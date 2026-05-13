@@ -65,6 +65,7 @@
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
+  /* Mobile: quick-row + bottom-tab estimated height (without safe-area inset) */
   --mobile-nav-space: 126px;
   --page-inline-pad: 24px;
 }
@@ -80,7 +81,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  overflow-x: hidden;
 }
 
 img, svg, video, canvas {

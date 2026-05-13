@@ -51,7 +51,7 @@ export default function MobileNav() {
         <div
           onClick={() => setOpenAll(false)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
               e.preventDefault();
               setOpenAll(false);
             }
