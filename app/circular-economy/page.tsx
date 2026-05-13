@@ -1,14 +1,10 @@
 'use client';
-import { motion } from 'framer-motion';
 import { 
   Recycle, 
   RotateCcw, 
   Package, 
   ShieldCheck, 
-  History,
-  TrendingUp,
   ArrowUpRight,
-  Database,
   Layers,
   Activity
 } from 'lucide-react';
@@ -16,98 +12,106 @@ import { mockMaterials } from '@/lib/nature-data';
 
 export default function CircularEconomyPage() {
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 pb-20">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-lg">
-              <Recycle size={24} />
+    <div className="page-container animate-fade-in">
+      <div className="page-header">
+        <div className="page-header-inner">
+          <div>
+            <div className="page-title-block">
+              <div className="page-icon" style={{ background: 'var(--info)' }}>
+                <Recycle size={18} color="#fff" />
+              </div>
+              <h1 className="page-title">循環經濟門戶</h1>
             </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tighter">循環經濟門戶 Circular Economy</h1>
+            <div className="page-meta">
+              <span className="badge badge-blue">Circular Economy</span>
+              <span className="gri-chip">GRI 301</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 12.5 }}>物料使用、再生材料佔比與循環性追蹤</span>
+            </div>
           </div>
-          <p className="text-slate-500 font-medium text-sm mt-1">GRI 301 | 物料使用、再生材料佔比與循環性追蹤</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 14px', background: 'var(--info-light)', border: '1px solid var(--border-0)', borderRadius: 'var(--r-md)' }}>
+            <Layers size={14} style={{ color: 'var(--info)' }} />
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--info)' }}>Circularity Rate: 64.2%</span>
+          </div>
         </div>
-        <div className="flex gap-3">
-           <div className="px-5 py-2 bg-blue-50 text-blue-700 border border-blue-100 rounded-2xl flex items-center gap-3">
-              <Layers size={16} />
-              <span className="text-[10px] font-black uppercase tracking-widest">Circularity Rate: 64.2%</span>
-           </div>
-        </div>
-      </header>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-         <div className="lg:col-span-8 bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm space-y-10">
-            <div className="flex justify-between items-center">
-               <h3 className="font-bold flex items-center gap-2 text-xl text-slate-800">
-                  <Database className="text-blue-500" size={24} /> 物料生命週期追蹤
-               </h3>
-               <span className="text-[9px] font-black text-slate-400 uppercase bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">Unit: KG</span>
+      <div className="grid-2" style={{ alignItems: 'start' }}>
+        <div className="card card-accent" style={{ padding: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Activity size={15} style={{ color: 'var(--info)' }} />
+              <div className="section-title">物料生命週期追蹤</div>
             </div>
-            
-            <div className="space-y-6">
-               {mockMaterials.map((m) => (
-                 <div key={m.id} className="p-6 rounded-[2rem] border border-slate-100 hover:bg-slate-50 transition-all group">
-                    <div className="flex justify-between items-center mb-6">
-                       <div className="flex items-center gap-4">
-                          <div className={`p-3 rounded-xl ${m.category === 'Packaging' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
-                             <Package size={20} />
-                          </div>
-                          <div>
-                             <h4 className="font-black text-slate-900">{m.materialName}</h4>
-                             <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{m.category} Material | ID: {m.id}</p>
-                          </div>
-                       </div>
-                       <div className="text-right">
-                          <p className="text-xl font-black text-slate-900 tabular-nums">{m.totalWeight.toLocaleString()}</p>
-                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Total Weight (KG)</p>
-                       </div>
+            <span className="badge badge-gray">Unit: KG</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {mockMaterials.map((m) => (
+              <div key={m.id} className="info-row" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: m.category === 'Packaging' ? 'var(--success-light)' : 'var(--info-light)',
+                    }}>
+                      <Package size={14} style={{ color: m.category === 'Packaging' ? 'var(--success)' : 'var(--info)' }} />
                     </div>
-                    <div className="space-y-2">
-                       <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
-                          <span>再生材料佔比 Recycled Content</span>
-                          <span className="text-blue-600">{m.recycledPercentage}%</span>
-                       </div>
-                       <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${m.recycledPercentage}%` }}
-                            className={`h-full ${m.recycledPercentage > 80 ? 'bg-emerald-500' : 'bg-blue-500'}`}
-                          />
-                       </div>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600 }}>{m.materialName}</div>
+                      <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{m.category} · {m.id}</div>
                     </div>
-                 </div>
-               ))}
-            </div>
-         </div>
-
-         <div className="lg:col-span-4 space-y-6">
-            <div className="bg-slate-900 p-10 rounded-[3rem] text-white space-y-8 shadow-2xl relative overflow-hidden">
-               <RotateCcw size={120} className="absolute -right-10 -top-10 text-white/5" />
-               <h3 className="font-bold flex items-center gap-3 text-lg relative z-10">
-                  <ShieldCheck className="text-emerald-400" size={22} /> 5T 循環實證
-               </h3>
-               <div className="space-y-4 relative z-10">
-                  <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
-                     <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">再生比例聲明</p>
-                     <p className="text-xs font-bold leading-relaxed">2025 年度原物料盤點 - 經由 5T 協議驗證</p>
                   </div>
-                  <button className="w-full py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-all">
-                     生成循環經濟報告
-                  </button>
-               </div>
-            </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 18, fontWeight: 700 }}>{m.totalWeight.toLocaleString()}</div>
+                    <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Total KG</div>
+                  </div>
+                </div>
+                <div style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 4 }}>
+                    <span>再生材料佔比</span>
+                    <span style={{ color: m.recycledPercentage > 80 ? 'var(--success)' : 'var(--info)' }}>{m.recycledPercentage}%</span>
+                  </div>
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{
+                      width: `${m.recycledPercentage}%`,
+                      background: m.recycledPercentage > 80 ? 'var(--success)' : 'var(--info)',
+                      transition: 'width 0.7s var(--ease-out)',
+                    }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-            <div className="bg-blue-50 p-8 rounded-[2.5rem] border border-blue-100">
-               <Activity className="text-blue-600 mb-4" size={32} />
-               <h4 className="font-black text-xs text-blue-900 uppercase tracking-widest mb-2">循環路徑優化</h4>
-               <p className="text-xs text-blue-700 leading-relaxed font-medium">
-                 偵測到「回收鋁材」供應商之再生比例提升空間。預計透過 Tier-2 協作，可將產品整機循環率提升至 70%。
-               </p>
-               <button className="mt-6 flex items-center gap-2 text-[10px] font-black text-blue-600 uppercase hover:underline">
-                  檢視供應鏈循環力 <ArrowUpRight size={12} />
-               </button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ background: 'var(--berkeley-blue)', borderRadius: 'var(--r-xl)', padding: 24, color: '#fff', boxShadow: 'var(--shadow-brand)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', right: -20, top: -20, opacity: 0.05 }}>
+              <RotateCcw size={120} />
             </div>
-         </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, position: 'relative', zIndex: 1 }}>
+              <ShieldCheck size={15} style={{ color: '#4ade80' }} />
+              <span style={{ fontWeight: 700, fontSize: 14 }}>5T 循環實證</span>
+            </div>
+            <div style={{ padding: '14px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, marginBottom: 14, position: 'relative', zIndex: 1 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#60a5fa', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 4 }}>再生比例聲明</div>
+              <div style={{ fontSize: 13, fontWeight: 600 }}>2025 年度原物料盤點 - 經由 5T 協議驗證</div>
+            </div>
+            <button className="btn w-full" style={{ position: 'relative', zIndex: 1, background: '#fff', color: 'var(--berkeley-blue)', border: 'none', fontWeight: 700 }}>
+              生成循環經濟報告
+            </button>
+          </div>
+
+          <div className="alert alert-info" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: 18 }}>
+            <Activity size={22} style={{ color: 'var(--info)', marginBottom: 8 }} />
+            <div style={{ fontWeight: 700, fontSize: 12, color: 'var(--info)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>循環路徑優化</div>
+            <p style={{ fontSize: 13, lineHeight: 1.6 }}>
+              偵測到「回收鋁材」供應商之再生比例提升空間。預計透過 Tier-2 協作，可將產品整機循環率提升至 70%。
+            </p>
+            <button style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: 'var(--info)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              檢視供應鏈循環力 <ArrowUpRight size={11} />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

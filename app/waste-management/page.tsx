@@ -1,5 +1,4 @@
 'use client';
-import { motion } from 'framer-motion';
 import { 
   Trash2, 
   Recycle, 
@@ -11,97 +10,116 @@ import {
   ArrowRight
 } from 'lucide-react';
 
+const disposeColors = ['var(--success)', 'var(--warning)', 'var(--danger)', 'var(--text-muted)'];
+const statPalette = [
+  { bg: 'var(--surface-2)',    color: 'var(--text-secondary)' },
+  { bg: 'var(--success-light)', color: 'var(--success)' },
+  { bg: 'var(--danger-light)',  color: 'var(--danger)'  },
+  { bg: 'var(--info-light)',    color: 'var(--info)'    },
+];
+
 export default function WasteManagementPage() {
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-700 pb-20">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-slate-100 text-slate-600 rounded-xl">
-              <Trash2 size={24} />
+    <div className="page-container animate-fade-in">
+      <div className="page-header">
+        <div className="page-header-inner">
+          <div>
+            <div className="page-title-block">
+              <div className="page-icon">
+                <Trash2 size={18} color="#fff" />
+              </div>
+              <h1 className="page-title">廢棄物管理</h1>
             </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">廢棄物管理 Waste Hub</h1>
+            <div className="page-meta">
+              <span className="badge badge-gray">Waste Hub</span>
+              <span className="gri-chip">GRI 306</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 12.5 }}>一般/有害廢棄物、回收與處置追蹤</span>
+            </div>
           </div>
-          <p className="text-slate-500 font-medium text-sm">GRI 306 | 一般/有害廢棄物、回收與處置追蹤</p>
+          <button className="btn btn-primary">
+            <Plus size={14} /> 登錄聯單
+          </button>
         </div>
-        <button className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-600 transition-all">
-          <Plus size={16} /> 登錄聯單
-        </button>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[
-          { label: '總廢棄物 (kg)', value: '4,520', icon: Trash2, color: 'slate' },
-          { label: '回收率', value: '42%', icon: Recycle, color: 'emerald' },
-          { label: '有害廢棄物', value: '125', icon: AlertTriangle, color: 'rose' },
-          { label: '清運次數', value: '12', icon: Truck, color: 'blue' },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
-            <stat.icon className={`text-${stat.color}-500 mb-4`} size={24} />
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
-            <h3 className="text-2xl font-black text-slate-900 mt-1">{stat.value}</h3>
-          </div>
-        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-7 bg-white rounded-[3rem] border border-slate-200 shadow-sm p-10">
-           <h3 className="font-bold text-xl text-slate-800 mb-8 flex items-center gap-3">
-             <BarChart3 size={24} className="text-emerald-500" /> 處置方式分佈
-           </h3>
-           <div className="space-y-6">
-              {[
-                { label: '回收再利用 (Recycling)', value: 1898, color: 'bg-emerald-500' },
-                { label: '焚化處理 (Incineration)', value: 1540, color: 'bg-amber-500' },
-                { label: '掩埋處置 (Landfill)', value: 957, color: 'bg-rose-500' },
-                { label: '其它 (Others)', value: 125, color: 'bg-slate-400' },
-              ].map((item, i) => (
-                <div key={i} className="space-y-2">
-                   <div className="flex justify-between text-xs font-bold text-slate-600">
-                      <span>{item.label}</span>
-                      <span>{item.value} kg</span>
-                   </div>
-                   <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(item.value / 4520) * 100}%` }}
-                        className={`h-full ${item.color}`}
-                      />
-                   </div>
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        {[
+          { label: '總廢棄物 (kg)', value: '4,520', icon: Trash2 },
+          { label: '回收率',         value: '42%',   icon: Recycle },
+          { label: '有害廢棄物',     value: '125',   icon: AlertTriangle },
+          { label: '清運次數',       value: '12',    icon: Truck },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          const { bg, color } = statPalette[i];
+          return (
+            <div key={i} className="stat-card">
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+                <Icon size={16} style={{ color }} />
+              </div>
+              <div className="stat-label">{stat.label}</div>
+              <div className="stat-value" style={{ fontSize: 26, color }}>{stat.value}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="grid-2" style={{ alignItems: 'start' }}>
+        <div className="card card-accent" style={{ padding: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+            <BarChart3 size={16} style={{ color: 'var(--success)' }} />
+            <div className="section-title">處置方式分佈</div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {[
+              { label: '回收再利用 (Recycling)', value: 1898, total: 4520 },
+              { label: '焚化處理 (Incineration)',  value: 1540, total: 4520 },
+              { label: '掩埋處置 (Landfill)',       value: 957,  total: 4520 },
+              { label: '其它 (Others)',             value: 125,  total: 4520 },
+            ].map((item, i) => (
+              <div key={i}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 6 }}>
+                  <span>{item.label}</span>
+                  <span>{item.value.toLocaleString()} kg</span>
                 </div>
-              ))}
-           </div>
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{
+                    width: `${(item.value / item.total) * 100}%`,
+                    background: disposeColors[i],
+                    transition: 'width 0.7s var(--ease-out)',
+                  }} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="lg:col-span-5 space-y-6">
-           <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl">
-              <h3 className="font-bold text-lg mb-8 flex items-center gap-3">
-                <FileText className="text-emerald-400" /> 近期清運紀錄 (Manifests)
-              </h3>
-              <div className="space-y-6">
-                 {[
-                   { id: 'M-20250422', type: '一般', weight: '240kg', status: 'Sealed' },
-                   { id: 'M-20250418', type: '有害', weight: '12kg', status: 'Verified' },
-                   { id: 'M-20250415', type: '資源', weight: '580kg', status: 'Sealed' },
-                 ].map((m, i) => (
-                   <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10 group cursor-pointer hover:bg-white/10 transition-all">
-                      <div className="space-y-1">
-                         <p className="text-xs font-bold">{m.id}</p>
-                         <div className="flex gap-2">
-                            <span className="text-[9px] font-black uppercase text-white/40">{m.type}</span>
-                            <span className="text-[9px] font-black uppercase text-emerald-400">{m.status}</span>
-                         </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                         <span className="text-sm font-black tabular-nums">{m.weight}</span>
-                         <ArrowRight size={14} className="text-white/20 group-hover:text-white transition-colors" />
-                      </div>
-                   </div>
-                 ))}
+        <div style={{ background: 'var(--berkeley-blue)', borderRadius: 'var(--r-xl)', padding: 24, color: '#fff', boxShadow: 'var(--shadow-brand)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+            <FileText size={15} style={{ color: '#4ade80' }} />
+            <span style={{ fontWeight: 700, fontSize: 14 }}>近期清運紀錄 (Manifests)</span>
+          </div>
+          {[
+            { id: 'M-20250422', type: '一般', weight: '240kg', status: 'Sealed' },
+            { id: 'M-20250418', type: '有害', weight: '12kg',  status: 'Verified' },
+            { id: 'M-20250415', type: '資源', weight: '580kg', status: 'Sealed' },
+          ].map((m, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, marginBottom: 8, cursor: 'pointer' }}>
+              <div>
+                <div style={{ fontSize: 12.5, fontWeight: 600 }}>{m.id}</div>
+                <div style={{ display: 'flex', gap: 8, marginTop: 2 }}>
+                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{m.type}</span>
+                  <span style={{ fontSize: 10, color: '#4ade80', fontWeight: 700 }}>{m.status}</span>
+                </div>
               </div>
-           </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontWeight: 700 }}>{m.weight}</span>
+                <ArrowRight size={13} style={{ color: 'rgba(255,255,255,0.25)' }} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
+
