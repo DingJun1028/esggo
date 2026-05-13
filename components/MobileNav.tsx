@@ -50,6 +50,15 @@ export default function MobileNav() {
       {openAll && (
         <div
           onClick={() => setOpenAll(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpenAll(false);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="關閉快捷功能面板"
           style={{
             position: 'fixed',
             inset: 0,
