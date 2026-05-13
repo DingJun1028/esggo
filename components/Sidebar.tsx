@@ -115,7 +115,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
     >
       {/* Logo Header */}
       <div style={{
-        height: 56,
+        height: 'var(--header-h)',
         display: 'flex',
         alignItems: 'center',
         padding: collapsed ? '0 14px' : '0 16px',
