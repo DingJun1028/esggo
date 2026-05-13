@@ -138,7 +138,13 @@ export default function MobileNav() {
             aria-label="開啟全部快捷功能"
           >
             全部
-            <ChevronUp size={13} style={{ transform: openAll ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+            <ChevronUp
+              size={13}
+              style={{
+                transform: openAll ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform var(--dur-fast) var(--ease-out)',
+              }}
+            />
           </button>
         </div>
 

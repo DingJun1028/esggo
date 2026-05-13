@@ -65,7 +65,7 @@
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
-  /* Mobile: quick-row + bottom-tab estimated height (without safe-area inset) */
+  /* Mobile: quick-row(42px) + bottom-tab(56px) + borders/gap(28px), safe-area handled separately in MobileNav */
   --mobile-nav-space: 126px;
   --page-inline-pad: 24px;
 }
