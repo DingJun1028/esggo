@@ -55,11 +55,11 @@ export default function CybersecurityPage() {
            <div className="space-y-4">
               <div className="flex justify-between text-xs font-bold">
                  <span className="text-slate-400 uppercase tracking-widest">研發費用佔營收比</span>
-                 <span className=\"text-slate-900 font-black\">6.2%</span>
+                 <span className="text-slate-900 font-black">6.2%</span>
               </div>
               <div className="flex justify-between text-xs font-bold">
                  <span className="text-slate-400 uppercase tracking-widest">綠色專利取得數</span>
-                 <span className=\"text-emerald-600 font-black\">{innovationStats.greenPatents} 件</span>
+                 <span className="text-emerald-600 font-black">{innovationStats.greenPatents} 件</span>
               </div>
            </div>
         </div>

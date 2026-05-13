@@ -3,7 +3,7 @@ export interface GeminiMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  type: 'text' | 'code' | 'json' | 'analysis';
+  type: 'text' | 'code' | 'json' | 'analysis' | 'vision';
   model?: string;
 }
 
