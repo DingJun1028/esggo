@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   GraduationCap, Award, Users, Star, Globe, ExternalLink,
   ChevronDown, ChevronRight, CheckCircle, MapPin, Mail, Phone,
@@ -158,6 +159,24 @@ export default function AcademyPage() {
                 <span style={{ color: '#A8C8E8', fontSize: 12 }}>{s.l}</span>
               </div>
             ))}
+            <Link
+              href="/academy/whitepaper"
+              style={{
+                background: '#FFFFFF',
+                color: BLUE,
+                borderRadius: 8,
+                padding: '6px 14px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                fontSize: 12,
+                fontWeight: 700,
+                textDecoration: 'none',
+              }}
+            >
+              <Award size={14} />
+              設計白皮書
+            </Link>
           </div>
         </div>
       </div>
