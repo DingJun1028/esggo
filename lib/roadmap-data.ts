@@ -19,11 +19,11 @@ export const decarbonizationPath: RoadmapTarget[] = [
   { year: 2027, target: 3600 },
   { year: 2028, target: 3400 },
   { year: 2029, target: 3200 },
-  { year: 2030, target: 3000 }, // 2030 \u534a\u6e1b\u76ee\u6a19
+  { year: 2030, target: 3000 }, // 2030 半減目標
 ];
 
 export const reductionInitiatives = [
-  { id: 1, name: '\u5168\u5ee0 LED \u7167\u660e\u66f4\u63db', impact: -120, cost: 'Low', status: 'Completed' },
-  { id: 2, name: '\u5c4b\u9802\u592a\u964a\u80fd\u677f\u7b2c\u4e8c\u671f', impact: -450, cost: 'High', status: 'Ongoing' },
-  { id: 3, name: '\u6c41\u51b7\u51dd\u7cfb\u7d71 AI \u512a\u5316', impact: -280, cost: 'Medium', status: 'Planned' },
+  { id: 1, name: '全廠 LED 照明更換', impact: -120, cost: 'Low', status: 'Completed' },
+  { id: 2, name: '屋頂太陽能板第二期', impact: -450, cost: 'High', status: 'Ongoing' },
+  { id: 3, name: '汽冷凝系統 AI 優化', impact: -280, cost: 'Medium', status: 'Planned' },
 ];

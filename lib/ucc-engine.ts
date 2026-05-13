@@ -71,7 +71,7 @@ export class EntropyForge {
     to_state: string,
     actor: string
   ): ILifecycleEvent {
-    const event_id = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const event_id = `evt_${crypto.randomUUID()}`;
     const timestamp = Date.now();
     const hashInput = `${event_id}:${component_uuid}:${from_state}:${to_state}:${timestamp}`;
     return Object.freeze({
