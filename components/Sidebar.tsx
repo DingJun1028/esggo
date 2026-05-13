@@ -100,14 +100,14 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       style={{
-        width: collapsed ? 'var(--sidebar-collapsed)' : 'var(--sidebar-width)',
+        width: collapsed ? 'var(--sidebar-collapsed)' : 'var(--sidebar-w)',
         height: '100vh',
         background: 'var(--berkeley-blue)',
         position: 'fixed',
         top: 0, left: 0,
         display: 'flex',
         flexDirection: 'column',
-        transition: 'width var(--duration-slow) var(--ease-in-out)',
+        transition: 'width var(--dur-slow) var(--ease-in-out)',
         zIndex: 200,
         overflow: 'hidden',
         boxShadow: '2px 0 20px rgba(0,0,0,0.18)',
@@ -183,7 +183,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
             alignItems: 'center',
             justifyContent: 'center',
             color: 'rgba(255,255,255,0.5)',
-            transition: 'all var(--duration-fast) var(--ease-out)',
+            transition: 'all var(--dur-fast) var(--ease-out)',
             flexShrink: 0,
           }}
           onMouseOver={e => {
@@ -249,7 +249,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     padding: collapsed ? '8px 0' : '7px 10px',
                     borderRadius: 8,
                     textDecoration: 'none',
-                    transition: `all var(--duration-fast) var(--ease-out)`,
+                    transition: `all var(--dur-fast) var(--ease-out)`,
                     background: active
                       ? 'rgba(253,181,21,0.13)'
                       : hovered
@@ -272,7 +272,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     style={{
                       flexShrink: 0,
                       opacity: active ? 1 : 0.8,
-                      transition: 'opacity var(--duration-fast)',
+                      transition: 'opacity var(--dur-fast)',
                     }}
                   />
                   {!collapsed && (

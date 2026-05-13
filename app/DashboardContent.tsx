@@ -3,10 +3,10 @@
 import { Activity, ArrowUpRight, FileCheck, ShieldCheck, Target } from 'lucide-react';
 
 const stats = [
-  { label: 'GRI 覆蓋率', value: '84%', detail: '較上月 +6%', icon: Target, accent: 'text-emerald-600 bg-emerald-50' },
-  { label: '待驗證證據', value: '18', detail: '5 份優先處理', icon: FileCheck, accent: 'text-amber-600 bg-amber-50' },
-  { label: '5T 審計記錄', value: '156', detail: '本月新增 24 筆', icon: ShieldCheck, accent: 'text-slate-900 bg-slate-100' },
-  { label: '改善任務', value: '12', detail: '3 項即將到期', icon: Activity, accent: 'text-indigo-600 bg-indigo-50' },
+  { label: 'GRI 覆蓋率',   value: '84%', detail: '較上月 +6%',       icon: Target,     color: 'var(--success)',         bg: 'var(--success-light)' },
+  { label: '待驗證證據',   value: '18',  detail: '5 份優先處理',     icon: FileCheck,  color: 'var(--warning)',         bg: 'var(--warning-light)' },
+  { label: '5T 審計記錄', value: '156', detail: '本月新增 24 筆',   icon: ShieldCheck,color: 'var(--berkeley-blue)',   bg: '#E5EDF8' },
+  { label: '改善任務',     value: '12',  detail: '3 項即將到期',     icon: Activity,   color: 'var(--founders-rock)',   bg: 'var(--info-light)' },
 ];
 
 const priorities = [
@@ -17,76 +17,113 @@ const priorities = [
 
 export default function DashboardContent() {
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 pb-20">
-      <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-slate-900 p-2.5 text-white shadow-lg">
-              <Activity size={24} />
+    <div className="page-container animate-fade-in">
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="page-header-row">
+          <div>
+            <div className="page-title-block">
+              <div className="page-icon">
+                <Activity size={18} color="#fff" />
+              </div>
+              <h1 className="page-title">ESG GO 控制台</h1>
             </div>
-            <h1 className="text-3xl font-black tracking-tighter text-slate-900">ESG GO 控制台</h1>
+            <div className="page-meta">
+              <span className="badge badge-blue">Dashboard</span>
+              <span className="gri-chip">5T Protocol</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 12.5 }}>中小企業永續治理總覽</span>
+            </div>
           </div>
-          <p className="text-sm font-medium text-slate-500">
-            中小企業永續治理總覽與 5T 實證追蹤中心
-          </p>
+          <button className="btn btn-primary">
+            進入本月改善計畫
+            <ArrowUpRight size={14} />
+          </button>
         </div>
-        <button className="flex items-center gap-2 rounded-2xl bg-slate-900 px-6 py-3 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-slate-900/10 transition-all hover:bg-emerald-600">
-          進入本月改善計畫
-          <ArrowUpRight size={16} />
-        </button>
-      </header>
+      </div>
 
-      <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {stats.map((stat) => (
-          <div key={stat.label} className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
-            <div className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl ${stat.accent}`}>
-              <stat.icon size={22} />
+      {/* Stat Cards */}
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <div key={stat.label} className="stat-card">
+              <div style={{
+                width: 36, height: 36, borderRadius: 10,
+                background: stat.bg, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', marginBottom: 12,
+              }}>
+                <Icon size={18} style={{ color: stat.color }} />
+              </div>
+              <div className="stat-label">{stat.label}</div>
+              <div className="stat-value" style={{ color: stat.color, fontSize: 26 }}>{stat.value}</div>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>{stat.detail}</div>
             </div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-900">{stat.value}</h2>
-            <p className="mt-3 text-xs font-bold text-slate-500">{stat.detail}</p>
-          </div>
-        ))}
-      </section>
+          );
+        })}
+      </div>
 
-      <section className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8 rounded-[3rem] border border-slate-200 bg-white p-10 shadow-sm">
-          <div className="mb-8 flex items-center justify-between">
+      {/* Main Content Grid */}
+      <div className="grid-2" style={{ alignItems: 'start' }}>
+        {/* Priority List */}
+        <div className="card card-accent" style={{ padding: 24 }}>
+          <div style={{ marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Monthly Focus</p>
-              <h3 className="mt-2 text-xl font-black text-slate-900">重大改善優先順序</h3>
+              <div className="section-title">重大改善優先順序</div>
+              <div className="section-sub">Monthly Focus · 5T Active</div>
             </div>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600">
-              5T Active
-            </span>
+            <span className="badge badge-green">5T Active</span>
           </div>
-          <div className="space-y-4">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {priorities.map((item, index) => (
-              <div
-                key={item}
-                className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-xs font-black text-slate-900 shadow-sm">
-                  0{index + 1}
+              <div key={item} className="info-row">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: 8,
+                    background: 'var(--berkeley-blue)', color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 11, fontWeight: 800, flexShrink: 0,
+                  }}>
+                    0{index + 1}
+                  </div>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>{item}</span>
                 </div>
-                <p className="text-sm font-bold text-slate-700">{item}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="lg:col-span-4 rounded-[3rem] bg-slate-900 p-10 text-white shadow-2xl">
-          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Integrity Snapshot</p>
-          <h3 className="mt-2 text-2xl font-black">本週系統狀態穩定</h3>
-          <p className="mt-4 text-sm font-medium leading-relaxed text-slate-300">
-            目前核心頁面已解壓完成，重點資料流與前端模組可持續驗證；後續可依需求再補齊更多實際資料串接。
+        {/* Status Panel */}
+        <div style={{
+          background: 'var(--berkeley-blue)',
+          borderRadius: 'var(--r-xl)',
+          padding: 24,
+          color: '#fff',
+          boxShadow: 'var(--shadow-brand)',
+        }}>
+          <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(255,255,255,0.38)', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: 6 }}>
+            Integrity Snapshot
+          </div>
+          <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 12 }}>
+            本週系統狀態穩定
+          </div>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, marginBottom: 20 }}>
+            核心頁面已完整建置，重點資料流與前端模組持續驗證中；後續可依需求補齊實際資料串接。
           </p>
-          <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/5 p-6">
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Next Step</p>
-            <p className="mt-2 text-sm font-bold text-white">繼續修正建置期間發現的其餘型別與模組問題。</p>
+          <div style={{
+            background: 'rgba(255,255,255,0.07)',
+            border: '1px solid rgba(255,255,255,0.12)',
+            borderRadius: 'var(--r-lg)',
+            padding: '14px 16px',
+          }}>
+            <div style={{ fontSize: 9.5, fontWeight: 700, color: 'rgba(255,255,255,0.35)', letterSpacing: '1.2px', textTransform: 'uppercase', marginBottom: 6 }}>
+              Next Step
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#fff' }}>
+              繼續修正建置期間發現的型別與模組問題。
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
