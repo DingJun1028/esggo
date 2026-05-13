@@ -1,126 +1,140 @@
 'use client';
-import { motion } from 'framer-motion';
 import { 
   PackageCheck, 
   ShieldCheck, 
   Tag, 
   Activity, 
   AlertCircle,
-  FileCheck,
   Plus,
-  BarChart,
   Search,
   CheckCircle2
 } from 'lucide-react';
 
+const statPalette = [
+  { bg: 'var(--success-light)', color: 'var(--success)' },
+  { bg: 'var(--info-light)',    color: 'var(--info)'    },
+  { bg: 'var(--success-light)', color: 'var(--success)' },
+];
+
 export default function ProductStewardshipPage() {
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 pb-20">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-600/20">
-              <PackageCheck size={24} />
+    <div className="page-container animate-fade-in">
+      <div className="page-header">
+        <div className="page-header-inner">
+          <div>
+            <div className="page-title-block">
+              <div className="page-icon" style={{ background: 'var(--info)' }}>
+                <PackageCheck size={18} color="#fff" />
+              </div>
+              <h1 className="page-title">產品責任中心</h1>
             </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tighter">產品責任中心 Stewardship</h1>
+            <div className="page-meta">
+              <span className="badge badge-blue">Stewardship</span>
+              <span className="gri-chip">GRI 416</span>
+              <span className="gri-chip">GRI 417</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 12.5 }}>產品健康安全、標示合規</span>
+            </div>
           </div>
-          <p className="text-slate-500 font-medium text-sm mt-1">GRI 416, 417 | 產品健康安全、標示合規與全生命週期管理</p>
+          <button className="btn btn-primary">
+            <Plus size={14} /> 登錄產品合規證書
+          </button>
         </div>
-        <button className="px-6 py-3 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-blue-600 transition-all shadow-xl">
-          <Plus size={16} /> 登錄產品合規證書
-        </button>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[
-          { label: '健康與安全評估覆蓋率', value: '100%', status: 'Target Met', icon: ShieldCheck, color: 'emerald' },
-          { label: '產品標示違規件數', value: '0', status: 'Perfect Record', icon: Tag, color: 'blue' },
-          { label: '召回事件/客戶投訴', value: 'NONE', status: 'Verified', icon: CheckCircle2, color: 'emerald' },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm relative group overflow-hidden">
-             <div className="relative z-10">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                <h3 className="text-3xl font-black text-slate-900">{stat.value}</h3>
-                <p className="text-[10px] font-bold text-emerald-600 mt-4 uppercase tracking-tighter">{stat.status}</p>
-             </div>
-             <stat.icon className={`absolute -right-4 -bottom-4 text-${stat.color}-50`} size={80} />
-          </div>
-        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-         <div className="lg:col-span-8 bg-white rounded-[3rem] border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-8 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-               <h3 className="font-bold text-slate-800 flex items-center gap-2 text-xl">
-                  <Activity size={24} className="text-blue-500" /> 產品合規矩陣
-               </h3>
-               <div className="flex items-center gap-4 bg-white border border-slate-200 rounded-xl px-4 py-2 w-64 focus-within:border-blue-400 transition-all">
-                  <Search size={14} className="text-slate-400" />
-                  <input type="text" placeholder="搜尋產品編號..." className="bg-transparent border-none outline-none text-xs font-bold w-full" />
-               </div>
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        {[
+          { label: '健康與安全評估覆蓋率', value: '100%', status: 'Target Met',    icon: ShieldCheck  },
+          { label: '產品標示違規件數',     value: '0',    status: 'Perfect Record', icon: Tag          },
+          { label: '召回事件/客戶投訴',   value: 'NONE', status: 'Verified',       icon: CheckCircle2 },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          const { bg, color } = statPalette[i];
+          return (
+            <div key={i} className="stat-card" style={{ position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', right: -8, bottom: -8, color: bg, opacity: 0.7, pointerEvents: 'none' }}>
+                <Icon size={68} />
+              </div>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+                  <Icon size={16} style={{ color }} />
+                </div>
+                <div className="stat-label">{stat.label}</div>
+                <div className="stat-value" style={{ fontSize: 26, color }}>{stat.value}</div>
+                <div style={{ fontSize: 11, color, fontWeight: 600, marginTop: 6 }}>{stat.status}</div>
+              </div>
             </div>
-            <div className="overflow-x-auto">
-               <table className="w-full text-left">
-                  <thead>
-                     <tr className="border-b border-slate-50">
-                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">產品名稱 / ID</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">健康安全評估</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">標示合規</th>
-                        <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">狀態</th>
-                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-50">
-                     {[
-                       { name: '精密電子模組 X1', id: 'PRD-001', health: 'Pass', label: 'RoHS, REACH', status: 'Active' },
-                       { name: '工業感測器 S5', id: 'PRD-002', health: 'Pass', label: 'CE, FCC', status: 'Active' },
-                       { name: '智慧節能控制系統', id: 'PRD-003', health: 'Reviewing', label: 'Pending', status: 'Locked' },
-                     ].map((p, i) => (
-                       <tr key={i} className="hover:bg-slate-50 transition-all cursor-pointer">
-                          <td className="px-8 py-6">
-                             <p className="font-bold text-slate-900 text-sm">{p.name}</p>
-                             <p className="text-[10px] text-slate-400 font-medium">{p.id}</p>
-                          </td>
-                          <td className="px-8 py-6">
-                             <span className="text-xs font-bold text-emerald-600">{p.health}</span>
-                          </td>
-                          <td className="px-8 py-6 text-xs font-bold text-slate-600">{p.label}</td>
-                          <td className="px-8 py-6">
-                             <span className={`text-[10px] font-black px-3 py-1 rounded-lg border ${
-                               p.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'
-                             }`}>{p.status}</span>
-                          </td>
-                       </tr>
-                     ))}
-                  </tbody>
-               </table>
-            </div>
-         </div>
+          );
+        })}
+      </div>
 
-         <div className="lg:col-span-4 space-y-6">
-            <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
-               <h3 className="font-bold flex items-center gap-3 text-lg mb-8">
-                 <ShieldCheck className="text-blue-400" size={22} /> 5T 標籤實證
-               </h3>
-               <div className="space-y-6 relative z-10">
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
-                     <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">合規封印紀錄</p>
-                     <p className="text-xs font-bold leading-relaxed">RoHS 2.0 檢驗數據 - 已由 5T 協議完成雜湊鎖定</p>
-                     <p className="text-[10px] font-mono text-slate-500 mt-2">ID: 0x7c21...e110</p>
-                  </div>
-                  <button className="w-full py-4 bg-blue-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg">
-                     簽署產品合規聲明
-                  </button>
-               </div>
+      <div className="grid-2" style={{ alignItems: 'start' }}>
+        <div className="card card-accent" style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-0)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Activity size={15} style={{ color: 'var(--info)' }} />
+              <div className="section-title">產品合規矩陣</div>
             </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface-0)', border: '1px solid var(--border-0)', borderRadius: 'var(--r-sm)', padding: '5px 10px' }}>
+              <Search size={12} style={{ color: 'var(--text-muted)' }} />
+              <input type="text" placeholder="搜尋產品編號…" style={{ background: 'transparent', border: 'none', outline: 'none', fontSize: 12, width: 140 }} />
+            </div>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-0)', background: 'var(--bg-tertiary)' }}>
+                  {['產品名稱 / ID', '健康安全評估', '標示合規', '狀態'].map((h) => (
+                    <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: '精密電子模組 X1', id: 'PRD-001', health: 'Pass',      label: 'RoHS, REACH', status: 'Active'  },
+                  { name: '工業感測器 S5',   id: 'PRD-002', health: 'Pass',      label: 'CE, FCC',     status: 'Active'  },
+                  { name: '智慧節能控制系統', id: 'PRD-003', health: 'Reviewing', label: 'Pending',     status: 'Locked'  },
+                ].map((p, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border-light)', cursor: 'pointer' }}>
+                    <td style={{ padding: '12px 16px' }}>
+                      <div style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</div>
+                      <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{p.id}</div>
+                    </td>
+                    <td style={{ padding: '12px 16px', fontSize: 13, fontWeight: 600, color: 'var(--success)' }}>{p.health}</td>
+                    <td style={{ padding: '12px 16px', fontSize: 13, color: 'var(--text-secondary)' }}>{p.label}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span className={`tag-5t ${p.status === 'Active' ? 'tag-verified' : 'tag-pending'}`}>{p.status}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-            <div className="bg-blue-50 p-8 rounded-[2.5rem] border border-blue-100">
-               <AlertCircle className="text-blue-600 mb-4" size={32} />
-               <h4 className="font-black text-xs text-blue-900 uppercase tracking-widest mb-2">客戶滿意度提示</h4>
-               <p className="text-xs text-blue-700 leading-relaxed font-medium">
-                 本月有關「產品耐用性」的客戶回饋轉向正向，建議在下份永續報告書中加入「循環產品生命週期」之質性敘述。
-               </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ background: 'var(--berkeley-blue)', borderRadius: 'var(--r-xl)', padding: 24, color: '#fff', boxShadow: 'var(--shadow-brand)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+              <ShieldCheck size={15} style={{ color: '#60a5fa' }} />
+              <span style={{ fontWeight: 700, fontSize: 14 }}>5T 標籤實證</span>
             </div>
-         </div>
+            <div style={{ padding: '14px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, marginBottom: 14 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: '#60a5fa', letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 4 }}>合規封印紀錄</div>
+              <div style={{ fontSize: 13, fontWeight: 600 }}>RoHS 2.0 檢驗數據 - 已由 5T 協議完成雜湊鎖定</div>
+              <div style={{ fontSize: 10, fontFamily: 'monospace', color: 'rgba(255,255,255,0.4)', marginTop: 6 }}>ID: 0x7c21...e110</div>
+            </div>
+            <button className="btn w-full" style={{ background: 'var(--info)', color: '#fff', border: 'none' }}>
+              簽署產品合規聲明
+            </button>
+          </div>
+
+          <div className="alert alert-info" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: 18 }}>
+            <AlertCircle size={22} style={{ color: 'var(--info)', marginBottom: 8 }} />
+            <div style={{ fontWeight: 700, fontSize: 12, color: 'var(--info)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>客戶滿意度提示</div>
+            <p style={{ fontSize: 13, lineHeight: 1.6 }}>
+              本月有關「產品耐用性」的客戶回饋轉向正向，建議在下份永續報告書中加入「循環產品生命週期」之質性敘述。
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

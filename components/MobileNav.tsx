@@ -41,7 +41,7 @@ export default function MobileNav() {
               padding: '10px 4px',
               textDecoration: 'none',
               color: active ? 'var(--berkeley-blue)' : 'var(--text-muted)',
-              transition: 'color var(--duration-fast) var(--ease-out)',
+              transition: 'color var(--dur-fast) var(--ease-out)',
               gap: 3,
             }}
           >

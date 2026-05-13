@@ -7,6 +7,8 @@
   --california-gold: #FDB515;
   --gold-warm: #F5A623;
   --founders-rock: #3B7EA1;
+  --founders-rock-light: #E0EEF5;
+  --founders-rock-border: #A2CDDF;
   --medalist: #C4820A;
 
   --surface-0: #FFFFFF;
@@ -56,6 +58,13 @@
 
   --sidebar-w: 256px;
   --sidebar-collapsed: 64px;
+
+  /* ── Aliases for component compatibility ── */
+  --sidebar-width: 256px;
+  --header-h: 56px;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -334,6 +343,28 @@ tbody tr:hover { background: var(--surface-1); }
 .text-danger  { color: var(--danger); }
 .text-muted   { color: var(--text-muted); }
 
-@media (max-width: 1200px) { .page-wrap { padding: 22px 22px 36px; } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+/* ── Compat aliases ───────────────────── */
+.page-container { padding: 28px 32px 48px; max-width: 1560px; width: 100%; margin: 0 auto; }
+.page-header-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.page-subtitle { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
+
+/* ── Progress bar alias ───────────────── */
+.progress-bar { height: 6px; background: var(--surface-2); border-radius: var(--r-full); overflow: hidden; }
+
+/* ── Glass card ───────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ── animate-in / fade-in compat ─────── */
+.animate-in { animation: fadeUp 0.4s var(--ease-out) both; }
+.fade-in    { animation: fadeIn 0.35s var(--ease-out) both; }
+
+@media (max-width: 1200px) { .page-wrap, .page-container { padding: 22px 22px 36px; } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 900px)  { .stats-grid { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px)  { .page-wrap { padding: 16px 14px 80px; } .page-title { font-size: 20px; } .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .page-wrap, .page-container { padding: 16px 14px 80px; } .page-title { font-size: 20px; } .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }

@@ -1,5 +1,4 @@
 'use client';
-import { motion } from 'framer-motion';
 import { 
   Zap, 
   Flame, 
@@ -11,92 +10,116 @@ import {
   Activity
 } from 'lucide-react';
 
+const statColors: { bg: string; color: string }[] = [
+  { bg: 'var(--warning-light)',  color: 'var(--warning)' },
+  { bg: 'var(--danger-light)',   color: 'var(--danger)'  },
+  { bg: 'var(--success-light)',  color: 'var(--success)' },
+];
+
+const statusColor: Record<string, string> = {
+  Verified: 'var(--success)',
+  Connected: 'var(--founders-rock)',
+  Pending: 'var(--warning)',
+};
+
 export default function EnergyManagementPage() {
   return (
-    <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-700 pb-20">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-100 text-amber-600 rounded-xl">
-              <Zap size={24} />
-            </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">能源管理終端 Energy Hub</h1>
-          </div>
-          <p className="text-slate-500 font-medium text-sm">GRI 302-1 | 範疇一、二、三能源消耗監測與綠電配比</p>
-        </div>
-        <button className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-amber-600 transition-all shadow-xl shadow-slate-900/10">
-          <Plus size={16} /> 錄入能耗數據
-        </button>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          { label: '總用電量 (MWh)', value: '142.5', trend: '-2.4%', icon: Zap, color: 'amber' },
-          { label: '化石燃料 (GJ)', value: '890.2', trend: '+0.8%', icon: Flame, color: 'orange' },
-          { label: '再生能源佔比', value: '24.8%', trend: 'Target: 30%', icon: Leaf, color: 'emerald' },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
-              <div className={`p-3 rounded-2xl bg-${stat.color}-50 text-${stat.color}-600 group-hover:scale-110 transition-transform`}>
-                <stat.icon size={24} />
+    <div className="page-container animate-fade-in">
+      <div className="page-header">
+        <div className="page-header-inner">
+          <div>
+            <div className="page-title-block">
+              <div className="page-icon" style={{ background: 'var(--warning)' }}>
+                <Zap size={18} color="#fff" />
               </div>
-              <ArrowUpRight size={16} className="text-slate-300" />
+              <h1 className="page-title">能源管理終端</h1>
             </div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
-            <h3 className="text-3xl font-black text-slate-900 mt-1 tabular-nums">{stat.value}</h3>
-            <p className={`text-[10px] font-bold mt-2 ${stat.trend.startsWith('-') ? 'text-emerald-500' : 'text-rose-500'}`}>
-              {stat.trend} <span className="text-slate-400">vs Last Month</span>
-            </p>
+            <div className="page-meta">
+              <span className="badge badge-gold">Energy Hub</span>
+              <span className="gri-chip">GRI 302-1</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: 12.5 }}>範疇一、二、三能源消耗監測</span>
+            </div>
           </div>
-        ))}
+          <button className="btn btn-primary">
+            <Plus size={14} /> 錄入能耗數據
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8 bg-white rounded-[3rem] border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
-            <h3 className="font-bold text-slate-800 flex items-center gap-2">
-              <Activity size={18} className="text-amber-500" /> 能耗趨勢與預測
-            </h3>
-            <div className="flex gap-2">
-              <span className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-[10px] font-black text-slate-400 uppercase">Monthly</span>
+      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        {[
+          { label: '總用電量 (MWh)', value: '142.5', trend: '-2.4%', isDown: true,  icon: Zap },
+          { label: '化石燃料 (GJ)',  value: '890.2', trend: '+0.8%', isDown: false, icon: Flame },
+          { label: '再生能源佔比',   value: '24.8%', trend: 'Target: 30%', isDown: false, icon: Leaf },
+        ].map((stat, i) => {
+          const Icon = stat.icon;
+          const { bg, color } = statColors[i];
+          return (
+            <div key={i} className="stat-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={18} style={{ color }} />
+                </div>
+                <ArrowUpRight size={14} style={{ color: 'var(--text-muted)' }} />
+              </div>
+              <div className="stat-label">{stat.label}</div>
+              <div className="stat-value" style={{ fontSize: 26, color }}>{stat.value}</div>
+              <div style={{ fontSize: 11, color: stat.isDown ? 'var(--success)' : 'var(--danger)', fontWeight: 600, marginTop: 6 }}>
+                {stat.trend} <span style={{ color: 'var(--text-muted)' }}>vs 上月</span>
+              </div>
             </div>
+          );
+        })}
+      </div>
+
+      <div className="grid-2" style={{ alignItems: 'start' }}>
+        <div className="card card-accent" style={{ padding: 24 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Activity size={16} style={{ color: 'var(--warning)' }} />
+              <div className="section-title">能耗趨勢與預測</div>
+            </div>
+            <span className="badge badge-gray">Monthly</span>
           </div>
-          <div className="h-[400px] p-8 flex items-center justify-center text-slate-300 italic font-medium">
-             [能源消耗折線圖：顯示電、氣、油之月度變化]
+          <div style={{
+            height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: '1px dashed var(--border-1)', borderRadius: 'var(--r-md)',
+            color: 'var(--text-muted)', fontSize: 13, fontStyle: 'italic',
+          }}>
+            [能源消耗折線圖：顯示電、氣、油之月度變化]
           </div>
         </div>
 
-        <div className="lg:col-span-4 space-y-6">
-          <div className="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-xl">
-            <h3 className="font-bold flex items-center gap-2 text-lg mb-6">
-              <FileCheck className="text-emerald-400" /> 5T 實證狀態
-            </h3>
-            <div className="space-y-6">
-              {[
-                { label: '台電電子帳單 (API)', status: 'Connected', date: '2025-04-20' },
-                { label: '綠電採購憑證 (T-REC)', status: 'Verified', date: '2025-03-15' },
-                { label: '鍋爐燃料採購單', status: 'Pending', date: 'Waiting...' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                  <div className={`w-2 h-2 rounded-full ${item.status === 'Verified' ? 'bg-emerald-500' : item.status === 'Connected' ? 'bg-blue-500' : 'bg-amber-500'}`} />
-                  <div className="flex-1">
-                    <p className="text-sm font-bold">{item.label}</p>
-                    <p className="text-[10px] text-white/40 font-black uppercase tracking-tighter">{item.status} | {item.date}</p>
-                  </div>
-                </div>
-              ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ background: 'var(--berkeley-blue)', borderRadius: 'var(--r-xl)', padding: 24, color: '#fff', boxShadow: 'var(--shadow-brand)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+              <FileCheck size={15} style={{ color: '#4ade80' }} />
+              <span style={{ fontWeight: 700, fontSize: 14 }}>5T 實證狀態</span>
             </div>
-            <button className="w-full mt-8 py-4 bg-emerald-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-emerald-500 transition-all">
+            {[
+              { label: '台電電子帳單 (API)', status: 'Connected', date: '2025-04-20' },
+              { label: '綠電採購憑證 (T-REC)', status: 'Verified',   date: '2025-03-15' },
+              { label: '鍋爐燃料採購單',       status: 'Pending',    date: 'Waiting...' },
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, marginBottom: 8 }}>
+                <div style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: statusColor[item.status] }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 12.5, fontWeight: 600 }}>{item.label}</div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 1 }}>{item.status} · {item.date}</div>
+                </div>
+              </div>
+            ))}
+            <button className="btn w-full" style={{ marginTop: 8, background: 'var(--success)', color: '#fff', border: 'none' }}>
               執行年度碳盤查校正
             </button>
           </div>
 
-          <div className="bg-amber-50 p-8 rounded-[2.5rem] border border-amber-100">
-             <TrendingDown className="text-amber-600 mb-4" size={32} />
-             <h4 className="font-black text-sm text-amber-900 uppercase tracking-widest mb-2">節能建議 AI Insight</h4>
-             <p className="text-xs text-amber-700 leading-relaxed font-medium">
-               偵測到空調系統在非營業時間能耗異常，建議檢查第 4 區定時設定。預計可降低 12% 離峰用電。
-             </p>
+          <div className="alert alert-warning" style={{ flexDirection: 'column', alignItems: 'flex-start', padding: 18 }}>
+            <TrendingDown size={24} style={{ color: 'var(--warning)', marginBottom: 8 }} />
+            <div style={{ fontWeight: 700, fontSize: 12, color: 'var(--warning)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>節能建議 AI Insight</div>
+            <p style={{ fontSize: 13, lineHeight: 1.6 }}>
+              偵測到空調系統在非營業時間能耗異常，建議檢查第 4 區定時設定。預計可降低 12% 離峰用電。
+            </p>
           </div>
         </div>
       </div>

@@ -1,79 +1,98 @@
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { ShieldCheck, Mail, Lock, ArrowRight, Chrome } from 'lucide-react';
-import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Orbs */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-100/30 rounded-full blur-[120px] translate-x-1/2 translate-y-1/2" />
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--berkeley-blue)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 24, position: 'relative', overflow: 'hidden',
+    }}>
+      {/* Background decoration */}
+      <div style={{
+        position: 'absolute', top: '-160px', right: '-160px',
+        width: 400, height: 400, borderRadius: '50%',
+        background: 'rgba(253,181,21,0.08)', pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '-120px', left: '-120px',
+        width: 340, height: 340, borderRadius: '50%',
+        background: 'rgba(59,126,161,0.12)', pointerEvents: 'none',
+      }} />
 
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[480px] glass-card p-12 relative z-10"
-      >
-        <div className="text-center space-y-3 mb-12">
-          <div className="w-16 h-16 bg-slate-900 text-white rounded-[1.5rem] flex items-center justify-center mx-auto shadow-2xl">
-            <ShieldCheck size={32} />
+      <div className="glass-card animate-fade-in" style={{ width: '100%', maxWidth: 460, padding: '48px 40px', position: 'relative', zIndex: 1 }}>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: 36 }}>
+          <div style={{
+            width: 60, height: 60, borderRadius: 16,
+            background: 'var(--berkeley-blue)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 16px', boxShadow: 'var(--shadow-brand)',
+          }}>
+            <ShieldCheck size={28} color="#fff" />
           </div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase">ESG GO</h1>
-          <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.3em]">Omni_Terminal Auth</p>
+          <h1 style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.04em', color: 'var(--text-primary)' }}>ESG GO</h1>
+          <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: 4 }}>
+            Omni_Terminal Auth
+          </p>
         </div>
 
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Corporate Email</label>
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 flex items-center gap-3 focus-within:border-emerald-400 focus-within:bg-white transition-all">
-              <Mail size={18} className="text-slate-300" />
-              <input 
-                type="email" 
+        {/* Form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Email */}
+          <div className="form-group">
+            <label className="form-label">企業電子郵件 Corporate Email</label>
+            <div style={{ position: 'relative' }}>
+              <Mail size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <input
+                type="email"
                 placeholder="name@company.com"
-                className="bg-transparent border-none outline-none text-sm font-bold flex-1"
+                className="form-input"
+                style={{ paddingLeft: 36 }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Secure Password</label>
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 flex items-center gap-3 focus-within:border-emerald-400 focus-within:bg-white transition-all">
-              <Lock size={18} className="text-slate-300" />
-              <input 
-                type="password" 
+          {/* Password */}
+          <div className="form-group">
+            <label className="form-label">安全密碼 Secure Password</label>
+            <div style={{ position: 'relative' }}>
+              <Lock size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <input
+                type="password"
                 placeholder="••••••••"
-                className="bg-transparent border-none outline-none text-sm font-bold flex-1"
+                className="form-input"
+                style={{ paddingLeft: 36 }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
 
-          <button className="w-full py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-xs uppercase tracking-widest hover:bg-emerald-600 active:scale-95 transition-all shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2">
-            Sign In to Terminal <ArrowRight size={16} />
+          <button className="btn btn-primary btn-lg w-full" style={{ marginTop: 4 }}>
+            登入系統 Sign In
+            <ArrowRight size={15} />
           </button>
 
-          <div className="relative py-4">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-100" /></div>
-            <div className="relative flex justify-center text-[10px] font-black uppercase"><span className="bg-white px-4 text-slate-300">Or Secure Login With</span></div>
-          </div>
+          <div className="divider-label">或使用其他方式</div>
 
-          <button className="w-full py-4 bg-white border border-slate-200 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-slate-50 transition-all">
-            <Chrome size={18} className="text-blue-500" /> Continue with Google
+          <button className="btn btn-secondary w-full">
+            <Chrome size={16} style={{ color: '#4285F4' }} />
+            使用 Google 帳號登入
           </button>
         </div>
 
-        <p className="text-center mt-12 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-          Enterprise Grade 5T Encryption Active
+        <p style={{ textAlign: 'center', marginTop: 28, fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.5px' }}>
+          Enterprise Grade · 5T Integrity Protocol Active
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }

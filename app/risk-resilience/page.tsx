@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+
 import { 
   ShieldAlert, 
   TrendingUp, 
@@ -15,7 +15,7 @@ import { mockScenarios, getRiskLevel } from '@/lib/risk-data';
 
 export default function RiskResiliencePage() {
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 pb-20">
+    <div className="page-container animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div className="flex items-center gap-3">

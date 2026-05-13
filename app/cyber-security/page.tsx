@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+
 import { 
   ShieldCheck, 
   Lock, 
@@ -16,7 +16,7 @@ import { mockIncidents, innovationStats } from '@/lib/tech-data';
 
 export default function CybersecurityPage() {
   return (
-    <div className="space-y-10 animate-in fade-in duration-700 pb-20">
+    <div className="page-container animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div className="flex items-center gap-3">
@@ -27,7 +27,7 @@ export default function CybersecurityPage() {
           </div>
           <p className="text-slate-500 font-medium text-sm mt-1">GRI 418 | 資訊安全、客戶隱私保護與綠色創新研發</p>
         </div>
-        <button className="btn-premium flex items-center gap-2">
+        <button className="btn btn-primary flex items-center gap-2">
           <Plus size={16} /> 登錄資安演練
         </button>
       </header>
