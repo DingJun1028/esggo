@@ -1,5 +1,3 @@
-import type { Chapter } from './editor-data';
-
 export interface TemplateField {
   id: string;
   label: string;

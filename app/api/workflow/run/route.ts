@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BLUE_CC_TOKEN = process.env.BLUE_CC_TOKEN || '5aec931e542749548e84b5e23d51f44b';
-const BLUE_CC_API_KEY = process.env.BLUE_CC_API_KEY || 'pat_f9c692d959e84fe7943bf2dcfdfa88c7';
+const BLUE_CC_TOKEN = process.env.BLUE_CC_TOKEN || '';
+const BLUE_CC_API_KEY = process.env.BLUE_CC_API_KEY || '';
 const BOOSTSPACE_API_KEY = process.env.BOOSTSPACE_API_KEY || '';
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
 

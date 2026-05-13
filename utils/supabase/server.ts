@@ -10,14 +10,19 @@ export const createClient = async () => {
   const cookieStore = await cookies();
   return createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
-      getAll() {
-        return cookieStore.getAll();
+      get(name) {
+        return cookieStore.get(name)?.value;
       },
-      setAll(cookiesToSet) {
+      set(name, value, options) {
         try {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
+          cookieStore.set(name, value, options);
+        } catch {
+          // Called from Server Component — safe to ignore
+        }
+      },
+      remove(name, options) {
+        try {
+          cookieStore.set(name, '', options);
         } catch {
           // Called from Server Component — safe to ignore
         }

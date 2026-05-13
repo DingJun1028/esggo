@@ -38,8 +38,8 @@ export class BlueCCClient {
   private baseUrl = 'https://api.blue.cc/v1';
 
   constructor() {
-    this.token = process.env.BLUE_CC_TOKEN || '5aec931e542749548e84b5e23d51f44b';
-    this.apiKey = process.env.BLUE_CC_API_KEY || 'pat_f9c692d959e84fe7943bf2dcfdfa88c7';
+    this.token = process.env.BLUE_CC_TOKEN || '';
+    this.apiKey = process.env.BLUE_CC_API_KEY || '';
   }
 
   async getProjects(): Promise<unknown[]> {
