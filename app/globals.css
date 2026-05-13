@@ -65,7 +65,7 @@
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
-  /* Mobile content reserve (without iOS safe-area): quick-row(42px) + bottom-tab(56px) + borders/gap(28px); safe-area is handled by nav padding in MobileNav */
+  /* Mobile content reserve (without iOS safe-area): quick-row(42px) + bottom-tab(56px) + borders/gap(28px) = 126px; safe-area is handled by nav padding in MobileNav */
   --mobile-nav-space: 126px;
   --page-inline-pad: 24px;
 }
@@ -388,7 +388,7 @@ tbody tr:hover { background: var(--surface-1); }
 @media (max-width: 1200px) { .page-wrap, .page-container { padding: 22px 22px 36px; } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 900px)  { .stats-grid { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px)  {
-  /* Small-screen extra 20px reserves expanded shortcut panel controls */
+  /* Small-screen reserve: 126px base + 20px for denser quick-row/control wrapping at <=640px = 146px */
   :root { --mobile-nav-space: 146px; --page-inline-pad: 14px; }
   .page-wrap, .page-container, .rwd-shell { padding: 16px 14px 80px; }
   .page-title { font-size: 20px; }
