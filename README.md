@@ -80,6 +80,7 @@ ESG GO Omni_Terminal
 | 模組 | 路徑 | 說明 |
 |------|------|------|
 | 永續學院 Academy | `/academy` | Berkeley Haas × TSISDA 課程 |
+| 學院設計白皮書 Academy Whitepaper | `/academy/whitepaper` | 柏克萊學院 UI/UX 白皮書（含 Atomic Design） |
 | 顧問專區 Advisors | `/advisors` | ESG 顧問配對預約 |
 | 代理專區 Agents | `/agents` | 永續聯盟代理推廣碼、善向幣 |
 | 顧問服務 Consulting | `/consulting` | 5 大模組輔導服務 |
