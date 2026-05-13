@@ -113,7 +113,7 @@ export class UCCRegistry {
   private forge = new EntropyForge();
 
   register(taskData: Omit<ITask, 'uuid' | 'version' | 'timestamp' | 'hash_lock' | 'lifecycle'>): ITask {
-    const uuid = `task_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const uuid = `task_${crypto.randomUUID()}`;
     const partial = {
       ...taskData,
       uuid,

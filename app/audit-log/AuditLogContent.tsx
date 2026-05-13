@@ -23,7 +23,7 @@ function formatTimestamp(value?: string) {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
-  }).format(date).replace(' ', ' ');
+  }).format(date);
 }
 
 export default function AuditLogContent() {
