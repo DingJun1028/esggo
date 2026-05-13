@@ -1,0 +1,35 @@
+{
+  "name": "esggo-omni-terminal",
+  "version": "8.5.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "15.0.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "@next/swc-wasm-nodejs": "15.0.3",
+    "lucide-react": "0.468.0",
+    "framer-motion": "11.15.0",
+    "recharts": "2.13.3",
+    "@supabase/supabase-js": "2.39.0",
+    "@supabase/ssr": "0.1.0",
+    "zustand": "4.5.5"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.1",
+    "postcss": "8.4.35",
+    "autoprefixer": "10.4.17",
+    "@types/node": "20.11.5",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "typescript": "5.3.3"
+  },
+  "overrides": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  }
+}
