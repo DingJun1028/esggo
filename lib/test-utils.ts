@@ -26,8 +26,8 @@ export function testHashIntegrity(): TestResult[] {
   }));
 
   results.push(runTest('EntropyForge', 'Deterministic hashing', () => {
-    const h1 = forge.generateHash('same-input');
-    const h2 = forge.generateHash('same-input');
+    const h1 = forge.generateDeterministicHash('same-input');
+    const h2 = forge.generateDeterministicHash('same-input');
     return h1 === h2;
   }));
 
@@ -64,13 +64,13 @@ export function testZKPLogic(): TestResult[] {
   results.push(runTest('ZKP', 'Proof generation', () => {
     const data = { value: 1250, unit: 'tCO2e', scope: 1 };
     const hash = forge.generateHash(JSON.stringify(data));
-    return hash.startsWith('') && hash.length === 64;
+    return /^[0-9a-f]{64}$/.test(hash);
   }));
 
   results.push(runTest('ZKP', 'Verification logic', () => {
     const data = 'GRI-305-1-verification';
-    const h1 = forge.generateHash(data);
-    const h2 = forge.generateHash(data);
+    const h1 = forge.generateDeterministicHash(data);
+    const h2 = forge.generateDeterministicHash(data);
     return h1 === h2;
   }));
 

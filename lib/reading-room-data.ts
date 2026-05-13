@@ -41,7 +41,7 @@ export const getReports = () => {
 export const addReport = (report: Omit<SustainableReport, 'id' | 'timestamp'>) => {
   const newReport: SustainableReport = {
     ...report,
-    id: Math.random().toString(36).substr(2, 9),
+    id: crypto.randomUUID(),
     timestamp: new Date(),
   };
   reports = [newReport, ...reports];
