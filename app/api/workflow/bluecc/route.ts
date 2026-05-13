@@ -3,9 +3,16 @@ import { NextRequest, NextResponse } from 'next/server';
 const BLUE_CC_TOKEN = process.env.BLUE_CC_TOKEN || '';
 const BLUE_CC_API_KEY = process.env.BLUE_CC_API_KEY || '';
 
+function sanitizeEndpoint(input?: string | null) {
+  const endpoint = input || '/projects';
+  if (endpoint === '/projects') return endpoint;
+  if (/^\/projects\/[A-Za-z0-9_-]+\/tasks$/.test(endpoint)) return endpoint;
+  return '/projects';
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const endpoint = searchParams.get('endpoint') || '/projects';
+  const endpoint = sanitizeEndpoint(searchParams.get('endpoint'));
 
   try {
     const res = await fetch(`https://api.blue.cc/v1${endpoint}`, {
@@ -37,7 +44,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { endpoint, payload } = body;
+  const endpoint = sanitizeEndpoint(body.endpoint);
+  const payload = body.payload;
 
   try {
     const res = await fetch(`https://api.blue.cc/v1${endpoint}`, {
