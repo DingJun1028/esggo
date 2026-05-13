@@ -100,7 +100,7 @@ export class BlueCCClient {
   }
 
   private getMockTask(task: { title: string; description: string; priority: string }) {
-    return { id: `task_${Date.now()}`, ...task, status: 'created', createdAt: new Date().toISOString() };
+    return { id: `task_${crypto.randomUUID()}`, ...task, status: 'created', createdAt: new Date().toISOString() };
   }
 
   private getMockTasks() {
@@ -152,7 +152,7 @@ export class BoostspaceClient {
 
   private getMockTriggerResult(scenarioId: string) {
     return {
-      executionId: `exec_${Date.now()}`,
+      executionId: `exec_${crypto.randomUUID()}`,
       scenarioId,
       status: 'running',
       startedAt: new Date().toISOString(),
@@ -410,7 +410,7 @@ export class WorkflowOrchestrator {
 
   private createRun(scenario: ScenarioType, title: string): WorkflowRun {
     const run: WorkflowRun = {
-      id: `run_${Date.now()}`,
+      id: `run_${crypto.randomUUID()}`,
       scenario,
       title,
       status: 'running',
