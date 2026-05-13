@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model EsgData {
+  id          String   @id @default(uuid())
+  code        String
+  module      String
+  label       String
+  value       Float?
+  unit        String?
+  status      String   @default("Pending")
+  evidenceId  String?  @map("evidence_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("esg_data")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  txnId     String   @unique @map("txn_id")
+  module    String
+  action    String
+  actor     String
+  dataHash  String   @map("data_hash")
+  status    String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
+
+model ReadingRoom {
+  id         String   @id @default(uuid())
+  title      String
+  summary    String?
+  source     String?
+  reportType String?  @map("report_type")
+  tags       String[]
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("reading_room")
+}
