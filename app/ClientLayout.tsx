@@ -64,7 +64,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         className="app-main"
         style={{
           marginLeft: sidebarWidth,
-          paddingBottom: isMobile ? 64 : 0,
+          paddingBottom: isMobile ? 'var(--mobile-nav-space)' : 0,
           minHeight: '100vh',
           background: 'var(--surface-1)',
         }}
