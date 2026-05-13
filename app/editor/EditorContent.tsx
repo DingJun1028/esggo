@@ -13,7 +13,8 @@ import {
   CheckCircle2,
   ChevronRight,
   Database,
-  History
+  History,
+  Plus
 } from 'lucide-react';
 import { expertTemplates, ESGTemplate } from '@/lib/templates-data';
 

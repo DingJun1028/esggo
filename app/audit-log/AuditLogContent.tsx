@@ -10,7 +10,21 @@ import {
   Clock
 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { format } from 'date-fns';
+
+function formatTimestamp(value?: string) {
+  if (!value) return '--';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('sv-SE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).format(date).replace(' ', ' ');
+}
 
 export default function AuditLogContent() {
   const [logs, setLogs] = useState<any[]>([]);
@@ -38,9 +52,9 @@ export default function AuditLogContent() {
             <div className="p-2.5 bg-slate-900 text-white rounded-2xl shadow-lg">
               <ClipboardList size={24} />
             </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tighter">5T \u5be6\u8b49\u5be9\u8a08\u65e5\u8a8c</h1>
+            <h1 className="text-3xl font-black text-slate-900 tracking-tighter">5T 實證審計日誌</h1>
           </div>
-          <p className="text-slate-500 font-medium text-sm mt-1">\u5df2\u9023\u7d50 Supabase Cloud | \u4e0d\u53ef\u7be1\u6539\u7684 ESG \u6578\u64da\u93c8\u7d50\u8ecc\u8de1</p>
+          <p className="text-slate-500 font-medium text-sm mt-1">已連結 Supabase Cloud | 不可篡改的 ESG 數據鏈結軌跡</p>
         </div>
         <button 
           onClick={() => { setLoading(true); window.location.reload(); }}
@@ -61,11 +75,11 @@ export default function AuditLogContent() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">\u4ea4\u6613 ID / \u6642\u9593</th>
-                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">\u6a21\u7d44 / \u52d5\u4f5c</th>
-                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">\u57f7\u884c\u8005</th>
-                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">\u8b49\u64da\u96dc\u6e4a (SHA-256)</th>
-                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">\u72c0\u614b</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">交易 ID / 時間</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">模組 / 動作</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">執行者</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">證據雜湊 (SHA-256)</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">狀態</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,7 +89,7 @@ export default function AuditLogContent() {
                       <div className="space-y-1">
                         <p className="font-black text-slate-900 text-xs tracking-tighter">{log.txn_id}</p>
                         <p className="text-[10px] text-slate-400 font-medium">
-                          {format(new Date(log.created_at), 'yyyy-MM-dd HH:mm:ss')}
+                          {formatTimestamp(log.created_at)}
                         </p>
                       </div>
                     </td>

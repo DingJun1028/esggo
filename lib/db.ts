@@ -494,3 +494,37 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     return { complianceRate: 78, carbonEmissions: 2140, pendingTasks: 12, evidenceCompleteness: 65, auditCount: 156, verifiedEvidence: 42 };
   }
 }
+
+export const db = {
+  logAudit,
+  getAuditLogs,
+  upsertEsgMetric,
+  getEsgMetrics,
+  getEnvironmentalData,
+  upsertEnvironmentalData,
+  getSocialMetrics,
+  upsertSocialMetric,
+  getGovernanceMetrics,
+  upsertGovernanceMetric,
+  addEvidence,
+  getEvidence,
+  verifyEvidence,
+  addReadingRoomReport,
+  getReadingRoomReports,
+  getRoadmapMilestones,
+  upsertRoadmapMilestone,
+  updateMilestoneStatus,
+  saveAdvisorySession,
+  getAdvisorySessions,
+  getPublishedReports,
+  createPublishedReport,
+  updateReportStatus,
+  getCompanyProfile,
+  upsertCompanyProfile,
+  getDigitalTwin,
+  upsertDigitalTwin,
+  getTasks,
+  createTask,
+  updateTaskStatus,
+  getDashboardStats,
+};

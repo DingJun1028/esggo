@@ -319,6 +319,7 @@ export const MOCK_HEALTH_CHECK: HealthCheckResult = {
   totalScore: 68,
   maxScore: 100,
   percentage: 68,
+  completedAt: '2026-06-20T15:00:00',
   dimensions: [
     { name: '治理架構', score: 55, max: 100, gap: '董事會永續授權、獨立董事比例' },
     { name: '環境管理', score: 72, max: 100, gap: '範疇三排放盤查、水資源管理' },
