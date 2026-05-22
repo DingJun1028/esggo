@@ -1,180 +1,153 @@
 'use client';
-import React, { useState } from 'react';
-import { FileText, Shield, CheckCircle, XCircle, Loader, Search, Lock, Eye, Clock, Hash } from 'lucide-react';
+import { useState } from 'react';
+import { Shield, Search, CheckCircle, XCircle, Clock, Hash, AlertTriangle, Lock } from 'lucide-react';
 
-interface VerifyRecord {
-  id: string;
-  hash: string;
-  resource: string;
-  gri: string;
-  status: 'verified' | 'pending' | 'failed';
-  verifiedAt: string;
-  verifier: string;
-  zkpProof: boolean;
+async function sha256(message: string): Promise<string> {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-const sampleRecords: VerifyRecord[] = [
-  { id: '1', hash: 'a3f8b2c1d9e4f7a2b8c3d5e6f1a2b3c4', resource: 'ISO 14064-1 GHG 盤查清冊 2024', gri: 'GRI 305-1', status: 'verified', verifiedAt: '2025-01-15T09:23', verifier: 'Bureau Veritas', zkpProof: true },
-  { id: '2', hash: 'd9e4f7a2b8c1d3e5f6a7b2c4d8e1f3a5', resource: 'ISO 45001 職安衛管理系統', gri: 'GRI 403-1', status: 'verified', verifiedAt: '2025-01-10T14:30', verifier: 'SGS Taiwan', zkpProof: true },
-  { id: '3', hash: 'f2e1d8a9b3c4d7e6a1b5c9d2e4f8a3b7', resource: '2024 Q3 用電數據彙整', gri: 'GRI 302-1', status: 'pending', verifiedAt: '', verifier: '待分配', zkpProof: false },
-  { id: '4', hash: 'c7b3a1e5d2f9a4b6c8e3f1a7b9d5c2e8', resource: '董事會績效評估報告', gri: 'GRI 2-9', status: 'verified', verifiedAt: '2024-12-20T10:00', verifier: 'KPMG Taiwan', zkpProof: true },
+const MOCK_RECORDS = [
+  { id: 'ev-001', title: 'GRI 305-1 溫室氣體盤查清冊', hash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', actor: '環安部主任', module: 'Environmental', status: 'verified', created_at: '2024-04-10T08:30:00Z' },
+  { id: 'ev-002', title: '台電帳單 2024-Q1', hash: 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', actor: '總務部門', module: 'Evidence', status: 'verified', created_at: '2024-04-08T14:22:00Z' },
+  { id: 'ev-003', title: 'ISO 14001 認證書', hash: '2c624232cdd221771294dfbb310acbc8d21d659b94b5dc02e26157e6e33a5f8e', actor: '環安部', module: 'Compliance', status: 'pending', created_at: '2024-04-05T10:15:00Z' },
 ];
 
 export default function AuditVerifyPage() {
   const [inputHash, setInputHash] = useState('');
+  const [verifyInput, setVerifyInput] = useState('');
+  const [result, setResult] = useState<{ match: boolean; computed: string; original: string } | null>(null);
   const [verifying, setVerifying] = useState(false);
-  const [verifyResult, setVerifyResult] = useState<'success' | 'fail' | null>(null);
-  const [matchedRecord, setMatchedRecord] = useState<VerifyRecord | null>(null);
-  const [records] = useState<VerifyRecord[]>(sampleRecords);
+  const [step, setStep] = useState(0);
+  const [selected, setSelected] = useState<typeof MOCK_RECORDS[0] | null>(null);
 
   const handleVerify = async () => {
-    if (!inputHash.trim()) return;
+    if (!verifyInput.trim() || !inputHash.trim()) return;
     setVerifying(true);
-    setVerifyResult(null);
-    await new Promise(r => setTimeout(r, 1800));
-    const found = records.find(r => r.hash.includes(inputHash.toLowerCase().replace(/^sha256:/, '')) || inputHash.toLowerCase().includes(r.hash.slice(0, 8)));
-    if (found && found.status === 'verified') {
-      setVerifyResult('success');
-      setMatchedRecord(found);
-    } else {
-      setVerifyResult('fail');
-      setMatchedRecord(null);
+    setStep(0);
+    setResult(null);
+
+    for (let i = 1; i <= 4; i++) {
+      await new Promise(r => setTimeout(r, 600));
+      setStep(i);
     }
+
+    const computed = await sha256(verifyInput);
+    setResult({ match: computed === inputHash, computed, original: inputHash });
     setVerifying(false);
   };
 
-  const verified = records.filter(r => r.status === 'verified').length;
+  const STEPS = ['接收驗算請求', 'SHA-256 雜湊計算', '比對資料庫記錄', '輸出驗算結果'];
 
   return (
-    <div className="page-container animate-fade-in">
-      <div className="page-header">
-        <div className="page-header-inner">
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--berkeley-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FileText size={18} color="#fff" />
-              </div>
-              <h1 className="page-title">VerifyLink™ 審計驗證</h1>
-            </div>
-            <div className="page-subtitle">
-              <span className="badge badge-purple">ZKP 零知識證明</span>
-              <span className="badge badge-green">第三方驗算</span>
-              <span className="badge badge-blue">SHA-256</span>
-            </div>
+    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '24px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#003262', margin: 0 }}>VerifyLink™ 審計驗算入口</h1>
+        <p style={{ color: '#64748b', marginTop: '4px', fontSize: '14px' }}>零知識證明 · SHA-256 雜湊驗算 · 5T 不可篡改協議</p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+        {/* Verifier */}
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Hash size={18} /> 即時 Hash 驗算器
+          </h3>
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'block', marginBottom: '6px' }}>輸入原始內容</label>
+            <textarea value={verifyInput} onChange={e => setVerifyInput(e.target.value)} placeholder="貼上您要驗算的原始數據或文字..."
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', outline: 'none', minHeight: '80px', resize: 'vertical', boxSizing: 'border-box' }} />
           </div>
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'block', marginBottom: '6px' }}>對照 Hash 值</label>
+            <input value={inputHash} onChange={e => setInputHash(e.target.value)} placeholder="貼上原始 SHA-256 Hash..."
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', fontFamily: 'monospace', outline: 'none', boxSizing: 'border-box' }} />
+          </div>
+          <button onClick={handleVerify} disabled={verifying || !verifyInput || !inputHash}
+            style={{ width: '100%', padding: '12px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '14px', opacity: verifying ? 0.7 : 1 }}>
+            {verifying ? '驗算中...' : '🔐 啟動 ZKP 驗算'}
+          </button>
         </div>
-      </div>
 
-      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-        <div className="stat-card"><div className="stat-value text-success">{verified}</div><div className="stat-label">已驗證記錄</div></div>
-        <div className="stat-card"><div className="stat-value text-warning">{records.filter(r => r.status === 'pending').length}</div><div className="stat-label">待驗證</div></div>
-        <div className="stat-card"><div className="stat-value" style={{ color: '#7c3aed' }}>{records.filter(r => r.zkpProof).length}</div><div className="stat-label">ZKP 封印</div></div>
-        <div className="stat-card"><div className="stat-value" style={{ color: 'var(--berkeley-blue)' }}>{Math.round((verified / records.length) * 100)}%</div><div className="stat-label">驗證完整率</div></div>
-      </div>
-
-      {/* ZKP Verifier */}
-      <div className="card" style={{ padding: 28, marginBottom: 20 }}>
-        <div style={{ maxWidth: 600, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <div style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--berkeley-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-              <Shield size={24} color="#fff" />
-            </div>
-            <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>零知識證明驗算器</h2>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>輸入 SHA-256 雜湊值，在不揭露原始數據的前提下驗證數據完整性</p>
-          </div>
-          <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
-            <div style={{ flex: 1, position: 'relative' }}>
-              <Hash size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input value={inputHash} onChange={e => setInputHash(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleVerify()}
-                placeholder="輸入 SHA-256 雜湊值（如：a3f8b2c1...）" className="form-input" style={{ paddingLeft: 36, fontFamily: 'JetBrains Mono, monospace', fontSize: 13 }} />
-            </div>
-            <button className="btn btn-primary" onClick={handleVerify} disabled={verifying || !inputHash.trim()} style={{ minWidth: 100 }}>
-              {verifying ? <Loader size={16} style={{ animation: 'spin 0.6s linear infinite' }} /> : <><Search size={14} />驗算</>}
-            </button>
-          </div>
-
-          {verifying && (
-            <div style={{ textAlign: 'center', padding: 20 }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 12 }}>
-                {['解碼雜湊', 'ZKP 驗算', '完整性確認'].map((step, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
-                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--berkeley-blue)', animation: `pulse 1s ${i * 0.3}s infinite` }} />
-                    {step}
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>執行零知識證明驗算中...</p>
-            </div>
-          )}
-
-          {verifyResult === 'success' && matchedRecord && (
-            <div className="alert alert-success" style={{ padding: '16px 20px', borderRadius: 12, border: '1px solid var(--success)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <CheckCircle size={20} color="var(--success)" />
-                  <span style={{ fontWeight: 700, fontSize: 15 }}>ZKP 驗算通過 — 數據完整性確認</span>
+        {/* Steps + Result */}
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Shield size={18} /> 驗算流程
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+            {STEPS.map((s, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: step > i ? '#003262' : step === i && verifying ? '#f59e0b' : '#e2e8f0',
+                  transition: 'background 0.3s',
+                }}>
+                  {step > i ? <CheckCircle size={16} color="#fff" /> : <span style={{ fontSize: '11px', fontWeight: '700', color: step === i && verifying ? '#fff' : '#94a3b8' }}>{i + 1}</span>}
                 </div>
-                <div style={{ paddingLeft: 28, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <div style={{ fontSize: 13 }}><strong>資源：</strong>{matchedRecord.resource}</div>
-                  <div style={{ fontSize: 13 }}><strong>GRI 指標：</strong><span className="gri-chip">{matchedRecord.gri}</span></div>
-                  <div style={{ fontSize: 13 }}><strong>驗證機構：</strong>{matchedRecord.verifier}</div>
-                  <div style={{ fontSize: 13 }}><strong>驗證時間：</strong>{matchedRecord.verifiedAt}</div>
-                </div>
+                <span style={{ fontSize: '13px', color: step > i ? '#1e293b' : '#94a3b8', fontWeight: step > i ? '600' : '400', transition: 'color 0.3s' }}>{s}</span>
               </div>
-            </div>
-          )}
-
-          {verifyResult === 'fail' && (
-            <div className="alert alert-danger" style={{ padding: '16px 20px', borderRadius: 12 }}>
-              <XCircle size={20} color="var(--danger)" />
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>驗算失敗 — 雜湊值未能匹配</div>
-                <div style={{ fontSize: 13, opacity: 0.8 }}>請確認雜湊值是否完整，或聯繫系統管理員進行人工審查。</div>
-              </div>
-            </div>
-          )}
-
-          <div style={{ marginTop: 16, padding: '12px 16px', background: 'var(--bg-tertiary)', borderRadius: 8 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 6 }}>快速測試（點擊複製雜湊值）</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {records.filter(r => r.status === 'verified').map(r => (
-                <button key={r.id} onClick={() => setInputHash(r.hash.slice(0, 16))} className="btn btn-secondary btn-sm" style={{ fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}>
-                  {r.hash.slice(0, 12)}...
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
+
+          {result && (
+            <div style={{ padding: '16px', borderRadius: '8px', background: result.match ? '#dcfce7' : '#fee2e2', border: `1px solid ${result.match ? '#86efac' : '#fca5a5'}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                {result.match ? <CheckCircle size={20} color="#16a34a" /> : <XCircle size={20} color="#dc2626" />}
+                <span style={{ fontSize: '15px', fontWeight: '800', color: result.match ? '#16a34a' : '#dc2626' }}>
+                  {result.match ? '✅ 驗算通過 — 數據完整性確認' : '❌ 驗算失敗 — Hash 不符'}
+                </span>
+              </div>
+              <div style={{ fontSize: '11px', fontFamily: 'monospace', color: '#475569', wordBreak: 'break-all' }}>
+                計算值：{result.computed.substring(0, 32)}...
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Records Table */}
-      <div className="card">
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border-light)' }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600 }}>驗證記錄台帳</h3>
+      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', margin: 0 }}>已封印實證記錄</h3>
         </div>
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr><th>文件資源</th><th>GRI 指標</th><th>SHA-256 雜湊（前 16 碼）</th><th>ZKP 狀態</th><th>驗證機構</th><th>驗證時間</th></tr>
-            </thead>
-            <tbody>
-              {records.map(r => (
-                <tr key={r.id}>
-                  <td style={{ fontWeight: 500, fontSize: 13 }}>{r.resource}</td>
-                  <td><span className="gri-chip">{r.gri}</span></td>
-                  <td style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'var(--text-muted)' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Hash size={11} />{r.hash.slice(0, 16)}...</span>
-                  </td>
-                  <td>{r.zkpProof ? <span className="tag-5t tag-locked"><Lock size={10} />ZKP 封印</span> : <span className="badge badge-gray">未封印</span>}</td>
-                  <td style={{ fontSize: 13 }}>{r.verifier}</td>
-                  <td style={{ fontSize: 12, color: r.status === 'pending' ? 'var(--warning)' : 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                    {r.status === 'pending' ? <><Clock size={12} />待驗證</> : r.verifiedAt}
-                  </td>
-                </tr>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead style={{ background: '#f8fafc' }}>
+            <tr>
+              {['文件名稱', '模組', '上傳者', '封印時間', '狀態', '操作'].map(h => (
+                <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', color: '#64748b', fontWeight: '700', borderBottom: '1px solid #e2e8f0' }}>{h}</th>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </thead>
+          <tbody>
+            {MOCK_RECORDS.map(r => (
+              <tr key={r.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Lock size={12} color="#94a3b8" />
+                    {r.title}
+                  </div>
+                </td>
+                <td style={{ padding: '14px 16px' }}>
+                  <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '20px', background: '#dbeafe', color: '#1e40af', fontWeight: '600' }}>{r.module}</span>
+                </td>
+                <td style={{ padding: '14px 16px', fontSize: '13px', color: '#64748b' }}>{r.actor}</td>
+                <td style={{ padding: '14px 16px', fontSize: '12px', color: '#94a3b8' }}>{new Date(r.created_at).toLocaleDateString('zh-TW')}</td>
+                <td style={{ padding: '14px 16px' }}>
+                  <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '20px', background: r.status === 'verified' ? '#dcfce7' : '#fef3c7', color: r.status === 'verified' ? '#16a34a' : '#92400e', fontWeight: '700' }}>
+                    {r.status === 'verified' ? '已驗證' : '待審核'}
+                  </span>
+                </td>
+                <td style={{ padding: '14px 16px' }}>
+                  <button onClick={() => { setInputHash(r.hash); setSelected(r); }}
+                    style={{ fontSize: '11px', padding: '5px 12px', background: '#003262', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>
+                    驗算
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

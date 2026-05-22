@@ -1,780 +1,1210 @@
 'use client';
-
-import { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  FileEdit, CheckCircle, AlertTriangle, Brain, Shield, Save, Download,
-  ChevronRight, ChevronDown, BookOpen, FileText, Upload, BarChart2,
-  Plus, X, TrendingUp, StickyNote, Hash, Clock, Tag, Layers,
-  MessageSquare, Activity, AlignLeft, Trash2, RefreshCw, PieChart as PieIcon
+  FileText, ChevronRight, ChevronDown, Check, X,
+  Sparkles, Shield, BookOpen, Upload, BarChart3,
+  RefreshCw, Save, Download, Eye, Edit3, Plus,
+  AlertTriangle, CheckCircle, Clock, Lock,
+  FileCheck, Users, Leaf, Building2, Zap,
 } from 'lucide-react';
-import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer
-} from 'recharts';
+import { logAudit, simpleHash } from '../../lib/db';
 
-type ChartType = 'line' | 'bar' | 'pie' | 'area';
-interface ChartKey { key: string; label: string; color: string; }
-interface ChartPreset {
-  id: string; name: string; type: ChartType; gri: string; xKey: string;
-  data: Record<string, string | number | null>[];
-  keys: ChartKey[];
+// ── GRI Chapter Data ───────────────────────────────────────────────────────
+interface DocItem { id: string; name: string; department: string; required: boolean; uploaded?: boolean; }
+interface DataField { id: string; label: string; unit: string; gri: string; value?: string; }
+interface Chapter {
+  id: string;
+  num: string;
+  title: string;
+  titleEn: string;
+  gri: string;
+  category: 'G' | 'E' | 'S';
+  estPages: number;
+  docs: DocItem[];
+  fields: DataField[];
+  expertTemplates: { persona: 'compliance' | 'harmony' | 'innovation'; text: string }[];
+  benchmark: { company: string; excerpt: string };
 }
-interface InsertedChart { uid: string; presetId: string; sectionId: string; }
-interface NoteItem {
-  id: string; type: 'note' | 'question' | 'todo' | 'done';
-  text: string; gri_tag: string; timestamp: string;
-}
-interface UploadItem { id: string; name: string; size: string; type: string; timestamp: string; }
 
-// ─── CHAPTERS (208 pages total) ──────────────────────────────────────────────
-const CHAPTERS = [
+const CHAPTERS: Chapter[] = [
   {
-    id: 'cover', title: '封面、目錄與永續摘要', gri: '通用', estimatedPages: 8, color: '#64748B',
-    sections: [
-      { id: 'cv1', title: '1.1 封面與 CEO 聲明', fields: ['企業名稱、LOGO、報告期間', '董事長/CEO 永續聲明書', 'ESG 委員會主席聲明', '確信機構名稱'], docs: ['公司 LOGO 高解析度檔案', '董事長親筆簽名掃描件', '永續委員會核准記錄'], formula: '—' },
-      { id: 'cv2', title: '1.2 目錄與 GRI/ISSB 索引', fields: ['章節目錄與頁碼對應', 'GRI 2021 內容索引表', 'ISSB S1/S2 對照表', 'TCFD 對照表', 'SDGs 對應摘要'], docs: ['最終頁碼確認表', 'GRI 索引草稿', 'ISSB 對照工作表'], formula: '—' },
-      { id: 'cv3', title: '1.3 永續績效亮點摘要', fields: ['五大 ESG 亮點（量化）', '關鍵指標年度對比表', 'UN SDGs 重點貢獻說明', '年度目標達成情況'], docs: ['年度 ESG 亮點彙整', 'KPI 對比統計表'], formula: '—' },
-    ]
+    id: 'general',
+    num: '01',
+    title: '組織概況與治理架構',
+    titleEn: 'General Disclosures',
+    gri: 'GRI 2-1 ~ 2-5',
+    category: 'G',
+    estPages: 18,
+    docs: [
+      { id: 'd1', name: '公司組織章程', department: '法務部', required: true },
+      { id: 'd2', name: '年度財務報告（稽核後）', department: '財務部', required: true },
+      { id: 'd3', name: '報告書範疇說明書', department: 'ESG 辦公室', required: true },
+      { id: 'd4', name: '永續政策聲明書', department: '高層管理', required: true },
+      { id: 'd5', name: '主要子公司清單', department: '財務部', required: false },
+    ],
+    fields: [
+      { id: 'f1', label: '公司名稱', unit: '', gri: 'GRI 2-1', value: '' },
+      { id: 'f2', label: '員工人數', unit: '人', gri: 'GRI 2-7', value: '' },
+      { id: 'f3', label: '營業收入', unit: '新台幣千元', gri: 'GRI 2-5', value: '' },
+      { id: 'f4', label: '資本額', unit: '新台幣千元', gri: 'GRI 2-5', value: '' },
+      { id: 'f5', label: '服務據點數', unit: '處', gri: 'GRI 2-1', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司依據 GRI 2021《一般揭露》標準，就組織基本資訊進行完整說明。本報告書範疇涵蓋台灣總部及所有合併子公司，報告期間為 {YEAR} 年度（1月1日至12月31日）。本公司資本額為新台幣 {CAPITAL} 元，全球員工人數共計 {EMPLOYEES} 人，提供 {LOCATIONS} 處服務據點，業務範圍涵蓋 {INDUSTRY}。報告書依照 GRI 2021 全套框架編製，並取得第三方確信（ISSA 5000）。' },
+      { persona: 'harmony', text: '本公司成立以來，秉持「善向永續、共創共榮」的核心理念，將 ESG 治理融入企業文化的每一個層面。我們深信，企業的長期競爭力不僅來自財務績效，更來自對利害關係人、社區與環境的正向貢獻。本年度報告書揭示公司在永續發展路徑上的具體行動與成果，並承諾持續透明揭露，與所有利害關係人建立長期信任關係。' },
+      { persona: 'innovation', text: '面對全球供應鏈 ESG 盡職調查浪潮、CBAM 碳邊境機制及 ISSB 氣候揭露標準的多重壓力，本公司超前部署永續轉型策略，建立以數位化 5T 誠信協議為核心的 ESG 數據治理體系。透過整合 ISO 14064-1 溫室氣體盤查、SBTi 科學基礎目標設定及第三方 ZKP 零知識驗算，確保每一筆揭露數據的可溯源性與不可篡改性，為企業創造差異化的信任資產。' },
+    ],
+    benchmark: {
+      company: '台積電 2023 年永續報告書',
+      excerpt: '本公司依GRI 2021標準揭露，報告期間涵蓋台灣、美國、日本及歐洲所有主要營運單位，並取得安侯建業會計師事務所有限確信聲明。',
+    },
   },
   {
-    id: 'general', title: '第一章：基礎治理與重大性評估', gri: 'GRI 2', estimatedPages: 28, color: '#003262',
-    sections: [
-      { id: 'g1', title: '2.1 組織基本資料（GRI 2-1 ~ 2-6）', fields: ['公司名稱、組織型態（GRI 2-1）', '主要活動、品牌、產品及服務（GRI 2-6）', '員工總人數（性別/職類/地區）（GRI 2-7）', '工人總人數（非員工）（GRI 2-8）', '供應鏈概述', '重大市場與客戶所在地', '所有權結構與法律型態', '子公司及關聯企業清單'], docs: ['公司登記證明書', '最新年報', '股東結構資料', '組織架構圖', '子公司清單'], formula: '員工人數 = 全職 + 兼職 + 定期契約（依實際在職日數加權計算）' },
-      { id: 'g2', title: '2.2 報告書基礎架構（GRI 2-2 ~ 2-5）', fields: ['報告期間與截止日（GRI 2-3）', '組織邊界/財務控制邊界（GRI 2-2）', '外部確信情況（GRI 2-5）', '報告書聯絡人資訊', '與前期報告書之重述說明', '採用之 GRI 版本'], docs: ['前期報告書', '外部確信合約', 'ISAE 3000 確信聲明書'], formula: '—' },
-      { id: 'g3', title: '2.3 治理架構（GRI 2-9 ~ 2-21）', fields: ['最高治理機構組成（GRI 2-9）', '董事會名義主席（GRI 2-11）', '最高治理機構永續角色（GRI 2-13）', '永續報告書評估批准（GRI 2-14）', '利益衝突迴避（GRI 2-15）', '最高治理機構之知識與技能（GRI 2-17）', '高階主管薪酬與永續績效連結（GRI 2-19）', '永續委員會組成與職責', '獨立董事人數與比例（≥3人或1/3）'], docs: ['董事會名冊', '董事會績效評估報告', '薪酬委員會報告', '永續委員會章程'], formula: '獨立董事比例 = 獨立董事人數 / 董事總人數 × 100%' },
-      { id: 'g4', title: '2.4 策略、政策與實踐（GRI 2-22 ~ 2-28）', fields: ['永續發展聲明（GRI 2-22）', '人權政策承諾（GRI 2-23）', '環境政策承諾（GRI 2-23）', '損害之補救機制（GRI 2-25）', '申訴機制設立（GRI 2-26）', '外部倡議遵守情況（GRI 2-27）', '行業協會成員資格（GRI 2-28）'], docs: ['永續政策文件集', '人權聲明書', '環境政策', '供應商行為準則', '申訴管道說明'], formula: '—' },
-      { id: 'g5', title: '2.5 利害關係人參與（GRI 2-29 ~ 2-30）', fields: ['利害關係人識別方法', '各群組參與方式與頻率', '關鍵關注議題彙整', '回應機制說明', '集體協商涵蓋之員工比例（GRI 2-30）'], docs: ['利害關係人問卷原始資料', '深度訪談紀錄', '參與活動記錄', '集體協商協議'], formula: '集體協商比例 = 受集體協商協議涵蓋人數 / 員工總數 × 100%' },
-      { id: 'g6', title: '2.6 雙重重大性評估（GRI 3-1 ~ 3-3）', fields: ['重大議題確認過程（GRI 3-1）', '重大議題清單（GRI 3-2）', '各重大議題管理方針（GRI 3-3）', '雙重重大性矩陣（衝擊度 × 關注度 1-10分）', '董事會審議與確認記錄', '與前期議題變化說明'], docs: ['重大性評估報告', '利害關係人問卷統計', '董事會決議記錄', '重大性矩陣圖'], formula: '重大性分數 = (衝擊度 × 0.5) + (關注度 × 0.5)；分數 ≥ 7 視為重大議題' },
-    ]
+    id: 'materiality',
+    num: '02',
+    title: '重大性評估與利害關係人議合',
+    titleEn: 'Materiality & Stakeholders',
+    gri: 'GRI 2-29 / GRI 3-1~3-3',
+    category: 'G',
+    estPages: 20,
+    docs: [
+      { id: 'd6', name: '利害關係人問卷調查結果', department: 'ESG 辦公室', required: true },
+      { id: 'd7', name: '深度訪談紀錄', department: 'ESG 辦公室', required: true },
+      { id: 'd8', name: '重大議題決策會議紀錄', department: '永續委員會', required: true },
+      { id: 'd9', name: '利害關係人識別與參與紀錄', department: 'ESG 辦公室', required: false },
+    ],
+    fields: [
+      { id: 'f6', label: '識別之利害關係人群體數', unit: '個', gri: 'GRI 2-29', value: '' },
+      { id: 'f7', label: '問卷回收率', unit: '%', gri: 'GRI 3-1', value: '' },
+      { id: 'f8', label: '確認之重大議題數', unit: '項', gri: 'GRI 3-2', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司依 GRI 3-1 至 3-3 雙重重大性評估方法，識別對公司財務績效具有重大影響，及本公司對經濟、環境、社會造成重大衝擊的 ESG 議題。評估流程分為四階段：（1）議題盤點、（2）利害關係人議合、（3）重大性評分矩陣分析、（4）董事會審議確認。本年度共識別 {TOPICS} 項重大議題，其中 E/S/G 各占 {DISTRIBUTION}。' },
+      { persona: 'harmony', text: '本公司透過多元管道與利害關係人進行深度對話，包含員工滿意度調查、客戶焦點訪談、供應商議合會議及社區說明會。本年度共觸及 {STAKEHOLDERS} 個利害關係人群體，問卷有效回收 {RESPONSES} 份，回收率達 {RATE}%。透過聆聽各方聲音，我們確保重大議題的識別真實反映社會期待，而非企業單向定義。' },
+      { persona: 'innovation', text: '本公司導入 AI 輔助重大性分析工具，整合 ESG 評分機構數據、媒體輿情監測及國際法規趨勢，動態更新議題重要性排序。結合 GRI 3-1 雙重重大性矩陣與 ISSB S1 財務重大性框架，建立跨框架的統一重大性評估方法論，有效降低揭露遺漏風險達 40%。' },
+    ],
+    benchmark: {
+      company: '鴻海 2023 年永續報告書',
+      excerpt: '本公司採GRI雙重重大性評估，識別17項重大ESG議題，並透過全球員工、客戶、供應商及非政府組織的多方議合，確保評估結果的代表性與完整性。',
+    },
   },
   {
-    id: 'environment', title: '第二章：環境面揭露 Environment (E)', gri: 'GRI 300', estimatedPages: 52, color: '#2E8B57',
-    sections: [
-      { id: 'e1', title: '3.1 溫室氣體盤查（GRI 305）', fields: ['範疇一：固定燃燒源直接排放量（tCO₂e）', '範疇一：移動燃燒源直接排放量（tCO₂e）', '範疇一：工業製程排放量（tCO₂e）', '範疇二：購買電力（位置基礎法）（tCO₂e）', '範疇二：購買電力（市場基礎法）（tCO₂e）', '範疇三 Cat.1：採購商品與服務', '範疇三 Cat.3：燃料與能源相關活動', '範疇三 Cat.4：上游運輸', '範疇三 Cat.6：商務旅行', '範疇三 Cat.7：員工通勤', 'GHG 排放密度（tCO₂e/NT$百萬元）', 'GHG 減少量（tCO₂e）', 'SBTi 科學基礎減量目標設定與進度', 'ISO 14064-1 第三方查證聲明'], docs: ['ISO 14064-1 盤查清冊', 'GHG 第三方查證聲明書', '冷媒填充紀錄', '燃油消耗紀錄', '範疇三計算工作表', '供應商碳足跡調查'], formula: '範疇一 = Σ(活動數據 × 排放係數 × GWP)；依 IPCC AR6 / 環保署最新排放係數' },
-      { id: 'e2', title: '3.2 能源管理（GRI 302）', fields: ['組織內能源消耗總量（GJ）', '化石燃料消耗量（GJ）——天然氣/柴油/汽油', '再生能源消耗量（GJ）——太陽能/風能', '購買電力消耗量（kWh）', '自發電量（kWh）', '綠電憑證 T-REC 採購數量（MWh）', '再生能源使用比例（%）', '能源密度（GJ/NT$百萬元）', '能源節省量（GJ）', 'ISO 50001 認證狀況', '低碳能源技術投資（NT$）'], docs: ['台電帳單（12個月）', 'T-REC 綠電採購憑證', '天然氣/油資帳單', 'ISO 50001 證書', '太陽能發電紀錄'], formula: '再生能源比例 = (自發再生能源 kWh + T-REC kWh) / 總用電 kWh × 100%\n能源密度 = 總能源消耗(GJ) / 年度營收(NT$百萬元)' },
-      { id: 'e3', title: '3.3 水資源管理（GRI 303）', fields: ['水資源管理方針（GRI 303-1）', '用水相關影響管理（GRI 303-2）', '各來源取水量（m³）——自來水/地下水/雨水/回收水', '缺水地區取水量', '各目的地廢水排放量（m³）（GRI 303-4）', '廢水水質指標（BOD/COD/SS/TP）', '水資源消耗量（m³）（GRI 303-5）', '水資源密度（m³/NT$百萬元）', '水資源回收再利用量與比例', '缺水地區風險評估（WRI Aqueduct）'], docs: ['自來水帳單（12個月）', '水權狀', '廢水水質月報', '廢水排放許可', '用水效率改善計畫'], formula: '水資源消耗量 = 總取水量 - 總廢水排放量\n水資源密度 = 消耗量(m³) / 年度營收(NT$百萬元)' },
-      { id: 'e4', title: '3.4 廢棄物管理（GRI 306）', fields: ['廢棄物管理方針（GRI 306-1）', '廢棄物相關顯著影響（GRI 306-2）', '廢棄物產生總量（公噸）（GRI 306-3）', '轉移廢棄物——有害/一般（GRI 306-4）', '再利用比例（%）', '回收比例（%）', '能源回收比例（%）', '焚化比例（%）', '掩埋比例（%）', '有害廢棄物處理方式說明', '廢棄物密度（公噸/NT$百萬元）', '循環經濟成果'], docs: ['廢棄物清運聯單（全年）', '回收商合法執照', '過磅單', '有害廢棄物處理合約'], formula: '廢棄物回收率 = 回收量(公噸) / 廢棄物總量(公噸) × 100%' },
-      { id: 'e5', title: '3.5 生物多樣性（GRI 304）', fields: ['各據點鄰近保護區情況（GRI 304-1）', '對生物多樣性有顯著影響之活動（GRI 304-2）', '受保護或復育物種（GRI 304-4）', 'TNFD LEAP 方法論應用', '自然相關財務揭露（TNFD Beta）', '生態補償或復育措施'], docs: ['環境影響評估報告', 'TNFD 評估報告', '生態復育計畫'], formula: '—' },
-      { id: 'e6', title: '3.6 環境合規與投資（GRI 307）', fields: ['環保違規罰款總金額（NT$）', '非金融環境處罰數量', '環境裁罰案件說明', '環保投資金額（NT$）', 'ISO 14001 認證狀況', '環境教育訓練時數'], docs: ['ISO 14001 證書', '環保局裁處書', '環保設備採購合約'], formula: '—' },
-      { id: 'e7', title: '3.7 TCFD 氣候相關財務揭露', fields: ['治理：董事會氣候風險監督機制', '治理：管理層氣候風險管理角色', '策略：已識別氣候相關風險與機會', '策略：1.5°C 情境對業務影響', '策略：4°C 情境對業務影響', '策略：氣候韌性評估', '風險管理：識別與評估流程', '風險管理：整合至整體企業風險', '指標：溫室氣體排放量（S1+S2+S3）', '指標：碳強度與2025目標', '物理風險財務影響量化（NT$M）', '轉型風險財務影響量化（NT$M）'], docs: ['TCFD 報告', '氣候情境分析報告', '碳定價影響評估', '氣候韌性評估'], formula: '碳強度 = (S1 + S2 市場基礎) tCO₂e / 年度營收 NT$百萬元' },
-    ]
+    id: 'ghg',
+    num: '03',
+    title: '溫室氣體盤查與排放管理',
+    titleEn: 'GHG Emissions',
+    gri: 'GRI 305-1 ~ 305-5',
+    category: 'E',
+    estPages: 24,
+    docs: [
+      { id: 'd10', name: 'ISO 14064-1 盤查清冊', department: '環安衛', required: true },
+      { id: 'd11', name: '查證聲明書', department: '環安衛', required: true },
+      { id: 'd12', name: '冷媒填充紀錄', department: '廠務', required: true },
+      { id: 'd13', name: '燃料採購發票', department: '廠務', required: true },
+    ],
+    fields: [
+      { id: 'f9', label: '範疇一直接排放', unit: 'tCO₂e', gri: 'GRI 305-1', value: '' },
+      { id: 'f10', label: '範疇二間接排放', unit: 'tCO₂e', gri: 'GRI 305-2', value: '' },
+      { id: 'f11', label: '範疇三排放量（已揭露項目）', unit: 'tCO₂e', gri: 'GRI 305-3', value: '' },
+      { id: 'f12', label: '碳排放強度', unit: 'tCO₂e/百萬營收', gri: 'GRI 305-4', value: '' },
+      { id: 'f13', label: '碳排放減少量（相較基準年）', unit: 'tCO₂e', gri: 'GRI 305-5', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司依照 ISO 14064-1:2018 標準進行溫室氣體盤查，並委託第三方驗證機構取得有限確信聲明。{YEAR} 年度溫室氣體排放量如下：範疇一直接排放 {SCOPE1} 公噸二氧化碳當量（tCO₂e）、範疇二間接排放 {SCOPE2} tCO₂e（市場基礎法）、範疇三已揭露項目排放 {SCOPE3} tCO₂e。所有計算採用最新版 IPCC 全球暖化潛勢值（GWP），電力排放係數採用台電年度公告值。' },
+      { persona: 'harmony', text: '氣候變遷是本公司面臨的最重大永續課題之一。我們積極推動全價值鏈的減碳行動，不僅管理自身的範疇一與範疇二排放，更攜手供應鏈夥伴共同盤查範疇三排放。透過設定科學基礎減碳目標（SBTi），我們承諾於 2030 年前將溫室氣體排放強度較基準年降低 46%，與 1.5°C 氣候目標保持一致。' },
+      { persona: 'innovation', text: '本公司率先業界導入即時碳排監測系統，透過 IoT 感測器串接生產設備，實現範疇一排放的逐日追蹤。結合 AI 預測模型，系統可提前 30 天預測月度碳排超標風險，並自動觸發節能應急措施。此外，本公司已完成 CBAM 影響評估，對歐盟出口產品的產品碳足跡均取得 ISO 14067 認證，確保零關稅壁壘風險。' },
+    ],
+    benchmark: {
+      company: '台達電子 2023 年永續報告書',
+      excerpt: '台達電2023年合併範疇一+範疇二排放量為315,876 tCO₂e，碳排放強度為0.027 tCO₂e/千美元，已完成SBTi驗證並設定2030減碳46%目標。',
+    },
   },
   {
-    id: 'social', title: '第三章：社會面揭露 Social (S)', gri: 'GRI 400', estimatedPages: 48, color: '#3B7EA1',
-    sections: [
-      { id: 's1', title: '4.1 就業與員工結構（GRI 401）', fields: ['員工總人數（全職/兼職/定期契約）', '各性別員工人數與比例', '各年齡層分布（<30/30-50/>50）', '各地區員工人數', '新進員工人數與比率（按性別/年齡）', '員工離職人數與比率（按性別/年齡）', '育嬰留停申請人數（按性別）', '育嬰留停後復職率（按性別）', '全職員工福利項目清單'], docs: ['人資系統匯出報表', '員工名冊（保密版）', '新進/離職統計表', '育嬰留停申請/復職記錄'], formula: '新進率 = 年度新進人數 / 期初員工總數 × 100%\n離職率 = 年度離職人數 / 期初員工總數 × 100%' },
-      { id: 's2', title: '4.2 職業安全衛生（GRI 403）', fields: ['職安衛管理體系（ISO 45001）（GRI 403-1）', '危害識別與風險評估（GRI 403-2）', '職業健康服務（GRI 403-3）', '工作者在職安衛中的參與（GRI 403-4）', '職安衛訓練（GRI 403-5）', '工作相關傷害——員工（GRI 403-9）', '工作相關傷害——工人（GRI 403-10）', '失能傷害頻率 FR', '失能傷害嚴重率 SR', '職業疾病發生率', '工作相關死亡人數', '零職災月份統計'], docs: ['ISO 45001 證書', '勞保局職災申報單', '工安事件調查報告', '職安衛委員會會議記錄'], formula: 'FR = 傷害次數 × 1,000,000 / 總工時\nSR = 損失工時 × 1,000,000 / 總工時\n職業疾病率 = 職業疾病案例數 × 1,000,000 / 總工時' },
-      { id: 's3', title: '4.3 訓練與教育（GRI 404）', fields: ['平均受訓時數（按性別/員工類別）（GRI 404-1）', '技能提升及轉換計畫（GRI 404-2）', '績效考核覆蓋率（按性別）（GRI 404-3）', '訓練費用總額（NT$）', '領導力發展計畫', '數位技能培訓投資', '因應 AI/自動化再培訓計畫', '內部晉升比率'], docs: ['教育訓練簽到表', '線上課程完課記錄', '績效考核系統報告', '訓練費用統計'], formula: '平均受訓時數 = 訓練總時數 / 受訓人數\n績效考核覆蓋率 = 完成考核人數 / 員工總數 × 100%' },
-      { id: 's4', title: '4.4 多元化與平等機會（GRI 405）', fields: ['治理機構成員多元性（性別/年齡）（GRI 405-1）', '女性主管比例（高/中/基層）', '薪酬比率——女性/男性（按職類）（GRI 405-2）', '身心障礙員工人數與比例', 'DEI 政策與倡議', '反歧視政策與案件統計'], docs: ['薪資結算表（保密）', 'DEI 政策文件', '身心障礙員工統計', '反歧視事件記錄'], formula: '薪酬比率 = 女性平均薪酬 / 男性平均薪酬 × 100%（按職類計算）' },
-      { id: 's5', title: '4.5 供應鏈社會責任（GRI 414）', fields: ['新供應商社會影響評估（GRI 414-1）', '供應鏈社會影響及採取行動（GRI 414-2）', '供應商行為準則簽署比例', '供應商稽核覆蓋率', '因社會考量終止之供應商', '衝突礦物政策', '供應商能力建設計畫'], docs: ['供應商行為準則簽署書', '供應商 ESG 稽核評分表', '稽核結果報告', '衝突礦物聲明'], formula: '供應商稽核率 = 完成稽核供應商數 / 重大供應商總數 × 100%' },
-      { id: 's6', title: '4.6 人權管理（GRI 412）', fields: ['人權盡職調查涵蓋業務（GRI 412-1）', '顯著投資協議人權條款（GRI 412-2）', '員工人權政策訓練比率（GRI 412-3）', '人權風險識別與評估', '供應鏈人權風險管理', '強迫勞動/童工預防政策', '結社自由保障措施'], docs: ['人權盡職調查報告', '人權政策文件', '人權訓練記錄', '供應商人權問卷'], formula: '—' },
-      { id: 's7', title: '4.7 在地社區影響（GRI 413）', fields: ['具在地社區參與之營運（GRI 413-1）', '顯著負面社區影響之營運（GRI 413-2）', '社會責任投資總額（NT$）', '公益活動類別與參與人次', '在地採購比例', '地方就業機會創造'], docs: ['社區參與評估報告', '公益活動紀錄', '在地採購統計', '社區意見調查'], formula: '在地採購比例 = 在地採購金額 / 總採購金額 × 100%' },
-    ]
+    id: 'energy',
+    num: '04',
+    title: '能源管理',
+    titleEn: 'Energy Management',
+    gri: 'GRI 302-1 ~ 302-4',
+    category: 'E',
+    estPages: 16,
+    docs: [
+      { id: 'd14', name: '台電帳單（12個月）', department: '總務/廠務', required: true },
+      { id: 'd15', name: '綠電採購憑證（T-REC）', department: '廠務', required: false },
+      { id: 'd16', name: '油資發票或採購單', department: '廠務', required: true },
+    ],
+    fields: [
+      { id: 'f14', label: '總用電量', unit: 'kWh', gri: 'GRI 302-1', value: '' },
+      { id: 'f15', label: '化石燃料使用量', unit: 'GJ', gri: 'GRI 302-1', value: '' },
+      { id: 'f16', label: '再生能源使用比例', unit: '%', gri: 'GRI 302-1', value: '' },
+      { id: 'f17', label: '能源強度', unit: 'kWh/百萬營收', gri: 'GRI 302-3', value: '' },
+      { id: 'f18', label: '能源節約量', unit: 'GJ', gri: 'GRI 302-4', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司依 GRI 302 能源標準揭露各類能源使用情況。{YEAR} 年度總用電量為 {ELECTRICITY} 度（kWh），其中再生能源比例達 {RENEWABLE}%，已採購 T-REC 綠電憑證 {TREC} 度。化石燃料使用量折合 {FOSSIL} GJ，涵蓋天然氣、柴油及汽油。能源強度較去年改善 {IMPROVEMENT}%，達到年度節能目標。' },
+      { persona: 'harmony', text: '能源效率提升不僅降低碳排放，更直接節省企業營運成本。本公司推動全員節能文化，從辦公室照明改採 LED、製程設備導入變頻馬達，到建立能源管理系統（ISO 50001），每一項措施都源自員工自主提案。{YEAR} 年度員工節能提案共計 {PROPOSALS} 件，實現節電 {SAVINGS} 度，折合節省電費新台幣 {COST_SAVINGS} 萬元。' },
+      { persona: 'innovation', text: '本公司建置智慧能源管理平台（SEMS），整合廠區所有用電設備的即時數據，透過機器學習演算法識別能耗異常並自動優化生產排程。{YEAR} 年度透過 SEMS 實現節電 {SMART_SAVINGS} 度，較傳統人工管理提升效率 35%。此外，屋頂太陽能裝置容量已達 {SOLAR} kWp，年度自發電量約 {SELF_POWER} 萬度，自給率提升至 {SELF_RATE}%。' },
+    ],
+    benchmark: {
+      company: '友達光電 2023 年永續報告書',
+      excerpt: '友達2023年再生能源使用比例達75.3%，能源強度較2017基準年降低33%，獲RE100成員資格，目標2050年100%再生能源。',
+    },
   },
   {
-    id: 'governance', title: '第四章：公司治理揭露 Governance (G)', gri: 'GRI 200', estimatedPages: 32, color: '#4B0082',
-    sections: [
-      { id: 'gv1', title: '5.1 經濟績效（GRI 201）', fields: ['直接創造並分配的經濟價值（GRI 201-1）', '氣候變遷財務衝擊（GRI 201-2）', '確定福利計畫義務（GRI 201-3）', '政府提供的財務補助（GRI 201-4）', '年度營收、成本、薪酬、社區投資、股利分配表'], docs: ['財務報告', '氣候財務影響評估', '退休金精算報告', '政府補助申請文件'], formula: '經濟價值 = 營收 - (採購成本 + 薪酬 + 稅款 + 社區投資 + 股利)' },
-      { id: 'gv2', title: '5.2 採購實踐（GRI 204）', fields: ['在地供應商採購比例（GRI 204-1）', '在地採購政策說明', '前 10 大供應商在地/國際比例', '在地採購促進計畫'], docs: ['採購系統報告', '在地採購統計表', '供應商名冊'], formula: '在地採購比例 = 在地供應商採購金額 / 總採購金額 × 100%' },
-      { id: 'gv3', title: '5.3 反貪腐（GRI 205）', fields: ['貪腐風險評估業務數量（GRI 205-1）', '反貪腐政策訓練人數（GRI 205-2）', '已確認貪腐事件數（GRI 205-3）', '廉政申訴管道運作情況', '舉報件數與處理結果', '貪腐相關法律訴訟'], docs: ['反貪腐政策文件', '內部稽核報告', '申訴管道記錄', '法務裁罰通知書'], formula: '反貪腐訓練覆蓋率 = 完成訓練人數 / 適用人員總數 × 100%' },
-      { id: 'gv4', title: '5.4 稅務透明度（GRI 207）', fields: ['稅務管理方針（GRI 207-1）', '利害關係人溝通稅務（GRI 207-2）', '國家稅務倡議（GRI 207-3）', '國家別報告（GRI 207-4）：各地稅前盈利/實際稅率/員工', '移轉訂價政策說明', '有效稅率 vs 法定稅率差異'], docs: ['稅務申報書', '移轉訂價報告', '國家別稅務揭露文件'], formula: '有效稅率 = 實際應繳稅款 / 稅前盈利 × 100%' },
-      { id: 'gv5', title: '5.5 資訊安全與客戶隱私（GRI 418）', fields: ['客戶隱私違規投訴（GRI 418-1）', '個資外洩事件數及影響人數', 'ISO 27001 認證', '資安事件應對計畫（CSIRP）', '員工資安訓練覆蓋率', '供應商資安管理', '資安漏洞掃描覆蓋率', 'GDPR/個資法合規'], docs: ['ISO 27001 證書', '資安演練紀錄', '系統弱點掃描報告', '個資保護政策', 'CSIRP 文件'], formula: '—' },
-    ]
+    id: 'water',
+    num: '05',
+    title: '水資源管理',
+    titleEn: 'Water & Effluents',
+    gri: 'GRI 303-1 ~ 303-5',
+    category: 'E',
+    estPages: 14,
+    docs: [
+      { id: 'd17', name: '自來水帳單', department: '廠務/環安衛', required: true },
+      { id: 'd18', name: '水權狀', department: '廠務', required: false },
+      { id: 'd19', name: '廢水處理廠水質檢測報告', department: '環安衛', required: true },
+    ],
+    fields: [
+      { id: 'f19', label: '總取水量', unit: 'm³', gri: 'GRI 303-3', value: '' },
+      { id: 'f20', label: '廢水排放量', unit: 'm³', gri: 'GRI 303-4', value: '' },
+      { id: 'f21', label: '水資源回收再利用率', unit: '%', gri: 'GRI 303-5', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司依 GRI 303 水資源標準進行揭露，評估水資源壓力地區的取水風險。{YEAR} 年度總取水量為 {WATER_INTAKE} 立方公尺，廢水排放量 {WATER_DISCHARGE} 立方公尺，水資源回收再利用率達 {RECYCLE_RATE}%。廠區廢水處理達到放流水標準，定期委託環保局認可實驗室檢測，全年度無違規事件。' },
+      { persona: 'harmony', text: '水是生命之源，也是台灣日益珍貴的資源。本公司在生產過程中積極推動節水措施，包含製程用水循環再利用、雨水收集系統及員工節水行為宣導。我們關注廠區所在地的水資源壓力，並與地方政府及社區共同規劃永續水資源管理策略。' },
+      { persona: 'innovation', text: '本公司投入新台幣 {INVESTMENT} 萬元建置先進廢水處理回收系統，採用薄膜生物反應器（MBR）技術，將廢水回收率提升至 {RECYCLE_RATE}%。結合數位水錶及 AI 漏水預警系統，有效降低管線水損率至 {LOSS_RATE}% 以下，年度節水效益達 {WATER_SAVINGS} 噸。' },
+    ],
+    benchmark: {
+      company: '台灣大哥大 2023 年永續報告書',
+      excerpt: '台灣大哥大2023年取水強度較2019基準年降低18%，新北市機房導入雨水回收系統，年節水量達1,500公噸。',
+    },
   },
   {
-    id: 'issb', title: '第五章：ISSB S1/S2 永續財務揭露', gri: 'ISSB S1/S2', estimatedPages: 22, color: '#1B4F8A',
-    sections: [
-      { id: 'i1', title: '6.1 ISSB S1 永續相關財務資訊通用要求', fields: ['治理：最高治理機構監督機制', '治理：管理層角色', '策略：重大永續相關風險與機會', '策略：短中長期財務影響', '策略：韌性評估與情境分析', '風險管理：識別評估排序過程', '風險管理：整合至整體風險管理', '指標：衡量和監測所用指標', '目標：設定的永續目標與進度'], docs: ['ISSB S1 評估報告', '董事會批准記錄', '風險管理政策文件'], formula: '—' },
-      { id: 'i2', title: '6.2 ISSB S2 氣候相關揭露', fields: ['氣候治理：董事會監督機制', '氣候治理：管理層角色', '氣候情境分析（1.5°C/2°C/4°C）', '物理風險：急性風險（極端天氣）', '物理風險：慢性風險（海平面上升）', '轉型風險：政策法規/技術/市場', '氣候相關機會識別', '氣候財務影響量化', 'S1+S2 溫室氣體排放量', '範疇三適用類別排放量', '碳強度指標（tCO₂e/NT$百萬元）', 'SBTi 目標認定'], docs: ['ISSB S2 評估報告', 'SBTi 認定文件', '氣候情境分析', '物理風險地圖', '轉型風險評估'], formula: '碳強度 = (S1 + S2 市場基礎) tCO₂e / 年度營收 NT$百萬元' },
-    ]
+    id: 'waste',
+    num: '06',
+    title: '廢棄物管理',
+    titleEn: 'Waste',
+    gri: 'GRI 306-1 ~ 306-5',
+    category: 'E',
+    estPages: 14,
+    docs: [
+      { id: 'd20', name: '廢棄物清運聯單', department: '環安衛', required: true },
+      { id: 'd21', name: '回收商合法執照', department: '環安衛', required: true },
+      { id: 'd22', name: '處理廠過磅單', department: '環安衛', required: true },
+    ],
+    fields: [
+      { id: 'f22', label: '有害廢棄物總量', unit: '公噸', gri: 'GRI 306-3', value: '' },
+      { id: 'f23', label: '一般廢棄物總量', unit: '公噸', gri: 'GRI 306-4', value: '' },
+      { id: 'f24', label: '資源回收率', unit: '%', gri: 'GRI 306-5', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '{YEAR} 年度本公司廢棄物管理依 GRI 306 標準揭露。有害廢棄物總量 {HAZARDOUS} 公噸，委託合法廢棄物清除處理機構處理，全程追蹤清除處理流程；一般廢棄物總量 {GENERAL} 公噸，資源回收率 {RECYCLE_RATE}%，其中廢紙、金屬、塑膠等主要品項均達到主管機關規定之最低回收比例。全年度無違反廢棄物相關法規事件。' },
+      { persona: 'harmony', text: '本公司推動「零廢棄物」願景，從源頭減量、再使用、回收到妥善處置，建立完整廢棄物管理階層。員工廢棄物分類意識逐年提升，{YEAR} 年辦公室一般廢棄物回收率達 {OFFICE_RECYCLE}%，較前年提升 {IMPROVEMENT}個百分點。我們與在地社區合作，推動廢棄物資源化，讓廢料成為他人的原料。' },
+      { persona: 'innovation', text: '本公司導入工業共生概念，與鄰近廠商建立廢棄物交換平台，將生產過程產生的廢熱、廢溶劑及廢金屬轉化為其他企業的原料或能源。{YEAR} 年度透過工業共生實現廢棄物資源化 {SYMBIOSIS} 公噸，避免掩埋或焚化，估計減少碳排放 {CO2_AVOID} 公噸。' },
+    ],
+    benchmark: {
+      company: '南亞塑膠 2023 年永續報告書',
+      excerpt: '南亞塑膠2023年廢棄物資源化率達87.3%，有害廢棄物全程追蹤，無重大環保違規事件，廢棄物強度較2016年基準年降低15%。',
+    },
   },
   {
-    id: 'appendix', title: '附錄：索引、對照表與確信聲明', gri: 'Appendix', estimatedPages: 18, color: '#64748B',
-    sections: [
-      { id: 'a1', title: '附錄 A：GRI 2021 完整內容索引', fields: ['GRI 2 通用揭露索引（2-1 至 2-30）', 'GRI 3 重大議題索引（3-1 至 3-3）', 'GRI 300 環境系列全部指標', 'GRI 400 社會系列全部指標'], docs: ['GRI 內容索引完整表', '外部確信確認表'], formula: '—' },
-      { id: 'a2', title: '附錄 B：SASB 產業標準對照', fields: ['SICS 產業識別', '適用 SASB 主題與指標', 'SASB 與 GRI/ISSB 對照表'], docs: ['SASB 對照分析文件'], formula: '—' },
-      { id: 'a3', title: '附錄 C：外部確信聲明', fields: ['確信範圍說明', '確信標準（ISAE 3000/AA1000AS）', '確信等級（有限/合理）', '確信師獨立性聲明'], docs: ['外部確信報告全文', 'ISAE 3000 聲明書'], formula: '—' },
-      { id: 'a4', title: '附錄 D：UN SDGs 對應矩陣', fields: ['ESG 活動與 17 個 SDGs 對應', '重點 SDGs 說明', 'SDGs 指標貢獻量化'], docs: ['SDGs 對應分析表'], formula: '—' },
-    ]
+    id: 'workforce',
+    num: '07',
+    title: '員工結構與勞動實踐',
+    titleEn: 'Employment & Labor',
+    gri: 'GRI 2-7 / GRI 401 / GRI 405',
+    category: 'S',
+    estPages: 22,
+    docs: [
+      { id: 'd23', name: '人資系統匯出報表', department: '人資部', required: true },
+      { id: 'd24', name: '員工名冊（含性別/職級）', department: '人資部', required: true },
+      { id: 'd25', name: '育嬰留停及復職率統計表', department: '人資部', required: true },
+    ],
+    fields: [
+      { id: 'f25', label: '全職員工總人數', unit: '人', gri: 'GRI 2-7', value: '' },
+      { id: 'f26', label: '女性員工比例', unit: '%', gri: 'GRI 405-1', value: '' },
+      { id: 'f27', label: '員工自願離職率', unit: '%', gri: 'GRI 401-1', value: '' },
+      { id: 'f28', label: '男女薪酬比（中位數）', unit: '比', gri: 'GRI 405-2', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '截至 {YEAR} 年 12 月 31 日，本公司全球員工人數共計 {EMPLOYEES} 人，其中正職員工 {FULL_TIME} 人，兼職員工 {PART_TIME} 人。依性別分析，女性員工占 {FEMALE_RATE}%；依職級分析，管理職中女性比例為 {FEMALE_MGMT}%。全年度新進員工 {NEW_HIRE} 人，離職員工 {TURNOVER} 人，自願離職率 {TURNOVER_RATE}%。' },
+      { persona: 'harmony', text: '本公司深信多元包容的工作環境是企業永續發展的基石。我們積極推動 DEI（多元、公平、包容）政策，提供友善職場環境，包含彈性上班制度、家庭照顧假、心理健康支援方案及無障礙工作環境。{YEAR} 年度員工敬業度調查滿意度達 {ENGAGEMENT}%，連續三年位居業界前 25%。' },
+      { persona: 'innovation', text: '面對人才競爭白熱化，本公司打造「AI 輔助職涯發展系統」，透過大數據分析員工職能缺口，客製化推薦學習資源，實現個人化職涯成長路徑。{YEAR} 年度內部晉升比例達 {INTERNAL_PROMO}%，有效降低關鍵職位外部招募成本，同時激勵高潛力員工長期投入。' },
+    ],
+    benchmark: {
+      company: '聯發科技 2023 年永續報告書',
+      excerpt: '聯發科2023年全球員工24,038人，女性比例27%，管理職女性比例22%，獲CDP人力資本評比A-評級，推行全球薪酬公平審查機制。',
+    },
+  },
+  {
+    id: 'safety',
+    num: '08',
+    title: '職業安全衛生',
+    titleEn: 'Occupational Health & Safety',
+    gri: 'GRI 403-1 ~ 403-10',
+    category: 'S',
+    estPages: 18,
+    docs: [
+      { id: 'd26', name: 'ISO 45001 證書', department: '環安衛/人資', required: false },
+      { id: 'd27', name: '勞保局職災申報單', department: '環安衛', required: true },
+      { id: 'd28', name: '工安事件調查報告', department: '環安衛', required: true },
+    ],
+    fields: [
+      { id: 'f29', label: '失能傷害頻率（FR）', unit: '次/百萬工時', gri: 'GRI 403-9', value: '' },
+      { id: 'f30', label: '總工時', unit: '小時', gri: 'GRI 403-9', value: '' },
+      { id: 'f31', label: '職業病件數', unit: '件', gri: 'GRI 403-10', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '{YEAR} 年度本公司依 GRI 403 職業安全衛生標準進行揭露。全年總工時 {TOTAL_HOURS} 小時，失能傷害頻率（FR）為 {FR}（次/百萬工時），失能傷害嚴重率（SR）為 {SR}（損失工時/百萬工時），職業病件數 {OCC_DISEASE} 件。所有廠區均建立符合 ISO 45001 要求之職業安全衛生管理系統，定期辦理稽核與改善。' },
+      { persona: 'harmony', text: '零職災是本公司最莊嚴的承諾。我們建立「安全文化金字塔」，從最高層的安全願景到基層員工的日常安全行為，形成全員參與的安全文化。每月辦理職安委員會議，員工可透過匿名管道通報不安全行為或環境，確保每一項風險都被即時識別與消除。' },
+      { persona: 'innovation', text: '本公司引入工業 AI 視覺辨識系統，即時監控製程區域的人員行為安全合規性，包含個人防護裝備佩戴偵測及危險區域入侵預警。{YEAR} 年系統辨識不安全行為 {ALERT} 次，及時介入率達 {RESPONSE_RATE}%，有效防止潛在職災發生。' },
+    ],
+    benchmark: {
+      company: '台灣化學纖維 2023 年永續報告書',
+      excerpt: '台化2023年失能傷害頻率FR為0.34，低於石化業平均值0.89，推行行為安全觀察計畫，完成觀察12,345次，安全行為符合率99.2%。',
+    },
+  },
+  {
+    id: 'training',
+    num: '09',
+    title: '人才培育與發展',
+    titleEn: 'Training & Education',
+    gri: 'GRI 404-1 ~ 404-3',
+    category: 'S',
+    estPages: 14,
+    docs: [
+      { id: 'd29', name: '教育訓練簽到表', department: '人資部', required: true },
+      { id: 'd30', name: '線上課程完課紀錄', department: '人資部', required: true },
+      { id: 'd31', name: '績效考核系統紀錄', department: '人資部', required: true },
+    ],
+    fields: [
+      { id: 'f32', label: '平均每人年受訓時數', unit: '小時/人', gri: 'GRI 404-1', value: '' },
+      { id: 'f33', label: '績效考核覆蓋率', unit: '%', gri: 'GRI 404-3', value: '' },
+      { id: 'f34', label: '訓練總投資金額', unit: '新台幣千元', gri: 'GRI 404-1', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '{YEAR} 年度本公司員工訓練總時數達 {TOTAL_TRAINING_HOURS} 小時，平均每人每年受訓時數 {AVG_TRAINING} 小時，訓練總投資金額新台幣 {TRAINING_INVESTMENT} 千元。績效考核制度涵蓋 {PERFORMANCE_RATE}% 之正職員工，評核項目包含工作績效（60%）及核心職能（40%），並與薪酬調整及晉升決策連動。' },
+      { persona: 'harmony', text: '本公司視人才為最重要的競爭資產，投入大量資源建構完整的學習生態系。從新進員工的 Onboarding 計畫、中階主管領導力培訓，到高階主管的策略思維工作坊，每一位員工都能獲得量身打造的學習資源。{YEAR} 年度員工主動學習時數達 {SELF_LEARNING} 小時，自主學習意願持續提升。' },
+      { persona: 'innovation', text: '本公司打造企業大學（Corporate University）平台，整合實體課程、線上微學習（Microlearning）及 AI 個人化推薦引擎，建構 70-20-10 學習框架。{YEAR} 年度透過 AI 學習推薦系統，員工平均學習完成率提升至 {COMPLETION_RATE}%，較傳統課程安排提高 {IMPROVEMENT}個百分點。' },
+    ],
+    benchmark: {
+      company: '統一企業 2023 年永續報告書',
+      excerpt: '統一企業2023年員工平均受訓時數達45.2小時，ESG及永續相關訓練占比23%，建置數位學習平台，線上課程完成率達91%。',
+    },
+  },
+  {
+    id: 'supply_chain',
+    num: '10',
+    title: '供應鏈永續管理',
+    titleEn: 'Supply Chain Management',
+    gri: 'GRI 308 / GRI 414',
+    category: 'S',
+    estPages: 16,
+    docs: [
+      { id: 'd32', name: '供應商行為準則簽署書', department: '採購部', required: true },
+      { id: 'd33', name: '供應商 ESG 稽核評分表', department: '採購部', required: true },
+    ],
+    fields: [
+      { id: 'f35', label: '在地採購比例', unit: '%', gri: 'GRI 204-1', value: '' },
+      { id: 'f36', label: '簽署永續承諾書供應商比例', unit: '%', gri: 'GRI 308-1', value: '' },
+      { id: 'f37', label: '已接受 ESG 評估之供應商比例', unit: '%', gri: 'GRI 308-2', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司建立嚴謹之供應商永續管理制度，要求所有策略供應商簽署《供應商行為準則》，承諾遵守人權、勞工、環境及商業倫理相關規範。截至 {YEAR} 年底，已有 {SIGNED_RATE}% 的策略供應商完成簽署。本年度對前 {AUDITED} 大供應商進行 ESG 實地稽核，識別高風險供應商 {HIGH_RISK} 家並完成改善追蹤。' },
+      { persona: 'harmony', text: '供應商是本公司價值鏈不可或缺的夥伴。我們不僅要求供應商遵守最低標準，更積極提供 ESG 能力建置資源，包含免費的永續培訓課程、碳足跡計算輔導及 ESG 評鑑工具。{YEAR} 年度協助 {SUPPORT_SUPPLIER} 家中小型供應商完成首次碳盤查，共同推進供應鏈減碳。' },
+      { persona: 'innovation', text: '本公司建置「供應鏈永續透明化平台」，整合供應商 ESG 數據、風險評分及改善軌跡，實現供應鏈永續績效的即時可視化。運用 AI 供應鏈風險模型，分析地緣政治、氣候、勞工及法規風險，提前預警高風險事件，供應鏈韌性指數較前年提升 {RESILIENCE}%。' },
+    ],
+    benchmark: {
+      company: '華碩電腦 2023 年永續報告書',
+      excerpt: '華碩2023年100%策略供應商簽署供應商行為準則，對237家高風險供應商完成ESG稽核，導入供應鏈碳盤查，協助80家供應商完成碳盤查。',
+    },
+  },
+  {
+    id: 'board',
+    num: '11',
+    title: '董事會治理與薪酬連結',
+    titleEn: 'Board Governance',
+    gri: 'GRI 2-9 ~ 2-20',
+    category: 'G',
+    estPages: 18,
+    docs: [
+      { id: 'd34', name: '董事會名冊', department: '董事會秘書室', required: true },
+      { id: 'd35', name: '董事會績效評估報告', department: '董事會秘書室', required: true },
+      { id: 'd36', name: '高階主管薪酬連結 ESG 說明', department: '董事會', required: true },
+    ],
+    fields: [
+      { id: 'f38', label: '獨立董事比例', unit: '%', gri: 'GRI 2-9', value: '' },
+      { id: 'f39', label: '女性董事比例', unit: '%', gri: 'GRI 405-1', value: '' },
+      { id: 'f40', label: 'ESG 連結薪酬比例（高管）', unit: '%', gri: 'GRI 2-19', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司董事會由 {BOARD_SIZE} 位董事組成，其中獨立董事 {IND_DIRECTORS} 位，比例達 {IND_RATE}%，符合法規最低要求。女性董事 {FEMALE_DIRECTORS} 位，占 {FEMALE_BOARD_RATE}%。董事會設有審計委員會、薪酬委員會及永續委員會，每季定期召開會議，監督公司 ESG 策略執行。{YEAR} 年度董事會共召開 {BOARD_MEETINGS} 次，平均出席率 {ATTENDANCE_RATE}%。' },
+      { persona: 'harmony', text: '多元化的董事會組成是優質治理的基礎。本公司致力於提升董事會的多元性，不僅追求性別平衡，更重視產業背景、國際視野及 ESG 專業的多元組合。 {YEAR} 年度完成董事會整體績效評估，針對 ESG 議題的治理效能進行專項評估，並將評估結果公開揭露，接受利害關係人監督。' },
+      { persona: 'innovation', text: '本公司率先將 ESG 關鍵績效指標（KPIs）系統性納入高階主管薪酬計算機制。ESG 績效指標占短期激勵（STI）計算基礎的 {ESG_STI}%，涵蓋碳排放減量、員工敬業度及供應鏈永續評分三大面向。此一「薪酬 ESG 連結」設計，有效驅動管理層將永續思維落實於日常決策。' },
+    ],
+    benchmark: {
+      company: '中信金融 2023 年永續報告書',
+      excerpt: '中信金控2023年董事會獨立董事比例62.5%，女性董事比例37.5%，高階主管薪酬與ESG目標連結，永續績效占年度短期激勵計算25%。',
+    },
+  },
+  {
+    id: 'ethics',
+    num: '12',
+    title: '商業倫理與反貪腐',
+    titleEn: 'Business Ethics & Anti-Corruption',
+    gri: 'GRI 205 / GRI 206 / GRI 207',
+    category: 'G',
+    estPages: 14,
+    docs: [
+      { id: 'd37', name: '內部稽核報告', department: '稽核/法務', required: true },
+      { id: 'd38', name: '申訴管道紀錄', department: '法務部', required: true },
+      { id: 'd39', name: '稅務策略聲明書', department: '財務部', required: true },
+    ],
+    fields: [
+      { id: 'f41', label: '貪腐相關調查事件數', unit: '件', gri: 'GRI 205-3', value: '' },
+      { id: 'f42', label: '因違反法規被罰款總額', unit: '新台幣千元', gri: 'GRI 2-27', value: '' },
+      { id: 'f43', label: '有效稅率', unit: '%', gri: 'GRI 207-1', value: '' },
+      { id: 'f44', label: '申訴件數', unit: '件', gri: 'GRI 2-25', value: '' },
+    ],
+    expertTemplates: [
+      { persona: 'compliance', text: '本公司恪守商業誠信與反貪腐原則，建立完整之廉潔文化制度架構。{YEAR} 年度反貪腐相關訓練涵蓋率達 {TRAINING_RATE}%，申訴管道共受理 {COMPLAINTS} 件，均依程序完成調查與處置。無重大貪腐事件、無裁罰、無法律訴訟案件，符合 GRI 205 及金管會法遵要求。有效稅率為 {EFFECTIVE_TAX}%，稅務策略透明揭露。' },
+      { persona: 'harmony', text: '誠信是本公司最珍貴的資產。我們在全體員工中推動「誠信文化工程」，透過案例分析研討、誠信行為守則宣導及吹哨者保護制度，建立全員共識。每位員工每年完成反貪腐線上課程，管理職人員額外參加情境模擬研討，確保誠信理念內化為日常行為準則。' },
+      { persona: 'innovation', text: '本公司運用 AI 法遵監控系統，即時掃描交易數據中的異常模式，自動標記潛在利益衝突或不尋常支出。{YEAR} 年度 AI 系統主動識別疑似異常交易 {AI_ALERTS} 筆，經人工複核後 {CONFIRMED} 筆確認為需關注案件，有效提升內控效率，降低法遵風險。' },
+    ],
+    benchmark: {
+      company: '富邦金控 2023 年永續報告書',
+      excerpt: '富邦金控2023年反貪腐訓練覆蓋率100%，吹哨者保護案件處理完成率100%，有效稅率18.3%，連續5年零重大貪腐事件。',
+    },
   },
 ];
 
-// ─── PRESET CHARTS ─────────────────────────────────────────────────────────
-const PRESET_CHARTS: ChartPreset[] = [
-  {
-    id: 'ghg_trend', name: 'GHG 三範疇排放趨勢（tCO₂e）', type: 'line', gri: 'GRI 305', xKey: 'name',
-    data: [{ name: '2022', s1: 1450, s2: 1020, total: 5800 }, { name: '2023', s1: 1380, s2: 950, total: 5540 }, { name: '2024', s1: 1310, s2: 920, total: 5320 }, { name: '2025', s1: 1250, s2: 890, total: 5140 }],
-    keys: [{ key: 's1', label: '範疇一', color: '#2E8B57' }, { key: 's2', label: '範疇二', color: '#3B7EA1' }, { key: 'total', label: '三範疇合計', color: '#003262' }]
-  },
-  {
-    id: 'energy_mix', name: '能源結構分布（%）', type: 'pie', gri: 'GRI 302', xKey: 'name',
-    data: [{ name: '購買電力', value: 58, color: '#3B7EA1' }, { name: '天然氣', value: 22, color: '#B8860B' }, { name: '再生能源', value: 15, color: '#2E8B57' }, { name: '燃油', value: 5, color: '#CC4400' }],
-    keys: [{ key: 'value', label: '比例', color: '' }]
-  },
-  {
-    id: 'water_trend', name: '水資源消耗趨勢（m³）', type: 'area', gri: 'GRI 303', xKey: 'year',
-    data: [{ year: '2022', intake: 48500, consume: 16500 }, { year: '2023', intake: 46200, consume: 14700 }, { year: '2024', intake: 44800, consume: 13600 }, { year: '2025', intake: 42100, consume: 11600 }],
-    keys: [{ key: 'intake', label: '取水量 m³', color: '#3B7EA1' }, { key: 'consume', label: '消耗量 m³', color: '#B8860B' }]
-  },
-  {
-    id: 'waste_dist', name: '廢棄物處理方式分布（%）', type: 'pie', gri: 'GRI 306', xKey: 'name',
-    data: [{ name: '資源回收', value: 45, color: '#2E8B57' }, { name: '能源回收', value: 28, color: '#B8860B' }, { name: '焚化', value: 18, color: '#CC4400' }, { name: '掩埋', value: 9, color: '#94A3B8' }],
-    keys: [{ key: 'value', label: '比例 %', color: '' }]
-  },
-  {
-    id: 'gender_dept', name: '各部門性別分布（人數）', type: 'bar', gri: 'GRI 401', xKey: 'dept',
-    data: [{ dept: '生產部', male: 120, female: 45 }, { dept: '工程部', male: 85, female: 22 }, { dept: '業務部', male: 38, female: 52 }, { dept: '管理部', male: 25, female: 38 }],
-    keys: [{ key: 'male', label: '男性', color: '#003262' }, { key: 'female', label: '女性', color: '#FDB515' }]
-  },
-  {
-    id: 'safety_kpi', name: '職安衛 KPI 趨勢', type: 'line', gri: 'GRI 403', xKey: 'year',
-    data: [{ year: '2022', FR: 0.68, SR: 18.5 }, { year: '2023', FR: 0.55, SR: 15.2 }, { year: '2024', FR: 0.48, SR: 13.1 }, { year: '2025', FR: 0.42, SR: 12.8 }],
-    keys: [{ key: 'FR', label: '失能傷害頻率 FR', color: '#DC2626' }, { key: 'SR', label: '嚴重率 SR', color: '#D97706' }]
-  },
-  {
-    id: 'training_hrs', name: '平均受訓時數（小時/年）', type: 'bar', gri: 'GRI 404', xKey: 'category',
-    data: [{ category: '高階主管', male: 28, female: 26 }, { category: '中階主管', male: 34, female: 32 }, { category: '基層人員', male: 38, female: 36 }, { category: '技術人員', male: 42, female: 40 }],
-    keys: [{ key: 'male', label: '男性（h）', color: '#003262' }, { key: 'female', label: '女性（h）', color: '#3B7EA1' }]
-  },
-  {
-    id: 'carbon_path', name: '碳排放減量路徑（SBTi）', type: 'area', gri: 'TCFD / ISSB S2', xKey: 'year',
-    data: [{ year: '2022', actual: 5800, target: 5800 }, { year: '2023', actual: 5540, target: 5510 }, { year: '2024', actual: 5320, target: 5220 }, { year: '2025', actual: 5140, target: 4930 }, { year: '2028E', actual: null, target: 4060 }, { year: '2030E', actual: null, target: 2668 }],
-    keys: [{ key: 'actual', label: '實際排放量', color: '#DC2626' }, { key: 'target', label: 'SBTi 目標路徑', color: '#2E8B57' }]
-  },
-];
+const PERSONA_META = {
+  compliance: { label: '合規守衛', color: 'var(--blue-700)', bg: 'var(--blue-50)', border: 'var(--blue-100)' },
+  harmony:    { label: '共榮引導', color: 'var(--green-700)', bg: 'var(--green-50)', border: 'var(--green-100)' },
+  innovation: { label: '創新先行', color: 'var(--purple-600)', bg: 'var(--purple-50)', border: 'var(--purple-100)' },
+};
 
-const GRI_TAGS = ['GRI 2', 'GRI 302', 'GRI 303', 'GRI 305', 'GRI 306', 'GRI 401', 'GRI 403', 'GRI 404', 'GRI 405', 'TCFD', 'ISSB S2', 'SBTi'];
-const NOTE_TYPES = [
-  { id: 'note' as const, label: '備註', color: '#3B7EA1', bg: '#EBF5FB' },
-  { id: 'question' as const, label: '待確認', color: '#D97706', bg: '#FEF3C7' },
-  { id: 'todo' as const, label: '待辦', color: '#DC2626', bg: '#FEF2F2' },
-  { id: 'done' as const, label: '已完成', color: '#16A34A', bg: '#DCFCE7' },
-];
+const CATEGORY_META = {
+  G: { label: '治理', color: 'var(--blue-700)', bg: 'var(--blue-50)' },
+  E: { label: '環境', color: 'var(--green-700)', bg: 'var(--green-50)' },
+  S: { label: '社會', color: 'var(--purple-600)', bg: 'var(--purple-50)' },
+};
 
-// ─── CHART RENDERER ────────────────────────────────────────────────────────
-function ChartRenderer({ chart }: { chart: ChartPreset }) {
-  if (chart.type === 'pie') {
-    return (
-      <ResponsiveContainer width="100%" height={220}>
-        <PieChart>
-          <Pie data={chart.data} dataKey="value" cx="50%" cy="50%" outerRadius={80}
-            label={({ name, value }) => `${name}: ${value}%`} labelLine={false}>
-            {chart.data.map((entry, i) => (
-              <Cell key={i} fill={('color' in entry && typeof entry.color === 'string') ? entry.color : '#003262'} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
-    );
-  }
-  if (chart.type === 'bar') {
-    return (
-      <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={chart.data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-          <XAxis dataKey={chart.xKey} tick={{ fontSize: 10 }} />
-          <YAxis tick={{ fontSize: 10 }} />
-          <Tooltip />
-          <Legend />
-          {chart.keys.map(k => (
-            <Bar key={k.key} dataKey={k.key} fill={k.color} name={k.label} radius={[3, 3, 0, 0]} />
-          ))}
-        </BarChart>
-      </ResponsiveContainer>
-    );
-  }
-  if (chart.type === 'area') {
-    return (
-      <ResponsiveContainer width="100%" height={220}>
-        <AreaChart data={chart.data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-          <XAxis dataKey={chart.xKey} tick={{ fontSize: 10 }} />
-          <YAxis tick={{ fontSize: 10 }} />
-          <Tooltip />
-          <Legend />
-          {chart.keys.map(k => (
-            <Area key={k.key} type="monotone" dataKey={k.key} stroke={k.color}
-              fill={k.color + '20'} name={k.label} connectNulls={false} />
-          ))}
-        </AreaChart>
-      </ResponsiveContainer>
-    );
-  }
-  return (
-    <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={chart.data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-        <XAxis dataKey={chart.xKey} tick={{ fontSize: 10 }} />
-        <YAxis tick={{ fontSize: 10 }} />
-        <Tooltip />
-        <Legend />
-        {chart.keys.map(k => (
-          <Line key={k.key} type="monotone" dataKey={k.key} stroke={k.color}
-            strokeWidth={2} name={k.label} dot={{ r: 3 }} />
-        ))}
-      </LineChart>
-    </ResponsiveContainer>
-  );
+// ── Helpers ────────────────────────────────────────────────────────────────
+function timeAgo(ts: string): string {
+  const diff = (Date.now() - new Date(ts).getTime()) / 1000;
+  if (diff < 60) return '剛剛';
+  if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+  return `${Math.floor(diff / 3600)} 小時前`;
 }
 
-// ─── MAIN PAGE ─────────────────────────────────────────────────────────────
-const BLUE = '#003262';
-const GOLD = '#FDB515';
-const TOTAL_PAGES = CHAPTERS.reduce((a, c) => a + c.estimatedPages, 0);
-
+// ── Main Component ─────────────────────────────────────────────────────────
 export default function EditorPage() {
-  const [activeChapterId, setActiveChapterId] = useState('general');
-  const [activeSectionId, setActiveSectionId] = useState('g1');
-  const [content, setContent] = useState('本公司依據 GRI 2021 準則，以雙重重大性評估方法，識別並揭露對環境、社會及公司治理層面具顯著影響之核心議題。本章節提供完整的組織背景、治理架構與重大性評估結果。\n\n本報告書涵蓋期間為 2025 年 1 月 1 日至 12 月 31 日，報告邊界為母公司合併財務控制範圍內之所有營運實體，共涵蓋台灣本島 3 個主要生產基地及 2 個海外子公司。\n\n報告書依循 GRI 2021 核心選項編製，並已取得 KPMG Taiwan 有限確信（ISAE 3000）。本報告書已獲永續委員會及董事會審閱並核准發布。');
-  const [selectedTags, setSelectedTags] = useState<string[]>(['GRI 2']);
-  const [tab, setTab] = useState<'write' | 'preview'>('write');
-  const [showChartModal, setShowChartModal] = useState(false);
-  const [insertedCharts, setInsertedCharts] = useState<InsertedChart[]>([]);
-  const [checkedDocs, setCheckedDocs] = useState<Record<string, boolean>>({});
-  const [showDocs, setShowDocs] = useState(true);
-  const [showNotes, setShowNotes] = useState(true);
-  const [notesTab, setNotesTab] = useState<'notes' | 'upload'>('notes');
-  const [notes, setNotes] = useState<NoteItem[]>([
-    { id: 'n1', type: 'question', text: '確認 GRI 2-7 員工人數是否包含派遣員工', gri_tag: 'GRI 2', timestamp: '2026-05-13 10:30' },
-    { id: 'n2', type: 'todo', text: '請人資部門於 6/15 前提供 2025 年育嬰留停復職數據', gri_tag: 'GRI 401', timestamp: '2026-05-13 11:20' },
-  ]);
-  const [uploads, setUploads] = useState<UploadItem[]>([
-    { id: 'u1', name: '董事會名冊_2025.pdf', size: '1.2 MB', type: 'PDF', timestamp: '2026-05-13 09:15' },
-    { id: 'u2', name: '重大性評估問卷統計.xlsx', size: '0.8 MB', type: 'Excel', timestamp: '2026-05-12 16:40' },
-  ]);
-  const [newNoteText, setNewNoteText] = useState('');
-  const [newNoteType, setNewNoteType] = useState<'note' | 'question' | 'todo' | 'done'>('note');
-  const [newNoteTag, setNewNoteTag] = useState('GRI 2');
-  const [saved, setSaved] = useState(false);
-  const [sectionContents, setSectionContents] = useState<Record<string, string>>({});
-  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({ general: true });
+  const [selectedChapterId, setSelectedChapterId] = useState<string>('general');
+  const [content, setContent] = useState<Record<string, string>>({});
+  const [fields, setFields] = useState<Record<string, Record<string, string>>>({});
+  const [docStatus, setDocStatus] = useState<Record<string, Record<string, boolean>>>({});
+  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [selectedPersona, setSelectedPersona] = useState<'compliance' | 'harmony' | 'innovation'>('compliance');
+  const [generating, setGenerating] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [sealing, setSealing] = useState(false);
+  const [sealedChapters, setSealedChapters] = useState<Record<string, string>>({});
+  const [activePanel, setActivePanel] = useState<'write' | 'data' | 'docs' | 'benchmark'>('write');
+  const [navCollapsed, setNavCollapsed] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [showBenchmark, setShowBenchmark] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const activeChapter = CHAPTERS.find(c => c.id === activeChapterId)!;
-  const activeSection = activeChapter?.sections.find(s => s.id === activeSectionId)
-    || activeChapter?.sections[0];
+  const chapter = CHAPTERS.find(c => c.id === selectedChapterId) ?? CHAPTERS[0];
 
-  const sectionKey = `${activeChapterId}-${activeSectionId}`;
-  const currentContent = sectionContents[sectionKey] ?? content;
+  const showToast = useCallback((msg: string, type: 'success' | 'error' | 'info' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 2800);
+  }, []);
 
-  const chartsForSection = insertedCharts.filter(c => c.sectionId === activeSectionId);
+  // Load from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('esggo_editor_state');
+      if (saved) {
+        const state = JSON.parse(saved);
+        if (state.content) setContent(state.content);
+        if (state.fields) setFields(state.fields);
+        if (state.docStatus) setDocStatus(state.docStatus);
+        if (state.notes) setNotes(state.notes);
+        if (state.sealedChapters) setSealedChapters(state.sealedChapters);
+      }
+    } catch { /* ignore */ }
+  }, []);
 
-  const totalDocs = CHAPTERS.reduce((a, c) => a + c.sections.reduce((b, s) => b + s.docs.length, 0), 0);
-  const completedDocs = Object.values(checkedDocs).filter(Boolean).length;
-  const completionPct = Math.round((completedDocs / totalDocs) * 100);
+  const saveToLocal = useCallback((newContent?: Record<string, string>, newFields?: Record<string, Record<string, string>>, newDocs?: Record<string, Record<string, boolean>>, newNotes?: Record<string, string>, newSealed?: Record<string, string>) => {
+    try {
+      localStorage.setItem('esggo_editor_state', JSON.stringify({
+        content: newContent ?? content,
+        fields: newFields ?? fields,
+        docStatus: newDocs ?? docStatus,
+        notes: newNotes ?? notes,
+        sealedChapters: newSealed ?? sealedChapters,
+        savedAt: new Date().toISOString(),
+      }));
+    } catch { /* ignore */ }
+  }, [content, fields, docStatus, notes, sealedChapters]);
 
-  const handleSave = () => {
-    setSectionContents(prev => ({ ...prev, [sectionKey]: currentContent }));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handleGenerate = async () => {
+    const template = chapter.expertTemplates.find(t => t.persona === selectedPersona);
+    if (!template) return;
+    setGenerating(true);
+    await new Promise(r => setTimeout(r, 1200));
+    const chFields = fields[chapter.id] ?? {};
+    let generated = template.text;
+    chapter.fields.forEach(f => {
+      const val = chFields[f.id] || `[${f.label}]`;
+      generated = generated.replace(new RegExp(`\\{${f.id}\\}`, 'g'), val);
+    });
+    const updated = { ...content, [chapter.id]: generated };
+    setContent(updated);
+    saveToLocal(updated);
+    setGenerating(false);
+    showToast(`${PERSONA_META[selectedPersona].label} 草稿生成完成 ✓`);
+    setActivePanel('write');
   };
 
-  const handleInsertChart = (presetId: string) => {
-    setInsertedCharts(prev => [...prev, { uid: Date.now().toString(), presetId, sectionId: activeSectionId }]);
-    setShowChartModal(false);
+  const handleSave = async () => {
+    setSaving(true);
+    await new Promise(r => setTimeout(r, 600));
+    saveToLocal();
+    await logAudit({
+      action: 'SAVE_DRAFT',
+      resource: `永續撰寫 - ${chapter.title}`,
+      user_name: 'User',
+      t5_tag: 'T5',
+      details: `章節 ${chapter.num} 草稿儲存，字數: ${(content[chapter.id] ?? '').length}`,
+    });
+    setSaving(false);
+    showToast('草稿已儲存 ✓');
   };
 
-  const handleRemoveChart = (uid: string) => {
-    setInsertedCharts(prev => prev.filter(c => c.uid !== uid));
+  const handleSeal = async () => {
+    if (!content[chapter.id]?.trim()) {
+      showToast('請先完成內容撰寫再進行 5T 封印', 'error');
+      return;
+    }
+    setSealing(true);
+    await new Promise(r => setTimeout(r, 1800));
+    const hash = simpleHash(chapter.id + content[chapter.id] + Date.now().toString());
+    const updatedSealed = { ...sealedChapters, [chapter.id]: hash };
+    setSealedChapters(updatedSealed);
+    saveToLocal(undefined, undefined, undefined, undefined, updatedSealed);
+    await logAudit({
+      action: 'ZKP_SEAL',
+      resource: `章節封印 - ${chapter.title}`,
+      user_name: 'User',
+      t5_tag: 'T4',
+      details: `SHA-256: ${hash}`,
+    });
+    setSealing(false);
+    showToast(`5T 封印完成 · Hash: ${hash.slice(0, 8)}...`);
   };
 
-  const handleAddNote = () => {
-    if (!newNoteText.trim()) return;
-    const note: NoteItem = {
-      id: Date.now().toString(), type: newNoteType,
-      text: newNoteText, gri_tag: newNoteTag,
-      timestamp: new Date().toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+  const toggleDoc = (docId: string) => {
+    const updated = {
+      ...docStatus,
+      [chapter.id]: {
+        ...(docStatus[chapter.id] ?? {}),
+        [docId]: !(docStatus[chapter.id]?.[docId]),
+      },
     };
-    setNotes(prev => [note, ...prev]);
-    setNewNoteText('');
+    setDocStatus(updated);
+    saveToLocal(undefined, undefined, updated);
   };
 
-  const handleRemoveNote = (id: string) => setNotes(prev => prev.filter(n => n.id !== id));
-
-  const handleSimulateUpload = () => {
-    const fakeFiles = ['Q1_能源數據.xlsx', '廢水水質報告_2025.pdf', '供應商問卷統計.xlsx', 'ISO14064查證聲明.pdf'];
-    const f = fakeFiles[Math.floor(Math.random() * fakeFiles.length)];
-    const newFile: UploadItem = {
-      id: Date.now().toString(), name: f,
-      size: `${(Math.random() * 3 + 0.3).toFixed(1)} MB`,
-      type: f.endsWith('.pdf') ? 'PDF' : 'Excel',
-      timestamp: new Date().toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+  const updateField = (fieldId: string, value: string) => {
+    const updated = {
+      ...fields,
+      [chapter.id]: { ...(fields[chapter.id] ?? {}), [fieldId]: value },
     };
-    setUploads(prev => [newFile, ...prev]);
+    setFields(updated);
+    saveToLocal(undefined, updated);
   };
 
-  const handleRemoveUpload = (id: string) => setUploads(prev => prev.filter(u => u.id !== id));
+  const updateContent = (val: string) => {
+    const updated = { ...content, [chapter.id]: val };
+    setContent(updated);
+  };
 
-  const toggleTag = (t: string) => setSelectedTags(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]);
-  const toggleDoc = (key: string) => setCheckedDocs(prev => ({ ...prev, [key]: !prev[key] }));
+  const updateNote = (val: string) => {
+    const updated = { ...notes, [chapter.id]: val };
+    setNotes(updated);
+    saveToLocal(undefined, undefined, undefined, updated);
+  };
+
+  // Stats
+  const totalDocs = CHAPTERS.reduce((s, c) => s + c.docs.length, 0);
+  const uploadedDocs = CHAPTERS.reduce((s, c) => s + c.docs.filter(d => docStatus[c.id]?.[d.id]).length, 0);
+  const filledChapters = CHAPTERS.filter(c => content[c.id]?.trim()).length;
+  const sealedCount = Object.keys(sealedChapters).length;
+  const totalPages = CHAPTERS.reduce((s, c) => s + c.estPages, 0);
+
+  const chDocs = chapter.docs;
+  const uploadedChDocs = chDocs.filter(d => docStatus[chapter.id]?.[d.id]).length;
+  const chFieldsFilled = chapter.fields.filter(f => fields[chapter.id]?.[f.id]?.trim()).length;
+  const chCompletion = Math.round(
+    ((content[chapter.id] ? 50 : 0) +
+      (uploadedChDocs / chDocs.length) * 30 +
+      (chFieldsFilled / chapter.fields.length) * 20)
+  );
+
+  const catMeta = CATEGORY_META[chapter.category];
+  const isSealed = !!sealedChapters[chapter.id];
 
   return (
-    <div style={{ background: '#F4F6F9', minHeight: '100vh' }}>
-      {/* Header */}
-      <div className="page-header">
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <FileEdit size={20} color={GOLD} />
-            <span style={{ color: '#A8C8E8', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase' }}>
-              SustainWrite · 5T Protocol · ZKP Seal · 208 Pages
-            </span>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+      {/* Toast */}
+      {toast && (
+        <div style={{
+          position: 'fixed', top: 20, right: 20, zIndex: 9999,
+          background: toast.type === 'error' ? 'var(--red-700)' : toast.type === 'info' ? 'var(--blue-700)' : 'var(--green-700)',
+          color: '#fff', padding: '10px 18px', borderRadius: 'var(--radius-xl)',
+          fontSize: 13, fontWeight: 600, boxShadow: 'var(--shadow-xl)',
+          animation: 'fade-in 0.2s var(--ease)', display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          {toast.type === 'success' ? <CheckCircle size={14} /> : toast.type === 'error' ? <AlertTriangle size={14} /> : <Zap size={14} />}
+          {toast.msg}
+        </div>
+      )}
+
+      {/* Top Header */}
+      <div style={{
+        flexShrink: 0, background: 'var(--surface-card)',
+        borderBottom: '1px solid var(--border-default)',
+        padding: '0 var(--space-5)', height: 56,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-4)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 'var(--radius-lg)',
+            background: 'var(--blue-700)', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', color: '#fff', flexShrink: 0,
+          }}>
+            <FileText size={16} />
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-            <h1 style={{ color: '#fff', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: 800, margin: 0 }}>
-              永續撰寫 SustainWrite Editor
+          <div>
+            <h1 style={{ fontSize: 'var(--font-size-base)', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2 }}>
+              SustainWrite™ 永續撰寫工作台
             </h1>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              {[
-                { l: '總頁數', v: `${TOTAL_PAGES} 頁` },
-                { l: '章節數', v: `${CHAPTERS.reduce((a, c) => a + c.sections.length, 0)}` },
-                { l: '文件就緒', v: `${completedDocs}/${totalDocs}` },
-                { l: '完成度', v: `${completionPct}%` }
-              ].map(s => (
-                <div key={s.l} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 8, padding: '5px 12px', display: 'flex', gap: 6, alignItems: 'center' }}>
-                  <span style={{ color: GOLD, fontWeight: 800, fontSize: 14 }}>{s.v}</span>
-                  <span style={{ color: '#A8C8E8', fontSize: 11 }}>{s.l}</span>
-                </div>
-              ))}
-            </div>
+            <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', marginTop: 1 }}>
+              GRI 2021 全套 · 5T 誠信協議 · {CHAPTERS.length} 章節 · 預計 {totalPages}+ 頁
+            </p>
           </div>
-          {/* Overall Progress */}
-          <div style={{ marginTop: 10, height: 6, background: 'rgba(255,255,255,0.15)', borderRadius: 3, overflow: 'hidden', maxWidth: 400 }}>
-            <div style={{ height: '100%', width: `${completionPct}%`, background: GOLD, borderRadius: 3, transition: 'width 0.6s' }} />
+        </div>
+
+        {/* Summary Stats */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+          {[
+            { label: '章節完成', value: `${filledChapters}/${CHAPTERS.length}`, color: 'var(--blue-700)' },
+            { label: '文件就緒', value: `${uploadedDocs}/${totalDocs}`, color: 'var(--green-700)' },
+            { label: '已封印', value: `${sealedCount}/${CHAPTERS.length}`, color: 'var(--gold-600)' },
+          ].map(s => (
+            <div key={s.label} style={{ textAlign: 'center', minWidth: 56 }}>
+              <p style={{ fontSize: 'var(--font-size-base)', fontWeight: 700, color: s.color, lineHeight: 1 }}>{s.value}</p>
+              <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>{s.label}</p>
+            </div>
+          ))}
+
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            <button
+              className="btn btn-ghost btn-sm flex items-center gap-2"
+              onClick={handleSave}
+              disabled={saving}
+              aria-label="儲存草稿"
+            >
+              {saving ? <RefreshCw size={13} className="spin" /> : <Save size={13} />}
+              儲存
+            </button>
+            <button
+              className="btn btn-primary btn-sm flex items-center gap-2"
+              onClick={handleSeal}
+              disabled={sealing || !content[chapter.id]?.trim() || isSealed}
+              aria-label="5T 封印"
+            >
+              {sealing ? <RefreshCw size={13} className="spin" /> : <Lock size={13} />}
+              {isSealed ? '已封印' : '5T 封印'}
+            </button>
+            <button className="btn btn-ghost btn-sm" aria-label="匯出報告">
+              <Download size={13} />
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Main 3-column layout */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 16px', display: 'grid', gridTemplateColumns: '220px 1fr 290px', gap: 14, alignItems: 'start' }}>
-
-        {/* ── LEFT: Chapter Nav ── */}
-        <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', overflow: 'hidden', position: 'sticky', top: 16 }}>
-          <div style={{ padding: '11px 14px', background: BLUE, color: '#fff', fontSize: 12, fontWeight: 700 }}>章節導覽</div>
-          {/* Doc Collection Status */}
-          <div style={{ padding: '10px 14px', borderBottom: '1px solid #F1F5F9', background: '#FFFBEB' }}>
-            <div style={{ fontSize: 10, color: '#92400E', fontWeight: 700, marginBottom: 5 }}>總單據收集狀況</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#78350F', marginBottom: 4 }}>
-              <span>已收集</span><span style={{ fontWeight: 800 }}>{completedDocs}/{totalDocs}</span>
-            </div>
-            <div style={{ height: 4, background: '#FEF3C7', borderRadius: 2, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${completionPct}%`, background: GOLD, borderRadius: 2 }} />
-            </div>
+      {/* Global Doc Collection Status */}
+      <div style={{
+        flexShrink: 0, background: 'var(--surface-section)',
+        borderBottom: '1px solid var(--border-subtle)',
+        padding: 'var(--space-3) var(--space-5)',
+        display: 'flex', alignItems: 'center', gap: 'var(--space-4)',
+      }}>
+        <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700, color: 'var(--text-secondary)', flexShrink: 0 }}>
+          總單據收集狀況：
+        </span>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+          <div className="progress-track" style={{ flex: 1, height: 8 }}>
+            <div className="progress-fill" style={{ width: `${totalDocs > 0 ? Math.round((uploadedDocs / totalDocs) * 100) : 0}%`, background: 'var(--green-500)' }} />
           </div>
-          {/* Chapter List */}
-          <div style={{ maxHeight: 'calc(100vh - 260px)', overflowY: 'auto' }}>
-            {CHAPTERS.map(ch => {
-              const isExpanded = expandedChapters[ch.id];
-              const isActiveChapter = activeChapterId === ch.id;
+          <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700, color: 'var(--green-700)', flexShrink: 0 }}>
+            {uploadedDocs}/{totalDocs} ({totalDocs > 0 ? Math.round((uploadedDocs / totalDocs) * 100) : 0}%)
+          </span>
+        </div>
+        {/* Chapter pills */}
+        <div style={{ display: 'flex', gap: 4, flexShrink: 0, flexWrap: 'wrap' }}>
+          {CHAPTERS.map(c => {
+            const chUploaded = c.docs.filter(d => docStatus[c.id]?.[d.id]).length;
+            const pct = Math.round((chUploaded / c.docs.length) * 100);
+            const hasContent = !!content[c.id]?.trim();
+            const sealed = !!sealedChapters[c.id];
+            return (
+              <div
+                key={c.id}
+                title={`${c.num}. ${c.title} — 文件 ${chUploaded}/${c.docs.length}，${hasContent ? '已填寫' : '未填寫'}${sealed ? '，已封印' : ''}`}
+                style={{
+                  width: 18, height: 18, borderRadius: 4,
+                  background: sealed ? 'var(--gold-100)' : hasContent ? 'var(--blue-100)' : pct > 0 ? 'var(--green-100)' : 'var(--neutral-200)',
+                  border: `1.5px solid ${sealed ? 'var(--gold-400)' : hasContent ? 'var(--blue-300)' : pct > 0 ? 'var(--green-300)' : 'var(--neutral-300)'}`,
+                  cursor: 'pointer',
+                  transition: 'transform var(--duration-fast)',
+                }}
+                onClick={() => setSelectedChapterId(c.id)}
+              />
+            );
+          })}
+        </div>
+        <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+          {[
+            { color: 'var(--gold-300)', label: '已封印' },
+            { color: 'var(--blue-200)', label: '已撰寫' },
+            { color: 'var(--green-200)', label: '有文件' },
+            { color: 'var(--neutral-200)', label: '未開始' },
+          ].map(l => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: 10, height: 10, borderRadius: 2, background: l.color, border: '1px solid rgba(0,0,0,0.1)' }} />
+              <span style={{ fontSize: 10, color: 'var(--text-tertiary)' }}>{l.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Body */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+
+        {/* Chapter Navigation */}
+        <div style={{
+          width: navCollapsed ? 52 : 220,
+          flexShrink: 0,
+          borderRight: '1px solid var(--border-default)',
+          background: 'var(--surface-card)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          transition: 'width var(--duration-normal) var(--ease)',
+        }}>
+          <div style={{
+            display: 'flex', alignItems: 'center',
+            justifyContent: navCollapsed ? 'center' : 'space-between',
+            padding: navCollapsed ? 'var(--space-3)' : 'var(--space-3) var(--space-3) var(--space-2)',
+            borderBottom: '1px solid var(--border-subtle)',
+          }}>
+            {!navCollapsed && (
+              <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                章節導覽
+              </span>
+            )}
+            <button
+              className="btn btn-ghost btn-icon btn-xs"
+              onClick={() => setNavCollapsed(p => !p)}
+              aria-label={navCollapsed ? '展開章節導覽' : '收合章節導覽'}
+            >
+              {navCollapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
+            </button>
+          </div>
+
+          <div style={{ flex: 1, overflowY: 'auto', padding: '6px 4px' }}>
+            {['G', 'E', 'S'].map(cat => {
+              const catChapters = CHAPTERS.filter(c => c.category === cat);
+              const catMeta2 = CATEGORY_META[cat as 'G' | 'E' | 'S'];
               return (
-                <div key={ch.id}>
-                  <button
-                    onClick={() => {
-                      setExpandedChapters(prev => ({ ...prev, [ch.id]: !prev[ch.id] }));
-                      setActiveChapterId(ch.id);
-                      setActiveSectionId(ch.sections[0].id);
-                    }}
-                    style={{ width: '100%', padding: '9px 12px', background: isActiveChapter ? '#EBF2FF' : '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'flex-start', gap: 7, borderLeft: `3px solid ${isActiveChapter ? ch.color : 'transparent'}`, textAlign: 'left' }}
-                  >
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: ch.color, flexShrink: 0, marginTop: 4 }} />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: isActiveChapter ? ch.color : '#374151', lineHeight: 1.3 }}>{ch.title}</div>
-                      <div style={{ fontSize: 9, color: '#94A3B8', marginTop: 2 }}>{ch.gri} · 約 {ch.estimatedPages} 頁</div>
+                <div key={cat}>
+                  {!navCollapsed && (
+                    <div style={{
+                      padding: '6px 8px 4px',
+                      fontSize: 10, fontWeight: 700,
+                      color: catMeta2.color,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                    }}>
+                      {catMeta2.label}
                     </div>
-                    {isExpanded ? <ChevronDown size={11} color="#94A3B8" /> : <ChevronRight size={11} color="#94A3B8" />}
-                  </button>
-                  {isExpanded && ch.sections.map(sec => (
-                    <button
-                      key={sec.id}
-                      onClick={() => { setActiveChapterId(ch.id); setActiveSectionId(sec.id); }}
-                      style={{ width: '100%', padding: '7px 12px 7px 24px', background: activeSectionId === sec.id ? `${ch.color}10` : '#fff', border: 'none', cursor: 'pointer', borderLeft: `3px solid ${activeSectionId === sec.id ? ch.color : 'transparent'}`, textAlign: 'left' }}
-                    >
-                      <div style={{ fontSize: 10, color: activeSectionId === sec.id ? ch.color : '#64748B', fontWeight: activeSectionId === sec.id ? 700 : 500, lineHeight: 1.3 }}>{sec.title}</div>
-                    </button>
-                  ))}
+                  )}
+                  {catChapters.map(c => {
+                    const active = c.id === selectedChapterId;
+                    const hasContent = !!content[c.id]?.trim();
+                    const sealed = !!sealedChapters[c.id];
+                    const chUploaded2 = c.docs.filter(d => docStatus[c.id]?.[d.id]).length;
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedChapterId(c.id)}
+                        title={navCollapsed ? `${c.num}. ${c.title}` : undefined}
+                        style={{
+                          width: '100%', display: 'flex', alignItems: 'center',
+                          gap: 8, padding: navCollapsed ? '8px' : '7px 10px',
+                          borderRadius: 'var(--radius-lg)', border: 'none',
+                          background: active ? 'var(--blue-50)' : 'transparent',
+                          cursor: 'pointer', textAlign: 'left',
+                          fontFamily: 'var(--font-sans)',
+                          borderLeft: `2px solid ${active ? 'var(--blue-700)' : 'transparent'}`,
+                          marginBottom: 2,
+                          transition: 'all var(--duration-fast) var(--ease)',
+                          minHeight: 40,
+                          justifyContent: navCollapsed ? 'center' : 'flex-start',
+                        }}
+                        aria-current={active ? 'page' : undefined}
+                      >
+                        {/* Status dot */}
+                        <div style={{
+                          width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+                          background: sealed ? 'var(--gold-500)' : hasContent ? 'var(--blue-500)' : chUploaded2 > 0 ? 'var(--green-400)' : 'var(--neutral-300)',
+                        }} />
+                        {!navCollapsed && (
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{
+                              fontSize: 11, lineHeight: 1.3,
+                              color: active ? 'var(--blue-700)' : 'var(--text-secondary)',
+                              fontWeight: active ? 600 : 400,
+                              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                            }}>
+                              {c.num}. {c.title}
+                            </p>
+                            <p style={{ fontSize: 9, color: 'var(--text-tertiary)', marginTop: 1 }}>
+                              {c.gri}
+                            </p>
+                          </div>
+                        )}
+                        {!navCollapsed && sealed && (
+                          <Lock size={10} style={{ color: 'var(--gold-500)', flexShrink: 0 }} />
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* ── CENTER: Editor ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {/* Section Header */}
-          <div style={{ background: '#fff', borderRadius: 12, border: `2px solid ${activeChapter.color}30`, padding: '14px 18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ background: activeChapter.color, color: '#fff', borderRadius: 5, padding: '2px 9px', fontSize: 10, fontWeight: 800 }}>{activeChapter.gri}</span>
-                  <span style={{ background: `${activeChapter.color}15`, color: activeChapter.color, borderRadius: 5, padding: '2px 8px', fontSize: 10, fontWeight: 700 }}>約 {activeChapter.estimatedPages} 頁</span>
+        {/* Main Editor Area */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+
+          {/* Chapter Header */}
+          <div style={{
+            flexShrink: 0,
+            padding: 'var(--space-4) var(--space-5)',
+            borderBottom: '1px solid var(--border-subtle)',
+            background: 'var(--surface-card)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-4)', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 'var(--radius-lg)',
+                  background: catMeta.bg, color: catMeta.color,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0, fontWeight: 700, fontSize: 14,
+                  fontFamily: 'var(--font-mono)',
+                }}>
+                  {chapter.num}
                 </div>
-                <div style={{ fontWeight: 700, color: '#111', fontSize: 15, marginTop: 4 }}>{activeSection?.title}</div>
-                <div style={{ fontSize: 11, color: '#64748B', marginTop: 2 }}>{activeChapter.title}</div>
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                {(['write', 'preview'] as const).map(t => (
-                  <button key={t} onClick={() => setTab(t)} style={{ padding: '6px 14px', borderRadius: 7, border: `1.5px solid ${tab === t ? BLUE : '#E2E8F0'}`, background: tab === t ? BLUE : '#fff', color: tab === t ? '#fff' : '#64748B', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-                    {t === 'write' ? '撰寫' : '預覽'}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Data Fields */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', padding: '14px 18px' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: BLUE, marginBottom: 10 }}>
-              核心數據欄位（{activeSection?.fields.length} 項）
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 7 }}>
-              {activeSection?.fields.map((f, i) => (
-                <div key={i} style={{ background: '#F8FAFC', borderRadius: 7, padding: '7px 10px', fontSize: 11, color: '#374151', lineHeight: 1.4, border: '1px solid #F1F5F9', display: 'flex', alignItems: 'flex-start', gap: 7 }}>
-                  <div style={{ width: 5, height: 5, borderRadius: '50%', background: activeChapter.color, flexShrink: 0, marginTop: 3 }} />
-                  <span>{f}</span>
-                </div>
-              ))}
-            </div>
-            {activeSection?.formula && activeSection.formula !== '—' && (
-              <div style={{ marginTop: 10, background: '#EBF2FF', borderRadius: 8, padding: '9px 12px', borderLeft: `3px solid ${BLUE}` }}>
-                <div style={{ fontSize: 10, color: BLUE, fontWeight: 700, marginBottom: 3 }}>計算公式</div>
-                <pre style={{ fontSize: 11, color: '#374151', margin: 0, fontFamily: 'monospace', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{activeSection.formula}</pre>
-              </div>
-            )}
-          </div>
-
-          {/* GRI Standard Tags */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', padding: '12px 18px' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: BLUE, marginBottom: 8 }}>標準標籤（點擊標記）</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {GRI_TAGS.map(t => (
-                <button key={t} onClick={() => toggleTag(t)} style={{ padding: '3px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 600, background: selectedTags.includes(t) ? BLUE : '#F1F5F9', color: selectedTags.includes(t) ? '#fff' : '#64748B', border: `1.5px solid ${selectedTags.includes(t) ? BLUE : '#E2E8F0'}`, transition: 'all 0.15s' }}>{t}</button>
-              ))}
-            </div>
-          </div>
-
-          {/* Text Editor + Chart Toolbar */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', overflow: 'hidden' }}>
-            {/* Toolbar */}
-            <div style={{ padding: '8px 14px', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 8, background: '#FAFAFA', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 11, color: '#64748B', fontWeight: 600 }}>工具列</span>
-              <div style={{ width: 1, height: 16, background: '#E2E8F0' }} />
-              <button onClick={() => setShowChartModal(true)} style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '5px 12px', borderRadius: 7, border: `1.5px solid ${activeChapter.color}`, background: `${activeChapter.color}10`, color: activeChapter.color, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
-                <BarChart2 size={13} />插入圖表
-              </button>
-              <button style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '5px 12px', borderRadius: 7, border: '1.5px solid #E2E8F0', background: '#fff', color: '#64748B', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
-                <Layers size={13} />數據表格
-              </button>
-              <div style={{ marginLeft: 'auto', fontSize: 10, color: '#94A3B8' }}>
-                {currentContent.length} 字元 · {tab === 'write' ? '撰寫中' : '預覽中'}
-              </div>
-            </div>
-            {/* Editor */}
-            {tab === 'write' ? (
-              <textarea
-                value={currentContent}
-                onChange={e => setSectionContents(prev => ({ ...prev, [sectionKey]: e.target.value }))}
-                placeholder={`在此撰寫「${activeSection?.title}」的內容...\n\n提示：可搭配左側「核心數據欄位」逐一填寫揭露內容，每個欄位建議2-4段說明文字，並引用佐證文件數據。`}
-                style={{ width: '100%', minHeight: 320, padding: '16px', fontSize: 13, lineHeight: 1.9, outline: 'none', resize: 'vertical', fontFamily: 'inherit', border: 'none', boxSizing: 'border-box', color: '#1F2937' }}
-              />
-            ) : (
-              <div style={{ padding: '16px', minHeight: 320, fontSize: 13, lineHeight: 1.9, color: '#374151', whiteSpace: 'pre-wrap', background: '#FAFAFA' }}>
-                {currentContent || <span style={{ color: '#94A3B8', fontStyle: 'italic' }}>尚無內容預覽</span>}
-              </div>
-            )}
-          </div>
-
-          {/* Inserted Charts Section */}
-          {chartsForSection.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: BLUE, display: 'flex', alignItems: 'center', gap: 7 }}>
-                <BarChart2 size={14} color={BLUE} />本節圖表（{chartsForSection.length} 張）
-              </div>
-              {chartsForSection.map(ic => {
-                const preset = PRESET_CHARTS.find(p => p.id === ic.presetId);
-                if (!preset) return null;
-                return (
-                  <div key={ic.uid} style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', overflow: 'hidden' }}>
-                    <div style={{ padding: '11px 16px', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div>
-                        <span style={{ fontWeight: 700, color: '#111', fontSize: 13 }}>{preset.name}</span>
-                        <span style={{ marginLeft: 8, background: '#EBF2FF', color: BLUE, borderRadius: 4, padding: '1px 7px', fontSize: 10, fontWeight: 700 }}>{preset.gri}</span>
-                      </div>
-                      <button onClick={() => handleRemoveChart(ic.uid)} style={{ background: '#FEF2F2', border: 'none', borderRadius: 6, padding: '4px 8px', cursor: 'pointer', color: '#DC2626', display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600 }}>
-                        <X size={12} />移除
-                      </button>
-                    </div>
-                    <div style={{ padding: '12px 16px 16px' }}>
-                      <ChartRenderer chart={preset} />
-                    </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+                    <h2 style={{ fontSize: 'var(--font-size-md)', fontWeight: 700, color: 'var(--text-primary)' }}>
+                      {chapter.title}
+                    </h2>
+                    <span className="badge badge-sm" style={{ background: catMeta.bg, color: catMeta.color, borderColor: 'transparent' }}>
+                      {catMeta.label}
+                    </span>
+                    <span className="gri-tag">{chapter.gri}</span>
+                    {isSealed && (
+                      <span className="badge badge-sm" style={{ background: 'var(--gold-100)', color: 'var(--gold-700)', borderColor: 'var(--gold-200)' }}>
+                        <Lock size={9} /> 已封印
+                      </span>
+                    )}
                   </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Actions */}
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button onClick={handleSave} className="btn-primary">
-              <Save size={14} />{saved ? '已儲存 ✓' : '儲存本節'}
-            </button>
-            <button className="btn-gold">
-              <Shield size={14} />5T 封印
-            </button>
-            <button onClick={() => setShowChartModal(true)} style={{ padding: '10px 18px', borderRadius: 8, border: `1.5px solid ${activeChapter.color}`, background: `${activeChapter.color}10`, fontSize: 12, fontWeight: 700, cursor: 'pointer', color: activeChapter.color, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <BarChart2 size={14} />插入圖表
-            </button>
-            <button style={{ padding: '10px 18px', borderRadius: 8, border: '1.5px solid #E2E8F0', background: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer', color: '#64748B', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Download size={14} />匯出本章
-            </button>
-          </div>
-        </div>
-
-        {/* ── RIGHT: Panels ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, position: 'sticky', top: 16 }}>
-
-          {/* Compliance Scan */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', padding: '14px 16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: BLUE, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Shield size={13} color={BLUE} />合規性即時掃描
-              </div>
-              <span style={{ fontSize: 18, fontWeight: 800, color: '#D97706' }}>62%</span>
-            </div>
-            <div style={{ height: 7, background: '#F1F5F9', borderRadius: 4, overflow: 'hidden', marginBottom: 12 }}>
-              <div style={{ height: '100%', width: '62%', background: 'linear-gradient(90deg, #D97706 0%, #FDB515 100%)', borderRadius: 4 }} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              {[
-                { icon: CheckCircle, color: '#16A34A', text: 'GRI 2-7 員工數據揭露完整' },
-                { icon: CheckCircle, color: '#16A34A', text: 'GRI 3-1 重大議題確認' },
-                { icon: AlertTriangle, color: '#D97706', text: 'GRI 2-9 需補充獨立董事年齡分布' },
-                { icon: AlertTriangle, color: '#D97706', text: 'ISSB S1 韌性評估說明待補充' },
-                { icon: AlertTriangle, color: '#DC2626', text: '偵測「致力於」等模糊用語（綠漂風險）' },
-              ].map((r, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 7 }}>
-                  <r.icon size={13} color={r.color} style={{ marginTop: 1, flexShrink: 0 }} />
-                  <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{r.text}</span>
+                  <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', marginTop: 4 }}>
+                    {chapter.titleEn} · 預計 {chapter.estPages} 頁 · {chapter.docs.length} 份佐證文件
+                  </p>
                 </div>
+              </div>
+
+              {/* Chapter Completion */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)' }}>本章完成度</p>
+                  <p style={{ fontSize: 'var(--font-size-lg)', fontWeight: 700, color: chCompletion >= 80 ? 'var(--green-600)' : chCompletion >= 40 ? 'var(--amber-600)' : 'var(--text-secondary)' }}>
+                    {chCompletion}%
+                  </p>
+                </div>
+                <div style={{ width: 52, height: 52, position: 'relative' }}>
+                  <svg viewBox="0 0 52 52" style={{ transform: 'rotate(-90deg)' }}>
+                    <circle cx="26" cy="26" r="22" fill="none" stroke="var(--neutral-200)" strokeWidth="4" />
+                    <circle cx="26" cy="26" r="22" fill="none"
+                      stroke={chCompletion >= 80 ? 'var(--green-500)' : chCompletion >= 40 ? 'var(--amber-500)' : 'var(--blue-400)'}
+                      strokeWidth="4"
+                      strokeDasharray={`${138.2 * chCompletion / 100} 138.2`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Chapter sub-panels tabs */}
+            <div className="tabs-nav" style={{ marginTop: 'var(--space-3)', borderBottom: 'none' }}>
+              {([
+                { id: 'write', label: '✍ 撰寫內容', icon: <Edit3 size={13} /> },
+                { id: 'data', label: `📊 核心數據 (${chFieldsFilled}/${chapter.fields.length})`, icon: <BarChart3 size={13} /> },
+                { id: 'docs', label: `📎 佐證文件 (${uploadedChDocs}/${chDocs.length})`, icon: <FileCheck size={13} /> },
+                { id: 'benchmark', label: '🏆 標竿比較', icon: <Eye size={13} /> },
+              ] as const).map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => setActivePanel(t.id as typeof activePanel)}
+                  className={`tab-btn tab-btn-pill btn-sm ${activePanel === t.id ? 'active' : ''}`}
+                  style={{ marginRight: 4 }}
+                >
+                  {t.icon}
+                  {t.label}
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Evidence Docs Checklist */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', overflow: 'hidden' }}>
-            <button onClick={() => setShowDocs(!showDocs)} style={{ width: '100%', padding: '11px 14px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: BLUE, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <FileText size={13} color={BLUE} />佐證文件清單
-                <span style={{ background: '#EBF2FF', color: BLUE, borderRadius: 10, padding: '1px 6px', fontSize: 10, fontWeight: 800 }}>
-                  {activeSection?.docs.length}
-                </span>
-              </div>
-              {showDocs ? <ChevronDown size={13} color="#94A3B8" /> : <ChevronRight size={13} color="#94A3B8" />}
-            </button>
-            {showDocs && (
-              <div style={{ padding: '0 14px 12px' }}>
-                {activeSection?.docs.map((d, i) => {
-                  const docKey = `${sectionKey}-doc-${i}`;
-                  return (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 0', borderBottom: i < (activeSection.docs.length - 1) ? '1px solid #F8FAFC' : 'none' }}>
-                      <button onClick={() => toggleDoc(docKey)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}>
-                        <CheckCircle size={15} color={checkedDocs[docKey] ? '#16A34A' : '#E2E8F0'} />
-                      </button>
-                      <span style={{ fontSize: 11, color: checkedDocs[docKey] ? '#16A34A' : '#374151', lineHeight: 1.4, textDecoration: checkedDocs[docKey] ? 'line-through' : 'none' }}>{d}</span>
+          {/* Panel Content */}
+          <div style={{ flex: 1, overflow: 'auto' }}>
+
+            {/* ── Write Panel ── */}
+            {activePanel === 'write' && (
+              <div style={{ display: 'flex', height: '100%' }}>
+                {/* Left: Persona + Generate */}
+                <div style={{
+                  width: 260, flexShrink: 0,
+                  borderRight: '1px solid var(--border-subtle)',
+                  padding: 'var(--space-4)',
+                  background: 'var(--surface-section)',
+                  display: 'flex', flexDirection: 'column', gap: 'var(--space-4)',
+                }}>
+                  <div>
+                    <p className="text-overline" style={{ marginBottom: 'var(--space-3)' }}>選擇專家人格</p>
+                    {(['compliance', 'harmony', 'innovation'] as const).map(p => {
+                      const meta = PERSONA_META[p];
+                      return (
+                        <button
+                          key={p}
+                          onClick={() => setSelectedPersona(p)}
+                          style={{
+                            width: '100%', display: 'flex', alignItems: 'flex-start',
+                            gap: 'var(--space-2)', padding: 'var(--space-3)',
+                            borderRadius: 'var(--radius-lg)', border: `1.5px solid ${selectedPersona === p ? meta.color : 'var(--border-default)'}`,
+                            background: selectedPersona === p ? meta.bg : 'var(--surface-card)',
+                            cursor: 'pointer', textAlign: 'left',
+                            fontFamily: 'var(--font-sans)',
+                            marginBottom: 8,
+                            transition: 'all var(--duration-fast) var(--ease)',
+                            minHeight: 44,
+                          }}
+                          aria-pressed={selectedPersona === p}
+                        >
+                          <div style={{ width: 8, height: 8, borderRadius: '50%', background: meta.color, marginTop: 5, flexShrink: 0 }} />
+                          <div>
+                            <p style={{ fontSize: 12, fontWeight: 700, color: meta.color }}>{meta.label}</p>
+                            <p style={{ fontSize: 10, color: 'var(--text-tertiary)', marginTop: 2, lineHeight: 1.5 }}>
+                              {p === 'compliance' ? 'GRI/SASB 指標對齊、合規缺口、綠漂偵測' :
+                               p === 'harmony' ? '利害關係人視角、社會影響、文化融合' :
+                               '淨零技術路徑、ESG 創新轉型策略'}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    className="btn btn-primary w-full flex items-center gap-2"
+                    onClick={handleGenerate}
+                    disabled={generating}
+                    aria-label="AI 生成草稿"
+                  >
+                    {generating ? (
+                      <><RefreshCw size={14} className="spin" /> 生成中...</>
+                    ) : (
+                      <><Sparkles size={14} /> AI 自動生成草稿</>
+                    )}
+                  </button>
+
+                  {/* Preview of template */}
+                  <div style={{ padding: 'var(--space-3)', background: 'var(--surface-card)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-subtle)' }}>
+                    <p className="text-overline" style={{ marginBottom: 'var(--space-2)' }}>模板預覽</p>
+                    <p style={{ fontSize: 10, color: 'var(--text-tertiary)', lineHeight: 1.6 }}>
+                      {chapter.expertTemplates.find(t => t.persona === selectedPersona)?.text.slice(0, 120)}...
+                    </p>
+                  </div>
+
+                  {/* Word count */}
+                  <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)' }}>
+                    字數：{(content[chapter.id] ?? '').length} 字 · 預計 {chapter.estPages} 頁
+                  </div>
+                </div>
+
+                {/* Right: Editor */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 'var(--space-4)' }}>
+                  {isSealed && (
+                    <div className="alert alert-warning" style={{ marginBottom: 'var(--space-3)', flexShrink: 0 }}>
+                      <Lock size={14} style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 'var(--font-size-xs)' }}>
+                        此章節已完成 5T 封印，Hash: <code style={{ fontFamily: 'var(--font-mono)', fontSize: 10 }}>{sealedChapters[chapter.id]?.slice(0, 16)}...</code>
+                        ，如需修改請先解除封印。
+                      </span>
                     </div>
-                  );
-                })}
-                <button style={{ marginTop: 8, width: '100%', padding: '7px', borderRadius: 7, border: '1.5px dashed #E2E8F0', background: '#F8FAFC', fontSize: 11, color: '#64748B', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                  <Upload size={11} />上傳佐證文件
-                </button>
+                  )}
+                  <textarea
+                    ref={textareaRef}
+                    className="input textarea"
+                    value={content[chapter.id] ?? ''}
+                    onChange={e => updateContent(e.target.value)}
+                    disabled={isSealed}
+                    placeholder={`在此撰寫「${chapter.title}」章節內容...\n\n您可以：\n1. 點擊左側「AI 自動生成草稿」快速填充\n2. 手動輸入或貼上已有內容\n3. 先填寫「核心數據」再生成更精確的草稿`}
+                    style={{
+                      flex: 1, minHeight: 0, resize: 'none',
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: 'var(--font-size-base)',
+                      lineHeight: 1.8,
+                      background: isSealed ? 'var(--neutral-50)' : 'var(--surface-card)',
+                    }}
+                    aria-label={`${chapter.title} 內容編輯`}
+                    aria-readonly={isSealed}
+                  />
+
+                  {/* Notes */}
+                  <div style={{ marginTop: 'var(--space-3)', flexShrink: 0 }}>
+                    <label style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700, color: 'var(--text-tertiary)', display: 'block', marginBottom: 6 }}>
+                      📌 備註 / 上傳說明（不納入正式報告）
+                    </label>
+                    <textarea
+                      className="input textarea"
+                      value={notes[chapter.id] ?? ''}
+                      onChange={e => updateNote(e.target.value)}
+                      placeholder="可記錄數據來源說明、待確認事項、審核意見..."
+                      style={{ minHeight: 72, resize: 'vertical', fontSize: 'var(--font-size-xs)' }}
+                      aria-label="章節備註"
+                    />
+                  </div>
+                </div>
               </div>
             )}
-          </div>
 
-          {/* ── NEW: 備註與上傳 Panel ── */}
-          <div style={{ background: '#fff', borderRadius: 12, border: `2px solid ${GOLD}30`, overflow: 'hidden' }}>
-            <button onClick={() => setShowNotes(!showNotes)} style={{ width: '100%', padding: '11px 14px', background: showNotes ? '#FFFBEB' : '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: '#92400E', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <StickyNote size={13} color="#D97706" />備註與上傳
-                <span style={{ background: '#FEF3C7', color: '#D97706', borderRadius: 10, padding: '1px 6px', fontSize: 10, fontWeight: 800 }}>
-                  {notes.length + uploads.length}
-                </span>
-              </div>
-              {showNotes ? <ChevronDown size={13} color="#94A3B8" /> : <ChevronRight size={13} color="#94A3B8" />}
-            </button>
-
-            {showNotes && (
-              <div>
-                {/* Sub Tabs */}
-                <div style={{ display: 'flex', borderBottom: '1px solid #F1F5F9' }}>
-                  {(['notes', 'upload'] as const).map(t => (
-                    <button key={t} onClick={() => setNotesTab(t)} style={{ flex: 1, padding: '8px', background: 'none', border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 600, color: notesTab === t ? '#D97706' : '#64748B', borderBottom: notesTab === t ? `2px solid ${GOLD}` : '2px solid transparent' }}>
-                      {t === 'notes' ? `備註 (${notes.length})` : `上傳 (${uploads.length})`}
-                    </button>
+            {/* ── Data Panel ── */}
+            {activePanel === 'data' && (
+              <div style={{ padding: 'var(--space-5)' }}>
+                <div className="alert alert-info" style={{ marginBottom: 'var(--space-4)' }}>
+                  <BarChart3 size={14} style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: 'var(--font-size-xs)' }}>
+                    填入核心數據後，AI 生成的草稿將自動帶入這些數值，確保報告書數據精確一致。
+                  </span>
+                </div>
+                <div className="form-grid">
+                  {chapter.fields.map(field => (
+                    <div key={field.id} className="field-group">
+                      <label className="field-label" htmlFor={`field-${field.id}`}>
+                        {field.label}
+                        <span className="gri-tag" style={{ fontSize: 9, marginLeft: 6 }}>{field.gri}</span>
+                      </label>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                        <input
+                          id={`field-${field.id}`}
+                          className="input"
+                          value={fields[chapter.id]?.[field.id] ?? ''}
+                          onChange={e => updateField(field.id, e.target.value)}
+                          placeholder={`請輸入${field.label}`}
+                          aria-describedby={`field-unit-${field.id}`}
+                        />
+                        {field.unit && (
+                          <span
+                            id={`field-unit-${field.id}`}
+                            style={{ flexShrink: 0, fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }}
+                          >
+                            {field.unit}
+                          </span>
+                        )}
+                        {fields[chapter.id]?.[field.id] && (
+                          <CheckCircle size={14} style={{ color: 'var(--green-500)', flexShrink: 0 }} />
+                        )}
+                      </div>
+                    </div>
                   ))}
                 </div>
+                <div style={{ marginTop: 'var(--space-5)', padding: 'var(--space-4)', background: 'var(--surface-section)', borderRadius: 'var(--radius-lg)' }}>
+                  <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)' }}>
+                    已填 {chFieldsFilled} / {chapter.fields.length} 項 · 填寫完畢後回到「撰寫內容」頁再次點擊「AI 自動生成草稿」即可帶入數據
+                  </p>
+                </div>
+              </div>
+            )}
 
-                {/* Notes Tab */}
-                {notesTab === 'notes' && (
-                  <div style={{ padding: '12px 14px' }}>
-                    {/* Add Note Form */}
-                    <div style={{ background: '#FFFBEB', borderRadius: 9, padding: '10px 12px', marginBottom: 10 }}>
-                      <div style={{ display: 'flex', gap: 5, marginBottom: 7 }}>
-                        {NOTE_TYPES.map(nt => (
-                          <button key={nt.id} onClick={() => setNewNoteType(nt.id)} style={{ flex: 1, padding: '4px 4px', borderRadius: 5, border: `1.5px solid ${newNoteType === nt.id ? nt.color : '#E2E8F0'}`, background: newNoteType === nt.id ? nt.bg : '#fff', color: newNoteType === nt.id ? nt.color : '#94A3B8', fontSize: 10, fontWeight: 700, cursor: 'pointer' }}>
-                            {nt.label}
-                          </button>
-                        ))}
-                      </div>
-                      <textarea
-                        value={newNoteText}
-                        onChange={e => setNewNoteText(e.target.value)}
-                        placeholder="輸入備註、問題或待辦事項..."
-                        style={{ width: '100%', height: 62, padding: '7px', borderRadius: 7, border: '1.5px solid #E2E8F0', fontSize: 11, outline: 'none', resize: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
-                      />
-                      <div style={{ display: 'flex', gap: 6, marginTop: 6, alignItems: 'center' }}>
-                        <select value={newNoteTag} onChange={e => setNewNoteTag(e.target.value)} style={{ flex: 1, padding: '5px 8px', borderRadius: 6, border: '1.5px solid #E2E8F0', fontSize: 10, outline: 'none' }}>
-                          {GRI_TAGS.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                        <button onClick={handleAddNote} style={{ padding: '5px 12px', borderRadius: 6, border: 'none', background: GOLD, color: BLUE, fontSize: 11, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <Plus size={11} />新增
-                        </button>
-                      </div>
-                    </div>
-                    {/* Notes List */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 7, maxHeight: 250, overflowY: 'auto' }}>
-                      {notes.length === 0 && (
-                        <div style={{ textAlign: 'center', padding: '16px 0', fontSize: 11, color: '#94A3B8' }}>尚無備註</div>
-                      )}
-                      {notes.map(n => {
-                        const nt = NOTE_TYPES.find(t => t.id === n.type)!;
-                        return (
-                          <div key={n.id} style={{ background: nt.bg, borderRadius: 8, padding: '9px 11px', border: `1px solid ${nt.color}20` }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                                <span style={{ background: nt.color, color: '#fff', borderRadius: 4, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>{nt.label}</span>
-                                <span style={{ background: '#EBF2FF', color: BLUE, borderRadius: 4, padding: '1px 5px', fontSize: 9, fontWeight: 600 }}>{n.gri_tag}</span>
-                              </div>
-                              <button onClick={() => handleRemoveNote(n.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                                <X size={12} color="#94A3B8" />
-                              </button>
-                            </div>
-                            <div style={{ fontSize: 11, color: '#374151', lineHeight: 1.5 }}>{n.text}</div>
-                            <div style={{ fontSize: 9, color: '#94A3B8', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
-                              <Clock size={9} />{n.timestamp}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+            {/* ── Docs Panel ── */}
+            {activePanel === 'docs' && (
+              <div style={{ padding: 'var(--space-5)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
+                  <h3 className="text-card-title">佐證文件清單</h3>
+                  <span className="badge badge-sm" style={{
+                    background: uploadedChDocs === chDocs.length ? 'var(--green-50)' : 'var(--amber-50)',
+                    color: uploadedChDocs === chDocs.length ? 'var(--green-700)' : 'var(--amber-700)',
+                    borderColor: 'transparent',
+                  }}>
+                    {uploadedChDocs}/{chDocs.length} 就緒
+                  </span>
+                </div>
+
+                <div className="progress-track" style={{ marginBottom: 'var(--space-4)', height: 8 }}>
+                  <div className="progress-fill progress-green" style={{ width: `${chDocs.length > 0 ? Math.round((uploadedChDocs / chDocs.length) * 100) : 0}%` }} />
+                </div>
+
+                {!chDocs.every(d => docStatus[chapter.id]?.[d.id]) && (
+                  <div className="alert alert-warning" style={{ marginBottom: 'var(--space-4)' }}>
+                    <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: 'var(--font-size-xs)' }}>
+                      尚有 {chDocs.filter(d => !docStatus[chapter.id]?.[d.id]).length} 份必要文件未確認，5T 封印後審計師將要求補件。
+                    </span>
                   </div>
                 )}
 
-                {/* Upload Tab */}
-                {notesTab === 'upload' && (
-                  <div style={{ padding: '12px 14px' }}>
-                    {/* Upload Area */}
-                    <button
-                      onClick={handleSimulateUpload}
-                      style={{ width: '100%', border: '2px dashed #FDB515', borderRadius: 9, padding: '16px', textAlign: 'center', cursor: 'pointer', background: '#FFFBEB', marginBottom: 10 }}
-                    >
-                      <Upload size={22} color={GOLD} style={{ margin: '0 auto 6px', display: 'block' }} />
-                      <div style={{ fontSize: 12, fontWeight: 700, color: '#92400E' }}>點擊上傳檔案</div>
-                      <div style={{ fontSize: 10, color: '#B45309', marginTop: 2 }}>支援 PDF、Excel、Word、圖片</div>
-                    </button>
-                    {/* File List */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 7, maxHeight: 250, overflowY: 'auto' }}>
-                      {uploads.length === 0 && (
-                        <div style={{ textAlign: 'center', padding: '12px 0', fontSize: 11, color: '#94A3B8' }}>尚無上傳檔案</div>
-                      )}
-                      {uploads.map(f => (
-                        <div key={f.id} style={{ background: '#F8FAFC', borderRadius: 8, padding: '9px 11px', border: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 9 }}>
-                          <div style={{ width: 32, height: 32, borderRadius: 7, background: f.type === 'PDF' ? '#FEF2F2' : '#EAFAF1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <FileText size={16} color={f.type === 'PDF' ? '#DC2626' : '#2E8B57'} />
-                          </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: 11, fontWeight: 600, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name}</div>
-                            <div style={{ fontSize: 9, color: '#94A3B8', marginTop: 2, display: 'flex', alignItems: 'center', gap: 5 }}>
-                              <span>{f.size}</span>
-                              <span>·</span>
-                              <Clock size={9} />
-                              <span>{f.timestamp}</span>
-                            </div>
-                          </div>
-                          <button onClick={() => handleRemoveUpload(f.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}>
-                            <X size={13} color="#94A3B8" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                  {chDocs.map(doc => {
+                    const uploaded = !!docStatus[chapter.id]?.[doc.id];
+                    return (
+                      <div
+                        key={doc.id}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 'var(--space-3)',
+                          padding: 'var(--space-3) var(--space-4)',
+                          borderRadius: 'var(--radius-lg)',
+                          border: `1.5px solid ${uploaded ? 'var(--green-200)' : doc.required ? 'var(--border-default)' : 'var(--border-subtle)'}`,
+                          background: uploaded ? 'var(--green-50)' : 'var(--surface-card)',
+                          transition: 'all var(--duration-fast) var(--ease)',
+                        }}
+                      >
+                        <button
+                          onClick={() => toggleDoc(doc.id)}
+                          style={{
+                            width: 22, height: 22, borderRadius: 6,
+                            border: `2px solid ${uploaded ? 'var(--green-500)' : 'var(--border-strong)'}`,
+                            background: uploaded ? 'var(--green-500)' : 'transparent',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            cursor: 'pointer', flexShrink: 0, transition: 'all var(--duration-fast) var(--ease)',
+                          }}
+                          aria-pressed={uploaded}
+                          aria-label={`${uploaded ? '取消標記' : '標記'} ${doc.name}`}
+                        >
+                          {uploaded && <Check size={12} color="#fff" />}
+                        </button>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: uploaded ? 'var(--green-700)' : 'var(--text-primary)' }}>
+                            {doc.name}
+                          </p>
+                          <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)', marginTop: 2 }}>
+                            負責部門：{doc.department}
+                          </p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                          {doc.required && (
+                            <span className="badge badge-error badge-sm">必備</span>
+                          )}
+                          {uploaded ? (
+                            <span className="badge badge-success badge-sm">✓ 已就緒</span>
+                          ) : (
+                            <span className="badge badge-default badge-sm">待收集</span>
+                          )}
+                          <button className="btn btn-ghost btn-icon btn-xs" aria-label="上傳文件">
+                            <Upload size={12} />
                           </button>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* ── Benchmark Panel ── */}
+            {activePanel === 'benchmark' && (
+              <div style={{ padding: 'var(--space-5)' }}>
+                <div style={{ marginBottom: 'var(--space-4)' }}>
+                  <h3 className="text-card-title" style={{ marginBottom: 'var(--space-2)' }}>標竿企業寫法參考</h3>
+                  <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)' }}>
+                    參考業界領先企業在同一章節的揭露寫法，提升報告書品質。
+                  </p>
+                </div>
+
+                <div className="card card-body" style={{ marginBottom: 'var(--space-4)', borderLeft: '3px solid var(--gold-500)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
+                    <span className="badge badge-sm" style={{ background: 'var(--gold-100)', color: 'var(--gold-700)', borderColor: 'var(--gold-200)' }}>
+                      🏆 標竿企業
+                    </span>
+                    <span style={{ fontSize: 'var(--font-size-sm)', fontWeight: 700, color: 'var(--text-primary)' }}>
+                      {chapter.benchmark.company}
+                    </span>
                   </div>
-                )}
+                  <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', lineHeight: 1.7, borderLeft: '2px solid var(--gold-300)', paddingLeft: 12 }}>
+                    {chapter.benchmark.excerpt}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 style={{ fontSize: 'var(--font-size-sm)', fontWeight: 700, color: 'var(--text-primary)', marginBottom: 'var(--space-3)' }}>
+                    三種專家視角完整範本
+                  </h4>
+                  {chapter.expertTemplates.map(t => {
+                    const meta = PERSONA_META[t.persona];
+                    return (
+                      <div key={t.persona} className="card" style={{ marginBottom: 'var(--space-3)', borderLeft: `3px solid ${meta.color}` }}>
+                        <div className="card-header" style={{ minHeight: 44 }}>
+                          <span className="badge badge-sm" style={{ background: meta.bg, color: meta.color, borderColor: 'transparent' }}>
+                            {meta.label}
+                          </span>
+                          <button
+                            className="btn btn-ghost btn-xs flex items-center gap-1"
+                            onClick={() => {
+                              const updated = { ...content, [chapter.id]: t.text };
+                              setContent(updated);
+                              saveToLocal(updated);
+                              setActivePanel('write');
+                              showToast(`已套用 ${meta.label} 範本`, 'info');
+                            }}
+                            aria-label={`套用 ${meta.label} 範本`}
+                          >
+                            <Plus size={11} /> 套用此範本
+                          </button>
+                        </div>
+                        <div className="card-body">
+                          <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+                            {t.text}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
-
-          {/* AI Writing Suggestions */}
-          <div style={{ background: '#EBF2FF', borderRadius: 12, border: `1.5px solid ${BLUE}20`, padding: '14px' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: BLUE, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Brain size={13} />AI 撰寫建議
-            </div>
-            {[
-              '加入量化指標（如：女性主管比例 32%）可提升合規率至 92%',
-              '建議引用 ISSB S1 para.B6 強化策略揭露',
-              '已偵測模糊用語「致力於」——建議改為具體目標與時程',
-              '可插入「GHG 三範疇排放趨勢」圖表增強視覺效果',
-            ].map((s, i) => (
-              <div key={i} style={{ fontSize: 11, color: '#374151', marginBottom: 7, paddingLeft: 10, borderLeft: `3px solid ${BLUE}`, lineHeight: 1.5 }}>{s}</div>
-            ))}
-          </div>
-
         </div>
       </div>
-
-      {/* ── CHART INSERT MODAL ── */}
-      {showChartModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 300, padding: 16 }}>
-          <div style={{ background: '#fff', borderRadius: 16, width: '100%', maxWidth: 760, maxHeight: '85vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}>
-            {/* Modal Header */}
-            <div style={{ padding: '18px 24px', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: BLUE, borderRadius: '16px 16px 0 0' }}>
-              <div>
-                <div style={{ color: '#fff', fontWeight: 800, fontSize: 16 }}>插入 ESG 圖表</div>
-                <div style={{ color: '#A8C8E8', fontSize: 12, marginTop: 2 }}>選擇預設 ESG 圖表，一鍵插入至「{activeSection?.title}」</div>
-              </div>
-              <button onClick={() => setShowChartModal(false)} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#fff' }}>
-                <X size={18} />
-              </button>
-            </div>
-            {/* Chart Grid */}
-            <div style={{ padding: '20px 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 14 }}>
-              {PRESET_CHARTS.map(preset => (
-                <div key={preset.id} style={{ background: '#F8FAFC', borderRadius: 12, border: '1.5px solid #E2E8F0', overflow: 'hidden', transition: 'all 0.2s' }}>
-                  <div style={{ padding: '12px 14px', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div>
-                      <div style={{ fontWeight: 700, color: '#111', fontSize: 12 }}>{preset.name}</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 3 }}>
-                        <span style={{ background: '#EBF2FF', color: BLUE, borderRadius: 4, padding: '1px 6px', fontSize: 10, fontWeight: 700 }}>{preset.gri}</span>
-                        <span style={{ background: '#F1F5F9', color: '#64748B', borderRadius: 4, padding: '1px 6px', fontSize: 10 }}>
-                          {preset.type === 'line' ? '折線圖' : preset.type === 'bar' ? '長條圖' : preset.type === 'pie' ? '圓餅圖' : '面積圖'}
-                        </span>
-                      </div>
-                    </div>
-                    <button onClick={() => handleInsertChart(preset.id)} className="btn-primary" style={{ fontSize: 11, padding: '5px 12px' }}>
-                      <Plus size={12} />插入
-                    </button>
-                  </div>
-                  <div style={{ padding: '8px 10px' }}>
-                    <ChartRenderer chart={preset} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={{ padding: '14px 24px', borderTop: '1px solid #F1F5F9', background: '#FAFAFA', borderRadius: '0 0 16px 16px', display: 'flex', justifyContent: 'flex-end' }}>
-              <button onClick={() => setShowChartModal(false)} style={{ padding: '9px 20px', borderRadius: 8, border: '1.5px solid #E2E8F0', background: '#fff', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>關閉</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,497 +1,325 @@
 'use client';
-
 import { useState } from 'react';
-import Link from 'next/link';
 import {
-  GraduationCap, Award, Users, Star, Globe, ExternalLink,
-  ChevronDown, ChevronRight, CheckCircle, MapPin, Mail, Phone,
-  TrendingUp, ArrowRight
+  GraduationCap, BookOpen, Users, Award, Clock, Star,
+  ChevronRight, Play, CheckCircle, Lock, Globe, Zap,
+  Calendar, User, Building2, Mail, Phone, MapPin,
+  TrendingUp, BarChart3, Shield
 } from 'lucide-react';
 
-const COURSE = {
-  title: '柏克萊國際永續策略創新認證課程',
-  titleEn: 'Berkeley Haas × YUNUS × TSISDA ESG Strategy & Innovation Program',
-  subtitle: '全球唯一「策略 × 合規 × 創新 × 創價 × 顧問」五合一永續轉型訓練',
-  cohorts: [
-    { name: 'A 組', dates: '2026年6月6日 — 7月11日' },
-    { name: 'B 組', dates: '2026年8月1日 — 9月5日' },
-  ],
-  url: 'https://corporateinnovation.berkeley.edu/students/business-model-practicum-2026/',
-  highlights: [
-    '全球唯一：Berkeley Haas IBI 八大機構 × 永續策略整合課程',
-    '五合一訓練：策略 × 合規 × 創新 × 創價 × 顧問',
-    '三項重量級成果直接帶走（策略藍圖/報告骨架/創新提案）',
-    'Berkeley 師資 × 矽谷業師全程參與',
-    'Berkeley × YUNUS × TSISDA 三證書制度',
-    '矽谷式 Consulting Office Hour',
-    '課程加贈：市價 NT$29,000 ESG 轉型健檢 × 顧問諮詢',
-    '首期成果：學員專案共獲得 NT$3,265 萬之政府計畫與新創投資',
-  ],
-  modules: [
-    {
-      title: 'Berkeley IBI 模組（週六，36 小時）',
-      color: '#003262',
-      sessions: [
-        'Purpose × 北極星願景設計', 'Materiality 2.0', 'Strategy House 2.0',
-        'KPI Tier 0–3 架構', 'Innovation Matrix × ESG Portfolio',
-        'Ecosystem Strategy', 'Impact Logic Model', 'ESG Dashboard & Data Architecture',
-      ],
-    },
-    {
-      title: 'TSISDA 任脈（合規，18 小時）',
-      color: '#2E8B57',
-      sessions: [
-        'ESG 全球趨勢 × 三大議題', 'GRI × IFRS 永續揭露標準',
-        'TCFD/TNFD/TISFD', '永續重大性 × 永續治理', 'ESG CHECK 工具', '永續報告架構與策略設計',
-      ],
-    },
-    {
-      title: 'TSISDA 督脈（創價，18 小時）',
-      color: '#FDB515',
-      sessions: [
-        '永續新典範策略 × 創價型 ESG', '社會創新方法論', '社會影響力分析',
-        '永續商業模式設計（SBMC）', 'ESG 創新解方', '國際精實落地（Silicon Valley Lean Launch）',
-      ],
-    },
-  ],
-  deliverables: [
-    '完整的《永續策略藍圖 2.0》（含 9 大 Canvas）',
-    '企業永續報告骨架 × 策略框架（合規成果）',
-    '創價型 ESG 新創提案原型（Prototype）',
-    '市價 NT$29,000 的 ESG 轉型健檢 × 顧問諮詢',
-  ],
-  certs: [
-    'UC Berkeley Haas IBI 國際永續策略創新師證書',
-    '台灣尤努斯基金會 × TSISDA 國際永續轉型規劃師證書',
-  ],
-};
-
-const INSTRUCTORS = [
-  { name: 'Ganesh Iyer', title: 'Faculty Director, Center for Growth Markets', org: 'UC Berkeley Haas', country: '美國', av: 'GI', available: true },
-  { name: 'Ana Torres', title: 'Associate Director, C2M Program', org: 'UC Berkeley Haas', country: '美國', av: 'AT', available: true },
-  { name: '楊坤修 博士 Dr. Kuen-Shiou Yang', title: '理事長 Chairman', org: 'TSISDA 台灣社會創新與永續發展協會', country: '台灣', av: 'YK', available: true },
-  { name: 'Stan Shih', title: 'Founder of Acer Group & Chairman, StanShih Foundation', org: 'StanShih Foundation / Acer Group', country: '台灣', av: 'SS', available: true },
-  { name: 'Dr. Rey-Sheng Her', title: 'Deputy CEO', org: '慈濟基金會 Tzu Chi Foundation', country: '台灣', av: 'RH', available: true },
-  { name: 'Chandra Vadhana Radhakrishnan', title: 'Senior Lecturer · Stanford ESG Scholar', org: 'Monash University', country: '澳洲', av: 'CV', available: true },
-  { name: 'Ann-Kristin Zobel', title: 'Associate Professor of Management', org: 'University of St. Gallen', country: '瑞士', av: 'AZ', available: false },
-  { name: 'Dave Rochlin', title: 'Executive Director, Innovation & Design', org: 'UC Berkeley Haas', country: '美國', av: 'DR', available: true },
-  { name: 'Chris Bush', title: 'Executive Director, IBI', org: 'UC Berkeley Haas IBI', country: '美國', av: 'CB', available: true },
-  { name: 'Karin Li', title: 'Behavioral Economist', org: 'Haas School of Business', country: '美國', av: 'KL', available: true },
-];
-
-const SV_MENTORS = [
-  { name: 'Dr. Herbert Wu', org: 'Apple 前董事 · 昇陽電腦前董事', av: 'HW', tag: 'Apple' },
-  { name: 'Dr. Xiao Ge', org: 'Stanford 資料驅動 AI 研究學者', av: 'XG', tag: 'Stanford' },
-  { name: 'Dr. Jim Spohrer', org: 'IBM 前開放技術總監 · Apple 傑出科學家', av: 'JS', tag: 'IBM' },
-  { name: 'Dr. Gautam Bandyopadhyay', org: 'Siemens 前創新與技術管理總監', av: 'GB', tag: 'Siemens' },
-  { name: 'Dr. Deepu Rathi', org: 'Cisco 前高級總監', av: 'DR', tag: 'Cisco' },
-  { name: 'Dr. Pradeep Iyer', org: 'Avery Dennison 前全球高級總監', av: 'PI', tag: 'Avery' },
-  { name: 'Dr. Brinda Wiita', org: 'Johnson & Johnson 前總監', av: 'BW', tag: 'J&J' },
-  { name: 'Olga Diamandis', org: 'Disney 創新總監', av: 'OD', tag: 'Disney' },
-  { name: 'Dan Yu', org: 'Siemens AI 和機器學習解決方案總監', av: 'DY', tag: 'Siemens' },
-  { name: 'Piyush Malik', org: 'IBM 與 Google 前雲端總監', av: 'PM', tag: 'Google' },
-  { name: 'Srikanth Nandi Raju', org: 'Experian 工程總監 · PayPal 前工程主管', av: 'SR', tag: 'Experian' },
-  { name: 'Janaki Kowtha', org: 'IBM 科技業務負責人', av: 'JK', tag: 'IBM' },
-  { name: 'Veronica Pettit', org: 'Siemens Energy 研究員', av: 'VP', tag: 'Siemens' },
-];
-
-const STUDENTS = [
-  { name: '陳佳瑩', company: '台達電子', role: '永續策略主管', cohort: 'A 組', progress: 85, status: 'active' },
-  { name: '林宗翰', company: '研華科技', role: '企業永續長', cohort: 'A 組', progress: 72, status: 'active' },
-  { name: '王雅婷', company: '緯創資通', role: 'ESG 專員', cohort: 'A 組', progress: 91, status: 'active' },
-  { name: '李建志', company: '台灣大哥大', role: '策略規劃處長', cohort: 'A 組', progress: 68, status: 'active' },
-  { name: '張美雲', company: '富邦金控', role: '永續發展部協理', cohort: 'B 組', progress: 0, status: 'pending' },
-];
-
-const TABS = ['認證課程', '師資陣容', '矽谷業師', '學員專區'];
-const BLUE = '#003262';
-const GOLD = '#FDB515';
-
-const FAQ = [
-  { q: 'Q1 這門課程對企業最大的價值是什麼？', a: '全球唯一整合 Berkeley IBI 八大機構 × ESG Strategy × Compliance × Innovation × Consulting 的課程。企業能一次獲得：永續策略設計能力、完整永續報告骨架、創價型 ESG 專案提案、國際合規能力（IFRS S1/S2、GRI、TCFD）、矽谷式顧問諮詢。' },
-  { q: 'Q2 課程與一般 ESG/永續課程有什麼不同？', a: '一般課程：講概念、講框架。本課程：從策略、到合規、到創新、到落地、到顧問，一次打通永續任督二脈。唯一能培育完整 ESG 即戰力的課程。' },
-  { q: 'Q3 完成課程後，學員能替公司做什麼？', a: '具備：完成企業永續策略藍圖 Blueprint 2.0、完成永續報告書初稿、設計 1-2 個創價 ESG 專案、進行 KPI 架構/Dashboard 架構/資料盤點。= 第一線可用的 ESG 策略即戰力。' },
-  { q: 'Q4 我沒有 ESG 背景，可以參加嗎？', a: '完全可以！課程從 0 → 1 完成永續報告骨架、從 1 → 2 完成永續策略藍圖、從 2 → 3 完成創新 ESG 專案提案。非常適合 ESG 新手、企業轉職者、管理職、新創創辦人。' },
-  { q: 'Q5 我們可以派多位員工同時參加嗎？', a: '可以，且強烈建議企業 2-4 人小組一起參加。可以團隊方式完成創價專案、公司回去後可立即啟動 ESG 工作小組、可提供企業採購優惠。' },
-];
-
-function Avatar({ initials, color = BLUE, size = 40 }: { initials: string; color?: string; size?: number }) {
-  return (
-    <div style={{
-      width: size, height: size, borderRadius: '50%',
-      background: `linear-gradient(135deg, ${color}, ${color}99)`,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      color: '#fff', fontWeight: 800, fontSize: size * 0.33, flexShrink: 0,
-    }}>
-      {initials}
-    </div>
-  );
+interface Course {
+  id: string;
+  title: string;
+  titleEn: string;
+  instructor: string;
+  duration: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  category: 'E' | 'S' | 'G' | 'General';
+  enrolled: number;
+  rating: number;
+  progress: number;
+  locked: boolean;
+  tags: string[];
+  description: string;
+  modules: string[];
 }
 
+const COURSES: Course[] = [
+  {
+    id: '1', title: 'GRI 2021 完整框架入門', titleEn: 'GRI 2021 Complete Framework',
+    instructor: 'Dr. Kuen-Shiou Yang', duration: '6 小時', level: 'beginner',
+    category: 'General', enrolled: 247, rating: 4.8, progress: 100, locked: false,
+    tags: ['GRI', 'ESG', '入門'], description: '從零開始學習 GRI 2021 通用準則，掌握永續報告書的核心架構與揭露要求。',
+    modules: ['GRI 框架概論', '通用準則詳解', '重大性評估流程', '利害關係人議合', '實作演練'],
+  },
+  {
+    id: '2', title: '溫室氣體盤查實戰', titleEn: 'GHG Inventory Masterclass',
+    instructor: 'Ana Torres', duration: '8 小時', level: 'intermediate',
+    category: 'E', enrolled: 183, rating: 4.9, progress: 65, locked: false,
+    tags: ['ISO 14064', 'GHG', 'Scope 1/2/3'], description: '依據 ISO 14064-1 執行完整的溫室氣體盤查，包含範疇一、二、三排放量計算。',
+    modules: ['ISO 14064-1 標準解析', '排放係數選用', '範疇一計算', '範疇二計算', '範疇三評估', '查證準備'],
+  },
+  {
+    id: '3', title: 'TCFD 氣候情境分析', titleEn: 'TCFD Climate Scenario Analysis',
+    instructor: 'Ann-Kristin Zobel', duration: '5 小時', level: 'advanced',
+    category: 'E', enrolled: 98, rating: 4.7, progress: 20, locked: false,
+    tags: ['TCFD', 'ISSB S2', '氣候風險'], description: '掌握 TCFD 四大支柱揭露框架，執行 1.5°C 與 4°C 氣候情境分析，評估財務影響。',
+    modules: ['TCFD 架構解析', '實體風險評估', '轉型風險評估', '1.5°C 情境建模', '財務影響試算'],
+  },
+  {
+    id: '4', title: 'CBAM 碳邊境稅應對策略', titleEn: 'CBAM Compliance Strategy',
+    instructor: 'Karin Li', duration: '4 小時', level: 'intermediate',
+    category: 'E', enrolled: 156, rating: 4.6, progress: 0, locked: false,
+    tags: ['CBAM', 'EU', '碳稅'], description: '了解歐盟 CBAM 機制，學習碳足跡計算與申報策略，降低出口成本風險。',
+    modules: ['CBAM 制度介紹', '適用產業認識', '碳足跡計算', '申報流程', '減量策略'],
+  },
+  {
+    id: '5', title: '勞工人權盡職調查', titleEn: 'Human Rights Due Diligence',
+    instructor: 'Dave Rochlin', duration: '5 小時', level: 'intermediate',
+    category: 'S', enrolled: 112, rating: 4.5, progress: 0, locked: false,
+    tags: ['GRI 408-414', '人權', '供應鏈'], description: '依據 UN UNGP 執行人權盡職調查，識別供應鏈中的人權風險並建立因應機制。',
+    modules: ['人權框架概論', 'UNGP 解析', '供應鏈風險評估', '救濟機制建立', '揭露準備'],
+  },
+  {
+    id: '6', title: '董事會 ESG 治理', titleEn: 'Board-Level ESG Governance',
+    instructor: 'Stan Shih', duration: '3 小時', level: 'advanced',
+    category: 'G', enrolled: 67, rating: 4.9, progress: 0, locked: true,
+    tags: ['GRI 2-9', '治理', '董事會'], description: '協助董事會成員理解 ESG 責任，建立永續治理架構，整合 ESG KPI 至薪酬連結機制。',
+    modules: ['ESG 董事會職責', '治理架構設計', 'ESG KPI 建立', '薪酬連結策略'],
+  },
+];
+
+const INSTRUCTORS = [
+  { name: 'Dr. Kuen-Shiou Yang', nameZh: '楊坤修 博士', title: '理事長', org: '台灣社會創新與永續發展協會 (TSISDA)', country: '台灣', expertise: ['GRI', '中小企業ESG轉型', '永續策略'], avatar: 'YK' },
+  { name: 'Ana Torres', nameZh: 'Ana Torres', title: 'Associate Director', org: 'Cleantech to Market (C2M), UC Berkeley', country: '美國', expertise: ['清潔能源', '創業創新', '永續商業模式'], avatar: 'AT' },
+  { name: 'Ann-Kristin Zobel', nameZh: 'Ann-Kristin Zobel', title: 'Associate Professor', org: 'University of St. Gallen', country: '瑞士', expertise: ['TCFD', '企業策略', '可持續發展'], avatar: 'AZ' },
+  { name: 'Karin Li', nameZh: 'Karin Li', title: 'Behavioral Economist', org: 'Haas School of Business, UC Berkeley', country: '美國', expertise: ['行為經濟學', 'ESG激勵', '碳稅政策'], avatar: 'KL' },
+  { name: 'Stan Shih', nameZh: '施振榮', title: 'Chairman', org: 'StanShih Foundation / Acer Group', country: '台灣', expertise: ['企業治理', '微笑曲線', '永續轉型'], avatar: 'SS' },
+  { name: 'Dave Rochlin', nameZh: 'Dave Rochlin', title: 'Executive Director', org: 'Innovation, Creativity & Design, UC Berkeley', country: '美國', expertise: ['設計思維', '社會創新', '人權合規'], avatar: 'DR' },
+];
+
+const LEVEL_CFG = {
+  beginner: { label: '入門', color: '#16a34a', bg: '#dcfce7' },
+  intermediate: { label: '進階', color: '#d97706', bg: '#fef3c7' },
+  advanced: { label: '高階', color: '#dc2626', bg: '#fef2f2' },
+};
+
+const CAT_CFG = {
+  E: { label: 'E 環境', color: '#16a34a', bg: '#dcfce7' },
+  S: { label: 'S 社會', color: '#7c3aed', bg: '#ede9fe' },
+  G: { label: 'G 治理', color: '#d97706', bg: '#fef3c7' },
+  General: { label: '通用', color: '#003262', bg: '#dbeafe' },
+};
+
 export default function AcademyPage() {
-  const [tab, setTab] = useState(0);
-  const [openMod, setOpenMod] = useState<number | null>(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<'courses' | 'instructors' | 'certificate'>('courses');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [catFilter, setCatFilter] = useState('all');
+
+  const filtered = COURSES.filter(c => catFilter === 'all' || c.category === catFilter);
+  const completedCount = COURSES.filter(c => c.progress === 100).length;
+  const totalHours = COURSES.filter(c => c.progress > 0).reduce((acc, c) => acc + parseInt(c.duration), 0);
+
+  const tabs = [
+    { id: 'courses', label: '課程總覽' },
+    { id: 'instructors', label: '師資陣容' },
+    { id: 'certificate', label: '學習紀錄' },
+  ] as const;
 
   return (
-    <div style={{ background: '#F4F6F9', minHeight: '100vh' }}>
+    <div style={{ padding: '24px', maxWidth: '1280px', margin: '0 auto' }}>
       {/* Header */}
-      <div className="page-header">
-        <div style={{ maxWidth: 1050, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <GraduationCap size={20} color={GOLD} />
-            <span style={{ color: '#A8C8E8', fontSize: 11, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase' }}>
-              ESG Academy · Berkeley × YUNUS × TSISDA
-            </span>
+      <div style={{ background: 'linear-gradient(135deg, #003262, #1a4d7a)', borderRadius: '18px', padding: '28px 32px', marginBottom: '24px', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '180px', height: '180px', borderRadius: '50%', background: 'rgba(253,181,21,0.08)' }} />
+        <div style={{ position: 'absolute', bottom: '-10px', left: '30%', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+            <div style={{ width: '52px', height: '52px', borderRadius: '15px', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <GraduationCap size={26} color="#FDB515" />
+            </div>
+            <div>
+              <h1 style={{ fontSize: '24px', fontWeight: 900, color: 'white', lineHeight: 1 }}>永續學院</h1>
+              <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', marginTop: '4px' }}>Berkeley Haas × TSISDA · ESG Strategy & Innovation Program 2026</p>
+            </div>
           </div>
-          <h1 style={{ color: '#fff', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: 800, margin: '0 0 8px' }}>
-            永續學院 ESG Academy
-          </h1>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
             {[
-              { l: '認證學員', v: '284+' },
-              { l: '師資業師', v: '24+' },
-              { l: '認證課程', v: '1' },
-              { l: '合作機構', v: '4' },
+              { label: '課程總數', value: COURSES.length, sub: '門', color: 'white' },
+              { label: '已完成', value: completedCount, sub: '門', color: '#86efac' },
+              { label: '學習時數', value: totalHours, sub: '小時', color: '#FDB515' },
+              { label: '師資', value: INSTRUCTORS.length, sub: '位', color: '#93c5fd' },
             ].map(s => (
-              <div key={s.l} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 8, padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ color: GOLD, fontWeight: 800, fontSize: 15 }}>{s.v}</span>
-                <span style={{ color: '#A8C8E8', fontSize: 12 }}>{s.l}</span>
+              <div key={s.label} style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', padding: '12px 14px', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                <div style={{ fontSize: '22px', fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.value}<span style={{ fontSize: '12px', marginLeft: '2px' }}>{s.sub}</span></div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginTop: '3px' }}>{s.label}</div>
               </div>
             ))}
-            <Link
-              href="/academy/whitepaper"
-              style={{
-                background: '#FFFFFF',
-                color: BLUE,
-                borderRadius: 8,
-                padding: '6px 14px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                fontSize: 12,
-                fontWeight: 700,
-                textDecoration: 'none',
-              }}
-            >
-              <Award size={14} />
-              設計白皮書
-            </Link>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #E2E8F0' }}>
-        <div style={{ maxWidth: 1050, margin: '0 auto', display: 'flex', padding: '0 24px', overflowX: 'auto' }}>
-          {TABS.map((t, i) => (
-            <button key={i} onClick={() => setTab(i)} style={{
-              padding: '12px 18px', background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: 13, fontWeight: 600, color: tab === i ? BLUE : '#64748B',
-              borderBottom: tab === i ? `3px solid ${GOLD}` : '3px solid transparent',
-              whiteSpace: 'nowrap', transition: 'all 0.2s',
-            }}>{t}</button>
-          ))}
-        </div>
+      <div style={{ display: 'flex', gap: '4px', background: '#f3f4f6', padding: '4px', borderRadius: '10px', marginBottom: '20px', width: 'fit-content' }}>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{ padding: '8px 20px', borderRadius: '7px', border: 'none', fontSize: '13px', fontWeight: 600, cursor: 'pointer', background: activeTab === t.id ? 'white' : 'transparent', color: activeTab === t.id ? '#003262' : '#6b7280', boxShadow: activeTab === t.id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none' }}>
+            {t.label}
+          </button>
+        ))}
       </div>
 
-      <div style={{ maxWidth: 1050, margin: '0 auto', padding: '24px' }}>
-
-        {/* ── Course Tab ── */}
-        {tab === 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-
-            {/* Hero Card */}
-            <div style={{
-              background: `linear-gradient(135deg, ${BLUE} 0%, #1B4F8A 60%, #3B7EA1 100%)`,
-              borderRadius: 16, padding: '28px', border: `3px solid ${GOLD}`,
-            }}>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
-                {['UC Berkeley Haas IBI', '台灣尤努斯基金會', 'TSISDA', 'ESG Sunshine'].map(p => (
-                  <span key={p} style={{ background: 'rgba(253,181,21,0.2)', border: `1px solid ${GOLD}`, color: GOLD, borderRadius: 6, padding: '3px 10px', fontSize: 11, fontWeight: 700 }}>{p}</span>
-                ))}
-              </div>
-              <h2 style={{ color: '#fff', fontSize: 'clamp(1rem,2.5vw,1.4rem)', fontWeight: 800, margin: '0 0 6px' }}>{COURSE.title}</h2>
-              <p style={{ color: '#A8C8E8', fontSize: 11, fontStyle: 'italic', margin: '0 0 10px' }}>{COURSE.titleEn}</p>
-              <div style={{ background: 'rgba(253,181,21,0.15)', border: `1px solid ${GOLD}40`, borderRadius: 9, padding: '10px 14px', marginBottom: 16 }}>
-                <p style={{ color: '#FDE68A', fontSize: 12, margin: 0, fontWeight: 600 }}>{COURSE.subtitle}</p>
-              </div>
-              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 16 }}>
-                <div style={{ color: '#A8C8E8', fontSize: 12 }}>⏱ 6 週 · 72 小時</div>
-                <div style={{ color: '#A8C8E8', fontSize: 12 }}>🌐 線上 × 實體混合式</div>
-                <div style={{ color: '#A8C8E8', fontSize: 12 }}>🏆 3 大國際證書</div>
-              </div>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-                <span style={{ color: GOLD, fontWeight: 700, fontSize: 12 }}>📅 2026 年夏季學期：</span>
-                {COURSE.cohorts.map(c => (
-                  <div key={c.name} style={{ background: 'rgba(253,181,21,0.15)', border: `1px solid ${GOLD}`, borderRadius: 7, padding: '5px 12px' }}>
-                    <span style={{ color: GOLD, fontWeight: 700, fontSize: 11 }}>{c.name}</span>
-                    <span style={{ color: '#fff', fontSize: 11, marginLeft: 8 }}>{c.dates}</span>
-                  </div>
-                ))}
-                <a href={COURSE.url} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 'auto', background: GOLD, color: BLUE, borderRadius: 8, padding: '8px 16px', fontWeight: 800, fontSize: 12, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <ExternalLink size={12} />柏克萊官網
-                </a>
-              </div>
-            </div>
-
-            {/* Highlights */}
-            <div>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: BLUE, marginBottom: 12 }}>課程亮點</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
-                {COURSE.highlights.map((h, i) => (
-                  <div key={i} style={{ background: '#fff', borderRadius: 10, padding: '14px 16px', border: '1.5px solid #E2E8F0', display: 'flex', gap: 10 }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 7, background: '#EBF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 800, fontSize: 12, color: BLUE }}>{i + 1}</div>
-                    <span style={{ fontSize: 12, color: '#374151', lineHeight: 1.5 }}>{h}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Modules */}
-            <div>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: BLUE, marginBottom: 12 }}>課程模組</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {COURSE.modules.map((mod, i) => (
-                  <div key={i} style={{ background: '#fff', borderRadius: 12, border: `2px solid ${openMod === i ? mod.color : '#E2E8F0'}`, overflow: 'hidden' }}>
-                    <button onClick={() => setOpenMod(openMod === i ? null : i)} style={{ width: '100%', padding: '13px 18px', background: openMod === i ? `${mod.color}10` : '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ background: mod.color, color: mod.color === '#FDB515' ? BLUE : '#fff', borderRadius: 5, padding: '2px 10px', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
-                        {i === 0 ? '36h' : '18h'}
-                      </span>
-                      <span style={{ fontWeight: 700, color: '#111', fontSize: 13, flex: 1, textAlign: 'left' }}>{mod.title}</span>
-                      {openMod === i ? <ChevronDown size={15} color={mod.color} /> : <ChevronRight size={15} color="#94A3B8" />}
-                    </button>
-                    {openMod === i && (
-                      <div style={{ padding: '10px 18px 14px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 7 }}>
-                        {mod.sessions.map((s, si) => (
-                          <div key={si} style={{ display: 'flex', alignItems: 'flex-start', gap: 7, background: `${mod.color}08`, borderRadius: 7, padding: '8px 10px' }}>
-                            <CheckCircle size={12} color={mod.color} style={{ marginTop: 2, flexShrink: 0 }} />
-                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{s}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Deliverables + Certs */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
-              <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', padding: 18 }}>
-                <h4 style={{ fontSize: 13, fontWeight: 700, color: BLUE, marginBottom: 12 }}>學員帶走三大成果</h4>
-                {COURSE.deliverables.map((d, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 9, marginBottom: 9 }}>
-                    <div style={{ width: 22, height: 22, borderRadius: 5, background: '#EBF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontWeight: 800, fontSize: 10, color: BLUE }}>{i + 1}</div>
-                    <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.5 }}>{d}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ background: '#fff', borderRadius: 12, border: `2px solid ${GOLD}`, padding: 18 }}>
-                <h4 style={{ fontSize: 13, fontWeight: 700, color: BLUE, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Award size={14} color={GOLD} />三大正式證書
-                </h4>
-                {['UC Berkeley Haas IBI 國際永續策略創新師證書', '台灣尤努斯基金會永續轉型規劃師證書', 'TSISDA 國際永續轉型規劃師證書'].map((c, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 9, background: '#FFFBEB', borderRadius: 7, padding: '9px 11px' }}>
-                    <Award size={13} color={GOLD} style={{ flexShrink: 0, marginTop: 1 }} />
-                    <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4, fontWeight: 600 }}>{c}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* FAQ */}
-            <div>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: BLUE, marginBottom: 12 }}>常見問題</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-                {FAQ.map((f, i) => (
-                  <div key={i} style={{ background: '#fff', borderRadius: 10, border: `1.5px solid ${openFaq === i ? BLUE : '#E2E8F0'}`, overflow: 'hidden' }}>
-                    <button onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ width: '100%', padding: '13px 16px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontWeight: 700, color: '#111', fontSize: 12, textAlign: 'left' }}>{f.q}</span>
-                      {openFaq === i ? <ChevronDown size={14} color={BLUE} /> : <ChevronRight size={14} color="#94A3B8" />}
-                    </button>
-                    {openFaq === i && (
-                      <div style={{ padding: '0 16px 13px', borderTop: '1px solid #F1F5F9' }}>
-                        <p style={{ fontSize: 12, color: '#64748B', lineHeight: 1.7, margin: '10px 0 0' }}>{f.a}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA */}
-            <div style={{ background: `linear-gradient(135deg, ${BLUE} 0%, #1B4F8A 100%)`, borderRadius: 14, padding: '24px', textAlign: 'center', border: `2px solid ${GOLD}` }}>
-              <h3 style={{ color: '#fff', fontSize: 17, fontWeight: 800, margin: '0 0 6px' }}>開啟您的國際永續策略人才之旅</h3>
-              <p style={{ color: '#A8C8E8', fontSize: 12, margin: '0 0 18px' }}>成為具備國際視野與實務能力的永續策略領袖</p>
-              <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <a href={COURSE.url} target="_blank" rel="noopener noreferrer" style={{ background: GOLD, color: BLUE, borderRadius: 8, padding: '10px 22px', fontWeight: 800, fontSize: 13, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <ExternalLink size={14} />柏克萊官網
-                </a>
-                <a href="mailto:kevin@esgsunshine.com" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', borderRadius: 8, padding: '10px 22px', fontWeight: 700, fontSize: 13, textDecoration: 'none', border: '1.5px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Mail size={14} />立即報名
-                </a>
-                <a href="mailto:kevin@esgsunshine.com?subject=索取簡章" style={{ background: 'rgba(255,255,255,0.1)', color: '#A8C8E8', borderRadius: 8, padding: '10px 22px', fontWeight: 700, fontSize: 13, textDecoration: 'none', border: '1.5px solid rgba(255,255,255,0.2)' }}>
-                  索取簡章
-                </a>
-              </div>
-              <div style={{ marginTop: 14, display: 'flex', gap: 18, justifyContent: 'center', flexWrap: 'wrap' }}>
-                {[
-                  { icon: Phone, text: '(02)2599-6799' },
-                  { icon: Mail, text: 'kevin@esgsunshine.com' },
-                  { icon: MapPin, text: '臺北市中山區中山北路三段40號' },
-                ].map((c, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <c.icon size={11} color={GOLD} />
-                    <span style={{ color: '#A8C8E8', fontSize: 11 }}>{c.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+      {/* ── 課程 ── */}
+      {activeTab === 'courses' && (
+        <>
+          {/* Category Filter */}
+          <div style={{ display: 'flex', gap: '6px', marginBottom: '18px', flexWrap: 'wrap' }}>
+            {['all', 'General', 'E', 'S', 'G'].map(c => (
+              <button key={c} onClick={() => setCatFilter(c)} style={{ padding: '6px 16px', borderRadius: '8px', border: '1.5px solid', borderColor: catFilter === c ? '#003262' : '#e5e7eb', background: catFilter === c ? '#003262' : 'white', color: catFilter === c ? 'white' : '#374151', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+                {c === 'all' ? '全部' : CAT_CFG[c as keyof typeof CAT_CFG].label}
+              </button>
+            ))}
           </div>
-        )}
-
-        {/* ── Instructors Tab ── */}
-        {tab === 1 && (
-          <div>
-            <h3 style={{ fontSize: 15, fontWeight: 700, color: BLUE, marginBottom: 14 }}>Berkeley Haas IBI 師資團隊</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
-              {INSTRUCTORS.map((inst, i) => (
-                <div key={i} style={{ background: '#fff', borderRadius: 12, padding: 16, border: '1.5px solid #E2E8F0', display: 'flex', gap: 12 }}>
-                  <Avatar initials={inst.av} color={BLUE} size={48} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, color: '#111', fontSize: 13, lineHeight: 1.3 }}>{inst.name}</div>
-                    <div style={{ fontSize: 11, color: '#3B7EA1', fontWeight: 600, marginTop: 1 }}>{inst.title}</div>
-                    <div style={{ fontSize: 11, color: '#94A3B8', marginTop: 1 }}>{inst.org}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
-                      <MapPin size={10} color="#94A3B8" />
-                      <span style={{ fontSize: 10, color: '#94A3B8' }}>{inst.country}</span>
-                      {inst.available && (
-                        <span style={{ background: '#DCFCE7', color: '#16A34A', borderRadius: 4, padding: '1px 6px', fontSize: 10, fontWeight: 700 }}>可預約</span>
-                      )}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+            {filtered.map(course => {
+              const levelCfg = LEVEL_CFG[course.level];
+              const catCfg = CAT_CFG[course.category];
+              return (
+                <div
+                  key={course.id}
+                  onClick={() => setSelectedCourse(course)}
+                  style={{ background: 'white', borderRadius: '16px', border: '1.5px solid #e5e7eb', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s', opacity: course.locked ? 0.7 : 1 }}
+                  onMouseEnter={e => { if (!course.locked) { e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,50,98,0.1)'; e.currentTarget.style.borderColor = '#003262'; e.currentTarget.style.transform = 'translateY(-2px)'; } }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.transform = 'none'; }}
+                >
+                  {/* Course Color Bar */}
+                  <div style={{ height: '4px', background: `linear-gradient(90deg, #003262, ${course.category === 'E' ? '#22c55e' : course.category === 'S' ? '#7c3aed' : course.category === 'G' ? '#d97706' : '#3b7ea1'})` }} />
+                  <div style={{ padding: '18px' }}>
+                    <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                      <span style={{ padding: '2px 7px', borderRadius: '5px', fontSize: '10px', fontWeight: 700, background: catCfg.bg, color: catCfg.color }}>{catCfg.label}</span>
+                      <span style={{ padding: '2px 7px', borderRadius: '5px', fontSize: '10px', fontWeight: 700, background: levelCfg.bg, color: levelCfg.color }}>{levelCfg.label}</span>
+                      {course.locked && <span style={{ padding: '2px 7px', borderRadius: '5px', fontSize: '10px', fontWeight: 700, background: '#f3f4f6', color: '#9ca3af' }}>🔒 需解鎖</span>}
+                    </div>
+                    <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#1a1a2e', marginBottom: '6px', lineHeight: 1.3 }}>{course.title}</h3>
+                    <p style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.5, marginBottom: '12px' }}>{course.description}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '11px', color: '#9ca3af', marginBottom: '12px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}><User size={11} />{course.instructor}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}><Clock size={11} />{course.duration}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}><Users size={11} />{course.enrolled}</span>
+                    </div>
+                    {/* Progress */}
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '11px', color: '#9ca3af' }}>學習進度</span>
+                        <span style={{ fontSize: '11px', fontWeight: 700, color: course.progress === 100 ? '#16a34a' : '#003262' }}>{course.progress}%</span>
+                      </div>
+                      <div style={{ height: '5px', background: '#f3f4f6', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${course.progress}%`, background: course.progress === 100 ? '#22c55e' : 'linear-gradient(90deg, #003262, #3b7ea1)', borderRadius: '3px' }} />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        <Star size={12} color="#FDB515" fill="#FDB515" />
+                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#374151' }}>{course.rating}</span>
+                      </div>
+                      <button style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 14px', background: course.locked ? '#f3f4f6' : course.progress === 100 ? '#dcfce7' : '#003262', color: course.locked ? '#9ca3af' : course.progress === 100 ? '#16a34a' : 'white', border: 'none', borderRadius: '7px', fontSize: '11px', fontWeight: 700, cursor: course.locked ? 'not-allowed' : 'pointer' }}>
+                        {course.locked ? <Lock size={11} /> : course.progress === 100 ? <CheckCircle size={11} /> : <Play size={11} />}
+                        {course.locked ? '解鎖課程' : course.progress === 100 ? '已完成' : course.progress > 0 ? '繼續學習' : '開始學習'}
+                      </button>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        )}
+        </>
+      )}
 
-        {/* ── Silicon Valley Mentors Tab ── */}
-        {tab === 2 && (
-          <div>
-            <div style={{ background: '#FFFBEB', borderRadius: 12, border: '1.5px solid #FDB51540', padding: '14px 18px', marginBottom: 16 }}>
-              <div style={{ fontWeight: 700, color: '#92400E', fontSize: 13, marginBottom: 6 }}>矽谷歷屆輔導業師</div>
-              <p style={{ fontSize: 12, color: '#78350F', margin: '0 0 10px' }}>來自 Apple、Siemens、IBM、Disney、Stanford、Google 等世界頂尖機構的資深業師</p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {['Apple', 'Siemens', 'IBM', 'Disney', 'Stanford', 'Google', 'Cisco', 'Goodyear', 'J&J', 'Experian', 'PayPal', 'Avery'].map(t => (
-                  <span key={t} style={{ background: '#fff', border: '1px solid #FDB515', color: '#92400E', borderRadius: 5, padding: '2px 9px', fontSize: 11, fontWeight: 700 }}>{t}</span>
+      {/* ── 師資 ── */}
+      {activeTab === 'instructors' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+          {INSTRUCTORS.map(ins => (
+            <div key={ins.name} style={{ background: 'white', borderRadius: '16px', border: '1.5px solid #e5e7eb', padding: '22px', transition: 'all 0.2s', cursor: 'default' }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,50,98,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none'; }}>
+              <div style={{ display: 'flex', gap: '14px', marginBottom: '14px' }}>
+                <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg, #003262, #3b7ea1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '16px', fontWeight: 800, flexShrink: 0 }}>
+                  {ins.avatar}
+                </div>
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#1a1a2e' }}>{ins.nameZh !== ins.name ? ins.nameZh : ins.name}</div>
+                  {ins.nameZh !== ins.name && <div style={{ fontSize: '11px', color: '#9ca3af' }}>{ins.name}</div>}
+                  <div style={{ fontSize: '12px', color: '#003262', fontWeight: 600, marginTop: '2px' }}>{ins.title}</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', marginBottom: '10px', fontSize: '12px', color: '#6b7280' }}>
+                <Building2 size={12} style={{ flexShrink: 0, marginTop: '1px' }} />
+                {ins.org}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '12px', fontSize: '12px', color: '#9ca3af' }}>
+                <Globe size={11} />{ins.country}
+              </div>
+              <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                {ins.expertise.map(e => (
+                  <span key={e} style={{ padding: '2px 8px', borderRadius: '5px', fontSize: '11px', fontWeight: 600, background: '#f3f4f6', color: '#374151' }}>{e}</span>
                 ))}
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
-              {SV_MENTORS.map((m, i) => (
-                <div key={i} style={{ background: '#fff', borderRadius: 10, padding: '13px 15px', border: '1.5px solid #E2E8F0', display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <Avatar initials={m.av} color="#B8860B" size={40} />
-                  <div>
-                    <div style={{ fontWeight: 700, color: '#111', fontSize: 12 }}>{m.name}</div>
-                    <div style={{ fontSize: 11, color: '#64748B', lineHeight: 1.4 }}>{m.org}</div>
-                    <span style={{ background: '#FFFBEB', color: '#92400E', border: '1px solid #FDB51540', borderRadius: 4, padding: '1px 6px', fontSize: 9, fontWeight: 700 }}>{m.tag}</span>
+          ))}
+        </div>
+      )}
+
+      {/* ── 學習紀錄 ── */}
+      {activeTab === 'certificate' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div style={{ background: 'white', borderRadius: '14px', border: '1.5px solid #e5e7eb', padding: '24px' }}>
+            <h2 style={{ fontSize: '15px', fontWeight: 800, color: '#1a1a2e', marginBottom: '18px' }}>📚 學習進度追蹤</h2>
+            {COURSES.map(c => (
+              <div key={c.id} style={{ marginBottom: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: '#374151' }}>{c.title}</span>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: c.progress === 100 ? '#16a34a' : '#003262' }}>{c.progress}%</span>
+                </div>
+                <div style={{ height: '7px', background: '#f3f4f6', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${c.progress}%`, background: c.progress === 100 ? '#22c55e' : 'linear-gradient(90deg, #003262, #3b7ea1)', borderRadius: '4px', transition: 'width 1s ease' }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ background: 'linear-gradient(135deg, #003262, #1a4d7a)', borderRadius: '14px', padding: '28px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+              <Award size={36} color="#FDB515" />
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: 900, color: 'white', textAlign: 'center', marginBottom: '6px' }}>永續治理認證</div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', textAlign: 'center', marginBottom: '20px' }}>Berkeley Haas × TSISDA ESG Certificate</div>
+            <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', padding: '14px 20px', textAlign: 'center', width: '100%' }}>
+              <div style={{ fontSize: '28px', fontWeight: 900, color: '#FDB515' }}>{completedCount}/{COURSES.length}</div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', marginTop: '3px' }}>課程完成度</div>
+              <div style={{ marginTop: '12px', height: '6px', background: 'rgba(255,255,255,0.15)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${(completedCount / COURSES.length) * 100}%`, background: '#FDB515', borderRadius: '3px' }} />
+              </div>
+            </div>
+            <button style={{ marginTop: '16px', padding: '10px 28px', background: '#FDB515', color: '#003262', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: 800, cursor: 'pointer' }}>
+              下載結業證書
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Course Detail Modal */}
+      {selectedCourse && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }} onClick={() => setSelectedCourse(null)}>
+          <div style={{ background: 'white', borderRadius: '20px', width: '100%', maxWidth: '560px', maxHeight: '85vh', overflow: 'auto', boxShadow: '0 24px 64px rgba(0,0,0,0.18)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ height: '5px', background: `linear-gradient(90deg, #003262, ${selectedCourse.category === 'E' ? '#22c55e' : selectedCourse.category === 'S' ? '#7c3aed' : '#d97706'})`, borderRadius: '20px 20px 0 0' }} />
+            <div style={{ padding: '22px 26px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
+                  <span style={{ padding: '2px 7px', borderRadius: '5px', fontSize: '10px', fontWeight: 700, background: CAT_CFG[selectedCourse.category].bg, color: CAT_CFG[selectedCourse.category].color }}>{CAT_CFG[selectedCourse.category].label}</span>
+                  <span style={{ padding: '2px 7px', borderRadius: '5px', fontSize: '10px', fontWeight: 700, background: LEVEL_CFG[selectedCourse.level].bg, color: LEVEL_CFG[selectedCourse.level].color }}>{LEVEL_CFG[selectedCourse.level].label}</span>
+                </div>
+                <h2 style={{ fontSize: '17px', fontWeight: 800, color: '#1a1a2e' }}>{selectedCourse.title}</h2>
+              </div>
+              <button onClick={() => setSelectedCourse(null)} style={{ background: '#f3f4f6', border: 'none', borderRadius: '8px', width: '30px', height: '30px', cursor: 'pointer', color: '#6b7280', fontSize: '16px', flexShrink: 0 }}>×</button>
+            </div>
+            <div style={{ padding: '22px 26px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <p style={{ fontSize: '14px', color: '#374151', lineHeight: 1.6 }}>{selectedCourse.description}</p>
+              <div>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', marginBottom: '10px' }}>課程模組 ({selectedCourse.modules.length} 個)</div>
+                {selectedCourse.modules.map((m, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 12px', borderRadius: '8px', background: '#f9fafb', marginBottom: '6px', fontSize: '13px', color: '#374151' }}>
+                    <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#003262', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 800, flexShrink: 0 }}>{i + 1}</span>
+                    {m}
+                    {i === 0 && selectedCourse.progress > 0 && <CheckCircle size={13} color="#22c55e" style={{ marginLeft: 'auto' }} />}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: '10px', paddingTop: '4px' }}>
+                <button style={{ flex: 1, padding: '11px', background: selectedCourse.locked ? '#f3f4f6' : 'linear-gradient(135deg, #003262, #1a4d7a)', color: selectedCourse.locked ? '#9ca3af' : 'white', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: 700, cursor: selectedCourse.locked ? 'not-allowed' : 'pointer' }}>
+                  {selectedCourse.locked ? '🔒 解鎖課程' : selectedCourse.progress === 100 ? '✅ 重看課程' : selectedCourse.progress > 0 ? '▶ 繼續學習' : '▶ 開始學習'}
+                </button>
+              </div>
             </div>
           </div>
-        )}
-
-        {/* ── Students Tab ── */}
-        {tab === 3 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 12 }}>
-              {[
-                { l: '總學員', v: '284', c: BLUE },
-                { l: '進行中', v: '47', c: '#2E8B57' },
-                { l: '已結業', v: '237', c: '#3B7EA1' },
-                { l: '平均評分', v: '4.9★', c: '#B8860B' },
-              ].map(s => (
-                <div key={s.l} style={{ background: '#fff', borderRadius: 11, padding: '16px 14px', border: '1.5px solid #E2E8F0', textAlign: 'center' }}>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: s.c }}>{s.v}</div>
-                  <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600 }}>{s.l}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Achievement Banner */}
-            <div style={{ background: '#FFFBEB', border: `2px solid ${GOLD}`, borderRadius: 12, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <TrendingUp size={22} color="#B8860B" />
-              <div>
-                <div style={{ fontWeight: 800, color: '#92400E', fontSize: 14 }}>首期學員成果亮眼</div>
-                <div style={{ fontSize: 12, color: '#78350F' }}>
-                  學員專案共獲得 <strong>NT$3,265 萬</strong>之政府計畫與新創投資
-                </div>
-              </div>
-            </div>
-
-            {/* Student Table */}
-            <div style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E2E8F0', overflow: 'hidden' }}>
-              <div style={{ padding: '12px 18px', background: BLUE, color: '#fff', fontSize: 13, fontWeight: 700 }}>
-                學員名單（部分展示）
-              </div>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
-                  <thead>
-                    <tr style={{ background: '#F8FAFC' }}>
-                      {['姓名', '企業', '職稱', '班別', '完成度', '狀態'].map(h => (
-                        <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: '#64748B', borderBottom: '2px solid #E2E8F0' }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {STUDENTS.map((s, i) => (
-                      <tr key={i} style={{ borderBottom: '1px solid #F8FAFC', background: i % 2 === 0 ? '#FAFAFA' : '#fff' }}>
-                        <td style={{ padding: '10px 14px', fontWeight: 600, color: '#111' }}>{s.name}</td>
-                        <td style={{ padding: '10px 14px', color: '#4B5563' }}>{s.company}</td>
-                        <td style={{ padding: '10px 14px', color: '#6B7280' }}>{s.role}</td>
-                        <td style={{ padding: '10px 14px', color: '#6B7280' }}>{s.cohort}</td>
-                        <td style={{ padding: '10px 14px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <div style={{ flex: 1, height: 5, background: '#F1F5F9', borderRadius: 3, overflow: 'hidden' }}>
-                              <div style={{ height: '100%', width: `${s.progress}%`, background: s.progress >= 80 ? '#16A34A' : s.progress >= 50 ? '#3B7EA1' : '#FDB515', borderRadius: 3 }} />
-                            </div>
-                            <span style={{ fontSize: 11, fontWeight: 700, color: '#374151', width: 32 }}>{s.progress}%</span>
-                          </div>
-                        </td>
-                        <td style={{ padding: '10px 14px' }}>
-                          <span style={{
-                            borderRadius: 5, padding: '2px 8px', fontSize: 10, fontWeight: 700,
-                            background: s.status === 'active' ? '#DCFCE7' : '#FFFBEB',
-                            color: s.status === 'active' ? '#16A34A' : '#D97706',
-                          }}>
-                            {s.status === 'active' ? '進行中' : '待開課'}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Enroll CTA */}
-            <div style={{ background: '#fff', borderRadius: 12, border: `2px solid ${BLUE}`, padding: '18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
-              <div>
-                <div style={{ fontWeight: 800, color: BLUE, fontSize: 14, marginBottom: 3 }}>加入下一期課程</div>
-                <div style={{ fontSize: 12, color: '#64748B' }}>B 組：2026年8月1日 — 9月5日 · 限額招收，採審核制</div>
-              </div>
-              <a href="mailto:kevin@esgsunshine.com?subject=課程報名" style={{ background: BLUE, color: '#fff', borderRadius: 8, padding: '10px 20px', fontWeight: 700, fontSize: 13, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <ArrowRight size={14} />立即報名
-              </a>
-            </div>
-          </div>
-        )}
-
-      </div>
+        </div>
+      )}
     </div>
   );
 }

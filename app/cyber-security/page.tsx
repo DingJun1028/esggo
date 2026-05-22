@@ -1,126 +1,102 @@
 'use client';
+import { Shield, Lock, AlertTriangle, CheckCircle, Activity, Server } from 'lucide-react';
 
-import { 
-  ShieldCheck, 
-  Lock, 
-  Cpu, 
-  AlertCircle, 
-  Zap, 
-  Eye, 
-  Database, 
-  Activity,
-  Plus,
-  ArrowUpRight
-} from 'lucide-react';
-import { mockIncidents, innovationStats } from '@/lib/tech-data';
+const METRICS = [
+  { label: '資安事件數', value: '0', unit: '件', gri: 'GRI 418-1', color: '#22c55e', trend: '同期 0' },
+  { label: '系統可用率', value: '99.97', unit: '%', gri: 'GRI 418-1', color: '#003262', trend: '+0.02%' },
+  { label: '弱點掃描覆蓋', value: '100', unit: '%', gri: 'GRI 418-1', color: '#3b7ea1', trend: '最新 2024-Q4' },
+  { label: '客戶隱私投訴', value: '0', unit: '件', gri: 'GRI 418-1', color: '#8b5cf6', trend: '同期 0' },
+];
+
+const CERTS = [
+  { name: 'ISO 27001', status: '已認證', year: '2024', desc: '資訊安全管理系統' },
+  { name: 'ISO 27701', status: '進行中', year: '2025', desc: '隱私資訊管理' },
+  { name: 'SOC 2 Type II', status: '規劃中', year: '2025', desc: '服務組織控制' },
+];
 
 export default function CybersecurityPage() {
   return (
-    <div className="page-container animate-fade-in">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-slate-900 text-white rounded-2xl shadow-lg">
-              <ShieldCheck size={24} />
-            </div>
-            <h1 className="text-3xl font-black text-slate-900 tracking-tighter">資安與創新中心 Tech Hub</h1>
-          </div>
-          <p className="text-slate-500 font-medium text-sm mt-1">GRI 418 | 資訊安全、客戶隱私保護與綠色創新研發</p>
-        </div>
-        <button className="btn btn-primary flex items-center gap-2">
-          <Plus size={16} /> 登錄資安演練
-        </button>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm space-y-6">
-           <Lock className="text-indigo-600" size={32} />
-           <h3 className="text-xl font-black text-slate-900">資安合規性</h3>
-           <div className="space-y-4">
-              <div className="flex justify-between text-xs font-bold">
-                 <span className="text-slate-400 uppercase tracking-widest">ISO 27001 認證狀態</span>
-                 <span className="text-emerald-600 font-black">ACTIVE</span>
-              </div>
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                 <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-                   系統已自動串接防火牆日誌，過去 30 天攔截 1,420 次潛在攻擊。
-                 </p>
-              </div>
-           </div>
-        </div>
-
-        <div className="bg-white p-10 rounded-[3rem] border border-slate-200 shadow-sm space-y-6">
-           <Cpu className="text-emerald-600" size={32} />
-           <h3 className="text-xl font-black text-slate-900">綠色創新研發</h3>
-           <div className="space-y-4">
-              <div className="flex justify-between text-xs font-bold">
-                 <span className="text-slate-400 uppercase tracking-widest">研發費用佔營收比</span>
-                 <span className="text-slate-900 font-black">6.2%</span>
-              </div>
-              <div className="flex justify-between text-xs font-bold">
-                 <span className="text-slate-400 uppercase tracking-widest">綠色專利取得數</span>
-                 <span className="text-emerald-600 font-black">{innovationStats.greenPatents} 件</span>
-              </div>
-           </div>
-        </div>
-
-        <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
-           <Zap size={120} className="absolute -right-10 -bottom-10 text-white/5" />
-           <div className="relative z-10">
-              <h3 className="text-xl font-black mb-2">5T 隱私驗證</h3>
-              <p className="text-xs text-slate-400 font-medium opacity-80">使用 ZKP 確保客戶數據隱私不外洩的情況下完成合規證明</p>
-           </div>
-           <div className="space-y-4 relative z-10 mt-10">
-              <div className="flex items-center gap-3 text-emerald-400">
-                 <ShieldCheck size={16} />
-                 <span className="text-[10px] font-black uppercase tracking-widest">Privacy Proof Active</span>
-              </div>
-              <button className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">
-                 生成資安聲明
-              </button>
-           </div>
+    <div className="space-y-6 pb-20">
+      <div className="page-header">
+        <h1>資安與創新中心</h1>
+        <p>Cybersecurity & Innovation · GRI 418 · ISO 27001 · 數位韌性指標</p>
+        <div className="page-header-meta">
+          <span className="badge badge-green"><Shield size={10} /> 系統安全</span>
+          <span className="badge badge-blue"><Lock size={10} /> GRI 418 合規</span>
         </div>
       </div>
 
-      <div className="bg-white rounded-[3rem] border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-           <h3 className="font-black text-slate-800 flex items-center gap-2">
-             <AlertCircle size={20} className="text-rose-500" /> 資安與隱私事件日誌
-           </h3>
-           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">GRI 418-1 Disclosure</span>
+      <div className="stats-grid">
+        {METRICS.map(m => (
+          <div key={m.label} className="stat-item">
+            <div className="stat-value" style={{ color: m.color }}>{m.value}<span style={{ fontSize: 14 }}>{m.unit}</span></div>
+            <div className="stat-label">{m.label}</div>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>{m.gri}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
+        <div className="card">
+          <div className="card-title" style={{ marginBottom: 16 }}>資安認證狀態</div>
+          <div style={{ display: 'grid', gap: 10 }}>
+            {CERTS.map((c, i) => (
+              <div key={i} style={{ display: 'flex', gap: 12, padding: '14px', background: 'var(--bg-primary)', borderRadius: '10px', border: '1px solid var(--border-light)' }}>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: c.status === '已認證' ? '#dcfce7' : '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {c.status === '已認證' ? <CheckCircle size={18} color="#16a34a" /> : <Activity size={18} color="#d97706" />}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, fontSize: 14 }}>{c.name}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{c.desc}</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span className={`badge ${c.status === '已認證' ? 'badge-green' : c.status === '進行中' ? 'badge-yellow' : 'badge-gray'}`}>{c.status}</span>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>{c.year}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="border-b border-slate-50">
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">事件 ID</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">類型</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">嚴重程度</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">日期</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">狀態</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50">
-              {mockIncidents.map((incident) => (
-                <tr key={incident.id} className="hover:bg-slate-50 transition-all">
-                  <td className="px-8 py-6 font-bold text-slate-900 text-sm">{incident.id}</td>
-                  <td className="px-8 py-6 text-xs font-bold text-slate-600">{incident.type}</td>
-                  <td className="px-8 py-6">
-                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase ${
-                      incident.severity === 'High' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-500'
-                    }`}>{incident.severity}</span>
-                  </td>
-                  <td className="px-8 py-6 text-xs font-bold text-slate-500">{incident.date}</td>
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                      <span className="text-[10px] font-black uppercase text-emerald-600">{incident.status}</span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="card">
+          <div className="card-title" style={{ marginBottom: 16 }}>系統架構韌性</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {[
+              { label: '多因素驗證 (MFA)', status: '啟用', color: '#22c55e' },
+              { label: '數據加密 (AES-256)', status: '啟用', color: '#22c55e' },
+              { label: 'ZKP 零知識證明', status: '啟用', color: '#22c55e' },
+              { label: '備份頻率', status: '每日', color: '#3b7ea1' },
+              { label: '滲透測試', status: '季度執行', color: '#3b7ea1' },
+              { label: 'DDoS 防護', status: 'Cloudflare', color: '#3b7ea1' },
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: 'var(--bg-primary)', borderRadius: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Server size={14} color="var(--text-muted)" />
+                  <span style={{ fontSize: 13 }}>{item.label}</span>
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 600, color: item.color }}>{item.status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-title" style={{ marginBottom: 4 }}>GRI 418 隱私政策揭露</div>
+        <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 16 }}>依據 GRI 418-1，公司須揭露已識別的客戶隱私侵害行為及相關投訴情況。</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+          {[
+            { label: '客戶資料洩漏事件', value: '0 件', desc: '2024 全年' },
+            { label: '監管機關受理投訴', value: '0 件', desc: '2024 全年' },
+            { label: '涉及客戶數 (洩漏)', value: '0 人', desc: '2024 全年' },
+            { label: '法規裁罰總額', value: 'NT$ 0', desc: '2024 全年' },
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '16px', background: '#f0fdf4', borderRadius: '10px', border: '1px solid #bbf7d0' }}>
+              <div style={{ fontSize: 12, color: '#16a34a', fontWeight: 600, marginBottom: 4 }}>{item.label}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: '#15803d' }}>{item.value}</div>
+              <div style={{ fontSize: 11, color: '#166534', marginTop: 2 }}>{item.desc}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

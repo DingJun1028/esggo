@@ -1,222 +1,195 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, Send, Bot, RefreshCw, User, Zap, Shield, Leaf, Lightbulb, Clock, Save, Trash2 } from 'lucide-react';
-import { saveAdvisorySession, getAdvisorySessions, logAudit } from '../../lib/db';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Bot, Send, RefreshCw, Trash2, User, Sparkles } from 'lucide-react';
+import { saveAdvisorySession, getAdvisorySession, logAudit, type AdvisoryMessage } from '../../lib/db';
 
-const personas = [
-  { id: 'compliance', label: '合規守衛', en: 'Compliance Guard', icon: Shield, color: '#2563eb', desc: '專注 GRI 指標對齊與法規風險控管' },
-  { id: 'harmony', label: '共榮引導', en: 'Harmony Guide', icon: Leaf, color: '#059669', desc: '提供利害關係人與 DEI 文化視角' },
-  { id: 'innovation', label: '創新先行', en: 'Innovation Lead', icon: Lightbulb, color: '#d97706', desc: '探索永續技術、循環經濟與轉型方案' },
-  { id: 'berkeley', label: 'Berkeley 導師', en: 'Berkeley Mentor', icon: Zap, color: '#7c3aed', desc: 'Haas 商學院 ESG 策略與商業模式框架' },
+const PERSONAS = [
+  { id: 'compliance', label: '合規守衛', sub: 'Compliance', color: '#003262', bg: '#EBF2FA', desc: '專注 GRI/SASB/TCFD 指標對齊、綠漂風險偵測與合規缺口分析' },
+  { id: 'harmony',    label: '共榮引導', sub: 'Harmony',    color: '#22C55E', bg: '#DCFCE7', desc: '提供利害關係人視角、社區影響分析與企業文化永續建議' },
+  { id: 'innovation', label: '創新先行', sub: 'Innovation',  color: '#8B5CF6', bg: '#F5F3FF', desc: '探索淨零技術路徑、綠色金融工具與產業轉型替代方案' },
+  { id: 'berkeley',   label: 'Berkeley 導師', sub: 'Berkeley Haas', color: '#FDB515', bg: '#FEF3C7', desc: 'UC Berkeley ESG 學術觀點、研究方法論與國際最佳實踐' },
 ];
 
-const quickPrompts = [
-  '我應從哪個 GRI 指標開始揭露？',
-  '如何計算範疇三 Scope 3 排放量？',
-  '中小企業如何應對 TCFD 氣候財務風險？',
-  '供應鏈 ESG 稽核的最佳實踐是什麼？',
-  '如何避免永續報告中的綠漂風險？',
-  'ISSB S2 對台灣企業的實務影響？',
-];
-
-const personaResponses: Record<string, string[]> = {
-  compliance: [
-    '依據 GRI 2021 通用準則，建議優先從 GRI 2-1（組織詳情）與 GRI 2-6（活動、價值鏈）開始，這是所有框架的共同基礎。完成後再依重大性評估決定 GRI 300 或 400 系列的揭露順序。',
-    '範疇三排放計算依 GHG Protocol 分為 15 個類別。對中小企業建議優先盤查：類別 1（採購商品/服務）與類別 11（使用銷售產品），這兩類通常佔範疇三排放的 70% 以上。建議取得供應商的初級數據，若無法取得則使用產業平均排放係數。',
-    'TCFD 四大核心要素：治理、策略、風險管理、指標目標。建議先完成氣候情境分析（1.5°C 與 4°C），評估實體風險（颱風、洪水、乾旱）與轉型風險（碳費、法規、市場偏好），再對應財務衝擊。金管會已要求特定企業 2026 年前完成 TCFD 揭露。',
-    '綠漂風險識別三大警訊：1) 模糊用語如「致力於」、「友善環境」未附具體目標；2) 選擇性揭露只報告正面數據；3) 缺乏第三方驗證。建議所有環境聲明都附上計量數據、時間目標與查證機構。',
-  ],
-  harmony: [
-    '從利害關係人視角，建議先進行雙重重大性評估，了解員工、客戶、投資人與社區最關注的 ESG 議題。透過問卷、深度訪談與焦點團體蒐集意見，再決定揭露優先順序。這樣的由外而內策略更具說服力，也符合 GRI 3-1 要求。',
-    'ESG 文化建立需要由上而下的承諾與由下而上的參與。建議：1) 設立跨部門 ESG 大使計畫；2) 將個人 ESG 貢獻納入績效考核；3) 舉辦內部永續黑客松；4) 定期分享量化進展。讓永續不只是企業義務，更是個人價值實踐。',
-    '供應鏈管理建議分三層：第一層直接供應商 100% ESG 問卷評估；第二層重點高風險供應商現場稽核；第三層要求簽署永續行為準則。EU CSRD 要求企業對整個供應鏈進行盡職調查，台灣出口商需提前準備。',
-  ],
-  innovation: [
-    '建議採用數位化 ESG 數據平台整合 IoT 感測器，實現用電、用水、廢棄物的即時監控與預測性節能管理。AI 驅動的能源優化系統可將碳排放降低 15-25%。結合 5T 數據架構確保數據可溯源性，通過第三方零幻覺驗算。',
-    '循環經濟在製造業三大商業模式：1) 產品即服務 (PaaS) — 租賃替代購買；2) 工業共生 — 與周邊企業交換廢棄物與副產品；3) 再製造 — 回收舊品翻新。預計 2030 年前循環經濟市場規模將達 4.5 兆美元，先行者可取得競爭優勢。',
-    'ISSB S2 對台灣企業最大衝擊是供應鏈透明度要求。建議投資建立碳足跡追蹤系統，使用 LCA（生命週期評估）方法量化產品碳足跡，並與主要客戶建立數據共享機制，這將成為未來供應商資格審核的必要條件。',
-  ],
-  berkeley: [
-    '根據 Haas 商學院 ESG 研究，「由合規到創造」轉型框架分三個階段：防守期（基礎合規揭露）→ 進攻期（ESG 差異化競爭）→ 轉型期（商業模式創新）。大多數台灣中小企業目前在防守期，建議在鞏固基礎揭露的同時，積極識別 ESG 帶來的商業機會。',
-    'Berkeley 開放創新方法論在 ESG 領域的應用：與學術機構合作開發低碳技術、透過 ESG 加速器引入新創解決方案、參與產業聯盟共同推動標準制定。這種多邊協作模式比單打獨鬥更能快速提升 ESG 成熟度，同時降低轉型成本。',
-  ],
+const QUICK_PROMPTS: Record<string, string[]> = {
+  compliance: ['我的 GRI 305-1 揭露有哪些缺口？', '如何避免綠漂風險？', '金管會規範最新要求為何？'],
+  harmony:    ['如何識別主要利害關係人？', '重大性評估如何進行？', '社區投資如何量化效益？'],
+  innovation: ['2030 淨零路徑如何規劃？', 'CBAM 碳邊境稅對我有何影響？', '再生能源採購策略建議？'],
+  berkeley:   ['TCFD 四大支柱如何實踐？', 'ISSB S2 與 GRI 的差異？', '企業 ESG 評分如何改善？'],
 };
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-  persona?: string;
-}
+const PERSONA_RESPONSES: Record<string, (q: string) => string> = {
+  compliance: (q) => `**[合規守衛分析]**\n\n針對您的問題「${q}」：\n\n**GRI 框架對應：**\n- GRI 2-1~2-5：一般揭露基本資訊\n- GRI 305-1/2/3：溫室氣體排放揭露\n\n**合規要點：**\n1. 確保數據可溯源至原始憑證（T1 可溯源）\n2. 計算方法須符合 ISO 14064-1 標準\n3. 第三方查證建議採用 ISSA 5000 準則\n\n**行動建議：** 建議立即檢視 evidence_vault 中對應指標的佐證文件完整性，並執行 ZKP 封印確保不可篡改性。`,
+  harmony: (q) => `**[共榮引導觀點]**\n\n關於「${q}」的利害關係人視角：\n\n**識別框架：**\n- 內部：員工、董事會、股東\n- 外部：客戶、供應商、社區、政府\n\n**議合方式：**\n1. 問卷調查（GRI 2-29）\n2. 深度訪談與焦點團體\n3. 年度說明會與永續報告書\n\n**重大性評估：** 建議採用 GRI 3-1~3-3 雙重重大性矩陣，同時考量「對企業影響」與「對社會/環境影響」。`,
+  innovation: (q) => `**[創新先行方案]**\n\n關於「${q}」的創新路徑：\n\n**技術選項：**\n- 短期：能效提升、再生能源採購（T-REC）\n- 中期：製程電氣化、循環經濟設計\n- 長期：碳捕捉、氫能導入\n\n**金融工具：**\n- 永續連結貸款（SLL）\n- 綠色債券發行\n- 內部碳定價機制\n\n**SBTi 建議：** 設定科學基礎目標，對齊 1.5°C 路徑，2030 年前實現 46% 減排。`,
+  berkeley: (q) => `**[Berkeley Haas 學術觀點]**\n\n基於「${q}」的研究與實踐：\n\n**學術框架：**\n- Porter & Kramer 共享價值創造理論\n- Freeman 利害關係人理論\n- TCFD 氣候相關財務揭露\n\n**實證研究：**\n- ESG 評分高的企業長期 ROE 平均高出 23%\n- 永續供應鏈管理可降低 15-20% 採購風險\n\n**建議閱讀：** GRI 2021 全套標準、ISSB S1/S2、UC Berkeley ESG Lab 研究報告。`,
+};
 
 export default function AdvisoryPage() {
-  const [activePersona, setActivePersona] = useState(personas[0]);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: `您好！我是您的 ${personas[0].label}，專門提供 ESG 合規策略與 GRI 指標對齊建議。請問有什麼永續治理議題我可以協助您？`, timestamp: new Date(), persona: personas[0].id }
-  ]);
+  const [persona, setPersona] = useState(PERSONAS[0].id);
+  const [messages, setMessages] = useState<AdvisoryMessage[]>([]);
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [sessions, setSessions] = useState<string[]>([]);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sending, setSending] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [toast, setToast] = useState('');
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2000); };
+
+  const loadHistory = useCallback(async () => {
+    setLoadingHistory(true);
+    try { const hist = await getAdvisorySession(persona); setMessages(hist); }
+    finally { setLoadingHistory(false); }
+  }, [persona]);
+
+  useEffect(() => { loadHistory(); }, [loadHistory]);
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
   const sendMessage = async (text?: string) => {
-    const content = text || input.trim();
-    if (!content || loading) return;
+    const content = (text ?? input).trim();
+    if (!content || sending) return;
     setInput('');
-    const userMsg: Message = { role: 'user', content, timestamp: new Date() };
-    setMessages(prev => [...prev, userMsg]);
-    setLoading(true);
-    await new Promise(r => setTimeout(r, 900 + Math.random() * 600));
-    const responses = personaResponses[activePersona.id] || personaResponses.compliance;
-    const reply = responses[Math.floor(Math.random() * responses.length)];
-    setMessages(prev => [...prev, { role: 'assistant', content: reply, timestamp: new Date(), persona: activePersona.id }]);
-    setLoading(false);
+
+    const userMsg: AdvisoryMessage = { role: 'user', content, timestamp: new Date().toISOString() };
+    const updated = [...messages, userMsg];
+    setMessages(updated);
+    setSending(true);
+
+    try {
+      await new Promise(r => setTimeout(r, 900 + Math.random() * 600));
+      const respFn = PERSONA_RESPONSES[persona] ?? PERSONA_RESPONSES.compliance;
+      const aiMsg: AdvisoryMessage = { role: 'assistant', content: respFn(content), timestamp: new Date().toISOString() };
+      const final = [...updated, aiMsg];
+      setMessages(final);
+      await saveAdvisorySession(persona, final);
+      await logAudit({ action: 'ADVISORY_CHAT', resource: `${PERSONAS.find(p => p.id === persona)?.label} 諮詢`, user_name: 'User', t5_tag: 'T2', details: content.slice(0, 80) });
+    } finally { setSending(false); }
   };
 
-  const switchPersona = (p: typeof personas[0]) => {
-    setActivePersona(p);
-    setMessages([{ role: 'assistant', content: `您好！我是 ${p.label}，${p.desc}。請問有什麼 ESG 治理問題需要我協助？`, timestamp: new Date(), persona: p.id }]);
+  const clearChat = async () => {
+    setMessages([]);
+    await saveAdvisorySession(persona, []);
+    showToast('對話已清除');
   };
 
-  const handleSaveSession = async () => {
-    await saveAdvisorySession({
-      persona: activePersona.id,
-      title: `${activePersona.label} — ${messages[1]?.content.slice(0, 20)}...`,
-      messages: messages.map(m => ({ role: m.role, content: m.content })),
-    });
-    await logAudit({ action: 'SAVE_SESSION', resource: `${activePersona.label} 諮詢記錄`, user_name: 'User', t5_tag: 'T1+T5' });
-    setSessions(prev => [...prev, activePersona.id]);
-  };
+  const currentPersona = PERSONAS.find(p => p.id === persona)!;
 
   return (
-    <div className="page-container" style={{ height: '100vh', display: 'flex', flexDirection: 'column', paddingBottom: 0 }}>
-      <div className="page-header">
-        <div className="page-header-inner">
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--berkeley-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <MessageSquare size={18} color="#fff" />
-              </div>
-              <h1 className="page-title">專家諮詢</h1>
-            </div>
-            <div className="page-subtitle">
-              <span className="badge badge-purple">SPIRIT Personas</span>
-              <span className="badge badge-blue">AI 驅動</span>
-              <span style={{ color: 'var(--text-muted)' }}>· Berkeley Haas × ESG GO</span>
-            </div>
+    <div className="page-container fade-in" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - var(--topbar-h) - var(--space-8))' }}>
+      {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999, background: '#003262', color: '#fff', padding: '10px 18px', borderRadius: 'var(--radius-xl)', fontSize: 13, fontWeight: 600, boxShadow: 'var(--shadow-lg)' }}>{toast}</div>}
+
+      <div className="page-header mb-4">
+        <div className="flex items-start gap-4">
+          <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-xl)', background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Sparkles size={22} color="#fff" />
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-secondary btn-sm" onClick={handleSaveSession} disabled={messages.length < 2}>
-              <Save size={14} />儲存記錄
-            </button>
-            <button className="btn btn-ghost btn-sm" onClick={() => switchPersona(activePersona)}>
-              <RefreshCw size={14} />重置
-            </button>
+          <div>
+            <h1 style={{ color: '#fff', fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>SPIRIT AI 專家諮詢</h1>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'var(--font-size-base)', marginTop: 4 }}>4 位 AI 人格 · 持久對話記憶 · GRI 合規建議</p>
           </div>
         </div>
       </div>
 
-      {/* Persona Selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
-        {personas.map(p => {
-          const Icon = p.icon;
-          const active = p.id === activePersona.id;
-          return (
-            <button key={p.id} onClick={() => switchPersona(p)} style={{
-              padding: '14px 16px', border: `2px solid ${active ? p.color : 'var(--border-light)'}`,
-              borderRadius: 10, background: active ? `${p.color}08` : 'var(--bg-card)',
-              cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', fontFamily: 'inherit',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <Icon size={16} color={p.color} />
-                <span style={{ fontSize: 13, fontWeight: 600, color: active ? p.color : 'var(--text-primary)' }}>{p.label}</span>
+      <div style={{ display: 'flex', gap: 'var(--space-4)', flex: 1, minHeight: 0 }}>
+        {/* Persona Panel */}
+        <div style={{ width: 200, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {PERSONAS.map(p => (
+            <button key={p.id} onClick={() => setPersona(p.id)}
+              style={{ display: 'flex', alignItems: 'flex-start', gap: 8, padding: '10px 12px', borderRadius: 'var(--radius-lg)', background: persona === p.id ? p.bg : 'var(--surface-card)', border: `1.5px solid ${persona === p.id ? p.color : 'var(--border-default)'}`, cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-sans)', transition: 'all var(--duration-fast)' }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: p.color, marginTop: 5, flexShrink: 0 }} />
+              <div>
+                <p style={{ fontSize: 12, fontWeight: 700, color: persona === p.id ? p.color : 'var(--text-primary)' }}>{p.label}</p>
+                <p style={{ fontSize: 10, color: 'var(--text-tertiary)', marginTop: 1 }}>{p.sub}</p>
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.4 }}>{p.desc}</div>
             </button>
-          );
-        })}
-      </div>
+          ))}
+          <div className="card card-sm mt-2">
+            <div className="card-body" style={{ padding: 'var(--space-3)' }}>
+              <p style={{ fontSize: 10, color: 'var(--text-tertiary)', lineHeight: 1.6 }}>{currentPersona.desc}</p>
+            </div>
+          </div>
+        </div>
 
-      {/* Chat Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-        <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 12px' }}>
+        {/* Chat Area */}
+        <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <div className="card-header">
+            <div className="flex items-center gap-2">
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: currentPersona.color }} />
+              <span style={{ fontWeight: 700, color: currentPersona.color, fontSize: 'var(--font-size-sm)' }}>{currentPersona.label}</span>
+              {loadingHistory && <RefreshCw size={12} className="spin" style={{ color: 'var(--text-tertiary)' }} />}
+            </div>
+            <button onClick={clearChat} className="btn btn-ghost btn-xs flex items-center gap-1" aria-label="清除對話">
+              <Trash2 size={12} /> 清除
+            </button>
+          </div>
+
+          {/* Messages */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+            {messages.length === 0 && (
+              <div style={{ textAlign: 'center', padding: 'var(--space-8) var(--space-4)' }}>
+                <div style={{ width: 56, height: 56, borderRadius: 'var(--radius-2xl)', background: currentPersona.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: currentPersona.color }}>
+                  <Bot size={28} />
+                </div>
+                <p style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8 }}>{currentPersona.label} 準備就緒</p>
+                <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-tertiary)', marginBottom: 16 }}>{currentPersona.desc}</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+                  {QUICK_PROMPTS[persona]?.map(q => (
+                    <button key={q} onClick={() => sendMessage(q)}
+                      style={{ fontSize: 12, padding: '6px 14px', borderRadius: 'var(--radius-full)', background: currentPersona.bg, color: currentPersona.color, border: `1px solid ${currentPersona.color}30`, cursor: 'pointer', fontFamily: 'var(--font-sans)' }}>
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {messages.map((msg, i) => (
-              <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 16, justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
+              <div key={i} style={{ display: 'flex', gap: 8, justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
                 {msg.role === 'assistant' && (
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: `${activePersona.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
-                    <Bot size={16} color={activePersona.color} />
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: currentPersona.bg, color: currentPersona.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Bot size={14} />
                   </div>
                 )}
-                <div style={{
-                  maxWidth: '75%', padding: '12px 16px',
-                  borderRadius: msg.role === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
-                  background: msg.role === 'user' ? 'var(--berkeley-blue)' : 'var(--bg-tertiary)',
-                  color: msg.role === 'user' ? '#fff' : 'var(--text-primary)',
-                  fontSize: 14, lineHeight: 1.6,
-                }}>
+                <div style={{ maxWidth: '75%', padding: '10px 14px', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px', background: msg.role === 'user' ? 'var(--blue-700)' : 'var(--surface-section)', color: msg.role === 'user' ? '#fff' : 'var(--text-primary)', fontSize: 'var(--font-size-sm)', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                   {msg.content}
-                  <div style={{ fontSize: 10, opacity: 0.5, marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Clock size={9} />
-                    {msg.timestamp.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
-                  </div>
                 </div>
                 {msg.role === 'user' && (
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--berkeley-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
-                    <User size={16} color="#fff" />
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--blue-700)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <User size={14} />
                   </div>
                 )}
               </div>
             ))}
-            {loading && (
-              <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: `${activePersona.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Bot size={16} color={activePersona.color} />
+            {sending && (
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: currentPersona.bg, color: currentPersona.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Bot size={14} />
                 </div>
-                <div style={{ padding: '12px 16px', background: 'var(--bg-tertiary)', borderRadius: '14px 14px 14px 4px' }}>
-                  <div style={{ display: 'flex', gap: 4 }}>
-                    {[0, 1, 2].map(j => (
-                      <div key={j} style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-muted)', animation: `pulse 1.2s ease-in-out ${j * 0.2}s infinite` }} />
-                    ))}
+                <div style={{ padding: '10px 14px', borderRadius: '16px 16px 16px 4px', background: 'var(--surface-section)' }}>
+                  <div className="flex gap-1 items-center">
+                    {[0, 1, 2].map(d => <div key={d} style={{ width: 6, height: 6, borderRadius: '50%', background: currentPersona.color, animation: `bounce 1s ${d * 0.2}s infinite` }} />)}
                   </div>
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Quick Prompts */}
-          <div style={{ padding: '8px 16px', borderTop: '1px solid var(--border-light)', overflowX: 'auto' }}>
-            <div style={{ display: 'flex', gap: 8, paddingBottom: 4 }}>
-              {quickPrompts.map((p, i) => (
-                <button key={i} onClick={() => sendMessage(p)} className="btn btn-secondary btn-sm" style={{ whiteSpace: 'nowrap', fontSize: 12 }}>
-                  {p}
-                </button>
-              ))}
-            </div>
+            <div ref={bottomRef} />
           </div>
 
           {/* Input */}
-          <div style={{ padding: '12px 16px 16px', display: 'flex', gap: 10 }}>
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-              placeholder={`詢問 ${activePersona.label}...`}
-              className="form-input"
-              style={{ flex: 1 }}
-              disabled={loading}
-            />
-            <button onClick={() => sendMessage()} className="btn btn-primary" disabled={loading || !input.trim()}>
-              <Send size={16} />
+          <div style={{ padding: 'var(--space-3) var(--space-4)', borderTop: '1px solid var(--border-default)', display: 'flex', gap: 8 }}>
+            <input className="input" style={{ flex: 1 }} value={input} onChange={e => setInput(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+              placeholder={`詢問 ${currentPersona.label}...`} disabled={sending} aria-label="輸入訊息" />
+            <button className="btn btn-primary btn-icon" onClick={() => sendMessage()} disabled={!input.trim() || sending} aria-label="送出">
+              {sending ? <RefreshCw size={16} className="spin" /> : <Send size={16} />}
             </button>
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+        @media (max-width: 767px) { .persona-panel { display: none; } }
+      `}</style>
     </div>
   );
 }

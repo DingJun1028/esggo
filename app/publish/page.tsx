@@ -1,271 +1,219 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { Send, Plus, CheckCircle, Clock, Lock, FileText, Download, Eye, Loader, Shield } from 'lucide-react';
-import { getPublishedReports, createPublishedReport, updateReportStatus, logAudit, type PublishedReport } from '../../lib/db';
 
-const frameworkOptions = ['GRI 2021', 'TCFD', 'SASB', 'ISSB S1', 'ISSB S2', 'SBTi', 'ISO 14064-1'];
+import { useState } from 'react';
+import ClientLayout from '../ClientLayout';
+import { Download, Shield, FileText, CheckCircle, Clock, X } from 'lucide-react';
 
-const statusConfig: Record<string, { color: string; label: string; icon: React.ElementType }> = {
-  draft:     { color: 'var(--warning)',        label: '草稿',  icon: Clock },
-  review:    { color: 'var(--founders-rock)',  label: '審核中', icon: Eye },
-  published: { color: 'var(--success)',        label: '已發布', icon: CheckCircle },
-  archived:  { color: 'var(--text-muted)',     label: '已封存', icon: Lock },
+interface Report {
+  id: string;
+  title: string;
+  year: number;
+  status: 'draft' | 'reviewing' | 'published';
+  framework: string[];
+  pageCount: number;
+  griCoverage: number;
+  zkpVerified: boolean;
+  createdAt: string;
+}
+
+const mockReports: Report[] = [
+  { id: '1', title: '2024 永續報告書', year: 2024, status: 'draft', framework: ['GRI 2021', 'TCFD', 'SASB'], pageCount: 156, griCoverage: 78, zkpVerified: false, createdAt: new Date().toISOString() },
+  { id: '2', title: '2023 永續報告書', year: 2023, status: 'published', framework: ['GRI 2021', 'TCFD'], pageCount: 143, griCoverage: 71, zkpVerified: true, createdAt: new Date(Date.now() - 31536000000).toISOString() },
+];
+
+const STATUS_MAP: Record<string, { label: string; badge: string }> = {
+  draft: { label: '草稿', badge: 'badge-gray' },
+  reviewing: { label: '審核中', badge: 'badge-gold' },
+  published: { label: '已發布', badge: 'badge-green' },
 };
 
-const fallbackReports: PublishedReport[] = [
-  { id: '1', title: '2023 永續報告書', year: 2023, framework: ['GRI 2021', 'TCFD', 'SASB'], status: 'published', page_count: 156, gri_coverage: 78, zkp_verified: true, zkp_hash: 'sha256:a1b2c3d4e5f678901234' },
-  { id: '2', title: '2022 永續報告書', year: 2022, framework: ['GRI 2021', 'TCFD'], status: 'published', page_count: 128, gri_coverage: 71, zkp_verified: true, zkp_hash: 'sha256:b2c3d4e5f678901234' },
-  { id: '3', title: '2024 永續報告書 (草稿)', year: 2024, framework: ['GRI 2021', 'TCFD', 'SASB', 'ISSB S2'], status: 'draft', page_count: 0, gri_coverage: 45, zkp_verified: false, zkp_hash: undefined },
-  { id: '4', title: '2024 中期進度報告', year: 2024, framework: ['GRI 2021'], status: 'published', page_count: 48, gri_coverage: 35, zkp_verified: true, zkp_hash: 'sha256:c3d4e5f678901234' },
-  { id: '5', title: '碳中和路徑白皮書', year: 2024, framework: ['TCFD', 'SBTi'], status: 'published', page_count: 64, gri_coverage: 20, zkp_verified: true, zkp_hash: 'sha256:d4e5f678901234' },
+const CHAPTERS = [
+  { id: '1', title: '一、組織概況', ready: true },
+  { id: '2', title: '二、治理架構', ready: true },
+  { id: '3', title: '三、重大性評估', ready: true },
+  { id: '4', title: '四、環境績效', ready: false },
+  { id: '5', title: '五、社會績效', ready: false },
+  { id: '6', title: '六、公司治理', ready: true },
+  { id: '7', title: '七、前瞻展望', ready: false },
 ];
 
 export default function PublishPage() {
-  const [reports, setReports] = useState<PublishedReport[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showCreate, setShowCreate] = useState(false);
-  const [sealing, setSealingId] = useState<string | null>(null);
-  const [selected, setSelected] = useState<PublishedReport | null>(null);
-  const [newReport, setNewReport] = useState({ title: '', year: 2024, framework: [] as string[], status: 'draft' as const, page_count: 0, gri_coverage: 0 });
+  const [reports, setReports] = useState<Report[]>(mockReports);
+  const [activeTab, setActiveTab] = useState('list');
+  const [sealing, setSealing] = useState<string | null>(null);
+  const [sealProgress, setSealProgress] = useState(0);
+  const [selected, setSelected] = useState<Report | null>(null);
 
-  useEffect(() => { loadReports(); }, []);
-
-  async function loadReports() {
-    setLoading(true);
-    const data = await getPublishedReports();
-    setReports(data.length > 0 ? data : fallbackReports);
-    setLoading(false);
-  }
-
-  async function handleCreate() {
-    const report: PublishedReport = { company_id: 'default', ...newReport, zkp_verified: false };
-    const saved = await createPublishedReport(report);
-    if (saved) {
-      setReports(prev => [saved, ...prev]);
-      await logAudit({ action: 'CREATE_REPORT', resource: newReport.title, user_name: 'User', t5_tag: 'T1+T5', details: `建立新報告草稿：${newReport.title}` });
+  const sealReport = async (r: Report) => {
+    setSealing(r.id);
+    for (let i = 0; i <= 100; i += 10) {
+      await new Promise(res => setTimeout(res, 150));
+      setSealProgress(i);
     }
-    setShowCreate(false);
-    setNewReport({ title: '', year: 2024, framework: [], status: 'draft', page_count: 0, gri_coverage: 0 });
-  }
+    setReports(prev => prev.map(rep => rep.id === r.id ? { ...rep, zkpVerified: true, status: 'reviewing' } : rep));
+    setSealing(null);
+    setSealProgress(0);
+  };
 
-  async function handleZKPSeal(report: PublishedReport) {
-    if (!report.id) return;
-    setSealingId(report.id);
-    await new Promise(r => setTimeout(r, 1500));
-    const hash = `sha256:${Math.random().toString(36).slice(2, 18)}${Math.random().toString(36).slice(2, 18)}`;
-    const ok = await updateReportStatus(report.id, 'published', hash);
-    if (ok) {
-      setReports(prev => prev.map(r => r.id === report.id ? { ...r, status: 'published', zkp_verified: true, zkp_hash: hash } : r));
-      await logAudit({ action: 'ZKP_SEAL', resource: report.title, user_name: 'System', t5_tag: 'T4', hash_lock: hash, details: 'ZKP 完整性封印完成，報告狀態轉換為已發布' });
-    }
-    setSealingId(null);
-  }
-
-  const published = reports.filter(r => r.status === 'published').length;
-  const avgCoverage = reports.length > 0 ? Math.round(reports.reduce((s, r) => s + (r.gri_coverage || 0), 0) / reports.length) : 0;
-  const zkpCount = reports.filter(r => r.zkp_verified).length;
+  const readyCount = CHAPTERS.filter(c => c.ready).length;
 
   return (
-    <div className="page-container animate-fade-in">
-      <div className="page-header">
-        <div className="page-header-inner">
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--berkeley-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Send size={18} color="#fff" />
-              </div>
-              <h1 className="page-title">報告發布中心</h1>
+    <ClientLayout>
+      <div className="page-container">
+        <div className="page-header">
+          <h1 className="page-title">報告發布 Report Publisher</h1>
+          <p className="page-subtitle">永續報告書生成 · ZKP 認證 · 5T 完整性封印</p>
+        </div>
+
+        <div className="tabs" style={{ marginBottom: 20 }}>
+          {[
+            { id: 'list', label: '報告列表' },
+            { id: 'chapters', label: '章節進度' },
+            { id: 'preview', label: 'A4 預覽' },
+          ].map(tab => (
+            <button key={tab.id} className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`} onClick={() => setActiveTab(tab.id)}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'list' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {reports.map(r => {
+              const status = STATUS_MAP[r.status];
+              return (
+                <div key={r.id} className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+                    <div>
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{r.title}</h3>
+                        <span className={`badge ${status.badge}`}>{status.label}</span>
+                        {r.zkpVerified && <span className="badge badge-purple">ZKP ✓</span>}
+                      </div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
+                        {r.framework.map(f => <span key={f} className="badge badge-blue">{f}</span>)}
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--gray-500)', display: 'flex', gap: 16 }}>
+                        <span>📄 {r.pageCount} 頁</span>
+                        <span>GRI 覆蓋率 {r.griCoverage}%</span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button className="btn btn-outline btn-sm" onClick={() => { setSelected(r); setActiveTab('preview'); }}>
+                        <FileText size={12} />預覽
+                      </button>
+                      {!r.zkpVerified && (
+                        <button
+                          className="btn btn-gold btn-sm"
+                          onClick={() => sealReport(r)}
+                          disabled={sealing === r.id}
+                        >
+                          {sealing === r.id ? <Clock size={12} /> : <Shield size={12} />}
+                          {sealing === r.id ? `封印中 ${sealProgress}%` : 'ZKP 封印'}
+                        </button>
+                      )}
+                      {r.status === 'reviewing' && (
+                        <button className="btn btn-primary btn-sm">
+                          <CheckCircle size={12} />發布
+                        </button>
+                      )}
+                      {r.zkpVerified && (
+                        <button className="btn btn-outline btn-sm">
+                          <Download size={12} />下載
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {sealing === r.id && (
+                    <div style={{ marginTop: 12 }}>
+                      <div style={{ fontSize: 12, color: 'var(--gray-500)', marginBottom: 6 }}>ZKP 零知識證明封印中...</div>
+                      <div className="progress-bar">
+                        <div className="progress-fill gold" style={{ width: `${sealProgress}%`, transition: 'width 0.1s' }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {activeTab === 'chapters' && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">章節就緒度</h3>
+              <span style={{ fontSize: 12, color: 'var(--gray-500)' }}>{readyCount}/{CHAPTERS.length} 章節已完成</span>
             </div>
-            <div className="page-subtitle">
-              <span className="badge badge-blue">Report Publisher</span>
-              <span className="badge badge-purple">ZKP 認證</span>
-              <span className="badge badge-green">5T 封印</span>
+            <div className="progress-bar" style={{ marginBottom: 20 }}>
+              <div className="progress-fill green" style={{ width: `${(readyCount / CHAPTERS.length) * 100}%` }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {CHAPTERS.map(ch => (
+                <div key={ch.id} style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '12px 16px', background: 'var(--gray-50)', borderRadius: 8,
+                  border: `1px solid ${ch.ready ? 'var(--success)' : 'var(--gray-200)'}`,
+                }}>
+                  <span style={{ fontWeight: 500, fontSize: 14 }}>{ch.title}</span>
+                  <span className={`badge ${ch.ready ? 'badge-green' : 'badge-gold'}`}>
+                    {ch.ready ? '✓ 完成' : '進行中'}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
-          <button className="btn btn-primary btn-sm" onClick={() => setShowCreate(true)}>
-            <Plus size={14} />建立新報告
-          </button>
-        </div>
-      </div>
+        )}
 
-      {/* Stats */}
-      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-        <div className="stat-card"><div className="stat-value text-success">{published}</div><div className="stat-label">已發布報告</div></div>
-        <div className="stat-card"><div className="stat-value text-warning">{reports.filter(r => r.status === 'draft').length}</div><div className="stat-label">草稿中</div></div>
-        <div className="stat-card"><div className="stat-value" style={{ color: '#7c3aed' }}>{zkpCount}</div><div className="stat-label">ZKP 已認證</div></div>
-        <div className="stat-card"><div className="stat-value" style={{ color: 'var(--berkeley-blue)' }}>{avgCoverage}%</div><div className="stat-label">平均 GRI 覆蓋率</div></div>
-      </div>
-
-      {/* Reports Grid */}
-      {loading ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
-          {[1,2,3].map(i => <div key={i} className="skeleton" style={{ height: 200 }} />)}
-        </div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
-          {reports.map(r => {
-            const sc = statusConfig[r.status] || statusConfig.draft;
-            const StatusIcon = sc.icon;
-            return (
-              <div key={r.id} className="card" style={{ padding: 20, position: 'relative', overflow: 'hidden' }}>
-                {r.zkp_verified && (
-                  <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--success)', color: '#fff', fontSize: 9, fontWeight: 700, padding: '3px 8px', borderRadius: '0 0 0 8px', letterSpacing: '0.5px' }}>
-                    ZKP SEALED
-                  </div>
-                )}
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4, paddingRight: 60 }}>{r.title}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                    <span className="badge badge-blue">{r.year}</span>
-                    <span className={`tag-5t ${r.status === 'published' ? 'tag-verified' : 'tag-pending'}`}>
-                      <StatusIcon size={10} />{sc.label}
-                    </span>
+        {activeTab === 'preview' && (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{
+              width: 595, background: 'white', boxShadow: 'var(--shadow-lg)', minHeight: 842,
+              fontFamily: 'Inter, sans-serif', border: '1px solid var(--gray-200)',
+              borderRadius: 4, overflow: 'hidden',
+            }}>
+              {/* Cover */}
+              <div style={{ background: 'var(--berkeley-blue)', padding: '60px 50px', color: 'white', minHeight: 280 }}>
+                <div style={{ fontSize: 11, letterSpacing: '0.15em', opacity: 0.7, marginBottom: 20, textTransform: 'uppercase' }}>
+                  Berkeley Haas × TSISDA · 5T 誠信協議 · GRI 2021
+                </div>
+                <h1 style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.2, margin: '0 0 16px' }}>
+                  善向永續<br />2024 永續報告書
+                </h1>
+                <div style={{ fontSize: 13, opacity: 0.8 }}>Sustainability Report</div>
+                <div style={{ marginTop: 40, padding: '16px', background: 'rgba(255,255,255,0.1)', borderRadius: 8, fontSize: 12 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                    {[
+                      { k: '報告範疇', v: 'GRI 2021 全套框架' },
+                      { k: '確信等級', v: 'Limited Assurance' },
+                      { k: '基準年', v: '2020' },
+                      { k: '報告年度', v: '2024' },
+                    ].map(item => (
+                      <div key={item.k}>
+                        <div style={{ opacity: 0.6, fontSize: 10 }}>{item.k}</div>
+                        <div style={{ fontWeight: 600, fontSize: 12 }}>{item.v}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 12 }}>
-                  {(r.framework || []).map(f => <span key={f} className="gri-chip">{f}</span>)}
-                </div>
-
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>GRI 覆蓋率</span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: (r.gri_coverage || 0) >= 70 ? 'var(--success)' : 'var(--warning)' }}>{r.gri_coverage}%</span>
-                  </div>
-                  <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: `${r.gri_coverage}%` }} />
-                  </div>
-                </div>
-
-                {r.page_count && r.page_count > 0 ? (
-                  <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 12 }}>
-                    <FileText size={12} style={{ display: 'inline', marginRight: 4 }} />{r.page_count} 頁
-                  </div>
-                ) : null}
-
-                {r.zkp_hash && (
-                  <div style={{ fontSize: 10, fontFamily: 'JetBrains Mono, monospace', color: 'var(--text-muted)', marginBottom: 12, padding: '6px 8px', background: 'var(--bg-tertiary)', borderRadius: 5, wordBreak: 'break-all' }}>
-                    {r.zkp_hash}
-                  </div>
-                )}
-
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button className="btn btn-ghost btn-sm" onClick={() => setSelected(r)} style={{ flex: 1, justifyContent: 'center' }}>
-                    <Eye size={13} />預覽
-                  </button>
-                  {r.status !== 'published' && (
-                    <button
-                      className="btn btn-primary btn-sm"
-                      style={{ flex: 1, justifyContent: 'center' }}
-                      onClick={() => handleZKPSeal(r)}
-                      disabled={sealing === r.id}
-                    >
-                      {sealing === r.id ? <Loader size={13} style={{ animation: 'spin 0.6s linear infinite' }} /> : <Lock size={13} />}
-                      ZKP 封印
-                    </button>
-                  )}
-                  {r.status === 'published' && (
-                    <button className="btn btn-secondary btn-sm" style={{ flex: 1, justifyContent: 'center' }}>
-                      <Download size={13} />下載
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Create Modal */}
-      {showCreate && (
-        <div className="modal-overlay" onClick={() => setShowCreate(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2 style={{ fontSize: 18 }}>建立新永續報告</h2>
-              <button className="btn btn-ghost btn-icon" onClick={() => setShowCreate(false)}>✕</button>
-            </div>
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="form-label">報告名稱</label>
-                <input className="form-input" value={newReport.title} onChange={e => setNewReport(p => ({ ...p, title: e.target.value }))} placeholder="如：2024 永續報告書" />
-              </div>
-              <div className="grid-2">
-                <div className="form-group">
-                  <label className="form-label">報告年度</label>
-                  <input type="number" className="form-input" value={newReport.year} onChange={e => setNewReport(p => ({ ...p, year: parseInt(e.target.value) }))} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">GRI 覆蓋率 (%)</label>
-                  <input type="number" className="form-input" value={newReport.gri_coverage} onChange={e => setNewReport(p => ({ ...p, gri_coverage: parseInt(e.target.value) }))} min="0" max="100" />
-                </div>
-              </div>
-              <div className="form-group">
-                <label className="form-label">對齊框架</label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {frameworkOptions.map(f => (
-                    <button key={f} onClick={() => setNewReport(p => ({ ...p, framework: p.framework.includes(f) ? p.framework.filter(x => x !== f) : [...p.framework, f] }))}
-                      className={`btn btn-sm ${newReport.framework.includes(f) ? 'btn-primary' : 'btn-secondary'}`}>
-                      {f}
-                    </button>
+                <div style={{ marginTop: 20, display: 'flex', gap: 8 }}>
+                  {['GRI 2021', 'TCFD', 'SASB', 'ISSB'].map(f => (
+                    <span key={f} style={{ padding: '3px 8px', background: 'var(--california-gold)', color: 'var(--berkeley-blue)', borderRadius: 4, fontSize: 10, fontWeight: 700 }}>{f}</span>
                   ))}
                 </div>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={() => setShowCreate(false)}>取消</button>
-              <button className="btn btn-primary" onClick={handleCreate} disabled={!newReport.title}>建立報告</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Preview Modal */}
-      {selected && (
-        <div className="modal-overlay" onClick={() => setSelected(null)}>
-          <div className="modal" style={{ maxWidth: 700 }} onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2 style={{ fontSize: 18 }}>報告詳情</h2>
-              <button className="btn btn-ghost btn-icon" onClick={() => setSelected(null)}>✕</button>
-            </div>
-            <div className="modal-body">
-              <div style={{ background: 'var(--berkeley-blue)', borderRadius: 12, padding: 32, textAlign: 'center', color: '#fff', marginBottom: 20 }}>
-                <div style={{ width: 56, height: 56, background: 'var(--california-gold)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontWeight: 800, fontSize: 14, color: 'var(--berkeley-blue)' }}>ESG</div>
-                <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{selected.title}</div>
-                <div style={{ fontSize: 14, opacity: 0.7 }}>永續報告書 · {selected.year} 年度</div>
-                {selected.zkp_verified && (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 12, padding: '5px 12px', background: 'rgba(74,222,128,0.2)', borderRadius: 20, fontSize: 12 }}>
-                    <Shield size={12} /><span>ZKP 完整性認證</span>
+              <div style={{ padding: '40px 50px' }}>
+                <h2 style={{ color: 'var(--berkeley-blue)', fontSize: 18, borderBottom: '2px solid var(--california-gold)', paddingBottom: 8 }}>目錄</h2>
+                {CHAPTERS.map(ch => (
+                  <div key={ch.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--gray-100)', fontSize: 13 }}>
+                    <span>{ch.title}</span>
+                    <span style={{ color: 'var(--gray-400)' }}>── {Math.floor(Math.random() * 20) + 10}</span>
                   </div>
-                )}
+                ))}
               </div>
-              <div className="grid-2">
-                <div><div className="form-label">報告狀態</div>
-                  {(() => { const sc = statusConfig[selected.status] || statusConfig.draft; const Ic = sc.icon; return <span className="tag-5t tag-verified"><Ic size={10} />{sc.label}</span>; })()}
-                </div>
-                <div><div className="form-label">頁數</div><div style={{ fontWeight: 600 }}>{selected.page_count || '—'} 頁</div></div>
-                <div><div className="form-label">GRI 覆蓋率</div><div style={{ fontWeight: 700, fontSize: 20, color: 'var(--success)' }}>{selected.gri_coverage}%</div></div>
-                <div><div className="form-label">ZKP 狀態</div>{selected.zkp_verified ? <span className="tag-5t tag-locked"><Lock size={10} />已封印</span> : <span className="badge badge-gray">未封印</span>}</div>
-              </div>
-              <div style={{ marginTop: 12 }}>
-                <div className="form-label">對齊框架</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
-                  {(selected.framework || []).map(f => <span key={f} className="gri-chip">{f}</span>)}
-                </div>
-              </div>
-              {selected.zkp_hash && (
-                <div style={{ marginTop: 12 }}>
-                  <div className="form-label">ZKP 完整性雜湊</div>
-                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 12, padding: '8px 12px', background: 'var(--bg-tertiary)', borderRadius: 6, marginTop: 6, wordBreak: 'break-all' }}>{selected.zkp_hash}</div>
-                </div>
-              )}
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={() => setSelected(null)}>關閉</button>
-              <button className="btn btn-primary"><Download size={14} />下載報告</button>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </ClientLayout>
   );
 }

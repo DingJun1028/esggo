@@ -1,255 +1,200 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { TrendingUp, CheckCircle, Clock, AlertCircle, Target, Plus, Leaf, Zap, Globe, BarChart2, Loader } from 'lucide-react';
-import { getRoadmapMilestones, updateMilestoneStatus, logAudit, type RoadmapMilestone } from '../../lib/db';
 
-const categoryConfig: Record<string, { color: string; icon: React.ElementType }> = {
-  Carbon:     { color: '#059669', icon: Leaf },
-  Renewable:  { color: '#d97706', icon: Zap },
-  Efficiency: { color: '#2563eb', icon: BarChart2 },
-  Transport:  { color: '#7c3aed', icon: Globe },
-  Strategy:   { color: '#dc2626', icon: Target },
+import { useState, useEffect } from 'react';
+import ClientLayout from '../ClientLayout';
+import { Target, Plus, X, CheckCircle } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { getRoadmapMilestones, upsertRoadmapMilestone, updateMilestoneStatus, RoadmapMilestone } from '../../lib/db';
+
+const STATUS_COLORS: Record<string, string> = {
+  achieved: 'badge-green', in_progress: 'badge-blue', planned: 'badge-gray', missed: 'badge-red'
 };
-
-const statusConfig: Record<string, { color: string; label: string; icon: React.ElementType }> = {
-  achieved:    { color: 'var(--success)',  label: '已達成', icon: CheckCircle },
-  in_progress: { color: 'var(--warning)',  label: '進行中', icon: Clock },
-  planned:     { color: 'var(--text-muted)', label: '規劃中', icon: Target },
-  missed:      { color: 'var(--danger)',   label: '未達成', icon: AlertCircle },
+const STATUS_LABELS: Record<string, string> = {
+  achieved: '已達成', in_progress: '進行中', planned: '計劃中', missed: '未達成'
 };
-
-const fallbackMilestones: RoadmapMilestone[] = [
-  { id: '1', title: '完成基準年碳盤查',    description: '依 ISO 14064-1 完成基準年盤查，取得第三方查證', target_year: 2024, category: 'Carbon',    target_value: 0,   current_value: 0,   unit: 'tCO2e', status: 'achieved',    sbti_aligned: false, gri_reference: 'GRI 305-1' },
-  { id: '2', title: '太陽能屋頂安裝',      description: '廠區屋頂安裝 500 kW 太陽能板，年發電量約 65 萬度', target_year: 2024, category: 'Renewable',  target_value: 8,   current_value: 8.2, unit: '%',    status: 'achieved',    sbti_aligned: false, gri_reference: 'GRI 302-1' },
-  { id: '3', title: 'LED 照明全面換裝',    description: '將全廠照明更換為 LED，減少 30% 電力消耗',        target_year: 2024, category: 'Efficiency', target_value: 5,   current_value: 3.1, unit: '%',    status: 'in_progress', sbti_aligned: false, gri_reference: 'GRI 302-4' },
-  { id: '4', title: '電動公務車採購',      description: '採購 10 輛電動公務車，取代燃油車隊',              target_year: 2025, category: 'Transport',  target_value: 3,   current_value: 0,   unit: '%',    status: 'planned',     sbti_aligned: false, gri_reference: 'GRI 305-1' },
-  { id: '5', title: '綠電採購 20%',        description: '透過 T-REC 採購 20% 再生能源憑證',                target_year: 2025, category: 'Renewable',  target_value: 12,  current_value: 0,   unit: '%',    status: 'planned',     sbti_aligned: false, gri_reference: 'GRI 302-1' },
-  { id: '6', title: '供應鏈碳足跡盤查',    description: '完成前 30 大供應商範疇三排放量盤查',              target_year: 2025, category: 'Carbon',    target_value: 0,   current_value: 0,   unit: 'tCO2e', status: 'planned',    sbti_aligned: false, gri_reference: 'GRI 305-3' },
-  { id: '7', title: '碳中和路徑規劃',      description: '制定 2030 碳中和科學基礎減碳目標 (SBTi)',         target_year: 2025, category: 'Strategy',   target_value: 0,   current_value: 0,   unit: 'tCO2e', status: 'planned',    sbti_aligned: true,  gri_reference: 'GRI 305-1' },
-  { id: '8', title: '製程廢熱回收',        description: '安裝廢熱回收系統，減少蒸氣鍋爐用量 40%',          target_year: 2026, category: 'Efficiency', target_value: 15,  current_value: 0,   unit: '%',    status: 'planned',     sbti_aligned: false, gri_reference: 'GRI 302-4' },
-  { id: '9', title: '達成 SBTi 1.5°C 目標','description': '完成科學基礎減碳目標認證，較基準年減碳 46%',    target_year: 2030, category: 'Strategy',   target_value: 46,  current_value: 0,   unit: '%',    status: 'planned',     sbti_aligned: true,  gri_reference: 'GRI 305-1' },
-  { id: '10', title: '淨零排放',           description: '達成全範疇碳中和，剩餘排放透過碳抵換抵銷',         target_year: 2050, category: 'Strategy',   target_value: 100, current_value: 0,   unit: '%',    status: 'planned',     sbti_aligned: true,  gri_reference: 'GRI 305-1' },
-];
 
 const carbonTrend = [
-  { year: 2020, scope1: 1800, scope2: 1200, total: 3000 },
-  { year: 2021, scope1: 1720, scope2: 1150, total: 2870 },
-  { year: 2022, scope1: 1650, scope2: 1080, total: 2730 },
-  { year: 2023, scope1: 1520, scope2: 980,  total: 2500 },
-  { year: 2024, scope1: 1380, scope2: 890,  total: 2270 },
-  { year: 2025, scope1: 1200, scope2: 780,  total: 1980, projected: true },
-  { year: 2030, scope1: 800,  scope2: 500,  total: 1300, projected: true },
+  { year: 2020, actual: 3200, sbti: 3200 },
+  { year: 2021, actual: 3050, sbti: 3104 },
+  { year: 2022, actual: 2890, sbti: 3008 },
+  { year: 2023, actual: 2640, sbti: 2912 },
+  { year: 2024, actual: 2140, sbti: 2816 },
+  { year: 2025, actual: null, sbti: 2720 },
+  { year: 2026, actual: null, sbti: 2624 },
+  { year: 2030, actual: null, sbti: 1728 },
 ];
 
 export default function RoadmapPage() {
   const [milestones, setMilestones] = useState<RoadmapMilestone[]>([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'timeline' | 'chart'>('timeline');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [showAdd, setShowAdd] = useState(false);
+  const [newMilestone, setNewMilestone] = useState<Partial<RoadmapMilestone>>({ title: '', target_year: 2030, category: 'Carbon', status: 'planned', sbti_aligned: true });
 
-  useEffect(() => { loadMilestones(); }, []);
+  useEffect(() => {
+    getRoadmapMilestones().then(d => { setMilestones(d); setLoading(false); });
+  }, []);
 
-  async function loadMilestones() {
-    setLoading(true);
-    const data = await getRoadmapMilestones();
-    setMilestones(data.length > 0 ? data : fallbackMilestones);
-    setLoading(false);
-  }
+  const cycleStatus = async (m: RoadmapMilestone) => {
+    const statuses = ['planned', 'in_progress', 'achieved'];
+    const idx = statuses.indexOf(m.status || 'planned');
+    const next = statuses[(idx + 1) % statuses.length];
+    await updateMilestoneStatus(m.id!, next);
+    setMilestones(prev => prev.map(ms => ms.id === m.id ? { ...ms, status: next } : ms));
+  };
 
-  async function handleStatusToggle(m: RoadmapMilestone) {
-    if (!m.id) return;
-    const nextStatus = m.status === 'planned' ? 'in_progress' : m.status === 'in_progress' ? 'achieved' : 'planned';
-    setUpdatingId(m.id);
-    const ok = await updateMilestoneStatus(m.id, nextStatus);
-    if (ok) {
-      setMilestones(prev => prev.map(x => x.id === m.id ? { ...x, status: nextStatus } : x));
-      await logAudit({ action: 'UPDATE_MILESTONE', resource: m.title, user_name: 'User', gri_reference: m.gri_reference, t5_tag: 'T5', details: `狀態更新：${m.status} → ${nextStatus}` });
-    }
-    setUpdatingId(null);
-  }
+  const addMilestone = async () => {
+    if (!newMilestone.title) return;
+    const result = await upsertRoadmapMilestone(newMilestone as RoadmapMilestone);
+    if (result) setMilestones(prev => [...prev, result]);
+    setShowAdd(false);
+    setNewMilestone({ title: '', target_year: 2030, category: 'Carbon', status: 'planned', sbti_aligned: true });
+  };
 
-  const filtered = milestones.filter(m => filterStatus === 'all' || m.status === filterStatus);
-  const years = [...new Set(filtered.map(m => m.target_year))].sort();
-  const achieved = milestones.filter(m => m.status === 'achieved').length;
-  const inProgress = milestones.filter(m => m.status === 'in_progress').length;
-  const sbtiCount = milestones.filter(m => m.sbti_aligned).length;
-  const maxCarbon = Math.max(...carbonTrend.map(t => t.total));
+  const achievedCount = milestones.filter(m => m.status === 'achieved').length;
 
   return (
-    <div className="page-container animate-fade-in">
-      <div className="page-header">
-        <div className="page-header-inner">
+    <ClientLayout>
+      <div className="page-container">
+        <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <TrendingUp size={18} color="#fff" />
-              </div>
-              <h1 className="page-title">淨零路線圖</h1>
-            </div>
-            <div className="page-subtitle">
-              <span className="badge badge-green">Net-Zero Planner</span>
-              <span className="badge badge-blue">SBTi 對齊</span>
-              <span className="gri-chip">GRI 305</span>
-              <span className="gri-chip">TCFD</span>
-            </div>
+            <h1 className="page-title">淨零路線圖 Net-Zero Roadmap</h1>
+            <p className="page-subtitle">SBTi 減碳里程碑 · 碳排趨勢 · GRI 305 合規</p>
           </div>
-          <button className="btn btn-primary btn-sm">
+          <button className="btn btn-primary" onClick={() => setShowAdd(true)}>
             <Plus size={14} />新增里程碑
           </button>
         </div>
-      </div>
 
-      {/* Stats */}
-      <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-        <div className="stat-card">
-          <div className="stat-value text-success">{achieved}</div>
-          <div className="stat-label">已達成里程碑</div>
-          <div className="progress-bar" style={{ marginTop: 10 }}>
-            <div className="progress-fill green" style={{ width: `${(achieved / milestones.length) * 100}%` }} />
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-value text-warning">{inProgress}</div>
-          <div className="stat-label">進行中</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-value" style={{ color: '#dc2626' }}>{sbtiCount}</div>
-          <div className="stat-label">SBTi 對齊項目</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-value" style={{ color: 'var(--berkeley-blue)' }}>
-            {Math.round((achieved / milestones.length) * 100)}%
-          </div>
-          <div className="stat-label">整體達成率</div>
-        </div>
-      </div>
-
-      {/* View Tabs + Filter */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
-        <div className="tabs" style={{ marginBottom: 0 }}>
-          <button className={`tab-btn ${view === 'timeline' ? 'active' : ''}`} onClick={() => setView('timeline')}>時間軸</button>
-          <button className={`tab-btn ${view === 'chart' ? 'active' : ''}`} onClick={() => setView('chart')}>碳排趨勢</button>
-        </div>
-        <div className="tabs" style={{ marginBottom: 0 }}>
-          {['all', 'achieved', 'in_progress', 'planned'].map(s => (
-            <button key={s} className={`tab-btn ${filterStatus === s ? 'active' : ''}`} onClick={() => setFilterStatus(s)}>
-              {s === 'all' ? '全部' : statusConfig[s]?.label ?? s}
-            </button>
+        {/* Stats */}
+        <div className="kpi-grid" style={{ marginBottom: 20 }}>
+          {[
+            { label: '總里程碑', value: milestones.length },
+            { label: '已達成', value: achievedCount },
+            { label: '進行中', value: milestones.filter(m => m.status === 'in_progress').length },
+            { label: 'SBTi 對齊', value: milestones.filter(m => m.sbti_aligned).length },
+          ].map(s => (
+            <div key={s.label} className="kpi-card">
+              <div className="kpi-value">{s.value}</div>
+              <div className="kpi-label">{s.label}</div>
+            </div>
           ))}
         </div>
-      </div>
 
-      {view === 'timeline' ? (
-        <div className="card" style={{ padding: 24 }}>
+        {/* Carbon Trend Chart */}
+        <div className="card" style={{ marginBottom: 20 }}>
+          <div className="card-header">
+            <h3 className="card-title"><Target size={16} color="var(--berkeley-blue)" />碳排趨勢 vs SBTi 路徑</h3>
+          </div>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart data={carbonTrend} margin={{ top: 10, right: 20, bottom: 0, left: 0 }}>
+              <defs>
+                <linearGradient id="actualGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#003262" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#003262" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="sbtiGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#FDB515" stopOpacity={0.2} />
+                  <stop offset="95%" stopColor="#FDB515" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="year" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} />
+              <Tooltip />
+              <ReferenceLine x={2024} stroke="var(--gray-300)" strokeDasharray="4 4" label={{ value: '現在', fontSize: 11 }} />
+              <Area type="monotone" dataKey="actual" stroke="#003262" fill="url(#actualGrad)" strokeWidth={2} name="實際排放" />
+              <Area type="monotone" dataKey="sbti" stroke="#FDB515" fill="url(#sbtiGrad)" strokeWidth={2} strokeDasharray="4 4" name="SBTi 目標" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Milestones */}
+        <div className="card" style={{ padding: 0 }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--gray-200)' }}>
+            <strong style={{ fontSize: 14 }}>里程碑時間軸</strong>
+          </div>
           {loading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {[1,2,3].map(i => <div key={i} className="skeleton" style={{ height: 100 }} />)}
-            </div>
+            <div style={{ padding: 40, textAlign: 'center', color: 'var(--gray-400)' }}>載入中...</div>
           ) : (
-            <div>
-              {years.map(year => {
-                const yearMilestones = filtered.filter(m => m.target_year === year);
-                return (
-                  <div key={year} style={{ marginBottom: 32 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                      <div style={{ width: 60, height: 28, borderRadius: 6, background: 'var(--berkeley-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13 }}>
-                        {year}
-                      </div>
-                      <div style={{ flex: 1, height: 1, background: 'var(--border-light)' }} />
-                      <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{yearMilestones.length} 個里程碑</span>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12, paddingLeft: 24 }}>
-                      {yearMilestones.map(m => {
-                        const sc = statusConfig[m.status] || statusConfig.planned;
-                        const cc = categoryConfig[m.category] || { color: 'var(--text-muted)', icon: Target };
-                        const Icon = cc.icon;
-                        const StatusIcon = sc.icon;
-                        const pct = m.target_value && m.target_value > 0 && m.current_value != null
-                          ? Math.min(100, Math.round((m.current_value / m.target_value) * 100))
-                          : m.status === 'achieved' ? 100 : 0;
-                        return (
-                          <div key={m.id} style={{ padding: 16, border: `1px solid ${m.status === 'achieved' ? 'var(--success)' : 'var(--border-light)'}`, borderRadius: 10, background: m.status === 'achieved' ? 'var(--success-light)' : 'var(--bg-card)', transition: 'all 0.2s' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                <div style={{ width: 28, height: 28, borderRadius: 7, background: `${cc.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                  <Icon size={14} color={cc.color} />
-                                </div>
-                                <div>
-                                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{m.title}</div>
-                                  <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{m.category}</div>
-                                </div>
-                              </div>
-                              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                                {m.sbti_aligned && <span className="badge badge-red" style={{ fontSize: 9 }}>SBTi</span>}
-                                <span className="gri-chip" style={{ fontSize: 10 }}>{m.gri_reference}</span>
-                              </div>
-                            </div>
-                            <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: 10 }}>{m.description}</p>
-                            <div style={{ marginBottom: 10 }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>進度</span>
-                                <span style={{ fontSize: 12, fontWeight: 700, color: sc.color }}>{pct}%</span>
-                              </div>
-                              <div className="progress-bar">
-                                <div className="progress-fill" style={{ width: `${pct}%`, background: sc.color }} />
-                              </div>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <button
-                                className="btn btn-secondary btn-sm"
-                                style={{ fontSize: 11, color: sc.color, borderColor: `${sc.color}40` }}
-                                onClick={() => handleStatusToggle(m)}
-                                disabled={updatingId === m.id}
-                              >
-                                {updatingId === m.id ? <Loader size={11} style={{ animation: 'spin 0.6s linear infinite' }} /> : <StatusIcon size={11} />}
-                                {sc.label}
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="table-wrapper" style={{ borderRadius: 0, border: 'none' }}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>里程碑</th>
+                    <th>類別</th>
+                    <th>目標年</th>
+                    <th>目標值</th>
+                    <th>狀態</th>
+                    <th>SBTi</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {milestones.map(m => (
+                    <tr key={m.id}>
+                      <td style={{ fontWeight: 500, fontSize: 13 }}>{m.title}</td>
+                      <td><span className="badge badge-blue">{m.category}</span></td>
+                      <td style={{ fontWeight: 600 }}>{m.target_year}</td>
+                      <td style={{ fontSize: 12 }}>
+                        {m.target_value !== undefined ? `${m.target_value} ${m.unit || ''}` : '-'}
+                      </td>
+                      <td><span className={`badge ${STATUS_COLORS[m.status || 'planned']}`}>{STATUS_LABELS[m.status || 'planned']}</span></td>
+                      <td>{m.sbti_aligned ? <span className="badge badge-green">SBTi ✓</span> : <span className="badge badge-gray">-</span>}</td>
+                      <td>
+                        <button className="btn btn-outline btn-sm" onClick={() => cycleStatus(m)}>
+                          <CheckCircle size={12} />推進
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
-      ) : (
-        <div className="card" style={{ padding: 24 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6 }}>碳排放量趨勢</h3>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 24 }}>範疇一 + 範疇二 | 單位：tCO₂e | 虛線為預測值</p>
-          <div style={{ position: 'relative', height: 280 }}>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, height: '100%', paddingBottom: 32 }}>
-              {carbonTrend.map((d, i) => {
-                const h = Math.round((d.total / maxCarbon) * 220);
-                const h1 = Math.round((d.scope1 / maxCarbon) * 220);
-                const h2 = Math.round((d.scope2 / maxCarbon) * 220);
-                return (
-                  <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: d.projected ? 'var(--text-muted)' : 'var(--text-primary)' }}>
-                      {d.total.toLocaleString()}
-                    </div>
-                    <div style={{ width: '100%', display: 'flex', gap: 2, alignItems: 'flex-end', height: 220 }}>
-                      <div style={{ flex: 1, height: h1, background: d.projected ? 'rgba(5,150,105,0.4)' : 'var(--success)', borderRadius: '4px 4px 0 0', transition: 'height 0.6s ease' }} title={`範疇一: ${d.scope1}`} />
-                      <div style={{ flex: 1, height: h2, background: d.projected ? 'rgba(37,99,235,0.4)' : 'var(--founders-rock)', borderRadius: '4px 4px 0 0', transition: 'height 0.6s ease' }} title={`範疇二: ${d.scope2}`} />
-                    </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: d.projected ? 400 : 600 }}>
-                      {d.year}{d.projected ? '~' : ''}
-                    </div>
+
+        {showAdd && (
+          <div className="modal-overlay">
+            <div className="modal" style={{ maxWidth: 480 }}>
+              <div className="modal-header">
+                <h3 className="modal-title">新增淨零里程碑</h3>
+                <button className="btn-icon" onClick={() => setShowAdd(false)}><X size={16} /></button>
+              </div>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label className="form-label">里程碑名稱 *</label>
+                  <input className="form-input" value={newMilestone.title || ''} onChange={e => setNewMilestone(p => ({ ...p, title: e.target.value }))} placeholder="例：達成 SBTi 1.5°C 目標" />
+                </div>
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label className="form-label">目標年度</label>
+                    <input className="form-input" type="number" value={newMilestone.target_year || 2030} onChange={e => setNewMilestone(p => ({ ...p, target_year: parseInt(e.target.value) }))} />
                   </div>
-                );
-              })}
+                  <div className="form-group">
+                    <label className="form-label">類別</label>
+                    <select className="form-select" value={newMilestone.category || 'Carbon'} onChange={e => setNewMilestone(p => ({ ...p, category: e.target.value }))}>
+                      {['Carbon', 'Energy', 'Water', 'Strategy', 'Social'].map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="grid-2">
+                  <div className="form-group">
+                    <label className="form-label">目標值</label>
+                    <input className="form-input" type="number" value={newMilestone.target_value || ''} onChange={e => setNewMilestone(p => ({ ...p, target_value: parseFloat(e.target.value) }))} />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">單位</label>
+                    <input className="form-input" value={newMilestone.unit || ''} onChange={e => setNewMilestone(p => ({ ...p, unit: e.target.value }))} placeholder="%" />
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-outline" onClick={() => setShowAdd(false)}>取消</button>
+                <button className="btn btn-primary" onClick={addMilestone} disabled={!newMilestone.title}>新增</button>
+              </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 20, justifyContent: 'center', marginTop: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><div style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--success)' }} /><span style={{ fontSize: 12, color: 'var(--text-muted)' }}>範疇一</span></div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><div style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--founders-rock)' }} /><span style={{ fontSize: 12, color: 'var(--text-muted)' }}>範疇二</span></div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><div style={{ width: 12, height: 12, borderRadius: 3, background: 'rgba(5,150,105,0.4)' }} /><span style={{ fontSize: 12, color: 'var(--text-muted)' }}>預測值</span></div>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </ClientLayout>
   );
 }
