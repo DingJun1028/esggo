@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^4.2.0",
     "@genkit-ai/google-genai": "^1.35.0",
     "@genkit-ai/googleai": "^1.28.0",
     "@google/adk": "^1.1.0",
@@ -28,6 +29,7 @@
     "framer-motion": "11.15.0",
     "genkit": "^1.35.0",
     "graphql": "^16.14.0",
+    "graphql-ws": "^6.0.8",
     "graphql-yoga": "^5.21.0",
     "lucide-react": "0.468.0",
     "next": "15.0.3",
