@@ -26,69 +26,68 @@ export default function TerminalPage() {
   };
 
   const handleCommand = async (cmd: string) => {
-    const trimmed = cmd.trim().toLowerCase();
+    const trimmed = cmd.trim();
     if (!trimmed) return;
 
     addLine('cmd', `> ${cmd}`);
     setInput('');
 
-    const [action, ...args] = trimmed.split(' ');
+    const [action, ...args] = trimmed.split(' ').filter(Boolean);
+    const actionLower = action.toLowerCase();
 
-    switch (action) {
-      case 'help':
-        addLine('out', 'Available commands:');
-        addLine('out', '  agent status     - Check OmniHermes gateway status');
-        addLine('out', '  agent trigger    - Manually trigger an AI task');
-        addLine('out', '  vault list       - Show recent 5T records');
-        addLine('out', '  blue status      - Check cloud control plane');
-        addLine('out', '  clear            - Clear the terminal screen');
-        addLine('out', '  exit             - Go back to dashboard');
-        break;
+    // Local commands
+    if (actionLower === 'clear') {
+      setLines([]);
+      return;
+    }
+    if (actionLower === 'exit') {
+      window.location.href = '/';
+      return;
+    }
+    if (actionLower === 'help') {
+      addLine('out', 'Available commands:');
+      addLine('out', '  agent status     - Check OmniHermes gateway status (API)');
+      addLine('out', '  agent trigger    - Manually trigger an AI task (API)');
+      addLine('out', '  vault list       - Show recent 5T records (API)');
+      addLine('out', '  blue status      - Check cloud control plane (API)');
+      addLine('out', '  clear            - Clear the terminal screen');
+      addLine('out', '  exit             - Go back to dashboard');
+      return;
+    }
 
-      case 'clear':
-        setLines([]);
-        break;
+    // Backend commands
+    try {
+      addLine('info', 'Processing...');
+      const res = await fetch('/api/terminal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command: actionLower, args })
+      });
 
-      case 'agent':
-        if (args[0] === 'status') {
-          addLine('info', '📡 Fetching OmniHermes Gateway Status...');
-          await new Promise(r => setTimeout(r, 800));
-          addLine('success', '✅ Mode: LIVE (VPS-Native)');
-          addLine('out', 'Version: 0.14.1 | Workers: 8 | Memory: 2.4 GB');
-        } else {
-          addLine('err', 'Usage: agent status');
+      if (!res.ok) {
+        addLine('err', `HTTP Error: ${res.status}`);
+        return;
+      }
+
+      const data = await res.json();
+      
+      // Remove the "Processing..." line (optional, but let's just append for now to keep history intact or we could pop it)
+      setLines(prev => {
+        const newLines = [...prev];
+        // Remove the last 'info' line which was 'Processing...'
+        if (newLines.length > 0 && newLines[newLines.length - 1].content === 'Processing...') {
+          newLines.pop();
         }
-        break;
+        return newLines;
+      });
 
-      case 'vault':
-        if (args[0] === 'list') {
-          addLine('info', '📦 Fetching recent Vault records...');
-          await new Promise(r => setTimeout(r, 1000));
-          addLine('out', '2026/05/22 | 8a2f1b0c | 5f3d9e2a... | IDENTITY');
-          addLine('out', '2026/05/21 | 9c4e2d1a | b7a1f8c0... | CORE');
-          addLine('success', 'Total: 2 records found.');
-        } else {
-          addLine('err', 'Usage: vault list');
-        }
-        break;
-
-      case 'blue':
-        if (args[0] === 'status') {
-          addLine('info', '☁️ Connecting to BlueCC Control Plane...');
-          await new Promise(r => setTimeout(r, 1200));
-          addLine('success', '✅ Cluster: blue-cluster-01 (STABLE)');
-          addLine('out', 'Region: asia-east1 | Active Nodes: 12');
-        } else {
-          addLine('err', 'Usage: blue status');
-        }
-        break;
-
-      case 'exit':
-        window.location.href = '/';
-        break;
-
-      default:
-        addLine('err', `Unknown command: ${action}`);
+      if (data.lines && Array.isArray(data.lines)) {
+        data.lines.forEach((l: TerminalLine) => addLine(l.type, l.content));
+      } else {
+        addLine('err', 'Invalid response from server.');
+      }
+    } catch (err: any) {
+      addLine('err', `Fetch Error: ${err.message}`);
     }
   };
 
