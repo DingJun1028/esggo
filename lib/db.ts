@@ -1,4 +1,4 @@
-'use client';
+
 import { getSupabaseClient } from './supabase';
 
 function db() { return getSupabaseClient(); }

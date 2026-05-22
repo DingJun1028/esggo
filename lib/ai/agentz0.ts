@@ -101,9 +101,9 @@ Please analyze the request, use any available tools to query the databases for n
       `;
 
       // Utilize Genkit for core generation (Base LLM execution)
-      const { gemini15Flash } = require('@genkit-ai/googleai');
+      const { gemini20Flash } = require('@genkit-ai/googleai');
       const response = await genkitInstance.generate({
-        model: gemini15Flash,
+        model: gemini20Flash,
         prompt: prompt,
         tools: this.tools, // Enable function calling
         config: {
