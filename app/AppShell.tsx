@@ -199,13 +199,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
         <SidebarContent collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)} />
       )}
       
-      <main 
-        className={`main-content transition-all duration-300 relative ${!isMobile ? (collapsed ? 'sidebar-collapsed' : '') : ''}`}
-        style={{ 
-          marginLeft: isMobile ? 0 : (collapsed ? 'var(--sidebar-w-sm)' : 'var(--sidebar-w)'),
-          marginBottom: isMobile ? 'var(--mobile-nav-h)' : 0
-        }}
-      >
+      <main className={`main-content transition-all duration-300 relative ${!isMobile && collapsed ? 'sidebar-collapsed' : ''} ${isMobile ? 'mobile-mode' : ''}`}>
         <div className="fixed inset-0 pointer-events-none -z-10 bg-gradient-to-br from-[#EBF2FA] via-[#F8FAFC] to-[#F1F5F9]" />
         {children}
       </main>
