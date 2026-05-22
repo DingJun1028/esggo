@@ -38,7 +38,7 @@ const REVIEW_STATUS_MAP: Record<ReviewStatus, { label: string; variant: any }> =
   draft:           { label: '草稿',   variant: 'outline' },
   awaiting_review: { label: '待審核', variant: 'warning' },
   approved:        { label: '已核准', variant: 'success' },
-  rejected:        { label: '已拒絕', variant: 'danger' },
+  rejected:        { label: '已拒絕', variant: 'error' },
   promoted:        { label: '已提升', variant: 'gold' },
 };
 
@@ -120,7 +120,7 @@ export default function HermesOrchestratorPage() {
   async function handleExecute(rec: ExecutionRecord) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/agent/hermes`, {
+      const res = await fetch(`/api/agent/tasks/${rec.task.id}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ task: rec.task }),
@@ -299,10 +299,10 @@ export default function HermesOrchestratorPage() {
                   <BrandCardHeader title="Swarm Kanban" subtitle="跨代理任務排程與綠色門徑審核" />
                   <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-slate-100 min-h-[500px]">
                      {[
-                       { id: 'backlog', label: '待處理', items: executions.filter(r => !r.execution) },
-                       { id: 'running', label: '執行中', items: executions.filter(r => r.execution?.status === 'running') },
-                       { id: 'review', label: '待審核', items: executions.filter(r => r.artifact?.reviewStatus === 'awaiting_review') },
-                       { id: 'done', label: '已封印', items: executions.filter(r => r.artifact?.reviewStatus === 'promoted' || r.artifact?.reviewStatus === 'approved') },
+                       { id: 'backlog', label: '待處理', items: (executions || []).filter(r => r && !r.execution) },
+                       { id: 'running', label: '執行中', items: (executions || []).filter(r => r && r.execution?.status === 'running') },
+                       { id: 'review', label: '待審核', items: (executions || []).filter(r => r && r.artifact?.reviewStatus === 'awaiting_review') },
+                       { id: 'done', label: '已封印', items: (executions || []).filter(r => r && r.artifact && (r.artifact.reviewStatus === 'promoted' || r.artifact.reviewStatus === 'approved')) },
                      ].map(lane => (
                        <div key={lane.id} className="p-4 space-y-3 bg-slate-50/20">
                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex justify-between items-center px-1">

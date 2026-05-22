@@ -205,7 +205,7 @@ export default function PublishPage() {
                      <div key={ch.id} className={`p-4 rounded-lg border transition-all ${ch.ready ? 'bg-emerald-50/30 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
                         <div className="flex justify-between items-center mb-3">
                            <span className="text-sm font-bold text-slate-700">{ch.title}</span>
-                           <BrandStatusDot status={ch.ready ? 'active' : 'inactive'} size="xs" label={ch.ready ? 'READY' : 'PENDING'} />
+                           <BrandStatusDot status={ch.ready ? 'active' : 'inactive'} size="sm" label={ch.ready ? 'READY' : 'PENDING'} />
                         </div>
                         <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden mb-2">
                            <div className={`h-full transition-all duration-500 ${ch.ready ? 'bg-emerald-500' : 'bg-amber-400'}`} style={{ width: ch.ready ? '100%' : '45%' }} />
