@@ -10,6 +10,7 @@ import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip
 } from '../../components/brand';
+import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
 
 const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
 const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
@@ -31,6 +32,7 @@ export default function VaultPage() {
   const [scanningId, setScanningId] = useState<string | null>(null);
   const [scanResult, setScanResult] = useState<{ extraction: string; confidence: number; gap: string } | null>(null);
   const [form, setForm] = useState({ file_name: '', category: 'E', gri_reference: '', uploader: '' });
+  const [selectionHouse, setSelectionHouse] = useState<{ open: boolean, type: 'category' | 'gri' | null }>({ open: false, type: null });
 
   useEffect(() => {
     getEvidenceFiles().then(d => { setFiles(d); setLoading(false); });
@@ -76,9 +78,57 @@ export default function VaultPage() {
 
   const verifiedCount = files.filter(f => f.status === 'verified').length;
 
+  const griCategories: SelectionCategory[] = [
+    {
+      id: 'E',
+      title: '環境指標 (Environmental)',
+      items: [
+        { id: '302', label: 'GRI 302: 能源', tag: 'GRI 302' },
+        { id: '305', label: 'GRI 305: 排放', tag: 'GRI 305' },
+        { id: '306', label: 'GRI 306: 廢棄物', tag: 'GRI 306' },
+      ]
+    },
+    {
+      id: 'S',
+      title: '社會指標 (Social)',
+      items: [
+        { id: '401', label: 'GRI 401: 僱用', tag: 'GRI 401' },
+        { id: '403', label: 'GRI 403: 職業健康與安全', tag: 'GRI 403' },
+      ]
+    }
+  ];
+
+  const catCategories: SelectionCategory[] = [
+    {
+      id: 'esg',
+      title: 'ESG 核心分類',
+      items: [
+        { id: 'E', label: '環境 (Environmental)', tag: 'E' },
+        { id: 'S', label: '社會 (Social)', tag: 'S' },
+        { id: 'G', label: '治理 (Governance)', tag: 'G' },
+        { id: 'T', label: '資安 (Security)', tag: 'T' },
+      ]
+    }
+  ];
+
   return (
     <ClientLayout>
       <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+        <SelectionHouse 
+          isOpen={selectionHouse.open && selectionHouse.type === 'category'}
+          onClose={() => setSelectionHouse({ open: false, type: null })}
+          onSelect={(item) => setForm(p => ({ ...p, category: item.tag! }))}
+          categories={catCategories}
+          title="選擇 ESG 類別"
+        />
+
+        <SelectionHouse 
+          isOpen={selectionHouse.open && selectionHouse.type === 'gri'}
+          onClose={() => setSelectionHouse({ open: false, type: null })}
+          onSelect={(item) => setForm(p => ({ ...p, gri_reference: item.tag! }))}
+          categories={griCategories}
+          title="選擇對應 GRI 指標"
+        />
         
         <BrandPageHeader 
           title="證據金庫 Evidence Vault" 
@@ -260,11 +310,26 @@ export default function VaultPage() {
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                    <label className="text-xs font-bold text-slate-500">ESG 類別</label>
-                   <select className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}>
-                     {['E', 'S', 'G', 'T'].map(c => <option key={c} value={c}>{c} - {CAT_LABELS[c]}</option>)}
-                   </select>
+                   <button 
+                     onClick={() => setSelectionHouse({ open: true, type: 'category' })}
+                     className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm hover:border-blue-600 transition-all text-left"
+                   >
+                     <span>{form.category} - {CAT_LABELS[form.category]}</span>
+                     <ChevronDown size={14} className="text-slate-400" />
+                   </button>
                 </div>
-                <BrandInput label="GRI 指標" value={form.gri_reference} onChange={e => setForm(p => ({ ...p, gri_reference: e.target.value }))} placeholder="GRI 305-1" />
+                <div className="space-y-1.5">
+                   <label className="text-xs font-bold text-slate-500">GRI 指標</label>
+                   <button 
+                     onClick={() => setSelectionHouse({ open: true, type: 'gri' })}
+                     className="w-full flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl text-sm hover:border-blue-600 transition-all text-left"
+                   >
+                     <span className={form.gri_reference ? 'text-slate-900 font-bold' : 'text-slate-400'}>
+                       {form.gri_reference || '選擇指標...'}
+                     </span>
+                     <ChevronDown size={14} className="text-slate-400" />
+                   </button>
+                </div>
              </div>
              <BrandInput label="上傳部門/人員" value={form.uploader} onChange={e => setForm(p => ({ ...p, uploader: e.target.value }))} placeholder="ESG 辦公室" />
              <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-3">

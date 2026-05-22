@@ -7,6 +7,7 @@ import {
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput, BrandCardHeader 
 } from '../../components/brand';
 import { create5TAttestation } from '../../lib/crypto-proof';
+import ProvenanceDrawer, { ProvenanceStep } from '../../components/ui/ProvenanceDrawer';
 
 const TABS = [
   { id: 'GHG' as const,    label: '溫室氣體', gri: 'GRI 305', color: 'var(--green-600)', icon: <Wind size={14}/> },
@@ -44,6 +45,8 @@ export default function EnvironmentalPage() {
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'info' } | null>(null);
   const [insights, setInsights] = useState<string | null>(null);
   const [insightsLoading, setInsightsLoading] = useState(false);
+  const [isProvenanceOpen, setIsProvenanceOpen] = useState(false);
+  const [activeProvenanceMetric, setActiveProvenanceMetric] = useState<EnvironmentalMetric | null>(null);
 
   const fetchInsights = useCallback(async () => {
     setInsightsLoading(true);
@@ -143,6 +146,18 @@ export default function EnvironmentalPage() {
     window.location.href = '/hermes-orchestrator';
   };
 
+  const handleOpenProvenance = (metric: EnvironmentalMetric) => {
+    setActiveProvenanceMetric(metric);
+    setIsProvenanceOpen(true);
+  };
+
+  const mockProvenanceSteps: ProvenanceStep[] = [
+    { id: 'p1', type: 'source', title: '原始憑證載入', description: '從數位金庫讀取 PDF 憑證', actor: 'Vault_System', timestamp: '2024-03-12 14:20:00' },
+    { id: 'p2', type: 'processing', title: 'AI 指標提取', description: 'OmniHermes 自動辨識 GHG 排放量', actor: 'Hermes-2', timestamp: '2024-03-12 14:20:05', details: 'Confidence: 0.96' },
+    { id: 'p3', type: 'review', title: '人工覆核', description: '確認數據無誤', actor: 'ESG_Manager', timestamp: '2024-03-13 09:30:00' },
+    { id: 'p4', type: 'result', title: '5T 封印完成', description: '生成 SHA-256 不可篡改鎖定', actor: '5T_Engine', timestamp: '2024-03-13 09:30:05' },
+  ];
+
   const currentTabInfo = TABS.find(t => t.id === activeTab)!;
   const verifiedCount = metrics.filter(m => m.verified).length;
   const totalValue = metrics.reduce((s, m) => s + (m.metric_value ?? 0), 0);
@@ -151,6 +166,14 @@ export default function EnvironmentalPage() {
     <div className="page-container max-w-7xl mx-auto p-6 space-y-8 fade-in relative">
       <div className="fixed inset-0 pointer-events-none -z-10 bg-gradient-to-br from-slate-50/50 via-[#EBF2FA]/30 to-slate-50/50" />
 
+      <ProvenanceDrawer 
+        isOpen={isProvenanceOpen}
+        onClose={() => setIsProvenanceOpen(false)}
+        title={activeProvenanceMetric ? `${activeProvenanceMetric.metric_name} 溯源` : '數據溯源'}
+        currentValue={activeProvenanceMetric?.metric_value?.toLocaleString()}
+        unit={activeProvenanceMetric?.unit}
+        steps={mockProvenanceSteps}
+      />
       
       {/* Toast */}
       {toast && (
@@ -413,7 +436,15 @@ export default function EnvironmentalPage() {
                        </div>
                      ),
                      gri: <BrandBadge variant="outline" size="xs" className="font-mono">{m.gri_standard}</BrandBadge>,
-                     source: <span className="text-xs text-slate-500">{m.source_origin || '—'}</span>,
+                     source: (
+                       <button 
+                         onClick={() => handleOpenProvenance(m)}
+                         className="flex items-center gap-1.5 text-xs text-blue-700 hover:text-blue-900 font-bold transition-colors group/src"
+                       >
+                         <History size={12} className="text-blue-400 group-hover/src:rotate-[-45deg] transition-transform" />
+                         <span>{m.source_origin || '檢視溯源'}</span>
+                       </button>
+                     ),
                      status: (
                        <div className="flex items-center gap-2">
                           <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? '已封印 (T4)' : '待驗證'} size="sm" />

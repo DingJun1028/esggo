@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { ClipboardList, Plus, Check, X, RefreshCw, AlertTriangle, Clock, LayoutGrid, List } from 'lucide-react';
+import { ClipboardList, Plus, Check, X, RefreshCw, AlertTriangle, Clock, LayoutGrid, List, User, Building2, Tag, ChevronDown, Shield } from 'lucide-react';
 import { getTasks, upsertTask, updateTaskStatus, deleteTask, type Task } from '../../lib/db';
+import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
 
 const STATUS_COLS: { id: Task['status']; label: string; color: string; bg: string }[] = [
   { id: 'todo',        label: '待辦',   color: '#64748B', bg: '#F1F5F9' },
@@ -24,7 +25,8 @@ export default function TasksPage() {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState<Partial<Task>>({ status: 'todo', priority: 'medium', title: '' });
+  const [form, setForm] = useState<Partial<Task>>({ status: 'todo', priority: 'medium', title: '', assignee: '', department: '', gri_reference: '' });
+  const [selectionHouse, setSelectionHouse] = useState<{ open: boolean, type: 'assignee' | 'gri' | null }>({ open: false, type: null });
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [filter, setFilter] = useState<Task['status'] | 'all'>('all');
@@ -61,8 +63,75 @@ export default function TasksPage() {
   const filtered = filter === 'all' ? tasks : tasks.filter(t => t.status === filter);
   const stats = STATUS_COLS.map(s => ({ ...s, count: tasks.filter(t => t.status === s.id).length }));
 
+  const assigneeCategories: SelectionCategory[] = [
+    {
+      id: 'esg',
+      title: 'ESG 辦公室',
+      icon: <Shield size={14} />,
+      items: [
+        { id: 'a1', label: '永續長 (CSO)', sub: 'ESG 策略與決策', tag: 'OFFICE' },
+        { id: 'a2', label: 'ESG 專員', sub: '報告書編撰與溝通', tag: 'OFFICE' },
+      ]
+    },
+    {
+      id: 'hse',
+      title: '環安衛部門',
+      icon: <User size={14} />,
+      items: [
+        { id: 'a3', label: '環安衛主任', sub: '環境數據與安衛管理', tag: 'HSE' },
+        { id: 'a4', label: '節能工程師', sub: '能源效率與減碳執行', tag: 'HSE' },
+      ]
+    },
+    {
+      id: 'hr',
+      title: '人力資源部',
+      icon: <Building2 size={14} />,
+      items: [
+        { id: 'a5', label: 'HR 經理', sub: '員工發展與人權', tag: 'HR' },
+        { id: 'a6', label: '職安管理員', sub: '員工健康與福利', tag: 'HR' },
+      ]
+    }
+  ];
+
+  const griCategories: SelectionCategory[] = [
+    {
+      id: 'E',
+      title: '環境準則 (Environmental)',
+      items: [
+        { id: '302', label: 'GRI 302: 能源', sub: '能源消耗與效率', tag: 'GRI 302' },
+        { id: '305', label: 'GRI 305: 排放', sub: 'GHG 範疇一、二、三', tag: 'GRI 305' },
+      ]
+    },
+    {
+      id: 'S',
+      title: '社會準則 (Social)',
+      items: [
+        { id: '401', label: 'GRI 401: 僱用', sub: '員工福利與離職率', tag: 'GRI 401' },
+        { id: '403', label: 'GRI 403: 職業健康與安全', sub: '工安事故與預防', tag: 'GRI 403' },
+      ]
+    }
+  ];
+
   return (
     <div className="page-container fade-in">
+      {/* Selection House Overlays */}
+      <SelectionHouse 
+        isOpen={selectionHouse.open && selectionHouse.type === 'assignee'}
+        onClose={() => setSelectionHouse({ open: false, type: null })}
+        onSelect={(item) => setForm(p => ({ ...p, assignee: item.label, department: item.tag }))}
+        categories={assigneeCategories}
+        title="選擇任務負責人"
+        placeholder="搜尋負責人姓名或職稱..."
+      />
+
+      <SelectionHouse 
+        isOpen={selectionHouse.open && selectionHouse.type === 'gri'}
+        onClose={() => setSelectionHouse({ open: false, type: null })}
+        onSelect={(item) => setForm(p => ({ ...p, gri_reference: item.tag }))}
+        categories={griCategories}
+        title="選擇對應 GRI 指標"
+        placeholder="搜尋指標號碼..."
+      />
       {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999, background: '#003262', color: '#fff', padding: '10px 18px', borderRadius: 'var(--radius-xl)', fontSize: 13, fontWeight: 600, boxShadow: 'var(--shadow-lg)' }}>{toast}</div>}
 
       <div className="page-header mb-6">
@@ -130,15 +199,27 @@ export default function TasksPage() {
               </div>
               <div className="field-group">
                 <label className="field-label">負責人</label>
-                <input className="input" value={form.assignee ?? ''} onChange={e => setForm(p => ({ ...p, assignee: e.target.value }))} placeholder="例：環安衛主任" />
-              </div>
-              <div className="field-group">
-                <label className="field-label">部門</label>
-                <input className="input" value={form.department ?? ''} onChange={e => setForm(p => ({ ...p, department: e.target.value }))} placeholder="例：環安衛" />
+                <button 
+                  onClick={() => setSelectionHouse({ open: true, type: 'assignee' })}
+                  className="w-full flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl text-sm font-medium hover:border-[#003262] transition-all"
+                >
+                  <span className={form.assignee ? 'text-slate-900 font-bold' : 'text-slate-400'}>
+                    {form.assignee || '點擊選擇負責人...'}
+                  </span>
+                  <ChevronDown size={14} className="text-slate-400" />
+                </button>
               </div>
               <div className="field-group">
                 <label className="field-label">GRI 指標</label>
-                <input className="input" value={form.gri_reference ?? ''} onChange={e => setForm(p => ({ ...p, gri_reference: e.target.value }))} placeholder="例：GRI 305-1" />
+                <button 
+                  onClick={() => setSelectionHouse({ open: true, type: 'gri' })}
+                  className="w-full flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl text-sm font-medium hover:border-[#003262] transition-all"
+                >
+                  <span className={form.gri_reference ? 'text-slate-900 font-bold' : 'text-slate-400'}>
+                    {form.gri_reference || '點擊選擇 GRI 指標...'}
+                  </span>
+                  <Tag size={14} className="text-slate-400" />
+                </button>
               </div>
               <div className="field-group">
                 <label className="field-label">截止日期</label>
@@ -160,7 +241,7 @@ export default function TasksPage() {
           {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: 200, borderRadius: 12 }} />)}
         </div>
       ) : view === 'kanban' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 'var(--space-4)' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {STATUS_COLS.map(col => {
             const colTasks = filtered.filter(t => t.status === col.id);
             return (
