@@ -84,16 +84,18 @@ export default function DigitalTwinPage() {
       />
 
       {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 fade-in">
            <div className="lg:col-span-4">
               <BrandCard className="text-center h-full flex flex-col justify-center items-center" padding="lg">
-                 <BrandScoreRing 
-                   value={overallDna} 
-                   size={180} 
-                   strokeWidth={12} 
-                   color="var(--blue-700)" 
-                 />
-                 <div className="mt-4">
+                 <div style={{ width: '100%', maxWidth: 240, margin: '0 auto' }}>
+                   <BrandScoreRing 
+                     value={overallDna} 
+                     size={220} 
+                     strokeWidth={12} 
+                     color="var(--blue-700)" 
+                   />
+                 </div>
+                 <div className="mt-6">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">DNA 整合指數</p>
                     <p className="text-sm font-bold text-slate-700">Governance Alignment: HIGH</p>
                  </div>
@@ -102,9 +104,9 @@ export default function DigitalTwinPage() {
            
            <div className="lg:col-span-8 flex flex-col gap-6">
               <BrandCard title="覺醒狀態與進度" subtitle="System Cognitive Evolution" padding="md">
-                 <div className="space-y-4">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {['休眠 (Dormant)', '初始化 (Bootstrap)', '活躍 (Active)', '進化 (Evolution)'].map((stage, idx) => (
-                      <div key={idx} className="flex items-center gap-4 p-3 rounded-2xl border border-slate-50">
+                      <div key={idx} className="flex items-center gap-4 p-3 rounded-2xl border border-slate-50 bg-slate-50/30">
                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${awakeningStage > idx ? 'bg-blue-700 text-white' : awakeningStage === idx ? 'bg-gold-500 text-white' : 'bg-slate-100 text-slate-400'}`}>
                             {idx + 1}
                          </div>
@@ -116,7 +118,7 @@ export default function DigitalTwinPage() {
                  </div>
               </BrandCard>
               
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                  {[
                    { label: '知識碎片', value: knowledge.reduce((a,b)=>a+b.entries, 0), icon: <Book size={16}/> },
                    { label: '實證鏈結', value: 247, icon: <Lock size={16}/> },
@@ -134,14 +136,14 @@ export default function DigitalTwinPage() {
       )}
 
       {activeTab === 'knowledge' && (
-        <div className="space-y-6">
-           <div className="flex justify-between items-center">
+        <div className="space-y-6 fade-in">
+           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                  <h2 className="text-xl font-bold text-slate-900">RAG 知識倉庫</h2>
                  <p className="text-xs text-slate-500">數位分身的底層知識來源，支援 PDF/DOCX 向量化檢索</p>
               </div>
               <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
-              <BrandButton variant="primary" onClick={() => fileInputRef.current?.click()} loading={uploading}>
+              <BrandButton variant="primary" onClick={() => fileInputRef.current?.click()} loading={uploading} fullWidthOnMobile>
                  <Upload size={16}/> 上傳企業文件
               </BrandButton>
            </div>

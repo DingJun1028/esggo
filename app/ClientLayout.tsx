@@ -8,7 +8,7 @@ import {
   TrendingDown, FileSearch, BookOpen, Library, DollarSign,
   Truck, UserCheck, GraduationCap, UserCircle, Bot, Cog,
   Settings, ChevronLeft, ChevronRight, Menu, X, Home,
-  Bell, ShieldCheck, ChevronDown, Search, Layers, Code
+  Bell, ShieldCheck, ChevronDown, Search, Layers, Code, MoreHorizontal
 } from 'lucide-react';
 import { CommandPalette } from '../components/ui/CommandPalette';
 import {
@@ -83,7 +83,7 @@ const MOBILE_NAV_ITEMS: NavItem[] = [
   { href: '/editor',       label: '撰寫',   sub: '', icon: <FileText size={20} /> },
   { href: '/vault',        label: '金庫',   sub: '', icon: <Database size={20} /> },
   { href: '/swarm',        label: '蜂群',   sub: '', icon: <Users size={20} /> },
-  { href: '/tasks',        label: '任務',   sub: '', icon: <ClipboardList size={20} /> },
+  { href: '#more',         label: '更多',   sub: '', icon: <MoreHorizontal size={20} /> },
 ];
 
 function SidebarInner({ collapsed, currentPath, onNav }: {
@@ -209,6 +209,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -218,7 +219,10 @@ function AppContent({ children }: { children: React.ReactNode }) {
     } catch { /* ignore */ }
   }, []);
 
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  useEffect(() => { 
+    setMobileOpen(false); 
+    setMobileMoreOpen(false);
+  }, [pathname]);
 
   if (!mounted) return null;
 
@@ -227,6 +231,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
   return (
     <div className="app-shell">
       <CommandPalette />
+      <style>{`
+        @keyframes slideUpFade {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
       
       {/* Mobile Overlay */}
       <div
@@ -297,12 +307,108 @@ function AppContent({ children }: { children: React.ReactNode }) {
           {children}
         </main>
 
+        {/* Mobile More Full Screen Menu */}
+        <div 
+          className="show-mobile-only"
+          style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: '60px', 
+            background: 'rgba(0, 50, 98, 0.95)', // Berkeley blue with opacity
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            zIndex: 100,
+            overflowY: 'auto', padding: '24px 16px',
+            opacity: mobileMoreOpen ? 1 : 0,
+            pointerEvents: mobileMoreOpen ? 'auto' : 'none',
+            transform: mobileMoreOpen ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            paddingBottom: '40px'
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+            <div>
+              <h2 style={{ color: 'var(--california-gold)', fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em' }}>功能總覽</h2>
+              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>ESG Go System Navigation</p>
+            </div>
+            <button 
+              onClick={() => setMobileMoreOpen(false)} 
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', 
+                width: 36, height: 36, borderRadius: '50%', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center' 
+              }}
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+            {NAV_GROUPS.map((group, gIndex) => (
+              <div 
+                key={group.title}
+                style={{ 
+                  animation: mobileMoreOpen ? \`slideUpFade 0.4s ease-out forwards \${gIndex * 0.05}s\` : 'none',
+                  opacity: mobileMoreOpen ? 0 : 1
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                  <div style={{ width: 4, height: 12, background: 'var(--california-gold)', borderRadius: 2 }} />
+                  <h3 style={{ color: 'white', fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    {group.title}
+                  </h3>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+                  {group.items.map(item => (
+                    <Link 
+                      key={item.href} 
+                      href={item.href}
+                      onClick={() => setMobileMoreOpen(false)}
+                      style={{
+                        display: 'flex', flexDirection: 'column', gap: 12,
+                        padding: '16px', borderRadius: '16px',
+                        background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                        textDecoration: 'none', color: 'white',
+                        boxShadow: '0 4px 24px -8px rgba(0,0,0,0.2)',
+                      }}
+                    >
+                      <div style={{ 
+                        width: 32, height: 32, borderRadius: '10px', 
+                        background: 'rgba(253,181,21,0.15)', color: 'var(--california-gold)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                      }}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <p style={{ fontSize: 14, fontWeight: 700 }}>{item.label}</p>
+                        <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 4, textTransform: 'uppercase' }}>{item.sub}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Mobile Nav */}
         <nav className="mobile-nav">
           {MOBILE_NAV_ITEMS.map(item => {
+            if (item.href === '#more') {
+              return (
+                <button 
+                  key="more" 
+                  onClick={() => setMobileMoreOpen(!mobileMoreOpen)} 
+                  className={`mobile-nav-item \${mobileMoreOpen ? 'active' : ''}`}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </button>
+              );
+            }
             const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);
             return (
-              <Link key={item.href} href={item.href} className={`mobile-nav-item ${active ? 'active' : ''}`}>
+              <Link key={item.href} href={item.href} onClick={() => setMobileMoreOpen(false)} className={`mobile-nav-item \${active ? 'active' : ''}`}>
                 {item.icon}
                 <span>{item.label}</span>
               </Link>
