@@ -211,7 +211,7 @@ function MobileGlobalMenu({ isOpen, onClose, currentPath }: { isOpen: boolean; o
     <div 
       className="fade-in"
       style={{
-        position: 'fixed', inset: 0, zIndex: var(--z-modal),
+        position: 'fixed', inset: 0, zIndex: 'var(--z-modal)',
         background: 'var(--surface-page)', display: 'flex', flexDirection: 'column',
         overflowY: 'auto', paddingBottom: '2rem'
       }}
