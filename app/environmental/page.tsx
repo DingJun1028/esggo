@@ -148,7 +148,9 @@ export default function EnvironmentalPage() {
   const totalValue = metrics.reduce((s, m) => s + (m.metric_value ?? 0), 0);
 
   return (
-    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+    <div className="page-container max-w-7xl mx-auto p-6 space-y-8 fade-in relative">
+      <div className="fixed inset-0 pointer-events-none -z-10 bg-gradient-to-br from-slate-50/50 via-[#EBF2FA]/30 to-slate-50/50" />
+
       
       {/* Toast */}
       {toast && (
@@ -177,17 +179,22 @@ export default function EnvironmentalPage() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
-          { label: '項目總數', value: metrics.length, icon: <BarChart3 size={18}/> },
-          { label: '已實證項目', value: verifiedCount, icon: <Shield size={18}/> },
-          { label: '驗證覆蓋率', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Zap size={18}/> },
-          { label: '數據總量', value: totalValue.toLocaleString(), icon: <Activity size={18}/> },
+          { label: '項目總數', value: metrics.length, icon: <BarChart3 size={24}/> },
+          { label: '已實證項目', value: verifiedCount, icon: <Shield size={24}/> },
+          { label: '驗證覆蓋率', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Zap size={24}/> },
+          { label: '數據總量', value: totalValue.toLocaleString(), icon: <Activity size={24}/> },
         ].map(s => (
-          <BrandCard key={s.label} padding="md" className="text-center">
-             <div className="text-blue-700 mb-2 flex justify-center opacity-40">{s.icon}</div>
-             <p className="text-2xl font-extrabold text-[#003262]">{s.value}</p>
-             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.label}</p>
+          <BrandCard key={s.label} padding="lg" variant="glass" className="relative overflow-hidden group">
+             <div className="absolute -top-4 -right-4 p-8 bg-blue-50/50 rounded-full opacity-50 group-hover:scale-150 group-hover:bg-blue-100/50 transition-all duration-700">
+                {React.cloneElement(s.icon as React.ReactElement, { size: 48, className: 'text-blue-500 opacity-20' })}
+             </div>
+             <div className="relative z-10">
+               <div className="text-blue-600 mb-3 opacity-80 group-hover:scale-110 transition-transform duration-300 origin-left">{s.icon}</div>
+               <p className="text-4xl font-extrabold text-[#003262] tracking-tight">{s.value}</p>
+               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-2">{s.label}</p>
+             </div>
           </BrandCard>
         ))}
       </div>
@@ -199,32 +206,35 @@ export default function EnvironmentalPage() {
       />
 
       {editRow && (
-        <BrandCard padding="lg" className="border-blue-200 bg-blue-50/20">
-          <div className="mb-4">
-            <h3 className="text-lg font-bold text-[#003262]">{editRow.isNew ? '新增環境指標' : '編輯指標'}</h3>
-            <p className="text-sm text-slate-500">所有變更將記錄於 T3 稽核軌跡</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-             <BrandInput label="指標名稱" value={editRow.metric_name ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_name: e.target.value }))} placeholder="例：範疇一直接排放" />
-             <BrandInput label="數值" type="number" value={editRow.metric_value ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_value: parseFloat(e.target.value) || null }))} placeholder="0" />
-             <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500">單位</label>
-                <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm" value={editRow.unit ?? ''} onChange={e => setEditRow(p => ({ ...p, unit: e.target.value }))}>
-                  {UNIT_MAP[activeTab].map(u => <option key={u} value={u}>{u}</option>)}
-                </select>
-             </div>
-             <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500">GRI 標準</label>
-                <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm" value={editRow.gri_standard ?? ''} onChange={e => setEditRow(p => ({ ...p, gri_standard: e.target.value }))}>
-                  {GRI_MAP[activeTab].map(g => <option key={g} value={g}>{g}</option>)}
-                </select>
-             </div>
-             <BrandInput label="數據來源" value={editRow.source_origin ?? ''} onChange={e => setEditRow(p => ({ ...p, source_origin: e.target.value }))} placeholder="例：台電帳單" />
-             <BrandInput label="年度" type="number" value={editRow.year ?? new Date().getFullYear()} onChange={e => setEditRow(p => ({ ...p, year: parseInt(e.target.value) }))} />
-          </div>
-          <div className="flex gap-3 mt-8">
-             <BrandButton variant="primary" onClick={handleSave} loading={saving}>儲存指標</BrandButton>
-             <BrandButton variant="ghost" onClick={() => setEditRow(null)}>取消</BrandButton>
+        <BrandCard padding="lg" variant="glass" className="border-blue-200/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 to-transparent pointer-events-none" />
+          <div className="relative z-10">
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-[#003262]">{editRow.isNew ? '新增環境指標' : '編輯指標'}</h3>
+              <p className="text-sm text-slate-500 mt-1">所有變更將記錄於 T3 稽核軌跡</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               <BrandInput label="指標名稱" value={editRow.metric_name ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_name: e.target.value }))} placeholder="例：範疇一直接排放" />
+               <BrandInput label="數值" type="number" value={editRow.metric_value ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_value: parseFloat(e.target.value) || null }))} placeholder="0" />
+               <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">單位</label>
+                  <select className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" value={editRow.unit ?? ''} onChange={e => setEditRow(p => ({ ...p, unit: e.target.value }))}>
+                    {UNIT_MAP[activeTab].map(u => <option key={u} value={u}>{u}</option>)}
+                  </select>
+               </div>
+               <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">GRI 標準</label>
+                  <select className="w-full bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all" value={editRow.gri_standard ?? ''} onChange={e => setEditRow(p => ({ ...p, gri_standard: e.target.value }))}>
+                    {GRI_MAP[activeTab].map(g => <option key={g} value={g}>{g}</option>)}
+                  </select>
+               </div>
+               <BrandInput label="數據來源" value={editRow.source_origin ?? ''} onChange={e => setEditRow(p => ({ ...p, source_origin: e.target.value }))} placeholder="例：台電帳單" />
+               <BrandInput label="年度" type="number" value={editRow.year ?? new Date().getFullYear()} onChange={e => setEditRow(p => ({ ...p, year: parseInt(e.target.value) }))} />
+            </div>
+            <div className="flex gap-3 mt-8">
+               <BrandButton variant="primary" onClick={handleSave} loading={saving}>儲存指標</BrandButton>
+               <BrandButton variant="ghost" onClick={() => setEditRow(null)}>取消</BrandButton>
+            </div>
           </div>
         </BrandCard>
       )}
@@ -233,7 +243,7 @@ export default function EnvironmentalPage() {
         <div className="lg:col-span-12">
           {activeTab === 'Analysis' ? (
             <div className="space-y-6 fade-in">
-              <BrandCard padding="lg">
+              <BrandCard padding="lg" variant="glass">
                 <BrandCardHeader 
                   title="GHG 排放趨勢與減量目標" 
                   subtitle="歷史排放數據 (Scope 1+2) 與 2030 減量路徑分析"
@@ -295,10 +305,10 @@ export default function EnvironmentalPage() {
               </BrandCard>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <BrandCard padding="md">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                         <Zap size={16} className="text-gold-500" /> AI 洞察分析
+                 <BrandCard padding="lg" variant="glass">
+                    <div className="flex items-center justify-between mb-6">
+                      <h4 className="text-base font-bold text-[#003262] flex items-center gap-2">
+                         <Zap size={18} className="text-blue-500" /> AI 洞察分析
                       </h4>
                       <BrandButton variant="ghost" size="sm" onClick={fetchInsights} loading={insightsLoading}>
                          <RefreshCw size={14}/>
@@ -323,25 +333,31 @@ export default function EnvironmentalPage() {
                       </div>
                     )}
                  </BrandCard>
-                 <BrandCard padding="md">
-                    <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-                       <Shield size={16} className="text-green-600" /> 5T 實證建議
+                 <BrandCard padding="lg" variant="glass">
+                    <h4 className="text-base font-bold text-[#003262] mb-6 flex items-center gap-2">
+                       <Shield size={18} className="text-green-600" /> 5T 實證建議
                     </h4>
-                    <ul className="text-sm text-slate-600 space-y-2">
-                       <li className="flex items-start gap-2">• 已有 82% 數據完成 T4 封印</li>
-                       <li className="flex items-start gap-2">• 建議補強 2024 年度的廢棄物清運佐證</li>
+                    <ul className="text-sm text-slate-600 space-y-4">
+                       <li className="flex items-start gap-3">
+                         <div className="mt-0.5 w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                         <span>已有 <strong className="text-slate-800">82%</strong> 數據完成 T4 封印，可直接匯出報告。</span>
+                       </li>
+                       <li className="flex items-start gap-3">
+                         <div className="mt-0.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                         <span>建議補強 <strong className="text-slate-800">2024 年度</strong> 的廢棄物清運佐證，以符合 T3 稽核要求。</span>
+                       </li>
                     </ul>
                  </BrandCard>
               </div>
             </div>
           ) : (
-            <BrandCard padding="none" className="overflow-hidden">
-               <div className="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: currentTabInfo.color }} />
-                     <span className="font-bold text-slate-700">{currentTabInfo.label} 實證列表</span>
+            <BrandCard padding="none" variant="glass" className="overflow-hidden">
+               <div className="p-5 bg-white/40 border-b border-white/40 flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                     <div className="w-3 h-3 rounded-full shadow-sm" style={{ background: currentTabInfo.color }} />
+                     <span className="font-bold text-[#003262] text-lg">{currentTabInfo.label} 實證列表</span>
                   </div>
-                  <BrandBadge variant="outline">{currentTabInfo.gri} 標準對齊</BrandBadge>
+                  <BrandBadge variant="outline" className="bg-white/50 backdrop-blur-sm border-white/60 text-[#003262]">{currentTabInfo.gri} 標準對齊</BrandBadge>
                </div>
                <div className="scroll-x-governed">
                  <BrandTable 
@@ -389,23 +405,35 @@ export default function EnvironmentalPage() {
       {/* Floating AI Assistant Button */}
       <button
         onClick={handleAskOmniHermes}
+        className="group"
         style={{
           position: 'fixed', bottom: '2rem', right: '2rem',
           width: '64px', height: '64px', borderRadius: '50%',
-          background: 'linear-gradient(135deg, #003262, #005DAA)',
-          color: '#fff', border: 'none', boxShadow: '0 8px 32px rgba(0, 50, 98, 0.3)',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4))',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.6)',
+          color: '#003262', boxShadow: '0 8px 32px rgba(31,38,135,0.15)',
           cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 100, transition: 'transform 0.2s',
+          zIndex: 100, transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        onMouseEnter={e => {
+            e.currentTarget.style.transform = 'scale(1.05) translateY(-4px)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(31,38,135,0.25)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5))';
+        }}
+        onMouseLeave={e => {
+            e.currentTarget.style.transform = 'scale(1) translateY(0)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(31,38,135,0.15)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4))';
+        }}
       >
-        <Bot size={28} />
+        <Bot size={28} className="text-blue-600 drop-shadow-sm transition-transform group-hover:scale-110" />
         <div style={{
-          position: 'absolute', right: '74px', background: 'white',
-          padding: '8px 16px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          position: 'absolute', right: '76px', background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)',
+          padding: '10px 16px', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', border: '1px solid rgba(255,255,255,0.4)',
           whiteSpace: 'nowrap', color: '#003262', fontSize: '0.875rem', fontWeight: 700, pointerEvents: 'none',
-        }}>
+          opacity: 0, transform: 'translateX(10px)', transition: 'all 0.3s ease',
+        }} className="group-hover:opacity-100 group-hover:transform-none">
           Ask OmniHermes 分析環境缺口
         </div>
       </button>

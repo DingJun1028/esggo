@@ -198,7 +198,8 @@ export default function HermesOrchestratorPage() {
   }
 
   return (
-    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in relative">
+      <div className="fixed inset-0 pointer-events-none -z-10 bg-gradient-to-br from-slate-50/50 via-[#EBF2FA]/30 to-slate-50/50" />
       
       {/* Toast */}
       {toast && (
@@ -252,11 +253,13 @@ export default function HermesOrchestratorPage() {
         <div className={(selected && !loading) ? 'lg:col-span-7' : 'lg:col-span-12'}>
 
           {activeTab === 'create' && (
-            <BrandCard padding="lg">
-              <BrandCardHeader 
-                title="配置新任務" 
-                subtitle="Policy Guard 將自動審核您的請求權限"
-              />
+            <BrandCard padding="lg" variant="glass" className="border-blue-200/50 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 to-transparent pointer-events-none" />
+              <div className="relative z-10">
+                <BrandCardHeader 
+                  title="配置新任務" 
+                  subtitle="Policy Guard 將自動審核您的請求權限"
+                />
               <div className="space-y-6 mt-6">
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">任務類型</label>
@@ -296,9 +299,10 @@ export default function HermesOrchestratorPage() {
                   </div>
                 </div>
 
-                <BrandButton variant="primary" fullWidth size="lg" onClick={handleCreate} loading={loading}>
+                <BrandButton variant="primary" fullWidth size="lg" onClick={handleCreate} loading={loading} className="shadow-lg shadow-blue-500/25">
                   <Zap size={16}/> 通過 Policy Guard 並建立
                 </BrandButton>
+              </div>
               </div>
             </BrandCard>
           )}
@@ -328,8 +332,10 @@ export default function HermesOrchestratorPage() {
                </div>
 
                {/* Kanban Surface */}
-               <BrandCard padding="none" className="bg-white/60">
-                  <BrandCardHeader title="Swarm Kanban" subtitle="跨代理任務排程與綠色門徑審核" />
+               <BrandCard padding="none" variant="glass" className="bg-white/40 backdrop-blur-xl border border-white/60">
+                  <div className="p-5 bg-white/40 border-b border-white/40 flex justify-between items-center">
+                    <BrandCardHeader title="Swarm Kanban" subtitle="跨代理任務排程與綠色門徑審核" />
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-slate-100 min-h-[500px]">
                      {[
                        { id: 'backlog', label: '待處理', items: (executions || []).filter(r => r && !r.execution) },
@@ -347,7 +353,7 @@ export default function HermesOrchestratorPage() {
                               key={rec.task.id} 
                               padding="sm" 
                               hover 
-                              className="text-xs border-slate-200/60 shadow-none bg-white/90 hover:border-blue-600/30 group"
+                              className="text-xs border-white/60 shadow-sm bg-white/70 backdrop-blur-md hover:border-blue-400 hover:shadow-md transition-all group"
                               onClick={() => setSelected(rec)}
                             >
                                <div className="flex items-center gap-2 mb-2">
@@ -383,8 +389,10 @@ export default function HermesOrchestratorPage() {
           )}
 
           {activeTab === 'executions' && (
-            <BrandCard padding="none">
-               <BrandCardHeader title="任務執行軌跡" />
+            <BrandCard padding="none" variant="glass" className="overflow-hidden">
+               <div className="p-5 bg-white/40 border-b border-white/40">
+                 <BrandCardHeader title="任務執行軌跡" />
+               </div>
                <div className="mt-4">
                  <BrandTable 
                    columns={[
@@ -469,7 +477,7 @@ export default function HermesOrchestratorPage() {
         {/* Detail Panel */}
         {selected && (
           <div className="lg:col-span-5 fade-in">
-             <BrandCard padding="lg">
+             <BrandCard padding="lg" variant="glass" className="border border-white/60 shadow-xl">
                 <BrandCardHeader 
                   title="任務控制台" 
                   subtitle={selected.task.title}
