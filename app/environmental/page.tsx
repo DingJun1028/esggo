@@ -179,23 +179,58 @@ export default function EnvironmentalPage() {
         }
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {[
-          { label: '項目總數', value: metrics.length, icon: <BarChart3 size={24}/> },
-          { label: '已實證項目', value: verifiedCount, icon: <Shield size={24}/> },
-          { label: '驗證覆蓋率', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Zap size={24}/> },
-          { label: '數據總量', value: totalValue.toLocaleString(), icon: <Activity size={24}/> },
-        ].map(s => (
-          <BrandCard key={s.label} padding="lg" variant="glass" className="relative overflow-hidden group">
-             <div className="absolute -top-4 -right-4 p-8 bg-blue-50/50 rounded-full opacity-50 group-hover:scale-150 group-hover:bg-blue-100/50 transition-all duration-700">
-                {React.cloneElement(s.icon as React.ReactElement, { size: 48, className: 'text-blue-500 opacity-20' })}
-             </div>
-             <div className="relative z-10">
-               <div className="text-blue-600 mb-3 opacity-80 group-hover:scale-110 transition-transform duration-300 origin-left">{s.icon}</div>
-               <p className="text-4xl font-extrabold text-[#003262] tracking-tight">{s.value}</p>
-               <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-2">{s.label}</p>
-             </div>
-          </BrandCard>
+      {/* KPI 統計卡片 — 4 欄固定佈局 */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+        {([
+          { label: '項目總數',    value: metrics.length,                                                                                  icon: <BarChart3 size={22}/>, color: '#3B7EA1', accent: '#EBF2FA' },
+          { label: '已實證項目',  value: verifiedCount,                                                                                   icon: <Shield size={22}/>,   color: '#16A34A', accent: '#F0FDF4' },
+          { label: '驗證覆蓋率',  value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`,                     icon: <Zap size={22}/>,      color: '#D97706', accent: '#FFFBEB' },
+          { label: '數據總量',    value: totalValue.toLocaleString(),                                                                     icon: <Activity size={22}/>,  color: '#7C3AED', accent: '#F5F3FF' },
+        ] as { label: string; value: string | number; icon: React.ReactNode; color: string; accent: string }[]).map(s => (
+          <div
+            key={s.label}
+            className="group"
+            style={{
+              background: 'rgba(255,255,255,0.72)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.8)',
+              borderRadius: '16px',
+              padding: '1.5rem',
+              boxShadow: '0 4px 24px rgba(0,50,98,0.06)',
+              position: 'relative',
+              overflow: 'hidden',
+              transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
+              cursor: 'default',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,50,98,0.12)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 24px rgba(0,50,98,0.06)'; }}
+          >
+            {/* 裝飾背景圓 */}
+            <div style={{
+              position: 'absolute', top: '-20px', right: '-20px',
+              width: '100px', height: '100px',
+              borderRadius: '50%',
+              background: s.accent,
+              opacity: 0.6,
+              transition: 'transform 0.6s ease',
+            }} />
+            {/* 左側色條 */}
+            <div style={{ position: 'absolute', left: 0, top: '16px', bottom: '16px', width: '3px', borderRadius: '0 4px 4px 0', background: s.color, opacity: 0.7 }} />
+
+            {/* 圖示 */}
+            <div style={{ color: s.color, marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {s.icon}
+            </div>
+            {/* 數值 */}
+            <p style={{ fontSize: '2.25rem', fontWeight: 800, color: '#003262', lineHeight: 1, letterSpacing: '-0.03em', fontVariantNumeric: 'tabular-nums' }}>
+              {s.value}
+            </p>
+            {/* 標籤 */}
+            <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '8px' }}>
+              {s.label}
+            </p>
+          </div>
         ))}
       </div>
 

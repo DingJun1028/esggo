@@ -112,7 +112,7 @@ export default function SocialPage() {
 
         {loading ? (
           <div className="space-y-6 animate-pulse">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
               {[1, 2, 3, 4].map(i => (
                 <BrandCard key={i} padding="md" className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-slate-200"></div>
@@ -144,7 +144,7 @@ export default function SocialPage() {
           <div className="space-y-6">
             
             {/* KPI Summary Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
               {tabMetrics.map((m, idx) => (
                 <BrandKpiCard
                   key={m.id || idx}

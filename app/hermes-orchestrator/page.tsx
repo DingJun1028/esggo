@@ -253,45 +253,77 @@ export default function HermesOrchestratorPage() {
         <div className={(selected && !loading) ? 'lg:col-span-7' : 'lg:col-span-12'}>
 
           {activeTab === 'create' && (
-            <BrandCard padding="lg" variant="glass" className="border-blue-200/50 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <BrandCardHeader 
-                  title="配置新任務" 
-                  subtitle="Policy Guard 將自動審核您的請求權限"
-                />
-              <div className="space-y-6 mt-6">
-                <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">任務類型</label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div style={{
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid rgba(59,126,161,0.2)',
+              borderRadius: '20px',
+              padding: '2rem',
+              boxShadow: '0 8px 32px rgba(0,50,98,0.08)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* 背景漸層裝飾 */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(235,242,250,0.5) 0%, transparent 60%)', pointerEvents: 'none' }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(226,232,240,0.8)' }}>
+                  <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#0F172A' }}>配置新任務</h3>
+                  <p style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '2px' }}>Policy Guard 將自動審核您的請求權限</p>
+                </div>
+
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <p style={{ fontSize: '0.625rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>任務類型</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem' }}>
                     {Object.entries(TASK_TYPE_META).map(([type, m]) => (
-                      <button 
-                        key={type} 
+                      <button
+                        key={type}
                         onClick={() => {
                           setTaskType(type as any);
                           const skill = SKILL_REGISTRY.find(s => s.taskType === type);
                           if (skill) setSelectedSkill(skill.skillKey);
                         }}
-                        className={`p-4 rounded-lg border-2 text-left transition-all ${taskType === type ? 'border-blue-600 bg-blue-50/50' : 'border-slate-50 hover:border-slate-100'}`}
+                        style={{
+                          padding: '0.875rem',
+                          borderRadius: '12px',
+                          border: taskType === type ? `2px solid #003262` : '2px solid rgba(226,232,240,0.8)',
+                          background: taskType === type ? 'rgba(235,242,250,0.9)' : 'rgba(248,250,252,0.8)',
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          boxShadow: taskType === type ? '0 0 0 3px rgba(0,50,98,0.08)' : 'none',
+                        }}
                       >
-                        <div style={{ color: m.color }} className="mb-2">{TASK_ICONS[type]}</div>
-                        <p className="text-xs font-bold text-slate-700">{m.label}</p>
+                        <div style={{ color: m.color, marginBottom: '6px' }}>{TASK_ICONS[type]}</div>
+                        <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: taskType === type ? '#003262' : '#475569', lineHeight: 1.3 }}>{m.label}</p>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-4 mt-6 mb-6">
-                  <BrandInput 
-                    label="任務標題" 
-                    placeholder="例：2024 年度 GRI 305 排放草稿" 
-                    value={title} 
-                    onChange={e => setTitle(e.target.value)} 
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <BrandInput
+                    label="任務標題"
+                    placeholder="例：2024 年度 GRI 305 排放草稿"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
                   />
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-500">任務說明</label>
-                    <textarea 
-                      className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm min-h-[100px] focus:bg-white focus:border-blue-600 transition-all outline-none"
+                  <div>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>任務說明</label>
+                    <textarea
+                      style={{
+                        width: '100%',
+                        background: 'rgba(248,250,252,0.9)',
+                        border: '1px solid rgba(226,232,240,0.8)',
+                        borderRadius: '10px',
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.875rem',
+                        minHeight: '100px',
+                        outline: 'none',
+                        resize: 'vertical',
+                        fontFamily: 'inherit',
+                        transition: 'all 0.2s',
+                      }}
                       placeholder="詳細說明執行範疇..."
                       value={description}
                       onChange={e => setDescription(e.target.value)}
@@ -303,8 +335,7 @@ export default function HermesOrchestratorPage() {
                   <Zap size={16}/> 通過 Policy Guard 並建立
                 </BrandButton>
               </div>
-              </div>
-            </BrandCard>
+            </div>
           )}
 
           {activeTab === 'swarm' && (

@@ -40,13 +40,30 @@ export default function BrandKpiCard({
   return (
     <>
       <div
-        className={`bg-white rounded-xl border p-5 transition-all duration-300 cursor-pointer group ${
+        className={`rounded-xl p-5 transition-all duration-300 cursor-pointer group ${
           sealed
-            ? 'border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.15)] hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]'
-            : verified
-            ? 'border-slate-200 hover:shadow-md hover:border-[#003262]/20'
-            : 'border-slate-200 hover:shadow-md hover:border-[#003262]/20 opacity-90 grayscale-[20%]'
+            ? 'shadow-[0_0_15px_rgba(52,211,153,0.15)] hover:shadow-[0_0_24px_rgba(52,211,153,0.3)]'
+            : 'hover:shadow-lg'
         } ${className}`}
+        style={{
+          background: sealed
+            ? 'linear-gradient(135deg, rgba(240,253,244,0.9) 0%, rgba(255,255,255,0.95) 100%)'
+            : 'rgba(255,255,255,0.88)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: sealed
+            ? '1px solid rgba(52,211,153,0.4)'
+            : verified
+            ? '1px solid rgba(255,255,255,0.9)'
+            : '1px solid rgba(255,255,255,0.9)',
+          borderTop: sealed
+            ? '3px solid rgba(52,211,153,0.8)'
+            : `3px solid ${color}`,
+          boxShadow: sealed
+            ? '0 0 15px rgba(52,211,153,0.12), 0 2px 12px rgba(0,50,98,0.04)'
+            : '0 2px 16px rgba(0,50,98,0.06), 0 1px 3px rgba(0,50,98,0.04)',
+          opacity: (!sealed && !verified) ? 0.9 : 1,
+        }}
         onClick={() => {
           if (formula || sources || description) setShowDetail(true);
           onClick?.();

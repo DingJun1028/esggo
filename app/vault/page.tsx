@@ -92,7 +92,7 @@ export default function VaultPage() {
         />
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
             {[1, 2, 3, 4].map(i => (
               <BrandCard key={i} padding="md" className="animate-pulse text-center">
                 <div className="h-3 bg-slate-200 rounded w-16 mb-2 mx-auto"></div>
@@ -101,7 +101,7 @@ export default function VaultPage() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
              {[
                { label: '總文件數', value: files.length, variant: 'info' },
                { label: '已實證封印', value: verifiedCount, variant: 'success' },

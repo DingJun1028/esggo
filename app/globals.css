@@ -332,7 +332,7 @@ body {
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background: var(--surface-page);
+  background: linear-gradient(135deg, #EBF2FA 0%, #F5F8FC 50%, #EFF4F9 100%);
 }
 
 .sidebar {
@@ -1387,4 +1387,105 @@ body {
 .mobile-nav {
   padding-bottom: env(safe-area-inset-bottom, 0);
   height: calc(var(--mobile-nav-h) + env(safe-area-inset-bottom, 0));
+}
+
+/* ============================================================
+   Premium Glassmorphism Utility Classes
+   Use these for reliable cross-browser glass effects
+   ============================================================ */
+
+/* Glass panel — white frosted glass card */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 4px 24px rgba(0, 50, 98, 0.06), 0 1px 4px rgba(0, 50, 98, 0.04);
+}
+
+.glass-panel:hover {
+  box-shadow: 0 8px 40px rgba(0, 50, 98, 0.1), 0 2px 8px rgba(0, 50, 98, 0.06);
+  transform: translateY(-1px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hermes AI dark gradient panel */
+.hermes-panel {
+  background: linear-gradient(135deg, var(--blue-900, #0c1a35) 0%, var(--blue-800, #1e3a5f) 60%, #0d2644 100%);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hermes-panel::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(253, 181, 21, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hermes-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(0, 158, 157, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Responsive KPI grid — guaranteed 4-column at ≥768px */
+.kpi-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 1024px) {
+  .kpi-grid-auto { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .kpi-grid-auto { grid-template-columns: 1fr; }
+}
+
+/* Premium KPI card with glass surface */
+.glass-kpi {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow: 0 2px 16px rgba(0, 50, 98, 0.06), 0 1px 3px rgba(0, 50, 98, 0.04);
+  transition: all var(--duration-fast) var(--ease);
+  cursor: pointer;
+}
+
+.glass-kpi:hover {
+  box-shadow: 0 8px 32px rgba(0, 50, 98, 0.1);
+  transform: translateY(-2px);
+  border-color: rgba(0, 50, 98, 0.12);
+}
+
+/* Page wrapper with consistent spacing */
+.page-wrapper {
+  padding: var(--content-pad);
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+/* Section divider for glass pages */
+.glass-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 50, 98, 0.1) 30%, rgba(0, 50, 98, 0.1) 70%, transparent 100%);
+  margin: var(--space-6) 0;
 }

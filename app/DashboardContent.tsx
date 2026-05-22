@@ -166,7 +166,7 @@ export default function DashboardContent() {
       </BrandCard>
 
       {/* ── KPI Grid ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
         {KPIS.map(k => (
           <BrandKpiCard
             key={k.key}
@@ -245,7 +245,7 @@ export default function DashboardContent() {
       </div>
 
       {/* ── Quick Actions Grid ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '16px' }}>
         {QUICK_ACTIONS.map(a => (
           <Link key={a.href} href={a.href} className="group">
             <BrandCard padding="sm" hover className="text-center group-hover:border-blue-600/30">
