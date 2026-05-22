@@ -23,3 +23,7 @@ export { Tooltip } from './Tooltip';
 export { Tag } from './Tag';
 export { SectionHeader } from './SectionHeader';
 export { ScoreRing } from './ScoreRing';
+
+// Advanced 5T Patterns
+export { default as SelectionHouse } from './SelectionHouse';
+export { default as ProvenanceDrawer } from './ProvenanceDrawer';
