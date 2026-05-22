@@ -1,0 +1,59 @@
+{
+  "version": "5",
+  "remote": {
+    "https://deno.land/std@0.168.0/fmt/colors.ts": "03ad95e543d2808bc43c17a3dd29d25b43d0f16287fe562a0be89bf632454a12",
+    "https://deno.land/std@0.168.0/testing/_diff.ts": "a23e7fc2b4d8daa3e158fa06856bedf5334ce2a2831e8bf9e509717f455adb2c",
+    "https://deno.land/std@0.168.0/testing/_format.ts": "cd11136e1797791045e639e9f0f4640d5b4166148796cad37e6ef75f7d7f3832",
+    "https://deno.land/std@0.168.0/testing/asserts.ts": "51353e79437361d4b02d8e32f3fc83b22231bc8f8d4c841d86fd32b0b0afe940"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@apollo/client@^4.2.0",
+        "npm:@genkit-ai/google-genai@^1.35.0",
+        "npm:@genkit-ai/googleai@^1.28.0",
+        "npm:@google/adk@^1.1.0",
+        "npm:@google/generative-ai@0.21.0",
+        "npm:@graphql-tools/schema@^10.0.33",
+        "npm:@next/swc-wasm-nodejs@15.5.18",
+        "npm:@supabase/ssr@0.1.0",
+        "npm:@supabase/supabase-js@2.39.0",
+        "npm:@testing-library/dom@^10.4.1",
+        "npm:@testing-library/jest-dom@^6.9.1",
+        "npm:@testing-library/react@^16.3.2",
+        "npm:@types/node@20.11.5",
+        "npm:@types/react-dom@18.2.18",
+        "npm:@types/react@18.2.48",
+        "npm:@types/uuid@10",
+        "npm:@vitejs/plugin-react@^6.0.2",
+        "npm:autoprefixer@10.4.17",
+        "npm:cheerio@^1.2.0",
+        "npm:class-variance-authority@0.7.1",
+        "npm:clsx@2.1.1",
+        "npm:commander@^14.0.3",
+        "npm:date-fns@3.6.0",
+        "npm:dotenv@^17.4.2",
+        "npm:framer-motion@11.15.0",
+        "npm:genkit@^1.35.0",
+        "npm:graphql-ws@^6.0.8",
+        "npm:graphql-yoga@^5.21.0",
+        "npm:graphql@^16.14.0",
+        "npm:jsdom@^29.1.1",
+        "npm:lucide-react@0.468.0",
+        "npm:next@15.5.18",
+        "npm:picocolors@^1.1.1",
+        "npm:postcss@8.4.35",
+        "npm:react-dom@19.0.0",
+        "npm:react@19.0.0",
+        "npm:recharts@2.13.3",
+        "npm:tailwind-merge@2.5.4",
+        "npm:tailwindcss@3.4.1",
+        "npm:typescript@5.3.3",
+        "npm:uuid@14",
+        "npm:vitest@^4.1.7",
+        "npm:zod@^4.4.3",
+        "npm:zustand@4.5.5"
+      ]
+    }
+  }
+}
