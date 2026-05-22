@@ -204,6 +204,99 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
   );
 }
 
+function MobileGlobalMenu({ isOpen, onClose, currentPath }: { isOpen: boolean; onClose: () => void; currentPath: string }) {
+  if (!isOpen) return null;
+
+  return (
+    <div 
+      className="fade-in"
+      style={{
+        position: 'fixed', inset: 0, zIndex: var(--z-modal),
+        background: 'var(--surface-page)', display: 'flex', flexDirection: 'column',
+        overflowY: 'auto', paddingBottom: '2rem'
+      }}
+    >
+      {/* Menu Header */}
+      <div style={{
+        flexShrink: 0, height: 'var(--topbar-h)', padding: '0 var(--space-5)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        borderBottom: '1px solid var(--border-subtle)', background: '#fff',
+        position: 'sticky', top: 0, zIndex: 10
+      }}>
+        <div className="flex items-center gap-3">
+          <div style={{
+            width: 28, height: 28, borderRadius: 'var(--radius-md)',
+            background: 'var(--blue-700)', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontWeight: 800, fontSize: 12,
+          }}>O</div>
+          <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)' }}>
+            OmniHermes 全功能導覽
+          </span>
+        </div>
+        <BrandButton variant="ghost" size="icon" onClick={onClose} style={{ borderRadius: '50%' }}>
+          <X size={20} />
+        </BrandButton>
+      </div>
+
+      {/* Menu Content */}
+      <div style={{ padding: 'var(--space-6) var(--space-5)' }}>
+        {NAV_GROUPS.map((group, idx) => (
+          <div key={group.title} style={{ marginBottom: idx === NAV_GROUPS.length - 1 ? 0 : '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1.25rem' }}>
+              <div style={{ width: 4, height: 16, background: 'var(--blue-700)', borderRadius: 2 }} />
+              <h3 style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                {group.title}
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {group.items.map(item => {
+                const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);
+                return (
+                  <Link 
+                    key={item.href} 
+                    href={item.href} 
+                    onClick={onClose}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <BrandCard 
+                      padding="sm" 
+                      hover 
+                      className={`h-full text-center transition-all ${active ? 'border-blue-600 bg-blue-50/30 ring-1 ring-blue-600/10' : ''}`}
+                      style={{ borderRadius: 'var(--radius-2xl)' }}
+                    >
+                      <div 
+                        className="w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-2"
+                        style={{ background: active ? 'var(--blue-700)' : 'var(--neutral-100)', color: active ? '#fff' : 'var(--blue-700)' }}
+                      >
+                        {item.icon}
+                      </div>
+                      <p style={{ fontSize: 13, fontWeight: 700, color: active ? 'var(--blue-700)' : 'var(--text-primary)', marginBottom: 2 }}>
+                        {item.label}
+                      </p>
+                      <p style={{ fontSize: 9, fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+                        {item.sub}
+                      </p>
+                    </BrandCard>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* Bottom Footer Info */}
+      <div style={{ padding: '0 var(--space-5)', textAlign: 'center', opacity: 0.4 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-tertiary)' }}>
+          OMNI_TERMINAL v8.5.1 · INTEGRITY ACTIVE
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
