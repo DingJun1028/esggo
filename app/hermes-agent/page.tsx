@@ -48,7 +48,7 @@ export default function HermesAgentPage() {
       {/* Main Tabs */}
       <div className="glass-dense">
         <div className="tabs" style={{ padding: '0 1.25rem' }}>
-          {['overview', 'architecture', 'tools', 'research', 'releases'].map(t => (
+          {['overview', 'quickstart', 'architecture', 'tools', 'research', 'releases'].map(t => (
             <button key={t} className={`tab ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
@@ -90,6 +90,79 @@ export default function HermesAgentPage() {
                       v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 Hermes 能直接作為 Zed 的 AI 後端，實時同步代碼上下文。
                     </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'quickstart' && (
+            <div className="fade-in">
+              <div className="card" style={{ padding: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--berkeley-blue)' }}>
+                  Hermes Agent + ESG GO Quickstart
+                </h3>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  {/* Step 1: Install Hermes */}
+                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Terminal size={18} color="var(--esg-teal)" /> 1. Install Hermes Agent
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                      Set up the core Hermes CLI and initialize your workspace.
+                    </p>
+                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
+                      <span style={{ color: '#569cd6' }}>npm</span> install -g @nousresearch/hermes<br/>
+                      hermes setup
+                    </code>
+                  </div>
+
+                  {/* Step 2: Genkit */}
+                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Layers size={18} color="var(--berkeley-blue)" /> 2. Choose Provider & Initialize Genkit
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                      Configure Google Genkit to manage LLM interactions (e.g. Gemini 1.5 Pro).
+                    </p>
+                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
+                      <span style={{ color: '#569cd6' }}>import</span> {'{'} genkit {'}'} <span style={{ color: '#569cd6' }}>from</span> <span style={{ color: '#ce9178' }}>'genkit'</span>;<br/>
+                      <span style={{ color: '#569cd6' }}>import</span> {'{'} googleAI {'}'} <span style={{ color: '#569cd6' }}>from</span> <span style={{ color: '#ce9178' }}>'@genkit-ai/googleai'</span>;<br/><br/>
+                      <span style={{ color: '#569cd6' }}>const</span> ai = genkit({'{'} plugins: [googleAI()] {'}'});
+                    </code>
+                  </div>
+
+                  {/* Step 3: ADK Integration */}
+                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Globe size={18} color="var(--esg-purple)" /> 3. ADK Integration (ESG Experts)
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                      Register specialized ESG agents using Google&apos;s Agent Development Kit.
+                    </p>
+                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
+                      <span style={{ color: '#569cd6' }}>import</span> {'{'} createAgent {'}'} <span style={{ color: '#569cd6' }}>from</span> <span style={{ color: '#ce9178' }}>'@google/adk'</span>;<br/><br/>
+                      <span style={{ color: '#569cd6' }}>const</span> esgResearcher = createAgent({'{'}<br/>
+                      &nbsp;&nbsp;name: <span style={{ color: '#ce9178' }}>'ESG_Researcher_Agent'</span>,<br/>
+                      &nbsp;&nbsp;role: <span style={{ color: '#ce9178' }}>'Sustainability Data Analyst'</span><br/>
+                      {'}'});
+                    </code>
+                  </div>
+
+                  {/* Step 4: Agent Zero */}
+                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Cpu size={18} color="var(--california-gold)" /> 4. Activate Agent Zero (Autonomous Operations)
+                    </h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                      Enable system-level execution and sub-agent spawning for complex workflows.
+                    </p>
+                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
+                      <span style={{ color: '#569cd6' }}>docker</span> run -it -v $(pwd):/workspace agent0ai/agent-zero<br/>
+                      <span style={{ color: '#6a9955' }}># AgentZ0 will now monitor and execute tasks autonomously.</span>
+                    </code>
+                  </div>
+
                 </div>
               </div>
             </div>
