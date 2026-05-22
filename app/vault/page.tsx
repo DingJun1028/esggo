@@ -2,19 +2,61 @@
 
 import { useState, useEffect } from 'react';
 import ClientLayout from '../ClientLayout';
-import { Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw } from 'lucide-react';
+import { 
+  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter 
+} from 'lucide-react';
 import { getEvidenceFiles, insertEvidence, updateEvidenceStatus, EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
-import { BrandButton, BrandBadge } from '../../components/brand';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader
+} from '../../components/brand';
 
-// ... (keep constants)
+const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
+const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
+
+const STATUS_MAP: Record<string, { label: string; variant: any }> = {
+  verified: { label: '已驗證', variant: 'success' },
+  pending: { label: '待驗證', variant: 'warning' },
+  rejected: { label: '已拒絕', variant: 'danger' },
+};
 
 export default function VaultPage() {
-  // ... (existing state)
+  const [files, setFiles] = useState<EvidenceFile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState('全部');
+  const [search, setSearch] = useState('');
+  const [showUpload, setShowUpload] = useState(false);
+  const [sealing, setSealingId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<EvidenceFile | null>(null);
   const [scanningId, setScanningId] = useState<string | null>(null);
   const [scanResult, setScanResult] = useState<{ extraction: string; confidence: number; gap: string } | null>(null);
+  const [form, setForm] = useState({ file_name: '', category: 'E', gri_reference: '', uploader: '' });
 
-  // ... (existing functions useEffect, filtered, sealFile, upload)
+  useEffect(() => {
+    getEvidenceFiles().then(d => { setFiles(d); setLoading(false); });
+  }, []);
+
+  const filtered = files.filter(f => {
+    const matchCat = activeCategory === '全部' || f.category === activeCategory;
+    const matchSearch = !search || f.file_name.toLowerCase().includes(search.toLowerCase()) || (f.gri_reference || '').toLowerCase().includes(search.toLowerCase());
+    return matchCat && matchSearch;
+  });
+
+  const sealFile = async (file: EvidenceFile) => {
+    setSealingId(file.id!);
+    await new Promise(r => setTimeout(r, 1500));
+    await updateEvidenceStatus(file.id!, 'verified', true);
+    setFiles(prev => prev.map(f => f.id === file.id ? { ...f, status: 'verified', zkp_proof: true } : f));
+    setSealingId(null);
+  };
+
+  const upload = async () => {
+    if (!form.file_name) return;
+    const result = await insertEvidence({ ...form, status: 'pending', zkp_proof: false });
+    if (result) setFiles(prev => [result, ...prev]);
+    setShowUpload(false);
+    setForm({ file_name: '', category: 'E', gri_reference: '', uploader: '' });
+  };
 
   const handleScan = async (file: EvidenceFile) => {
     setScanningId(file.id!);
@@ -26,195 +68,164 @@ export default function VaultPage() {
         gap: res.gapAnalysis
       });
     } catch (e) {
-      alert('AI 掃描失敗，請檢查網路連線');
+      alert('AI 掃描失敗');
     } finally {
       setScanningId(null);
     }
   };
 
-  // ... (verifiedCount logic)
+  const verifiedCount = files.filter(f => f.status === 'verified').length;
 
   return (
     <ClientLayout>
-      <div className="page-container">
-        {/* ... (keep header and stats) */}
+      <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+        
+        <BrandPageHeader 
+          title="證據金庫 Evidence Vault" 
+          subtitle="5T 誠信協議 · ZKP 零知識證明 · SHA-256 數位鎖定"
+          icon={<Database size={24} />}
+          actions={
+            <BrandButton variant="primary" onClick={() => setShowUpload(true)}>
+              <Upload size={16} /> 上傳佐證
+            </BrandButton>
+          }
+        />
 
-        {/* ... (keep filters) */}
-
-        {/* Table */}
-        <div className="card" style={{ padding: 0 }}>
-          <div className="table-wrapper" style={{ borderRadius: 12, border: 'none' }}>
-            <table>
-              {/* ... (thead stays same) */}
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40 }}>載入中...</td></tr>
-                ) : filtered.length === 0 ? (
-                  <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--gray-400)', padding: 40 }}>無符合條件的文件</td></tr>
-                ) : (
-                  filtered.map(f => {
-                    const status = STATUS_MAP[f.status || 'pending'];
-                    return (
-                      <tr key={f.id}>
-                        {/* ... (name, category, gri, uploader, status columns stay same) */}
-                        <td>
-                          {f.zkp_proof
-                            ? <span className="badge badge-purple">✓ ZKP</span>
-                            : <span className="badge badge-gray">未封印</span>}
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', gap: 4 }}>
-                            <button className="btn-icon" onClick={() => setSelected(f)} title="查看詳情">
-                              <Eye size={14} />
-                            </button>
-                            <button 
-                              className="btn btn-ghost btn-xs" 
-                              onClick={() => handleScan(f)}
-                              disabled={scanningId === f.id}
-                              title="使用 OmniHermes 視覺掃描"
-                              style={{ color: 'var(--blue-700)' }}
-                            >
-                              {scanningId === f.id ? <RefreshCw size={12} className="spin" /> : <Bot size={12} />}
-                              AI 掃描
-                            </button>
-                            {f.status !== 'verified' && (
-                              <button
-                                className="btn btn-gold btn-sm"
-                                onClick={() => sealFile(f)}
-                                disabled={sealing === f.id}
-                              >
-                                {sealing === f.id ? <Clock size={12} /> : <Shield size={12} />}
-                                {sealing === f.id ? '封印中...' : 'ZKP 封印'}
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+           {[
+             { label: '總文件數', value: files.length, variant: 'info' },
+             { label: '已實證封印', value: verifiedCount, variant: 'success' },
+             { label: '待處理項', value: files.filter(f => f.status === 'pending').length, variant: 'warning' },
+             { label: '5T 覆蓋率', value: `${Math.round((verifiedCount / (files.length || 1)) * 100)}%`, variant: 'gold' },
+           ].map(s => (
+             <BrandCard key={s.label} padding="md" className="text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
+                <p className="text-2xl font-bold text-[#003262]">{s.value}</p>
+             </BrandCard>
+           ))}
         </div>
 
-        {/* Scan Result Modal */}
-        {scanResult && (
-          <div className="modal-overlay" onClick={() => setScanResult(null)}>
-            <div className="modal" style={{ maxWidth: 520 }} onClick={e => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3 className="modal-title flex items-center gap-2">
-                  <Bot size={18} style={{ color: 'var(--blue-700)' }} />
-                  OmniHermes 視覺掃描報告
-                </h3>
-                <button className="btn-icon" onClick={() => setScanResult(null)}><X size={16} /></button>
-              </div>
-              <div className="modal-body">
-                <div style={{ padding: '1rem', background: '#f8fafc', borderRadius: 12, border: '1px solid #e2e8f0', marginBottom: '1.5rem' }}>
-                  <p className="text-xs font-bold text-slate-400 uppercase mb-2">數據提取 (Extraction)</p>
-                  <p className="text-sm text-slate-700 leading-relaxed">{scanResult.extraction}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">信心準確率 (Confidence)</p>
-                    <p className="text-lg font-bold text-green-600">{(scanResult.confidence * 100).toFixed(1)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">合規狀態</p>
-                    <BrandBadge variant="success">驗證吻合</BrandBadge>
-                  </div>
-                </div>
-
-                <div style={{ padding: '1rem', background: 'var(--blue-50)', borderRadius: 12, border: '1px solid var(--blue-100)' }}>
-                  <div className="flex items-center gap-2 mb-2 text-[#003262]">
-                    <Shield size={14} />
-                    <p className="text-xs font-bold">5T 缺口分析 (Gap Analysis)</p>
-                  </div>
-                  <p className="text-xs text-[#003262] leading-relaxed opacity-80">{scanResult.gap}</p>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <BrandButton variant="primary" onClick={() => setScanResult(null)}>確定並匯入指標</BrandButton>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ... (rest of modals) */}
-
-
-        {/* Upload Modal */}
-        {showUpload && (
-          <div className="modal-overlay">
-            <div className="modal" style={{ maxWidth: 480 }}>
-              <div className="modal-header">
-                <h3 className="modal-title">上傳佐證文件</h3>
-                <button className="btn-icon" onClick={() => setShowUpload(false)}><X size={16} /></button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label className="form-label">文件名稱 *</label>
-                  <input className="form-input" value={form.file_name} onChange={e => setForm(p => ({ ...p, file_name: e.target.value }))} placeholder="例：ISO 14064-1 盤查清冊.pdf" />
-                </div>
-                <div className="grid-2">
-                  <div className="form-group">
-                    <label className="form-label">ESG 類別</label>
-                    <select className="form-select" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}>
-                      {['E', 'S', 'G', 'T'].map(c => <option key={c} value={c}>{c} - {CAT_LABELS[c]}</option>)}
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">GRI 指標</label>
-                    <input className="form-input" value={form.gri_reference} onChange={e => setForm(p => ({ ...p, gri_reference: e.target.value }))} placeholder="GRI 305-1" />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">上傳者</label>
-                  <input className="form-input" value={form.uploader} onChange={e => setForm(p => ({ ...p, uploader: e.target.value }))} placeholder="部門/人員名稱" />
-                </div>
-                <div className="alert alert-info">
-                  <Shield size={14} />
-                  文件上傳後將自動生成 SHA-256 Hash Lock，確保數據不可篡改 (T4 Trustworthy)
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-outline" onClick={() => setShowUpload(false)}>取消</button>
-                <button className="btn btn-primary" onClick={upload} disabled={!form.file_name}>確認上傳</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Detail Modal */}
-        {selected && (
-          <div className="modal-overlay" onClick={() => setSelected(null)}>
-            <div className="modal" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3 className="modal-title">{selected.file_name}</h3>
-                <button className="btn-icon" onClick={() => setSelected(null)}><X size={16} /></button>
-              </div>
-              <div className="modal-body">
-                {[
-                  { label: 'ESG 類別', value: `${selected.category} - ${CAT_LABELS[selected.category!]}` },
-                  { label: 'GRI 指標', value: selected.gri_reference || '-' },
-                  { label: '上傳者', value: selected.uploader || '-' },
-                  { label: '狀態', value: STATUS_MAP[selected.status || 'pending'].label },
-                  { label: 'ZKP 封印', value: selected.zkp_proof ? '✓ 已封印' : '未封印' },
-                  { label: 'Hash Lock', value: selected.hash_lock ? `${selected.hash_lock.slice(0, 32)}...` : '-' },
-                ].map(row => (
-                  <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--gray-100)', fontSize: 13 }}>
-                    <span style={{ color: 'var(--gray-500)' }}>{row.label}</span>
-                    <span style={{ fontWeight: 500, fontFamily: row.label === 'Hash Lock' ? 'monospace' : 'inherit', fontSize: row.label === 'Hash Lock' ? 11 : 13 }}>{row.value}</span>
-                  </div>
+        <BrandCard padding="none" className="overflow-hidden">
+           <div className="p-4 bg-slate-50 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-center">
+              <div className="flex gap-2">
+                {CATEGORIES.map(c => (
+                  <button 
+                    key={c} 
+                    onClick={() => setActiveCategory(c)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeCategory === c ? 'bg-blue-700 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+                  >
+                    {c === '全部' ? '全部' : `${c} · ${CAT_LABELS[c]}`}
+                  </button>
                 ))}
               </div>
-              <div className="modal-footer">
-                <button className="btn btn-outline" onClick={() => setSelected(null)}>關閉</button>
+              <div className="relative w-full md:w-64">
+                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                 <input 
+                   className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:border-blue-600 outline-none transition-all"
+                   placeholder="搜尋文件名或 GRI..."
+                   value={search}
+                   onChange={e => setSearch(e.target.value)}
+                 />
               </div>
+           </div>
+
+           <BrandTable 
+             columns={[
+               { key: 'file', label: '文件資訊' },
+               { key: 'category', label: '類別' },
+               { key: 'gri', label: 'GRI 指標' },
+               { key: 'status', label: '狀態' },
+               { key: 'zkp', label: '5T 實證' },
+               { key: 'action', label: '操作' },
+             ]}
+             rows={filtered.map(f => ({
+               file: (
+                 <div className="flex flex-col">
+                   <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
+                   {f.hash_lock && <code className="text-[9px] text-slate-400 mt-1">SHA256: {f.hash_lock.slice(0, 16)}...</code>}
+                 </div>
+               ),
+               category: <BrandBadge variant="outline" size="xs">{f.category} · {CAT_LABELS[f.category!]}</BrandBadge>,
+               gri: <BrandBadge variant="info" size="xs">{f.gri_reference || '-'}</BrandBadge>,
+               status: <BrandBadge variant={STATUS_MAP[f.status || 'pending'].variant} size="xs">{STATUS_MAP[f.status || 'pending'].label}</BrandBadge>,
+               zkp: f.zkp_proof ? <BrandBadge variant="gold" size="xs">✓ ZKP SEALED</BrandBadge> : <span className="text-[10px] text-slate-300 font-bold">UNSEALED</span>,
+               action: (
+                 <div className="flex gap-2">
+                    <BrandButton variant="ghost" size="icon" onClick={() => setSelected(f)}><Eye size={14}/></BrandButton>
+                    <BrandTooltip content="OmniHermes 視覺掃描">
+                      <BrandButton variant="ghost" size="icon" onClick={() => handleScan(f)} loading={scanningId === f.id} className="text-blue-700">
+                        <Bot size={14}/>
+                      </BrandButton>
+                    </BrandTooltip>
+                    {f.status !== 'verified' && (
+                      <BrandButton variant="primary" size="sm" onClick={() => sealFile(f)} loading={sealing === f.id}>
+                        <Shield size={12}/> 封印
+                      </BrandButton>
+                    )}
+                 </div>
+               )
+             }))}
+           />
+        </BrandCard>
+
+        {/* Scan Result Modal */}
+        <BrandModal 
+          open={!!scanResult} 
+          onClose={() => setScanResult(null)}
+          title="OmniHermes 視覺掃描報告"
+          icon={<Bot size={20}/>}
+        >
+          {scanResult && (
+            <div className="space-y-6">
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                 <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">數據提取結果</p>
+                 <p className="text-sm text-slate-700 leading-relaxed font-medium">{scanResult.extraction}</p>
+              </div>
+              <div className="flex items-center justify-between">
+                 <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase">信心準確率</p>
+                    <p className="text-xl font-bold text-green-600">{(scanResult.confidence * 100).toFixed(1)}%</p>
+                 </div>
+                 <BrandBadge variant="success">驗證通過</BrandBadge>
+              </div>
+              <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                 <div className="flex items-center gap-2 mb-2 text-blue-800">
+                    <Shield size={14}/> <span className="text-xs font-bold uppercase">5T 缺口分析</span>
+                 </div>
+                 <p className="text-xs text-blue-700/80 leading-relaxed">{scanResult.gap}</p>
+              </div>
+              <BrandButton variant="primary" fullWidth onClick={() => setScanResult(null)}>確認並對齊指標</BrandButton>
             </div>
+          )}
+        </BrandModal>
+
+        {/* Upload Modal */}
+        <BrandModal 
+          open={showUpload} 
+          onClose={() => setShowUpload(false)}
+          title="上傳 ESG 佐證文件"
+          icon={<Upload size={20}/>}
+        >
+          <div className="space-y-4">
+             <BrandInput label="文件名稱" value={form.file_name} onChange={e => setForm(p => ({ ...p, file_name: e.target.value }))} placeholder="例：2024年電力帳單.pdf" />
+             <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                   <label className="text-xs font-bold text-slate-500">ESG 類別</label>
+                   <select className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm outline-none" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}>
+                     {['E', 'S', 'G', 'T'].map(c => <option key={c} value={c}>{c} - {CAT_LABELS[c]}</option>)}
+                   </select>
+                </div>
+                <BrandInput label="GRI 指標" value={form.gri_reference} onChange={e => setForm(p => ({ ...p, gri_reference: e.target.value }))} placeholder="GRI 305-1" />
+             </div>
+             <BrandInput label="上傳部門/人員" value={form.uploader} onChange={e => setForm(p => ({ ...p, uploader: e.target.value }))} placeholder="ESG 辦公室" />
+             <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-3">
+                <Shield size={16} className="text-blue-700 mt-0.5" />
+                <p className="text-[11px] text-blue-700 leading-relaxed">上傳後將立即觸發 <strong>T4 不可篡改鎖定</strong>，生成 SHA-256 雜湊並寫入審計日誌。</p>
+             </div>
+             <BrandButton variant="primary" fullWidth size="lg" onClick={upload} disabled={!form.file_name}>確認上傳</BrandButton>
           </div>
-        )}
+        </BrandModal>
+
       </div>
     </ClientLayout>
   );
