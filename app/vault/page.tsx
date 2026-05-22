@@ -142,10 +142,7 @@ export default function VaultPage() {
         )}
 
         {/* ... (rest of modals) */}
-      </div>
-    </ClientLayout>
-  );
-}
+
 
         {/* Upload Modal */}
         {showUpload && (

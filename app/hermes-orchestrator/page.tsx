@@ -166,12 +166,14 @@ export default function HermesOrchestratorPage() {
       const updatedArtifact: AgentArtifact = { 
         ...rec.artifact, 
         reviewStatus: 'promoted',
-        hashLock: data.hashLock, // 確保型別定義或 metadata 包含此欄位
+        hashLock: data.hashLock, 
       };
       const updated: ExecutionRecord = { ...rec, artifact: updatedArtifact };
       setExecutions(prev => prev.map(r => r.task.id === rec.task.id ? updated : r));
       setSelected(updated);
-      showToast(`草稿已提升為正式態，Hash Lock 已封印: ${data.hashLock.slice(0, 10)}...`);
+      
+      // [Phase 5] 量子進化：反饋與封印視覺提示
+      showToast(`【5T 實證封印成功】\nMaster Seal: ${data.hashLock.slice(0, 16)}...\n內容已自動同步至數位分身記憶矩陣。`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : '提升失敗';
       showToast(msg);

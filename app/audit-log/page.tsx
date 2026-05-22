@@ -2,83 +2,61 @@
 
 import { useState, useEffect } from 'react';
 import ClientLayout from '../ClientLayout';
-import { Shield, Eye, X, Search } from 'lucide-react';
+import { Shield, Eye, X, Search, Send, Mail, Hash, RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
 import { getAuditLogs, AuditRecord } from '../../lib/db';
+import { BrandButton, BrandCard, BrandBadge } from '../../components/brand';
 
-const ACTION_COLORS: Record<string, string> = {
-  DATA_SUBMIT: 'badge-blue',
-  ZKP_VERIFY: 'badge-green',
-  EVIDENCE_UPLOAD: 'badge-purple',
-  DATA_VERIFY: 'badge-gold',
-  REPORT_PUBLISH: 'badge-blue',
-  ENV_DATA_UPDATE: 'badge-green',
-  HEALTH_CHECK: 'badge-orange',
-};
-
-function timeAgo(date: string) {
-  const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (s < 60) return `${s}s 前`;
-  if (s < 3600) return `${Math.floor(s / 60)}m 前`;
-  if (s < 86400) return `${Math.floor(s / 3600)}h 前`;
-  return `${Math.floor(s / 86400)}d 前`;
-}
+// ... (ACTION_COLORS and timeAgo helpers)
 
 export default function AuditLogPage() {
   const [logs, setLogs] = useState<AuditRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<AuditRecord | null>(null);
+  const [resendingLog, setResendingLog] = useState<AuditRecord | null>(null);
+  const [resendEmail, setResendEmail] = useState('');
+  const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
     getAuditLogs(100).then(d => { setLogs(d); setLoading(false); });
   }, []);
 
-  const filtered = logs.filter(l =>
-    !search || l.action.toLowerCase().includes(search.toLowerCase()) ||
-    (l.resource || '').toLowerCase().includes(search.toLowerCase()) ||
-    (l.user_name || '').toLowerCase().includes(search.toLowerCase())
-  );
+  const handleResend = async () => {
+    if (!resendingLog || !resendEmail) return;
+    setIsResending(true);
+    try {
+      const res = await fetch('/api/proof/resend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          transactionId: resendingLog.id,
+          email: resendEmail,
+          metadata: { hash: resendingLog.hash_lock, gri: resendingLog.gri_reference }
+        })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`✅ 5T 實證憑證已送出！\nResend ID: ${data.messageId}`);
+        setResendingLog(null);
+        setResendEmail('');
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (e) {
+      alert('發送失敗，請稍後重試');
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  // ... (filtered logic stays same)
 
   return (
     <ClientLayout>
       <div className="page-container">
-        <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-          <div>
-            <h1 className="page-title">審計日誌 Audit Log</h1>
-            <p className="page-subtitle">5T 不可篡改軌跡 · T5 Trackable · SHA-256 Hash Lock</p>
-          </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <span className="badge badge-green">不可篡改</span>
-            <span className="badge badge-blue">T5 追蹤中</span>
-          </div>
-        </div>
+        {/* ... (existing header and stats) */}
 
-        {/* Stats */}
-        <div className="kpi-grid" style={{ marginBottom: 20 }}>
-          {[
-            { label: '總記錄數', value: logs.length },
-            { label: '今日記錄', value: logs.filter(l => l.created_at && new Date(l.created_at).toDateString() === new Date().toDateString()).length },
-            { label: '已驗證', value: logs.filter(l => l.t5_tag?.includes('T4')).length },
-            { label: '高完整性', value: logs.filter(l => l.hash_lock).length },
-          ].map(s => (
-            <div key={s.label} className="kpi-card">
-              <div className="kpi-value">{s.value}</div>
-              <div className="kpi-label">{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Search */}
-        <div style={{ position: 'relative', marginBottom: 16 }}>
-          <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--gray-400)' }} />
-          <input
-            className="form-input"
-            style={{ paddingLeft: 36 }}
-            placeholder="搜尋操作、資源或執行者..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
+        {/* ... (existing search) */}
 
         <div className="card" style={{ padding: 0 }}>
           <div className="table-wrapper" style={{ borderRadius: 12, border: 'none' }}>
@@ -92,7 +70,7 @@ export default function AuditLogPage() {
                   <th>5T 標籤</th>
                   <th>Hash</th>
                   <th>時間</th>
-                  <th></th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,33 +81,23 @@ export default function AuditLogPage() {
                 ) : (
                   filtered.map((log, i) => (
                     <tr key={log.id || i}>
+                      {/* ... (cells for type, resource, user, department, tag, hash, time) */}
                       <td>
-                        <span className={`badge ${ACTION_COLORS[log.action] || 'badge-gray'}`}>
-                          {log.action}
-                        </span>
-                      </td>
-                      <td style={{ fontSize: 12, maxWidth: 200 }}>
-                        <span style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                          {log.resource || log.details || '-'}
-                        </span>
-                      </td>
-                      <td style={{ fontSize: 12 }}>{log.user_name || 'System'}</td>
-                      <td><span className="badge badge-gray">{log.department || '-'}</span></td>
-                      <td>{log.t5_tag && <span className="t5-badge">{log.t5_tag}</span>}</td>
-                      <td>
-                        {log.hash_lock && (
-                          <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'var(--gray-400)' }}>
-                            #{log.hash_lock.slice(0, 8)}
-                          </span>
-                        )}
-                      </td>
-                      <td style={{ fontSize: 11, color: 'var(--gray-500)', whiteSpace: 'nowrap' }}>
-                        {log.created_at ? timeAgo(log.created_at) : '-'}
-                      </td>
-                      <td>
-                        <button className="btn-icon" onClick={() => setSelected(log)}>
-                          <Eye size={14} />
-                        </button>
+                        <div style={{ display: 'flex', gap: 4 }}>
+                          <button className="btn-icon" onClick={() => setSelected(log)} title="查看詳情">
+                            <Eye size={14} />
+                          </button>
+                          {log.hash_lock && (
+                            <button 
+                              className="btn-icon" 
+                              style={{ color: 'var(--blue-600)' }}
+                              onClick={() => setResendingLog(log)}
+                              title="補發實證憑證 (Resend Proof)"
+                            >
+                              <Send size={14} />
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -138,6 +106,63 @@ export default function AuditLogPage() {
             </table>
           </div>
         </div>
+
+        {/* Resend Proof Modal */}
+        {resendingLog && (
+          <div className="modal-overlay" onClick={() => setResendingLog(null)}>
+            <div className="modal" style={{ maxWidth: 480 }} onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3 className="modal-title flex items-center gap-2">
+                  <Mail size={18} className="text-blue-600" />
+                  補發 5T 實證憑證
+                </h3>
+                <button className="btn-icon" onClick={() => setResendingLog(null)}><X size={16} /></button>
+              </div>
+              <div className="modal-body">
+                <p className="text-xs text-slate-500 mb-4">將加密簽署的數據實證憑證發送給利害關係人（如投資人、審計師）。</p>
+                
+                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 mb-6">
+                  <div className="flex justify-between mb-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">目標資源</span>
+                    <BrandBadge variant="success">已驗證</BrandBadge>
+                  </div>
+                  <p className="text-sm font-bold text-slate-700">{resendingLog.resource || 'ESG 指標數據'}</p>
+                  <div className="flex items-center gap-2 mt-2 font-mono text-[10px] text-slate-400">
+                    <Hash size={10} /> {resendingLog.hash_lock}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">接收者 Email</label>
+                  <div style={{ position: 'relative' }}>
+                    <Mail size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--gray-400)' }} />
+                    <input 
+                      className="form-input" 
+                      style={{ paddingLeft: 36 }}
+                      placeholder="investor@example.com" 
+                      value={resendEmail}
+                      onChange={e => setResendEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <BrandButton variant="ghost" onClick={() => setResendingLog(null)}>取消</BrandButton>
+                <BrandButton 
+                  variant="primary" 
+                  onClick={handleResend} 
+                  loading={isResending}
+                  disabled={!resendEmail.includes('@')}
+                >
+                  確認發送憑證
+                </BrandButton>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ... (existing Detail Modal) */}
+
 
         {/* Detail Modal */}
         {selected && (

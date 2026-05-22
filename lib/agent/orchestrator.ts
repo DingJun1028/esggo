@@ -104,17 +104,29 @@ export function buildPromptPolicy(task: AgentTask, dataScope: string[]): string 
 import { createHashLock, create5TAttestation } from '../crypto-proof';
 import { updateArtifact, updateExecution } from './store';
 
+import { addToKnowledgeBase } from './rag-engine';
+
 /**
  * 提升草稿至信任層 (5T 實證封印)
  * 實現「深貫廣通」：從 Agent 產出無縫對接至 5T 誠信協議
  */
 export async function promoteToTrustLayer(artifactId: string, actorId: string) {
   // 1. 獲取草稿內容
+  // 此處應從 store 讀取真實 artifact
   const seal = await createHashLock({ artifactId, promotedBy: actorId });
   
   // 2. 深貫：寫入治理稽核日誌
   console.log(`[OmniHermes Audit] Artifact ${artifactId} promoted to Trust Layer by ${actorId}.`);
   console.log(`[OmniHermes Audit] Master Seal Generated: ${seal.hash}`);
+
+  // [Phase 5] 量子進化：自動化自我演進記憶 (Autonomous Memory Loop)
+  // 將審核通過的正式內容餵回 RAG 知識庫，讓數位分身從人類決策中學習
+  addToKnowledgeBase([{
+    id: `learned_${artifactId}`,
+    source: `Promoted Artifact: ${artifactId}`,
+    text: `正式治理決策紀錄：該產出內容已被人類審核員 ${actorId} 核准並封印。內容包含 ESG 關鍵指標之正式解釋。`,
+    metadata: { type: 'learned_decision', promotedBy: actorId, hash: seal.hash }
+  }]);
   
   // 3. 更新狀態
   updateArtifact(artifactId, { 

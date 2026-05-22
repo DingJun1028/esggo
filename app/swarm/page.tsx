@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Cpu, Play, Pause, Activity, CheckSquare, Inbox } from 'lucide-react';
+import { Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap } from 'lucide-react';
 
 const agents = [
   { name: 'Aurora', role: 'Orchestrator', state: 'Idle', task: '待命：接收指令並生成 SwarmBrief', health: 100, memory: '85%' },
@@ -141,6 +141,7 @@ export default function SwarmPage() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       )}
 
