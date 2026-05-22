@@ -115,10 +115,14 @@ agent.command('run <task>')
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Agent API failed');
       
-      console.log(pc.green(`✅ Agent (${data.result.agent}) execution successful!`));
-      console.log(pc.white('──────────────────────────────────────────────────'));
-      console.log(pc.yellow(data.result.result));
-      console.log(pc.white('──────────────────────────────────────────────────'));
+      if (!data.result || !data.result.success) {
+        console.log(pc.red(`❌ Agent (${data.result?.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.result?.error?.message || data.result?.error || data.error || 'Unknown Error')}`));
+      } else {
+        console.log(pc.green(`✅ Agent (${data.result.agent}) execution successful!`));
+        console.log(pc.white('──────────────────────────────────────────────────'));
+        console.log(pc.yellow(data.result.result));
+        console.log(pc.white('──────────────────────────────────────────────────'));
+      }
     } catch (err) {
       console.log(pc.red(`❌ Agent Execution Error: ${err.message}`));
     }

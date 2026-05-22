@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {
   Bell, CheckCircle, AlertTriangle, Info, XCircle, Zap,
   Clock, Globe, Leaf, Shield, FileText, Database, X,
-  Filter, MarkAsRead
+  Filter
 } from 'lucide-react';
 
 interface Notification {

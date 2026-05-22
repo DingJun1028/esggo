@@ -14,10 +14,15 @@ export async function POST(req: NextRequest) {
     const payload = {
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 4096,
+      },
     };
 
-    // 使用 Gemini 的 Server-Sent Events (SSE) 端點達成串流
-    // 注意：Gemini API 預設支援串流回應
+    // Use streamGenerateContent with alt=sse
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse&key=${apiKey}`,
       {
@@ -32,7 +37,7 @@ export async function POST(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Gemini API Error', details: errText }), { status: response.status });
     }
 
-    // 直接透傳 (Pass-through) 串流到前端
+    // Pass-through the response body (it's already SSE from Google)
     return new Response(response.body, {
       headers: {
         'Content-Type': 'text/event-stream',
@@ -41,6 +46,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err: any) {
+    console.error('[AI Stream API] Fatal Error:', err);
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }

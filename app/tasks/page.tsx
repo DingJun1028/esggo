@@ -24,7 +24,7 @@ export default function TasksPage() {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState<Partial<Task>>({ status: 'todo', priority: 'medium', title: '', year: new Date().getFullYear() });
+  const [form, setForm] = useState<Partial<Task>>({ status: 'todo', priority: 'medium', title: '' });
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [filter, setFilter] = useState<Task['status'] | 'all'>('all');

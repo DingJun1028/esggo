@@ -306,7 +306,7 @@ export default function HermesAgentPage() {
                             variant="primary" 
                             size="sm" 
                             onClick={() => {
-                              showToast?.(`執行指令: ${step.command.split('\n')[0]}`, 'info');
+                              console.log(`執行指令: ${step.command.split('\n')[0]}`, 'info');
                             }}
                           >
                             <PlayCircle size={14} className="mr-2" /> 執行指令 (Execute)

@@ -94,8 +94,8 @@ export default function StakeholdersPage() {
                 cursor: 'pointer', color: '#fff', fontSize: '10px', fontWeight: '700',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
                 zIndex: 10,
-                title: s.name,
-              }}>
+              }}
+              title={s.name}>
                 {s.name.charAt(0)}
               </div>
             ))}

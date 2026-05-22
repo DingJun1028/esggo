@@ -12,7 +12,7 @@ interface ThemeSelectorProps {
   onSelect?: (id: ThemeId) => void;
 }
 
-export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
+export default function ThemeSelector({ collapsed, currentTheme, onSelect }: ThemeSelectorProps) {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState<ThemeId>('minimal-blue');
   const [favorites, setFavorites] = useState<ThemeId[]>(['minimal-blue']);
