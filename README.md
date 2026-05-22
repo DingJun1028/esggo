@@ -276,6 +276,7 @@ npm run dev
 |------|------|
 | [`ESG_GO_Brand_Style_Specification.md`](./ESG_GO_Brand_Style_Specification.md) | 平台品牌風格元素規格書 v1.1 |
 | [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) | 設計系統白皮書 |
+| [`ADK_GUIDE.md`](./ADK_GUIDE.md) | Agent 技術堆疊與開發指南 (ADK/Genkit/Agent0) |
 | [`supabase_master_setup.sql`](./supabase_master_setup.sql) | 資料庫初始化 SQL（整合版） |
 
 ---
