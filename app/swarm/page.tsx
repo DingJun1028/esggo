@@ -175,6 +175,42 @@ export default function SwarmPage() {
                             </div>
                             <p className="text-sm text-slate-300 leading-relaxed">{step.message}</p>
                             
+                            {step.payload?.thought && (
+                              <div className="mt-3 p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl relative">
+                                 <div className="flex items-center gap-2 mb-2 text-amber-500/70">
+                                    <MessageSquare size={12} />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest">Internal Thought Process</span>
+                                 </div>
+                                 <p className="text-xs text-amber-200/80 italic leading-relaxed">{step.payload.thought}</p>
+                              </div>
+                            )}
+
+                            {step.payload?.tool_call && (
+                              <div className="mt-3 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+                                 <div className="px-4 py-2 bg-slate-800/50 flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-blue-400">
+                                       <Zap size={12} />
+                                       <span className="text-[10px] font-bold font-mono">{step.payload.tool_call.name}</span>
+                                    </div>
+                                    <BrandBadge variant="outline" size="xs" className="text-[8px]">TOOL_EXEC</BrandBadge>
+                                 </div>
+                                 <div className="p-4 space-y-3">
+                                    <div>
+                                       <p className="text-[9px] text-slate-500 font-bold uppercase mb-1">Arguments</p>
+                                       <pre className="text-[10px] text-slate-400 bg-black/30 p-2 rounded-lg">{JSON.stringify(step.payload.tool_call.args, null, 2)}</pre>
+                                    </div>
+                                    {step.payload.tool_call.result && (
+                                       <div>
+                                          <p className="text-[9px] text-slate-500 font-bold uppercase mb-1">Result</p>
+                                          <div className="text-[10px] text-green-400/90 bg-green-500/5 border border-green-500/10 p-2 rounded-lg">
+                                             {step.payload.tool_call.result}
+                                          </div>
+                                       </div>
+                                    )}
+                                 </div>
+                              </div>
+                            )}
+
                             {step.payload?.code && (
                               <div className="mt-3 p-4 bg-slate-900 border border-slate-800 rounded-xl relative group">
                                  <div className="absolute top-2 right-4 flex gap-2">
