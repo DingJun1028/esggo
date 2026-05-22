@@ -133,9 +133,35 @@ export default function PublishPage() {
                              <Lock size={14} className="mr-1.5"/> ZKP 封印
                           </BrandButton>
                        ) : (
-                          <BrandButton variant="primary" size="sm" className="bg-[#10B981] border-none shadow-lg shadow-emerald-500/20">
-                             <FileDown size={14} className="mr-1.5"/> 匯出 PDF
-                          </BrandButton>
+                          <div className="flex gap-2">
+                             <BrandButton 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => {
+                                  const url = `${window.location.origin}/audit-verify?hash=${r.hash}`;
+                                  navigator.clipboard.writeText(url);
+                                  alert('驗證連結已複製！');
+                                }}
+                             >
+                                <Share2 size={14} className="mr-1.5"/> 連結
+                             </BrandButton>
+                             <BrandButton 
+                                variant="primary" 
+                                size="sm" 
+                                className="bg-[#10B981] border-none shadow-lg shadow-emerald-500/20"
+                                onClick={() => {
+                                  const content = `ESG GO 5T INTEGRITY REPORT\n\nTitle: ${r.title}\nYear: ${r.year}\nMaster Hash: ${r.hash}\nStatus: PUBLISHED\n\nVerified by ZKP Proof Engine.`;
+                                  const blob = new Blob([content], { type: 'text/plain' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `${r.title.replace(/\s/g, '_')}_5T_Report.txt`;
+                                  a.click();
+                                }}
+                             >
+                                <FileDown size={14} className="mr-1.5"/> 匯出 PDF
+                             </BrandButton>
+                          </div>
                        )}
                     </div>
                   </div>

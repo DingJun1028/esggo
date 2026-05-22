@@ -6,6 +6,7 @@ import { getEnvironmentalData, upsertEnvironmentalData, deleteEnvironmentalData,
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput 
 } from '../../components/brand';
+import { create5TAttestation } from '../../lib/crypto-proof';
 
 const TABS = [
   { id: 'GHG' as const,    label: '溫室氣體', gri: 'GRI 305', color: 'var(--green-600)', icon: <Wind size={14}/> },
@@ -76,10 +77,42 @@ export default function EnvironmentalPage() {
   };
 
   const handleVerify = async (metric: EnvironmentalMetric) => {
-    const updated = await upsertEnvironmentalData({ ...metric, verified: !metric.verified });
-    if (updated) {
-      setMetrics(prev => prev.map(m => m.id === metric.id ? { ...m, verified: !m.verified } : m));
-      showToast(metric.verified ? '已取消驗證' : '數據已封印 ✓');
+    if (metric.verified) {
+      const updated = await upsertEnvironmentalData({ ...metric, verified: false });
+      if (updated) {
+        setMetrics(prev => prev.map(m => m.id === metric.id ? { ...m, verified: false } : m));
+        showToast('已取消封印', 'info');
+      }
+      return;
+    }
+
+    setSaving(true);
+    showToast('正在執行 5T 實證運算 (T1-T5)...', 'info');
+
+    try {
+      // Real Cryptographic Attestation
+      const attestation = await create5TAttestation(
+        metric.metric_name,
+        metric.metric_value || 0,
+        metric.unit,
+        metric.source_origin || 'Manual Entry',
+        `GRI Standard: ${metric.gri_standard}`
+      );
+
+      const updated = await upsertEnvironmentalData({ 
+        ...metric, 
+        verified: true,
+        // Optional: store seal in metadata or source
+      });
+
+      if (updated) {
+        setMetrics(prev => prev.map(m => m.id === metric.id ? { ...m, verified: true } : m));
+        showToast(`5T 封印完成！Seal: ${attestation.masterSeal.slice(0, 12)}...`, 'success');
+      }
+    } catch (err) {
+      showToast('封印失敗，請重試', 'info');
+    } finally {
+      setSaving(false);
     }
   };
 

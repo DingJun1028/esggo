@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ai as genkitInstance } from '@/lib/agents/genkit';
 import { getSocialMetrics } from '@/lib/db';
 
 // Ensure this runs as an Edge Function
@@ -26,36 +25,28 @@ Make sure the insights highlight achievements and point out areas needing improv
 Use Traditional Chinese (zh-TW).
     `;
 
-    // Attempt to use Genkit instance, fallback to direct fetch if Genkit is misconfigured in Edge
-    try {
-      const { gemini15Flash } = require('@genkit-ai/googleai');
-      const response = await genkitInstance.generate({
-        model: gemini15Flash,
-        prompt: prompt,
-        config: { temperature: 0.3 }
-      });
-      return NextResponse.json({ insights: response.text, metrics_analyzed: metrics.length });
-    } catch (genkitError) {
-      console.warn('Genkit failed in Edge runtime, falling back to direct API call.', genkitError);
-      
-      const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-      if (!GEMINI_API_KEY) throw new Error('API Key missing');
+    // Edge runtime doesn't support dynamic require() well, using standard fetch API
+    const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+    if (!GEMINI_API_KEY) throw new Error('API Key missing');
 
-      const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.3 }
-        })
-      });
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.3 }
+      })
+    });
 
-      if (!geminiRes.ok) throw new Error('Fallback API failed');
-      const data = await geminiRes.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '無法生成洞察報告。';
-      
-      return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
+    if (!geminiRes.ok) {
+      const errData = await geminiRes.text();
+      console.error('Gemini API failed:', errData);
+      throw new Error('Gemini API failed');
     }
+    const data = await geminiRes.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '無法生成洞察報告。';
+    
+    return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
   } catch (error: any) {
     console.error('Social Insights API Error:', error);
     return NextResponse.json(

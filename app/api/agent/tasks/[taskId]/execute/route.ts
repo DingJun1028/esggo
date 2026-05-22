@@ -41,10 +41,11 @@ export async function POST(
         
         // [Real LLM Integration] 若有本地 Key 則嘗試直連，否則使用 Mock
         if (GEMINI_API_KEY && GEMINI_API_KEY !== 'your_gemini_key') {
-          const { agentZ0Flow } = await import('@/lib/agents/agentz0');
-          const query = `標題：${task.title}\n描述：${task.description || '無'}\n類型：${task.taskType}\n請生成專業的 ESG 內容。`;
+          const { callGeminiWithTools } = await import('@/lib/services/ai-server');
+          const systemInstruction = `你現在是 Hermes Agent。請執行 ESG 分析與撰寫任務。你具備調用工具查詢真實數據（GHG、社會指標、任務列表）的能力。請產出專業、符合 GRI 準則的報告。`;
+          const prompt = `標題：${task.title}\n描述：${task.description || '無'}\n類型：${task.taskType}\n請開始執行任務。`;
           
-          content = await agentZ0Flow({ query, context: task });
+          content = await callGeminiWithTools(prompt, systemInstruction);
         } else {
           // 全 Mock Fallback
           await new Promise(r => setTimeout(r, 1200));

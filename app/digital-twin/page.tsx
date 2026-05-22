@@ -26,6 +26,7 @@ export default function DigitalTwinPage() {
   const [awakeningStage, setAwakeningStage] = useState(2);
   const [uploading, setUploading] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
+  const [selectedKb, setSelectedKb] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [knowledge, setKnowledge] = useState(KNOWLEDGE_BASE);
@@ -184,12 +185,30 @@ export default function DigitalTwinPage() {
                             <BrandBadge variant="success" size="xs">已索引</BrandBadge>
                          </div>
                          <p className="text-[10px] text-slate-400 font-bold uppercase">{kb.category || 'Standard'} · 向量化</p>
-                         <p className="text-[9px] text-slate-300 mt-2">索引日期: {kb.date || '2025-01-10'}</p>
+                         <div className="flex justify-between items-center mt-2">
+                            <p className="text-[9px] text-slate-300">索引日期: {kb.date || '2025-01-10'}</p>
+                            <BrandButton variant="ghost" size="sm" className="h-6 p-0 px-2 text-[10px]" onClick={() => setSelectedKb(kb)}>檢視原文</BrandButton>
+                         </div>
                       </div>
                    </div>
                 </BrandCard>
               ))}
            </div>
+
+           {selectedKb && (
+             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setSelectedKb(null)} />
+                <BrandCard padding="lg" className="relative z-10 w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+                   <BrandCardHeader title={`原文提取詳情: ${selectedKb.source}`} icon={<FileText size={18}/>} />
+                   <div className="flex-1 overflow-y-auto mt-6 p-4 bg-slate-50 rounded-2xl border border-slate-100 font-mono text-xs leading-relaxed text-slate-600">
+                      {selectedKb.text}
+                   </div>
+                   <div className="mt-6 flex justify-end">
+                      <BrandButton variant="primary" onClick={() => setSelectedKb(null)}>關閉</BrandButton>
+                   </div>
+                </BrandCard>
+             </div>
+           )}
         </div>
       )}
 

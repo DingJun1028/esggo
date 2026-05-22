@@ -162,6 +162,22 @@ export default function VaultPage() {
                           <Bot size={14}/>
                         </BrandButton>
                       </BrandTooltip>
+                      {f.status === 'verified' && (
+                        <BrandTooltip content="複製驗證連結">
+                          <BrandButton 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => {
+                              const url = `${window.location.origin}/audit-verify?uuid=${f.id}`;
+                              navigator.clipboard.writeText(url);
+                              alert('驗證連結已複製！');
+                            }}
+                            className="text-emerald-600"
+                          >
+                            <Share2 size={14}/>
+                          </BrandButton>
+                        </BrandTooltip>
+                      )}
                       {f.status !== 'verified' && (
                         <BrandButton variant="primary" size="sm" onClick={() => sealFile(f)} loading={sealing === f.id}>
                           <Shield size={12}/> 封印
