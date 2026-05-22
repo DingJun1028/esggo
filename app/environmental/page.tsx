@@ -123,10 +123,10 @@ export default function EnvironmentalPage() {
       { id: 'ai', label: 'Ask OmniHermes', icon: <Zap size={16}/>, variant: 'gold', onClick: handleAskOmniHermes }
     ],
     kpis: [
-      { key: 'total', label: '年度累計排放', value: totalValue.toLocaleString(), unit: 'tCO2e', icon: <Wind size={18}/>, verified: true },
-      { key: 'verified', label: '已驗證比例', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Shield size={18}/>, verified: true },
-      { key: 'energy', label: '能源密集度', value: '4.2', unit: 'MWh/人', icon: <Zap size={18}/> },
-      { key: 'water', label: '回收率', value: '68', unit: '%', icon: <CloudRain size={18}/> },
+      { key: 'total', label: '年度累計排放', value: totalValue.toLocaleString(), unit: 'tCO2e', icon: <Wind size={18}/>, verified: true, formula: 'Scope1 + Scope2 + Scope3_Reported' },
+      { key: 'verified', label: '已驗證比例', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Shield size={18}/>, verified: true, formula: 'Verified_Count / Total_Metric_Count' },
+      { key: 'energy', label: '能源密集度', value: '4.2', unit: 'MWh/人', icon: <Zap size={18}/>, formula: 'Total_Consumption / Employee_Total' },
+      { key: 'water', label: '回收率', value: '68', unit: '%', icon: <CloudRain size={18}/>, formula: 'Recycled_Water / Total_Withdrawal' },
     ],
     sections: [
       {
