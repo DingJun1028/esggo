@@ -7,7 +7,7 @@ import {
   ChevronRight, Zap, Target, BookOpen, HeartPulse, Info, X, Users, Bot, Layers
 } from 'lucide-react';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandProgress, BrandKpiCard, BrandTimeline, BrandT5Strip
+  BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandKpiCard, BrandTimeline, BrandT5Strip
 } from '../components/brand';
 import { EnvironmentalTrajectory } from '../components/brand/EnvironmentalTrajectory';
 
@@ -102,7 +102,7 @@ export default function DashboardContent() {
     <div className="fade-in max-w-[1600px] mx-auto p-6 space-y-6">
       
       {/* ── Page Header ── */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-100">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 pb-4 md:pb-6 border-b border-slate-100">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
              <BrandBadge variant="gold" size="sm" className="font-mono">OMNI_TERMINAL v8.5.1</BrandBadge>
@@ -113,15 +113,15 @@ export default function DashboardContent() {
             基於 Berkeley 5T 誠信協議的企業級 ESG 治理引擎：數據實證、AI 調度與自動化揭露一體化中心。
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200 text-right">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          <div className="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200 text-center sm:text-right">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">最後更新</p>
             <p className="text-sm font-bold text-[#003262]">
               {now.toLocaleDateString('zh-TW')} {now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
-          <Link href="/hermes-orchestrator">
-            <BrandButton variant="primary" className="shadow-lg shadow-blue-900/10">
+          <Link href="/hermes-orchestrator" className="w-full sm:w-auto">
+            <BrandButton variant="primary" className="w-full sm:w-auto shadow-lg shadow-blue-900/10">
               <Zap size={16} /> 啟動 AI 任務
             </BrandButton>
           </Link>
@@ -138,7 +138,7 @@ export default function DashboardContent() {
       </BrandCard>
 
       {/* ── KPI Grid ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {KPIS.map(k => (
           <BrandKpiCard
             key={k.key}
@@ -159,7 +159,8 @@ export default function DashboardContent() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Trajectory Chart */}
         <div className="lg:col-span-8">
-          <BrandCard title="全方位永續軌跡分析" subtitle="實際排放量 vs SBTi 1.5°C 目標情境" padding="lg">
+          <BrandCard padding="lg">
+            <BrandCardHeader title="全方位永續軌跡分析" subtitle="實際排放量 vs SBTi 1.5°C 目標情境" />
             <EnvironmentalTrajectory 
               title="" // Title is already in BrandCard
             />
@@ -174,9 +175,10 @@ export default function DashboardContent() {
         </div>
 
         {/* Module Completion */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
-          <BrandCard title="模組就緒度" subtitle="GRI 核心揭露進度" padding="md">
-            <div className="space-y-5">
+        <div className="lg:col-span-4 flex flex-col gap-4 md:gap-6">
+          <BrandCard padding="md">
+            <BrandCardHeader title="模組就緒度" subtitle="GRI 核心揭露進度" />
+            <div className="space-y-5 mt-4">
               {MODULES.map(m => (
                 <Link key={m.href} href={m.href} className="block group">
                   <div className="flex justify-between items-end mb-1.5">
@@ -198,8 +200,11 @@ export default function DashboardContent() {
           </BrandCard>
 
           {/* Activity Feed */}
-          <BrandCard title="治理實證軌跡" subtitle="5T 不可篡改稽核流" padding="md" className="flex-1">
-             <BrandTimeline items={ACTIVITY} />
+          <BrandCard padding="md" className="flex-1">
+             <BrandCardHeader title="治理實證軌跡" subtitle="5T 不可篡改稽核流" />
+             <div className="mt-4">
+               <BrandTimeline items={ACTIVITY} />
+             </div>
              <Link href="/audit-log" className="mt-4 block">
                 <p className="text-[10px] font-bold text-blue-700 text-center hover:underline cursor-pointer uppercase tracking-widest">
                    查看完整審計日誌
@@ -210,7 +215,7 @@ export default function DashboardContent() {
       </div>
 
       {/* ── Quick Actions Grid ── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
         {QUICK_ACTIONS.map(a => (
           <Link key={a.href} href={a.href} className="group">
             <BrandCard padding="sm" hover className="text-center group-hover:border-blue-600/30">
@@ -245,9 +250,11 @@ export default function DashboardContent() {
                   以確保 2024 年度報告具備最高合規性。
                </p>
             </div>
-            <BrandButton variant="secondary" onClick={() => window.location.href='/intelligence'}>
-               查看詳細分析
-            </BrandButton>
+            <div className="w-full md:w-auto mt-2 md:mt-0">
+               <BrandButton variant="secondary" className="w-full md:w-auto" onClick={() => window.location.href='/intelligence'}>
+                  查看詳細分析
+               </BrandButton>
+            </div>
          </div>
       </BrandCard>
 

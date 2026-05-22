@@ -1,6 +1,6 @@
 /* ============================================================
-   ESG GO Design Token System v10.0
-   Berkeley Academy Design System - Complete Token Foundation
+   OmniHermes X ESGGO Design System v11.0
+   Berkeley Academy Precision - Universal RWD Foundation
    ============================================================ */
 
 /* ── Primitive Layer: Color Scales ── */
@@ -1308,4 +1308,83 @@ body {
 
 @media (min-width: 1024px) {
   .show-mobile-only { display: none !important; }
+}
+
+/* ============================================================
+   OmniHermes X ESGGO RWD Optimizations
+   ============================================================ */
+
+/* ── Fluid Typography & Spacing ── */
+:root {
+  --touch-target: 44px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --font-size-3xl: 1.5rem;
+    --font-size-2xl: 1.25rem;
+    --font-size-xl: 1.125rem;
+    --content-pad: var(--space-4);
+  }
+
+  /* Improve Card Padding for Mobile */
+  .card-body { padding: var(--space-4); }
+  
+  /* Horizontal Scroll Containers for Brand Components */
+  .tabs-nav, .table-wrap, .t5-strip {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2px; /* Avoid clipping focus rings */
+  }
+  .tabs-nav::-webkit-scrollbar, .table-wrap::-webkit-scrollbar, .t5-strip::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Advanced Grid Utilities ── */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-6);
+}
+
+@media (max-width: 639px) {
+  .grid-responsive { gap: var(--space-4); }
+  .form-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ── Interactive Best Practices ── */
+.btn, .input, .select, .tab-btn {
+  min-height: var(--touch-target);
+  font-size: 16px !important; /* Prevent iOS zoom on focus */
+}
+
+.tap-highlight-none {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Mobile Layout Fixes ── */
+@media (max-width: 767px) {
+  .topbar {
+    justify-content: space-between;
+  }
+  
+  .ph-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ── Safe Area Support ── */
+.app-shell {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.mobile-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  height: calc(var(--mobile-nav-h) + env(safe-area-inset-bottom, 0));
 }

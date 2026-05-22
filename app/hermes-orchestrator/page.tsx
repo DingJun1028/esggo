@@ -191,14 +191,15 @@ export default function HermesOrchestratorPage() {
         ]}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
         {/* Main Content Area */}
-        <div className={selected ? 'lg:col-span-7' : 'lg:col-span-12'}>
-          
+        <div className={(selected && !loading) ? 'lg:col-span-7' : 'lg:col-span-12'}>
+
           {activeTab === 'create' && (
             <BrandCard title="配置新任務" subtitle="Policy Guard 將自動審核您的請求權限" padding="lg">
-              <div className="space-y-6">
+              {/* ... (Create form logic) */}
+
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">任務類型</label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

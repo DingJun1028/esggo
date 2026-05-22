@@ -1,27 +1,31 @@
 'use client';
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, ChevronDown, ChevronUp, Upload, FileText, CheckCircle, RefreshCw } from 'lucide-react';
-import { BrandButton, BrandCard, BrandBadge, BrandProgress } from '../../components/brand';
+import { useState, useRef } from 'react';
+import { 
+  Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, ChevronDown, ChevronUp, Upload, FileText, CheckCircle, RefreshCw, Shield 
+} from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandScoreRing, BrandPageHeader 
+} from '../../components/brand';
 
 const tabs = [
-  { key: 'overview', label: '總覽', icon: <Brain size={14} /> },
-  { key: 'knowledge', label: '知識庫 (RAG)', icon: <Book size={14} /> },
+  { key: 'overview', label: '狀態總覽', icon: <Brain size={14} /> },
+  { key: 'knowledge', label: '知識倉庫', icon: <Book size={14} /> },
   { key: 'dna', label: '道德 DNA', icon: <Dna size={14} /> },
   { key: 'chat', label: '智慧對話', icon: <MessageSquare size={14} /> },
   { key: 'ledger', label: '主權帳本', icon: <Lock size={14} /> },
 ];
 
 const dnaLabels = {
-  intelligence: { label: '智 Intelligence', desc: '資訊處理與決策分析能力' },
-  benevolence: { label: '仁 Benevolence', desc: '利害關係人關懷與社會影響' },
-  courage: { label: '勇 Courage', desc: '面對挑戰的決策果斷力' },
-  integrity: { label: '誠 Integrity', desc: '數據誠信與透明揭露承諾' },
+  intelligence: { label: '智 Intelligence', desc: '數據處理與邏輯推理能力' },
+  benevolence: { label: '仁 Benevolence', desc: '利害關係人同理與價值取向' },
+  courage: { label: '勇 Courage', desc: '關鍵治理決策的執行意志' },
+  integrity: { label: '誠 Integrity', desc: '5T 實證數據的透明度執著' },
 };
 
 const ledgerEntries = [
-  { time: '2025-05-10 14:32', action: '知識庫更新', detail: '新增 GRI 305-1 排放盤查方法論', hash: 'a1b2c3d4' },
-  { time: '2025-05-09 09:15', action: '道德 DNA 調整', detail: '誠 Integrity 指數更新至 90', hash: 'e5f6g7h8' },
-  { time: '2025-05-08 16:40', action: '對話記憶', detail: '儲存 3 筆 TCFD 相關諮詢紀錄', hash: 'i9j0k1l2' },
+  { time: '14:32', action: '知識碎步封印', detail: 'GRI 305-1 盤查方法論已雜湊存證', hash: 'a1b2c3d4' },
+  { time: '09:15', action: 'DNA 特徵偏移', detail: '檢測到合規守衛人格權重微調', hash: 'e5f6g7h8' },
+  { time: '昨天', action: '記憶固化', detail: '將 TCFD 氣候風險情境分析納入長期記憶', hash: 'i9j0k1l2' },
 ];
 
 const defaultDna = { intelligence: 75, benevolence: 80, courage: 65, integrity: 90 };
@@ -43,260 +47,220 @@ export default function DigitalTwinPage() {
     { id: 3, title: 'TCFD 氣候情境分析', category: 'Analysis', status: 'active', entries: 15, date: '2025-04-02' },
   ]);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    await new Promise(r => setTimeout(r, 2000));
-    const newEntry = {
-      id: Date.now(),
-      title: file.name,
-      category: 'User Upload',
-      status: 'active',
-      entries: Math.floor(Math.random() * 20) + 5,
-      date: new Date().toISOString().split('T')[0]
-    };
-    setKnowledge(prev => [newEntry, ...prev]);
-    setUploading(false);
-  };
+  const overallDna = Math.round(Object.values(dna).reduce((a, b) => a + b, 0) / 4);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
     const userMsg = { role: 'user', content: input };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
-
-    const thinkingMsg = { role: 'assistant', content: '正在檢索知識庫並思考中...' };
-    setMessages(prev => [...prev, thinkingMsg]);
-
     await new Promise(r => setTimeout(r, 1200));
-
-    const responses = [
-      '根據「GRI 2021 框架」，您的揭露應包含對環境、社會及人的經濟衝擊分析。',
-      '在您的「2024 永續報告書」草稿中，範疇一碳排數據顯示有 15% 的增長，這與您的減碳目標存在缺口。',
-      '檢索到最新上傳的文件內容：建議優先處理供應鏈中的範疇三數據透明度問題。',
-    ];
-    
-    const botMsg = { role: 'assistant', content: responses[Math.floor(Math.random() * responses.length)] };
-    setMessages(prev => [...prev.slice(0, -1), botMsg]);
+    const botMsg = { role: 'assistant', content: '根據您的知識庫與 5T 數據，我建議在重大性矩陣中將「碳風險」權重提升 15%，以符合 CSRD 最新規範。' };
+    setMessages(prev => [...prev, botMsg]);
   };
 
-  const overallDna = Math.round(Object.values(dna).reduce((a, b) => a + b, 0) / 4);
+  const handleFileUpload = async (e: any) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    await new Promise(r => setTimeout(r, 2000));
+    setKnowledge(prev => [{ id: Date.now(), title: file.name, category: 'User Upload', status: 'active', entries: 12, date: '今天' }, ...prev]);
+    setUploading(false);
+  };
 
   return (
-    <div className="page-container max-w-5xl mx-auto">
-      <div className="page-header">
-        <div className="page-header-content">
-          <h1 className="page-title">OmniHermes 數位分身</h1>
-          <p className="page-subtitle">Digital Twin · RAG 知識倉庫 · 道德 DNA · 主權帳本</p>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: 'var(--surface-section)', borderRadius: 8, border: '1px solid var(--border-subtle)' }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: awakeningStage >= 2 ? '#22c55e' : '#f59e0b', boxShadow: '0 0 8px rgba(34,197,94,0.4)' }} />
-          <span style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--blue-700)' }}>{['休眠', '初始化', '活躍', '進化'][awakeningStage]}</span>
-        </div>
-      </div>
+    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+      
+      <BrandPageHeader 
+        title="OmniHermes 數位分身" 
+        subtitle="Digital Twin · 知識共鳴 · 道德建模 · 5T 主權帳本"
+        icon={<Brain size={24}/>}
+      />
 
-      <div className="tabs mb-8">
-        {tabs.map(tab => (
-          <button key={tab.key} className={`tab-btn ${activeTab === tab.key ? 'active' : ''}`} onClick={() => setActiveTab(tab.key)}>
-            {tab.icon} {tab.label}
-          </button>
-        ))}
-      </div>
+      <BrandTabs 
+        activeTab={activeTab}
+        onTabChange={(t) => setActiveTab(t as any)}
+        tabs={tabs}
+      />
 
       {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 fade-in">
-          <BrandCard padding="lg" className="text-center">
-            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #003262, #005DAA)', margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(0,50,98,0.2)' }}>
-              <Brain size={40} color="#fff" />
-            </div>
-            <div className="text-3xl font-bold text-[#003262] mb-1">{overallDna}</div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">道德 DNA 綜合指數</p>
-            <div className="grid grid-cols-3 gap-4 border-t border-slate-100 pt-6">
-              <div>
-                <div className="font-bold text-[#003262]">{knowledge.length}</div>
-                <div className="text-[10px] text-slate-400 uppercase">知識域</div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+           <div className="lg:col-span-4">
+              <BrandCard className="text-center h-full flex flex-col justify-center items-center" padding="lg">
+                 <BrandScoreRing 
+                   value={overallDna} 
+                   size={180} 
+                   strokeWidth={12} 
+                   color="var(--blue-700)" 
+                 />
+                 <div className="mt-4">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">DNA 整合指數</p>
+                    <p className="text-sm font-bold text-slate-700">Governance Alignment: HIGH</p>
+                 </div>
+              </BrandCard>
+           </div>
+           
+           <div className="lg:col-span-8 flex flex-col gap-6">
+              <BrandCard title="覺醒狀態與進度" subtitle="System Cognitive Evolution" padding="md">
+                 <div className="space-y-4">
+                    {['休眠 (Dormant)', '初始化 (Bootstrap)', '活躍 (Active)', '進化 (Evolution)'].map((stage, idx) => (
+                      <div key={idx} className="flex items-center gap-4 p-3 rounded-2xl border border-slate-50">
+                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${awakeningStage > idx ? 'bg-blue-700 text-white' : awakeningStage === idx ? 'bg-gold-500 text-white' : 'bg-slate-100 text-slate-400'}`}>
+                            {idx + 1}
+                         </div>
+                         <span className={`text-sm font-bold ${awakeningStage === idx ? 'text-slate-900' : 'text-slate-400'}`}>{stage}</span>
+                         {awakeningStage > idx && <CheckCircle size={14} className="ml-auto text-green-500"/>}
+                         {awakeningStage === idx && <RefreshCw size={14} className="ml-auto text-gold-500 animate-spin"/>}
+                      </div>
+                    ))}
+                 </div>
+              </BrandCard>
+              
+              <div className="grid grid-cols-3 gap-4">
+                 {[
+                   { label: '知識碎片', value: knowledge.reduce((a,b)=>a+b.entries, 0), icon: <Book size={16}/> },
+                   { label: '實證鏈結', value: 247, icon: <Lock size={16}/> },
+                   { label: '共鳴頻率', value: '4.2 Hz', icon: <Zap size={16}/> },
+                 ].map(s => (
+                   <BrandCard key={s.label} padding="md" className="text-center">
+                      <div className="text-blue-700 mb-2 flex justify-center">{s.icon}</div>
+                      <p className="text-xl font-bold text-slate-900">{s.value}</p>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{s.label}</p>
+                   </BrandCard>
+                 ))}
               </div>
-              <div>
-                <div className="font-bold text-[#003262]">{knowledge.reduce((a, b) => a + b.entries, 0)}</div>
-                <div className="text-[10px] text-slate-400 uppercase">知識條目</div>
-              </div>
-              <div>
-                <div className="font-bold text-[#003262]">{ledgerEntries.length}</div>
-                <div className="text-[10px] text-slate-400 uppercase">帳本記錄</div>
-              </div>
-            </div>
-          </BrandCard>
-          
-          <BrandCard padding="lg">
-            <h3 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-              <Zap size={14} className="text-gold-500" />
-              分身覺醒階段 (Awakening)
-            </h3>
-            {['休眠 (Dormant)', '初始化 (Bootstrap)', '活躍 (Active)', '進化 (Evolution)'].map((stage, idx) => (
-              <div key={stage} className="flex items-center gap-4 py-3 border-b border-slate-50 last:border-none">
-                <div style={{ 
-                  width: 28, height: 28, borderRadius: '50%', 
-                  background: awakeningStage > idx ? 'var(--blue-700)' : awakeningStage === idx ? 'var(--gold-500)' : 'var(--slate-100)',
-                  color: awakeningStage >= idx ? '#fff' : 'var(--slate-400)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 800 
-                }}>
-                  {idx + 1}
-                </div>
-                <span className={`text-sm font-bold ${awakeningStage === idx ? 'text-[#003262]' : 'text-slate-400'}`}>{stage}</span>
-                {awakeningStage > idx && <CheckCircle size={14} className="ml-auto text-green-500" />}
-                {awakeningStage === idx && <RefreshCw size={14} className="ml-auto text-gold-500 animate-spin" />}
-              </div>
-            ))}
-          </BrandCard>
+           </div>
         </div>
       )}
 
       {activeTab === 'knowledge' && (
-        <div className="fade-in">
-          <div className="flex justify-between items-end mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-[#003262]">RAG 知識倉庫</h2>
-              <p className="text-sm text-slate-500">數位分身的底層知識來源，支援 PDF/DOCX 向量化檢索</p>
-            </div>
-            <input type="file" ref={fileInputRef} onChange={handleFileUpload} style={{ display: 'none' }} />
-            <BrandButton variant="primary" onClick={() => fileInputRef.current?.click()} loading={uploading}>
-              <Upload size={14} /> 上傳企業文件
-            </BrandButton>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {knowledge.map(kb => (
-              <BrandCard key={kb.id} padding="md" hover>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#EBF2FA] flex items-center justify-center text-[#003262] flex-shrink-0">
-                    <FileText size={20} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-bold text-slate-800">{kb.title}</h4>
-                      <BrandBadge variant="success" size="xs">已索引</BrandBadge>
-                    </div>
-                    <p className="text-xs text-slate-400 mb-3">{kb.category} · {kb.entries} 知識碎片</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-slate-400">索引日期: {kb.date}</span>
-                      <button className="text-[10px] font-bold text-[#003262] hover:underline">管理碎片</button>
-                    </div>
-                  </div>
-                </div>
-              </BrandCard>
-            ))}
-          </div>
+        <div className="space-y-6">
+           <div className="flex justify-between items-center">
+              <div>
+                 <h2 className="text-xl font-bold text-slate-900">RAG 知識倉庫</h2>
+                 <p className="text-xs text-slate-500">數位分身的底層知識來源，支援 PDF/DOCX 向量化檢索</p>
+              </div>
+              <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
+              <BrandButton variant="primary" onClick={() => fileInputRef.current?.click()} loading={uploading}>
+                 <Upload size={16}/> 上傳企業文件
+              </BrandButton>
+           </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {knowledge.map(kb => (
+                <BrandCard key={kb.id} hover padding="md">
+                   <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
+                         <FileText size={20}/>
+                      </div>
+                      <div className="flex-1">
+                         <div className="flex justify-between mb-1">
+                            <h4 className="font-bold text-slate-800 text-sm">{kb.title}</h4>
+                            <BrandBadge variant="success" size="xs">已索引</BrandBadge>
+                         </div>
+                         <p className="text-[10px] text-slate-400 font-bold uppercase">{kb.category} · {kb.entries} 碎片</p>
+                         <p className="text-[9px] text-slate-300 mt-2">索引日期: {kb.date}</p>
+                      </div>
+                   </div>
+                </BrandCard>
+              ))}
+           </div>
         </div>
       )}
 
       {activeTab === 'dna' && (
-        <div className="fade-in">
-          <BrandCard padding="lg">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-bold text-[#003262]">道德 DNA 建模</h3>
-              <BrandBadge variant="gold">綜合評分 {overallDna}</BrandBadge>
-            </div>
-            <div className="grid grid-cols-1 gap-8">
-              {Object.entries(dna).map(([key, val]) => {
-                const info = dnaLabels[key as keyof typeof dnaLabels];
-                return (
-                  <div key={key}>
-                    <div className="flex justify-between mb-2">
+        <BrandCard title="道德 DNA 建模" subtitle="調整數位分身的決策取向與人格權重" padding="lg">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {Object.entries(dna).map(([key, val]) => (
+                <div key={key} className="space-y-4">
+                   <div className="flex justify-between items-end">
                       <div>
-                        <span className="font-bold text-slate-800">{info.label}</span>
-                        <span className="text-xs text-slate-400 ml-3">{info.desc}</span>
+                         <p className="text-sm font-bold text-slate-800">{dnaLabels[key as keyof typeof dnaLabels].label}</p>
+                         <p className="text-xs text-slate-400">{dnaLabels[key as keyof typeof dnaLabels].desc}</p>
                       </div>
-                      <span className="font-bold text-[#003262]">{val}%</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      value={val}
-                      onChange={e => setDna(prev => ({ ...prev, [key]: +e.target.value }))}
-                      style={{ width: '100%', accentColor: 'var(--blue-700)' }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </BrandCard>
-        </div>
+                      <span className="text-xl font-bold text-blue-700">{val}%</span>
+                   </div>
+                   <input 
+                     type="range" min="0" max="100" value={val} 
+                     onChange={e => setDna(p => ({ ...p, [key]: parseInt(e.target.value) }))}
+                     className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-700"
+                   />
+                </div>
+              ))}
+           </div>
+           <div className="mt-12 p-6 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-8 opacity-20"><Dna size={80}/></div>
+              <div className="relative z-10">
+                 <h3 className="font-bold mb-2">人格特質摘要 (Identity Brief)</h3>
+                 <p className="text-sm text-blue-100/70 leading-relaxed max-w-xl">
+                    當前數位分身傾向於 <strong>高誠信、中等果斷</strong> 的治理風格。在面對碳揭露爭議時，
+                    分身將優先選擇透明化揭露（Integrity 90%）而非規避風險，並會主動尋求 5T 實證鏈結。
+                 </p>
+              </div>
+           </div>
+        </BrandCard>
       )}
 
       {activeTab === 'chat' && (
-        <div className="fade-in">
-          <BrandCard padding="none" className="overflow-hidden" style={{ height: 600, display: 'flex', flexDirection: 'column' }}>
-            <div className="p-4 border-b border-slate-100 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700">
-                <MessageSquare size={16} />
+        <BrandCard padding="none" className="min-h-[600px] flex flex-col overflow-hidden">
+           <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                 <BrandStatusDot status="active" pulse size="sm" />
+                 <span className="text-sm font-bold text-slate-700">分身共鳴對話 (Grounding Active)</span>
               </div>
-              <h3 className="font-bold text-slate-700 text-sm">分身共鳴對話 (Grounding Active)</h3>
-            </div>
-            
-            <div className="flex-1 p-6 overflow-y-auto space-y-4">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div style={{
-                    maxWidth: '80%',
-                    padding: '0.875rem 1.125rem',
-                    borderRadius: msg.role === 'user' ? '1.25rem 1.25rem 0.25rem 1.25rem' : '1.25rem 1.25rem 1.25rem 0.25rem',
-                    background: msg.role === 'user' ? 'var(--blue-700)' : '#f1f5f9',
-                    color: msg.role === 'user' ? '#fff' : '#1e293b',
-                    fontSize: '0.875rem',
-                    lineHeight: 1.6,
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
-                  }}>
-                    {msg.content}
-                  </div>
+              <BrandBadge variant="info" size="xs">Gemini 2.0 Flash</BrandBadge>
+           </div>
+           
+           <div className="flex-1 p-6 overflow-y-auto space-y-6">
+              {messages.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                   <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-blue-700 text-white rounded-tr-none' : 'bg-white border border-slate-100 text-slate-700 rounded-tl-none'}`}>
+                      {msg.content}
+                   </div>
                 </div>
               ))}
-            </div>
-            
-            <div className="p-4 bg-slate-50 border-t border-slate-100 flex gap-3">
-              <input
-                className="input flex-1"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && sendMessage()}
-                placeholder="向您的數位分身提問，AI 將檢索知識庫..."
-                style={{ borderRadius: '1rem' }}
-              />
-              <BrandButton onClick={sendMessage} variant="primary" style={{ borderRadius: '1rem', width: 44, height: 44, padding: 0 }}>
-                <Send size={18} />
-              </BrandButton>
-            </div>
-          </BrandCard>
-        </div>
+           </div>
+
+           <div className="p-4 border-t border-slate-100 bg-slate-50">
+              <div className="flex gap-3">
+                 <input 
+                   className="flex-1 bg-white border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:border-blue-600 outline-none transition-all"
+                   placeholder="向數位分身提問..."
+                   value={input}
+                   onChange={e => setInput(e.target.value)}
+                   onKeyDown={e => e.key === 'Enter' && sendMessage()}
+                 />
+                 <BrandButton variant="primary" className="rounded-2xl w-14 h-14 p-0 flex items-center justify-center" onClick={sendMessage}>
+                    <Send size={20}/>
+                 </BrandButton>
+              </div>
+           </div>
+        </BrandCard>
       )}
 
       {activeTab === 'ledger' && (
-        <div className="fade-in">
-          <BrandCard padding="lg">
-            <h3 className="text-xl font-bold text-[#003262] mb-6 flex items-center gap-2">
-              <Lock size={18} />
-              主權帳本 (Sovereign Ledger)
-            </h3>
-            <div className="space-y-3">
-              {ledgerEntries.map((entry, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-white transition-all group">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-slate-800 text-sm">{entry.action}</span>
-                      <span className="text-[10px] font-bold text-slate-400">{entry.time}</span>
-                    </div>
-                    <p className="text-xs text-slate-500">{entry.detail}</p>
-                  </div>
-                  <code className="text-[10px] font-mono p-1.5 px-2 bg-blue-50 text-blue-700 rounded-lg group-hover:bg-blue-100 transition-all">
-                    #{entry.hash}
-                  </code>
-                </div>
-              ))}
-            </div>
-          </BrandCard>
-        </div>
+        <BrandCard title="主權帳本" subtitle="數位分身的所有認知與決策演進軌跡 (SHA-256 Verified)" padding="none">
+           <div className="p-6">
+              <div className="space-y-4">
+                 {ledgerEntries.map((e, i) => (
+                   <div key={i} className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 transition-all">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                         <Shield size={18}/>
+                      </div>
+                      <div className="flex-1">
+                         <div className="flex items-center justify-between mb-1">
+                            <span className="text-sm font-bold text-slate-900">{e.action}</span>
+                            <span className="text-[10px] font-bold text-slate-400">{e.time}</span>
+                         </div>
+                         <p className="text-xs text-slate-500">{e.detail}</p>
+                      </div>
+                      <code className="text-[10px] text-blue-700 bg-blue-50 px-2 py-1 rounded font-mono">#{e.hash}</code>
+                   </div>
+                 ))}
+              </div>
+           </div>
+        </BrandCard>
       )}
+
     </div>
   );
 }

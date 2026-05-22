@@ -33,15 +33,16 @@ export function EnvironmentalTrajectory({
   unit?: string 
 }) {
   return (
-    <div style={{ width: '100%', height: 320, background: '#fff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+    <div className="w-full" style={{ background: '#fff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
       <div className="flex justify-between items-center mb-4">
-        <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#003262' }}>{title}</h3>
+        <h3 style={{ fontSize: 'var(--font-size-sm)', fontWeight: 700, color: '#003262' }}>{title}</h3>
         <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>單位: {unit}</span>
       </div>
-      
-      <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data}>
-          <defs>
+
+      <div style={{ width: '100%', height: 'clamp(240px, 40vh, 320px)' }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={data}>
+            {/* ... (rest of Recharts config) */}
             <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#003262" stopOpacity={0.1}/>
               <stop offset="95%" stopColor="#003262" stopOpacity={0}/>
