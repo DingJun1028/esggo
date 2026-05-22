@@ -45,4 +45,5 @@ prisma/migrations/
 .supabase/
 
 # Debug
-*.log
+*.log.env
+.env

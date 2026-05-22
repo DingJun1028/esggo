@@ -64,6 +64,12 @@ const FORBIDDEN_FLOWS = [
   'draft_generated → published（跳過 approve）',
 ];
 
+const CONNECTIVITY_NODES = [
+  { label: 'OmniHermes + ESG Go Dashboard', status: 'client', desc: 'Next.js Frontend / API Route' },
+  { label: 'OmniHermes Gateway v0.14.1', status: 'gateway', desc: 'VPS-Native (Ubuntu 24.04)' },
+  { label: 'AI Execution Engine', status: 'runtime', desc: 'Gemini 2.0 / Omni-Models' },
+];
+
 export default function HermesArchitecturePage() {
   const [activeTab, setActiveTab] = useState<'architecture' | 'risks' | 'boundaries' | 'dataflow' | 'phases'>('architecture');
   const [expandedRisk, setExpandedRisk] = useState<string | null>(null);
@@ -100,12 +106,12 @@ export default function HermesArchitecturePage() {
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 style={{ color: '#fff', fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>
-                  Hermes × ESG GO 架構治理
+                  OmniHermes 系統 + ESG Go 系統
                 </h1>
-                <span className="badge badge-gold badge-sm">v1.0</span>
+                <span className="badge badge-gold badge-sm">v1.1</span>
               </div>
               <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 'var(--font-size-base)', marginTop: 4 }}>
-                Agent Orchestration Architecture · Risk Registry · Boundary Enforcement · Governance Layers
+                架構治理中心 · Architecture Governance · Risk Registry · Boundary Enforcement
               </p>
             </div>
           </div>
@@ -398,6 +404,45 @@ export default function HermesArchitecturePage() {
       {/* ── Data Flow Tab ── */}
       {activeTab === 'dataflow' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
+          {/* Topology */}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="text-card-title flex items-center gap-2">
+                <Globe size={15} style={{ color: 'var(--blue-700)' }}/>
+                Live 執行拓撲 (Execution Topology)
+              </h3>
+            </div>
+            <div className="card-body">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--space-8)', padding: 'var(--space-6) 0' }}>
+                {CONNECTIVITY_NODES.map((node, i) => (
+                  <React.Fragment key={node.label}>
+                    <div style={{ textAlign: 'center', width: 140 }}>
+                      <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--surface-section)', border: '2px solid var(--blue-700)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: 'var(--blue-700)' }}>
+                        {node.status === 'client' ? <Eye size={24}/> : node.status === 'gateway' ? <Zap size={24}/> : <Bot size={24}/>}
+                      </div>
+                      <p style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700, color: 'var(--text-primary)' }}>{node.label}</p>
+                      <p style={{ fontSize: '10px', color: 'var(--text-tertiary)', marginTop: 2 }}>{node.desc}</p>
+                    </div>
+                    {i < CONNECTIVITY_NODES.length - 1 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                        <div style={{ width: 60, height: 2, background: 'var(--border-default)', position: 'relative' }}>
+                          <ChevronRight size={12} style={{ position: 'absolute', right: -6, top: -5, color: 'var(--text-tertiary)' }}/>
+                        </div>
+                        <span style={{ fontSize: '9px', color: 'var(--text-tertiary)', fontWeight: 600 }}>HTTPS / 8642</span>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+              <div className="alert alert-info mt-2" style={{ background: '#F0F9FF', border: '1px solid #B9E6FE' }}>
+                <Info size={14} style={{ flexShrink: 0, color: '#026AA2' }}/>
+                <span style={{ fontSize: 'var(--font-size-xs)', color: '#026AA2' }}>
+                  <strong>容錯機制：</strong>若 VPS Gateway 無回應，Dashboard 將自動切換至 <strong>Mock Engine</strong>，確保核心流程不中斷。
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Standard flow */}
           <div className="card">
             <div className="card-header">

@@ -1,24 +1,24 @@
-# ESG GO 善向永續 | Omni_Terminal v8.5.0
+# OmniHermes 系統 + ESG Go 系統 | Omni_Terminal v8.5.1
 
-> 臺北市中小企業永續治理實證系統 · Berkeley Haas × TSISDA · 5T 誠信協議 · ZKP 零知識證明
+> 臺北市中小企業永續治理實證系統 · Berkeley Haas × TSISDA · 5T 誠信協議 · Omni-Agent 智能調度
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.0.3-black)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue)](https://typescriptlang.org)
 [![React](https://img.shields.io/badge/React-19.0.0-blue)](https://react.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)](https://supabase.com)
-[![GRI](https://img.shields.io/badge/GRI-2021-orange)](https://www.globalreporting.org)
+[![OmniHermes](https://img.shields.io/badge/OmniHermes-v0.14.1-blueviolet)](https://github.com/DingJun1028/esggo_orignal_1)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 ---
 
-## 🏛️ 核心架構：5T × UCC 誠信協議
+## 🏛️ 核心架構：5T × Omni-Agent 誠信協議
 
 | 協議 | 定義 | 技術實作 |
 |------|------|---------|-|
 | **T1 Tangible** | 抽象數據轉化為具體治理指標 | Bento Grid 視覺化 + Skeleton Loader |
 | **T2 Traceable** | 每筆數據與原始憑證精確關聯 | `evidence_id` 外鍵 + `source_origin` 欄位 |
 | **T3 Trackable** | 完整編輯軌跡與生命週期追蹤 | `audit_logs` 表 + 生命週期 Hook |
-| **T4 Transparent** | 主動掃描綠漂風險，算法公開 | AI 合規引擎 + GRI 對齊檢查 |
+| **T4 Transparent** | AI 主動掃描風險，算法公開 | **OmniHermes** 合規引擎 + GRI 對齊檢查 |
 | **T5 Trustworthy** | SHA-256 雜湊鎖定，不可篡改 | `hash_lock` 欄位 + `Object.freeze()` |
 
 ---
@@ -54,14 +54,12 @@
 ```
 Frontend:   Next.js 15 + React 19 + TypeScript (全端雙向型別安全)
 Styling:    Custom CSS Variables (Berkeley Design System v10.0) + Tailwind
-Database:   Supabase PostgreSQL (15 張資料表)
+Database:   Supabase PostgreSQL (16 張資料表)
 Auth:       Supabase Auth (Email + Google OAuth)
-AI:         Google Gemini 2.0 Flash API
+AI Engine:  Google Gemini 2.0 Flash + Nous Hermes-2 Pro (Hybrid)
 ZKP:        Web Crypto API (SHA-256) + 模擬 ZK-SNARK
-State:      Zustand + localStorage 持久化
-Charts:     Recharts (環境趨勢 / 碳排軌跡)
-Edge Fn:    Supabase Edge Functions (Deno)
-Agent:      Hermes Runtime Adapter
+State:      Zustand + Store Persistence
+Agent:      OmniHermes Gateway v0.14.1 (VPS-Native Support)
 ```
 
 ---
@@ -72,53 +70,36 @@ Agent:      Hermes Runtime Adapter
 
 | 頁面 | 路徑 | 功能說明 |
 |------|------|---------|
-| 控制台 Dashboard | `/` | KPI 互動卡片（含公式/來源/細項）、GRI 覆蓋矩陣、5T 活動日誌、快速操作 |
-| 永續撰寫 SustainWrite | `/editor` | 12 章節 GRI 2021、3 Expert Persona 模板（各 5000 字）、AI 草稿生成、5T 封印、標竿比較 |
+| 控制台 Dashboard | `/` | KPI 互動卡片、GRI 覆蓋矩陣、5T 活動日誌、Omni-Agent 狀態燈 |
+| 永續撰寫 SustainWrite | `/editor` | 12 章節 GRI 2021、3 Expert Persona 模板、OmniHermes 草稿生成、5T 封印 |
 | 數位分身 Digital Twin | `/digital-twin` | RAG 知識庫、道德 DNA 滑桿、主權帳本、對話持久記憶 |
-| 企業健檢 Health Check | `/health-check` | 15 題 ESG 自評、E/S/G 分類、90 天改善路線圖、Supabase 持久化 |
-| 商情中心 Intelligence | `/intelligence` | ESG 法規情報、產業標竿、風險預警、書籤系統 |
+| 企業健檢 Health Check | `/health-check` | 15 題 ESG 自評、E/S/G 分類、90 天改善路線圖 |
+| 商情中心 Intelligence | `/intelligence` | ESG 法規情報、產業標竿、Ask OmniHermes 智慧分析 |
 
 ### E · S · G 數據模組
 
 | 頁面 | 路徑 | GRI 對應 | 功能說明 |
 |------|------|---------|---------|
 | 環境指揮 Environmental | `/environmental` | GRI 302–306 | GHG/能源/水/廢棄物 CRUD、驗證切換、即時統計 |
-| 社會影響 Social | `/social` | GRI 401–414 | 員工/安全/培訓/供應鏈數據管理 |
-| 公司治理 Governance | `/governance` | GRI 2, 205–207 | 董事會/倫理/稅務/風險指標管理 |
+| 社會影響 Social | `/social` | GRI 401–414 | 員工/安全/培訓數據、利害關係人問卷 AI 分析 |
+| 公司治理 Governance | `/governance` | GRI 2, 205–207 | 董事會/倫理/稅務指標、CBAM 數據 AI 校驗 |
 
 ### GOVERNANCE 治理模組
 
 | 頁面 | 路徑 | 功能說明 |
 |------|------|---------|
-| 重大性矩陣 Materiality | `/materiality` | GRI 3-1~3-3 雙重重大性、互動矩陣/表格雙視圖 |
-| 審計日誌 Audit Log | `/audit-log` | 不可篡改 5T 軌跡、搜尋篩選、Hash 顯示、詳情 Modal |
-| 證據金庫 Vault | `/vault` | 文件上傳、ZKP 封印動畫、SHA-256、狀態篩選 |
+| 重大性矩陣 Materiality | `/materiality` | GRI 3-1 雙重重大性、OmniHermes 座標校正建議 |
+| 審計日誌 Audit Log | `/audit-log` | 不可篡改 5T 軌跡、Hash 顯示、詳情 Modal |
+| 證據金庫 Vault | `/vault` | 文件上傳、ZKP 封印動畫、SHA-256 驗證 |
 
-### INSIGHTS 洞察模組
-
-| 頁面 | 路徑 | 功能說明 |
-|------|------|---------|
-| 淨零路線圖 Roadmap | `/roadmap` | SBTi 里程碑時間軸、碳排趨勢 AreaChart、狀態切換 |
-| VerifyLink™ | `/audit-verify` | SHA-256 真實驗算、ZKP 4步驟動畫、記錄查詢 |
-| 報告發布 Publish | `/publish` | 報告管理、A4 封面預覽、ZKP 封印流程、GRI 章節就緒度 |
-| 永續閱覽室 Reading Room | `/reading-room` | 法規庫、台灣 ESG 年鑑、標竿報告書、溯源連結 |
-| 供應鏈透明 Supply Chain | `/supply-chain` | 供應商 ESG 評分、風險分級、詳情 Modal |
-| 永續財務 Finance | `/finance` | ESG ROI 分析、TCFD 四大支柱、碳風險情境 |
-| 利害關係人 Stakeholders | `/stakeholders` | 影響力/關注度矩陣、情感追蹤 |
-
-### ACADEMY 學院模組
+### OmniHermes AI 模組
 
 | 頁面 | 路徑 | 功能說明 |
 |------|------|---------|
-| 永續學院 Academy | `/academy` | Berkeley Haas × TSISDA 課程、講師管理 |
-| 顧問服務 Advisors | `/advisors` | 顧問配對、服務模組、GoodCoin 激勵 |
-
-### HERMES AI 模組
-
-| 頁面 | 路徑 | 功能說明 |
-|------|------|---------|
-| Agent 調度 | `/hermes-orchestrator` | Policy Guard、Skill Registry、草稿→審核→封印 |
-| 架構治理 | `/hermes-architecture` | 6層架構視圖、9項風險清單、邊界規則 |
+| Agent 調度中心 | `/hermes-orchestrator` | Policy Guard、Skill Registry、Live VPS 狀態、草稿→審核→封印 |
+| 架構治理中心 | `/hermes-architecture` | 6層架構視圖、9項風險清單、Live 執行拓撲、邊界規則 |
+| 代理蜂群 Swarm | `/swarm` | 多代理協同模式、Aurora 調度器、異步任務看板 |
+| 代理實驗室 Agent | `/hermes-agent` | 模型地圖、模組版本、ACP 協議對接 |
 
 ### SYSTEM 系統模組
 
@@ -132,14 +113,18 @@ Agent:      Hermes Runtime Adapter
 
 ---
 
-## 🗄️ 資料庫架構 (Supabase PostgreSQL — 15 張資料表)
+## 🗄️ 資料庫架構 (Supabase PostgreSQL — 16 張資料表)
 
 ```sql
 -- 核心稽核與存證
 esg_data              -- ESG 指標數據 (E/S/G 分類)
 audit_logs            -- 5T 不可篡改審計軌跡
 evidence_vault        -- 佐證文件 + ZKP 狀態
-reading_room          -- 永續情報文章
+
+-- OmniHermes 代理層 (NEW)
+agent_tasks           -- 代理任務定義
+agent_executions      -- 執行紀錄與元數據
+agent_artifacts       -- 代理產出草稿 (Versioned)
 
 -- E-S-G 數據層
 environmental_data    -- 環境數據 (GHG/Energy/Water/Waste)
@@ -281,7 +266,7 @@ npm run dev
 |------|--------|
 | **系統架構設計與開發** | Antigravity AI |
 | **ESG 框架顧問** | Berkeley Haas × TSISDA |
-| **課程學術指導** | Dr. Kuen-Shiou Yang (楊坤修博士) — 台灣社會創新與永續發展協會理事長 |
+| **學術指導** | Dr. Kuen-Shiou Yang (楊坤修博士) |
 
 ---
 
@@ -289,10 +274,10 @@ npm run dev
 
 | 文件 | 說明 |
 |------|------|
-| [`ESG_GO_Brand_Style_Specification.md`](./ESG_GO_Brand_Style_Specification.md) | 平台品牌風格元素規格書 v1.0 |
+| [`ESG_GO_Brand_Style_Specification.md`](./ESG_GO_Brand_Style_Specification.md) | 平台品牌風格元素規格書 v1.1 |
 | [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) | 設計系統白皮書 |
 | [`supabase_master_setup.sql`](./supabase_master_setup.sql) | 資料庫初始化 SQL（整合版） |
 
 ---
 
-_Last Updated: 2026-05-21 | Version: 8.5.0-Alpha | 5T Integrity Protocol Active_
+_Last Updated: 2026-05-22 | Version: 8.5.1-Alpha | OmniHermes + ESG Go Active_

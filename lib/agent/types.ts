@@ -3,7 +3,10 @@ export type AgentTaskType =
   | 'compliance_review'
   | 'evidence_mapping'
   | 'course_assistant'
-  | 'task_planning';
+  | 'task_planning'
+  | 'stakeholder_analysis'
+  | 'materiality_generation'
+  | 'cbam_validation';
 
 export type AgentExecutionStatus =
   | 'queued'
@@ -20,7 +23,10 @@ export type ArtifactType =
   | 'compliance_gap_list'
   | 'evidence_candidate_map'
   | 'course_faq_draft'
-  | 'task_plan_draft';
+  | 'task_plan_draft'
+  | 'survey_analysis_report'
+  | 'materiality_matrix_draft'
+  | 'cbam_validation_log';
 
 export type ReviewStatus =
   | 'draft'
@@ -84,6 +90,7 @@ export interface AgentArtifact {
   reviewNote?: string;
   reviewedBy?: string;
   reviewedAt?: string;
+  hashLock?: string;
   createdAt: string;
   updatedAt: string;
 }

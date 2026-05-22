@@ -5,6 +5,7 @@ import {
   Clock, FileText, ShieldCheck, Database, GraduationCap,
   ClipboardList, ChevronRight, Zap, Eye, RefreshCw,
   Info, Shield, Activity, Hash, X, ArrowRight,
+  Users, BarChart3, CheckSquare,
 } from 'lucide-react';
 import type {
   AgentTask, AgentExecution, AgentArtifact,
@@ -13,11 +14,14 @@ import type {
 import { SKILL_REGISTRY, TASK_TYPE_META, STATUS_META } from '../../lib/agent/registry';
 
 const TASK_ICONS: Record<string, React.ReactNode> = {
-  report_drafting:   <FileText size={15}/>,
-  compliance_review: <ShieldCheck size={15}/>,
-  evidence_mapping:  <Database size={15}/>,
-  course_assistant:  <GraduationCap size={15}/>,
-  task_planning:     <ClipboardList size={15}/>,
+  report_drafting:        <FileText size={15}/>,
+  compliance_review:      <ShieldCheck size={15}/>,
+  evidence_mapping:       <Database size={15}/>,
+  course_assistant:       <GraduationCap size={15}/>,
+  task_planning:          <ClipboardList size={15}/>,
+  stakeholder_analysis:   <Users size={15}/>,
+  materiality_generation: <BarChart3 size={15}/>,
+  cbam_validation:        <CheckSquare size={15}/>,
 };
 
 interface ExecutionRecord {
@@ -47,8 +51,15 @@ export default function HermesOrchestratorPage() {
   const [reviewAction, setReviewAction] = useState<'approve' | 'reject' | 'request_changes' | null>(null);
   const [reviewNote, setReviewNote] = useState('');
   const [toastMsg, setToastMsg] = useState('');
+  const [gatewayStatus, setGatewayStatus] = useState<{ status: string; is_mock?: boolean } | null>(null);
 
   const availableSkills = SKILL_REGISTRY.filter(s => s.taskType === taskType && s.enabled);
+
+  React.useEffect(() => {
+    import('../../lib/hermes-gateway').then(m => {
+      m.fetchHermesStatus().then(setGatewayStatus);
+    });
+  }, []);
 
   function showToast(msg: string) {
     setToastMsg(msg);
@@ -146,16 +157,21 @@ export default function HermesOrchestratorPage() {
       const res = await fetch(`/api/agent/artifacts/${rec.artifact.id}/promote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currentReviewStatus: rec.artifact.reviewStatus }),
+        body: JSON.stringify({ currentReviewStatus: rec.artifact.reviewStatus, actorId: 'user_001' }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
 
-      const updatedArtifact: AgentArtifact = { ...rec.artifact, reviewStatus: 'promoted' };
+      // 廣通：同步後端產生的真 Hash Lock 到 UI
+      const updatedArtifact: AgentArtifact = { 
+        ...rec.artifact, 
+        reviewStatus: 'promoted',
+        hashLock: data.hashLock, // 確保型別定義或 metadata 包含此欄位
+      };
       const updated: ExecutionRecord = { ...rec, artifact: updatedArtifact };
       setExecutions(prev => prev.map(r => r.task.id === rec.task.id ? updated : r));
       setSelected(updated);
-      showToast('草稿已提升為正式態，Hash Lock 已封印');
+      showToast(`草稿已提升為正式態，Hash Lock 已封印: ${data.hashLock.slice(0, 10)}...`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : '提升失敗';
       showToast(msg);
@@ -193,11 +209,17 @@ export default function HermesOrchestratorPage() {
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 style={{ color: '#fff', fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>Hermes Agent Orchestrator</h1>
-                <span className="badge badge-gold badge-sm">v1.0</span>
+                <h1 style={{ color: '#fff', fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>OmniHermes 系統 + ESG Go 系統</h1>
+                <span className="badge badge-gold badge-sm">v1.1</span>
+                {gatewayStatus && (
+                  <span className={`badge badge-sm ${gatewayStatus.is_mock ? 'badge-warning' : 'badge-success'}`} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Activity size={10}/>
+                    {gatewayStatus.is_mock ? 'Mock Mode' : 'Live VPS'}
+                  </span>
+                )}
               </div>
               <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 'var(--font-size-base)', marginTop: 4 }}>
-                受控代理執行層 · Policy Guard · Artifact Manager · Approval Flow
+                受控代理執行層 · Omni-Agent Orchestration · Policy Guard · Artifact Manager
               </p>
             </div>
           </div>

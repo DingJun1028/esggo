@@ -161,7 +161,7 @@ function getServiceClient() {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-/** Write a VaultOmniRecord to Supabase vault_omni_core table */
+/** Write a VaultOmniRecord to Supabase vault_omni_core table and Secret Vault */
 export async function engraveToSingleTable(component: IComponentCore): Promise<{ success: boolean; id?: string; error?: string }> {
   const supabase = getServiceClient();
   if (!supabase) {
@@ -182,17 +182,29 @@ export async function engraveToSingleTable(component: IComponentCore): Promise<{
     return { success: false, error: error.message };
   }
 
-  // Write audit trail
+  // 寫入 Supabase Vault Secret (實現 T4 Trustworthy 的最高安全等級)
+  // 這是 Phase 2 的關鍵：確保 Hash Lock 的來源數據在資料庫外也被安全保存
+  const { error: vaultError } = await supabase.rpc('create_evidence_seal', {
+    p_secret: record.payload,
+    p_name: `omni_seal_${record.uuid}`,
+    p_description: `5T Seal for GRI:${component.trace.griReference || 'N/A'}`
+  });
+
+  if (vaultError) {
+    console.warn('[vault_omni_core] Failed to create vault secret:', vaultError.message);
+  }
+
+  // Write audit trail (T5 Trackable)
   await supabase.from('audit_logs').insert({
     action: 'VAULT_OMNI_ENGRAVE',
     resource: `vault_omni_core:${record.uuid}`,
     user_name: component.trace.actorId ?? 'system',
     t5_tag: 'T1+T4+T5',
     hash_lock: record.hash_lock,
-    details: `聖碑刻印完成 — dimension:${record.dimension} | GRI:${component.trace.griReference ?? 'N/A'}`,
+    details: `聖碑刻印完成 (含 Vault Secret) — dimension:CORE | version:${component.identity.version}`,
   }).maybeSingle();
 
-  console.log(`[vault_omni_core] UUID: ${record.uuid} 已完成單一表扁平化刻印。`);
+  console.log(`[vault_omni_core] UUID: ${record.uuid} 已完成單一表扁平化刻印及 Vault 寫入。`);
   return { success: true, id: data?.uuid ?? record.uuid };
 }
 

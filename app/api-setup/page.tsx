@@ -14,6 +14,7 @@ const ENV_VARS = [
 const CONNECTORS = [
   { name: 'Supabase PostgreSQL', type: 'Database', status: 'connected', icon: Database },
   { name: 'Google Gemini 2.0', type: 'AI Model', status: 'connected', icon: Settings },
+  { name: 'BlueCC Cloud Plane', type: 'Orchestrator', status: 'connected', icon: Zap },
   { name: 'OpenRouter Gateway', type: 'AI Gateway', status: 'pending', icon: Link },
   { name: 'Boostspace Webhook', type: 'Workflow', status: 'pending', icon: Webhook },
 ];

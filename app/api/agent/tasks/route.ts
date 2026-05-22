@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createTask } from '../../../../lib/agent/orchestrator';
+import { GLOBAL_TASKS, addTask } from '../../../../lib/agent/store';
 import type { AgentTaskType } from '../../../../lib/agent/types';
 
 export async function POST(req: NextRequest) {
@@ -20,6 +21,8 @@ export async function POST(req: NextRequest) {
       skillKey,
     });
 
+    addTask(task);
+
     return NextResponse.json({ task, policy, ok: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : '未知錯誤';
@@ -28,5 +31,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ tasks: [], total: 0, ok: true });
+  return NextResponse.json({ 
+    tasks: GLOBAL_TASKS, 
+    total: GLOBAL_TASKS.length, 
+    ok: true 
+  });
 }

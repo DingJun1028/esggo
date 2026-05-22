@@ -1,13 +1,14 @@
 'use client';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  FileText, ChevronRight, ChevronDown, Check, X,
+  FileText, ChevronRight, ChevronLeft, ChevronDown, Check, X,
   Sparkles, Shield, BookOpen, Upload, BarChart3,
   RefreshCw, Save, Download, Eye, Edit3, Plus,
   AlertTriangle, CheckCircle, Clock, Lock,
   FileCheck, Users, Leaf, Building2, Zap,
 } from 'lucide-react';
-import { logAudit, simpleHash } from '../../lib/db';
+import { logAudit, simpleHash, getEnvironmentalData, getSocialMetrics, getGovernanceMetrics } from '../../lib/db';
+import { BrandButton, BrandKpiCard, BrandBadge, BrandCard, BrandProgress } from '../../components/brand';
 
 // ── GRI Chapter Data ───────────────────────────────────────────────────────
 interface DocItem { id: string; name: string; department: string; required: boolean; uploaded?: boolean; }
@@ -411,7 +412,6 @@ export default function EditorPage() {
   const [activePanel, setActivePanel] = useState<'write' | 'data' | 'docs' | 'benchmark'>('write');
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
-  const [showBenchmark, setShowBenchmark] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const chapter = CHAPTERS.find(c => c.id === selectedChapterId) ?? CHAPTERS[0];
@@ -420,6 +420,91 @@ export default function EditorPage() {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 2800);
   }, []);
+
+  // [Module 3] 啟動時自動 Mapping 資料庫 ESG 指標數據到對應的欄位
+  useEffect(() => {
+    let mounted = true;
+    Promise.all([getEnvironmentalData(), getSocialMetrics(), getGovernanceMetrics()]).then(([env, soc, gov]) => {
+      if (!mounted) return;
+      const allData = [...env, ...soc, ...gov];
+      
+      setFields(prev => {
+        const next = { ...prev };
+        CHAPTERS.forEach(ch => {
+          if (!next[ch.id]) next[ch.id] = {};
+          ch.fields.forEach(f => {
+            if (!next[ch.id][f.id]) {
+              // 找尋 GRI Standard 匹配的真實數據
+              const match = allData.find(d => d.gri_standard && d.gri_standard.includes(f.gri.split(' ')[1] || ''));
+              if (match && match.metric_value !== null) {
+                next[ch.id][f.id] = String(match.metric_value);
+              }
+            }
+          });
+        });
+        return next;
+      });
+    });
+    return () => { mounted = false; };
+  }, []);
+
+  // [Module 3] AI 即時串流生成 (SSE Streaming Response)
+  const handleGenerateStream = async () => {
+    const template = chapter.expertTemplates.find(t => t.persona === selectedPersona);
+    if (!template) return;
+    setGenerating(true);
+    setActivePanel('write');
+
+    const chFields = fields[chapter.id] ?? {};
+    const metricsStr = chapter.fields.map(f => `${f.label}: ${chFields[f.id] || '未填寫'}`).join('\n');
+
+    const prompt = `請以「${PERSONA_META[selectedPersona].label}」的專業視角，為永續報告書撰寫「${chapter.title}」章節。\n\n現有核心數據：\n${metricsStr}\n\n參考語氣與範本：\n${template.text}\n\n請直接輸出報告內文，不要有任何問候語或程式碼區塊標記。排版需具備標題與條列。`;
+
+    try {
+      const res = await fetch('/api/ai/stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!res.ok || !res.body) throw new Error('Stream failed');
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let streamText = '';
+
+      setContent(prev => ({ ...prev, [chapter.id]: '' }));
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const dataStr = line.slice(6).trim();
+            if (dataStr === '[DONE]' || !dataStr) continue;
+            try {
+              const data = JSON.parse(dataStr);
+              const textPiece = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+              streamText += textPiece;
+              setContent(prev => ({ ...prev, [chapter.id]: streamText }));
+              
+              if (textareaRef.current) {
+                textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+              }
+            } catch (e) { /* ignore parse error on chunks */ }
+          }
+        }
+      }
+      showToast(`${PERSONA_META[selectedPersona].label} 草稿生成完畢 ✓`);
+    } catch (err) {
+      showToast('AI 生成失敗，請確認 API 狀態', 'error');
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   // Load from localStorage
   useEffect(() => {

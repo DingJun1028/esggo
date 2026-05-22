@@ -1,6 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Globe, Calculator, AlertTriangle, CheckCircle, TrendingUp, Download, Plus, Trash2 } from 'lucide-react';
+import { Globe, Calculator, AlertTriangle, CheckCircle, TrendingUp, Download, Plus, Trash2, Bot, RefreshCw } from 'lucide-react';
 
 interface CBAmProduct {
   id: string;
@@ -41,6 +41,32 @@ export default function CBAMCalculatorPage() {
   ]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState<Partial<CBAmProduct>>({ euEtsPrice: DEFAULT_ETS_PRICE, paidCarbonPrice: 0 });
+  const [loading, setLoading] = useState(false);
+
+  const handleAskHermes = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/agent/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          actorId: 'user_001',
+          taskType: 'cbam_validation',
+          title: 'CBAM 出口數據格式與係數校驗',
+          description: '校驗當前列出的出口商品數據是否符合歐盟 2023/956 申報要求，並檢查排放係數偏差。',
+          skillKey: 'cbam_data_validator',
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        window.location.href = '/hermes-orchestrator';
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const calculations = useMemo(() => {
     return products.map(p => {
@@ -241,6 +267,54 @@ export default function CBAMCalculatorPage() {
           ))}
         </div>
       </div>
+
+      {/* Floating AI Assistant Button */}
+      <button
+        onClick={handleAskHermes}
+        disabled={loading}
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #003262, #005DAA)',
+          color: '#fff',
+          border: 'none',
+          boxShadow: '0 8px 32px rgba(0, 50, 98, 0.3)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100,
+          transition: 'transform 0.2s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        {loading ? <RefreshCw size={28} className="spin" /> : <Bot size={28} />}
+        <div style={{
+          position: 'absolute',
+          right: '74px',
+          background: 'white',
+          padding: '8px 16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          whiteSpace: 'nowrap',
+          color: '#003262',
+          fontSize: '0.875rem',
+          fontWeight: 700,
+          pointerEvents: 'none',
+        }}>
+          Ask OmniHermes AI 校驗 CBAM 數據
+        </div>
+      </button>
+
+      <style>{`
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }

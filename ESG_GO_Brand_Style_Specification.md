@@ -1,6 +1,6 @@
-# 🏛️ ESG GO 善向永續 — 平台品牌風格元素規格書 v1.0
+# 🏛️ OmniHermes 系統 + ESG Go 系統 — 平台品牌風格元素規格書 v1.1
 
-> **Platform:** ESG GO 善向永續 | **Version:** 8.5.0-Alpha | **Framework:** Berkeley Haas × TSISDA × 5T Protocol
+> **Platform:** OmniHermes + ESG Go | **Version:** 8.5.1-Alpha | **Framework:** Berkeley Haas × TSISDA × 5T Protocol
 
 ---
 
@@ -8,10 +8,10 @@
 
 | 欄位 | 內容 |
 |------|------|
-| **專案名稱** | ESG GO 善向永續 (Goodward Sustainability Terminal) |
-| **系統代號** | Omni_Terminal v8.5.0-Alpha |
+| **專案名稱** | OmniHermes 系統 + ESG Go 系統 (Goodward Sustainability Terminal with Omni-Agent) |
+| **系統代號** | Omni_Terminal v8.5.1-Alpha |
 | **目標對象** | 台灣中小企業 ESG 負責人、永續委員會、稽核師、投資人 |
-| **設計目標** | 5T 誠信協議視覺化、GRI 合規操作直覺化、零幻覺驗算透明化 |
+| **設計目標** | 5T 誠信協議視覺化、GRI 合規操作直覺化、Omni-Agent 智能協作透明化 |
 | **支援平台** | ✅ Web (Responsive) ✅ Mobile (PWA) |
 | **設計哲學** | Liquid Glass · Bento Grid · Berkeley Academic Precision |
 | **核心協議** | 5T Integrity Protocol (Tangible · Traceable · Trackable · Transparent · Trustworthy) |

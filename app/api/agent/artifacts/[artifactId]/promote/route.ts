@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { promoteToTrustLayer } from '../../../../../../lib/agent/orchestrator';
 
 export async function POST(
   req: NextRequest,
@@ -6,7 +7,7 @@ export async function POST(
 ) {
   try {
     const body = await req.json();
-    const { currentReviewStatus } = body;
+    const { currentReviewStatus, actorId } = body;
 
     if (currentReviewStatus !== 'approved') {
       return NextResponse.json({
@@ -15,11 +16,14 @@ export async function POST(
       }, { status: 400 });
     }
 
+    // 深貫廣通：呼叫實時雜湊鎖定引擎
+    const seal = await promoteToTrustLayer(params.artifactId, actorId || 'user_001');
+
     return NextResponse.json({
       artifactId: params.artifactId,
       reviewStatus: 'promoted',
-      promotedAt: new Date().toISOString(),
-      hashLock: `sha256:${Date.now().toString(16)}abcdef1234567890`,
+      promotedAt: seal.timestamp,
+      hashLock: seal.hash,
       ok: true,
     });
   } catch (err: unknown) {

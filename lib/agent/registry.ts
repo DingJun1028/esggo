@@ -61,6 +61,42 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     version: '1.0.0',
     enabled: true,
   },
+  {
+    skillKey: 'stakeholder_survey_analysis',
+    skillName: '利害關係人問卷分析',
+    taskType: 'stakeholder_analysis',
+    description: '分析問卷調查數據，提取關注議題並計算加權權重',
+    allowedDataScopes: ['esg_data', 'survey_responses'],
+    outputArtifactType: 'survey_analysis_report',
+    requiresHumanReview: true,
+    riskLevel: 'medium',
+    version: '1.0.0',
+    enabled: true,
+  },
+  {
+    skillKey: 'materiality_matrix_generator',
+    skillName: '重大性矩陣生成',
+    taskType: 'materiality_generation',
+    description: '基於利害關係人關注度與營運衝擊，產出重大性矩陣草稿',
+    allowedDataScopes: ['esg_data', 'survey_analysis_report'],
+    outputArtifactType: 'materiality_matrix_draft',
+    requiresHumanReview: true,
+    riskLevel: 'medium',
+    version: '1.0.0',
+    enabled: true,
+  },
+  {
+    skillKey: 'cbam_data_validator',
+    skillName: 'CBAM 數據格式校驗',
+    taskType: 'cbam_validation',
+    description: '校驗進口申報數據與排放係數是否符合歐盟 CBAM 申報要求',
+    allowedDataScopes: ['cbam_data', 'emissions_factors'],
+    outputArtifactType: 'cbam_validation_log',
+    requiresHumanReview: true,
+    riskLevel: 'high',
+    version: '1.0.0',
+    enabled: true,
+  },
 ];
 
 export function getSkill(skillKey: string): SkillRegistryItem | undefined {
@@ -72,11 +108,14 @@ export function getSkillsByTaskType(taskType: string): SkillRegistryItem[] {
 }
 
 export const TASK_TYPE_META: Record<string, { label: string; color: string; icon: string }> = {
-  report_drafting:   { label: '報告草稿生成',   color: '#003262', icon: 'FileText' },
-  compliance_review: { label: '合規比對審查',   color: '#8B5CF6', icon: 'ShieldCheck' },
-  evidence_mapping:  { label: '證據映射整理',   color: '#22C55E', icon: 'Database' },
-  course_assistant:  { label: '課程助教支援',   color: '#FDB515', icon: 'GraduationCap' },
-  task_planning:     { label: '任務規劃拆解',   color: '#F59E0B', icon: 'ClipboardList' },
+  report_drafting:        { label: '報告草稿生成',     color: '#003262', icon: 'FileText' },
+  compliance_review:      { label: '合規比對審查',     color: '#8B5CF6', icon: 'ShieldCheck' },
+  evidence_mapping:       { label: '證據映射整理',     color: '#22C55E', icon: 'Database' },
+  course_assistant:       { label: '課程助教支援',     color: '#FDB515', icon: 'GraduationCap' },
+  task_planning:          { label: '任務規劃拆解',     color: '#F59E0B', icon: 'ClipboardList' },
+  stakeholder_analysis:   { label: '利害關係人問卷分析', color: '#0EA5E9', icon: 'Users' },
+  materiality_generation: { label: '重大性矩陣生成',     color: '#D946EF', icon: 'BarChart3' },
+  cbam_validation:        { label: 'CBAM 數據驗證',     color: '#10B981', icon: 'CheckSquare' },
 };
 
 export const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {

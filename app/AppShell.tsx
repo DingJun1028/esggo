@@ -98,8 +98,8 @@ function SidebarContent({ collapsed, onCollapse }: { collapsed: boolean; onColla
         </div>
         {!collapsed && (
           <div>
-            <div style={{ color: '#FDB515', fontWeight: 700, fontSize: 14, lineHeight: 1.2 }}>ESG GO</div>
-            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>善向永續</div>
+            <div style={{ color: '#FDB515', fontWeight: 700, fontSize: 14, lineHeight: 1.2 }}>OmniHermes</div>
+            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>ESG Go 系統</div>
           </div>
         )}
         <button

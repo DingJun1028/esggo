@@ -8,18 +8,18 @@ import {
 } from 'lucide-react';
 
 const repoModules = [
+  { path: 'hermes-gateway', desc: 'Node.js 網關 v0.14.0 (支持 VPS 部署)', status: 'Hot' },
+  { path: 'vps_adapter', desc: 'Ubuntu 24.04 本地化執行與自動化安裝', status: 'New' },
   { path: 'acp_adapter', desc: 'Zed 編輯器上下文協議適配器', status: 'New' },
   { path: 'agent', desc: 'Auxiliary 輔助客戶端與 Nous 認證', status: 'Stable' },
   { path: 'tools/video_gen', desc: '統一影片生成工具 (Pluggable)', status: 'Hot' },
   { path: 'tinker-atropos', desc: 'RL 強化學習訓練環境子模組', status: 'Research' },
-  { path: 'trajectory_compressor', desc: 'SFT/RL 訓練用軌跡數據壓縮器', status: 'Advanced' },
-  { path: 'locales', desc: '8 種新語言本地化支持', status: 'Updated' }
 ];
 
 const releases = [
+  { v: 'v0.14.1', date: 'Today', note: 'ESG Integration: 3 New Skills & Live VPS Fallback' },
   { v: 'v0.14.0', date: '2 days ago', note: 'ACP Registry for Zed & Video Gen' },
   { v: 'v0.13.0', date: 'last week', note: '8 New Locales & Gateway l10n' },
-  { v: 'v0.12.0', date: '2 weeks ago', note: 'Web UI Dashboard Alpha' }
 ];
 
 export default function HermesAgentPage() {
@@ -33,9 +33,9 @@ export default function HermesAgentPage() {
           <div>
             <div className="page-eyebrow">
               <Bot size={12} style={{ marginRight: 4 }} />
-              Nous Research · v0.14.0 · Self-Improving Agent
+              OmniHermes · v0.14.1 · Self-Improving Agent
             </div>
-            <h1 className="page-title">Hermes Agent ☤</h1>
+            <h1 className="page-title">OmniHermes 系統 + ESG Go 系統 ☤</h1>
             <p className="page-sub">超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心</p>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -190,7 +190,7 @@ export default function HermesAgentPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <Bot size={18} style={{ color: 'var(--berkeley-blue)' }} />
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--berkeley-blue)', fontFamily: 'monospace' }}>
-            HERMES-AGENT SYSTEM v0.14.0
+            OMNIHERMES-AGENT SYSTEM v0.14.1
           </span>
         </div>
         <div style={{ display: 'flex', gap: 15 }}>

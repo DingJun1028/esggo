@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Grid, List, Plus, Save } from 'lucide-react';
+import { Grid, List, Plus, Save, Bot, Sparkles, RefreshCw } from 'lucide-react';
 
 const initialTopics = [
   { id: 1, name: '溫室氣體排放', category: 'E', gri: 'GRI 305', impact: 4.5, concern: 4.8, status: 'critical' },
@@ -22,6 +22,32 @@ export default function MaterialityPage() {
   const [viewMode, setViewMode] = useState<'matrix' | 'table'>('matrix');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [selectedTopic, setSelectedTopic] = useState<typeof topics[0] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleAskHermes = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/agent/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          actorId: 'user_001',
+          taskType: 'materiality_generation',
+          title: '重大性議題 AI 分析與座標校正',
+          description: '分析當前 12 個議題的衝擊與關注度，建議座標調整以符合 2026 最新趨勢。',
+          skillKey: 'materiality_matrix_generator',
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        window.location.href = '/hermes-orchestrator';
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filtered = selectedCategory === 'ALL' ? topics : topics.filter(t => t.category === selectedCategory);
 
@@ -207,6 +233,54 @@ export default function MaterialityPage() {
           </div>
         </div>
       )}
+
+      {/* Floating AI Assistant Button */}
+      <button
+        onClick={handleAskHermes}
+        disabled={loading}
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #003262, #005DAA)',
+          color: '#fff',
+          border: 'none',
+          boxShadow: '0 8px 32px rgba(0, 50, 98, 0.3)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100,
+          transition: 'transform 0.2s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        {loading ? <RefreshCw size={28} className="spin" /> : <Bot size={28} />}
+        <div style={{
+          position: 'absolute',
+          right: '74px',
+          background: 'white',
+          padding: '8px 16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          whiteSpace: 'nowrap',
+          color: '#003262',
+          fontSize: '0.875rem',
+          fontWeight: 700,
+          pointerEvents: 'none',
+        }}>
+          Ask OmniHermes AI 分析重大性
+        </div>
+      </button>
+
+      <style>{`
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }

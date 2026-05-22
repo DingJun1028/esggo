@@ -4,7 +4,7 @@ import './globals.css';
 import ClientLayout from './ClientLayout';
 
 export const metadata: Metadata = {
-  title: 'ESG GO 善向永續 | Omni_Terminal',
+  title: 'OmniHermes 系統 + ESG Go 系統 | Omni_Terminal',
   description: '臺北市中小企業永續治理實證系統 v8.5.0-Alpha · Berkeley Haas × TSISDA · 5T 誠信協議',
   keywords: ['ESG', 'GRI', 'TCFD', '永續報告', '台灣', '中小企業'],
 };
@@ -20,7 +20,7 @@ function LoadingFallback() {
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F8FAFC' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid #003262', borderTopColor: 'transparent', animation: 'spin 0.8s linear infinite' }} />
-        <p style={{ fontSize: 13, color: '#94A3B8', fontFamily: 'system-ui' }}>ESG GO 善向永續</p>
+        <p style={{ fontSize: 13, color: '#94A3B8', fontFamily: 'system-ui' }}>OmniHermes + ESG Go</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

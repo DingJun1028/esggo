@@ -3,7 +3,8 @@ import { useState, useMemo } from 'react';
 import {
   Users, Plus, Send, BarChart3, CheckCircle, Clock,
   AlertTriangle, Download, Search, ChevronDown, X,
-  Mail, Globe, Building2, Star, TrendingUp, PieChart
+  Mail, Globe, Building2, Star, TrendingUp, PieChart,
+  Bot, RefreshCw
 } from 'lucide-react';
 
 interface Stakeholder {
@@ -73,6 +74,32 @@ export default function StakeholderSurveyPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'list' | 'results' | 'matrix'>('overview');
   const [search, setSearch] = useState('');
   const [selectedStakeholder, setSelectedStakeholder] = useState<Stakeholder | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleAskHermes = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/agent/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          actorId: 'user_001',
+          taskType: 'stakeholder_analysis',
+          title: '利害關係人問卷權重分析',
+          description: '分析當前所有已回覆問卷，計算各議題之關注度加權值，並產出分析報告。',
+          skillKey: 'stakeholder_survey_analysis',
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        window.location.href = '/hermes-orchestrator';
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const completed = stakeholders.filter(s => s.surveyStatus === 'completed');
   const responseRate = Math.round((completed.length / stakeholders.length) * 100);
@@ -440,6 +467,54 @@ export default function StakeholderSurveyPage() {
           </div>
         </div>
       )}
+
+      {/* Floating AI Assistant Button */}
+      <button
+        onClick={handleAskHermes}
+        disabled={loading}
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          width: '64px',
+          height: '64px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #003262, #005DAA)',
+          color: '#fff',
+          border: 'none',
+          boxShadow: '0 8px 32px rgba(0, 50, 98, 0.3)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100,
+          transition: 'transform 0.2s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        {loading ? <RefreshCw size={28} className="spin" /> : <Bot size={28} />}
+        <div style={{
+          position: 'absolute',
+          right: '74px',
+          background: 'white',
+          padding: '8px 16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          whiteSpace: 'nowrap',
+          color: '#003262',
+          fontSize: '0.875rem',
+          fontWeight: 700,
+          pointerEvents: 'none',
+        }}>
+          Ask OmniHermes AI 分析問卷
+        </div>
+      </button>
+
+      <style>{`
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }

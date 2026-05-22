@@ -10,6 +10,7 @@ import {
   Settings, ChevronLeft, ChevronRight, Menu, X, Home,
   Bell, ShieldCheck, ChevronDown, Search, Layers,
 } from 'lucide-react';
+import { CommandPalette } from '../components/ui/CommandPalette';
 
 interface NavItem { href: string; label: string; sub: string; icon: React.ReactNode; }
 interface NavGroup { title: string; items: NavItem[]; }
@@ -61,7 +62,7 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    title: 'HERMES AI',
+    title: 'OmniHermes + ESG Go',
     items: [
       { href: '/hermes-orchestrator', label: 'Agent 調度', sub: 'Orchestrator', icon: <Bot size={15} /> },
       { href: '/hermes-architecture', label: '架構治理',   sub: 'Architecture', icon: <Layers size={15} /> },
@@ -252,6 +253,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app-shell">
+      <CommandPalette />
       {/* Mobile Overlay */}
       <div
         className={`sidebar-overlay ${mobileOpen ? 'visible' : ''}`}
@@ -316,9 +318,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
               background: 'var(--blue-700)', display: 'flex',
               alignItems: 'center', justifyContent: 'center',
               color: '#fff', fontWeight: 700, fontSize: 13,
-            }}>E</div>
+            }}>O</div>
             <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)' }}>
-              ESG GO
+              OmniHermes + ESG Go
             </span>
           </div>
 

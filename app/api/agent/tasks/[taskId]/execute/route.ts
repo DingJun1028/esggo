@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createExecution, generateMockArtifact } from '../../../../../../lib/agent/orchestrator';
+import { executeHermesTask } from '../../../../../../lib/hermes-gateway';
+import { addExecution, addArtifact } from '../../../../../../lib/agent/store';
 import type { AgentTask } from '../../../../../../lib/agent/types';
+
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
 export async function POST(
   req: NextRequest,
@@ -14,19 +18,58 @@ export async function POST(
       return NextResponse.json({ error: '缺少 task payload' }, { status: 400 });
     }
 
+    // [Policy Guard Check]
+    if (task.status === 'denied') {
+      return NextResponse.json({ error: '此任務已被 Policy Guard 拒絕' }, { status: 403 });
+    }
+
     const execution = createExecution(task);
     execution.status = 'running';
+    execution.startedAt = new Date().toISOString();
 
-    await new Promise(r => setTimeout(r, 800));
+    try {
+      // 優先嘗試呼叫 live Gateway (VPS)
+      const result = await executeHermesTask(task);
+      addExecution(result.execution);
+      addArtifact(result.artifact);
+      return NextResponse.json({ ...result, ok: true });
+    } catch (e: any) {
+      if (e.message === 'HERMES_GATEWAY_UNREACHABLE') {
+        console.info(`Falling back to local AI execution for task: ${task.id}`);
+        
+        let content = '';
+        
+        // [Real LLM Integration] 若有本地 Key 則嘗試直連，否則使用 Mock
+        if (GEMINI_API_KEY && GEMINI_API_KEY !== 'your_gemini_key') {
+          const prompt = `你現在是 OmniHermes Agent。請執行以下任務：\n標題：${task.title}\n描述：${task.description || '無'}\n類型：${task.taskType}\n請生成專業的 ESG 內容。`;
+          
+          const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+          });
+          const aiData = await aiRes.json();
+          content = aiData.candidates?.[0]?.content?.parts?.[0]?.text || '本地 AI 生成失敗';
+        } else {
+          // 全 Mock Fallback
+          await new Promise(r => setTimeout(r, 1200));
+          content = generateMockArtifact(task, execution).content;
+        }
 
-    execution.status = 'draft_generated';
-    execution.startedAt = new Date(Date.now() - 800).toISOString();
-    execution.finishedAt = new Date().toISOString();
+        execution.status = 'draft_generated';
+        execution.finishedAt = new Date().toISOString();
 
-    const artifact = generateMockArtifact(task, execution);
-    execution.outputRefIds = [artifact.id];
+        const artifact = generateMockArtifact(task, execution);
+        artifact.content = content;
+        execution.outputRefIds = [artifact.id];
 
-    return NextResponse.json({ execution, artifact, ok: true });
+        addExecution(execution);
+        addArtifact(artifact);
+
+        return NextResponse.json({ execution, artifact, ok: true });
+      }
+      throw e;
+    }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : '未知錯誤';
     return NextResponse.json({ error: message }, { status: 500 });

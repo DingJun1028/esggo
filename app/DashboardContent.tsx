@@ -6,6 +6,7 @@ import {
   FileText, Database, ClipboardList, BarChart3, AlertTriangle,
   ChevronRight, Zap, Target, BookOpen, HeartPulse, Info, X,
 } from 'lucide-react';
+import { EnvironmentalTrajectory } from '../components/brand/EnvironmentalTrajectory';
 
 interface KpiItem {
   key: string;
@@ -148,7 +149,7 @@ export default function DashboardContent() {
                   永續治理儀表板
                 </h1>
                 <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'var(--font-size-base)', marginTop: 4 }}>
-                  ESG GO 善向永續 · 5T 誠信協議 · Berkeley Haas × TSISDA
+                  OmniHermes + ESG Go 系統 · 5T 誠信協議 · Berkeley Haas × TSISDA
                 </p>
               </div>
             </div>
@@ -271,17 +272,24 @@ export default function DashboardContent() {
         )}
       </section>
 
-      {/* ── Bento: Modules + Activity ── */}
-      <div className="bento section">
-        {/* Module Progress */}
-        <div className="card b8">
+      {/* ── Bento: Charts & Modules ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 section">
+        {/* Main Chart: Environmental Trajectory */}
+        <div className="lg:col-span-8">
+          <EnvironmentalTrajectory 
+            title="永續治理軌跡 — 碳排放實際 vs SBTi 目標 (5T 實證)"
+          />
+        </div>
+
+        {/* Module Progress (Moved to span 4) */}
+        <div className="card lg:col-span-4">
           <div className="card-header">
             <h2 className="section-title">
               <Target size={15} style={{ color: 'var(--blue-700)' }}/>
               模組完成度
             </h2>
-            <Link href="/health-check" className="btn btn-secondary btn-sm flex items-center gap-1">
-              完整健檢 <ChevronRight size={12}/>
+            <Link href="/health-check" className="btn btn-secondary btn-sm">
+              完整健檢
             </Link>
           </div>
           <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
@@ -305,7 +313,10 @@ export default function DashboardContent() {
             ))}
           </div>
         </div>
+      </div>
 
+      {/* ── Bento: Activity & Others ── */}
+      <div className="bento section">
         {/* Activity Feed */}
         <div className="card b4">
           <div className="card-header">
