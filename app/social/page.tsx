@@ -1,95 +1,210 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ClientLayout from '../ClientLayout';
-import { Users, Plus, Edit2 } from 'lucide-react';
+import { getSocialMetrics, SocialMetric } from '@/lib/db';
+import BrandPageHeader from '@/components/brand/BrandPageHeader';
+import BrandTabs from '@/components/brand/BrandTabs';
+import BrandKpiCard from '@/components/brand/BrandKpiCard';
+import BrandCard, { BrandCardHeader } from '@/components/brand/BrandCard';
+import BrandBadge from '@/components/brand/BrandBadge';
+import { Users, ShieldAlert, BookOpen, Link, Heart, Scale, Sparkles, RefreshCw } from 'lucide-react';
 
-const metrics = [
-  { category: 'workforce', metric: '全職員工人數', value: 1250, unit: '人', gri: 'GRI 2-7', verified: true },
-  { category: 'workforce', metric: '女性員工比例', value: 38.5, unit: '%', gri: 'GRI 2-7', verified: true },
-  { category: 'safety', metric: '失能傷害頻率 (FR)', value: 0.45, unit: '次/百萬工時', gri: 'GRI 403-2', verified: true },
-  { category: 'safety', metric: '職業安全訓練覆蓋率', value: 96, unit: '%', gri: 'GRI 403-5', verified: false },
-  { category: 'training', metric: '平均訓練時數', value: 28.5, unit: '小時/人', gri: 'GRI 404-1', verified: true },
-  { category: 'training', metric: '績效考核覆蓋率', value: 100, unit: '%', gri: 'GRI 404-3', verified: true },
-  { category: 'supply', metric: '在地採購比例', value: 65, unit: '%', gri: 'GRI 204-1', verified: false },
-  { category: 'supply', metric: '供應商 ESG 評核完成率', value: 78, unit: '%', gri: 'GRI 308-1', verified: false },
+const TAB_DATA = [
+  { id: 'workforce', label: '員工結構', icon: <Users size={16} />, gri: 'GRI 2-7, 401-405' },
+  { id: 'safety', label: '職業安全', icon: <ShieldAlert size={16} />, gri: 'GRI 403' },
+  { id: 'training', label: '人才培育', icon: <BookOpen size={16} />, gri: 'GRI 404' },
+  { id: 'supply', label: '供應鏈管理', icon: <Link size={16} />, gri: 'GRI 308, 414' },
+  { id: 'community', label: '社區共榮', icon: <Heart size={16} />, gri: 'GRI 413, 201' },
+  { id: 'human_rights', label: '人權盡職調查', icon: <Scale size={16} />, gri: 'GRI 412' },
 ];
 
-const TAB_DATA: Record<string, { label: string; gri: string }> = {
-  workforce: { label: '員工結構', gri: 'GRI 2-7, 401-405' },
-  safety: { label: '職業安全衛生', gri: 'GRI 403' },
-  training: { label: '人才培育', gri: 'GRI 404' },
-  supply: { label: '供應鏈管理', gri: 'GRI 308, 414' },
-};
-
 export default function SocialPage() {
+  const [metrics, setMetrics] = useState<SocialMetric[]>([]);
   const [activeTab, setActiveTab] = useState('workforce');
+  const [loading, setLoading] = useState(true);
+  const [insights, setInsights] = useState('');
+  const [loadingInsights, setLoadingInsights] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (metrics.length > 0) {
+      loadInsights(activeTab);
+    }
+  }, [activeTab, metrics]);
+
+  async function loadData() {
+    setLoading(true);
+    try {
+      const data = await getSocialMetrics();
+      setMetrics(data);
+    } catch (err) {
+      console.error('Failed to load social metrics:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function loadInsights(category: string) {
+    setLoadingInsights(true);
+    setInsights('');
+    try {
+      const res = await fetch(`/api/social/insights?category=${category}`);
+      if (res.ok) {
+        const data = await res.json();
+        setInsights(data.insights);
+      } else {
+        setInsights('無法取得 Hermes AI 洞察。');
+      }
+    } catch (err) {
+      console.error(err);
+      setInsights('取得洞察時發生錯誤。');
+    } finally {
+      setLoadingInsights(false);
+    }
+  }
+
   const tabMetrics = metrics.filter(m => m.category === activeTab);
+  const activeTabData = TAB_DATA.find(t => t.id === activeTab);
 
   return (
     <ClientLayout>
-      <div className="page-container">
-        <div className="page-header">
-          <h1 className="page-title">社會影響 Social Impact</h1>
-          <p className="page-subtitle">S-Hub · GRI 401-414 · 員工 · 安全 · 培訓 · 供應鏈</p>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <BrandPageHeader
+          title="共榮普惠 (Social Impact)"
+          subtitle="GRI 401-414 社會類別指標：透過 Hermes AI 提供員工、安全、供應鏈與社區參與的深度洞察"
+          icon={<Heart size={28} />}
+        />
 
-        <div className="kpi-grid" style={{ marginBottom: 20 }}>
-          {Object.entries(TAB_DATA).map(([key, val]) => {
-            const catMetrics = metrics.filter(m => m.category === key);
-            const verified = catMetrics.filter(m => m.verified).length;
-            return (
-              <div key={key} className="kpi-card" onClick={() => setActiveTab(key)} style={{ cursor: 'pointer', borderColor: activeTab === key ? 'var(--berkeley-blue)' : 'var(--gray-200)' }}>
-                <div className="kpi-value">{catMetrics.length}</div>
-                <div className="kpi-label">{val.label}</div>
-                <div style={{ fontSize: 11, color: 'var(--gray-500)', marginTop: 4 }}>
-                  {verified}/{catMetrics.length} 已驗證
+        <BrandTabs
+          tabs={TAB_DATA.map(t => ({
+            id: t.id,
+            label: t.label,
+            icon: t.icon,
+            badge: metrics.filter(m => m.category === t.id).length || undefined
+          }))}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          variant="line"
+        />
+
+        {loading ? (
+          <div className="flex justify-center py-20 text-slate-400">載入資料中...</div>
+        ) : (
+          <div className="space-y-6">
+            
+            {/* KPI Summary Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {tabMetrics.map((m, idx) => (
+                <BrandKpiCard
+                  key={m.id || idx}
+                  label={m.metric_name}
+                  value={m.metric_value ?? '-'}
+                  unit={m.unit}
+                  verified={m.verified}
+                  color={m.verified ? '#22C55E' : '#FDB515'}
+                  icon={<Users size={20} />}
+                />
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              {/* Detailed Table Section */}
+              <div className="lg:col-span-2">
+                <BrandCard className="h-full">
+                  <BrandCardHeader 
+                    title={`${activeTabData?.label} 指標明細`}
+                    subtitle={`符合 ${activeTabData?.gri} 標準`}
+                  />
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-slate-600">
+                      <thead className="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
+                        <tr>
+                          <th className="px-4 py-3">指標名稱</th>
+                          <th className="px-4 py-3 text-right">數值</th>
+                          <th className="px-4 py-3">GRI 參考</th>
+                          <th className="px-4 py-3 text-center">狀態</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tabMetrics.length === 0 ? (
+                          <tr>
+                            <td colSpan={4} className="px-4 py-8 text-center text-slate-400">無相關數據</td>
+                          </tr>
+                        ) : (
+                          tabMetrics.map((m, idx) => (
+                            <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50">
+                              <td className="px-4 py-3 font-medium text-[#0F172A]">{m.metric_name}</td>
+                              <td className="px-4 py-3 text-right">
+                                <span className="font-bold text-[#003262] text-base">{m.metric_value}</span>
+                                <span className="text-slate-400 ml-1">{m.unit}</span>
+                              </td>
+                              <td className="px-4 py-3">
+                                <BrandBadge variant="default">{m.gri_standard}</BrandBadge>
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                {m.verified ? (
+                                  <BrandBadge variant="success">✓ 已驗證</BrandBadge>
+                                ) : (
+                                  <BrandBadge variant="warning">待驗證</BrandBadge>
+                                )}
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </BrandCard>
+              </div>
+
+              {/* Hermes AI Insights Section */}
+              <div className="lg:col-span-1">
+                <div className="bg-gradient-to-br from-[#003262] to-[#001F3F] rounded-2xl p-6 text-white h-full shadow-lg relative overflow-hidden flex flex-col">
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white/5 blur-2xl" />
+                  <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-[#FDB515]/10 blur-2xl" />
+                  
+                  <div className="relative z-10 flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+                        <Sparkles size={20} className="text-[#FDB515]" />
+                      </div>
+                      <h3 className="font-semibold text-lg">Hermes 智能洞察</h3>
+                    </div>
+                    {loadingInsights && <RefreshCw size={16} className="animate-spin text-white/60" />}
+                  </div>
+
+                  <div className="relative z-10 flex-1 flex flex-col text-sm text-slate-200/90 leading-relaxed overflow-y-auto pr-2 custom-scrollbar">
+                    {loadingInsights ? (
+                      <div className="flex flex-col items-center justify-center flex-1 space-y-3 opacity-70 py-10">
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 rounded-full bg-[#FDB515] animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#FDB515] animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#FDB515] animate-bounce" style={{ animationDelay: '300ms' }} />
+                        </div>
+                        <p>正在分析 {activeTabData?.label} 數據...</p>
+                      </div>
+                    ) : (
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        {insights ? (
+                          <div dangerouslySetInnerHTML={{ __html: insights.replace(/\n/g, '<br/>') }} />
+                        ) : (
+                          <p className="text-slate-400 italic">目前無洞察報告</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
 
-        <div className="tabs" style={{ marginBottom: 20 }}>
-          {Object.entries(TAB_DATA).map(([key, val]) => (
-            <button key={key} className={`tab-btn ${activeTab === key ? 'active' : ''}`} onClick={() => setActiveTab(key)}>
-              {val.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="card" style={{ padding: 0 }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--gray-200)', display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-              <strong>{TAB_DATA[activeTab].label}</strong>
-              <span className="badge badge-blue" style={{ marginLeft: 8 }}>{TAB_DATA[activeTab].gri}</span>
             </div>
           </div>
-          <div className="table-wrapper" style={{ borderRadius: 0, border: 'none' }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>指標</th>
-                  <th>數值</th>
-                  <th>單位</th>
-                  <th>GRI 標準</th>
-                  <th>狀態</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tabMetrics.map((m, i) => (
-                  <tr key={i}>
-                    <td style={{ fontWeight: 500 }}>{m.metric}</td>
-                    <td style={{ fontWeight: 700, color: 'var(--berkeley-blue)' }}>{m.value}</td>
-                    <td><span className="badge badge-gray">{m.unit}</span></td>
-                    <td><span className="badge badge-blue">{m.gri}</span></td>
-                    <td><span className={`badge ${m.verified ? 'badge-green' : 'badge-gold'}`}>{m.verified ? '✓ 已驗證' : '待驗證'}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        )}
       </div>
     </ClientLayout>
   );

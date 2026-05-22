@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
-import { Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Zap, Bot, Info, BarChart3, CloudRain, Trash, Wind, Activity, CheckCircle, Globe } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Zap, Bot, Info, BarChart3, CloudRain, Trash, Wind, Activity, CheckCircle, Globe, TrendingUp } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { getEnvironmentalData, upsertEnvironmentalData, deleteEnvironmentalData, type EnvironmentalMetric } from '../../lib/db';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput 
@@ -11,10 +12,20 @@ const TABS = [
   { id: 'Energy' as const, label: '能源管理', gri: 'GRI 302', color: 'var(--blue-600)', icon: <Zap size={14}/> },
   { id: 'Water' as const,  label: '水資源',   gri: 'GRI 303', color: 'var(--blue-400)', icon: <CloudRain size={14}/> },
   { id: 'Waste' as const,  label: '廢棄物',   gri: 'GRI 306', color: 'var(--amber-600)', icon: <Trash size={14}/> },
+  { id: 'Analysis' as const, label: '趨勢分析', gri: 'Analytics', color: 'var(--purple-600)', icon: <TrendingUp size={14}/> },
+];
+
+const MOCK_TREND = [
+  { year: 2020, scope1: 450, scope2: 820, target: 1400 },
+  { year: 2021, scope1: 480, scope2: 780, target: 1300 },
+  { year: 2022, scope1: 420, scope2: 710, target: 1200 },
+  { year: 2023, scope1: 390, scope2: 680, target: 1100 },
+  { year: 2024, scope1: 412, scope2: 635, target: 1000 },
 ];
 
 const UNIT_MAP: Record<string, string[]> = {
   GHG: ['tCO₂e', 'kg CO₂e'], Energy: ['kWh', 'MWh', 'GJ', '%'], Water: ['m³', 'kL'], Waste: ['公噸', 'kg', '%'],
+  Analysis: [],
 };
 const GRI_MAP: Record<string, string[]> = {
   GHG: ['GRI 305-1', 'GRI 305-2', 'GRI 305-3'], Energy: ['GRI 302-1', 'GRI 302-2', 'GRI 302-3'],
@@ -163,57 +174,141 @@ export default function EnvironmentalPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-12">
-          <BrandCard padding="none" className="overflow-hidden">
-             <div className="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: currentTabInfo.color }} />
-                   <span className="font-bold text-slate-700">{currentTabInfo.label} 實證列表</span>
+          {activeTab === 'Analysis' ? (
+            <div className="space-y-6 fade-in">
+              <BrandCard padding="lg">
+                <BrandCardHeader 
+                  title="GHG 排放趨勢與減量目標" 
+                  subtitle="歷史排放數據 (Scope 1+2) 與 2030 減量路徑分析"
+                  icon={<TrendingUp size={20} className="text-purple-600" />}
+                />
+                <div className="h-[400px] w-full mt-8">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={MOCK_TREND} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorScope1" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#003262" stopOpacity={0.1}/>
+                          <stop offset="95%" stopColor="#003262" stopOpacity={0}/>
+                        </linearGradient>
+                        <linearGradient id="colorScope2" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#3b7ea1" stopOpacity={0.1}/>
+                          <stop offset="95%" stopColor="#3b7ea1" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis 
+                        dataKey="year" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 12, fontWeight: 600, fill: '#64748b' }} 
+                        dy={10}
+                      />
+                      <YAxis 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 12, fontWeight: 600, fill: '#64748b' }} 
+                      />
+                      <Tooltip 
+                        content={({ active, payload, label }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-xl">
+                                <p className="text-xs font-bold text-slate-400 mb-2 uppercase">{label} 年度數據</p>
+                                {payload.map((p, i) => (
+                                  <div key={i} className="flex items-center justify-between gap-8 mb-1">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-2 h-2 rounded-full" style={{ background: p.color }} />
+                                      <span className="text-sm font-bold text-slate-700">{p.name === 'scope1' ? '範疇一' : p.name === 'scope2' ? '範疇二' : '減量目標'}</span>
+                                    </div>
+                                    <span className="text-sm font-mono font-bold text-[#003262]">{p.value} tCO₂e</span>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Area name="scope1" type="monotone" dataKey="scope1" stroke="#003262" strokeWidth={3} fillOpacity={1} fill="url(#colorScope1)" />
+                      <Area name="scope2" type="monotone" dataKey="scope2" stroke="#3b7ea1" strokeWidth={3} fillOpacity={1} fill="url(#colorScope2)" />
+                      <Area name="target" type="dashed" dataKey="target" stroke="#cbd5e1" strokeWidth={2} strokeDasharray="5 5" fill="transparent" />
+                    </AreaChart>
+                  </ResponsiveContainer>
                 </div>
-                <BrandBadge variant="outline">{currentTabInfo.gri} 標準對齊</BrandBadge>
-             </div>
-             <div className="scroll-x-governed">
-               <BrandTable 
-                 columns={[
-                   { key: 'name', label: '指標名稱' },
-                   { key: 'value', label: '數值' },
-                   { key: 'gri', label: 'GRI' },
-                   { key: 'source', label: '來源溯源' },
-                   { key: 'status', label: '實證狀態' },
-                   { key: 'action', label: '操作' },
-                 ]}
-                 data={metrics.map(m => ({
-                   name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
-                   value: (
-                     <div className="flex items-end gap-1">
-                        <span className="text-lg font-mono font-bold text-[#003262]">{m.metric_value?.toLocaleString() ?? '—'}</span>
-                        <span className="text-[10px] font-bold text-slate-400 mb-1">{m.unit}</span>
-                     </div>
-                   ),
-                   gri: <BrandBadge variant="outline" size="xs" className="font-mono">{m.gri_standard}</BrandBadge>,
-                   source: <span className="text-xs text-slate-500">{m.source_origin || '—'}</span>,
-                   status: (
-                     <div className="flex items-center gap-2">
-                        <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? '已封印 (T4)' : '待驗證'} size="sm" />
-                     </div>
-                   ),
-                   action: (
-                       <div className="flex gap-2">
-                        <BrandTooltip content={m.verified ? '取消封印' : '5T 實證封印'}>
-                           <BrandButton variant={m.verified ? 'ghost' : 'outline'} size="sm" onClick={() => handleVerify(m)} className={m.verified ? 'text-green-600' : ''}>
-                              <Shield size={14}/>
-                           </BrandButton>
-                        </BrandTooltip>
-                        <BrandButton variant="ghost" size="sm" onClick={() => setEditRow({ ...m, isNew: false })}><Edit2 size={14}/></BrandButton>
-                        <BrandButton variant="ghost" size="sm" onClick={() => m.id && handleDelete(m.id)} className="text-red-500"><Trash2 size={14}/></BrandButton>
-                     </div>
-                   )
-                 }))}
-               />
-             </div>
-          </BrandCard>
+              </BrandCard>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <BrandCard padding="md">
+                    <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                       <Zap size={16} className="text-gold-500" /> AI 洞察分析
+                    </h4>
+                    <p className="text-sm text-slate-600 leading-relaxed italic">
+                       「根據 2023-2024 數據趨勢，範疇二電力排放在第三季有顯著增長，建議查驗冷卻系統效能。當前減量進度領先 SBTi 目標 4.2%。」
+                    </p>
+                 </BrandCard>
+                 <BrandCard padding="md">
+                    <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                       <Shield size={16} className="text-green-600" /> 5T 實證建議
+                    </h4>
+                    <ul className="text-sm text-slate-600 space-y-2">
+                       <li className="flex items-start gap-2">• 已有 82% 數據完成 T4 封印</li>
+                       <li className="flex items-start gap-2">• 建議補強 2024 年度的廢棄物清運佐證</li>
+                    </ul>
+                 </BrandCard>
+              </div>
+            </div>
+          ) : (
+            <BrandCard padding="none" className="overflow-hidden">
+               <div className="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: currentTabInfo.color }} />
+                     <span className="font-bold text-slate-700">{currentTabInfo.label} 實證列表</span>
+                  </div>
+                  <BrandBadge variant="outline">{currentTabInfo.gri} 標準對齊</BrandBadge>
+               </div>
+               <div className="scroll-x-governed">
+                 <BrandTable 
+                   columns={[
+                     { key: 'name', label: '指標名稱' },
+                     { key: 'value', label: '數值' },
+                     { key: 'gri', label: 'GRI' },
+                     { key: 'source', label: '來源溯源' },
+                     { key: 'status', label: '實證狀態' },
+                     { key: 'action', label: '操作' },
+                   ]}
+                   data={metrics.map(m => ({
+                     name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
+                     value: (
+                       <div className="flex items-end gap-1">
+                          <span className="text-lg font-mono font-bold text-[#003262]">{m.metric_value?.toLocaleString() ?? '—'}</span>
+                          <span className="text-[10px] font-bold text-slate-400 mb-1">{m.unit}</span>
+                       </div>
+                     ),
+                     gri: <BrandBadge variant="outline" size="xs" className="font-mono">{m.gri_standard}</BrandBadge>,
+                     source: <span className="text-xs text-slate-500">{m.source_origin || '—'}</span>,
+                     status: (
+                       <div className="flex items-center gap-2">
+                          <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? '已封印 (T4)' : '待驗證'} size="sm" />
+                       </div>
+                     ),
+                     action: (
+                         <div className="flex gap-2">
+                          <BrandTooltip content={m.verified ? '取消封印' : '5T 實證封印'}>
+                             <BrandButton variant={m.verified ? 'ghost' : 'outline'} size="sm" onClick={() => handleVerify(m)} className={m.verified ? 'text-green-600' : ''}>
+                                <Shield size={14}/>
+                             </BrandButton>
+                          </BrandTooltip>
+                          <BrandButton variant="ghost" size="sm" onClick={() => setEditRow({ ...m, isNew: false })}><Edit2 size={14}/></BrandButton>
+                          <BrandButton variant="ghost" size="sm" onClick={() => m.id && handleDelete(m.id)} className="text-red-500"><Trash2 size={14}/></BrandButton>
+                       </div>
+                     )
+                   }))}
+                 />
+               </div>
+            </BrandCard>
+          )}
         </div>
       </div>
-
       {/* Floating AI Assistant Button */}
       <button
         onClick={handleAskOmniHermes}

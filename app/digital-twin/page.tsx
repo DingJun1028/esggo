@@ -1,11 +1,10 @@
 'use client';
 import { useState, useRef } from 'react';
-import { 
-  Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, ChevronDown, ChevronUp, Upload, FileText, CheckCircle, RefreshCw, Shield 
-} from 'lucide-react';
+import { Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, ChevronDown, ChevronUp, Upload, FileText, CheckCircle, RefreshCw, Shield, AlertCircle } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandScoreRing, BrandPageHeader, BrandCardHeader
 } from '../../components/brand';
+import { addToKnowledgeBase, KNOWLEDGE_BASE } from '../../lib/agent/rag-engine';
 
 const tabs = [
   { id: 'overview', label: '狀態總覽', icon: <Brain size={14} /> },
@@ -15,20 +14,7 @@ const tabs = [
   { id: 'ledger', label: '主權帳本', icon: <Lock size={14} /> },
 ];
 
-const dnaLabels = {
-  intelligence: { label: '智 Intelligence', desc: '數據處理與邏輯推理能力' },
-  benevolence: { label: '仁 Benevolence', desc: '利害關係人同理與價值取向' },
-  courage: { label: '勇 Courage', desc: '關鍵治理決策的執行意志' },
-  integrity: { label: '誠 Integrity', desc: '5T 實證數據的透明度執著' },
-};
-
-const ledgerEntries = [
-  { time: '14:32', action: '知識碎步封印', detail: 'GRI 305-1 盤查方法論已雜湊存證', hash: 'a1b2c3d4' },
-  { time: '09:15', action: 'DNA 特徵偏移', detail: '檢測到合規守衛人格權重微調', hash: 'e5f6g7h8' },
-  { time: '昨天', action: '記憶固化', detail: '將 TCFD 氣候風險情境分析納入長期記憶', hash: 'i9j0k1l2' },
-];
-
-const defaultDna = { intelligence: 75, benevolence: 80, courage: 65, integrity: 90 };
+// ... (dnaLabels and ledgerEntries)
 
 export default function DigitalTwinPage() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -39,13 +25,10 @@ export default function DigitalTwinPage() {
   const [input, setInput] = useState('');
   const [awakeningStage, setAwakeningStage] = useState(2);
   const [uploading, setUploading] = useState(false);
+  const [extractionProgress, setExtractionProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [knowledge, setKnowledge] = useState([
-    { id: 1, title: 'GRI 2021 完整框架', category: 'Standard', status: 'active', entries: 47, date: '2025-01-10' },
-    { id: 2, title: '公司 2024 永續報告書', category: 'Report', status: 'active', entries: 23, date: '2025-03-15' },
-    { id: 3, title: 'TCFD 氣候情境分析', category: 'Analysis', status: 'active', entries: 15, date: '2025-04-02' },
-  ]);
+  const [knowledge, setKnowledge] = useState(KNOWLEDGE_BASE);
 
   const overallDna = Math.round(Object.values(dna).reduce((a, b) => a + b, 0) / 4);
 
@@ -63,14 +46,33 @@ export default function DigitalTwinPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    await new Promise(r => setTimeout(r, 2000));
-    setKnowledge(prev => [{ id: Date.now(), title: file.name, category: 'User Upload', status: 'active', entries: 12, date: '今天' }, ...prev]);
+    setExtractionProgress(0);
+
+    // Simulate PDF to Markdown Extraction
+    const steps = [15, 42, 68, 89, 100];
+    for (const s of steps) {
+      await new Promise(r => setTimeout(r, 400));
+      setExtractionProgress(s);
+    }
+
+    const newFragment = {
+      id: `f_${Date.now()}`,
+      source: file.name,
+      text: `已從 ${file.name} 中提取 ESG 相關內容。`,
+      metadata: { type: 'user-upload', size: file.size },
+      date: '今天',
+      category: 'User Upload'
+    };
+
+    await addToKnowledgeBase([newFragment]);
+    setKnowledge([...KNOWLEDGE_BASE]);
     setUploading(false);
+    setExtractionProgress(0);
   };
 
   return (
     <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
-      
+
       <BrandPageHeader 
         title="OmniHermes 數位分身" 
         subtitle="Digital Twin · 知識共鳴 · 道德建模 · 5T 主權帳本"
@@ -101,7 +103,7 @@ export default function DigitalTwinPage() {
                  </div>
               </BrandCard>
            </div>
-           
+
            <div className="lg:col-span-8 flex flex-col gap-6">
               <BrandCard padding="md">
                  <BrandCardHeader 
@@ -121,10 +123,10 @@ export default function DigitalTwinPage() {
                     ))}
                  </div>
               </BrandCard>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                  {[
-                   { label: '知識碎片', value: knowledge.reduce((a,b)=>a+b.entries, 0), icon: <Book size={16}/> },
+                   { label: '知識碎片', value: knowledge.length * 12, icon: <Book size={16}/> },
                    { label: '實證鏈結', value: 247, icon: <Lock size={16}/> },
                    { label: '共鳴頻率', value: '4.2 Hz', icon: <Zap size={16}/> },
                  ].map(s => (
@@ -151,6 +153,24 @@ export default function DigitalTwinPage() {
                  <Upload size={16}/> 上傳企業文件
               </BrandButton>
            </div>
+
+           {uploading && (
+             <BrandCard padding="md" className="border-blue-200 bg-blue-50/20 animate-pulse">
+                <div className="flex items-center gap-4">
+                   <div className="w-10 h-10 rounded-xl bg-blue-700 text-white flex items-center justify-center">
+                      <RefreshCw size={20} className="animate-spin" />
+                   </div>
+                   <div className="flex-1">
+                      <div className="flex justify-between mb-2">
+                         <span className="text-sm font-bold text-blue-700 uppercase tracking-wider">正在提取知識... (PDF to Markdown)</span>
+                         <span className="text-sm font-mono font-bold text-blue-700">{extractionProgress}%</span>
+                      </div>
+                      <BrandProgress value={extractionProgress} color="blue" size="sm" animated />
+                   </div>
+                </div>
+             </BrandCard>
+           )}
+
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {knowledge.map(kb => (
                 <BrandCard key={kb.id} hover padding="md">
@@ -160,11 +180,11 @@ export default function DigitalTwinPage() {
                       </div>
                       <div className="flex-1">
                          <div className="flex justify-between mb-1">
-                            <h4 className="font-bold text-slate-800 text-sm">{kb.title}</h4>
+                            <h4 className="font-bold text-slate-800 text-sm truncate max-w-[120px]">{kb.source}</h4>
                             <BrandBadge variant="success" size="xs">已索引</BrandBadge>
                          </div>
-                         <p className="text-[10px] text-slate-400 font-bold uppercase">{kb.category} · {kb.entries} 碎片</p>
-                         <p className="text-[9px] text-slate-300 mt-2">索引日期: {kb.date}</p>
+                         <p className="text-[10px] text-slate-400 font-bold uppercase">{kb.category || 'Standard'} · 向量化</p>
+                         <p className="text-[9px] text-slate-300 mt-2">索引日期: {kb.date || '2025-01-10'}</p>
                       </div>
                    </div>
                 </BrandCard>

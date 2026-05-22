@@ -38,21 +38,40 @@ EOF
 # 5. Install dependencies
 echo "🚚 Installing dependencies..."
 npm install
+sudo npm install -g pm2-logrotate
 
-# 6. Open Firewall port 8642
-echo "🛡️ Configuring Firewall..."
+# 6. Environment Setup
+echo "🔑 Setting up environment..."
+if [ ! -f .env ]; then
+  cat <<EOF > .env
+GEMINI_API_KEY=your_key_here
+PORT=8642
+NODE_ENV=production
+EOF
+  echo "⚠️ Created .env template. PLEASE EDIT IT with your API Key!"
+fi
+
+# 7. Security & Firewall
+echo "🛡️ Hardening Firewall..."
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
 sudo ufw allow 8642/tcp
+sudo ufw --force enable
 
-# 7. Start server with PM2
-echo "🚀 Launching Hermes Server..."
-pm2 start hermes-server.mjs --name hermes-gateway
+# 8. Launch Hermes Server
+echo "🚀 Launching Hermes Server with PM2..."
+pm2 start hermes-server.mjs --name hermes-gateway --exp-backoff-restart-delay 100
 
-# 8. Setup PM2 startup
+# 9. Setup PM2 startup
 pm2 save
 sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp $HOME
 
 echo "------------------------------------------------"
-echo "✅ Hermes Gateway is now LIVE on port 8642!"
-echo "Check status with: pm2 status"
-echo "View logs with: pm2 logs hermes-gateway"
+echo "✅ Hermes Gateway Deployment COMPLETE!"
+echo "------------------------------------------------"
+echo "🌐 LIVE URL: http://$(curl -s ifconfig.me):8642"
+echo "📝 Action Required: Edit ~/hermes-gateway/.env"
+echo "💡 Tip: For SSL, install Nginx and certbot:"
+echo "   sudo apt install nginx certbot python3-certbot-nginx"
 echo "------------------------------------------------"

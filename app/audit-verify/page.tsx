@@ -1,6 +1,11 @@
 'use client';
-import { useState } from 'react';
-import { Shield, Search, CheckCircle, XCircle, Clock, Hash, AlertTriangle, Lock } from 'lucide-react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Shield, Search, CheckCircle, XCircle, Clock, Hash, AlertTriangle, Lock, ExternalLink, RefreshCw, FileText, User } from 'lucide-react';
+import { listVaultRecords, type VaultOmniRecord, verifyRecord } from '../../lib/vault-omni';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandStatusDot, BrandProgress, BrandPageHeader, BrandCardHeader, BrandInput 
+} from '../../components/brand';
 
 async function sha256(message: string): Promise<string> {
   const msgBuffer = new TextEncoder().encode(message);
@@ -9,22 +14,41 @@ async function sha256(message: string): Promise<string> {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-const MOCK_RECORDS = [
-  { id: 'ev-001', title: 'GRI 305-1 溫室氣體盤查清冊', hash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', actor: '環安部主任', module: 'Environmental', status: 'verified', created_at: '2024-04-10T08:30:00Z' },
-  { id: 'ev-002', title: '台電帳單 2024-Q1', hash: 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', actor: '總務部門', module: 'Evidence', status: 'verified', created_at: '2024-04-08T14:22:00Z' },
-  { id: 'ev-003', title: 'ISO 14001 認證書', hash: '2c624232cdd221771294dfbb310acbc8d21d659b94b5dc02e26157e6e33a5f8e', actor: '環安部', module: 'Compliance', status: 'pending', created_at: '2024-04-05T10:15:00Z' },
-];
-
-export default function AuditVerifyPage() {
+function VerifyContent() {
+  const searchParams = useSearchParams();
+  const [records, setRecords] = useState<VaultOmniRecord[]>([]);
   const [inputHash, setInputHash] = useState('');
   const [verifyInput, setVerifyInput] = useState('');
-  const [result, setResult] = useState<{ match: boolean; computed: string; original: string } | null>(null);
+  const [result, setResult] = useState<{ match: boolean; computed: string; original: string; detail?: string } | null>(null);
   const [verifying, setVerifying] = useState(false);
   const [step, setStep] = useState(0);
-  const [selected, setSelected] = useState<typeof MOCK_RECORDS[0] | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleVerify = async () => {
-    if (!verifyInput.trim() || !inputHash.trim()) return;
+  const loadRecords = async () => {
+    setLoading(true);
+    const data = await listVaultRecords(20);
+    setRecords(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadRecords();
+  }, []);
+
+  useEffect(() => {
+    const uuid = searchParams.get('uuid');
+    if (uuid && records.length > 0) {
+      const record = records.find(r => r.uuid === uuid);
+      if (record) {
+        setInputHash(record.hash_lock);
+        setVerifyInput(record.payload);
+        handleVerify(record.payload, record.hash_lock);
+      }
+    }
+  }, [searchParams, records]);
+
+  const handleVerify = async (input = verifyInput, target = inputHash) => {
+    if (!input.trim() || !target.trim()) return;
     setVerifying(true);
     setStep(0);
     setResult(null);
@@ -34,121 +58,152 @@ export default function AuditVerifyPage() {
       setStep(i);
     }
 
-    const computed = await sha256(verifyInput);
-    setResult({ match: computed === inputHash, computed, original: inputHash });
+    const computed = await sha256(input);
+    const match = computed === target;
+    
+    // Also use the library verification for deeper checks if possible
+    const recordFound = records.find(r => r.hash_lock === target);
+    let detail = '';
+    if (recordFound) {
+      const v = verifyRecord(recordFound);
+      detail = v.detail;
+    }
+
+    setResult({ match, computed, original: target, detail });
     setVerifying(false);
   };
 
-  const STEPS = ['接收驗算請求', 'SHA-256 雜湊計算', '比對資料庫記錄', '輸出驗算結果'];
+  const STEPS = ['接收驗算請求', 'SHA-256 雜湊計算', '比對聖碑記錄 (T4)', '輸出驗算結果'];
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#003262', margin: 0 }}>VerifyLink™ 審計驗算入口</h1>
-        <p style={{ color: '#64748b', marginTop: '4px', fontSize: '14px' }}>零知識證明 · SHA-256 雜湊驗算 · 5T 不可篡改協議</p>
-      </div>
+    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+      <BrandPageHeader 
+        title="VerifyLink™ 審計驗算入口" 
+        subtitle="零知識證明 · SHA-256 雜湊驗算 · 5T 不可篡改協議"
+        icon={<Shield size={24}/>}
+      />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Verifier */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Hash size={18} /> 即時 Hash 驗算器
-          </h3>
-          <div style={{ marginBottom: '12px' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'block', marginBottom: '6px' }}>輸入原始內容</label>
-            <textarea value={verifyInput} onChange={e => setVerifyInput(e.target.value)} placeholder="貼上您要驗算的原始數據或文字..."
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', outline: 'none', minHeight: '80px', resize: 'vertical', boxSizing: 'border-box' }} />
+        <BrandCard padding="lg">
+          <BrandCardHeader 
+            title="即時 Hash 驗算器" 
+            subtitle="手動驗證數據完整性"
+            icon={<Hash size={18} className="text-[#003262]" />}
+          />
+          <div className="space-y-4 mt-6">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-slate-500 uppercase">原始數據內容 (Payload)</label>
+              <textarea 
+                value={verifyInput} 
+                onChange={e => setVerifyInput(e.target.value)} 
+                placeholder="貼上您要驗算的原始 JSON 或文字..."
+                className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs font-mono min-h-[120px] focus:bg-white focus:border-blue-600 outline-none transition-all" 
+              />
+            </div>
+            <BrandInput 
+              label="對照 Hash 值 (Hash Lock)" 
+              value={inputHash} 
+              onChange={e => setInputHash(e.target.value)} 
+              placeholder="貼上原始 SHA-256 Hash..."
+              className="font-mono text-[11px]"
+            />
+            <BrandButton 
+              variant="primary" 
+              fullWidth 
+              onClick={() => handleVerify()} 
+              loading={verifying}
+              disabled={!verifyInput || !inputHash}
+            >
+              <Lock size={16}/> {verifying ? '正在計算 ZKP...' : '啟動 5T 驗算'}
+            </BrandButton>
           </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', display: 'block', marginBottom: '6px' }}>對照 Hash 值</label>
-            <input value={inputHash} onChange={e => setInputHash(e.target.value)} placeholder="貼上原始 SHA-256 Hash..."
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '12px', fontFamily: 'monospace', outline: 'none', boxSizing: 'border-box' }} />
-          </div>
-          <button onClick={handleVerify} disabled={verifying || !verifyInput || !inputHash}
-            style={{ width: '100%', padding: '12px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '14px', opacity: verifying ? 0.7 : 1 }}>
-            {verifying ? '驗算中...' : '🔐 啟動 ZKP 驗算'}
-          </button>
-        </div>
+        </BrandCard>
 
         {/* Steps + Result */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Shield size={18} /> 驗算流程
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+        <BrandCard padding="lg" className="bg-slate-900 text-white border-none shadow-2xl">
+          <BrandCardHeader 
+            title="驗算流程實況" 
+            subtitle="SHA-256 Runtime Trace"
+            icon={<RefreshCw size={18} className="text-blue-400" />}
+          />
+          <div className="flex flex-col gap-6 mt-8">
             {STEPS.map((s, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{
-                  width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: step > i ? '#003262' : step === i && verifying ? '#f59e0b' : '#e2e8f0',
-                  transition: 'background 0.3s',
-                }}>
-                  {step > i ? <CheckCircle size={16} color="#fff" /> : <span style={{ fontSize: '11px', fontWeight: '700', color: step === i && verifying ? '#fff' : '#94a3b8' }}>{i + 1}</span>}
+              <div key={i} className="flex items-center gap-4">
+                <div className={`
+                  w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-500
+                  ${step > i ? 'bg-blue-600 text-white scale-110' : step === i && verifying ? 'bg-gold-500 text-white animate-pulse' : 'bg-slate-800 text-slate-500'}
+                `}>
+                  {step > i ? <CheckCircle size={16} /> : i + 1}
                 </div>
-                <span style={{ fontSize: '13px', color: step > i ? '#1e293b' : '#94a3b8', fontWeight: step > i ? '600' : '400', transition: 'color 0.3s' }}>{s}</span>
+                <span className={`text-sm font-bold tracking-tight ${step > i ? 'text-blue-400' : 'text-slate-500'}`}>{s}</span>
               </div>
             ))}
           </div>
 
           {result && (
-            <div style={{ padding: '16px', borderRadius: '8px', background: result.match ? '#dcfce7' : '#fee2e2', border: `1px solid ${result.match ? '#86efac' : '#fca5a5'}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                {result.match ? <CheckCircle size={20} color="#16a34a" /> : <XCircle size={20} color="#dc2626" />}
-                <span style={{ fontSize: '15px', fontWeight: '800', color: result.match ? '#16a34a' : '#dc2626' }}>
-                  {result.match ? '✅ 驗算通過 — 數據完整性確認' : '❌ 驗算失敗 — Hash 不符'}
+            <div className={`mt-8 p-6 rounded-3xl animate-in zoom-in-95 duration-500 ${result.match ? 'bg-green-600/10 border border-green-500/20' : 'bg-red-600/10 border border-red-500/20'}`}>
+              <div className="flex items-center gap-3 mb-3">
+                {result.match ? <CheckCircle size={24} className="text-green-500" /> : <XCircle size={24} className="text-red-500" />}
+                <span className={`text-lg font-black uppercase tracking-tight ${result.match ? 'text-green-500' : 'text-red-500'}`}>
+                  {result.match ? 'Integrity Verified' : 'Integrity Failed'}
                 </span>
               </div>
-              <div style={{ fontSize: '11px', fontFamily: 'monospace', color: '#475569', wordBreak: 'break-all' }}>
-                計算值：{result.computed.substring(0, 32)}...
+              <p className="text-xs text-slate-400 mb-4 leading-relaxed">{result.detail || (result.match ? '數據完整性驗證通過。此紀錄與 5T 聖碑中記載的原始雜湊完全相符。' : '數據雜湊不符。內容可能在封印後遭到篡改或格式不一致。')}</p>
+              <div className="p-3 bg-black/30 rounded-xl font-mono text-[9px] text-blue-300 break-all border border-white/5">
+                Computed: {result.computed}
               </div>
             </div>
           )}
-        </div>
+        </BrandCard>
       </div>
 
       {/* Records Table */}
-      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', margin: 0 }}>已封印實證記錄</h3>
+      <BrandCard padding="none" className="overflow-hidden">
+        <div className="p-6 bg-white border-b border-slate-100 flex justify-between items-center">
+          <h3 className="text-base font-bold text-slate-900">已封印 5T 實證記錄 (Vault Omni Core)</h3>
+          <BrandButton variant="ghost" size="sm" onClick={loadRecords}><RefreshCw size={14}/></BrandButton>
         </div>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead style={{ background: '#f8fafc' }}>
-            <tr>
-              {['文件名稱', '模組', '上傳者', '封印時間', '狀態', '操作'].map(h => (
-                <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', color: '#64748b', fontWeight: '700', borderBottom: '1px solid #e2e8f0' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {MOCK_RECORDS.map(r => (
-              <tr key={r.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Lock size={12} color="#94a3b8" />
-                    {r.title}
-                  </div>
-                </td>
-                <td style={{ padding: '14px 16px' }}>
-                  <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '20px', background: '#dbeafe', color: '#1e40af', fontWeight: '600' }}>{r.module}</span>
-                </td>
-                <td style={{ padding: '14px 16px', fontSize: '13px', color: '#64748b' }}>{r.actor}</td>
-                <td style={{ padding: '14px 16px', fontSize: '12px', color: '#94a3b8' }}>{new Date(r.created_at).toLocaleDateString('zh-TW')}</td>
-                <td style={{ padding: '14px 16px' }}>
-                  <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '20px', background: r.status === 'verified' ? '#dcfce7' : '#fef3c7', color: r.status === 'verified' ? '#16a34a' : '#92400e', fontWeight: '700' }}>
-                    {r.status === 'verified' ? '已驗證' : '待審核'}
-                  </span>
-                </td>
-                <td style={{ padding: '14px 16px' }}>
-                  <button onClick={() => { setInputHash(r.hash); setSelected(r); }}
-                    style={{ fontSize: '11px', padding: '5px 12px', background: '#003262', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>
+        <div className="overflow-x-auto">
+          <BrandTable 
+            columns={[
+              { key: 'uuid', label: 'UUID' },
+              { key: 'dimension', label: '層級' },
+              { key: 'hash', label: 'Hash Lock' },
+              { key: 'time', label: '時間' },
+              { key: 'action', label: '操作' },
+            ]}
+            data={records.map(r => ({
+              uuid: <span className="font-mono text-[10px] font-bold text-blue-600">{r.uuid.slice(0, 8)}</span>,
+              dimension: <BrandBadge variant="outline" size="xs">{r.dimension}</BrandBadge>,
+              hash: <span className="font-mono text-[10px] text-slate-400">{r.hash_lock.slice(0, 16)}...</span>,
+              time: <span className="text-[10px] text-slate-400 font-bold uppercase">{new Date(r.timestamp).toLocaleString()}</span>,
+              action: (
+                <div className="flex gap-2">
+                  <BrandButton 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => { setInputHash(r.hash_lock); setVerifyInput(r.payload); handleVerify(r.payload, r.hash_lock); }}
+                  >
                     驗算
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  </BrandButton>
+                  <BrandButton variant="ghost" size="sm" onClick={() => window.open(`/audit-verify?uuid=${r.uuid}`)}>
+                    <ExternalLink size={12}/>
+                  </BrandButton>
+                </div>
+              )
+            }))}
+          />
+        </div>
+      </BrandCard>
     </div>
+  );
+}
+
+export default function AuditVerifyPage() {
+  return (
+    <Suspense fallback={<div>Loading Verifier...</div>}>
+      <VerifyContent />
+    </Suspense>
   );
 }
