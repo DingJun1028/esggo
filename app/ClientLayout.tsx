@@ -34,7 +34,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/hermes-orchestrator', label: 'Agent 調度', sub: 'Orchestrator', icon: <Bot size={16} /> },
       { href: '/hermes-architecture', label: '架構治理',   sub: 'Architecture', icon: <Layers size={16} /> },
-      { href: '/swarm',               label: '代理蜂群',   sub: 'Swarm Mode',   icon: <Users size={16} /> },
+      { href: '/swarm',               label: '代理蜂群',   sub: 'Swarm V3',     icon: <Users size={16} />, badge: 'V3' },
     ],
   },
   {
