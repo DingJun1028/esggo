@@ -8,6 +8,8 @@ import {
 
 interface ThemeSelectorProps {
   collapsed?: boolean;
+  currentTheme?: ThemeId;
+  onSelect?: (id: ThemeId) => void;
 }
 
 export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
@@ -30,6 +32,7 @@ export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
     setCurrent(id);
     applyTheme(id);
     setOpen(false);
+    if (onSelect) onSelect(id);
   };
 
   const toggleFavorite = (e: React.MouseEvent, id: ThemeId) => {
@@ -44,7 +47,8 @@ export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
     }
   };
 
-  const currentTheme = THEMES.find(t => t.id === current);
+  const activeTheme = currentTheme || current;
+  const activeThemeObj = THEMES.find(t => t.id === activeTheme);
   const favoriteThemes = THEMES.filter(t => favorites.includes(t.id));
   const otherThemes = THEMES.filter(t => !favorites.includes(t.id));
 
@@ -52,7 +56,7 @@ export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
     <div style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen(!open)}
-        title={collapsed ? `主題：${currentTheme?.name}` : undefined}
+        title={collapsed ? `主題：${activeThemeObj?.name}` : undefined}
         style={{
           width: '100%',
           display: 'flex',
@@ -69,11 +73,11 @@ export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
           justifyContent: collapsed ? 'center' : 'flex-start',
         }}
       >
-        <span style={{ fontSize: '14px', flexShrink: 0 }}>{currentTheme?.emoji}</span>
+        <span style={{ fontSize: '14px', flexShrink: 0 }}>{activeThemeObj?.emoji}</span>
         {!collapsed && (
           <>
             <span style={{ flex: 1, textAlign: 'left', fontWeight: 500, color: 'var(--text-primary)' }}>
-              {currentTheme?.name}
+              {activeThemeObj?.name}
             </span>
             <Palette size={12} style={{ flexShrink: 0 }} />
           </>
@@ -115,7 +119,7 @@ export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
                     <ThemeItem
                       key={theme.id}
                       theme={theme}
-                      isCurrent={current === theme.id}
+                      isCurrent={activeTheme === theme.id}
                       isFavorite={true}
                       onSelect={() => handleSelect(theme.id)}
                       onToggleFav={(e) => toggleFavorite(e, theme.id)}
@@ -135,7 +139,7 @@ export default function ThemeSelector({ collapsed }: ThemeSelectorProps) {
                     <ThemeItem
                       key={theme.id}
                       theme={theme}
-                      isCurrent={current === theme.id}
+                      isCurrent={activeTheme === theme.id}
                       isFavorite={false}
                       onSelect={() => handleSelect(theme.id)}
                       onToggleFav={(e) => toggleFavorite(e, theme.id)}
