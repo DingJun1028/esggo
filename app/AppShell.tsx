@@ -75,89 +75,71 @@ function SidebarContent({ collapsed, onCollapse }: { collapsed: boolean; onColla
   };
 
   return (
-    <aside style={{
-      width: collapsed ? 64 : 240,
-      minHeight: '100vh',
-      background: '#001e3c',
-      display: 'flex',
-      flexDirection: 'column',
-      transition: 'width 0.25s ease',
-      flexShrink: 0,
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      zIndex: 100,
-      overflowY: 'auto',
-      overflowX: 'hidden',
-    }}>
+    <aside className={`sidebar ${collapsed ? 'collapsed' : ''} bg-[#003262] border-r border-[#003262]/20 shadow-xl shadow-[#003262]/10`}>
       {/* Logo */}
-      <div style={{ padding: collapsed ? '16px 12px' : '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: 10, minHeight: 64 }}>
-        <div style={{ width: 36, height: 36, background: '#FDB515', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 14, color: '#001e3c', flexShrink: 0 }}>
+      <div className="flex items-center gap-3 p-5 border-b border-white/10 min-h-[64px]">
+        <div className="w-9 h-9 rounded-xl bg-[#FDB515] flex items-center justify-center font-black text-[#003262] text-sm shadow-lg shadow-[#FDB515]/20 flex-shrink-0">
           ESG
         </div>
         {!collapsed && (
-          <div>
-            <div style={{ color: '#FDB515', fontWeight: 700, fontSize: 14, lineHeight: 1.2 }}>OmniHermes</div>
-            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>ESG Go 系統</div>
+          <div className="animate-in fade-in duration-300">
+            <div className="text-[#FDB515] font-bold text-sm leading-tight tracking-tight uppercase">OmniHermes</div>
+            <div className="text-white/40 text-[9px] font-black uppercase tracking-widest">Enterprise OS</div>
           </div>
         )}
         <button
           onClick={onCollapse}
-          style={{ marginLeft: 'auto', background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', padding: 4, borderRadius: 4, fontSize: 16, flexShrink: 0 }}
+          className="ml-auto p-1.5 rounded-lg bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
         >
-          {collapsed ? '›' : '‹'}
+          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, padding: '8px 0' }}>
+      <nav className="flex-1 py-4 overflow-y-auto no-scrollbar space-y-6">
         {navGroups.map((group) => (
-          <div key={group.label}>
+          <div key={group.label} className="px-3">
             {!collapsed && (
-              <div style={{ padding: '12px 20px 4px', fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.3)', letterSpacing: 1.5, textTransform: 'uppercase' }}>
+              <div className="px-4 mb-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">
                 {group.label}
               </div>
             )}
-            {group.items.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: collapsed ? '10px 16px' : '8px 20px',
-                  margin: '1px 8px',
-                  borderRadius: 8,
-                  textDecoration: 'none',
-                  background: isActive(item.href) ? 'rgba(253,181,21,0.15)' : 'transparent',
-                  borderLeft: isActive(item.href) ? '3px solid #FDB515' : '3px solid transparent',
-                  transition: 'all 0.15s',
-                }}
-                title={collapsed ? `${item.label} · ${item.sub}` : undefined}
-              >
-                <span style={{ fontSize: 16, flexShrink: 0, width: 20, textAlign: 'center' }}>{item.icon}</span>
-                {!collapsed && (
-                  <div style={{ overflow: 'hidden' }}>
-                    <div style={{ color: isActive(item.href) ? '#FDB515' : '#e2e8f0', fontSize: 12, fontWeight: isActive(item.href) ? 600 : 400, whiteSpace: 'nowrap' }}>
-                      {item.label}
-                    </div>
-                    <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10, whiteSpace: 'nowrap' }}>{item.sub}</div>
-                  </div>
-                )}
-              </Link>
-            ))}
+            <div className="space-y-1">
+               {group.items.map((item) => (
+                 <Link
+                   key={item.href}
+                   href={item.href}
+                   className={`flex items-center gap-3 py-2.5 px-4 rounded-xl transition-all group ${
+                     isActive(item.href) 
+                       ? 'bg-gradient-to-r from-[#FDB515]/20 to-transparent text-[#FDB515] border-l-4 border-[#FDB515]' 
+                       : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+                   }`}
+                   title={collapsed ? `${item.label} · ${item.sub}` : undefined}
+                 >
+                   <span className={`text-lg transition-transform duration-300 ${isActive(item.href) ? 'scale-110' : 'group-hover:scale-110'}`}>
+                     {item.icon}
+                   </span>
+                   {!collapsed && (
+                     <div className="overflow-hidden animate-in slide-in-from-left-2 duration-300">
+                       <div className="text-[13px] font-bold whitespace-nowrap leading-none mb-0.5">
+                         {item.label}
+                       </div>
+                       <div className="text-[10px] text-white/30 whitespace-nowrap group-hover:text-white/40 transition-colors uppercase font-medium">{item.sub}</div>
+                     </div>
+                   )}
+                 </Link>
+               ))}
+            </div>
           </div>
         ))}
       </nav>
 
       {/* Footer */}
       {!collapsed && (
-        <div style={{ padding: '12px 20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
-            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>5T 誠信協議 · 已啟用</span>
+        <div className="p-5 border-t border-white/10 bg-black/10">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider">5T Integrity Active</span>
           </div>
         </div>
       )}
@@ -176,18 +158,18 @@ function MobileNav() {
   ];
 
   return (
-    <nav style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 200,
-      background: '#001e3c', borderTop: '1px solid rgba(255,255,255,0.1)',
-      display: 'flex', alignItems: 'center', justifyContent: 'space-around',
-      padding: '8px 0 max(8px, env(safe-area-inset-bottom))',
-    }}>
+    <nav className="mobile-nav bg-[#003262] border-t border-white/10 px-4 shadow-2xl">
       {quickItems.map((item) => {
         const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
         return (
-          <Link key={item.href} href={item.href} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, textDecoration: 'none', padding: '4px 12px' }}>
-            <span style={{ fontSize: 20 }}>{item.icon}</span>
-            <span style={{ fontSize: 10, color: active ? '#FDB515' : 'rgba(255,255,255,0.5)', fontWeight: active ? 700 : 400 }}>{item.label}</span>
+          <Link 
+            key={item.href} 
+            href={item.href} 
+            className={`flex flex-col items-center justify-center gap-1 flex-1 py-2 transition-all ${active ? 'text-[#FDB515]' : 'text-white/40'}`}
+          >
+            <span className="text-xl">{item.icon}</span>
+            <span className="text-[10px] font-bold uppercase tracking-tighter">{item.label}</span>
+            {active && <div className="w-1 h-1 rounded-full bg-[#FDB515] mt-0.5 shadow-[0_0_8px_#FDB515]" />}
           </Link>
         );
       })}
@@ -202,40 +184,31 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => setIsMobile(window.innerWidth < 1024);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  if (!mounted) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#f8f9fa' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 40, height: 40, border: '3px solid #003262', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
-          <p style={{ color: '#003262', fontSize: 14 }}>載入中...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const sidebarWidth = collapsed ? 64 : 240;
+  if (!mounted) return null;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8f9fa' }}>
+    <div className="app-shell min-h-screen font-sans">
       {!isMobile && (
         <SidebarContent collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)} />
       )}
-      <main style={{
-        flex: 1,
-        marginLeft: isMobile ? 0 : sidebarWidth,
-        marginBottom: isMobile ? 64 : 0,
-        minHeight: '100vh',
-        transition: 'margin-left 0.25s ease',
-        overflow: 'auto',
-      }}>
+      
+      <main 
+        className={`main-content transition-all duration-300 relative ${!isMobile ? (collapsed ? 'sidebar-collapsed' : '') : ''}`}
+        style={{ 
+          marginLeft: isMobile ? 0 : (collapsed ? 'var(--sidebar-w-sm)' : 'var(--sidebar-w)'),
+          marginBottom: isMobile ? 'var(--mobile-nav-h)' : 0
+        }}
+      >
+        <div className="fixed inset-0 pointer-events-none -z-10 bg-gradient-to-br from-[#EBF2FA] via-[#F8FAFC] to-[#F1F5F9]" />
         {children}
       </main>
+      
       {isMobile && <MobileNav />}
     </div>
   );
