@@ -1,0 +1,99 @@
+
+[functions.send-email-resend]
+enabled = true
+verify_jwt = false
+import_map = "./functions/send-email-resend/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/send-email-resend/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/send-email-resend/*.html" ]
+
+[functions.stripe-webhooks]
+enabled = true
+verify_jwt = false
+import_map = "./functions/stripe-webhooks/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/stripe-webhooks/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/stripe-webhooks/*.html" ]
+
+[functions.restful-tasks]
+enabled = true
+verify_jwt = false
+import_map = "./functions/restful-tasks/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/restful-tasks/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/restful-tasks/*.html" ]
+
+[functions.select-from-table-with-auth-rls]
+enabled = true
+verify_jwt = false
+import_map = "./functions/select-from-table-with-auth-rls/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/select-from-table-with-auth-rls/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/select-from-table-with-auth-rls/*.html" ]
+
+[functions.openai]
+enabled = true
+verify_jwt = false
+import_map = "./functions/openai/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/openai/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/openai/*.html" ]
+
+[functions.og-image-with-storage-cdn]
+enabled = true
+verify_jwt = false
+import_map = "./functions/og-image-with-storage-cdn/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/og-image-with-storage-cdn/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/og-image-with-storage-cdn/*.html" ]
+
+[functions.file-upload-storage]
+enabled = true
+verify_jwt = false
+import_map = "./functions/file-upload-storage/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/file-upload-storage/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/file-upload-storage/*.html" ]
+
+[functions.background-upload-storage]
+enabled = true
+verify_jwt = false
+import_map = "./functions/background-upload-storage/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/background-upload-storage/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/background-upload-storage/*.html" ]
+
+[functions.upstash-redis-ratelimit]
+enabled = true
+verify_jwt = false
+import_map = "./functions/upstash-redis-ratelimit/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/upstash-redis-ratelimit/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/upstash-redis-ratelimit/*.html" ]

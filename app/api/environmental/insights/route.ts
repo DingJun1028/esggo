@@ -1,6 +1,5 @@
-
 import { NextRequest, NextResponse } from 'next/server';
-import { getSocialMetrics } from '@/lib/db';
+import { getEnvironmentalMetrics } from '@/lib/db';
 
 // Ensure this runs as an Edge Function
 export const runtime = 'edge';
@@ -11,12 +10,12 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category') || undefined;
 
     // Fetch the metrics dynamically (this hits Supabase or mock)
-    const metrics = await getSocialMetrics(category);
+    const metrics = await getEnvironmentalMetrics(category);
 
     const prompt = `
-You are Hermes AI, an expert in ESG (Environmental, Social, and Governance) analytics and GRI standards.
-Analyze the following Social Impact (共榮普惠) metrics and provide 3 key actionable insights.
-Focus on diversity, occupational safety, training, supply chain, community, and human rights.
+You are Hermes AI, an expert in ESG (Environmental, Social, and Governance) analytics and ISO 14064 GHG standards.
+Analyze the following Environmental (環境保護) metrics and provide 3 key actionable insights.
+Focus on carbon emissions, energy usage, water consumption, waste management, and CBAM compliance.
 
 Metrics Data:
 ${JSON.stringify(metrics, null, 2)}
@@ -46,10 +45,10 @@ Use Traditional Chinese (zh-TW).
     }
     const data = await geminiRes.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '無法生成洞察報告。';
-
+    
     return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
   } catch (error: any) {
-    console.error('Social Insights API Error:', error);
+    console.error('Environmental Insights API Error:', error);
     return NextResponse.json(
       { error: error.message || 'Internal server error' },
       { status: 500 }
