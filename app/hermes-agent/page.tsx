@@ -1,13 +1,43 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Bot, Terminal, Cpu, Zap, Shield, Globe, Layers, Video, 
   Code, Database, Activity, ExternalLink, ChevronRight, 
-  Download, FileJson, MessageSquare, Gauge
+  Download, FileJson, MessageSquare, Gauge, Plus, Copy,
+  CheckCircle, ArrowRight, PlayCircle
 } from 'lucide-react';
+import { 
+  BrandCard, BrandButton, BrandTabs, BrandBadge, BrandCardHeader, 
+  BrandStatusDot, BrandTable, BrandPageHeader 
+} from '../../components/brand';
 
-const repoModules = [
+/**
+ * Full-Stack Bidirectional TypeScript Models
+ */
+interface RepoModule {
+  path: string;
+  desc: string;
+  status: 'Hot' | 'New' | 'Stable' | 'Research';
+}
+
+interface ReleaseNote {
+  v: string;
+  date: string;
+  note: string;
+}
+
+interface QuickstartStep {
+  id: number;
+  title: string;
+  icon: React.ReactNode;
+  color: string;
+  description: string;
+  command: string;
+  isSnippet?: boolean;
+}
+
+const REPO_MODULES: RepoModule[] = [
   { path: 'hermes-gateway', desc: 'Node.js 網關 v0.14.0 (支持 VPS 部署)', status: 'Hot' },
   { path: 'vps_adapter', desc: 'Ubuntu 24.04 本地化執行與自動化安裝', status: 'New' },
   { path: 'acp_adapter', desc: 'Zed 編輯器上下文協議適配器', status: 'New' },
@@ -16,265 +46,382 @@ const repoModules = [
   { path: 'tinker-atropos', desc: 'RL 強化學習訓練環境子模組', status: 'Research' },
 ];
 
-const releases = [
+const RELEASE_HISTORY: ReleaseNote[] = [
   { v: 'v0.14.1', date: 'Today', note: 'ESG Integration: 3 New Skills & Live VPS Fallback' },
   { v: 'v0.14.0', date: '2 days ago', note: 'ACP Registry for Zed & Video Gen' },
   { v: 'v0.13.0', date: 'last week', note: '8 New Locales & Gateway l10n' },
 ];
 
+const QUICKSTART_STEPS: QuickstartStep[] = [
+  {
+    id: 1,
+    title: '1. Install Hermes Agent',
+    icon: <Terminal size={18}/>,
+    color: '#009E9D', // ESG Teal
+    description: 'Set up the core Hermes CLI and initialize your workspace.',
+    command: 'npm install -g @nousresearch/hermes\nhermes setup'
+  },
+  {
+    id: 2,
+    title: '2. Initialize Google Genkit',
+    icon: <Layers size={18}/>,
+    color: '#003262', // Berkeley Blue
+    description: 'Configure Google Genkit to manage LLM interactions (Gemini 1.5 Pro).',
+    command: "import { genkit } from 'genkit';\nimport { googleAI } from '@genkit-ai/googleai';\n\nconst ai = genkit({ plugins: [googleAI()] });",
+    isSnippet: true
+  },
+  {
+    id: 3,
+    title: '3. ADK Integration (ESG Experts)',
+    icon: <Globe size={18}/>,
+    color: '#8B5CF6', // ESG Purple
+    description: "Register specialized ESG agents using Google's Agent Development Kit.",
+    command: "import { createAgent } from '@google/adk';\n\nconst esgResearcher = createAgent({\n  name: 'ESG_Researcher_Agent',\n  role: 'Sustainability Data Analyst'\n});",
+    isSnippet: true
+  },
+  {
+    id: 4,
+    title: '4. Activate Agent Zero',
+    icon: <Cpu size={18}/>,
+    color: '#FDB515', // California Gold
+    description: 'Enable system-level execution and sub-agent spawning for autonomous ops.',
+    command: 'docker run -it -v $(pwd):/workspace agent0ai/agent-zero\n# AgentZ0 will now monitor and execute autonomously.'
+  }
+];
+
 export default function HermesAgentPage() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'quickstart' | 'architecture' | 'tools' | 'research' | 'releases'>('overview');
+  const [copied, setCopied] = useState<number | null>(null);
+
+  const handleCopy = (id: number, text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', maxWidth: 1200 }}>
-      {/* Header */}
-      <div className="page-header fade-in">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <div className="page-eyebrow">
-              <Bot size={12} style={{ marginRight: 4 }} />
-              OmniHermes · v0.14.1 · Self-Improving Agent
-            </div>
-            <h1 className="page-title">OmniHermes 系統 + ESG Go 系統 ☤</h1>
-            <p className="page-sub">超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心</p>
+    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+      
+      {/* Stitch-Style Header */}
+      <BrandPageHeader 
+        title="OmniHermes Agent 系統 ☤"
+        subtitle="超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心"
+        eyebrow="v0.14.1 · Self-Improving Agent"
+        icon={<Bot size={32} />}
+        action={
+          <div className="flex items-center gap-3">
+            <BrandBadge variant="blue" size="md" dot>v0.14.0 Stable</BrandBadge>
+            <BrandStatusDot status="active" label="Runtime Online" pulse />
           </div>
-          <div style={{ textAlign: 'right' }}>
-            <span className="badge badge-gold">v0.14.0 Stable</span>
-            <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>Last Bump: 2 days ago</div>
-          </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* Main Tabs */}
-      <div className="glass-dense">
-        <div className="tabs" style={{ padding: '0 1.25rem' }}>
-          {['overview', 'quickstart', 'architecture', 'tools', 'research', 'releases'].map(t => (
-            <button key={t} className={`tab ${activeTab === t ? 'active' : ''}`} onClick={() => setActiveTab(t)}>
-              {t.charAt(0).toUpperCase() + t.slice(1)}
-            </button>
-          ))}
-        </div>
+      <BrandTabs 
+        activeTab={activeTab}
+        onTabChange={(id) => setActiveTab(id as any)}
+        tabs={[
+          { id: 'overview', label: '總覽', icon: <Activity size={14}/> },
+          { id: 'quickstart', label: '快速上手', icon: <Zap size={14}/> },
+          { id: 'architecture', label: '系統架構', icon: <Layers size={14}/> },
+          { id: 'tools', label: '工具箱', icon: <Terminal size={14}/> },
+          { id: 'research', label: '技術研究', icon: <Database size={14}/> },
+          { id: 'releases', label: '版本紀錄', icon: <Activity size={14}/> },
+        ]}
+      />
 
-        <div style={{ padding: '1.5rem' }}>
-          {activeTab === 'overview' && (
-            <div className="fade-in">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '1.5rem' }}>
-                <div>
-                  <h3 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--berkeley-blue)' }}>核心能力 (Core Pillars)</h3>
-                  <div className="g-auto" style={{ gap: '0.75rem' }}>
-                    {[
-                      { icon: <Activity size={18} />, t: '閉環學習', d: '透過經驗創造 Skill，並在任務中持續自我優化。' },
-                      { icon: <Database size={18} />, t: '方言記憶', d: '具備 FTS5 歷史對話搜尋與 LLM 長期記憶摘要。' },
-                      { icon: <Globe size={18} />, t: '20+ 平台閘道', d: '一個進程同時驅動 Telegram, Discord, Slack 等。' },
-                      { icon: <Layers size={18} />, t: '七大後端', d: '支持 Docker, SSH, Singularity, Modal 與 Daytona。' },
-                    ].map(item => (
-                      <div key={item.t} className="card card-hover" style={{ padding: '1rem' }}>
-                        <div style={{ color: 'var(--california-gold)', marginBottom: 8 }}>{item.icon}</div>
-                        <div style={{ fontWeight: 700, fontSize: '0.875rem', marginBottom: 4 }}>{item.t}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>{item.d}</div>
-                      </div>
-                    ))}
-                  </div>
+      <div className="mt-6">
+        {activeTab === 'overview' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 fade-in">
+            <div className="lg:col-span-8 space-y-6">
+              <BrandCard padding="lg">
+                <BrandCardHeader title="核心能力 (Core Pillars)" subtitle="定義自主代理的四大維度" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  {[
+                    { icon: <Activity size={20} />, t: '閉環學習', d: '透過經驗創造 Skill，並在任務中持續自我優化。' },
+                    { icon: <Database size={20} />, t: '方言記憶', d: '具備 FTS5 歷史對話搜尋與 LLM 長期記憶摘要。' },
+                    { icon: <Globe size={20} />, t: '20+ 平台閘道', d: '一個進程同時驅動 Telegram, Discord, Slack 等。' },
+                    { icon: <Layers size={20} />, t: '七大後端', d: '支持 Docker, SSH, Singularity, Modal 與 Daytona。' },
+                  ].map(item => (
+                    <div key={item.t} className="p-4 rounded-lg border border-slate-100 bg-slate-50/50 hover:border-blue-200 transition-all group">
+                      <div className="text-blue-700 mb-3 group-hover:scale-110 transition-transform">{item.icon}</div>
+                      <div className="font-bold text-slate-800 text-sm mb-1">{item.t}</div>
+                      <div className="text-xs text-slate-500 leading-relaxed">{item.d}</div>
+                    </div>
+                  ))}
                 </div>
+              </BrandCard>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <div className="info-box info-box-blue" style={{ margin: 0 }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.75rem', marginBottom: 5 }}>快速部署</div>
-                    <code style={{ fontSize: '0.65rem', background: 'rgba(0,0,0,0.05)', padding: '8px', display: 'block', borderRadius: 4, lineHeight: 1.4 }}>
-                      curl -fsSL https://.../install.sh | bash
-                    </code>
+              <BrandCard padding="lg" className="bg-[#003262]/5 border-blue-100">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 flex-shrink-0">
+                    <Zap size={24} />
                   </div>
-                  <div className="card" style={{ padding: '1rem' }}>
-                    <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: 8 }}>新特性: ACP ADAPTER</div>
-                    <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                  <div>
+                    <h3 className="font-bold text-[#003262] mb-1">新特性: ACP ADAPTER</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 Hermes 能直接作為 Zed 的 AI 後端，實時同步代碼上下文。
                     </p>
+                    <BrandButton variant="ghost" size="sm" className="mt-3 p-0 h-auto text-blue-700 font-bold hover:bg-transparent">
+                      查看開發文檔 <ArrowRight size={14} className="ml-1" />
+                    </BrandButton>
                   </div>
                 </div>
-              </div>
+              </BrandCard>
             </div>
-          )}
 
-          {activeTab === 'quickstart' && (
-            <div className="fade-in">
-              <div className="card" style={{ padding: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--berkeley-blue)' }}>
-                  Hermes Agent + ESG GO Quickstart
-                </h3>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                  {/* Step 1: Install Hermes */}
-                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
-                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Terminal size={18} color="var(--esg-teal)" /> 1. Install Hermes Agent
-                    </h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                      Set up the core Hermes CLI and initialize your workspace.
-                    </p>
-                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
-                      <span style={{ color: '#569cd6' }}>npm</span> install -g @nousresearch/hermes<br/>
-                      hermes setup
-                    </code>
+            <div className="lg:col-span-4 space-y-6">
+              <BrandCard padding="lg">
+                <BrandCardHeader title="快速部署" />
+                <div className="mt-4 space-y-4">
+                  <div className="p-3 bg-slate-900 rounded-lg font-mono text-[10px] text-emerald-400 border border-slate-800 relative group">
+                    <code>curl -fsSL https://hermes.ai/install.sh | bash</code>
+                    <button className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-white">
+                      <Copy size={12} />
+                    </button>
                   </div>
-
-                  {/* Step 2: Genkit */}
-                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
-                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Layers size={18} color="var(--berkeley-blue)" /> 2. Choose Provider & Initialize Genkit
-                    </h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                      Configure Google Genkit to manage LLM interactions (e.g. Gemini 1.5 Pro).
-                    </p>
-                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
-                      <span style={{ color: '#569cd6' }}>import</span> {'{'} genkit {'}'} <span style={{ color: '#569cd6' }}>from</span> <span style={{ color: '#ce9178' }}>'genkit'</span>;<br/>
-                      <span style={{ color: '#569cd6' }}>import</span> {'{'} googleAI {'}'} <span style={{ color: '#569cd6' }}>from</span> <span style={{ color: '#ce9178' }}>'@genkit-ai/googleai'</span>;<br/><br/>
-                      <span style={{ color: '#569cd6' }}>const</span> ai = genkit({'{'} plugins: [googleAI()] {'}'});
-                    </code>
-                  </div>
-
-                  {/* Step 3: ADK Integration */}
-                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
-                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Globe size={18} color="var(--esg-purple)" /> 3. ADK Integration (ESG Experts)
-                    </h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                      Register specialized ESG agents using Google&apos;s Agent Development Kit.
-                    </p>
-                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
-                      <span style={{ color: '#569cd6' }}>import</span> {'{'} createAgent {'}'} <span style={{ color: '#569cd6' }}>from</span> <span style={{ color: '#ce9178' }}>'@google/adk'</span>;<br/><br/>
-                      <span style={{ color: '#569cd6' }}>const</span> esgResearcher = createAgent({'{'}<br/>
-                      &nbsp;&nbsp;name: <span style={{ color: '#ce9178' }}>'ESG_Researcher_Agent'</span>,<br/>
-                      &nbsp;&nbsp;role: <span style={{ color: '#ce9178' }}>'Sustainability Data Analyst'</span><br/>
-                      {'}'});
-                    </code>
-                  </div>
-
-                  {/* Step 4: Agent Zero */}
-                  <div style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid var(--border-base)', borderRadius: '8px', padding: '1.25rem' }}>
-                    <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Cpu size={18} color="var(--california-gold)" /> 4. Activate Agent Zero (Autonomous Operations)
-                    </h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                      Enable system-level execution and sub-agent spawning for complex workflows.
-                    </p>
-                    <code style={{ fontSize: '0.85rem', background: '#1e1e1e', color: '#d4d4d4', padding: '12px', display: 'block', borderRadius: 6, fontFamily: 'monospace' }}>
-                      <span style={{ color: '#569cd6' }}>docker</span> run -it -v $(pwd):/workspace agent0ai/agent-zero<br/>
-                      <span style={{ color: '#6a9955' }}># AgentZ0 will now monitor and execute tasks autonomously.</span>
-                    </code>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'architecture' && (
-            <div className="fade-in">
-              <div className="card" style={{ padding: '1.25rem' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>代碼模組地圖 (Source Map)</h3>
-                <div className="tbl-wrap">
-                  <table className="tbl">
-                    <thead>
-                      <tr><th>模組路徑</th><th>功能定義</th><th>當前狀態</th></tr>
-                    </thead>
-                    <tbody>
-                      {repoModules.map(m => (
-                        <tr key={m.path}>
-                          <td style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--berkeley-blue)' }}>{m.path}</td>
-                          <td style={{ fontSize: '0.75rem' }}>{m.desc}</td>
-                          <td><span className={`badge badge-sm ${m.status === 'New' ? 'badge-gold' : m.status === 'Research' ? 'badge-purple' : 'badge-blue'}`}>{m.status}</span></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'tools' && (
-            <div className="fade-in">
-              <div className="g-3">
-                <div className="card" style={{ padding: '1rem' }}>
-                  <Video size={24} style={{ color: 'var(--esg-purple)', marginBottom: 10 }} />
-                  <div style={{ fontWeight: 700 }}>video_generate</div>
-                  <p style={{ fontSize: '0.72rem', marginTop: 5 }}>v0.14.0 統一了影片生成接口，支持多供應商插件（如 Luma, Kling）。</p>
-                </div>
-                <div className="card" style={{ padding: '1rem' }}>
-                  <Code size={24} style={{ color: 'var(--berkeley-blue)', marginBottom: 10 }} />
-                  <div style={{ fontWeight: 700 }}>agent-browser v0.26</div>
-                  <p style={{ fontSize: '0.72rem', marginTop: 5 }}>強化了瀏覽器自動化能力，支持長期空閒守護進程，提升抓取效率。</p>
-                </div>
-                <div className="card" style={{ padding: '1rem' }}>
-                  <Shield size={24} style={{ color: 'var(--esg-green)', marginBottom: 10 }} />
-                  <div style={{ fontWeight: 700 }}>Secure Sandbox</div>
-                  <p style={{ fontSize: '0.72rem', marginTop: 5 }}>硬化容器隔離技術，支持唯讀根文件系統與命名空間隔離。</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'research' && (
-            <div className="fade-in">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div className="card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--esg-purple)' }}>
-                  <div style={{ fontSize: '0.62rem', fontWeight: 800, color: 'var(--esg-purple)', marginBottom: 5 }}>ADVANCED RL</div>
-                  <h4 style={{ fontWeight: 700 }}>Trajectory Compression</h4>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 8 }}>
-                    專為訓練下一代工具調用模型設計。Hermes 能將複雜的任務解決軌跡（Trajectories）壓縮為高效的訓練樣本，並匯出為 ShareGPT 格式。
+                  <p className="text-[10px] text-slate-400 leading-relaxed">
+                    * 支持 Ubuntu, macOS 與 WSL2 環境。<br/>
+                    * 自動安裝 Node.js 22, Python 3.11 與所需工具。
                   </p>
+                  <BrandButton variant="primary" fullWidth size="sm">
+                    <Download size={14} className="mr-2" /> 下載離線套件
+                  </BrandButton>
                 </div>
-                <div className="card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--esg-teal)' }}>
-                  <div style={{ fontSize: '0.62rem', fontWeight: 800, color: 'var(--esg-teal)', marginBottom: 5 }}>MODEL TRAINING</div>
-                  <h4 style={{ fontWeight: 700 }}>Atropos Integration</h4>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 8 }}>
-                    整合 `tinker-atropos` 環境，支持在多步 Web 研究任務中進行強化學習（RL）環境模擬與數據生成。
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+              </BrandCard>
 
-          {activeTab === 'releases' && (
-            <div className="fade-in">
-              <div className="tbl-wrap">
-                <table className="tbl">
-                  <thead>
-                    <tr><th>版本</th><th>更新時間</th><th>主要變動</th></tr>
-                  </thead>
-                  <tbody>
-                    {releases.map(r => (
-                      <tr key={r.v}>
-                        <td style={{ fontWeight: 800, color: 'var(--berkeley-blue)' }}>{r.v}</td>
-                        <td style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{r.date}</td>
-                        <td className="td-label">{r.note}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <BrandCard padding="lg">
+                <BrandCardHeader title="實時指標" />
+                <div className="mt-4 space-y-4">
+                  {[
+                    { label: 'Uptime', value: '99.98%', icon: <Activity size={12}/> },
+                    { label: 'Latency', value: '142ms', icon: <Gauge size={12}/> },
+                    { label: 'Token/sec', value: '85', icon: <Zap size={12}/> },
+                  ].map(stat => (
+                    <div key={stat.label} className="flex justify-between items-center border-b border-slate-50 pb-2 last:border-0">
+                      <div className="flex items-center gap-2 text-xs text-slate-500">
+                        {stat.icon} {stat.label}
+                      </div>
+                      <span className="text-xs font-mono font-bold text-slate-700">{stat.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </BrandCard>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {activeTab === 'quickstart' && (
+          <div className="max-w-4xl mx-auto space-y-6 fade-in">
+            <BrandCard padding="lg">
+              <BrandCardHeader 
+                title="Hermes Agent + ESG GO Quickstart" 
+                subtitle="從零開始構建您的 5T 誠信代理蜂群"
+              />
+              <div className="mt-8 space-y-8">
+                {QUICKSTART_STEPS.map((step) => (
+                  <div key={step.id} className="relative pl-10 group">
+                    {/* Progress Line */}
+                    {step.id !== QUICKSTART_STEPS.length && (
+                      <div className="absolute left-[13px] top-8 bottom-[-32px] w-[2px] bg-slate-100 group-hover:bg-blue-100 transition-colors" />
+                    )}
+                    
+                    {/* Step Icon */}
+                    <div 
+                      className="absolute left-0 top-0 w-7 h-7 rounded-full flex items-center justify-center text-white z-10 shadow-sm"
+                      style={{ backgroundColor: step.color }}
+                    >
+                      {step.icon}
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <h4 className="font-bold text-slate-800">{step.title}</h4>
+                        <p className="text-xs text-slate-500">{step.description}</p>
+                      </div>
+
+                      <div className="relative group/code">
+                        <pre className="p-4 bg-[#1e1e1e] rounded-lg border border-slate-800 font-mono text-sm overflow-x-auto text-[#d4d4d4] leading-relaxed shadow-inner">
+                          {step.isSnippet ? (
+                            <code>
+                              {step.command.split('\n').map((line, i) => {
+                                // Simple syntax highlighting simulation
+                                if (line.startsWith('import') || line.startsWith('const')) {
+                                  const parts = line.split(' ');
+                                  return (
+                                    <span key={i}>
+                                      <span className="text-[#569cd6]">{parts[0]}</span> {parts.slice(1).join(' ')}
+                                      {'\n'}
+                                    </span>
+                                  );
+                                }
+                                return line + '\n';
+                              })}
+                            </code>
+                          ) : (
+                            <code>
+                              {step.command.split('\n').map((line, i) => (
+                                <span key={i}>
+                                  {line.startsWith('#') ? <span className="text-[#6a9955]">{line}</span> : line}
+                                  {'\n'}
+                                </span>
+                              ))}
+                            </code>
+                          )}
+                        </pre>
+                        <button 
+                          onClick={() => handleCopy(step.id, step.command)}
+                          className="absolute top-3 right-3 p-1.5 bg-white/5 hover:bg-white/10 rounded border border-white/10 text-white/40 hover:text-white transition-all opacity-0 group-hover/code:opacity-100"
+                        >
+                          {copied === step.id ? <CheckCircle size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-12 p-6 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                    <PlayCircle size={20} />
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-sm text-slate-800">準備好進行實測了嗎？</h5>
+                    <p className="text-xs text-slate-500">進入調度中心啟動您的第一個 5T 任務</p>
+                  </div>
+                </div>
+                <BrandButton variant="primary" onClick={() => window.location.href='/hermes-orchestrator'}>
+                  前往調度中心 <ChevronRight size={16} className="ml-1" />
+                </BrandButton>
+              </div>
+            </BrandCard>
+          </div>
+        )}
+
+        {activeTab === 'architecture' && (
+          <div className="space-y-6 fade-in">
+            <BrandCard padding="none">
+              <BrandCardHeader title="代碼模組地圖 (Source Map)" subtitle="Hermes 代理核心的架構分層" />
+              <div className="mt-4">
+                <BrandTable 
+                  columns={[
+                    { key: 'path', label: '模組路徑', render: (v) => <code className="font-bold text-blue-700">{v}</code> },
+                    { key: 'desc', label: '功能定義' },
+                    { key: 'status', label: '當前狀態', render: (v) => (
+                      <BrandBadge 
+                        variant={v === 'Hot' ? 'error' : v === 'New' ? 'gold' : v === 'Research' ? 'purple' : 'success'} 
+                        size="xs"
+                      >
+                        {v}
+                      </BrandBadge>
+                    )}
+                  ]}
+                  data={REPO_MODULES}
+                />
+              </div>
+            </BrandCard>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <BrandCard padding="lg">
+                  <BrandCardHeader title="系統流轉層 (Runtime)" />
+                  <p className="mt-4 text-xs text-slate-500 leading-relaxed">
+                    底層基於 Node.js 22 與 Python 3.11 混合架構，確保了高效的 I/O 處理與強大的數據運算能力。
+                    所有執行均在受控的 Sandbox 中進行，支援 5T 完整性簽章。
+                  </p>
+               </BrandCard>
+               <BrandCard padding="lg">
+                  <BrandCardHeader title="認證與安全" />
+                  <p className="mt-4 text-xs text-slate-500 leading-relaxed">
+                    整合 Nous Research 認證體系，每一筆指令均附帶 Actor ID 與 Policy Guard 決策雜湊，
+                    符合 Berkeley Academy 最嚴苛的治理標準。
+                  </p>
+               </BrandCard>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'tools' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in">
+            <BrandCard padding="lg" hover>
+              <Video size={24} className="text-purple-500 mb-4" />
+              <h4 className="font-bold text-slate-800">video_generate</h4>
+              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
+                v0.14.0 統一了影片生成接口，支持多供應商插件（如 Luma, Kling），支援 ESG 視覺化簡報生成。
+              </p>
+            </BrandCard>
+            <BrandCard padding="lg" hover>
+              <Code size={24} className="text-blue-600 mb-4" />
+              <h4 className="font-bold text-slate-800">agent-browser v0.26</h4>
+              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
+                強化了瀏覽器自動化能力，支持長期空閒守護進程，提升網路數據抓取與 GRI 標竿比對效率。
+              </p>
+            </BrandCard>
+            <BrandCard padding="lg" hover>
+              <Shield size={24} className="text-emerald-500 mb-4" />
+              <h4 className="font-bold text-slate-800">Secure Sandbox</h4>
+              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
+                硬化容器隔離技術，支持唯讀根文件系統與命名空間隔離，確保 5T 數據處理過程不被外部污染。
+              </p>
+            </BrandCard>
+          </div>
+        )}
+
+        {activeTab === 'research' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 fade-in">
+            <BrandCard padding="lg" className="border-l-4 border-l-purple-500">
+               <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-1">Advanced RL</p>
+               <h4 className="font-bold text-slate-800 text-lg mb-3">Trajectory Compression</h4>
+               <p className="text-xs text-slate-500 leading-relaxed">
+                 專為訓練下一代工具調用模型設計。Hermes 能將複雜的任務解決軌跡（Trajectories）壓縮為高效的訓練樣本，並匯出為 ShareGPT 格式，助力企業建立專屬私有 ESG 模型。
+               </p>
+            </BrandCard>
+            <BrandCard padding="lg" className="border-l-4 border-l-emerald-500">
+               <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Model Training</p>
+               <h4 className="font-bold text-slate-800 text-lg mb-3">Atropos Integration</h4>
+               <p className="text-xs text-slate-500 leading-relaxed">
+                 整合 `tinker-atropos` 環境，支持在多步 Web 研究任務中進行強化學習（RL）環境模擬與數據生成，讓 Agent 具備自我演進的邏輯推理能力。
+               </p>
+            </BrandCard>
+          </div>
+        )}
+
+        {activeTab === 'releases' && (
+          <BrandCard padding="none" className="fade-in">
+            <BrandCardHeader title="版本發佈軌跡" subtitle="持續進化的系統核心" />
+            <div className="mt-4">
+              <BrandTable 
+                columns={[
+                  { key: 'v', label: '版本', render: (v) => <span className="font-bold text-blue-700">{v}</span> },
+                  { key: 'date', label: '更新時間', render: (v) => <span className="text-slate-400">{v}</span> },
+                  { key: 'note', label: '主要變動', render: (v) => <BrandBadge variant="outline" size="xs">{v}</BrandBadge> }
+                ]}
+                data={RELEASE_HISTORY}
+              />
+            </div>
+          </BrandCard>
+        )}
       </div>
 
-      {/* Footer Branding */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: 'white', borderRadius: 12, border: '1px solid var(--border-base)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Bot size={18} style={{ color: 'var(--berkeley-blue)' }} />
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--berkeley-blue)', fontFamily: 'monospace' }}>
-            OMNIHERMES-AGENT SYSTEM v0.14.1
-          </span>
+      {/* Stitch Footer Branding */}
+      <BrandCard padding="sm" className="bg-white border-slate-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Bot size={18} className="text-[#003262]" />
+            <span className="text-[10px] font-bold text-[#003262] uppercase tracking-[0.2em] font-mono">
+              OMNIHERMES-AGENT SYSTEM v0.14.1
+            </span>
+          </div>
+          <div className="flex gap-4">
+            <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" className="text-[10px] text-slate-400 font-bold hover:text-blue-700 flex items-center gap-1.5 transition-colors">
+              <Terminal size={12} /> DOCUMENTATION
+            </a>
+            <a href="https://discord.gg/NousResearch" target="_blank" rel="noreferrer" className="text-[10px] text-slate-400 font-bold hover:text-blue-700 flex items-center gap-1.5 transition-colors">
+              <MessageSquare size={12} /> DISCORD
+            </a>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 15 }}>
-          <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" style={{ fontSize: '0.68rem', color: 'var(--founders-rock)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Terminal size={12} /> Documentation
-          </a>
-          <a href="https://discord.gg/NousResearch" target="_blank" rel="noreferrer" style={{ fontSize: '0.68rem', color: 'var(--founders-rock)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-            <MessageSquare size={12} /> Discord
-          </a>
-        </div>
-      </div>
+      </BrandCard>
     </div>
   );
 }
