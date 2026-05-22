@@ -142,35 +142,36 @@ export default function VaultPage() {
                  { key: 'zkp', label: '5T 實證' },
                  { key: 'action', label: '操作' },
                ]}
-               rows={filtered.map(f => ({
-                 // ... (rows map stays same)
-               file: (
-                 <div className="flex flex-col">
-                   <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
-                   {f.hash_lock && <code className="text-[9px] text-slate-400 mt-1">SHA256: {f.hash_lock.slice(0, 16)}...</code>}
-                 </div>
-               ),
-               category: <BrandBadge variant="outline" size="xs">{f.category} · {CAT_LABELS[f.category!]}</BrandBadge>,
-               gri: <BrandBadge variant="info" size="xs">{f.gri_reference || '-'}</BrandBadge>,
-               status: <BrandBadge variant={STATUS_MAP[f.status || 'pending'].variant} size="xs">{STATUS_MAP[f.status || 'pending'].label}</BrandBadge>,
-               zkp: f.zkp_proof ? <BrandBadge variant="gold" size="xs">✓ ZKP SEALED</BrandBadge> : <span className="text-[10px] text-slate-300 font-bold">UNSEALED</span>,
-               action: (
-                 <div className="flex gap-2">
-                    <BrandButton variant="ghost" size="icon" onClick={() => setSelected(f)}><Eye size={14}/></BrandButton>
-                    <BrandTooltip content="OmniHermes 視覺掃描">
-                      <BrandButton variant="ghost" size="icon" onClick={() => handleScan(f)} loading={scanningId === f.id} className="text-blue-700">
-                        <Bot size={14}/>
-                      </BrandButton>
-                    </BrandTooltip>
-                    {f.status !== 'verified' && (
-                      <BrandButton variant="primary" size="sm" onClick={() => sealFile(f)} loading={sealing === f.id}>
-                        <Shield size={12}/> 封印
-                      </BrandButton>
-                    )}
-                 </div>
-               )
-             }))}
-           />
+               data={filtered.map(f => ({
+                 id: f.id,
+                 file: (
+                   <div className="flex flex-col">
+                     <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
+                     {f.hash_lock && <code className="text-[9px] text-slate-400 mt-1">SHA256: {f.hash_lock.slice(0, 16)}...</code>}
+                   </div>
+                 ),
+                 category: <BrandBadge variant="outline" size="xs">{f.category} · {CAT_LABELS[f.category!]}</BrandBadge>,
+                 gri: <BrandBadge variant="info" size="xs">{f.gri_reference || '-'}</BrandBadge>,
+                 status: <BrandBadge variant={STATUS_MAP[f.status || 'pending'].variant} size="xs">{STATUS_MAP[f.status || 'pending'].label}</BrandBadge>,
+                 zkp: f.zkp_proof ? <BrandBadge variant="gold" size="xs">✓ ZKP SEALED</BrandBadge> : <span className="text-[10px] text-slate-300 font-bold">UNSEALED</span>,
+                 action: (
+                   <div className="flex gap-2">
+                      <BrandButton variant="ghost" size="sm" onClick={() => setSelected(f)}><Eye size={14}/></BrandButton>
+                      <BrandTooltip content="OmniHermes 視覺掃描">
+                        <BrandButton variant="ghost" size="sm" onClick={() => handleScan(f)} loading={scanningId === f.id} className="text-blue-700">
+                          <Bot size={14}/>
+                        </BrandButton>
+                      </BrandTooltip>
+                      {f.status !== 'verified' && (
+                        <BrandButton variant="primary" size="sm" onClick={() => sealFile(f)} loading={sealing === f.id}>
+                          <Shield size={12}/> 封印
+                        </BrandButton>
+                      )}
+                   </div>
+                 )
+               }))}
+             />
+           </div>
         </BrandCard>
 
         {/* Scan Result Modal */}
