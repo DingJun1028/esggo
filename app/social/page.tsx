@@ -8,7 +8,7 @@ import BrandTabs from '@/components/brand/BrandTabs';
 import BrandKpiCard from '@/components/brand/BrandKpiCard';
 import BrandCard, { BrandCardHeader } from '@/components/brand/BrandCard';
 import BrandBadge from '@/components/brand/BrandBadge';
-import { Users, ShieldAlert, BookOpen, Link, Heart, Scale, Sparkles, RefreshCw } from 'lucide-react';
+import { Users, ShieldAlert, BookOpen, Link, Heart, Scale, Sparkles, RefreshCw, CheckCircle } from 'lucide-react';
 
 const TAB_DATA = [
   { id: 'workforce', label: '員工結構', icon: <Users size={16} />, gri: 'GRI 2-7, 401-405' },
@@ -25,6 +25,12 @@ export default function SocialPage() {
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState('');
   const [loadingInsights, setLoadingInsights] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  const showToast = (msg: string, type: 'success' | 'error' | 'info' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
 
   useEffect(() => {
     loadData();
@@ -43,6 +49,7 @@ export default function SocialPage() {
       setMetrics(data);
     } catch (err) {
       console.error('Failed to load social metrics:', err);
+      showToast('無法取得社會類別指標，請稍後重試。', 'error');
     } finally {
       setLoading(false);
     }
@@ -57,11 +64,13 @@ export default function SocialPage() {
         const data = await res.json();
         setInsights(data.insights);
       } else {
-        setInsights('無法取得 Hermes AI 洞察。');
+        setInsights('**無法取得 OmniHermes 洞察。**\n連線逾時或伺服器錯誤，請檢查網路連線或稍後再試。');
+        showToast('無法取得洞察，請稍後重試。', 'error');
       }
     } catch (err) {
       console.error(err);
-      setInsights('取得洞察時發生錯誤。');
+      setInsights('**取得洞察時發生錯誤。**\n請確認您的網路環境是否正常。');
+      showToast('洞察載入失敗。', 'error');
     } finally {
       setLoadingInsights(false);
     }
@@ -72,6 +81,16 @@ export default function SocialPage() {
 
   return (
     <ClientLayout>
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed top-6 right-6 z-[9999] fade-in">
+          <BrandCard padding="sm" className={`flex items-center gap-3 border-none text-white shadow-xl ${toast.type === 'error' ? 'bg-red-600' : toast.type === 'info' ? 'bg-blue-700' : 'bg-green-600'}`}>
+             {toast.type === 'error' ? <ShieldAlert size={16} /> : <CheckCircle size={16} />} 
+             <span className="font-bold text-sm">{toast.msg}</span>
+          </BrandCard>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <BrandPageHeader
           title="共榮普惠 (Social Impact)"
@@ -92,7 +111,35 @@ export default function SocialPage() {
         />
 
         {loading ? (
-          <div className="flex justify-center py-20 text-slate-400">載入資料中...</div>
+          <div className="space-y-6 animate-pulse">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map(i => (
+                <BrandCard key={i} padding="md" className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-slate-200"></div>
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+                    <div className="h-6 bg-slate-200 rounded w-1/3"></div>
+                  </div>
+                </BrandCard>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <BrandCard className="h-full">
+                  <div className="p-4 border-b border-slate-100 flex justify-between">
+                    <div className="h-6 bg-slate-200 rounded w-1/3"></div>
+                    <div className="h-6 bg-slate-200 rounded w-1/4"></div>
+                  </div>
+                  <div className="p-4 space-y-4">
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-10 bg-slate-100 rounded w-full"></div>)}
+                  </div>
+                </BrandCard>
+              </div>
+              <div className="lg:col-span-1">
+                <div className="bg-slate-200 rounded-2xl h-full min-h-[300px]"></div>
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="space-y-6">
             

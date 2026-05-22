@@ -51,6 +51,31 @@ serve(async (req) => {
         details: `SHA-256: ${sha256Hash.slice(0, 16)}... 不可篡改封印完成`,
         company_id: evidence.company_id ?? 'default',
       }]);
+
+      // Trigger Email Notification via send-email-resend
+      try {
+        const functionUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/send-email-resend`;
+        await fetch(functionUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`,
+          },
+          body: JSON.stringify({
+            to: Deno.env.get('ADMIN_EMAIL') || 'admin@esggo.ai',
+            subject: `🔒 5T 封印完成通知: ${evidence.file_name}`,
+            html: `
+              <h3>5T 誠信協議 - 封印完成</h3>
+              <p>檔案：<b>${evidence.file_name}</b></p>
+              <p>指標：${evidence.gri_reference || 'N/A'}</p>
+              <p>Hash Lock: <code style="color: #003262;">${sha256Hash.slice(0, 32)}</code></p>
+              <p>狀態：已完成 ZKP 不可篡改封印，並寫入審計日誌。</p>
+            `,
+          }),
+        });
+      } catch (emailErr) {
+        console.error('Failed to send seal notification:', emailErr);
+      }
     } else if (action === 'verify') {
       const rehash = Array.from(new Uint8Array(
         await crypto.subtle.digest('SHA-256', encoder.encode(`${evidence_id}-${evidence.file_name}-${evidence.created_at ?? timestamp}`))

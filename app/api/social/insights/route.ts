@@ -14,16 +14,22 @@ export async function GET(request: NextRequest) {
     const metrics = await getSocialMetrics(category);
 
     const prompt = `
-You are Hermes AI, an expert in ESG (Environmental, Social, and Governance) analytics and GRI standards.
-Analyze the following Social Impact (共榮普惠) metrics and provide 3 key actionable insights.
-Focus on diversity, occupational safety, training, supply chain, community, and human rights.
+You are OmniHermes, an advanced AI specializing in ESG (Environmental, Social, and Governance) analytics, GRI standards, and 5T audit protocols.
+Analyze the following Social Impact (共榮普惠) metrics data.
 
 Metrics Data:
 ${JSON.stringify(metrics, null, 2)}
 
-Provide your response in a structured, professional tone using Markdown format. 
-Make sure the insights highlight achievements and point out areas needing improvement.
-Use Traditional Chinese (zh-TW).
+Your task is to provide a highly structured, actionable insight report in Markdown format.
+Please include the following sections:
+1. **數據總覽與成就 (Executive Summary)**: Briefly summarize the current state and highlight any verified achievements. Focus on diversity, occupational safety, training, supply chain, community, and human rights.
+2. **缺口與風險分析 (Gap & Risk Analysis)**: Identify any missing data (partial data gaps), anomalies, or unverified metrics that could pose a compliance risk (e.g., missing GRI coverage).
+3. **具體行動建議 (Actionable Steps)**: Provide 2-3 concrete, prioritized recommendations for the ESG team to fill data gaps or improve metrics.
+
+Guidelines:
+- Maintain a highly professional, authoritative tone.
+- If data is sparse or completely missing, emphasize the immediate need for data collection and 5T verification to ensure compliance.
+- Use Traditional Chinese (zh-TW).
     `;
 
     // Edge runtime doesn't support dynamic require() well, using standard fetch API

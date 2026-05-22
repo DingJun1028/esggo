@@ -1,46 +1,41 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { corsHeaders } from '../_shared/cors.ts'
 
-// Setup type definitions for built-in Supabase Runtime APIs
-import "@supabase/functions-js/edge-runtime.d.ts";
-import { withSupabase } from "@supabase/server";
+// TODO: 借鑒與整合 Upstash Redis 進行限速
+// import { Redis } from "https://deno.land/x/upstash_redis/mod.ts";
+// const redis = new Redis({
+//   url: Deno.env.get("UPSTASH_REDIS_REST_URL")!,
+//   token: Deno.env.get("UPSTASH_REDIS_REST_TOKEN")!,
+// });
 
-console.log("Hello from Functions!");
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
 
-// This endpoint uses 'publishable' | 'secret' access, apiKey is required.
-// Use publishable for Client-facing, key-validated endpoints
-// Use secret for Server-to-server, internal calls
-export default {
-  fetch: withSupabase({ auth: ["publishable", "secret"] }, async (req, ctx) => {
-    // Called by another service with a secret key
-    // ctx.supabaseAdmin bypasses RLS — use for privileged operations
-    /*
-    if (ctx.authMode === "secret") {
-      const { user_id } = await req.json();
-      const { data } = await ctx.supabaseAdmin.auth.admin.getUserById(user_id);
+  try {
+    const ip = req.headers.get('x-forwarded-for') || '127.0.0.1'
+    
+    // Mock rate limiting logic
+    // const count = await redis.incr(`ratelimit:${ip}`)
+    // if (count > 100) throw new Error('Too many requests')
+    const allowed = true
 
-      return Response.json({
-        email: data?.user?.email,
-      });
+    if (!allowed) {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 429,
+      })
     }
-    */
 
-    const { name } = await req.json();
-
-    return Response.json({
-      message: `Hello ${name}!`,
-    });
-  }),
-};
-
-/* To invoke locally:
-
-  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  2. Make an HTTP request:
-
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/upstash-redis-ratelimit' \
-    --header 'apiKey: sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH' \
-    --data '{"name":"Functions"}'
-
-*/
+    return new Response(JSON.stringify({ message: 'Request allowed' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    })
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 400,
+    })
+  }
+})
