@@ -105,23 +105,26 @@ export default function VaultPage() {
            ))}
         </div>
 
-        <BrandCard padding="none" className="overflow-hidden">
-           <div className="p-4 bg-slate-50 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-center">
-              <div className="flex gap-2">
-                {CATEGORIES.map(c => (
-                  <button 
-                    key={c} 
-                    onClick={() => setActiveCategory(c)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeCategory === c ? 'bg-blue-700 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
-                  >
-                    {c === '全部' ? '全部' : `${c} · ${CAT_LABELS[c]}`}
-                  </button>
-                ))}
+        <BrandCard padding="none" className="overflow-hidden shadow-sm">
+           <div className="p-4 bg-slate-50/50 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-center">
+              {/* ... (category buttons logic stays same) */}
+              <div className="scroll-x-governed w-full md:w-auto">
+                <div className="flex gap-2">
+                  {CATEGORIES.map(c => (
+                    <button 
+                      key={c} 
+                      onClick={() => setActiveCategory(c)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeCategory === c ? 'bg-blue-700 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+                    >
+                      {c === '全部' ? '全部' : `${c} · ${CAT_LABELS[c]}`}
+                    </button>
+                  ))}
+                </div>
               </div>
               <div className="relative w-full md:w-64">
                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                  <input 
-                   className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:border-blue-600 outline-none transition-all"
+                   className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:border-blue-600 outline-none transition-all"
                    placeholder="搜尋文件名或 GRI..."
                    value={search}
                    onChange={e => setSearch(e.target.value)}
@@ -129,16 +132,18 @@ export default function VaultPage() {
               </div>
            </div>
 
-           <BrandTable 
-             columns={[
-               { key: 'file', label: '文件資訊' },
-               { key: 'category', label: '類別' },
-               { key: 'gri', label: 'GRI 指標' },
-               { key: 'status', label: '狀態' },
-               { key: 'zkp', label: '5T 實證' },
-               { key: 'action', label: '操作' },
-             ]}
-             rows={filtered.map(f => ({
+           <div className="scroll-x-governed">
+             <BrandTable 
+               columns={[
+                 { key: 'file', label: '文件資訊' },
+                 { key: 'category', label: '類別' },
+                 { key: 'gri', label: 'GRI 指標' },
+                 { key: 'status', label: '狀態' },
+                 { key: 'zkp', label: '5T 實證' },
+                 { key: 'action', label: '操作' },
+               ]}
+               rows={filtered.map(f => ({
+                 // ... (rows map stays same)
                file: (
                  <div className="flex flex-col">
                    <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
