@@ -9,6 +9,7 @@ interface BrandProgressProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
   color?: 'blue' | 'gold' | 'green' | 'red' | 'purple' | 'auto';
   animated?: boolean;
+  className?: string;
 }
 
 const sizeStyles = {
@@ -26,6 +27,7 @@ export default function BrandProgress({
   size = 'sm',
   color = 'blue',
   animated = false,
+  className = '',
 }: BrandProgressProps) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
 
@@ -42,7 +44,7 @@ export default function BrandProgress({
   };
 
   return (
-    <div className="w-full">
+    <div className={`w-full ${className}`}>
       {(label || showValue) && (
         <div className="flex justify-between items-center mb-1.5">
           {label && <span className="text-xs text-slate-600 font-medium">{label}</span>}

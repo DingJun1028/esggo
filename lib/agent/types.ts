@@ -11,6 +11,7 @@ export type AgentTaskType =
 export type AgentExecutionStatus =
   | 'queued'
   | 'running'
+  | 'failed'
   | 'draft_generated'
   | 'awaiting_review'
   | 'approved'

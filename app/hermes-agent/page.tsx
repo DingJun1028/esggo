@@ -108,7 +108,7 @@ export default function HermesAgentPage() {
         subtitle="超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心"
         eyebrow="v0.14.1 · Self-Improving Agent"
         icon={<Bot size={32} />}
-        action={
+        actions={
           <div className="flex items-center gap-3">
             <BrandBadge variant="blue" size="md" dot>v0.14.0 Stable</BrandBadge>
             <BrandStatusDot status="active" label="Runtime Online" pulse />
@@ -212,32 +212,56 @@ export default function HermesAgentPage() {
         )}
 
         {activeTab === 'quickstart' && (
-          <div className="max-w-4xl mx-auto space-y-6 fade-in">
+          <div className="max-w-5xl mx-auto fade-in">
             <BrandCard padding="lg">
               <BrandCardHeader 
                 title="Hermes Agent + ESG GO Quickstart" 
                 subtitle="從零開始構建您的 5T 誠信代理蜂群"
               />
-              <div className="mt-8 space-y-8">
-                {QUICKSTART_STEPS.map((step) => (
-                  <div key={step.id} className="relative pl-10 group">
-                    {/* Progress Line */}
-                    {step.id !== QUICKSTART_STEPS.length && (
-                      <div className="absolute left-[13px] top-8 bottom-[-32px] w-[2px] bg-slate-100 group-hover:bg-blue-100 transition-colors" />
-                    )}
-                    
-                    {/* Step Icon */}
-                    <div 
-                      className="absolute left-0 top-0 w-7 h-7 rounded-full flex items-center justify-center text-white z-10 shadow-sm"
-                      style={{ backgroundColor: step.color }}
-                    >
-                      {step.icon}
+              
+              <div className="mt-8 flex flex-col md:flex-row gap-8">
+                {/* Left: Progress Stepper */}
+                <div className="w-full md:w-64 flex-shrink-0">
+                  <div className="sticky top-6">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Installation Steps</h4>
+                    <div className="space-y-6">
+                      {QUICKSTART_STEPS.map((step, idx) => (
+                        <div key={step.id} className="flex gap-4">
+                          <div className="flex flex-col items-center">
+                            <div 
+                              className={`w-8 h-8 rounded-full flex items-center justify-center text-white flex-shrink-0 shadow-sm cursor-pointer transition-all hover:scale-110`}
+                              style={{ backgroundColor: step.color }}
+                              onClick={() => {
+                                // In a real app, this would change the active step
+                                // For now, we just scroll to it
+                                document.getElementById(`step-${step.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              }}
+                            >
+                              {step.icon}
+                            </div>
+                            {idx < QUICKSTART_STEPS.length - 1 && (
+                              <div className="w-[2px] h-full bg-slate-100 my-2" />
+                            )}
+                          </div>
+                          <div className="pb-6">
+                            <p className="text-sm font-bold text-slate-800">{step.title}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
+                  </div>
+                </div>
 
-                    <div className="space-y-3">
-                      <div>
-                        <h4 className="font-bold text-slate-800">{step.title}</h4>
-                        <p className="text-xs text-slate-500">{step.description}</p>
+                {/* Right: Step Details */}
+                <div className="flex-1 space-y-12">
+                  {QUICKSTART_STEPS.map((step) => (
+                    <div key={step.id} id={`step-${step.id}`} className="scroll-mt-24">
+                      <div className="mb-4">
+                        <h3 className="text-lg font-bold text-[#003262] flex items-center gap-2">
+                          <span style={{ color: step.color }}>{step.icon}</span>
+                          {step.title}
+                        </h3>
+                        <p className="text-sm text-slate-500 mt-1">{step.description}</p>
                       </div>
 
                       <div className="relative group/code">
@@ -245,7 +269,6 @@ export default function HermesAgentPage() {
                           {step.isSnippet ? (
                             <code>
                               {step.command.split('\n').map((line, i) => {
-                                // Simple syntax highlighting simulation
                                 if (line.startsWith('import') || line.startsWith('const')) {
                                   const parts = line.split(' ');
                                   return (
@@ -276,14 +299,28 @@ export default function HermesAgentPage() {
                           {copied === step.id ? <CheckCircle size={14} className="text-emerald-400" /> : <Copy size={14} />}
                         </button>
                       </div>
+                      
+                      <div className="mt-4 flex gap-3">
+                        {!step.isSnippet && (
+                          <BrandButton 
+                            variant="primary" 
+                            size="sm" 
+                            onClick={() => {
+                              showToast?.(`執行指令: ${step.command.split('\n')[0]}`, 'info');
+                            }}
+                          >
+                            <PlayCircle size={14} className="mr-2" /> 執行指令 (Execute)
+                          </BrandButton>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               <div className="mt-12 p-6 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-md">
                     <PlayCircle size={20} />
                   </div>
                   <div>
@@ -291,7 +328,7 @@ export default function HermesAgentPage() {
                     <p className="text-xs text-slate-500">進入調度中心啟動您的第一個 5T 任務</p>
                   </div>
                 </div>
-                <BrandButton variant="primary" onClick={() => window.location.href='/hermes-orchestrator'}>
+                <BrandButton variant="secondary" onClick={() => window.location.href='/hermes-orchestrator'}>
                   前往調度中心 <ChevronRight size={16} className="ml-1" />
                 </BrandButton>
               </div>

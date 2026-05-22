@@ -7,6 +7,7 @@ interface BrandAvatarProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?: string;
   status?: 'online' | 'offline' | 'busy';
+  onClick?: () => void;
 }
 
 const sizeStyles = {
@@ -23,11 +24,14 @@ const statusStyles = {
   busy: 'bg-amber-500',
 };
 
-export default function BrandAvatar({ name, src, size = 'md', color = '#003262', status }: BrandAvatarProps) {
+export default function BrandAvatar({ name, src, size = 'md', color = '#003262', status, onClick }: BrandAvatarProps) {
   const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
-    <div className="relative inline-flex flex-shrink-0">
+    <div 
+      className={`relative inline-flex flex-shrink-0 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
+    >
       {src ? (
         <img src={src} alt={name} className={`${sizeStyles[size]} rounded-full object-cover`} />
       ) : (

@@ -8,11 +8,11 @@ import {
 } from '../../components/brand';
 
 const tabs = [
-  { key: 'overview', label: '狀態總覽', icon: <Brain size={14} /> },
-  { key: 'knowledge', label: '知識倉庫', icon: <Book size={14} /> },
-  { key: 'dna', label: '道德 DNA', icon: <Dna size={14} /> },
-  { key: 'chat', label: '智慧對話', icon: <MessageSquare size={14} /> },
-  { key: 'ledger', label: '主權帳本', icon: <Lock size={14} /> },
+  { id: 'overview', label: '狀態總覽', icon: <Brain size={14} /> },
+  { id: 'knowledge', label: '知識倉庫', icon: <Book size={14} /> },
+  { id: 'dna', label: '道德 DNA', icon: <Dna size={14} /> },
+  { id: 'chat', label: '智慧對話', icon: <MessageSquare size={14} /> },
+  { id: 'ledger', label: '主權帳本', icon: <Lock size={14} /> },
 ];
 
 const dnaLabels = {
@@ -89,7 +89,7 @@ export default function DigitalTwinPage() {
               <BrandCard className="text-center h-full flex flex-col justify-center items-center" padding="lg">
                  <div style={{ width: '100%', maxWidth: 240, margin: '0 auto' }}>
                    <BrandScoreRing 
-                     value={overallDna} 
+                     score={overallDna} 
                      size={220} 
                      strokeWidth={12} 
                      color="var(--blue-700)" 
@@ -147,7 +147,7 @@ export default function DigitalTwinPage() {
                  <p className="text-xs text-slate-500">數位分身的底層知識來源，支援 PDF/DOCX 向量化檢索</p>
               </div>
               <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
-              <BrandButton variant="primary" onClick={() => fileInputRef.current?.click()} loading={uploading} fullWidthOnMobile>
+              <BrandButton variant="primary" onClick={() => fileInputRef.current?.click()} loading={uploading} className="w-full sm:w-auto">
                  <Upload size={16}/> 上傳企業文件
               </BrandButton>
            </div>

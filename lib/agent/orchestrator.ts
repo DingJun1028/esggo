@@ -187,7 +187,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     const artifact = generateMockArtifact(task, execution);
     if (chainedContext) artifact.content = chainedContext + '\n' + artifact.content;
     
-    updateExecution(execution.id, { status: 'completed', updatedAt: new Date().toISOString() });
+    updateExecution(execution.id, { status: 'draft_generated', updatedAt: new Date().toISOString() });
     return { execution, artifact };
   } catch (error: any) {
     // 觸發 Repair Playbook

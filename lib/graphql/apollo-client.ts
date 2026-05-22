@@ -4,7 +4,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 
-let apolloClient: ApolloClient<any> | null = null;
+let apolloClient: any | null = null;
 
 function getBaseUrl() {
   if (typeof window !== 'undefined') return window.location.origin;
@@ -56,8 +56,8 @@ function createApolloClient() {
       },
     }),
     defaultOptions: {
-      watchQuery: { errorPolicy: 'all' },
-      query: { errorPolicy: 'all' },
+      watchQuery: { errorPolicy: 'all' as any },
+      query: { errorPolicy: 'all' as any },
     },
   });
 }

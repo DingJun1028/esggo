@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'genkit';
 import { ai } from './genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 

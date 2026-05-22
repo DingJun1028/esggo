@@ -1,24 +1,20 @@
-import { NextResponse } from 'next/server';
-import { runESGMultiAgentWorkflow } from '@/lib/ai/agentz0';
+import { NextRequest, NextResponse } from 'next/server';
+import { esgResearchAgent } from '@/lib/ai/agentz0';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { topic } = await req.json();
+    const { task, dataContext } = await req.json();
 
-    if (!topic) {
-      return NextResponse.json({ error: 'Topic is required' }, { status: 400 });
+    if (!task) {
+      return NextResponse.json({ error: 'Task is required' }, { status: 400 });
     }
 
-    // Execute the ADK + Genkit + AgentZ0 Multi-Agent Workflow
-    const results = await runESGMultiAgentWorkflow(topic);
+    // Call our agent from edge function
+    const result = await esgResearchAgent.runTask(task, dataContext);
 
-    return NextResponse.json({
-      success: true,
-      message: 'AgentZ0 Workflow Completed',
-      data: results
-    });
+    return NextResponse.json({ success: true, result });
   } catch (error: any) {
-    console.error('Agent API Error:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+    console.error('[Edge API Agent] Error:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

@@ -107,7 +107,8 @@ export default function HealthCheckPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <BrandCard title="缺口分析" padding="md">
+          <BrandCard padding="md">
+            <div className="mb-4 text-lg font-bold text-[#003262]">缺口分析</div>
             {gaps.length === 0 ? (
               <div className="text-center py-8">
                 <CheckCircle size={40} className="mx-auto text-green-500 mb-2" />
@@ -118,7 +119,7 @@ export default function HealthCheckPage() {
                 {gaps.slice(0, 5).map(q => (
                   <div key={q.id} className="p-3 bg-slate-50 rounded-lg border-l-4 border-red-500">
                     <div className="flex items-center gap-2 mb-1">
-                      <BrandBadge variant="danger" size="xs">{q.category}</BrandBadge>
+                      <BrandBadge variant="error" size="xs">{q.category}</BrandBadge>
                       <span className="text-[10px] font-bold text-slate-400">{q.gri}</span>
                     </div>
                     <p className="text-xs text-slate-700 font-medium">{q.text}</p>
@@ -129,7 +130,8 @@ export default function HealthCheckPage() {
             )}
           </BrandCard>
 
-          <BrandCard title="90 天改善建議" padding="md">
+          <BrandCard padding="md">
+             <div className="mb-4 text-lg font-bold text-[#003262]">90 天改善建議</div>
              <div className="space-y-4">
                 {[
                   { period: '第 1 個月', tasks: gaps.filter(q => q.category === 'G').slice(0, 2).map(q => q.gri), variant: 'gold' },

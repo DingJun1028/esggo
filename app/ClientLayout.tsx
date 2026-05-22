@@ -12,10 +12,10 @@ import {
 } from 'lucide-react';
 import { CommandPalette } from '../components/ui/CommandPalette';
 import {
-  BrandButton, BrandBadge, BrandAvatar, BrandStatusDot, BrandSearchBar, BrandTooltip
+  BrandButton, BrandBadge, BrandAvatar, BrandStatusDot, BrandSearchBar, BrandTooltip, BrandCard
 } from '../components/brand';
 
-interface NavItem { href: string; label: string; sub: string; icon: React.ReactNode; }
+interface NavItem { href: string; label: string; sub: string; icon: React.ReactNode; badge?: string; }
 interface NavGroup { title: string; items: NavItem[]; }
 
 const NAV_GROUPS: NavGroup[] = [
@@ -234,7 +234,7 @@ function MobileGlobalMenu({ isOpen, onClose, currentPath }: { isOpen: boolean; o
             OmniHermes 全功能導覽
           </span>
         </div>
-        <BrandButton variant="ghost" size="icon" onClick={onClose} style={{ borderRadius: '50%' }}>
+        <BrandButton variant="ghost" size="sm" onClick={onClose} style={{ borderRadius: '50%' }}>
           <X size={20} />
         </BrandButton>
       </div>

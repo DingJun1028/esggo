@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { logAudit, simpleHash, getEnvironmentalData, getSocialMetrics, getGovernanceMetrics } from '../../lib/db';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandProgress, BrandTabs, BrandKpiCard, BrandT5Strip, BrandTooltip 
+  BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandTabs, BrandKpiCard, BrandT5Strip, BrandTooltip 
 } from '../../components/brand';
 
 // ── GRI Chapter Data ───────────────────────────────────────────────────────

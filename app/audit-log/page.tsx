@@ -49,7 +49,19 @@ export default function AuditLogPage() {
     }
   };
 
-  // ... (filtered logic stays same)
+  // Filter logs by search text
+  const filtered = logs.filter(log => {
+    if (!search) return true;
+    const term = search.toLowerCase();
+    return (
+      (log.action && log.action.toLowerCase().includes(term)) ||
+      (log.resource && log.resource.toLowerCase().includes(term)) ||
+      (log.user_name && log.user_name.toLowerCase().includes(term)) ||
+      (log.department && log.department.toLowerCase().includes(term)) ||
+      (log.t5_tag && log.t5_tag.toLowerCase().includes(term)) ||
+      (log.hash_lock && log.hash_lock.toLowerCase().includes(term))
+    );
+  });
 
   return (
     <ClientLayout>

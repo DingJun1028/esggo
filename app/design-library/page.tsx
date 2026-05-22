@@ -33,7 +33,7 @@ export default function DesignLibraryPage() {
         subtitle="Google Stitch Edition v2.0 · 5T 誠信視覺系統"
         eyebrow="Design System & Component Library"
         icon={<Settings size={32} />}
-        action={
+        actions={
           <BrandBadge variant="gold" size="md" dot>Stitch Verified</BrandBadge>
         }
       />

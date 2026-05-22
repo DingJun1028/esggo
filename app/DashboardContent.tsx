@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {
   CheckCircle, Leaf, Shield, Activity, TrendingUp, TrendingDown,
   FileText, Database, ClipboardList, BarChart3, AlertTriangle,
-  ChevronRight, Zap, Target, BookOpen, HeartPulse, Info, X, Users, Bot, Layers
+  ChevronRight, Zap, Target, BookOpen, HeartPulse, Info, X, Users, Bot, Layers, Code
 } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandKpiCard, BrandTimeline, BrandT5Strip, BrandStatusDot

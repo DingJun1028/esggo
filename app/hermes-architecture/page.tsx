@@ -4,7 +4,7 @@ import {
   Bot, Shield, AlertTriangle, XCircle, CheckCircle,
   ChevronRight, ChevronDown, Layers, Lock, Database,
   Eye, Activity, ArrowDown, Info, Zap, FileText,
-  ShieldCheck, Users, Clock, Hash, BarChart3,
+  ShieldCheck, Users, Clock, Hash, BarChart3, Globe,
 } from 'lucide-react';
 import {
   RISK_REGISTRY, BOUNDARY_RULES, ARCHITECTURE_LAYERS, PHASE_PLAN,

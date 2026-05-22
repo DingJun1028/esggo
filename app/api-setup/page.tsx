@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Settings, Link, Webhook, CheckCircle, AlertCircle, Database, Key, RefreshCw, Plus } from 'lucide-react';
+import { Settings, Link, Webhook, CheckCircle, AlertCircle, Database, Key, RefreshCw, Plus, Zap } from 'lucide-react';
 
 const ENV_VARS = [
   { key: 'NEXT_PUBLIC_SUPABASE_URL', desc: 'Supabase 專案 URL', required: true },

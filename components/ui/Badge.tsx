@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/cn';
-import { t5Colors, esgColors } from '@/lib/design-tokens';
+import { designTokens } from '@/lib/design-tokens';
 
 // ─── Generic Badge ──────────────────────────────────────────────────────────
 interface BadgeProps {
@@ -57,6 +57,13 @@ const t5Labels: Record<T5Key, string> = {
 };
 
 export function T5Badge({ protocol, className }: { protocol: T5Key; className?: string }) {
+  const t5Colors: Record<T5Key, string> = {
+    T1: designTokens.colors.t1Color,
+    T2: designTokens.colors.t2Color,
+    T3: designTokens.colors.t3Color,
+    T4: designTokens.colors.t4Color,
+    T5: designTokens.colors.t5Color,
+  };
   const color = t5Colors[protocol];
   return (
     <span

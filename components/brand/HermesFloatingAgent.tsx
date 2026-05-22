@@ -29,7 +29,7 @@ export default function HermesFloatingAgent() {
                      </div>
                      <div>
                         <p className="text-xs font-bold">OmniHermes Agent</p>
-                        <BrandStatusDot status="active" label="Ready to assist" size="xs" color="#10B981" />
+                        <BrandStatusDot status="active" label="Ready to assist" size="sm" />
                      </div>
                   </div>
                   <div className="flex items-center gap-1">

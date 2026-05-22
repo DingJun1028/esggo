@@ -99,6 +99,31 @@ agent.command('status')
     console.log(pc.white(`----------------------------------`));
   });
 
+agent.command('run <task>')
+  .description('Run an agent task via Edge Function with Function Calling')
+  .action(async (task) => {
+    console.log(pc.cyan(`🤖 Invoking Edge AgentZ0 for task: "${task}"...`));
+    try {
+      // Typically NEXT_PUBLIC_SITE_URL or localhost for local dev
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      const res = await fetch(`${baseUrl}/api/agent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Agent API failed');
+      
+      console.log(pc.green(`✅ Agent (${data.result.agent}) execution successful!`));
+      console.log(pc.white('──────────────────────────────────────────────────'));
+      console.log(pc.yellow(data.result.result));
+      console.log(pc.white('──────────────────────────────────────────────────'));
+    } catch (err) {
+      console.log(pc.red(`❌ Agent Execution Error: ${err.message}`));
+    }
+  });
+
 // ── Vault & ZKP Commands ─────────────────────────────────────────────────────
 const vault = program.command('vault').description('Cryptographic seal and evidence management');
 
@@ -130,6 +155,33 @@ vault.command('list')
       });
     } catch (err) {
       console.log(pc.red(`❌ Error: ${err.message}`));
+    }
+  });
+
+// ── Intelligence Hub Commands ────────────────────────────────────────────────
+const intel = program.command('intel').description('ESG Intelligence and Regulatory Hub');
+
+intel.command('fetch <source>')
+  .description('Fetch latest regulations (EU, TW, GRI)')
+  .action(async (source) => {
+    console.log(pc.blue(`🔍 Fetching ESG intelligence from [${source.toUpperCase()}]...`));
+    
+    // Simulate scraper logic (matching lib/services/scraper.ts)
+    await new Promise(r => setTimeout(r, 1500));
+    
+    const data = {
+      'EU': [{ title: 'EU 2023/956: CBAM Implementing Regulation', date: '2023-05-16' }],
+      'TW': [{ title: '氣候變遷因應法：碳費徵收辦法草案', date: '2024-04-29' }],
+      'GRI': [{ title: 'GRI 101: Biodiversity 2024', date: '2024-01-25' }]
+    };
+
+    const results = data[source.toUpperCase()] || [];
+    if (results.length === 0) {
+      console.log(pc.yellow('⚠️ No recent updates found for this source.'));
+    } else {
+      results.forEach(r => {
+        console.log(`${pc.green('✅ FOUND')} | ${pc.white(r.title)} (${pc.gray(r.date)})`);
+      });
     }
   });
 

@@ -33,7 +33,7 @@ export const ESGAnalysisOutputSchema = z.object({
 
 export const GRIContentInputSchema = z.object({
   chapter: z.string(),
-  metrics: z.record(z.union([z.string(), z.number()])),
+  metrics: z.record(z.string(), z.union([z.string(), z.number()])),
   persona: z.enum(['compliance', 'harmony', 'innovation']).default('compliance'),
   wordCount: z.number().default(500),
 });

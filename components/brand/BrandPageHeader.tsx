@@ -9,6 +9,7 @@ interface BrandPageHeaderProps {
   breadcrumb?: { label: string; href?: string }[];
   badge?: React.ReactNode;
   gradient?: boolean;
+  eyebrow?: React.ReactNode;
 }
 
 export default function BrandPageHeader({
@@ -19,6 +20,7 @@ export default function BrandPageHeader({
   breadcrumb,
   badge,
   gradient = false,
+  eyebrow,
 }: BrandPageHeaderProps) {
   return (
     <div className={`
@@ -48,6 +50,11 @@ export default function BrandPageHeader({
             </div>
           )}
           <div className="min-w-0">
+            {eyebrow && (
+              <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${gradient ? 'text-california-gold' : 'text-slate-400'}`}>
+                {eyebrow}
+              </div>
+            )}
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className={`text-xl font-bold leading-tight ${gradient ? 'text-white' : 'text-[#0F172A]'}`}>
                 {title}

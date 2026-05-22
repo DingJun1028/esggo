@@ -1,0 +1,7 @@
+### Execution Trace:
+- Viewed: c:\Project\esggo_original\cli\omni.mjs (L68-104)
+- Ran: none
+- Modified: c:\Project\esggo_original\cli\omni.mjs (added agent run command)
+
+### Outcome:
+Integrated the agent run <task> CLI command into omni.mjs to invoke the Edge AgentZ0 API endpoint with Function Calling support.

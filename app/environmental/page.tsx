@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Zap, Bot, Info, BarChart3, CloudRain, Trash, Wind } from 'lucide-react';
+import { Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Zap, Bot, Info, BarChart3, CloudRain, Trash, Wind, Activity, CheckCircle, Globe } from 'lucide-react';
 import { getEnvironmentalData, upsertEnvironmentalData, deleteEnvironmentalData, type EnvironmentalMetric } from '../../lib/db';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput 
 } from '../../components/brand';
 
 const TABS = [
@@ -132,10 +132,10 @@ export default function EnvironmentalPage() {
 
       {editRow && (
         <BrandCard padding="lg" className="border-blue-200 bg-blue-50/20">
-          <BrandCardHeader 
-            title={editRow.isNew ? '新增環境指標' : '編輯指標'} 
-            subtitle="所有變更將記錄於 T3 稽核軌跡"
-          />
+          <div className="mb-4">
+            <h3 className="text-lg font-bold text-[#003262]">{editRow.isNew ? '新增環境指標' : '編輯指標'}</h3>
+            <p className="text-sm text-slate-500">所有變更將記錄於 T3 稽核軌跡</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
              <BrandInput label="指標名稱" value={editRow.metric_name ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_name: e.target.value }))} placeholder="例：範疇一直接排放" />
              <BrandInput label="數值" type="number" value={editRow.metric_value ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_value: parseFloat(e.target.value) || null }))} placeholder="0" />
@@ -197,14 +197,14 @@ export default function EnvironmentalPage() {
                      </div>
                    ),
                    action: (
-                     <div className="flex gap-2">
+                       <div className="flex gap-2">
                         <BrandTooltip content={m.verified ? '取消封印' : '5T 實證封印'}>
-                           <BrandButton variant={m.verified ? 'ghost' : 'outline'} size="icon" onClick={() => handleVerify(m)} className={m.verified ? 'text-green-600' : ''}>
+                           <BrandButton variant={m.verified ? 'ghost' : 'outline'} size="sm" onClick={() => handleVerify(m)} className={m.verified ? 'text-green-600' : ''}>
                               <Shield size={14}/>
                            </BrandButton>
                         </BrandTooltip>
-                        <BrandButton variant="ghost" size="icon" onClick={() => setEditRow({ ...m, isNew: false })}><Edit2 size={14}/></BrandButton>
-                        <BrandButton variant="ghost" size="icon" onClick={() => m.id && handleDelete(m.id)} className="text-red-500"><Trash2 size={14}/></BrandButton>
+                        <BrandButton variant="ghost" size="sm" onClick={() => setEditRow({ ...m, isNew: false })}><Edit2 size={14}/></BrandButton>
+                        <BrandButton variant="ghost" size="sm" onClick={() => m.id && handleDelete(m.id)} className="text-red-500"><Trash2 size={14}/></BrandButton>
                      </div>
                    )
                  }))}

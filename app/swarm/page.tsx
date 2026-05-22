@@ -1,7 +1,7 @@
 'use client';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
-  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle
+  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle, Users
 } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandTimeline, BrandPageHeader 
