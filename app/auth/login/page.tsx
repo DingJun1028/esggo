@@ -4,10 +4,8 @@ import React, { useState } from 'react';
 import { Leaf, ShieldCheck, ArrowRight, Github } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,12 +14,14 @@ export default function LoginPage() {
     if (e) e.preventDefault();
     setLoading(true);
     
-    // Stitch Auth Persistence
-    localStorage.setItem('omni_user', 'admin');
+    // Stitch Auth Force Seal - Admin Access
+    localStorage.clear();
+    localStorage.setItem('omni_user', 'developer_master_admin');
     
+    // Using window.location.href to force a full app state re-initialization
     setTimeout(() => {
-      router.push('/');
-    }, 800);
+      window.location.href = '/';
+    }, 500);
   }
 
   return (
@@ -35,13 +35,17 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-[420px] px-6 fade-in">
         {/* Brand Identity */}
         <div className="flex flex-col items-center mb-10 text-center">
+           {/* DEVELOPER MASTER KEY - CLICK THE LOGO */}
            <button 
              onClick={() => handleLogin()} 
-             title="Developer Master Key"
-             className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#009E9D] to-[#00C2A8] flex items-center justify-center shadow-2xl mb-6 hover:scale-105 active:scale-95 transition-transform cursor-pointer group"
+             type="button"
+             title="Developer Master Key - Click to bypass"
+             className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#009E9D] to-[#00C2A8] flex items-center justify-center shadow-2xl mb-6 hover:scale-110 active:scale-90 transition-all cursor-pointer group relative"
            >
-              <Leaf size={32} color="#fff" className="group-hover:rotate-12 transition-transform" />
+              <div className="absolute inset-0 rounded-2xl bg-white/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
+              <Leaf size={32} color="#fff" className="relative z-10 group-hover:rotate-12 transition-transform" />
            </button>
+           
            <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">ESG GO</h1>
            <div className="flex items-center gap-2">
               <BrandBadge variant="outline" className="border-white/20 text-white/60 text-[10px]">VER v8.5.1</BrandBadge>

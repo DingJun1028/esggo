@@ -92,6 +92,14 @@ export default function HermesOrchestratorPage() {
     setTimeout(() => setToast(null), 3500);
   }
 
+  function getUserId() {
+    try {
+      const u = localStorage.getItem('omni_user');
+      if (u) return JSON.parse(u).id || 'user_001';
+    } catch (e) {}
+    return 'user_001';
+  }
+
   async function handleCreate() {
     if (!title.trim()) { showToast('請填寫任務標題', 'error'); return; }
     setLoading(true);
@@ -99,7 +107,7 @@ export default function HermesOrchestratorPage() {
       const res = await fetch('/api/agent/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ actorId: 'user_001', taskType, title, description, skillKey: selectedSkill }),
+        body: JSON.stringify({ actorId: getUserId(), taskType, title, description, skillKey: selectedSkill }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -145,7 +153,7 @@ export default function HermesOrchestratorPage() {
       const res = await fetch(`/api/agent/artifacts/${rec.artifact!.id}/promote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ currentReviewStatus: rec.artifact!.reviewStatus, actorId: 'user_001' }),
+        body: JSON.stringify({ currentReviewStatus: rec.artifact!.reviewStatus, actorId: getUserId() }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
@@ -170,7 +178,7 @@ export default function HermesOrchestratorPage() {
       const res = await fetch(`/api/agent/artifacts/${rec.artifact!.id}/review`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, reviewerId: 'user_001' }),
+        body: JSON.stringify({ action, reviewerId: getUserId() }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
