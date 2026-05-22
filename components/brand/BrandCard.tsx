@@ -9,6 +9,7 @@ interface BrandCardProps {
   border?: boolean;
   shadow?: 'none' | 'sm' | 'md' | 'lg';
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 interface BrandCardHeaderProps {
@@ -77,6 +78,7 @@ export default function BrandCard({
   border = true,
   shadow = 'sm',
   onClick,
+  style,
 }: BrandCardProps) {
   return (
     <div
@@ -90,6 +92,7 @@ export default function BrandCard({
         ${className}
       `}
       onClick={onClick}
+      style={style}
     >
       {children}
     </div>

@@ -287,7 +287,7 @@ export default function HermesOrchestratorPage() {
                           <div>
                              <p className="text-xs font-bold text-slate-700">{m.role}</p>
                              <p className="text-[10px] text-slate-400 mb-1">{m.sub}</p>
-                             <BrandStatusDot status="active" label="Idle" size="xs" />
+                             <BrandStatusDot status="active" label="Idle" size="sm" />
                           </div>
                        </div>
                     </BrandCard>
