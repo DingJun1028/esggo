@@ -78,7 +78,11 @@ export default function SwarmPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 fade-in">
            {/* Left: Conscious Stream */}
            <div className="lg:col-span-4">
-              <BrandCard title="AI 共鳴意識流" subtitle="OmniMemory 實時同步軌跡" padding="md">
+              <BrandCard padding="md">
+                 <div className="mb-4 pb-4 border-b border-slate-50">
+                    <h3 className="text-sm font-bold text-[#003262]">AI 共鳴意識流</h3>
+                    <p className="text-xs text-slate-500 mt-1">OmniMemory 實時同步軌跡</p>
+                 </div>
                  <div className="scroll-x-governed">
                    <BrandTimeline items={STREAM_DATA} />
                  </div>
@@ -123,8 +127,8 @@ export default function SwarmPage() {
                      </div>
 
                      <div className="flex gap-2 mt-6 pt-4 border-t border-slate-50">
-                        <BrandButton variant="ghost" size="icon"><Play size={12}/></BrandButton>
-                        <BrandButton variant="ghost" size="icon"><Pause size={12}/></BrandButton>
+                        <BrandButton variant="ghost" size="sm"><Play size={12}/></BrandButton>
+                        <BrandButton variant="ghost" size="sm"><Pause size={12}/></BrandButton>
                         <BrandButton variant="ghost" size="sm" className="ml-auto">詳情</BrandButton>
                      </div>
                   </BrandCard>

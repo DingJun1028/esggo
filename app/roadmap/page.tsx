@@ -35,9 +35,9 @@ export default function RoadmapPage() {
   }, []);
 
   const cycleStatus = async (m: RoadmapMilestone) => {
-    const statuses = ['planned', 'in_progress', 'achieved'];
-    const idx = statuses.indexOf(m.status || 'planned');
-    const next = statuses[(idx + 1) % statuses.length];
+    const statuses = ['planned', 'in_progress', 'achieved'] as const;
+    const idx = statuses.indexOf((m.status as any) || 'planned');
+    const next = statuses[(idx + 1) % statuses.length] as typeof statuses[number];
     await updateMilestoneStatus(m.id!, next);
     setMilestones(prev => prev.map(ms => ms.id === m.id ? { ...ms, status: next } : ms));
   };

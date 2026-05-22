@@ -107,5 +107,6 @@ export function EnvironmentalTrajectory({
         </ComposedChart>
       </ResponsiveContainer>
     </div>
+  </div>
   );
 }
