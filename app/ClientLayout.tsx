@@ -439,7 +439,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
               <div 
                 key={group.title}
                 style={{ 
-                  animation: mobileMoreOpen ? \`slideUpFade 0.4s ease-out forwards \${gIndex * 0.05}s\` : 'none',
+                  animation: mobileMoreOpen ? `slideUpFade 0.4s ease-out forwards ${gIndex * 0.05}s` : 'none',
                   opacity: mobileMoreOpen ? 0 : 1
                 }}
               >
@@ -491,7 +491,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
                 <button 
                   key="more" 
                   onClick={() => setMobileMoreOpen(!mobileMoreOpen)} 
-                  className={`mobile-nav-item \${mobileMoreOpen ? 'active' : ''}`}
+                  className={`mobile-nav-item ${mobileMoreOpen ? 'active' : ''}`}
                   style={{ background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   {item.icon}
@@ -501,7 +501,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
             }
             const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);
             return (
-              <Link key={item.href} href={item.href} onClick={() => setMobileMoreOpen(false)} className={`mobile-nav-item \${active ? 'active' : ''}`}>
+              <Link key={item.href} href={item.href} onClick={() => setMobileMoreOpen(false)} className={`mobile-nav-item ${active ? 'active' : ''}`}>
                 {item.icon}
                 <span>{item.label}</span>
               </Link>

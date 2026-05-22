@@ -5,7 +5,7 @@ import {
   Clock, FileText, ShieldCheck, Database, GraduationCap,
   ClipboardList, ChevronRight, Zap, Eye, RefreshCw,
   Info, Shield, Activity, Hash, X, ArrowRight,
-  Users, BarChart3, CheckSquare,
+  Users, BarChart3, CheckSquare, Lock,
 } from 'lucide-react';
 import type {
   AgentTask, AgentExecution, AgentArtifact,
@@ -237,7 +237,6 @@ export default function HermesOrchestratorPage() {
                 <BrandButton variant="primary" fullWidth size="lg" onClick={handleCreate} loading={loading}>
                   <Zap size={16}/> 通過 Policy Guard 並建立
                 </BrandButton>
-              </div>
             </BrandCard>
           )}
 

@@ -8,7 +8,7 @@ import {
 import { getEvidenceFiles, insertEvidence, updateEvidenceStatus, EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip
 } from '../../components/brand';
 
 const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];

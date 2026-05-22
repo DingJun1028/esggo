@@ -42,12 +42,12 @@ export function EnvironmentalTrajectory({
       <div style={{ width: '100%', height: 'clamp(240px, 40vh, 320px)' }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={data}>
-            {/* ... (rest of Recharts config) */}
-            <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#003262" stopOpacity={0.1}/>
-              <stop offset="95%" stopColor="#003262" stopOpacity={0}/>
-            </linearGradient>
-          </defs>
+            <defs>
+              <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#003262" stopOpacity={0.1}/>
+                <stop offset="95%" stopColor="#003262" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
           <XAxis 
             dataKey="year" 
