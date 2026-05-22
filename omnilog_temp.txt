@@ -1,0 +1,15 @@
+### Execution Trace:
+- Viewed: 
+  - `app/social/page.tsx`
+  - `app/vault/page.tsx`
+  - `app/environmental/page.tsx`
+  - `app/api/social/insights/route.ts`
+  - `app/api/environmental/insights/route.ts`
+- Modified:
+  - `app/vault/page.tsx` (Added skeleton loading states)
+  - `app/social/page.tsx` (Added skeleton loading state, added Toast UI for error handling)
+  - `app/api/social/insights/route.ts` (Updated OmniHermes prompt for structured gap analysis)
+  - `app/api/environmental/insights/route.ts` (Updated OmniHermes prompt for structured gap analysis, fixed function bug)
+
+### Outcome:
+Successfully implemented robust loading states (skeletons) for social and vault pages. Enhanced OmniHermes AI prompts for explicit gap handling and actionable steps. Added user-friendly Toast error notifications to the social page.

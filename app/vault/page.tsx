@@ -91,104 +91,131 @@ export default function VaultPage() {
           }
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-           {[
-             { label: '總文件數', value: files.length, variant: 'info' },
-             { label: '已實證封印', value: verifiedCount, variant: 'success' },
-             { label: '待處理項', value: files.filter(f => f.status === 'pending').length, variant: 'warning' },
-             { label: '5T 覆蓋率', value: `${Math.round((verifiedCount / (files.length || 1)) * 100)}%`, variant: 'gold' },
-           ].map(s => (
-             <BrandCard key={s.label} padding="md" className="text-center">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
-                <p className="text-2xl font-bold text-[#003262]">{s.value}</p>
-             </BrandCard>
-           ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map(i => (
+              <BrandCard key={i} padding="md" className="animate-pulse text-center">
+                <div className="h-3 bg-slate-200 rounded w-16 mb-2 mx-auto"></div>
+                <div className="h-8 bg-slate-200 rounded w-20 mx-auto"></div>
+              </BrandCard>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+             {[
+               { label: '總文件數', value: files.length, variant: 'info' },
+               { label: '已實證封印', value: verifiedCount, variant: 'success' },
+               { label: '待處理項', value: files.filter(f => f.status === 'pending').length, variant: 'warning' },
+               { label: '5T 覆蓋率', value: `${Math.round((verifiedCount / (files.length || 1)) * 100)}%`, variant: 'gold' },
+             ].map(s => (
+               <BrandCard key={s.label} padding="md" className="text-center">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
+                  <p className="text-2xl font-bold text-[#003262]">{s.value}</p>
+               </BrandCard>
+             ))}
+          </div>
+        )}
 
-        <BrandCard padding="none" className="overflow-hidden shadow-sm">
-           <div className="p-4 bg-slate-50/50 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-center">
-              {/* ... (category buttons logic stays same) */}
-              <div className="scroll-x-governed w-full md:w-auto">
-                <div className="flex gap-2">
-                  {CATEGORIES.map(c => (
-                    <button 
-                      key={c} 
-                      onClick={() => setActiveCategory(c)}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeCategory === c ? 'bg-blue-700 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
-                    >
-                      {c === '全部' ? '全部' : `${c} · ${CAT_LABELS[c]}`}
-                    </button>
-                  ))}
+        {loading ? (
+          <BrandCard padding="none" className="overflow-hidden shadow-sm animate-pulse">
+            <div className="p-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
+               <div className="flex gap-2">
+                 {[1,2,3,4].map(i => <div key={i} className="h-8 w-16 bg-slate-200 rounded-xl"></div>)}
+               </div>
+               <div className="h-9 w-64 bg-slate-200 rounded-xl"></div>
+            </div>
+            <div className="p-4 space-y-4">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div key={i} className="h-12 bg-slate-100 rounded-xl w-full"></div>
+              ))}
+            </div>
+          </BrandCard>
+        ) : (
+          <BrandCard padding="none" className="overflow-hidden shadow-sm">
+             <div className="p-4 bg-slate-50/50 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-center">
+                {/* ... (category buttons logic stays same) */}
+                <div className="scroll-x-governed w-full md:w-auto">
+                  <div className="flex gap-2">
+                    {CATEGORIES.map(c => (
+                      <button 
+                        key={c} 
+                        onClick={() => setActiveCategory(c)}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeCategory === c ? 'bg-blue-700 text-white shadow-md' : 'text-slate-500 hover:bg-slate-100'}`}
+                      >
+                        {c === '全部' ? '全部' : `${c} · ${CAT_LABELS[c]}`}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="relative w-full md:w-64">
-                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                 <input 
-                   className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:border-blue-600 outline-none transition-all"
-                   placeholder="搜尋文件名或 GRI..."
-                   value={search}
-                   onChange={e => setSearch(e.target.value)}
-                 />
-              </div>
-           </div>
+                <div className="relative w-full md:w-64">
+                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                   <input 
+                     className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:border-blue-600 outline-none transition-all"
+                     placeholder="搜尋文件名或 GRI..."
+                     value={search}
+                     onChange={e => setSearch(e.target.value)}
+                   />
+                </div>
+             </div>
 
-           <div className="scroll-x-governed">
-             <BrandTable 
-               columns={[
-                 { key: 'file', label: '文件資訊' },
-                 { key: 'category', label: '類別' },
-                 { key: 'gri', label: 'GRI 指標' },
-                 { key: 'status', label: '狀態' },
-                 { key: 'zkp', label: '5T 實證' },
-                 { key: 'action', label: '操作' },
-               ]}
-               data={filtered.map(f => ({
-                 id: f.id,
-                 file: (
-                   <div className="flex flex-col">
-                     <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
-                     {f.hash_lock && <code className="text-[9px] text-slate-400 mt-1">SHA256: {f.hash_lock.slice(0, 16)}...</code>}
-                   </div>
-                 ),
-                 category: <BrandBadge variant="outline" size="xs">{f.category} · {CAT_LABELS[f.category!]}</BrandBadge>,
-                 gri: <BrandBadge variant="info" size="xs">{f.gri_reference || '-'}</BrandBadge>,
-                 status: <BrandBadge variant={STATUS_MAP[f.status || 'pending'].variant} size="xs">{STATUS_MAP[f.status || 'pending'].label}</BrandBadge>,
-                 zkp: f.zkp_proof ? <BrandBadge variant="gold" size="xs">✓ ZKP SEALED</BrandBadge> : <span className="text-[10px] text-slate-300 font-bold">UNSEALED</span>,
-                 action: (
-                   <div className="flex gap-2">
-                      <BrandButton variant="ghost" size="sm" onClick={() => setSelected(f)}><Eye size={14}/></BrandButton>
-                      <BrandTooltip content="OmniHermes 視覺掃描">
-                        <BrandButton variant="ghost" size="sm" onClick={() => handleScan(f)} loading={scanningId === f.id} className="text-blue-700">
-                          <Bot size={14}/>
-                        </BrandButton>
-                      </BrandTooltip>
-                      {f.status === 'verified' && (
-                        <BrandTooltip content="複製驗證連結">
-                          <BrandButton 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => {
-                              const url = `${window.location.origin}/audit-verify?uuid=${f.id}`;
-                              navigator.clipboard.writeText(url);
-                              alert('驗證連結已複製！');
-                            }}
-                            className="text-emerald-600"
-                          >
-                            <Share2 size={14}/>
+             <div className="scroll-x-governed">
+               <BrandTable 
+                 columns={[
+                   { key: 'file', label: '文件資訊' },
+                   { key: 'category', label: '類別' },
+                   { key: 'gri', label: 'GRI 指標' },
+                   { key: 'status', label: '狀態' },
+                   { key: 'zkp', label: '5T 實證' },
+                   { key: 'action', label: '操作' },
+                 ]}
+                 data={filtered.map(f => ({
+                   id: f.id,
+                   file: (
+                     <div className="flex flex-col">
+                       <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
+                       {f.hash_lock && <code className="text-[9px] text-slate-400 mt-1">SHA256: {f.hash_lock.slice(0, 16)}...</code>}
+                     </div>
+                   ),
+                   category: <BrandBadge variant="outline" size="xs">{f.category} · {CAT_LABELS[f.category!]}</BrandBadge>,
+                   gri: <BrandBadge variant="info" size="xs">{f.gri_reference || '-'}</BrandBadge>,
+                   status: <BrandBadge variant={STATUS_MAP[f.status || 'pending'].variant} size="xs">{STATUS_MAP[f.status || 'pending'].label}</BrandBadge>,
+                   zkp: f.zkp_proof ? <BrandBadge variant="gold" size="xs">✓ ZKP SEALED</BrandBadge> : <span className="text-[10px] text-slate-300 font-bold">UNSEALED</span>,
+                   action: (
+                     <div className="flex gap-2">
+                        <BrandButton variant="ghost" size="sm" onClick={() => setSelected(f)}><Eye size={14}/></BrandButton>
+                        <BrandTooltip content="OmniHermes 視覺掃描">
+                          <BrandButton variant="ghost" size="sm" onClick={() => handleScan(f)} loading={scanningId === f.id} className="text-blue-700">
+                            <Bot size={14}/>
                           </BrandButton>
                         </BrandTooltip>
-                      )}
-                      {f.status !== 'verified' && (
-                        <BrandButton variant="primary" size="sm" onClick={() => sealFile(f)} loading={sealing === f.id}>
-                          <Shield size={12}/> 封印
-                        </BrandButton>
-                      )}
-                   </div>
-                 )
-               }))}
-             />
-           </div>
-        </BrandCard>
+                        {f.status === 'verified' && (
+                          <BrandTooltip content="複製驗證連結">
+                            <BrandButton 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => {
+                                const url = `${window.location.origin}/audit-verify?uuid=${f.id}`;
+                                navigator.clipboard.writeText(url);
+                                alert('驗證連結已複製！');
+                              }}
+                              className="text-emerald-600"
+                            >
+                              <Share2 size={14}/>
+                            </BrandButton>
+                          </BrandTooltip>
+                        )}
+                        {f.status !== 'verified' && (
+                          <BrandButton variant="primary" size="sm" onClick={() => sealFile(f)} loading={sealing === f.id}>
+                            <Shield size={12}/> 封印
+                          </BrandButton>
+                        )}
+                     </div>
+                   )
+                 }))}
+               />
+             </div>
+          </BrandCard>
+        )}
 
         {/* Scan Result Modal */}
         <BrandModal 

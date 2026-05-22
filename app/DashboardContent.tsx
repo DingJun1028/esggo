@@ -11,12 +11,19 @@ import {
 } from '../components/brand';
 import { EnvironmentalTrajectory } from '../components/brand/EnvironmentalTrajectory';
 
-const KPIS = [
+export interface DashboardStatsData {
+  complianceRate: number;
+  carbonEmissions: number;
+  griCoverage: number;
+  auditCount: number;
+}
+
+const getKpis = (stats: DashboardStatsData | null, loading: boolean) => [
   {
     key: 'compliance',
     icon: <CheckCircle size={18}/>,
     label: '合規完成率',
-    value: '78',
+    value: stats?.complianceRate.toString() || (loading ? '...' : '0'),
     unit: '%',
     trend: '+5.2%',
     trendUp: true,
@@ -29,7 +36,7 @@ const KPIS = [
     key: 'carbon',
     icon: <Leaf size={18}/>,
     label: '碳排放量',
-    value: '1,247',
+    value: stats?.carbonEmissions.toLocaleString() || (loading ? '...' : '0'),
     unit: 'tCO₂e',
     trend: '-12%',
     trendUp: false,
@@ -42,7 +49,7 @@ const KPIS = [
     key: 'gri',
     icon: <Shield size={18}/>,
     label: 'GRI 覆蓋率',
-    value: '67',
+    value: stats?.griCoverage.toString() || (loading ? '...' : '0'),
     unit: '%',
     trend: '+8%',
     trendUp: true,
@@ -55,7 +62,7 @@ const KPIS = [
     key: 'audit',
     icon: <Activity size={18}/>,
     label: '審計記錄',
-    value: '2,847',
+    value: stats?.auditCount.toLocaleString() || (loading ? '...' : '0'),
     unit: '筆',
     trend: 'T5 追蹤',
     trendUp: true,
@@ -92,11 +99,33 @@ const QUICK_ACTIONS = [
 
 export default function DashboardContent() {
   const [now, setNow] = useState(new Date());
+  const [stats, setStats] = useState<DashboardStatsData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 60000);
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/dashboard/stats');
+        if (res.ok) {
+          const data = await res.json();
+          setStats(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch stats', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchStats();
+    const t = setInterval(() => {
+      setNow(new Date());
+      fetchStats();
+    }, 60000);
     return () => clearInterval(t);
   }, []);
+
+  const KPIS = getKpis(stats, loading);
 
   return (
     <div className="fade-in max-w-[1600px] mx-auto p-6 space-y-6">
