@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Edit3, Save, Plus, Trash2, Building, Target, Users, Globe } from 'lucide-react';
+import { Edit3, Save, Plus, Trash2, Building, Target, Users, Globe, CreditCard, ExternalLink, Zap } from 'lucide-react';
+import { BrandCard, BrandBadge, BrandButton, BrandCardHeader } from '../../components/brand';
 
 const defaultProfile = {
   company_name: '善向永續股份有限公司',
@@ -52,53 +53,82 @@ export default function ProfilePage() {
   const statusLabel = (s: string) => s === 'completed' ? '已完成' : s === 'in_progress' ? '進行中' : '計畫中';
 
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <div className="page-header-content">
-          <h1 className="page-title">企業管理</h1>
-          <p className="page-subtitle">Corporate Profile · 基本資料 · ESG 目標管理</p>
+    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">企業管理</h1>
+          <p className="text-sm text-slate-500 mt-1">Corporate Profile · 基本資料 · ESG 目標管理</p>
         </div>
         {!editing ? (
-          <button onClick={() => { setEditing(true); setEditForm(profile); }} className="btn btn-primary">
-            <Edit3 size={14} style={{ display: 'inline', marginRight: 4 }} />編輯資料
-          </button>
+          <BrandButton onClick={() => { setEditing(true); setEditForm(profile); }}>
+            <Edit3 size={14} className="mr-2" /> 編輯資料
+          </BrandButton>
         ) : (
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <button onClick={() => setEditing(false)} className="btn btn-secondary">取消</button>
-            <button onClick={handleSave} className="btn btn-primary"><Save size={14} style={{ display: 'inline', marginRight: 4 }} />儲存</button>
+          <div className="flex gap-2">
+            <BrandButton variant="ghost" onClick={() => setEditing(false)}>取消</BrandButton>
+            <BrandButton onClick={handleSave}><Save size={14} className="mr-2" /> 儲存</BrandButton>
           </div>
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title"><Building size={16} style={{ display: 'inline', marginRight: 6 }} />公司基本資料</h3>
-          </div>
-          <div className="card-body">
+      {/* Subscription & Billing Section */}
+      <BrandCard padding="lg" variant="glass" className="border-[#FDB515]/20 overflow-hidden relative mb-6">
+        <div className="absolute top-0 right-0 p-6 opacity-10">
+           <Zap size={64} className="text-[#FDB515] rotate-12" />
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+           <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#FDB515]/10 flex items-center justify-center text-[#FDB515] shadow-inner">
+                 <CreditCard size={28} />
+              </div>
+              <div>
+                 <div className="flex items-center gap-3 mb-1">
+                    <h2 className="text-xl font-bold text-slate-900">訂閱與方案</h2>
+                    <BrandBadge variant="gold" size="sm">PRO PLAN</BrandBadge>
+                 </div>
+                 <p className="text-sm text-slate-500 leading-relaxed max-w-lg">
+                    您的企業目前使用的是專業版方案。享有全自動 5T 封印、GRI 2021 AI 撰寫額度以及 BlueCC 雲端集群優先調度權。
+                 </p>
+              </div>
+           </div>
+           <div className="flex gap-2 w-full md:w-auto">
+              <BrandButton variant="primary" className="flex-1 md:flex-none px-6">
+                 管理訂閱 <ExternalLink size={14} className="ml-2" />
+              </BrandButton>
+              <BrandButton variant="ghost" className="flex-1 md:flex-none">
+                 查看帳單
+              </BrandButton>
+           </div>
+        </div>
+      </BrandCard>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <BrandCard padding="none" className="overflow-hidden">
+          <BrandCardHeader title="公司基本資料" icon={<Building size={18} />} />
+          <div className="p-6">
             {editing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">公司名稱</label>
-                  <input className="form-input" value={editForm.company_name} onChange={e => setEditForm(p => ({ ...p, company_name: e.target.value }))} />
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase">公司名稱</label>
+                  <input className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:border-blue-600 outline-none transition-all" value={editForm.company_name} onChange={e => setEditForm(p => ({ ...p, company_name: e.target.value }))} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">產業別</label>
-                  <input className="form-input" value={editForm.industry} onChange={e => setEditForm(p => ({ ...p, industry: e.target.value }))} />
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase">產業別</label>
+                  <input className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:border-blue-600 outline-none transition-all" value={editForm.industry} onChange={e => setEditForm(p => ({ ...p, industry: e.target.value }))} />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div className="form-group">
-                    <label className="form-label">員工人數</label>
-                    <input className="form-input" type="number" value={editForm.employee_count} onChange={e => setEditForm(p => ({ ...p, employee_count: +e.target.value }))} />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-500 uppercase">員工人數</label>
+                    <input className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:border-blue-600 outline-none transition-all" type="number" value={editForm.employee_count} onChange={e => setEditForm(p => ({ ...p, employee_count: +e.target.value }))} />
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">報告年度</label>
-                    <input className="form-input" type="number" value={editForm.reporting_year} onChange={e => setEditForm(p => ({ ...p, reporting_year: +e.target.value }))} />
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-500 uppercase">報告年度</label>
+                    <input className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:border-blue-600 outline-none transition-all" type="number" value={editForm.reporting_year} onChange={e => setEditForm(p => ({ ...p, reporting_year: +e.target.value }))} />
                   </div>
                 </div>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div className="space-y-1">
                 {[
                   { label: '公司名稱', value: profile.company_name },
                   { label: '產業別', value: profile.industry },
@@ -107,94 +137,101 @@ export default function ProfilePage() {
                   { label: '資本額', value: `NT$ ${(profile.capital_twd / 1e6).toFixed(0)} 百萬` },
                   { label: '報告年度', value: `${profile.reporting_year} 年` },
                 ].map(item => (
-                  <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--border-light)' }}>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{item.label}</span>
-                    <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{item.value}</span>
+                  <div key={item.label} className="flex justify-between py-3 border-b border-slate-50 last:border-0">
+                    <span className="text-sm text-slate-500 font-medium">{item.label}</span>
+                    <span className="text-sm text-slate-900 font-bold">{item.value}</span>
                   </div>
                 ))}
               </div>
             )}
           </div>
-        </div>
+        </BrandCard>
 
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title"><Globe size={16} style={{ display: 'inline', marginRight: 6 }} />願景與使命</h3>
-          </div>
-          <div className="card-body">
+        <BrandCard padding="none" className="overflow-hidden">
+          <BrandCardHeader title="願景與使命" icon={<Globe size={18} />} />
+          <div className="p-6">
             {editing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">企業願景</label>
-                  <textarea className="form-textarea" value={editForm.vision} onChange={e => setEditForm(p => ({ ...p, vision: e.target.value }))} rows={4} />
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase">企業願景</label>
+                  <textarea className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:border-blue-600 outline-none transition-all min-h-[120px]" value={editForm.vision} onChange={e => setEditForm(p => ({ ...p, vision: e.target.value }))} rows={4} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">企業使命</label>
-                  <textarea className="form-textarea" value={editForm.mission} onChange={e => setEditForm(p => ({ ...p, mission: e.target.value }))} rows={4} />
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-500 uppercase">企業使命</label>
+                  <textarea className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:border-blue-600 outline-none transition-all min-h-[120px]" value={editForm.mission} onChange={e => setEditForm(p => ({ ...p, mission: e.target.value }))} rows={4} />
                 </div>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="space-y-8">
                 <div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>企業願景</div>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.7, color: 'var(--text-primary)' }}>{profile.vision}</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">企業願景 Vision</p>
+                  <p className="text-sm text-slate-700 leading-relaxed font-medium italic border-l-4 border-blue-600 pl-4">{profile.vision}</p>
                 </div>
                 <div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>企業使命</div>
-                  <p style={{ fontSize: '0.9rem', lineHeight: 1.7, color: 'var(--text-primary)' }}>{profile.mission}</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">企業使命 Mission</p>
+                  <p className="text-sm text-slate-700 leading-relaxed font-medium italic border-l-4 border-[#FDB515] pl-4">{profile.mission}</p>
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </BrandCard>
       </div>
 
-      <div className="card">
-        <div className="card-header">
-          <h3 className="card-title"><Target size={16} style={{ display: 'inline', marginRight: 6 }} />ESG 目標管理</h3>
-          <button onClick={() => setShowAddGoal(!showAddGoal)} className="btn btn-primary" style={{ fontSize: '0.8rem' }}>
-            <Plus size={14} style={{ display: 'inline', marginRight: 4 }} />新增目標
-          </button>
-        </div>
-        <div className="card-body">
+      <BrandCard padding="none" className="mt-6 overflow-hidden">
+        <BrandCardHeader 
+          title="ESG 目標管理" 
+          icon={<Target size={18} />}
+          actions={
+            <BrandButton size="xs" onClick={() => setShowAddGoal(!showAddGoal)}>
+              <Plus size={14} className="mr-1" /> 新增目標
+            </BrandButton>
+          }
+        />
+        <div className="p-6">
           {showAddGoal && (
-            <div style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 8, marginBottom: '1rem', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto auto', gap: '0.75rem', alignItems: 'end' }}>
-              <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">目標名稱</label>
-                <input className="form-input" value={newGoal.title} onChange={e => setNewGoal(p => ({ ...p, title: e.target.value }))} placeholder="目標名稱" />
+            <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 mb-6 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end animate-in fade-in zoom-in-95 duration-200">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase">目標名稱</label>
+                <input className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:border-blue-600 outline-none transition-all" value={newGoal.title} onChange={e => setNewGoal(p => ({ ...p, title: e.target.value }))} placeholder="目標名稱" />
               </div>
-              <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">目標內容</label>
-                <input className="form-input" value={newGoal.target} onChange={e => setNewGoal(p => ({ ...p, target: e.target.value }))} placeholder="具體目標" />
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase">目標內容</label>
+                <input className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:border-blue-600 outline-none transition-all" value={newGoal.target} onChange={e => setNewGoal(p => ({ ...p, target: e.target.value }))} placeholder="具體目標" />
               </div>
-              <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">截止日期</label>
-                <input className="form-input" type="date" value={newGoal.deadline} onChange={e => setNewGoal(p => ({ ...p, deadline: e.target.value }))} />
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold text-slate-500 uppercase">截止日期</label>
+                <input className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:border-blue-600 outline-none transition-all" type="date" value={newGoal.deadline} onChange={e => setNewGoal(p => ({ ...p, deadline: e.target.value }))} />
               </div>
-              <button onClick={addGoal} className="btn btn-primary"><Save size={14} /></button>
-              <button onClick={() => setShowAddGoal(false)} className="btn btn-secondary">取消</button>
+              <div className="flex gap-2">
+                <BrandButton variant="primary" size="sm" onClick={addGoal} className="flex-1">儲存</BrandButton>
+                <BrandButton variant="ghost" size="sm" onClick={() => setShowAddGoal(false)}>取消</BrandButton>
+              </div>
             </div>
           )}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div className="space-y-3">
             {goals.map(goal => (
-              <div key={goal.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: 8 }}>
-                <span className={`badge ${goal.category === 'E' ? 'badge-green' : goal.category === 'S' ? 'badge-blue' : 'badge-yellow'}`}>{goal.category}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.25rem' }}>{goal.title}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{goal.target}</div>
+              <div key={goal.id} className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-2xl hover:border-blue-200 transition-all hover:shadow-sm group">
+                <BrandBadge variant={goal.category === 'E' ? 'success' : goal.category === 'S' ? 'info' : 'warning'} size="sm" className="w-8 h-8 flex items-center justify-center p-0 rounded-lg">{goal.category}</BrandBadge>
+                <div className="flex-1">
+                  <div className="font-bold text-slate-900 text-sm mb-0.5">{goal.title}</div>
+                  <div className="text-[11px] text-slate-500 font-medium">{goal.target}</div>
                 </div>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{goal.deadline}</span>
-                <button onClick={() => cycleStatus(goal.id)} style={{ padding: '0.25rem 0.75rem', borderRadius: 20, border: 'none', background: `${statusColor(goal.status)}20`, color: statusColor(goal.status), cursor: 'pointer', fontWeight: 600, fontSize: '0.75rem' }}>
+                <div className="hidden sm:block text-[11px] font-mono text-slate-400 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">{goal.deadline}</div>
+                <button 
+                  onClick={() => cycleStatus(goal.id)}
+                  className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
+                  style={{ background: `${statusColor(goal.status)}10`, color: statusColor(goal.status), border: `1px solid ${statusColor(goal.status)}20` }}
+                >
                   {statusLabel(goal.status)}
                 </button>
-                <button onClick={() => removeGoal(goal.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444' }}>
-                  <Trash2 size={14} />
+                <button onClick={() => removeGoal(goal.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100">
+                  <Trash2 size={16} />
                 </button>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </BrandCard>
     </div>
   );
 }
