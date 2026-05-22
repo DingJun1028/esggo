@@ -15,6 +15,7 @@ export default function LoginPage() {
     setLoading(true);
     // Simulation for Stitch Auth
     setTimeout(() => {
+      localStorage.setItem('omni_user', 'true');
       window.location.href = '/';
     }, 1200);
   }

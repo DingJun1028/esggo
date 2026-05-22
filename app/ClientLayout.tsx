@@ -304,12 +304,18 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     setMounted(true);
     try {
       if (localStorage.getItem('sidebar_collapsed') === 'true') setCollapsed(true);
-    } catch { /* ignore */ }
+      // Simulated Auth Check
+      const user = localStorage.getItem('omni_user');
+      setIsAuthenticated(!!user);
+    } catch { 
+      setIsAuthenticated(false);
+    }
   }, []);
 
   useEffect(() => { 
@@ -317,7 +323,17 @@ function AppContent({ children }: { children: React.ReactNode }) {
     setMobileMoreOpen(false);
   }, [pathname]);
 
-  if (!mounted) return null;
+  // Auth Guard
+  useEffect(() => {
+    if (mounted && isAuthenticated === false && pathname !== '/auth/login') {
+      router.replace('/auth/login');
+    }
+  }, [mounted, isAuthenticated, pathname, router]);
+
+  if (!mounted || isAuthenticated === null) return null;
+
+  // Don't show shell on login page
+  if (pathname === '/auth/login') return <>{children}</>;
 
   const currentPath = pathname ?? '/';
 
