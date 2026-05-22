@@ -164,6 +164,31 @@ export default function HermesOrchestratorPage() {
     }
   }
 
+  async function handleReview(rec: ExecutionRecord, action: 'approve' | 'reject') {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/agent/artifacts/${rec.artifact!.id}/review`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, reviewerId: 'user_001' }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+
+      const updated: ExecutionRecord = { 
+        ...rec, 
+        artifact: { ...rec.artifact!, reviewStatus: data.reviewStatus } 
+      };
+      setExecutions(prev => prev.map(r => r.task.id === rec.task.id ? updated : r));
+      if (selected?.task.id === rec.task.id) setSelected(updated);
+      showToast(`草稿已${action === 'approve' ? '核准' : '拒絕'}`);
+    } catch (e: any) {
+      showToast(e.message, 'error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
       
@@ -331,8 +356,8 @@ export default function HermesOrchestratorPage() {
                                </div>
                                {lane.id === 'review' && (
                                  <div className="mt-3 pt-3 border-t border-slate-100 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <BrandButton variant="ghost" size="sm" className="h-6 text-[10px] flex-1 py-0">詳情</BrandButton>
-                                    <BrandButton variant="primary" size="sm" className="h-6 text-[10px] flex-1 py-0">快速核准</BrandButton>
+                                    <BrandButton variant="ghost" size="sm" className="h-6 text-[10px] flex-1 py-0" onClick={(e) => { e.stopPropagation(); setSelected(rec); }}>詳情</BrandButton>
+                                    <BrandButton variant="primary" size="sm" className="h-6 text-[10px] flex-1 py-0" onClick={(e) => { e.stopPropagation(); handleReview(rec, 'approve'); }}>快速核准</BrandButton>
                                  </div>
                                )}
                             </BrandCard>
@@ -479,16 +504,10 @@ export default function HermesOrchestratorPage() {
                         
                         {selected.artifact.reviewStatus === 'awaiting_review' && (
                           <div className="flex gap-2">
-                             <BrandButton variant="primary" fullWidth onClick={async () => {
-                               // Simulate approval for prototype
-                               const updated = { ...selected, artifact: { ...selected.artifact!, reviewStatus: 'approved' as ReviewStatus } };
-                               setExecutions(prev => prev.map(r => r.task.id === selected.task.id ? updated : r));
-                               setSelected(updated);
-                               showToast('已批准草稿');
-                             }}>
+                             <BrandButton variant="primary" fullWidth onClick={() => handleReview(selected, 'approve')} loading={loading}>
                                 核准
                              </BrandButton>
-                             <BrandButton variant="outline" fullWidth onClick={() => showToast('已拒絕草稿', 'error')}>
+                             <BrandButton variant="outline" fullWidth onClick={() => handleReview(selected, 'reject')} disabled={loading}>
                                 拒絕
                              </BrandButton>
                           </div>

@@ -323,17 +323,32 @@ function AppContent({ children }: { children: React.ReactNode }) {
     setMobileMoreOpen(false);
   }, [pathname]);
 
-  // Auth Guard
+  // Auth Guard & Bidirectional Redirect
   useEffect(() => {
-    if (mounted && isAuthenticated === false && pathname !== '/auth/login') {
+    if (!mounted || isAuthenticated === null) return;
+
+    if (isAuthenticated === false && pathname !== '/auth/login') {
       router.replace('/auth/login');
+    } else if (isAuthenticated === true && pathname === '/auth/login') {
+      router.replace('/');
     }
   }, [mounted, isAuthenticated, pathname, router]);
 
-  if (!mounted || isAuthenticated === null) return null;
+  if (!mounted) return null;
 
-  // Don't show shell on login page
-  if (pathname === '/auth/login') return <>{children}</>;
+  // Don't show shell on login page, but allow rendering the login page itself
+  if (pathname === '/auth/login') {
+    return <>{children}</>;
+  }
+
+  // If still checking auth or not authenticated, don't show the dashboard shell yet
+  if (isAuthenticated === null || isAuthenticated === false) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   const currentPath = pathname ?? '/';
 
