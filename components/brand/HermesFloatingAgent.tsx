@@ -1,4 +1,5 @@
 'use client';
+// [Stitch Integrity Sealed] 2026-05-22
 import React, { useState } from 'react';
 import { Bot, X, Send, Maximize2, Minimize2 } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandStatusDot } from './';
