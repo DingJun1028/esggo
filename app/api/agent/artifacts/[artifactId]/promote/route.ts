@@ -3,9 +3,10 @@ import { promoteToTrustLayer } from '../../../../../../lib/agent/orchestrator';
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { artifactId: string } }
+  { params }: { params: Promise<{ artifactId: string }> }
 ) {
   try {
+    const { artifactId } = await params;
     const body = await req.json();
     const { currentReviewStatus, actorId } = body;
 
@@ -17,10 +18,10 @@ export async function POST(
     }
 
     // 深貫廣通：呼叫實時雜湊鎖定引擎
-    const seal = await promoteToTrustLayer(params.artifactId, actorId || 'user_001');
+    const seal = await promoteToTrustLayer(artifactId, actorId || 'user_001');
 
     return NextResponse.json({
-      artifactId: params.artifactId,
+      artifactId: artifactId,
       reviewStatus: 'promoted',
       promotedAt: seal.timestamp,
       hashLock: seal.hash,
