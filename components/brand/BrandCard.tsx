@@ -81,11 +81,11 @@ export default function BrandCard({
   return (
     <div
       className={`
-        bg-white rounded-xl
-        ${border ? 'border border-slate-200' : ''}
-        ${shadowStyles[shadow]}
+        bg-white/80 backdrop-blur-[12px] rounded-lg
+        ${border ? 'border border-slate-100' : ''}
+        shadow-[0_2px_8px_rgba(0,0,0,0.03)]
         ${paddingStyles[padding]}
-        ${hover ? 'hover:shadow-md hover:border-[#003262]/20 transition-all duration-200 cursor-pointer' : ''}
+        ${hover ? 'hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-slate-200 transition-all duration-200 cursor-pointer' : ''}
         ${onClick ? 'cursor-pointer' : ''}
         ${className}
       `}

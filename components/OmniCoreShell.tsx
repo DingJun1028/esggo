@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -13,6 +13,7 @@ import {
   Shield,
 } from 'lucide-react';
 import ThemeSelector from './ThemeSelector';
+import HermesFloatingAgent from './brand/HermesFloatingAgent';
 import { THEMES, type ThemeId, applyTheme, getSavedTheme } from '../lib/theme-config';
 
 interface NavItem {
@@ -509,6 +510,8 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
           {children}
         </div>
       </main>
+
+      <HermesFloatingAgent />
 
       <style>{`
         @media (max-width: 768px) {

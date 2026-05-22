@@ -48,11 +48,11 @@ export function BrandInput({
         )}
         <input
           className={`
-            w-full h-9 rounded-lg border text-sm transition-all duration-150
-            bg-white text-[#0F172A] placeholder:text-slate-400
-            focus:outline-none focus:ring-2 focus:ring-[#003262]/20 focus:border-[#003262]
-            disabled:bg-slate-50 disabled:cursor-not-allowed
-            ${error ? 'border-red-400 focus:border-red-400 focus:ring-red-100' : 'border-slate-200 hover:border-slate-300'}
+            w-full h-9 rounded border text-sm transition-all duration-150
+            bg-slate-50 text-[#333333] placeholder:text-slate-400
+            focus:outline-none focus:bg-white focus:border-[#009E9D]
+            disabled:bg-slate-100 disabled:cursor-not-allowed
+            ${error ? 'border-[#FF4D6D] focus:border-[#FF4D6D]' : 'border-slate-100 hover:border-slate-200'}
             ${icon ? 'pl-9' : 'pl-3'}
             ${iconRight ? 'pr-9' : 'pr-3'}
             ${className}
@@ -86,11 +86,11 @@ export function BrandTextarea({
       )}
       <textarea
         className={`
-          w-full rounded-lg border text-sm p-3 transition-all duration-150
-          bg-white text-[#0F172A] placeholder:text-slate-400 resize-y min-h-[80px]
-          focus:outline-none focus:ring-2 focus:ring-[#003262]/20 focus:border-[#003262]
-          disabled:bg-slate-50 disabled:cursor-not-allowed
-          ${error ? 'border-red-400' : 'border-slate-200 hover:border-slate-300'}
+          w-full rounded border text-sm p-3 transition-all duration-150
+          bg-slate-50 text-[#333333] placeholder:text-slate-400 resize-y min-h-[80px]
+          focus:outline-none focus:bg-white focus:border-[#009E9D]
+          disabled:bg-slate-100 disabled:cursor-not-allowed
+          ${error ? 'border-[#FF4D6D]' : 'border-slate-100 hover:border-slate-200'}
           ${className}
         `}
         {...props}
@@ -117,11 +117,11 @@ export function BrandSelect({
       )}
       <select
         className={`
-          w-full h-9 rounded-lg border text-sm px-3 transition-all duration-150
-          bg-white text-[#0F172A]
-          focus:outline-none focus:ring-2 focus:ring-[#003262]/20 focus:border-[#003262]
-          disabled:bg-slate-50 disabled:cursor-not-allowed
-          ${error ? 'border-red-400' : 'border-slate-200 hover:border-slate-300'}
+          w-full h-9 rounded border text-sm px-3 transition-all duration-150
+          bg-slate-50 text-[#333333]
+          focus:outline-none focus:bg-white focus:border-[#009E9D]
+          disabled:bg-slate-100 disabled:cursor-not-allowed
+          ${error ? 'border-[#FF4D6D]' : 'border-slate-100 hover:border-slate-200'}
           ${className}
         `}
         {...props}

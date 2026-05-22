@@ -43,7 +43,7 @@ const REVIEW_STATUS_MAP: Record<ReviewStatus, { label: string; variant: any }> =
 };
 
 export default function HermesOrchestratorPage() {
-  const [activeTab, setActiveTab] = useState<'create' | 'executions' | 'audit' | 'registry'>('create');
+  const [activeTab, setActiveTab] = useState<'create' | 'swarm' | 'executions' | 'audit' | 'registry'>('create');
   const [taskType, setTaskType] = useState<AgentTaskType>('report_drafting');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -120,7 +120,7 @@ export default function HermesOrchestratorPage() {
   async function handleExecute(rec: ExecutionRecord) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/agent/tasks/${rec.task.id}/execute`, {
+      const res = await fetch(`/api/agent/hermes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ task: rec.task }),
@@ -206,6 +206,7 @@ export default function HermesOrchestratorPage() {
         onTabChange={(t) => setActiveTab(t as any)}
         tabs={[
           { id: 'create', label: '建立任務', icon: <Plus size={14}/> },
+          { id: 'swarm', label: '蜂群監控', icon: <Users size={14}/> },
           { id: 'executions', label: `執行記錄 (${executions.length})`, icon: <Activity size={14}/> },
           { id: 'audit', label: '稽核日誌', icon: <ShieldCheck size={14}/> },
           { id: 'registry', label: '技能庫', icon: <Zap size={14}/> },
@@ -235,7 +236,7 @@ export default function HermesOrchestratorPage() {
                           const skill = SKILL_REGISTRY.find(s => s.taskType === type);
                           if (skill) setSelectedSkill(skill.skillKey);
                         }}
-                        className={`p-4 rounded-2xl border-2 text-left transition-all ${taskType === type ? 'border-blue-600 bg-blue-50/50' : 'border-slate-50 hover:border-slate-100'}`}
+                        className={`p-4 rounded-lg border-2 text-left transition-all ${taskType === type ? 'border-blue-600 bg-blue-50/50' : 'border-slate-50 hover:border-slate-100'}`}
                       >
                         <div style={{ color: m.color }} className="mb-2">{TASK_ICONS[type]}</div>
                         <p className="text-xs font-bold text-slate-700">{m.label}</p>
@@ -254,7 +255,7 @@ export default function HermesOrchestratorPage() {
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-500">任務說明</label>
                     <textarea 
-                      className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm min-h-[100px] focus:bg-white focus:border-blue-600 transition-all outline-none"
+                      className="w-full bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-sm min-h-[100px] focus:bg-white focus:border-blue-600 transition-all outline-none"
                       placeholder="詳細說明執行範疇..."
                       value={description}
                       onChange={e => setDescription(e.target.value)}
@@ -267,6 +268,85 @@ export default function HermesOrchestratorPage() {
                 </BrandButton>
               </div>
             </BrandCard>
+          )}
+
+          {activeTab === 'swarm' && (
+            <div className="space-y-6">
+               {/* Worker Nodes */}
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[
+                    { role: 'Orchestrator', sub: 'Control Plane', icon: <Bot size={20}/>, color: '#003262' },
+                    { role: 'Researcher', sub: 'Data Discovery', icon: <Database size={20}/>, color: '#3B7EA1' },
+                    { role: 'Builder', sub: 'Report Generation', icon: <FileText size={20}/>, color: '#8B5CF6' },
+                  ].map(m => (
+                    <BrandCard key={m.role} padding="sm" className="border-l-4" style={{ borderLeftColor: m.color }}>
+                       <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center" style={{ color: m.color }}>
+                             {m.icon}
+                          </div>
+                          <div>
+                             <p className="text-xs font-bold text-slate-700">{m.role}</p>
+                             <p className="text-[10px] text-slate-400 mb-1">{m.sub}</p>
+                             <BrandStatusDot status="active" label="Idle" size="xs" />
+                          </div>
+                       </div>
+                    </BrandCard>
+                  ))}
+               </div>
+
+               {/* Kanban Surface */}
+               <BrandCard padding="none" className="bg-white/60">
+                  <BrandCardHeader title="Swarm Kanban" subtitle="跨代理任務排程與綠色門徑審核" />
+                  <div className="grid grid-cols-1 md:grid-cols-4 divide-x divide-slate-100 min-h-[500px]">
+                     {[
+                       { id: 'backlog', label: '待處理', items: executions.filter(r => !r.execution) },
+                       { id: 'running', label: '執行中', items: executions.filter(r => r.execution?.status === 'running') },
+                       { id: 'review', label: '待審核', items: executions.filter(r => r.artifact?.reviewStatus === 'awaiting_review') },
+                       { id: 'done', label: '已封印', items: executions.filter(r => r.artifact?.reviewStatus === 'promoted' || r.artifact?.reviewStatus === 'approved') },
+                     ].map(lane => (
+                       <div key={lane.id} className="p-4 space-y-3 bg-slate-50/20">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex justify-between items-center px-1">
+                            <span>{lane.label}</span>
+                            <span className="bg-white border border-slate-200 px-1.5 py-0.5 rounded-full text-slate-500">{lane.items.length}</span>
+                          </p>
+                          {lane.items.map(rec => (
+                            <BrandCard 
+                              key={rec.task.id} 
+                              padding="sm" 
+                              hover 
+                              className="text-xs border-slate-200/60 shadow-none bg-white/90 hover:border-blue-600/30 group"
+                              onClick={() => setSelected(rec)}
+                            >
+                               <div className="flex items-center gap-2 mb-2">
+                                  <div style={{ color: TASK_TYPE_META[rec.task.taskType]?.color }}>
+                                     {TASK_ICONS[rec.task.taskType]}
+                                  </div>
+                                  <p className="font-bold text-slate-700 truncate flex-1">{rec.task.title}</p>
+                               </div>
+                               <div className="flex justify-between items-center">
+                                  <span className="text-[10px] text-slate-400 font-mono">#{rec.task.id.slice(-4).toUpperCase()}</span>
+                                  <BrandBadge variant="outline" size="xs" className="scale-90 origin-right">
+                                    {TASK_TYPE_META[rec.task.taskType]?.label.slice(0,2)}
+                                  </BrandBadge>
+                               </div>
+                               {lane.id === 'review' && (
+                                 <div className="mt-3 pt-3 border-t border-slate-100 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <BrandButton variant="ghost" size="sm" className="h-6 text-[10px] flex-1 py-0">詳情</BrandButton>
+                                    <BrandButton variant="primary" size="sm" className="h-6 text-[10px] flex-1 py-0">快速核准</BrandButton>
+                                 </div>
+                               )}
+                            </BrandCard>
+                          ))}
+                          {lane.items.length === 0 && (
+                            <div className="h-24 border-2 border-dashed border-slate-100 rounded-lg flex items-center justify-center">
+                               <span className="text-[10px] text-slate-300 font-bold uppercase tracking-tighter">Empty Lane</span>
+                            </div>
+                          )}
+                       </div>
+                     ))}
+                  </div>
+               </BrandCard>
+            </div>
           )}
 
           {activeTab === 'executions' && (

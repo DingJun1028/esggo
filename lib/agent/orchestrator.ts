@@ -145,6 +145,60 @@ export async function promoteToTrustLayer(artifactId: string, actorId: string) {
   return seal;
 }
 
+// --- Repair Playbook & Swarm Intelligence ---
+
+export interface RepairAction {
+  errorCode: string;
+  strategy: 'retry' | 'fallback_model' | 'reprompt' | 'escalate';
+  targetModel?: string;
+}
+
+const REPAIR_PLAYBOOK: RepairAction[] = [
+  { errorCode: 'RATE_LIMIT', strategy: 'retry' },
+  { errorCode: 'CONTEXT_LENGTH_EXCEEDED', strategy: 'fallback_model', targetModel: 'gemini-1.5-pro' },
+  { errorCode: 'POLICY_DRIFT', strategy: 'reprompt' },
+  { errorCode: 'SAFETY_REJECT', strategy: 'escalate' },
+];
+
+/**
+ * 執行蜂群任務 (具備自癒與鏈路能力)
+ */
+export async function executeSwarmTask(taskId: string, parentArtifactId?: string) {
+  const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, addExecution } = await import('./store');
+  const task = GLOBAL_TASKS.find(t => t.id === taskId);
+  if (!task) throw new Error('Task not found');
+
+  // 鏈路處理：如果存在父產出物，將其內容注入 Context
+  let chainedContext = '';
+  if (parentArtifactId) {
+    const parentArt = getArtifact(parentArtifactId);
+    if (parentArt) chainedContext = `\n[Context from Parent Task]:\n${parentArt.content}\n`;
+  }
+
+  const execution = createExecution(task);
+  updateExecution(execution.id, { status: 'running', updatedAt: new Date().toISOString() });
+
+  try {
+    // 模擬 AI 調用與工具執行
+    console.log(`[Swarm] Executing Task ${taskId} with model ${execution.modelName}...`);
+    await new Promise(r => setTimeout(r, 2000)); 
+
+    // 生成產出
+    const artifact = generateMockArtifact(task, execution);
+    if (chainedContext) artifact.content = chainedContext + '\n' + artifact.content;
+    
+    updateExecution(execution.id, { status: 'completed', updatedAt: new Date().toISOString() });
+    return { execution, artifact };
+  } catch (error: any) {
+    // 觸發 Repair Playbook
+    const repair = REPAIR_PLAYBOOK.find(r => r.errorCode === error.code) || { strategy: 'escalate' };
+    console.warn(`[Swarm Repair] Error detected: ${error.code}. Applying strategy: ${repair.strategy}`);
+    
+    updateExecution(execution.id, { status: 'failed', updatedAt: new Date().toISOString() });
+    throw error;
+  }
+}
+
 export function generateMockArtifact(task: AgentTask, execution: AgentExecution): AgentArtifact {
   const skill = getSkill(task.skillKey);
   const artifactType = (skill?.outputArtifactType ?? 'report_section_draft') as ArtifactType;
