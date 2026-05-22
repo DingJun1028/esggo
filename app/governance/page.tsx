@@ -41,20 +41,16 @@ export default function GovernancePage() {
       const data = await res.json();
       if (data.insights) setInsights(data.insights);
     } catch {
-      setInsights('目前 AI 分析引擎正在同步治理數據，請稍後再試。建議檢視 GRI 2-9 董事會組成揭露項目。');
+      setInsights('目前 AI 分析引擎正在同步治理數據，請稍後再試。');
     } finally {
       setInsightsLoading(false);
     }
   }, [activeTab]);
 
-  useEffect(() => {
-    setInsights(null);
-    fetchInsights();
-  }, [activeTab, fetchInsights]);
+  useEffect(() => { fetchInsights(); }, [fetchInsights]);
 
   const activeTabData = TAB_DATA[activeTab];
 
-  // ── Universal Page Configuration (萬能配置) ──────────────────────────────────
   const pageConfig: UniversalPageConfig = {
     id: 'governance-hub',
     title: '公司治理 Governance',
@@ -62,110 +58,61 @@ export default function GovernancePage() {
     icon: <Shield size={32} />,
     griReference: 'GRI 2, 205-207',
     activeT5Tags: ['T1', 'T2', 'T3', 'T5'],
-    
     primaryActions: [
-      { id: 'refresh', label: '刷新數據', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: load, loading },
-      { id: 'audit', label: '匯出審計報告', icon: <Building2 size={16}/>, onClick: () => alert('生成中...') }
+      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: load, loading },
+      { id: 'audit', label: '審計報告', icon: <Building2 size={16}/>, onClick: () => alert('正在生成...') }
     ],
-
     kpis: [
-      { key: 'board', label: '獨立董事比例', value: '42', unit: '%', icon: <Building2 size={18}/>, verified: true },
-      { key: 'ethics', label: '商業道德培訓', value: '100', unit: '%', icon: <Scale size={18}/>, verified: true },
-      { key: 'tax', label: '實質稅率', value: '18.4', unit: '%', icon: <Receipt size={18}/>, verified: false },
-      { key: 'risk', label: '高風險緩解率', value: '92', unit: '%', icon: <AlertOctagon size={18}/>, verified: true },
+      { key: 'board', label: '獨董比例', value: '42', unit: '%', icon: <Building2 size={18}/>, verified: true },
+      { key: 'ethics', label: '道德培訓', value: '100', unit: '%', icon: <Scale size={18}/>, verified: true },
+      { key: 'tax', label: '稅率', value: '18.4', unit: '%', icon: <Receipt size={18}/> },
+      { key: 'risk', label: '風險緩解', value: '92', unit: '%', icon: <AlertOctagon size={18}/>, verified: true },
     ],
-
     sections: [
       {
-        id: 'nav-grid',
-        title: '治理維度導覽',
+        id: 'nav',
+        title: '治理維度',
         columns: 12,
         component: (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Object.entries(TAB_DATA).map(([key, val]) => (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={`p-5 rounded-2xl border transition-all text-center group ${activeTab === key ? 'bg-[#003262] border-[#003262] shadow-lg scale-[1.02]' : 'bg-white border-slate-100 hover:border-blue-300'}`}
-              >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 transition-colors ${activeTab === key ? 'bg-white/10 text-[#FDB515]' : 'bg-slate-50 text-[#003262]'}`}>
-                   {val.icon}
-                </div>
-                <p className={`text-sm font-bold mb-1 ${activeTab === key ? 'text-white' : 'text-slate-700'}`}>{val.label}</p>
-                <p className={`text-[10px] font-medium ${activeTab === key ? 'text-white/60' : 'text-slate-400'}`}>{val.gri}</p>
+              <button key={key} onClick={() => setActiveTab(key)} className={`p-5 rounded-2xl border transition-all ${activeTab === key ? 'bg-[#003262] text-white border-[#003262]' : 'bg-white text-slate-700 border-slate-100 hover:border-blue-300'}`}>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-3 ${activeTab === key ? 'bg-white/10 text-[#FDB515]' : 'bg-slate-50 text-[#003262]'}`}>{val.icon}</div>
+                <p className="text-xs font-bold">{val.label}</p>
               </button>
             ))}
           </div>
         )
       },
       {
-        id: 'data-table',
-        title: `${activeTabData.label} 指標明細`,
-        subtitle: `符合 ${activeTabData.gri} 標準`,
-        icon: <BarChart3 size={18}/>,
+        id: 'table',
+        title: `${activeTabData.label} 指標`,
         columns: 8,
         component: (
           <BrandTable 
             loading={loading}
-            columns={[
-              { header: '指標名稱', key: 'name' },
-              { header: '數值', key: 'value' },
-              { header: 'GRI', key: 'gri' },
-              { header: '狀態', key: 'status' },
-            ]}
+            columns={[{ header: '指標名稱', key: 'name' }, { header: '數值', key: 'value' }, { header: '狀態', key: 'status' }]}
             data={metrics.map(m => ({
               name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
-              value: (
-                <div className="flex items-baseline gap-2">
-                   <span className="text-lg font-mono font-bold text-[#003262]">{m.metric_value?.toLocaleString() ?? '—'}</span>
-                   <span className="text-[10px] font-bold text-slate-400">{m.unit}</span>
-                </div>
-              ),
-              gri: <BrandBadge variant="outline" size="xs" className="font-mono">{m.gri_standard}</BrandBadge>,
-              status: <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? '已封印' : '待覆核'} size="sm" />
+              value: <span className="font-mono text-blue-700 font-bold">{m.metric_value} {m.unit}</span>,
+              status: <BrandStatusDot status={m.verified ? 'active' : 'warning'} size="sm" />
             }))}
           />
         )
       },
       {
-        id: 'ai-insights',
-        title: '治理智慧洞察',
-        subtitle: 'Governance Intelligence',
-        icon: <Bot size={18}/>,
+        id: 'ai',
+        title: 'AI 智慧洞察',
         columns: 4,
         component: (
-          <div className="hermes-panel min-h-[350px] flex flex-col relative overflow-hidden">
-             <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Bot size={100} color="#fff" />
-             </div>
-             <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center gap-2 mb-6 text-[#FDB515]">
-                   <Zap size={18} />
-                   <span className="text-xs font-bold uppercase tracking-widest">Real-time Analysis</span>
-                </div>
-                <div className="flex-1 text-sm text-blue-50/80 leading-relaxed italic">
-                   {insightsLoading ? (
-                     <div className="space-y-3 animate-pulse">
-                        <div className="h-2 bg-white/10 rounded w-full"></div>
-                        <div className="h-2 bg-white/10 rounded w-4/5"></div>
-                        <div className="h-2 bg-white/10 rounded w-3/5"></div>
-                     </div>
-                   ) : (
-                     insights || '分析引擎正在評估董事會獨立性比例...'
-                   )}
-                </div>
-                <BrandButton variant="secondary" size="xs" fullWidth className="mt-8">
-                   生成治理風險地圖 ❯
-                </BrandButton>
-             </div>
+          <div className="hermes-panel p-4 text-white">
+             <div className="flex items-center gap-2 mb-4 text-[#FDB515]"><Zap size={18}/><span className="text-xs font-bold">Real-time Analysis</span></div>
+             <p className="text-sm text-blue-50/80 leading-relaxed italic">{insightsLoading ? '分析中...' : insights}</p>
           </div>
         )
       }
     ],
-
-    features: {
-      useAuditLog: true
-    }
+    features: { useAuditLog: true }
   };
 
   return <StandardPage config={pageConfig} />;
