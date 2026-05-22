@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { TrendingUp, TrendingDown, Info, X } from 'lucide-react';
+import { TrendingUp, TrendingDown, Info, X, ShieldCheck } from 'lucide-react';
 
 interface BrandKpiCardProps {
   label: string;
@@ -11,6 +11,7 @@ interface BrandKpiCardProps {
   icon?: React.ReactNode;
   color?: string;
   verified?: boolean;
+  sealed?: boolean;
   formula?: string;
   sources?: string[];
   description?: string;
@@ -27,6 +28,7 @@ export default function BrandKpiCard({
   icon,
   color = '#003262',
   verified = false,
+  sealed = false,
   formula,
   sources,
   description,
@@ -38,7 +40,13 @@ export default function BrandKpiCard({
   return (
     <>
       <div
-        className={`bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md hover:border-[#003262]/20 transition-all duration-200 cursor-pointer group ${className}`}
+        className={`bg-white rounded-xl border p-5 transition-all duration-300 cursor-pointer group ${
+          sealed
+            ? 'border-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.15)] hover:shadow-[0_0_20px_rgba(52,211,153,0.3)]'
+            : verified
+            ? 'border-slate-200 hover:shadow-md hover:border-[#003262]/20'
+            : 'border-slate-200 hover:shadow-md hover:border-[#003262]/20 opacity-90 grayscale-[20%]'
+        } ${className}`}
         onClick={() => {
           if (formula || sources || description) setShowDetail(true);
           onClick?.();
@@ -46,18 +54,27 @@ export default function BrandKpiCard({
       >
         <div className="flex items-start justify-between mb-3">
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: `${color}15` }}
+            className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${sealed ? 'bg-emerald-50' : ''}`}
+            style={sealed ? {} : { backgroundColor: `${color}15` }}
           >
-            <span style={{ color }}>{icon}</span>
+            <span style={{ color: sealed ? '#10B981' : color }}>{icon}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            {verified && (
+            {sealed ? (
+              <span className="flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-semibold shadow-sm">
+                <ShieldCheck size={12} className="text-emerald-500" />
+                ZKP Sealed
+              </span>
+            ) : verified ? (
               <span className="text-[10px] bg-green-50 text-green-600 border border-green-200 px-1.5 py-0.5 rounded-full font-medium">
                 5T ✓
               </span>
+            ) : (
+              <span className="text-[10px] bg-amber-50 text-amber-600 border border-amber-200 px-1.5 py-0.5 rounded-full font-medium">
+                Pending Seal
+              </span>
             )}
-            {(formula || sources) && (
+            {(formula || sources || description) && (
               <Info size={12} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
             )}
           </div>
@@ -107,7 +124,7 @@ export default function BrandKpiCard({
               </div>
             )}
             <div className="mt-4 flex items-center gap-2 text-xs text-slate-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+              <span className={`w-1.5 h-1.5 rounded-full ${sealed ? 'bg-emerald-400' : verified ? 'bg-green-400' : 'bg-amber-400'}`} />
               現值: <span className="font-semibold text-[#003262]">{value}{unit}</span>
             </div>
           </div>

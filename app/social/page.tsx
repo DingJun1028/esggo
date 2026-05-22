@@ -152,6 +152,7 @@ export default function SocialPage() {
                   value={m.metric_value ?? '-'}
                   unit={m.unit}
                   verified={m.verified}
+                  sealed={m.zkp_sealed}
                   color={m.verified ? '#22C55E' : '#FDB515'}
                   icon={<Users size={20} />}
                 />
@@ -194,7 +195,12 @@ export default function SocialPage() {
                                 <BrandBadge variant="default">{m.gri_standard}</BrandBadge>
                               </td>
                               <td className="px-4 py-3 text-center">
-                                {m.verified ? (
+                                {m.zkp_sealed ? (
+                                  <BrandBadge variant="sealed" dot>
+                                    <ShieldAlert size={12} className="inline mr-1" />
+                                    ZKP 封印
+                                  </BrandBadge>
+                                ) : m.verified ? (
                                   <BrandBadge variant="success">✓ 已驗證</BrandBadge>
                                 ) : (
                                   <BrandBadge variant="warning">待驗證</BrandBadge>
