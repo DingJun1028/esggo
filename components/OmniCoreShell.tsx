@@ -173,9 +173,9 @@ function SidebarNav({
             borderRadius: currentTheme === 'berkeley' ? 6 : 8,
             background: currentTheme === 'berkeley'
               ? 'linear-gradient(135deg,#003262,#3b7ea1)'
-              : currentTheme === 'water'
+              : currentTheme === 'water-zen'
               ? 'linear-gradient(135deg,#2ea8b0,#52b788)'
-              : currentTheme === 'light'
+              : currentTheme === 'minimal-blue'
               ? 'linear-gradient(135deg,#0ea5e9,#22c55e)'
               : 'linear-gradient(135deg,#06b6d4,#10b981)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -355,7 +355,7 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState<ThemeId>('dark');
+  const [currentTheme, setCurrentTheme] = useState<ThemeId>('dark-navy');
 
   useEffect(() => {
     setMounted(true);
@@ -409,11 +409,11 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
       {/* BG texture */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
-        background: currentTheme === 'water'
+        background: currentTheme === 'water-zen'
           ? 'radial-gradient(ellipse at 10% 90%, rgba(46,168,176,0.06) 0%, transparent 60%), radial-gradient(ellipse at 90% 10%, rgba(82,183,136,0.05) 0%, transparent 60%)'
           : currentTheme === 'berkeley'
           ? 'radial-gradient(ellipse at 0% 0%, rgba(0,50,98,0.05) 0%, transparent 50%), radial-gradient(ellipse at 100% 100%, rgba(253,181,21,0.04) 0%, transparent 50%)'
-          : currentTheme === 'light'
+          : currentTheme === 'minimal-blue'
           ? 'radial-gradient(ellipse at 30% 20%, rgba(14,165,233,0.04) 0%, transparent 60%)'
           : 'radial-gradient(ellipse at 20% 20%, rgba(6,182,212,0.05) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.04) 0%, transparent 50%)',
       }} />
@@ -471,8 +471,8 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
             border: '1px solid var(--sidebar-border)',
             fontSize: 10, color: 'var(--text-muted)',
           }}>
-            <span>{themeConfig.icon}</span>
-            <span style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>{themeConfig.label}</span>
+            <span>{themeConfig.emoji}</span>
+            <span style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>{themeConfig.name}</span>
           </div>
           {/* T5 strip */}
           <div style={{ display: 'flex', gap: 3 }}>
