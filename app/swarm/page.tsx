@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { 
-  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw 
+  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot 
 } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandTimeline, BrandPageHeader 
@@ -45,21 +45,21 @@ export default function SwarmPage() {
         icon={<Cpu size={24}/>}
       />
 
-      <BrandCard padding="lg" className="border-l-4 border-l-blue-700">
+      <BrandCard padding="lg" className="border-l-4 border-l-blue-700 shadow-sm">
          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">向全球代理發布意圖 (Sovereign Intent)</p>
-         <div className="flex gap-4">
+         <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
                <MessageSquare size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                <input 
                  className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-11 pr-4 py-4 text-sm focus:bg-white focus:border-blue-600 outline-none transition-all"
-                 placeholder="例如：幫我分析本季供應鏈碳排異常，並寫成一頁式報告..."
+                 placeholder="例如：幫我分析本季供應鏈碳排異常..."
                  value={prompt}
                  onChange={e => setPrompt(e.target.value)}
                  disabled={dispatching}
                />
             </div>
-            <BrandButton variant="primary" onClick={handleDispatch} loading={dispatching} disabled={!prompt.trim()} className="rounded-2xl px-8">
-               <Zap size={16}/> Dispatch Brief
+            <BrandButton variant="primary" onClick={handleDispatch} loading={dispatching} disabled={!prompt.trim()} className="rounded-2xl px-8 min-h-[56px] sm:min-h-0">
+               <Zap size={16}/> Dispatch
             </BrandButton>
          </div>
       </BrandCard>
@@ -90,8 +90,49 @@ export default function SwarmPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {agents.map((a, i) => (
                   <BrandCard key={i} padding="md" hover>
-                     {/* ... (agent card content stays same) */}
+                     <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${a.state === 'Running' ? 'bg-blue-700 text-white shadow-lg' : 'bg-slate-100 text-slate-400'}`}>
+                              <Bot size={20}/>
+                           </div>
+                           <div>
+                              <p className="text-sm font-bold text-slate-900">{a.name}</p>
+                              <BrandBadge variant="outline" size="xs">{a.role}</BrandBadge>
+                           </div>
+                        </div>
+                        <BrandStatusDot status={a.state === 'Running' ? 'active' : 'inactive'} pulse={a.state === 'Running'} size="sm" />
+                     </div>
+                     
+                     <p className="text-xs text-slate-600 mb-6 min-h-[32px]">{a.task}</p>
+                     
+                     <div className="space-y-4">
+                        <div className="space-y-1.5">
+                           <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                              <span>Health</span>
+                              <span>{a.health}%</span>
+                           </div>
+                           <BrandProgress value={a.health} color={a.health > 90 ? 'green' : 'gold'} size="xs" />
+                        </div>
+                        <div className="space-y-1.5">
+                           <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                              <span>Memory Load</span>
+                              <span>{a.memory}%</span>
+                           </div>
+                           <BrandProgress value={a.memory} color="blue" size="xs" />
+                        </div>
+                     </div>
 
+                     <div className="flex gap-2 mt-6 pt-4 border-t border-slate-50">
+                        <BrandButton variant="ghost" size="icon"><Play size={12}/></BrandButton>
+                        <BrandButton variant="ghost" size="icon"><Pause size={12}/></BrandButton>
+                        <BrandButton variant="ghost" size="sm" className="ml-auto">詳情</BrandButton>
+                     </div>
+                  </BrandCard>
+                ))}
+              </div>
+           </div>
+        </div>
+      )}
 
       {tab === 'kanban' && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -103,7 +144,7 @@ export default function SwarmPage() {
                </div>
                <div className="min-h-[400px] bg-slate-50/50 rounded-3xl border border-dashed border-slate-200 p-3">
                   {lane === 'Running' && (
-                    <BrandCard padding="sm" className="border-l-4 border-l-red-500 mb-3">
+                    <BrandCard padding="sm" className="border-l-4 border-l-red-500 mb-3 shadow-sm">
                        <p className="text-xs font-bold text-slate-900">撰寫 GRI 305 章節</p>
                        <p className="text-[10px] text-slate-500 mt-1">ESG-Scribe · 85%</p>
                     </BrandCard>
