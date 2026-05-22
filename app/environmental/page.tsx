@@ -42,6 +42,28 @@ export default function EnvironmentalPage() {
   const [editRow, setEditRow] = useState<EditRow | null>(null);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'info' } | null>(null);
+  const [insights, setInsights] = useState<string | null>(null);
+  const [insightsLoading, setInsightsLoading] = useState(false);
+
+  const fetchInsights = useCallback(async () => {
+    setInsightsLoading(true);
+    try {
+      const res = await fetch('/api/environmental/insights');
+      const data = await res.json();
+      if (data.insights) setInsights(data.insights);
+    } catch (e) {
+      console.error(e);
+      setInsights('無法取得 AI 分析');
+    } finally {
+      setInsightsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'Analysis' && !insights) {
+      fetchInsights();
+    }
+  }, [activeTab, insights, fetchInsights]);
 
   const showToast = (msg: string, type: 'success' | 'info' = 'success') => {
     setToast({ msg, type });
@@ -274,12 +296,32 @@ export default function EnvironmentalPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <BrandCard padding="md">
-                    <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-                       <Zap size={16} className="text-gold-500" /> AI 洞察分析
-                    </h4>
-                    <p className="text-sm text-slate-600 leading-relaxed italic">
-                       「根據 2023-2024 數據趨勢，範疇二電力排放在第三季有顯著增長，建議查驗冷卻系統效能。當前減量進度領先 SBTi 目標 4.2%。」
-                    </p>
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                         <Zap size={16} className="text-gold-500" /> AI 洞察分析
+                      </h4>
+                      <BrandButton variant="ghost" size="sm" onClick={fetchInsights} loading={insightsLoading}>
+                         <RefreshCw size={14}/>
+                      </BrandButton>
+                    </div>
+                    {insightsLoading ? (
+                      <div className="animate-pulse flex space-x-4">
+                        <div className="flex-1 space-y-4 py-1">
+                          <div className="h-2 bg-slate-200 rounded"></div>
+                          <div className="space-y-3">
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                              <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                            </div>
+                            <div className="h-2 bg-slate-200 rounded"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-sm text-slate-600 leading-relaxed italic whitespace-pre-wrap">
+                         {insights || '「根據 2023-2024 數據趨勢，範疇二電力排放在第三季有顯著增長，建議查驗冷卻系統效能。當前減量進度領先 SBTi 目標 4.2%。」'}
+                      </div>
+                    )}
                  </BrandCard>
                  <BrandCard padding="md">
                     <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">

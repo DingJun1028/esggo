@@ -1,19 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ClientLayout from '../ClientLayout';
-import { Building2 } from 'lucide-react';
-
-const metrics = [
-  { category: 'board', metric: '董事會人數', value: 9, unit: '人', gri: 'GRI 2-9', verified: true },
-  { category: 'board', metric: '獨立董事比例', value: 33.3, unit: '%', gri: 'GRI 2-9', verified: true },
-  { category: 'board', metric: '女性董事比例', value: 22.2, unit: '%', gri: 'GRI 2-10', verified: true },
-  { category: 'ethics', metric: '貪腐事件數', value: 0, unit: '件', gri: 'GRI 205-3', verified: true },
-  { category: 'ethics', metric: '反貪腐培訓覆蓋率', value: 100, unit: '%', gri: 'GRI 205-2', verified: true },
-  { category: 'tax', metric: '實際稅率', value: 18.5, unit: '%', gri: 'GRI 207-1', verified: false },
-  { category: 'tax', metric: '稅務透明度指數', value: 87, unit: '分', gri: 'GRI 207-4', verified: false },
-  { category: 'risk', metric: 'ESG 風險識別數', value: 23, unit: '項', gri: 'GRI 2-12', verified: true },
-];
+import { Building2, Zap, RefreshCw, Shield, Edit2, Trash2 } from 'lucide-react';
+import { getGovernanceMetrics, GovernanceMetric } from '../../lib/db';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandStatusDot, BrandPageHeader 
+} from '../../components/brand';
 
 const TAB_DATA: Record<string, { label: string; gri: string }> = {
   board: { label: '董事會結構', gri: 'GRI 2-9/2-10' },
@@ -24,68 +17,144 @@ const TAB_DATA: Record<string, { label: string; gri: string }> = {
 
 export default function GovernancePage() {
   const [activeTab, setActiveTab] = useState('board');
-  const tabMetrics = metrics.filter(m => m.category === activeTab);
+  const [metrics, setMetrics] = useState<GovernanceMetric[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [insights, setInsights] = useState<string | null>(null);
+  const [insightsLoading, setInsightsLoading] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getGovernanceMetrics(activeTab);
+      setMetrics(data);
+    } finally {
+      setLoading(false);
+    }
+  }, [activeTab]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const fetchInsights = useCallback(async () => {
+    setInsightsLoading(true);
+    try {
+      const res = await fetch(`/api/governance/insights?category=${activeTab}`);
+      const data = await res.json();
+      if (data.insights) setInsights(data.insights);
+    } catch (e) {
+      console.error(e);
+      setInsights('無法取得 AI 分析');
+    } finally {
+      setInsightsLoading(false);
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    setInsights(null); // reset when tab changes
+    fetchInsights();
+  }, [activeTab, fetchInsights]);
 
   return (
     <ClientLayout>
-      <div className="page-container">
-        <div className="page-header">
-          <h1 className="page-title">公司治理 Governance</h1>
-          <p className="page-subtitle">G-Hub · GRI 2, 205-207 · 董事會 · 誠信 · 稅務 · 風險</p>
-        </div>
+      <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+        <BrandPageHeader 
+          title="公司治理 Governance" 
+          subtitle="G-Hub · GRI 2, 205-207 · 董事會 · 誠信 · 稅務 · 風險"
+          icon={<Building2 size={24}/>}
+          actions={
+            <div className="flex gap-2">
+               <BrandButton variant="ghost" size="sm" onClick={load} loading={loading}>
+                 <RefreshCw size={14}/>
+               </BrandButton>
+            </div>
+          }
+        />
 
-        <div className="kpi-grid" style={{ marginBottom: 20 }}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Object.entries(TAB_DATA).map(([key, val]) => {
-            const catMetrics = metrics.filter(m => m.category === key);
             return (
-              <div key={key} className="kpi-card" onClick={() => setActiveTab(key)} style={{ cursor: 'pointer', borderColor: activeTab === key ? 'var(--berkeley-blue)' : 'var(--gray-200)' }}>
-                <div className="kpi-value">{catMetrics.length}</div>
-                <div className="kpi-label">{val.label}</div>
-              </div>
+              <BrandCard 
+                key={key} 
+                padding="md" 
+                className={`text-center cursor-pointer transition-all ${activeTab === key ? 'border-blue-600 bg-blue-50/50' : 'hover:border-blue-300'}`}
+                onClick={() => setActiveTab(key)}
+              >
+                <div className="text-blue-700 mb-2 flex justify-center opacity-40"><Building2 size={18}/></div>
+                <p className="text-[12px] font-bold text-slate-600 uppercase tracking-widest">{val.label}</p>
+                <p className="text-[10px] text-slate-400 mt-1">{val.gri}</p>
+              </BrandCard>
             );
           })}
         </div>
 
-        <div className="tabs" style={{ marginBottom: 20 }}>
-          {Object.entries(TAB_DATA).map(([key, val]) => (
-            <button key={key} className={`tab-btn ${activeTab === key ? 'active' : ''}`} onClick={() => setActiveTab(key)}>
-              {val.label}
-            </button>
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8">
+            <BrandCard padding="none" className="overflow-hidden">
+               <div className="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                     <span className="font-bold text-slate-700">{TAB_DATA[activeTab].label} 數據</span>
+                  </div>
+                  <BrandBadge variant="outline">{TAB_DATA[activeTab].gri} 標準對齊</BrandBadge>
+               </div>
+               <div className="scroll-x-governed">
+                 <BrandTable 
+                   columns={[
+                     { key: 'name', label: '指標名稱' },
+                     { key: 'value', label: '數值' },
+                     { key: 'gri', label: 'GRI' },
+                     { key: 'status', label: '實證狀態' },
+                   ]}
+                   data={metrics.map((m, i) => ({
+                     name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
+                     value: (
+                       <div className="flex items-end gap-1">
+                          <span className="text-lg font-mono font-bold text-[#003262]">{m.metric_value?.toLocaleString() ?? '—'}</span>
+                          <span className="text-[10px] font-bold text-slate-400 mb-1">{m.unit}</span>
+                       </div>
+                     ),
+                     gri: <BrandBadge variant="outline" size="xs" className="font-mono">{m.gri_standard}</BrandBadge>,
+                     status: (
+                       <div className="flex items-center gap-2">
+                          <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? '已驗證' : '待驗證'} size="sm" />
+                       </div>
+                     ),
+                   }))}
+                 />
+               </div>
+            </BrandCard>
+          </div>
+
+          <div className="lg:col-span-4">
+            <BrandCard padding="md">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                   <Zap size={16} className="text-gold-500" /> AI 洞察分析
+                </h4>
+                <BrandButton variant="ghost" size="sm" onClick={fetchInsights} loading={insightsLoading}>
+                   <RefreshCw size={14}/>
+                </BrandButton>
+              </div>
+              {insightsLoading ? (
+                <div className="animate-pulse flex space-x-4">
+                  <div className="flex-1 space-y-4 py-1">
+                    <div className="h-2 bg-slate-200 rounded"></div>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="h-2 bg-slate-200 rounded col-span-2"></div>
+                        <div className="h-2 bg-slate-200 rounded col-span-1"></div>
+                      </div>
+                      <div className="h-2 bg-slate-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-sm text-slate-600 leading-relaxed italic whitespace-pre-wrap">
+                   {insights || '無法產生洞察分析。'}
+                </div>
+              )}
+            </BrandCard>
+          </div>
         </div>
 
-        <div className="card" style={{ padding: 0 }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--gray-200)', display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-              <strong>{TAB_DATA[activeTab].label}</strong>
-              <span className="badge badge-blue" style={{ marginLeft: 8 }}>{TAB_DATA[activeTab].gri}</span>
-            </div>
-          </div>
-          <div className="table-wrapper" style={{ borderRadius: 0, border: 'none' }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>指標</th>
-                  <th>數值</th>
-                  <th>單位</th>
-                  <th>GRI 標準</th>
-                  <th>狀態</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tabMetrics.map((m, i) => (
-                  <tr key={i}>
-                    <td style={{ fontWeight: 500 }}>{m.metric}</td>
-                    <td style={{ fontWeight: 700, color: 'var(--berkeley-blue)' }}>{m.value}</td>
-                    <td><span className="badge badge-gray">{m.unit}</span></td>
-                    <td><span className="badge badge-blue">{m.gri}</span></td>
-                    <td><span className={`badge ${m.verified ? 'badge-green' : 'badge-gold'}`}>{m.verified ? '✓ 已驗證' : '待驗證'}</span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </ClientLayout>
   );

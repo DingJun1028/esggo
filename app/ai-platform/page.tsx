@@ -112,6 +112,78 @@ export default function AIPlatformPage() {
         ))}
       </div>
 
+      {/* BlueCC Cloud Infrastructure Section */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(0, 50, 98, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Globe size={20} color="#003262" />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#003262', margin: 0 }}>BlueCC 雲端集群狀態</h3>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>Global Agent Control Plane</p>
+            </div>
+            <div style={{ marginLeft: 'auto' }}>
+              <span style={{ fontSize: '10px', padding: '2px 10px', borderRadius: '20px', background: '#ecfdf5', color: '#059669', fontWeight: '700', border: '1px solid #d1fae5' }}>
+                STABLE
+              </span>
+            </div>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px' }}>
+              <p style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>Cluster ID</p>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', margin: 0 }}>blue-cluster-01</p>
+            </div>
+            <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px' }}>
+              <p style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>Region</p>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', margin: 0 }}>asia-east1</p>
+            </div>
+            <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px' }}>
+              <p style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>Active Nodes</p>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#003262', margin: 0 }}>12 / 12</p>
+            </div>
+            <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px' }}>
+              <p style={{ fontSize: '10px', color: '#64748b', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>Cloud Uptime</p>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b', margin: 0 }}>99.98%</p>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(124, 58, 237, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Cpu size={20} color="#7c3aed" />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#003262', margin: 0 }}>雲端資源清單</h3>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>BlueCloud Elastic Compute</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { id: 'res_001', type: 'GPU_NODE (NVIDIA H100)', status: 'ready', provider: 'BlueCloud' },
+              { id: 'res_002', type: 'VECTOR_DB (AlloyDB AI)', status: 'ready', provider: 'BlueCloud' },
+              { id: 'res_003', type: 'ORCHESTRATOR_NODE', status: 'ready', provider: 'BlueCloud' },
+            ].map(res => (
+              <div key={res.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }} />
+                  <div>
+                    <p style={{ fontSize: '12px', fontWeight: '700', color: '#1e293b', margin: 0 }}>{res.type}</p>
+                    <p style={{ fontSize: '10px', color: '#64748b', margin: 0 }}>{res.provider} · {res.id}</p>
+                  </div>
+                </div>
+                <button style={{ padding: '4px 10px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '10px', fontWeight: '700', color: '#64748b', cursor: 'pointer' }}>
+                  管理
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Activity Log */}
       <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', padding: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
