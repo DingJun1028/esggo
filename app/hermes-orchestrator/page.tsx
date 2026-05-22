@@ -175,7 +175,7 @@ export default function HermesOrchestratorPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-           <BrandStatusDot status={gatewayStatus?.status === 'online' ? 'active' : 'inactive'} text="Hermes Runtime" size="sm" pulse />
+           <BrandStatusDot status={gatewayStatus?.status === 'online' ? 'active' : 'inactive'} label="Hermes Runtime" size="sm" pulse />
         </div>
       </header>
 
@@ -197,7 +197,11 @@ export default function HermesOrchestratorPage() {
         <div className={(selected && !loading) ? 'lg:col-span-7' : 'lg:col-span-12'}>
 
           {activeTab === 'create' && (
-            <BrandCard title="配置新任務" subtitle="Policy Guard 將自動審核您的請求權限" padding="lg">
+            <BrandCard padding="lg">
+              <div className="pb-4 mb-4 border-b border-slate-100">
+                <h3 className="font-semibold text-[#0F172A] text-sm leading-tight">配置新任務</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Policy Guard 將自動審核您的請求權限</p>
+              </div>
               {/* ... (Create form logic) */}
 
                 <div>
@@ -216,7 +220,7 @@ export default function HermesOrchestratorPage() {
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 mt-6 mb-6">
                   <BrandInput 
                     label="任務標題" 
                     placeholder="例：2024 年度 GRI 305 排放草稿" 
@@ -241,7 +245,10 @@ export default function HermesOrchestratorPage() {
           )}
 
           {activeTab === 'executions' && (
-            <BrandCard title="任務執行軌跡" padding="none">
+            <BrandCard padding="none">
+               <div className="p-4 border-b border-slate-100 bg-slate-50">
+                 <h3 className="font-semibold text-[#0F172A] text-sm">任務執行軌跡</h3>
+               </div>
                <BrandTable 
                  columns={[
                    { key: 'title', label: '任務標題' },
@@ -250,7 +257,7 @@ export default function HermesOrchestratorPage() {
                    { key: 'time', label: '時間' },
                    { key: 'action', label: '' },
                  ]}
-                 rows={executions.map(rec => ({
+                 data={executions.map(rec => ({
                    title: <span className="font-bold text-slate-700">{rec.task.title}</span>,
                    type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[rec.task.taskType].label}</BrandBadge>,
                    status: rec.artifact ? (
@@ -271,16 +278,20 @@ export default function HermesOrchestratorPage() {
         {/* Detail Panel */}
         {selected && (
           <div className="lg:col-span-5 fade-in">
-             <BrandCard 
-               title="任務控制台" 
-               subtitle={selected.task.title} 
-               padding="lg"
-               headerExtra={<BrandButton variant="ghost" size="icon" onClick={() => setSelected(null)}><X size={16}/></BrandButton>}
-             >
+             <BrandCard padding="lg">
+                <div className="flex items-start justify-between gap-3 pb-4 mb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="font-semibold text-[#0F172A] text-sm leading-tight">任務控制台</h3>
+                    <p className="text-xs text-slate-500 mt-0.5">{selected.task.title}</p>
+                  </div>
+                  <BrandButton variant="ghost" size="sm" onClick={() => setSelected(null)}><X size={16}/></BrandButton>
+                </div>
                 <div className="space-y-6">
                    <BrandT5Strip 
-                     activeSteps={selected.artifact?.reviewStatus === 'promoted' ? [1,2,3,4,5] : [1,2,3]} 
-                     currentStep={selected.artifact?.reviewStatus === 'promoted' ? 5 : 3} 
+                     items={['T1','T2','T3','T4','T5'].map((code, i) => ({ 
+                       code: code as any, 
+                       active: selected.artifact?.reviewStatus === 'promoted' || i < 3 
+                     }))} 
                    />
 
                    <div className="space-y-3">
