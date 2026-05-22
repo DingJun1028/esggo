@@ -13,7 +13,7 @@ import type {
 } from '../../lib/agent/types';
 import { SKILL_REGISTRY, TASK_TYPE_META, STATUS_META } from '../../lib/agent/registry';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandT5Strip, BrandInput
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandT5Strip, BrandInput, BrandCardHeader
 } from '../../components/brand';
 
 const TASK_ICONS: Record<string, React.ReactNode> = {
@@ -51,12 +51,8 @@ export default function HermesOrchestratorPage() {
   const [loading, setLoading] = useState(false);
   const [executions, setExecutions] = useState<ExecutionRecord[]>([]);
   const [selected, setSelected] = useState<ExecutionRecord | null>(null);
-  const [reviewAction, setReviewAction] = useState<'approve' | 'reject' | 'request_changes' | null>(null);
-  const [reviewNote, setReviewNote] = useState('');
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [gatewayStatus, setGatewayStatus] = useState<{ status: string; is_mock?: boolean } | null>(null);
-
-  const availableSkills = SKILL_REGISTRY.filter(s => s.taskType === taskType && s.enabled);
 
   useEffect(() => {
     import('../../lib/hermes-gateway').then(m => {
@@ -141,8 +137,6 @@ export default function HermesOrchestratorPage() {
     }
   }
 
-  const meta = TASK_TYPE_META[taskType];
-
   return (
     <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
       
@@ -198,12 +192,11 @@ export default function HermesOrchestratorPage() {
 
           {activeTab === 'create' && (
             <BrandCard padding="lg">
-              <div className="pb-4 mb-4 border-b border-slate-100">
-                <h3 className="font-semibold text-[#0F172A] text-sm leading-tight">配置新任務</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Policy Guard 將自動審核您的請求權限</p>
-              </div>
-              {/* ... (Create form logic) */}
-
+              <BrandCardHeader 
+                title="配置新任務" 
+                subtitle="Policy Guard 將自動審核您的請求權限"
+              />
+              <div className="space-y-6 mt-6">
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">任務類型</label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -241,36 +234,37 @@ export default function HermesOrchestratorPage() {
                 <BrandButton variant="primary" fullWidth size="lg" onClick={handleCreate} loading={loading}>
                   <Zap size={16}/> 通過 Policy Guard 並建立
                 </BrandButton>
+              </div>
             </BrandCard>
           )}
 
           {activeTab === 'executions' && (
             <BrandCard padding="none">
-               <div className="p-4 border-b border-slate-100 bg-slate-50">
-                 <h3 className="font-semibold text-[#0F172A] text-sm">任務執行軌跡</h3>
+               <BrandCardHeader title="任務執行軌跡" />
+               <div className="mt-4">
+                 <BrandTable 
+                   columns={[
+                     { key: 'title', label: '任務標題' },
+                     { key: 'type', label: '類型' },
+                     { key: 'status', label: '狀態' },
+                     { key: 'time', label: '時間' },
+                     { key: 'action', label: '', align: 'right' },
+                   ]}
+                   data={executions.map(rec => ({
+                     title: <span className="font-bold text-slate-700">{rec.task.title}</span>,
+                     type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[rec.task.taskType].label}</BrandBadge>,
+                     status: rec.artifact ? (
+                       <BrandBadge variant={REVIEW_STATUS_MAP[rec.artifact.reviewStatus].variant} size="xs">
+                          {REVIEW_STATUS_MAP[rec.artifact.reviewStatus].label}
+                       </BrandBadge>
+                     ) : <BrandBadge variant="outline" size="xs">待執行</BrandBadge>,
+                     time: <span className="text-[10px] text-slate-400 font-mono">{new Date(rec.task.createdAt).toLocaleTimeString()}</span>,
+                     action: (
+                       <BrandButton variant="ghost" size="sm" onClick={() => setSelected(rec)}>詳情</BrandButton>
+                     )
+                   }))}
+                 />
                </div>
-               <BrandTable 
-                 columns={[
-                   { key: 'title', label: '任務標題' },
-                   { key: 'type', label: '類型' },
-                   { key: 'status', label: '狀態' },
-                   { key: 'time', label: '時間' },
-                   { key: 'action', label: '' },
-                 ]}
-                 data={executions.map(rec => ({
-                   title: <span className="font-bold text-slate-700">{rec.task.title}</span>,
-                   type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[rec.task.taskType].label}</BrandBadge>,
-                   status: rec.artifact ? (
-                     <BrandBadge variant={REVIEW_STATUS_MAP[rec.artifact.reviewStatus].variant} size="xs">
-                        {REVIEW_STATUS_MAP[rec.artifact.reviewStatus].label}
-                     </BrandBadge>
-                   ) : <BrandBadge variant="outline" size="xs">待執行</BrandBadge>,
-                   time: <span className="text-[10px] text-slate-400 font-mono">{new Date(rec.task.createdAt).toLocaleTimeString()}</span>,
-                   action: (
-                     <BrandButton variant="ghost" size="sm" onClick={() => setSelected(rec)}>詳情</BrandButton>
-                   )
-                 }))}
-               />
             </BrandCard>
           )}
         </div>
@@ -279,14 +273,12 @@ export default function HermesOrchestratorPage() {
         {selected && (
           <div className="lg:col-span-5 fade-in">
              <BrandCard padding="lg">
-                <div className="flex items-start justify-between gap-3 pb-4 mb-4 border-b border-slate-100">
-                  <div>
-                    <h3 className="font-semibold text-[#0F172A] text-sm leading-tight">任務控制台</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">{selected.task.title}</p>
-                  </div>
-                  <BrandButton variant="ghost" size="sm" onClick={() => setSelected(null)}><X size={16}/></BrandButton>
-                </div>
-                <div className="space-y-6">
+                <BrandCardHeader 
+                  title="任務控制台" 
+                  subtitle={selected.task.title}
+                  action={<BrandButton variant="ghost" size="sm" onClick={() => setSelected(null)}><X size={16}/></BrandButton>}
+                />
+                <div className="space-y-6 mt-6">
                    <BrandT5Strip 
                      items={['T1','T2','T3','T4','T5'].map((code, i) => ({ 
                        code: code as any, 

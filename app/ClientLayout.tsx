@@ -377,12 +377,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <BrandTooltip content="系統通知">
-              <BrandButton variant="ghost" size="icon">
+              <BrandButton variant="ghost" size="sm" style={{ width: 36, height: 36, padding: 0 }}>
                 <Bell size={18} />
               </BrandButton>
             </BrandTooltip>
             <BrandTooltip content="治理規範">
-              <BrandButton variant="ghost" size="icon" onClick={() => router.push('/audit-governance')}>
+              <BrandButton variant="ghost" size="sm" style={{ width: 36, height: 36, padding: 0 }} onClick={() => router.push('/audit-governance')}>
                 <ShieldCheck size={18} />
               </BrandButton>
             </BrandTooltip>

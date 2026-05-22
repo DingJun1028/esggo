@@ -4,7 +4,7 @@ import {
   Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, ChevronDown, ChevronUp, Upload, FileText, CheckCircle, RefreshCw, Shield 
 } from 'lucide-react';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandScoreRing, BrandPageHeader 
+  BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandScoreRing, BrandPageHeader, BrandCardHeader
 } from '../../components/brand';
 
 const tabs = [
@@ -95,7 +95,7 @@ export default function DigitalTwinPage() {
                      color="var(--blue-700)" 
                    />
                  </div>
-                 <div className="mt-6">
+                 <div className="mt-4">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">DNA 整合指數</p>
                     <p className="text-sm font-bold text-slate-700">Governance Alignment: HIGH</p>
                  </div>
@@ -103,8 +103,12 @@ export default function DigitalTwinPage() {
            </div>
            
            <div className="lg:col-span-8 flex flex-col gap-6">
-              <BrandCard title="覺醒狀態與進度" subtitle="System Cognitive Evolution" padding="md">
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <BrandCard padding="md">
+                 <BrandCardHeader 
+                   title="覺醒狀態與進度" 
+                   subtitle="System Cognitive Evolution"
+                 />
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                     {['休眠 (Dormant)', '初始化 (Bootstrap)', '活躍 (Active)', '進化 (Evolution)'].map((stage, idx) => (
                       <div key={idx} className="flex items-center gap-4 p-3 rounded-2xl border border-slate-50 bg-slate-50/30">
                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${awakeningStage > idx ? 'bg-blue-700 text-white' : awakeningStage === idx ? 'bg-gold-500 text-white' : 'bg-slate-100 text-slate-400'}`}>
@@ -170,8 +174,12 @@ export default function DigitalTwinPage() {
       )}
 
       {activeTab === 'dna' && (
-        <BrandCard title="道德 DNA 建模" subtitle="調整數位分身的決策取向與人格權重" padding="lg">
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <BrandCard padding="lg">
+           <BrandCardHeader 
+             title="道德 DNA 建模" 
+             subtitle="調整數位分身的決策取向與人格權重"
+           />
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
               {Object.entries(dna).map(([key, val]) => (
                 <div key={key} className="space-y-4">
                    <div className="flex justify-between items-end">
@@ -240,7 +248,11 @@ export default function DigitalTwinPage() {
       )}
 
       {activeTab === 'ledger' && (
-        <BrandCard title="主權帳本" subtitle="數位分身的所有認知與決策演進軌跡 (SHA-256 Verified)" padding="none">
+        <BrandCard padding="none">
+           <BrandCardHeader 
+             title="主權帳本" 
+             subtitle="數位分身的所有認知與決策演進軌跡 (SHA-256 Verified)"
+           />
            <div className="p-6">
               <div className="space-y-4">
                  {ledgerEntries.map((e, i) => (

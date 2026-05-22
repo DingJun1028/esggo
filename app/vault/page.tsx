@@ -5,7 +5,7 @@ import ClientLayout from '../ClientLayout';
 import { 
   Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter 
 } from 'lucide-react';
-import { getEvidenceFiles, insertEvidence, updateEvidenceStatus, EvidenceFile } from '../../lib/db';
+import { getEvidenceFiles, insertEvidence, sealEvidence, EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip
@@ -45,7 +45,7 @@ export default function VaultPage() {
   const sealFile = async (file: EvidenceFile) => {
     setSealingId(file.id!);
     await new Promise(r => setTimeout(r, 1500));
-    await updateEvidenceStatus(file.id!, 'verified', true);
+    await sealEvidence(file.id!);
     setFiles(prev => prev.map(f => f.id === file.id ? { ...f, status: 'verified', zkp_proof: true } : f));
     setSealingId(null);
   };

@@ -7,7 +7,7 @@ import {
   ChevronRight, Zap, Target, BookOpen, HeartPulse, Info, X, Users, Bot, Layers
 } from 'lucide-react';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandKpiCard, BrandTimeline, BrandT5Strip
+  BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandKpiCard, BrandTimeline, BrandT5Strip, BrandStatusDot
 } from '../components/brand';
 import { EnvironmentalTrajectory } from '../components/brand/EnvironmentalTrajectory';
 
@@ -106,7 +106,7 @@ export default function DashboardContent() {
         <div className="space-y-2">
           <div className="flex items-center gap-2">
              <BrandBadge variant="gold" size="sm" className="font-mono">OMNI_TERMINAL v8.5.1</BrandBadge>
-             <BrandStatusDot status="active" pulse text="Sovereign Node Active" size="sm" />
+             <BrandStatusDot status="active" pulse label="Sovereign Node Active" size="sm" />
           </div>
           <h1 className="text-3xl font-extrabold text-[#003262] tracking-tight">永續治理主控台</h1>
           <p className="text-slate-500 text-sm max-w-2xl font-medium">
@@ -131,8 +131,7 @@ export default function DashboardContent() {
       {/* ── 5T Protocol Strip ── */}
       <BrandCard padding="none" className="overflow-hidden border-blue-100">
         <BrandT5Strip 
-          activeSteps={[1,2,3,4,5]} 
-          currentStep={5}
+          items={['T1','T2','T3','T4','T5'].map(code => ({ code: code as any, active: true }))}
           className="bg-blue-50/30"
         />
       </BrandCard>
@@ -161,9 +160,11 @@ export default function DashboardContent() {
         <div className="lg:col-span-8">
           <BrandCard padding="lg">
             <BrandCardHeader title="全方位永續軌跡分析" subtitle="實際排放量 vs SBTi 1.5°C 目標情境" />
-            <EnvironmentalTrajectory 
-              title="" // Title is already in BrandCard
-            />
+            <div className="mt-4">
+              <EnvironmentalTrajectory 
+                title="" // Title is already in BrandCard
+              />
+            </div>
             <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100 flex items-start gap-3">
               <Info size={16} className="text-blue-600 mt-0.5" />
               <p className="text-xs text-slate-600 leading-relaxed">

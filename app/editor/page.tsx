@@ -227,7 +227,7 @@ export default function EditorPage() {
            <div className="flex gap-2">
              <BrandButton variant="ghost" size="sm" onClick={handleSave} loading={saving}><Save size={14}/> 儲存</BrandButton>
              <BrandButton variant="primary" size="sm" onClick={handleSeal} loading={sealing} disabled={isSealed}><Lock size={14}/> 5T 封印</BrandButton>
-             <BrandButton variant="ghost" size="icon"><Download size={16}/></BrandButton>
+             <BrandButton variant="ghost" size="sm" style={{ width: 32, height: 32, padding: 0 }}><Download size={16}/></BrandButton>
            </div>
         </div>
       </header>
@@ -334,15 +334,24 @@ export default function EditorPage() {
                       className="flex-1 bg-white rounded-3xl border border-slate-200 p-10 text-slate-700 leading-loose shadow-sm focus:border-blue-600 outline-none transition-all"
                       style={{ fontSize: '1.05rem', minHeight: 600 }}
                     />
-                    <BrandT5Strip activeSteps={isSealed ? [1,2,3,4,5] : [1,2,3]} currentStep={isSealed ? 5 : 3} />
+                    <BrandT5Strip 
+                      items={['T1','T2','T3','T4','T5'].map((code, i) => ({ 
+                        code: code as any, 
+                        active: isSealed || i < 3 
+                      }))} 
+                    />
                   </div>
                 </div>
               )}
 
               {activePanel === 'data' && (
                 <div className="p-8 max-w-4xl mx-auto">
-                  <BrandCard title="GRI 數據填報" subtitle="這些數值將直接影響 AI 生成的精確度" padding="lg">
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <BrandCard padding="lg">
+                     <BrandCardHeader 
+                       title="GRI 數據填報" 
+                       subtitle="這些數值將直接影響 AI 生成的精確度"
+                     />
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                         {chapter.fields.map(f => (
                           <div key={f.id} className="space-y-2">
                              <label className="text-xs font-bold text-slate-500 flex items-center justify-between">

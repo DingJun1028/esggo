@@ -1,6 +1,6 @@
 export { default as BrandBadge } from './BrandBadge';
 export { default as BrandButton } from './BrandButton';
-export { default as BrandCard } from './BrandCard';
+export { default as BrandCard, BrandCardHeader, BrandCardSection } from './BrandCard';
 export { default as BrandInput } from './BrandInput';
 export { default as BrandModal } from './BrandModal';
 export { default as BrandTable } from './BrandTable';

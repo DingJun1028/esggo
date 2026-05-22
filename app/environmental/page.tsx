@@ -131,8 +131,12 @@ export default function EnvironmentalPage() {
       />
 
       {editRow && (
-        <BrandCard title={editRow.isNew ? '新增環境指標' : '編輯指標'} subtitle="所有變更將記錄於 T3 稽核軌跡" padding="lg" className="border-blue-200 bg-blue-50/20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <BrandCard padding="lg" className="border-blue-200 bg-blue-50/20">
+          <BrandCardHeader 
+            title={editRow.isNew ? '新增環境指標' : '編輯指標'} 
+            subtitle="所有變更將記錄於 T3 稽核軌跡"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
              <BrandInput label="指標名稱" value={editRow.metric_name ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_name: e.target.value }))} placeholder="例：範疇一直接排放" />
              <BrandInput label="數值" type="number" value={editRow.metric_value ?? ''} onChange={e => setEditRow(p => ({ ...p, metric_value: parseFloat(e.target.value) || null }))} placeholder="0" />
              <div className="space-y-1.5">
@@ -177,7 +181,7 @@ export default function EnvironmentalPage() {
                    { key: 'status', label: '實證狀態' },
                    { key: 'action', label: '操作' },
                  ]}
-                 rows={metrics.map(m => ({
+                 data={metrics.map(m => ({
                    name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
                    value: (
                      <div className="flex items-end gap-1">
@@ -189,10 +193,7 @@ export default function EnvironmentalPage() {
                    source: <span className="text-xs text-slate-500">{m.source_origin || '—'}</span>,
                    status: (
                      <div className="flex items-center gap-2">
-                        <BrandStatusDot status={m.verified ? 'active' : 'warning'} size="sm" />
-                        <span className={`text-xs font-bold ${m.verified ? 'text-green-600' : 'text-amber-600'}`}>
-                           {m.verified ? '已封印 (T4)' : '待驗證'}
-                        </span>
+                        <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? '已封印 (T4)' : '待驗證'} size="sm" />
                      </div>
                    ),
                    action: (
