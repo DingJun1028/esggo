@@ -128,116 +128,123 @@ export default function DashboardContent() {
   const KPIS = getKpis(stats, loading);
 
   return (
-    <div className="fade-in max-w-[1600px] mx-auto p-6 space-y-6">
+    <div className="fade-in max-w-[1600px] mx-auto p-6 space-y-8">
       
       {/* ── Page Header ── */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 pb-4 md:pb-6 border-b border-slate-100">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-             <BrandBadge variant="gold" size="sm" className="font-mono">OMNI_TERMINAL v8.5.1</BrandBadge>
-             <BrandStatusDot status="active" pulse label="Sovereign Node Active" size="sm" />
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-200/60">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+             <BrandBadge variant="gold" size="sm" className="font-black tracking-widest px-3">OMNI_TERMINAL v8.5.1</BrandBadge>
+             <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 shadow-sm shadow-emerald-500/5">
+                <BrandStatusDot status="active" pulse size="sm" />
+                <span className="text-[10px] font-black text-emerald-700 uppercase tracking-wider">Sovereign Node Active</span>
+             </div>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#003262] tracking-tight">永續治理主控台</h1>
-          <p className="text-slate-500 text-sm max-w-2xl font-medium">
-            基於 Berkeley 5T 誠信協議的企業級 ESG 治理引擎：數據實證、AI 調度與自動化揭露一體化中心。
+          <h1 className="text-4xl font-black text-[#003262] tracking-tight leading-none">永續治理主控台</h1>
+          <p className="text-slate-500 text-sm max-w-2xl font-medium leading-relaxed">
+            基於 Berkeley <span className="text-[#FDB515] font-bold">5T 誠信協議</span> 的企業級 ESG 治理引擎：數據實證、AI 調度與自動化揭露一體化中心。
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
-          <div className="px-4 py-2 bg-slate-50 rounded-xl border border-slate-200 text-center sm:text-right">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">最後更新</p>
-            <p className="text-sm font-bold text-[#003262]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
+          <div className="px-5 py-3 bg-white rounded-2xl border border-slate-200 shadow-sm text-center sm:text-right min-w-[180px]">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">最後更新 Last Update</p>
+            <p className="text-base font-black text-[#003262] font-mono">
               {now.toLocaleDateString('zh-TW')} {now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
           <Link href="/hermes-orchestrator" className="w-full sm:w-auto">
-            <BrandButton variant="primary" className="w-full sm:w-auto shadow-lg shadow-blue-900/10">
-              <Zap size={16} /> 啟動 AI 任務
+            <BrandButton variant="primary" className="w-full sm:w-auto h-14 px-8 rounded-2xl shadow-xl shadow-[#003262]/20 hover:scale-105 transition-all">
+              <Zap size={18} className="mr-2" /> 啟動 AI 任務
             </BrandButton>
           </Link>
         </div>
       </header>
 
       {/* ── 5T Protocol Strip ── */}
-      <BrandCard padding="none" className="overflow-hidden border-blue-100">
+      <BrandCard padding="none" className="overflow-hidden border-blue-100/50 shadow-lg shadow-blue-900/5">
         <BrandT5Strip 
           items={['T1','T2','T3','T4','T5'].map(code => ({ code: code as any, active: true }))}
-          className="bg-blue-50/30"
+          className="bg-gradient-to-r from-blue-50/50 via-white to-blue-50/50"
         />
       </BrandCard>
 
-      {/* ── KPI Grid ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-        {KPIS.map(k => (
-          <BrandKpiCard
-            key={k.key}
-            label={k.label}
-            value={k.value}
-            unit={k.unit}
-            trend={k.trend}
-            trendUp={k.trendUp}
-            icon={k.icon}
-            color={k.color}
-            verified={k.verified}
-            formula={k.formula}
-            sources={k.sources}
-          />
+      {/* ── KPI Bento Grid ── */}
+      <div className="bento">
+        {KPIS.map((k, idx) => (
+          <div key={k.key} className="col-span-12 sm:col-span-6 lg:col-span-3">
+             <BrandKpiCard
+               label={k.label}
+               value={k.value}
+               unit={k.unit}
+               trend={k.trend}
+               trendUp={k.trendUp}
+               icon={k.icon}
+               color={k.color}
+               verified={k.verified}
+               formula={k.formula}
+               sources={k.sources}
+               className={`h-full border-t-4 border-${idx % 2 === 0 ? '[#003262]' : '[#FDB515]'}`}
+             />
+          </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="bento">
         {/* Main Trajectory Chart */}
-        <div className="lg:col-span-8">
-          <BrandCard padding="lg">
+        <div className="col-span-12 lg:col-span-8">
+          <BrandCard padding="lg" className="h-full glass-panel">
             <BrandCardHeader title="全方位永續軌跡分析" subtitle="實際排放量 vs SBTi 1.5°C 目標情境" />
-            <div className="mt-4">
+            <div className="mt-8 h-[300px]">
               <EnvironmentalTrajectory 
                 title="" // Title is already in BrandCard
               />
             </div>
-            <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100 flex items-start gap-3">
-              <Info size={16} className="text-blue-600 mt-0.5" />
-              <p className="text-xs text-slate-600 leading-relaxed">
-                系統已自動根據 <strong>ISO 14064-1</strong> 實體盤查數據與 <strong>GRI 305-1</strong> 標準進行對齊。
-                當前實際排放軌跡優於 BAU 趨勢 18%，但仍需加速範疇三減排以達成 2030 目標。
+            <div className="mt-8 p-5 bg-[#EBF2FA]/40 rounded-2xl border border-blue-100/50 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white flex-shrink-0 shadow-lg shadow-blue-600/20">
+                 <Info size={20} />
+              </div>
+              <p className="text-sm text-[#003262]/80 leading-relaxed font-medium">
+                系統已自動根據 <strong className="text-blue-700">ISO 14064-1</strong> 實體盤查數據與 <strong className="text-blue-700">GRI 305-1</strong> 標準進行對齊。
+                當前實際排放軌跡優於 BAU 趨勢 <span className="text-emerald-600 font-black">18%</span>，但仍需加速範疇三減排以達成 2030 目標。
               </p>
             </div>
           </BrandCard>
         </div>
 
         {/* Module Completion */}
-        <div className="lg:col-span-4 flex flex-col gap-4 md:gap-6">
-          <BrandCard padding="md">
+        <div className="col-span-12 lg:col-span-4 space-y-6">
+          <BrandCard padding="md" className="glass-panel">
             <BrandCardHeader title="模組就緒度" subtitle="GRI 核心揭露進度" />
-            <div className="space-y-5 mt-4">
+            <div className="space-y-6 mt-6">
               {MODULES.map(m => (
                 <Link key={m.href} href={m.href} className="block group">
-                  <div className="flex justify-between items-end mb-1.5">
-                    <div>
-                      <span className="text-sm font-bold text-slate-700 group-hover:text-blue-700 transition-colors">{m.label}</span>
-                      <span className="text-[10px] font-bold text-slate-400 ml-2 uppercase tracking-tight">{m.sub}</span>
+                  <div className="flex justify-between items-end mb-2">
+                    <div className="flex flex-col">
+                      <span className="text-[13px] font-black text-slate-700 group-hover:text-blue-700 transition-colors uppercase tracking-tight">{m.label}</span>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{m.sub}</span>
                     </div>
-                    <span className="text-xs font-bold" style={{ color: m.color }}>{m.pct}%</span>
+                    <span className="text-sm font-black font-mono" style={{ color: m.color }}>{m.pct}%</span>
                   </div>
-                  <BrandProgress value={m.pct} color="auto" size="sm" animated />
+                  <BrandProgress value={m.pct} color="auto" size="md" animated />
                 </Link>
               ))}
             </div>
-            <Link href="/health-check" className="mt-6 block">
-              <BrandButton variant="ghost" fullWidth size="sm">
-                查看詳細健檢分析 <ChevronRight size={14} />
+            <Link href="/health-check" className="mt-8 block">
+              <BrandButton variant="ghost" fullWidth size="md" className="bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-100">
+                查看詳細健檢分析 <ChevronRight size={14} className="ml-2" />
               </BrandButton>
             </Link>
           </BrandCard>
 
           {/* Activity Feed */}
-          <BrandCard padding="md" className="flex-1">
+          <BrandCard padding="md" className="glass-panel border-purple-100/50">
              <BrandCardHeader title="治理實證軌跡" subtitle="5T 不可篡改稽核流" />
-             <div className="mt-4">
+             <div className="mt-6">
                <BrandTimeline items={ACTIVITY} />
              </div>
-             <Link href="/audit-log" className="mt-4 block">
-                <p className="text-[10px] font-bold text-blue-700 text-center hover:underline cursor-pointer uppercase tracking-widest">
-                   查看完整審計日誌
+             <Link href="/audit-log" className="mt-6 block border-t border-slate-100 pt-4">
+                <p className="text-[10px] font-black text-blue-700 text-center hover:text-blue-900 cursor-pointer uppercase tracking-[0.2em] transition-colors">
+                   VIEW FULL AUDIT LOG ❯
                 </p>
              </Link>
           </BrandCard>
@@ -245,44 +252,47 @@ export default function DashboardContent() {
       </div>
 
       {/* ── Quick Actions Grid ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '16px' }}>
-        {QUICK_ACTIONS.map(a => (
-          <Link key={a.href} href={a.href} className="group">
-            <BrandCard padding="sm" hover className="text-center group-hover:border-blue-600/30">
-              <div 
-                className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center mb-3 transition-transform group-hover:scale-110"
-                style={{ backgroundColor: `${a.color}12`, color: a.color }}
-              >
-                {a.icon}
-              </div>
-              <p className="text-xs font-bold text-slate-700">{a.label}</p>
-            </BrandCard>
-          </Link>
-        ))}
+      <div>
+         <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-4 px-1">快速導覽 Quick Access</h3>
+         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+           {QUICK_ACTIONS.map(a => (
+             <Link key={a.href} href={a.href} className="group">
+               <BrandCard padding="md" hover className="text-center group-hover:border-blue-600 border-slate-100/50 bg-white/60 backdrop-blur-md">
+                 <div 
+                   className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition-all group-hover:scale-110 group-hover:rotate-3 shadow-sm"
+                   style={{ backgroundColor: `${a.color}12`, color: a.color, border: `1px solid ${a.color}20` }}
+                 >
+                   {a.icon}
+                 </div>
+                 <p className="text-[13px] font-black text-slate-700 tracking-tight group-hover:text-[#003262] transition-colors">{a.label}</p>
+               </BrandCard>
+             </Link>
+           ))}
+         </div>
       </div>
 
       {/* ── Intelligence Snippet ── */}
-      <BrandCard padding="md" className="bg-slate-900 border-none shadow-2xl relative overflow-hidden">
-         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <Bot size={120} color="#fff" />
+      <BrandCard padding="lg" className="bg-[#0f172a] border-none shadow-2xl relative overflow-hidden group">
+         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-1000">
+            <Bot size={200} color="#fff" />
          </div>
-         <div className="flex flex-col md:flex-row md:items-center gap-6 relative z-10">
-            <div className="w-12 h-12 rounded-full bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 flex-shrink-0">
-               <Bot size={24} />
+         <div className="flex flex-col md:flex-row md:items-center gap-8 relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 flex-shrink-0 shadow-2xl shadow-blue-500/20">
+               <Bot size={32} />
             </div>
             <div className="flex-1">
-               <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-white font-bold">OmniHermes 智慧洞察</h3>
-                  <BrandBadge variant="info" size="xs" className="bg-blue-500/20 border-blue-400/30 text-blue-300">New</BrandBadge>
+               <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-xl font-bold text-white tracking-tight">OmniHermes 智慧洞察</h3>
+                  <BrandBadge variant="info" size="sm" className="bg-blue-500/20 border-blue-400/30 text-blue-300 font-mono tracking-widest">REAL_TIME</BrandBadge>
                </div>
-               <p className="text-blue-100/70 text-sm leading-relaxed">
-                  偵測到歐盟委員會昨日更新了 <strong>GRI 305: Emissions</strong> 的細則指引。建議對照當前範疇三盤查邏輯進行微調，
+               <p className="text-blue-100/60 text-base leading-relaxed max-w-4xl">
+                  偵測到歐盟委員會昨日更新了 <strong className="text-white">GRI 305: Emissions</strong> 的細則指引。建議對照當前範疇三盤查邏輯進行微調，
                   以確保 2024 年度報告具備最高合規性。
                </p>
             </div>
-            <div className="w-full md:w-auto mt-2 md:mt-0">
-               <BrandButton variant="secondary" className="w-full md:w-auto" onClick={() => window.location.href='/intelligence'}>
-                  查看詳細分析
+            <div className="w-full md:w-auto mt-4 md:mt-0">
+               <BrandButton variant="secondary" className="w-full md:w-auto h-12 px-8 rounded-xl font-bold hover:bg-white hover:text-slate-900 transition-all" onClick={() => window.location.href='/intelligence'}>
+                  查看分析 ❯
                </BrandButton>
             </div>
          </div>
