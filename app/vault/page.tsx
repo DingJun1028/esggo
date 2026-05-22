@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ClientLayout from '../ClientLayout';
 import { 
-  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter 
+  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2 
 } from 'lucide-react';
 import { getEvidenceFiles, insertEvidence, sealEvidence, EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';

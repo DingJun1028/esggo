@@ -14,7 +14,24 @@ const tabs = [
   { id: 'ledger', label: '主權帳本', icon: <Lock size={14} /> },
 ];
 
-// ... (dnaLabels and ledgerEntries)
+const defaultDna = {
+  integrity: 90,
+  transparency: 85,
+  empathy: 70,
+  decisiveness: 60
+};
+
+const dnaLabels = {
+  integrity: { label: '誠信度 (Integrity)', desc: '確保資料真實無篡改' },
+  transparency: { label: '透明度 (Transparency)', desc: '決策過程可解釋性' },
+  empathy: { label: '共情力 (Empathy)', desc: '利害關係人利益平衡' },
+  decisiveness: { label: '果斷力 (Decisiveness)', desc: '面對衝突的決斷速度' }
+};
+
+const ledgerEntries = [
+  { action: 'DNA 初始化', time: '2023-10-01 10:00:00', detail: '設定初始 DNA 參數', hash: 'a1b2c3d4e5f6g7h8' },
+  { action: '知識庫更新', time: '2023-10-02 11:30:00', detail: '載入 GRI 2021 標準', hash: '8h7g6f5e4d3c2b1a' }
+];
 
 export default function DigitalTwinPage() {
   const [activeTab, setActiveTab] = useState('overview');

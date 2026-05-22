@@ -4,7 +4,7 @@ import { Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Za
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { getEnvironmentalData, upsertEnvironmentalData, deleteEnvironmentalData, type EnvironmentalMetric } from '../../lib/db';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput, BrandCardHeader 
 } from '../../components/brand';
 import { create5TAttestation } from '../../lib/crypto-proof';
 
@@ -36,7 +36,7 @@ const GRI_MAP: Record<string, string[]> = {
 type EditRow = Partial<EnvironmentalMetric> & { isNew?: boolean };
 
 export default function EnvironmentalPage() {
-  const [activeTab, setActiveTab] = useState<EnvironmentalMetric['category']>('GHG');
+  const [activeTab, setActiveTab] = useState<EnvironmentalMetric['category'] | 'Analysis'>('GHG');
   const [metrics, setMetrics] = useState<EnvironmentalMetric[]>([]);
   const [loading, setLoading] = useState(true);
   const [editRow, setEditRow] = useState<EditRow | null>(null);
@@ -62,7 +62,7 @@ export default function EnvironmentalPage() {
     try {
       const result = await upsertEnvironmentalData({
         ...(editRow as EnvironmentalMetric),
-        category: activeTab,
+        category: activeTab as EnvironmentalMetric['category'],
         year: editRow.year ?? new Date().getFullYear(),
         metric_value: editRow.metric_value ?? null,
       });
@@ -146,9 +146,11 @@ export default function EnvironmentalPage() {
              <BrandButton variant="ghost" size="sm" onClick={load} loading={loading}>
                <RefreshCw size={14}/>
              </BrandButton>
-             <BrandButton variant="primary" size="sm" onClick={() => setEditRow({ isNew: true, category: activeTab, year: new Date().getFullYear(), gri_standard: GRI_MAP[activeTab][0], unit: UNIT_MAP[activeTab][0] })}>
-               <Plus size={16}/> 新增指標
-             </BrandButton>
+             {activeTab !== 'Analysis' && (
+               <BrandButton variant="primary" size="sm" onClick={() => setEditRow({ isNew: true, category: activeTab as EnvironmentalMetric['category'], year: new Date().getFullYear(), gri_standard: GRI_MAP[activeTab][0], unit: UNIT_MAP[activeTab][0] })}>
+                 <Plus size={16}/> 新增指標
+               </BrandButton>
+             )}
           </div>
         }
       />
@@ -264,7 +266,7 @@ export default function EnvironmentalPage() {
                       />
                       <Area name="scope1" type="monotone" dataKey="scope1" stroke="#003262" strokeWidth={3} fillOpacity={1} fill="url(#colorScope1)" />
                       <Area name="scope2" type="monotone" dataKey="scope2" stroke="#3b7ea1" strokeWidth={3} fillOpacity={1} fill="url(#colorScope2)" />
-                      <Area name="target" type="dashed" dataKey="target" stroke="#cbd5e1" strokeWidth={2} strokeDasharray="5 5" fill="transparent" />
+                      <Area name="target" type="monotone" dataKey="target" stroke="#cbd5e1" strokeWidth={2} strokeDasharray="5 5" fill="transparent" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>

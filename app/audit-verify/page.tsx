@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Shield, Search, CheckCircle, XCircle, Clock, Hash, AlertTriangle, Lock, ExternalLink, RefreshCw, FileText, User } from 'lucide-react';
 import { listVaultRecords, type VaultOmniRecord, verifyRecord } from '../../lib/vault-omni';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandStatusDot, BrandProgress, BrandPageHeader, BrandCardHeader, BrandInput 
+  BrandButton, BrandBadge, BrandCard, BrandStatusDot, BrandProgress, BrandPageHeader, BrandCardHeader, BrandInput, BrandTable
 } from '../../components/brand';
 
 async function sha256(message: string): Promise<string> {
