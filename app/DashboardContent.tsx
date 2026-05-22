@@ -183,7 +183,7 @@ export default function DashboardContent() {
                verified={k.verified}
                formula={k.formula}
                sources={k.sources}
-               className={`h-full border-t-4 border-${idx % 2 === 0 ? '[#003262]' : '[#FDB515]'}`}
+               className={`h-full border-t-4 ${idx % 2 === 0 ? 'border-[#003262]' : 'border-[#FDB515]'}`}
              />
           </div>
         ))}
