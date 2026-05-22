@@ -8,9 +8,10 @@ import {
 import { getEvidenceFiles, insertEvidence, sealEvidence, EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip, StandardPage
 } from '../../components/brand';
 import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
+import { UniversalPageConfig } from '../../lib/page-config';
 
 const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
 const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
@@ -109,26 +110,131 @@ export default function VaultPage() {
         { id: 'T', label: '資安 (Security)', tag: 'T' },
       ]
     }
-  ];
+  const verifiedCount = files.filter(f => f.status === 'verified').length;
+
+  // ── Universal Page Configuration (萬能配置) ──────────────────────────────────
+  const pageConfig: UniversalPageConfig = {
+    id: 'evidence-vault',
+    title: '證據金庫 Evidence Vault',
+    subtitle: '5T 誠信協議 · ZKP 零知識證明 · SHA-256 數位鎖定，確保治理數據真實性。',
+    icon: <Database size={32} />,
+    griReference: 'Governance Vault',
+    activeT5Tags: ['T1', 'T2', 'T3', 'T4', 'T5'],
+
+    primaryActions: [
+      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: () => getEvidenceFiles().then(setFiles), loading },
+      { id: 'upload', label: '上傳佐證', icon: <Upload size={16}/>, onClick: () => setShowUpload(true) }
+    ],
+
+    kpis: [
+      { key: 'total', label: '總文件數', value: files.length, icon: <FileText size={18}/> },
+      { key: 'sealed', label: '已實證封印', value: verifiedCount, icon: <Shield size={18}/>, verified: true },
+      { key: 'pending', label: '待處理項', value: files.filter(f => f.status === 'pending').length, icon: <Clock size={18}/> },
+      { key: 'coverage', label: '5T 覆蓋率', value: `${Math.round((verifiedCount / (files.length || 1)) * 100)}%`, icon: <Zap size={18}/> },
+    ],
+
+    sections: [
+      {
+        id: 'browser',
+        title: '佐證文件瀏覽器',
+        subtitle: '分類檢索與實證狀態',
+        icon: <Filter size={18}/>,
+        columns: 12,
+        component: (
+          <div className="space-y-6">
+             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                  {CATEGORIES.map(c => (
+                    <button 
+                      key={c} 
+                      onClick={() => setActiveCategory(c)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeCategory === c ? 'bg-[#003262] text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                    >
+                      {c === '全部' ? '全部' : `${c} · ${CAT_LABELS[c]}`}
+                    </button>
+                  ))}
+                </div>
+                <div className="relative w-full md:w-64">
+                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                   <input 
+                     className="w-full bg-slate-50 border border-slate-100 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:border-blue-600 outline-none transition-all"
+                     placeholder="搜尋文件名..."
+                     value={search}
+                     onChange={e => setSearch(e.target.value)}
+                   />
+                </div>
+             </div>
+
+             <BrandTable 
+               loading={loading}
+               columns={[
+                 { header: '文件資訊', key: 'file' },
+                 { header: '類別', key: 'category' },
+                 { header: 'GRI', key: 'gri' },
+                 { header: '狀態', key: 'status' },
+                 { header: '5T 實證', key: 'zkp' },
+                 { header: '操作', key: 'actions' },
+               ]}
+               data={filtered.map(f => ({
+                 file: (
+                   <div className="flex flex-col">
+                     <span className="font-bold text-slate-700 text-sm">{f.file_name}</span>
+                     {f.hash_lock && <code className="text-[9px] text-slate-400 mt-1">SHA256: {f.hash_lock.slice(0, 16)}...</code>}
+                   </div>
+                 ),
+                 category: <BrandBadge variant="outline" size="xs">{f.category} · {CAT_LABELS[f.category!]}</BrandBadge>,
+                 gri: <BrandBadge variant="info" size="xs">{f.gri_reference || '-'}</BrandBadge>,
+                 status: <BrandBadge variant={STATUS_MAP[f.status || 'pending'].variant} size="xs">{STATUS_MAP[f.status || 'pending'].label}</BrandBadge>,
+                 zkp: f.zkp_proof ? <BrandBadge variant="gold" size="xs">✓ ZKP SEALED</BrandBadge> : <span className="text-[10px] text-slate-300 font-bold uppercase">Unsealed</span>,
+                 actions: (
+                   <div className="flex gap-1">
+                      <BrandButton variant="ghost" size="xs" onClick={() => setSelected(f)}><Eye size={12}/></BrandButton>
+                      <BrandButton variant="ghost" size="xs" onClick={() => handleScan(f)} loading={scanningId === f.id} className="text-blue-700"><Bot size={12}/></BrandButton>
+                      {f.status !== 'verified' ? (
+                        <BrandButton variant="ghost" size="xs" onClick={() => sealFile(f)} loading={sealing === f.id} className="text-[#FDB515]"><Shield size={12}/></BrandButton>
+                      ) : (
+                        <BrandButton variant="ghost" size="xs" onClick={() => {
+                          const url = `${window.location.origin}/audit-verify?uuid=${f.id}`;
+                          navigator.clipboard.writeText(url);
+                          alert('連結已複製');
+                        }} className="text-emerald-600"><Share2 size={12}/></BrandButton>
+                      )}
+                   </div>
+                 )
+               }))}
+             />
+          </div>
+        )
+      }
+    ],
+
+    features: {
+      useSelectionHouse: true,
+      useProvenance: true,
+      useAuditLog: true
+    }
+  };
 
   return (
-    <ClientLayout>
-      <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
-        <SelectionHouse 
-          isOpen={selectionHouse.open && selectionHouse.type === 'category'}
-          onClose={() => setSelectionHouse({ open: false, type: null })}
-          onSelect={(item) => setForm(p => ({ ...p, category: item.tag! }))}
-          categories={catCategories}
-          title="選擇 ESG 類別"
-        />
+    <div className="relative">
+      <StandardPage config={pageConfig} />
 
-        <SelectionHouse 
-          isOpen={selectionHouse.open && selectionHouse.type === 'gri'}
-          onClose={() => setSelectionHouse({ open: false, type: null })}
-          onSelect={(item) => setForm(p => ({ ...p, gri_reference: item.tag! }))}
-          categories={griCategories}
-          title="選擇對應 GRI 指標"
-        />
+      <SelectionHouse 
+        isOpen={selectionHouse.open && selectionHouse.type === 'category'}
+        onClose={() => setSelectionHouse({ open: false, type: null })}
+        onSelect={(item) => setForm(p => ({ ...p, category: item.tag! }))}
+        categories={catCategories}
+        title="選擇 ESG 類別"
+      />
+
+      <SelectionHouse 
+        isOpen={selectionHouse.open && selectionHouse.type === 'gri'}
+        onClose={() => setSelectionHouse({ open: false, type: null })}
+        onSelect={(item) => setForm(p => ({ ...p, gri_reference: item.tag! }))}
+        categories={griCategories}
+        title="選擇對應 GRI 指標"
+      />
+
         
         <BrandPageHeader 
           title="證據金庫 Evidence Vault" 
