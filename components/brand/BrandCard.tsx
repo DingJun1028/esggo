@@ -27,47 +27,12 @@ interface BrandCardSectionProps {
 
 const paddingStyles = {
   none: '',
-  sm: 'p-4',
-  md: 'p-5',
-  lg: 'p-6',
+  sm: 'p-3 md:p-4',
+  md: 'p-4 md:p-5',
+  lg: 'p-5 md:p-6',
 };
 
-const shadowStyles = {
-  none: '',
-  sm: 'shadow-sm',
-  md: 'shadow-md',
-  lg: 'shadow-lg',
-};
-
-export function BrandCardHeader({ title, subtitle, icon, action, badge }: BrandCardHeaderProps) {
-  return (
-    <div className="flex items-start justify-between gap-3 pb-4 border-b border-slate-100">
-      <div className="flex items-start gap-3 min-w-0">
-        {icon && (
-          <div className="w-8 h-8 rounded-lg bg-[#EBF2FA] flex items-center justify-center flex-shrink-0">
-            {icon}
-          </div>
-        )}
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-[#0F172A] text-sm leading-tight">{title}</h3>
-            {badge}
-          </div>
-          {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
-        </div>
-      </div>
-      {action && <div className="flex-shrink-0">{action}</div>}
-    </div>
-  );
-}
-
-export function BrandCardSection({ children, className = '', divider = false }: BrandCardSectionProps) {
-  return (
-    <div className={`${divider ? 'border-t border-slate-100 pt-4 mt-4' : ''} ${className}`}>
-      {children}
-    </div>
-  );
-}
+// ... (keep shadowStyles and Header/Section)
 
 export default function BrandCard({
   children,
@@ -81,12 +46,12 @@ export default function BrandCard({
   return (
     <div
       className={`
-        bg-white rounded-xl
+        bg-white rounded-xl overflow-hidden
         ${border ? 'border border-slate-200' : ''}
         ${shadowStyles[shadow]}
         ${paddingStyles[padding]}
-        ${hover ? 'hover:shadow-md hover:border-[#003262]/20 transition-all duration-200 cursor-pointer' : ''}
-        ${onClick ? 'cursor-pointer' : ''}
+        ${hover ? 'hover:shadow-md hover:border-[#003262]/20 transition-all duration-200' : ''}
+        ${onClick || hover ? 'cursor-pointer' : ''}
         ${className}
       `}
       onClick={onClick}

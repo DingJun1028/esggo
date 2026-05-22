@@ -12,23 +12,10 @@ interface BrandButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   icon?: React.ReactNode;
   iconRight?: React.ReactNode;
   fullWidth?: boolean;
+  fullWidthOnMobile?: boolean;
 }
 
-const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-[#003262] text-white hover:bg-[#001F3F] shadow-sm hover:shadow-md',
-  secondary: 'bg-[#EBF2FA] text-[#003262] hover:bg-[#D4E4F7] border border-[#D4E4F7]',
-  ghost: 'bg-transparent text-[#003262] hover:bg-[#EBF2FA]',
-  danger: 'bg-red-500 text-white hover:bg-red-600 shadow-sm',
-  gold: 'bg-[#FDB515] text-[#003262] hover:bg-yellow-400 shadow-sm font-semibold',
-  outline: 'bg-transparent text-[#003262] border border-[#003262] hover:bg-[#EBF2FA]',
-};
-
-const sizeStyles: Record<ButtonSize, string> = {
-  xs: 'text-xs px-2.5 py-1 h-7',
-  sm: 'text-sm px-3 py-1.5 h-8',
-  md: 'text-sm px-4 py-2 h-9',
-  lg: 'text-base px-6 py-2.5 h-11',
-};
+// ... (keep styles)
 
 export default function BrandButton({
   children,
@@ -38,6 +25,7 @@ export default function BrandButton({
   icon,
   iconRight,
   fullWidth = false,
+  fullWidthOnMobile = false,
   className = '',
   disabled,
   ...props
@@ -51,6 +39,7 @@ export default function BrandButton({
         ${variantStyles[variant]}
         ${sizeStyles[size]}
         ${fullWidth ? 'w-full' : ''}
+        ${fullWidthOnMobile ? 'w-full sm:w-auto' : ''}
         ${className}
       `}
       disabled={disabled || loading}
