@@ -1,4 +1,5 @@
 'use client';
+// [Stitch Identity Sealed] 2026-05-22
 import React, { useState } from 'react';
 import { Leaf, ShieldCheck, ArrowRight, Github } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
