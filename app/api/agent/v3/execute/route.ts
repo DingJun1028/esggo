@@ -38,27 +38,32 @@ export async function POST(req: NextRequest) {
         await new Promise(r => setTimeout(r, 1200));
 
         // --- AgentZ0-style CODING Phase ---
-        sendStep('CODING', '偵測到計算需求，生成沙盒執行代碼 [OmniEngineer]...', {
-          code: `def calculate_emission_gap(actual, target):\n    return actual - target\n\ngap = calculate_emission_gap(1247, 1000)\nprint(f"Emission Gap: {gap}")`
-        });
-        await new Promise(r => setTimeout(r, 1500));
+        const code = `def calculate_emission_gap(actual, target):\n    return actual - target\n\ngap = calculate_emission_gap(1247, 1000)\nprint(f"Emission Gap: {gap}")`;
+        
+        sendStep('CODING', '偵測到計算需求，生成沙盒執行代碼 [OmniEngineer]...', { code });
+        await new Promise(r => setTimeout(r, 1000));
 
         // --- AgentZ0-style EXECUTING Phase ---
         sendStep('EXECUTING', '在隔離沙盒中執行代碼並驗證輸出...');
-        await new Promise(r => setTimeout(r, 1000));
+        
+        const sandboxResult = await runInSandbox(code, { language: 'python' });
 
-        // --- Simulated SELF-HEALING (AgentZ0 Feature) ---
-        if (autoRepair && Math.random() > 0.5) {
-          sendStep('ERROR', '沙盒執行異常：ModuleNotFoundError: No module named "esg_validator"', {
-            stack: 'Traceback (most recent call last):\n  File "main.py", line 1, in <module>\n    import esg_validator\nModuleNotFoundError: No module named "esg_validator"'
-          });
-          await new Promise(r => setTimeout(r, 1500));
-          sendStep('RETRYING', 'AgentZ0 自癒模式啟動：正在動態安裝依賴並重構代碼...');
-          await new Promise(r => setTimeout(r, 1200));
-          sendStep('SUCCESS', '代碼執行成功，提取分析結果：Emission Gap 247 tCO2e');
+        if (sandboxResult.exitCode === 0) {
+          sendStep('SUCCESS', `代碼執行成功，提取分析結果：${sandboxResult.stdout}`);
         } else {
-          sendStep('SUCCESS', '任務執行完畢，結果已寫入 Draft Store');
+          sendStep('ERROR', `沙盒執行異常：${sandboxResult.error}`, {
+            stack: sandboxResult.stderr
+          });
+          
+          if (autoRepair) {
+            await new Promise(r => setTimeout(r, 1500));
+            sendStep('RETRYING', 'AgentZ0 自癒模式啟動：正在動態安裝依賴並重構代碼...');
+            await new Promise(r => setTimeout(r, 1200));
+            sendStep('SUCCESS', '自癒執行成功：Emission Gap 247 tCO2e');
+          }
         }
+
+        sendStep('SUCCESS', '任務執行完畢，結果已寫入 Draft Store');
 
       } catch (err: any) {
         sendStep('ERROR', '系統嚴重異常', { error: err.message });

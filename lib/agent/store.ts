@@ -39,3 +39,7 @@ export function updateArtifact(artId: string, patch: Partial<AgentArtifact>) {
     GLOBAL_ARTIFACTS[idx] = { ...GLOBAL_ARTIFACTS[idx], ...patch, updatedAt: new Date().toISOString() };
   }
 }
+
+export function getArtifact(artId: string): AgentArtifact | undefined {
+  return GLOBAL_ARTIFACTS.find(a => a.id === artId);
+}

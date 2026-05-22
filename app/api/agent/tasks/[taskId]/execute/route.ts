@@ -41,15 +41,10 @@ export async function POST(
         
         // [Real LLM Integration] 若有本地 Key 則嘗試直連，否則使用 Mock
         if (GEMINI_API_KEY && GEMINI_API_KEY !== 'your_gemini_key') {
-          const prompt = `你現在是 OmniHermes Agent。請執行以下任務：\n標題：${task.title}\n描述：${task.description || '無'}\n類型：${task.taskType}\n請生成專業的 ESG 內容。`;
+          const { agentZ0Flow } = await import('@/lib/agents/agentz0');
+          const query = `標題：${task.title}\n描述：${task.description || '無'}\n類型：${task.taskType}\n請生成專業的 ESG 內容。`;
           
-          const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-          });
-          const aiData = await aiRes.json();
-          content = aiData.candidates?.[0]?.content?.parts?.[0]?.text || '本地 AI 生成失敗';
+          content = await agentZ0Flow({ query, context: task });
         } else {
           // 全 Mock Fallback
           await new Promise(r => setTimeout(r, 1200));

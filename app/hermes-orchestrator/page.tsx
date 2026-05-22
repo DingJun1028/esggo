@@ -54,10 +54,37 @@ export default function HermesOrchestratorPage() {
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [gatewayStatus, setGatewayStatus] = useState<{ status: string; is_mock?: boolean } | null>(null);
 
+  // Initial Data Loading
   useEffect(() => {
+    async function init() {
+      try {
+        const [tasksRes, execsRes, artsRes] = await Promise.all([
+          fetch('/api/agent/tasks'),
+          fetch('/api/agent/executions'),
+          fetch('/api/agent/artifacts'),
+        ]);
+        const tasksData = await tasksRes.json();
+        const execsData = await execsRes.json();
+        const artsData = await artsRes.json();
+
+        if (tasksData.ok) {
+          const merged: ExecutionRecord[] = tasksData.tasks.map((t: AgentTask) => {
+            const execution = execsData.executions?.find((e: any) => e.taskId === t.id) || null;
+            const artifact = artsData.artifacts?.find((a: any) => a.taskId === t.id) || null;
+            return { task: t, execution, artifact, policy: null };
+          });
+          setExecutions(merged);
+        }
+      } catch (e) {
+        console.error('Failed to load initial data', e);
+      }
+    }
+
     import('../../lib/hermes-gateway').then(m => {
       m.fetchHermesStatus().then(setGatewayStatus);
     });
+
+    init();
   }, []);
 
   function showToast(msg: string, type: 'success' | 'error' | 'info' = 'success') {
@@ -203,7 +230,11 @@ export default function HermesOrchestratorPage() {
                     {Object.entries(TASK_TYPE_META).map(([type, m]) => (
                       <button 
                         key={type} 
-                        onClick={() => setTaskType(type as any)}
+                        onClick={() => {
+                          setTaskType(type as any);
+                          const skill = SKILL_REGISTRY.find(s => s.taskType === type);
+                          if (skill) setSelectedSkill(skill.skillKey);
+                        }}
                         className={`p-4 rounded-2xl border-2 text-left transition-all ${taskType === type ? 'border-blue-600 bg-blue-50/50' : 'border-slate-50 hover:border-slate-100'}`}
                       >
                         <div style={{ color: m.color }} className="mb-2">{TASK_ICONS[type]}</div>
@@ -252,7 +283,7 @@ export default function HermesOrchestratorPage() {
                    ]}
                    data={executions.map(rec => ({
                      title: <span className="font-bold text-slate-700">{rec.task.title}</span>,
-                     type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[rec.task.taskType].label}</BrandBadge>,
+                     type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[rec.task.taskType]?.label || rec.task.taskType}</BrandBadge>,
                      status: rec.artifact ? (
                        <BrandBadge variant={REVIEW_STATUS_MAP[rec.artifact.reviewStatus].variant} size="xs">
                           {REVIEW_STATUS_MAP[rec.artifact.reviewStatus].label}
@@ -262,6 +293,59 @@ export default function HermesOrchestratorPage() {
                      action: (
                        <BrandButton variant="ghost" size="sm" onClick={() => setSelected(rec)}>詳情</BrandButton>
                      )
+                   }))}
+                 />
+               </div>
+            </BrandCard>
+          )}
+
+          {activeTab === 'audit' && (
+            <BrandCard padding="none">
+               <BrandCardHeader title="系統審計日誌" subtitle="所有 Agent 執行與狀態變更的完整軌跡" />
+               <div className="mt-4">
+                 <BrandTable 
+                   columns={[
+                     { key: 'id', label: '執行 ID' },
+                     { key: 'model', label: '模型' },
+                     { key: 'status', label: '狀態' },
+                     { key: 'audit', label: '稽核代碼' },
+                     { key: 'time', label: '時間' },
+                   ]}
+                   data={executions.filter(r => r.execution).map(r => ({
+                     id: <span className="text-[10px] font-mono text-slate-400">{r.execution?.id}</span>,
+                     model: <span className="text-xs font-bold text-slate-700">{r.execution?.modelName}</span>,
+                     status: <BrandBadge variant="outline" size="xs">{r.execution?.status}</BrandBadge>,
+                     audit: <span className="text-[10px] font-mono text-blue-600">{r.execution?.auditLogId}</span>,
+                     time: <span className="text-[10px] text-slate-400 font-mono">{r.execution?.createdAt ? new Date(r.execution.createdAt).toLocaleString() : '-'}</span>,
+                   }))}
+                 />
+               </div>
+            </BrandCard>
+          )}
+
+          {activeTab === 'registry' && (
+            <BrandCard padding="none">
+               <BrandCardHeader title="OmniHermes 技能庫" subtitle="目前已註冊的 Agent 專業技能與風險評級" />
+               <div className="mt-4">
+                 <BrandTable 
+                   columns={[
+                     { key: 'skill', label: '技能名稱' },
+                     { key: 'type', label: '任務類型' },
+                     { key: 'risk', label: '風險評級' },
+                     { key: 'review', label: '審核需求' },
+                     { key: 'version', label: '版本' },
+                   ]}
+                   data={SKILL_REGISTRY.map(s => ({
+                     skill: (
+                       <div className="flex flex-col">
+                         <span className="font-bold text-slate-700">{s.skillName}</span>
+                         <span className="text-[10px] text-slate-400">{s.description}</span>
+                       </div>
+                     ),
+                     type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[s.taskType]?.label || s.taskType}</BrandBadge>,
+                     risk: <BrandBadge variant={s.riskLevel === 'high' ? 'error' : s.riskLevel === 'medium' ? 'warning' : 'success'} size="xs">{s.riskLevel.toUpperCase()}</BrandBadge>,
+                     review: s.requiresHumanReview ? <span className="text-xs text-orange-600 font-bold">需要</span> : <span className="text-xs text-green-600">自動</span>,
+                     version: <span className="text-[10px] font-mono text-slate-400">v{s.version}</span>
                    }))}
                  />
                </div>
@@ -313,6 +397,23 @@ export default function HermesOrchestratorPage() {
                            {selected.artifact.content}
                         </div>
                         
+                        {selected.artifact.reviewStatus === 'awaiting_review' && (
+                          <div className="flex gap-2">
+                             <BrandButton variant="primary" fullWidth onClick={async () => {
+                               // Simulate approval for prototype
+                               const updated = { ...selected, artifact: { ...selected.artifact!, reviewStatus: 'approved' as ReviewStatus } };
+                               setExecutions(prev => prev.map(r => r.task.id === selected.task.id ? updated : r));
+                               setSelected(updated);
+                               showToast('已批准草稿');
+                             }}>
+                                核准
+                             </BrandButton>
+                             <BrandButton variant="outline" fullWidth onClick={() => showToast('已拒絕草稿', 'error')}>
+                                拒絕
+                             </BrandButton>
+                          </div>
+                        )}
+
                         {selected.artifact.reviewStatus === 'approved' && (
                           <BrandButton variant="secondary" fullWidth onClick={() => handlePromote(selected)} loading={loading}>
                              <Shield size={16}/> 提升為正式態 (5T 封印)

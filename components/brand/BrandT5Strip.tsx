@@ -9,14 +9,15 @@ interface T5Item {
 interface BrandT5StripProps {
   items?: T5Item[];
   compact?: boolean;
+  className?: string;
 }
 
 const t5Config = {
-  T1: { label: '可溯源', color: '#3B7EA1', bg: '#EBF2FA' },
-  T2: { label: '透明', color: '#22c55e', bg: '#f0fdf4' },
-  T3: { label: '可感知', color: '#FDB515', bg: '#fefce8' },
-  T4: { label: '不可篡改', color: '#ef4444', bg: '#fff1f2' },
-  T5: { label: '可追蹤', color: '#8b5cf6', bg: '#f5f3ff' },
+  T1: { label: '可感知', color: '#10B981', bg: '#f0fdf4' },
+  T2: { label: '可溯源', color: '#3B7EA1', bg: '#EBF2FA' },
+  T3: { label: '可追蹤', color: '#8B5CF6', bg: '#F5F3FF' },
+  T4: { label: '透明', color: '#F59E0B', bg: '#FEF3C7' },
+  T5: { label: '不可篡改', color: '#003262', bg: '#EBF2FA' },
 };
 
 export default function BrandT5Strip({
@@ -28,9 +29,10 @@ export default function BrandT5Strip({
     { code: 'T5', active: true },
   ],
   compact = false,
+  className = '',
 }: BrandT5StripProps) {
   return (
-    <div className={`flex items-center gap-${compact ? '1' : '1.5'} flex-wrap`}>
+    <div className={`flex items-center gap-${compact ? '1' : '1.5'} flex-wrap ${className}`}>
       {items.map(item => {
         const config = t5Config[item.code];
         const active = item.active !== false;

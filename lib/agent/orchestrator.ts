@@ -102,7 +102,7 @@ export function buildPromptPolicy(task: AgentTask, dataScope: string[]): string 
 }
 
 import { createHashLock, create5TAttestation } from '../crypto-proof';
-import { updateArtifact, updateExecution } from './store';
+import { updateArtifact, updateExecution, getArtifact } from './store';
 
 import { addToKnowledgeBase } from './rag-engine';
 
@@ -112,7 +112,9 @@ import { addToKnowledgeBase } from './rag-engine';
  */
 export async function promoteToTrustLayer(artifactId: string, actorId: string) {
   // 1. 獲取草稿內容
-  // 此處應從 store 讀取真實 artifact
+  const artifact = getArtifact(artifactId);
+  if (!artifact) throw new Error('找不到指定的產出物資料');
+
   const seal = await createHashLock({ artifactId, promotedBy: actorId });
   
   // 2. 深貫：寫入治理稽核日誌
@@ -123,9 +125,15 @@ export async function promoteToTrustLayer(artifactId: string, actorId: string) {
   // 將審核通過的正式內容餵回 RAG 知識庫，讓數位分身從人類決策中學習
   addToKnowledgeBase([{
     id: `learned_${artifactId}`,
-    source: `Promoted Artifact: ${artifactId}`,
-    text: `正式治理決策紀錄：該產出內容已被人類審核員 ${actorId} 核准並封印。內容包含 ESG 關鍵指標之正式解釋。`,
-    metadata: { type: 'learned_decision', promotedBy: actorId, hash: seal.hash }
+    source: `Promoted Artifact: ${artifact.title}`,
+    text: `正式治理決策與揭露內容：\n${artifact.content}\n\n[驗證資訊] 此內容由 ${actorId} 於 ${new Date().toISOString()} 核准並封印。5T 雜湊鎖定值: ${seal.hash}`,
+    metadata: { 
+      type: 'learned_decision', 
+      promotedBy: actorId, 
+      hash: seal.hash,
+      originalArtifactId: artifactId,
+      taskId: artifact.taskId
+    }
   }]);
   
   // 3. 更新狀態
