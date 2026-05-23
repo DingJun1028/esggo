@@ -45,31 +45,16 @@ const QUICK_ACTIONS = [
 
 export default function DashboardContent() {
   const [now, setNow] = useState(new Date());
-  const [stats, setStats] = useState<DashboardStatsData | null>(null);
-  const [growth, setGrowth] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { stats, loading: statsLoading } = useDashboardStats();
+  const { growth, loading: growthLoading } = useSystemEvolution();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [sRes, gRes] = await Promise.all([
-          fetch('/api/dashboard/stats'),
-          fetch('/api/ai/growth')
-        ]);
-        if (sRes.ok) setStats(await sRes.json());
-        if (gRes.ok) setGrowth(await gRes.json());
-      } catch (err) {
-        console.error('fetch error', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-    const t = setInterval(() => { setNow(new Date()); fetchData(); }, 60000);
+    const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
 
-  const KPIS = getKpis(stats, loading);
+  const KPIS = getKpis(stats, statsLoading);
+
 
   return (
     <div className="page-container fade-in pb-8">

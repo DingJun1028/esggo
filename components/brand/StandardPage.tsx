@@ -57,7 +57,7 @@ export default function StandardPage({ config }: StandardPageProps) {
         {/* Status + Actions (right side) */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100">
-            <BrandStatusDot status="active" pulse size="xs" />
+            <BrandStatusDot status="active" pulse size="sm" />
             <span className="text-[9px] font-black text-emerald-700 uppercase tracking-widest hidden sm:block">Live</span>
           </div>
           {config.primaryActions?.map(action => (
