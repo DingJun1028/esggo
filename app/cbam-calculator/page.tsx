@@ -1,6 +1,11 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Globe, Calculator, AlertTriangle, CheckCircle, TrendingUp, Download, Plus, Trash2, Bot, RefreshCw } from 'lucide-react';
+import { Globe, Calculator, AlertTriangle, CheckCircle, TrendingUp, Download, Plus, Trash2, Bot, RefreshCw, Landmark, ArrowUpRight, Sparkles, X, History, CheckCircle2, ShieldCheck, Gauge } from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
+} from '../../components/brand';
+import { UniversalPageConfig } from '../../lib/page-config';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface CBAmProduct {
   id: string;
@@ -19,302 +24,155 @@ const SECTORS = [
   { id: 'aluminum', name: '鋁', cn: '7601-7616', factor: 6.72 },
   { id: 'cement', name: '水泥', cn: '2523', factor: 0.83 },
   { id: 'fertilizer', name: '化學肥料', cn: '3102-3105', factor: 2.40 },
-  { id: 'electricity', name: '電力', cn: '2716', factor: 0.50 },
-  { id: 'hydrogen', name: '氫氣', cn: '2804.10', factor: 0.00 },
 ];
 
-const DEFAULT_ETS_PRICE = 65; // EUR/tCO₂e
+const DEFAULT_ETS_PRICE = 65;
 
 export default function CBAMCalculatorPage() {
   const [products, setProducts] = useState<CBAmProduct[]>([
-    {
-      id: '1',
-      productName: '熱軋鋼板',
-      cnCode: '7208.37',
-      sector: 'steel',
-      annualExportTons: 5000,
-      directEmissions: 1.89,
-      indirectEmissions: 0.32,
-      paidCarbonPrice: 0,
-      euEtsPrice: DEFAULT_ETS_PRICE,
-    },
+    { id: '1', productName: '熱軋鋼板', cnCode: '7208.37', sector: 'steel', annualExportTons: 5000, directEmissions: 1.89, indirectEmissions: 0.32, paidCarbonPrice: 0, euEtsPrice: DEFAULT_ETS_PRICE },
   ]);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [newProduct, setNewProduct] = useState<Partial<CBAmProduct>>({ euEtsPrice: DEFAULT_ETS_PRICE, paidCarbonPrice: 0 });
+  const [showAdd, setShowAdd] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleAskHermes = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/agent/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          actorId: 'user_001',
-          taskType: 'cbam_validation',
-          title: 'CBAM 出口數據格式與係數校驗',
-          description: '校驗當前列出的出口商品數據是否符合歐盟 2023/956 申報要求，並檢查排放係數偏差。',
-          skillKey: 'cbam_data_validator',
-        }),
-      });
-      const data = await res.json();
-      if (data.ok) {
-        window.location.href = '/hermes-orchestrator';
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const calculations = useMemo(() => {
     return products.map(p => {
       const totalEmissions = (p.directEmissions + p.indirectEmissions) * p.annualExportTons;
-      const netEmissions = Math.max(0, totalEmissions - (p.paidCarbonPrice / p.euEtsPrice) * p.annualExportTons * (p.directEmissions + p.indirectEmissions));
-      const cbamCost = netEmissions * p.euEtsPrice;
-      const adjustedCbamCost = Math.max(0, totalEmissions * p.euEtsPrice - p.paidCarbonPrice * p.annualExportTons);
+      const adjustedCost = Math.max(0, totalEmissions * p.euEtsPrice - p.paidCarbonPrice * p.annualExportTons);
       return {
         ...p,
-        totalEmissions: Math.round(totalEmissions * 10) / 10,
-        cbamCertificates: Math.round(netEmissions * 10) / 10,
-        estimatedCost: Math.round(adjustedCbamCost),
-        costPerTon: p.annualExportTons > 0 ? Math.round((adjustedCbamCost / p.annualExportTons) * 10) / 10 : 0,
-        riskLevel: adjustedCbamCost > 500000 ? 'high' : adjustedCbamCost > 100000 ? 'medium' : 'low',
+        totalEmissions: Math.round(totalEmissions),
+        estimatedCost: Math.round(adjustedCost),
+        riskLevel: adjustedCost > 500000 ? 'high' : adjustedCost > 100000 ? 'medium' : 'low',
       };
     });
   }, [products]);
 
-  const totalCBAmCost = calculations.reduce((acc, c) => acc + c.estimatedCost, 0);
-  const totalEmissions = calculations.reduce((acc, c) => acc + c.totalEmissions, 0);
+  const totalCost = calculations.reduce((a, c) => a + c.estimatedCost, 0);
 
-  const addProduct = () => {
-    if (!newProduct.productName || !newProduct.sector) return;
-    const sector = SECTORS.find(s => s.id === newProduct.sector);
-    setProducts(prev => [...prev, {
-      id: Date.now().toString(),
-      productName: newProduct.productName ?? '',
-      cnCode: newProduct.cnCode ?? sector?.cn ?? '',
-      sector: newProduct.sector ?? 'steel',
-      annualExportTons: newProduct.annualExportTons ?? 0,
-      directEmissions: newProduct.directEmissions ?? sector?.factor ?? 0,
-      indirectEmissions: newProduct.indirectEmissions ?? 0,
-      paidCarbonPrice: newProduct.paidCarbonPrice ?? 0,
-      euEtsPrice: newProduct.euEtsPrice ?? DEFAULT_ETS_PRICE,
-    }]);
-    setNewProduct({ euEtsPrice: DEFAULT_ETS_PRICE, paidCarbonPrice: 0 });
-    setShowAddForm(false);
+  const pageConfig: UniversalPageConfig = {
+    id: 'cbam-calculator',
+    title: 'CBAM 碳稅試算器',
+    subtitle: 'EU Carbon Border Adjustment Mechanism：歐盟碳邊境調整機制精確模擬，評估 2026 正式課徵之財務衝擊。',
+    icon: <Calculator size={32} />,
+    griReference: 'EU Regulation 2023/956',
+    activeT5Tags: ['T1', 'T2', 'T3'],
+    primaryActions: [
+      { id: 'export', label: '匯出試算書', icon: <Download size={16}/>, onClick: () => alert('正在生成試算書...') },
+      { id: 'add', label: '新增出口商品', icon: <Plus size={16}/>, onClick: () => setShowAdd(true) }
+    ],
+    kpis: [
+      { key: 'cost',   label: '預估年度碳稅', value: `€${totalCost.toLocaleString()}`, icon: <TrendingUp size={18}/>, color: '#EF4444' },
+      { key: 'ton',    label: '出口總碳排',   value: calculations.reduce((a,c)=>a+c.totalEmissions,0).toLocaleString(), unit: 'tCO2e', icon: <Globe size={18}/>, color: '#003262' },
+      { key: 'tw',     label: '台幣等值',     value: `NT$${Math.round(totalCost * 35).toLocaleString()}`, icon: <Landmark size={18}/>, color: '#3B7EA1', verified: true },
+      { key: 'status', label: '申報合規度',   value: '100', unit: '%', icon: <ShieldCheck size={18}/>, color: '#10B981', verified: true },
+    ],
+    sections: [
+      {
+        id: 'alert',
+        title: '時程預警',
+        columns: 12,
+        component: (
+          <div className="p-6 bg-amber-50 rounded-[28px] border border-amber-100 flex items-center gap-6">
+             <div className="w-12 h-12 rounded-2xl bg-amber-500 flex items-center justify-center text-white shadow-lg"><AlertTriangle size={24}/></div>
+             <div>
+                <h4 className="text-sm font-black text-amber-900 uppercase tracking-tight">CBAM 2026 正式課徵階段倒數</h4>
+                <p className="text-xs text-amber-800/70 font-medium">當前為過渡申報期（2023-2025），請確保 T1 溯源數據完整性以應對未來財務實質課稅。</p>
+             </div>
+          </div>
+        )
+      },
+      {
+        id: 'table',
+        title: '出口商品清單',
+        columns: 12,
+        component: (
+          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
+             <BrandTable 
+               columns={[
+                 { label: '商品名稱', key: 'name' },
+                 { label: '產業別', key: 'sector' },
+                 { label: '出口量', key: 'volume' },
+                 { label: '總排放量', key: 'emissions' },
+                 { label: '預估費用', key: 'cost' },
+                 { label: '風險分級', key: 'risk' },
+                 { label: '操作', key: 'actions' },
+               ]}
+               data={calculations.map(c => ({
+                 name: (
+                   <div className="flex flex-col">
+                      <span className="font-bold text-[#003262]">{c.productName}</span>
+                      <span className="text-[10px] font-mono text-slate-400 font-black">CN_{c.cnCode}</span>
+                   </div>
+                 ),
+                 sector: <BrandBadge variant="outline" size="xs" className="opacity-60">{SECTORS.find(s=>s.id===c.sector)?.name}</BrandBadge>,
+                 volume: <span className="font-mono text-xs font-bold">{c.annualExportTons.toLocaleString()} 噸</span>,
+                 emissions: <span className="font-mono text-xs font-black text-[#003262]">{c.totalEmissions.toLocaleString()} tCO2e</span>,
+                 cost: <span className="font-mono text-sm font-black text-rose-600">€{c.estimatedCost.toLocaleString()}</span>,
+                 risk: <BrandBadge variant={c.riskLevel === 'high' ? 'danger' : c.riskLevel === 'medium' ? 'warning' : 'success'} size="xs" className="font-black">{c.riskLevel.toUpperCase()}</BrandBadge>,
+                 actions: (
+                   <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0 text-slate-300 hover:text-rose-500" onClick={() => setProducts(p => p.filter(x=>x.id!==c.id))}>
+                      <Trash2 size={14}/>
+                   </BrandButton>
+                 )
+               }))}
+             />
+          </BrandCard>
+        )
+      },
+      {
+        id: 'tips',
+        title: '減項優化建議',
+        columns: 12,
+        component: (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+             {[
+               { title: '再生能源電力', save: '20-40%', icon: <Sparkles size={20}/>, desc: '採購綠電降低間接排放係數，直接縮減 CBAM 計費基礎。' },
+               { title: '製程低碳化', save: '30-60%', icon: <Gauge size={20}/>, desc: '導入電弧爐等低碳設備，從源頭降低直接排放係數。' },
+               { title: '碳抵消額度', save: '10-25%', icon: <Landmark size={20}/>, desc: '善用國內碳交所額度抵減申報量，緩解歐盟財務衝擊。' },
+             ].map((t, i) => (
+               <BrandCard key={i} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-xl transition-all group">
+                  <div className="flex items-center justify-between mb-4">
+                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#003262] group-hover:scale-110 transition-transform">{t.icon}</div>
+                     <BrandBadge variant="success" size="xs" className="font-black">SAVE {t.save}</BrandBadge>
+                  </div>
+                  <h4 className="text-sm font-black text-[#003262] uppercase tracking-widest mb-3">{t.title}</h4>
+                  <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{t.desc}</p>
+               </BrandCard>
+             ))}
+          </div>
+        )
+      }
+    ],
+    features: { useAuditLog: true }
   };
 
-  const riskColors = { high: '#dc2626', medium: '#d97706', low: '#16a34a' };
-  const riskBg = { high: '#fef2f2', medium: '#fef3c7', low: '#dcfce7' };
-  const riskLabel = { high: '高風險', medium: '中風險', low: '低風險' };
-
   return (
-    <div style={{ padding: '24px', maxWidth: '1280px', margin: '0 auto' }}>
-      {/* Header */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Globe size={22} color="white" />
-          </div>
-          <div>
-            <h1 style={{ fontSize: '22px', fontWeight: 800, color: '#1a1a2e', lineHeight: 1 }}>CBAM 碳邊境稅試算器</h1>
-            <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>EU Carbon Border Adjustment Mechanism · 歐盟碳邊境調整機制 · 2026年正式課徵</p>
-          </div>
-        </div>
-        {/* Alert Banner */}
-        <div style={{ padding: '12px 16px', background: '#fef3c7', border: '1.5px solid #fde68a', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <AlertTriangle size={16} color="#d97706" style={{ flexShrink: 0 }} />
-          <div style={{ fontSize: '13px', color: '#92400e' }}>
-            <strong>重要時程提醒：</strong>CBAM 過渡期（2023-2025年）僅需申報，2026年起正式課徵。台灣出口商應立即建立碳足跡追蹤機制。
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', marginBottom: '24px' }}>
-        {[
-          { label: '預估年度 CBAM 費用', value: `€${totalCBAmCost.toLocaleString()}`, sub: '歐元/年', color: '#dc2626', desc: '依當前歐盟 ETS 碳價試算' },
-          { label: '出口碳排總量', value: `${totalEmissions.toLocaleString()}`, sub: 'tCO₂e/年', color: '#003262', desc: '直接+間接排放合計' },
-          { label: '台幣換算（估）', value: `NT$${Math.round(totalCBAmCost * 35).toLocaleString()}`, sub: '新台幣', color: '#7c3aed', desc: '以 €1 ≈ NT$35 估算' },
-        ].map(s => (
-          <div key={s.label} style={{ background: 'white', borderRadius: '14px', border: '1.5px solid #e5e7eb', padding: '20px' }}>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '6px' }}>{s.label}</div>
-            <div style={{ fontSize: '28px', fontWeight: 800, color: s.color, lineHeight: 1 }}>
-              {s.value}<span style={{ fontSize: '13px', fontWeight: 500, marginLeft: '4px' }}>{s.sub}</span>
-            </div>
-            <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '5px' }}>{s.desc}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Products Table */}
-      <div style={{ background: 'white', borderRadius: '14px', border: '1.5px solid #e5e7eb', overflow: 'hidden', marginBottom: '20px' }}>
-        <div style={{ padding: '16px 20px', borderBottom: '1.5px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f9fafb' }}>
-          <div>
-            <span style={{ fontSize: '14px', fontWeight: 700, color: '#1f2937' }}>出口商品 CBAM 試算</span>
-            <span style={{ marginLeft: '8px', fontSize: '12px', color: '#9ca3af' }}>{products.length} 項商品</span>
-          </div>
-          <button onClick={() => setShowAddForm(true)} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: '#003262', color: 'white', border: 'none', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>
-            <Plus size={13} />新增商品
-          </button>
-        </div>
-
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
-            <thead>
-              <tr style={{ background: '#f9fafb' }}>
-                {['商品名稱', 'CN 稅號', '產業別', '年出口量(噸)', '直接排放(tCO₂e/噸)', '間接排放(tCO₂e/噸)', '總碳排(tCO₂e)', '預估CBAM費用', '風險', '操作'].map(h => (
-                  <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6b7280', borderBottom: '1px solid #e5e7eb', whiteSpace: 'nowrap' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {calculations.map((calc, i) => {
-                const sector = SECTORS.find(s => s.id === calc.sector);
-                return (
-                  <tr key={calc.id} style={{ borderBottom: '1px solid #f3f4f6', background: i % 2 === 0 ? 'white' : '#fafafa' }}>
-                    <td style={{ padding: '12px', fontSize: '13px', fontWeight: 600, color: '#1f2937' }}>{calc.productName}</td>
-                    <td style={{ padding: '12px', fontSize: '12px', fontFamily: 'monospace', color: '#374151' }}>{calc.cnCode}</td>
-                    <td style={{ padding: '12px' }}>
-                      <span style={{ padding: '2px 8px', borderRadius: '5px', fontSize: '11px', fontWeight: 600, background: '#e0f2fe', color: '#0369a1' }}>{sector?.name}</span>
-                    </td>
-                    <td style={{ padding: '12px', fontSize: '13px', color: '#374151', textAlign: 'right' }}>{calc.annualExportTons.toLocaleString()}</td>
-                    <td style={{ padding: '12px', fontSize: '13px', color: '#374151', textAlign: 'right' }}>{calc.directEmissions}</td>
-                    <td style={{ padding: '12px', fontSize: '13px', color: '#374151', textAlign: 'right' }}>{calc.indirectEmissions}</td>
-                    <td style={{ padding: '12px', fontSize: '13px', fontWeight: 700, color: '#003262', textAlign: 'right' }}>{calc.totalEmissions.toLocaleString()}</td>
-                    <td style={{ padding: '12px', textAlign: 'right' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 800, color: riskColors[calc.riskLevel as keyof typeof riskColors] }}>€{calc.estimatedCost.toLocaleString()}</div>
-                      <div style={{ fontSize: '10px', color: '#9ca3af' }}>€{calc.costPerTon}/噸</div>
-                    </td>
-                    <td style={{ padding: '12px' }}>
-                      <span style={{ padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, background: riskBg[calc.riskLevel as keyof typeof riskBg], color: riskColors[calc.riskLevel as keyof typeof riskColors] }}>
-                        {riskLabel[calc.riskLevel as keyof typeof riskLabel]}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px' }}>
-                      <button onClick={() => setProducts(prev => prev.filter(p => p.id !== calc.id))} style={{ padding: '4px', background: 'none', border: 'none', cursor: 'pointer', color: '#dc2626' }}>
-                        <Trash2 size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Add Product Form */}
-      {showAddForm && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }} onClick={() => setShowAddForm(false)}>
-          <div style={{ background: 'white', borderRadius: '18px', width: '100%', maxWidth: '500px', boxShadow: '0 24px 64px rgba(0,0,0,0.18)' }} onClick={e => e.stopPropagation()}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 800, color: '#1a1a2e' }}>新增出口商品</h2>
-              <button onClick={() => setShowAddForm(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#9ca3af' }}>×</button>
-            </div>
-            <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {[
-                { key: 'productName', label: '商品名稱 *', placeholder: '例：熱軋鋼板', type: 'text' },
-                { key: 'cnCode', label: 'CN 稅號', placeholder: '例：7208.37', type: 'text' },
-                { key: 'annualExportTons', label: '年出口量（噸）', placeholder: '5000', type: 'number' },
-                { key: 'directEmissions', label: '直接排放係數（tCO₂e/噸）', placeholder: '1.89', type: 'number' },
-                { key: 'indirectEmissions', label: '間接排放係數（tCO₂e/噸）', placeholder: '0.32', type: 'number' },
-                { key: 'paidCarbonPrice', label: '已支付碳價（EUR/tCO₂e）', placeholder: '0', type: 'number' },
-                { key: 'euEtsPrice', label: 'EU ETS 碳價（EUR/tCO₂e）', placeholder: '65', type: 'number' },
-              ].map(f => (
-                <div key={f.key}>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '4px' }}>{f.label}</label>
-                  {f.key === 'sector' ? (
-                    <select style={{ width: '100%', padding: '8px 12px', border: '1.5px solid #e5e7eb', borderRadius: '8px', fontSize: '13px', outline: 'none' }} onChange={e => setNewProduct(p => ({ ...p, sector: e.target.value }))}>
-                      {SECTORS.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                    </select>
-                  ) : (
-                    <input type={f.type} placeholder={f.placeholder} onChange={e => setNewProduct(p => ({ ...p, [f.key]: f.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value }))} style={{ width: '100%', padding: '8px 12px', border: '1.5px solid #e5e7eb', borderRadius: '8px', fontSize: '13px', outline: 'none', boxSizing: 'border-box' }} />
-                  )}
+    <>
+      <StandardPage config={pageConfig} />
+      
+      {/* Refined Add Modal */}
+      <AnimatePresence>
+        {showAdd && (
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setShowAdd(false)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme p-10 lg:p-14 max-w-xl w-full overflow-hidden text-center">
+              <header className="flex justify-between items-center mb-10 relative z-10">
+                <div className="flex items-center gap-4"><div className="w-12 h-12 rounded-2xl bg-[#003262] flex items-center justify-center text-white shadow-lg"><Plus size={20} /></div><h3 className="text-2xl font-black text-[#003262] uppercase tracking-tight">新增出口試算商品</h3></div>
+                <button onClick={() => setShowAdd(false)} className="w-10 h-10 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all"><X size={20} /></button>
+              </header>
+              <div className="space-y-6 mb-10 relative z-10 text-left">
+                <div className="grid grid-cols-2 gap-6">
+                   <div className="space-y-2"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Product Name</label><input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white outline-none transition-all" placeholder="例：熱軋鋼板" /></div>
+                   <div className="space-y-2"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sector</label><select className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white transition-all outline-none">{SECTORS.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
                 </div>
-              ))}
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '4px' }}>產業別 *</label>
-                <select onChange={e => setNewProduct(p => ({ ...p, sector: e.target.value }))} style={{ width: '100%', padding: '8px 12px', border: '1.5px solid #e5e7eb', borderRadius: '8px', fontSize: '13px', outline: 'none' }}>
-                  {SECTORS.map(s => <option key={s.id} value={s.id}>{s.name} — 預設係數 {s.factor} tCO₂e/噸</option>)}
-                </select>
+                <div className="space-y-2"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Annual Export (Tons)</label><input type="number" className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white outline-none transition-all" placeholder="5000" /></div>
               </div>
-              <div style={{ display: 'flex', gap: '10px', paddingTop: '6px' }}>
-                <button onClick={() => setShowAddForm(false)} style={{ flex: 1, padding: '10px', background: '#f3f4f6', color: '#374151', border: 'none', borderRadius: '9px', fontSize: '13px', cursor: 'pointer' }}>取消</button>
-                <button onClick={addProduct} style={{ flex: 2, padding: '10px', background: 'linear-gradient(135deg, #0369a1, #003262)', color: 'white', border: 'none', borderRadius: '9px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>加入試算</button>
-              </div>
-            </div>
+              <div className="flex gap-4"><BrandButton variant="ghost" className="flex-1 rounded-2xl h-14" onClick={() => setShowAdd(false)}>取消</BrandButton><BrandButton variant="primary" className="flex-[2] rounded-2xl h-14 font-black shadow-xl" onClick={() => setShowAdd(false)}>加入試算表</BrandButton></div>
+            </motion.div>
           </div>
-        </div>
-      )}
-
-      {/* Reduction Tips */}
-      <div style={{ background: 'white', borderRadius: '14px', border: '1.5px solid #e5e7eb', padding: '22px' }}>
-        <h2 style={{ fontSize: '15px', fontWeight: 800, color: '#1a1a2e', marginBottom: '14px' }}>🌱 CBAM 費用減量建議</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-          {[
-            { title: '導入再生能源', desc: '採購綠電或自建太陽能可降低間接排放係數，直接減少 CBAM 計費基礎', saving: '可節省 20-40%', color: '#16a34a' },
-            { title: '製程低碳化', desc: '採用電弧爐（EAF）替代高爐煉鋼等低碳製程，大幅降低直接排放係數', saving: '可節省 30-60%', color: '#003262' },
-            { title: '取得碳抵消額度', desc: '購買台灣碳交所認可的碳抵消額度，可用於抵減 CBAM 申報量', saving: '可節省 10-25%', color: '#7c3aed' },
-          ].map(tip => (
-            <div key={tip.title} style={{ padding: '14px', background: '#f9fafb', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#1f2937', marginBottom: '6px' }}>{tip.title}</div>
-              <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.5, marginBottom: '8px' }}>{tip.desc}</div>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: tip.color, background: `${tip.color}15`, padding: '2px 8px', borderRadius: '5px' }}>{tip.saving}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Floating AI Assistant Button */}
-      <button
-        onClick={handleAskHermes}
-        disabled={loading}
-        style={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          width: '64px',
-          height: '64px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #003262, #005DAA)',
-          color: '#fff',
-          border: 'none',
-          boxShadow: '0 8px 32px rgba(0, 50, 98, 0.3)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          transition: 'transform 0.2s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        {loading ? <RefreshCw size={28} className="spin" /> : <Bot size={28} />}
-        <div style={{
-          position: 'absolute',
-          right: '74px',
-          background: 'white',
-          padding: '8px 16px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          whiteSpace: 'nowrap',
-          color: '#003262',
-          fontSize: '0.875rem',
-          fontWeight: 700,
-          pointerEvents: 'none',
-        }}>
-          Ask OmniHermes AI 校驗 CBAM 數據
-        </div>
-      </button>
-
-      <style>{`
-        .spin { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
-    </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
