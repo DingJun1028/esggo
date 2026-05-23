@@ -1,7 +1,7 @@
 /* =============================================================
-   OmniHermes X ESGGO Design System v11.6
-   Berkeley Academy Precision - Universal RWD Foundation
-   Global Compact & Extreme Minimalist Aesthetics
+   OmniHermes X ESGGO Design System v12.0
+   High-Density Bento Box · Maximum Information Architecture
+   Berkeley Academy Precision — Zero-Waste Layout Engine
    ============================================================= */
 
 @tailwind base;
@@ -24,17 +24,18 @@
   --purple: #8B5CF6;
 
   /* ── Surface & Depth ────────────────────────────────────────────── */
-  --bg-void: #F8FAFC;
-  --glass-white: rgba(255, 255, 255, 0.75);
-  --glass-border: rgba(255, 255, 255, 0.9);
-  --border-subtle: rgba(0, 50, 98, 0.05);
+  --bg-void: #F1F5F9;
+  --glass-white: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.95);
+  --border-subtle: rgba(0, 50, 98, 0.06);
+  --border-muted: rgba(0, 50, 98, 0.08);
 
-  /* ── Spacing & Layout (Compact Logic) ──────────────────────────── */
-  --space-unit: 1rem;
-  --sidebar-w: 280px;
-  --sidebar-w-sm: 88px;
-  --topbar-h: 72px;
-  --mobile-nav-h: 68px; /* Compacted from 80px */
+  /* ── Spacing (High-Density Compact Logic) ──────────────────────── */
+  --space-unit: 0.75rem;
+  --sidebar-w: 256px;      /* Tighter sidebar */
+  --sidebar-w-sm: 72px;    /* Icon-only collapsed */
+  --topbar-h: 56px;        /* Thin topbar */
+  --mobile-nav-h: 60px;    /* Ultra compact mobile nav */
 
   /* ── Z-Index ── */
   --z-sidebar: 50;
@@ -46,13 +47,16 @@
 @layer base {
   html {
     @apply scroll-smooth;
-    font-size: 16px; /* Base */
+    font-size: 15px; /* Slightly tighter base */
+  }
+  @media (max-width: 1279px) {
+    html { font-size: 14px; }
   }
   @media (max-width: 767px) {
-    html { font-size: 14px; } /* Compact Typography for Mobile */
+    html { font-size: 13px; }
   }
   body {
-    @apply bg-[#F8FAFC] text-slate-900 font-sans antialiased;
+    @apply bg-[#F1F5F9] text-slate-800 font-sans antialiased;
     -webkit-tap-highlight-color: transparent;
     text-rendering: optimizeLegibility;
   }
@@ -62,57 +66,144 @@
 }
 
 @layer components {
-  /* Global Compact Container */
+
+  /* ─── High-Density Page Container ─────────────────────────────── */
   .page-container {
-    @apply max-w-[1600px] mx-auto;
-    padding: 2rem;
+    @apply max-w-[1680px] mx-auto;
+    padding: 1.25rem 1.5rem;
   }
-  @media (max-width: 1023px) {
-    .page-container { padding: 1.25rem; }
+  @media (max-width: 1279px) {
+    .page-container { padding: 1rem 1.25rem; }
   }
-  @media (max-width: 639px) {
-    .page-container { padding: 1rem; }
+  @media (max-width: 767px) {
+    .page-container { padding: 0.75rem 1rem; }
   }
 
-  /* High-Density Bento Grid */
+  /* ─── Tight Bento Grid ─────────────────────────────────────────── */
   .bento {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 1.5rem; /* Compacted from 2rem */
+    gap: 0.75rem;
   }
   @media (max-width: 1023px) {
-    .bento { gap: 1rem; }
+    .bento { gap: 0.625rem; }
+  }
+  @media (max-width: 767px) {
+    .bento { gap: 0.5rem; }
   }
 
-  /* Liquid Glass Panel - Refined Density */
+  /* Ultra-tight bento variant */
+  .bento-tight {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0.5rem;
+  }
+
+  /* ─── Liquid Glass Panel — Refined Density ─────────────────────── */
   .glass-panel {
     background: var(--glass-white);
-    backdrop-filter: blur(40px) saturate(190%);
-    -webkit-backdrop-filter: blur(40px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 
-      0 4px 20px -1px rgba(0, 50, 98, 0.02),
-      0 8px 32px -4px rgba(0, 50, 98, 0.04);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    padding: 2rem;
-  }
-  @media (max-width: 1023px) {
-    .glass-panel { padding: 1.5rem; border-radius: 1.5rem; }
-  }
-  @media (max-width: 639px) {
-    .glass-panel { padding: 1.25rem; border-radius: 1.25rem; }
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow:
+      0 1px 3px rgba(0, 50, 98, 0.04),
+      0 4px 16px -2px rgba(0, 50, 98, 0.05);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 0.75rem;
+    padding: 0;
   }
 
   .glass-panel:hover {
-    box-shadow: 
-      0 20px 60px -10px rgba(0, 50, 98, 0.06),
-      0 0 0 1px rgba(0, 50, 98, 0.03);
-    transform: translateY(-2px);
+    box-shadow:
+      0 4px 20px -4px rgba(0, 50, 98, 0.08),
+      0 0 0 1px rgba(0, 50, 98, 0.04);
+    transform: translateY(-1px);
   }
 
-  /* App Shell Layout */
+  /* ─── Compact Section Card ─────────────────────────────────────── */
+  .section-card {
+    @apply rounded-xl overflow-hidden;
+    background: var(--glass-white);
+    border: 1px solid rgba(0, 50, 98, 0.07);
+    box-shadow: 0 1px 4px rgba(0, 50, 98, 0.04);
+  }
+
+  .section-card-header {
+    @apply flex items-center justify-between px-4 py-2.5 border-b;
+    border-color: rgba(0, 50, 98, 0.06);
+    min-height: 44px;
+  }
+
+  .section-card-body {
+    padding: 0.875rem 1rem;
+  }
+
+  /* ─── Page Header (Ultra Compact Bar) ──────────────────────────── */
+  .page-header-bar {
+    @apply flex items-center justify-between gap-4 w-full;
+    min-height: 48px;
+    padding: 0.625rem 0;
+  }
+
+  .page-header-title {
+    @apply text-xl font-black text-[#003262] tracking-tight leading-none uppercase;
+  }
+  @media (max-width: 767px) {
+    .page-header-title { @apply text-lg; }
+  }
+
+  /* ─── KPI Bar (Horizontal Inline Strip) ────────────────────────── */
+  .kpi-bar {
+    @apply flex items-stretch gap-px rounded-xl overflow-hidden;
+    border: 1px solid rgba(0, 50, 98, 0.08);
+    background: rgba(0, 50, 98, 0.04);
+  }
+
+  .kpi-bar-cell {
+    @apply flex-1 flex flex-col justify-center px-3 py-2 bg-white/80 min-w-[100px];
+    border-right: 1px solid rgba(0, 50, 98, 0.06);
+    transition: background 0.2s;
+  }
+
+  .kpi-bar-cell:last-child { border-right: none; }
+  .kpi-bar-cell:hover { background: rgba(0, 50, 98, 0.03); }
+
+  .kpi-bar-value {
+    @apply text-xl font-black text-[#003262] leading-none font-mono;
+  }
+
+  .kpi-bar-label {
+    @apply text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5;
+  }
+
+  /* ─── Mini Section Label ─────────────────────────────────────────  */
+  .section-label {
+    @apply text-[9px] font-black uppercase tracking-[0.3em] text-slate-400;
+  }
+
+  .section-divider {
+    @apply flex items-center gap-3 mb-3;
+  }
+
+  .section-divider::after {
+    content: '';
+    @apply flex-1 h-px bg-slate-100;
+  }
+
+  /* ─── T5 Micro Strip ────────────────────────────────────────────── */
+  .t5-micro-strip {
+    @apply flex items-center gap-1 px-3 py-1.5 rounded-lg;
+    background: rgba(0, 50, 98, 0.04);
+    border: 1px solid rgba(0, 50, 98, 0.06);
+  }
+
+  .t5-dot {
+    @apply w-1.5 h-1.5 rounded-full;
+  }
+
+  /* ─── App Shell Layout ──────────────────────────────────────────── */
   .sidebar {
-    @apply fixed left-0 top-0 bottom-0 z-[var(--z-sidebar)] flex flex-col transition-all duration-500;
+    @apply fixed left-0 top-0 bottom-0 z-[var(--z-sidebar)] flex flex-col transition-all duration-400;
     transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     width: var(--sidebar-w);
   }
@@ -122,9 +213,10 @@
   }
 
   .main-content {
-    @apply flex-1 flex flex-col transition-all duration-500;
+    @apply flex-1 flex flex-col transition-all duration-400;
     transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     margin-left: var(--sidebar-w);
+    min-height: 100vh;
   }
 
   .main-content.sidebar-collapsed {
@@ -136,25 +228,36 @@
     .main-content { margin-left: 0 !important; padding-bottom: var(--mobile-nav-h); }
   }
 
-  /* Mobile Nav - Refined Compactness */
+  /* ─── Mobile Nav — Ultra Compact ─────────────────────────────────  */
   .mobile-nav {
-    @apply fixed bottom-0 left-0 right-0 z-[var(--z-sidebar)] h-[var(--mobile-nav-h)] bg-white/90 backdrop-blur-3xl border-t border-slate-100 flex items-center justify-around px-2 lg:hidden;
+    @apply fixed bottom-0 left-0 right-0 z-[var(--z-sidebar)] bg-white/92 backdrop-blur-3xl border-t flex items-center justify-around px-1 lg:hidden;
+    height: var(--mobile-nav-h);
+    border-color: rgba(0, 50, 98, 0.08);
     padding-bottom: env(safe-area-inset-bottom);
-    box-shadow: 0 -10px 40px -10px rgba(0, 50, 98, 0.1);
+    box-shadow: 0 -4px 24px -4px rgba(0, 50, 98, 0.08);
   }
 
-  /* Skeleton Loading */
+  /* ─── Compact Table Override ──────────────────────────────────── */
+  .table-compact th {
+    @apply px-3 py-2 text-[9px] font-black uppercase tracking-widest text-slate-400;
+  }
+
+  .table-compact td {
+    @apply px-3 py-2 text-[12px];
+  }
+
+  /* ─── Skeleton Loading ──────────────────────────────────────────── */
   .skeleton {
-    @apply bg-slate-100 relative overflow-hidden;
+    @apply bg-slate-100 relative overflow-hidden rounded-lg;
   }
   .skeleton::after {
     content: "";
     @apply absolute inset-0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: shimmer 2s infinite;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: shimmer 1.8s infinite;
   }
 
-  /* Custom Animations */
+  /* ─── Custom Animations ─────────────────────────────────────────── */
   @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
@@ -165,46 +268,63 @@
   }
   .animate-gradient-x {
     background-size: 200% 200%;
-    animation: gradient-x 15s ease infinite;
+    animation: gradient-x 12s ease infinite;
   }
 
   /* Animation Utilities */
-  .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .fade-in  { animation: fadeIn  0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-up { animation: slideUp 0.4s  cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn  { from { opacity: 0; }                            to { opacity: 1; transform: none; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  
+
   .shadow-premium {
-    box-shadow: 
-      0 0 0 1px rgba(0, 50, 98, 0.02),
-      0 10px 30px -10px rgba(0, 50, 98, 0.08);
-  }
-  
-  .shadow-extreme {
-    box-shadow: 
-      0 0 0 1px rgba(0, 50, 98, 0.01),
-      0 30px 60px -15px rgba(0, 50, 98, 0.12);
+    box-shadow:
+      0 0 0 1px rgba(0, 50, 98, 0.03),
+      0 4px 16px -4px rgba(0, 50, 98, 0.06);
   }
 
+  .shadow-card {
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.04),
+      0 4px 12px -2px rgba(0, 50, 98, 0.05);
+  }
+
+  .shadow-extreme {
+    box-shadow:
+      0 0 0 1px rgba(0, 50, 98, 0.02),
+      0 16px 40px -8px rgba(0, 50, 98, 0.10);
+  }
+
+  /* Dense compact grid for action cards */
   .grid-compact {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.5rem;
+  }
+
+  /* Micro data label */
+  .data-label {
+    @apply text-[9px] font-black uppercase tracking-[0.25em] text-slate-400;
+  }
+
+  /* Mono value display */
+  .data-value {
+    @apply font-mono font-black text-[#003262] leading-none;
   }
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+/* ─── Scrollbar Styling ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { 
-  background: rgba(0, 50, 98, 0.1); 
-  @apply rounded-full transition-colors;
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 50, 98, 0.12);
+  border-radius: 100px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(0, 50, 98, 0.2); }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 50, 98, 0.24); }

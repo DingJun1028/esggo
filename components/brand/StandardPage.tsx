@@ -2,116 +2,146 @@
 import React from 'react';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandKpiCard, BrandT5Strip, BrandStatusDot 
+  BrandButton, BrandBadge, BrandCard, BrandKpiCard, BrandT5Strip, BrandStatusDot 
 } from './index';
-import { motion } from 'framer-motion';
 
 interface StandardPageProps {
   config: UniversalPageConfig;
 }
 
 export default function StandardPage({ config }: StandardPageProps) {
+  const activeKpis = config.kpis?.slice(0, 6) ?? [];
+
   return (
-    <div className="page-container space-y-6 lg:space-y-10 min-h-screen slide-up">
+    <div className="page-container fade-in pb-8">
       
-      {/* 1. Compact Universal Page Header */}
-      <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 lg:gap-10">
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-3">
-             <BrandBadge variant="gold" size="sm" className="font-black tracking-[0.2em] px-3 py-1 rounded-full uppercase">
-               {config.griReference || 'Governance'} OS
-             </BrandBadge>
-             <div className="flex items-center gap-2 bg-emerald-50/50 backdrop-blur-sm px-3 py-1 rounded-full border border-emerald-100/50">
-                <BrandStatusDot status="active" pulse size="sm" />
-                <span className="text-[9px] font-black text-emerald-700 uppercase tracking-widest">Sovereign State Active</span>
-             </div>
+      {/* ─── Compact Header Bar ───────────────────────────────────── */}
+      <header className="page-header-bar mb-3">
+        <div className="flex items-center gap-3 min-w-0">
+          {/* T5 micro indicator */}
+          <div className="t5-micro-strip flex-shrink-0">
+            {['T1','T2','T3','T4','T5'].map(code => (
+              <div
+                key={code}
+                className="t5-dot"
+                style={{
+                  backgroundColor: config.activeT5Tags.includes(code as any)
+                    ? '#003262' : '#CBD5E1'
+                }}
+                title={code}
+              />
+            ))}
           </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-4">
-               {config.icon && <div className="text-[#003262] opacity-80">{config.icon}</div>}
-               <h1 className="text-3xl lg:text-5xl font-black text-[#003262] tracking-tighter leading-none uppercase">{config.title}</h1>
-            </div>
-            <p className="text-slate-400 text-base lg:text-lg max-w-3xl font-medium leading-relaxed">
+          
+          {/* Icon + Title */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            {config.icon && (
+              <div className="text-[#003262]/70 flex-shrink-0">{config.icon}</div>
+            )}
+            <h1 className="page-header-title truncate">{config.title}</h1>
+          </div>
+
+          {/* Subtitle tag */}
+          {config.subtitle && (
+            <span className="hidden lg:block text-xs text-slate-400 font-medium truncate max-w-[260px]">
               {config.subtitle}
-            </p>
-          </div>
+            </span>
+          )}
+
+          {/* Module badge */}
+          <BrandBadge variant="gold" size="xs" className="hidden sm:flex flex-shrink-0 font-black tracking-widest">
+            {config.griReference || 'ESG-OS'}
+          </BrandBadge>
         </div>
 
-        {/* Primary Actions Area */}
-        <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+        {/* Status + Actions (right side) */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100">
+            <BrandStatusDot status="active" pulse size="xs" />
+            <span className="text-[9px] font-black text-emerald-700 uppercase tracking-widest hidden sm:block">Live</span>
+          </div>
           {config.primaryActions?.map(action => (
-            <BrandButton 
+            <BrandButton
               key={action.id}
               variant={action.variant || 'primary'}
               onClick={action.onClick}
               loading={action.loading}
               disabled={action.disabled}
-              className="flex-1 xl:flex-none h-14 px-8 rounded-2xl shadow-xl shadow-[#003262]/5 hover:scale-[1.02] transition-all"
+              size="sm"
+              className="h-9 px-4 rounded-lg text-xs font-black"
             >
               {action.icon}
-              <span className={action.icon ? 'ml-3' : ''}>{action.label}</span>
+              {action.label && <span className={action.icon ? 'ml-1.5 hidden sm:inline' : ''}>{action.label}</span>}
             </BrandButton>
           ))}
         </div>
       </header>
 
-      {/* 2. 5T Integrity Protocol Strip */}
-      <BrandCard padding="none" className="overflow-hidden border-white/40 bg-white/20 backdrop-blur-sm shadow-xl shadow-blue-900/5">
-        <BrandT5Strip 
-          items={['T1','T2','T3','T4','T5'].map(code => ({ 
-            code: code as any, 
-            active: config.activeT5Tags.includes(code as any) 
-          }))}
-          className="bg-gradient-to-r from-white/40 via-white/80 to-white/40"
-        />
-      </BrandCard>
-
-      {/* 3. High-Density KPI Grid */}
-      {config.kpis && config.kpis.length > 0 && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-          {config.kpis.map((k) => (
-            <BrandKpiCard
-              key={k.key}
-              label={k.label}
-              value={k.value}
-              unit={k.unit}
-              trend={k.trend}
-              trendUp={k.trendUp}
-              icon={k.icon}
-              color={k.color}
-              verified={k.verified}
-              className="p-5 lg:p-7 rounded-[1.5rem] lg:rounded-[2rem] border-none shadow-premium bg-white/80 backdrop-blur-md"
-            />
+      {/* ─── KPI Bar (inline horizontal strip) ─────────────────────── */}
+      {activeKpis.length > 0 && (
+        <div className="kpi-bar mb-3">
+          {activeKpis.map((k) => (
+            <div key={k.key} className="kpi-bar-cell">
+              <div className="flex items-center gap-1 mb-0.5">
+                {k.icon && (
+                  <span style={{ color: k.color || '#003262' }} className="opacity-70 flex-shrink-0">
+                    {React.cloneElement(k.icon as React.ReactElement, { size: 10 })}
+                  </span>
+                )}
+                <span className="kpi-bar-label truncate">{k.label}</span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="kpi-bar-value" style={{ color: k.color || '#003262' }}>{k.value}</span>
+                {k.unit && <span className="text-[9px] text-slate-400 font-bold">{k.unit}</span>}
+              </div>
+              {k.trend && (
+                <span className={`text-[9px] font-black ${k.trendUp ? 'text-emerald-500' : 'text-red-400'}`}>
+                  {k.trend}
+                </span>
+              )}
+            </div>
           ))}
         </div>
       )}
 
-      {/* 4. Main Section Bento Grid */}
-      <div className="bento pb-24">
-        {config.sections.filter(section => !section.hidden).map(section => (
-          <div 
-            key={section.id} 
+      {/* ─── Bento Grid Sections ─────────────────────────────────────── */}
+      <div className="bento">
+        {config.sections.filter(s => !s.hidden).map(section => (
+          <div
+            key={section.id}
             className={`col-span-12 lg:col-span-${section.columns}`}
           >
-            <BrandCard padding="none" className="h-full glass-panel border-none shadow-premium overflow-hidden group">
-              <div className="p-6 lg:p-10 border-b border-slate-50 flex items-center justify-between">
-                <BrandCardHeader 
-                  title={section.title} 
-                  subtitle={section.subtitle} 
-                  icon={section.icon}
-                />
-                <div className="flex gap-2">
+            <div className="section-card h-full">
+              {/* Section header – ultra compact */}
+              <div className="section-card-header">
+                <div className="flex items-center gap-2 min-w-0">
+                  {section.icon && (
+                    <span className="text-[#003262]/60 flex-shrink-0">
+                      {React.cloneElement(section.icon as React.ReactElement, { size: 13 })}
+                    </span>
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-[#003262] leading-none truncate">{section.title}</p>
+                    {section.subtitle && (
+                      <p className="section-label mt-0.5 truncate">{section.subtitle}</p>
+                    )}
+                  </div>
+                </div>
+                {/* Section actions */}
+                <div className="flex items-center gap-1 flex-shrink-0">
                   {section.actions?.map(a => (
-                    <BrandButton key={a.id} variant={a.variant || 'ghost'} size="xs" className="w-9 h-9 p-0 rounded-xl" onClick={a.onClick}>
-                      {a.icon}
+                    <BrandButton key={a.id} variant={a.variant || 'ghost'} size="xs" className="w-7 h-7 p-0 rounded-lg" onClick={a.onClick}>
+                      {a.icon && React.cloneElement(a.icon as React.ReactElement, { size: 12 })}
                     </BrandButton>
                   ))}
                 </div>
               </div>
-              <div className="p-6 lg:p-10">
+
+              {/* Section body */}
+              <div className="section-card-body">
                 {section.component}
               </div>
-            </BrandCard>
+            </div>
           </div>
         ))}
       </div>
