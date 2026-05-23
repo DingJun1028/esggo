@@ -186,24 +186,24 @@ export default function EditorPage() {
       )}
 
       {/* Premium Header */}
-      <header className="h-20 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-8 flex items-center justify-between z-30 shadow-sm">
+      <header className="h-14 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 flex items-center justify-between z-30 shadow-sm">
         <div className="flex items-center gap-5">
-          <div className="w-12 h-12 rounded-[18px] bg-[#003262] flex items-center justify-center text-white shadow-2xl shadow-[#003262]/20">
-            <FileText size={24} />
+          <div className="w-8 h-8 rounded-xl bg-[#003262] flex items-center justify-center text-white shadow-lg shadow-[#003262]/20">
+            <FileText size={16} />
           </div>
           <div>
-            <h1 className="text-xl font-black text-[#003262] tracking-tight uppercase">SustainWrite™ <span className="text-[#FDB515] opacity-50 ml-1">v8.5</span></h1>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Omni-Agent Governance Engine</p>
+            <h1 className="text-sm font-black text-[#003262] tracking-tight uppercase">SustainWrite™ <span className="text-[#FDB515] opacity-50 ml-1">v8.5</span></h1>
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Omni-Agent Governance Engine</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-           <div className="hidden xl:flex items-center gap-4 px-6 py-2 bg-slate-50 rounded-2xl border border-slate-100 mr-4">
+           <div className="hidden xl:flex items-center gap-3 px-4 py-1.5 bg-slate-50 rounded-xl border border-slate-100 mr-3">
               <div className="text-right">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Global Progress</p>
-                <p className="text-sm font-black text-[#003262] leading-none">88% <span className="text-slate-300 font-medium">/ GRI_2021</span></p>
+                <p className="text-xs font-black text-[#003262] leading-none">88% <span className="text-slate-300 font-medium">/ GRI_2021</span></p>
               </div>
-              <div className="w-20 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+              <div className="w-16 h-1 bg-slate-200 rounded-full overflow-hidden">
                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: '88%' }} />
               </div>
            </div>
@@ -224,30 +224,30 @@ export default function EditorPage() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Navigation Sidebar */}
-        <aside className={`bg-white border-r border-slate-100 transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1) flex flex-col ${navCollapsed ? 'w-20' : 'w-72'}`}>
-           <div className="p-6 flex items-center justify-between">
-              {!navCollapsed && <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Reporting Chapters</span>}
-              <button onClick={() => setNavCollapsed(!navCollapsed)} className="p-2 hover:bg-slate-50 rounded-xl transition-all">
-                {navCollapsed ? <ChevronRight size={18} className="text-slate-400" /> : <ChevronLeft size={18} className="text-slate-400" />}
+        <aside className={`bg-white border-r border-slate-100 transition-all duration-300 flex flex-col ${navCollapsed ? 'w-16' : 'w-60'}`}>
+           <div className="px-3 py-2.5 flex items-center justify-between border-b border-slate-50">
+              {!navCollapsed && <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Chapters</span>}
+              <button onClick={() => setNavCollapsed(!navCollapsed)} className="p-1.5 hover:bg-slate-50 rounded-lg transition-all ml-auto">
+                {navCollapsed ? <ChevronRight size={15} className="text-slate-400" /> : <ChevronLeft size={15} className="text-slate-400" />}
               </button>
            </div>
-           <div className="flex-1 overflow-y-auto px-3 space-y-1 no-scrollbar">
+           <div className="flex-1 overflow-y-auto px-2 py-2 space-y-0.5 no-scrollbar">
               {CHAPTERS.map(c => (
                 <button
                   key={c.id}
                   onClick={() => setSelectedChapterId(c.id)}
-                  className={`w-full flex items-center gap-4 p-4 rounded-[20px] transition-all duration-300 ${selectedChapterId === c.id ? 'bg-[#003262] text-white shadow-xl shadow-[#003262]/10' : 'text-slate-500 hover:bg-slate-50'}`}
+                  className={`w-full flex items-center gap-2.5 p-2.5 rounded-xl transition-all duration-200 ${selectedChapterId === c.id ? 'bg-[#003262] text-white' : 'text-slate-500 hover:bg-slate-50'}`}
                 >
-                  <div className={`w-9 h-9 rounded-2xl flex items-center justify-center font-black text-[12px] flex-shrink-0 transition-colors ${selectedChapterId === c.id ? 'bg-white/10' : 'bg-slate-50'}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-black text-[10px] flex-shrink-0 transition-colors ${selectedChapterId === c.id ? 'bg-white/10' : 'bg-slate-50'}`}>
                     {c.num}
                   </div>
                   {!navCollapsed && (
                     <div className="text-left flex-1 min-w-0">
-                      <p className={`text-sm font-black truncate ${selectedChapterId === c.id ? 'text-white' : 'text-[#003262]'}`}>{c.title}</p>
-                      <p className={`text-[9px] font-bold uppercase tracking-widest ${selectedChapterId === c.id ? 'text-white/40' : 'text-slate-400'}`}>{c.gri}</p>
+                      <p className={`text-[11px] font-black truncate ${selectedChapterId === c.id ? 'text-white' : 'text-[#003262]'}`}>{c.title}</p>
+                      <p className={`text-[8px] font-bold uppercase tracking-widest ${selectedChapterId === c.id ? 'text-white/40' : 'text-slate-400'}`}>{c.gri}</p>
                     </div>
                   )}
-                  {!navCollapsed && chapterStatuses[c.id] === 'sealed' && <Lock size={12} className="text-[#FDB515]" />}
+                  {!navCollapsed && chapterStatuses[c.id] === 'sealed' && <Lock size={10} className="text-[#FDB515]" />}
                 </button>
               ))}
            </div>
@@ -265,13 +265,13 @@ export default function EditorPage() {
               </div>
            </div>
 
-           <div className="p-8 border-b border-slate-100 bg-white">
-              <div className="flex items-center gap-3 mb-4">
-                 <BrandBadge variant="outline" size="sm" className="font-mono text-[#003262] border-[#003262]/20 px-3 uppercase">{chapter.gri}</BrandBadge>
+           <div className="px-5 py-3 border-b border-slate-100 bg-white">
+              <div className="flex items-center gap-2 mb-2">
+                 <BrandBadge variant="outline" size="xs" className="font-mono text-[#003262] border-[#003262]/20 uppercase">{chapter.gri}</BrandBadge>
                  <div className={`w-1.5 h-1.5 rounded-full`} style={{ backgroundColor: CATEGORY_META[chapter.category].color }} />
-                 <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{CATEGORY_META[chapter.category].label} Disclosure</span>
+                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{CATEGORY_META[chapter.category].label} Disclosure</span>
               </div>
-              <h2 className="text-3xl font-black text-[#003262] tracking-tight uppercase mb-8">{chapter.title}</h2>
+              <h2 className="text-lg font-black text-[#003262] tracking-tight uppercase mb-3">{chapter.title}</h2>
               
               <BrandTabs 
                 activeTab={activePanel}
@@ -288,32 +288,27 @@ export default function EditorPage() {
               {activePanel === 'write' && (
                 <div className="flex h-full flex-col xl:flex-row">
                   {/* Left Column: AI Assistant & Compliance */}
-                  <div className="w-full xl:w-[400px] border-r border-slate-100 flex flex-col p-8 gap-10 flex-shrink-0 bg-white/50">
+                  <div className="w-full xl:w-[300px] border-r border-slate-100 flex flex-col p-4 gap-4 flex-shrink-0 bg-white/50">
                     <section className="space-y-6">
                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
                           <Users size={14}/> Expert Persona
                        </h4>
-                       <div className="grid grid-cols-1 gap-3">
+                       <div className="grid grid-cols-1 gap-1.5">
                           {Object.entries(PERSONA_META).map(([p, meta]) => (
                             <button
                               key={p}
                               onClick={() => setSelectedPersona(p as any)}
                               disabled={isSealed}
-                              className={`p-5 rounded-2xl border transition-all text-left group ${selectedPersona === p ? 'bg-[#003262] border-[#003262] shadow-2xl' : 'bg-white border-slate-100 hover:border-[#003262]/20 shadow-sm'}`}
+                              className={`p-3 rounded-xl border transition-all text-left ${selectedPersona === p ? 'bg-[#003262] border-[#003262]' : 'bg-white border-slate-100 hover:border-[#003262]/20'}`}
                             >
-                               <div className="flex items-center justify-between mb-2">
-                                  <span className={`text-xs font-black uppercase tracking-widest ${selectedPersona === p ? 'text-[#FDB515]' : 'text-slate-500'}`}>{meta.label}</span>
+                               <div className="flex items-center justify-between">
+                                  <span className={`text-[10px] font-black uppercase tracking-widest ${selectedPersona === p ? 'text-[#FDB515]' : 'text-slate-500'}`}>{meta.label}</span>
                                   <div className={selectedPersona === p ? 'text-white' : 'text-slate-300'}>{meta.icon}</div>
                                </div>
-                               <p className={`text-[10px] leading-relaxed font-medium ${selectedPersona === p ? 'text-white/60' : 'text-slate-400'}`}>
-                                  {p === 'compliance' ? '專注於 GRI 準則原文精確度與核心指標完整性。' : 
-                                   p === 'harmony' ? '強調內外部利害關係人溝通與永續價值傳遞。' : 
-                                   '引入 5T 誠信體系，將動態數據轉化為治理優勢。'}
-                               </p>
                             </button>
                           ))}
                        </div>
-                       <BrandButton variant="primary" fullWidth size="lg" className="h-16 rounded-2xl shadow-xl shadow-[#003262]/10" onClick={handleGenerateStream} disabled={isSealed || generating}>
+                       <BrandButton variant="primary" fullWidth size="sm" className="h-9 rounded-xl" onClick={handleGenerateStream} disabled={isSealed || generating}>
                           <Sparkles size={18} className="mr-3 text-[#FDB515]" /> 
                           <span className="font-black">生成 AI 建議草稿</span>
                        </BrandButton>
@@ -350,15 +345,15 @@ export default function EditorPage() {
                   </div>
 
                   {/* Right Column: Editor Surface */}
-                  <div className="flex-1 p-8 lg:p-12 flex flex-col gap-10 bg-white">
-                     <div className="flex-1 min-h-[600px] relative">
+                  <div className="flex-1 p-5 flex flex-col gap-4 bg-white">
+                     <div className="flex-1 min-h-[400px] relative">
                         <textarea
                           ref={textareaRef}
                           value={generatedContent[chapter.id] || ''}
                           onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])}
                           disabled={isSealed || generating}
                           placeholder="治理主權由您執筆，或透過 AI 自動生成基礎架構..."
-                          className="w-full h-full p-12 lg:p-16 rounded-[48px] bg-[#F8FAFC]/50 border border-slate-100 text-slate-700 leading-[2] shadow-inner focus:bg-white focus:border-[#003262]/20 focus:ring-[20px] focus:ring-blue-500/5 transition-all outline-none resize-none font-serif text-lg italic"
+                          className="w-full h-full p-6 rounded-2xl bg-[#F8FAFC]/50 border border-slate-100 text-slate-700 leading-relaxed shadow-inner focus:bg-white focus:border-[#003262]/20 focus:ring-4 focus:ring-blue-500/5 transition-all outline-none resize-none font-serif text-sm"
                         />
                         {generating && (
                           <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] rounded-[48px] flex items-center justify-center">
