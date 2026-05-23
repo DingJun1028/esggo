@@ -3,11 +3,18 @@
    Berkeley Academy Precision - Universal RWD Foundation
    ============================================================ */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* ── Core Berkeley Tokens ────────────────────────────────── */
   --primary: #003262;      /* Berkeley Blue */
   --accent: #FDB515;       /* California Gold */
   --secondary: #3B7EA1;    /* Founders Rock */
+  --berkeley-blue: var(--primary);
+  --california-gold: var(--accent);
+
   --success: #10B981;
   --warning: #F59E0B;
   --danger: #EF4444;
