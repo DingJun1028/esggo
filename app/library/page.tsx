@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { BookOpen, Search, ExternalLink, Star, Filter, Download, Globe, FileText, Award, ArrowUpRight, Sparkles, RefreshCw, X, CheckCircle2, BookmarkCheck, Landmark } from 'lucide-react';
+import { BookOpen, Search, ExternalLink, Star, Filter, Download, Globe, FileText, Award, ArrowUpRight, Sparkles, RefreshCw, X, CheckCircle2, BookmarkCheck, Landmark, Flag } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
 } from '../../components/brand';

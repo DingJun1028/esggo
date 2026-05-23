@@ -1,35 +1,28 @@
-'use client';
-import { forwardRef } from 'react';
+import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/cn';
+import { cn } from '../../lib/utils';
 import { Loader2 } from 'lucide-react';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-[9px] font-semibold transition-all duration-150 cursor-pointer border disabled:opacity-50 disabled:cursor-not-allowed',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-button text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        primary:   'bg-gradient-to-br from-[#003262] to-[#3b7ea1] text-white border-transparent hover:opacity-90 shadow-sm',
-        secondary: 'bg-white text-[#003262] border-[#003262] hover:bg-blue-50',
-        ghost:     'bg-transparent text-[#374151] border-[#e5e7eb] hover:bg-gray-50',
-        danger:    'bg-[#fee2e2] text-[#dc2626] border-[#fca5a5] hover:bg-red-100',
-        success:   'bg-[#dcfce7] text-[#16a34a] border-[#86efac] hover:bg-green-100',
-        warning:   'bg-[#fef3c7] text-[#92400e] border-[#fde68a] hover:bg-amber-100',
-        gold:      'bg-[#FDB515] text-[#003262] border-transparent hover:bg-amber-400 font-bold',
-        muted:     'bg-[#f3f4f6] text-[#374151] border-[#e5e7eb] hover:bg-gray-100',
+        primary: 'bg-primary-500 text-white hover:bg-primary-600 shadow-sm',
+        secondary: 'bg-glass backdrop-blur text-slate-800 hover:bg-glass-dark border border-slate-200', // 液態玻璃
+        ghost: 'hover:bg-slate-100 hover:text-slate-900 text-slate-600',
+        danger: 'bg-error text-white hover:bg-red-600',
       },
       size: {
-        xs: 'px-2.5 py-1 text-[11px]',
-        sm: 'px-3.5 py-1.5 text-[12px]',
-        md: 'px-4 py-2 text-[13px]',
-        lg: 'px-5 py-2.5 text-[14px]',
-        xl: 'px-7 py-3 text-[16px]',
-        icon: 'w-8 h-8 p-0',
+        default: 'h-10 px-4 py-2',
+        sm: 'h-9 rounded-md px-3',
+        lg: 'h-11 rounded-md px-8',
+        icon: 'h-10 w-10',
       },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'md',
+      size: 'default',
     },
   }
 );
@@ -37,26 +30,24 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  loading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  isLoading?: boolean;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, loading, leftIcon, rightIcon, children, disabled, ...props }, ref) => {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, isLoading, children, ...props }, ref) => {
     return (
       <button
+        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        className={cn(buttonVariants({ variant, size }), className)}
-        disabled={disabled || loading}
+        disabled={isLoading || props.disabled}
         {...props}
       >
-        {loading ? <Loader2 size={14} className="animate-spin" /> : leftIcon}
+        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {children}
-        {!loading && rightIcon}
       </button>
     );
   }
 );
-
 Button.displayName = 'Button';
+
+export { Button, buttonVariants };

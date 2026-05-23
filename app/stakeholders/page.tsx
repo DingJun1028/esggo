@@ -131,7 +131,7 @@ export default function StakeholdersPage() {
                     sentiment: <BrandBadge variant="outline" size="xs" style={{ color: SENTIMENT_META[s.sentiment].color, backgroundColor: SENTIMENT_META[s.sentiment].bg, borderColor: 'transparent' }}>{SENTIMENT_META[s.sentiment].label}</BrandBadge>,
                     date: <span className="font-mono text-[11px] text-slate-400 font-bold">{s.lastContact}</span>
                   }))}
-                  onRowClick={setSelected}
+                 onRowClick={(row: any) => setSelected(stakeholders.find(s => s.name === (row.name as any).props.children) || null)}
                  />
               </BrandCard>
             )}

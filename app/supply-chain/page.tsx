@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Truck, Search, AlertTriangle, CheckCircle, Star, Plus, X, ShieldCheck, TrendingDown, Globe, MoreHorizontal, ArrowUpRight, CheckCircle2, AlertCircle, MapPin } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
@@ -135,7 +136,7 @@ export default function SupplyChainPage() {
                  pledge: s.pledgeSigned ? <CheckCircle2 size={16} className="text-emerald-500" /> : <AlertCircle size={16} className="text-amber-500" />,
                  audit: <span className="font-mono text-[11px] text-slate-400 font-bold">{s.lastAudit}</span>
                }))}
-               onRowClick={setSelected}
+               onRowClick={(row: any) => setSelected(suppliers.find(s => s.id === row.id) || null)}
              />
           </BrandCard>
         )

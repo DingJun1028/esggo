@@ -1,116 +1,39 @@
-'use client';
-import { forwardRef } from 'react';
-import { cn } from '@/lib/cn';
+import * as React from 'react';
+import { cn } from '../../lib/utils';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon?: React.ReactNode;
   error?: string;
-  hint?: string;
-  leftAddon?: React.ReactNode;
-  rightAddon?: React.ReactNode;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, hint, leftAddon, rightAddon, className, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, icon, error, ...props }, ref) => {
     return (
-      <div className="flex flex-col gap-1.5 w-full">
-        {label && <label className="text-[12px] font-semibold text-[#374151]">{label}</label>}
-        <div className="relative flex items-center">
-          {leftAddon && <span className="absolute left-3 text-[#9ca3af]">{leftAddon}</span>}
-          <input
-            ref={ref}
-            className={cn(
-              'w-full px-3 py-2.5 rounded-[9px] border text-[13px] outline-none transition-all',
-              'border-[#e5e7eb] bg-white text-[#1a1a2e] placeholder-[#9ca3af]',
-              'focus:border-[#003262] focus:ring-3 focus:ring-[#00326215]',
-              error && 'border-red-400 focus:border-red-500 focus:ring-red-100',
-              leftAddon && 'pl-9',
-              rightAddon && 'pr-9',
-              className
-            )}
-            {...props}
-          />
-          {rightAddon && <span className="absolute right-3 text-[#9ca3af]">{rightAddon}</span>}
-        </div>
-        {error && <p className="text-[11px] text-red-500 font-medium">{error}</p>}
-        {hint && !error && <p className="text-[11px] text-[#9ca3af]">{hint}</p>}
+      <div className="relative w-full">
+        {icon && (
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+            {icon}
+          </div>
+        )}
+        <input
+          type={type}
+          className={cn(
+            'flex h-12 w-full rounded-input border border-slate-200 bg-white/50 px-4 py-2 text-sm backdrop-blur transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent disabled:cursor-not-allowed disabled:opacity-50',
+            icon && 'pl-10',
+            error && 'border-error focus-visible:ring-error',
+            className
+          )}
+          ref={ref}
+          {...props}
+        />
+        {error && (
+          <p className="mt-1 text-xs text-error">{error}</p>
+        )}
       </div>
     );
   }
 );
 Input.displayName = 'Input';
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string;
-  error?: string;
-  hint?: string;
-}
-
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, hint, className, ...props }, ref) => {
-    return (
-      <div className="flex flex-col gap-1.5 w-full">
-        {label && <label className="text-[12px] font-semibold text-[#374151]">{label}</label>}
-        <textarea
-          ref={ref}
-          className={cn(
-            'w-full px-3 py-2.5 rounded-[9px] border text-[13px] outline-none transition-all resize-vertical',
-            'border-[#e5e7eb] bg-white text-[#1a1a2e] placeholder-[#9ca3af] font-inherit',
-            'focus:border-[#003262] focus:ring-3 focus:ring-[#00326215]',
-            error && 'border-red-400',
-            className
-          )}
-          {...props}
-        />
-        {error && <p className="text-[11px] text-red-500 font-medium">{error}</p>}
-        {hint && !error && <p className="text-[11px] text-[#9ca3af]">{hint}</p>}
-      </div>
-    );
-  }
-);
-Textarea.displayName = 'Textarea';
-
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
-  error?: string;
-  options: { value: string; label: string }[];
-}
-
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, options, className, ...props }, ref) => {
-    return (
-      <div className="flex flex-col gap-1.5 w-full">
-        {label && <label className="text-[12px] font-semibold text-[#374151]">{label}</label>}
-        <select
-          ref={ref}
-          className={cn(
-            'w-full px-3 py-2.5 rounded-[9px] border text-[13px] outline-none transition-all bg-white',
-            'border-[#e5e7eb] text-[#1a1a2e]',
-            'focus:border-[#003262] focus:ring-3 focus:ring-[#00326215]',
-            error && 'border-red-400',
-            className
-          )}
-          {...props}
-        >
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
-        </select>
-        {error && <p className="text-[11px] text-red-500 font-medium">{error}</p>}
-      </div>
-    );
-  }
-);
-Select.displayName = 'Select';
-
-export function FormField({ label, required, children, hint }: { label: string; required?: boolean; children: React.ReactNode; hint?: string }) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[12px] font-semibold text-[#374151]">
-        {label}{required && <span className="text-red-500 ml-0.5">*</span>}
-      </label>
-      {children}
-      {hint && <p className="text-[11px] text-[#9ca3af]">{hint}</p>}
-    </div>
-  );
-}
+export { Input };

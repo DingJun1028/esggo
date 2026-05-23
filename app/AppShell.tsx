@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -7,8 +7,8 @@ import {
   HeartPulse, MessageSquare, BarChart3, Leaf, Users, ShieldCheck, 
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
-  UserRound, Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
-  Search, Command, X, Sparkles, ArrowRight, Settings2, Layout
+  Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
+  Search, Command, X, ArrowRight, Settings2, Layout
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
@@ -16,10 +16,158 @@ import ComposerFooter from '../components/brand/ComposerFooter';
 import HermesControlCenter from '../components/brand/HermesControlCenter';
 
 const navGroups = [
-  // ... (keep existing navGroups)
+  {
+    label: 'CORE',
+    items: [
+      { href: '/', label: '控制台', sub: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+      { href: '/editor', label: '永續撰寫', sub: 'SustainWrite', icon: <FileText size={18} /> },
+      { href: '/digital-twin', label: '數位分身', sub: 'Digital Twin', icon: <Fingerprint size={18} /> },
+      { href: '/health-check', label: '企業健檢', sub: 'Health Check', icon: <HeartPulse size={18} /> },
+      { href: '/advisory', label: '專家諮詢', sub: 'Advisory', icon: <MessageSquare size={18} /> },
+      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <BarChart3 size={18} /> },
+    ],
+  },
+  {
+    label: 'E-S-G 模組',
+    items: [
+      { href: '/environmental', label: '環境指揮', sub: 'Environmental', icon: <Leaf size={18} /> },
+      { href: '/social', label: '社會影響', sub: 'Social', icon: <Users size={18} /> },
+      { href: '/governance', label: '公司治理', sub: 'Governance', icon: <ShieldCheck size={18} /> },
+    ],
+  },
+  {
+    label: 'GOVERNANCE',
+    items: [
+      { href: '/materiality', label: '重大性矩陣', sub: 'Materiality', icon: <Hexagon size={18} /> },
+      { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: <ListChecks size={18} /> },
+      { href: '/vault', label: '證據金庫', sub: 'Evidence Vault', icon: <Lock size={18} /> },
+      { href: '/document-checklist', label: '文件清單', sub: 'Doc Checklist', icon: <ClipboardList size={18} /> },
+    ],
+  },
+  {
+    label: 'INSIGHTS',
+    items: [
+      { href: '/roadmap', label: '淨零路線圖', sub: 'Net-Zero', icon: <Map size={18} /> },
+      { href: '/publish', label: '報告發布', sub: 'Publish', icon: <BookOpen size={18} /> },
+      { href: '/reading-room', label: '永續閱覽室', sub: 'Reading Room', icon: <Library size={18} /> },
+      { href: '/library', label: '永續智庫', sub: 'Library', icon: <Building2 size={18} /> },
+      { href: '/finance', label: '永續財務', sub: 'Finance', icon: <Wallet size={18} /> },
+      { href: '/supply-chain', label: '供應鏈透明', sub: 'Supply Chain', icon: <Link2 size={18} /> },
+      { href: '/stakeholders', label: '利害關係人', sub: 'Stakeholders', icon: <Handshake size={18} /> },
+      { href: '/audit-verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: <CheckCircle2 size={18} /> },
+    ],
+  },
+  {
+    label: 'SYSTEM',
+    items: [
+      { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: <CheckSquare size={18} /> },
+      { href: '/profile', label: '企業管理', sub: 'Profile', icon: <Building2 size={18} /> },
+      { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: <Cable size={18} /> },
+      { href: '/ai-platform', label: 'AI 平台', sub: 'AI Platform', icon: <Bot size={18} /> },
+    ],
+  },
 ];
 
-// ... (keep CommandPalette)
+function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<any[]>([]);
+  const [searching, setScanning] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!query) {
+      setResults(navGroups.flatMap(g => g.items).slice(0, 6));
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setScanning(true);
+      try {
+        const { globalSearch } = await import('../lib/db');
+        const dbResults = await globalSearch(query);
+        
+        const navMatches = navGroups.flatMap(g => g.items).filter(i => 
+          i.label.includes(query) || i.sub.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setResults([...navMatches, ...dbResults]);
+      } finally {
+        setScanning(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const handleSelect = (href: string) => {
+    router.push(href);
+    onClose();
+  };
+
+  const getIcon = (item: any) => {
+    if (item.icon) return item.icon;
+    switch (item.type) {
+      case 'metric': return <BarChart3 size={18} />;
+      case 'task':   return <CheckSquare size={18} />;
+      case 'audit':  return <Shield size={18} />;
+      default:       return <FileText size={18} />;
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-100 flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-300">
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
+      <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-extreme overflow-hidden">
+        <div className="flex items-center gap-4 p-5 border-b border-slate-100">
+          <Search size={20} className={searching ? "text-blue-500 animate-spin" : "text-slate-400"} />
+          <input 
+            autoFocus
+            placeholder="搜尋功能、指標數據或 5T 紀錄..."
+            className="flex-1 bg-transparent border-none outline-none text-base font-bold text-[#003262] placeholder:text-slate-300"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <kbd className="px-2 py-1 bg-slate-50 rounded-lg border border-slate-100 text-[9px] font-black text-slate-400">ESC</kbd>
+        </div>
+
+        <div className="max-h-[60vh] overflow-y-auto p-3 no-scrollbar">
+          {results.length > 0 ? (
+            <div className="space-y-1">
+              {results.map((item, idx) => (
+                <button
+                  key={`${item.href}-${idx}`}
+                  onClick={() => handleSelect(item.href)}
+                  className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-[#003262]/5 transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-[#003262] group-hover:border-[#003262]/20 transition-all shadow-sm">
+                      {getIcon(item)}
+                    </div>
+                    <div className="text-left">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-black text-[#003262]">{item.label || item.title}</p>
+                        {item.type && <span className="px-1.5 py-0.5 bg-slate-100 rounded text-[8px] font-black uppercase tracking-tighter opacity-40">{item.type}</span>}
+                      </div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub || item.subtitle}</p>
+                    </div>
+                  </div>
+                  <ArrowRight size={14} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100" />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="p-12 text-center">
+              <Bot size={40} className="mx-auto text-slate-200 mb-4 animate-bounce" />
+              <p className="text-sm font-bold text-slate-400 italic">查無結果</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function SidebarContent({ collapsed, onCollapse, onSearch, onOpenSettings }: { collapsed: boolean; onCollapse: () => void; onSearch: () => void; onOpenSettings: () => void }) {
   const pathname = usePathname() ?? '/';
@@ -132,7 +280,41 @@ function SidebarContent({ collapsed, onCollapse, onSearch, onOpenSettings }: { c
   );
 }
 
-// ... (keep MobileNav)
+function MobileNav() {
+  const pathname = usePathname() ?? '/';
+  const quickItems = [
+    { href: '/', label: '控制', icon: <LayoutDashboard size={18} /> },
+    { href: '/advisory', label: '諮詢', icon: <MessageSquare size={18} /> },
+    { href: '/environmental', label: '環境', icon: <Leaf size={18} /> },
+    { href: '/vault', label: '金庫', icon: <Lock size={18} /> },
+    { href: '/editor', label: '撰寫', icon: <FileText size={18} /> },
+  ];
+
+  return (
+    <nav className="mobile-nav">
+      {quickItems.map((item) => {
+        const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+        return (
+          <Link 
+            key={item.href} 
+            href={item.href} 
+            className={`flex flex-col items-center justify-center gap-1.5 flex-1 py-3 transition-all relative ${active ? 'text-[#003262]' : 'text-slate-400'}`}
+          >
+            <div className={`transition-all duration-300 ${active ? 'scale-110 -translate-y-1 text-[#FDB515]' : ''}`}>
+              {item.icon}
+            </div>
+            <span className={`text-[9px] font-black uppercase tracking-widest transition-all ${active ? 'text-[#003262] opacity-100 scale-105' : 'opacity-60'}`}>
+              {item.label}
+            </span>
+            {active && (
+              <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#FDB515] shadow-[0_0_8px_#FDB515]" />
+            )}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
 
 function AppShellInner({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -216,7 +398,6 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (

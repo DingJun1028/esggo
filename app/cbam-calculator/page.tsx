@@ -109,7 +109,7 @@ export default function CBAMCalculatorPage() {
                  volume: <span className="font-mono text-xs font-bold">{c.annualExportTons.toLocaleString()} 噸</span>,
                  emissions: <span className="font-mono text-xs font-black text-[#003262]">{c.totalEmissions.toLocaleString()} tCO2e</span>,
                  cost: <span className="font-mono text-sm font-black text-rose-600">€{c.estimatedCost.toLocaleString()}</span>,
-                 risk: <BrandBadge variant={c.riskLevel === 'high' ? 'danger' : c.riskLevel === 'medium' ? 'warning' : 'success'} size="xs" className="font-black">{c.riskLevel.toUpperCase()}</BrandBadge>,
+                 risk: <BrandBadge variant={c.riskLevel === 'high' ? 'error' : c.riskLevel === 'medium' ? 'warning' : 'success'} size="xs" className="font-black">{c.riskLevel.toUpperCase()}</BrandBadge>,
                  actions: (
                    <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0 text-slate-300 hover:text-rose-500" onClick={() => setProducts(p => p.filter(x=>x.id!==c.id))}>
                       <Trash2 size={14}/>
