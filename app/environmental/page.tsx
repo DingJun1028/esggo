@@ -129,10 +129,10 @@ export default function EnvironmentalPage() {
         title: `${currentTabInfo.label} 管理`,
         columns: activeTab === 'Analysis' ? 12 : 8,
         component: (
-          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden h-full">
-            <div className="p-8 border-b border-slate-50 flex items-center justify-between">
-               <h3 className="text-xl font-black text-[#003262] tracking-tight uppercase">{currentTabInfo.label} 實證清單</h3>
-               <BrandBadge variant="outline" size="sm" className="font-mono">{currentTabInfo.gri}</BrandBadge>
+          <BrandCard padding="none" className="overflow-hidden h-full">
+            <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+               <h3 className="text-sm font-black text-[#003262] tracking-tight uppercase">{currentTabInfo.label} 實證清單</h3>
+               <BrandBadge variant="outline" size="xs" className="font-mono text-[9px]">{currentTabInfo.gri}</BrandBadge>
             </div>
             {activeTab !== 'Analysis' ? (
               <BrandTable 
@@ -162,8 +162,8 @@ export default function EnvironmentalPage() {
                 }))}
               />
             ) : (
-              <div className="p-10">
-                <div className="h-[400px] w-full">
+              <div className="p-4">
+                <div className="h-[280px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={MOCK_TREND}>
                       <defs>
@@ -173,24 +173,24 @@ export default function EnvironmentalPage() {
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700, fill: '#94a3b8' }} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700, fill: '#94a3b8' }} />
+                      <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#94a3b8' }} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 700, fill: '#94a3b8' }} />
                       <Tooltip 
-                        contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', padding: '12px' }}
+                        contentStyle={{ borderRadius: '10px', border: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', padding: '8px 12px', fontSize: '12px' }}
                       />
-                      <Area type="monotone" dataKey="scope1" stroke="#003262" strokeWidth={4} fillOpacity={1} fill="url(#colorScope)" />
+                      <Area type="monotone" dataKey="scope1" stroke="#003262" strokeWidth={3} fillOpacity={1} fill="url(#colorScope)" />
                       <Area type="monotone" dataKey="target" stroke="#FDB515" strokeWidth={2} strokeDasharray="5 5" fill="none" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="mt-8 flex items-center justify-center gap-10">
-                   <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-[#003262]" />
-                      <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Actual Scope 1+2</span>
+                <div className="mt-3 flex items-center justify-center gap-6">
+                   <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#003262]" />
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Scope 1+2 Actual</span>
                    </div>
-                   <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 border-2 border-dashed border-[#FDB515] rounded-full" />
-                      <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">SBTi 1.5°C Pathway</span>
+                   <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 border-2 border-dashed border-[#FDB515] rounded-full" />
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">SBTi 1.5°C</span>
                    </div>
                 </div>
               </div>
@@ -204,26 +204,26 @@ export default function EnvironmentalPage() {
         columns: 4,
         hidden: activeTab === 'Analysis',
         component: (
-          <BrandCard padding="none" className="bg-[#003262] border-none shadow-extreme overflow-hidden h-full flex flex-col group">
-             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-[2000ms]">
-                <Bot size={200} color="#fff" strokeWidth={0.5} />
+          <div className="bg-[#003262] rounded-xl overflow-hidden h-full flex flex-col relative">
+             <div className="absolute top-0 right-0 opacity-[0.04] pointer-events-none">
+                <Bot size={160} color="#fff" strokeWidth={0.5} />
              </div>
-             <div className="p-8 border-b border-white/5 relative z-10">
-                <div className="flex items-center gap-3 text-[#FDB515] mb-2">
-                   <Sparkles size={20} className="animate-pulse" />
-                   <h3 className="text-lg font-black text-white uppercase tracking-tight">AI 減碳洞察</h3>
+             <div className="px-4 py-3 border-b border-white/5 relative z-10">
+                <div className="flex items-center gap-2 text-[#FDB515] mb-0.5">
+                   <Sparkles size={14} className="animate-pulse" />
+                   <h3 className="text-sm font-black text-white uppercase tracking-tight">AI 減碳洞察</h3>
                 </div>
-                <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.3em]">OmniHermes E-Analytics Node</p>
+                <p className="text-[9px] font-black text-blue-200/40 uppercase tracking-[0.25em]">OmniHermes E-Analytics</p>
              </div>
-             <div className="p-8 flex-1 relative z-10 text-base text-blue-50/80 leading-relaxed font-medium italic">
+             <div className="px-4 py-3 flex-1 relative z-10 text-xs text-blue-50/80 leading-relaxed font-medium italic">
                 偵測到範疇二電力排放在 Q3 有上升趨勢。建議檢視「綠電採購合約」執行進度，並透過 AI 模擬 2024 年度減碳目標達成率。
              </div>
-             <div className="p-8 mt-auto border-t border-white/5 relative z-10">
-                <BrandButton variant="secondary" fullWidth className="rounded-2xl h-14 font-black" onClick={() => window.location.href='/intelligence'}>
-                   執行目標模擬 <ArrowUpRight size={16} className="ml-2" />
+             <div className="px-4 py-3 border-t border-white/5 relative z-10">
+                <BrandButton variant="secondary" fullWidth className="rounded-lg h-9 text-xs font-black" onClick={() => window.location.href='/intelligence'}>
+                   執行目標模擬 <ArrowUpRight size={12} className="ml-1" />
                 </BrandButton>
              </div>
-          </BrandCard>
+          </div>
         )
       }
     ],
