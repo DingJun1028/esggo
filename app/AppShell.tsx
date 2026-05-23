@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, Suspense, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -176,73 +176,73 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
 
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''} bg-[#003262] border-r border-white/5 shadow-2xl shadow-black/20`}>
-      <div className="flex items-center gap-3 p-6 border-b border-white/5 min-h-[80px]">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#FDB515] to-[#f4a100] flex items-center justify-center font-black text-[#003262] text-sm shadow-lg flex-shrink-0">
+      <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/5 min-h-[56px]">
+        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FDB515] to-[#f4a100] flex items-center justify-center font-black text-[#003262] text-[11px] shadow-lg flex-shrink-0">
           ESG
         </div>
         {!collapsed && (
-          <div className="animate-in fade-in duration-500 slide-in-from-left-4">
-            <div className="text-[#FDB515] font-black text-base leading-none tracking-tight">OmniHermes</div>
-            <div className="text-white/30 text-[9px] font-black uppercase tracking-[0.3em] mt-1 text-balance">Enterprise OS</div>
+          <div className="animate-in fade-in duration-500 slide-in-from-left-4 min-w-0">
+            <div className="text-[#FDB515] font-black text-sm leading-none tracking-tight">OmniHermes</div>
+            <div className="text-white/30 text-[9px] font-black uppercase tracking-[0.3em] mt-0.5">Enterprise OS</div>
           </div>
         )}
         <button
           onClick={onCollapse}
-          className="ml-auto p-2 rounded-xl bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-white/5"
+          className="ml-auto p-1.5 rounded-lg bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-white/5"
         >
-          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
       </div>
 
-      <div className="px-4 py-4">
+      <div className="px-3 py-2">
         <button 
           onClick={onSearch}
-          className={`flex items-center gap-3 w-full p-3 rounded-2xl bg-white/5 border border-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-all group ${collapsed ? 'justify-center' : ''}`}
+          className={`flex items-center gap-2.5 w-full p-2.5 rounded-xl bg-white/5 border border-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-all group ${collapsed ? 'justify-center' : ''}`}
         >
-          <Search size={18} className="group-hover:scale-110 transition-transform" />
+          <Search size={15} className="group-hover:scale-110 transition-transform flex-shrink-0" />
           {!collapsed && (
             <>
-              <span className="flex-1 text-left text-[13px] font-bold">快速搜尋...</span>
-              <div className="flex items-center gap-1 px-1.5 py-0.5 bg-white/5 rounded-md border border-white/10 text-[9px] font-black opacity-50 group-hover:opacity-100 transition-opacity">
-                <Command size={10} />K
+              <span className="flex-1 text-left text-[12px] font-bold">快速搜尋...</span>
+              <div className="flex items-center gap-1 px-1.5 py-0.5 bg-white/5 rounded border border-white/10 text-[8px] font-black opacity-50">
+                <Command size={9} />K
               </div>
             </>
           )}
         </button>
       </div>
 
-      <nav className="flex-1 py-2 overflow-y-auto no-scrollbar scroll-smooth">
+      <nav className="flex-1 py-1 overflow-y-auto no-scrollbar scroll-smooth">
         {navGroups.map((group) => (
-          <div key={group.label} className="px-4 mb-6 last:mb-0">
+          <div key={group.label} className="px-3 mb-4 last:mb-0">
             {!collapsed && (
-              <div className="px-4 mb-3 text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">
+              <div className="px-3 mb-1.5 text-[9px] font-black text-white/20 uppercase tracking-[0.35em]">
                 {group.label}
               </div>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
                {group.items.map((item) => (
                  <Link
                    key={item.href}
                    href={item.href}
-                   className={`flex items-center gap-3.5 py-3 px-4 rounded-2xl transition-all duration-300 group relative overflow-hidden ${
+                   className={`flex items-center gap-2.5 py-2 px-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
                      isActive(item.href) 
-                       ? 'bg-white/10 text-[#FDB515] shadow-inner' 
+                       ? 'bg-white/10 text-[#FDB515]' 
                        : 'text-white/50 hover:bg-white/5 hover:text-white'
                    }`}
                    title={collapsed ? `${item.label} · ${item.sub}` : undefined}
                  >
                    {isActive(item.href) && (
-                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FDB515] rounded-full my-3" />
+                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#FDB515] rounded-full" />
                    )}
-                   <span className={`transition-all duration-500 ${isActive(item.href) ? 'scale-110 text-[#FDB515]' : 'group-hover:scale-110 group-hover:text-white'}`}>
-                     {item.icon}
+                   <span className={`flex-shrink-0 transition-all duration-300 ${isActive(item.href) ? 'text-[#FDB515]' : 'group-hover:text-white'}`}>
+                     {React.cloneElement(item.icon as React.ReactElement, { size: 15 })}
                    </span>
                    {!collapsed && (
-                     <div className="overflow-hidden animate-in fade-in slide-in-from-left-3 duration-500">
-                       <div className="text-[13px] font-bold whitespace-nowrap leading-none mb-1">
+                     <div className="overflow-hidden min-w-0">
+                       <div className="text-[12px] font-bold whitespace-nowrap leading-none">
                          {item.label}
                        </div>
-                       <div className={`text-[9px] uppercase font-bold tracking-widest transition-colors ${isActive(item.href) ? 'text-[#FDB515]/60' : 'text-white/20 group-hover:text-white/40'}`}>
+                       <div className={`text-[8px] uppercase font-bold tracking-widest mt-0.5 ${isActive(item.href) ? 'text-[#FDB515]/50' : 'text-white/20 group-hover:text-white/30'}`}>
                          {item.sub}
                        </div>
                      </div>
@@ -254,11 +254,11 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
         ))}
       </nav>
 
-      <div className={`p-6 border-t border-white/5 transition-all ${collapsed ? 'items-center' : ''}`}>
-        <div className="flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.6)]" />
+      <div className={`px-4 py-3 border-t border-white/5 ${collapsed ? 'flex justify-center' : ''}`}>
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
           {!collapsed && (
-            <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em]">5T Active Node</span>
+            <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em]">5T Node · Active</span>
           )}
         </div>
       </div>
