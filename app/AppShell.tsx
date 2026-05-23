@@ -11,6 +11,7 @@ import {
   Search, Command, X, Sparkles, ArrowRight
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
+import { BrandBadge } from '../components/brand';
 
 const navGroups = [
   {
@@ -67,16 +68,48 @@ const navGroups = [
 
 function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState<any[]>([]);
+  const [searching, setScanning] = useState(false);
   const router = useRouter();
 
-  const allItems = navGroups.flatMap(g => g.items);
-  const filtered = query 
-    ? allItems.filter(i => i.label.includes(query) || i.sub.toLowerCase().includes(query.toLowerCase()))
-    : allItems.slice(0, 6);
+  useEffect(() => {
+    if (!query) {
+      setResults(navGroups.flatMap(g => g.items).slice(0, 6));
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setScanning(true);
+      try {
+        const { globalSearch } = await import('../lib/db');
+        const dbResults = await globalSearch(query);
+        
+        const navMatches = navGroups.flatMap(g => g.items).filter(i => 
+          i.label.includes(query) || i.sub.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setResults([...navMatches, ...dbResults]);
+      } finally {
+        setScanning(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
 
   const handleSelect = (href: string) => {
     router.push(href);
     onClose();
+  };
+
+  const getIcon = (item: any) => {
+    if (item.icon) return item.icon;
+    switch (item.type) {
+      case 'metric': return <BarChart3 size={18} />;
+      case 'task':   return <CheckSquare size={18} />;
+      case 'audit':  return <Shield size={18} />;
+      default:       return <FileText size={18} />;
+    }
   };
 
   if (!isOpen) return null;
@@ -86,10 +119,10 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
       <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-[32px] border border-white shadow-extreme overflow-hidden">
         <div className="flex items-center gap-4 p-6 border-b border-slate-100">
-          <Search size={22} className="text-slate-400" />
+          <Search size={22} className={searching ? "text-blue-500 animate-spin" : "text-slate-400"} />
           <input 
             autoFocus
-            placeholder="搜尋功能、章節或 5T 紀錄..."
+            placeholder="搜尋功能、指標數據或 5T 審計紀錄..."
             className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-[#003262] placeholder:text-slate-300"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -100,21 +133,24 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
         </div>
 
         <div className="max-h-[60vh] overflow-y-auto p-4 no-scrollbar">
-          {filtered.length > 0 ? (
+          {results.length > 0 ? (
             <div className="space-y-2">
-              {filtered.map((item) => (
+              {results.map((item, idx) => (
                 <button
-                  key={item.href}
+                  key={`${item.href}-${idx}`}
                   onClick={() => handleSelect(item.href)}
                   className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-[#003262]/5 transition-all group"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-[#003262] group-hover:border-[#003262]/20 transition-all shadow-sm">
-                      {item.icon}
+                      {getIcon(item)}
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-black text-[#003262]">{item.label}</p>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-black text-[#003262]">{item.label || item.title}</p>
+                        {item.type && <BrandBadge variant="outline" size="xs" className="text-[8px] font-black uppercase tracking-tighter opacity-40">{item.type}</BrandBadge>}
+                      </div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub || item.subtitle}</p>
                     </div>
                   </div>
                   <ArrowRight size={16} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0" />
@@ -142,7 +178,7 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
           </div>
           <div className="flex items-center gap-2 text-[#FDB515]">
             <Sparkles size={12} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Powered by OmniHermes</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Powered by OmniHermes AI</span>
           </div>
         </div>
       </div>

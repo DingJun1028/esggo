@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, Info, X, ShieldCheck, ChevronRight, Hash, Database, Layers } from 'lucide-react';
 import BrandFormula from './BrandFormula';
 import BrandBadge from './BrandBadge';
+import BrandButton from './BrandButton';
 
 interface BrandKpiCardProps {
   label: string;

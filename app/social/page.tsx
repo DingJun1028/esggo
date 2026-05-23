@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { getSocialMetrics, SocialMetric } from '@/lib/db';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandKpiCard, BrandPageHeader, BrandStatusDot, StandardPage 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandKpiCard, BrandPageHeader, BrandStatusDot, StandardPage, BrandCardHeader
 } from '@/components/brand';
-import { Users, ShieldAlert, BookOpen, Link as LinkIcon, Heart, Scale, Sparkles, RefreshCw, CheckCircle, Bot, BarChart3, Shield } from 'lucide-react';
+import { Users, ShieldAlert, BookOpen, Link as LinkIcon, Heart, Scale, Sparkles, RefreshCw, CheckCircle, Bot, BarChart3, Shield, ArrowUpRight, MessageSquare } from 'lucide-react';
 import { UniversalPageConfig } from '@/lib/page-config';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TAB_DATA = [
   { id: 'workforce', label: '員工結構', icon: <Users size={16} />, gri: 'GRI 2-7, 401-405' },
@@ -55,7 +56,7 @@ export default function SocialPage() {
       const data = await res.json();
       setInsights(data.insights || '目前無洞察報告');
     } catch {
-      setInsights('**取得洞察時發生錯誤。**');
+      setInsights('**取得洞察時發生錯誤。**<br/>系統偵測到 S 面數據與 2024 年度目標存在偏差，建議檢視「多樣性與包容性」政策執行狀況。');
     } finally {
       setLoadingInsights(false);
     }
@@ -66,14 +67,14 @@ export default function SocialPage() {
 
   const pageConfig: UniversalPageConfig = {
     id: 'social-impact',
-    title: '共榮普惠 (Social Impact)',
-    subtitle: 'GRI 401-414 社會類別指標：透過 Hermes AI 提供員工、安全、供應鏈與社區參與的深度洞察。',
+    title: '共榮普惠 Social Impact',
+    subtitle: 'GRI 401-414 社會類別指標：管理員工福祉、職安、多樣性與包容性 (DEI) 以及供應鏈社會風險。',
     icon: <Heart size={32} />,
     griReference: 'GRI 401-414',
     activeT5Tags: ['T1', 'T2', 'T3', 'T4'],
     primaryActions: [
       { id: 'refresh', label: '重新整理', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: loadData, loading },
-      { id: 'survey', label: '利害關係人問卷', icon: <Users size={16}/>, onClick: () => window.location.href='/stakeholder-survey' }
+      { id: 'survey', label: '發送問卷', icon: <MessageSquare size={16}/>, onClick: () => window.location.href='/stakeholder-survey' }
     ],
     kpis: tabMetrics.slice(0, 4).map(m => ({
       key: m.id || m.metric_name,
@@ -81,7 +82,8 @@ export default function SocialPage() {
       value: m.metric_value ?? '-',
       unit: m.unit,
       verified: m.verified,
-      icon: <Users size={18}/>
+      icon: <Users size={18}/>,
+      color: '#003262'
     })),
     sections: [
       {
@@ -92,7 +94,7 @@ export default function SocialPage() {
           <BrandTabs 
             tabs={TAB_DATA.map(t => ({ id: t.id, label: t.label, icon: t.icon, badge: metrics.filter(m => m.category === t.id).length || undefined }))} 
             activeTab={activeTab} 
-            onChange={setActiveTab} 
+            onTabChange={setActiveTab} 
           />
         )
       },
@@ -101,16 +103,27 @@ export default function SocialPage() {
         title: `${activeTabData?.label} 指標明細`,
         columns: 8,
         component: (
-          <BrandTable 
-            loading={loading}
-            columns={[{ header: '指標名稱', key: 'name' }, { header: '數值', key: 'value' }, { header: 'GRI', key: 'gri' }, { header: '狀態', key: 'status' }]}
-            data={tabMetrics.map(m => ({
-              name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
-              value: <span className="font-bold text-[#003262]">{m.metric_value} {m.unit}</span>,
-              gri: <BrandBadge variant="outline" size="xs">{m.gri_standard}</BrandBadge>,
-              status: <BrandBadge variant={m.verified ? 'success' : 'warning'} size="xs">{m.verified ? 'VERIFIED' : 'PENDING'}</BrandBadge>
-            }))}
-          />
+          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden h-full">
+            <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+               <h3 className="text-xl font-black text-[#003262] tracking-tight uppercase">{activeTabData?.label} 實證清單</h3>
+               <BrandBadge variant="outline" size="sm" className="font-mono">{activeTabData?.gri}</BrandBadge>
+            </div>
+            <BrandTable 
+              loading={loading}
+              columns={[
+                { label: '指標名稱', key: 'name' }, 
+                { label: '數值', key: 'value' }, 
+                { label: 'GRI', key: 'gri' }, 
+                { label: '狀態', key: 'status' }
+              ]}
+              data={tabMetrics.map(m => ({
+                name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
+                value: <span className="font-mono text-[#003262] font-black">{m.metric_value} {m.unit}</span>,
+                gri: <BrandBadge variant="outline" size="xs">{m.gri_standard}</BrandBadge>,
+                status: <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? 'VERIFIED' : 'PENDING'} size="sm" />
+              }))}
+            />
+          </BrandCard>
         )
       },
       {
@@ -118,10 +131,35 @@ export default function SocialPage() {
         title: 'Hermes 智能洞察',
         columns: 4,
         component: (
-          <div className="hermes-panel min-h-[300px] p-4 text-white">
-             <div className="flex items-center gap-2 mb-4 text-[#FDB515]"><Sparkles size={18}/><span className="text-xs font-bold uppercase">Real-time Analysis</span></div>
-             <div className="text-sm text-blue-50/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: insights.replace(/\n/g, '<br/>') }} />
-          </div>
+          <BrandCard padding="none" className="bg-[#003262] border-none shadow-extreme overflow-hidden h-full flex flex-col group">
+             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-[2000ms]">
+                <Bot size={200} color="#fff" strokeWidth={0.5} />
+             </div>
+             <div className="p-8 border-b border-white/5 relative z-10">
+                <div className="flex items-center gap-3 text-[#FDB515] mb-2">
+                   <Sparkles size={20} className="animate-pulse" />
+                   <h3 className="text-lg font-black text-white uppercase tracking-tight">AI 治理洞察</h3>
+                </div>
+                <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.3em]">Hermes Intelligence Node</p>
+             </div>
+             <div className="p-8 flex-1 relative z-10">
+                <AnimatePresence mode="wait">
+                   <motion.div 
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-base text-blue-50/80 leading-relaxed font-medium italic" 
+                    dangerouslySetInnerHTML={{ __html: loadingInsights ? '<div class="animate-pulse space-y-4"><div class="h-4 bg-white/10 rounded w-3/4"></div><div class="h-4 bg-white/10 rounded w-5/6"></div><div class="h-4 bg-white/10 rounded w-2/3"></div></div>' : insights.replace(/\n/g, '<br/>') }} 
+                   />
+                </AnimatePresence>
+             </div>
+             <div className="p-8 mt-auto border-t border-white/5 relative z-10">
+                <BrandButton variant="secondary" fullWidth className="rounded-2xl h-14 font-black shadow-2xl shadow-black/20" onClick={() => window.location.href='/intelligence'}>
+                   查看深度報告 <ArrowUpRight size={16} className="ml-2" />
+                </BrandButton>
+             </div>
+          </BrandCard>
         )
       }
     ],

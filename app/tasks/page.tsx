@@ -1,21 +1,33 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { ClipboardList, Plus, Check, X, RefreshCw, AlertTriangle, Clock, LayoutGrid, List, User, Building2, Tag, ChevronDown, Shield } from 'lucide-react';
+import { 
+  ClipboardList, Plus, Check, X, RefreshCw, AlertTriangle, Clock, 
+  LayoutGrid, List, User, Building2, Tag, ChevronDown, Shield, 
+  ArrowUpRight, Sparkles, Filter, Search, MoreHorizontal, Calendar, 
+  AlertCircle, CheckCircle2, MoreVertical
+} from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, 
+  BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, 
+  BrandInput, BrandCardHeader, StandardPage 
+} from '../../components/brand';
 import { getTasks, upsertTask, updateTaskStatus, deleteTask, type Task } from '../../lib/db';
 import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
+import { UniversalPageConfig } from '../../lib/page-config';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const STATUS_COLS: { id: Task['status']; label: string; color: string; bg: string }[] = [
-  { id: 'todo',        label: '待辦',   color: '#64748B', bg: '#F1F5F9' },
-  { id: 'in_progress', label: '進行中', color: '#3B7EA1', bg: '#EBF2FA' },
-  { id: 'review',      label: '審核中', color: '#F59E0B', bg: '#FEF3C7' },
-  { id: 'done',        label: '完成',   color: '#22C55E', bg: '#DCFCE7' },
+const STATUS_COLS: { id: Task['status']; label: string; sub: string; icon: any; color: string }[] = [
+  { id: 'todo',        label: '待辦事項', sub: 'BACKLOG',    icon: <ClipboardList size={16}/>, color: '#94a3b8' },
+  { id: 'in_progress', label: '進行中',   sub: 'ACTIVE',     icon: <RefreshCw size={16}/>,     color: '#3B7EA1' },
+  { id: 'review',      label: '審核中',   sub: 'G-AUDIT',    icon: <Shield size={16}/>,        color: '#FDB515' },
+  { id: 'done',        label: '已完成',   sub: 'T5_SEALED',  icon: <CheckCircle2 size={16}/>,  color: '#10B981' },
 ];
 
 const PRIORITY_META: Record<Task['priority'], { label: string; color: string; bg: string }> = {
-  low:      { label: '低',  color: '#64748B', bg: '#F1F5F9' },
-  medium:   { label: '中',  color: '#3B7EA1', bg: '#EBF2FA' },
-  high:     { label: '高',  color: '#F59E0B', bg: '#FEF3C7' },
-  critical: { label: '緊急', color: '#EF4444', bg: '#FFE4E6' },
+  low:      { label: 'LOW',      color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)' },
+  medium:   { label: 'MEDIUM',   color: '#3B7EA1', bg: 'rgba(59, 126, 161, 0.1)' },
+  high:     { label: 'HIGH',     color: '#FDB515', bg: 'rgba(253, 181, 21, 0.1)' },
+  critical: { label: 'CRITICAL', color: '#EF4444', bg: 'rgba(239, 68, 68, 0.1)' },
 };
 
 function isOverdue(due?: string) { return due ? new Date(due) < new Date() : false; }
@@ -28,10 +40,13 @@ export default function TasksPage() {
   const [form, setForm] = useState<Partial<Task>>({ status: 'todo', priority: 'medium', title: '', assignee: '', department: '', gri_reference: '' });
   const [selectionHouse, setSelectionHouse] = useState<{ open: boolean, type: 'assignee' | 'gri' | null }>({ open: false, type: null });
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState('');
-  const [filter, setFilter] = useState<Task['status'] | 'all'>('all');
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+  const [search, setSearch] = useState('');
 
-  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 2500); };
+  const showToast = (msg: string, type: 'success' | 'error' = 'success') => { 
+    setToast({ msg, type }); 
+    setTimeout(() => setToast(null), 2500); 
+  };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -46,7 +61,7 @@ export default function TasksPage() {
   };
 
   const handleSave = async () => {
-    if (!form.title?.trim()) { showToast('請填寫任務標題'); return; }
+    if (!form.title?.trim()) { showToast('請填寫任務標題', 'error'); return; }
     setSaving(true);
     try {
       const result = await upsertTask({ ...(form as Task), status: form.status ?? 'todo', priority: form.priority ?? 'medium' });
@@ -60,8 +75,10 @@ export default function TasksPage() {
     if (ok) { showToast('已刪除'); setTasks(prev => prev.filter(t => t.id !== id)); }
   };
 
-  const filtered = filter === 'all' ? tasks : tasks.filter(t => t.status === filter);
-  const stats = STATUS_COLS.map(s => ({ ...s, count: tasks.filter(t => t.status === s.id).length }));
+  const filtered = tasks.filter(t => 
+    t.title.toLowerCase().includes(search.toLowerCase()) || 
+    t.description?.toLowerCase().includes(search.toLowerCase())
+  );
 
   const assigneeCategories: SelectionCategory[] = [
     {
@@ -81,15 +98,6 @@ export default function TasksPage() {
         { id: 'a3', label: '環安衛主任', sub: '環境數據與安衛管理', tag: 'HSE' },
         { id: 'a4', label: '節能工程師', sub: '能源效率與減碳執行', tag: 'HSE' },
       ]
-    },
-    {
-      id: 'hr',
-      title: '人力資源部',
-      icon: <Building2 size={14} />,
-      items: [
-        { id: 'a5', label: 'HR 經理', sub: '員工發展與人權', tag: 'HR' },
-        { id: 'a6', label: '職安管理員', sub: '員工健康與福利', tag: 'HR' },
-      ]
     }
   ];
 
@@ -107,229 +115,246 @@ export default function TasksPage() {
       title: '社會準則 (Social)',
       items: [
         { id: '401', label: 'GRI 401: 僱用', sub: '員工福利與離職率', tag: 'GRI 401' },
-        { id: '403', label: 'GRI 403: 職業健康與安全', sub: '工安事故與預防', tag: 'GRI 403' },
       ]
     }
   ];
 
-  return (
-    <div className="page-container fade-in">
-      {/* Selection House Overlays */}
-      <SelectionHouse 
-        isOpen={selectionHouse.open && selectionHouse.type === 'assignee'}
-        onClose={() => setSelectionHouse({ open: false, type: null })}
-        onSelect={(item) => setForm(p => ({ ...p, assignee: item.label, department: item.tag }))}
-        categories={assigneeCategories}
-        title="選擇任務負責人"
-        placeholder="搜尋負責人姓名或職稱..."
-      />
-
-      <SelectionHouse 
-        isOpen={selectionHouse.open && selectionHouse.type === 'gri'}
-        onClose={() => setSelectionHouse({ open: false, type: null })}
-        onSelect={(item) => setForm(p => ({ ...p, gri_reference: item.tag }))}
-        categories={griCategories}
-        title="選擇對應 GRI 指標"
-        placeholder="搜尋指標號碼..."
-      />
-      {toast && <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 9999, background: '#003262', color: '#fff', padding: '10px 18px', borderRadius: 'var(--radius-xl)', fontSize: 13, fontWeight: 600, boxShadow: 'var(--shadow-lg)' }}>{toast}</div>}
-
-      <div className="page-header mb-6">
-        <div className="flex items-start gap-4">
-          <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-xl)', background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <ClipboardList size={22} color="#fff" />
-          </div>
-          <div>
-            <h1 style={{ color: '#fff', fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>任務指揮中心</h1>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 'var(--font-size-base)', marginTop: 4 }}>跨部門 ESG 任務管理 · Kanban 看板 · GRI 追蹤</p>
-          </div>
-        </div>
-        <div className="ph-stats">
-          {stats.map(s => <div key={s.id} className="ph-stat-item"><div className="ph-stat-value">{s.count}</div><div className="ph-stat-label">{s.label}</div></div>)}
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
-        <div className="flex gap-2 flex-wrap">
-          {(['all', ...STATUS_COLS.map(s => s.id)] as const).map(f => (
-            <button key={f} onClick={() => setFilter(f as typeof filter)}
-              className="btn btn-sm"
-              style={{ background: filter === f ? 'var(--blue-700)' : 'var(--surface-section)', color: filter === f ? '#fff' : 'var(--text-secondary)' }}>
-              {f === 'all' ? `全部 (${tasks.length})` : `${STATUS_COLS.find(s => s.id === f)?.label} (${tasks.filter(t => t.status === f).length})`}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <button onClick={() => setView(v => v === 'kanban' ? 'list' : 'kanban')} className="btn btn-ghost btn-sm flex items-center gap-1">
-            {view === 'kanban' ? <List size={14} /> : <LayoutGrid size={14} />}
-            {view === 'kanban' ? '列表' : '看板'}
-          </button>
-          <button onClick={load} className="btn btn-ghost btn-sm" aria-label="重新整理"><RefreshCw size={13} className={loading ? 'spin' : ''} /></button>
-          <button className="btn btn-primary btn-sm flex items-center gap-1" onClick={() => setShowForm(true)}><Plus size={14} /> 新增任務</button>
-        </div>
-      </div>
-
-      {showForm && (
-        <div className="card mb-6 fade-in" style={{ border: '1.5px solid var(--blue-200)', background: 'var(--blue-50)' }}>
-          <div className="card-header">
-            <h3 className="text-card-title">新增任務</h3>
-            <button className="btn btn-ghost btn-icon btn-xs" onClick={() => setShowForm(false)} aria-label="取消"><X size={14} /></button>
-          </div>
-          <div className="card-body">
-            <div className="form-grid">
-              <div className="field-group form-full">
-                <label className="field-label">任務標題 <span className="required">*</span></label>
-                <input className="input" value={form.title ?? ''} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="例：完成溫室氣體範疇一盤查" />
-              </div>
-              <div className="field-group form-full">
-                <label className="field-label">任務說明</label>
-                <textarea className="input textarea" rows={2} value={form.description ?? ''} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="詳細說明任務目標與交付物..." />
-              </div>
-              <div className="field-group">
-                <label className="field-label">狀態</label>
-                <select className="input select" value={form.status} onChange={e => setForm(p => ({ ...p, status: e.target.value as Task['status'] }))}>
-                  {STATUS_COLS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
-                </select>
-              </div>
-              <div className="field-group">
-                <label className="field-label">優先級</label>
-                <select className="input select" value={form.priority} onChange={e => setForm(p => ({ ...p, priority: e.target.value as Task['priority'] }))}>
-                  {Object.entries(PRIORITY_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-                </select>
-              </div>
-              <div className="field-group">
-                <label className="field-label">負責人</label>
-                <button 
-                  onClick={() => setSelectionHouse({ open: true, type: 'assignee' })}
-                  className="w-full flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl text-sm font-medium hover:border-[#003262] transition-all"
-                >
-                  <span className={form.assignee ? 'text-slate-900 font-bold' : 'text-slate-400'}>
-                    {form.assignee || '點擊選擇負責人...'}
-                  </span>
-                  <ChevronDown size={14} className="text-slate-400" />
-                </button>
-              </div>
-              <div className="field-group">
-                <label className="field-label">GRI 指標</label>
-                <button 
-                  onClick={() => setSelectionHouse({ open: true, type: 'gri' })}
-                  className="w-full flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl text-sm font-medium hover:border-[#003262] transition-all"
-                >
-                  <span className={form.gri_reference ? 'text-slate-900 font-bold' : 'text-slate-400'}>
-                    {form.gri_reference || '點擊選擇 GRI 指標...'}
-                  </span>
-                  <Tag size={14} className="text-slate-400" />
-                </button>
-              </div>
-              <div className="field-group">
-                <label className="field-label">截止日期</label>
-                <input className="input" type="date" value={form.due_date ?? ''} onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))} />
-              </div>
-            </div>
-            <div className="flex gap-3 mt-4">
-              <button className="btn btn-primary btn-sm flex items-center gap-1" onClick={handleSave} disabled={saving}>
-                {saving ? <RefreshCw size={13} className="spin" /> : <Check size={13} />} 建立任務
-              </button>
-              <button className="btn btn-ghost btn-sm" onClick={() => setShowForm(false)}>取消</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {loading ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
-          {[...Array(4)].map((_, i) => <div key={i} className="skeleton" style={{ height: 200, borderRadius: 12 }} />)}
-        </div>
-      ) : view === 'kanban' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STATUS_COLS.map(col => {
-            const colTasks = filtered.filter(t => t.status === col.id);
-            return (
-              <div key={col.id}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, padding: '8px 12px', borderRadius: 'var(--radius-lg)', background: col.bg }}>
-                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: col.color }} />
-                  <span style={{ fontSize: 13, fontWeight: 700, color: col.color }}>{col.label}</span>
-                  <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 700, color: col.color }}>{colTasks.length}</span>
+  const pageConfig: UniversalPageConfig = {
+    id: 'task-center',
+    title: '任務指揮中心 Tasks',
+    subtitle: '跨部門 ESG 協作看板：發配、追蹤並確保每一項治理行動皆符合 5T 誠信體系。',
+    icon: <ClipboardList size={32} />,
+    griReference: 'Governance Operations',
+    activeT5Tags: ['T3', 'T5'],
+    primaryActions: [
+      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: load, loading },
+      { id: 'view',    label: view === 'kanban' ? '列表視圖' : '看板視圖', icon: view === 'kanban' ? <List size={16}/> : <LayoutGrid size={16}/>, variant: 'ghost', onClick: () => setView(view === 'kanban' ? 'list' : 'kanban') },
+      { id: 'add',     label: '新增任務', icon: <Plus size={16}/>, onClick: () => setShowForm(true) }
+    ],
+    kpis: [
+      { key: 'total', label: '總任務', value: tasks.length, icon: <ClipboardList size={18}/>, color: '#003262' },
+      { key: 'active', label: '執行中', value: tasks.filter(t => t.status === 'in_progress').length, icon: <RefreshCw size={18}/>, color: '#3B7EA1' },
+      { key: 'critical', label: '緊急', value: tasks.filter(t => t.priority === 'critical').length, icon: <AlertTriangle size={18}/>, color: '#EF4444' },
+      { key: 'sealed', label: 'T5 封印', value: tasks.filter(t => t.status === 'done').length, icon: <Shield size={18}/>, color: '#10B981', verified: true },
+    ],
+    sections: [
+      {
+        id: 'board',
+        title: '工作看板',
+        columns: 12,
+        component: (
+          <div className="space-y-8">
+             <div className="flex items-center justify-between gap-6 flex-wrap">
+                <div className="flex-1 max-w-md relative group">
+                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#003262] transition-colors" />
+                   <input 
+                    placeholder="搜尋任務、標籤或負責人..."
+                    className="w-full h-12 bg-white/60 backdrop-blur-md rounded-2xl border border-white shadow-sm pl-12 pr-4 text-sm font-bold focus:bg-white transition-all outline-none"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {colTasks.map(task => {
-                    const pri = PRIORITY_META[task.priority];
-                    const overdue = isOverdue(task.due_date) && task.status !== 'done';
+                <div className="flex items-center gap-2 p-1.5 bg-white/40 backdrop-blur-md rounded-2xl border border-white shadow-sm">
+                   {['all', 'environment', 'social', 'governance'].map(cat => (
+                     <button 
+                      key={cat} 
+                      className={`px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-[#003262]`}
+                     >
+                        {cat}
+                     </button>
+                   ))}
+                </div>
+             </div>
+
+             {showForm && (
+               <BrandCard padding="lg" className="glass-panel border-blue-200/50 bg-blue-50/30 animate-in slide-in-from-top-4 duration-500">
+                  <div className="flex justify-between items-center mb-8">
+                     <h3 className="text-xl font-black text-[#003262] uppercase tracking-tight">建立新任務</h3>
+                     <button onClick={() => setShowForm(false)} className="p-2 hover:bg-white rounded-full transition-all"><X size={20}/></button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+                     <div className="lg:col-span-2 space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Task Title</label>
+                        <input className="w-full h-14 bg-white rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:ring-4 focus:ring-blue-500/5 outline-none" value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="例如：收集範疇三電力數據..." />
+                     </div>
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Priority</label>
+                        <select className="w-full h-14 bg-white rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:ring-4 focus:ring-blue-500/5 outline-none" value={form.priority} onChange={e => setForm({...form, priority: e.target.value as any})}>
+                           {Object.entries(PRIORITY_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+                        </select>
+                     </div>
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Assignee</label>
+                        <button onClick={() => setSelectionHouse({ open: true, type: 'assignee' })} className="w-full h-14 bg-white rounded-2xl border border-slate-100 px-6 flex items-center justify-between text-sm font-bold text-slate-700">
+                           {form.assignee || '點擊選擇...'} <User size={16} className="text-slate-300" />
+                        </button>
+                     </div>
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">GRI Reference</label>
+                        <button onClick={() => setSelectionHouse({ open: true, type: 'gri' })} className="w-full h-14 bg-white rounded-2xl border border-slate-100 px-6 flex items-center justify-between text-sm font-bold text-slate-700">
+                           {form.gri_reference || '點擊選擇...'} <Tag size={16} className="text-slate-300" />
+                        </button>
+                     </div>
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Due Date</label>
+                        <input type="date" className="w-full h-14 bg-white rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:ring-4 focus:ring-blue-500/5 outline-none" value={form.due_date} onChange={e => setForm({...form, due_date: e.target.value})} />
+                     </div>
+                  </div>
+                  <div className="flex justify-end gap-4">
+                     <BrandButton variant="ghost" onClick={() => setShowForm(false)}>取消</BrandButton>
+                     <BrandButton variant="primary" className="px-10 h-14 rounded-2xl shadow-xl shadow-[#003262]/20" onClick={handleSave} loading={saving}>確認建立</BrandButton>
+                  </div>
+               </BrandCard>
+             )}
+
+             {view === 'kanban' ? (
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 h-full min-h-[600px]">
+                  {STATUS_COLS.map(col => {
+                    const colTasks = filtered.filter(t => t.status === col.id);
                     return (
-                      <div key={task.id} className="card card-sm" style={{ borderLeft: `3px solid ${col.color}` }}>
-                        <div className="card-body">
-                          <div className="flex items-start justify-between gap-2 mb-2">
-                            <p style={{ fontSize: 'var(--font-size-sm)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.4 }}>{task.title}</p>
-                            <button onClick={() => task.id && handleDelete(task.id)} className="btn btn-ghost btn-icon btn-xs flex-shrink-0" aria-label="刪除" style={{ color: 'var(--text-tertiary)' }}><X size={11} /></button>
-                          </div>
-                          <div className="flex flex-wrap gap-1 mb-2">
-                            <span className="badge badge-sm" style={{ background: pri.bg, color: pri.color, borderColor: 'transparent' }}>{pri.label}</span>
-                            {task.gri_reference && <span className="gri-tag" style={{ fontSize: 9 }}>{task.gri_reference}</span>}
-                          </div>
-                          {task.assignee && <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-tertiary)' }}>👤 {task.assignee}</p>}
-                          {task.due_date && <p style={{ fontSize: 'var(--font-size-xs)', color: overdue ? '#EF4444' : 'var(--text-tertiary)', fontWeight: overdue ? 700 : 400 }}>
-                            {overdue ? '⚠ 已逾期 ' : '📅 '}{task.due_date}
-                          </p>}
-                          <div className="flex gap-1 mt-2 flex-wrap">
-                            {STATUS_COLS.filter(s => s.id !== task.status).map(s => (
-                              <button key={s.id} onClick={() => task.id && handleStatusChange(task.id, s.id)}
-                                className="btn btn-xs"
-                                style={{ background: s.bg, color: s.color, border: 'none', fontFamily: 'var(--font-sans)', fontSize: 10, minHeight: 24, padding: '0 8px' }}>
-                                → {s.label}
-                              </button>
-                            ))}
-                          </div>
+                      <div key={col.id} className="flex flex-col gap-6">
+                        <header className="flex items-center justify-between px-2">
+                           <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-[#003262] shadow-sm">
+                                 {col.icon}
+                              </div>
+                              <div>
+                                 <h3 className="text-sm font-black text-[#003262] uppercase tracking-tight">{col.label}</h3>
+                                 <p className="text-[10px] font-bold text-slate-300 tracking-[0.2em]">{col.sub}</p>
+                              </div>
+                           </div>
+                           <BrandBadge variant="outline" size="xs" className="opacity-40">{colTasks.length}</BrandBadge>
+                        </header>
+
+                        <div className="flex-1 space-y-4">
+                           {colTasks.map(task => {
+                             const pri = PRIORITY_META[task.priority];
+                             const overdue = isOverdue(task.due_date) && task.status !== 'done';
+                             return (
+                               <BrandCard key={task.id} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer group relative overflow-hidden">
+                                  {overdue && <div className="absolute top-0 right-0 w-1.5 h-full bg-red-500" />}
+                                  <div className="flex items-start justify-between mb-4">
+                                     <BrandBadge 
+                                       variant="outline" size="xs" 
+                                       className="font-black uppercase tracking-widest"
+                                       style={{ color: pri.color, borderColor: `${pri.color}30`, backgroundColor: pri.bg }}
+                                     >
+                                        {task.priority}
+                                     </BrandBadge>
+                                     <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onClick={() => handleDelete(task.id!)} className="text-slate-300 hover:text-red-500"><X size={14}/></button>
+                                     </div>
+                                  </div>
+
+                                  <h4 className="text-base font-black text-[#003262] leading-tight mb-3 group-hover:text-blue-700 transition-colors">{task.title}</h4>
+                                  <div className="flex flex-wrap gap-2 mb-5">
+                                     {task.gri_reference && <BrandBadge variant="outline" size="xs" className="text-[9px] font-mono opacity-50">{task.gri_reference}</BrandBadge>}
+                                     {overdue && <BrandBadge variant="error" size="xs" dot className="font-black">OVERDUE</BrandBadge>}
+                                  </div>
+
+                                  <div className="pt-5 border-t border-slate-50 flex items-center justify-between">
+                                     <div className="flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center border border-white shadow-sm">
+                                           <User size={14} className="text-slate-400" />
+                                        </div>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{task.assignee?.split(' ')[0]}</span>
+                                     </div>
+                                     <div className={`flex items-center gap-1.5 ${overdue ? 'text-red-500 font-bold' : 'text-slate-300'}`}>
+                                        <Clock size={12}/>
+                                        <span className="text-[10px] font-mono">{task.due_date?.slice(5) || 'NO_DATE'}</span>
+                                     </div>
+                                  </div>
+
+                                  <div className="mt-4 flex gap-1 pt-2 overflow-x-auto no-scrollbar">
+                                     {STATUS_COLS.filter(s => s.id !== task.status).map(s => (
+                                       <button key={s.id} onClick={() => handleStatusChange(task.id!, s.id)}
+                                         className="px-3 py-1 rounded-lg bg-slate-50 text-[9px] font-black text-slate-400 hover:bg-[#003262] hover:text-white transition-all flex-shrink-0">
+                                         → {s.label}
+                                       </button>
+                                     ))}
+                                  </div>
+                               </BrandCard>
+                             );
+                           })}
+                           <button onClick={() => { setShowForm(true); setForm({...form, status: col.id}); }} className="w-full py-4 rounded-[20px] border-2 border-dashed border-slate-100 flex items-center justify-center gap-2 text-slate-300 hover:border-blue-200 hover:text-blue-500 hover:bg-white transition-all group">
+                              <Plus size={16} className="group-hover:rotate-90 transition-transform duration-500" />
+                              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Add Task</span>
+                           </button>
                         </div>
                       </div>
                     );
                   })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="card">
-          {filtered.length === 0 ? (
-            <div className="empty-state"><div className="empty-icon"><ClipboardList size={28} /></div><p style={{ color: 'var(--text-tertiary)' }}>無任務</p></div>
-          ) : (
-            <div className="table-wrap" style={{ borderRadius: 0, border: 'none' }}>
-              <table className="table">
-                <thead>
-                  <tr><th>標題</th><th>狀態</th><th>優先級</th><th>負責人</th><th>GRI</th><th>截止日期</th><th>操作</th></tr>
-                </thead>
-                <tbody>
-                  {filtered.map(task => {
-                    const col = STATUS_COLS.find(s => s.id === task.status)!;
-                    const pri = PRIORITY_META[task.priority];
-                    const overdue = isOverdue(task.due_date) && task.status !== 'done';
-                    return (
-                      <tr key={task.id}>
-                        <td style={{ fontWeight: 600 }}>{task.title}</td>
-                        <td><span className="badge badge-sm" style={{ background: col.bg, color: col.color, borderColor: 'transparent' }}>{col.label}</span></td>
-                        <td><span className="badge badge-sm" style={{ background: pri.bg, color: pri.color, borderColor: 'transparent' }}>{pri.label}</span></td>
-                        <td style={{ fontSize: 'var(--font-size-xs)', color: 'var(--text-secondary)' }}>{task.assignee ?? '—'}</td>
-                        <td>{task.gri_reference ? <span className="gri-tag" style={{ fontSize: 9 }}>{task.gri_reference}</span> : '—'}</td>
-                        <td style={{ fontSize: 'var(--font-size-xs)', color: overdue ? '#EF4444' : 'var(--text-secondary)', fontWeight: overdue ? 700 : 400 }}>
-                          {overdue ? '⚠ ' : ''}{task.due_date ?? '—'}
-                        </td>
-                        <td>
-                          <select className="input select" style={{ height: 28, fontSize: 11, padding: '0 24px 0 8px' }}
-                            value={task.status} onChange={e => task.id && handleStatusChange(task.id, e.target.value as Task['status'])}>
-                            {STATUS_COLS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
-                          </select>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+               </div>
+             ) : (
+               <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
+                  <BrandTable 
+                    loading={loading}
+                    columns={[
+                      { label: '任務名稱', key: 'title' },
+                      { label: '優先級', key: 'priority' },
+                      { label: '狀態', key: 'status' },
+                      { label: '負責人', key: 'assignee' },
+                      { label: '截止日', key: 'due' },
+                      { label: '操作', key: 'actions' },
+                    ]}
+                    data={filtered.map(t => {
+                      const pri = PRIORITY_META[t.priority];
+                      const overdue = isOverdue(t.due_date) && t.status !== 'done';
+                      return {
+                        title: (
+                          <div className="flex flex-col">
+                             <span className="font-bold text-[#003262]">{t.title}</span>
+                             <span className="text-[10px] font-black text-slate-300 uppercase font-mono">{t.gri_reference}</span>
+                          </div>
+                        ),
+                        priority: <BrandBadge variant="outline" size="xs" style={{ color: pri.color, borderColor: `${pri.color}30` }}>{t.priority}</BrandBadge>,
+                        status: <BrandStatusDot status={t.status === 'done' ? 'active' : 'warning'} label={t.status} size="sm" />,
+                        assignee: <span className="text-xs font-bold text-slate-500">{t.assignee}</span>,
+                        due: <span className={`text-xs font-mono font-bold ${overdue ? 'text-red-500' : 'text-slate-400'}`}>{t.due_date}</span>,
+                        actions: (
+                          <div className="flex gap-2">
+                             <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0" onClick={() => handleDelete(t.id!)}><X size={14}/></BrandButton>
+                          </div>
+                        )
+                      };
+                    })}
+                  />
+               </BrandCard>
+             )}
+          </div>
+        )
+      }
+    ],
+    features: { useAuditLog: true }
+  };
+
+  return (
+    <>
+      <StandardPage config={pageConfig} />
+      <SelectionHouse 
+        isOpen={selectionHouse.open && selectionHouse.type === 'assignee'}
+        onClose={() => setSelectionHouse({ open: false, type: null })}
+        onSelect={(item) => { setForm(p => ({ ...p, assignee: item.label, department: item.tag })); setSelectionHouse({ open: false, type: null }); }}
+        categories={assigneeCategories}
+        title="選擇任務負責人"
+        placeholder="搜尋負責人姓名或職稱..."
+      />
+      <SelectionHouse 
+        isOpen={selectionHouse.open && selectionHouse.type === 'gri'}
+        onClose={() => setSelectionHouse({ open: false, type: null })}
+        onSelect={(item) => { setForm(p => ({ ...p, gri_reference: item.tag })); setSelectionHouse({ open: false, type: null }); }}
+        categories={griCategories}
+        title="選擇對應 GRI 指標"
+        placeholder="搜尋指標號碼..."
+      />
+      {toast && (
+        <div className="fixed top-8 right-8 z-100 animate-in fade-in slide-in-from-top-4 duration-300">
+           <div className={`px-6 py-4 rounded-2xl shadow-extreme text-white font-black text-sm flex items-center gap-3 ${toast.type === 'error' ? 'bg-red-600' : 'bg-[#003262]'}`}>
+              {toast.type === 'error' ? <AlertTriangle size={18} /> : <CheckCircle size={18} />}
+              {toast.msg}
+           </div>
         </div>
       )}
-
-      <style>{`@media (max-width: 767px) { .kanban-grid { grid-template-columns: 1fr !important; } }`}</style>
-    </div>
+    </>
   );
 }

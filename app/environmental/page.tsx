@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
-  Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Zap, Bot, Info, BarChart3, CloudRain, Trash, Wind, Activity, CheckCircle, Globe, TrendingUp, History, AlertCircle 
+  Leaf, Plus, Edit2, Trash2, Check, X, RefreshCw, Shield, ChevronDown, Zap, Bot, Info, BarChart3, CloudRain, Trash, Wind, Activity, CheckCircle, Globe, TrendingUp, History, AlertCircle, ArrowUpRight, Sparkles
 } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, BrandTooltip, BrandInput, BrandCardHeader, StandardPage 
@@ -12,13 +12,14 @@ import ProvenanceDrawer, { ProvenanceStep } from '../../components/ui/Provenance
 import { UniversalPageConfig } from '../../lib/page-config';
 import { getEnvironmentalData, upsertEnvironmentalData, deleteEnvironmentalData, EnvironmentalMetric } from '../../lib/db';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TABS = [
-  { id: 'GHG' as const,     label: 'GHG 排放', gri: 'GRI 305-1', color: 'var(--blue-600)', icon: <Wind size={14}/> },
-  { id: 'Energy' as const,  label: '能源消耗', gri: 'GRI 302',   color: 'var(--green-600)', icon: <Zap size={14}/> },
-  { id: 'Water' as const,   label: '水資源',   gri: 'GRI 303',   color: 'var(--blue-400)', icon: <CloudRain size={14}/> },
-  { id: 'Waste' as const,   label: '廢棄物',   gri: 'GRI 306', color: 'var(--amber-600)', icon: <Trash size={14}/> },
-  { id: 'Analysis' as const, label: '趨勢分析', gri: 'Analytics', color: 'var(--purple-600)', icon: <TrendingUp size={14}/> },
+  { id: 'GHG' as const,     label: 'GHG 排放', gri: 'GRI 305-1', color: '#003262', icon: <Wind size={16}/> },
+  { id: 'Energy' as const,  label: '能源消耗', gri: 'GRI 302',   color: '#10B981', icon: <Zap size={16}/> },
+  { id: 'Water' as const,   label: '水資源',   gri: 'GRI 303',   color: '#3B7EA1', icon: <CloudRain size={16}/> },
+  { id: 'Waste' as const,   label: '廢棄物',   gri: 'GRI 306',   color: '#F59E0B', icon: <Trash size={16}/> },
+  { id: 'Analysis' as const, label: '趨勢分析', gri: 'Analytics', color: '#8B5CF6', icon: <TrendingUp size={16}/> },
 ];
 
 const MOCK_TREND = [
@@ -27,9 +28,6 @@ const MOCK_TREND = [
   { year: '2023', scope1: 3400, scope2: 950, target: 4500 },
   { year: '2024', scope1: 3100, scope2: 880, target: 4000 },
 ];
-
-const GRI_MAP = { GHG: ['GRI 305-1','GRI 305-2'], Energy: ['GRI 302-1','GRI 302-3'], Water: ['GRI 303-3'], Waste: ['GRI 306-3'], Analysis: [] };
-const UNIT_MAP = { GHG: ['tCO2e','kgCO2e'], Energy: ['MWh','GJ'], Water: ['m3','L'], Waste: ['t','kg'], Analysis: [] };
 
 interface EditRow extends Partial<EnvironmentalMetric> { isNew?: boolean; }
 
@@ -59,12 +57,9 @@ export default function EnvironmentalPage() {
     if (!editRow?.metric_name) return;
     setSaving(true);
     try {
-      if (editRow.isNew) {
-        const { isNew, ...rest } = editRow;
-        await upsertEnvironmentalData(rest as EnvironmentalMetric);
-      } else {
-        await upsertEnvironmentalData(editRow as EnvironmentalMetric);
-      }
+      const payload = editRow.isNew ? { ...editRow } : editRow;
+      delete (payload as any).isNew;
+      await upsertEnvironmentalData(payload as EnvironmentalMetric);
       setEditRow(null);
       load();
       setToast({ msg: '數據儲存成功', type: 'success' });
@@ -73,26 +68,6 @@ export default function EnvironmentalPage() {
       setSaving(false);
     }
   };
-
-  const handleVerify = async (metric: EnvironmentalMetric) => {
-    setSaving(true);
-    try {
-      await upsertEnvironmentalData({ ...metric, verified: true });
-      load();
-      setToast({ msg: '5T 實證封印成功', type: 'success' });
-      setTimeout(() => setToast(null), 3000);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('確定刪除此項指標？')) return;
-    await deleteEnvironmentalData(id);
-    load();
-  };
-
-  const handleAskOmniHermes = () => { window.location.href = '/hermes-orchestrator'; };
 
   const handleOpenProvenance = (metric: EnvironmentalMetric) => {
     setActiveProvenanceMetric(metric);
@@ -112,72 +87,131 @@ export default function EnvironmentalPage() {
 
   const pageConfig: UniversalPageConfig = {
     id: 'environmental-hub',
-    title: '環境指揮中心',
-    subtitle: '基於 GRI 302/305/306 標準的環境治理模組，支援實時排放量監測與 5T 誠信封印。',
+    title: '環境指揮中心 Environmental',
+    subtitle: 'G-Hub · GRI 302/305/306 核心指標：管理碳排放、能源效率、水資源足跡與廢棄物循環。',
     icon: <Leaf size={32} />,
     griReference: 'GRI 302-306',
     activeT5Tags: ['T1', 'T2', 'T3', 'T4', 'T5'],
     primaryActions: [
       { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: load, loading },
       { id: 'add', label: '新增指標', icon: <Plus size={16}/>, onClick: () => setEditRow({ isNew: true, category: activeTab === 'Analysis' ? 'GHG' : activeTab as any }) },
-      { id: 'ai', label: 'Ask OmniHermes', icon: <Zap size={16}/>, variant: 'gold', onClick: handleAskOmniHermes }
+      { id: 'ai', label: 'Ask OmniHermes', icon: <Zap size={16}/>, variant: 'gold', onClick: () => window.location.href='/hermes-orchestrator' }
     ],
     kpis: [
-      { key: 'total', label: '年度累計排放', value: totalValue.toLocaleString(), unit: 'tCO2e', icon: <Wind size={18}/>, verified: true, formula: 'Scope1 + Scope2 + Scope3_Reported' },
-      { key: 'verified', label: '已驗證比例', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Shield size={18}/>, verified: true, formula: 'Verified_Count / Total_Metric_Count' },
-      { key: 'energy', label: '能源密集度', value: '4.2', unit: 'MWh/人', icon: <Zap size={18}/>, formula: 'Total_Consumption / Employee_Total' },
-      { key: 'water', label: '回收率', value: '68', unit: '%', icon: <CloudRain size={18}/>, formula: 'Recycled_Water / Total_Withdrawal' },
+      { key: 'total', label: '年度累計排放', value: totalValue.toLocaleString(), unit: 'tCO2e', icon: <Wind size={18}/>, verified: true, color: '#003262' },
+      { key: 'verified', label: '已驗證比例', value: `${metrics.length ? Math.round(verifiedCount / metrics.length * 100) : 0}%`, icon: <Shield size={18}/>, verified: true, color: '#10B981' },
+      { key: 'energy', label: '能源密集度', value: '4.2', unit: 'MWh/人', icon: <Zap size={18}/>, color: '#FDB515' },
+      { key: 'water', label: '回收率', value: '68', unit: '%', icon: <CloudRain size={18}/>, color: '#3B7EA1' },
     ],
     sections: [
       {
-        id: 'table',
-        title: `${currentTabInfo.label} 實證清單`,
+        id: 'tabs',
+        title: '分類維度',
         columns: 12,
         component: (
-          <div className="space-y-6">
-            <BrandTabs tabs={TABS.map(t => ({ id: t.id, label: t.label, icon: t.icon }))} activeTab={activeTab} onChange={(id) => setActiveTab(id as any)} />
+          <BrandTabs tabs={TABS.map(t => ({ id: t.id, label: t.label, icon: t.icon }))} activeTab={activeTab} onTabChange={(id) => setActiveTab(id as any)} />
+        )
+      },
+      {
+        id: 'main',
+        title: `${currentTabInfo.label} 管理`,
+        columns: activeTab === 'Analysis' ? 12 : 8,
+        component: (
+          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden h-full">
+            <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+               <h3 className="text-xl font-black text-[#003262] tracking-tight uppercase">{currentTabInfo.label} 實證清單</h3>
+               <BrandBadge variant="outline" size="sm" className="font-mono">{currentTabInfo.gri}</BrandBadge>
+            </div>
             {activeTab !== 'Analysis' ? (
               <BrandTable 
                 loading={loading}
                 columns={[
-                  { header: '指標名稱', key: 'name' },
-                  { header: '數值', key: 'value' },
-                  { header: 'GRI', key: 'gri' },
-                  { header: '溯源', key: 'source' },
-                  { header: '狀態', key: 'status' },
-                  { header: '操作', key: 'actions' },
+                  { label: '指標名稱', key: 'name' },
+                  { label: '數值', key: 'value' },
+                  { label: '溯源', key: 'source' },
+                  { label: '狀態', key: 'status' },
+                  { label: '操作', key: 'actions' },
                 ]}
                 data={metrics.map(m => ({
                   name: <span className="font-bold text-slate-700">{m.metric_name}</span>,
-                  value: <span className="font-mono text-blue-700 font-bold">{m.metric_value?.toLocaleString()} {m.unit}</span>,
-                  gri: <BrandBadge variant="outline" size="xs">{m.gri_standard}</BrandBadge>,
+                  value: <span className="font-mono text-[#003262] font-black">{m.metric_value?.toLocaleString()} {m.unit}</span>,
                   source: (
-                    <button onClick={() => handleOpenProvenance(m)} className="flex items-center gap-1.5 text-xs text-blue-700 hover:underline font-bold">
-                       <History size={12}/> 溯源
+                    <button onClick={() => handleOpenProvenance(m)} className="flex items-center gap-2 text-[11px] text-blue-600 hover:text-blue-800 font-black uppercase tracking-widest transition-colors group">
+                       <History size={12} className="opacity-40 group-hover:opacity-100" /> PROVENANCE
                     </button>
                   ),
-                  status: <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? 'T5 SEALED' : 'PENDING'} size="sm" />,
+                  status: <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? 'T5_SEALED' : 'PENDING'} size="sm" />,
                   actions: (
-                    <div className="flex gap-1">
-                      <BrandButton variant="ghost" size="xs" onClick={() => setEditRow(m)}><Edit2 size={12}/></BrandButton>
-                      <BrandButton variant="ghost" size="xs" onClick={() => handleDelete(m.id!)}><Trash2 size={12} className="text-red-500"/></BrandButton>
+                    <div className="flex gap-2">
+                      <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0" onClick={() => setEditRow(m)}><Edit2 size={12}/></BrandButton>
+                      <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0" onClick={() => handleDelete(m.id!)}><Trash2 size={12} className="text-red-500"/></BrandButton>
                     </div>
                   )
                 }))}
               />
             ) : (
-              <div className="h-[400px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={MOCK_TREND}>
-                    <XAxis dataKey="year" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="scope1" stroke="#003262" fill="#003262" fillOpacity={0.1} />
-                  </AreaChart>
-                </ResponsiveContainer>
+              <div className="p-10">
+                <div className="h-[400px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={MOCK_TREND}>
+                      <defs>
+                        <linearGradient id="colorScope" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#003262" stopOpacity={0.1}/>
+                          <stop offset="95%" stopColor="#003262" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700, fill: '#94a3b8' }} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 700, fill: '#94a3b8' }} />
+                      <Tooltip 
+                        contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', padding: '12px' }}
+                      />
+                      <Area type="monotone" dataKey="scope1" stroke="#003262" strokeWidth={4} fillOpacity={1} fill="url(#colorScope)" />
+                      <Area type="monotone" dataKey="target" stroke="#FDB515" strokeWidth={2} strokeDasharray="5 5" fill="none" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-8 flex items-center justify-center gap-10">
+                   <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-[#003262]" />
+                      <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Actual Scope 1+2</span>
+                   </div>
+                   <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 border-2 border-dashed border-[#FDB515] rounded-full" />
+                      <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">SBTi 1.5°C Pathway</span>
+                   </div>
+                </div>
               </div>
             )}
-          </div>
+          </BrandCard>
+        )
+      },
+      {
+        id: 'ai',
+        title: 'Hermes 智能分析',
+        columns: 4,
+        hidden: activeTab === 'Analysis',
+        component: (
+          <BrandCard padding="none" className="bg-[#003262] border-none shadow-extreme overflow-hidden h-full flex flex-col group">
+             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-[2000ms]">
+                <Bot size={200} color="#fff" strokeWidth={0.5} />
+             </div>
+             <div className="p-8 border-b border-white/5 relative z-10">
+                <div className="flex items-center gap-3 text-[#FDB515] mb-2">
+                   <Sparkles size={20} className="animate-pulse" />
+                   <h3 className="text-lg font-black text-white uppercase tracking-tight">AI 減碳洞察</h3>
+                </div>
+                <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.3em]">OmniHermes E-Analytics Node</p>
+             </div>
+             <div className="p-8 flex-1 relative z-10 text-base text-blue-50/80 leading-relaxed font-medium italic">
+                偵測到範疇二電力排放在 Q3 有上升趨勢。建議檢視「綠電採購合約」執行進度，並透過 AI 模擬 2024 年度減碳目標達成率。
+             </div>
+             <div className="p-8 mt-auto border-t border-white/5 relative z-10">
+                <BrandButton variant="secondary" fullWidth className="rounded-2xl h-14 font-black" onClick={() => window.location.href='/intelligence'}>
+                   執行目標模擬 <ArrowUpRight size={16} className="ml-2" />
+                </BrandButton>
+             </div>
+          </BrandCard>
         )
       }
     ],

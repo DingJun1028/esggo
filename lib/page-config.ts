@@ -22,6 +22,8 @@ export interface PageKpi {
   icon?: React.ReactNode;
   verified?: boolean;
   gri?: string;
+  formula?: string;
+  color?: string;
 }
 
 export interface PageSection {
@@ -29,7 +31,7 @@ export interface PageSection {
   title: string;
   subtitle?: string;
   icon?: React.ReactNode;
-  columns: 1 | 2 | 3 | 4 | 6 | 8 | 12; // Bento grid columns
+  columns: 1 | 2 | 3 | 4 | 6 | 7 | 8 | 12; // Bento grid columns
   component: React.ReactNode;
   actions?: PageAction[];
 }

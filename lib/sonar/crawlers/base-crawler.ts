@@ -37,7 +37,7 @@ export abstract class BaseCrawler {
   /**
    * Fetch static HTML (Cheerio)
    */
-  protected async fetchStatic(url: string): Promise<cheerio.CheerioAPI> {
+  protected async fetchStatic(url: string): Promise<ReturnType<typeof cheerio.load>> {
     const response = await fetch(url);
     const html = await response.text();
     return cheerio.load(html);

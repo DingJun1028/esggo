@@ -1,7 +1,7 @@
 /* =============================================================
-   OmniHermes X ESGGO Design System v11.5
+   OmniHermes X ESGGO Design System v11.6
    Berkeley Academy Precision - Universal RWD Foundation
-   Minimalist Extreme Aesthetics & High-Performance UI
+   Global Compact & Extreme Minimalist Aesthetics
    ============================================================= */
 
 @tailwind base;
@@ -29,17 +29,12 @@
   --glass-border: rgba(255, 255, 255, 0.9);
   --border-subtle: rgba(0, 50, 98, 0.05);
 
-  /* ── Formula Standard ──────────────────────────────────────────── */
-  --formula-bg: rgba(0, 50, 98, 0.04);
-  --formula-op: #FDB515;
-  --font-mono: 'JetBrains Mono', monospace;
-
-  /* ── Spacing & Layout ──────────────────────────────────────────── */
+  /* ── Spacing & Layout (Compact Logic) ──────────────────────────── */
   --space-unit: 1rem;
   --sidebar-w: 280px;
   --sidebar-w-sm: 88px;
   --topbar-h: 72px;
-  --mobile-nav-h: 80px;
+  --mobile-nav-h: 68px; /* Compacted from 80px */
 
   /* ── Z-Index ── */
   --z-sidebar: 50;
@@ -51,6 +46,10 @@
 @layer base {
   html {
     @apply scroll-smooth;
+    font-size: 16px; /* Base */
+  }
+  @media (max-width: 767px) {
+    html { font-size: 14px; } /* Compact Typography for Mobile */
   }
   body {
     @apply bg-[#F8FAFC] text-slate-900 font-sans antialiased;
@@ -63,40 +62,57 @@
 }
 
 @layer components {
-  /* Premium Bento Grid */
+  /* Global Compact Container */
+  .page-container {
+    @apply max-w-[1600px] mx-auto;
+    padding: 2rem;
+  }
+  @media (max-width: 1023px) {
+    .page-container { padding: 1.25rem; }
+  }
+  @media (max-width: 639px) {
+    .page-container { padding: 1rem; }
+  }
+
+  /* High-Density Bento Grid */
   .bento {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 2rem;
+    gap: 1.5rem; /* Compacted from 2rem */
+  }
+  @media (max-width: 1023px) {
+    .bento { gap: 1rem; }
   }
 
-  /* Liquid Glass Panel - Extreme Minimalism */
+  /* Liquid Glass Panel - Refined Density */
   .glass-panel {
     background: var(--glass-white);
     backdrop-filter: blur(40px) saturate(190%);
     -webkit-backdrop-filter: blur(40px) saturate(190%);
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow: 
-      0 4px 24px -1px rgba(0, 50, 98, 0.03),
-      0 10px 40px -5px rgba(0, 50, 98, 0.05);
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      0 4px 20px -1px rgba(0, 50, 98, 0.02),
+      0 8px 32px -4px rgba(0, 50, 98, 0.04);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 2rem;
+  }
+  @media (max-width: 1023px) {
+    .glass-panel { padding: 1.5rem; border-radius: 1.5rem; }
+  }
+  @media (max-width: 639px) {
+    .glass-panel { padding: 1.25rem; border-radius: 1.25rem; }
   }
 
   .glass-panel:hover {
     box-shadow: 
-      0 20px 80px -10px rgba(0, 50, 98, 0.08),
-      0 0 0 1px rgba(0, 50, 98, 0.05);
-    transform: translateY(-4px) scale(1.005);
+      0 20px 60px -10px rgba(0, 50, 98, 0.06),
+      0 0 0 1px rgba(0, 50, 98, 0.03);
+    transform: translateY(-2px);
   }
 
-  /* App Shell Layout Extensions */
-  .app-shell {
-    @apply relative min-h-screen flex flex-col;
-  }
-
+  /* App Shell Layout */
   .sidebar {
-    @apply fixed left-0 top-0 bottom-0 z-[var(--z-sidebar)] flex flex-col transition-all duration-500;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    @apply fixed left-0 top-0 bottom-0 z-[var(--z-sidebar)] flex flex-col transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1);
     width: var(--sidebar-w);
   }
 
@@ -105,8 +121,7 @@
   }
 
   .main-content {
-    @apply flex-1 flex flex-col transition-all duration-500;
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    @apply flex-1 flex flex-col transition-all duration-500 cubic-bezier(0.16, 1, 0.3, 1);
     margin-left: var(--sidebar-w);
   }
 
@@ -119,13 +134,14 @@
     .main-content { margin-left: 0 !important; padding-bottom: var(--mobile-nav-h); }
   }
 
-  /* Mobile Nav Refinement */
+  /* Mobile Nav - Refined Compactness */
   .mobile-nav {
-    @apply fixed bottom-0 left-0 right-0 z-[var(--z-sidebar)] h-[var(--mobile-nav-h)] bg-white/80 backdrop-blur-2xl border-t border-slate-100/50 flex items-center justify-around px-4 lg:hidden;
+    @apply fixed bottom-0 left-0 right-0 z-[var(--z-sidebar)] h-[var(--mobile-nav-h)] bg-white/90 backdrop-blur-3xl border-t border-slate-100 flex items-center justify-around px-2 lg:hidden;
     padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -10px 40px -10px rgba(0, 50, 98, 0.1);
   }
 
-  /* Skeleton Loading - Premium Pulse */
+  /* Skeleton Loading */
   .skeleton {
     @apply bg-slate-100 relative overflow-hidden;
   }
@@ -141,31 +157,22 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
   }
-
   @keyframes gradient-x {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
-
   .animate-gradient-x {
     background-size: 200% 200%;
     animation: gradient-x 15s ease infinite;
   }
 
   /* Animation Utilities */
-  .fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
@@ -183,19 +190,19 @@
       0 0 0 1px rgba(0, 50, 98, 0.01),
       0 30px 60px -15px rgba(0, 50, 98, 0.12);
   }
+
+  .grid-compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
 }
 
 /* Scrollbar Styling */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { 
-  background: rgba(0, 50, 98, 0.08); 
+  background: rgba(0, 50, 98, 0.1); 
   @apply rounded-full transition-colors;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(0, 50, 98, 0.15); }
-
-/* Page Layout Components */
-.page-container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 50, 98, 0.2); }

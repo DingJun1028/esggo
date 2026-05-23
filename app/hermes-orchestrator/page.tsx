@@ -13,7 +13,7 @@ import type {
 } from '../../lib/agent/types';
 import { SKILL_REGISTRY, TASK_TYPE_META, STATUS_META } from '../../lib/agent/registry';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandT5Strip, BrandInput, BrandCardHeader, StandardPage
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandT5Strip, BrandInput, BrandCardHeader, StandardPage, BrandModal
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 
