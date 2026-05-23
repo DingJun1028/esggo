@@ -1,6 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { Truck, Search, Filter, AlertTriangle, CheckCircle, Star, ExternalLink, Plus, Download } from 'lucide-react';
+import { useState } from 'react';
+import ClientLayout from '../ClientLayout';
+import { Truck, Search, AlertTriangle, CheckCircle, Star, Plus, X, ShieldCheck, TrendingDown, Globe } from 'lucide-react';
+import { BrandCard, BrandButton, BrandBadge, BrandPageHeader } from '../../components/brand';
 
 interface Supplier {
   id: string;
@@ -26,8 +28,14 @@ const MOCK_SUPPLIERS: Supplier[] = [
   { id: '5', name: '全球物流夥伴 GLP', country: '新加坡', industry: '物流', esgScore: 67, envScore: 63, socialScore: 70, govScore: 68, riskLevel: 'medium', certified: false, localProcurement: false, pledgeSigned: true, lastAudit: '2023-12-20' },
 ];
 
+const RISK_CONFIG = {
+  low:    { label: '低風險', color: '#22c55e', bg: 'rgba(34,197,94,0.1)',  border: 'rgba(34,197,94,0.3)'  },
+  medium: { label: '中等',   color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.3)' },
+  high:   { label: '高風險', color: '#ef4444', bg: 'rgba(239,68,68,0.1)',  border: 'rgba(239,68,68,0.3)'  },
+};
+
 export default function SupplyChainPage() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>(MOCK_SUPPLIERS);
+  const [suppliers] = useState<Supplier[]>(MOCK_SUPPLIERS);
   const [search, setSearch] = useState('');
   const [riskFilter, setRiskFilter] = useState('all');
   const [selected, setSelected] = useState<Supplier | null>(null);
@@ -38,124 +46,232 @@ export default function SupplyChainPage() {
     return matchSearch && matchRisk;
   });
 
-  const riskColor = (r: string) => r === 'low' ? '#22c55e' : r === 'medium' ? '#f59e0b' : '#ef4444';
-  const riskLabel = (r: string) => r === 'low' ? '低風險' : r === 'medium' ? '中等' : '高風險';
+  const avgScore = Math.round(suppliers.reduce((a, s) => a + s.esgScore, 0) / suppliers.length);
+
+  const STATS = [
+    { label: '供應商總數', value: suppliers.length, color: 'var(--blue-700)', icon: <Globe size={20} /> },
+    { label: '高風險供應商', value: suppliers.filter(s => s.riskLevel === 'high').length, color: '#ef4444', icon: <AlertTriangle size={20} /> },
+    { label: '已簽永續承諾', value: `${suppliers.filter(s => s.pledgeSigned).length}/${suppliers.length}`, color: '#22c55e', icon: <ShieldCheck size={20} /> },
+    { label: '平均 ESG 評分', value: avgScore, color: '#f59e0b', icon: <TrendingDown size={20} /> },
+  ];
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
-        <div>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#003262', margin: 0 }}>供應鏈透明 Supply Chain</h1>
-          <p style={{ color: '#64748b', marginTop: '4px', fontSize: '14px' }}>GRI 308/414 · 供應商 ESG 評分 · 風險分級管理</p>
-        </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
-          <Plus size={14} /> 新增供應商
-        </button>
-      </div>
+    <ClientLayout>
+      <div style={{ padding: '24px', maxWidth: '1400px', margin: '0 auto' }} className="fade-in">
+        
+        <BrandPageHeader
+          title="供應鏈透明 Supply Chain"
+          subtitle="GRI 308/414 · 供應商 ESG 評分 · 風險分級管理"
+          icon={<Truck size={24} />}
+          actions={
+            <BrandButton variant="primary">
+              <Plus size={16} /> 新增供應商
+            </BrandButton>
+          }
+        />
 
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        {[
-          { label: '供應商總數', value: suppliers.length.toString(), color: '#003262' },
-          { label: '高風險供應商', value: suppliers.filter(s => s.riskLevel === 'high').length.toString(), color: '#ef4444' },
-          { label: '已簽署永續承諾', value: `${suppliers.filter(s => s.pledgeSigned).length}/${suppliers.length}`, color: '#22c55e' },
-          { label: '平均 ESG 分數', value: `${Math.round(suppliers.reduce((a, s) => a + s.esgScore, 0) / suppliers.length)}`, color: '#f59e0b' },
-        ].map((s, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginBottom: '8px' }}>{s.label}</div>
-            <div style={{ fontSize: '28px', fontWeight: '800', color: s.color }}>{s.value}</div>
+        {/* KPI Stats Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
+          {STATS.map((stat, i) => (
+            <BrandCard key={i} padding="md" hover style={{ textAlign: 'center' }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: '12px',
+                background: `${stat.color}15`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 12px',
+                color: stat.color,
+              }}>
+                {stat.icon}
+              </div>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>
+                {stat.label}
+              </div>
+              <div style={{ fontSize: '28px', fontWeight: 800, color: stat.color, lineHeight: 1 }}>
+                {stat.value}
+              </div>
+            </BrandCard>
+          ))}
+        </div>
+
+        {/* Filters */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
+            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-tertiary)' }} />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="搜尋供應商、國家、產業..."
+              style={{
+                width: '100%', padding: '10px 12px 10px 36px',
+                border: '1px solid var(--border-default)', borderRadius: 'var(--radius-lg)',
+                fontSize: '13px', outline: 'none', boxSizing: 'border-box',
+                background: 'var(--surface-card)', color: 'var(--text-primary)',
+              }}
+            />
           </div>
-        ))}
-      </div>
-
-      {/* Filters */}
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="搜尋供應商名稱、國家、產業..." style={{ width: '100%', padding: '10px 12px 10px 36px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', outline: 'none', boxSizing: 'border-box' }} />
-        </div>
-        {['all', 'low', 'medium', 'high'].map(r => (
-          <button key={r} onClick={() => setRiskFilter(r)}
-            style={{ padding: '10px 16px', border: '1px solid', borderColor: riskFilter === r ? '#003262' : '#e2e8f0', borderRadius: '8px', background: riskFilter === r ? '#003262' : '#fff', color: riskFilter === r ? '#fff' : '#64748b', fontSize: '12px', cursor: 'pointer', fontWeight: '600' }}>
-            {r === 'all' ? '全部' : riskLabel(r)}
-          </button>
-        ))}
-      </div>
-
-      {/* Table */}
-      <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead style={{ background: '#f8fafc' }}>
-            <tr>
-              {['供應商名稱', '國家/地區', '產業', 'ESG 評分', '風險等級', '永續承諾', '操作'].map(h => (
-                <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', color: '#64748b', fontWeight: '700', borderBottom: '1px solid #e2e8f0' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(s => (
-              <tr key={s.id} style={{ borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }} onClick={() => setSelected(s)}
-                onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
-                onMouseLeave={e => (e.currentTarget.style.background = '#fff')}>
-                <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {s.certified && <Star size={12} color="#f59e0b" fill="#f59e0b" />}
-                    {s.name}
-                  </div>
-                </td>
-                <td style={{ padding: '14px 16px', fontSize: '13px', color: '#64748b' }}>{s.country}</td>
-                <td style={{ padding: '14px 16px', fontSize: '13px', color: '#64748b' }}>{s.industry}</td>
-                <td style={{ padding: '14px 16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '60px', height: '6px', background: '#e2e8f0', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div style={{ width: `${s.esgScore}%`, height: '100%', background: s.esgScore >= 80 ? '#22c55e' : s.esgScore >= 60 ? '#f59e0b' : '#ef4444', borderRadius: '3px' }} />
-                    </div>
-                    <span style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>{s.esgScore}</span>
-                  </div>
-                </td>
-                <td style={{ padding: '14px 16px' }}>
-                  <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '20px', background: `${riskColor(s.riskLevel)}15`, color: riskColor(s.riskLevel), fontWeight: '700' }}>{riskLabel(s.riskLevel)}</span>
-                </td>
-                <td style={{ padding: '14px 16px' }}>
-                  {s.pledgeSigned ? <CheckCircle size={16} color="#22c55e" /> : <AlertTriangle size={16} color="#f59e0b" />}
-                </td>
-                <td style={{ padding: '14px 16px' }}>
-                  <button style={{ fontSize: '11px', padding: '4px 10px', border: '1px solid #e2e8f0', borderRadius: '6px', cursor: 'pointer', background: '#fff', color: '#64748b' }}>查看詳情</button>
-                </td>
-              </tr>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {(['all', 'low', 'medium', 'high'] as const).map(r => (
+              <button
+                key={r}
+                onClick={() => setRiskFilter(r)}
+                style={{
+                  padding: '9px 16px',
+                  border: '1px solid',
+                  borderColor: riskFilter === r ? 'var(--blue-700)' : 'var(--border-default)',
+                  borderRadius: 'var(--radius-lg)',
+                  background: riskFilter === r ? 'var(--blue-700)' : 'var(--surface-card)',
+                  color: riskFilter === r ? '#fff' : 'var(--text-secondary)',
+                  fontSize: '12px', cursor: 'pointer', fontWeight: 700,
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {r === 'all' ? '全部' : RISK_CONFIG[r].label}
+              </button>
             ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Detail Modal */}
-      {selected && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }} onClick={() => setSelected(null)}>
-          <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', width: '480px', maxWidth: '90vw' }} onClick={e => e.stopPropagation()}>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#003262', marginBottom: '20px' }}>{selected.name}</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
-              {[
-                { label: '環境評分 (E)', value: selected.envScore, color: '#22c55e' },
-                { label: '社會評分 (S)', value: selected.socialScore, color: '#3b7ea1' },
-                { label: '治理評分 (G)', value: selected.govScore, color: '#8b5cf6' },
-                { label: '綜合 ESG', value: selected.esgScore, color: '#003262' },
-              ].map((m, i) => (
-                <div key={i} style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
-                  <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '4px' }}>{m.label}</div>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: m.color }}>{m.value}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
-              {selected.certified && <span style={{ fontSize: '11px', padding: '4px 10px', background: '#fef3c7', color: '#92400e', borderRadius: '20px', fontWeight: '600' }}>✓ 認證供應商</span>}
-              {selected.pledgeSigned && <span style={{ fontSize: '11px', padding: '4px 10px', background: '#dcfce7', color: '#166534', borderRadius: '20px', fontWeight: '600' }}>✓ 已簽永續承諾</span>}
-              {selected.localProcurement && <span style={{ fontSize: '11px', padding: '4px 10px', background: '#dbeafe', color: '#1e40af', borderRadius: '20px', fontWeight: '600' }}>✓ 在地採購</span>}
-            </div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '20px' }}>最後稽核日期：{selected.lastAudit}</div>
-            <button onClick={() => setSelected(null)} style={{ width: '100%', padding: '12px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>關閉</button>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Table */}
+        <BrandCard padding="none" style={{ overflow: 'hidden' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead style={{ background: 'var(--surface-section)' }}>
+                <tr>
+                  {['供應商名稱', '國家/地區', '產業', 'ESG 評分', '風險等級', '永續承諾', '最後稽核', '操作'].map(h => (
+                    <th key={h} style={{
+                      padding: '12px 16px', textAlign: 'left',
+                      fontSize: '11px', color: 'var(--text-tertiary)',
+                      fontWeight: 700, borderBottom: '1px solid var(--border-default)',
+                      whiteSpace: 'nowrap', letterSpacing: '0.04em', textTransform: 'uppercase',
+                    }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((s, idx) => {
+                  const risk = RISK_CONFIG[s.riskLevel];
+                  return (
+                    <tr
+                      key={s.id}
+                      style={{ borderBottom: '1px solid var(--border-subtle)', cursor: 'pointer', transition: 'background 0.15s' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-section)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                      onClick={() => setSelected(s)}
+                    >
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          {s.certified && <Star size={13} color="#f59e0b" fill="#f59e0b" />}
+                          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>{s.name}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px 16px', fontSize: '13px', color: 'var(--text-secondary)' }}>{s.country}</td>
+                      <td style={{ padding: '14px 16px', fontSize: '13px', color: 'var(--text-secondary)' }}>{s.industry}</td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ width: 64, height: 6, background: 'var(--neutral-200)', borderRadius: 3, overflow: 'hidden' }}>
+                            <div style={{
+                              width: `${s.esgScore}%`, height: '100%', borderRadius: 3,
+                              background: s.esgScore >= 80 ? '#22c55e' : s.esgScore >= 60 ? '#f59e0b' : '#ef4444',
+                            }} />
+                          </div>
+                          <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)' }}>{s.esgScore}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <span style={{
+                          fontSize: '11px', padding: '3px 10px', borderRadius: 'var(--radius-full)',
+                          background: risk.bg, color: risk.color,
+                          border: `1px solid ${risk.border}`, fontWeight: 700,
+                        }}>{risk.label}</span>
+                      </td>
+                      <td style={{ padding: '14px 16px', textAlign: 'center' }}>
+                        {s.pledgeSigned
+                          ? <CheckCircle size={16} color="#22c55e" />
+                          : <AlertTriangle size={16} color="#f59e0b" />
+                        }
+                      </td>
+                      <td style={{ padding: '14px 16px', fontSize: '12px', color: 'var(--text-tertiary)' }}>{s.lastAudit}</td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <button
+                          style={{
+                            fontSize: '11px', padding: '5px 12px',
+                            border: '1px solid var(--border-default)', borderRadius: 'var(--radius-md)',
+                            cursor: 'pointer', background: 'var(--surface-card)',
+                            color: 'var(--text-secondary)', fontWeight: 600,
+                          }}
+                          onClick={e => { e.stopPropagation(); setSelected(s); }}
+                        >查看詳情</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={8} style={{ padding: '40px', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: 14 }}>
+                      沒有符合條件的供應商
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </BrandCard>
+
+        {/* Detail Modal */}
+        {selected && (
+          <div
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999, backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}
+            onClick={() => setSelected(null)}
+          >
+            <div
+              style={{ background: 'var(--surface-card)', borderRadius: 'var(--radius-2xl)', padding: '32px', width: 520, maxWidth: '90vw', boxShadow: 'var(--shadow-xl)' }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: 4 }}>{selected.name}</h3>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <BrandBadge variant="outline" size="xs">{selected.country}</BrandBadge>
+                    <BrandBadge variant="info" size="xs">{selected.industry}</BrandBadge>
+                  </div>
+                </div>
+                <button onClick={() => setSelected(null)} style={{ background: 'var(--surface-section)', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <X size={16} />
+                </button>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
+                {[
+                  { label: '環境評分 (E)', value: selected.envScore, color: '#22c55e' },
+                  { label: '社會評分 (S)', value: selected.socialScore, color: '#3b7ea1' },
+                  { label: '治理評分 (G)', value: selected.govScore, color: '#8b5cf6' },
+                  { label: '綜合 ESG', value: selected.esgScore, color: 'var(--blue-700)' },
+                ].map((m, i) => (
+                  <div key={i} style={{ padding: '16px', background: 'var(--surface-section)', borderRadius: 'var(--radius-lg)', textAlign: 'center' }}>
+                    <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 700, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
+                    <div style={{ fontSize: '28px', fontWeight: 800, color: m.color, lineHeight: 1 }}>{m.value}</div>
+                    <div style={{ marginTop: 8, height: 4, background: 'var(--neutral-200)', borderRadius: 2, overflow: 'hidden' }}>
+                      <div style={{ width: `${m.value}%`, height: '100%', background: m.color, borderRadius: 2 }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+                {selected.certified && <BrandBadge variant="warning" size="sm">✓ 認證供應商</BrandBadge>}
+                {selected.pledgeSigned && <BrandBadge variant="success" size="sm">✓ 已簽永續承諾</BrandBadge>}
+                {selected.localProcurement && <BrandBadge variant="info" size="sm">✓ 在地採購</BrandBadge>}
+              </div>
+
+              <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: 20, padding: '10px 14px', background: 'var(--surface-section)', borderRadius: 'var(--radius-md)' }}>
+                📅 最後稽核日期：{selected.lastAudit}
+              </div>
+
+              <BrandButton variant="primary" fullWidth onClick={() => setSelected(null)}>關閉</BrandButton>
+            </div>
+          </div>
+        )}
+      </div>
+    </ClientLayout>
   );
 }

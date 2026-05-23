@@ -8,6 +8,7 @@ interface BrandCardProps {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   border?: boolean;
   shadow?: 'none' | 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'glass';
   onClick?: () => void;
   style?: React.CSSProperties;
 }
@@ -77,17 +78,22 @@ export default function BrandCard({
   padding = 'md',
   border = true,
   shadow = 'sm',
+  variant = 'default',
   onClick,
   style,
 }: BrandCardProps) {
+  const baseBg = variant === 'glass' 
+    ? 'bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.07)]' 
+    : 'bg-white/80 backdrop-blur-[12px] shadow-[0_2px_8px_rgba(0,0,0,0.03)]';
+
   return (
     <div
       className={`
-        bg-white/80 backdrop-blur-[12px] rounded-lg
-        ${border ? 'border border-slate-100' : ''}
-        shadow-[0_2px_8px_rgba(0,0,0,0.03)]
+        ${baseBg} rounded-xl
+        ${border && variant !== 'glass' ? 'border border-slate-100' : ''}
+        ${border && variant === 'glass' ? 'border border-white/60' : ''}
         ${paddingStyles[padding]}
-        ${hover ? 'hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:border-slate-200 transition-all duration-200 cursor-pointer' : ''}
+        ${hover ? 'hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 cursor-pointer' : 'transition-all duration-300'}
         ${onClick ? 'cursor-pointer' : ''}
         ${className}
       `}

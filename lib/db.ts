@@ -42,6 +42,7 @@ export interface SocialMetric {
   gri_standard?: string;
   source_origin?: string;
   verified?: boolean;
+  zkp_sealed?: boolean;
 }
 
 export interface GovernanceMetric {
@@ -262,15 +263,15 @@ export async function upsertSocialMetric(metric: SocialMetric): Promise<SocialMe
 
 function getMockSocial(category?: string): SocialMetric[] {
   const all: SocialMetric[] = [
-    { id: 's1', category: 'workforce', metric_name: '全職員工人數', metric_value: 1250, unit: '人', year: 2024, gri_standard: 'GRI 2-7', verified: true },
-    { id: 's2', category: 'workforce', metric_name: '女性員工比例', metric_value: 42, unit: '%', year: 2024, gri_standard: 'GRI 405-1', verified: true },
-    { id: 's3', category: 'safety', metric_name: '失能傷害頻率 (FR)', metric_value: 0.45, unit: '次/百萬工時', year: 2024, gri_standard: 'GRI 403-2', verified: true },
-    { id: 's4', category: 'training', metric_name: '平均每人年受訓時數', metric_value: 32, unit: '小時/人', year: 2024, gri_standard: 'GRI 404-1', verified: false },
-    { id: 's5', category: 'supply', metric_name: '在地採購比例', metric_value: 65, unit: '%', year: 2024, gri_standard: 'GRI 204-1', verified: false },
-    { id: 's6', category: 'supply', metric_name: '簽署永續承諾書供應商比例', metric_value: 68, unit: '%', year: 2024, gri_standard: 'GRI 308-1', verified: false },
-    { id: 's7', category: 'community', metric_name: '社區志工服務時數', metric_value: 1200, unit: '小時', year: 2024, gri_standard: 'GRI 413-1', verified: true },
-    { id: 's8', category: 'community', metric_name: '公益捐款總額', metric_value: 500, unit: '萬元', year: 2024, gri_standard: 'GRI 201-1', verified: true },
-    { id: 's9', category: 'human_rights', metric_name: '人權盡職調查完成率', metric_value: 85, unit: '%', year: 2024, gri_standard: 'GRI 412-1', verified: false },
+    { id: 's1', category: 'workforce', metric_name: '全職員工人數', metric_value: 1250, unit: '人', year: 2024, gri_standard: 'GRI 2-7', verified: true, zkp_sealed: true },
+    { id: 's2', category: 'workforce', metric_name: '女性員工比例', metric_value: 42, unit: '%', year: 2024, gri_standard: 'GRI 405-1', verified: true, zkp_sealed: false },
+    { id: 's3', category: 'safety', metric_name: '失能傷害頻率 (FR)', metric_value: 0.45, unit: '次/百萬工時', year: 2024, gri_standard: 'GRI 403-2', verified: true, zkp_sealed: true },
+    { id: 's4', category: 'training', metric_name: '平均每人年受訓時數', metric_value: 32, unit: '小時/人', year: 2024, gri_standard: 'GRI 404-1', verified: false, zkp_sealed: false },
+    { id: 's5', category: 'supply', metric_name: '在地採購比例', metric_value: 65, unit: '%', year: 2024, gri_standard: 'GRI 204-1', verified: false, zkp_sealed: false },
+    { id: 's6', category: 'supply', metric_name: '簽署永續承諾書供應商比例', metric_value: 68, unit: '%', year: 2024, gri_standard: 'GRI 308-1', verified: false, zkp_sealed: false },
+    { id: 's7', category: 'community', metric_name: '社區志工服務時數', metric_value: 1200, unit: '小時', year: 2024, gri_standard: 'GRI 413-1', verified: true, zkp_sealed: true },
+    { id: 's8', category: 'community', metric_name: '公益捐款總額', metric_value: 500, unit: '萬元', year: 2024, gri_standard: 'GRI 201-1', verified: true, zkp_sealed: true },
+    { id: 's9', category: 'human_rights', metric_name: '人權盡職調查完成率', metric_value: 85, unit: '%', year: 2024, gri_standard: 'GRI 412-1', verified: false, zkp_sealed: false },
   ];
   return category ? all.filter(m => m.category === category) : all;
 }

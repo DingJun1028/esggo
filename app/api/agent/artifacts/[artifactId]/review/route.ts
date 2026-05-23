@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { artifactId: string } }
+  { params }: { params: Promise<{ artifactId: string }> }
 ) {
   try {
     const body = await req.json();
@@ -18,8 +18,9 @@ export async function POST(
       request_changes: 'awaiting_review',
     };
 
+    const { artifactId } = await params;
     return NextResponse.json({
-      artifactId: params.artifactId,
+      artifactId: artifactId,
       reviewStatus: statusMap[action],
       reviewNote,
       reviewerId: reviewerId ?? 'reviewer_001',

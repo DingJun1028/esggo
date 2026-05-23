@@ -1,11 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import {
-  ShieldCheck, CheckCircle, XCircle, AlertTriangle, Minus,
-  ChevronDown, ChevronRight, FileText, LayoutDashboard,
-  List, FileSearch, FormInput, BarChart3, RefreshCw,
-  Download, Info, Layers, Box, Code2, X,
-} from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, StandardPage, BrandScoreRing, BrandCardHeader
+} from '../../components/brand';
+import { UniversalPageConfig } from '../../lib/page-config';
 import {
   COMPONENT_SPECS, PAGE_VALIDATION_ITEMS, BLOCK_CONDITIONS,
   type ValidationStatus, type ComponentSpec, type PageTemplate,

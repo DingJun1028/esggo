@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'gold' | 'blue' | 'purple' | 'outline';
+type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'gold' | 'blue' | 'purple' | 'outline' | 'sealed';
 type BadgeSize = 'xs' | 'sm' | 'md';
 
 interface BrandBadgeProps {
@@ -22,6 +22,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   blue: 'bg-[#EBF2FA] text-[#003262] border border-[#D4E4F7]',
   purple: 'bg-purple-50 text-purple-700 border border-purple-200',
   outline: 'bg-transparent text-[#003262] border border-[#003262]',
+  sealed: 'bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.2)]',
 };
 
 const dotColors: Record<BadgeVariant, string> = {
@@ -34,6 +35,7 @@ const dotColors: Record<BadgeVariant, string> = {
   blue: 'bg-[#003262]',
   purple: 'bg-purple-500',
   outline: 'bg-[#003262]',
+  sealed: 'bg-emerald-500',
 };
 
 const sizeStyles: Record<BadgeSize, string> = {

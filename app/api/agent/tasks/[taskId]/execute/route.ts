@@ -8,9 +8,10 @@ const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOO
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { taskId: string } }
+  { params }: { params: Promise<{ taskId: string }> }
 ) {
   try {
+    const { taskId } = await params;
     const body = await req.json();
     const { task } = body as { task: AgentTask };
 
