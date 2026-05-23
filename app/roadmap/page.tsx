@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Target, Plus, X, CheckCircle, Map, TrendingDown, ShieldCheck, Flag, ArrowUpRight, Sparkles, Bot, Clock, RefreshCw } from 'lucide-react';
+import { Target, Plus, X, CheckCircle, Map, TrendingDown, ShieldCheck, Flag, ArrowUpRight, Sparkles, Bot, Clock, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid } from 'recharts';
 import { getRoadmapMilestones, upsertRoadmapMilestone, updateMilestoneStatus, type RoadmapMilestone } from '../../lib/db';
 import { 

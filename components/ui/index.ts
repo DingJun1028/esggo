@@ -3,10 +3,10 @@
 
 // Primitives
 export { Button } from './Button';
-export { Badge, GRIBadge, T5Badge, StatusBadge } from './Badge';
-export { Card, CardHeader, CardBody, CardFooter } from './Card';
+export { Badge } from './Badge';
+export { Card, CardHeader } from './Card';
 export { KpiCard } from './KpiCard';
-export { Input, Textarea, Select, FormField } from './Input';
+export { Input } from './Input';
 export { Modal } from './Modal';
 export { ProgressBar } from './ProgressBar';
 export { PageHeader } from './PageHeader';

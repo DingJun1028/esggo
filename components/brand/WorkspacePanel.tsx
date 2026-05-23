@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Search, Database, History, ChevronRight, Maximize2, Shield, Bot, Layout, Info } from 'lucide-react';
-import { BrandBadge, BrandCard, BrandCardHeader, BrandTabs } from './index';
+import { BrandBadge, BrandCard, BrandCardHeader, BrandTabs, BrandStatusDot } from './index';
 
 interface WorkspacePanelProps {
   isOpen: boolean;
@@ -127,7 +127,7 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
                        <span className="text-[10px] font-black font-mono text-slate-300">{trace.time}</span>
                        <div className="flex-1">
                           <p className="text-[11px] font-bold text-slate-600">{trace.msg}</p>
-                          <BrandStatusDot status={trace.status === 'success' ? 'active' : 'warning'} size="xs" label={trace.status.toUpperCase()} className="mt-1" />
+                          <BrandStatusDot status={trace.status === 'success' ? 'active' : 'warning'} size="sm" label={trace.status.toUpperCase()} />
                        </div>
                     </div>
                   ))}

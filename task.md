@@ -1,0 +1,6 @@
+- [/] Update `tailwind.config.ts` with new design tokens
+- [ ] Create `lib/utils.ts` and `lib/animations.ts`
+- [ ] Create UI components: `Button`, `Card`, `Input`, `Badge`
+- [ ] Refactor `app/editor/page.tsx` for light theme and liquid glass aesthetics
+- [ ] Verify UI changes
+- [ ] Create walkthrough documentation

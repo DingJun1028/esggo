@@ -1,8 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Sparkles, Search, ShieldCheck, MessageSquare, TrendingUp, Cpu, Code, Brain, ChevronRight, Zap, BarChart2, FileText, Globe, Activity, Server, Radio, ArrowUpRight, Database } from 'lucide-react';
+import { 
+  Sparkles, Search, ShieldCheck, MessageSquare, TrendingUp, Cpu, Code, Brain, ChevronRight, Zap, BarChart2, FileText, Globe, Activity, Server, Radio, ArrowUpRight, Database, Bot 
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrandBadge, BrandButton, BrandCard, BrandStatusDot } from '../../components/brand';
+import { BrandBadge, BrandButton, BrandCard, BrandStatusDot, BrandProgress } from '../../components/brand';
 
 const AI_APPS = [
   { id: 'greenwash', title: '綠漂風險掌控', icon: ShieldCheck, desc: '掃描文本中的誇大或不實永續聲明。', color: '#10B981', tag: 'GRI T2' },

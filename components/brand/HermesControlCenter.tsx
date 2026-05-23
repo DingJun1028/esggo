@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Settings2, Cpu, Database, Bell, Shield, Radio, Key, Github, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
-import { BrandButton, BrandBadge, BrandCard, BrandTabs } from './index';
+import { BrandButton, BrandBadge, BrandCard, BrandTabs, BrandProgress } from './index';
 
 interface HermesControlCenterProps {
   isOpen: boolean;
