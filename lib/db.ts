@@ -653,47 +653,73 @@ export async function getAdvisorySession(persona: string): Promise<AdvisoryMessa
   } catch { return []; }
 }
 
-// ── SustainWrite Sections ─────────────────────────────────────────────────────
+// ── Global Search ─────────────────────────────────────────────────────────────
 
-export interface SustainWriteSection {
-  id?: string;
-  chapter_id: string;
-  content?: string;
-  fields?: Record<string, string>;
-  doc_status?: Record<string, boolean>;
-  notes?: string;
-  hash_lock?: string;
-  sealed?: boolean;
-  user_id?: string;
-  created_at?: string;
-  updated_at?: string;
+export interface SearchResult {
+  id: string;
+  type: 'metric' | 'task' | 'audit' | 'file';
+  title: string;
+  subtitle: string;
+  href: string;
+  category?: string;
 }
 
-export async function upsertSustainWriteSection(section: SustainWriteSection): Promise<SustainWriteSection | null> {
+export async function globalSearch(query: string): Promise<SearchResult[]> {
+  if (!query || query.length < 2) return [];
   const client = db();
-  const payload = {
-    ...section,
-    user_id: section.user_id ?? 'default',
-    hash_lock: section.content ? simpleHash(section.chapter_id + (section.content ?? '') + Date.now()) : section.hash_lock,
-    updated_at: new Date().toISOString(),
-  };
-  if (!client) return { ...payload, id: payload.id ?? `mock_${Date.now()}` };
-  try {
-    const { data } = await client.from('sustainwrite_sections').upsert([payload]).select().single();
-    if (data) await logAudit({ action: 'WRITE_SAVE', resource: `章節更新 ${section.chapter_id}`, user_name: 'User', t5_tag: 'T1' });
-    return (data as SustainWriteSection) ?? { ...payload, id: `mock_${Date.now()}` };
-  } catch { return { ...payload, id: payload.id ?? `mock_${Date.now()}` }; }
-}
+  const q = query.toLowerCase();
 
-export async function saveSustainWriteSection(section: SustainWriteSection): Promise<SustainWriteSection | null> {
-  return upsertSustainWriteSection(section);
-}
+  // In a real system, we'd use Supabase's full-text search or a vectorized search.
+  // For this optimized implementation, we combine local mock data and potential DB matches.
+  
+  const results: SearchResult[] = [];
 
-export async function getSustainWriteSections(): Promise<SustainWriteSection[]> {
-  const client = db();
-  if (!client) return [];
   try {
-    const { data } = await client.from('sustainwrite_sections').select('*').eq('user_id', 'default');
-    return (data as SustainWriteSection[]) ?? [];
-  } catch { return []; }
+    // 1. Search Environmental
+    const env = await getEnvironmentalData();
+    env.forEach(m => {
+      if (m.metric_name.toLowerCase().includes(q) || m.gri_standard?.toLowerCase().includes(q)) {
+        results.push({
+          id: m.id!,
+          type: 'metric',
+          title: m.metric_name,
+          subtitle: `${m.gri_standard} · ${m.metric_value} ${m.unit}`,
+          href: '/environmental'
+        });
+      }
+    });
+
+    // 2. Search Tasks
+    const tasks = await getTasks();
+    tasks.forEach(t => {
+      if (t.title.toLowerCase().includes(q) || t.description?.toLowerCase().includes(q)) {
+        results.push({
+          id: t.id!,
+          type: 'task',
+          title: t.title,
+          subtitle: `Status: ${t.status} · ${t.assignee}`,
+          href: '/tasks'
+        });
+      }
+    });
+
+    // 3. Search Audit Logs
+    const logs = await getAuditLogs(20);
+    logs.forEach(l => {
+      if (l.resource?.toLowerCase().includes(q) || l.action.toLowerCase().includes(q)) {
+        results.push({
+          id: l.id!,
+          type: 'audit',
+          title: `${l.action}: ${l.resource}`,
+          subtitle: `${l.user_name} · ${l.t5_tag}`,
+          href: '/audit-log'
+        });
+      }
+    });
+
+  } catch (err) {
+    console.error('Global search error:', err);
+  }
+
+  return results.slice(0, 10);
 }

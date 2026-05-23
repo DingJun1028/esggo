@@ -121,7 +121,7 @@ export default function VaultPage() {
              </div>
              <BrandTable 
                loading={loading}
-               columns={[{ header: '文件', key: 'file' }, { header: '類別', key: 'cat' }, { header: 'GRI', key: 'gri' }, { header: '5T', key: 'zkp' }, { header: '操作', key: 'actions' }]}
+               columns={[{ label: '文件', key: 'file' }, { label: '類別', key: 'cat' }, { label: 'GRI', key: 'gri' }, { label: '5T', key: 'zkp' }, { label: '操作', key: 'actions' }]}
                data={filtered.map(f => ({
                  file: <span className="font-bold">{f.file_name}</span>,
                  cat: <BrandBadge variant="outline" size="xs">{f.category}</BrandBadge>,

@@ -107,7 +107,7 @@ describe('OmniCore Integrity Engine', () => {
 
   describe('Eternal Memory Integrity', () => {
     it('should store memory with a valid hash lock', async () => {
-      const memory = await omniCore.storeMemory('Project Alpha initialized', 'CORE', ['init']);
+      const memory = await omniCore.storeMemory('Project Alpha initialized', 'SEMANTIC', ['init']);
       
       expect(memory.hash_lock).toBeDefined();
       expect(memory.consolidated).toBe(false);
@@ -117,14 +117,14 @@ describe('OmniCore Integrity Engine', () => {
     });
 
     it('should consolidate multiple memories into one summary', async () => {
-      await omniCore.storeMemory('Event 1', 'EVENT', ['tag1']);
-      await omniCore.storeMemory('Event 2', 'EVENT', ['tag2']);
+      await omniCore.storeMemory('Event 1', 'EPISODIC', ['tag1']);
+      await omniCore.storeMemory('Event 2', 'EPISODIC', ['tag2']);
 
-      const consolidated = await omniCore.consolidateMemories('EVENT');
+      const consolidated = await omniCore.consolidateMemories('EPISODIC');
       
       expect(consolidated).not.toBeNull();
       expect(consolidated?.tags).toContain('consolidated');
-      expect(consolidated?.content).toContain('Consolidated Summary of 2 EVENT records');
+      expect(consolidated?.content).toContain('Consolidated Summary of 2 EPISODIC records');
 
       const allMemories = omniCore.getMemories();
       const originals = allMemories.filter(m => m.content === 'Event 1' || m.content === 'Event 2');

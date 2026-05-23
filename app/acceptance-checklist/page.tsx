@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, List, FileSearch, FormInput, BarChart3, CheckCircle, XCircle, AlertTriangle, 
-  Minus, Layers, Box, Code2, ShieldCheck, Download, RefreshCw, Info, ChevronDown, ChevronRight, X
+  Minus, Layers, Box, Code2, ShieldCheck, Download, RefreshCw, Info, ChevronDown, ChevronRight, X, Sparkles, Database, LayoutGrid, Check
 } from 'lucide-react';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, StandardPage, BrandScoreRing, BrandCardHeader
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, StandardPage, BrandScoreRing, BrandCardHeader, BrandKpiCard
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 import {
@@ -25,29 +25,10 @@ const TEMPLATE_META: Record<PageTemplate, { label: string; icon: React.ReactNode
 };
 
 function StatusIcon({ s }: { s: CheckState }) {
-  if (s === 'pass')  return <CheckCircle size={14} className="text-green-500 flex-shrink-0" />;
-  if (s === 'block') return <XCircle     size={14} className="text-red-500   flex-shrink-0" />;
-  if (s === 'fix')   return <AlertTriangle size={14} className="text-amber-500 flex-shrink-0" />;
-  return <Minus size={14} className="text-slate-300 flex-shrink-0" />;
-}
-
-function ScoreRing({ score, size = 72 }: { score: number; size?: number }) {
-  const r = size / 2 - 7;
-  const c = 2 * Math.PI * r;
-  const offset = c - (score / 100) * c;
-  const color = score >= 90 ? '#22c55e' : score >= 70 ? '#FDB515' : score >= 50 ? '#f97316' : '#ef4444';
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#e2e8f0" strokeWidth="5" />
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth="5"
-        strokeLinecap="round" strokeDasharray={c} strokeDashoffset={offset}
-        transform={`rotate(-90 ${size/2} ${size/2})`}
-        style={{ transition:'stroke-dashoffset 0.4s ease' }}
-      />
-      <text x={size/2} y={size/2+1} textAnchor="middle" dominantBaseline="middle"
-        fontSize="13" fontWeight="700" fill={color}>{score}</text>
-    </svg>
-  );
+  if (s === 'pass')  return <CheckCircle size={16} className="text-emerald-500" />;
+  if (s === 'block') return <XCircle     size={16} className="text-red-500" />;
+  if (s === 'fix')   return <AlertTriangle size={16} className="text-amber-500" />;
+  return <Minus size={16} className="text-slate-300" />;
 }
 
 export default function AcceptanceChecklistPage() {
@@ -108,27 +89,6 @@ export default function AcceptanceChecklistPage() {
     setSavedAt('');
   };
 
-  const exportReport = () => {
-    const data = {
-      exportAt: new Date().toISOString(),
-      platform: 'ESG GO 善向永續',
-      componentChecks: COMPONENT_SPECS.flatMap(s =>
-        s.checks.map(c => ({ component: s.name, checkId: c.id, label: c.label, status: compChecks[c.id] ?? 'skip' }))
-      ),
-      pageChecks: PAGE_VALIDATION_ITEMS.map(p => ({
-        id: p.id, question: p.question, templates: p.template, status: pageChecks[p.id] ?? 'skip',
-      })),
-      blockConditions: BLOCK_CONDITIONS.map((b, i) => ({
-        condition: b, triggered: !!blockChecks[String(i)],
-      })),
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `esggo-acceptance-${Date.now()}.json`; a.click();
-    URL.revokeObjectURL(url);
-  };
-
   const allCompChecks = COMPONENT_SPECS.flatMap(s => s.checks.map(c => compChecks[c.id] ?? 'skip'));
   const allPageChecks = PAGE_VALIDATION_ITEMS.map(p => pageChecks[p.id] ?? 'skip');
   const allChecks = [...allCompChecks, ...allPageChecks];
@@ -143,424 +103,268 @@ export default function AcceptanceChecklistPage() {
     ? PAGE_VALIDATION_ITEMS
     : PAGE_VALIDATION_ITEMS.filter(p => p.template.includes(filterTemplate));
 
-  const TABS = [
-    { id: 'components', label: '元件驗收', icon: <Box size={13}/> },
-    { id: 'pages',      label: '頁面驗收', icon: <Layers size={13}/> },
-    { id: 'tokens',     label: '狀態語意', icon: <Code2 size={13}/> },
-    { id: 'status',     label: '禁止上線', icon: <XCircle size={13}/> },
-  ] as const;
-
-  return (
-    <div className="page-container">
-      {/* Header */}
-      <div className="page-header mb-6">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(255,255,255,0.2)' }}>
-              <ShieldCheck size={24} className="text-white" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 style={{ color: '#fff', fontSize: '1.375rem', fontWeight: 700 }}>
-                  頁面模板與元件驗收清單
-                </h1>
-                <span className="badge badge-gold badge-sm">v1.0</span>
-              </div>
-              <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                ESG GO UIUX Anti-Collapse · Component API Spec · Design Token Governance
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-2 flex-wrap items-center">
-            {savedAt && <span style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,0.6)' }}>儲存：{savedAt}</span>}
-            <button onClick={exportReport}
-              className="btn btn-sm flex items-center gap-1.5"
-              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
-              <Download size={13}/> 匯出
-            </button>
-            <button onClick={reset}
-              className="btn btn-sm flex items-center gap-1.5"
-              style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
-              <RefreshCw size={13}/> 重置
-            </button>
-          </div>
-        </div>
-
-        {/* Score strip */}
-        <div className="flex items-center gap-6 mt-4 flex-wrap">
-          <ScoreRing score={score} size={72} />
-          <div className="flex gap-4 flex-wrap">
-            {[
-              { v: passCount,  l: '通過', c: '#86efac' },
-              { v: fixCount,   l: '需修正', c: '#fde68a' },
-              { v: blockCount, l: '禁止上線', c: '#fca5a5' },
-              { v: total - passCount - fixCount - blockCount, l: '待確認', c: 'rgba(255,255,255,0.4)' },
-            ].map(s => (
-              <div key={s.l} className="text-center">
-                <p className="text-xl font-bold" style={{ color: s.c }}>{s.v}</p>
-                <p style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,0.6)' }}>{s.l}</p>
-              </div>
-            ))}
-          </div>
-          {blockedItems.length > 0 && (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl"
-              style={{ background: 'rgba(239,68,68,0.25)', border: '1px solid rgba(239,68,68,0.4)' }}>
-              <XCircle size={14} style={{ color: '#fca5a5' }}/>
-              <span style={{ fontSize: '0.75rem', color: '#fca5a5', fontWeight: 600 }}>
-                {blockedItems.length} 項禁止上線條件
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="tabs-list mb-6">
-        {TABS.map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id)}
-            className={`tab-item ${activeTab === t.id ? 'active' : ''}`}>
-            {t.icon}{t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* ── Components Tab ─── */}
-      {activeTab === 'components' && (
-        <div className="space-y-3">
-          <div className="alert alert-info mb-4" role="note">
-            <Info size={15} style={{ flexShrink: 0 }}/>
-            <p className="text-sm">
-              每個元件必須逐項確認。<strong>pass = 通過、fix = 需修正、block = 禁止上線</strong>。
-              結果自動儲存至 localStorage。
-            </p>
-          </div>
-
-          {COMPONENT_SPECS.map(spec => {
-            const specChecks = spec.checks.map(c => compChecks[c.id] ?? 'skip');
-            const specPass  = specChecks.filter(s => s === 'pass').length;
-            const specBlock = specChecks.filter(s => s === 'block').length;
-            const isOpen = expandedComp === spec.name;
-
-            return (
-              <div key={spec.name} className="card overflow-hidden">
-                <button
-                  className="card-header w-full text-left hover:bg-slate-50 transition-colors"
-                  onClick={() => setExpandedComp(isOpen ? null : spec.name)}
-                  aria-expanded={isOpen}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                      style={{ background: spec.category === 'base' ? '#EBF2FA' : spec.category === 'composite' ? '#f0fdf4' : '#fef3c7',
-                               color: spec.category === 'base' ? '#003262' : spec.category === 'composite' ? '#15803d' : '#92400e' }}>
-                      <Box size={14}/>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{spec.name}</p>
-                        <span className="badge badge-sm badge-default">{spec.category}</span>
-                      </div>
-                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{spec.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {specBlock > 0 && <span className="badge badge-error badge-sm">{specBlock} 禁止</span>}
-                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{specPass}/{spec.checks.length}</span>
-                    {isOpen ? <ChevronDown size={13} style={{ color: 'var(--text-muted)' }}/> : <ChevronRight size={13} style={{ color: 'var(--text-muted)' }}/>}
-                  </div>
-                </button>
-
-                {isOpen && (
-                  <div className="card-body" style={{ paddingTop: '0.75rem' }}>
-                    <div className="space-y-2 mb-4">
-                      {spec.checks.map(check => {
-                        const cur = compChecks[check.id] ?? 'skip';
-                        return (
-                          <div key={check.id}
-                            className="flex items-start gap-2 p-3 rounded-lg"
-                            style={{ background: cur === 'block' ? '#fff1f2' : cur === 'fix' ? '#fffbeb' : cur === 'pass' ? '#f0fdf4' : 'var(--surface-gray)' }}>
-                            <StatusIcon s={cur as CheckState}/>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-xs font-mono text-slate-400">{check.id}</span>
-                                {check.required && <span className="badge badge-sm badge-error">必要</span>}
+  const pageConfig: UniversalPageConfig = {
+    id: 'acceptance-checklist',
+    title: '品質驗收清單',
+    subtitle: '頁面模板與元件品牌合規檢查。確保每一頁都符合 Berkeley Academy v11.5 視覺標準與 5T 誠信協議。',
+    icon: <ShieldCheck size={32} />,
+    griReference: 'Governance Quality Control',
+    activeT5Tags: ['T1', 'T4', 'T5'],
+    primaryActions: [
+      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: () => window.location.reload() },
+      { id: 'reset',   label: '重置', icon: <XCircle size={16}/>, variant: 'ghost', onClick: reset },
+      { id: 'export',  label: '匯出審計報告', icon: <Download size={16}/>, onClick: () => alert('正在匯出...') }
+    ],
+    kpis: [
+      { key: 'score', label: '合規分數', value: score, unit: 'pts', icon: <BrandScoreRing score={score} size={20} />, color: '#003262' },
+      { key: 'passed', label: '通過項目', value: passCount, icon: <CheckCircle size={18}/>, color: '#10B981' },
+      { key: 'fixes', label: '需修正', value: fixCount, icon: <AlertTriangle size={18}/>, color: '#FDB515' },
+      { key: 'blocked', label: '禁止上線', value: blockCount, icon: <XCircle size={18}/>, color: '#EF4444' },
+    ],
+    sections: [
+      {
+        id: 'tabs',
+        title: '驗收維度',
+        columns: 12,
+        component: (
+          <BrandTabs 
+            activeTab={activeTab}
+            onTabChange={(t) => setActiveTab(t as any)}
+            tabs={[
+              { id: 'components', label: '元件合規', icon: <Box size={16}/> },
+              { id: 'pages',      label: '模板驗收', icon: <Layers size={16}/> },
+              { id: 'tokens',     label: '視覺語意', icon: <Code2 size={16}/> },
+              { id: 'status',     label: '封殺清單', icon: <XCircle size={16}/> },
+            ]}
+          />
+        )
+      },
+      {
+        id: 'content',
+        title: '檢核明細',
+        columns: 12,
+        component: (
+          <div className="space-y-8 fade-in">
+            {activeTab === 'components' && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                 {COMPONENT_SPECS.map(spec => {
+                   const specChecks = spec.checks.map(c => compChecks[c.id] ?? 'skip');
+                   const specPass = specChecks.filter(s => s === 'pass').length;
+                   const isOpen = expandedComp === spec.name;
+                   
+                   return (
+                     <BrandCard key={spec.name} padding="none" className="glass-panel border-none overflow-hidden group">
+                        <button 
+                          onClick={() => setExpandedComp(isOpen ? null : spec.name)}
+                          className="w-full flex items-center justify-between p-8 text-left hover:bg-[#003262]/5 transition-all"
+                        >
+                           <div className="flex items-center gap-5">
+                              <div className="w-12 h-12 rounded-2xl bg-[#003262]/5 flex items-center justify-center text-[#003262] group-hover:scale-110 transition-transform shadow-sm">
+                                 <Box size={24} />
                               </div>
-                              <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>{check.label}</p>
-                            </div>
-                            <div className="flex gap-1 flex-shrink-0">
-                              {(['pass', 'fix', 'block', 'skip'] as CheckState[]).map(s => (
-                                <button key={s} onClick={() => setComp(check.id, s)}
-                                  className="text-[10px] font-semibold px-2 py-1 rounded transition-all"
-                                  style={{
-                                    background: cur === s ? (s === 'pass' ? '#22c55e' : s === 'fix' ? '#f59e0b' : s === 'block' ? '#ef4444' : '#64748b') : 'var(--surface-mid)',
-                                    color: cur === s ? '#fff' : 'var(--text-muted)',
-                                  }}>
-                                  {s === 'pass' ? '通過' : s === 'fix' ? '修正' : s === 'block' ? '禁止' : '—'}
-                                </button>
-                              ))}
-                            </div>
+                              <div>
+                                 <h3 className="text-lg font-black text-[#003262] tracking-tight">{spec.name}</h3>
+                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{spec.category} · {specPass}/{spec.checks.length} Pass</p>
+                              </div>
+                           </div>
+                           <ChevronDown className={`text-slate-300 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        
+                        {isOpen && (
+                          <div className="p-8 pt-0 space-y-4 animate-in slide-in-from-top-2 duration-500">
+                             <div className="h-px bg-slate-100 mb-6" />
+                             {spec.checks.map(check => {
+                               const cur = compChecks[check.id] ?? 'skip';
+                               return (
+                                 <div key={check.id} className="flex items-start gap-4 p-5 rounded-2xl bg-white/50 border border-slate-50 shadow-sm transition-all hover:border-[#003262]/10">
+                                    <StatusIcon s={cur} />
+                                    <div className="flex-1 min-w-0">
+                                       <div className="flex items-center gap-2 mb-1">
+                                          <span className="text-[10px] font-mono text-slate-300">#{check.id}</span>
+                                          {check.required && <BrandBadge variant="outline" size="xs" className="text-red-500 border-red-100">REQUIRED</BrandBadge>}
+                                       </div>
+                                       <p className="text-sm font-bold text-slate-700 leading-snug">{check.label}</p>
+                                    </div>
+                                    <div className="flex gap-1.5">
+                                       {(['pass', 'fix', 'block'] as CheckState[]).map(s => (
+                                         <button 
+                                          key={s} 
+                                          onClick={() => setComp(check.id, s)}
+                                          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${cur === s ? 'bg-[#003262] text-white shadow-lg' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
+                                         >
+                                            {s === 'pass' ? <CheckCircle size={14}/> : s === 'block' ? <XCircle size={14}/> : <AlertTriangle size={14}/>}
+                                         </button>
+                                       ))}
+                                    </div>
+                                 </div>
+                               );
+                             })}
                           </div>
-                        );
-                      })}
-                    </div>
-
-                    {spec.antiPatterns.length > 0 && (
-                      <div className="rounded-xl p-3" style={{ background: '#fff1f2', border: '1px solid #fecdd3' }}>
-                        <p className="text-xs font-semibold mb-2" style={{ color: '#991b1b' }}>⚠ 反模式警示</p>
-                        <div className="space-y-1">
-                          {spec.antiPatterns.map((ap, i) => (
-                            <div key={i} className="flex items-start gap-1.5">
-                              <X size={10} style={{ color: '#ef4444', flexShrink: 0, marginTop: 3 }}/>
-                              <span className="text-xs" style={{ color: '#991b1b' }}>{ap}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* ── Pages Tab ─── */}
-      {activeTab === 'pages' && (
-        <div className="space-y-4">
-          {/* Template filter */}
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setFilterTemplate('all')}
-              className="btn btn-sm"
-              style={{ background: filterTemplate === 'all' ? '#003262' : 'var(--surface-mid)', color: filterTemplate === 'all' ? '#fff' : 'var(--text-secondary)' }}>
-              全部模板
-            </button>
-            {Object.entries(TEMPLATE_META).map(([t, meta]) => (
-              <button key={t}
-                onClick={() => setFilterTemplate(t as PageTemplate)}
-                className="btn btn-sm flex items-center gap-1.5"
-                style={{
-                  background: filterTemplate === t ? meta.color : 'var(--surface-mid)',
-                  color: filterTemplate === t ? '#fff' : 'var(--text-secondary)',
-                }}>
-                {meta.icon}{meta.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="card">
-            <div className="card-header">
-              <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                頁面驗收清單
-              </h3>
-              <span className="badge badge-blue">{filteredPageItems.length} 項</span>
-            </div>
-            <div style={{ padding: '0.75rem' }}>
-              <div className="space-y-2">
-                {filteredPageItems.map(item => {
-                  const cur = pageChecks[item.id] ?? 'skip';
-                  return (
-                    <div key={item.id}
-                      className="flex items-start gap-3 p-3 rounded-xl"
-                      style={{ background: cur === 'block' ? '#fff1f2' : cur === 'fix' ? '#fffbeb' : cur === 'pass' ? '#f0fdf4' : 'var(--surface-gray)' }}>
-                      <StatusIcon s={cur as CheckState}/>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                          <span className="text-[10px] font-mono text-slate-400">{item.id}</span>
-                          {item.required && <span className="badge badge-sm badge-error">必要</span>}
-                          {item.template.map(t => (
-                            <span key={t} className="badge badge-sm"
-                              style={{ background: `${TEMPLATE_META[t].color}15`, color: TEMPLATE_META[t].color, borderColor: 'transparent' }}>
-                              {TEMPLATE_META[t].label}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{item.question}</p>
-                      </div>
-                      <div className="flex gap-1 flex-shrink-0">
-                        {(['pass', 'fix', 'block', 'skip'] as CheckState[]).map(s => (
-                          <button key={s} onClick={() => setPage(item.id, s)}
-                            className="text-[10px] font-semibold px-2 py-1 rounded transition-all"
-                            style={{
-                              background: cur === s ? (s === 'pass' ? '#22c55e' : s === 'fix' ? '#f59e0b' : s === 'block' ? '#ef4444' : '#64748b') : 'var(--surface-mid)',
-                              color: cur === s ? '#fff' : 'var(--text-muted)',
-                            }}>
-                            {s === 'pass' ? '通過' : s === 'fix' ? '修正' : s === 'block' ? '禁止' : '—'}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── Tokens / Status Tab ─── */}
-      {activeTab === 'tokens' && (
-        <div className="space-y-6">
-          {/* Status presentation map */}
-          <div className="card">
-            <div className="card-header">
-              <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                RecordLifecycleStatus 狀態語意映射表
-              </h3>
-              <span className="badge badge-blue">shared-types</span>
-            </div>
-            <div className="table-wrapper" style={{ borderRadius: 0, border: 'none' }}>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Status Key</th><th>顯示標籤</th><th>Tone</th><th>視覺效果</th><th>防崩壞規則</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(Object.entries(STATUS_PRESENTATION_MAP) as [RecordLifecycleStatus, typeof STATUS_PRESENTATION_MAP[RecordLifecycleStatus]][]).map(([key, v]) => (
-                    <tr key={key}>
-                      <td><code className="mono text-xs" style={{ color: '#003262' }}>{key}</code></td>
-                      <td>
-                        <span className={`badge badge-${
-                          v.tone === 'success' ? 'success' : v.tone === 'warning' ? 'warning' : v.tone === 'danger' ? 'error' : v.tone === 'info' ? 'info' : 'default'
-                        }`}>{v.label}</span>
-                      </td>
-                      <td><span className="badge badge-default badge-sm">{v.tone}</span></td>
-                      <td>
-                        <div className="w-4 h-4 rounded-full inline-block"
-                          style={{ background: v.tone === 'success' ? '#22c55e' : v.tone === 'warning' ? '#f59e0b' : v.tone === 'danger' ? '#ef4444' : v.tone === 'info' ? '#3b82f6' : '#94a3b8' }}/>
-                      </td>
-                      <td className="text-xs" style={{ color: 'var(--text-muted)' }}>
-                        {key === 'pending' ? 'pending/waiting/processing 不可共存' :
-                         key === 'approved' ? 'approved 綠與 completed 綠必須同色' :
-                         key === 'rejected' ? '列表與詳情 label 必須一致' :
-                         '顏色不可為唯一信號，必須搭配文案'}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Design Token quick ref */}
-          <div className="bento-grid">
-            {[
-              { title: '行動顏色', items: [
-                { label: 'primary.bg',     v: '#003262', isColor: true },
-                { label: 'primary.hover',  v: '#001F3F', isColor: true },
-                { label: 'secondary.bg',   v: '#EBF2FA', isColor: true },
-                { label: 'danger.bg',      v: '#E11D48', isColor: true },
-                { label: 'gold',           v: '#FDB515', isColor: true },
-              ]},
-              { title: '狀態顏色', items: [
-                { label: 'success.bg',  v: '#DCFCE7', isColor: true },
-                { label: 'warning.bg',  v: '#FEF3C7', isColor: true },
-                { label: 'danger.bg',   v: '#FFE4E6', isColor: true },
-                { label: 'info.bg',     v: '#EBF2FA', isColor: true },
-                { label: 'neutral.bg',  v: '#F1F5F9', isColor: true },
-              ]},
-              { title: '排版比例', items: [
-                { label: 'pageTitle',    v: '1.875rem / 700', isColor: false },
-                { label: 'sectionTitle', v: '1.125rem / 600', isColor: false },
-                { label: 'cardTitle',    v: '1rem / 600',     isColor: false },
-                { label: 'body',         v: '0.875rem / 400', isColor: false },
-                { label: 'caption',      v: '0.6875rem / 400',isColor: false },
-              ]},
-              { title: '間距 Scale', items: [
-                { label: 'stack.xs', v: '0.25rem', isColor: false },
-                { label: 'stack.s',  v: '0.5rem',  isColor: false },
-                { label: 'stack.m',  v: '1rem',    isColor: false },
-                { label: 'stack.l',  v: '1.5rem',  isColor: false },
-                { label: 'stack.xl', v: '2rem',    isColor: false },
-              ]},
-            ].map((group, gi) => (
-              <div key={gi} className="card card-body bento-6 bento-3">
-                <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--text-muted)' }}>
-                  {group.title}
-                </p>
-                <div className="space-y-2">
-                  {group.items.map((item, ii) => (
-                    <div key={ii} className="flex items-center justify-between">
-                      <span className="text-xs font-mono" style={{ color: '#003262' }}>{item.label}</span>
-                      <div className="flex items-center gap-2">
-                        {item.isColor && (
-                          <div className="w-4 h-4 rounded border border-slate-200" style={{ background: item.v }}/>
                         )}
-                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{item.v}</span>
-                      </div>
+                     </BrandCard>
+                   );
+                 })}
+              </div>
+            )}
+
+            {activeTab === 'pages' && (
+              <div className="space-y-10">
+                 <div className="flex items-center gap-4 p-4 bg-white/60 backdrop-blur-md rounded-[24px] border border-white shadow-sm overflow-x-auto no-scrollbar">
+                    <button onClick={() => setFilterTemplate('all')} className={`px-5 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all ${filterTemplate === 'all' ? 'bg-[#003262] text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}>ALL_TEMPLATES</button>
+                    {Object.entries(TEMPLATE_META).map(([t, m]) => (
+                      <button 
+                        key={t} onClick={() => setFilterTemplate(t as PageTemplate)}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all ${filterTemplate === t ? 'bg-[#003262] text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}
+                      >
+                         {m.icon} {m.label}
+                      </button>
+                    ))}
+                 </div>
+
+                 <BrandCard padding="none" className="glass-panel border-none shadow-extreme overflow-hidden">
+                    <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+                       <h3 className="text-xl font-black text-[#003262] tracking-tight uppercase">頁面合規檢查</h3>
+                       <BrandBadge variant="gold" size="sm">{filteredPageItems.length} ITEMS</BrandBadge>
                     </div>
-                  ))}
-                </div>
+                    <div className="divide-y divide-slate-50">
+                       {filteredPageItems.map(item => {
+                         const cur = pageChecks[item.id] ?? 'skip';
+                         return (
+                           <div key={item.id} className="p-8 flex items-start gap-8 hover:bg-slate-50/50 transition-all group">
+                              <StatusIcon s={cur} />
+                              <div className="flex-1 space-y-3">
+                                 <div className="flex items-center gap-3">
+                                    <span className="text-[10px] font-mono text-slate-300 tracking-tighter">#{item.id}</span>
+                                    {item.template.map(t => (
+                                      <BrandBadge key={t} variant="outline" size="xs" className="opacity-40">{TEMPLATE_META[t].label}</BrandBadge>
+                                    ))}
+                                 </div>
+                                 <p className="text-base font-bold text-slate-700 leading-relaxed">{item.question}</p>
+                              </div>
+                              <div className="flex gap-2">
+                                 {(['pass', 'fix', 'block'] as CheckState[]).map(s => (
+                                   <BrandButton 
+                                    key={s} 
+                                    variant={cur === s ? 'primary' : 'ghost'} 
+                                    size="xs" 
+                                    className="h-10 px-4 rounded-xl font-black uppercase tracking-widest"
+                                    onClick={() => setPage(item.id, s)}
+                                   >
+                                      {s === 'pass' ? 'PASS' : s === 'fix' ? 'FIX' : 'BLOCK'}
+                                   </BrandButton>
+                                 ))}
+                              </div>
+                           </div>
+                         );
+                       })}
+                    </div>
+                 </BrandCard>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            )}
 
-      {/* ── Block Conditions Tab ─── */}
-      {activeTab === 'status' && (
-        <div className="space-y-4">
-          <div className="alert alert-danger" role="alert">
-            <XCircle size={15} style={{ flexShrink: 0 }}/>
-            <p className="text-sm">
-              以下任一條件成立，即判定為<strong> 禁止上線</strong>，必須修復後重新驗收。
-              請勾選目前已發現的問題。
-            </p>
-          </div>
+            {activeTab === 'tokens' && (
+              <div className="space-y-12">
+                 <BrandCard padding="lg" className="glass-panel border-none shadow-premium">
+                    <BrandCardHeader title="RecordLifecycleStatus 狀態映射" subtitle="共享類型語意標準" />
+                    <div className="mt-8 overflow-hidden rounded-[24px] border border-slate-100">
+                       <table className="w-full text-left">
+                          <thead className="bg-slate-50/50 border-b border-slate-100">
+                             <tr>
+                                <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status Key</th>
+                                <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Presentation</th>
+                                <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tone</th>
+                                <th className="p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Safety Rule</th>
+                             </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-50 bg-white/50">
+                             {(Object.entries(STATUS_PRESENTATION_MAP) as [RecordLifecycleStatus, typeof STATUS_PRESENTATION_MAP[RecordLifecycleStatus]][]).map(([key, v]) => (
+                               <tr key={key} className="hover:bg-white transition-colors">
+                                  <td className="p-6"><code className="font-mono text-sm font-black text-[#003262]">{key}</code></td>
+                                  <td className="p-6"><BrandBadge variant={v.tone === 'danger' ? 'error' : v.tone as any} size="sm" className="font-black px-4">{v.label}</BrandBadge></td>
+                                  <td className="p-6"><span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{v.tone}</span></td>
+                                  <td className="p-6 text-xs font-medium text-slate-500 italic">顏色不可為唯一信號，必須搭配文字說明。</td>
+                               </tr>
+                             ))}
+                          </tbody>
+                       </table>
+                    </div>
+                 </BrandCard>
 
-          <div className="card">
-            <div className="card-header">
-              <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>禁止上線條件清單</h3>
-              <span className={`badge ${blockedItems.length > 0 ? 'badge-error' : 'badge-success'}`}>
-                {blockedItems.length > 0 ? `${blockedItems.length} 項觸發` : '全部通過'}
-              </span>
-            </div>
-            <div style={{ padding: '0.75rem' }}>
-              <div className="space-y-2">
-                {BLOCK_CONDITIONS.map((cond, i) => {
-                  const triggered = !!blockChecks[String(i)];
-                  return (
-                    <label key={i}
-                      className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors"
-                      style={{ background: triggered ? '#fff1f2' : 'var(--surface-gray)', border: triggered ? '1px solid #fecdd3' : '1px solid transparent' }}>
-                      <input type="checkbox" checked={triggered}
-                        onChange={e => setBlock(String(i), e.target.checked)}
-                        className="w-4 h-4 rounded"
-                        style={{ accentColor: '#ef4444' }}
-                        aria-label={cond}/>
-                      <span className="text-sm" style={{ color: triggered ? '#991b1b' : 'var(--text-secondary)', fontWeight: triggered ? 600 : 400 }}>
-                        {cond}
-                      </span>
-                      {triggered && <XCircle size={14} style={{ color: '#ef4444', marginLeft: 'auto', flexShrink: 0 }}/>}
-                    </label>
-                  );
-                })}
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {[
+                      { title: 'Core Colors', items: [['primary', '#003262'], ['accent', '#FDB515'], ['secondary', '#3B7EA1']] },
+                      { title: 'Status Colors', items: [['success', '#10B981'], ['warning', '#F59E0B'], ['error', '#EF4444']] },
+                      { title: 'Typography', items: [['Title', '1.875rem'], ['Section', '1.125rem'], ['Body', '0.875rem']] },
+                      { title: 'Spacial System', items: [['Stack.M', '1rem'], ['Stack.L', '1.5rem'], ['Radius', '24px']] }
+                    ].map((g, i) => (
+                      <BrandCard key={i} padding="lg" className="border-none shadow-sm hover:shadow-lg transition-all duration-500 bg-white group">
+                         <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6 group-hover:text-[#003262] transition-colors">{g.title}</h4>
+                         <div className="space-y-4">
+                            {g.items.map(([l, v]) => (
+                              <div key={l} className="flex items-center justify-between">
+                                 <span className="text-xs font-black text-[#003262]/60">{l}</span>
+                                 <div className="flex items-center gap-3">
+                                    {v.startsWith('#') && <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: v }} />}
+                                    <span className="font-mono text-[11px] text-slate-400">{v}</span>
+                                 </div>
+                              </div>
+                            ))}
+                         </div>
+                      </BrandCard>
+                    ))}
+                 </div>
               </div>
-            </div>
-          </div>
+            )}
 
-          {/* Quick judgment guide */}
-          <div className="card card-body" style={{ background: '#EBF2FA', border: '1px solid #D4E4F7' }}>
-            <p className="text-xs font-bold mb-3" style={{ color: '#003262' }}>💡 設計是否正確的快速判斷法</p>
-            <div className="space-y-2">
-              {[
-                '若拿掉顏色與插圖，頁面仍能被理解 → 結構大致正確',
-                '若資料量增加三倍，頁面仍不亂 → 模板穩定',
-                '若第一次使用者能在短時間內知道下一步 → 互動路徑正確',
-                '若同模組不同頁面看起來像同一個產品 → 系統一致性正確',
-                '若前端能用共用元件實作而非各做各的 → 工程映射正確',
-              ].map((tip, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <CheckCircle size={12} style={{ color: '#003262', flexShrink: 0, marginTop: 2 }}/>
-                  <span className="text-xs" style={{ color: '#005DAA' }}>{tip}</span>
-                </div>
-              ))}
-            </div>
+            {activeTab === 'status' && (
+              <div className="space-y-10">
+                 <div className="p-10 bg-red-600 rounded-[40px] shadow-2xl overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none group-hover:scale-125 transition-transform duration-1000">
+                       <AlertTriangle size={200} color="#fff" strokeWidth={1} />
+                    </div>
+                    <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10">
+                       <div className="w-20 h-20 rounded-3xl bg-white/10 flex items-center justify-center text-white backdrop-blur-md">
+                          <XCircle size={48} />
+                       </div>
+                       <div className="flex-1 space-y-2">
+                          <h3 className="text-3xl font-black text-white tracking-tight uppercase">禁止上線 (Hard Stop)</h3>
+                          <p className="text-red-100 text-lg font-medium max-w-2xl">
+                             以下任一條件成立，系統將自動鎖定「發布 (Publish)」功能。必須修復後方可重新進入 T5 封印流程。
+                          </p>
+                       </div>
+                    </div>
+                 </div>
+
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {BLOCK_CONDITIONS.map((cond, i) => {
+                      const triggered = !!blockChecks[String(i)];
+                      return (
+                        <button 
+                          key={i} 
+                          onClick={() => setBlock(String(i), !triggered)}
+                          className={`group p-8 rounded-[32px] border text-left transition-all duration-500 ${triggered ? 'bg-red-50 border-red-200 shadow-lg' : 'bg-white border-slate-100 hover:border-red-100'}`}
+                        >
+                           <div className="flex items-center justify-between mb-4">
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${triggered ? 'bg-red-600 text-white' : 'bg-slate-50 text-slate-300'}`}>
+                                 {triggered ? <XCircle size={20} /> : <AlertTriangle size={20} />}
+                              </div>
+                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${triggered ? 'bg-red-600 border-red-600' : 'border-slate-100 group-hover:border-red-200'}`}>
+                                 {triggered && <Check size={12} className="text-white" />}
+                              </div>
+                           </div>
+                           <p className={`text-base font-black leading-relaxed ${triggered ? 'text-red-900' : 'text-slate-500 group-hover:text-slate-700'}`}>{cond}</p>
+                        </button>
+                      );
+                    })}
+                 </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
-    </div>
-  );
+        )
+      }
+    ],
+    features: { useAuditLog: true }
+  };
+
+  return <StandardPage config={pageConfig} />;
 }

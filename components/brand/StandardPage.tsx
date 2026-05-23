@@ -76,8 +76,9 @@ export default function StandardPage({ config }: StandardPageProps) {
               trend={k.trend}
               trendUp={k.trendUp}
               icon={k.icon}
+              color={k.color}
               verified={k.verified}
-              className={`border-t-4 ${idx % 2 === 0 ? 'border-[#003262]' : 'border-[#FDB515]'}`}
+              className="border-none shadow-xl shadow-slate-200/50 bg-white/80 backdrop-blur-md transition-all duration-500 hover:scale-[1.02]"
             />
           ))}
         </div>
