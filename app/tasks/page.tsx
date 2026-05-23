@@ -350,7 +350,7 @@ export default function TasksPage() {
       {toast && (
         <div className="fixed top-8 right-8 z-100 animate-in fade-in slide-in-from-top-4 duration-300">
            <div className={`px-6 py-4 rounded-2xl shadow-extreme text-white font-black text-sm flex items-center gap-3 ${toast.type === 'error' ? 'bg-red-600' : 'bg-[#003262]'}`}>
-              {toast.type === 'error' ? <AlertTriangle size={18} /> : <CheckCircle size={18} />}
+              {toast.type === 'error' ? <AlertTriangle size={18} /> : <CheckCircle2 size={18} />}
               {toast.msg}
            </div>
         </div>

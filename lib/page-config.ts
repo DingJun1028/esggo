@@ -34,6 +34,7 @@ export interface PageSection {
   columns: 1 | 2 | 3 | 4 | 6 | 7 | 8 | 12; // Bento grid columns
   component: React.ReactNode;
   actions?: PageAction[];
+  hidden?: boolean;
 }
 
 export interface UniversalPageConfig {

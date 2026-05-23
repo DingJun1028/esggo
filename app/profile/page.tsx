@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Edit3, Save, Plus, Trash2, Building, Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, Sparkles, MapPin, Landmark } from 'lucide-react';
+import { Edit3, Save, Plus, Trash2, Building, Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, Sparkles, MapPin, Landmark, X } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandCardHeader, BrandStatusDot } from '../../components/brand';
 import { motion, AnimatePresence } from 'framer-motion';
 

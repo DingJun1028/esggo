@@ -11,7 +11,6 @@ import {
   Search, Command, X, Sparkles, ArrowRight
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
-import { BrandBadge } from '../components/brand';
 
 const navGroups = [
   {
@@ -115,26 +114,24 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-start justify-center pt-[15vh] px-4 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-100 flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-300">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
-      <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-[32px] border border-white shadow-extreme overflow-hidden">
-        <div className="flex items-center gap-4 p-6 border-b border-slate-100">
-          <Search size={22} className={searching ? "text-blue-500 animate-spin" : "text-slate-400"} />
+      <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-extreme overflow-hidden">
+        <div className="flex items-center gap-4 p-5 border-b border-slate-100">
+          <Search size={20} className={searching ? "text-blue-500 animate-spin" : "text-slate-400"} />
           <input 
             autoFocus
-            placeholder="搜尋功能、指標數據或 5T 審計紀錄..."
-            className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-[#003262] placeholder:text-slate-300"
+            placeholder="搜尋功能、指標數據或 5T 紀錄..."
+            className="flex-1 bg-transparent border-none outline-none text-base font-bold text-[#003262] placeholder:text-slate-300"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <div className="flex items-center gap-1 px-2 py-1 bg-slate-50 rounded-lg border border-slate-100">
-            <span className="text-[10px] font-black text-slate-400 uppercase">ESC</span>
-          </div>
+          <kbd className="px-2 py-1 bg-slate-50 rounded-lg border border-slate-100 text-[9px] font-black text-slate-400">ESC</kbd>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto p-4 no-scrollbar">
+        <div className="max-h-[60vh] overflow-y-auto p-3 no-scrollbar">
           {results.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-1">
               {results.map((item, idx) => (
                 <button
                   key={`${item.href}-${idx}`}
@@ -142,44 +139,27 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                   className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-[#003262]/5 transition-all group"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-[#003262] group-hover:border-[#003262]/20 transition-all shadow-sm">
+                    <div className="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-[#003262] group-hover:border-[#003262]/20 transition-all shadow-sm">
                       {getIcon(item)}
                     </div>
                     <div className="text-left">
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-black text-[#003262]">{item.label || item.title}</p>
-                        {item.type && <BrandBadge variant="outline" size="xs" className="text-[8px] font-black uppercase tracking-tighter opacity-40">{item.type}</BrandBadge>}
+                        {item.type && <span className="px-1.5 py-0.5 bg-slate-100 rounded text-[8px] font-black uppercase tracking-tighter opacity-40">{item.type}</span>}
                       </div>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub || item.subtitle}</p>
                     </div>
                   </div>
-                  <ArrowRight size={16} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0" />
+                  <ArrowRight size={14} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100" />
                 </button>
               ))}
             </div>
           ) : (
             <div className="p-12 text-center">
-              <Bot size={48} className="mx-auto text-slate-200 mb-4 animate-bounce" />
-              <p className="text-sm font-bold text-slate-400 italic">Omni-Agent 找不到對應的結果，請嘗試其他關鍵字</p>
+              <Bot size={40} className="mx-auto text-slate-200 mb-4 animate-bounce" />
+              <p className="text-sm font-bold text-slate-400 italic">查無結果</p>
             </div>
           )}
-        </div>
-
-        <div className="p-4 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Select</span>
-              <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 text-[9px] font-black shadow-sm">↵</kbd>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Navigate</span>
-              <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 text-[9px] font-black shadow-sm">↑↓</kbd>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-[#FDB515]">
-            <Sparkles size={12} />
-            <span className="text-[10px] font-black uppercase tracking-widest">Powered by OmniHermes AI</span>
-          </div>
         </div>
       </div>
     </div>
@@ -196,9 +176,8 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
 
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''} bg-[#003262] border-r border-white/5 shadow-2xl shadow-black/20`}>
-      {/* Logo Section */}
       <div className="flex items-center gap-3 p-6 border-b border-white/5 min-h-[80px]">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#FDB515] to-[#f4a100] flex items-center justify-center font-black text-[#003262] text-sm shadow-lg shadow-[#FDB515]/20 flex-shrink-0">
+        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#FDB515] to-[#f4a100] flex items-center justify-center font-black text-[#003262] text-sm shadow-lg flex-shrink-0">
           ESG
         </div>
         {!collapsed && (
@@ -215,7 +194,6 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
         </button>
       </div>
 
-      {/* Global Search Trigger */}
       <div className="px-4 py-4">
         <button 
           onClick={onSearch}
@@ -233,10 +211,9 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
         </button>
       </div>
 
-      {/* Nav Section */}
       <nav className="flex-1 py-2 overflow-y-auto no-scrollbar scroll-smooth">
         {navGroups.map((group) => (
-          <div key={group.label} className="px-4 mb-8 last:mb-0">
+          <div key={group.label} className="px-4 mb-6 last:mb-0">
             {!collapsed && (
               <div className="px-4 mb-3 text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">
                 {group.label}
@@ -262,10 +239,10 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
                    </span>
                    {!collapsed && (
                      <div className="overflow-hidden animate-in fade-in slide-in-from-left-3 duration-500">
-                       <div className="text-[13.5px] font-bold whitespace-nowrap leading-none mb-1">
+                       <div className="text-[13px] font-bold whitespace-nowrap leading-none mb-1">
                          {item.label}
                        </div>
-                       <div className={`text-[9.5px] uppercase font-bold tracking-widest transition-colors ${isActive(item.href) ? 'text-[#FDB515]/60' : 'text-white/20 group-hover:text-white/40'}`}>
+                       <div className={`text-[9px] uppercase font-bold tracking-widest transition-colors ${isActive(item.href) ? 'text-[#FDB515]/60' : 'text-white/20 group-hover:text-white/40'}`}>
                          {item.sub}
                        </div>
                      </div>
@@ -277,12 +254,11 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
         ))}
       </nav>
 
-      {/* Sidebar Footer */}
       <div className={`p-6 border-t border-white/5 transition-all ${collapsed ? 'items-center' : ''}`}>
         <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.6)]" />
+          <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.6)]" />
           {!collapsed && (
-            <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em] animate-in fade-in duration-700">5T Active Node</span>
+            <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em]">5T Active Node</span>
           )}
         </div>
       </div>
@@ -293,31 +269,31 @@ function SidebarContent({ collapsed, onCollapse, onSearch }: { collapsed: boolea
 function MobileNav() {
   const pathname = usePathname() ?? '/';
   const quickItems = [
-    { href: '/', label: '控制台', icon: <LayoutDashboard size={20} /> },
-    { href: '/advisory', label: '諮詢', icon: <MessageSquare size={20} /> },
-    { href: '/environmental', label: '環境', icon: <Leaf size={20} /> },
-    { href: '/vault', label: '金庫', icon: <Lock size={20} /> },
-    { href: '/editor', label: '撰寫', icon: <FileText size={20} /> },
+    { href: '/', label: '控制', icon: <LayoutDashboard size={18} /> },
+    { href: '/advisory', label: '諮詢', icon: <MessageSquare size={18} /> },
+    { href: '/environmental', label: '環境', icon: <Leaf size={18} /> },
+    { href: '/vault', label: '金庫', icon: <Lock size={18} /> },
+    { href: '/editor', label: '撰寫', icon: <FileText size={18} /> },
   ];
 
   return (
-    <nav className="mobile-nav bg-[#003262] border-t border-white/10 px-6 shadow-[0_-8px_32px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+    <nav className="mobile-nav">
       {quickItems.map((item) => {
         const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
         return (
           <Link 
             key={item.href} 
             href={item.href} 
-            className={`flex flex-col items-center justify-center gap-1.5 flex-1 py-3 transition-all relative ${active ? 'text-[#FDB515]' : 'text-white/30'}`}
+            className={`flex flex-col items-center justify-center gap-1.5 flex-1 py-3 transition-all relative ${active ? 'text-[#003262]' : 'text-slate-400'}`}
           >
-            <div className={`transition-all duration-300 ${active ? 'scale-110 -translate-y-1' : ''}`}>
+            <div className={`transition-all duration-300 ${active ? 'scale-110 -translate-y-1 text-[#FDB515]' : ''}`}>
               {item.icon}
             </div>
-            <span className={`text-[9px] font-black uppercase tracking-widest transition-all ${active ? 'opacity-100 scale-105' : 'opacity-60'}`}>
+            <span className={`text-[9px] font-black uppercase tracking-widest transition-all ${active ? 'text-[#003262] opacity-100 scale-105' : 'opacity-60'}`}>
               {item.label}
             </span>
             {active && (
-              <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#FDB515] shadow-[0_0_10px_#FDB515]" />
+              <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#FDB515] shadow-[0_0_8px_#FDB515]" />
             )}
           </Link>
         );

@@ -74,6 +74,18 @@ export default function EnvironmentalPage() {
     setIsProvenanceOpen(true);
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('確定要刪除此指標嗎？')) return;
+    try {
+      await deleteEnvironmentalData(id);
+      load();
+      setToast({ msg: '數據刪除成功', type: 'success' });
+      setTimeout(() => setToast(null), 3000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const mockProvenanceSteps: ProvenanceStep[] = [
     { id: 'p1', type: 'source', title: '原始憑證載入', description: '從數位金庫讀取 PDF 憑證', actor: 'Vault_System', timestamp: '2024-03-12 14:20:00' },
     { id: 'p2', type: 'processing', title: 'AI 指標提取', description: 'OmniHermes 自動辨識 GHG 排放量', actor: 'Hermes-2', timestamp: '2024-03-12 14:20:05', details: 'Confidence: 0.96' },

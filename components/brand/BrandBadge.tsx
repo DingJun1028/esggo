@@ -10,6 +10,7 @@ interface BrandBadgeProps {
   size?: BadgeSize;
   dot?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
@@ -50,10 +51,12 @@ export default function BrandBadge({
   size = 'sm',
   dot = false,
   className = '',
+  style,
 }: BrandBadgeProps) {
   return (
     <span
       className={`inline-flex items-center gap-1 rounded-full font-medium ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      style={style}
     >
       {dot && (
         <span className={`w-1.5 h-1.5 rounded-full ${dotColors[variant]}`} />
