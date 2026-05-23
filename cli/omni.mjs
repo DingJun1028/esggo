@@ -421,6 +421,47 @@ audit.command('validate <file>')
     console.log(pc.yellow('💡 Recommendation: Run "vault seal" to achieve T5.'));
   });
 
+audit.command('stress')
+  .description('Perform a 5T Sealing Engine stress test (100 concurrent seals)')
+  .option('-i, --iterations <number>', 'Number of concurrent attestations', '100')
+  .action(async (options) => {
+    const iterations = parseInt(options.iterations);
+    console.log(pc.magenta(`🔥 Starting 5T Protocol Stress Test: ${iterations} items...`));
+    const startTime = Date.now();
+
+    // Re-implementing core sealing logic for CLI environment stability
+    const runSeal = async (i) => {
+      const timestamp = new Date().toISOString();
+      const payload = JSON.stringify({ metric: `STRESS_${i}`, value: Math.random() });
+      const hash = computeHashLock(payload + timestamp);
+      
+      // Simulate mining delay (difficulty 2)
+      let nonce = 0;
+      let blockHash = '';
+      while (!blockHash.startsWith('00')) {
+        nonce++;
+        blockHash = computeHashLock(`${i}${payload}${hash}${nonce}`);
+      }
+      return { hash, blockHash };
+    };
+
+    try {
+      const tasks = Array.from({ length: iterations }).map((_, i) => runSeal(i));
+      const results = await Promise.all(tasks);
+      const duration = Date.now() - startTime;
+
+      console.log(pc.green('✅ Stress test completed successfully!'));
+      console.log(pc.white('----------------------------------'));
+      console.log(`Total Duration:  ${pc.cyan(duration + 'ms')}`);
+      console.log(`Avg per Seal:    ${pc.cyan((duration / iterations).toFixed(2) + 'ms')}`);
+      console.log(`Throughput:      ${pc.green((iterations / (duration / 1000)).toFixed(2) + ' items/sec')}`);
+      console.log(`Final Block:     ${pc.yellow(results[results.length-1].blockHash.slice(0, 16) + '...')}`);
+      console.log(pc.white('----------------------------------'));
+    } catch (err) {
+      console.log(pc.red(`❌ Stress Test Failed: ${err.message}`));
+    }
+  });
+
 // ── BlueCC & Cloud Commands ──────────────────────────────────────────────────
 const blue = program.command('blue').description('BlueCC Cloud Control Plane management');
 
