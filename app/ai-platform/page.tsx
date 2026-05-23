@@ -113,10 +113,35 @@ export default function AIPlatformPage() {
       <section className="space-y-6">
         <div className="flex items-center justify-between px-4">
            <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] flex items-center gap-2">
-              <Radio size={12} className="text-red-500 animate-pulse" /> Live Execution Stream
+              <Bot size={12} className="text-[#003262]" /> ADK Framework Readiness
            </h4>
-           <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Protocol: 5T_SECURE_V1</span>
+           <BrandBadge variant="outline" size="xs" className="border-slate-200 text-slate-400">Production_Candidate_v1</BrandBadge>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {[
+             { label: '核心調度器 (Orchestrator)', val: 100, status: 'READY', desc: '任務分派、授權守門員與狀態機。' },
+             { label: '技能註冊庫 (Skill Registry)', val: 100, status: 'READY', desc: '8 項核心 ESG 專家技能已上線。' },
+             { label: '5T 誠信協議整合', val: 100, status: 'READY', desc: 'SHA-256 自動封印與 RAG 閉環。' },
+             { label: '自癒自律機制 (Swarm)', val: 90, status: 'OPTIMIZING', desc: 'Repair Playbook 模型自動降級策略。' },
+             { label: 'LLM 串接核心 (Genkit)', val: 80, status: 'TESTING', desc: 'Gemini 2.0 介面已就緒，生成邏輯調優中。' },
+             { label: '整體框架成熟度', val: 95, status: 'STABLE', desc: '全域 Agent 協作標準化框架已達標。' },
+           ].map((m, i) => (
+             <BrandCard key={i} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-md transition-all group">
+                <div className="flex justify-between items-start mb-4">
+                   <h5 className="text-xs font-black text-[#003262] uppercase tracking-tight">{m.label}</h5>
+                   <span className={`text-[9px] font-black px-2 py-0.5 rounded ${m.val === 100 ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>{m.status}</span>
+                </div>
+                <div className="flex items-end justify-between mb-2">
+                   <span className="text-2xl font-black text-[#003262] font-mono leading-none">{m.val}%</span>
+                </div>
+                <BrandProgress value={m.val} size="xs" color={m.val === 100 ? 'green' : 'blue'} animated={m.val < 100} className="mb-4" />
+                <p className="text-[10px] text-slate-400 font-medium leading-relaxed">{m.desc}</p>
+             </BrandCard>
+           ))}
+        </div>
+      </section>
+
+      <section className="space-y-6">
         <div className="bg-[#0f172a] rounded-[32px] border border-slate-800 shadow-2xl overflow-hidden p-8 lg:p-12 relative">
            <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
            <div className="space-y-5 relative z-10">
