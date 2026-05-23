@@ -1,0 +1,53 @@
+type Organization @table {
+  name: String!
+  createdAt: Timestamp!
+  industry: String
+  contactEmail: String
+  website: String
+}
+
+type ESGCategory @table {
+  name: String!
+  description: String!
+  createdAt: Timestamp!
+}
+
+type Initiative @table {
+  organization: Organization!
+  esgCategory: ESGCategory!
+  name: String!
+  description: String!
+  status: String!
+  startDate: Date!
+  createdAt: Timestamp!
+  endDate: Date
+  ownerDepartment: String
+}
+
+type KPI @table {
+  initiative: Initiative!
+  name: String!
+  targetValue: Float!
+  unit: String!
+  createdAt: Timestamp!
+  description: String
+  baselineValue: Float
+}
+
+type ProgressUpdate @table {
+  kpi: KPI!
+  initiative: Initiative!
+  actualValue: Float!
+  dateRecorded: Date!
+  createdAt: Timestamp!
+  notes: String
+}
+
+type Document @table {
+  initiative: Initiative!
+  title: String!
+  documentURL: String!
+  createdAt: Timestamp!
+  description: String
+  documentType: String
+}
