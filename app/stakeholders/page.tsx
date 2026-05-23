@@ -1,6 +1,11 @@
 'use client';
-import { useState } from 'react';
-import { Users, TrendingUp, MessageSquare, Star, Plus, Filter } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Users, TrendingUp, MessageSquare, Star, Plus, Filter, ShieldCheck, Heart, BarChart3, ArrowUpRight, CheckCircle2, AlertCircle, Bot, Sparkles, X, History } from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
+} from '../../components/brand';
+import { UniversalPageConfig } from '../../lib/page-config';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Stakeholder {
   id: string;
@@ -15,160 +20,186 @@ interface Stakeholder {
 }
 
 const MOCK_STAKEHOLDERS: Stakeholder[] = [
-  { id: '1', name: '機構投資者聯盟', type: '投資者', influence: 9, concern: 8, sentiment: 'positive', engagements: 12, lastContact: '2024-04-10', topics: ['ESG 評級', 'TCFD 揭露', '股東回報'] },
-  { id: '2', name: '台灣環保聯盟', type: '非政府組織', influence: 7, concern: 9, sentiment: 'neutral', engagements: 5, lastContact: '2024-03-22', topics: ['碳排放', '廢水處理', '生物多樣性'] },
-  { id: '3', name: '員工代表委員會', type: '員工', influence: 8, concern: 7, sentiment: 'positive', engagements: 24, lastContact: '2024-04-15', topics: ['薪酬福利', '工作安全', '多元共融'] },
-  { id: '4', name: '主要客戶群 (B2B)', type: '客戶', influence: 9, concern: 6, sentiment: 'positive', engagements: 18, lastContact: '2024-04-20', topics: ['供應鏈透明', '碳足跡', '綠色產品'] },
-  { id: '5', name: '地方社區代表', type: '社區', influence: 5, concern: 8, sentiment: 'neutral', engagements: 8, lastContact: '2024-02-28', topics: ['環境影響', '就業機會', '社區投資'] },
+  { id: '1', name: '機構投資者聯盟', type: '投資者', influence: 9, concern: 8, sentiment: 'positive', engagements: 12, lastContact: '2024-04-10', topics: ['ESG 評級', 'TCFD 揭露'] },
+  { id: '2', name: '台灣環保聯盟', type: '非政府組織', influence: 7, concern: 9, sentiment: 'neutral', engagements: 5, lastContact: '2024-03-22', topics: ['碳排放', '廢水處理'] },
+  { id: '3', name: '員工代表委員會', type: '員工', influence: 8, concern: 7, sentiment: 'positive', engagements: 24, lastContact: '2024-04-15', topics: ['薪酬福利', '工作安全'] },
+  { id: '4', name: '主要客戶群 (B2B)', type: '客戶', influence: 9, concern: 6, sentiment: 'positive', engagements: 18, lastContact: '2024-04-20', topics: ['供應鏈透明', '碳足跡'] },
 ];
+
+const SENTIMENT_META = {
+  positive: { label: '正向', color: '#10B981', bg: 'rgba(16, 185, 129, 0.1)' },
+  neutral:  { label: '中立', color: '#FDB515', bg: 'rgba(253, 181, 21, 0.1)' },
+  negative: { label: '負向', color: '#EF4444', bg: 'rgba(239, 68, 68, 0.1)' },
+};
 
 export default function StakeholdersPage() {
   const [stakeholders] = useState<Stakeholder[]>(MOCK_STAKEHOLDERS);
-  const [activeTab, setActiveTab] = useState<'list' | 'matrix'>('matrix');
+  const [activeTab, setActiveTab] = useState('matrix');
   const [selected, setSelected] = useState<Stakeholder | null>(null);
 
-  const sentimentColor = (s: string) => s === 'positive' ? '#22c55e' : s === 'neutral' ? '#f59e0b' : '#ef4444';
-  const sentimentLabel = (s: string) => s === 'positive' ? '正向' : s === 'neutral' ? '中立' : '負向';
+  const pageConfig: UniversalPageConfig = {
+    id: 'stakeholders',
+    title: '利害關係人 Stakeholders',
+    subtitle: 'GRI 2-29 · 影響力矩陣 · 情感追蹤：系統化管理與各群體的議合動態與關注議題。',
+    icon: <Users size={32} />,
+    griReference: 'GRI 2-29',
+    activeT5Tags: ['T1', 'T2', 'T3'],
+    primaryActions: [
+      { id: 'add', label: '新增關係人', icon: <Plus size={16}/>, onClick: () => alert('新增流程...') }
+    ],
+    kpis: [
+      { key: 'total', label: '關係人總數', value: stakeholders.length, icon: <Users size={18}/>, color: '#003262' },
+      { key: 'positive', label: '正向情感', value: '75', unit: '%', icon: <Heart size={18}/>, color: '#10B981', verified: true },
+      { key: 'engage', label: '本季議合', value: '59', unit: '次', icon: <MessageSquare size={18}/>, color: '#3B7EA1', verified: true },
+      { key: 'high', label: '高影響力', value: stakeholders.filter(s => s.influence >= 8).length, icon: <ShieldCheck size={18}/>, color: '#8B5CF6' },
+    ],
+    sections: [
+      {
+        id: 'tabs',
+        title: '檢視模式',
+        columns: 12,
+        component: (
+          <BrandTabs 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            tabs={[
+              { id: 'matrix', label: '影響力矩陣', icon: <BarChart3 size={16}/> },
+              { id: 'list',   label: '名冊清單',   icon: <Plus size={16}/> },
+            ]}
+          />
+        )
+      },
+      {
+        id: 'main',
+        title: activeTab === 'matrix' ? '影響力 vs 關注度 矩陣' : '利害關係人名冊',
+        columns: 8,
+        component: (
+          <div className="fade-in h-full">
+            {activeTab === 'matrix' ? (
+              <BrandCard padding="none" className="glass-panel border-none shadow-premium p-10 h-full min-h-[500px] flex flex-col">
+                 <div className="relative flex-1 bg-slate-50/50 rounded-[32px] border border-slate-100 overflow-hidden">
+                    {/* Matrix Grid */}
+                    <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px)', backgroundSize: '25% 25%' }} />
+                    <div className="absolute left-1/2 top-0 bottom-0 border-l-2 border-dashed border-slate-200" />
+                    <div className="absolute top-1/2 left-0 right-0 border-t-2 border-dashed border-slate-200" />
+                    
+                    <div className="absolute top-6 left-6 text-[10px] font-black text-slate-300 uppercase tracking-widest">高關注 / 低影響</div>
+                    <div className="absolute top-6 right-6 text-[10px] font-black text-[#003262]/40 uppercase tracking-widest text-right">核心深度協作</div>
+                    <div className="absolute bottom-6 left-6 text-[10px] font-black text-slate-300 uppercase tracking-widest">被動監控</div>
+                    <div className="absolute bottom-6 right-6 text-[10px] font-black text-slate-300 uppercase tracking-widest text-right">管理期望</div>
+
+                    {stakeholders.map(s => (
+                      <motion.button
+                        key={s.id}
+                        whileHover={{ scale: 1.2, zIndex: 50 }}
+                        onClick={() => setSelected(s)}
+                        className="absolute w-12 h-12 rounded-full border-4 border-white shadow-xl flex items-center justify-center text-white font-black text-sm transition-colors"
+                        style={{ 
+                          left: `${(s.influence / 10) * 100}%`, 
+                          bottom: `${(s.concern / 10) * 100}%`,
+                          backgroundColor: SENTIMENT_META[s.sentiment].color,
+                          transform: 'translate(-50%, 50%)'
+                        }}
+                      >
+                        {s.name.charAt(0)}
+                      </motion.button>
+                    ))}
+                 </div>
+                 <div className="mt-8 flex flex-wrap gap-6 justify-center">
+                    {Object.entries(SENTIMENT_META).map(([k, v]) => (
+                      <div key={k} className="flex items-center gap-2">
+                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: v.color }} />
+                         <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{v.label}傾向</span>
+                      </div>
+                    ))}
+                 </div>
+              </BrandCard>
+            ) : (
+              <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
+                 <BrandTable 
+                  columns={[
+                    { label: '關係人名稱', key: 'name' },
+                    { label: '類別', key: 'type' },
+                    { label: '指標 (I/C)', key: 'metrics' },
+                    { label: '情感', key: 'sentiment' },
+                    { label: '最後聯絡', key: 'date' },
+                  ]}
+                  data={stakeholders.map(s => ({
+                    name: <span className="font-bold text-[#003262]">{s.name}</span>,
+                    type: <BrandBadge variant="outline" size="xs" className="opacity-60">{s.type}</BrandBadge>,
+                    metrics: <span className="font-mono text-xs font-black">{s.influence} / {s.concern}</span>,
+                    sentiment: <BrandBadge variant="outline" size="xs" style={{ color: SENTIMENT_META[s.sentiment].color, backgroundColor: SENTIMENT_META[s.sentiment].bg, borderColor: 'transparent' }}>{SENTIMENT_META[s.sentiment].label}</BrandBadge>,
+                    date: <span className="font-mono text-[11px] text-slate-400 font-bold">{s.lastContact}</span>
+                  }))}
+                  onRowClick={setSelected}
+                 />
+              </BrandCard>
+            )}
+          </div>
+        )
+      },
+      {
+        id: 'ai',
+        title: 'Hermes 關係人分析',
+        columns: 4,
+        component: (
+          <BrandCard padding="none" className="bg-[#003262] border-none shadow-extreme overflow-hidden h-full flex flex-col group">
+             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-[2000ms]">
+                <Bot size={200} color="#fff" strokeWidth={0.5} />
+             </div>
+             <div className="p-8 border-b border-white/5 relative z-10">
+                <div className="flex items-center gap-3 text-[#FDB515] mb-2">
+                   <Sparkles size={20} className="animate-pulse" />
+                   <h3 className="text-lg font-black text-white uppercase tracking-tight">議合風險預警</h3>
+                </div>
+                <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.3em]">Hermes Sentiment Node</p>
+             </div>
+             <div className="p-8 flex-1 relative z-10 text-base text-blue-50/80 leading-relaxed font-medium italic">
+                偵測到「環保聯盟」近期在公開場合對本公司廢水處理流程表示關注。建議主動發送「T1 溯源報告」。
+             </div>
+             <div className="p-8 mt-auto border-t border-white/5 relative z-10">
+                <BrandButton variant="secondary" fullWidth className="rounded-2xl h-14 font-black shadow-2xl shadow-black/20" onClick={() => window.location.href='/intelligence'}>
+                   生成回覆建議 <ArrowUpRight size={16} className="ml-2" />
+                </BrandButton>
+             </div>
+          </BrandCard>
+        )
+      }
+    ],
+    features: { useAuditLog: true }
+  };
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
-        <div>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#003262', margin: 0 }}>利害關係人 Stakeholders</h1>
-          <p style={{ color: '#64748b', marginTop: '4px', fontSize: '14px' }}>GRI 2-29 · 影響力矩陣 · 情感追蹤</p>
-        </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
-          <Plus size={14} /> 新增利害關係人
-        </button>
-      </div>
-
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        {[
-          { label: '利害關係人總數', value: stakeholders.length.toString(), color: '#003262' },
-          { label: '正向情感比例', value: `${Math.round(stakeholders.filter(s => s.sentiment === 'positive').length / stakeholders.length * 100)}%`, color: '#22c55e' },
-          { label: '本季議合次數', value: stakeholders.reduce((a, s) => a + s.engagements, 0).toString(), color: '#3b7ea1' },
-          { label: '高影響力關係人', value: stakeholders.filter(s => s.influence >= 8).length.toString(), color: '#8b5cf6' },
-        ].map((s, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', marginBottom: '8px' }}>{s.label}</div>
-            <div style={{ fontSize: '28px', fontWeight: '800', color: s.color }}>{s.value}</div>
+    <>
+      <StandardPage config={pageConfig} />
+      <AnimatePresence>
+        {selected && (
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setSelected(null)} />
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme p-10 lg:p-14 max-w-xl w-full overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+              <header className="mb-10 relative z-10">
+                <div className="flex justify-between items-start">
+                   <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#003262] shadow-sm"><Users size={24} /></div>
+                      <div><h3 className="text-2xl font-black text-[#003262] tracking-tight">{selected.name}</h3><BrandBadge variant="info" size="xs" className="mt-1">{selected.type}</BrandBadge></div>
+                   </div>
+                   <button onClick={() => setSelected(null)} className="w-10 h-10 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all"><X size={20} /></button>
+                </div>
+              </header>
+              <div className="grid grid-cols-2 gap-6 mb-10 relative z-10">
+                 <div className="p-6 bg-slate-50/50 rounded-[24px] border border-slate-100 text-center"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">影響力</p><div className="text-4xl font-black text-[#003262] font-mono">{selected.influence} <span className="text-sm text-slate-300">/ 10</span></div></div>
+                 <div className="p-6 bg-slate-50/50 rounded-[24px] border border-slate-100 text-center"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">關注度</p><div className="text-4xl font-black text-[#003262] font-mono">{selected.concern} <span className="text-sm text-slate-300">/ 10</span></div></div>
+              </div>
+              <div className="space-y-6 relative z-10">
+                 <div className="space-y-3"><h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">關注議題</h4><div className="flex flex-wrap gap-2">{selected.topics.map((t, i) => <BrandBadge key={i} variant="outline" size="sm" className="px-3 border-slate-200 text-slate-500 font-bold">{t}</BrandBadge>)}</div></div>
+                 <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between"><div className="flex items-center gap-3"><History size={16} className="text-slate-300" /><span className="text-xs font-black text-slate-400 uppercase">Last Contact</span></div><span className="text-sm font-black text-[#003262] font-mono">{selected.lastContact}</span></div>
+              </div>
+              <footer className="mt-12"><BrandButton variant="primary" fullWidth className="rounded-2xl h-14 font-black shadow-xl" onClick={() => setSelected(null)}>關閉詳情</BrandButton></footer>
+            </motion.div>
           </div>
-        ))}
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-        {[{ id: 'matrix', label: '影響力矩陣' }, { id: 'list', label: '清單視圖' }].map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id as any)}
-            style={{ padding: '8px 16px', border: 'none', borderRadius: '8px', background: activeTab === t.id ? '#003262' : '#f1f5f9', color: activeTab === t.id ? '#fff' : '#64748b', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {activeTab === 'matrix' && (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '32px' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#003262', marginBottom: '20px' }}>影響力 vs 關注度 矩陣</h3>
-          <div style={{ position: 'relative', width: '100%', paddingBottom: '50%', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-            {/* Grid lines */}
-            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px)', backgroundSize: '25% 25%' }} />
-            <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, borderLeft: '2px dashed #cbd5e1' }} />
-            <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, borderTop: '2px dashed #cbd5e1' }} />
-            {/* Quadrant labels */}
-            <div style={{ position: 'absolute', top: '8px', left: '8px', fontSize: '10px', color: '#94a3b8', fontWeight: '600' }}>高關注/低影響 → 知情</div>
-            <div style={{ position: 'absolute', top: '8px', right: '8px', fontSize: '10px', color: '#94a3b8', fontWeight: '600', textAlign: 'right' }}>高關注/高影響 → 深度協作</div>
-            <div style={{ position: 'absolute', bottom: '8px', left: '8px', fontSize: '10px', color: '#94a3b8', fontWeight: '600' }}>低關注/低影響 → 監控</div>
-            <div style={{ position: 'absolute', bottom: '8px', right: '8px', fontSize: '10px', color: '#94a3b8', fontWeight: '600', textAlign: 'right' }}>低關注/高影響 → 管理期望</div>
-            {/* Stakeholder dots */}
-            {stakeholders.map(s => (
-              <div key={s.id} onClick={() => setSelected(s)} style={{
-                position: 'absolute',
-                left: `${(s.influence / 10) * 100}%`,
-                bottom: `${(s.concern / 10) * 100}%`,
-                transform: 'translate(-50%, 50%)',
-                width: '32px', height: '32px',
-                borderRadius: '50%',
-                background: sentimentColor(s.sentiment),
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', color: '#fff', fontSize: '10px', fontWeight: '700',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                zIndex: 10,
-              }}
-              title={s.name}>
-                {s.name.charAt(0)}
-              </div>
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: '16px', marginTop: '16px', flexWrap: 'wrap' }}>
-            {stakeholders.map(s => (
-              <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-                <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: sentimentColor(s.sentiment) }} />
-                <span style={{ color: '#64748b' }}>{s.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'list' && (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ background: '#f8fafc' }}>
-              <tr>
-                {['名稱', '類型', '影響力', '關注度', '情感傾向', '議合次數', '最後聯絡'].map(h => (
-                  <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', color: '#64748b', fontWeight: '700', borderBottom: '1px solid #e2e8f0' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {stakeholders.map(s => (
-                <tr key={s.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{s.name}</td>
-                  <td style={{ padding: '14px 16px', fontSize: '12px' }}>
-                    <span style={{ padding: '3px 8px', borderRadius: '20px', background: '#dbeafe', color: '#1e40af', fontWeight: '600' }}>{s.type}</span>
-                  </td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '700', color: '#003262' }}>{s.influence}/10</td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '700', color: '#003262' }}>{s.concern}/10</td>
-                  <td style={{ padding: '14px 16px' }}>
-                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '20px', background: `${sentimentColor(s.sentiment)}15`, color: sentimentColor(s.sentiment), fontWeight: '700' }}>{sentimentLabel(s.sentiment)}</span>
-                  </td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', color: '#64748b' }}>{s.engagements}</td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', color: '#94a3b8' }}>{s.lastContact}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selected && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }} onClick={() => setSelected(null)}>
-          <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', width: '480px', maxWidth: '90vw' }} onClick={e => e.stopPropagation()}>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#003262', marginBottom: '8px' }}>{selected.name}</h3>
-            <span style={{ fontSize: '12px', padding: '4px 10px', background: '#dbeafe', color: '#1e40af', borderRadius: '20px', fontWeight: '600' }}>{selected.type}</span>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', margin: '20px 0' }}>
-              <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '4px' }}>影響力</div>
-                <div style={{ fontSize: '24px', fontWeight: '800', color: '#003262' }}>{selected.influence}/10</div>
-              </div>
-              <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
-                <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '4px' }}>關注度</div>
-                <div style={{ fontSize: '24px', fontWeight: '800', color: '#003262' }}>{selected.concern}/10</div>
-              </div>
-            </div>
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', marginBottom: '8px' }}>關注議題</div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {selected.topics.map((t, i) => (
-                  <span key={i} style={{ fontSize: '11px', padding: '4px 10px', background: '#f1f5f9', color: '#475569', borderRadius: '20px' }}>{t}</span>
-                ))}
-              </div>
-            </div>
-            <button onClick={() => setSelected(null)} style={{ width: '100%', padding: '12px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>關閉</button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

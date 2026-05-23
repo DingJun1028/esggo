@@ -1,12 +1,16 @@
 'use client';
 import { useState } from 'react';
-import { TrendingUp, DollarSign, AlertTriangle, BarChart2, Shield, Leaf, Users, Building } from 'lucide-react';
+import { TrendingUp, DollarSign, AlertTriangle, BarChart2, Shield, Leaf, Users, Building2, Landmark, Receipt, Scale, ArrowUpRight, CheckCircle2, PieChart, ShieldCheck } from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
+} from '../../components/brand';
+import { UniversalPageConfig } from '../../lib/page-config';
 
 const TCFD_PILLARS = [
-  { id: 'governance', title: '治理', icon: Building, desc: '董事會與管理層對氣候相關風險與機會的監督。', completion: 85, items: ['董事會 ESG 審議紀錄', '管理層氣候報告職責', 'ESG 委員會章程'] },
-  { id: 'strategy', title: '策略', icon: TrendingUp, desc: '氣候相關風險與機會對組織業務、策略及財務規劃的實質性影響。', completion: 72, items: ['1.5°C 情境分析', '碳價格影響評估', '轉型機會識別'] },
-  { id: 'risk', title: '風險管理', icon: AlertTriangle, desc: '組織如何識別、評估和管理氣候相關風險的流程。', completion: 90, items: ['物理風險評估框架', '轉型風險矩陣', '供應鏈氣候壓力測試'] },
-  { id: 'metrics', title: '指標與目標', icon: BarChart2, desc: '評估和管理氣候相關風險與機會所使用的指標與目標。', completion: 78, items: ['GHG 盤查 Scope 1/2/3', 'SBTi 目標設定', '碳強度 KPI'] },
+  { id: 'governance', title: '治理', icon: <Building2 size={18}/>, desc: '董事會對氣候風險與機會的監督。', completion: 85, items: ['董事會 ESG 審議紀錄', '氣候報告職責'] },
+  { id: 'strategy', title: '策略', icon: <TrendingUp size={18}/>, desc: '對業務、策略及財務規劃的實質性影響。', completion: 72, items: ['1.5°C 情境分析', '碳價格影響'] },
+  { id: 'risk', title: '風險管理', icon: <AlertTriangle size={18}/>, desc: '組織識別、評估和管理風險的流程。', completion: 90, items: ['物理風險評估', '壓力測試'] },
+  { id: 'metrics', title: '指標與目標', icon: <BarChart2 size={18}/>, desc: '用以評估風險與機會的具體指標。', completion: 78, items: ['GRI 305 GHG', 'SBTi 目標'] },
 ];
 
 const ESG_ROI = [
@@ -17,128 +21,133 @@ const ESG_ROI = [
 ];
 
 export default function FinancePage() {
-  const [activeTab, setActiveTab] = useState<'tcfd' | 'roi' | 'risk'>('tcfd');
+  const [activeTab, setActiveTab] = useState('tcfd');
 
-  return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '24px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#003262', margin: 0 }}>永續財務 Finance Hub</h1>
-        <p style={{ color: '#64748b', marginTop: '4px', fontSize: '14px' }}>TCFD 四大支柱 · ESG ROI 分析 · 碳風險情境</p>
-      </div>
+  const pageConfig: UniversalPageConfig = {
+    id: 'finance-hub',
+    title: '永續財務 Finance Hub',
+    subtitle: 'TCFD 四大支柱 · ESG ROI 分析 · 碳風險情境：將永續指標轉化為企業財務決策的主權語言。',
+    icon: <Landmark size={32} />,
+    griReference: 'TCFD / ISSB S2',
+    activeT5Tags: ['T1', 'T2', 'T5'],
+    primaryActions: [
+      { id: 'export', label: '財務影響報告', icon: <BarChart2 size={16}/>, onClick: () => alert('正在生成...') }
+    ],
+    kpis: [
+      { key: 'invest', label: 'ESG 投資總額', value: '1,080', unit: '萬', icon: <DollarSign size={18}/>, color: '#003262' },
+      { key: 'save',   label: '年度節省金額', value: '185', unit: '萬', icon: <TrendingUp size={18}/>, color: '#10B981', verified: true },
+      { key: 'reduction', label: '碳減量成果', value: '250', unit: 'tCO2e', icon: <Leaf size={18}/>, color: '#3B7EA1', verified: true },
+      { key: 'tcfd',   label: 'TCFD 完成率', value: '81', unit: '%', icon: <ShieldCheck size={18}/>, color: '#8B5CF6' },
+    ],
+    sections: [
+      {
+        id: 'tabs',
+        title: '分析維度',
+        columns: 12,
+        component: (
+          <BrandTabs 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            tabs={[
+              { id: 'tcfd', label: 'TCFD 揭露', icon: <Shield size={16}/> },
+              { id: 'roi',  label: 'ROI 分析', icon: <PieChart size={16}/> },
+              { id: 'risk', label: '碳風險',   icon: <AlertTriangle size={16}/> },
+            ]}
+          />
+        )
+      },
+      {
+        id: 'content',
+        title: activeTab === 'tcfd' ? 'TCFD 四大支柱' : activeTab === 'roi' ? 'ESG 投資回報率' : '碳風險情境評估',
+        columns: 12,
+        component: (
+          <div className="fade-in">
+            {activeTab === 'tcfd' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                 {TCFD_PILLARS.map(p => (
+                   <BrandCard key={p.id} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-xl transition-all duration-500 group">
+                      <div className="flex items-center gap-4 mb-6">
+                         <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#003262] group-hover:scale-110 transition-transform shadow-sm">
+                            {p.icon}
+                         </div>
+                         <div>
+                            <h4 className="text-sm font-black text-[#003262] uppercase tracking-widest">{p.title}</h4>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase">Completion {p.completion}%</p>
+                         </div>
+                      </div>
+                      <BrandProgress value={p.completion} size="sm" color={p.completion >= 85 ? 'green' : 'blue'} animated className="mb-6" />
+                      <p className="text-xs text-slate-500 leading-relaxed font-medium mb-6 line-clamp-2">{p.desc}</p>
+                      <div className="space-y-2 pt-4 border-t border-slate-50">
+                         {p.items.map((item, i) => (
+                           <div key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-400">
+                              <CheckCircle2 size={10} className="text-emerald-500" /> {item}
+                           </div>
+                         ))}
+                      </div>
+                   </BrandCard>
+                 ))}
+              </div>
+            )}
 
-      {/* KPI */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        {[
-          { label: 'ESG 投資總額', value: 'NT$1,080萬', color: '#003262', icon: DollarSign },
-          { label: '年度節省金額', value: 'NT$185萬', color: '#22c55e', icon: TrendingUp },
-          { label: '碳減量成果', value: '250 tCO₂e', color: '#3b7ea1', icon: Leaf },
-          { label: 'TCFD 完成率', value: `${Math.round(TCFD_PILLARS.reduce((a, p) => a + p.completion, 0) / TCFD_PILLARS.length)}%`, color: '#8b5cf6', icon: Shield },
-        ].map((s, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>{s.label}</span>
-              <s.icon size={16} color={s.color} />
-            </div>
-            <div style={{ fontSize: '22px', fontWeight: '800', color: s.color }}>{s.value}</div>
+            {activeTab === 'roi' && (
+              <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
+                <BrandTable 
+                  columns={[
+                    { label: 'ESG 投資項目', key: 'initiative' },
+                    { label: '投資金額 (NT$)', key: 'investment' },
+                    { label: '年度節省 (NT$)', key: 'annualSaving' },
+                    { label: '碳減量 (tCO2e)', key: 'carbonReduction' },
+                    { label: 'ROI (%)', key: 'roi' },
+                    { label: '年度', key: 'year' },
+                  ]}
+                  data={ESG_ROI.map(r => ({
+                    ...r,
+                    initiative: <span className="font-bold text-[#003262]">{r.initiative}</span>,
+                    investment: <span className="font-mono text-slate-500 font-bold">{r.investment.toLocaleString()}</span>,
+                    annualSaving: <span className="font-mono text-emerald-600 font-black">{r.annualSaving.toLocaleString()}</span>,
+                    roi: <BrandBadge variant={r.roi >= 20 ? 'success' : 'info'} size="xs" className="font-black">{r.roi}%</BrandBadge>,
+                    year: <span className="text-slate-300 font-mono text-[11px] font-black">{r.year}</span>
+                  }))}
+                />
+              </BrandCard>
+            )}
+
+            {activeTab === 'risk' && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                 {[
+                   { scenario: '1.5°C 情境', impact: '低影響', cost: '120萬/年', risk: '中等', color: '#10B981', note: '符合 SBTi 目標，財務衝擊最小。' },
+                   { scenario: '2.0°C 情境', impact: '中度影響', cost: '250萬/年', risk: '高', color: '#FDB515', note: '需加速減碳投資，碳稅支出增加。' },
+                   { scenario: '4.0°C 情境', impact: '嚴重影響', cost: '580萬/年', risk: '極高', color: '#EF4444', note: '廠房物理風險、供應鏈斷鏈、碳稅重壓。' },
+                 ].map((s, i) => (
+                   <BrandCard key={i} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-2xl transition-all duration-500 group">
+                      <div className="flex items-center justify-between mb-6">
+                         <h4 className="text-xl font-black tracking-tight" style={{ color: s.color }}>{s.scenario}</h4>
+                         <BrandBadge variant="outline" size="xs" style={{ color: s.color, borderColor: `${s.color}30` }}>{s.impact}</BrandBadge>
+                      </div>
+                      <div className="space-y-3 mb-8">
+                         {[
+                           { label: '碳成本預估', value: s.cost },
+                           { label: '轉型風險等級', value: s.risk }
+                         ].map((m, j) => (
+                           <div key={j} className="flex justify-between items-center p-4 bg-slate-50/50 rounded-2xl border border-transparent group-hover:border-slate-100 transition-all">
+                              <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{m.label}</span>
+                              <span className="text-sm font-black text-[#003262]">{m.value}</span>
+                           </div>
+                         ))}
+                      </div>
+                      <p className="text-xs text-slate-500 leading-relaxed font-medium italic p-5 rounded-2xl" style={{ backgroundColor: `${s.color}08` }}>
+                         {s.note}
+                      </p>
+                   </BrandCard>
+                 ))}
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+        )
+      }
+    ],
+    features: { useAuditLog: true }
+  };
 
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-        {[{ id: 'tcfd', label: 'TCFD 四大支柱' }, { id: 'roi', label: 'ESG ROI 分析' }, { id: 'risk', label: '碳風險情境' }].map(t => (
-          <button key={t.id} onClick={() => setActiveTab(t.id as any)}
-            style={{ padding: '8px 16px', border: 'none', borderRadius: '8px', background: activeTab === t.id ? '#003262' : '#f1f5f9', color: activeTab === t.id ? '#fff' : '#64748b', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {activeTab === 'tcfd' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
-          {TCFD_PILLARS.map(p => (
-            <div key={p.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <p.icon size={20} color="#003262" />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', margin: 0 }}>TCFD {p.title}</h3>
-                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>完成率 {p.completion}%</div>
-                </div>
-              </div>
-              <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', marginBottom: '16px', overflow: 'hidden' }}>
-                <div style={{ width: `${p.completion}%`, height: '100%', background: p.completion >= 85 ? '#22c55e' : p.completion >= 70 ? '#f59e0b' : '#ef4444', borderRadius: '4px', transition: 'width 0.5s' }} />
-              </div>
-              <p style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6, marginBottom: '16px' }}>{p.desc}</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {p.items.map((item, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#475569' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {activeTab === 'roi' && (
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead style={{ background: '#f8fafc' }}>
-              <tr>
-                {['ESG 投資項目', '投資金額 (NT$)', '年度節省 (NT$)', '碳減量 (tCO₂e)', 'ROI (%)', '投資年度'].map(h => (
-                  <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '11px', color: '#64748b', fontWeight: '700', borderBottom: '1px solid #e2e8f0' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {ESG_ROI.map((r, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', fontWeight: '600', color: '#1e293b' }}>{r.initiative}</td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', color: '#64748b' }}>{r.investment.toLocaleString()}</td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', color: '#22c55e', fontWeight: '700' }}>{r.annualSaving.toLocaleString()}</td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', color: '#3b7ea1', fontWeight: '700' }}>{r.carbonReduction}</td>
-                  <td style={{ padding: '14px 16px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: '800', color: r.roi >= 20 ? '#22c55e' : r.roi >= 15 ? '#f59e0b' : '#ef4444' }}>{r.roi}%</span>
-                  </td>
-                  <td style={{ padding: '14px 16px', fontSize: '13px', color: '#94a3b8' }}>{r.year}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {activeTab === 'risk' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {[
-            { scenario: '1.5°C 情境', impact: '低影響', carbonCost: 'NT$120萬/年', transitionRisk: '中等', physicalRisk: '低', color: '#22c55e', note: '符合 SBTi 目標，財務衝擊最小' },
-            { scenario: '2.0°C 情境', impact: '中度影響', carbonCost: 'NT$250萬/年', transitionRisk: '高', physicalRisk: '中等', color: '#f59e0b', note: '需要加速減碳投資，碳稅支出增加' },
-            { scenario: '4.0°C 情境', impact: '嚴重影響', carbonCost: 'NT$580萬/年', transitionRisk: '極高', physicalRisk: '高', color: '#ef4444', note: '廠房淹水風險、供應鏈斷鏈、碳稅重壓' },
-          ].map((s, i) => (
-            <div key={i} style={{ background: '#fff', border: `2px solid ${s.color}30`, borderRadius: '12px', padding: '24px' }}>
-              <div style={{ fontSize: '18px', fontWeight: '800', color: s.color, marginBottom: '4px' }}>{s.scenario}</div>
-              <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', marginBottom: '16px' }}>{s.impact}</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
-                {[
-                  { label: '碳成本', value: s.carbonCost },
-                  { label: '轉型風險', value: s.transitionRisk },
-                  { label: '物理風險', value: s.physicalRisk },
-                ].map((m, j) => (
-                  <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', padding: '8px', background: '#f8fafc', borderRadius: '6px' }}>
-                    <span style={{ color: '#64748b', fontWeight: '600' }}>{m.label}</span>
-                    <span style={{ color: '#1e293b', fontWeight: '700' }}>{m.value}</span>
-                  </div>
-                ))}
-              </div>
-              <p style={{ fontSize: '12px', color: '#64748b', lineHeight: 1.6, margin: 0, padding: '12px', background: `${s.color}10`, borderRadius: '8px' }}>{s.note}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  return <StandardPage config={pageConfig} />;
 }
