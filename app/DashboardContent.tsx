@@ -90,24 +90,26 @@ const QUICK_ACTIONS = [
 export default function DashboardContent() {
   const [now, setNow] = useState(new Date());
   const [stats, setStats] = useState<DashboardStatsData | null>(null);
+  const [growth, setGrowth] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch('/api/dashboard/stats');
-        if (res.ok) {
-          const data = await res.json();
-          setStats(data);
-        }
+        const [sRes, gRes] = await Promise.all([
+          fetch('/api/dashboard/stats'),
+          fetch('/api/ai/growth')
+        ]);
+        if (sRes.ok) setStats(await sRes.json());
+        if (gRes.ok) setGrowth(await gRes.json());
       } catch (err) {
-        console.error('Failed to fetch stats', err);
+        console.error('Failed to fetch data', err);
       } finally {
         setLoading(false);
       }
     };
-    fetchStats();
-    const t = setInterval(() => { setNow(new Date()); fetchStats(); }, 60000);
+    fetchData();
+    const t = setInterval(() => { setNow(new Date()); fetchData(); }, 60000);
     return () => clearInterval(t);
   }, []);
 
@@ -150,6 +152,36 @@ export default function DashboardContent() {
           </Link>
         </div>
       </header>
+
+      {/* Infinite Evolution Insight (New) */}
+      <AnimatePresence>
+        {growth && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+            <BrandCard padding="none" className="bg-gradient-to-r from-[#003262] to-[#1a4a7a] border-none overflow-hidden shadow-extreme p-6 lg:p-8 group">
+               <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-[#FDB515] flex-shrink-0 animate-pulse">
+                     <Brain size={28} />
+                  </div>
+                  <div className="flex-1 text-center md:text-left space-y-1">
+                     <div className="flex items-center justify-center md:justify-start gap-3">
+                        <h4 className="text-sm font-black text-blue-200 uppercase tracking-[0.3em]">System Self-Evolution Insight</h4>
+                        <BrandBadge variant="gold" size="xs" dot>EVOLUTION_ACTIVE</BrandBadge>
+                     </div>
+                     <p className="text-white text-base font-bold italic leading-relaxed">
+                        "{growth.analysis.growthSuggestion}"
+                     </p>
+                  </div>
+                  <div className="text-center md:text-right border-l border-white/10 pl-6 hidden md:block">
+                     <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Impact Score</p>
+                     <p className="text-2xl font-black text-[#FDB515] font-mono">{growth.analysis.impactScore}%</p>
+                  </div>
+               </div>
+               {/* Decorative background scanline */}
+               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none" />
+            </BrandCard>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* KPI Compact Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
