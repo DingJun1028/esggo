@@ -14,6 +14,7 @@ import { CommandPalette } from '../components/ui/CommandPalette';
 import {
   BrandButton, BrandBadge, BrandAvatar, BrandStatusDot, BrandSearchBar, BrandTooltip, BrandCard
 } from '../components/brand';
+import { initAnalytics } from '../lib/firebase';
 
 interface NavItem { href: string; label: string; sub: string; icon: React.ReactNode; badge?: string; }
 interface NavGroup { title: string; items: NavItem[]; }
@@ -308,6 +309,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
+    initAnalytics(); // Initialize Firebase Analytics
     try {
       if (localStorage.getItem('sidebar_collapsed') === 'true') setCollapsed(true);
       // Simulated Auth Check

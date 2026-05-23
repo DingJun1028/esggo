@@ -1,4 +1,4 @@
-import { assertEquals } from 'https://deno.land/std@0.168.0/testing/asserts.ts'
+import { assertEquals } from 'std/testing/asserts';
 
 Deno.test("send-email-resend edge function basic test", () => {
   // This is a basic test to verify the test runner works.
