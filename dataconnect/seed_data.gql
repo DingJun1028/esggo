@@ -1,0 +1,122 @@
+mutation CreateDemoData @transaction @auth(level: PUBLIC, insecureReason: "This is a seed mutation for demo data and is safe to expose publicly") {
+  organization_insertMany(data: [
+    {
+      id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      name: "Global Sustain Inc.",
+      createdAt: "2023-01-15T10:00:00Z",
+      industry: "Technology",
+      contactEmail: "info@globalsustain.com",
+      website: "https://www.globalsustain.com"
+    },
+    {
+      id: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      name: "EcoHarvest Solutions",
+      createdAt: "2023-02-20T11:30:00Z",
+      industry: "Agriculture",
+      contactEmail: "contact@ecoharvest.com",
+      website: "https://www.ecoharvest.com"
+    }
+  ])
+  eSGCategory_insertMany(data: [
+    {
+      id: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+      name: "Carbon Footprint Reduction",
+      description: "Initiatives focused on decreasing greenhouse gas emissions.",
+      createdAt: "2023-01-20T09:00:00Z"
+    },
+    {
+      id: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+      name: "Renewable Energy Adoption",
+      description: "Projects promoting the use of sustainable energy sources.",
+      createdAt: "2023-01-25T14:00:00Z"
+    }
+  ])
+  initiative_insertMany(data: [
+    {
+      id: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+      organizationId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      esgCategoryId: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
+      name: "Project GreenOffice",
+      description: "Reducing office energy consumption and waste.",
+      status: "In Progress",
+      startDate: "2023-03-01",
+      createdAt: "2023-02-28T08:00:00Z",
+      endDate: "2023-12-31",
+      ownerDepartment: "Operations"
+    },
+    {
+      id: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+      organizationId: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      esgCategoryId: "d4e5f6a7-b8c9-0123-4567-890abcdef123",
+      name: "Solar Farm Initiative",
+      description: "Installation of solar panels for agricultural power.",
+      status: "Planned",
+      startDate: "2023-06-01",
+      createdAt: "2023-03-10T10:00:00Z",
+      endDate: "2024-06-01",
+      ownerDepartment: "Research & Development"
+    }
+  ])
+  kPI_insertMany(data: [
+    {
+      id: "12345678-90ab-cdef-0123-456789abcdef",
+      initiativeId: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+      name: "Energy Consumption Reduction",
+      targetValue: 20.0,
+      unit: "%",
+      createdAt: "2023-03-05T09:00:00Z",
+      description: "Target for reducing electricity usage in offices.",
+      baselineValue: 1000.0
+    },
+    {
+      id: "abcdef01-2345-6789-abcd-ef0123456789",
+      initiativeId: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+      name: "Renewable Energy Capacity",
+      targetValue: 500.0,
+      unit: "kW",
+      createdAt: "2023-03-15T11:00:00Z",
+      description: "Capacity of solar energy generation.",
+      baselineValue: 0.0
+    }
+  ])
+  document_insertMany(data: [
+    {
+      id: "7a8b9c0d-1e2f-3456-7890-abcdef123456",
+      initiativeId: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+      title: "GreenOffice Energy Audit Report",
+      documentURL: "https://docs.globalsustain.com/energy-audit.pdf",
+      createdAt: "2023-03-10T13:00:00Z",
+      description: "Initial audit findings for Project GreenOffice.",
+      documentType: "Report"
+    },
+    {
+      id: "8b9c0d1e-2f3a-4567-8901-bcdef1234567",
+      initiativeId: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+      title: "Solar Farm Project Proposal",
+      documentURL: "https://docs.ecoharvest.com/solar-proposal.pdf",
+      createdAt: "2023-03-20T15:00:00Z",
+      description: "Detailed proposal for the solar farm initiative.",
+      documentType: "Proposal"
+    }
+  ])
+  progressUpdate_insertMany(data: [
+    {
+      id: "9c0d1e2f-3a4b-5678-9012-cdef12345678",
+      kpiId: "12345678-90ab-cdef-0123-456789abcdef",
+      initiativeId: "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+      actualValue: 15.0,
+      dateRecorded: "2023-04-01",
+      createdAt: "2023-04-01T10:00:00Z",
+      notes: "First quarter progress update for energy reduction."
+    },
+    {
+      id: "0d1e2f3a-4b5c-6789-0123-def123456789",
+      kpiId: "abcdef01-2345-6789-abcd-ef0123456789",
+      initiativeId: "f6a7b8c9-d0e1-2345-6789-0abcdef12345",
+      actualValue: 50.0,
+      dateRecorded: "2023-07-01",
+      createdAt: "2023-07-01T11:00:00Z",
+      notes: "Initial phase of solar panel installation completed."
+    }
+  ])
+}

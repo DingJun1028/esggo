@@ -1,0 +1,674 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `Document` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  document_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Document_Data!
+  ): Document_KeyOutput! @fdc_generated(from: "Document", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ESGCategory` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  eSGCategory_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ESGCategory_Data!
+  ): ESGCategory_KeyOutput! @fdc_generated(from: "ESGCategory", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Initiative` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  initiative_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Initiative_Data!
+  ): Initiative_KeyOutput! @fdc_generated(from: "Initiative", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `KPI` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  kPI_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: KPI_Data!
+  ): KPI_KeyOutput! @fdc_generated(from: "KPI", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Organization` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organization_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Organization_Data!
+  ): Organization_KeyOutput! @fdc_generated(from: "Organization", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ProgressUpdate` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  progressUpdate_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ProgressUpdate_Data!
+  ): ProgressUpdate_KeyOutput! @fdc_generated(from: "ProgressUpdate", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `Document` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  document_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Document_Data!]!
+  ): [Document_KeyOutput!]! @fdc_generated(from: "Document", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ESGCategory` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  eSGCategory_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ESGCategory_Data!]!
+  ): [ESGCategory_KeyOutput!]! @fdc_generated(from: "ESGCategory", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Initiative` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  initiative_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Initiative_Data!]!
+  ): [Initiative_KeyOutput!]! @fdc_generated(from: "Initiative", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `KPI` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  kPI_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [KPI_Data!]!
+  ): [KPI_KeyOutput!]! @fdc_generated(from: "KPI", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Organization` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organization_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Organization_Data!]!
+  ): [Organization_KeyOutput!]! @fdc_generated(from: "Organization", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ProgressUpdate` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  progressUpdate_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ProgressUpdate_Data!]!
+  ): [ProgressUpdate_KeyOutput!]! @fdc_generated(from: "ProgressUpdate", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `Document` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Document`.
+  """
+  document_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Document_Data!
+  ): Document_KeyOutput! @fdc_generated(from: "Document", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ESGCategory` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ESGCategory`.
+  """
+  eSGCategory_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ESGCategory_Data!
+  ): ESGCategory_KeyOutput! @fdc_generated(from: "ESGCategory", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Initiative` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Initiative`.
+  """
+  initiative_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Initiative_Data!
+  ): Initiative_KeyOutput! @fdc_generated(from: "Initiative", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `KPI` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `KPI`.
+  """
+  kPI_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: KPI_Data!
+  ): KPI_KeyOutput! @fdc_generated(from: "KPI", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Organization` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Organization`.
+  """
+  organization_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Organization_Data!
+  ): Organization_KeyOutput! @fdc_generated(from: "Organization", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ProgressUpdate` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProgressUpdate`.
+  """
+  progressUpdate_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ProgressUpdate_Data!
+  ): ProgressUpdate_KeyOutput! @fdc_generated(from: "ProgressUpdate", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `Document` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Document`.
+  """
+  document_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Document_Data!]!
+  ): [Document_KeyOutput!]! @fdc_generated(from: "Document", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ESGCategory` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ESGCategory`.
+  """
+  eSGCategory_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ESGCategory_Data!]!
+  ): [ESGCategory_KeyOutput!]! @fdc_generated(from: "ESGCategory", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Initiative` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Initiative`.
+  """
+  initiative_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Initiative_Data!]!
+  ): [Initiative_KeyOutput!]! @fdc_generated(from: "Initiative", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `KPI` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `KPI`.
+  """
+  kPI_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [KPI_Data!]!
+  ): [KPI_KeyOutput!]! @fdc_generated(from: "KPI", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Organization` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Organization`.
+  """
+  organization_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Organization_Data!]!
+  ): [Organization_KeyOutput!]! @fdc_generated(from: "Organization", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ProgressUpdate` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProgressUpdate`.
+  """
+  progressUpdate_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ProgressUpdate_Data!]!
+  ): [ProgressUpdate_KeyOutput!]! @fdc_generated(from: "ProgressUpdate", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `Document` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Document` or `null` if not found.
+  """
+  document_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Document_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Document_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Document_Data!
+  ): Document_KeyOutput @fdc_generated(from: "Document", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ESGCategory` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ESGCategory` or `null` if not found.
+  """
+  eSGCategory_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ESGCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ESGCategory_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ESGCategory_Data!
+  ): ESGCategory_KeyOutput @fdc_generated(from: "ESGCategory", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Initiative` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Initiative` or `null` if not found.
+  """
+  initiative_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Initiative_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Initiative_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Initiative_Data!
+  ): Initiative_KeyOutput @fdc_generated(from: "Initiative", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `KPI` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `KPI` or `null` if not found.
+  """
+  kPI_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: KPI_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: KPI_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: KPI_Data!
+  ): KPI_KeyOutput @fdc_generated(from: "KPI", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Organization` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Organization` or `null` if not found.
+  """
+  organization_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Organization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Organization_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Organization_Data!
+  ): Organization_KeyOutput @fdc_generated(from: "Organization", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ProgressUpdate` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ProgressUpdate` or `null` if not found.
+  """
+  progressUpdate_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ProgressUpdate_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProgressUpdate_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ProgressUpdate_Data!
+  ): ProgressUpdate_KeyOutput @fdc_generated(from: "ProgressUpdate", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `Document` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  document_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Document_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Document_Data!
+  ): Int! @fdc_generated(from: "Document", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ESGCategory` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  eSGCategory_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ESGCategory_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ESGCategory_Data!
+  ): Int! @fdc_generated(from: "ESGCategory", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Initiative` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  initiative_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Initiative_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Initiative_Data!
+  ): Int! @fdc_generated(from: "Initiative", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `KPI` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  kPI_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: KPI_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: KPI_Data!
+  ): Int! @fdc_generated(from: "KPI", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Organization` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  organization_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Organization_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Organization_Data!
+  ): Int! @fdc_generated(from: "Organization", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ProgressUpdate` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  progressUpdate_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ProgressUpdate_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ProgressUpdate_Data!
+  ): Int! @fdc_generated(from: "ProgressUpdate", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `Document` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  document_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Document_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Document_FirstRow
+  ): Document_KeyOutput @fdc_generated(from: "Document", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ESGCategory` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  eSGCategory_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ESGCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ESGCategory_FirstRow
+  ): ESGCategory_KeyOutput @fdc_generated(from: "ESGCategory", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Initiative` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  initiative_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Initiative_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Initiative_FirstRow
+  ): Initiative_KeyOutput @fdc_generated(from: "Initiative", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `KPI` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  kPI_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: KPI_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: KPI_FirstRow
+  ): KPI_KeyOutput @fdc_generated(from: "KPI", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Organization` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  organization_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Organization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Organization_FirstRow
+  ): Organization_KeyOutput @fdc_generated(from: "Organization", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ProgressUpdate` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  progressUpdate_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ProgressUpdate_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ProgressUpdate_FirstRow
+  ): ProgressUpdate_KeyOutput @fdc_generated(from: "ProgressUpdate", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `Document` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  document_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Document_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Document", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ESGCategory` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  eSGCategory_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ESGCategory_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ESGCategory", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Initiative` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  initiative_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Initiative_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Initiative", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `KPI` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  kPI_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: KPI_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "KPI", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Organization` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  organization_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Organization_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Organization", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ProgressUpdate` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  progressUpdate_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ProgressUpdate_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ProgressUpdate", purpose: DELETE_MULTIPLE)
+}

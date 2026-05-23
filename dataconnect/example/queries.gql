@@ -1,0 +1,48 @@
+query ListAllOrganizations @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  organizations {
+    id
+    name
+    industry
+    createdAt
+  }
+}
+
+query GetInitiativesByOrganization($organizationId: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  initiatives(where: {organizationId: {eq: $organizationId}}) {
+    id
+    name
+    description
+    status
+    startDate
+    endDate
+    organization {
+      name
+    }
+    esgCategory {
+      name
+    }
+  }
+}
+
+mutation CreateNewESGCategory($name: String!, $description: String!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  eSGCategory_insert(data: {
+    name: $name,
+    description: $description,
+    createdAt_expr: "request.time"
+  }) {
+    id
+  }
+}
+
+mutation RecordProgressUpdate($kpiId: UUID!, $initiativeId: UUID!, $actualValue: Float!, $dateRecorded: Date!, $notes: String) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  progressUpdate_insert(data: {
+    kpiId: $kpiId,
+    initiativeId: $initiativeId,
+    actualValue: $actualValue,
+    dateRecorded: $dateRecorded,
+    notes: $notes,
+    createdAt_expr: "request.time"
+  }) {
+    id
+  }
+}

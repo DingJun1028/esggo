@@ -2,5 +2,13 @@
   "hosting": {
     "site": "esggooriginal",
     "source": "."
+  },
+  "emulators": {
+    "dataconnect": {
+      "dataDir": "dataconnect/.dataconnect/pgliteData"
+    }
+  },
+  "dataconnect": {
+    "source": "dataconnect"
   }
 }
