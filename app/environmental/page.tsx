@@ -10,7 +10,7 @@ import {
 import { create5TAttestation } from '../../lib/crypto-proof';
 import ProvenanceDrawer, { ProvenanceStep } from '../../components/ui/ProvenanceDrawer';
 import { UniversalPageConfig } from '../../lib/page-config';
-import { getEnvironmentalMetrics, insertEnvironmentalMetric, updateEnvironmentalMetric, deleteEnvironmentalMetric, EnvironmentalMetric } from '../../lib/db';
+import { getEnvironmentalData, upsertEnvironmentalData, deleteEnvironmentalData, EnvironmentalMetric } from '../../lib/db';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const TABS = [
@@ -46,7 +46,7 @@ export default function EnvironmentalPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await getEnvironmentalMetrics(activeTab === 'Analysis' ? 'GHG' : activeTab);
+      const data = await getEnvironmentalData(activeTab === 'Analysis' ? 'GHG' : activeTab);
       setMetrics(data);
     } finally {
       setLoading(false);
@@ -61,9 +61,9 @@ export default function EnvironmentalPage() {
     try {
       if (editRow.isNew) {
         const { isNew, ...rest } = editRow;
-        await insertEnvironmentalMetric(rest as EnvironmentalMetric);
+        await upsertEnvironmentalData(rest as EnvironmentalMetric);
       } else {
-        await updateEnvironmentalMetric(editRow.id!, editRow);
+        await upsertEnvironmentalData(editRow as EnvironmentalMetric);
       }
       setEditRow(null);
       load();
@@ -77,7 +77,7 @@ export default function EnvironmentalPage() {
   const handleVerify = async (metric: EnvironmentalMetric) => {
     setSaving(true);
     try {
-      await updateEnvironmentalMetric(metric.id!, { verified: true });
+      await upsertEnvironmentalData({ ...metric, verified: true });
       load();
       setToast({ msg: '5T 實證封印成功', type: 'success' });
       setTimeout(() => setToast(null), 3000);
@@ -88,7 +88,7 @@ export default function EnvironmentalPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('確定刪除此項指標？')) return;
-    await deleteEnvironmentalMetric(id);
+    await deleteEnvironmentalData(id);
     load();
   };
 

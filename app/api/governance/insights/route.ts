@@ -13,19 +13,24 @@ export async function GET(request: NextRequest) {
     const metrics = await getGovernanceMetrics(category);
 
     const prompt = `
-You are Hermes AI, an expert in ESG (Environmental, Social, and Governance) analytics and corporate governance standards.
-Analyze the following Governance (公司治理) metrics and provide 3 key actionable insights.
-Focus on board diversity, ethical guidelines, risk management, data privacy, and executive compensation.
+You are OmniHermes, an advanced AI specializing in ESG (Environmental, Social, and Governance) analytics, GRI standards, and 5T audit protocols.
+Analyze the following Governance (公司治理) metrics data.
 
 Metrics Data:
 ${JSON.stringify(metrics, null, 2)}
 
-Provide your response in a structured, professional tone using Markdown format. 
-Make sure the insights highlight achievements and point out areas needing improvement.
-Use Traditional Chinese (zh-TW).
+Your task is to provide a highly structured, actionable insight report in Markdown format.
+Please include the following sections:
+1. **數據總覽與成就 (Executive Summary)**: Briefly summarize the current state and highlight any verified achievements. Focus on board composition, ethics, risk management, and tax transparency.
+2. **缺口與風險分析 (Gap & Risk Analysis)**: Identify any missing data (partial data gaps), anomalies, or unverified metrics that could pose a compliance risk (e.g., missing GRI 2/205 coverage).
+3. **具體行動建議 (Actionable Steps)**: Provide 2-3 concrete, prioritized recommendations for the ESG team to fill data gaps or improve metrics (e.g., board diversity planning, corruption risk assessment).
+
+Guidelines:
+- Maintain a highly professional, authoritative tone.
+- If data is sparse or completely missing, emphasize the immediate need for data collection and 5T verification to ensure compliance.
+- Use Traditional Chinese (zh-TW).
     `;
 
-    // Edge runtime doesn't support dynamic require() well, using standard fetch API
     const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (!GEMINI_API_KEY) throw new Error('API Key missing');
 
@@ -45,7 +50,7 @@ Use Traditional Chinese (zh-TW).
     }
     const data = await geminiRes.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '無法生成洞察報告。';
-    
+
     return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
   } catch (error: any) {
     console.error('Governance Insights API Error:', error);

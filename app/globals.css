@@ -1,14 +1,15 @@
-/* ============================================================
-   OmniHermes X ESGGO Design System v11.0
+/* =============================================================
+   OmniHermes X ESGGO Design System v11.5
    Berkeley Academy Precision - Universal RWD Foundation
-   ============================================================ */
+   Minimalist Extreme Aesthetics & High-Performance UI
+   ============================================================= */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* ── Core Berkeley Tokens ────────────────────────────────── */
+  /* ── Core Berkeley Tokens ────────────────────────────────────────── */
   --primary: #003262;      /* Berkeley Blue */
   --accent: #FDB515;       /* California Gold */
   --secondary: #3B7EA1;    /* Founders Rock */
@@ -16,32 +17,48 @@
   --california-gold: var(--accent);
 
   --success: #10B981;
+  --success-bg: #ecfdf5;
   --warning: #F59E0B;
   --danger: #EF4444;
   --info: #3B82F6;
   --purple: #8B5CF6;
-  
-  /* ── Surface & Depth ─────────────────────────────────────── */
+
+  /* ── Surface & Depth ────────────────────────────────────────────── */
   --bg-void: #F8FAFC;
-  --glass-white: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.8);
-  --border-subtle: rgba(0, 50, 98, 0.08);
-  
-  /* ── Formula Standard 01 ─────────────────────────────────── */
+  --glass-white: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --border-subtle: rgba(0, 50, 98, 0.05);
+
+  /* ── Formula Standard ──────────────────────────────────────────── */
   --formula-bg: rgba(0, 50, 98, 0.04);
   --formula-op: #FDB515;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* ── Spacing ─────────────────────────────────────────────── */
+  /* ── Spacing & Layout ──────────────────────────────────────────── */
   --space-unit: 1rem;
-  --sidebar-w: 260px;
-  --sidebar-w-sm: 80px;
-  --mobile-nav-h: 72px;
+  --sidebar-w: 280px;
+  --sidebar-w-sm: 88px;
+  --topbar-h: 72px;
+  --mobile-nav-h: 80px;
+
+  /* ── Z-Index ── */
+  --z-sidebar: 50;
+  --z-topbar: 40;
+  --z-modal: 100;
+  --z-overlay: 45;
 }
 
 @layer base {
+  html {
+    @apply scroll-smooth;
+  }
   body {
-    @apply bg-slate-50 text-slate-900 font-sans;
+    @apply bg-[#F8FAFC] text-slate-900 font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight text-[#003262];
   }
 }
 
@@ -50,66 +67,94 @@
   .bento {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
-  /* Liquid Glass Panel */
+  /* Liquid Glass Panel - Extreme Minimalism */
   .glass-panel {
     background: var(--glass-white);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 32px rgba(0, 50, 98, 0.06);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(40px) saturate(190%);
+    -webkit-backdrop-filter: blur(40px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 
+      0 4px 24px -1px rgba(0, 50, 98, 0.03),
+      0 10px 40px -5px rgba(0, 50, 98, 0.05);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .glass-panel:hover {
-    box-shadow: 0 12px 64px rgba(0, 50, 98, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 
+      0 20px 80px -10px rgba(0, 50, 98, 0.08),
+      0 0 0 1px rgba(0, 50, 98, 0.05);
+    transform: translateY(-4px) scale(1.005);
   }
 
-  /* Sidebar Standard */
+  /* App Shell Layout Extensions */
+  .app-shell {
+    @apply relative min-h-screen flex flex-col;
+  }
+
   .sidebar {
-    @apply fixed left-0 top-0 bottom-0 z-50 flex flex-col transition-all duration-300;
+    @apply fixed left-0 top-0 bottom-0 z-[var(--z-sidebar)] flex flex-col transition-all duration-500;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     width: var(--sidebar-w);
   }
+
   .sidebar.collapsed {
     width: var(--sidebar-w-sm);
   }
 
-  /* Main Content Layout */
   .main-content {
+    @apply flex-1 flex flex-col transition-all duration-500;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     margin-left: var(--sidebar-w);
-    min-height: 100vh;
   }
-  .sidebar-collapsed {
+
+  .main-content.sidebar-collapsed {
     margin-left: var(--sidebar-w-sm);
   }
-  .mobile-mode {
-    margin-left: 0 !important;
-    padding-bottom: var(--mobile-nav-h);
+
+  @media (max-width: 1023px) {
+    .sidebar { transform: translateX(-100%); }
+    .main-content { margin-left: 0 !important; padding-bottom: var(--mobile-nav-h); }
   }
 
-  /* Mobile Nav */
+  /* Mobile Nav Refinement */
   .mobile-nav {
-    @apply fixed bottom-0 left-0 right-0 z-50 h-[var(--mobile-nav-h)] flex items-center justify-around pb-[env(safe-area-inset-bottom)];
+    @apply fixed bottom-0 left-0 right-0 z-[var(--z-sidebar)] h-[var(--mobile-nav-h)] bg-white/80 backdrop-blur-2xl border-t border-slate-100/50 flex items-center justify-around px-4 lg:hidden;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* Formula Rendering */
-  .governance-formula {
-    font-family: var(--font-mono);
-    @apply bg-slate-900/5 px-3 py-1 rounded-lg text-[10px] font-bold tracking-tight text-slate-500;
+  /* Skeleton Loading - Premium Pulse */
+  .skeleton {
+    @apply bg-slate-100 relative overflow-hidden;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
   }
 
-  .governance-formula span {
-    color: var(--formula-op);
-    font-weight: 900;
-    padding: 0 2px;
+  /* Custom Animations */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes gradient-x {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 15s ease infinite;
   }
 
   /* Animation Utilities */
-  .fade-in { animation: fadeIn 0.6s ease-out forwards; }
-  .slide-up { animation: slideUp 0.5s ease-out forwards; }
+  .fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 }
 
 @keyframes fadeIn {
@@ -122,11 +167,32 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Custom Scrollbar for Sovereign Feel */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  
+  .shadow-premium {
+    box-shadow: 
+      0 0 0 1px rgba(0, 50, 98, 0.02),
+      0 10px 30px -10px rgba(0, 50, 98, 0.08);
+  }
+  
+  .shadow-extreme {
+    box-shadow: 
+      0 0 0 1px rgba(0, 50, 98, 0.01),
+      0 30px 60px -15px rgba(0, 50, 98, 0.12);
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0, 50, 98, 0.1); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0, 50, 98, 0.2); }
+::-webkit-scrollbar-thumb { 
+  background: rgba(0, 50, 98, 0.08); 
+  @apply rounded-full transition-colors;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 50, 98, 0.15); }
 
 /* Page Layout Components */
 .page-container {

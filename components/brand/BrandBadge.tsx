@@ -14,15 +14,15 @@ interface BrandBadgeProps {
 
 const variantStyles: Record<BadgeVariant, string> = {
   default: 'bg-slate-100 text-slate-700 border border-slate-200',
-  success: 'bg-green-50 text-green-700 border border-green-200',
-  warning: 'bg-amber-50 text-amber-700 border border-amber-200',
-  error: 'bg-red-50 text-red-700 border border-red-200',
-  info: 'bg-blue-50 text-blue-700 border border-blue-200',
-  gold: 'bg-yellow-50 text-yellow-800 border border-yellow-200',
-  blue: 'bg-[#EBF2FA] text-[#003262] border border-[#D4E4F7]',
-  purple: 'bg-purple-50 text-purple-700 border border-purple-200',
-  outline: 'bg-transparent text-[#003262] border border-[#003262]',
-  sealed: 'bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.2)]',
+  success: 'bg-success/10 text-success border border-success/20',
+  warning: 'bg-warning/10 text-warning border border-warning/20',
+  error: 'bg-danger/10 text-danger border border-danger/20',
+  info: 'bg-info/10 text-info border border-info/20',
+  gold: 'bg-accent/10 text-accent border border-accent/20',
+  blue: 'bg-berkeley-blue/10 text-berkeley-blue border border-berkeley-blue/20',
+  purple: 'bg-purple/10 text-purple border border-purple/20',
+  outline: 'bg-transparent text-berkeley-blue border border-berkeley-blue',
+  sealed: 'bg-t1-tangible/10 text-t1-tangible border border-t1-tangible/30 shadow-[0_0_8px_rgba(16,185,129,0.2)]',
 };
 
 const dotColors: Record<BadgeVariant, string> = {
@@ -32,9 +32,9 @@ const dotColors: Record<BadgeVariant, string> = {
   error: 'bg-red-500',
   info: 'bg-blue-500',
   gold: 'bg-yellow-500',
-  blue: 'bg-[#003262]',
+  blue: 'bg-berkeley-blue',
   purple: 'bg-purple-500',
-  outline: 'bg-[#003262]',
+  outline: 'bg-berkeley-blue',
   sealed: 'bg-emerald-500',
 };
 

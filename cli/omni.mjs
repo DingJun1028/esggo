@@ -29,14 +29,14 @@ async function fetchBlueStatus() {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!url || !key) throw new Error('Missing credentials');
-    
+
     const supabase = createClient(url, key);
     const { count, error } = await supabase.from('audit_logs').select('*', { count: 'exact', head: true });
-    
+
     if (error) throw error;
-    
+
     const active_nodes = Math.max(3, Math.min(64, Math.floor((count || 0) / 5)));
-    
+
     return {
       cluster_id: 'blue-cluster-omni-production',
       status: 'healthy (synced with Supabase)',
@@ -82,7 +82,7 @@ db.command('check')
   .description('Check database connection and environment')
   .action(async () => {
     console.log(pc.blue('🔍 Checking Omni_Terminal System Environment...'));
-    
+
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -94,9 +94,9 @@ db.command('check')
     try {
       const supabase = createClient(url, key);
       const { data, error } = await supabase.from('audit_logs').select('count').limit(1);
-      
+
       if (error) throw error;
-      
+
       console.log(pc.green('✅ Supabase Connection: STABLE'));
       console.log(pc.cyan(`📡 Endpoint: ${url}`));
     } catch (err) {
@@ -112,13 +112,13 @@ agent.command('status')
   .action(async () => {
     console.log(pc.blue('📡 Fetching OmniHermes Gateway Status...'));
     const status = await fetchHermesStatusLocal();
-    
+
     if (status.is_mock) {
       console.log(pc.yellow('⚠️ Mode: MOCK (Local Fallback)'));
     } else {
       console.log(pc.green('✅ Mode: LIVE (VPS-Native)'));
     }
-    
+
     console.log(pc.white(`----------------------------------`));
     console.log(`Version:  ${status.version}`);
     console.log(`Workers:  ${status.active_workers}`);
@@ -138,7 +138,7 @@ agent.command('tools')
       { id: 'mcp_bridge', category: 'System', desc: 'Connect to MCP servers' },
       { id: 'vault_seal', category: 'Security', desc: 'SHA-256 + ZKP sealing' }
     ];
-    
+
     tools.forEach(t => {
       console.log(`${pc.cyan(t.id.padEnd(16))} | ${pc.yellow(t.category.padEnd(12))} | ${pc.white(t.desc)}`);
     });
@@ -152,7 +152,7 @@ agent.command('memory <content>')
     console.log(pc.blue(`🧠 Storing eternal memory [${options.type}]...`));
     const timestamp = Date.now();
     const hash = computeHashLock(`${content}:${timestamp}`);
-    
+
     console.log(pc.green('✅ Memory engraved successfully.'));
     console.log(pc.white('----------------------------------'));
     console.log(`${pc.gray('Content:')}  ${content}`);
@@ -172,10 +172,10 @@ agent.command('run <task>')
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ task })
       });
-      
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Agent API failed');
-      
+
       if (!data.result || !data.result.success) {
         console.log(pc.red(`❌ Agent (${data.result?.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.result?.error?.message || data.result?.error || data.error || 'Unknown Error')}`));
       } else {
@@ -201,7 +201,7 @@ vault.command('list')
     const supabase = createClient(url, key);
 
     console.log(pc.blue(`📦 Listing recent ${options.limit} Vault records...`));
-    
+
     try {
       const { data, error } = await supabase
         .from('vault_omni_core')
@@ -216,7 +216,7 @@ vault.command('list')
 
       data.forEach(r => {
         const time = new Date(r.timestamp).toLocaleString();
-        console.log(`${pc.gray(time)} | ${pc.cyan(r.uuid.slice(0,8))} | ${pc.green(r.hash_lock.slice(0,12))}... | ${pc.white(r.dimension)}`);
+        console.log(`${pc.gray(time)} | ${pc.cyan(r.uuid.slice(0, 8))} | ${pc.green(r.hash_lock.slice(0, 12))}... | ${pc.white(r.dimension)}`);
       });
     } catch (err) {
       console.log(pc.red(`❌ Error: ${err.message}`));
@@ -231,7 +231,7 @@ vault.command('verify <uuid>')
     const supabase = createClient(url, key);
 
     console.log(pc.blue(`🔍 Verifying integrity for record: ${pc.cyan(uuid)}...`));
-    
+
     try {
       const { data: record, error } = await supabase
         .from('vault_omni_core')
@@ -280,7 +280,7 @@ vault.command('seal <id>')
   .description('Seal an evidence file with ZKP and SHA-256')
   .action(async (id) => {
     console.log(pc.blue(`🔒 Initiating Zero-Knowledge Proof sealing for ID: ${id}...`));
-    
+
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const supabase = createClient(url, key);
@@ -288,7 +288,7 @@ vault.command('seal <id>')
     try {
       // simulate ZKP generation delay
       await new Promise(r => setTimeout(r, 2000));
-      
+
       const hash = 'z' + Math.random().toString(16).slice(2) + Date.now().toString(16);
       const { error } = await supabase
         .from('evidence_vault')
@@ -329,10 +329,10 @@ intel.command('fetch <source>')
   .description('Fetch latest regulations (EU, TW, GRI)')
   .action(async (source) => {
     console.log(pc.blue(`🔍 Fetching ESG intelligence from [${source.toUpperCase()}]...`));
-    
+
     // Simulate scraper logic (matching lib/services/scraper.ts)
     await new Promise(r => setTimeout(r, 1500));
-    
+
     const data = {
       'EU': [{ title: 'EU 2023/956: CBAM Implementing Regulation', date: '2023-05-16' }],
       'TW': [{ title: '氣候變遷因應法：碳費徵收辦法草案', date: '2024-04-29' }],
@@ -354,7 +354,7 @@ intel.command('scan <id>')
   .action(async (id) => {
     console.log(pc.blue(`👁️ Initiating Vision Scan for Evidence ID: ${id}...`));
     await new Promise(r => setTimeout(r, 2000));
-    
+
     console.log(pc.green('✅ OCR & Semantic Analysis Complete.'));
     console.log(pc.white('----------------------------------'));
     console.log(`${pc.bold('Extraction:')} 識別出：2024年3月電費總計 12,450 元`);
@@ -370,7 +370,7 @@ audit.command('report')
   .description('Generate a 5T integrity summary report')
   .action(async () => {
     console.log(pc.blue('📊 Generating 5T Integrity Audit Report...'));
-    
+
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -395,7 +395,7 @@ audit.command('report')
       const supabase = createClient(url, key);
       const { data: vaultRecords } = await supabase.from('vault_omni_core').select('uuid');
       const { data: auditLogs } = await supabase.from('audit_logs').select('id');
-      
+
       console.log(pc.green('✅ Real-time data retrieved.'));
       console.log(pc.white('------------------------------------------'));
       console.log(`${pc.bold('Sealed Records:')}  ${vaultRecords?.length || 0}`);
@@ -429,7 +429,7 @@ blue.command('status')
   .action(async () => {
     console.log(pc.blue('☁️ Connecting to BlueCC Control Plane...'));
     const status = await fetchBlueStatus();
-    
+
     console.log(pc.green(`✅ Cluster: ${status.cluster_id} (STABLE)`));
     console.log(`Region:  ${status.region}`);
     console.log(`Nodes:   ${status.active_nodes} Active`);
@@ -471,3 +471,5 @@ daemon.command('status')
   });
 
 program.parse();
+
+

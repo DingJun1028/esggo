@@ -1,0 +1,85 @@
+// ESGSonar | Prisma Data Model
+// Integrated with ESG GO X OmniHermes 5T Protocol
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Regulation {
+  id              String   @id @default(uuid())
+  title           String
+  agency          String
+  region          String   // TW, EU, etc.
+  category        String   // E, S, G
+  effectiveDate   DateTime?
+  status          String   // Active, Proposed, Archived
+  content         String   @db.Text
+  hashLock        String   @unique
+  version         String   @default("1.0.0")
+  sourceUrl       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([agency, region])
+}
+
+model CompanyReport {
+  id              String   @id @default(uuid())
+  companyName     String
+  stockCode       String?
+  reportType      String   // ESG, Annual, etc.
+  year            Int
+  fileUrl         String
+  fileHash        String   @unique
+  contentSummary  String?  @db.Text
+  esgTags         ESGTag[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([companyName, year])
+}
+
+model ESGTag {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  category        String   // E, S, G
+  reports         CompanyReport[]
+}
+
+model Source {
+  id              String   @id
+  name            String
+  region          String
+  type            String
+  baseUrl         String
+  intervalHours   Int
+  lastCrawled     DateTime?
+  status          String   @default("Active")
+  history         CrawlHistory[]
+}
+
+model CrawlHistory {
+  id              String   @id @default(uuid())
+  sourceId        String
+  source          Source   @relation(fields: [sourceId], references: [id])
+  timestamp       DateTime @default(now())
+  itemsFound      Int
+  status          String   // Success, Failed
+  errorLog        String?  @db.Text
+  hashLock        String
+}
+
+model NotificationLog {
+  id              String   @id @default(uuid())
+  type            String   // RegulationChange, NewReport
+  title           String
+  message         String   @db.Text
+  severity        String   // Info, Warning, Critical
+  isRead          Boolean  @default(false)
+  timestamp       DateTime @default(now())
+}

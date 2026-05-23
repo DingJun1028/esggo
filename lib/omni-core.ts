@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import type {
   IComponentCore,
   IEvidence,
@@ -18,14 +19,9 @@ async function sha256(text: string): Promise<string> {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
-  // Fallback for SSR
-  let hash = 0;
-  for (let i = 0; i < text.length; i++) {
-    const char = text.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash).toString(16).padStart(64, '0');
+  
+  // Secure Node.js fallback
+  return createHash('sha256').update(text).digest('hex');
 }
 
 function generateUUID(): string {
@@ -129,6 +125,29 @@ export class OmniCore {
 
   getMemories(): EternalMemory[] {
     return [...this.memoryStore];
+  }
+
+  // Consolidate memories (Simulated AI Aggregation)
+  async consolidateMemories(type: EternalMemoryType): Promise<EternalMemory | null> {
+    const targets = this.memoryStore.filter(m => m.type === type && !m.consolidated);
+    
+    if (targets.length < 2) return null;
+
+    const combinedContent = targets.map(m => m.content).join('\n---\n');
+    const summary = `[Consolidated Summary of ${targets.length} ${type} records]: ${combinedContent.substring(0, 100)}...`;
+    
+    const consolidatedRecord = await this.storeMemory(
+      summary,
+      type,
+      ['consolidated', ...targets.flatMap(t => t.tags)]
+    );
+
+    // Mark originals as consolidated
+    targets.forEach(t => {
+      t.consolidated = true;
+    });
+
+    return consolidatedRecord;
   }
 
   // Quick hash for display

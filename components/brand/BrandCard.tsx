@@ -46,13 +46,13 @@ export function BrandCardHeader({ title, subtitle, icon, action, badge }: BrandC
     <div className="flex items-start justify-between gap-3 pb-4 border-b border-slate-100">
       <div className="flex items-start gap-3 min-w-0">
         {icon && (
-          <div className="w-8 h-8 rounded-lg bg-[#EBF2FA] flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
             {icon}
           </div>
         )}
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-[#0F172A] text-sm leading-tight">{title}</h3>
+            <h3 className="font-semibold text-berkeley-blue text-sm leading-tight">{title}</h3>
             {badge}
           </div>
           {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
@@ -83,7 +83,7 @@ export default function BrandCard({
   style,
 }: BrandCardProps) {
   const baseBg = variant === 'glass' 
-    ? 'bg-white/40 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.07)]' 
+    ? 'bg-white/40 backdrop-blur-xl shadow-glass' 
     : 'bg-white/80 backdrop-blur-[12px] shadow-[0_2px_8px_rgba(0,0,0,0.03)]';
 
   return (
@@ -93,7 +93,7 @@ export default function BrandCard({
         ${border && variant !== 'glass' ? 'border border-slate-100' : ''}
         ${border && variant === 'glass' ? 'border border-white/60' : ''}
         ${paddingStyles[padding]}
-        ${hover ? 'hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 cursor-pointer' : 'transition-all duration-300'}
+        ${hover ? 'hover:shadow-glass-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer' : 'transition-all duration-300'}
         ${onClick ? 'cursor-pointer' : ''}
         ${className}
       `}

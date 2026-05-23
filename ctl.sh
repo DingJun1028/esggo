@@ -1,3 +1,5 @@
+
+
 #!/bin/bash
 
 # ESG GO Platform Control Script (ctl.sh) v1.0
