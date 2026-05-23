@@ -317,6 +317,24 @@ export default function EditorPage() {
            
            {/* Chapter Header */}
            <div className="p-6 bg-white border-b border-slate-100 shadow-sm relative z-10">
+              <div className="md:hidden mb-4">
+                <button 
+                  onClick={() => setIsSelectionHouseOpen(true)}
+                  className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 active:bg-slate-100 transition-all"
+                >
+                  <div className="flex items-center gap-3 text-left">
+                    <div className="w-8 h-8 rounded-lg bg-[#003262] flex items-center justify-center text-white text-[10px] font-bold">
+                      {chapter.num}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-slate-700">{chapter.title}</p>
+                      <p className="text-[9px] text-slate-400 font-mono uppercase">{chapter.gri}</p>
+                    </div>
+                  </div>
+                  <ChevronDown size={16} className="text-slate-400" />
+                </button>
+              </div>
+
               <div className="flex justify-between items-start mb-6">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">

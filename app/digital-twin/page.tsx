@@ -5,6 +5,8 @@ import {
   BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandScoreRing, BrandPageHeader, BrandCardHeader
 } from '../../components/brand';
 import { addToKnowledgeBase, KNOWLEDGE_BASE } from '../../lib/agent/rag-engine';
+import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
+import ProvenanceDrawer, { ProvenanceStep } from '../../components/ui/ProvenanceDrawer';
 
 const tabs = [
   { id: 'overview', label: '狀態總覽', icon: <Brain size={14} /> },
@@ -44,9 +46,39 @@ export default function DigitalTwinPage() {
   const [uploading, setUploading] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
   const [selectedKb, setSelectedKb] = useState<any>(null);
+  const [isKbSelectionOpen, setIsKbSelectionOpen] = useState(false);
+  const [isProvenanceOpen, setIsProvenanceOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [knowledge, setKnowledge] = useState(KNOWLEDGE_BASE);
+
+  const kbCategories: SelectionCategory[] = [
+    {
+      id: 'internal',
+      title: '企業內部文件',
+      icon: <Shield size={14} />,
+      items: [
+        { id: 'ar', label: '2023 年度報告', sub: '財務與治理核心數據', tag: 'FINANCE' },
+        { id: 'sr', label: '2023 永續報告書', sub: 'GRI/SASB 歷史揭露', tag: 'ESG' },
+      ]
+    },
+    {
+      id: 'standards',
+      title: '國際準則庫',
+      icon: <Book size={14} />,
+      items: [
+        { id: 'gri', label: 'GRI 2021 Standard', sub: '全球通用報告準則', tag: 'ISO' },
+        { id: 'csrd', label: 'EU CSRD Directive', sub: '歐盟永續申報指令', tag: 'EU' },
+      ]
+    }
+  ];
+
+  const provenanceSteps: ProvenanceStep[] = [
+    { id: '1', type: 'source', title: '原始憑證載入', description: '從證據金庫 (Vault) 讀取 2024_Electricity_Bill.pdf', actor: 'System', timestamp: '10:00:24' },
+    { id: '2', type: 'processing', title: 'AI 數據提取', description: 'OmniHermes 辨識出用電量為 12,450 kWh', actor: 'Hermes-2', timestamp: '10:00:26', details: 'Confidence: 0.98' },
+    { id: '3', type: 'review', title: '人工覆核', description: '環安衛主任確認數值與電費單吻合', actor: 'Admin', timestamp: '11:15:00' },
+    { id: '4', type: 'result', title: '5T 封印寫入', description: '將數值鎖定至主權帳本並生成 Hash Lock', actor: '5T_Engine', timestamp: '11:15:05' },
+  ];
 
   const overallDna = Math.round(Object.values(dna).reduce((a, b) => a + b, 0) / 4);
 
@@ -90,6 +122,23 @@ export default function DigitalTwinPage() {
 
   return (
     <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
+      <SelectionHouse 
+        isOpen={isKbSelectionOpen}
+        onClose={() => setIsKbSelectionOpen(false)}
+        onSelect={(item) => setSelectedKb({ source: item.label, text: '模擬從選擇的庫存中提取的內容...', category: item.tag })}
+        categories={kbCategories}
+        title="選擇知識庫來源"
+        placeholder="搜尋文件名或類別..."
+      />
+
+      <ProvenanceDrawer 
+        isOpen={isProvenanceOpen}
+        onClose={() => setIsProvenanceOpen(false)}
+        title="電費排放量溯源"
+        currentValue="12,450"
+        unit="kWh"
+        steps={provenanceSteps}
+      />
 
       <BrandPageHeader 
         title="OmniHermes 數位分身" 

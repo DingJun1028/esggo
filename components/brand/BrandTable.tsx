@@ -41,11 +41,11 @@ export default function BrandTable<T extends Record<string, any>>({
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 overflow-hidden">
+    <div className="rounded-xl border border-slate-200/60 overflow-hidden bg-white/50 backdrop-blur-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
+            <tr className="bg-slate-50/50 border-b border-slate-200/80">
               {columns.map(col => (
                 <th
                   key={col.key}
@@ -72,9 +72,9 @@ export default function BrandTable<T extends Record<string, any>>({
                 <tr
                   key={rowKey ? rowKey(row) : rowIndex}
                   className={`
-                    border-b border-slate-100 last:border-0 transition-colors
-                    ${striped && rowIndex % 2 === 1 ? 'bg-slate-50/50' : 'bg-white'}
-                    ${onRowClick ? 'hover:bg-[#EBF2FA] cursor-pointer' : 'hover:bg-slate-50/50'}
+                    border-b border-slate-100/60 last:border-0 transition-all duration-300
+                    ${striped && rowIndex % 2 === 1 ? 'bg-slate-50/30' : 'bg-transparent'}
+                    ${onRowClick ? 'hover:bg-blue-50/40 hover:shadow-sm hover:scale-[1.002] cursor-pointer' : 'hover:bg-slate-50/60'}
                   `}
                   onClick={() => onRowClick?.(row)}
                 >
