@@ -17,27 +17,13 @@ export default function LandingPage() {
 
   // Auto-redirect if already logged in
   useEffect(() => {
-    const checkAuth = () => {
-      const { auth, isDemoMode } = require('../lib/firebase');
-      const { onAuthStateChanged } = require('firebase/auth');
-      
-      const unsubscribe = onAuthStateChanged(auth, (user: any) => {
-        if (user) {
-          router?.replace('/dashboard');
-        } else {
-          const localUser = localStorage.getItem('omni_user');
-          if (isDemoMode && localUser) {
-            router?.replace('/dashboard');
-          }
-        }
-      });
-      return unsubscribe;
-    };
-    
     if (typeof window !== 'undefined') {
-      return checkAuth();
+      const localUser = localStorage.getItem('omni_user');
+      if (localUser) {
+        window.location.href = '/dashboard';
+      }
     }
-  }, [router]);
+  }, []);
 
   const startDemo = () => {
     setIsExecuting(true);

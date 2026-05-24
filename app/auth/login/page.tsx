@@ -42,14 +42,14 @@ export default function LoginPage() {
       if (isDemoMode) {
         console.log('[Auth] Demo Mode Active. Bypassing Firebase.');
         // Allow any login in demo mode for dev convenience
-        localStorage.setItem('omni_user', JSON.stringify({ email, id: 'demo_user', role: 'admin' }));
-        router.push('/');
+        localStorage.setItem('omni_user', JSON.stringify({ email, id: 'demo_user', role: 'admin', company_id: 'default' }));
+        router.push('/dashboard');
         return;
       }
 
       await signInWithEmailAndPassword(auth, email, password);
-      localStorage.setItem('omni_user', JSON.stringify({ email, id: auth.currentUser?.uid, role: 'authenticated' }));
-      router.push('/');
+      localStorage.setItem('omni_user', JSON.stringify({ email, id: auth.currentUser?.uid, role: 'authenticated', company_id: 'default' }));
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || '登入失敗');
     } finally {
@@ -60,8 +60,8 @@ export default function LoginPage() {
   async function handleDemoLogin() {
     setLoading(true);
     await new Promise(r => setTimeout(r, 1000));
-    localStorage.setItem('omni_user', JSON.stringify({ email: 'admin@esggo.com', id: 'dev_admin', role: 'admin' }));
-    router.push('/');
+    localStorage.setItem('omni_user', JSON.stringify({ email: 'admin@esggo.com', id: 'dev_admin', role: 'admin', company_id: 'default' }));
+    router.push('/dashboard');
   }
 
   async function handleGoogleLogin() {
