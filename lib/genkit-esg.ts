@@ -212,7 +212,9 @@ ${metricsStr}
 }
 
 // ── Recursive Expansion Flow (Long-Form Master) ───────────────────────────
-async function runRecursiveExpansionFlow(input: GRIContentInput): ApiResult<GRIContentOutput> {
+async function runRecursiveExpansionFlow(
+  input: GRIContentInput
+): Promise<GRIContentOutput & { hashLock: string }> {
   console.log(`[GRI Engine] Starting Recursive Expansion for 5000+ words...`);
   
   // Phase 1: Generate Outline
@@ -252,7 +254,7 @@ async function runRecursiveExpansionFlow(input: GRIContentInput): ApiResult<GRIC
   };
 
   const hashLock = computeHashLock({ input, result });
-  return { ...result, hashLock } as any;
+  return { ...result, hashLock };
 }
 
 // ── Zero-Compute Expert Templates (The "Sacred Grids") ────────────────────
