@@ -19,7 +19,7 @@ import { fadeIn, slideIn, scaleIn, staggerContainer } from '../../lib/animations
 import { BrandTabs, BrandT5Strip, BrandStatusDot } from '../../components/brand';
 import { EXPERT_SACRED_TEMPLATES } from '../../lib/genkit-esg';
 
-// ── GRI Chapter Data (Master Production Set: 25+ Chapters) ─────────────────
+// ── GRI Chapter Data (Master Production Set: 30+ Chapters for 250-page target) ──
 interface Chapter {
   id: string; num: string; title: string; titleEn: string; gri: string;
   category: 'G' | 'E' | 'S'; order: number; estPages: number;
@@ -27,21 +27,24 @@ interface Chapter {
 }
 
 const CHAPTERS: Chapter[] = [
-  { id: 'general', num: '01', title: '組織概況與治理架構', titleEn: 'General Disclosures', gri: 'GRI 2', category: 'G', order: 1, estPages: 25, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台積電', excerpt: '' } },
-  { id: 'materiality', num: '02', title: '重大性議題分析', titleEn: 'Material Topics', gri: 'GRI 3', category: 'G', order: 2, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台達電', excerpt: '' } },
+  { id: 'intro', num: '00', title: '董事長聲明與報告摘要', titleEn: 'Statement & Summary', gri: 'GRI 2-22', category: 'G', order: 0, estPages: 10, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台積電', excerpt: '' } },
+  { id: 'general', num: '01', title: '組織概況與治理架構', titleEn: 'General Disclosures', gri: 'GRI 2-1 ~ 2-30', category: 'G', order: 1, estPages: 25, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台積電', excerpt: '' } },
+  { id: 'materiality', num: '02', title: '重大性議題分析', titleEn: 'Material Topics', gri: 'GRI 3-1 ~ 3-3', category: 'G', order: 2, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台達電', excerpt: '' } },
   { id: 'economic', num: '03', title: '經濟績效與稅務', titleEn: 'Economic', gri: 'GRI 201, 207', category: 'G', order: 3, estPages: 18, docs: [], fields: [], expertTemplates: [], benchmark: { company: '國泰金', excerpt: '' } },
-  { id: 'procurement', num: '04', title: '採購實務與供應鏈', titleEn: 'Procurement', gri: 'GRI 204', category: 'G', order: 4, estPages: 12, docs: [], fields: [], expertTemplates: [], benchmark: { company: '鴻海', excerpt: '' } },
+  { id: 'procurement', num: '04', title: '採購實務與供應鏈治理', titleEn: 'Procurement', gri: 'GRI 204', category: 'G', order: 4, estPages: 12, docs: [], fields: [], expertTemplates: [], benchmark: { company: '鴻海', excerpt: '' } },
   { id: 'anti-corruption', num: '05', title: '反貪腐與誠信經營', titleEn: 'Anti-corruption', gri: 'GRI 205', category: 'G', order: 5, estPages: 10, docs: [], fields: [], expertTemplates: [], benchmark: { company: '玉山金', excerpt: '' } },
-  { id: 'energy', num: '06', title: '能源管理與轉型', titleEn: 'Energy', gri: 'GRI 302', category: 'E', order: 6, estPages: 25, docs: [], fields: [], expertTemplates: [], benchmark: { company: '聯電', excerpt: '' } },
-  { id: 'water', num: '07', title: '水資源管理', titleEn: 'Water', gri: 'GRI 303', category: 'E', order: 7, estPages: 20, docs: [], fields: [], expertTemplates: [], benchmark: { company: '友達', excerpt: '' } },
-  { id: 'biodiversity', num: '08', title: '生物多樣性', titleEn: 'Biodiversity', gri: 'GRI 304', category: 'E', order: 8, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台泥', excerpt: '' } },
-  { id: 'emissions', num: '09', title: '溫室氣體排放 (Scope 1-3)', titleEn: 'Emissions', gri: 'GRI 305', category: 'E', order: 9, estPages: 35, docs: [], fields: [], expertTemplates: [], benchmark: { company: '中鋼', excerpt: '' } },
-  { id: 'waste', num: '10', title: '廢棄物與循環經濟', titleEn: 'Waste', gri: 'GRI 306', category: 'E', order: 10, estPages: 18, docs: [], fields: [], expertTemplates: [], benchmark: { company: '日月光', excerpt: '' } },
-  { id: 'labor', num: '11', title: '勞雇關係與人權', titleEn: 'Employment', gri: 'GRI 401', category: 'S', order: 11, estPages: 22, docs: [], fields: [], expertTemplates: [], benchmark: { company: '中華電信', excerpt: '' } },
-  { id: 'ohs', num: '12', title: '職業安全與健康', titleEn: 'OHS', gri: 'GRI 403', category: 'S', order: 12, estPages: 25, docs: [], fields: [], expertTemplates: [], benchmark: { company: '長榮海', excerpt: '' } },
-  { id: 'training', num: '13', title: '員工培訓與發展', titleEn: 'Training', gri: 'GRI 404', category: 'S', order: 13, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '第一金', excerpt: '' } },
-  { id: 'diversity', num: '14', title: '多元公平與包容', titleEn: 'Diversity', gri: 'GRI 405', category: 'S', order: 14, estPages: 12, docs: [], fields: [], expertTemplates: [], benchmark: { company: '渣打銀', excerpt: '' } },
-  { id: 'privacy', num: '15', title: '客戶隱私與資安', titleEn: 'Privacy', gri: 'GRI 418', category: 'S', order: 15, estPages: 10, docs: [], fields: [], expertTemplates: [], benchmark: { company: '趨勢科技', excerpt: '' } },
+  { id: 'materials', num: '06', title: '物料使用與循環經濟', titleEn: 'Materials', gri: 'GRI 301', category: 'E', order: 6, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '華碩', excerpt: '' } },
+  { id: 'energy', num: '07', title: '能源管理與綠電佈署', titleEn: 'Energy', gri: 'GRI 302', category: 'E', order: 7, estPages: 25, docs: [], fields: [], expertTemplates: [], benchmark: { company: '聯電', excerpt: '' } },
+  { id: 'water', num: '08', title: '水資源管理與減量', titleEn: 'Water & Effluents', gri: 'GRI 303', category: 'E', order: 8, estPages: 20, docs: [], fields: [], expertTemplates: [], benchmark: { company: '友達', excerpt: '' } },
+  { id: 'biodiversity', num: '09', title: '生物多樣性維護', titleEn: 'Biodiversity', gri: 'GRI 304', category: 'E', order: 9, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '台泥', excerpt: '' } },
+  { id: 'emissions', num: '10', title: '溫室氣體排放 (Scope 1-3)', titleEn: 'Emissions', gri: 'GRI 305', category: 'E', order: 10, estPages: 35, docs: [], fields: [], expertTemplates: [], benchmark: { company: '中鋼', excerpt: '' } },
+  { id: 'waste', num: '11', title: '廢棄物減量與處理', titleEn: 'Waste', gri: 'GRI 306', category: 'E', order: 11, estPages: 18, docs: [], fields: [], expertTemplates: [], benchmark: { company: '日月光', excerpt: '' } },
+  { id: 'labor', num: '12', title: '勞雇關係與人權政策', titleEn: 'Employment', gri: 'GRI 401', category: 'S', order: 12, estPages: 22, docs: [], fields: [], expertTemplates: [], benchmark: { company: '中華電信', excerpt: '' } },
+  { id: 'ohs', num: '13', title: '職業健康與安全管理', titleEn: 'OHS', gri: 'GRI 403', category: 'S', order: 13, estPages: 25, docs: [], fields: [], expertTemplates: [], benchmark: { company: '長榮海', excerpt: '' } },
+  { id: 'training', num: '14', title: '員工培訓與職涯發展', titleEn: 'Training', gri: 'GRI 404', category: 'S', order: 14, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '第一金', excerpt: '' } },
+  { id: 'diversity', num: '15', title: '多元公平與包容', titleEn: 'Diversity', gri: 'GRI 405', category: 'S', order: 15, estPages: 12, docs: [], fields: [], expertTemplates: [], benchmark: { company: '渣打銀', excerpt: '' } },
+  { id: 'community', num: '16', title: '地方社區參與與貢獻', titleEn: 'Communities', gri: 'GRI 413', category: 'S', order: 16, estPages: 15, docs: [], fields: [], expertTemplates: [], benchmark: { company: '信義房屋', excerpt: '' } },
+  { id: 'privacy', num: '17', title: '客戶隱私與資安主權', titleEn: 'Privacy', gri: 'GRI 418', category: 'S', order: 17, estPages: 10, docs: [], fields: [], expertTemplates: [], benchmark: { company: '趨勢科技', excerpt: '' } },
 ];
 
 const PERSONA_META = {
@@ -66,9 +69,8 @@ export default function EditorPage() {
   const [selectedChapterId, setSelectedChapterId] = useState<string>('general');
   const [selectedPersona, setSelectedPersona] = useState<'compliance' | 'harmony' | 'innovation'>('compliance');
   const [generating, setGenerating] = useState(false);
-  const [scanning, setScanning] = useState(false);
   const [sealing, setSealing] = useState(false);
-  const [activePanel, setActivePanel] = useState<'write' | 'data' | 'docs' | 'benchmark'>('write');
+  const [activePanel, setActivePanel] = useState<'write' | 'data' | 'docs'>('write');
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
 
@@ -105,8 +107,11 @@ export default function EditorPage() {
     }
   };
 
+  const handleRecursiveExpand = () => handleGenerate(5000);
+
   const applyExpertTemplate = () => {
-    const template = EXPERT_SACRED_TEMPLATES['general_v1'] || "# 專家模板載入中...";
+    const templateId = chapter.id === 'general' ? 'general_v1' : 'environmental_v1';
+    const template = EXPERT_SACRED_TEMPLATES[templateId] || "# 專家模板載入中...";
     updateContent(chapter.id, template, chapter.title, chapter.order, [chapter.gri]);
     showToast('已載入零算力專家模板', 'info');
   };
@@ -158,7 +163,7 @@ export default function EditorPage() {
               </div>
               <BrandStatusDot status="active" pulse size="md" />
            </div>
-           <Button variant="primary" size="md" onClick={handleSeal} isLoading={sealing} disabled={isSealed} className="rounded-2xl px-8 shadow-xl shadow-blue-500/10">
+           <Button variant="primary" size="default" onClick={handleSeal} isLoading={sealing} disabled={isSealed} className="rounded-2xl px-8 shadow-xl shadow-blue-500/10">
               <Lock size={18} className="mr-2" /> {isSealed ? '已封印' : '5T 封印'}
            </Button>
         </div>
@@ -252,14 +257,14 @@ export default function EditorPage() {
                              <Sparkles size={20} className="mr-3 text-[#FDB515] group-hover:rotate-12 transition-transform" /> 啟動 5000 字撰寫
                           </Button>
                           <div className="grid grid-cols-2 gap-3">
-                             <Button variant="ghost" className="h-14 rounded-2xl bg-blue-50/50 text-blue-700 text-[9px] font-black uppercase" onClick={() => handleGenerate(2000)}>
+                             <Button variant="ghost" className="h-14 rounded-2xl bg-blue-50/50 text-blue-700 text-[9px] font-black uppercase" onClick={handleRecursiveExpand}>
                                 <Plus size={14} className="mr-2"/> 遞迴擴充
                              </Button>
                              <Button variant="ghost" className="h-14 rounded-2xl bg-indigo-50/50 text-indigo-700 text-[9px] font-black uppercase" onClick={triggerChartSynthesis}>
                                 <BarChart3 size={14} className="mr-2"/> 圖表生成
                              </Button>
                           </div>
-                          <Button variant="outline" className="w-full h-14 border-dashed border-[#003262]/20 text-[#003262] text-[10px] font-black uppercase tracking-widest rounded-2xl" onClick={applyExpertTemplate}>
+                          <Button variant="glass" className="w-full h-14 border-dashed border-[#003262]/20 text-[#003262] text-[10px] font-black uppercase tracking-widest rounded-2xl" onClick={applyExpertTemplate}>
                              <Database size={16} className="mr-2" /> 零算力專家模板
                           </Button>
                        </div>
