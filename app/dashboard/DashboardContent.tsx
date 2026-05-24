@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {
   CheckCircle, Leaf, Shield, Activity,
   FileText, Database, BarChart3, AlertTriangle,
-  Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info
+  Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info, Globe
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -41,6 +41,7 @@ const QUICK_ACTIONS = [
   { href: '/vault',        icon: <Database size={18}/>,  label: '上傳佐證', color: '#003262' },
   { href: '/swarm',        icon: <Users size={18}/>,     label: '代理蜂群', color: '#003262' },
   { href: '/intelligence', icon: <BarChart3 size={18}/>, label: '情報中心', color: '#003262' },
+  { href: '/omni-skills',  icon: <Globe size={18}/>,     label: 'Omni 技能', color: '#003262' },
   { href: '/roadmap',      icon: <Target size={18}/>,    label: '淨零規劃', color: '#003262' },
   { href: '/terminal',     icon: <Code size={18}/>,      label: '終端主控', color: '#003262' },
 ];

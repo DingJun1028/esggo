@@ -1,37 +1,35 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Edit3, Save, Plus, Trash2, Building, Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, Sparkles, MapPin, Landmark, X } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandCardHeader, BrandStatusDot } from '../../components/brand';
+import { dcGetCompanyProfile, dcUpsertCompanyProfile } from '../../lib/dataconnect-services';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const defaultProfile = {
-  company_name: '善向永續股份有限公司',
-  industry: '永續科技服務業',
-  employee_count: 250,
-  revenue_twd: 150000000,
-  capital_twd: 50000000,
-  locations: ['台北市', '新竹市', '台中市'],
-  reporting_year: 2024,
-  vision: '成為台灣中小企業永續治理的最佳夥伴，透過科技與誠信實現 2030 淨零目標。',
-  mission: '提供符合 GRI 2021 與 ISSB 標準的一站式 ESG 解決方案，讓每一家企業都能實踐負責任的商業模式。',
-};
-
-const defaultGoals = [
-  { id: 1, title: '2030 碳中和目標', category: 'E', target: '碳排放較 2020 基準年減少 46%', deadline: '2030-12-31', status: 'in_progress' },
-  { id: 2, title: '再生能源比例提升', category: 'E', target: '再生能源佔比達 60%', deadline: '2027-12-31', status: 'in_progress' },
-  { id: 3, title: '女性管理職比例', category: 'S', target: '女性管理職比例達 40%', deadline: '2026-12-31', status: 'planned' },
-  { id: 4, title: 'GRI 全面揭露', category: 'G', target: '完成 GRI 2021 全套揭露', deadline: '2025-12-31', status: 'completed' },
-];
-
 export default function ProfilePage() {
-  const [profile, setProfile] = useState(defaultProfile);
-  const [goals, setGoals] = useState(defaultGoals);
+  const [profile, setProfile] = useState<any>(null);
+  const [goals, setGoals] = useState<any[]>([]);
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState(defaultProfile);
-  const [newGoal, setNewGoal] = useState({ title: '', category: 'E', target: '', deadline: '', status: 'planned' });
+  const [editForm, setEditForm] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [showAddGoal, setShowAddGoal] = useState(false);
+  const [newGoal, setNewGoal] = useState({ title: '', category: 'E', target: '', deadline: '', status: 'planned' });
 
-  const handleSave = () => {
+  useEffect(() => {
+    async function loadProfile() {
+      setLoading(true);
+      // Using a fixed demo ID for profile for now, can be dynamic later
+      const data = await dcGetCompanyProfile('550e8400-e29b-41d4-a716-446655440000');
+      if (data) {
+        setProfile(data);
+        setEditForm(data);
+      }
+      setLoading(false);
+    }
+    loadProfile();
+  }, []);
+
+  const handleSave = async () => {
+    await dcUpsertCompanyProfile(editForm);
     setProfile(editForm);
     setEditing(false);
   };

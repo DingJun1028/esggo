@@ -1,52 +1,182 @@
 type User @table {
-  displayName: String!
-  createdAt: Timestamp!
-  email: String
-  photoUrl: String
+  username: String!
+  email: String!
+  passwordHash: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+  displayName: String
+  bio: String
+  profilePictureUrl: String
+  publicProfile: Boolean
 }
 
-type Business @table {
-  name: String!
-  industry: String!
-  overallEsgScore: Float!
-  createdAt: Timestamp!
+type Action @table {
+  title: String!
+  category: Category!
+  loggedAt: Timestamp! @default(expr: "request.time")
+  isPublic: Boolean!
   description: String
-  website: String
-  environmentalScore: Float
-  socialScore: Float
-  governanceScore: Float
+  impactMetric: String
+  location: String
+  imageUrl: String
+  user: User
 }
 
-type EsgDetail @table {
-  business: Business
-  category: String!
+type Category @table {
+  name: String!
+  description: String
+  iconUrl: String
+}
+
+type Challenge @table {
+  name: String!
   description: String!
-  createdAt: Timestamp!
-  sourceUrl: String
+  startDate: Date!
+  endDate: Date!
+  isPublic: Boolean!
+  targetMetric: String
+  rules: String
+  creator: User
 }
 
-type UserList @table {
-  user: User
-  name: String!
-  public: Boolean!
-  createdAt: Timestamp!
-  updatedAt: Timestamp!
+type ChallengeParticipation @table(key: ["user", "challenge"]) {
+  user: User!
+  challenge: Challenge!
+  joinedAt: Timestamp! @default(expr: "request.time")
+  progressMetric: String
+}
+
+type SocialConnection @table(key: ["follower", "followed"]) {
+  follower: User!
+  followed: User!
+  connectedAt: Timestamp! @default(expr: "request.time")
+}
+
+type Task @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
   description: String
+  completed: Boolean!
+  status: String! @default(value: "todo")
+  priority: String! @default(value: "medium")
+  assignee: String
+  department: String
+  griReference: String
+  dueDate: Date
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
 }
 
-type ListBusiness @table {
-  userList: UserList
-  business: Business
-  position: Int!
-  note: String
+type RoadmapMilestone @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  targetYear: Int!
+  category: String!
+  status: String! @default(value: "planned")
+  targetValue: Float
+  unit: String
+  sbtiAligned: Boolean! @default(value: true)
+  createdAt: Timestamp! @default(expr: "request.time")
 }
 
-type Suggestion @table {
-  user: User
+type Comment @table {
+  user: User!
+  content: String!
+}
+
+type AuditRecord @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  dataType: String!
+  source: String!
+  standard: String
+  description: String
+  contentHash: String!
+  zkpStatus: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+  metadata: String
+  proofSignature: String
+  verifierKey: String
+  algorithm: String
+  salt: String
+  proofJson: String
+}
+
+type IntelligenceModule @table {
+  id: String!
+  titleZh: String!
+  titleEn: String!
+  descriptionZh: String!
+  descriptionEn: String!
+  iconName: String!
+  color: String!
+  details: String # JSON array
+}
+
+type IntelligenceSource @table {
+  id: UUID! @default(expr: "uuidV4()")
+  category: String!
+  name: String!
   type: String!
   status: String!
-  createdAt: Timestamp!
-  businessName: String
-  details: String
-  targetBusinessId: UUID
+}
+
+type CompanyProfile @table {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  industry: String
+  headquarters: String
+  vision: String
+  mission: String
+  employeeCount: Int
+  revenueTwd: Float
+  capitalTwd: Float
+  createdAt: Timestamp! @default(expr: "request.time")
+  user: User
+}
+
+type Report @table {
+  id: UUID! @default(expr: "uuidV4()")
+  company: CompanyProfile!
+  templateId: String!
+  title: String!
+  language: String!
+  progress: Int!
+  status: String!
+  createdAt: Timestamp! @default(expr: "request.time")
+  lastSavedAt: Timestamp
+}
+
+type ReportSection @table {
+  id: UUID! @default(expr: "uuidV4()")
+  report: Report!
+  sectionId: String!
+  title: String!
+  content: String
+  isDone: Boolean!
+  lastUpdated: Timestamp! @default(expr: "request.time")
+}
+
+type CompanyMetric @table {
+  id: UUID! @default(expr: "uuidV4()")
+  company: CompanyProfile!
+  metricName: String!
+  metricValue: Float
+  unit: String
+  category: String!
+  verified: Boolean! @default(value: false)
+  griStandard: String
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+type ScrapedArticle @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  summary: String
+  url: String!
+  source: String!
+  publishedAt: Date
+  category: String!
+  tags: String
+  impactLevel: String!
+  scrapedAt: Timestamp! @default(expr: "request.time")
 }

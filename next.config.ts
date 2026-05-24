@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
-  serverExternalPackages: ['sharp'],
+  serverExternalPackages: ['sharp', 'firebase-admin'],
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },

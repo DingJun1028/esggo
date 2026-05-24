@@ -1,26 +1,214 @@
-query ListAllBusinesses @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
-  businesses {
+query ListAllTasks @auth(level: USER) {
+  tasks(orderBy: [{createdAt: DESC}]) {
     id
-    name
-    industry
+    title
+    description
+    completed
+    status
+    priority
+    assignee
+    department
+    griReference
+    dueDate
     createdAt
   }
 }
 
-query GetBusinessDetails($id: UUID!) @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
-  business(id: $id) {
+query GetTaskById($id: UUID!) @auth(level: USER) {
+  task(key: {id: $id}) {
     id
-    name
+    title
     description
-    overallEsgScore
+    completed
+    status
+    priority
+    assignee
+    department
+    griReference
+    dueDate
   }
 }
 
-mutation CreateBusiness($name: String!, $industry: String!, $overallEsgScore: Float!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
-  business_insert(data: {
+mutation UpsertTask($id: UUID, $title: String!, $description: String, $completed: Boolean!, $status: String!, $priority: String!, $assignee: String, $department: String, $griReference: String, $dueDate: Date) @auth(level: USER) {
+  task_upsert(data: {
+    id: $id,
+    title: $title,
+    description: $description,
+    completed: $completed,
+    status: $status,
+    priority: $priority,
+    assignee: $assignee,
+    department: $department,
+    griReference: $griReference,
+    dueDate: $dueDate
+  })
+}
+
+query ListAuditRecords @auth(level: USER) {
+  auditRecords(orderBy: [{createdAt: DESC}], limit: 50) {
+    id
+    title
+    dataType
+    source
+    standard
+    description
+    contentHash
+    zkpStatus
+    createdAt
+  }
+}
+
+query ListScrapedArticles @auth(level: PUBLIC) {
+  scrapedArticles(orderBy: [{scrapedAt: DESC}], limit: 50) {
+    id
+    title
+    summary
+    url
+    source
+    publishedAt
+    category
+    tags
+    impactLevel
+    scrapedAt
+  }
+}
+
+query ListRoadmapMilestones @auth(level: USER) {
+  roadmapMilestones(orderBy: [{targetYear: ASC}]) {
+    id
+    title
+    targetYear
+    category
+    status
+    targetValue
+    unit
+    sbtiAligned
+  }
+}
+
+mutation UpsertRoadmapMilestone($id: UUID, $title: String!, $targetYear: Int!, $category: String!, $status: String!, $targetValue: Float, $unit: String, $sbtiAligned: Boolean!) @auth(level: USER) {
+  roadmapMilestone_upsert(data: {
+    id: $id,
+    title: $title,
+    targetYear: $targetYear,
+    category: $category,
+    status: $status,
+    targetValue: $targetValue,
+    unit: $unit,
+    sbtiAligned: $sbtiAligned
+  })
+}
+
+query GetCompanyProfile($id: UUID!) @auth(level: USER) {
+  companyProfile(key: {id: $id}) {
+    id
+    name
+    industry
+    headquarters
+    vision
+    mission
+    employeeCount
+    revenueTwd
+    capitalTwd
+  }
+}
+
+mutation UpsertCompanyProfile($id: UUID, $name: String!, $industry: String, $vision: String, $mission: String, $employeeCount: Int, $revenueTwd: Float, $capitalTwd: Float) @auth(level: USER) {
+  companyProfile_upsert(data: {
+    id: $id,
     name: $name,
     industry: $industry,
-    overallEsgScore: $overallEsgScore,
-    createdAt_expr: "request.time"
+    vision: $vision,
+    mission: $mission,
+    employeeCount: $employeeCount,
+    revenueTwd: $revenueTwd,
+    capitalTwd: $capitalTwd
+  })
+}
+
+query GetReportById($id: UUID!) @auth(level: USER) {
+  report(key: {id: $id}) {
+    id
+    title
+    progress
+    status
+    language
+    templateId
+    createdAt
+    company {
+      id
+      name
+    }
+  }
+}
+
+mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title: String!, $language: String!, $progress: Int!, $status: String!) @auth(level: USER) {
+  report_upsert(data: {
+    id: $id,
+    companyId: $companyId,
+    templateId: $templateId,
+    title: $title,
+    language: $language,
+    progress: $progress,
+    status: $status
+  })
+}
+
+query ListReports @auth(level: USER) {
+  reports(orderBy: [{createdAt: DESC}]) {
+    id
+    title
+    progress
+    status
+    language
+    templateId
+    createdAt
+    company {
+      id
+      name
+    }
+  }
+}
+
+query ListCompanyMetricsByCategory($companyId: UUID!, $category: String!) @auth(level: USER) {
+  companyMetrics(where: {
+    company: {id: {eq: $companyId}},
+    category: {eq: $category}
+  }) {
+    id
+    metricName
+    metricValue
+    unit
+    category
+    verified
+    griStandard
+    updatedAt
+  }
+}
+
+mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!, $metricValue: Float, $unit: String, $category: String!, $verified: Boolean!, $griStandard: String) @auth(level: USER) {
+  companyMetric_upsert(data: {
+    id: $id,
+    companyId: $companyId,
+    metricName: $metricName,
+    metricValue: $metricValue,
+    unit: $unit,
+    category: $category,
+    verified: $verified,
+    griStandard: $griStandard
+  })
+}
+
+mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: PUBLIC) {
+  scrapedArticle_upsert(data: {
+    id: $id,
+    title: $title,
+    summary: $summary,
+    url: $url,
+    source: $source,
+    publishedAt: $publishedAt,
+    category: $category,
+    tags: $tags,
+    impactLevel: $impactLevel
   })
 }

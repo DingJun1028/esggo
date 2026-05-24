@@ -52,6 +52,8 @@ export interface AgentTask {
   policyDecisionId: string;
   requiresHumanReview: boolean;
   skillKey: string;
+  parentTaskId?: string;
+  delegationReason?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -136,5 +138,4 @@ export interface AgentAuditEntry {
   startedAt?: string;
   finishedAt?: string;
   createdAt: string;
-}
 }

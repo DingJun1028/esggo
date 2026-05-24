@@ -16,6 +16,7 @@ import {
 } from '../components/brand';
 import { initAnalytics, auth } from '../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useFcmToken } from '../hooks/useFcmToken';
 
 interface NavItem { href: string; label: string; sub: string; icon: React.ReactNode; badge?: string; }
 interface NavGroup { title: string; items: NavItem[]; }
@@ -188,6 +189,8 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  
+  const { token, notificationPermissionStatus, retrieveToken } = useFcmToken();
 
   useEffect(() => {
     setMounted(true);
@@ -285,8 +288,18 @@ function AppContent({ children }: { children: React.ReactNode }) {
           <div className="flex-1" />
 
           <div className="flex items-center gap-2 lg:gap-3">
-            <BrandTooltip content="系統通知">
-              <BrandButton variant="ghost" size="sm" className="!w-9 !h-9 p-0 text-[#003262]">
+            <BrandTooltip content={token ? "推播已啟用" : "啟用系統通知"}>
+              <BrandButton 
+                variant="ghost" 
+                size="sm" 
+                className={`!w-9 !h-9 p-0 ${token ? 'text-[#FDB515]' : 'text-[#003262]'}`}
+                onClick={async () => {
+                  if (!token) {
+                    const t = await retrieveToken();
+                    if (t) console.log("FCM Token retrieved:", t);
+                  }
+                }}
+              >
                 <Bell size={18} />
               </BrandButton>
             </BrandTooltip>

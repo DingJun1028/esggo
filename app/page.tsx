@@ -18,9 +18,9 @@ export default function LandingPage() {
     setV3Steps([]);
     // Simulate some events
     const demoSteps = [
-      { id: '1', status: 'PLANNING', agentName: 'Aurora', message: 'Analyzing ESG GO deployment status...', timestamp: Date.now() },
-      { id: '2', status: 'EXECUTING', agentName: 'ESG-Scribe', message: 'Generating GRI 305 draft...', timestamp: Date.now() + 1000 },
-      { id: '3', status: 'SUCCESS', agentName: 'CBAM-Sentinel', message: 'Validated Q3 emission data.', timestamp: Date.now() + 2500 }
+      { id: '1', status: 'PLANNING' as const, agentName: 'Aurora', message: 'Analyzing ESG GO deployment status...', timestamp: new Date().toISOString() },
+      { id: '2', status: 'EXECUTING' as const, agentName: 'ESG-Scribe', message: 'Generating GRI 305 draft...', timestamp: new Date(Date.now() + 1000).toISOString() },
+      { id: '3', status: 'SUCCESS' as const, agentName: 'CBAM-Sentinel', message: 'Validated Q3 emission data.', timestamp: new Date(Date.now() + 2500).toISOString() }
     ];
 
     demoSteps.forEach((step, idx) => {
@@ -180,7 +180,7 @@ export default function LandingPage() {
                                 </div>
                                 <span className="text-xs text-slate-400">{agent.health}%</span>
                              </div>
-                             <BrandProgress value={agent.health} color={agent.active ? 'blue' : 'gray'} size="xs" />
+                             <BrandProgress value={agent.health} color={agent.active ? 'blue' : 'auto'} size="xs" />
                           </div>
                        </div>
                     ))}

@@ -1,0 +1,7 @@
+### Execution Trace:
+- Viewed: `app/api/scraper/route.ts`, `components/omni/DataVisualizer.tsx`
+- Modified: `app/api/scraper/route.ts`, `components/omni/DataVisualizer.tsx`
+
+### Outcome:
+- Updated the API to correctly propagate error context to the client if scraping fails.
+- Improved the DataVisualizer component to gracefully handle data fetching errors and empty states using user-friendly UI instead of failing silently.

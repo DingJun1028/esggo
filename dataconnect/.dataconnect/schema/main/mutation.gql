@@ -1,40 +1,148 @@
 extend type Mutation {
   """
-  ✨ Insert a single `Business` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Action` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  business_insert(
+  action_insert(
     """
     Data object to insert into the table.
     """
-    data: Business_Data!
-  ): Business_KeyOutput! @fdc_generated(from: "Business", purpose: INSERT_SINGLE)
+    data: Action_Data!
+  ): Action_KeyOutput! @fdc_generated(from: "Action", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `EsgDetail` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `AuditRecord` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  esgDetail_insert(
+  auditRecord_insert(
     """
     Data object to insert into the table.
     """
-    data: EsgDetail_Data!
-  ): EsgDetail_KeyOutput! @fdc_generated(from: "EsgDetail", purpose: INSERT_SINGLE)
+    data: AuditRecord_Data!
+  ): AuditRecord_KeyOutput! @fdc_generated(from: "AuditRecord", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `ListBusiness` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Category` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  listBusiness_insert(
+  category_insert(
     """
     Data object to insert into the table.
     """
-    data: ListBusiness_Data!
-  ): ListBusiness_KeyOutput! @fdc_generated(from: "ListBusiness", purpose: INSERT_SINGLE)
+    data: Category_Data!
+  ): Category_KeyOutput! @fdc_generated(from: "Category", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `Suggestion` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Challenge` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  suggestion_insert(
+  challenge_insert(
     """
     Data object to insert into the table.
     """
-    data: Suggestion_Data!
-  ): Suggestion_KeyOutput! @fdc_generated(from: "Suggestion", purpose: INSERT_SINGLE)
+    data: Challenge_Data!
+  ): Challenge_KeyOutput! @fdc_generated(from: "Challenge", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ChallengeParticipation` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  challengeParticipation_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ChallengeParticipation_Data!
+  ): ChallengeParticipation_KeyOutput! @fdc_generated(from: "ChallengeParticipation", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Comment` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  comment_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Comment_Data!
+  ): Comment_KeyOutput! @fdc_generated(from: "Comment", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `CompanyMetric` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  companyMetric_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: CompanyMetric_Data!
+  ): CompanyMetric_KeyOutput! @fdc_generated(from: "CompanyMetric", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `CompanyProfile` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  companyProfile_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: CompanyProfile_Data!
+  ): CompanyProfile_KeyOutput! @fdc_generated(from: "CompanyProfile", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `IntelligenceModule` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  intelligenceModule_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: IntelligenceModule_Data!
+  ): IntelligenceModule_KeyOutput! @fdc_generated(from: "IntelligenceModule", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `IntelligenceSource` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  intelligenceSource_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: IntelligenceSource_Data!
+  ): IntelligenceSource_KeyOutput! @fdc_generated(from: "IntelligenceSource", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Report` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  report_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Report_Data!
+  ): Report_KeyOutput! @fdc_generated(from: "Report", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ReportSection` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  reportSection_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ReportSection_Data!
+  ): ReportSection_KeyOutput! @fdc_generated(from: "ReportSection", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `RoadmapMilestone` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  roadmapMilestone_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: RoadmapMilestone_Data!
+  ): RoadmapMilestone_KeyOutput! @fdc_generated(from: "RoadmapMilestone", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `ScrapedArticle` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  scrapedArticle_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ScrapedArticle_Data!
+  ): ScrapedArticle_KeyOutput! @fdc_generated(from: "ScrapedArticle", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `SocialConnection` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  socialConnection_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: SocialConnection_Data!
+  ): SocialConnection_KeyOutput! @fdc_generated(from: "SocialConnection", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Task` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  task_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Task_Data!
+  ): Task_KeyOutput! @fdc_generated(from: "Task", purpose: INSERT_SINGLE)
   """
   ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -45,50 +153,149 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `UserList` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Action` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  userList_insert(
-    """
-    Data object to insert into the table.
-    """
-    data: UserList_Data!
-  ): UserList_KeyOutput! @fdc_generated(from: "UserList", purpose: INSERT_SINGLE)
-  """
-  ✨ Insert `Business` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
-  """
-  business_insertMany(
+  action_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [Business_Data!]!
-  ): [Business_KeyOutput!]! @fdc_generated(from: "Business", purpose: INSERT_MULTIPLE)
+    data: [Action_Data!]!
+  ): [Action_KeyOutput!]! @fdc_generated(from: "Action", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `EsgDetail` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `AuditRecord` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  esgDetail_insertMany(
+  auditRecord_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [EsgDetail_Data!]!
-  ): [EsgDetail_KeyOutput!]! @fdc_generated(from: "EsgDetail", purpose: INSERT_MULTIPLE)
+    data: [AuditRecord_Data!]!
+  ): [AuditRecord_KeyOutput!]! @fdc_generated(from: "AuditRecord", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `ListBusiness` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Category` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  listBusiness_insertMany(
+  category_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [ListBusiness_Data!]!
-  ): [ListBusiness_KeyOutput!]! @fdc_generated(from: "ListBusiness", purpose: INSERT_MULTIPLE)
+    data: [Category_Data!]!
+  ): [Category_KeyOutput!]! @fdc_generated(from: "Category", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `Suggestion` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Challenge` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  suggestion_insertMany(
+  challenge_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [Suggestion_Data!]!
-  ): [Suggestion_KeyOutput!]! @fdc_generated(from: "Suggestion", purpose: INSERT_MULTIPLE)
+    data: [Challenge_Data!]!
+  ): [Challenge_KeyOutput!]! @fdc_generated(from: "Challenge", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ChallengeParticipation` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  challengeParticipation_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ChallengeParticipation_Data!]!
+  ): [ChallengeParticipation_KeyOutput!]! @fdc_generated(from: "ChallengeParticipation", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Comment` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  comment_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Comment_Data!]!
+  ): [Comment_KeyOutput!]! @fdc_generated(from: "Comment", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `CompanyMetric` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  companyMetric_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [CompanyMetric_Data!]!
+  ): [CompanyMetric_KeyOutput!]! @fdc_generated(from: "CompanyMetric", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `CompanyProfile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  companyProfile_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [CompanyProfile_Data!]!
+  ): [CompanyProfile_KeyOutput!]! @fdc_generated(from: "CompanyProfile", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `IntelligenceModule` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  intelligenceModule_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [IntelligenceModule_Data!]!
+  ): [IntelligenceModule_KeyOutput!]! @fdc_generated(from: "IntelligenceModule", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `IntelligenceSource` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  intelligenceSource_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [IntelligenceSource_Data!]!
+  ): [IntelligenceSource_KeyOutput!]! @fdc_generated(from: "IntelligenceSource", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Report` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  report_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Report_Data!]!
+  ): [Report_KeyOutput!]! @fdc_generated(from: "Report", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ReportSection` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  reportSection_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ReportSection_Data!]!
+  ): [ReportSection_KeyOutput!]! @fdc_generated(from: "ReportSection", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `RoadmapMilestone` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  roadmapMilestone_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [RoadmapMilestone_Data!]!
+  ): [RoadmapMilestone_KeyOutput!]! @fdc_generated(from: "RoadmapMilestone", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `ScrapedArticle` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  scrapedArticle_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ScrapedArticle_Data!]!
+  ): [ScrapedArticle_KeyOutput!]! @fdc_generated(from: "ScrapedArticle", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `SocialConnection` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  socialConnection_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [SocialConnection_Data!]!
+  ): [SocialConnection_KeyOutput!]! @fdc_generated(from: "SocialConnection", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Task` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  task_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Task_Data!]!
+  ): [Task_KeyOutput!]! @fdc_generated(from: "Task", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -99,50 +306,149 @@ extend type Mutation {
     data: [User_Data!]!
   ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `UserList` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert or update a single `Action` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Action`.
   """
-  userList_insertMany(
-    """
-    List of data objects to insert into the table.
-    """
-    data: [UserList_Data!]!
-  ): [UserList_KeyOutput!]! @fdc_generated(from: "UserList", purpose: INSERT_MULTIPLE)
-  """
-  ✨ Insert or update a single `Business` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Business`.
-  """
-  business_upsert(
+  action_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: Business_Data!
-  ): Business_KeyOutput! @fdc_generated(from: "Business", purpose: UPSERT_SINGLE)
+    data: Action_Data!
+  ): Action_KeyOutput! @fdc_generated(from: "Action", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `EsgDetail` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `EsgDetail`.
+  ✨ Insert or update a single `AuditRecord` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AuditRecord`.
   """
-  esgDetail_upsert(
+  auditRecord_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: EsgDetail_Data!
-  ): EsgDetail_KeyOutput! @fdc_generated(from: "EsgDetail", purpose: UPSERT_SINGLE)
+    data: AuditRecord_Data!
+  ): AuditRecord_KeyOutput! @fdc_generated(from: "AuditRecord", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `ListBusiness` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ListBusiness`.
+  ✨ Insert or update a single `Category` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Category`.
   """
-  listBusiness_upsert(
+  category_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: ListBusiness_Data!
-  ): ListBusiness_KeyOutput! @fdc_generated(from: "ListBusiness", purpose: UPSERT_SINGLE)
+    data: Category_Data!
+  ): Category_KeyOutput! @fdc_generated(from: "Category", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `Suggestion` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Suggestion`.
+  ✨ Insert or update a single `Challenge` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Challenge`.
   """
-  suggestion_upsert(
+  challenge_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: Suggestion_Data!
-  ): Suggestion_KeyOutput! @fdc_generated(from: "Suggestion", purpose: UPSERT_SINGLE)
+    data: Challenge_Data!
+  ): Challenge_KeyOutput! @fdc_generated(from: "Challenge", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ChallengeParticipation` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ChallengeParticipation`.
+  """
+  challengeParticipation_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ChallengeParticipation_Data!
+  ): ChallengeParticipation_KeyOutput! @fdc_generated(from: "ChallengeParticipation", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Comment` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Comment`.
+  """
+  comment_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Comment_Data!
+  ): Comment_KeyOutput! @fdc_generated(from: "Comment", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `CompanyMetric` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CompanyMetric`.
+  """
+  companyMetric_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: CompanyMetric_Data!
+  ): CompanyMetric_KeyOutput! @fdc_generated(from: "CompanyMetric", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `CompanyProfile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CompanyProfile`.
+  """
+  companyProfile_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: CompanyProfile_Data!
+  ): CompanyProfile_KeyOutput! @fdc_generated(from: "CompanyProfile", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `IntelligenceModule` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `IntelligenceModule`.
+  """
+  intelligenceModule_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: IntelligenceModule_Data!
+  ): IntelligenceModule_KeyOutput! @fdc_generated(from: "IntelligenceModule", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `IntelligenceSource` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `IntelligenceSource`.
+  """
+  intelligenceSource_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: IntelligenceSource_Data!
+  ): IntelligenceSource_KeyOutput! @fdc_generated(from: "IntelligenceSource", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Report` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Report`.
+  """
+  report_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Report_Data!
+  ): Report_KeyOutput! @fdc_generated(from: "Report", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ReportSection` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ReportSection`.
+  """
+  reportSection_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ReportSection_Data!
+  ): ReportSection_KeyOutput! @fdc_generated(from: "ReportSection", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `RoadmapMilestone` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RoadmapMilestone`.
+  """
+  roadmapMilestone_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: RoadmapMilestone_Data!
+  ): RoadmapMilestone_KeyOutput! @fdc_generated(from: "RoadmapMilestone", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `ScrapedArticle` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ScrapedArticle`.
+  """
+  scrapedArticle_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ScrapedArticle_Data!
+  ): ScrapedArticle_KeyOutput! @fdc_generated(from: "ScrapedArticle", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `SocialConnection` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `SocialConnection`.
+  """
+  socialConnection_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: SocialConnection_Data!
+  ): SocialConnection_KeyOutput! @fdc_generated(from: "SocialConnection", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Task` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Task`.
+  """
+  task_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Task_Data!
+  ): Task_KeyOutput! @fdc_generated(from: "Task", purpose: UPSERT_SINGLE)
   """
   ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
   """
@@ -153,50 +459,149 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `UserList` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserList`.
+  ✨ Insert or update `Action` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Action`.
   """
-  userList_upsert(
-    """
-    Data object to insert or update if it already exists.
-    """
-    data: UserList_Data!
-  ): UserList_KeyOutput! @fdc_generated(from: "UserList", purpose: UPSERT_SINGLE)
-  """
-  ✨ Insert or update `Business` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Business`.
-  """
-  business_upsertMany(
+  action_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [Business_Data!]!
-  ): [Business_KeyOutput!]! @fdc_generated(from: "Business", purpose: UPSERT_MULTIPLE)
+    data: [Action_Data!]!
+  ): [Action_KeyOutput!]! @fdc_generated(from: "Action", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `EsgDetail` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `EsgDetail`.
+  ✨ Insert or update `AuditRecord` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AuditRecord`.
   """
-  esgDetail_upsertMany(
+  auditRecord_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [EsgDetail_Data!]!
-  ): [EsgDetail_KeyOutput!]! @fdc_generated(from: "EsgDetail", purpose: UPSERT_MULTIPLE)
+    data: [AuditRecord_Data!]!
+  ): [AuditRecord_KeyOutput!]! @fdc_generated(from: "AuditRecord", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `ListBusiness` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ListBusiness`.
+  ✨ Insert or update `Category` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Category`.
   """
-  listBusiness_upsertMany(
+  category_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [ListBusiness_Data!]!
-  ): [ListBusiness_KeyOutput!]! @fdc_generated(from: "ListBusiness", purpose: UPSERT_MULTIPLE)
+    data: [Category_Data!]!
+  ): [Category_KeyOutput!]! @fdc_generated(from: "Category", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `Suggestion` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Suggestion`.
+  ✨ Insert or update `Challenge` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Challenge`.
   """
-  suggestion_upsertMany(
+  challenge_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [Suggestion_Data!]!
-  ): [Suggestion_KeyOutput!]! @fdc_generated(from: "Suggestion", purpose: UPSERT_MULTIPLE)
+    data: [Challenge_Data!]!
+  ): [Challenge_KeyOutput!]! @fdc_generated(from: "Challenge", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ChallengeParticipation` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ChallengeParticipation`.
+  """
+  challengeParticipation_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ChallengeParticipation_Data!]!
+  ): [ChallengeParticipation_KeyOutput!]! @fdc_generated(from: "ChallengeParticipation", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Comment` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Comment`.
+  """
+  comment_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Comment_Data!]!
+  ): [Comment_KeyOutput!]! @fdc_generated(from: "Comment", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `CompanyMetric` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CompanyMetric`.
+  """
+  companyMetric_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [CompanyMetric_Data!]!
+  ): [CompanyMetric_KeyOutput!]! @fdc_generated(from: "CompanyMetric", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `CompanyProfile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `CompanyProfile`.
+  """
+  companyProfile_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [CompanyProfile_Data!]!
+  ): [CompanyProfile_KeyOutput!]! @fdc_generated(from: "CompanyProfile", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `IntelligenceModule` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `IntelligenceModule`.
+  """
+  intelligenceModule_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [IntelligenceModule_Data!]!
+  ): [IntelligenceModule_KeyOutput!]! @fdc_generated(from: "IntelligenceModule", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `IntelligenceSource` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `IntelligenceSource`.
+  """
+  intelligenceSource_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [IntelligenceSource_Data!]!
+  ): [IntelligenceSource_KeyOutput!]! @fdc_generated(from: "IntelligenceSource", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Report` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Report`.
+  """
+  report_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Report_Data!]!
+  ): [Report_KeyOutput!]! @fdc_generated(from: "Report", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ReportSection` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ReportSection`.
+  """
+  reportSection_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ReportSection_Data!]!
+  ): [ReportSection_KeyOutput!]! @fdc_generated(from: "ReportSection", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `RoadmapMilestone` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `RoadmapMilestone`.
+  """
+  roadmapMilestone_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [RoadmapMilestone_Data!]!
+  ): [RoadmapMilestone_KeyOutput!]! @fdc_generated(from: "RoadmapMilestone", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `ScrapedArticle` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ScrapedArticle`.
+  """
+  scrapedArticle_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ScrapedArticle_Data!]!
+  ): [ScrapedArticle_KeyOutput!]! @fdc_generated(from: "ScrapedArticle", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `SocialConnection` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `SocialConnection`.
+  """
+  socialConnection_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [SocialConnection_Data!]!
+  ): [SocialConnection_KeyOutput!]! @fdc_generated(from: "SocialConnection", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Task` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Task`.
+  """
+  task_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Task_Data!]!
+  ): [Task_KeyOutput!]! @fdc_generated(from: "Task", purpose: UPSERT_MULTIPLE)
   """
   ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
   """
@@ -207,18 +612,9 @@ extend type Mutation {
     data: [User_Data!]!
   ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `UserList` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserList`.
+  ✨ Update a single `Action` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Action` or `null` if not found.
   """
-  userList_upsertMany(
-    """
-    List of data objects to insert or update if it already exists.
-    """
-    data: [UserList_Data!]!
-  ): [UserList_KeyOutput!]! @fdc_generated(from: "UserList", purpose: UPSERT_MULTIPLE)
-  """
-  ✨ Update a single `Business` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Business` or `null` if not found.
-  """
-  business_update(
+  action_update(
     """
     The unique ID of the object.
     """
@@ -227,22 +623,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Business_Key
+    key: Action_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Business_FirstRow
+    first: Action_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: Business_Data!
-  ): Business_KeyOutput @fdc_generated(from: "Business", purpose: UPDATE_SINGLE)
+    data: Action_Data!
+  ): Action_KeyOutput @fdc_generated(from: "Action", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `EsgDetail` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `EsgDetail` or `null` if not found.
+  ✨ Update a single `AuditRecord` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `AuditRecord` or `null` if not found.
   """
-  esgDetail_update(
+  auditRecord_update(
     """
     The unique ID of the object.
     """
@@ -251,22 +647,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: EsgDetail_Key
+    key: AuditRecord_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: EsgDetail_FirstRow
+    first: AuditRecord_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: EsgDetail_Data!
-  ): EsgDetail_KeyOutput @fdc_generated(from: "EsgDetail", purpose: UPDATE_SINGLE)
+    data: AuditRecord_Data!
+  ): AuditRecord_KeyOutput @fdc_generated(from: "AuditRecord", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `ListBusiness` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ListBusiness` or `null` if not found.
+  ✨ Update a single `Category` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Category` or `null` if not found.
   """
-  listBusiness_update(
+  category_update(
     """
     The unique ID of the object.
     """
@@ -275,22 +671,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ListBusiness_Key
+    key: Category_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ListBusiness_FirstRow
+    first: Category_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: ListBusiness_Data!
-  ): ListBusiness_KeyOutput @fdc_generated(from: "ListBusiness", purpose: UPDATE_SINGLE)
+    data: Category_Data!
+  ): Category_KeyOutput @fdc_generated(from: "Category", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `Suggestion` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Suggestion` or `null` if not found.
+  ✨ Update a single `Challenge` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Challenge` or `null` if not found.
   """
-  suggestion_update(
+  challenge_update(
     """
     The unique ID of the object.
     """
@@ -299,18 +695,301 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Suggestion_Key
+    key: Challenge_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Suggestion_FirstRow
+    first: Challenge_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: Suggestion_Data!
-  ): Suggestion_KeyOutput @fdc_generated(from: "Suggestion", purpose: UPDATE_SINGLE)
+    data: Challenge_Data!
+  ): Challenge_KeyOutput @fdc_generated(from: "Challenge", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ChallengeParticipation` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ChallengeParticipation` or `null` if not found.
+  """
+  challengeParticipation_update(
+    """
+    The key used to identify the object.
+    """
+    key: ChallengeParticipation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ChallengeParticipation_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ChallengeParticipation_Data!
+  ): ChallengeParticipation_KeyOutput @fdc_generated(from: "ChallengeParticipation", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Comment` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Comment` or `null` if not found.
+  """
+  comment_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Comment_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Comment_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Comment_Data!
+  ): Comment_KeyOutput @fdc_generated(from: "Comment", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `CompanyMetric` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `CompanyMetric` or `null` if not found.
+  """
+  companyMetric_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: CompanyMetric_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: CompanyMetric_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: CompanyMetric_Data!
+  ): CompanyMetric_KeyOutput @fdc_generated(from: "CompanyMetric", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `CompanyProfile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `CompanyProfile` or `null` if not found.
+  """
+  companyProfile_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: CompanyProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: CompanyProfile_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: CompanyProfile_Data!
+  ): CompanyProfile_KeyOutput @fdc_generated(from: "CompanyProfile", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `IntelligenceModule` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `IntelligenceModule` or `null` if not found.
+  """
+  intelligenceModule_update(
+    """
+    The unique ID of the object.
+    """
+    id: String
+
+    """
+    ✨ `_expr` server value variant of `id` (The unique ID of the object.)
+    """
+    id_expr: String_Expr
+
+    """
+    The key used to identify the object.
+    """
+    key: IntelligenceModule_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IntelligenceModule_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: IntelligenceModule_Data!
+  ): IntelligenceModule_KeyOutput @fdc_generated(from: "IntelligenceModule", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `IntelligenceSource` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `IntelligenceSource` or `null` if not found.
+  """
+  intelligenceSource_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: IntelligenceSource_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IntelligenceSource_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: IntelligenceSource_Data!
+  ): IntelligenceSource_KeyOutput @fdc_generated(from: "IntelligenceSource", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Report` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Report` or `null` if not found.
+  """
+  report_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Report_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Report_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Report_Data!
+  ): Report_KeyOutput @fdc_generated(from: "Report", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ReportSection` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ReportSection` or `null` if not found.
+  """
+  reportSection_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ReportSection_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ReportSection_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ReportSection_Data!
+  ): ReportSection_KeyOutput @fdc_generated(from: "ReportSection", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `RoadmapMilestone` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `RoadmapMilestone` or `null` if not found.
+  """
+  roadmapMilestone_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RoadmapMilestone_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RoadmapMilestone_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: RoadmapMilestone_Data!
+  ): RoadmapMilestone_KeyOutput @fdc_generated(from: "RoadmapMilestone", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `ScrapedArticle` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ScrapedArticle` or `null` if not found.
+  """
+  scrapedArticle_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ScrapedArticle_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ScrapedArticle_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ScrapedArticle_Data!
+  ): ScrapedArticle_KeyOutput @fdc_generated(from: "ScrapedArticle", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `SocialConnection` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `SocialConnection` or `null` if not found.
+  """
+  socialConnection_update(
+    """
+    The key used to identify the object.
+    """
+    key: SocialConnection_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: SocialConnection_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: SocialConnection_Data!
+  ): SocialConnection_KeyOutput @fdc_generated(from: "SocialConnection", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Task` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Task` or `null` if not found.
+  """
+  task_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Task_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Task_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Task_Data!
+  ): Task_KeyOutput @fdc_generated(from: "Task", purpose: UPDATE_SINGLE)
   """
   ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
   """
@@ -336,37 +1015,13 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `UserList` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserList` or `null` if not found.
+  ✨ Update `Action` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  userList_update(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
-    The key used to identify the object.
-    """
-    key: UserList_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: UserList_FirstRow
-
-    """
-    Data object containing fields to be updated.
-    """
-    data: UserList_Data!
-  ): UserList_KeyOutput @fdc_generated(from: "UserList", purpose: UPDATE_SINGLE)
-  """
-  ✨ Update `Business` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
-  """
-  business_updateMany(
+  action_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: Business_Filter
+    where: Action_Filter
 
     """
     Set to true to update all rows.
@@ -376,16 +1031,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: Business_Data!
-  ): Int! @fdc_generated(from: "Business", purpose: UPDATE_MULTIPLE)
+    data: Action_Data!
+  ): Int! @fdc_generated(from: "Action", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `EsgDetail` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `AuditRecord` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  esgDetail_updateMany(
+  auditRecord_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: EsgDetail_Filter
+    where: AuditRecord_Filter
 
     """
     Set to true to update all rows.
@@ -395,16 +1050,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: EsgDetail_Data!
-  ): Int! @fdc_generated(from: "EsgDetail", purpose: UPDATE_MULTIPLE)
+    data: AuditRecord_Data!
+  ): Int! @fdc_generated(from: "AuditRecord", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `ListBusiness` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `Category` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  listBusiness_updateMany(
+  category_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: ListBusiness_Filter
+    where: Category_Filter
 
     """
     Set to true to update all rows.
@@ -414,16 +1069,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: ListBusiness_Data!
-  ): Int! @fdc_generated(from: "ListBusiness", purpose: UPDATE_MULTIPLE)
+    data: Category_Data!
+  ): Int! @fdc_generated(from: "Category", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `Suggestion` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `Challenge` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  suggestion_updateMany(
+  challenge_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: Suggestion_Filter
+    where: Challenge_Filter
 
     """
     Set to true to update all rows.
@@ -433,8 +1088,236 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: Suggestion_Data!
-  ): Int! @fdc_generated(from: "Suggestion", purpose: UPDATE_MULTIPLE)
+    data: Challenge_Data!
+  ): Int! @fdc_generated(from: "Challenge", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ChallengeParticipation` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  challengeParticipation_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ChallengeParticipation_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ChallengeParticipation_Data!
+  ): Int! @fdc_generated(from: "ChallengeParticipation", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Comment` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  comment_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Comment_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Comment_Data!
+  ): Int! @fdc_generated(from: "Comment", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `CompanyMetric` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  companyMetric_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: CompanyMetric_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: CompanyMetric_Data!
+  ): Int! @fdc_generated(from: "CompanyMetric", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `CompanyProfile` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  companyProfile_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: CompanyProfile_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: CompanyProfile_Data!
+  ): Int! @fdc_generated(from: "CompanyProfile", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `IntelligenceModule` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  intelligenceModule_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: IntelligenceModule_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: IntelligenceModule_Data!
+  ): Int! @fdc_generated(from: "IntelligenceModule", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `IntelligenceSource` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  intelligenceSource_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: IntelligenceSource_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: IntelligenceSource_Data!
+  ): Int! @fdc_generated(from: "IntelligenceSource", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Report` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  report_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Report_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Report_Data!
+  ): Int! @fdc_generated(from: "Report", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ReportSection` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  reportSection_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ReportSection_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ReportSection_Data!
+  ): Int! @fdc_generated(from: "ReportSection", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `RoadmapMilestone` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  roadmapMilestone_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: RoadmapMilestone_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: RoadmapMilestone_Data!
+  ): Int! @fdc_generated(from: "RoadmapMilestone", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `ScrapedArticle` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  scrapedArticle_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ScrapedArticle_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ScrapedArticle_Data!
+  ): Int! @fdc_generated(from: "ScrapedArticle", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `SocialConnection` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  socialConnection_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: SocialConnection_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: SocialConnection_Data!
+  ): Int! @fdc_generated(from: "SocialConnection", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Task` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  task_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Task_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Task_Data!
+  ): Int! @fdc_generated(from: "Task", purpose: UPDATE_MULTIPLE)
   """
   ✨ Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -455,28 +1338,9 @@ extend type Mutation {
     data: User_Data!
   ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `UserList` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Delete a single `Action` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  userList_updateMany(
-    """
-    Filter condition to specify which rows to update.
-    """
-    where: UserList_Filter
-
-    """
-    Set to true to update all rows.
-    """
-    all: Boolean = false
-
-    """
-    Data object containing fields to update.
-    """
-    data: UserList_Data!
-  ): Int! @fdc_generated(from: "UserList", purpose: UPDATE_MULTIPLE)
-  """
-  ✨ Delete a single `Business` based on `id`, `key` or `first` and return its key (or `null` if not found).
-  """
-  business_delete(
+  action_delete(
     """
     The unique ID of the object.
     """
@@ -485,17 +1349,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Business_Key
+    key: Action_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Business_FirstRow
-  ): Business_KeyOutput @fdc_generated(from: "Business", purpose: DELETE_SINGLE)
+    first: Action_FirstRow
+  ): Action_KeyOutput @fdc_generated(from: "Action", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `EsgDetail` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `AuditRecord` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  esgDetail_delete(
+  auditRecord_delete(
     """
     The unique ID of the object.
     """
@@ -504,17 +1368,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: EsgDetail_Key
+    key: AuditRecord_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: EsgDetail_FirstRow
-  ): EsgDetail_KeyOutput @fdc_generated(from: "EsgDetail", purpose: DELETE_SINGLE)
+    first: AuditRecord_FirstRow
+  ): AuditRecord_KeyOutput @fdc_generated(from: "AuditRecord", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `ListBusiness` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `Category` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  listBusiness_delete(
+  category_delete(
     """
     The unique ID of the object.
     """
@@ -523,17 +1387,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ListBusiness_Key
+    key: Category_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ListBusiness_FirstRow
-  ): ListBusiness_KeyOutput @fdc_generated(from: "ListBusiness", purpose: DELETE_SINGLE)
+    first: Category_FirstRow
+  ): Category_KeyOutput @fdc_generated(from: "Category", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `Suggestion` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `Challenge` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  suggestion_delete(
+  challenge_delete(
     """
     The unique ID of the object.
     """
@@ -542,13 +1406,236 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Suggestion_Key
+    key: Challenge_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Suggestion_FirstRow
-  ): Suggestion_KeyOutput @fdc_generated(from: "Suggestion", purpose: DELETE_SINGLE)
+    first: Challenge_FirstRow
+  ): Challenge_KeyOutput @fdc_generated(from: "Challenge", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ChallengeParticipation` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  challengeParticipation_delete(
+    """
+    The key used to identify the object.
+    """
+    key: ChallengeParticipation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ChallengeParticipation_FirstRow
+  ): ChallengeParticipation_KeyOutput @fdc_generated(from: "ChallengeParticipation", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Comment` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  comment_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Comment_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Comment_FirstRow
+  ): Comment_KeyOutput @fdc_generated(from: "Comment", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `CompanyMetric` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  companyMetric_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: CompanyMetric_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: CompanyMetric_FirstRow
+  ): CompanyMetric_KeyOutput @fdc_generated(from: "CompanyMetric", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `CompanyProfile` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  companyProfile_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: CompanyProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: CompanyProfile_FirstRow
+  ): CompanyProfile_KeyOutput @fdc_generated(from: "CompanyProfile", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `IntelligenceModule` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  intelligenceModule_delete(
+    """
+    The unique ID of the object.
+    """
+    id: String
+
+    """
+    ✨ `_expr` server value variant of `id` (The unique ID of the object.)
+    """
+    id_expr: String_Expr
+
+    """
+    The key used to identify the object.
+    """
+    key: IntelligenceModule_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IntelligenceModule_FirstRow
+  ): IntelligenceModule_KeyOutput @fdc_generated(from: "IntelligenceModule", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `IntelligenceSource` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  intelligenceSource_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: IntelligenceSource_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: IntelligenceSource_FirstRow
+  ): IntelligenceSource_KeyOutput @fdc_generated(from: "IntelligenceSource", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Report` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  report_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Report_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Report_FirstRow
+  ): Report_KeyOutput @fdc_generated(from: "Report", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ReportSection` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  reportSection_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ReportSection_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ReportSection_FirstRow
+  ): ReportSection_KeyOutput @fdc_generated(from: "ReportSection", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `RoadmapMilestone` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  roadmapMilestone_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RoadmapMilestone_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RoadmapMilestone_FirstRow
+  ): RoadmapMilestone_KeyOutput @fdc_generated(from: "RoadmapMilestone", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `ScrapedArticle` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  scrapedArticle_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ScrapedArticle_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ScrapedArticle_FirstRow
+  ): ScrapedArticle_KeyOutput @fdc_generated(from: "ScrapedArticle", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `SocialConnection` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  socialConnection_delete(
+    """
+    The key used to identify the object.
+    """
+    key: SocialConnection_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: SocialConnection_FirstRow
+  ): SocialConnection_KeyOutput @fdc_generated(from: "SocialConnection", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Task` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  task_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Task_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Task_FirstRow
+  ): Task_KeyOutput @fdc_generated(from: "Task", purpose: DELETE_SINGLE)
   """
   ✨ Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -569,80 +1656,229 @@ extend type Mutation {
     first: User_FirstRow
   ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `UserList` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete `Action` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  userList_delete(
-    """
-    The unique ID of the object.
-    """
-    id: UUID
-
-    """
-    The key used to identify the object.
-    """
-    key: UserList_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: UserList_FirstRow
-  ): UserList_KeyOutput @fdc_generated(from: "UserList", purpose: DELETE_SINGLE)
-  """
-  ✨ Delete `Business` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
-  """
-  business_deleteMany(
+  action_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: Business_Filter
+    where: Action_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "Business", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "Action", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `EsgDetail` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `AuditRecord` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  esgDetail_deleteMany(
+  auditRecord_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: EsgDetail_Filter
+    where: AuditRecord_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "EsgDetail", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "AuditRecord", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `ListBusiness` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `Category` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  listBusiness_deleteMany(
+  category_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: ListBusiness_Filter
+    where: Category_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "ListBusiness", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "Category", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `Suggestion` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `Challenge` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  suggestion_deleteMany(
+  challenge_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: Suggestion_Filter
+    where: Challenge_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "Suggestion", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "Challenge", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ChallengeParticipation` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  challengeParticipation_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ChallengeParticipation_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ChallengeParticipation", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Comment` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  comment_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Comment_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Comment", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `CompanyMetric` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  companyMetric_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: CompanyMetric_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "CompanyMetric", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `CompanyProfile` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  companyProfile_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: CompanyProfile_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "CompanyProfile", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `IntelligenceModule` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  intelligenceModule_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: IntelligenceModule_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "IntelligenceModule", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `IntelligenceSource` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  intelligenceSource_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: IntelligenceSource_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "IntelligenceSource", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Report` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  report_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Report_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Report", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ReportSection` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  reportSection_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ReportSection_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `RoadmapMilestone` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  roadmapMilestone_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: RoadmapMilestone_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "RoadmapMilestone", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `ScrapedArticle` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  scrapedArticle_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ScrapedArticle_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ScrapedArticle", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `SocialConnection` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  socialConnection_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: SocialConnection_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "SocialConnection", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Task` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  task_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Task_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Task", purpose: DELETE_MULTIPLE)
   """
   ✨ Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
@@ -657,18 +1893,4 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
-  """
-  ✨ Delete `UserList` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
-  """
-  userList_deleteMany(
-    """
-    Filter condition to specify which rows to delete.
-    """
-    where: UserList_Filter
-
-    """
-    Set to true to delete all rows.
-    """
-    all: Boolean = false
-  ): Int! @fdc_generated(from: "UserList", purpose: DELETE_MULTIPLE)
 }

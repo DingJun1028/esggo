@@ -1,0 +1,28 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "Populating seed data should only be done by authenticated users.") {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      username: "demouser1",
+      email: "demouser1@example.com",
+      createdAt: "2023-01-01T10:00:00Z",
+      passwordHash: "hash1"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      username: "demouser2",
+      email: "demouser2@example.com",
+      createdAt: "2023-01-02T11:00:00Z",
+      passwordHash: "hash2"
+    }
+  ])
+  comment_insertMany(data: [
+    {
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      content: "Example comment from demouser1"
+    },
+    {
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      content: "Example comment from demouser2"
+    }
+  ])
+}

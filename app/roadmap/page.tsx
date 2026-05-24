@@ -130,8 +130,8 @@ export default function RoadmapPage() {
                data={milestones.map(m => ({
                  title: <span className="font-bold text-[#003262]">{m.title}</span>,
                  category: <BrandBadge variant="outline" size="xs" className="opacity-60">{m.category}</BrandBadge>,
-                 year: <span className="font-mono text-sm font-black text-[#003262]">{m.target_year}</span>,
-                 target: <span className="text-xs font-bold text-slate-500">{m.target_value ? `${m.target_value} ${m.unit || ''}` : '-'}</span>,
+                 year: <span className="font-mono text-sm font-black text-[#003262]">{m.targetYear}</span>,
+                 target: <span className="text-xs font-bold text-slate-500">{m.targetValue ? `${m.targetValue} ${m.unit || ''}` : '-'}</span>,
                  status: (
                    <BrandBadge 
                     variant={m.status === 'achieved' ? 'success' : m.status === 'in_progress' ? 'info' : 'outline'} 
@@ -140,7 +140,7 @@ export default function RoadmapPage() {
                      {m.status?.toUpperCase().replace('_', ' ')}
                    </BrandBadge>
                  ),
-                 sbti: m.sbti_aligned ? <CheckCircle2 size={16} className="text-emerald-500 mx-auto" /> : <div className="h-4 w-4 rounded-full border border-slate-100 mx-auto" />,
+                 sbti: m.sbtiAligned ? <CheckCircle2 size={16} className="text-emerald-500 mx-auto" /> : <div className="h-4 w-4 rounded-full border border-slate-100 mx-auto" />,
                  actions: (
                    <BrandButton variant="ghost" size="xs" className="h-8 px-3 rounded-lg text-[10px] font-black uppercase tracking-widest" onClick={() => cycleStatus(m)}>
                       Next_Stage
