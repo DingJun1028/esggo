@@ -81,7 +81,7 @@ export default function BrandTable<T extends Record<string, any>>({
                   {columns.map(col => (
                     <td
                       key={col.key}
-                      className={`px-3 lg:px-6 py-4 text-[#003262] font-medium ${
+                      className={`px-3 lg:px-6 py-4 text-[#003262] font-medium whitespace-nowrap ${
                         col.align === 'center' ? 'text-center' :
                         col.align === 'right' ? 'text-right' : 'text-left'
                       }`}

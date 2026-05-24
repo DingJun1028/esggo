@@ -13,7 +13,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [leafClicks, setLeafClicks] = useState(0);
   const router = useRouter();
+
+  const handleLeafClick = () => {
+    const nextCount = leafClicks + 1;
+    if (nextCount >= 3) {
+      router.push('/terminal');
+      setLeafClicks(0);
+    } else {
+      setLeafClicks(nextCount);
+      // Reset counter if no click within 2 seconds
+      setTimeout(() => setLeafClicks(0), 2000);
+    }
+  };
 
   async function handleLogin(e?: React.FormEvent) {
     if (e) e.preventDefault();
@@ -56,7 +69,10 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-[440px] px-6 py-12 fade-in">
         {/* Brand Identity */}
         <div className="flex flex-col items-center mb-10 text-center">
-           <div className="w-20 h-20 rounded-[32px] bg-[#003262] flex items-center justify-center shadow-2xl shadow-blue-900/20 mb-6 relative group overflow-hidden">
+           <div 
+             onClick={handleLeafClick}
+             className="w-20 h-20 rounded-[32px] bg-[#003262] flex items-center justify-center shadow-2xl shadow-blue-900/20 mb-6 relative group overflow-hidden cursor-pointer active:scale-95 transition-all"
+           >
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <Leaf size={40} color="#FDB515" className="relative z-10" />
            </div>
@@ -154,17 +170,6 @@ export default function LoginPage() {
               </div>
            </div>
         </BrandCard>
-
-        {/* Developer Entrance */}
-        <div className="mt-12 flex items-center justify-center gap-6">
-           <Link href="/terminal" className="flex items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest hover:text-[#003262] transition-colors group">
-              <Terminal size={14} className="group-hover:scale-110 transition-transform" /> Developer_Entrance
-           </Link>
-           <div className="w-1 h-1 rounded-full bg-slate-200" />
-           <Link href="/api-setup" className="flex items-center gap-2 text-[10px] font-black text-slate-300 uppercase tracking-widest hover:text-[#003262] transition-colors group">
-              <Key size={14} className="group-hover:scale-110 transition-transform" /> System_Nodes
-           </Link>
-        </div>
 
         <p className="mt-10 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
           &copy; {new Date().getFullYear()} ESG GO Enterprise Hub <br/>

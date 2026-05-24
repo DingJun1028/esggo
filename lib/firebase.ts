@@ -12,7 +12,8 @@ const firebaseConfig = {
   projectId: "esg-sunshine",
   storageBucket: "esg-sunshine.firebasestorage.app",
   messagingSenderId: "950159032447",
-  appId: "1:950159032447:web:baada36f4b2c3ad3ecff4a"
+  appId: "1:950159032447:web:4168bcdb81a10a3eecff4a",
+  measurementId: "G-8D32BP5P40"
 };
 
 // Initialize Firebase

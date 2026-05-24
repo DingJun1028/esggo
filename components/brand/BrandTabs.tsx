@@ -63,7 +63,7 @@ export default function BrandTabs({
 
   return (
     <div>
-      <div className={`flex gap-1 overflow-x-auto scrollbar-hide ${containerStyles[variant]}`}>
+      <div className={`flex gap-1 overflow-x-auto no-scrollbar ${containerStyles[variant]}`}>
         {tabs.map(tab => (
           <button
             key={tab.id}

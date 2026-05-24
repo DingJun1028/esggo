@@ -102,26 +102,16 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
     setOpenGroups(prev => ({ ...prev, [title]: !prev[title] }));
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', background: 'var(--berkeley-blue)' }}>
+    <div className="flex flex-col h-full overflow-hidden bg-[#003262]">
       {/* Logo */}
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 12,
-        height: 'var(--topbar-h)', padding: '0 var(--space-4)',
-        borderBottom: '1px solid rgba(255,255,255,0.08)', flexShrink: 0,
-      }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: 'var(--radius-lg)',
-          background: 'var(--california-gold)', display: 'flex',
-          alignItems: 'center', justifyContent: 'center',
-          color: 'var(--berkeley-blue)', fontWeight: 900, fontSize: 14, flexShrink: 0,
-          letterSpacing: '-0.02em', boxShadow: '0 4px 12px rgba(253,181,21,0.2)'
-        }}>O</div>
+      <div className="flex items-center gap-3 h-[var(--topbar-h)] px-[var(--space-4)] border-b border-white/10 shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-[#FDB515] flex items-center justify-center text-[#003262] font-black text-sm shrink-0 shadow-[0_4px_12px_rgba(253,181,21,0.2)] tracking-tight">O</div>
         {!collapsed && (
-          <div style={{ minWidth: 0 }}>
-            <p style={{ fontSize: 14, fontWeight: 800, color: 'var(--california-gold)', lineHeight: 1.2, letterSpacing: '0.02em' }}>
+          <div className="min-w-0">
+            <p className="text-sm font-extrabold text-[#FDB515] leading-tight tracking-wide">
               OmniHermes
             </p>
-            <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.48)', fontWeight: 600, textTransform: 'uppercase' }}>
+            <p className="text-[9px] text-white/50 font-semibold uppercase">
               ESG Go System
             </p>
           </div>
@@ -129,28 +119,20 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
       </div>
 
       {/* Nav Items */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 8px', scrollbarWidth: 'none' }}>
+      <div className="flex-1 overflow-y-auto px-2 py-3 scrollbar-none">
         {NAV_GROUPS.map(group => (
-          <div key={group.title} style={{ marginBottom: 8 }}>
+          <div key={group.title} className="mb-2">
             {!collapsed && (
               <button
                 onClick={() => toggleGroup(group.title)}
-                style={{
-                  width: '100%', display: 'flex', alignItems: 'center',
-                  justifyContent: 'space-between', padding: '6px 12px',
-                  fontSize: 9, fontWeight: 800, color: 'rgba(255,255,255,0.24)',
-                  textTransform: 'uppercase', letterSpacing: '0.12em',
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontFamily: 'var(--font-mono)', borderRadius: 'var(--radius-md)',
-                  minHeight: 28,
-                }}
+                className="w-full flex items-center justify-between px-3 py-1.5 text-[9px] font-extrabold text-white/30 uppercase tracking-[0.12em] bg-transparent border-none cursor-pointer font-mono rounded-md min-h-[28px] hover:text-white/50 transition-colors"
               >
                 <span>{group.title}</span>
                 {openGroups[group.title] ? <ChevronDown size={10} /> : <ChevronRight size={10} />}
               </button>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 4 }}>
+            <div className="flex flex-col gap-0.5 mt-1">
               {(collapsed || openGroups[group.title]) && group.items.map(item => {
                 const active = isActive(item.href);
                 return (
@@ -159,24 +141,19 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
                     href={item.href}
                     onClick={onNav}
                     title={collapsed ? `${item.label} · ${item.sub}` : undefined}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 12,
-                      padding: '8px 12px', borderRadius: 'var(--radius-lg)',
-                      minHeight: 40, textDecoration: 'none',
-                      background: active ? 'rgba(253,181,21,0.12)' : 'transparent',
-                      color: active ? 'var(--california-gold)' : 'rgba(255,255,255,0.64)',
-                      fontWeight: active ? 700 : 400,
-                      borderLeft: `3px solid ${active ? 'var(--california-gold)' : 'transparent'}`,
-                      transition: 'all 0.2s var(--ease)',
-                    }}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg min-h-[40px] no-underline transition-all duration-200 border-l-[3px] ${
+                      active 
+                        ? 'bg-[#FDB515]/10 text-[#FDB515] font-bold border-[#FDB515]' 
+                        : 'bg-transparent text-white/60 font-normal border-transparent hover:bg-white/5 hover:text-white/90'
+                    }`}
                   >
-                    <span style={{ flexShrink: 0, color: active ? 'var(--california-gold)' : 'rgba(255,255,255,0.32)' }}>
+                    <span className={`shrink-0 ${active ? 'text-[#FDB515]' : 'text-white/30'}`}>
                       {item.icon}
                     </span>
                     {!collapsed && (
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <p style={{ fontSize: 13, lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</p>
-                        <p style={{ fontSize: 9, color: active ? 'rgba(253,181,21,0.6)' : 'rgba(255,255,255,0.24)', marginTop: 2, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{item.sub}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[13px] leading-tight whitespace-nowrap overflow-hidden text-ellipsis">{item.label}</p>
+                        <p className={`text-[9px] mt-0.5 uppercase tracking-[0.04em] ${active ? 'text-[#FDB515]/60' : 'text-white/30'}`}>{item.sub}</p>
                       </div>
                     )}
                   </Link>
@@ -189,14 +166,10 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
 
       {/* Footer */}
       {!collapsed && (
-        <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.08)', flexShrink: 0 }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 10,
-            padding: '8px 12px', borderRadius: 'var(--radius-lg)',
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.04)'
-          }}>
+        <div className="px-4 py-3 border-t border-white/10 shrink-0">
+          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/5 border border-white/5">
             <BrandStatusDot status="active" pulse size="sm" />
-            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.48)', fontWeight: 700, letterSpacing: '0.05em' }}>
+            <span className="text-[10px] text-white/50 font-bold tracking-widest uppercase">
               5T PROTOCOL ACTIVE
             </span>
           </div>
@@ -206,98 +179,6 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
   );
 }
 
-function MobileGlobalMenu({ isOpen, onClose, currentPath }: { isOpen: boolean; onClose: () => void; currentPath: string }) {
-  if (!isOpen) return null;
-
-  return (
-    <div 
-      className="fade-in"
-      style={{
-        position: 'fixed', inset: 0, zIndex: 'var(--z-modal)',
-        background: 'var(--surface-page)', display: 'flex', flexDirection: 'column',
-        overflowY: 'auto', paddingBottom: '2rem'
-      }}
-    >
-      {/* Menu Header */}
-      <div style={{
-        flexShrink: 0, height: 'var(--topbar-h)', padding: '0 var(--space-5)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        borderBottom: '1px solid var(--border-subtle)', background: '#fff',
-        position: 'sticky', top: 0, zIndex: 10
-      }}>
-        <div className="flex items-center gap-3">
-          <div style={{
-            width: 28, height: 28, borderRadius: 'var(--radius-md)',
-            background: 'var(--blue-700)', display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontWeight: 800, fontSize: 12,
-          }}>O</div>
-          <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)' }}>
-            OmniHermes 全功能導覽
-          </span>
-        </div>
-        <BrandButton variant="ghost" size="sm" onClick={onClose} style={{ borderRadius: '50%' }}>
-          <X size={20} />
-        </BrandButton>
-      </div>
-
-      {/* Menu Content */}
-      <div style={{ padding: 'var(--space-6) var(--space-5)' }}>
-        {NAV_GROUPS.map((group, idx) => (
-          <div key={group.title} style={{ marginBottom: idx === NAV_GROUPS.length - 1 ? 0 : '2.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: '1.25rem' }}>
-              <div style={{ width: 4, height: 16, background: 'var(--blue-700)', borderRadius: 2 }} />
-              <h3 style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                {group.title}
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              {group.items.map(item => {
-                const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);
-                return (
-                  <Link 
-                    key={item.href} 
-                    href={item.href} 
-                    onClick={onClose}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <BrandCard 
-                      padding="sm" 
-                      hover 
-                      className={`h-full text-center transition-all ${active ? 'border-blue-600 bg-blue-50/30 ring-1 ring-blue-600/10' : ''}`}
-                      style={{ borderRadius: 'var(--radius-2xl)' }}
-                    >
-                      <div 
-                        className="w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-2"
-                        style={{ background: active ? 'var(--blue-700)' : 'var(--neutral-100)', color: active ? '#fff' : 'var(--blue-700)' }}
-                      >
-                        {item.icon}
-                      </div>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: active ? 'var(--blue-700)' : 'var(--text-primary)', marginBottom: 2 }}>
-                        {item.label}
-                      </p>
-                      <p style={{ fontSize: 9, fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-                        {item.sub}
-                      </p>
-                    </BrandCard>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      {/* Bottom Footer Info */}
-      <div style={{ padding: '0 var(--space-5)', textAlign: 'center', opacity: 0.4 }}>
-        <p style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-tertiary)' }}>
-          OMNI_TERMINAL v8.5.1 · INTEGRITY ACTIVE
-        </p>
-      </div>
-    </div>
-  );
-}
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -357,7 +238,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const currentPath = pathname ?? '/';
 
   return (
-    <div className="app-shell">
+    <div className="flex min-h-screen bg-[#F8FAFD] w-full overflow-hidden">
       <CommandPalette />
       <style>{`
         @keyframes slideUpFade {
@@ -368,12 +249,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
       
       {/* Mobile Overlay */}
       <div
-        className={`sidebar-overlay ${mobileOpen ? 'visible' : ''}`}
+        className={`fixed inset-0 bg-[#003262]/30 backdrop-blur-sm z-[45] lg:hidden transition-opacity duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setMobileOpen(false)}
       />
 
       {/* Sidebar */}
-      <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
+      <aside className={`fixed left-0 top-0 bottom-0 flex flex-col z-[50] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] bg-[#003262] ${collapsed ? 'w-[68px]' : 'w-[248px]'} ${mobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}`}>
         <SidebarInner
           collapsed={collapsed}
           currentPath={currentPath}
@@ -381,43 +262,36 @@ function AppContent({ children }: { children: React.ReactNode }) {
         />
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hide-mobile"
-          style={{
-            position: 'absolute', top: '50%', right: -12,
-            width: 24, height: 24, borderRadius: '50%',
-            background: 'var(--surface-card)', border: '1px solid var(--border-default)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: 'var(--shadow-sm)', cursor: 'pointer', zIndex: 10,
-          }}
+          className="hidden lg:flex absolute top-1/2 -right-3 w-6 h-6 rounded-full bg-white border border-[#003262]/10 items-center justify-center shadow-sm cursor-pointer z-10 hover:bg-slate-50 transition-colors text-[#003262]"
         >
-          {collapsed ? <ChevronRight size={11} /> : <ChevronLeft size={11} />}
+          {collapsed ? <ChevronRight size={12} /> : <ChevronLeft size={12} />}
         </button>
       </aside>
 
       {/* Main Content */}
-      <div className={`main-content ${collapsed ? 'sidebar-collapsed' : ''}`}>
-        <header className="topbar">
-          <button className="show-mobile-only btn btn-ghost btn-icon btn-sm" onClick={() => setMobileOpen(!mobileOpen)}>
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] w-full max-w-[100vw] lg:max-w-none ml-0 ${collapsed ? 'lg:ml-[68px]' : 'lg:ml-[248px]'} pb-[58px] lg:pb-0`}>
+        <header className="flex items-center justify-between px-4 lg:px-6 h-[52px] lg:h-[60px] bg-white/80 backdrop-blur-md border-b border-[#003262]/10 sticky top-0 z-[40]">
+          <button className="flex lg:hidden items-center justify-center w-9 h-9 rounded-full hover:bg-slate-100 text-[#003262] transition-colors" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          <div className="hide-mobile" style={{ flex: 1, maxWidth: 400 }}>
+          <div className="hidden lg:block flex-1 max-w-[400px]">
             <BrandSearchBar 
               placeholder="搜尋治理指標、GRI 標準或 AI 任務..." 
               onSearch={(q) => router.push(`/search?q=${encodeURIComponent(q)}`)}
             />
           </div>
 
-          <div style={{ flex: 1 }} />
+          <div className="flex-1" />
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="flex items-center gap-2 lg:gap-3">
             <BrandTooltip content="系統通知">
-              <BrandButton variant="ghost" size="sm" style={{ width: 36, height: 36, padding: 0 }}>
+              <BrandButton variant="ghost" size="sm" className="!w-9 !h-9 p-0 text-[#003262]">
                 <Bell size={18} />
               </BrandButton>
             </BrandTooltip>
             <BrandTooltip content="治理規範">
-              <BrandButton variant="ghost" size="sm" style={{ width: 36, height: 36, padding: 0 }} onClick={() => router.push('/audit-governance')}>
+              <BrandButton variant="ghost" size="sm" className="!w-9 !h-9 p-0 text-[#003262]" onClick={() => router.push('/audit-governance')}>
                 <ShieldCheck size={18} />
               </BrandButton>
             </BrandTooltip>
@@ -431,45 +305,28 @@ function AppContent({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main id="main-content" style={{ flex: 1, paddingBottom: '5rem' }}>
+        <main id="main-content" className="flex-1 w-full pb-20">
           {children}
         </main>
 
         {/* Mobile More Full Screen Menu */}
         <div 
-          className="show-mobile-only"
-          style={{
-            position: 'fixed', top: 0, left: 0, right: 0, bottom: '60px', 
-            background: 'rgba(0, 50, 98, 0.95)', // Berkeley blue with opacity
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            zIndex: 100,
-            overflowY: 'auto', padding: '24px 16px',
-            opacity: mobileMoreOpen ? 1 : 0,
-            pointerEvents: mobileMoreOpen ? 'auto' : 'none',
-            transform: mobileMoreOpen ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-            paddingBottom: '40px'
-          }}
+          className={`lg:hidden fixed inset-0 bottom-[58px] bg-[#003262]/95 backdrop-blur-md z-[100] overflow-y-auto p-6 pb-10 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${mobileMoreOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none translate-y-5'}`}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+          <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 style={{ color: 'var(--california-gold)', fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em' }}>功能總覽</h2>
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>ESG Go System Navigation</p>
+              <h2 className="text-[#FDB515] text-2xl font-extrabold tracking-tight">功能總覽</h2>
+              <p className="text-xs text-white/60 mt-1">ESG Go System Navigation</p>
             </div>
             <button 
               onClick={() => setMobileMoreOpen(false)} 
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', 
-                width: 36, height: 36, borderRadius: '50%', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center' 
-              }}
+              className="bg-white/10 border-none text-white w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors"
             >
               <X size={20} />
             </button>
           </div>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div className="flex flex-col gap-8">
             {NAV_GROUPS.map((group, gIndex) => (
               <div 
                 key={group.title}
@@ -478,37 +335,26 @@ function AppContent({ children }: { children: React.ReactNode }) {
                   opacity: mobileMoreOpen ? 0 : 1
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                  <div style={{ width: 4, height: 12, background: 'var(--california-gold)', borderRadius: 2 }} />
-                  <h3 style={{ color: 'white', fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-1 h-3 bg-[#FDB515] rounded-sm" />
+                  <h3 className="text-white text-sm font-bold uppercase tracking-widest">
                     {group.title}
                   </h3>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+                <div className="grid grid-cols-2 gap-3">
                   {group.items.map(item => (
                     <Link 
                       key={item.href} 
                       href={item.href}
                       onClick={() => setMobileMoreOpen(false)}
-                      style={{
-                        display: 'flex', flexDirection: 'column', gap: 12,
-                        padding: '16px', borderRadius: '16px',
-                        background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        textDecoration: 'none', color: 'white',
-                        boxShadow: '0 4px 24px -8px rgba(0,0,0,0.2)',
-                      }}
+                      className="flex flex-col gap-3 p-4 rounded-2xl border border-white/10 no-underline text-white shadow-[0_4px_24px_-8px_rgba(0,0,0,0.2)] hover:border-white/20 transition-colors bg-gradient-to-br from-white/5 to-white/[0.02]"
                     >
-                      <div style={{ 
-                        width: 32, height: 32, borderRadius: '10px', 
-                        background: 'rgba(253,181,21,0.15)', color: 'var(--california-gold)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                      }}>
+                      <div className="w-8 h-8 rounded-lg bg-[#FDB515]/15 text-[#FDB515] flex items-center justify-center">
                         {item.icon}
                       </div>
                       <div>
-                        <p style={{ fontSize: 14, fontWeight: 700 }}>{item.label}</p>
-                        <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 4, textTransform: 'uppercase' }}>{item.sub}</p>
+                        <p className="text-sm font-bold">{item.label}</p>
+                        <p className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">{item.sub}</p>
                       </div>
                     </Link>
                   ))}
@@ -519,26 +365,25 @@ function AppContent({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Mobile Nav */}
-        <nav className="mobile-nav">
+        <nav className="lg:hidden fixed bottom-0 left-0 right-0 h-[58px] bg-white/95 backdrop-blur-2xl border-t border-[#003262]/10 z-[50] flex items-center justify-around px-2 shadow-[0_-4px_24px_rgba(0,50,98,0.07)] pb-[env(safe-area-inset-bottom)]">
           {MOBILE_NAV_ITEMS.map(item => {
             if (item.href === '#more') {
               return (
                 <button 
                   key="more" 
                   onClick={() => setMobileMoreOpen(!mobileMoreOpen)} 
-                  className={`mobile-nav-item ${mobileMoreOpen ? 'active' : ''}`}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  className={`flex flex-col items-center justify-center w-full h-full gap-1 bg-transparent border-none cursor-pointer transition-colors ${mobileMoreOpen ? 'text-[#003262] font-bold' : 'text-slate-400 hover:text-slate-600'}`}
                 >
                   {item.icon}
-                  <span>{item.label}</span>
+                  <span className="text-[10px]">{item.label}</span>
                 </button>
               );
             }
             const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);
             return (
-              <Link key={item.href} href={item.href} onClick={() => setMobileMoreOpen(false)} className={`mobile-nav-item ${active ? 'active' : ''}`}>
+              <Link key={item.href} href={item.href} onClick={() => setMobileMoreOpen(false)} className={`flex flex-col items-center justify-center w-full h-full gap-1 no-underline transition-colors ${active ? 'text-[#003262] font-bold' : 'text-slate-400 hover:text-slate-600'}`}>
                 {item.icon}
-                <span>{item.label}</span>
+                <span className="text-[10px]">{item.label}</span>
               </Link>
             );
           })}

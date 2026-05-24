@@ -183,7 +183,7 @@
 
   /* ─── KPI Bar — Light Frosted ────────────────────────────────────── */
   .kpi-bar {
-    @apply flex items-stretch gap-px overflow-hidden;
+    @apply flex items-stretch gap-px overflow-x-auto no-scrollbar;
     background: rgba(0, 50, 98, 0.06);
     border: 1px solid rgba(0, 50, 98, 0.08);
     border-radius: 0.875rem;
@@ -228,41 +228,6 @@
   /* ─── Utility Text ───────────────────────────────────────────────── */
   .section-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.28em; color: #94a3b8; }
 
-  /* ─── App Shell ──────────────────────────────────────────────────── */
-  .sidebar {
-    @apply fixed left-0 top-0 bottom-0 flex flex-col;
-    z-index: var(--z-sidebar);
-    width: var(--sidebar-w);
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .sidebar.collapsed { width: var(--sidebar-w-sm); }
-
-  .main-content {
-    @apply flex-1 flex flex-col;
-    margin-left: var(--sidebar-w);
-    min-height: 100vh;
-    transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .main-content.sidebar-collapsed { margin-left: var(--sidebar-w-sm); }
-
-  @media (max-width: 1023px) {
-    .sidebar { transform: translateX(-100%); }
-    .main-content { margin-left: 0 !important; padding-bottom: var(--mobile-nav-h); }
-  }
-
-  /* ─── Mobile Nav ─────────────────────────────────────────────────── */
-  .mobile-nav {
-    @apply fixed bottom-0 left-0 right-0 lg:hidden;
-    z-index: var(--z-sidebar);
-    height: var(--mobile-nav-h);
-    padding-bottom: env(safe-area-inset-bottom);
-    background: rgba(255, 255, 255, 0.97);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border-top: 1px solid rgba(0, 50, 98, 0.08);
-    box-shadow: 0 -4px 24px rgba(0, 50, 98, 0.07);
-    @apply flex items-center justify-around px-2;
-  }
 
   /* ─── Table Compact ──────────────────────────────────────────────── */
   .table-compact th { padding: 0.5rem 0.75rem; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; color: #94a3b8; }
