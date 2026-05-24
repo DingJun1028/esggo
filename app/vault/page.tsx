@@ -260,10 +260,9 @@ export default function VaultPage() {
               <div className="flex gap-4">
                  <BrandButton variant="ghost" className="flex-1 rounded-2xl h-14" onClick={() => setShowUpload(false)}>取消</BrandButton>
                  <BrandButton variant="primary" className="flex-[2] rounded-2xl h-14 font-black shadow-xl" onClick={async () => { 
-                   const { data: { user } } = await supabase.auth.getUser();
                    await supabase.from('evidence_vault').insert({
                      ...form,
-                     company_id: 'default',
+                     company_id: companyId,
                      uploader: user?.email || 'dev_user',
                      hash_lock: 'pending_hash'
                    });
