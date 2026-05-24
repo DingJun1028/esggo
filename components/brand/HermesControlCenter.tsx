@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Settings2, Cpu, Database, Bell, Shield, Radio, Key, Github, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
-import { BrandButton, BrandBadge, BrandCard, BrandTabs, BrandProgress } from './index';
+import { X, Settings2, Cpu, Database, Bell, Shield, Radio, Key, Github, HelpCircle, LogOut, ChevronRight, Info, Bot, CheckCircle, Zap } from 'lucide-react';
+import { BrandButton, BrandBadge, BrandCard, BrandTabs, BrandProgress, BrandStatusDot, BrandTimeline } from './index';
 
 interface HermesControlCenterProps {
   isOpen: boolean;
@@ -19,51 +19,11 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
     { id: 'mcp',    label: 'MCP 整合', icon: <Radio size={14}/> },
     { id: 'about',  label: '關於本站', icon: <Info size={14}/> },
   ];
-  ...
-              {activeTab === 'compliance' && (
-                <div className="space-y-8 fade-in">
-                   <div className="grid grid-cols-2 gap-4">
-                      <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
-                         <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">5T Integrity Score</p>
-                         <p className="text-3xl font-black text-emerald-800 font-mono">94.2%</p>
-                         <div className="h-1.5 w-full bg-emerald-200/50 rounded-full mt-4 overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: '94.2%' }} className="h-full bg-emerald-500" />
-                         </div>
-                      </div>
-                      <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100">
-                         <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">Unsealed Evidence</p>
-                         <p className="text-3xl font-black text-amber-800 font-mono">12</p>
-                         <p className="text-[9px] font-bold text-amber-600/60 mt-2 uppercase tracking-tighter">Requires 5T Sealing Logic</p>
-                      </div>
-                   </div>
 
-                   <section className="space-y-4">
-                      <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-1">Active Compliance Gaps</h4>
-                      <div className="space-y-2">
-                         {[
-                           { tag: 'GRI 305-1', desc: '缺少 2024 年度範疇一直接排放數據', severity: 'high' },
-                           { tag: 'GRI 403-9', desc: '職業安全訓練紀錄未經 5T 封印', severity: 'medium' },
-                           { tag: 'GRI 2-7', desc: '員工人數統計需重新校準', severity: 'low' },
-                         ].map((gap, i) => (
-                           <div key={i} className="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-                              <div className="flex items-center gap-3">
-                                 <BrandBadge variant="outline" size="xs" className="font-mono">{gap.tag}</BrandBadge>
-                                 <span className="text-[11px] font-bold text-slate-600">{gap.desc}</span>
-                              </div>
-                              <div className={`w-2 h-2 rounded-full ${gap.severity === 'high' ? 'bg-red-500' : gap.severity === 'medium' ? 'bg-amber-500' : 'bg-blue-500'}`} />
-                           </div>
-                         ))}
-                      </div>
-                   </section>
-
-                   <BrandButton variant="primary" fullWidth className="h-14 rounded-2xl shadow-xl shadow-blue-500/10" onClick={() => alert('啟動全域合規性掃描...')}>
-                      <Bot size={18} className="mr-2" /> 啟動 OmniHermes 全域審計
-                   </BrandButton>
-                </div>
-              )}
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 lg:p-8">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-8">
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
@@ -96,7 +56,6 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
 
         {/* Tab Sidebar + Content */}
         <div className="flex-1 flex overflow-hidden">
-           {/* Sidebar Tabs */}
            <aside className="w-56 border-r border-slate-50 p-6 space-y-2 bg-slate-50/30">
               {tabs.map(t => (
                 <button 
@@ -107,16 +66,8 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
                    {t.icon} {t.label}
                 </button>
               ))}
-              
-              <div className="mt-auto pt-8 border-t border-slate-100 space-y-4">
-                 <button className="w-full flex items-center justify-between px-5 py-3 text-[10px] font-black text-slate-400 uppercase hover:text-rose-500 transition-colors group">
-                    <span className="flex items-center gap-3"><LogOut size={14}/> Sign_Out</span>
-                    <ChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-all" />
-                 </button>
-              </div>
            </aside>
 
-           {/* Main Content */}
            <main className="flex-1 overflow-y-auto p-10 no-scrollbar bg-white">
               {activeTab === 'system' && (
                 <div className="space-y-8 fade-in">
@@ -140,17 +91,46 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
                          ))}
                       </div>
                    </section>
+                </div>
+              )}
 
-                   <section className="p-8 bg-blue-50/50 rounded-[32px] border border-blue-100 flex items-center justify-between">
-                      <div className="flex items-center gap-5">
-                         <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-[#3B7EA1] shadow-sm"><Key size={24}/></div>
-                         <div>
-                            <p className="text-sm font-black text-[#003262]">API Endpoint Configuration</p>
-                            <p className="text-[11px] text-[#3B7EA1] font-bold">Connected to Google GenAI · Gemini 2.0</p>
+              {activeTab === 'compliance' && (
+                <div className="space-y-8 fade-in">
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
+                         <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">5T Integrity Score</p>
+                         <p className="text-3xl font-black text-emerald-800 font-mono">94.2%</p>
+                         <div className="h-1.5 w-full bg-emerald-200/50 rounded-full mt-4 overflow-hidden">
+                            <motion.div initial={{ width: 0 }} animate={{ width: '94.2%' }} className="h-full bg-emerald-500" />
                          </div>
                       </div>
-                      <BrandButton variant="ghost" size="sm" className="font-black text-[10px] uppercase tracking-widest bg-white border border-blue-100 px-6">Manage_Keys</BrandButton>
+                      <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100">
+                         <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">Unsealed Evidence</p>
+                         <p className="text-3xl font-black text-amber-800 font-mono">12</p>
+                         <p className="text-[9px] font-bold text-amber-600/60 mt-2 uppercase tracking-tighter">Requires 5T Sealing Logic</p>
+                      </div>
+                   </div>
+                   <section className="space-y-4">
+                      <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-1">Active Compliance Gaps</h4>
+                      <div className="space-y-2">
+                         {[
+                           { tag: 'GRI 305-1', desc: '缺少 2024 年度範疇一直接排放數據', severity: 'high' },
+                           { tag: 'GRI 403-9', desc: '職業安全訓練紀錄未經 5T 封印', severity: 'medium' },
+                           { tag: 'GRI 2-7', desc: '員工人數統計需重新校準', severity: 'low' },
+                         ].map((gap, i) => (
+                           <div key={i} className="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+                              <div className="flex items-center gap-3">
+                                 <BrandBadge variant="outline" size="xs" className="font-mono">{gap.tag}</BrandBadge>
+                                 <span className="text-[11px] font-bold text-slate-600">{gap.desc}</span>
+                              </div>
+                              <div className={`w-2 h-2 rounded-full ${gap.severity === 'high' ? 'bg-red-500' : gap.severity === 'medium' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+                           </div>
+                         ))}
+                      </div>
                    </section>
+                   <BrandButton variant="primary" fullWidth className="h-14 rounded-2xl shadow-xl shadow-blue-500/10" onClick={() => alert('啟動全域合規性掃描...')}>
+                      <Bot size={18} className="mr-2" /> 啟動 OmniHermes 全域審計
+                   </BrandButton>
                 </div>
               )}
 
@@ -169,10 +149,6 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
                    <div className="w-20 h-20 rounded-[32px] bg-indigo-50 flex items-center justify-center text-indigo-500 mx-auto mb-6 shadow-inner"><Radio size={40}/></div>
                    <h3 className="text-2xl font-black text-[#003262]">MCP Marketplace</h3>
                    <p className="text-sm text-slate-500 max-w-sm mx-auto">連接外部數據源與工具集，包括 GitHub、Slack、Notion 與自定義 API。</p>
-                   <div className="flex gap-3 justify-center">
-                      <BrandButton variant="primary" className="rounded-xl px-10 h-12 font-black">Browse Marketplace</BrandButton>
-                      <BrandButton variant="ghost" className="rounded-xl px-10 h-12 font-black border border-slate-100">Add Source</BrandButton>
-                   </div>
                 </div>
               )}
 
@@ -185,17 +161,6 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
                       </div>
                       <h3 className="text-3xl font-black text-[#003262] tracking-tighter">ESG GO Enterprise</h3>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.5em] mt-2">Sovereign Governance OS</p>
-                   </div>
-                   
-                   <div className="grid grid-cols-2 gap-6">
-                      <BrandCard padding="lg" className="glass-panel border-none shadow-sm hover:shadow-md transition-all text-center group cursor-pointer">
-                         <Github size={24} className="mx-auto text-slate-300 group-hover:text-black transition-colors mb-3" />
-                         <p className="text-[11px] font-black text-[#003262] uppercase tracking-widest">Source_Code</p>
-                      </BrandCard>
-                      <BrandCard padding="lg" className="glass-panel border-none shadow-sm hover:shadow-md transition-all text-center group cursor-pointer">
-                         <HelpCircle size={24} className="mx-auto text-slate-300 group-hover:text-[#FDB515] transition-colors mb-3" />
-                         <p className="text-[11px] font-black text-[#003262] uppercase tracking-widest">Documentation</p>
-                      </BrandCard>
                    </div>
                 </div>
               )}
@@ -215,26 +180,5 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
         </footer>
       </motion.div>
     </div>
-  );
-}
-
-function Info(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
-    </svg>
   );
 }

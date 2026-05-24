@@ -122,7 +122,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <Suspense fallback={null}>
       <AuthProvider>
-        <AppContent>{children}</AuthProvider>
+        <AppContent>{children}</AppContent>
       </AuthProvider>
     </Suspense>
   );
