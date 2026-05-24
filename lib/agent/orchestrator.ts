@@ -173,33 +173,58 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
 
 /**
  * 蜂群自動交接 (Autonomous Handoff)
- * 當前 Agent 發現需要其他專家介入時，自動發起交接任務。
+ * 當前 Agent 發現需要其他專家介入時，自動發起交接任務並更新狀態機。
  */
 export async function dispatchSwarmHandoff(
   sourceTaskId: string,
   targetSkillKey: string,
   reason: string
 ) {
-  const { GLOBAL_TASKS, addTask } = await import('./store');
+  const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, updateExecution } = await import('./store');
   const sourceTask = GLOBAL_TASKS.find(t => t.id === sourceTaskId);
   if (!sourceTask) throw new Error('Source task not found');
 
-  console.log(`[Swarm Handoff] Initializing handoff from Task:${sourceTaskId} to Agent:${targetSkillKey}`);
-  console.log(`[Swarm Handoff] Reason: ${reason}`);
+  // 更新原始執行的狀態為「已委派等待中」
+  const sourceExec = GLOBAL_EXECUTIONS.find(e => e.taskId === sourceTaskId);
+  if (sourceExec) {
+    updateExecution(sourceExec.id, { 
+      status: 'delegated_pending', 
+      updatedAt: new Date().toISOString() 
+    });
+  }
 
+  console.log(`[Swarm Handoff] Initializing handoff from Task:${sourceTaskId} to Agent:${targetSkillKey}`);
+  
   const handoffInput: CreateTaskInput = {
     actorId: 'SYSTEM_SWARM_ORCHESTRATOR',
-    taskType: 'report_drafting', // Default to drafting for handoff
-    title: `[交接任務] 針對 "${sourceTask.title}" 的補件分析`,
-    description: `交接原因：${reason}\n原始任務 ID：${sourceTaskId}`,
+    taskType: 'report_drafting',
+    title: `[委派協作] 專家介入：${reason.substring(0, 20)}...`,
+    description: `源自任務: ${sourceTask.title}\n委派原因: ${reason}`,
     inputRefIds: sourceTask.inputRefIds,
     skillKey: targetSkillKey
   };
 
   const { task, policy } = createTask(handoffInput);
+  task.parentTaskId = sourceTaskId;
+  task.delegationReason = reason;
+  
   addTask(task);
 
   return { task, policy };
+}
+
+/**
+ * 評估是否需要自動委派 (智慧觸發器)
+ */
+export async function evaluateAutonomousDelegation(taskId: string, content: string): Promise<boolean> {
+  // 模擬邏輯：如果內容包含「數據缺失」或「高風險」關鍵字，自動觸發專家介入
+  const needsExpert = content.includes('數據缺失') || content.includes('無法校驗') || content.includes('偏移');
+  
+  if (needsExpert) {
+    console.log(`[Smart Trigger] High deviation detected in Task:${taskId}. Suggesting Swarm handoff.`);
+    return true;
+  }
+  return false;
 }
 
 export function generateMockArtifact(task: AgentTask, execution: AgentExecution): AgentArtifact {
