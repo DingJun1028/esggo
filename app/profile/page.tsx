@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   Edit3, Save, Palette, CheckCircle, RefreshCw, Eye, Sparkles, Building, 
   Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, MapPin, Landmark, X, ArrowRight 
@@ -59,7 +59,7 @@ export default function ProfilePage() {
     setEditing(false);
   };
 
-  if (loading || !profile) return <div className="p-20 text-center animate-pulse">Loading Corporate Identity...</div>;
+  if (loading || !profile) return <div className="p-20 text-center animate-pulse text-[#003262] font-black uppercase tracking-widest">Loading Corporate Identity...</div>;
 
   return (
     <div className="max-w-[1500px] mx-auto p-8 lg:p-12 space-y-12 pb-24 fade-in">
@@ -117,7 +117,8 @@ export default function ProfilePage() {
                  <div className="flex flex-wrap justify-center gap-4"><button className="px-10 h-14 rounded-2xl font-black text-xs uppercase tracking-widest text-white shadow-xl transition-all hover:scale-105" style={{ backgroundColor: activePalette.primary }}>Primary_Action</button><button className="px-10 h-14 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg border-2 transition-all" style={{ borderColor: activePalette.accent, color: activePalette.accent }}>Accent_Logic</button><button className="px-10 h-14 rounded-2xl font-black text-xs uppercase tracking-widest shadow-md border-2 border-transparent" style={{ backgroundColor: `${activePalette.secondary}15`, color: activePalette.secondary }}>Secondary_Insight</button></div>
                  <div className="w-full max-w-lg space-y-3"><div className="flex justify-between items-end"><span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Governance Integrity</span><span className="text-lg font-black font-mono" style={{ color: activePalette.primary }}>94%</span></div><div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/50"><motion.div className="h-full rounded-full" style={{ backgroundColor: activePalette.primary }} initial={{ width: 0 }} animate={{ width: '94%' }} /></div></div>
               </div>
-           </section>
+              <Zap size={200} className="absolute -bottom-10 -left-10 opacity-5 -z-10" style={{ color: activePalette.accent }} />
+           </BrandCard>
         </div>
         <div className="col-span-12 lg:col-span-4 space-y-8">
            <BrandCard padding="lg" className="glass-panel border-none shadow-premium bg-white/60 text-center"><div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto text-emerald-600 shadow-inner"><CheckCircle size={32} /></div><h4 className="font-black text-[#003262] uppercase tracking-tight">樣貌一致性檢查</h4><p className="text-[11px] text-slate-500 font-medium">系統已自動將您的 **{activePalette.name}** 調色盤延伸至所有的 5T 標籤。</p></BrandCard>
