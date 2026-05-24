@@ -1,283 +1,213 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Edit3, Save, Plus, Trash2, Building, Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, Sparkles, MapPin, Landmark, X } from 'lucide-react';
+import { 
+  Edit3, Save, Palette, CheckCircle, RefreshCw, Eye, Sparkles, Building, 
+  Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, MapPin, Landmark, X 
+} from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandCardHeader, BrandStatusDot } from '../../components/brand';
 import { dcGetCompanyProfile, dcUpsertCompanyProfile } from '../../lib/dataconnect-services';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const PRESET_PALETTES = [
+  { name: 'Berkeley Blue', primary: '#003262', accent: '#FDB515', secondary: '#3B7EA1' },
+  { name: 'Emerald Trust', primary: '#064E3B', accent: '#10B981', secondary: '#059669' },
+  { name: 'Deep Ocean', primary: '#1E3A8A', accent: '#3B82F6', secondary: '#60A5FA' },
+  { name: 'Crimson Honor', primary: '#7F1D1D', accent: '#EF4444', secondary: '#DC2626' },
+  { name: 'Amethyst Zen', primary: '#4C1D95', accent: '#8B5CF6', secondary: '#A78BFA' },
+];
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null);
-  const [goals, setGoals] = useState<any[]>([]);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [showAddGoal, setShowAddGoal] = useState(false);
-  const [newGoal, setNewGoal] = useState({ title: '', category: 'E', target: '', deadline: '', status: 'planned' });
+  const [activePalette, setActivePalette] = useState(PRESET_PALETTES[0]);
 
   useEffect(() => {
     async function loadProfile() {
       setLoading(true);
-      // Using a fixed demo ID for profile for now, can be dynamic later
       const data = await dcGetCompanyProfile('550e8400-e29b-41d4-a716-446655440000');
       if (data) {
         setProfile(data);
         setEditForm(data);
+        if (data.brand_config) {
+          setActivePalette(data.brand_config);
+          applyBrandPalette(data.brand_config);
+        }
       }
       setLoading(false);
     }
     loadProfile();
   }, []);
 
+  const applyBrandPalette = (palette: typeof PRESET_PALETTES[0]) => {
+    const root = document.documentElement;
+    root.style.setProperty('--primary', palette.primary);
+    root.style.setProperty('--accent', palette.accent);
+    root.style.setProperty('--secondary', palette.secondary);
+    
+    // Derived tokens for premium aesthetics
+    root.style.setProperty('--primary-50', `${palette.primary}08`);
+    root.style.setProperty('--primary-100', `${palette.primary}15`);
+    root.style.setProperty('--accent-light', `${palette.accent}15`);
+  };
+
   const handleSave = async () => {
-    await dcUpsertCompanyProfile(editForm);
-    setProfile(editForm);
+    const updatedForm = { ...editForm, brand_config: activePalette };
+    await dcUpsertCompanyProfile(updatedForm);
+    setProfile(updatedForm);
     setEditing(false);
   };
 
-  const addGoal = () => {
-    if (!newGoal.title) return;
-    setGoals(prev => [...prev, { ...newGoal, id: Date.now() }]);
-    setNewGoal({ title: '', category: 'E', target: '', deadline: '', status: 'planned' });
-    setShowAddGoal(false);
-  };
-
-  const removeGoal = (id: number) => setGoals(prev => prev.filter(g => g.id !== id));
-
-  const cycleStatus = (id: number) => {
-    const statuses = ['planned', 'in_progress', 'completed'];
-    setGoals(prev => prev.map(g => g.id === id ? { ...g, status: statuses[(statuses.indexOf(g.status) + 1) % statuses.length] } : g));
-  };
-
-  const statusColor = (s: string) => s === 'completed' ? '#10B981' : s === 'in_progress' ? '#003262' : '#F59E0B';
-  const statusLabel = (s: string) => s === 'completed' ? 'COMPLETED' : s === 'in_progress' ? 'ACTIVE' : 'PLANNED';
+  if (loading || !profile) return <div className="p-20 text-center animate-pulse">Loading Corporate Identity...</div>;
 
   return (
     <div className="max-w-[1500px] mx-auto p-8 lg:p-12 space-y-12 pb-24 fade-in">
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
         <div className="space-y-6">
           <div className="flex flex-wrap items-center gap-4">
-             <BrandBadge variant="gold" size="sm" className="font-black tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg shadow-[#FDB515]/10">CORPORATE_IDENTITY v8.5</BrandBadge>
+             <BrandBadge variant="gold" size="sm" className="font-black tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg shadow-[#FDB515]/10">BRAND_SOVEREIGNTY v8.5</BrandBadge>
              <div className="flex items-center gap-2.5 bg-white/40 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/60 shadow-sm">
-                <Landmark size={14} className="text-[#003262]" />
-                <span className="text-[10px] font-black text-[#003262] uppercase tracking-widest">Legal Entity Validated</span>
+                <Palette size={14} style={{ color: activePalette.primary }} />
+                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: activePalette.primary }}>Corporate Brand Live</span>
              </div>
           </div>
           <div className="space-y-2">
-            <h1 className="text-5xl font-black text-[#003262] tracking-tight leading-none uppercase">
-              企業管理
+            <h1 className="text-5xl font-black tracking-tight leading-none uppercase" style={{ color: activePalette.primary }}>
+              企業品牌管理
             </h1>
             <p className="text-slate-500 text-lg max-w-2xl font-medium leading-relaxed">
-              維護企業基本資料、願景使命與長期 ESG 目標。這是您 **數位分身 (Digital Twin)** 的核心參數。
+              定義您的品牌樣貌。所有的 5T 報告、主控台與自動預警將會根據此調色盤動態改變，建立專屬的治理美學。
             </p>
           </div>
         </div>
         {!editing ? (
-          <BrandButton variant="primary" className="h-16 px-10 rounded-2xl shadow-2xl shadow-[#003262]/20" onClick={() => { setEditing(true); setEditForm(profile); }}>
-            <Edit3 size={18} className="mr-3" /> 編輯資料
+          <BrandButton variant="primary" className="h-16 px-10 rounded-2xl shadow-2xl" style={{ backgroundColor: activePalette.primary }} onClick={() => setEditing(true)}>
+            <Edit3 size={18} className="mr-3" /> 修改品牌樣貌
           </BrandButton>
         ) : (
           <div className="flex gap-4">
             <BrandButton variant="ghost" className="h-16 px-8 rounded-2xl" onClick={() => setEditing(false)}>取消</BrandButton>
-            <BrandButton variant="primary" className="h-16 px-10 rounded-2xl shadow-xl shadow-[#003262]/20" onClick={handleSave}><Save size={18} className="mr-3" /> 儲存變更</BrandButton>
+            <BrandButton variant="primary" className="h-16 px-10 rounded-2xl shadow-xl" style={{ backgroundColor: activePalette.primary }} onClick={handleSave}><Save size={18} className="mr-3" /> 儲存並套用</BrandButton>
           </div>
         )}
       </header>
 
-      {/* Subscription & Billing Section */}
-      <BrandCard padding="none" className="glass-panel border-none overflow-hidden relative shadow-extreme p-10 lg:p-14 group">
-        <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-[2000ms]">
-           <Sparkles size={300} color="#FDB515" strokeWidth={0.5} />
-        </div>
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 relative z-10">
-           <div className="flex items-center gap-6">
-              <div className="w-20 h-20 rounded-[28px] bg-[#FDB515]/10 flex items-center justify-center text-[#FDB515] shadow-inner backdrop-blur-md border border-[#FDB515]/20">
-                 <CreditCard size={40} />
+      {editing && (
+        <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
+           <div className="flex items-center gap-4 px-2">
+              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-100">
+                 <Palette size={20} className="text-slate-400" />
               </div>
-              <div className="space-y-2">
-                 <div className="flex items-center gap-4">
-                    <h2 className="text-3xl font-black text-[#003262] tracking-tight">訂閱方案</h2>
-                    <BrandBadge variant="gold" size="sm" className="font-black px-4">PRO_ENTERPRISE</BrandBadge>
+              <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight">品牌調色盤設定</h3>
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+              {PRESET_PALETTES.map(p => (
+                <button 
+                  key={p.name}
+                  onClick={() => { setActivePalette(p); applyBrandPalette(p); }}
+                  className={cn(
+                    "p-6 rounded-[2.5rem] border-2 transition-all duration-500 text-center space-y-4 group",
+                    activePalette.name === p.name ? "bg-white shadow-extreme" : "bg-slate-50 border-transparent hover:border-slate-200"
+                  )}
+                  style={{ borderColor: activePalette.name === p.name ? p.primary : 'transparent' }}
+                >
+                   <div className="flex justify-center -space-x-3">
+                      <div className="w-10 h-10 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: p.primary }} />
+                      <div className="w-10 h-10 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: p.accent }} />
+                      <div className="w-10 h-10 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: p.secondary }} />
+                   </div>
+                   <p className="text-[11px] font-black uppercase tracking-widest">{p.name}</p>
+                   {activePalette.name === p.name && (
+                     <motion.div layoutId="check" className="mx-auto w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                        <CheckCircle size={10} className="text-white" />
+                     </motion.div>
+                   )}
+                </button>
+              ))}
+           </div>
+        </motion.section>
+      )}
+
+      {/* Brand Preview Showcase */}
+      <section className="grid grid-cols-12 gap-10">
+        <div className="col-span-12 lg:col-span-8">
+           <BrandCard padding="none" className="glass-panel border-none shadow-extreme overflow-hidden relative min-h-[400px]">
+              <div className="p-10 border-b border-slate-50 bg-white/40 flex items-center justify-between">
+                 <div>
+                    <h3 className="text-xl font-black uppercase tracking-tight" style={{ color: activePalette.primary }}>品牌即時預覽</h3>
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mt-1">Real-time Visual Feedback</p>
                  </div>
-                 <p className="text-slate-500 text-lg font-medium leading-relaxed max-w-2xl">
-                    您目前使用的是 **專業版**。享有全自動 5T 封印、GRI AI 撰寫額度以及 BlueCC 雲端集群優先調度權。
+                 <BrandBadge variant="gold" size="xs">PRO_IDENTITY</BrandBadge>
+              </div>
+              <div className="p-14 flex flex-col items-center justify-center space-y-12">
+                 <div className="flex gap-6 items-center">
+                    <div className="w-24 h-24 rounded-[32px] flex items-center justify-center text-white shadow-2xl rotate-3" style={{ backgroundColor: activePalette.primary }}>
+                       <Building size={48} />
+                    </div>
+                    <div className="space-y-1">
+                       <h2 className="text-4xl font-black tracking-tighter" style={{ color: activePalette.primary }}>{profile.company_name}</h2>
+                       <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-xs">{profile.industry} Governance Node</p>
+                    </div>
+                 </div>
+                 
+                 <div className="flex flex-wrap justify-center gap-4">
+                    <button className="px-10 h-14 rounded-2xl font-black text-xs uppercase tracking-widest text-white shadow-xl transition-all hover:scale-105 active:scale-95" style={{ backgroundColor: activePalette.primary }}>
+                       Primary_Action
+                    </button>
+                    <button className="px-10 h-14 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg border-2 transition-all hover:bg-slate-50" style={{ borderColor: activePalette.accent, color: activePalette.accent }}>
+                       Accent_Logic
+                    </button>
+                    <button className="px-10 h-14 rounded-2xl font-black text-xs uppercase tracking-widest shadow-md transition-all border-2 border-transparent" style={{ backgroundColor: `${activePalette.secondary}15`, color: activePalette.secondary }}>
+                       Secondary_Insight
+                    </button>
+                 </div>
+
+                 <div className="w-full max-w-lg space-y-3">
+                    <div className="flex justify-between items-end">
+                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Governance Integrity</span>
+                       <span className="text-lg font-black font-mono" style={{ color: activePalette.primary }}>94%</span>
+                    </div>
+                    <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/50">
+                       <motion.div className="h-full rounded-full" style={{ backgroundColor: activePalette.primary }} initial={{ width: 0 }} animate={{ width: '94%' }} />
+                    </div>
+                 </div>
+              </div>
+              <Zap size={200} className="absolute -bottom-10 -left-10 opacity-5 -z-10" style={{ color: activePalette.accent }} />
+           </BrandCard>
+        </div>
+
+        <div className="col-span-12 lg:col-span-4 space-y-8">
+           <BrandCard padding="lg" className="glass-panel border-none shadow-premium bg-white/60">
+              <div className="space-y-4 text-center">
+                 <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto text-emerald-600 shadow-inner">
+                    <CheckCircle size={32} />
+                 </div>
+                 <h4 className="font-black text-[#003262] uppercase tracking-tight">樣貌一致性檢查</h4>
+                 <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
+                    系統已自動將您的 **{activePalette.name}** 調色盤延伸至所有的 Edge Functions 與 5T 誠信標籤。
                  </p>
+                 <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-3">
+                    <BrandStatusDot status="active" size="sm" />
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Aesthetics Synchronized</span>
+                 </div>
               </div>
-           </div>
-           <div className="flex gap-4 w-full lg:w-auto">
-              <BrandButton variant="secondary" className="flex-1 lg:flex-none h-16 px-10 rounded-2xl font-black text-lg shadow-2xl shadow-black/10">
-                 管理訂閱 <ExternalLink size={18} className="ml-2" />
-              </BrandButton>
-           </div>
-        </div>
-      </BrandCard>
+           </BrandCard>
 
-      <div className="grid grid-cols-12 gap-10">
-        <div className="col-span-12 lg:col-span-7">
-           <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden h-full">
-             <div className="p-8 border-b border-slate-50">
-                <h3 className="text-xl font-black text-[#003262] tracking-tight uppercase">公司基本資料</h3>
-                <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mt-1">Legal Identity & Performance</p>
-             </div>
-             <div className="p-10">
-               {editing ? (
-                 <div className="space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Company Name</label>
-                          <input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all outline-none" value={editForm.company_name} onChange={e => setEditForm(p => ({ ...p, company_name: e.target.value }))} />
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Industry</label>
-                          <input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all outline-none" value={editForm.industry} onChange={e => setEditForm(p => ({ ...p, industry: e.target.value }))} />
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Employees</label>
-                          <input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all outline-none" type="number" value={editForm.employee_count} onChange={e => setEditForm(p => ({ ...p, employee_count: +e.target.value }))} />
-                       </div>
-                       <div className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Reporting Year</label>
-                          <input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all outline-none" type="number" value={editForm.reporting_year} onChange={e => setEditForm(p => ({ ...p, reporting_year: +e.target.value }))} />
-                       </div>
-                    </div>
-                 </div>
-               ) : (
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                   {[
-                     { label: '公司名稱', value: profile.company_name, icon: <Building size={14}/> },
-                     { label: '產業別', value: profile.industry, icon: <Target size={14}/> },
-                     { label: '員工人數', value: `${profile.employee_count.toLocaleString()} 人`, icon: <Users size={14}/> },
-                     { label: '年營收', value: `NT$ ${(profile.revenue_twd / 1e6).toFixed(0)} 百萬`, icon: <Landmark size={14}/> },
-                     { label: '資本額', value: `NT$ ${(profile.capital_twd / 1e6).toFixed(0)} 百萬`, icon: <CreditCard size={14}/> },
-                     { label: '主要據點', value: profile.locations.join(', '), icon: <MapPin size={14}/> },
-                   ].map(item => (
-                     <div key={item.label} className="flex items-center justify-between py-5 border-b border-slate-50 last:border-0 group">
-                        <div className="flex items-center gap-3">
-                           <div className="text-slate-300 group-hover:text-[#003262] transition-colors">{item.icon}</div>
-                           <span className="text-sm text-slate-400 font-bold uppercase tracking-tight">{item.label}</span>
-                        </div>
-                        <span className="text-base text-[#003262] font-black tracking-tight">{item.value}</span>
-                     </div>
-                   ))}
-                 </div>
-               )}
-             </div>
+           <BrandCard padding="lg" className="glass-panel border-none shadow-premium relative overflow-hidden group">
+              <div className="relative z-10 space-y-4">
+                 <h4 className="text-sm font-black uppercase tracking-widest text-slate-400">AI 品牌顧問建議</h4>
+                 <p className="text-sm font-bold italic text-slate-700 leading-relaxed">
+                    「基於您的產業別（{profile.industry}），使用 **{activePalette.name}** 系列能有效建立專業且具備誠信感的視覺記憶點。」
+                 </p>
+                 <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all group-hover:gap-4" style={{ color: activePalette.primary }}>
+                    獲取更多品牌洞察 <ArrowRight size={14} />
+                 </button>
+              </div>
+              <Sparkles size={100} className="absolute -top-10 -right-10 opacity-5 rotate-12" />
            </BrandCard>
         </div>
-
-        <div className="col-span-12 lg:col-span-5">
-           <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden h-full flex flex-col">
-             <div className="p-8 border-b border-slate-50">
-                <h3 className="text-xl font-black text-[#003262] tracking-tight uppercase">主權願景與使命</h3>
-                <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mt-1">Sovereign Vision & Mission</p>
-             </div>
-             <div className="p-10 space-y-12 flex-1">
-               {editing ? (
-                 <div className="space-y-8 h-full">
-                    <div className="space-y-3">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Vision Statement</label>
-                       <textarea className="w-full bg-slate-50 border border-slate-100 rounded-[28px] p-8 text-base font-medium text-slate-700 leading-relaxed italic focus:bg-white focus:ring-8 focus:ring-blue-500/5 transition-all outline-none resize-none min-h-[160px]" value={editForm.vision} onChange={e => setEditForm(p => ({ ...p, vision: e.target.value }))} />
-                    </div>
-                    <div className="space-y-3">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mission Statement</label>
-                       <textarea className="w-full bg-slate-50 border border-slate-100 rounded-[28px] p-8 text-base font-medium text-slate-700 leading-relaxed italic focus:bg-white focus:ring-8 focus:ring-blue-500/5 transition-all outline-none resize-none min-h-[160px]" value={editForm.mission} onChange={e => setEditForm(p => ({ ...p, mission: e.target.value }))} />
-                    </div>
-                 </div>
-               ) : (
-                 <div className="space-y-12">
-                    <div className="group">
-                       <div className="flex items-center gap-3 mb-5">
-                          <Globe size={18} className="text-[#003262]" />
-                          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">企業願景 Vision</h4>
-                       </div>
-                       <p className="text-lg text-[#003262] leading-relaxed font-bold italic border-l-[6px] border-[#FDB515] pl-8 py-2 bg-[#FDB515]/5 rounded-r-3xl transition-all group-hover:bg-[#FDB515]/10">{profile.vision}</p>
-                    </div>
-                    <div className="group">
-                       <div className="flex items-center gap-3 mb-5">
-                          <Target size={18} className="text-[#003262]" />
-                          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">企業使命 Mission</h4>
-                       </div>
-                       <p className="text-lg text-[#003262] leading-relaxed font-bold italic border-l-[6px] border-[#003262] pl-8 py-2 bg-[#003262]/5 rounded-r-3xl transition-all group-hover:bg-[#003262]/10">{profile.mission}</p>
-                    </div>
-                 </div>
-               )}
-             </div>
-           </BrandCard>
-        </div>
-      </div>
-
-      <section className="space-y-8">
-         <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-5">
-               <div className="w-14 h-14 rounded-2xl bg-[#003262] flex items-center justify-center text-white shadow-2xl shadow-[#003262]/20">
-                  <Target size={28} />
-               </div>
-               <div>
-                  <h3 className="text-2xl font-black text-[#003262] tracking-tight uppercase">ESG 核心目標管理</h3>
-                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mt-1">Strategic Roadmap Tracking</p>
-               </div>
-            </div>
-            <BrandButton variant="ghost" className="rounded-xl h-12 font-black uppercase text-[11px] tracking-widest border-slate-100" onClick={() => setShowAddGoal(!showAddGoal)}>
-               <Plus size={16} className="mr-2" /> New_Goal
-            </BrandButton>
-         </div>
-
-         <AnimatePresence>
-           {showAddGoal && (
-             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-               <BrandCard padding="lg" className="glass-panel border-blue-200/50 bg-blue-50/20 mb-10">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-end">
-                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Goal Title</label>
-                        <input className="w-full h-12 bg-white rounded-xl border border-slate-100 px-4 text-xs font-bold focus:ring-4 focus:ring-blue-500/5 outline-none transition-all" value={newGoal.title} onChange={e => setNewGoal(p => ({ ...p, title: e.target.value }))} placeholder="目標名稱" />
-                     </div>
-                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Details</label>
-                        <input className="w-full h-12 bg-white rounded-xl border border-slate-100 px-4 text-xs font-bold focus:ring-4 focus:ring-blue-500/5 outline-none transition-all" value={newGoal.target} onChange={e => setNewGoal(p => ({ ...p, target: e.target.value }))} placeholder="具體描述" />
-                     </div>
-                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Target Date</label>
-                        <input className="w-full h-12 bg-white rounded-xl border border-slate-100 px-4 text-xs font-bold focus:ring-4 focus:ring-blue-500/5 outline-none transition-all" type="date" value={newGoal.deadline} onChange={e => setNewGoal(p => ({ ...p, deadline: e.target.value }))} />
-                     </div>
-                     <div className="flex gap-3 h-12">
-                        <BrandButton variant="primary" className="flex-1 rounded-xl shadow-lg" onClick={addGoal}>儲存目標</BrandButton>
-                        <BrandButton variant="ghost" className="px-4 rounded-xl" onClick={() => setShowAddGoal(false)}><X size={16}/></BrandButton>
-                     </div>
-                  </div>
-               </BrandCard>
-             </motion.div>
-           )}
-         </AnimatePresence>
-
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {goals.map(goal => (
-              <BrandCard key={goal.id} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-xl transition-all duration-500 group relative">
-                <div className="flex items-center gap-6">
-                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shadow-sm transition-transform group-hover:scale-110 ${goal.category === 'E' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : goal.category === 'S' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-purple-50 text-purple-600 border border-purple-100'}`}>
-                      {goal.category}
-                   </div>
-                   <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1">
-                         <h4 className="font-black text-[#003262] text-lg tracking-tight">{goal.title}</h4>
-                         <span className="text-[10px] font-mono font-bold text-slate-300 uppercase tracking-widest">{goal.deadline}</span>
-                      </div>
-                      <p className="text-sm text-slate-500 font-medium leading-relaxed">{goal.target}</p>
-                   </div>
-                   <div className="flex flex-col items-end gap-3">
-                      <button 
-                        onClick={() => cycleStatus(goal.id)}
-                        className="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-sm"
-                        style={{ background: `${statusColor(goal.status)}08`, color: statusColor(goal.status), border: `1px solid ${statusColor(goal.status)}20` }}
-                      >
-                         {statusLabel(goal.status)}
-                      </button>
-                      <button onClick={() => removeGoal(goal.id)} className="p-2 text-slate-200 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
-                        <Trash2 size={16} />
-                      </button>
-                   </div>
-                </div>
-              </BrandCard>
-            ))}
-         </div>
       </section>
     </div>
   );
