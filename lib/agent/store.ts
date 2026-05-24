@@ -33,6 +33,23 @@ export function addArtifact(art: AgentArtifact) {
   GLOBAL_ARTIFACTS.unshift(art);
 }
 
+export function createArtifactVersion(artId: string, patch: Partial<AgentArtifact>): AgentArtifact | undefined {
+  const original = getArtifact(artId);
+  if (!original) return undefined;
+
+  const newVersion: AgentArtifact = {
+    ...original,
+    ...patch,
+    id: `${original.taskId}_v${original.version + 1}_${Math.random().toString(36).slice(2, 6)}`,
+    version: original.version + 1,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  GLOBAL_ARTIFACTS.unshift(newVersion);
+  return newVersion;
+}
+
 export function updateArtifact(artId: string, patch: Partial<AgentArtifact>) {
   const idx = GLOBAL_ARTIFACTS.findIndex(a => a.id === artId);
   if (idx !== -1) {
@@ -42,4 +59,16 @@ export function updateArtifact(artId: string, patch: Partial<AgentArtifact>) {
 
 export function getArtifact(artId: string): AgentArtifact | undefined {
   return GLOBAL_ARTIFACTS.find(a => a.id === artId);
+}
+
+export function getLatestArtifactByTask(taskId: string): AgentArtifact | undefined {
+  return GLOBAL_ARTIFACTS
+    .filter(a => a.taskId === taskId)
+    .sort((a, b) => b.version - a.version)[0];
+}
+
+export function getArtifactVersions(taskId: string): AgentArtifact[] {
+  return GLOBAL_ARTIFACTS
+    .filter(a => a.taskId === taskId)
+    .sort((a, b) => b.version - a.version);
 }

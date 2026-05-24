@@ -40,7 +40,13 @@ Complete these setup steps before proceeding:
         -   **Other Agents**: Review
             [references/setup/other_agents.md](references/setup/other_agents.md)
 
-2.  **Authentication:** Ensure you are logged in to Firebase so that commands
+2.  **Verify and Install Agent Skills:** You **MUST** ensure the full set of skills is installed to avoid using outdated patterns. Run this command:
+    ```bash
+    npx -y skills add firebase/agent-skills -y
+    ```
+    *If the skills are already installed, this command will ensure they are up to date. Do not skip this step.*
+
+3.  **Authentication:** Ensure you are logged in to Firebase so that commands
     have the correct permissions. Run `npx -y firebase-tools@latest login`. For
     environments without a browser (e.g., remote shells), use `npx -y
     firebase-tools@latest login --no-localhost`.

@@ -97,6 +97,43 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     version: '1.0.0',
     enabled: true,
   },
+  // --- System & Infrastructure Skills (Merged from Agent Platform) ---
+  {
+    skillKey: 'firebase_foundation',
+    skillName: 'Firebase 基礎設施管理',
+    taskType: 'system_ops',
+    description: '整合 Firestore, Auth, Hosting 與 Data Connect 之基礎設定與安全規則審計',
+    allowedDataScopes: ['infrastructure_config', 'security_rules'],
+    outputArtifactType: 'system_config_draft',
+    requiresHumanReview: true,
+    riskLevel: 'medium',
+    version: '1.2.0',
+    enabled: true,
+  },
+  {
+    skillKey: 'supabase_mastery',
+    skillName: 'Supabase 資料庫優化',
+    taskType: 'system_ops',
+    description: 'Postgres 效能調優、RLS 安全策略編寫與 Edge Functions 管理',
+    allowedDataScopes: ['db_schema', 'rls_policies'],
+    outputArtifactType: 'db_optimization_plan',
+    requiresHumanReview: true,
+    riskLevel: 'medium',
+    version: '1.1.0',
+    enabled: true,
+  },
+  {
+    skillKey: 'genkit_orchestration',
+    skillName: 'Genkit AI 流程調度',
+    taskType: 'ai_ops',
+    description: '跨語言 (JS/Py/Go/Dart) 的 LLM 工作流設計、Prompt 管理與 Trace 追蹤',
+    allowedDataScopes: ['ai_prompts', 'workflow_defs'],
+    outputArtifactType: 'ai_flow_blueprint',
+    requiresHumanReview: false,
+    riskLevel: 'low',
+    version: '1.3.0',
+    enabled: true,
+  },
 ];
 
 export function getSkill(skillKey: string): SkillRegistryItem | undefined {
@@ -116,6 +153,8 @@ export const TASK_TYPE_META: Record<string, { label: string; color: string; icon
   stakeholder_analysis:   { label: '利害關係人問卷分析', color: '#0EA5E9', icon: 'Users' },
   materiality_generation: { label: '重大性矩陣生成',     color: '#D946EF', icon: 'BarChart3' },
   cbam_validation:        { label: 'CBAM 數據驗證',     color: '#10B981', icon: 'CheckSquare' },
+  system_ops:             { label: '系統架構運維',     color: '#64748B', icon: 'Settings' },
+  ai_ops:                 { label: 'AI 模型調優',      color: '#3B82F6', icon: 'Cpu' },
 };
 
 export const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {

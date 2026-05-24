@@ -14,12 +14,53 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
 
   const tabs = [
     { id: 'system', label: '核心系統', icon: <Settings2 size={14}/> },
+    { id: 'compliance', label: '合規情報', icon: <Shield size={14}/> },
     { id: 'models', label: 'AI 模型', icon: <Cpu size={14}/> },
     { id: 'mcp',    label: 'MCP 整合', icon: <Radio size={14}/> },
     { id: 'about',  label: '關於本站', icon: <Info size={14}/> },
   ];
+  ...
+              {activeTab === 'compliance' && (
+                <div className="space-y-8 fade-in">
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
+                         <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">5T Integrity Score</p>
+                         <p className="text-3xl font-black text-emerald-800 font-mono">94.2%</p>
+                         <div className="h-1.5 w-full bg-emerald-200/50 rounded-full mt-4 overflow-hidden">
+                            <motion.div initial={{ width: 0 }} animate={{ width: '94.2%' }} className="h-full bg-emerald-500" />
+                         </div>
+                      </div>
+                      <div className="p-6 bg-amber-50 rounded-3xl border border-amber-100">
+                         <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-1">Unsealed Evidence</p>
+                         <p className="text-3xl font-black text-amber-800 font-mono">12</p>
+                         <p className="text-[9px] font-bold text-amber-600/60 mt-2 uppercase tracking-tighter">Requires 5T Sealing Logic</p>
+                      </div>
+                   </div>
 
-  if (!isOpen) return null;
+                   <section className="space-y-4">
+                      <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-1">Active Compliance Gaps</h4>
+                      <div className="space-y-2">
+                         {[
+                           { tag: 'GRI 305-1', desc: '缺少 2024 年度範疇一直接排放數據', severity: 'high' },
+                           { tag: 'GRI 403-9', desc: '職業安全訓練紀錄未經 5T 封印', severity: 'medium' },
+                           { tag: 'GRI 2-7', desc: '員工人數統計需重新校準', severity: 'low' },
+                         ].map((gap, i) => (
+                           <div key={i} className="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+                              <div className="flex items-center gap-3">
+                                 <BrandBadge variant="outline" size="xs" className="font-mono">{gap.tag}</BrandBadge>
+                                 <span className="text-[11px] font-bold text-slate-600">{gap.desc}</span>
+                              </div>
+                              <div className={`w-2 h-2 rounded-full ${gap.severity === 'high' ? 'bg-red-500' : gap.severity === 'medium' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+                           </div>
+                         ))}
+                      </div>
+                   </section>
+
+                   <BrandButton variant="primary" fullWidth className="h-14 rounded-2xl shadow-xl shadow-blue-500/10" onClick={() => alert('啟動全域合規性掃描...')}>
+                      <Bot size={18} className="mr-2" /> 啟動 OmniHermes 全域審計
+                   </BrandButton>
+                </div>
+              )}
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4 lg:p-8">

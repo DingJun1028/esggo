@@ -12,6 +12,8 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
+import { isDemoMode } from './firebase';
+import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data';
 
 // ==========================================
 // Types
@@ -42,6 +44,15 @@ export interface Signature {
   signature: string; // 5T signature
   timestamp: any;
 }
+
+export interface GovernanceMetric { id?: string; [key: string]: any; }
+export interface Task { id?: string; [key: string]: any; }
+export interface EvidenceFile { id?: string; [key: string]: any; }
+export interface AuditRecord { id?: string; [key: string]: any; }
+export interface AdvisoryMessage { id?: string; [key: string]: any; }
+export interface EnvironmentalMetric { id?: string; [key: string]: any; }
+export interface RoadmapMilestone { id?: string; [key: string]: any; }
+export interface SocialMetric { id?: string; [key: string]: any; }
 
 // ==========================================
 // Reports CRUD
@@ -116,18 +127,11 @@ export const addSignature = async (data: Omit<Signature, 'id' | 'timestamp'>) =>
 };
 
 // ==========================================
-// DUMMY EXPORTS TO FIX TS COMPILE ERRORS
+// ESG Metrics
 // ==========================================
-export interface GovernanceMetric { id?: string; [key: string]: any; }
-export interface Task { id?: string; [key: string]: any; }
-export interface EvidenceFile { id?: string; [key: string]: any; }
-export interface AuditRecord { id?: string; [key: string]: any; }
-export interface AdvisoryMessage { id?: string; [key: string]: any; }
-export interface EnvironmentalMetric { id?: string; [key: string]: any; }
-export interface RoadmapMilestone { id?: string; [key: string]: any; }
-export interface SocialMetric { id?: string; [key: string]: any; }
 
 export const getGovernanceMetrics = async (ownerId?: any): Promise<any> => {
+  if (isDemoMode) return getDemoData('gov', []);
   const colRef = collection(db, 'governance_metrics');
   const q = ownerId ? query(colRef, where('ownerId', '==', ownerId)) : query(colRef);
   const snapshot = await getDocs(q);
@@ -135,37 +139,66 @@ export const getGovernanceMetrics = async (ownerId?: any): Promise<any> => {
 };
 
 export const getSocialMetrics = async (ownerId?: any): Promise<any> => {
+  if (isDemoMode) return getDemoData('soc', []);
   const colRef = collection(db, 'social_metrics');
   const q = ownerId ? query(colRef, where('ownerId', '==', ownerId)) : query(colRef);
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
-export const getEnvironmentalData = async (ownerId?: any): Promise<any> => {
+export const getEnvironmentalData = async (activeCategory?: any): Promise<any> => {
+  if (isDemoMode) {
+    const all = await getDemoData('env', MOCK_ENVIRONMENTAL);
+    return activeCategory ? all.filter(m => m.category === activeCategory) : all;
+  }
   const colRef = collection(db, 'environmental_metrics');
-  const q = ownerId ? query(colRef, where('ownerId', '==', ownerId)) : query(colRef);
+  const q = activeCategory ? query(colRef, where('category', '==', activeCategory)) : query(colRef);
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
+
 export const upsertEnvironmentalData = async (data: any): Promise<any> => true;
 export const deleteEnvironmentalData = async (id: any): Promise<any> => true;
-export const getTasks = async (ownerId?: any): Promise<any> => [];
+
+// ==========================================
+// Tasks & Logs
+// ==========================================
+
+export const getTasks = async (ownerId?: any): Promise<any> => {
+  if (isDemoMode) return getDemoData('tasks', MOCK_TASKS);
+  return [];
+};
 export const upsertTask = async (data: any): Promise<any> => true;
 export const updateTaskStatus = async (id: any, status: any): Promise<any> => true;
 export const updateTask = async (id: any, data: any): Promise<any> => true;
 export const deleteTask = async (id: any): Promise<any> => true;
 export const getTasksByOwner = async (ownerId: any): Promise<any> => [];
 export const getTasksByAssignee = async (assigneeId: any): Promise<any> => [];
+
+export const getAuditLogs = async (ownerId?: any): Promise<any> => {
+  if (isDemoMode) return getDemoData('audit', MOCK_AUDIT);
+  return [];
+};
+export const logAudit = async (record: any): Promise<any> => true;
+
+export const getDashboardStats = async (ownerId?: any): Promise<any> => {
+  if (isDemoMode) return { complianceRate: 78, griCoverage: 67, totalEvidence: 42, carbonEmissions: 1247 };
+  return { complianceRate: 0, griCoverage: 0, totalEvidence: 0 };
+};
+
+// ==========================================
+// Evidence & Other
+// ==========================================
+
 export const getEvidenceFiles = async (): Promise<any> => [];
 export const insertEvidence = async (data: any): Promise<any> => 'dummy_id';
 export const sealEvidence = async (id: any): Promise<any> => true;
 export const getReadingRoomReports = async (): Promise<any> => [];
 export const secureHash = (data: any): any => 'dummy_hash';
-export const logAudit = async (record: any): Promise<any> => true;
+
 export const saveAdvisorySession = async (session: any, p2?: any): Promise<any> => true;
 export const getAdvisorySession = async (ownerId: any): Promise<any> => null;
-export const getAuditLogs = async (ownerId?: any): Promise<any> => [];
-export const getDashboardStats = async (ownerId?: any): Promise<any> => ({ complianceRate: 0, griCoverage: 0, totalEvidence: 0 });
+
 export const getRoadmapMilestones = async (): Promise<any> => [];
 export const upsertRoadmapMilestone = async (data: any): Promise<any> => data as any;
 export const updateMilestoneStatus = async (id: any, status: any): Promise<any> => true;

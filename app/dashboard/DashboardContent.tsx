@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
   CheckCircle, Leaf, Shield, Activity,
@@ -21,6 +21,72 @@ export interface DashboardStatsData {
   carbonEmissions: number;
   griCoverage: number;
   auditCount: number;
+}
+
+function AIRiskAlerter() {
+  const [alerts, setAlerts] = useState<any[]>([]);
+
+  const fetchAlerts = useCallback(async () => {
+    const { data } = await supabase.from('ai_alerts').select('*').eq('is_resolved', false).order('created_at', { ascending: false });
+    setAlerts(data || []);
+  }, []);
+
+  useEffect(() => {
+    fetchAlerts();
+    const channel = supabase
+      .channel('ai-alerts-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'ai_alerts' }, () => {
+        fetchAlerts();
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchAlerts]);
+
+  const handleResolve = async (id: string) => {
+    await supabase.from('ai_alerts').update({ is_resolved: true, resolved_at: new Date().toISOString() }).eq('id', id);
+    fetchAlerts();
+  };
+
+  if (alerts.length === 0) return null;
+
+  return (
+    <div className="space-y-4 mb-6">
+       {alerts.map(a => (
+         <motion.div key={a.id} initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className={cn(
+           "p-5 rounded-[2rem] border shadow-xl relative overflow-hidden",
+           a.severity === 'critical' ? 'bg-red-50 border-red-100' : 'bg-amber-50 border-amber-100'
+         )}>
+            <div className="flex items-start gap-4 relative z-10">
+               <div className={cn(
+                 "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg",
+                 a.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-white'
+               )}>
+                  <AlertTriangle size={20} />
+               </div>
+               <div className="flex-1 space-y-1">
+                  <div className="flex justify-between items-start">
+                    <p className={cn(
+                      "text-[10px] font-black uppercase tracking-widest",
+                      a.severity === 'critical' ? 'text-red-600' : 'text-amber-600'
+                    )}>AI_Proactive_Warning</p>
+                    <button onClick={() => handleResolve(a.id)} className="text-slate-400 hover:text-slate-600 p-1"><X size={12} /></button>
+                  </div>
+                  <h4 className="text-sm font-black text-slate-800">{a.title}</h4>
+                  <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{a.description}</p>
+                  <div className="mt-3 p-3 bg-white/60 rounded-xl border border-white/80 flex items-center justify-between">
+                     <div className="flex-1">
+                        <p className="text-[9px] font-black text-slate-400 uppercase mb-1">建議修正</p>
+                        <p className="text-[10px] font-bold text-blue-700">{a.suggested_fix}</p>
+                     </div>
+                     <BrandButton variant="primary" size="xs" className="h-7 px-3 rounded-lg text-[9px] font-black" onClick={() => handleResolve(a.id)}>已處理</BrandButton>
+                  </div>
+               </div>
+            </div>
+            <div className="absolute top-0 right-0 p-4 opacity-5"><Zap size={80} /></div>
+         </motion.div>
+       ))}
+    </div>
+  );
 }
 
 function DataAlchemyWidget() {
@@ -89,6 +155,60 @@ function DataAlchemyWidget() {
   );
 }
 
+function GapGuardian() {
+  const [gaps, setGaps] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchGaps = useCallback(async () => {
+    const { data } = await supabase.from('system_gaps_summary').select('*');
+    setGaps(data || []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchGaps();
+
+    // ─── Bidirectional Real-time Sync ───
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'environmental_data' }, () => {
+        console.log('[Sync] Data change detected, refreshing gaps...');
+        fetchGaps();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchGaps]);
+
+  return (
+    <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg">
+      <div className="p-6 border-b border-slate-50 flex items-center justify-between bg-amber-50/30">
+        <div>
+          <h4 className="text-[10px] font-black text-amber-800 uppercase tracking-[0.2em]">GRI Gap Guardian</h4>
+          <p className="text-[9px] font-bold text-amber-600/60 uppercase tracking-widest mt-0.5">Missing Disclosures Detector</p>
+        </div>
+        <AlertTriangle size={14} className="text-amber-500 animate-pulse" />
+      </div>
+      <div className="flex-1 p-4 space-y-2 max-h-[250px] overflow-y-auto no-scrollbar">
+        {gaps.filter(g => g.status === 'MISSING').length > 0 ? gaps.filter(g => g.status === 'MISSING').map((g, idx) => (
+          <div key={idx} className="flex items-center justify-between p-3 bg-white border border-amber-100 rounded-xl shadow-sm">
+             <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span className="text-[10px] font-black text-slate-700">{g.gri_tag}</span>
+             </div>
+             <BrandBadge variant="outline" size="xs" className="text-amber-600 border-amber-200">待補正</BrandBadge>
+          </div>
+        )) : (
+          <div className="py-8 text-center">
+             <CheckCircle size={20} className="mx-auto text-emerald-400 mb-2" />
+             <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">所有核心指標已齊備</p>
+          </div>
+        )}
+      </div>
+    </BrandCard>
+  );
+}
+
 function IntegrityTrace() {
   const [memories, setMemories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -106,6 +226,16 @@ function IntegrityTrace() {
 
   useEffect(() => {
     fetchMemories();
+    
+    // Real-time memory sync
+    const channel = supabase
+      .channel('memory-changes')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'user_memory' }, () => {
+        fetchMemories();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, []);
 
   const handleConsolidate = async () => {
@@ -198,7 +328,7 @@ export default function DashboardContent() {
   return (
     <div className="page-container space-y-8 lg:space-y-12 pb-24 fade-in">
       
-      {/* Compact Page Header */}
+      {/* Page Header */}
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-10">
         <div className="space-y-4 lg:space-y-6">
           <div className="flex flex-wrap items-center gap-3">
@@ -233,36 +363,7 @@ export default function DashboardContent() {
         </div>
       </header>
 
-      {/* Infinite Evolution Insight */}
-      <AnimatePresence>
-        {growth && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-            <BrandCard padding="none" className="bg-gradient-to-r from-[#003262] to-[#1a4a7a] border-none overflow-hidden shadow-extreme p-6 lg:p-8 group">
-               <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-[#FDB515] flex-shrink-0 animate-pulse">
-                     <Brain size={28} />
-                  </div>
-                  <div className="flex-1 text-center md:text-left space-y-1">
-                     <div className="flex items-center justify-center md:justify-start gap-3">
-                        <h4 className="text-sm font-black text-blue-200 uppercase tracking-[0.3em]">System Self-Evolution Insight</h4>
-                        <BrandBadge variant="gold" size="xs" dot>EVOLUTION_ACTIVE</BrandBadge>
-                     </div>
-                     <p className="text-white text-base font-bold italic leading-relaxed">
-                        "{growth.analysis.growthSuggestion}"
-                     </p>
-                  </div>
-                  <div className="text-center md:text-right border-l border-white/10 pl-6 hidden md:block">
-                     <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Impact Score</p>
-                     <p className="text-2xl font-black text-[#FDB515] font-mono">{growth.analysis.impactScore}%</p>
-                  </div>
-               </div>
-               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none" />
-            </BrandCard>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* KPI Compact Grid */}
+      {/* KPI Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
         {KPIS.map((k) => (
           <BrandKpiCard
@@ -300,25 +401,10 @@ export default function DashboardContent() {
           </BrandCard>
         </div>
         <div className="col-span-12 lg:col-span-4 space-y-6 lg:space-y-8">
+          <AIRiskAlerter />
+          <GapGuardian />
           <IntegrityTrace />
           <DataAlchemyWidget />
-          <BrandCard padding="lg" className="glass-panel border-none h-full">
-            <BrandCardHeader title="模組就緒度" subtitle="GRI 核心進度" />
-            <div className="space-y-6 mt-6 lg:mt-8">
-              {MODULES.map(m => (
-                <Link key={m.href} href={m.href} className="block group">
-                  <div className="flex justify-between items-end mb-2">
-                    <div className="space-y-0.5">
-                      <span className="text-xs font-black text-[#003262] group-hover:text-blue-600 transition-colors uppercase tracking-tight">{m.label}</span>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.1em]">{m.sub}</p>
-                    </div>
-                    <span className="text-sm font-black font-mono" style={{ color: m.color }}>{m.pct}%</span>
-                  </div>
-                  <BrandProgress value={m.pct} color="auto" size="sm" animated />
-                </Link>
-              ))}
-            </div>
-          </BrandCard>
         </div>
       </div>
 

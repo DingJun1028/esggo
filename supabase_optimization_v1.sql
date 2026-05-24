@@ -42,9 +42,11 @@ CREATE POLICY "user_memory_owner_policy" ON public.user_memory
   WITH CHECK ( (SELECT auth.uid())::text = user_id );
 
 -- Optimize evidence_vault policies (Company-scoped access)
-DROP POLICY IF EXISTS "evidence_vault_owner_policy" ON public.evidence_vault;
-DROP POLICY IF EXISTS "evidence_vault_deny_all" ON public.evidence_vault;
-CREATE POLICY "evidence_vault_company_policy" ON public.evidence_vault
+DROP POLICY IF EXISTS evidence_vault_owner_policy ON public.evidence_vault;
+DROP POLICY IF EXISTS evidence_vault_deny_all ON public.evidence_vault;
+DROP POLICY IF EXISTS evidence_vault_company_policy ON public.evidence_vault;
+
+CREATE POLICY evidence_vault_company_policy ON public.evidence_vault
   FOR ALL TO authenticated
   USING ( company_id = (SELECT auth.jwt()->>'company_id') )
   WITH CHECK ( company_id = (SELECT auth.jwt()->>'company_id') );
