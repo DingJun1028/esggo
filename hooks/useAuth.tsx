@@ -29,36 +29,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [companyId, setCompanyId] = useState('default');
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
-      if (fbUser) {
-        setUser(fbUser);
-        
-        // Sync with Supabase session if needed
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-           console.log("[Auth Sync] Initializing Supabase session from Firebase context...");
-           // In a real prod env, you would use cross-auth exchange here
-        }
-
-        // Extract company_id from metadata or local storage
-        const local = localStorage.getItem('omni_user');
-        if (local) {
-          const parsed = JSON.parse(local);
-          setCompanyId(parsed.company_id || 'default');
-        }
-      } else {
-        // Fallback for Demo Mode
-        const localUser = localStorage.getItem('omni_user');
-        if (isDemoMode && localUser) {
-           const parsed = JSON.parse(localUser);
-           setCompanyId(parsed.company_id || 'default');
-           // Mock user object for UI
-           setUser({ email: 'dev@esggo.com', uid: parsed.id } as any);
-        } else {
-           setUser(null);
-        }
+    // Initial sync from localStorage for immediate RLS/SaaS state
+    try {
+      const local = localStorage.getItem('omni_user');
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (parsed.company_id) setCompanyId(parsed.company_id);
       }
-      setLoading(false);
+    } catch (e) {
+      console.warn('[Auth] Failed to parse initial local user');
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      try {
+        if (fbUser) {
+          setUser(fbUser);
+          
+          // Non-blocking Supabase sync
+          supabase.auth.getSession().then(({ data: { session } }) => {
+            if (!session) {
+               console.log("[Auth Sync] Supabase session missing, background sync active...");
+            }
+          }).catch(console.error);
+
+          const local = localStorage.getItem('omni_user');
+          if (local) {
+            const parsed = JSON.parse(local);
+            setCompanyId(parsed.company_id || 'default');
+          }
+        } else {
+          // Fallback for Demo Mode
+          const localUser = localStorage.getItem('omni_user');
+          if (isDemoMode && localUser) {
+             const parsed = JSON.parse(localUser);
+             setCompanyId(parsed.company_id || 'default');
+             setUser({ email: parsed.email || 'dev@esggo.com', uid: parsed.id || 'dev_user' } as any);
+          } else {
+             setUser(null);
+          }
+        }
+      } catch (err) {
+        console.error('[Auth Critical Error]', err);
+      } finally {
+        setLoading(false);
+      }
     });
 
     return () => unsubscribe();

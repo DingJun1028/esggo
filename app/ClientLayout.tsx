@@ -176,11 +176,6 @@ function SaaSStatusWidget() {
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => { setIsClient(true); }, []);
-
-  if (!isClient) return null;
-
   return (
     <Suspense fallback={null}>
       <ErrorBoundary>
