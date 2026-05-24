@@ -23,7 +23,6 @@ __export(next_config_exports, {
 });
 module.exports = __toCommonJS(next_config_exports);
 var nextConfig = {
-  eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   serverExternalPackages: ["sharp"],
   images: {

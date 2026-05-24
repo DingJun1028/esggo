@@ -13,8 +13,9 @@
     "@google/generative-ai": "0.21.0",
     "@graphql-tools/schema": "^10.0.33",
     "@next/swc-wasm-nodejs": "15.5.18",
-    "@supabase/ssr": "0.1.0",
-    "@supabase/supabase-js": "2.39.0",
+    "@prisma/client": "^7.8.0",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.1",
     "@types/uuid": "^10.0.0",
     "cheerio": "^1.2.0",
     "class-variance-authority": "0.7.1",
@@ -27,7 +28,8 @@
     "graphql-ws": "^6.0.8",
     "graphql-yoga": "^5.21.0",
     "lucide-react": "0.468.0",
-    "next": "15.5.18",
+    "next": "^15.5.18",
+    "playwright": "^1.60.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "recharts": "2.13.3",
@@ -41,7 +43,10 @@
   },
   "overrides": {
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "uuid": "^14.0.0",
+    "postcss": "^8.5.15",
+    "cookie": "^0.7.0"
   },
   "main": "server.js",
   "engines": {
