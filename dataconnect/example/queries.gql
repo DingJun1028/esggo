@@ -1,5 +1,5 @@
-query ListAllOrganizations @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
-  organizations {
+query ListAllBusinesses @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  businesses {
     id
     name
     industry
@@ -7,42 +7,20 @@ query ListAllOrganizations @auth(level: PUBLIC, insecureReason: "This operation 
   }
 }
 
-query GetInitiativesByOrganization($organizationId: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
-  initiatives(where: {organizationId: {eq: $organizationId}}) {
+query GetBusinessDetails($id: UUID!) @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  business(id: $id) {
     id
     name
     description
-    status
-    startDate
-    endDate
-    organization {
-      name
-    }
-    esgCategory {
-      name
-    }
+    overallEsgScore
   }
 }
 
-mutation CreateNewESGCategory($name: String!, $description: String!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
-  eSGCategory_insert(data: {
+mutation CreateBusiness($name: String!, $industry: String!, $overallEsgScore: Float!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  business_insert(data: {
     name: $name,
-    description: $description,
+    industry: $industry,
+    overallEsgScore: $overallEsgScore,
     createdAt_expr: "request.time"
-  }) {
-    id
-  }
-}
-
-mutation RecordProgressUpdate($kpiId: UUID!, $initiativeId: UUID!, $actualValue: Float!, $dateRecorded: Date!, $notes: String) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
-  progressUpdate_insert(data: {
-    kpiId: $kpiId,
-    initiativeId: $initiativeId,
-    actualValue: $actualValue,
-    dateRecorded: $dateRecorded,
-    notes: $notes,
-    createdAt_expr: "request.time"
-  }) {
-    id
-  }
+  })
 }

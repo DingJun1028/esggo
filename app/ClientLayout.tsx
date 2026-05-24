@@ -212,7 +212,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!mounted || isAuthenticated === null) return;
 
-    if (isAuthenticated === false && pathname !== '/auth/login') {
+    if (isAuthenticated === false && pathname !== '/auth/login' && pathname !== '/terminal') {
       router.replace('/auth/login');
     } else if (isAuthenticated === true && pathname === '/auth/login') {
       router.replace('/');
@@ -221,8 +221,8 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   if (!mounted) return null;
 
-  // Don't show shell on login page, but allow rendering the login page itself
-  if (pathname === '/auth/login') {
+  // Don't show shell on login page or terminal, but allow rendering them
+  if (pathname === '/auth/login' || pathname === '/terminal') {
     return <>{children}</>;
   }
 

@@ -1,224 +1,224 @@
 extend type Mutation {
   """
-  ✨ Insert a single `Document` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Business` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  document_insert(
+  business_insert(
     """
     Data object to insert into the table.
     """
-    data: Document_Data!
-  ): Document_KeyOutput! @fdc_generated(from: "Document", purpose: INSERT_SINGLE)
+    data: Business_Data!
+  ): Business_KeyOutput! @fdc_generated(from: "Business", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `ESGCategory` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `EsgDetail` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  eSGCategory_insert(
+  esgDetail_insert(
     """
     Data object to insert into the table.
     """
-    data: ESGCategory_Data!
-  ): ESGCategory_KeyOutput! @fdc_generated(from: "ESGCategory", purpose: INSERT_SINGLE)
+    data: EsgDetail_Data!
+  ): EsgDetail_KeyOutput! @fdc_generated(from: "EsgDetail", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `Initiative` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `ListBusiness` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  initiative_insert(
+  listBusiness_insert(
     """
     Data object to insert into the table.
     """
-    data: Initiative_Data!
-  ): Initiative_KeyOutput! @fdc_generated(from: "Initiative", purpose: INSERT_SINGLE)
+    data: ListBusiness_Data!
+  ): ListBusiness_KeyOutput! @fdc_generated(from: "ListBusiness", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `KPI` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Suggestion` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  kPI_insert(
+  suggestion_insert(
     """
     Data object to insert into the table.
     """
-    data: KPI_Data!
-  ): KPI_KeyOutput! @fdc_generated(from: "KPI", purpose: INSERT_SINGLE)
+    data: Suggestion_Data!
+  ): Suggestion_KeyOutput! @fdc_generated(from: "Suggestion", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `Organization` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  organization_insert(
+  user_insert(
     """
     Data object to insert into the table.
     """
-    data: Organization_Data!
-  ): Organization_KeyOutput! @fdc_generated(from: "Organization", purpose: INSERT_SINGLE)
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `ProgressUpdate` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `UserList` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  progressUpdate_insert(
+  userList_insert(
     """
     Data object to insert into the table.
     """
-    data: ProgressUpdate_Data!
-  ): ProgressUpdate_KeyOutput! @fdc_generated(from: "ProgressUpdate", purpose: INSERT_SINGLE)
+    data: UserList_Data!
+  ): UserList_KeyOutput! @fdc_generated(from: "UserList", purpose: INSERT_SINGLE)
   """
-  ✨ Insert `Document` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Business` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  document_insertMany(
+  business_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [Document_Data!]!
-  ): [Document_KeyOutput!]! @fdc_generated(from: "Document", purpose: INSERT_MULTIPLE)
+    data: [Business_Data!]!
+  ): [Business_KeyOutput!]! @fdc_generated(from: "Business", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `ESGCategory` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `EsgDetail` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  eSGCategory_insertMany(
+  esgDetail_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [ESGCategory_Data!]!
-  ): [ESGCategory_KeyOutput!]! @fdc_generated(from: "ESGCategory", purpose: INSERT_MULTIPLE)
+    data: [EsgDetail_Data!]!
+  ): [EsgDetail_KeyOutput!]! @fdc_generated(from: "EsgDetail", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `Initiative` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `ListBusiness` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  initiative_insertMany(
+  listBusiness_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [Initiative_Data!]!
-  ): [Initiative_KeyOutput!]! @fdc_generated(from: "Initiative", purpose: INSERT_MULTIPLE)
+    data: [ListBusiness_Data!]!
+  ): [ListBusiness_KeyOutput!]! @fdc_generated(from: "ListBusiness", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `KPI` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Suggestion` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  kPI_insertMany(
+  suggestion_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [KPI_Data!]!
-  ): [KPI_KeyOutput!]! @fdc_generated(from: "KPI", purpose: INSERT_MULTIPLE)
+    data: [Suggestion_Data!]!
+  ): [Suggestion_KeyOutput!]! @fdc_generated(from: "Suggestion", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `Organization` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  organization_insertMany(
+  user_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [Organization_Data!]!
-  ): [Organization_KeyOutput!]! @fdc_generated(from: "Organization", purpose: INSERT_MULTIPLE)
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `ProgressUpdate` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `UserList` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
-  progressUpdate_insertMany(
+  userList_insertMany(
     """
     List of data objects to insert into the table.
     """
-    data: [ProgressUpdate_Data!]!
-  ): [ProgressUpdate_KeyOutput!]! @fdc_generated(from: "ProgressUpdate", purpose: INSERT_MULTIPLE)
+    data: [UserList_Data!]!
+  ): [UserList_KeyOutput!]! @fdc_generated(from: "UserList", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert or update a single `Document` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Document`.
+  ✨ Insert or update a single `Business` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Business`.
   """
-  document_upsert(
+  business_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: Document_Data!
-  ): Document_KeyOutput! @fdc_generated(from: "Document", purpose: UPSERT_SINGLE)
+    data: Business_Data!
+  ): Business_KeyOutput! @fdc_generated(from: "Business", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `ESGCategory` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ESGCategory`.
+  ✨ Insert or update a single `EsgDetail` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `EsgDetail`.
   """
-  eSGCategory_upsert(
+  esgDetail_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: ESGCategory_Data!
-  ): ESGCategory_KeyOutput! @fdc_generated(from: "ESGCategory", purpose: UPSERT_SINGLE)
+    data: EsgDetail_Data!
+  ): EsgDetail_KeyOutput! @fdc_generated(from: "EsgDetail", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `Initiative` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Initiative`.
+  ✨ Insert or update a single `ListBusiness` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ListBusiness`.
   """
-  initiative_upsert(
+  listBusiness_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: Initiative_Data!
-  ): Initiative_KeyOutput! @fdc_generated(from: "Initiative", purpose: UPSERT_SINGLE)
+    data: ListBusiness_Data!
+  ): ListBusiness_KeyOutput! @fdc_generated(from: "ListBusiness", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `KPI` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `KPI`.
+  ✨ Insert or update a single `Suggestion` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Suggestion`.
   """
-  kPI_upsert(
+  suggestion_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: KPI_Data!
-  ): KPI_KeyOutput! @fdc_generated(from: "KPI", purpose: UPSERT_SINGLE)
+    data: Suggestion_Data!
+  ): Suggestion_KeyOutput! @fdc_generated(from: "Suggestion", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `Organization` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Organization`.
+  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
   """
-  organization_upsert(
+  user_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: Organization_Data!
-  ): Organization_KeyOutput! @fdc_generated(from: "Organization", purpose: UPSERT_SINGLE)
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `ProgressUpdate` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProgressUpdate`.
+  ✨ Insert or update a single `UserList` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserList`.
   """
-  progressUpdate_upsert(
+  userList_upsert(
     """
     Data object to insert or update if it already exists.
     """
-    data: ProgressUpdate_Data!
-  ): ProgressUpdate_KeyOutput! @fdc_generated(from: "ProgressUpdate", purpose: UPSERT_SINGLE)
+    data: UserList_Data!
+  ): UserList_KeyOutput! @fdc_generated(from: "UserList", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update `Document` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Document`.
+  ✨ Insert or update `Business` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Business`.
   """
-  document_upsertMany(
+  business_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [Document_Data!]!
-  ): [Document_KeyOutput!]! @fdc_generated(from: "Document", purpose: UPSERT_MULTIPLE)
+    data: [Business_Data!]!
+  ): [Business_KeyOutput!]! @fdc_generated(from: "Business", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `ESGCategory` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ESGCategory`.
+  ✨ Insert or update `EsgDetail` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `EsgDetail`.
   """
-  eSGCategory_upsertMany(
+  esgDetail_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [ESGCategory_Data!]!
-  ): [ESGCategory_KeyOutput!]! @fdc_generated(from: "ESGCategory", purpose: UPSERT_MULTIPLE)
+    data: [EsgDetail_Data!]!
+  ): [EsgDetail_KeyOutput!]! @fdc_generated(from: "EsgDetail", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `Initiative` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Initiative`.
+  ✨ Insert or update `ListBusiness` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ListBusiness`.
   """
-  initiative_upsertMany(
+  listBusiness_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [Initiative_Data!]!
-  ): [Initiative_KeyOutput!]! @fdc_generated(from: "Initiative", purpose: UPSERT_MULTIPLE)
+    data: [ListBusiness_Data!]!
+  ): [ListBusiness_KeyOutput!]! @fdc_generated(from: "ListBusiness", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `KPI` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `KPI`.
+  ✨ Insert or update `Suggestion` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Suggestion`.
   """
-  kPI_upsertMany(
+  suggestion_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [KPI_Data!]!
-  ): [KPI_KeyOutput!]! @fdc_generated(from: "KPI", purpose: UPSERT_MULTIPLE)
+    data: [Suggestion_Data!]!
+  ): [Suggestion_KeyOutput!]! @fdc_generated(from: "Suggestion", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `Organization` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Organization`.
+  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
   """
-  organization_upsertMany(
+  user_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [Organization_Data!]!
-  ): [Organization_KeyOutput!]! @fdc_generated(from: "Organization", purpose: UPSERT_MULTIPLE)
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `ProgressUpdate` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ProgressUpdate`.
+  ✨ Insert or update `UserList` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserList`.
   """
-  progressUpdate_upsertMany(
+  userList_upsertMany(
     """
     List of data objects to insert or update if it already exists.
     """
-    data: [ProgressUpdate_Data!]!
-  ): [ProgressUpdate_KeyOutput!]! @fdc_generated(from: "ProgressUpdate", purpose: UPSERT_MULTIPLE)
+    data: [UserList_Data!]!
+  ): [UserList_KeyOutput!]! @fdc_generated(from: "UserList", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Update a single `Document` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Document` or `null` if not found.
+  ✨ Update a single `Business` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Business` or `null` if not found.
   """
-  document_update(
+  business_update(
     """
     The unique ID of the object.
     """
@@ -227,22 +227,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Document_Key
+    key: Business_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Document_FirstRow
+    first: Business_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: Document_Data!
-  ): Document_KeyOutput @fdc_generated(from: "Document", purpose: UPDATE_SINGLE)
+    data: Business_Data!
+  ): Business_KeyOutput @fdc_generated(from: "Business", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `ESGCategory` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ESGCategory` or `null` if not found.
+  ✨ Update a single `EsgDetail` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `EsgDetail` or `null` if not found.
   """
-  eSGCategory_update(
+  esgDetail_update(
     """
     The unique ID of the object.
     """
@@ -251,22 +251,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ESGCategory_Key
+    key: EsgDetail_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ESGCategory_FirstRow
+    first: EsgDetail_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: ESGCategory_Data!
-  ): ESGCategory_KeyOutput @fdc_generated(from: "ESGCategory", purpose: UPDATE_SINGLE)
+    data: EsgDetail_Data!
+  ): EsgDetail_KeyOutput @fdc_generated(from: "EsgDetail", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `Initiative` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Initiative` or `null` if not found.
+  ✨ Update a single `ListBusiness` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ListBusiness` or `null` if not found.
   """
-  initiative_update(
+  listBusiness_update(
     """
     The unique ID of the object.
     """
@@ -275,22 +275,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Initiative_Key
+    key: ListBusiness_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Initiative_FirstRow
+    first: ListBusiness_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: Initiative_Data!
-  ): Initiative_KeyOutput @fdc_generated(from: "Initiative", purpose: UPDATE_SINGLE)
+    data: ListBusiness_Data!
+  ): ListBusiness_KeyOutput @fdc_generated(from: "ListBusiness", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `KPI` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `KPI` or `null` if not found.
+  ✨ Update a single `Suggestion` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Suggestion` or `null` if not found.
   """
-  kPI_update(
+  suggestion_update(
     """
     The unique ID of the object.
     """
@@ -299,22 +299,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: KPI_Key
+    key: Suggestion_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: KPI_FirstRow
+    first: Suggestion_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: KPI_Data!
-  ): KPI_KeyOutput @fdc_generated(from: "KPI", purpose: UPDATE_SINGLE)
+    data: Suggestion_Data!
+  ): Suggestion_KeyOutput @fdc_generated(from: "Suggestion", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `Organization` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Organization` or `null` if not found.
+  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
   """
-  organization_update(
+  user_update(
     """
     The unique ID of the object.
     """
@@ -323,22 +323,22 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Organization_Key
+    key: User_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Organization_FirstRow
+    first: User_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: Organization_Data!
-  ): Organization_KeyOutput @fdc_generated(from: "Organization", purpose: UPDATE_SINGLE)
+    data: User_Data!
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `ProgressUpdate` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ProgressUpdate` or `null` if not found.
+  ✨ Update a single `UserList` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserList` or `null` if not found.
   """
-  progressUpdate_update(
+  userList_update(
     """
     The unique ID of the object.
     """
@@ -347,26 +347,26 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ProgressUpdate_Key
+    key: UserList_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ProgressUpdate_FirstRow
+    first: UserList_FirstRow
 
     """
     Data object containing fields to be updated.
     """
-    data: ProgressUpdate_Data!
-  ): ProgressUpdate_KeyOutput @fdc_generated(from: "ProgressUpdate", purpose: UPDATE_SINGLE)
+    data: UserList_Data!
+  ): UserList_KeyOutput @fdc_generated(from: "UserList", purpose: UPDATE_SINGLE)
   """
-  ✨ Update `Document` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `Business` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  document_updateMany(
+  business_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: Document_Filter
+    where: Business_Filter
 
     """
     Set to true to update all rows.
@@ -376,16 +376,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: Document_Data!
-  ): Int! @fdc_generated(from: "Document", purpose: UPDATE_MULTIPLE)
+    data: Business_Data!
+  ): Int! @fdc_generated(from: "Business", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `ESGCategory` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `EsgDetail` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  eSGCategory_updateMany(
+  esgDetail_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: ESGCategory_Filter
+    where: EsgDetail_Filter
 
     """
     Set to true to update all rows.
@@ -395,16 +395,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: ESGCategory_Data!
-  ): Int! @fdc_generated(from: "ESGCategory", purpose: UPDATE_MULTIPLE)
+    data: EsgDetail_Data!
+  ): Int! @fdc_generated(from: "EsgDetail", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `Initiative` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `ListBusiness` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  initiative_updateMany(
+  listBusiness_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: Initiative_Filter
+    where: ListBusiness_Filter
 
     """
     Set to true to update all rows.
@@ -414,16 +414,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: Initiative_Data!
-  ): Int! @fdc_generated(from: "Initiative", purpose: UPDATE_MULTIPLE)
+    data: ListBusiness_Data!
+  ): Int! @fdc_generated(from: "ListBusiness", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `KPI` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `Suggestion` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  kPI_updateMany(
+  suggestion_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: KPI_Filter
+    where: Suggestion_Filter
 
     """
     Set to true to update all rows.
@@ -433,16 +433,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: KPI_Data!
-  ): Int! @fdc_generated(from: "KPI", purpose: UPDATE_MULTIPLE)
+    data: Suggestion_Data!
+  ): Int! @fdc_generated(from: "Suggestion", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `Organization` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  organization_updateMany(
+  user_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: Organization_Filter
+    where: User_Filter
 
     """
     Set to true to update all rows.
@@ -452,16 +452,16 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: Organization_Data!
-  ): Int! @fdc_generated(from: "Organization", purpose: UPDATE_MULTIPLE)
+    data: User_Data!
+  ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Update `ProgressUpdate` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  ✨ Update `UserList` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
-  progressUpdate_updateMany(
+  userList_updateMany(
     """
     Filter condition to specify which rows to update.
     """
-    where: ProgressUpdate_Filter
+    where: UserList_Filter
 
     """
     Set to true to update all rows.
@@ -471,12 +471,12 @@ extend type Mutation {
     """
     Data object containing fields to update.
     """
-    data: ProgressUpdate_Data!
-  ): Int! @fdc_generated(from: "ProgressUpdate", purpose: UPDATE_MULTIPLE)
+    data: UserList_Data!
+  ): Int! @fdc_generated(from: "UserList", purpose: UPDATE_MULTIPLE)
   """
-  ✨ Delete a single `Document` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `Business` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  document_delete(
+  business_delete(
     """
     The unique ID of the object.
     """
@@ -485,17 +485,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Document_Key
+    key: Business_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Document_FirstRow
-  ): Document_KeyOutput @fdc_generated(from: "Document", purpose: DELETE_SINGLE)
+    first: Business_FirstRow
+  ): Business_KeyOutput @fdc_generated(from: "Business", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `ESGCategory` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `EsgDetail` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  eSGCategory_delete(
+  esgDetail_delete(
     """
     The unique ID of the object.
     """
@@ -504,17 +504,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ESGCategory_Key
+    key: EsgDetail_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ESGCategory_FirstRow
-  ): ESGCategory_KeyOutput @fdc_generated(from: "ESGCategory", purpose: DELETE_SINGLE)
+    first: EsgDetail_FirstRow
+  ): EsgDetail_KeyOutput @fdc_generated(from: "EsgDetail", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `Initiative` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `ListBusiness` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  initiative_delete(
+  listBusiness_delete(
     """
     The unique ID of the object.
     """
@@ -523,17 +523,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Initiative_Key
+    key: ListBusiness_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Initiative_FirstRow
-  ): Initiative_KeyOutput @fdc_generated(from: "Initiative", purpose: DELETE_SINGLE)
+    first: ListBusiness_FirstRow
+  ): ListBusiness_KeyOutput @fdc_generated(from: "ListBusiness", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `KPI` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `Suggestion` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  kPI_delete(
+  suggestion_delete(
     """
     The unique ID of the object.
     """
@@ -542,17 +542,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: KPI_Key
+    key: Suggestion_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: KPI_FirstRow
-  ): KPI_KeyOutput @fdc_generated(from: "KPI", purpose: DELETE_SINGLE)
+    first: Suggestion_FirstRow
+  ): Suggestion_KeyOutput @fdc_generated(from: "Suggestion", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `Organization` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  organization_delete(
+  user_delete(
     """
     The unique ID of the object.
     """
@@ -561,17 +561,17 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: Organization_Key
+    key: User_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Organization_FirstRow
-  ): Organization_KeyOutput @fdc_generated(from: "Organization", purpose: DELETE_SINGLE)
+    first: User_FirstRow
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
   """
-  ✨ Delete a single `ProgressUpdate` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  ✨ Delete a single `UserList` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
-  progressUpdate_delete(
+  userList_delete(
     """
     The unique ID of the object.
     """
@@ -580,95 +580,95 @@ extend type Mutation {
     """
     The key used to identify the object.
     """
-    key: ProgressUpdate_Key
+    key: UserList_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ProgressUpdate_FirstRow
-  ): ProgressUpdate_KeyOutput @fdc_generated(from: "ProgressUpdate", purpose: DELETE_SINGLE)
+    first: UserList_FirstRow
+  ): UserList_KeyOutput @fdc_generated(from: "UserList", purpose: DELETE_SINGLE)
   """
-  ✨ Delete `Document` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `Business` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  document_deleteMany(
+  business_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: Document_Filter
+    where: Business_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "Document", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "Business", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `ESGCategory` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `EsgDetail` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  eSGCategory_deleteMany(
+  esgDetail_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: ESGCategory_Filter
+    where: EsgDetail_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "ESGCategory", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "EsgDetail", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `Initiative` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `ListBusiness` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  initiative_deleteMany(
+  listBusiness_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: Initiative_Filter
+    where: ListBusiness_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "Initiative", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "ListBusiness", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `KPI` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `Suggestion` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  kPI_deleteMany(
+  suggestion_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: KPI_Filter
+    where: Suggestion_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "KPI", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "Suggestion", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `Organization` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  organization_deleteMany(
+  user_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: Organization_Filter
+    where: User_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "Organization", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
   """
-  ✨ Delete `ProgressUpdate` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  ✨ Delete `UserList` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
-  progressUpdate_deleteMany(
+  userList_deleteMany(
     """
     Filter condition to specify which rows to delete.
     """
-    where: ProgressUpdate_Filter
+    where: UserList_Filter
 
     """
     Set to true to delete all rows.
     """
     all: Boolean = false
-  ): Int! @fdc_generated(from: "ProgressUpdate", purpose: DELETE_MULTIPLE)
+  ): Int! @fdc_generated(from: "UserList", purpose: DELETE_MULTIPLE)
 }

@@ -1,53 +1,52 @@
-type Organization @table {
-  name: String!
+type User @table {
+  displayName: String!
   createdAt: Timestamp!
-  industry: String
-  contactEmail: String
+  email: String
+  photoUrl: String
+}
+
+type Business @table {
+  name: String!
+  industry: String!
+  overallEsgScore: Float!
+  createdAt: Timestamp!
+  description: String
   website: String
+  environmentalScore: Float
+  socialScore: Float
+  governanceScore: Float
 }
 
-type ESGCategory @table {
-  name: String!
+type EsgDetail @table {
+  business: Business
+  category: String!
   description: String!
   createdAt: Timestamp!
+  sourceUrl: String
 }
 
-type Initiative @table {
-  organization: Organization!
-  esgCategory: ESGCategory!
+type UserList @table {
+  user: User
   name: String!
-  description: String!
+  public: Boolean!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  description: String
+}
+
+type ListBusiness @table {
+  userList: UserList
+  business: Business
+  position: Int!
+  note: String
+}
+
+type Suggestion @table {
+  user: User
+  type: String!
   status: String!
-  startDate: Date!
   createdAt: Timestamp!
-  endDate: Date
-  ownerDepartment: String
-}
-
-type KPI @table {
-  initiative: Initiative!
-  name: String!
-  targetValue: Float!
-  unit: String!
-  createdAt: Timestamp!
-  description: String
-  baselineValue: Float
-}
-
-type ProgressUpdate @table {
-  kpi: KPI!
-  initiative: Initiative!
-  actualValue: Float!
-  dateRecorded: Date!
-  createdAt: Timestamp!
-  notes: String
-}
-
-type Document @table {
-  initiative: Initiative!
-  title: String!
-  documentURL: String!
-  createdAt: Timestamp!
-  description: String
-  documentType: String
+  businessName: String
+  details: String
+  targetBusinessId: UUID
 }

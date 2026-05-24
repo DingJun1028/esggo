@@ -1,8 +1,8 @@
 extend type Query {
   """
-  ✨ Look up a single `Document` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `Business` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  document(
+  business(
     """
     The unique ID of the object.
     """
@@ -11,17 +11,17 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: Document_Key
+    key: Business_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Document_FirstRow
-  ): Document @fdc_generated(from: "Document", purpose: QUERY_SINGLE)
+    first: Business_FirstRow
+  ): Business @fdc_generated(from: "Business", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `ESGCategory` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `EsgDetail` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  eSGCategory(
+  esgDetail(
     """
     The unique ID of the object.
     """
@@ -30,17 +30,17 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: ESGCategory_Key
+    key: EsgDetail_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ESGCategory_FirstRow
-  ): ESGCategory @fdc_generated(from: "ESGCategory", purpose: QUERY_SINGLE)
+    first: EsgDetail_FirstRow
+  ): EsgDetail @fdc_generated(from: "EsgDetail", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `Initiative` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `ListBusiness` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  initiative(
+  listBusiness(
     """
     The unique ID of the object.
     """
@@ -49,17 +49,17 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: Initiative_Key
+    key: ListBusiness_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Initiative_FirstRow
-  ): Initiative @fdc_generated(from: "Initiative", purpose: QUERY_SINGLE)
+    first: ListBusiness_FirstRow
+  ): ListBusiness @fdc_generated(from: "ListBusiness", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `KPI` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `Suggestion` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  kPI(
+  suggestion(
     """
     The unique ID of the object.
     """
@@ -68,17 +68,17 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: KPI_Key
+    key: Suggestion_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: KPI_FirstRow
-  ): KPI @fdc_generated(from: "KPI", purpose: QUERY_SINGLE)
+    first: Suggestion_FirstRow
+  ): Suggestion @fdc_generated(from: "Suggestion", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `Organization` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `User` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  organization(
+  user(
     """
     The unique ID of the object.
     """
@@ -87,17 +87,17 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: Organization_Key
+    key: User_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: Organization_FirstRow
-  ): Organization @fdc_generated(from: "Organization", purpose: QUERY_SINGLE)
+    first: User_FirstRow
+  ): User @fdc_generated(from: "User", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `ProgressUpdate` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  ✨ Look up a single `UserList` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
-  progressUpdate(
+  userList(
     """
     The unique ID of the object.
     """
@@ -106,26 +106,26 @@ extend type Query {
     """
     The key used to identify the object.
     """
-    key: ProgressUpdate_Key
+    key: UserList_Key
 
     """
     Fetch the first row based on the filters and ordering.
     """
-    first: ProgressUpdate_FirstRow
-  ): ProgressUpdate @fdc_generated(from: "ProgressUpdate", purpose: QUERY_SINGLE)
+    first: UserList_FirstRow
+  ): UserList @fdc_generated(from: "UserList", purpose: QUERY_SINGLE)
   """
-  ✨ List `Document` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `Business` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  documents(
+  businesses(
     """
     Filter condition to narrow down the query results.
     """
-    where: Document_Filter
+    where: Business_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [Document_Order!]
+    orderBy: [Business_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -145,21 +145,21 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: Document_Having
-  ): [Document!]! @fdc_generated(from: "Document", purpose: QUERY_MULTIPLE)
+    having: Business_Having
+  ): [Business!]! @fdc_generated(from: "Business", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `ESGCategory` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `EsgDetail` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  eSGCategories(
+  esgDetails(
     """
     Filter condition to narrow down the query results.
     """
-    where: ESGCategory_Filter
+    where: EsgDetail_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [ESGCategory_Order!]
+    orderBy: [EsgDetail_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -179,21 +179,21 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: ESGCategory_Having
-  ): [ESGCategory!]! @fdc_generated(from: "ESGCategory", purpose: QUERY_MULTIPLE)
+    having: EsgDetail_Having
+  ): [EsgDetail!]! @fdc_generated(from: "EsgDetail", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `Initiative` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `ListBusiness` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  initiatives(
+  listBusinesses(
     """
     Filter condition to narrow down the query results.
     """
-    where: Initiative_Filter
+    where: ListBusiness_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [Initiative_Order!]
+    orderBy: [ListBusiness_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -213,21 +213,21 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: Initiative_Having
-  ): [Initiative!]! @fdc_generated(from: "Initiative", purpose: QUERY_MULTIPLE)
+    having: ListBusiness_Having
+  ): [ListBusiness!]! @fdc_generated(from: "ListBusiness", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `KPI` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `Suggestion` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  kPIS(
+  suggestions(
     """
     Filter condition to narrow down the query results.
     """
-    where: KPI_Filter
+    where: Suggestion_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [KPI_Order!]
+    orderBy: [Suggestion_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -247,21 +247,21 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: KPI_Having
-  ): [KPI!]! @fdc_generated(from: "KPI", purpose: QUERY_MULTIPLE)
+    having: Suggestion_Having
+  ): [Suggestion!]! @fdc_generated(from: "Suggestion", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `Organization` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `User` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  organizations(
+  users(
     """
     Filter condition to narrow down the query results.
     """
-    where: Organization_Filter
+    where: User_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [Organization_Order!]
+    orderBy: [User_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -281,21 +281,21 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: Organization_Having
-  ): [Organization!]! @fdc_generated(from: "Organization", purpose: QUERY_MULTIPLE)
+    having: User_Having
+  ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `ProgressUpdate` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `UserList` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
-  progressUpdates(
+  userLists(
     """
     Filter condition to narrow down the query results.
     """
-    where: ProgressUpdate_Filter
+    where: UserList_Filter
 
     """
     Order the query results by specific fields.
     """
-    orderBy: [ProgressUpdate_Order!]
+    orderBy: [UserList_Order!]
 
     """
     Number of rows to skip before starting to return the results.
@@ -315,6 +315,6 @@ extend type Query {
     """
     Filter condition to apply to the groups of aggregate queries.
     """
-    having: ProgressUpdate_Having
-  ): [ProgressUpdate!]! @fdc_generated(from: "ProgressUpdate", purpose: QUERY_MULTIPLE)
+    having: UserList_Having
+  ): [UserList!]! @fdc_generated(from: "UserList", purpose: QUERY_MULTIPLE)
 }

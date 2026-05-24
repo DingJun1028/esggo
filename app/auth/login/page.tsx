@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Leaf, ShieldCheck, ArrowRight, Github, AlertCircle } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
@@ -13,18 +13,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [leafClicks, setLeafClicks] = useState(0);
+  const leafClicksRef = useRef(0);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
   const handleLeafClick = () => {
-    const nextCount = leafClicks + 1;
-    if (nextCount >= 3) {
+    leafClicksRef.current += 1;
+    
+    if (leafClicksRef.current >= 3) {
       router.push('/terminal');
-      setLeafClicks(0);
+      leafClicksRef.current = 0;
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     } else {
-      setLeafClicks(nextCount);
       // Reset counter if no click within 2 seconds
-      setTimeout(() => setLeafClicks(0), 2000);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        leafClicksRef.current = 0;
+      }, 2000);
     }
   };
 

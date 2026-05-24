@@ -36,4 +36,10 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-export { app, db, auth, storage };
+import { getDataConnect } from "firebase/data-connect";
+import { connectorConfig } from "@dataconnect/generated";
+
+// Initialize Data Connect
+const dataConnect = getDataConnect(connectorConfig);
+
+export { app, db, auth, storage, dataConnect };

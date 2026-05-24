@@ -127,9 +127,26 @@ export interface EnvironmentalMetric { id?: string; [key: string]: any; }
 export interface RoadmapMilestone { id?: string; [key: string]: any; }
 export interface SocialMetric { id?: string; [key: string]: any; }
 
-export const getGovernanceMetrics = async (ownerId?: any): Promise<any> => [];
-export const getSocialMetrics = async (ownerId?: any): Promise<any> => [];
-export const getEnvironmentalData = async (ownerId?: any): Promise<any> => [];
+export const getGovernanceMetrics = async (ownerId?: any): Promise<any> => {
+  const colRef = collection(db, 'governance_metrics');
+  const q = ownerId ? query(colRef, where('ownerId', '==', ownerId)) : query(colRef);
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getSocialMetrics = async (ownerId?: any): Promise<any> => {
+  const colRef = collection(db, 'social_metrics');
+  const q = ownerId ? query(colRef, where('ownerId', '==', ownerId)) : query(colRef);
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getEnvironmentalData = async (ownerId?: any): Promise<any> => {
+  const colRef = collection(db, 'environmental_metrics');
+  const q = ownerId ? query(colRef, where('ownerId', '==', ownerId)) : query(colRef);
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
 export const upsertEnvironmentalData = async (data: any): Promise<any> => true;
 export const deleteEnvironmentalData = async (id: any): Promise<any> => true;
 export const getTasks = async (ownerId?: any): Promise<any> => [];

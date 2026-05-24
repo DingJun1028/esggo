@@ -1,60 +1,56 @@
-extend type Document {
+extend type Business {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Document", purpose: IMPLICIT_KEY_FIELD)
-  """
-  ✨ Implicit foreign key field based on `Document`.`initiative`. It must match the value of `Initiative`.`id`. See `@ref` for how to customize it.
-  """
-  initiativeId: UUID! @fdc_generated(from: "Document.initiative", purpose: IMPLICIT_REF_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Business", purpose: IMPLICIT_KEY_FIELD)
 }
-extend type ESGCategory {
+extend type EsgDetail {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "ESGCategory", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "EsgDetail", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `EsgDetail`.`business`. It must match the value of `Business`.`id`. See `@ref` for how to customize it.
+  """
+  businessId: UUID @fdc_generated(from: "EsgDetail.business", purpose: IMPLICIT_REF_FIELD)
 }
-extend type Initiative {
+extend type ListBusiness {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Initiative", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "ListBusiness", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `Initiative`.`esgCategory`. It must match the value of `ESGCategory`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `ListBusiness`.`business`. It must match the value of `Business`.`id`. See `@ref` for how to customize it.
   """
-  esgCategoryId: UUID! @fdc_generated(from: "Initiative.esgCategory", purpose: IMPLICIT_REF_FIELD)
+  businessId: UUID @fdc_generated(from: "ListBusiness.business", purpose: IMPLICIT_REF_FIELD)
   """
-  ✨ Implicit foreign key field based on `Initiative`.`organization`. It must match the value of `Organization`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `ListBusiness`.`userList`. It must match the value of `UserList`.`id`. See `@ref` for how to customize it.
   """
-  organizationId: UUID! @fdc_generated(from: "Initiative.organization", purpose: IMPLICIT_REF_FIELD)
+  userListId: UUID @fdc_generated(from: "ListBusiness.userList", purpose: IMPLICIT_REF_FIELD)
 }
-extend type KPI {
+extend type Suggestion {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "KPI", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Suggestion", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `KPI`.`initiative`. It must match the value of `Initiative`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Suggestion`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
   """
-  initiativeId: UUID! @fdc_generated(from: "KPI.initiative", purpose: IMPLICIT_REF_FIELD)
+  userId: UUID @fdc_generated(from: "Suggestion.user", purpose: IMPLICIT_REF_FIELD)
 }
-extend type Organization {
+extend type User {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Organization", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "User", purpose: IMPLICIT_KEY_FIELD)
 }
-extend type ProgressUpdate {
+extend type UserList {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "ProgressUpdate", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "UserList", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `ProgressUpdate`.`initiative`. It must match the value of `Initiative`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `UserList`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
   """
-  initiativeId: UUID! @fdc_generated(from: "ProgressUpdate.initiative", purpose: IMPLICIT_REF_FIELD)
-  """
-  ✨ Implicit foreign key field based on `ProgressUpdate`.`kpi`. It must match the value of `KPI`.`id`. See `@ref` for how to customize it.
-  """
-  kpiId: UUID! @fdc_generated(from: "ProgressUpdate.kpi", purpose: IMPLICIT_REF_FIELD)
+  userId: UUID @fdc_generated(from: "UserList.user", purpose: IMPLICIT_REF_FIELD)
 }
