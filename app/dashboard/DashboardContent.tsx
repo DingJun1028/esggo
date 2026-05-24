@@ -4,10 +4,9 @@ import Link from 'next/link';
 import {
   CheckCircle, Leaf, Shield, Activity,
   FileText, Database, BarChart3, AlertTriangle,
-  Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info, Globe, RefreshCw, Lock, Cpu, X
+  Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info, Globe, RefreshCw, Lock, Cpu, X, HeartPulse, ShieldCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '../../lib/utils';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandTimeline, BrandStatusDot, BrandKpiCard
 } from '../../components/brand';
@@ -22,72 +21,6 @@ export interface DashboardStatsData {
   carbonEmissions: number;
   griCoverage: number;
   auditCount: number;
-}
-
-function AIRiskAlerter() {
-  const [alerts, setAlerts] = useState<any[]>([]);
-
-  const fetchAlerts = useCallback(async () => {
-    const { data } = await supabase.from('ai_alerts').select('*').eq('is_resolved', false).order('created_at', { ascending: false });
-    setAlerts(data || []);
-  }, []);
-
-  useEffect(() => {
-    fetchAlerts();
-    const channel = supabase
-      .channel('ai-alerts-sync')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'ai_alerts' }, () => {
-        fetchAlerts();
-      })
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, [fetchAlerts]);
-
-  const handleResolve = async (id: string) => {
-    await supabase.from('ai_alerts').update({ is_resolved: true, resolved_at: new Date().toISOString() }).eq('id', id);
-    fetchAlerts();
-  };
-
-  if (alerts.length === 0) return null;
-
-  return (
-    <div className="space-y-4 mb-6">
-       {alerts.map(a => (
-         <motion.div key={a.id} initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className={cn(
-           "p-5 rounded-[2rem] border shadow-xl relative overflow-hidden",
-           a.severity === 'critical' ? 'bg-red-50 border-red-100' : 'bg-amber-50 border-amber-100'
-         )}>
-            <div className="flex items-start gap-4 relative z-10">
-               <div className={cn(
-                 "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg",
-                 a.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-white'
-               )}>
-                  <AlertTriangle size={20} />
-               </div>
-               <div className="flex-1 space-y-1">
-                  <div className="flex justify-between items-start">
-                    <p className={cn(
-                      "text-[10px] font-black uppercase tracking-widest",
-                      a.severity === 'critical' ? 'text-red-600' : 'text-amber-600'
-                    )}>AI_Proactive_Warning</p>
-                    <button onClick={() => handleResolve(a.id)} className="text-slate-400 hover:text-slate-600 p-1"><X size={12} /></button>
-                  </div>
-                  <h4 className="text-sm font-black text-slate-800">{a.title}</h4>
-                  <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{a.description}</p>
-                  <div className="mt-3 p-3 bg-white/60 rounded-xl border border-white/80 flex items-center justify-between">
-                     <div className="flex-1">
-                        <p className="text-[9px] font-black text-slate-400 uppercase mb-1">建議修正</p>
-                        <p className="text-[10px] font-bold text-blue-700">{a.suggested_fix}</p>
-                     </div>
-                     <BrandButton variant="primary" size="xs" className="h-7 px-3 rounded-lg text-[9px] font-black" onClick={() => handleResolve(a.id)}>已處理</BrandButton>
-                  </div>
-               </div>
-            </div>
-            <div className="absolute top-0 right-0 p-4 opacity-5"><Zap size={80} /></div>
-         </motion.div>
-       ))}
-    </div>
-  );
 }
 
 function DataAlchemyWidget() {
@@ -156,6 +89,48 @@ function DataAlchemyWidget() {
   );
 }
 
+function HealingGuardian() {
+  const [logs, setLogs] = useState<any[]>([]);
+
+  const fetchLogs = useCallback(async () => {
+    const { data } = await supabase.from('healing_log').select('*').order('created_at', { ascending: false }).limit(3);
+    setLogs(data || []);
+  }, []);
+
+  useEffect(() => {
+    fetchLogs();
+    const channel = supabase.channel('healing-dashboard-sync')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'healing_log' }, () => fetchLogs())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchLogs]);
+
+  if (logs.length === 0) return null;
+
+  return (
+    <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg bg-gradient-to-br from-emerald-50/20 to-white mt-6">
+      <div className="p-6 border-b border-slate-50 flex items-center justify-between bg-emerald-600/5">
+        <div>
+          <h4 className="text-[10px] font-black text-emerald-800 uppercase tracking-[0.2em]">Autonomous Guardian</h4>
+          <p className="text-[9px] font-bold text-emerald-600/60 uppercase tracking-widest mt-0.5">Self-Healing & Agency Engine</p>
+        </div>
+        <HeartPulse size={14} className="text-emerald-500 animate-pulse" />
+      </div>
+      <div className="flex-1 p-4 space-y-2">
+        {logs.map((log, idx) => (
+          <div key={idx} className="flex items-center gap-3 p-3 bg-white/60 rounded-xl border border-emerald-100/50 shadow-sm animate-in slide-in-from-right-4">
+             <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white shrink-0"><ShieldCheck size={16}/></div>
+             <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-black text-emerald-800 uppercase">{log.target_gri} Fixed</p>
+                <p className="text-[9px] text-slate-400 font-bold truncate">{log.action_taken}</p>
+             </div>
+          </div>
+        ))}
+      </div>
+    </BrandCard>
+  );
+}
+
 function GapGuardian() {
   const [gaps, setGaps] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -210,6 +185,72 @@ function GapGuardian() {
   );
 }
 
+function AIRiskAlerter() {
+  const [alerts, setAlerts] = useState<any[]>([]);
+
+  const fetchAlerts = useCallback(async () => {
+    const { data } = await supabase.from('ai_alerts').select('*').eq('is_resolved', false).order('created_at', { ascending: false });
+    setAlerts(data || []);
+  }, []);
+
+  useEffect(() => {
+    fetchAlerts();
+    const channel = supabase
+      .channel('ai-alerts-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'ai_alerts' }, () => {
+        fetchAlerts();
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchAlerts]);
+
+  const handleResolve = async (id: string) => {
+    await supabase.from('ai_alerts').update({ is_resolved: true, resolved_at: new Date().toISOString() }).eq('id', id);
+    fetchAlerts();
+  };
+
+  if (alerts.length === 0) return null;
+
+  return (
+    <div className="space-y-4 mb-6">
+       {alerts.map(a => (
+         <motion.div key={a.id} initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className={cn(
+           "p-5 rounded-[2rem] border shadow-xl relative overflow-hidden",
+           a.severity === 'critical' ? 'bg-red-50 border-red-100' : 'bg-amber-50 border-amber-100'
+         )}>
+            <div className="flex items-start gap-4 relative z-10">
+               <div className={cn(
+                 "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg",
+                 a.severity === 'critical' ? 'bg-red-500 text-white' : 'bg-amber-500 text-white'
+               )}>
+                  <AlertTriangle size={20} />
+               </div>
+               <div className="flex-1 space-y-1">
+                  <div className="flex justify-between items-start">
+                    <p className={cn(
+                      "text-[10px] font-black uppercase tracking-widest",
+                      a.severity === 'critical' ? 'text-red-600' : 'text-amber-600'
+                    )}>AI_Proactive_Warning</p>
+                    <button onClick={() => handleResolve(a.id)} className="text-slate-400 hover:text-slate-600 p-1"><X size={12} /></button>
+                  </div>
+                  <h4 className="text-sm font-black text-slate-800">{a.title}</h4>
+                  <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{a.description}</p>
+                  <div className="mt-3 p-3 bg-white/60 rounded-xl border border-white/80 flex items-center justify-between">
+                     <div className="flex-1">
+                        <p className="text-[9px] font-black text-slate-400 uppercase mb-1">建議修正</p>
+                        <p className="text-[10px] font-bold text-blue-700">{a.suggested_fix}</p>
+                     </div>
+                     <BrandButton variant="primary" size="xs" className="h-7 px-3 rounded-lg text-[9px] font-black" onClick={() => handleResolve(a.id)}>已處理</BrandButton>
+                  </div>
+               </div>
+            </div>
+            <div className="absolute top-0 right-0 p-4 opacity-5"><Zap size={80} /></div>
+         </motion.div>
+       ))}
+    </div>
+  );
+}
+
 function IntegrityTrace() {
   const [memories, setMemories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -227,15 +268,10 @@ function IntegrityTrace() {
 
   useEffect(() => {
     fetchMemories();
-    
-    // Real-time memory sync
     const channel = supabase
       .channel('memory-changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'user_memory' }, () => {
-        fetchMemories();
-      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'user_memory' }, () => fetchMemories())
       .subscribe();
-
     return () => { supabase.removeChannel(channel); };
   }, []);
 
@@ -328,8 +364,6 @@ export default function DashboardContent() {
 
   return (
     <div className="page-container space-y-8 lg:space-y-12 pb-24 fade-in">
-      
-      {/* Page Header */}
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-10">
         <div className="space-y-4 lg:space-y-6">
           <div className="flex flex-wrap items-center gap-3">
@@ -340,69 +374,37 @@ export default function DashboardContent() {
              </div>
           </div>
           <div className="space-y-1">
-            <h1 className="text-3xl lg:text-5xl font-black text-[#003262] tracking-tight leading-none uppercase">
-              永續治理主控台
-            </h1>
-            <p className="text-slate-400 text-base lg:text-lg max-w-2xl font-medium leading-relaxed">
-              基於 Berkeley <span className="text-[#FDB515] font-black">5T 誠信協議</span> 的企業級 ESG 引擎
-            </p>
+            <h1 className="text-3xl lg:text-5xl font-black text-[#003262] tracking-tight leading-none uppercase">永續治理主控台</h1>
+            <p className="text-slate-400 text-base lg:text-lg max-w-2xl font-medium leading-relaxed">基於 Berkeley <span className="text-[#FDB515] font-black">5T 誠信協議</span> 的企業級 ESG 引擎</p>
           </div>
         </div>
         <div className="flex items-stretch gap-3 min-w-[320px]">
           <div className="flex-1 px-5 py-3 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm flex flex-col justify-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Real-time Sync</p>
-            <p className="text-base font-black text-[#003262] font-mono leading-none">
-              {now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
-            </p>
+            <p className="text-base font-black text-[#003262] font-mono leading-none">{now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}</p>
           </div>
           <Link href="/hermes-orchestrator" className="group">
             <BrandButton variant="primary" className="h-full px-8 rounded-2xl shadow-xl shadow-[#003262]/10 transition-all flex items-center gap-2">
-              <Sparkles size={16} className="text-[#FDB515]" /> 
-              <span className="font-black tracking-tight text-sm">啟動 AI</span>
+              <Sparkles size={16} className="text-[#FDB515]" /> <span className="font-black tracking-tight text-sm">啟動 AI</span>
             </BrandButton>
           </Link>
         </div>
       </header>
 
-      {/* KPI Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-        {KPIS.map((k) => (
-          <BrandKpiCard
-            key={k.key}
-            label={k.label}
-            value={k.value}
-            unit={k.unit}
-            trend={k.trend}
-            trendUp={k.trendUp}
-            icon={k.icon}
-            color={k.color}
-            verified={true}
-            className="p-5 lg:p-7 rounded-[1.5rem] lg:rounded-[2rem]"
-          />
-        ))}
+        {KPIS.map((k) => (<BrandKpiCard key={k.key} label={k.label} value={k.value} unit={k.unit} trend={k.trend} trendUp={k.trendUp} icon={k.icon} color={k.color} verified={true} className="p-5 lg:p-7 rounded-[1.5rem] lg:rounded-[2rem]" />))}
       </div>
 
       <div className="grid grid-cols-12 gap-6 lg:gap-10">
         <div className="col-span-12 lg:col-span-8">
           <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden group">
-            <div className="p-6 lg:p-10 border-b border-slate-50 flex items-center justify-between">
-              <BrandCardHeader title="全方位永續軌跡分析" subtitle="SBTi 1.5°C 目標情境" />
-              <BrandBadge variant="outline" size="xs" className="opacity-40">REAL_TIME</BrandBadge>
-            </div>
-            <div className="p-6 lg:p-10">
-              <div className="h-[240px] lg:h-[360px] relative"><EnvironmentalTrajectory title="" /></div>
-              <div className="mt-8 p-5 bg-slate-50/50 rounded-2xl border border-slate-100 flex items-start gap-4 transition-all hover:bg-blue-50/30 group">
-                <div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-white flex-shrink-0 shadow-lg shadow-[#003262]/20"><Info size={20} /></div>
-                <div className="space-y-1">
-                  <p className="text-xs text-[#003262] font-black leading-tight uppercase tracking-widest">AI 洞察</p>
-                  <p className="text-sm text-slate-500 leading-relaxed font-medium">排放軌跡優於預期 <span className="text-emerald-600 font-black">18%</span>，範疇二綠電採購發揮關鍵作用。</p>
-                </div>
-              </div>
-            </div>
+            <div className="p-6 lg:p-10 border-b border-slate-50 flex items-center justify-between"><BrandCardHeader title="全方位永續軌跡分析" subtitle="SBTi 1.5°C 目標情境" /><BrandBadge variant="outline" size="xs" className="opacity-40">REAL_TIME</BrandBadge></div>
+            <div className="p-6 lg:p-10"><div className="h-[240px] lg:h-[360px] relative"><EnvironmentalTrajectory title="" /></div><div className="mt-8 p-5 bg-slate-50/50 rounded-2xl border border-slate-100 flex items-start gap-4 transition-all hover:bg-blue-50/30 group"><div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-white flex-shrink-0 shadow-lg shadow-[#003262]/20"><Info size={20} /></div><div className="space-y-1"><p className="text-xs text-[#003262] font-black leading-tight uppercase tracking-widest">AI 洞察</p><p className="text-sm text-slate-500 leading-relaxed font-medium">排放軌跡優於預期 <span className="text-emerald-600 font-black">18%</span>，範疇二綠電採購發揮關鍵作用。</p></div></div></div>
           </BrandCard>
         </div>
         <div className="col-span-12 lg:col-span-4 space-y-6 lg:space-y-8">
           <AIRiskAlerter />
+          <HealingGuardian />
           <GapGuardian />
           <IntegrityTrace />
           <DataAlchemyWidget />
@@ -410,38 +412,8 @@ export default function DashboardContent() {
       </div>
 
       <section className="space-y-6 lg:space-y-8">
-         <div className="flex items-center gap-4 px-2">
-            <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Quick Access</h3>
-            <div className="flex-1 h-px bg-slate-100" />
-         </div>
-         <div className="grid grid-compact">
-           {QUICK_ACTIONS.map(a => (
-             <Link key={a.href} href={a.href} className="group">
-               <BrandCard padding="md" hover className="text-center group-hover:border-blue-100 border-white bg-white/60 backdrop-blur-sm shadow-sm rounded-[1.5rem] transition-all duration-500 group-hover:-translate-y-1">
-                 <div className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center mb-3 transition-all duration-500 group-hover:scale-110 shadow-sm" style={{ backgroundColor: `${a.color}08`, color: a.color }}>{a.icon}</div>
-                 <p className="text-xs font-black text-[#003262] tracking-tight">{a.label}</p>
-               </BrandCard>
-             </Link>
-           ))}
-         </div>
-      </section>
-
-      <section className="relative group overflow-hidden rounded-[2rem] lg:rounded-[2.5rem]">
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 opacity-50 animate-gradient-x" />
-        <BrandCard padding="none" className="bg-[#003262] border-none shadow-3xl relative overflow-hidden p-8 lg:p-12">
-           <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-[3000ms]"><Bot size={240} color="#fff" strokeWidth={0.5} /></div>
-           <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 relative z-10">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white flex-shrink-0 backdrop-blur-md"><Bot size={32} className="text-blue-300" /></div>
-              <div className="flex-1 space-y-2">
-                 <div className="flex items-center gap-3">
-                    <h3 className="text-2xl font-black text-white tracking-tight">OmniHermes 智慧洞察</h3>
-                    <BrandBadge variant="info" size="xs" className="bg-blue-400/20 text-blue-200 font-mono tracking-widest px-2">LIVE</BrandBadge>
-                 </div>
-                 <p className="text-blue-100/60 text-sm leading-relaxed max-w-3xl font-medium">歐盟委員會更新了 <strong className="text-white font-black uppercase">GRI 305</strong> 指引。建議微調範疇三盤查邏輯以確保合規性。</p>
-              </div>
-              <BrandButton variant="secondary" className="w-full lg:w-auto h-14 px-10 rounded-2xl font-black text-base shadow-2xl" onClick={() => window.location.href='/intelligence'}>查看深度分析</BrandButton>
-           </div>
-        </BrandCard>
+         <div className="flex items-center gap-4 px-2"><h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Quick Access</h3><div className="flex-1 h-px bg-slate-100" /></div>
+         <div className="grid grid-compact">{QUICK_ACTIONS.map(a => (<Link key={a.href} href={a.href} className="group"><BrandCard padding="md" hover className="text-center group-hover:border-blue-100 border-white bg-white/60 backdrop-blur-sm shadow-sm rounded-[1.5rem] transition-all duration-500 group-hover:-translate-y-1"><div className="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center mb-3 transition-all duration-500 group-hover:scale-110 shadow-sm" style={{ backgroundColor: `${a.color}08`, color: a.color }}>{a.icon}</div><p className="text-xs font-black text-[#003262] tracking-tight">{a.label}</p></BrandCard></Link>))}</div>
       </section>
     </div>
   );
