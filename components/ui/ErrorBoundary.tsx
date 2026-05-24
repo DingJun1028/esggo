@@ -10,21 +10,30 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+  retryCount: number;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
-    error: null
+    error: null,
+    retryCount: 0
   };
 
   public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { hasError: true, error, retryCount: 0 };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo);
+    this.setState(prev => ({ retryCount: prev.retryCount + 1 }));
   }
+
+  private handleReset = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = '/';
+  };
 
   public render() {
     if (this.state.hasError) {
@@ -37,7 +46,9 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="space-y-2">
                <h2 className="text-2xl font-black text-[#003262] uppercase tracking-tight">系統異常中斷</h2>
                <p className="text-slate-500 text-sm font-medium leading-relaxed">
-                  偵測到未預期的程式錯誤。這可能是由於組件渲染失敗或數據同步異常。
+                  {this.state.retryCount > 2 
+                    ? "偵測到連續崩潰，建議清除快取並完全重置系統。" 
+                    : "偵測到未預期的程式錯誤。這可能是由於數據同步異常。"}
                </p>
             </div>
             
@@ -47,8 +58,13 @@ export class ErrorBoundary extends Component<Props, State> {
 
             <div className="flex flex-col gap-3">
                <BrandButton variant="primary" fullWidth className="h-14 rounded-2xl font-black shadow-xl" onClick={() => window.location.reload()}>
-                  <RefreshCw size={18} className="mr-2" /> 重新啟動介面
+                  <RefreshCw size={18} className="mr-2" /> 嘗試重新啟動
                </BrandButton>
+               {this.state.retryCount > 2 && (
+                 <BrandButton variant="ghost" className="text-rose-600 hover:bg-rose-50 border-rose-100" fullWidth onClick={this.handleReset}>
+                    <RefreshCw size={18} className="mr-2" /> 清除快取並強制重置
+                 </BrandButton>
+               )}
                <BrandButton variant="ghost" fullWidth onClick={() => window.location.href = '/'}>
                   <Home size={18} className="mr-2" /> 回到安全首頁
                </BrandButton>

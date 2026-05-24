@@ -6,7 +6,7 @@ import {
   LayoutDashboard, FileText, Brain, HeartPulse, BarChart3,
   ShieldAlert, Settings, Bell, Search, Menu, X, ChevronRight, ChevronDown,
   User, Database, ShieldCheck, Activity, Zap, Bot, Layout, 
-  HelpCircle, MessageSquare, Plus, RefreshCw, Lock, Globe, Cpu, MoreVertical
+  HelpCircle, MessageSquare, Plus, RefreshCw, Lock, Globe, Cpu, MoreVertical, AlertCircle
 } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import { BrandBadge, BrandButton, BrandCard } from '../components/brand';
@@ -18,6 +18,34 @@ import { useFcmToken } from '../hooks/useFcmToken';
 import HermesControlCenter from '../components/brand/HermesControlCenter';
 import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
+
+function SystemHealthBanner() {
+  const { systemStatus } = useAuth();
+  if (systemStatus === 'online') return null;
+
+  return (
+    <div className={cn(
+      "flex items-center gap-2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
+      systemStatus === 'offline' ? "bg-red-50 border-red-100 text-red-600" : "bg-amber-50 border-amber-100 text-amber-600"
+    )}>
+       <AlertCircle size={10} className={systemStatus === 'offline' ? "animate-pulse" : ""} />
+       {systemStatus === 'offline' ? "System_Offline" : "Auth_Sync_Degraded"}
+    </div>
+  );
+}
+
+function TenantSwitcher() {
+  const { companyId } = useAuth();
+  return (
+    <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl shadow-sm group cursor-pointer hover:bg-white transition-all">
+       <div className="w-5 h-5 rounded-lg bg-blue-600 flex items-center justify-center text-[10px] font-black text-white shadow-sm">
+          {companyId.charAt(0).toUpperCase()}
+       </div>
+       <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider group-hover:text-blue-600">{companyId}</span>
+       <ChevronDown size={10} className="text-slate-300" />
+    </div>
+  );
+}
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -51,12 +79,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   if (!mounted) return null;
 
-  // 1. Public Routes: Always render without shell
+  // 1. Public Routes
   if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
     return <>{children}</>;
   }
 
-  // 2. Loading State: Professional spinner while verifying session
+  // 2. Loading State
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#F8FAFD]">
@@ -68,7 +96,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // 3. Protected Shell: Only for authenticated users
+  // 3. Protected Shell
   if (isAuthenticated) {
     return (
       <div className="flex h-screen bg-[#F8FAFD] overflow-hidden selection:bg-blue-500/10">
@@ -94,6 +122,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
              </div>
              
              <div className="flex items-center gap-4">
+                <SystemHealthBanner />
                 <TenantSwitcher />
                 <button 
                   onClick={() => setControlCenterOpen(true)}
@@ -130,21 +159,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // 4. Default: User not authenticated on protected route, redirect handles it
   return null;
-}
-
-function TenantSwitcher() {
-  const { companyId } = useAuth();
-  return (
-    <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-xl shadow-sm group cursor-pointer hover:bg-white transition-all">
-       <div className="w-5 h-5 rounded-lg bg-blue-600 flex items-center justify-center text-[10px] font-black text-white shadow-sm">
-          {companyId.charAt(0).toUpperCase()}
-       </div>
-       <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider group-hover:text-blue-600">{companyId}</span>
-       <ChevronDown size={10} className="text-slate-300" />
-    </div>
-  );
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {

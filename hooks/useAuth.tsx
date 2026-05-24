@@ -7,29 +7,40 @@ import { supabase } from '../lib/supabase';
 /**
  * ESG GO | Unified Auth Context
  * Synchronizes Firebase (Legacy/UI) and Supabase (Data/RLS)
+ * Monitors Platform System Health
  */
+
+export type SystemStatus = 'online' | 'degraded' | 'offline';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
   companyId: string;
+  systemStatus: SystemStatus;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   isAuthenticated: false,
-  companyId: 'default'
+  companyId: 'default',
+  systemStatus: 'online'
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [companyId, setCompanyId] = useState('default');
+  const [systemStatus, setSystemStatus] = useState<SystemStatus>('online');
 
   useEffect(() => {
-    // Initial sync from localStorage for immediate RLS/SaaS state
+    // 1. Monitor Browser Network Connectivity
+    const updateOnlineStatus = () => setSystemStatus(navigator.onLine ? 'online' : 'offline');
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // 2. Initial Local Sync
     try {
       const local = localStorage.getItem('omni_user');
       if (local) {
@@ -37,20 +48,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (parsed.company_id) setCompanyId(parsed.company_id);
       }
     } catch (e) {
-      console.warn('[Auth] Failed to parse initial local user');
+      console.warn('[Auth] Local parse fail');
     }
 
+    // 3. Auth Listener
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
       try {
         if (fbUser) {
           setUser(fbUser);
           
-          // Non-blocking Supabase sync
+          // Non-blocking Supabase session check
           supabase.auth.getSession().then(({ data: { session } }) => {
             if (!session) {
-               console.log("[Auth Sync] Supabase session missing, background sync active...");
+               setSystemStatus('degraded'); // Auth sync required but session not found
+            } else {
+               setSystemStatus('online');
             }
-          }).catch(console.error);
+          }).catch(() => setSystemStatus('degraded'));
 
           const local = localStorage.getItem('omni_user');
           if (local) {
@@ -58,7 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setCompanyId(parsed.company_id || 'default');
           }
         } else {
-          // Fallback for Demo Mode
+          // Demo Mode Fallback
           const localUser = localStorage.getItem('omni_user');
           if (isDemoMode && localUser) {
              const parsed = JSON.parse(localUser);
@@ -69,20 +83,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       } catch (err) {
-        console.error('[Auth Critical Error]', err);
+        console.error('[Auth Critical]', err);
       } finally {
         setLoading(false);
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
   }, []);
 
   const value = {
     user,
     loading,
     isAuthenticated: !!user,
-    companyId
+    companyId,
+    systemStatus
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
