@@ -17,6 +17,7 @@ import SelectionHouse, { SelectionCategory } from '../../components/ui/Selection
 import { UniversalPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../hooks/useAuth';
 
 const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
 const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
