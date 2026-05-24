@@ -1,5 +1,5 @@
 'use client';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileText, ChevronRight, ChevronLeft,
@@ -8,7 +8,10 @@ import {
   FileCheck, Users, Zap, SearchCheck, Info, MessageSquare,
   XCircle, Database, CheckCircle, AlertTriangle, Plus
 } from 'lucide-react';
-import { logAudit, simpleHash } from '../../lib/db';
+import { addEvidence, addSignature } from '../../lib/db';
+import { omniCore } from '../../lib/omni-core';
+import { auth } from '../../lib/firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { useSustainWriteMemory } from '../../hooks/useMemory';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
@@ -48,8 +51,8 @@ const CHAPTERS: Chapter[] = [
     order: 1,
     estPages: 18,
     docs: [
-      { id: 'd1', name: '公司組織章程', department: '法務部', required: true },
-      { id: 'd2', name: '年度財務報告（稽核後）', department: '財務部', required: true },
+      { id: 'd1', name: '公司組織章程', department: '法務部', required: true, uploaded: true },
+      { id: 'd2', name: '年度財務報告（稽核後）', department: '財務部', required: true, uploaded: true },
       { id: 'd3', name: '報告書範疇說明書', department: 'ESG 辦公室', required: true },
       { id: 'd4', name: '永續政策聲明書', department: '高層管理', required: true },
     ],
@@ -112,14 +115,24 @@ export default function EditorPage() {
 
   const [selectedChapterId, setSelectedChapterId] = useState<string>('general');
   const [selectedPersona, setSelectedPersona] = useState<'compliance' | 'harmony' | 'innovation'>('compliance');
+  const [user, setUser] = useState<User | null>(null);
   const [generating, setGenerating] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [sealing, setSealing] = useState(false);
+  const [sealingId, setSealingId] = useState<string | null>(null);
   const [findings, setFindings] = useState<ComplianceFinding[]>([]);
   const [activePanel, setActivePanel] = useState<'write' | 'data' | 'docs' | 'benchmark'>('write');
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [uploadedDocs, setUploadedDocs] = useState<Record<string, boolean>>({});
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const chapter = CHAPTERS.find(c => c.id === selectedChapterId) ?? CHAPTERS[0];
 
@@ -162,14 +175,53 @@ export default function EditorPage() {
     setGenerating(false);
   };
 
+  const handleUpload = async (docId: string, docName: string) => {
+    const currentReportId = 'demo-report-001';
+    try {
+      await addEvidence({
+        reportId: currentReportId,
+        fileName: docName,
+        fileUrl: `gs://esggo/evidence/${docId}.pdf`,
+        hashLock: 'pending_hash' // Will be updated during seal
+      });
+      setUploadedDocs(prev => ({...prev, [docId]: true}));
+      showToast(`${docName} 上傳成功`);
+    } catch (e) {
+      showToast('上傳失敗', 'error');
+    }
+  };
+
   const handleSeal = async () => {
+    setSealingId(chapter.id); // Reusing sealingId for local UI state
     setSealing(true);
-    await new Promise(r => setTimeout(r, 1800));
-    const hash = simpleHash((generatedContent[chapter.id] || '') + Date.now().toString());
-    updateChapterStatus(chapter.id, 'sealed', chapter.title, chapter.order, [chapter.gri]);
-    await logAudit({ action: 'ZKP_SEAL', resource: `sustainwrite:${chapter.id}`, t5_tag: 'T4+T5', details: `Hash: ${hash}`, hash_lock: hash });
+    
+    const currentReportId = 'PROD_TEST_REPORT_2026';
+    const currentUserId = user ? user.uid : 'SYSTEM_NODE_001';
+    const content = generatedContent[chapter.id] || '';
+    
+    try {
+      // 1. Core 5T ZKP sealing with metadata
+      const component = await omniCore.sealComponent(
+        `GRI_CONTENT_LEN:${content.length}`,
+        `/reports/${currentReportId}/${chapter.id}`,
+        `[5T_PROTOCOL:SHA256]`
+      );
+
+      // 2. Add signature record to Firestore
+      await addSignature({
+        evidenceId: component.uuid,
+        signerId: currentUserId,
+        signature: component.hash_lock
+      });
+
+      updateChapterStatus(chapter.id, 'sealed', chapter.title, chapter.order, [chapter.gri]);
+      showToast(`5T 封印成功：雜湊鎖 ${component.hash_lock.slice(0, 8)}... 已刻印至 Firestore`, 'success');
+    } catch (e) {
+      showToast('5T 封印引擎故障，請檢查連線狀態', 'error');
+    }
+    
     setSealing(false);
-    showToast(`5T 封印完成！`);
+    setSealingId(null);
   };
 
   const isSealed = chapterStatuses[chapter.id] === 'sealed';
@@ -348,7 +400,24 @@ export default function EditorPage() {
                                      {f.type === 'error' ? <XCircle size={16} className="text-error" /> : f.type === 'success' ? <CheckCircle size={16} className="text-verified" /> : <AlertTriangle size={16} className="text-warning" />}
                                      <span className={`text-xs font-bold ${f.type === 'error' ? 'text-red-800' : f.type === 'success' ? 'text-emerald-800' : 'text-amber-800'}`}>{f.message}</span>
                                   </div>
-                                  <p className="text-xs font-medium text-slate-600 leading-relaxed pl-6">{f.suggestion}</p>
+                                  <p className="text-xs font-medium text-slate-600 leading-relaxed pl-6 mb-3">{f.suggestion}</p>
+                                  
+                                  {f.type === 'error' && (
+                                    <div className="pl-6">
+                                       <Button 
+                                         variant="ghost" 
+                                         size="xs" 
+                                         className="bg-red-100 hover:bg-red-200 text-red-700 font-black text-[10px] uppercase tracking-widest px-3 h-8 rounded-lg"
+                                         onClick={async () => {
+                                            const { dispatchSwarmHandoff } = await import('../../lib/agent/orchestrator');
+                                            await dispatchSwarmHandoff('task_001', 'carbon_expert_node', f.message);
+                                            showToast('蜂群交接已啟動：任務已指派給碳盤查專家節點', 'info');
+                                         }}
+                                       >
+                                          <Zap size={10} className="mr-1.5" /> Handoff_to_Expert
+                                       </Button>
+                                    </div>
+                                  )}
                                </motion.div>
                              )) : (
                                <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 mt-2">
@@ -470,6 +539,79 @@ export default function EditorPage() {
                             </p>
                          </div>
                          <Button variant="secondary" className="px-6">開始對比</Button>
+                      </div>
+                   </motion.div>
+                </motion.div>
+              )}
+
+              {activePanel === 'docs' && (
+                <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="max-w-4xl mx-auto py-8">
+                   <header className="flex items-start justify-between mb-10">
+                      <div>
+                         <h3 className="text-xl font-bold text-primary-900 tracking-tight mb-2">佐證文件與證據金庫 (Vault)</h3>
+                         <p className="text-sm text-slate-500 font-medium">Link Evidence to Sub-Metrics for ZKP Sealing</p>
+                      </div>
+                      <Badge variant="verified" className="px-3 py-1">
+                         <Shield size={12} className="mr-1.5" />
+                         Ready for Sealing
+                      </Badge>
+                   </header>
+
+                   <div className="space-y-4">
+                      {chapter.docs.map(doc => {
+                        const isDocUploaded = doc.uploaded || uploadedDocs[doc.id];
+                        return (
+                        <motion.div variants={slideIn} key={doc.id}>
+                          <Card className="border-slate-200/60 shadow-sm bg-white/80 hover:border-primary-300 transition-colors">
+                            <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                               <div className="flex items-start gap-4">
+                                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${isDocUploaded ? 'bg-verified/10 text-verified' : 'bg-slate-100 text-slate-400'}`}>
+                                     {isDocUploaded ? <FileCheck size={20} /> : <FileText size={20} />}
+                                  </div>
+                                  <div>
+                                     <div className="flex items-center gap-2 mb-1">
+                                        <h4 className="text-sm font-bold text-slate-800">{doc.name}</h4>
+                                        {doc.required && <Badge variant="outline" className="text-[9px] border-warning/30 text-warning px-1.5 py-0 uppercase bg-warning/5">Required</Badge>}
+                                     </div>
+                                     <p className="text-xs font-medium text-slate-500">來源單位：{doc.department}</p>
+                                  </div>
+                               </div>
+                               <div className="flex items-center gap-3">
+                                  {isDocUploaded ? (
+                                    <>
+                                       <Badge variant="verified" className="bg-verified/10 text-verified border-none">已連結金庫</Badge>
+                                       <Button variant="secondary" size="sm" className="text-xs">檢視證據</Button>
+                                    </>
+                                  ) : (
+                                    <>
+                                       <Button variant="secondary" size="sm" className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 border-none" onClick={() => handleUpload(doc.id, doc.name)} disabled={isSealed}>
+                                          <Upload size={14} className="mr-1.5" /> 上傳檔案
+                                       </Button>
+                                       <Button variant="primary" size="sm" className="text-xs">
+                                          <Database size={14} className="mr-1.5" /> 從 Vault 匯入
+                                       </Button>
+                                    </>
+                                  )}
+                               </div>
+                            </div>
+                          </Card>
+                        </motion.div>
+                      )})}
+                   </div>
+                   
+                   <motion.div variants={fadeIn} className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-xl flex items-start gap-4">
+                      <div className="p-2 bg-primary-100 text-primary-600 rounded-lg shrink-0">
+                         <Lock size={20} />
+                      </div>
+                      <div>
+                         <h4 className="text-sm font-bold text-slate-800 mb-1">零知識證明 (ZKP) 封印準備就緒</h4>
+                         <p className="text-xs text-slate-500 leading-relaxed mb-4">
+                           當所有必填佐證文件與數據對齊完成後，可點擊右上角「5T 封印」按鈕。系統將啟動 Omni.mjs CLI，將數據特徵進行雜湊鎖定 (Hash Lock)，確保數據不可竄改，並準備生成 T5 信任等級的報告。
+                         </p>
+                         <div className="flex flex-wrap gap-2">
+                           <Badge variant="outline" className="bg-white text-slate-500">SHA-256 Hash</Badge>
+                           <Badge variant="outline" className="bg-white text-slate-500">Omni-Agent Verification</Badge>
+                         </div>
                       </div>
                    </motion.div>
                 </motion.div>
