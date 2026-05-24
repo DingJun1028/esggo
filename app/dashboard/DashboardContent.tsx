@@ -7,6 +7,7 @@ import {
   Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info, Globe, RefreshCw, Lock, Cpu, X, HeartPulse, ShieldCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../../lib/utils';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandTimeline, BrandStatusDot, BrandKpiCard
 } from '../../components/brand';
