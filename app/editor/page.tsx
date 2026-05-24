@@ -271,13 +271,38 @@ export default function EditorPage() {
                              <Sparkles size={20} className="mr-3 text-[#FDB515] group-hover:rotate-12 transition-transform" /> 啟動 5000 字撰寫
                           </Button>
                           <div className="grid grid-cols-2 gap-3">
-                             <Button variant="ghost" className="h-14 rounded-2xl bg-blue-50/50 text-blue-700 text-[9px] font-black uppercase" onClick={() => handleGenerate(2500)}>
+                             <Button variant="ghost" className="h-14 rounded-2xl bg-blue-50/50 text-blue-700 text-[9px] font-black uppercase" onClick={handleRecursiveExpand}>
                                 <Plus size={14} className="mr-2"/> 遞迴擴充
                              </Button>
                              <Button variant="ghost" className="h-14 rounded-2xl bg-indigo-50/50 text-indigo-700 text-[9px] font-black uppercase" onClick={triggerChartSynthesis}>
                                 <BarChart3 size={14} className="mr-2"/> 圖表生成
                              </Button>
                           </div>
+                          <Button 
+                            variant="primary" 
+                            className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-500/20" 
+                            onClick={async () => {
+                              showToast('正在呼叫 OmniHermes 蜂群...', 'info');
+                              try {
+                                await fetch('/api/agent/tasks', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    actorId: user?.email || 'editor_user',
+                                    taskType: 'compliance_review',
+                                    title: `合規性審查: ${chapter.title}`,
+                                    description: `請對以下內容進行深度合規性審查，確保符合 ${chapter.gri} 準則要求。\n\n內容擷取：${(generatedContent[chapter.id] || '').substring(0, 500)}...`,
+                                    skillKey: 'gri_compliance_checker'
+                                  })
+                                });
+                                showToast('OmniHermes 已接收任務，請至調度中心查看', 'success');
+                              } catch (e) {
+                                showToast('呼叫 OmniHermes 失敗', 'error');
+                              }
+                            }}
+                          >
+                             <Bot size={16} className="mr-2" /> 呼叫 OmniHermes (自動審核)
+                          </Button>
                           <Button variant="glass" className="w-full h-14 border-dashed border-[#003262]/20 text-[#003262] text-[10px] font-black uppercase tracking-widest rounded-2xl" onClick={applyExpertTemplate}>
                              <Database size={16} className="mr-2" /> 零算力專家模板
                           </Button>
