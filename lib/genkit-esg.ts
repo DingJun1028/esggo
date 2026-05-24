@@ -72,7 +72,12 @@ async function callGemini(prompt: string, systemPrompt?: string): Promise<string
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: messages,
-          generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
+          generationConfig: { 
+            temperature: 0.7, 
+            maxOutputTokens: 8192,
+            topP: 0.95,
+            topK: 40
+          },
         }),
       }
     );
@@ -165,14 +170,21 @@ export async function runGRIContentFlow(
     .map(([k, v]) => `- ${k}：${v}`)
     .join('\n');
 
-  const prompt = `請依據以下資訊，撰寫 ${input.wordCount} 字的 ${input.chapter} 章節內容。
-${personaPrompts[input.persona]}
+  const prompt = `你是一位資深的 ESG 撰寫專家。請依據以下資訊，撰寫一份極其詳盡、專業且具備深度洞察的 ${input.chapter} 章節內容。
+目標字數：約 ${input.wordCount} 字（請務必提供足夠的細節與篇幅以達到此深度，不要縮減內容）。
+撰寫風格：${personaPrompts[input.persona]}
 
 已填報指標數據：
 ${metricsStr}
 
+撰寫要求：
+1. 嚴格遵循 GRI 2021 揭露要求與結構。
+2. 包含管理方針 (Management Approach)、績效分析、具體目標設定與未來展望。
+3. 若數據充足，請進行深度趨勢分析，並確保數值與背景描述一致。
+4. 內容需具備強大的邏輯性，使用業界公認的專業術語。
+
 輸出格式（JSON）：
-{"content":"完整章節文字","griIndicators":[],"keyPoints":[],"evidenceRequired":[]}`;
+{"content":"[在此填入完整、連續且長篇的章節文字，確保內容豐富度符合 5000 字左右的專家水準]","griIndicators":[],"keyPoints":[],"evidenceRequired":[]}`;
 
   const rawResponse = await callGemini(prompt);
 
