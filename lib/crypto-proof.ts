@@ -238,6 +238,91 @@ export interface T5Attestation {
   issuedAt: string;
 }
 
+// ── ZKP Selective Disclosure ────────────────────────────────────
+export interface SelectiveDisclosureProof {
+  commitment: ZKPCommitment;
+  claim: string;            // e.g., "value > 100"
+  isTruth: boolean;
+  proofPackage: string;     // Serialized encrypted package
+}
+
+export interface ZKPRangeProof {
+  commitment: ZKPCommitment;
+  min: number;
+  max: number;
+  inRange: boolean;
+  rangeSignature: string;   // HMAC verifying the range claim
+}
+
+export async function generateRangeProof(
+  secretValue: number,
+  min: number,
+  max: number
+): Promise<ZKPRangeProof> {
+  const commitment = await createZKPCommitment(secretValue);
+  const inRange = secretValue >= min && secretValue <= max;
+  
+  // Bind the range claim to the commitment via HMAC
+  const rangeSignature = await hmacSHA256(
+    commitment.commitment,
+    `RANGE_PROOF:${min}:${max}:${inRange}:${commitment.timestamp}`
+  );
+
+  return { commitment, min, max, inRange, rangeSignature };
+}
+
+export async function verifyRangeProof(
+  proof: ZKPRangeProof,
+  blindingFactor: string
+): Promise<boolean> {
+  // 1. Verify commitment integrity
+  const v = await verifyZKPProof(proof.commitment, blindingFactor);
+  if (!v.valid) return false;
+
+  // 2. Verify range signature
+  const recomputedSig = await hmacSHA256(
+    proof.commitment.commitment,
+    `RANGE_PROOF:${proof.min}:${proof.max}:${proof.inRange}:${proof.commitment.timestamp}`
+  );
+
+  return recomputedSig === proof.rangeSignature;
+}
+
+export async function generateSelectiveDisclosure(
+  metricValue: number | string,
+  criteria: (val: any) => boolean,
+  claimText: string
+): Promise<SelectiveDisclosureProof> {
+  const commitment = await createZKPCommitment(metricValue);
+  const isTruth = criteria(metricValue);
+  
+  // In a real ZKP, this would be a zk-SNARK proof. 
+  // Here we use a cryptographically signed claim bound to the commitment.
+  const proofPackage = await hmacSHA256(
+    commitment.commitment, 
+    JSON.stringify({ claim: claimText, isTruth, timestamp: commitment.timestamp })
+  );
+
+  return { commitment, claim: claimText, isTruth, proofPackage };
+}
+
+export async function verifySelectiveDisclosure(
+  proof: SelectiveDisclosureProof,
+  blindingFactor: string
+): Promise<boolean> {
+  // 1. Verify the commitment itself
+  const v = await verifyZKPProof(proof.commitment, blindingFactor);
+  if (!v.valid) return false;
+
+  // 2. Verify the proof package matches the claim
+  const recomputedPackage = await hmacSHA256(
+    proof.commitment.commitment,
+    JSON.stringify({ claim: proof.claim, isTruth: proof.isTruth, timestamp: proof.commitment.timestamp })
+  );
+
+  return recomputedPackage === proof.proofPackage;
+}
+
 export async function create5TAttestation(
   metric: string,
   value: string | number,

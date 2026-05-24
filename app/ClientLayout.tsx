@@ -14,8 +14,8 @@ import { CommandPalette } from '../components/ui/CommandPalette';
 import {
   BrandButton, BrandBadge, BrandAvatar, BrandStatusDot, BrandSearchBar, BrandTooltip, BrandCard
 } from '../components/brand';
-import { initAnalytics, auth } from '../lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { initAnalytics, isDemoMode } from '../lib/firebase';
+import { AuthProvider, useAuth } from '../hooks/useAuth';
 import { useFcmToken } from '../hooks/useFcmToken';
 
 interface NavItem { href: string; label: string; sub: string; icon: React.ReactNode; badge?: string; }
@@ -184,26 +184,20 @@ function SidebarInner({ collapsed, currentPath, onNav }: {
 function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, loading, isAuthenticated } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   
   const { token, notificationPermissionStatus, retrieveToken } = useFcmToken();
 
   useEffect(() => {
     setMounted(true);
-    initAnalytics(); // Initialize Firebase Analytics
+    initAnalytics();
     try {
       if (localStorage.getItem('sidebar_collapsed') === 'true') setCollapsed(true);
     } catch {}
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
-    });
-
-    return () => unsubscribe();
   }, []);
 
   useEffect(() => { 
@@ -213,14 +207,14 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   // Auth Guard & Bidirectional Redirect
   useEffect(() => {
-    if (!mounted || isAuthenticated === null) return;
+    if (!mounted || loading) return;
 
     if (isAuthenticated === false && pathname !== '/auth/login' && pathname !== '/terminal') {
       router.replace('/auth/login');
     } else if (isAuthenticated === true && pathname === '/auth/login') {
-      router.replace('/');
+      router.replace('/dashboard');
     }
-  }, [mounted, isAuthenticated, pathname, router]);
+  }, [mounted, isAuthenticated, loading, pathname, router]);
 
   if (!mounted) return null;
 
@@ -230,7 +224,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   }
 
   // If still checking auth or not authenticated, don't show the dashboard shell yet
-  if (isAuthenticated === null || isAuthenticated === false) {
+  if (loading || isAuthenticated === false) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
         <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
@@ -409,7 +403,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <Suspense fallback={null}>
-      <AppContent>{children}</AppContent>
+      <AuthProvider>
+        <AppContent>{children}</AppContent>
+      </AuthProvider>
     </Suspense>
   );
 }

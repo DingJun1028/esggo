@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {
   CheckCircle, Leaf, Shield, Activity,
   FileText, Database, BarChart3, AlertTriangle,
-  Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info, Globe
+  Zap, Target, Code, Sparkles, ArrowUpRight, Bot, Users, Brain, Info, Globe, RefreshCw, Lock, Cpu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -13,12 +13,149 @@ import {
 import { EnvironmentalTrajectory } from '../../components/brand/EnvironmentalTrajectory';
 import { useDashboardStats } from '../../hooks/useDashboard';
 import { useSystemEvolution } from '../../hooks/useSystemEvolution';
+import { omniCore } from '../../lib/omni-core';
+import { supabase } from '../../lib/supabase';
 
 export interface DashboardStatsData {
   complianceRate: number;
   carbonEmissions: number;
   griCoverage: number;
   auditCount: number;
+}
+
+function DataAlchemyWidget() {
+  const [result, setResult] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  const runAlchemy = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('data-alchemy', {
+        body: { action: 'calculate_intensity', params: { year: 2026 } }
+      });
+      if (error) throw error;
+      setResult(data);
+    } catch (e) {
+      console.error('Alchemy failed:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg bg-gradient-to-br from-white/80 to-blue-50/30">
+      <div className="p-6 border-b border-slate-50 flex items-center justify-between bg-blue-600/5">
+        <div>
+          <h4 className="text-[10px] font-black text-blue-800 uppercase tracking-[0.2em]">Data Alchemy Furnace</h4>
+          <p className="text-[9px] font-bold text-blue-400 uppercase tracking-widest mt-0.5">Edge Compute • RLS Identity</p>
+        </div>
+        <Zap size={14} className="text-blue-600 animate-pulse" />
+      </div>
+      <div className="flex-1 p-6 flex flex-col justify-center items-center text-center space-y-4">
+        {result ? (
+          <div className="space-y-3 animate-in zoom-in-95 duration-500">
+            <div className="text-3xl font-black text-[#003262] font-mono">
+              {result.total_emissions.toLocaleString()}
+              <span className="text-xs ml-1 text-slate-400 font-sans uppercase">tCO₂e</span>
+            </div>
+            <BrandBadge variant="gold" size="xs" dot>ALCHEMY_SUCCESS</BrandBadge>
+            <p className="text-[9px] text-slate-400 font-bold uppercase leading-relaxed">
+              Verified by Edge Alchemy Furnace<br/>
+              Timestamp: {new Date(result.timestamp).toLocaleTimeString()}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+             <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center mx-auto text-blue-600">
+                <Cpu size={24} />
+             </div>
+             <p className="text-[10px] text-slate-500 font-medium px-4">
+                啟動邊緣運算煉金爐，繼承您的 5T 誠信標記進行跨表數據聚合。
+             </p>
+          </div>
+        )}
+        <BrandButton 
+          variant={result ? "ghost" : "primary"} 
+          size="sm" 
+          fullWidth 
+          onClick={runAlchemy} 
+          loading={loading}
+          className="rounded-xl h-10 text-[10px] font-black uppercase tracking-widest"
+        >
+          {result ? "重新煉金" : "啟動數據轉化"}
+        </BrandButton>
+      </div>
+    </BrandCard>
+  );
+}
+
+function IntegrityTrace() {
+  const [memories, setMemories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchMemories = async () => {
+    try {
+      const data = await omniCore.getMemories();
+      setMemories(data.slice(0, 5));
+    } catch (e) {
+      console.error('Failed to fetch memories:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMemories();
+  }, []);
+
+  const handleConsolidate = async () => {
+    setLoading(true);
+    try {
+      await omniCore.consolidateMemories('thought' as any);
+      await fetchMemories();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg">
+      <div className="p-6 border-b border-slate-50 flex items-center justify-between bg-white/40">
+        <div>
+          <h4 className="text-[10px] font-black text-[#003262] uppercase tracking-[0.2em]">5T Integrity Trace</h4>
+          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Cloud Persistence</p>
+        </div>
+        <button 
+          onClick={handleConsolidate} 
+          disabled={loading}
+          className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-all disabled:opacity-50"
+          title="Consolidate Memories (DB RPC)"
+        >
+          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+        </button>
+      </div>
+      <div className="flex-1 p-4 space-y-3 overflow-y-auto no-scrollbar max-h-[280px]">
+        {memories.length > 0 ? memories.map((m, idx) => (
+          <div key={m.id || idx} className="p-3 bg-white/60 rounded-xl border border-white/80 shadow-sm flex flex-col gap-1.5 transition-all hover:bg-white hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <BrandBadge variant={m.consolidated ? "gold" : "info"} size="xs" className="scale-75 origin-left">{m.consolidated ? "CONSOLIDATED" : "TRACE"}</BrandBadge>
+              <span className="text-[8px] font-black text-slate-300 uppercase">{new Date(m.timestamp).toLocaleTimeString()}</span>
+            </div>
+            <p className="text-[10px] font-bold text-[#003262]/80 line-clamp-2 leading-relaxed">{m.content}</p>
+            <div className="flex items-center gap-1 opacity-20">
+              <Lock size={8} />
+              <span className="text-[8px] font-mono truncate max-w-[120px]">{m.hash_lock}</span>
+            </div>
+          </div>
+        )) : (
+          <div className="py-12 text-center">
+             <Activity size={24} className="mx-auto text-slate-200 mb-2 opacity-20" />
+             <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">無近期追蹤紀錄</p>
+          </div>
+        )}
+      </div>
+    </BrandCard>
+  );
 }
 
 const getKpis = (stats: any, loading: boolean) => [
@@ -163,6 +300,8 @@ export default function DashboardContent() {
           </BrandCard>
         </div>
         <div className="col-span-12 lg:col-span-4 space-y-6 lg:space-y-8">
+          <IntegrityTrace />
+          <DataAlchemyWidget />
           <BrandCard padding="lg" className="glass-panel border-none h-full">
             <BrandCardHeader title="模組就緒度" subtitle="GRI 核心進度" />
             <div className="space-y-6 mt-6 lg:mt-8">

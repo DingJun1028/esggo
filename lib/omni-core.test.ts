@@ -62,7 +62,7 @@ describe('OmniCore Integrity Engine', () => {
 
       expect(component.status).toBe('Trustworthy');
       expect(component.hash_lock).toBeDefined();
-      
+
       const isValid = await omniCore.verifyComponent(component);
       expect(isValid).toBe(true);
     });
@@ -108,10 +108,10 @@ describe('OmniCore Integrity Engine', () => {
   describe('Eternal Memory Integrity', () => {
     it('should store memory with a valid hash lock', async () => {
       const memory = await omniCore.storeMemory('Project Alpha initialized', 'SEMANTIC', ['init']);
-      
+
       expect(memory.hash_lock).toBeDefined();
       expect(memory.consolidated).toBe(false);
-      
+
       const memories = omniCore.getMemories();
       expect(memories).toContainEqual(memory);
     });
@@ -121,12 +121,12 @@ describe('OmniCore Integrity Engine', () => {
       await omniCore.storeMemory('Event 2', 'EPISODIC', ['tag2']);
 
       const consolidated = await omniCore.consolidateMemories('EPISODIC');
-      
+
       expect(consolidated).not.toBeNull();
       expect(consolidated?.tags).toContain('consolidated');
       expect(consolidated?.content).toContain('Consolidated Summary of 2 EPISODIC records');
 
-      const allMemories = omniCore.getMemories();
+      const allMemories = await omniCore.getMemories();
       const originals = allMemories.filter(m => m.content === 'Event 1' || m.content === 'Event 2');
       originals.forEach(m => {
         expect(m.consolidated).toBe(true);
@@ -134,3 +134,5 @@ describe('OmniCore Integrity Engine', () => {
     });
   });
 });
+
+
