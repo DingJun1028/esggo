@@ -80,3 +80,25 @@ export async function scanEvidenceWithVision(fileId: string, fileType: string): 
     gapAnalysis: "數據與報表系統中的 GRI 302-1 指標吻合，建議作為範疇二排放佐證。"
   };
 }
+
+/**
+ * [Phase 4] 智慧指標提取 (Smart Metric Extraction)
+ * 將非結構化憑證轉化為結構化數據點
+ */
+export async function extractMetricsFromEvidence(fileId: string): Promise<{
+  metrics: Array<{ key: string; value: number | string; unit: string; gri: string }>;
+  confidence: number;
+}> {
+  console.log(`[OmniHermes Alchemy] Extracting metrics from artifact ${fileId}...`);
+  
+  await new Promise(r => setTimeout(r, 1800));
+
+  // In production, this would use multi-modal OCR + LLM analysis
+  return {
+    metrics: [
+      { key: 'electricity_usage', value: 3420, unit: 'kWh', gri: 'GRI 302-1' },
+      { key: 'water_consumption', value: 125, unit: 'm3', gri: 'GRI 303-3' }
+    ],
+    confidence: 0.98
+  };
+}
