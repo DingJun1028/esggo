@@ -17,6 +17,7 @@ import { SaaSProvider, useSaaS } from '../hooks/useSaaS';
 import { useFcmToken } from '../hooks/useFcmToken';
 import HermesControlCenter from '../components/brand/HermesControlCenter';
 import { AnimatePresence, motion } from 'framer-motion';
+import ErrorBoundary from '../components/ui/ErrorBoundary';
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -175,13 +176,20 @@ function SaaSStatusWidget() {
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => { setIsClient(true); }, []);
+
+  if (!isClient) return null;
+
   return (
     <Suspense fallback={null}>
-      <AuthProvider>
-        <SaaSProvider>
-          <AppContent>{children}</AppContent>
-        </SaaSProvider>
-      </AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
+          <SaaSProvider>
+            <AppContent>{children}</AppContent>
+          </SaaSProvider>
+        </AuthProvider>
+      </ErrorBoundary>
     </Suspense>
   );
 }
