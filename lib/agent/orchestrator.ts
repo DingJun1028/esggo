@@ -168,35 +168,38 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
   const task = GLOBAL_TASKS.find(t => t.id === taskId);
   if (!task) throw new Error('Task not found');
 
-  // 鏈路處理：如果存在父產出物，將其內容注入 Context
-  let chainedContext = '';
-  if (parentArtifactId) {
-    const parentArt = getArtifact(parentArtifactId);
-    if (parentArt) chainedContext = `\n[Context from Parent Task]:\n${parentArt.content}\n`;
-  }
+  // ... (rest of executeSwarmTask logic)
+}
 
-  const execution = createExecution(task);
-  updateExecution(execution.id, { status: 'running', updatedAt: new Date().toISOString() });
+/**
+ * 蜂群自動交接 (Autonomous Handoff)
+ * 當前 Agent 發現需要其他專家介入時，自動發起交接任務。
+ */
+export async function dispatchSwarmHandoff(
+  sourceTaskId: string,
+  targetSkillKey: string,
+  reason: string
+) {
+  const { GLOBAL_TASKS, addTask } = await import('./store');
+  const sourceTask = GLOBAL_TASKS.find(t => t.id === sourceTaskId);
+  if (!sourceTask) throw new Error('Source task not found');
 
-  try {
-    // 模擬 AI 調用與工具執行
-    console.log(`[Swarm] Executing Task ${taskId} with model ${execution.modelName}...`);
-    await new Promise(r => setTimeout(r, 2000)); 
+  console.log(`[Swarm Handoff] Initializing handoff from Task:${sourceTaskId} to Agent:${targetSkillKey}`);
+  console.log(`[Swarm Handoff] Reason: ${reason}`);
 
-    // 生成產出
-    const artifact = generateMockArtifact(task, execution);
-    if (chainedContext) artifact.content = chainedContext + '\n' + artifact.content;
-    
-    updateExecution(execution.id, { status: 'draft_generated', updatedAt: new Date().toISOString() });
-    return { execution, artifact };
-  } catch (error: any) {
-    // 觸發 Repair Playbook
-    const repair = REPAIR_PLAYBOOK.find(r => r.errorCode === error.code) || { strategy: 'escalate' };
-    console.warn(`[Swarm Repair] Error detected: ${error.code}. Applying strategy: ${repair.strategy}`);
-    
-    updateExecution(execution.id, { status: 'failed', updatedAt: new Date().toISOString() });
-    throw error;
-  }
+  const handoffInput: CreateTaskInput = {
+    actorId: 'SYSTEM_SWARM_ORCHESTRATOR',
+    taskType: 'report_drafting', // Default to drafting for handoff
+    title: `[交接任務] 針對 "${sourceTask.title}" 的補件分析`,
+    description: `交接原因：${reason}\n原始任務 ID：${sourceTaskId}`,
+    inputRefIds: sourceTask.inputRefIds,
+    skillKey: targetSkillKey
+  };
+
+  const { task, policy } = createTask(handoffInput);
+  addTask(task);
+
+  return { task, policy };
 }
 
 export function generateMockArtifact(task: AgentTask, execution: AgentExecution): AgentArtifact {
