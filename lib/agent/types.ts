@@ -6,7 +6,9 @@ export type AgentTaskType =
   | 'task_planning'
   | 'stakeholder_analysis'
   | 'materiality_generation'
-  | 'cbam_validation';
+  | 'cbam_validation'
+  | 'system_ops'
+  | 'ai_ops';
 
 export type AgentExecutionStatus =
   | 'queued'
@@ -29,7 +31,10 @@ export type ArtifactType =
   | 'task_plan_draft'
   | 'survey_analysis_report'
   | 'materiality_matrix_draft'
-  | 'cbam_validation_log';
+  | 'cbam_validation_log'
+  | 'system_config_draft'
+  | 'db_optimization_plan'
+  | 'ai_flow_blueprint';
 
 export type ReviewStatus =
   | 'draft'

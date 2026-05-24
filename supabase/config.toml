@@ -1,4 +1,7 @@
 
+[realtime]
+enabled = true
+
 [functions.send-email-resend]
 enabled = true
 verify_jwt = false

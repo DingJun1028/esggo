@@ -1,11 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '../../lib/utils';
 import {
   Bot, Plus, Play, CheckCircle, XCircle, AlertTriangle,
   Clock, FileText, ShieldCheck, Database, GraduationCap,
   ClipboardList, ChevronRight, Zap, Eye, RefreshCw,
   Info, Shield, Activity, Hash, X, ArrowRight,
-  Users, BarChart3, CheckSquare, Lock,
+  Users, BarChart3, CheckSquare, Lock, Settings, Cpu,
 } from 'lucide-react';
 import type {
   AgentTask, AgentExecution, AgentArtifact,
@@ -26,6 +28,8 @@ const TASK_ICONS: Record<string, React.ReactNode> = {
   stakeholder_analysis:   <Users size={16}/>,
   materiality_generation: <BarChart3 size={16}/>,
   cbam_validation:        <CheckSquare size={16}/>,
+  system_ops:             <Settings size={16}/>,
+  ai_ops:                 <Cpu size={16}/>,
 };
 
 interface ExecutionRecord {
@@ -51,6 +55,7 @@ export default function HermesOrchestratorPage() {
   const [selectedSkill, setSelectedSkill] = useState('gri_report_draft');
   const [loading, setLoading] = useState(false);
   const [executions, setExecutions] = useState<ExecutionRecord[]>([]);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [selected, setSelected] = useState<ExecutionRecord | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [gatewayStatus, setGatewayStatus] = useState<{ status: string; is_mock?: boolean } | null>(null);
@@ -59,14 +64,16 @@ export default function HermesOrchestratorPage() {
   useEffect(() => {
     async function init() {
       try {
-        const [tasksRes, execsRes, artsRes] = await Promise.all([
+        const [tasksRes, execsRes, artsRes, auditRes] = await Promise.all([
           fetch('/api/agent/tasks'),
           fetch('/api/agent/executions'),
           fetch('/api/agent/artifacts'),
+          fetch('/api/audit'),
         ]);
         const tasksData = await tasksRes.json();
         const execsData = await execsRes.json();
         const artsData = await artsRes.json();
+        const auditData = await auditRes.json();
 
         if (tasksData.ok) {
           const merged: ExecutionRecord[] = tasksData.tasks.map((t: AgentTask) => {
@@ -75,6 +82,10 @@ export default function HermesOrchestratorPage() {
             return { task: t, execution, artifact, policy: null };
           });
           setExecutions(merged);
+        }
+
+        if (auditData.ok) {
+          setAuditLogs(auditData.logs);
         }
       } catch (e) {
         console.error('Failed to load initial data', e);
@@ -277,20 +288,45 @@ export default function HermesOrchestratorPage() {
             )}
 
             {activeTab === 'swarm' && (
-               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   {['backlog', 'running', 'review', 'done'].map(lane => (
-                    <div key={lane} className="bg-slate-50/50 rounded-2xl p-3 border border-slate-100 min-h-[300px]">
-                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 text-center">{lane}</p>
-                       <div className="space-y-2">
+                    <div key={lane} className="bg-slate-50/50 rounded-3xl p-4 border border-slate-200/50 min-h-[400px] shadow-inner">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">{lane}</p>
+                       <div className="space-y-3">
                           {executions.filter(r => {
                             if (lane === 'backlog') return !r.execution;
                             if (lane === 'running') return r.execution?.status === 'running';
                             if (lane === 'review') return r.artifact?.reviewStatus === 'awaiting_review';
                             return r.artifact?.reviewStatus === 'promoted';
                           }).map(r => (
-                            <div key={r.task.id} onClick={() => setSelected(r)} className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 cursor-pointer hover:border-blue-400 transition-all text-xs font-bold text-slate-700 truncate">
-                               {r.task.title}
-                            </div>
+                            <motion.div 
+                              layoutId={r.task.id}
+                              key={r.task.id} 
+                              onClick={() => setSelected(r)} 
+                              className={cn(
+                                "bg-white p-4 rounded-2xl shadow-sm border border-slate-100 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all group relative overflow-hidden",
+                                r.task.parentTaskId && "border-l-4 border-l-amber-400"
+                              )}
+                            >
+                               <div className="flex items-center justify-between mb-2">
+                                  <div style={{ color: TASK_TYPE_META[r.task.taskType]?.color }}>
+                                     {TASK_ICONS[r.task.taskType]}
+                                  </div>
+                                  {r.task.parentTaskId && (
+                                    <BrandBadge variant="warning" size="xs" className="scale-75 origin-right">SUB-TASK</BrandBadge>
+                                  )}
+                               </div>
+                               <p className="text-xs font-black text-slate-800 line-clamp-2 leading-tight mb-1">{r.task.title}</p>
+                               {r.task.parentTaskId && (
+                                 <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1">
+                                    <ArrowRight size={8}/> From: {executions.find(p => p.task.id === r.task.parentTaskId)?.task.title.substring(0, 15)}...
+                                 </p>
+                               )}
+                               <div className="mt-3 pt-2 border-t border-slate-50 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <span className="text-[9px] font-mono text-slate-300">ID: {r.task.id.slice(-6)}</span>
+                                  <ChevronRight size={10} className="text-slate-300"/>
+                               </div>
+                            </motion.div>
                           ))}
                        </div>
                     </div>
@@ -298,8 +334,33 @@ export default function HermesOrchestratorPage() {
                </div>
             )}
             
-            {(activeTab === 'registry' || activeTab === 'audit') && (
-              <p className="text-center text-slate-400 py-20 italic font-medium">數據加載中，符合 5T 實證標準...</p>
+            {activeTab === 'registry' && (
+              <div className="animate-in fade-in space-y-4">
+                <BrandTable 
+                  columns={[{ key: 'name', label: '技能名稱' }, { key: 'type', label: '任務類型' }, { key: 'risk', label: '風險等級' }]}
+                  data={SKILL_REGISTRY.map(s => ({
+                    name: <div className="flex flex-col"><span className="font-bold text-slate-700">{s.skillName}</span><span className="text-[10px] text-slate-400">{s.skillKey}</span></div>,
+                    type: <BrandBadge variant="outline" size="xs">{TASK_TYPE_META[s.taskType]?.label || s.taskType}</BrandBadge>,
+                    risk: <BrandBadge variant={s.riskLevel === 'high' ? 'error' : s.riskLevel === 'medium' ? 'warning' : 'success'} size="xs">{s.riskLevel.toUpperCase()}</BrandBadge>
+                  }))}
+                />
+              </div>
+            )}
+
+            {activeTab === 'audit' && (
+              <div className="animate-in fade-in space-y-4">
+                <BrandTable 
+                  columns={[{ key: 'action', label: '操作' }, { key: 'resource', label: '資源' }, { key: 'time', label: '時間' }]}
+                  data={auditLogs.map(l => ({
+                    action: <span className="font-black text-[10px] uppercase text-blue-600">{l.action}</span>,
+                    resource: <span className="text-xs font-bold text-slate-600">{l.resource}</span>,
+                    time: <span className="text-[10px] font-mono text-slate-400">{new Date(l.created_at).toLocaleString()}</span>
+                  }))}
+                />
+                {auditLogs.length === 0 && (
+                  <p className="text-center text-slate-300 py-10 italic text-sm">尚無稽核紀錄</p>
+                )}
+              </div>
             )}
           </div>
         )
