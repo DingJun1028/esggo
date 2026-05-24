@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
-import { BrandBadge } from './index';
+import { BrandBadge } from './brand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
 
