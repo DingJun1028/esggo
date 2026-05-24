@@ -223,14 +223,14 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
           />
         )}
       </AnimatePresence>
-
-      <aside
-        className={cn(
-          `fixed top-0 left-0 h-screen flex flex-col z-50 transition-all duration-500 ease-in-out ${t.sidebar}`,
-          isCollapsed ? 'w-16' : 'w-64',
-          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        )}
-      >
+<aside
+  className={cn(
+    `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-500 ease-in-out ${t.sidebar}`,
+    isCollapsed ? 'w-16' : 'w-64',
+    // Mobile visibility: fixed on mobile, static position on desktop
+    mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+  )}
+>
         {/* Logo */}
         <div className={`flex items-center justify-between px-4 py-4 ${t.logo}`}>
            <div className="flex items-center gap-2.5">
