@@ -1,56 +1,90 @@
-extend type Business {
+extend type Action {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Business", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Action", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Action`.`category`. It must match the value of `Category`.`id`. See `@ref` for how to customize it.
+  """
+  categoryId: UUID! @fdc_generated(from: "Action.category", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Action`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: UUID @fdc_generated(from: "Action.user", purpose: IMPLICIT_REF_FIELD)
 }
-extend type EsgDetail {
+extend type Category {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "EsgDetail", purpose: IMPLICIT_KEY_FIELD)
-  """
-  ✨ Implicit foreign key field based on `EsgDetail`.`business`. It must match the value of `Business`.`id`. See `@ref` for how to customize it.
-  """
-  businessId: UUID @fdc_generated(from: "EsgDetail.business", purpose: IMPLICIT_REF_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Category", purpose: IMPLICIT_KEY_FIELD)
 }
-extend type ListBusiness {
+extend type Challenge {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "ListBusiness", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Challenge", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `ListBusiness`.`business`. It must match the value of `Business`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Challenge`.`creator`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
   """
-  businessId: UUID @fdc_generated(from: "ListBusiness.business", purpose: IMPLICIT_REF_FIELD)
-  """
-  ✨ Implicit foreign key field based on `ListBusiness`.`userList`. It must match the value of `UserList`.`id`. See `@ref` for how to customize it.
-  """
-  userListId: UUID @fdc_generated(from: "ListBusiness.userList", purpose: IMPLICIT_REF_FIELD)
+  creatorId: UUID @fdc_generated(from: "Challenge.creator", purpose: IMPLICIT_REF_FIELD)
 }
-extend type Suggestion {
+extend type ChallengeParticipation {
+  """
+  ✨ Implicit foreign key field based on `ChallengeParticipation`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: UUID! @fdc_generated(from: "ChallengeParticipation.user", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `ChallengeParticipation`.`challenge`. It must match the value of `Challenge`.`id`. See `@ref` for how to customize it.
+  """
+  challengeId: UUID! @fdc_generated(from: "ChallengeParticipation.challenge", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Comment {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Suggestion", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Comment", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `Suggestion`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Comment`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
   """
-  userId: UUID @fdc_generated(from: "Suggestion.user", purpose: IMPLICIT_REF_FIELD)
+  userId: UUID! @fdc_generated(from: "Comment.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type CompanyMetric {
+  """
+  ✨ Implicit foreign key field based on `CompanyMetric`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
+  """
+  companyId: UUID! @fdc_generated(from: "CompanyMetric.company", purpose: IMPLICIT_REF_FIELD)
+}
+extend type CompanyProfile {
+  """
+  ✨ Implicit foreign key field based on `CompanyProfile`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: UUID @fdc_generated(from: "CompanyProfile.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Report {
+  """
+  ✨ Implicit foreign key field based on `Report`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
+  """
+  companyId: UUID! @fdc_generated(from: "Report.company", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ReportSection {
+  """
+  ✨ Implicit foreign key field based on `ReportSection`.`report`. It must match the value of `Report`.`id`. See `@ref` for how to customize it.
+  """
+  reportId: UUID! @fdc_generated(from: "ReportSection.report", purpose: IMPLICIT_REF_FIELD)
+}
+extend type SocialConnection {
+  """
+  ✨ Implicit foreign key field based on `SocialConnection`.`follower`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  followerId: UUID! @fdc_generated(from: "SocialConnection.follower", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `SocialConnection`.`followed`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  followedId: UUID! @fdc_generated(from: "SocialConnection.followed", purpose: IMPLICIT_REF_FIELD)
 }
 extend type User {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
   id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "User", purpose: IMPLICIT_KEY_FIELD)
-}
-extend type UserList {
-  """
-  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
-  """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "UserList", purpose: IMPLICIT_KEY_FIELD)
-  """
-  ✨ Implicit foreign key field based on `UserList`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
-  """
-  userId: UUID @fdc_generated(from: "UserList.user", purpose: IMPLICIT_REF_FIELD)
 }

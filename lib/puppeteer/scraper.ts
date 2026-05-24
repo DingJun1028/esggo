@@ -65,15 +65,15 @@ export const ESG_SCRAPE_TARGETS: ScrapeTarget[] = [
   },
   {
     id: 'twse-esg',
-    name: '台灣證交所 ESG 資訊',
-    url: 'https://esg.twse.com.tw/',
+    name: '台灣企業永續 (CSRone)',
+    url: 'https://csrone.com/news',
     category: '法規動態',
     selectors: {
-      articleContainer: '.news-list li, .announcement-item',
-      title: 'a, .title',
-      summary: '.content, p',
+      articleContainer: '.news-list-item, .article-item, article',
+      title: 'h3, h4, .title',
+      summary: '.desc, .summary, p',
       link: 'a',
-      date: '.date, span',
+      date: '.date, time',
     },
   },
 ];
@@ -99,65 +99,76 @@ export async function scrapeWithFetch(target: ScrapeTarget): Promise<ScrapeResul
     clearTimeout(timeout);
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`HTTP fetch failed with status ${response.status}: ${response.statusText}`);
     }
 
     const html = await response.text();
     const $ = cheerio.load(html);
     const articles: ScrapedArticle[] = [];
 
-    $(target.selectors.articleContainer)
-      .slice(0, 10)
-      .each((_, el) => {
-        const titleEl = $(el).find(target.selectors.title).first();
-        const title = titleEl.text().trim();
-        if (!title || title.length < 5) return;
+    const elements = $(target.selectors.articleContainer).slice(0, 10);
+    
+    if (elements.length === 0) {
+      throw new Error(`Selector mismatch: No elements found for container '${target.selectors.articleContainer}'`);
+    }
 
-        const summaryEl = target.selectors.summary
-          ? $(el).find(target.selectors.summary).first()
-          : null;
-        const summary =
-          summaryEl?.text().trim().slice(0, 200) ||
-          $(el).text().trim().slice(0, 200);
+    elements.each((_, el) => {
+      const titleEl = $(el).find(target.selectors.title).first();
+      const title = titleEl.text().trim();
+      if (!title || title.length < 5) return;
 
-        const linkEl = target.selectors.link
-          ? $(el).find(target.selectors.link).first()
-          : titleEl.closest('a');
-        const href = linkEl.attr('href') || '';
-        const url = href.startsWith('http')
-          ? href
-          : href
-          ? `${new URL(target.url).origin}${href}`
-          : target.url;
+      const summaryEl = target.selectors.summary
+        ? $(el).find(target.selectors.summary).first()
+        : null;
+      const summary =
+        summaryEl?.text().trim().slice(0, 200) ||
+        $(el).text().trim().slice(0, 200);
 
-        const dateEl = target.selectors.date
-          ? $(el).find(target.selectors.date).first()
-          : null;
-        const dateText =
-          dateEl?.attr('datetime') || dateEl?.text().trim() || '';
-        const publishedAt = parseDate(dateText);
+      const linkEl = target.selectors.link
+        ? $(el).find(target.selectors.link).first()
+        : titleEl.closest('a');
+      const href = linkEl.attr('href') || '';
+      const url = href.startsWith('http')
+        ? href
+        : href
+        ? `${new URL(target.url).origin}${href}`
+        : target.url;
 
-        const impactLevel = detectImpactLevel(title + ' ' + summary);
-        const tags = extractTags(title + ' ' + summary);
+      const dateEl = target.selectors.date
+        ? $(el).find(target.selectors.date).first()
+        : null;
+      const dateText =
+        dateEl?.attr('datetime') || dateEl?.text().trim() || '';
+      const publishedAt = parseDate(dateText);
 
-        articles.push({
-          title: title.slice(0, 150),
-          summary: summary.slice(0, 300),
-          url,
-          source: target.name,
-          publishedAt,
-          category: target.category,
-          tags,
-          impactLevel,
-        });
+      const impactLevel = detectImpactLevel(title + ' ' + summary);
+      const tags = extractTags(title + ' ' + summary);
+
+      articles.push({
+        title: title.slice(0, 150),
+        summary: summary.slice(0, 300),
+        url,
+        source: target.name,
+        publishedAt,
+        category: target.category,
+        tags,
+        impactLevel,
       });
+    });
+
+    if (articles.length === 0) {
+      throw new Error(`Selector mismatch: Found containers but failed to extract title '${target.selectors.title}'`);
+    }
+
+    // Call Gemini to dynamically enrich impactLevel and tags in one batch request
+    const enrichedArticles = await enrichArticlesWithGemini(articles);
 
     return {
       success: true,
-      articles,
+      articles: enrichedArticles,
       scrapedAt: new Date().toISOString(),
       source: target.name,
-      totalFound: articles.length,
+      totalFound: enrichedArticles.length,
       executionMs: Date.now() - startTime,
     };
   } catch (err: unknown) {
@@ -304,4 +315,72 @@ function extractTags(text: string): string[] {
     .filter(([k]) => lower.includes(k))
     .map(([, v]) => v)
     .slice(0, 5);
+}
+
+// ── Gemini Batch Analysis ───────────────────────────────────────────────────
+
+async function enrichArticlesWithGemini(articles: ScrapedArticle[]): Promise<ScrapedArticle[]> {
+  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+    console.log('[ESG Scraper] Gemini API key not set or is mock key. Fallback to rule-based classification.');
+    return articles;
+  }
+
+  try {
+    const prompt = `你是一位資深的 ESG 與氣候變遷分析專家。請分析以下 ${articles.length} 篇 ESG 新聞，分別判斷其對企業的「影響程度」（impactLevel，限 'high'、'medium'、'low' 之一），並提取 3-5 個最相關的專業永續關鍵標籤（tags，例如：GRI 305, 範疇三, CBAM, 金管會, 碳費, 減碳, 綠色金融, SBTi, 淨零 等）。
+
+待分析文章列表：
+${articles.map((a, i) => `[文章 #${i}]
+標題：${a.title}
+摘要：${a.summary}`).join('\n\n')}
+
+請嚴格以下列 JSON 陣列格式輸出分析結果，不要有任何額外的說明、Markdown 語法或外包圍括號，僅輸出一個符合結構的 JSON 陣列：
+[
+  {"impactLevel": "high" | "medium" | "low", "tags": ["標籤1", "標籤2"]}
+]`;
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { 
+            temperature: 0.2, 
+            maxOutputTokens: 2048,
+            responseMimeType: "application/json"
+          },
+        }),
+      }
+    );
+
+    if (!res.ok) throw new Error(`Gemini HTTP error ${res.status}`);
+    const json = await res.json();
+    const text = json.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Empty response from Gemini');
+
+    const analysis = JSON.parse(text);
+    
+    if (Array.isArray(analysis) && analysis.length === articles.length) {
+      console.log('[ESG Scraper] Gemini batch enrichment successful!');
+      return articles.map((article, idx) => {
+        const item = analysis[idx];
+        const rawImpact = String(item.impactLevel || 'medium').toLowerCase();
+        const impactLevel = (rawImpact === 'high' || rawImpact === 'medium' || rawImpact === 'low')
+          ? rawImpact as 'high' | 'medium' | 'low'
+          : article.impactLevel;
+        const tags = Array.isArray(item.tags) && item.tags.length > 0 
+          ? item.tags.map(t => String(t).trim()).filter(Boolean)
+          : article.tags;
+        return { ...article, impactLevel, tags };
+      });
+    } else {
+      console.warn('[ESG Scraper] Gemini response array length mismatch:', analysis?.length, 'vs', articles.length);
+    }
+  } catch (err) {
+    console.warn('[ESG Scraper] Gemini batch enrichment failed, using local rule-based metadata:', err);
+  }
+
+  return articles;
 }

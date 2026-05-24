@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { 
-  Sparkles, Search, ShieldCheck, MessageSquare, TrendingUp, Cpu, Code, Brain, ChevronRight, Zap, BarChart2, FileText, Globe, Activity, Server, Radio, ArrowUpRight, Database, Bot 
+  Sparkles, Search, ShieldCheck, MessageSquare, TrendingUp, Cpu, Code, Brain, ChevronRight, Zap, BarChart2, FileText, Globe, Activity, Server, Radio, ArrowUpRight, Database, Bot, Leaf 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrandBadge, BrandButton, BrandCard, BrandStatusDot, BrandProgress } from '../../components/brand';

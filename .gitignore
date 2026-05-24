@@ -1,49 +1,20 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
+# Firebase
+.firebase/
+firebase-debug.log*
+.firebaserc
+dataconnect/.dataconnect/
+dataconnect-debug.log*
 
 # Next.js
 .next/
 out/
+next-env.d.ts
 
-# Production
-build/
-dist/
-
-# Environment variables
+# Environment
+.env
 .env.local
 .env.*.local
 
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS
-.DS_Store
-*.pem
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Vercel
-.vercel
-
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# Prisma
-prisma/migrations/
-
-# Supabase local
-.supabase/
-
-# Debug
-*.log.env
-.env
+# Data Connect Generated (Optional: keep if you want type safety in CI without firebase login)
+# src/dataconnect-generated/
+node_modules

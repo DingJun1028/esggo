@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ClientLayout from '../ClientLayout';
 import { Shield, Eye, X, Search, Send, Mail, Hash, RefreshCw, CheckCircle, AlertTriangle, Share2 } from 'lucide-react';
-import { getAuditLogs, AuditRecord } from '../../lib/db';
+import { dcListAuditRecords } from '../../lib/dataconnect-services';
 import { 
   BrandButton, BrandCard, BrandBadge, BrandTable, BrandPageHeader, BrandInput, BrandStatusDot, BrandCardHeader 
 } from '../../components/brand';
@@ -16,16 +16,23 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 export default function AuditLogPage() {
-  const [logs, setLogs] = useState<AuditRecord[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<AuditRecord | null>(null);
-  const [resendingLog, setResendingLog] = useState<AuditRecord | null>(null);
+  const [selected, setSelected] = useState<any | null>(null);
+  const [resendingLog, setResendingLog] = useState<any | null>(null);
   const [resendEmail, setResendEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
 
+  async function loadLogs() {
+    setLoading(true);
+    const data = await dcListAuditRecords();
+    setLogs(data || []);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    getAuditLogs(100).then(d => { setLogs(d); setLoading(false); });
+    loadLogs();
   }, []);
 
   const handleResend = async () => {
@@ -38,7 +45,7 @@ export default function AuditLogPage() {
         body: JSON.stringify({
           transactionId: resendingLog.id,
           email: resendEmail,
-          metadata: { hash: resendingLog.hash_lock, gri: resendingLog.gri_reference }
+          metadata: { hash: resendingLog.contentHash, gri: resendingLog.standard }
         })
       });
       const data = await res.json();
@@ -60,10 +67,9 @@ export default function AuditLogPage() {
     if (!search) return true;
     const term = search.toLowerCase();
     return (
-      (log.action && log.action.toLowerCase().includes(term)) ||
-      (log.resource && log.resource.toLowerCase().includes(term)) ||
-      (log.user_name && log.user_name.toLowerCase().includes(term)) ||
-      (log.hash_lock && log.hash_lock.toLowerCase().includes(term))
+      (log.title && log.title.toLowerCase().includes(term)) ||
+      (log.source && log.source.toLowerCase().includes(term)) ||
+      (log.contentHash && log.contentHash.toLowerCase().includes(term))
     );
   });
 
@@ -77,7 +83,7 @@ export default function AuditLogPage() {
           icon={<Shield size={24} />}
           actions={
             <div className="flex gap-2">
-               <BrandButton variant="ghost" size="sm" onClick={() => { setLoading(true); getAuditLogs(100).then(d => { setLogs(d); setLoading(false); }); }}>
+               <BrandButton variant="ghost" size="sm" onClick={loadLogs}>
                   <RefreshCw size={14} className={loading ? 'animate-spin' : ''}/>
                </BrandButton>
             </div>
@@ -87,9 +93,9 @@ export default function AuditLogPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
            {[
              { label: '今日事件', value: logs.length, icon: <RefreshCw size={18}/> },
-             { label: '5T 封印項', value: logs.filter(l => l.hash_lock).length, icon: <Hash size={18}/> },
-             { label: 'Agent 調度', value: logs.filter(l => l.action?.includes('AGENT')).length, icon: <RefreshCw size={18}/> },
-             { label: '系統健康度', value: 'OPTIMAL', icon: <CheckCircle size={18}/> },
+             { label: '5T 封印項', value: logs.filter(l => l.contentHash).length, icon: <Hash size={18}/> },
+             { label: 'Agent 調度', value: logs.filter(l => l.title?.includes('AGENT')).length, icon: <RefreshCw size={18}/> },
+             { label: '數據誠信度', value: '100% SECURE', icon: <CheckCircle size={18}/> },
            ].map(s => (
              <BrandCard key={s.label} padding="md" className="text-center">
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{s.label}</p>
@@ -100,7 +106,7 @@ export default function AuditLogPage() {
 
         <BrandCard padding="none" className="overflow-hidden shadow-sm">
            <div className="p-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
-              <h3 className="text-sm font-bold text-slate-700">實時審計流 (Real-time Stream)</h3>
+              <h3 className="text-sm font-bold text-slate-700">實時審計流 (PostgreSQL Powered)</h3>
               <div className="relative w-full md:w-64">
                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                  <input 
@@ -112,60 +118,67 @@ export default function AuditLogPage() {
               </div>
            </div>
 
-           <div className="scroll-x-governed">
-             <BrandTable 
-               columns={[
-                 { key: 'action', label: '操作類型' },
-                 { key: 'resource', label: '資源' },
-                 { key: 'user', label: '執行者' },
-                 { key: 't5', label: '5T 標籤' },
-                 { key: 'hash', label: 'Hash Lock' },
-                 { key: 'time', label: '時間' },
-                 { key: 'ops', label: '操作' },
-               ]}
-               data={filtered.map(log => ({
-                 action: (
-                    <div className="flex items-center gap-2">
-                       <div className="w-2 h-2 rounded-full" style={{ background: ACTION_COLORS[log.action!] || '#cbd5e1' }} />
-                       <span className="font-bold text-slate-700 text-xs">{log.action}</span>
-                    </div>
-                 ),
-                 resource: <span className="text-xs text-slate-500 font-medium">{log.resource || '-'}</span>,
-                 user: (
-                    <div className="flex items-center gap-2">
-                       <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400 uppercase">
-                          {log.user_name?.charAt(0) || 'S'}
-                       </div>
-                       <span className="text-xs text-slate-600">{log.user_name || 'System'}</span>
-                    </div>
-                 ),
-                 t5: <BrandBadge variant="outline" size="xs" className="font-mono">{log.t5_tag || 'T1-T5'}</BrandBadge>,
-                 hash: log.hash_lock ? <code className="text-[9px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded">{log.hash_lock.slice(0, 12)}...</code> : <span className="text-[10px] text-slate-300">-</span>,
-                 time: <span className="text-[10px] text-slate-400 font-bold uppercase">{new Date(log.created_at || '').toLocaleTimeString()}</span>,
-                 ops: (
-                    <div className="flex gap-1">
-                       <BrandButton variant="ghost" size="sm" onClick={() => setSelected(log)} className="h-7 w-7 p-0 flex items-center justify-center"><Eye size={12}/></BrandButton>
-                       {log.hash_lock && (
-                         <>
-                           <BrandButton variant="ghost" size="sm" onClick={() => setResendingLog(log)} className="h-7 w-7 p-0 flex items-center justify-center text-blue-600"><Send size={12}/></BrandButton>
-                           <BrandButton 
-                             variant="ghost" 
-                             size="sm" 
-                             onClick={() => {
-                               const url = `${window.location.origin}/audit-verify?uuid=${log.id}`;
-                               navigator.clipboard.writeText(url);
-                               alert('驗證連結已複製！');
-                             }} 
-                             className="h-7 w-7 p-0 flex items-center justify-center text-green-600"
-                           >
-                             <Share2 size={12}/>
-                           </BrandButton>
-                         </>
-                       )}
-                    </div>
-                 )
-               }))}
-             />
+           <div className="scroll-x-governed min-h-[300px]">
+             {loading ? (
+               <div className="flex flex-col items-center justify-center py-20 gap-4">
+                  <RefreshCw size={32} className="text-[#003262]/20 animate-spin" />
+                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Fetching Audit Chain via GraphQL...</p>
+               </div>
+             ) : (
+               <BrandTable 
+                 columns={[
+                   { key: 'action', label: '操作類型' },
+                   { key: 'resource', label: '資源來源' },
+                   { key: 'user', label: '執行節點' },
+                   { key: 't5', label: '標準規範' },
+                   { key: 'hash', label: 'Hash Lock' },
+                   { key: 'time', label: '時間' },
+                   { key: 'ops', label: '操作' },
+                 ]}
+                 data={filtered.map(log => ({
+                   action: (
+                      <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 rounded-full" style={{ background: ACTION_COLORS[log.title!] || '#cbd5e1' }} />
+                         <span className="font-bold text-slate-700 text-xs">{log.title}</span>
+                      </div>
+                   ),
+                   resource: <span className="text-xs text-slate-500 font-medium">{log.source || '-'}</span>,
+                   user: (
+                      <div className="flex items-center gap-2">
+                         <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400 uppercase">
+                            {log.dataType?.charAt(0) || 'N'}
+                         </div>
+                         <span className="text-xs text-slate-600">{log.dataType || 'Node'}</span>
+                      </div>
+                   ),
+                   t5: <BrandBadge variant="outline" size="xs" className="font-mono">{log.standard || '5T_SYNC'}</BrandBadge>,
+                   hash: log.contentHash ? <code className="text-[9px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded">{log.contentHash.slice(0, 12)}...</code> : <span className="text-[10px] text-slate-300">-</span>,
+                   time: <span className="text-[10px] text-slate-400 font-bold uppercase">{new Date(log.createdAt || '').toLocaleTimeString()}</span>,
+                   ops: (
+                      <div className="flex gap-1">
+                         <BrandButton variant="ghost" size="sm" onClick={() => setSelected(log)} className="h-7 w-7 p-0 flex items-center justify-center"><Eye size={12}/></BrandButton>
+                         {log.contentHash && (
+                           <>
+                             <BrandButton variant="ghost" size="sm" onClick={() => setResendingLog(log)} className="h-7 w-7 p-0 flex items-center justify-center text-blue-600"><Send size={12}/></BrandButton>
+                             <BrandButton 
+                               variant="ghost" 
+                               size="sm" 
+                               onClick={() => {
+                                 const url = `${window.location.origin}/audit-verify?uuid=${log.id}`;
+                                 navigator.clipboard.writeText(url);
+                                 alert('驗證連結已複製！');
+                               }} 
+                               className="h-7 w-7 p-0 flex items-center justify-center text-green-600"
+                             >
+                               <Share2 size={12}/>
+                             </BrandButton>
+                           </>
+                         )}
+                      </div>
+                   )
+                 }))}
+               />
+             )}
            </div>
         </BrandCard>
 
@@ -208,14 +221,14 @@ export default function AuditLogPage() {
                 </div>
                 <div className="space-y-3">
                    {[
-                     { label: '操作類型', value: selected.action },
-                     { label: '資源', value: selected.resource || '-' },
-                     { label: '執行者', value: selected.user_name || 'System' },
-                     { label: '部門', value: selected.department || '-' },
-                     { label: '5T 標籤', value: selected.t5_tag || '-' },
-                     { label: '詳情', value: selected.details || '-' },
-                     { label: 'Hash Lock', value: selected.hash_lock || '-' },
-                     { label: '時間', value: new Date(selected.created_at || '').toLocaleString() },
+                     { label: '操作類型', value: selected.title },
+                     { label: '資源來源', value: selected.source || '-' },
+                     { label: '執行節點', value: selected.dataType || 'Node' },
+                     { label: '標準規範', value: selected.standard || '-' },
+                     { label: '描述詳情', value: selected.description || '-' },
+                     { label: 'Hash Lock', value: selected.contentHash || '-' },
+                     { label: 'ZKP 狀態', value: selected.zkpStatus || '-' },
+                     { label: '時間戳記', value: new Date(selected.createdAt || '').toLocaleString() },
                    ].map(row => (
                      <div key={row.label} className="flex justify-between py-2 border-b border-slate-50 text-sm gap-4">
                         <span className="text-slate-400 font-bold text-[11px] uppercase tracking-wider flex-shrink-0">{row.label}</span>

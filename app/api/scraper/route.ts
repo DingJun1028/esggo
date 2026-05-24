@@ -6,6 +6,8 @@ import {
   ESG_SCRAPE_TARGETS,
   ScrapeTarget,
 } from '@/lib/puppeteer/scraper';
+import { upsertScrapedArticle } from '@dataconnect/generated';
+import { dataConnect } from '@/lib/firebase';
 
 export const maxDuration = 30;
 export const dynamic = 'force-dynamic';
@@ -42,12 +44,37 @@ export async function POST(request: NextRequest) {
     switch (action) {
       case 'scrape_all': {
         const results = await scrapeAllTargets(targetIds);
-        const totalArticles = results.reduce(
-          (sum, r) => sum + r.articles.length,
-          0
-        );
+        let totalArticles = 0;
+        let hasErrors = false;
+        
+        for (const r of results) {
+          if (r.success) {
+            for (const article of r.articles) {
+              totalArticles++;
+              if (dataConnect) {
+                try {
+                  await upsertScrapedArticle(dataConnect, {
+                    title: article.title,
+                    summary: article.summary,
+                    url: article.url,
+                    source: article.source,
+                    publishedAt: article.publishedAt,
+                    category: article.category,
+                    tags: article.tags ? article.tags.join(', ') : '',
+                    impactLevel: article.impactLevel,
+                  });
+                } catch (e) {
+                  console.error('Failed to upsert article:', e);
+                }
+              }
+            }
+          } else {
+            hasErrors = true;
+          }
+        }
+        
         return NextResponse.json({
-          success: true,
+          success: !hasErrors || results.some(r => r.success), // success if at least one succeeded
           results,
           summary: {
             totalSources: results.length,
@@ -75,6 +102,33 @@ export async function POST(request: NextRequest) {
           );
         }
         const result = await scrapeWithFetch(target);
+        
+        if (!result.success) {
+          return NextResponse.json(
+            { success: false, error: result.error || 'Scraping failed for unknown reasons', result },
+            { status: 500 }
+          );
+        }
+
+        if (result.success && dataConnect) {
+          for (const article of result.articles) {
+            try {
+              await upsertScrapedArticle(dataConnect, {
+                title: article.title,
+                summary: article.summary,
+                url: article.url,
+                source: article.source,
+                publishedAt: article.publishedAt,
+                category: article.category,
+                tags: article.tags ? article.tags.join(', ') : '',
+                impactLevel: article.impactLevel,
+              });
+            } catch (e) {
+              console.error('Failed to upsert article:', e);
+            }
+          }
+        }
+        
         return NextResponse.json({ success: true, result });
       }
 

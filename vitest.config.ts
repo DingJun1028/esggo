@@ -14,6 +14,6 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     include: ['**/*.test.{ts,tsx}'],
-    exclude: ['node_modules', '.next', 'supabase/functions'],
+    exclude: ['node_modules', '.next', 'supabase/functions', '.firebase', '.kilo'],
   },
 })
