@@ -236,8 +236,5 @@ export default function TemplatesPage() {
         </div>
       )}
     </ClientLayout>
-  );
-}
-    </ClientLayout>
-  );
-}
+    );
+    }
