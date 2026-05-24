@@ -47,20 +47,17 @@ const CHAPTERS: Chapter[] = [
     num: '01',
     title: '組織概況與治理架構',
     titleEn: 'General Disclosures',
-    gri: 'GRI 2-1 ~ 2-5',
+    gri: 'GRI 2-1 ~ 2-30',
     category: 'G',
     order: 1,
     estPages: 18,
     docs: [
       { id: 'd1', name: '公司組織章程', department: '法務部', required: true, uploaded: true },
-      { id: 'd2', name: '年度財務報告（稽核後）', department: '財務部', required: true, uploaded: true },
-      { id: 'd3', name: '報告書範疇說明書', department: 'ESG 辦公室', required: true },
-      { id: 'd4', name: '永續政策聲明書', department: '高層管理', required: true },
+      { id: 'd2', name: '年度財務報告', department: '財務部', required: true, uploaded: true },
     ],
     fields: [
       { id: 'f1', label: '公司名稱', unit: '', gri: 'GRI 2-1', value: '' },
       { id: 'f2', label: '員工人數', unit: '人', gri: 'GRI 2-7', value: '' },
-      { id: 'f3', label: '營業收入', unit: 'NTD', gri: 'GRI 2-5', value: '' },
     ],
     expertTemplates: [
       { persona: 'compliance', text: '本公司依據 GRI 2021《一般揭露》標準...' },
@@ -70,14 +67,67 @@ const CHAPTERS: Chapter[] = [
     benchmark: { company: '台積電', excerpt: '本公司依GRI 2021標準揭露，報告期間涵蓋全球主要營運單位。' },
   },
   {
-    id: 'ghg',
+    id: 'materiality',
+    num: '02',
+    title: '重大性議題分析',
+    titleEn: 'Material Topics',
+    gri: 'GRI 3-1 ~ 3-3',
+    category: 'G',
+    order: 2,
+    estPages: 12,
+    docs: [
+      { id: 'm1', name: '利害關係人問卷結果', department: 'ESG 辦公室', required: true },
+    ],
+    fields: [],
+    expertTemplates: [{ persona: 'compliance', text: '' }],
+    benchmark: { company: '台達電', excerpt: '重大性分析流程包含識別、排序與驗證三個階段。' }
+  },
+  {
+    id: 'economic',
     num: '03',
+    title: '經濟績效與稅務揭露',
+    titleEn: 'Economic Performance',
+    gri: 'GRI 201, 207',
+    category: 'G',
+    order: 3,
+    estPages: 15,
+    docs: [
+      { id: 'e1', name: '年度結算損益表', department: '財務部', required: true },
+    ],
+    fields: [
+      { id: 'f_rev', label: '年度營收', unit: 'NTD', gri: 'GRI 201-1' }
+    ],
+    expertTemplates: [{ persona: 'compliance', text: '' }],
+    benchmark: { company: '國泰金控', excerpt: '創造穩定經濟價值，並確保稅務透明。' }
+  },
+  {
+    id: 'energy',
+    num: '04',
+    title: '能源管理',
+    titleEn: 'Energy Management',
+    gri: 'GRI 302-1 ~ 302-5',
+    category: 'E',
+    order: 4,
+    estPages: 20,
+    docs: [
+      { id: 'en1', name: '台電電費單據彙整', department: '總務部', required: true },
+      { id: 'en2', name: '再生能源憑證 (T-REC)', department: 'ESG 辦公室', required: true }
+    ],
+    fields: [
+      { id: 'f_en1', label: '總能源消耗量', unit: 'GJ', gri: 'GRI 302-1' }
+    ],
+    expertTemplates: [{ persona: 'compliance', text: '' }],
+    benchmark: { company: '聯電', excerpt: '能源使用強度逐年下降，綠電比例持續提升。' }
+  },
+  {
+    id: 'ghg',
+    num: '05',
     title: '溫室氣體盤查與管理',
     titleEn: 'GHG Emissions',
     gri: 'GRI 305-1 ~ 305-5',
     category: 'E',
-    order: 3,
-    estPages: 24,
+    order: 5,
+    estPages: 25,
     docs: [
       { id: 'd10', name: 'ISO 14064-1 清冊', department: '環安衛', required: true },
       { id: 'd11', name: '查證聲明書', department: '環安衛', required: true },
@@ -91,7 +141,61 @@ const CHAPTERS: Chapter[] = [
       { persona: 'harmony', text: '氣候變遷是我們最重大的課題，攜手供應鏈減碳...' },
       { persona: 'innovation', text: '率先導入即時碳排監測系統，實現範疇一逐日追蹤...' },
     ],
-    benchmark: { company: '台達電子', excerpt: '台達電2023年合併排放量顯著下降，已設定科學目標。' },
+    benchmark: { company: '中鋼', excerpt: '設定2050淨零目標，積極佈署低碳製程。' },
+  },
+  {
+    id: 'water',
+    num: '06',
+    title: '水資源與廢棄物管理',
+    titleEn: 'Water & Waste',
+    gri: 'GRI 303, 306',
+    category: 'E',
+    order: 6,
+    estPages: 18,
+    docs: [
+      { id: 'w1', name: '用水帳單及回收率紀錄', department: '環安衛', required: true }
+    ],
+    fields: [
+      { id: 'f_w1', label: '總取水量', unit: 'ML', gri: 'GRI 303-3' }
+    ],
+    expertTemplates: [{ persona: 'compliance', text: '' }],
+    benchmark: { company: '友達光電', excerpt: '實現高度水循環利用，降低廢棄物掩埋率。' }
+  },
+  {
+    id: 'labor',
+    num: '07',
+    title: '勞雇關係與職業安全',
+    titleEn: 'Labor & OHS',
+    gri: 'GRI 401, 403',
+    category: 'S',
+    order: 7,
+    estPages: 22,
+    docs: [
+      { id: 's1', name: '勞安檢查報告', department: '人力資源', required: true }
+    ],
+    fields: [
+      { id: 'f_s1', label: '職災失能傷害頻率', unit: 'FR', gri: 'GRI 403-9' }
+    ],
+    expertTemplates: [{ persona: 'compliance', text: '' }],
+    benchmark: { company: '中華電信', excerpt: '打造幸福職場，守護員工身心健康。' }
+  },
+  {
+    id: 'training',
+    num: '08',
+    title: '訓練教育與多元包容',
+    titleEn: 'Training & Diversity',
+    gri: 'GRI 404, 405',
+    category: 'S',
+    order: 8,
+    estPages: 15,
+    docs: [
+      { id: 't1', name: '教育訓練時數清冊', department: '人力資源', required: true }
+    ],
+    fields: [
+      { id: 'f_t1', label: '平均受訓時數', unit: '小時', gri: 'GRI 404-1' }
+    ],
+    expertTemplates: [{ persona: 'compliance', text: '' }],
+    benchmark: { company: '玉山金控', excerpt: '投資人才培育，落實性別平等與多元升遷。' }
   }
 ];
 
@@ -198,7 +302,7 @@ export default function EditorPage() {
           chapter: chapter.title,
           metrics: fieldValues[chapter.id] || {},
           persona: selectedPersona,
-          wordCount: chapter.estPages * 300 // rough estimate
+          wordCount: 5000 // Expert Level Depth
         })
       });
       
