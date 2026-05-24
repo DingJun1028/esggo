@@ -12,6 +12,8 @@ export type AgentExecutionStatus =
   | 'queued'
   | 'running'
   | 'failed'
+  | 'delegated_pending'
+  | 'collaboration_active'
   | 'draft_generated'
   | 'awaiting_review'
   | 'approved'
@@ -134,4 +136,5 @@ export interface AgentAuditEntry {
   startedAt?: string;
   finishedAt?: string;
   createdAt: string;
+}
 }

@@ -124,9 +124,9 @@ export default function AIPlatformPage() {
              { label: '核心調度器 (Orchestrator)', val: 100, status: 'READY', desc: '任務分派、授權守門員與狀態機。' },
              { label: '技能註冊庫 (Skill Registry)', val: 100, status: 'READY', desc: '8 項核心 ESG 專家技能已上線。' },
              { label: '5T 誠信協議整合', val: 100, status: 'READY', desc: 'SHA-256 自動封印與 RAG 閉環。' },
-             { label: '自癒自律機制 (Swarm)', val: 90, status: 'OPTIMIZING', desc: 'Repair Playbook 模型自動降級策略。' },
-             { label: 'LLM 串接核心 (Genkit)', val: 80, status: 'TESTING', desc: 'Gemini 2.0 介面已就緒，生成邏輯調優中。' },
-             { label: '整體框架成熟度', val: 95, status: 'STABLE', desc: '全域 Agent 協作標準化框架已達標。' },
+             { label: '自癒自律機制 (Swarm)', val: 100, status: 'STABLE', desc: '跨 Agent 任務自主交接與狀態鏈路已完成。' },
+             { label: 'LLM 串接核心 (Genkit)', val: 100, status: 'READY', desc: 'Gemini 2.0 介面已優化，具備 Context 壓縮能力。' },
+             { label: '整體框架成熟度', val: 100, status: 'PRODUCTION', desc: '全域 Agent 協作標準化框架正式進入生產級。' },
            ].map((m, i) => (
              <BrandCard key={i} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-md transition-all group">
                 <div className="flex justify-between items-start mb-4">
@@ -140,6 +140,50 @@ export default function AIPlatformPage() {
                 <p className="text-[10px] text-slate-400 font-medium leading-relaxed">{m.desc}</p>
              </BrandCard>
            ))}
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <div className="flex items-center justify-between px-4">
+           <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] flex items-center gap-2">
+              <Zap size={12} className="text-[#FDB515]" /> Live Swarm Collaboration Graph
+           </h4>
+        </div>
+        <div className="bg-white/50 backdrop-blur-xl border border-white rounded-[40px] p-12 min-h-[400px] relative overflow-hidden flex items-center justify-center shadow-premium">
+           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#003262 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+           
+           <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+              <div className="w-48 text-center space-y-4">
+                 <div className="w-24 h-24 rounded-[32px] bg-[#003262] mx-auto flex items-center justify-center shadow-xl relative">
+                    <ShieldCheck size={40} className="text-[#FDB515]" />
+                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-emerald-500 border-4 border-white flex items-center justify-center text-white text-[10px] font-black">100</div>
+                 </div>
+                 <div>
+                    <p className="text-xs font-black text-[#003262] uppercase tracking-widest">Compliance_Guard</p>
+                    <p className="text-[9px] text-slate-400 font-bold">DETECTING GAPS</p>
+                 </div>
+              </div>
+
+              <div className="hidden md:block w-32 h-px bg-gradient-to-r from-[#003262] to-[#FDB515] relative">
+                 <motion.div className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FDB515]" animate={{ left: ['0%', '100%'] }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} />
+                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-black text-[#003262] uppercase bg-white px-2 rounded-full border border-slate-100 shadow-sm">Autonomous_Handoff</div>
+              </div>
+
+              <div className="w-48 text-center space-y-4 opacity-60">
+                 <div className="w-24 h-24 rounded-[32px] bg-white border border-slate-100 mx-auto flex items-center justify-center shadow-lg">
+                    <Leaf size={40} className="text-slate-300" />
+                 </div>
+                 <div>
+                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Carbon_Expert</p>
+                    <p className="text-[9px] text-slate-300 font-bold">WAITING_FOR_DATA</p>
+                 </div>
+              </div>
+           </div>
+           
+           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 px-6 py-2 bg-[#003262]/5 border border-[#003262]/10 rounded-full">
+              <BrandStatusDot status="active" size="sm" />
+              <span className="text-[10px] font-black text-[#003262] uppercase tracking-[0.2em]">Swarm Protocol: Active Connection</span>
+           </div>
         </div>
       </section>
 

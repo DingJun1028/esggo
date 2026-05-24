@@ -117,17 +117,27 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
 
              {activeTab === 'history' && (
                <div className="space-y-4 fade-in">
-                  <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] ml-2">Agent Traces</h4>
+                  <div className="flex items-center justify-between px-2">
+                    <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Agent Traces</h4>
+                    <span className="text-[9px] font-black text-emerald-500 uppercase">Live_Node</span>
+                  </div>
                   {[
+                    { time: '14:20:45', msg: 'Delegating to Carbon_Expert...', status: 'delegation', detail: 'Reason: GHG data deviation > 15%' },
                     { time: '14:20:05', msg: 'RAG Search Completed (5 sources)', status: 'success' },
                     { time: '14:19:58', msg: 'Querying GRI 302-1 Table...', status: 'running' },
                     { time: '14:19:40', msg: 'Session Initialized', status: 'success' }
                   ].map((trace, i) => (
-                    <div key={i} className="flex gap-4 p-4 rounded-2xl border border-slate-50 bg-slate-50/30">
+                    <div key={i} className={`flex gap-4 p-4 rounded-2xl border transition-all ${trace.status === 'delegation' ? 'bg-amber-50/50 border-amber-100' : 'bg-slate-50/30 border-slate-50'}`}>
                        <span className="text-[10px] font-black font-mono text-slate-300">{trace.time}</span>
                        <div className="flex-1">
                           <p className="text-[11px] font-bold text-slate-600">{trace.msg}</p>
-                          <BrandStatusDot status={trace.status === 'success' ? 'active' : 'warning'} size="sm" label={trace.status.toUpperCase()} />
+                          {trace.status === 'delegation' ? (
+                            <div className="mt-2 p-2 bg-white rounded-lg border border-amber-100 text-[9px] font-medium text-amber-700 italic">
+                               {trace.detail}
+                            </div>
+                          ) : (
+                            <BrandStatusDot status={trace.status === 'success' ? 'active' : 'warning'} size="sm" label={trace.status.toUpperCase()} />
+                          )}
                        </div>
                     </div>
                   ))}
