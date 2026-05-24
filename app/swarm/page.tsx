@@ -132,10 +132,10 @@ export default function SwarmPage() {
                  <div className="p-6">
                     <BrandTimeline 
                       items={[
-                        { title: 'ZKP 密鑰生成', time: '10:24' },
-                        { title: '跨區數據同步', time: '10:15' },
-                        { title: '異常偵測：GRI 305', time: '10:02' },
-                        { title: '節點 Hermes-Alpha 啟動', time: '09:45' },
+                        { id: 'ev1', title: 'ZKP 密鑰生成', time: '10:24' },
+                        { id: 'ev2', title: '跨區數據同步', time: '10:15' },
+                        { id: 'ev3', title: '異常偵測：GRI 305', time: '10:02' },
+                        { id: 'ev4', title: '節點 Hermes-Alpha 啟動', time: '09:45' },
                       ]}
                     />
                  </div>

@@ -134,6 +134,8 @@ export default function EditorPage() {
     }
   };
 
+  const handleRecursiveExpand = () => handleGenerate(5000);
+
   const applyExpertTemplate = () => {
     const templateId = chapter.id === 'general' ? 'general_v1' : 'environmental_v1';
     const template = EXPERT_SACRED_TEMPLATES[templateId] || `# ${chapter.title}\n\n[Zero-Compute Expert Framework]\n\n`;
