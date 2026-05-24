@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileText, ChevronRight, ChevronLeft, Sparkles, Shield, Upload, BarChart3,
   RefreshCw, Save, Lock, FileCheck, Users, Zap, SearchCheck, Info, MessageSquare,
-  XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye
+  XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye, Bot
 } from 'lucide-react';
 import { omniCore } from '../../lib/omni-core';
 import { useAuth } from '../../hooks/useAuth';

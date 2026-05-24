@@ -1,7 +1,7 @@
 'use client';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
-  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle, Users, Sparkles
+  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle, Users, Sparkles, CheckCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandStatusDot, BrandTabs, BrandProgress, BrandTimeline } from '../../components/brand';
@@ -29,7 +29,6 @@ export default function SwarmPage() {
 
   const handleAutoFix = async () => {
     setIsAutonomous(true);
-    // Simulate Autonomous Governance logic
     await new Promise(r => setTimeout(r, 3000));
     setIsAutonomous(false);
     alert('OmniHermes 已完成全域自主治理：已補全 8 處數據缺角、執行 12 筆批次封印。');
@@ -63,7 +62,6 @@ export default function SwarmPage() {
         </header>
 
         <div className="grid grid-cols-12 gap-8">
-           {/* Main Swarm View */}
            <div className="col-span-12 lg:col-span-8 space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {agents.map(a => (
@@ -81,7 +79,7 @@ export default function SwarmPage() {
                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{a.role}</p>
                             </div>
                          </div>
-                         <BrandBadge variant={a.status === 'busy' ? 'warning' : 'outline'} size="xs" dot pulse={a.status === 'busy'}>{a.status.toUpperCase()}</BrandBadge>
+                         <BrandBadge variant={a.status === 'busy' ? 'warning' : 'outline'} size="xs" dot>{a.status.toUpperCase()}</BrandBadge>
                       </div>
 
                       <div className="mt-8 space-y-4 relative z-10">
@@ -94,7 +92,6 @@ export default function SwarmPage() {
                             <Zap size={10} className="text-[#FDB515]"/> {a.lastAction}
                          </div>
                       </div>
-                      
                       <div className="absolute -bottom-6 -right-6 p-8 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-1000">
                          <Cpu size={120} />
                       </div>
@@ -103,7 +100,6 @@ export default function SwarmPage() {
               </div>
            </div>
 
-           {/* Performance Sidebar */}
            <div className="col-span-12 lg:col-span-4 space-y-8">
               <BrandCard padding="lg" className="bg-[#003262] border-none text-white shadow-extreme rounded-[2.5rem] relative overflow-hidden">
                  <div className="relative z-10 space-y-6">
@@ -136,10 +132,10 @@ export default function SwarmPage() {
                  <div className="p-6">
                     <BrandTimeline 
                       items={[
-                        { title: 'ZKP 密鑰生成', time: '10:24', status: 'success' },
-                        { title: '跨區數據同步', time: '10:15', status: 'success' },
-                        { title: '異常偵測：GRI 305', time: '10:02', status: 'error' },
-                        { title: '節點 Hermes-Alpha 啟動', time: '09:45', status: 'success' },
+                        { title: 'ZKP 密鑰生成', time: '10:24' },
+                        { title: '跨區數據同步', time: '10:15' },
+                        { title: '異常偵測：GRI 305', time: '10:02' },
+                        { title: '節點 Hermes-Alpha 啟動', time: '09:45' },
                       ]}
                     />
                  </div>
@@ -147,7 +143,6 @@ export default function SwarmPage() {
            </div>
         </div>
 
-        {/* Global Control Terminal */}
         <section className="space-y-6">
            <div className="flex items-center gap-4 px-2">
               <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Swarm_Console</h3>
@@ -166,9 +161,6 @@ export default function SwarmPage() {
               <div className="p-8 font-mono text-[11px] text-emerald-400/80 leading-relaxed max-h-[300px] overflow-y-auto no-scrollbar">
                  <p>[SYSTEM] Initializing OmniHermes Swarm v3.0.2...</p>
                  <p>[SYSTEM] Mapping all environmental_data to T1 Traceability chain...</p>
-                 <p className="text-white font-bold">[AUTH] Active Identity: {localStorage.getItem('omni_user') ? JSON.parse(localStorage.getItem('omni_user')!).email : 'anonymous'}</p>
-                 <p className="text-blue-400">[TASK] Found 12 unsealed evidence artifacts in Vault.</p>
-                 <p className="text-amber-400">[WARN] GRI 305-1 disclosure gap detected for Fiscal Year 2024.</p>
                  <p>[SYSTEM] All 4 compute nodes are now operational.</p>
                  <p className="animate-pulse">_</p>
               </div>

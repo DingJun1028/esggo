@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
-  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles
+  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles, XCircle
 } from 'lucide-react';
 import { getEvidenceFiles, insertEvidence, sealEvidence, type EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
