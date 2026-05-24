@@ -9,10 +9,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandTimeline, BrandStatusDot, BrandKpiCard
-} from '../components/brand';
-import { EnvironmentalTrajectory } from '../components/brand/EnvironmentalTrajectory';
-import { useDashboardStats } from '../hooks/useDashboard';
-import { useSystemEvolution } from '../hooks/useSystemEvolution';
+} from '../../components/brand';
+import { EnvironmentalTrajectory } from '../../components/brand/EnvironmentalTrajectory';
+import { useDashboardStats } from '../../hooks/useDashboard';
+import { useSystemEvolution } from '../../hooks/useSystemEvolution';
 
 export interface DashboardStatsData {
   complianceRate: number;

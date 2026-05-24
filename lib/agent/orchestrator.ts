@@ -164,11 +164,56 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
  * 執行蜂群任務 (具備自癒與鏈路能力)
  */
 export async function executeSwarmTask(taskId: string, parentArtifactId?: string) {
-  const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, addExecution } = await import('./store');
+  const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, addExecution, updateExecution, getArtifact } = await import('./store');
   const task = GLOBAL_TASKS.find(t => t.id === taskId);
   if (!task) throw new Error('Task not found');
 
-  // ... (rest of executeSwarmTask logic)
+  // 1. ZKP Context 壓縮：只傳遞必要的哈希與元數據，而非完整全文
+  let minimalContext = '';
+  if (parentArtifactId) {
+    const parentArt = getArtifact(parentArtifactId);
+    if (parentArt) {
+      minimalContext = `\n[ZKP_CONTEXT_LINK]\nParent_Artifact_ID: ${parentArt.id}\nContent_Hash: ${parentArt.hashLock || 'T5_VERIFIED'}\nDelegation_Reason: ${task.delegationReason || 'N/A'}\n`;
+    }
+  }
+
+  const execution = createExecution(task);
+  updateExecution(execution.id, { status: 'running', updatedAt: new Date().toISOString() });
+
+  try {
+    // 模擬 AI 調用與算力調度
+    console.log(`[Swarm Execution] Active: Task:${taskId} | Node: BlueCC_Local_Edge`);
+    await new Promise(r => setTimeout(r, 1500)); 
+
+    // 生成產出物
+    const artifact = generateMockArtifact(task, execution);
+    
+    // 將壓縮過的 Context 標記在產出物中
+    if (minimalContext) {
+      artifact.content = `[CHAINED_EXECUTION_LINKED]\n${minimalContext}\n---\n${artifact.content}`;
+    }
+    
+    updateExecution(execution.id, { 
+      status: 'draft_generated', 
+      finishedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString() 
+    });
+
+    // 2. 自動演進評估：產出後檢查是否需要進一步委派
+    const needsMoreExpertise = await evaluateAutonomousDelegation(task.id, artifact.content);
+    if (needsMoreExpertise) {
+       await dispatchSwarmHandoff(task.id, 'legal_review_node', '檢測到合規偏差，需法務節點簽署');
+    }
+
+    return { execution, artifact };
+  } catch (error: any) {
+    // 觸發 Repair Playbook
+    const repair = REPAIR_PLAYBOOK.find(r => r.errorCode === error.code) || { strategy: 'escalate' };
+    console.warn(`[Swarm Repair] Applying strategy: ${repair.strategy} for error ${error.code}`);
+    
+    updateExecution(execution.id, { status: 'failed', errorMessage: error.message });
+    throw error;
+  }
 }
 
 /**
