@@ -6,9 +6,10 @@ import type {
   EternalMemory,
   EternalMemoryType,
 } from '../types/omni-core';
+import { supabase } from './supabase';
 
 // ============================================================
-// 萬能心核引擎 - 5T Logic Gate Implementation
+// 萬能心核引擎 - 5T Logic Gate Implementation (Persistent)
 // ============================================================
 
 async function sha256(text: string): Promise<string> {
@@ -37,13 +38,23 @@ function generateUUID(): string {
 
 export class OmniCore {
   private static instance: OmniCore;
-  private memoryStore: EternalMemory[] = [];
 
   static getInstance(): OmniCore {
     if (!OmniCore.instance) {
       OmniCore.instance = new OmniCore();
     }
     return OmniCore.instance;
+  }
+
+  // Helper to get current user info for multi-tenancy
+  private async getIdentity() {
+    if (typeof window === 'undefined') return { user_id: 'system', company_id: 'default' };
+    const local = localStorage.getItem('omni_user');
+    if (local) {
+      const parsed = JSON.parse(local);
+      return { user_id: parsed.id || 'unknown', company_id: parsed.company_id || 'default' };
+    }
+    return { user_id: 'anonymous', company_id: 'default' };
   }
 
   // 5T Gate Validation
@@ -99,17 +110,37 @@ export class OmniCore {
     return computedHash === component.hash_lock;
   }
 
-  // Store Eternal Memory
+  // Store Eternal Memory (Persistent in Supabase)
   async storeMemory(
     content: string,
     type: EternalMemoryType,
     tags: string[] = []
   ): Promise<EternalMemory> {
+    if (!supabase) throw new Error('Supabase client not initialized');
+    
+    const { user_id, company_id } = await this.getIdentity();
     const id = generateUUID();
     const timestamp = Date.now();
     const hash_lock = await sha256(`${id}:${content}:${timestamp}`);
 
-    const memory: EternalMemory = {
+    const memoryValue = { content, tags, raw: content };
+
+    const { error } = await supabase
+      .from('user_memory')
+      .insert({
+        id,
+        user_id,
+        company_id,
+        memory_type: 'ai_conversation', // Mapping to schema type
+        memory_key: `mem_${timestamp}`,
+        memory_value: memoryValue,
+        context: { tags, consolidated: false },
+        hash_lock,
+      });
+
+    if (error) throw error;
+
+    return {
       id,
       type,
       content,
@@ -118,36 +149,68 @@ export class OmniCore {
       hash_lock,
       consolidated: false,
     };
-
-    this.memoryStore.push(memory);
-    return memory;
   }
 
-  getMemories(): EternalMemory[] {
-    return [...this.memoryStore];
+  async getMemories(): Promise<EternalMemory[]> {
+    if (!supabase) return [];
+    
+    const { user_id, company_id } = await this.getIdentity();
+    const { data, error } = await supabase
+      .from('user_memory')
+      .select('*')
+      .eq('user_id', user_id)
+      .eq('company_id', company_id)
+      .order('created_at', { ascending: false });
+
+    if (error || !data) return [];
+
+    return data.map(m => ({
+      id: m.id,
+      type: 'thought' as any, // Simple mapping
+      content: m.memory_value?.content || '',
+      tags: m.context?.tags || [],
+      timestamp: new Date(m.created_at).getTime(),
+      hash_lock: m.hash_lock,
+      consolidated: m.context?.consolidated || false,
+    }));
   }
 
-  // Consolidate memories (Simulated AI Aggregation)
+  // Consolidate memories (High-Performance DB-Level Aggregation)
   async consolidateMemories(type: EternalMemoryType): Promise<EternalMemory | null> {
-    const targets = this.memoryStore.filter(m => m.type === type && !m.consolidated);
-    
-    if (targets.length < 2) return null;
+    if (!supabase) return null;
 
-    const combinedContent = targets.map(m => m.content).join('\n---\n');
-    const summary = `[Consolidated Summary of ${targets.length} ${type} records]: ${combinedContent.substring(0, 100)}...`;
+    const { user_id, company_id } = await this.getIdentity();
     
-    const consolidatedRecord = await this.storeMemory(
-      summary,
-      type,
-      ['consolidated', ...targets.flatMap(t => t.tags)]
-    );
-
-    // Mark originals as consolidated
-    targets.forEach(t => {
-      t.consolidated = true;
+    // Call the RPC function we deployed in migrations
+    const { data: consolidatedId, error } = await supabase.rpc('consolidate_eternal_memories', {
+      p_user_id: user_id,
+      p_company_id: company_id,
+      p_memory_type: 'ai_conversation'
     });
 
-    return consolidatedRecord;
+    if (error || !consolidatedId) {
+      console.warn('Consolidation failed or not enough records:', error?.message);
+      return null;
+    }
+
+    // Fetch the new record to return it
+    const { data: m } = await supabase
+      .from('user_memory')
+      .select('*')
+      .eq('id', consolidatedId)
+      .single();
+
+    if (!m) return null;
+
+    return {
+      id: m.id,
+      type,
+      content: JSON.stringify(m.memory_value),
+      tags: ['consolidated'],
+      timestamp: new Date(m.created_at).getTime(),
+      hash_lock: m.hash_lock,
+      consolidated: true,
+    };
   }
 
   // Quick hash for display

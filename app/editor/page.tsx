@@ -237,27 +237,27 @@ export default function EditorPage() {
     setSealing(true);
     
     const currentReportId = 'PROD_TEST_REPORT_2026';
-    const currentUserId = user ? user.uid : 'SYSTEM_NODE_001';
     const content = generatedContent[chapter.id] || '';
     
     try {
-      // 1. Core 5T ZKP sealing with metadata
+      // 1. Core 5T ZKP sealing with metadata via persistent OmniCore
       const component = await omniCore.sealComponent(
         `GRI_CONTENT_LEN:${content.length}`,
         `/reports/${currentReportId}/${chapter.id}`,
         `[5T_PROTOCOL:SHA256]`
       );
 
-      // 2. Add signature record to Firestore
-      await addSignature({
-        evidenceId: component.uuid,
-        signerId: currentUserId,
-        signature: component.hash_lock
-      });
+      // 2. Persist the thought/seal in the database via OmniCore
+      await omniCore.storeMemory(
+        `[5T_SEAL] Chapter: ${chapter.title} | Hash: ${component.hash_lock.slice(0, 16)}`,
+        'thought' as any,
+        ['seal', '5t', chapter.id]
+      );
 
       updateChapterStatus(chapter.id, 'sealed', chapter.title, chapter.order, [chapter.gri]);
-      showToast(`5T 封印成功：雜湊鎖 ${component.hash_lock.slice(0, 8)}... 已刻印至 Firestore`, 'success');
+      showToast(`5T 封印成功：雜湊鎖 ${component.hash_lock.slice(0, 8)}... 已刻印至雲端金庫`, 'success');
     } catch (e) {
+      console.error('Seal error:', e);
       showToast('5T 封印引擎故障，請檢查連線狀態', 'error');
     }
     

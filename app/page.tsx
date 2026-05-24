@@ -8,10 +8,36 @@ import { BrandButton, BrandCard, BrandBadge, BrandStatusDot, BrandProgress } fro
 import { AgentStep } from '../lib/agent/v3-shared';
 
 export default function LandingPage() {
+  const router = React.useMemo(() => typeof window !== 'undefined' ? require('next/navigation').useRouter() : null, []);
+  
   // Swarm V3 Showcase state
   const [v3Steps, setV3Steps] = useState<AgentStep[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
   const streamEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    const checkAuth = () => {
+      const { auth, isDemoMode } = require('../lib/firebase');
+      const { onAuthStateChanged } = require('firebase/auth');
+      
+      const unsubscribe = onAuthStateChanged(auth, (user: any) => {
+        if (user) {
+          router?.replace('/dashboard');
+        } else {
+          const localUser = localStorage.getItem('omni_user');
+          if (isDemoMode && localUser) {
+            router?.replace('/dashboard');
+          }
+        }
+      });
+      return unsubscribe;
+    };
+    
+    if (typeof window !== 'undefined') {
+      return checkAuth();
+    }
+  }, [router]);
 
   const startDemo = () => {
     setIsExecuting(true);
@@ -67,7 +93,7 @@ export default function LandingPage() {
              <span className="text-xl font-black tracking-tight text-white">ESG <span className="text-blue-400">GO</span></span>
           </div>
           <div className="flex gap-4">
-            <Link href="/dashboard">
+            <Link href="/auth/login">
               <BrandButton variant="ghost">登入</BrandButton>
             </Link>
             <Link href="/dashboard">

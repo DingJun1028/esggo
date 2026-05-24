@@ -1,12 +1,11 @@
 'use client';
 import React, { useState, useRef } from 'react';
-import { Leaf, ShieldCheck, ArrowRight, Github, AlertCircle } from 'lucide-react';
+import { Leaf, ShieldCheck, ArrowRight, Github, AlertCircle, Zap, Shield, Terminal, Layout, Globe, Key, AlertTriangle } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../../../lib/firebase';
-import { Terminal, Layout, Globe, Key } from 'lucide-react';
+import { auth, isDemoMode } from '../../../lib/firebase';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -39,14 +38,30 @@ export default function LoginPage() {
     setError(null);
     try {
       if (!email || !password) throw new Error('請輸入電子郵件與密碼');
+      
+      if (isDemoMode) {
+        console.log('[Auth] Demo Mode Active. Bypassing Firebase.');
+        // Allow any login in demo mode for dev convenience
+        localStorage.setItem('omni_user', JSON.stringify({ email, id: 'demo_user', role: 'admin' }));
+        router.push('/');
+        return;
+      }
+
       await signInWithEmailAndPassword(auth, email, password);
-      localStorage.setItem('omni_user', email);
+      localStorage.setItem('omni_user', JSON.stringify({ email, id: auth.currentUser?.uid, role: 'authenticated' }));
       router.push('/');
     } catch (err: any) {
       setError(err.message || '登入失敗');
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleDemoLogin() {
+    setLoading(true);
+    await new Promise(r => setTimeout(r, 1000));
+    localStorage.setItem('omni_user', JSON.stringify({ email: 'admin@esggo.com', id: 'dev_admin', role: 'admin' }));
+    router.push('/');
   }
 
   async function handleGoogleLogin() {
@@ -99,6 +114,28 @@ export default function LoginPage() {
              <div className="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3 text-rose-600 text-xs font-bold">
                <AlertCircle size={16} className="mt-0.5 shrink-0" />
                <p>{error}</p>
+             </div>
+           )}
+
+           {isDemoMode && (
+             <div className="mb-8 p-5 bg-blue-50 border border-blue-200 rounded-[32px] flex flex-col gap-4">
+                <div className="flex items-start gap-3">
+                   <Shield size={18} className="text-blue-600 shrink-0 mt-0.5" />
+                   <div>
+                      <p className="text-blue-800 text-[11px] font-black uppercase tracking-wider">Developer_Channel_Active</p>
+                      <p className="text-blue-700/70 text-[10px] font-bold leading-relaxed mt-1">開發者測試模式已啟動。您可以直接使用快速存取進入平台管理介面。</p>
+                   </div>
+                </div>
+                <BrandButton 
+                  variant="primary" 
+                  fullWidth 
+                  size="sm" 
+                  onClick={handleDemoLogin}
+                  className="bg-blue-600 hover:bg-blue-700 text-white h-12 text-xs font-black rounded-2xl shadow-lg shadow-blue-500/20"
+                  loading={loading}
+                >
+                   <Zap size={14} className="mr-2" /> 快速進入開發者控制台
+                </BrandButton>
              </div>
            )}
 
