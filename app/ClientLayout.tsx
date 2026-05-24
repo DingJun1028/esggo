@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   LayoutDashboard, FileText, Brain, HeartPulse, BarChart3,
-  ShieldAlert, Settings, Bell, Search, Menu, X, ChevronRight,
+  ShieldAlert, Settings, Bell, Search, Menu, X, ChevronRight, ChevronDown,
   User, Database, ShieldCheck, Activity, Zap, Bot, Layout, 
   HelpCircle, MessageSquare, Plus, RefreshCw, Lock, Globe, Cpu, MoreVertical
 } from 'lucide-react';
