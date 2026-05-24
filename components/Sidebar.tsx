@@ -10,10 +10,13 @@ import {
   UserCheck, Award, HeartHandshake, Bot, Cpu, ChevronDown,
   ChevronRight, PanelLeftClose, PanelLeftOpen, Zap, Activity,
   Settings, FlaskConical, Layers, Target, AlertTriangle, Layout,
-  DollarSign, Link2, Briefcase, Network, Sun, Moon
+  DollarSign, Link2, Briefcase, Network, Sun, Moon, X
 } from 'lucide-react';
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
-import ThemeSwitcher from './ThemeSwitcher';
+import { useSaaS } from '../hooks/useSaaS';
+import { BrandBadge } from './index';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../lib/utils';
 
 interface NavItem {
   href: string;
@@ -146,9 +149,40 @@ function getThemeStyles(theme: SidebarTheme) {
 interface SidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (v: boolean) => void;
+  mobileOpen?: boolean;
+  setMobileOpen?: (v: boolean) => void;
 }
 
-export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
+function SaaSStatusWidget() {
+  const { plan, usage, upgradePlan } = useSaaS();
+  const pct = Math.round((usage.aiWords / usage.aiLimit) * 100);
+
+  return (
+    <div className="mx-4 mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 shadow-sm">
+       <div className="flex items-center justify-between">
+          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">SaaS Plan</p>
+          <BrandBadge variant="gold" size="xs" className="scale-75 origin-right uppercase">{plan}</BrandBadge>
+       </div>
+       <div className="space-y-1">
+          <div className="flex justify-between items-end">
+             <span className="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">AI Capacity</span>
+             <span className="text-[9px] font-black text-[#003262]">{pct}%</span>
+          </div>
+          <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
+             <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} className="h-full bg-blue-600" />
+          </div>
+       </div>
+       <button 
+         onClick={upgradePlan}
+         className="w-full py-1.5 rounded-lg bg-white border border-slate-200 text-[#003262] text-[8px] font-black uppercase tracking-widest hover:bg-[#003262] hover:text-white transition-all shadow-sm"
+       >
+          Upgrade
+       </button>
+    </div>
+  );
+}
+
+export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }: SidebarProps) {
   const pathname = usePathname() || '/';
   const { sidebarTheme } = useThemeStore();
   const t = getThemeStyles(sidebarTheme);
@@ -177,185 +211,135 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   if (!mounted) return null;
 
   return (
-    <aside
-      className={`fixed top-0 left-0 h-screen flex flex-col z-40 transition-all duration-300 ${t.sidebar} ${
-        isCollapsed ? 'w-16' : 'w-64'
-      }`}
-    >
-      {/* Logo */}
-      <div className={`flex items-center justify-between px-4 py-4 ${t.logo}`}>
-        {!isCollapsed && (
-          <div className="flex items-center gap-2.5">
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${
-              sidebarTheme === 'dark' ? 'bg-[#FDB515] text-[#003262]' : 'bg-[#003262] text-white'
-            }`}>
-              GO
-            </div>
-            <div>
-              <p className={`text-sm font-bold leading-tight ${t.logoText}`}>ESG GO</p>
-              <p className={`text-xs leading-tight ${t.logoSub}`}>善向永續</p>
-            </div>
-          </div>
+    <>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            onClick={() => setMobileOpen?.(false)}
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] lg:hidden"
+          />
         )}
-        {isCollapsed && (
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm mx-auto ${
-            sidebarTheme === 'dark' ? 'bg-[#FDB515] text-[#003262]' : 'bg-[#003262] text-white'
-          }`}>
-            GO
-          </div>
+      </AnimatePresence>
+
+      <aside
+        className={cn(
+          `fixed top-0 left-0 h-screen flex flex-col z-50 transition-all duration-500 ease-in-out ${t.sidebar}`,
+          isCollapsed ? 'w-16' : 'w-64',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
-        {!isCollapsed && (
-          <button
-            onClick={() => setIsCollapsed(true)}
-            className={`p-1.5 rounded-lg transition-colors ${t.collapseBtn}`}
-          >
-            <PanelLeftClose size={16} />
-          </button>
-        )}
-      </div>
-
-      {/* Expand button when collapsed */}
-      {isCollapsed && (
-        <button
-          onClick={() => setIsCollapsed(false)}
-          className={`mx-auto mt-2 p-1.5 rounded-lg transition-colors ${t.collapseBtn}`}
-        >
-          <PanelLeftOpen size={16} />
-        </button>
-      )}
-
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
-        {NAV_GROUPS.map((group) => {
-          const isGroupActive = group.items.some(item => isActive(item.href));
-          const isExpanded = expandedGroups[group.title] ?? true;
-
-          return (
-            <div key={group.title} className="mb-1">
+      >
+        {/* Logo */}
+        <div className={`flex items-center justify-between px-4 py-4 ${t.logo}`}>
+           <div className="flex items-center gap-2.5">
+              <div className={cn(
+                "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm",
+                sidebarTheme === 'dark' ? 'bg-[#FDB515] text-[#003262]' : 'bg-[#003262] text-white'
+              )}>GO</div>
               {!isCollapsed && (
-                <button
-                  onClick={() => toggleGroup(group.title)}
-                  className={`w-full flex items-center justify-between px-3 py-1.5 transition-colors rounded-md mx-1 ${
-                    isGroupActive ? t.groupExpanded : t.groupHeader
-                  }`}
-                >
-                  <span className={`text-[10px] font-bold tracking-widest uppercase ${t.groupTitle}`}>
-                    {group.title}
-                  </span>
-                  <ChevronDown
-                    size={12}
-                    className={`transition-transform ${t.chevron} ${isExpanded ? '' : '-rotate-90'}`}
-                  />
-                </button>
-              )}
-
-              {(isExpanded || isCollapsed) && (
-                <div className={`${isCollapsed ? 'px-2' : 'px-2'} space-y-0.5 mt-0.5`}>
-                  {group.items.map((item) => {
-                    const Icon = item.icon;
-                    const active = isActive(item.href);
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        title={isCollapsed ? `${item.label} ${item.sub}` : undefined}
-                        className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all relative ${
-                          active ? t.navItemActive : t.navItem
-                        } ${isCollapsed ? 'justify-center' : ''}`}
-                      >
-                        <Icon
-                          size={16}
-                          className={`flex-shrink-0 ${active ? t.iconActive : t.iconInactive}`}
-                        />
-                        {!isCollapsed && (
-                          <>
-                            <span className="flex-1 truncate">{item.label}</span>
-                            {item.badge && (
-                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${t.badge}`}>
-                                {item.badge}
-                              </span>
-                            )}
-                            <span className={`text-[10px] ${active ? t.navItemSubActive : t.navItemSub}`}>
-                              {item.sub}
-                            </span>
-                          </>
-                        )}
-                        {isCollapsed && active && (
-                          <span className={`absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-l-full ${
-                            sidebarTheme === 'dark' ? 'bg-[#FDB515]' : 'bg-[#003262]'
-                          }`} />
-                        )}
-                      </Link>
-                    );
-                  })}
+                <div className="fade-in">
+                  <p className={`text-sm font-bold leading-tight ${t.logoText}`}>ESG GO</p>
+                  <p className={`text-xs leading-tight ${t.logoSub}`}>善向永續</p>
                 </div>
               )}
-            </div>
-          );
-        })}
-      </nav>
-
-      {/* Theme Switcher */}
-      {!isCollapsed && (
-        <div className={t.themeArea}>
-          <div className="p-3">
-            <p className={`text-[10px] font-bold tracking-widest uppercase mb-2 ${t.groupTitle}`}>外觀主題</p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => useThemeStore.getState().setSidebarTheme('light')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border transition-all ${
-                  sidebarTheme === 'light'
-                    ? 'bg-white text-[#003262] border-[#003262] shadow-sm'
-                    : sidebarTheme === 'dark'
-                    ? 'bg-white/5 text-[#94b8d8] border-white/10 hover:border-white/20'
-                    : 'bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <Sun size={12} />
-                淺色
-              </button>
-              <button
-                onClick={() => useThemeStore.getState().setSidebarTheme('dark')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border transition-all ${
-                  sidebarTheme === 'dark'
-                    ? 'bg-[#FDB515]/20 text-[#FDB515] border-[#FDB515] shadow-sm'
-                    : 'bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <Moon size={12} />
-                深色
-              </button>
-            </div>
-          </div>
+           </div>
+           
+           <button onClick={() => setMobileOpen?.(false)} className="lg:hidden p-2 text-slate-400">
+              <X size={20} />
+           </button>
+           
+           <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:block p-1.5 rounded-lg text-slate-400 hover:text-[#003262] transition-colors">
+              {isCollapsed ? <PanelLeftOpen size={16}/> : <PanelLeftClose size={16}/>}
+           </button>
         </div>
-      )}
 
-      {isCollapsed && (
-        <div className={`p-2 flex flex-col items-center gap-2 ${t.themeArea}`}>
+        {/* Desktop Expand button */}
+        {isCollapsed && (
           <button
-            onClick={() => useThemeStore.getState().setSidebarTheme(sidebarTheme === 'light' ? 'dark' : 'light')}
-            className={`p-2 rounded-lg transition-colors ${t.collapseBtn}`}
-            title={sidebarTheme === 'light' ? '切換深色主題' : '切換淺色主題'}
+            onClick={() => setIsCollapsed(false)}
+            className={`hidden lg:flex mx-auto mt-2 p-1.5 rounded-lg transition-colors ${t.collapseBtn}`}
           >
-            {sidebarTheme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+            <PanelLeftOpen size={16} />
           </button>
-        </div>
-      )}
-
-      {/* Footer */}
-      <div className={`px-3 py-3 ${t.footer}`}>
-        {!isCollapsed ? (
-          <div className={`flex items-center gap-2 text-xs ${t.footerText}`}>
-            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
-            <span className={t.syncText}>Supabase 同步中</span>
-            <span className="ml-auto">v8.5</span>
-          </div>
-        ) : (
-          <div className="flex justify-center">
-            <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
-          </div>
         )}
-      </div>
-    </aside>
+
+        <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
+          {NAV_GROUPS.map((group) => {
+            const isGroupActive = group.items.some(item => isActive(item.href));
+            const isExpanded = expandedGroups[group.title] ?? true;
+
+            return (
+              <div key={group.title} className="mb-1">
+                {!isCollapsed && (
+                  <button
+                    onClick={() => toggleGroup(group.title)}
+                    className={`w-full flex items-center justify-between px-3 py-1.5 transition-colors rounded-md mx-1 ${
+                      isGroupActive ? t.groupExpanded : t.groupHeader
+                    }`}
+                  >
+                    <span className={`text-[10px] font-bold tracking-widest uppercase ${t.groupTitle}`}>
+                      {group.title}
+                    </span>
+                    <ChevronDown
+                      size={12}
+                      className={`transition-transform ${t.chevron} ${isExpanded ? '' : '-rotate-90'}`}
+                    />
+                  </button>
+                )}
+
+                {(isExpanded || isCollapsed) && (
+                  <div className={`${isCollapsed ? 'px-2' : 'px-2'} space-y-0.5 mt-0.5`}>
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      const active = isActive(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          title={isCollapsed ? `${item.label} ${item.sub}` : undefined}
+                          className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-medium transition-all relative ${
+                            active ? t.navItemActive : t.navItem
+                          } ${isCollapsed ? 'justify-center' : ''}`}
+                          onClick={() => setMobileOpen?.(false)}
+                        >
+                          <Icon size={16} className={`flex-shrink-0 ${active ? t.iconActive : t.iconInactive}`} />
+                          {!isCollapsed && (
+                            <>
+                              <span className="flex-1 truncate">{item.label}</span>
+                              {item.badge && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${t.badge}`}>{item.badge}</span>}
+                              <span className={`text-[10px] ${active ? t.navItemSubActive : t.navItemSub}`}>{item.sub}</span>
+                            </>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+
+        {/* SaaS Widget */}
+        {!isCollapsed && <SaaSStatusWidget />}
+
+        {/* Footer */}
+        <div className={`px-3 py-3 ${t.footer}`}>
+          {!isCollapsed ? (
+            <div className={`flex items-center gap-2 text-xs ${t.footerText}`}>
+              <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
+              <span className={t.syncText}>Sovereign Sync</span>
+              <span className="ml-auto opacity-40">v8.5</span>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   );
 }

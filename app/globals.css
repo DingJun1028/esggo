@@ -111,8 +111,8 @@
   /* Pure white with very subtle depth */
   .glass-panel {
     background: var(--glass-white);
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
     border: 1px solid rgba(255, 255, 255, 0.9);
     border-bottom-color: rgba(0, 50, 98, 0.06);
     border-right-color:  rgba(0, 50, 98, 0.06);
@@ -123,6 +123,12 @@
     border-radius: 1rem;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     padding: 0;
+  }
+  @media (min-width: 1024px) {
+    .glass-panel {
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+    }
   }
   .glass-panel:hover {
     box-shadow:

@@ -25,12 +25,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const { user, loading, isAuthenticated } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [controlCenterOpen, setControlCenterOpen] = useState(false);
   
-  const { token, notificationPermissionStatus, retrieveToken } = useFcmToken();
-
   useEffect(() => {
     setMounted(true);
     initAnalytics();
@@ -39,12 +36,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
     } catch {}
   }, []);
 
-  useEffect(() => { 
-    setMobileOpen(false); 
-    setMobileMoreOpen(false);
-  }, [pathname]);
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  // Auth Guard & Bidirectional Redirect
+  // Auth Guard
   useEffect(() => {
     if (!mounted || loading) return;
 
@@ -57,7 +51,6 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   if (!mounted) return null;
 
-  // Don't show shell on login page, terminal or landing page
   if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
     return <>{children}</>;
   }
@@ -77,19 +70,22 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-[#F8FAFD] overflow-hidden selection:bg-blue-500/10">
-      <div className="flex flex-col h-full bg-white border-r border-slate-100 shadow-sm transition-all duration-300">
-         <Sidebar isCollapsed={collapsed} setIsCollapsed={setCollapsed} />
-         {!collapsed && (
-           <div className="p-4 mt-auto">
-              <SaaSStatusWidget />
-           </div>
-         )}
-      </div>
+      <Sidebar 
+        isCollapsed={collapsed} 
+        setIsCollapsed={setCollapsed} 
+        mobileOpen={mobileOpen} 
+        setMobileOpen={setMobileOpen} 
+      />
       
       <div className="flex-1 flex flex-col min-w-0 relative">
         <header className="h-[52px] bg-white/80 backdrop-blur-md border-b border-slate-50 flex items-center justify-between px-6 z-40 sticky top-0 shadow-sm">
            <div className="flex items-center gap-4">
-              <button onClick={() => setMobileOpen(true)} className="lg:hidden p-2 text-slate-400 hover:text-[#003262]"><LayoutDashboard size={20}/></button>
+              <button 
+                onClick={() => setMobileOpen(true)} 
+                className="lg:hidden p-2 -ml-2 text-slate-400 hover:text-[#003262] transition-colors"
+              >
+                 <Menu size={20}/>
+              </button>
               <div className="hidden lg:flex items-center gap-2">
                  <BrandBadge variant="outline" size="xs" className="text-slate-400 font-mono tracking-widest border-slate-100">HERMES_v11.7</BrandBadge>
               </div>
@@ -142,35 +138,6 @@ function TenantSwitcher() {
        </div>
        <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider group-hover:text-blue-600">{companyId}</span>
        <ChevronDown size={10} className="text-slate-300" />
-    </div>
-  );
-}
-
-function SaaSStatusWidget() {
-  const { plan, usage, upgradePlan } = useSaaS();
-  const pct = Math.round((usage.aiWords / usage.aiLimit) * 100);
-
-  return (
-    <div className="p-5 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-4 shadow-sm">
-       <div className="flex items-center justify-between">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">SaaS Plan</p>
-          <BrandBadge variant="gold" size="xs" className="scale-75 origin-right uppercase">{plan}</BrandBadge>
-       </div>
-       <div className="space-y-1.5">
-          <div className="flex justify-between items-end">
-             <span className="text-[8px] font-bold text-slate-400 uppercase">AI Capacity</span>
-             <span className="text-[10px] font-black text-[#003262]">{pct}%</span>
-          </div>
-          <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-             <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} className="h-full bg-blue-600" />
-          </div>
-       </div>
-       <button 
-         onClick={upgradePlan}
-         className="w-full h-10 rounded-xl bg-white border border-slate-200 text-[#003262] text-[9px] font-black uppercase tracking-widest hover:bg-[#003262] hover:text-white transition-all shadow-sm"
-       >
-          Upgrade_Plan
-       </button>
     </div>
   );
 }
