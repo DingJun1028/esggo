@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Zap, Brain, Shield, Sparkles, Send, Target, Rocket, Lock, 
   RefreshCw, Bot, TrendingUp, ChevronRight, BarChart3, 
   Layers, Database, PieChart, Activity, AlertTriangle, 
-  Award, ArrowUpRight, ZapOff, Sparkle
+  Award, ArrowUpRight, ZapOff, Sparkle, Globe, Network
 } from 'lucide-react';
 import { 
   BrandButton, BrandCard, BrandBadge, BrandPageHeader, 
@@ -16,20 +16,26 @@ import { UniversalPageConfig } from '../../lib/page-config';
 import { ConsensusVisualizer } from '../../components/ui/ConsensusVisualizer';
 import { swarmConsensusEngine, ConsensusResult } from '../../lib/swarm-consensus-engine';
 import { cn } from '../../lib/utils';
+import { useSystemEvolution } from '../../hooks/useSystemEvolution';
 
 export default function StrategyLabPage() {
   const [activeMode, setActiveTab] = useState<'consensus' | 'roadmap' | 'evolution'>('consensus');
   const [proposal, setProposal] = useState('');
   const [result, setResult] = useState<ConsensusResult | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const { submitEvolution } = useSystemEvolution();
 
-  const { submitEvolution } = await import('../../hooks/useSystemEvolution').then(m => m.useSystemEvolution());
+  const showToast = (msg: string, type: 'success' | 'error' | 'info' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
 
   const handleSealStrategy = async () => {
     if (!result) return;
     showToast('正在執行 5T 戰略封印...', 'info');
     await new Promise(r => setTimeout(r, 1500));
-    await submitEvolution(proposal.substring(0, 30) + '...', result.confidence * 100);
+    await submitEvolution(proposal.substring(0, 30) + '...', result.consensusScore);
     showToast('戰略封印完成，系統架構已同步更新', 'success');
   };
 
