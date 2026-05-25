@@ -326,11 +326,11 @@ export default function SupplyChainPage() {
                  </div>
               </div>
 
-              <footer className="mt-12">
-                 <Button variant="primary" fullWidth size="lg" className="rounded-[24px] h-16 text-lg font-bold shadow-2xl shadow-[#003262]/20" onClick={() => setSelected(null)}>
-                  關閉詳情並返回中心
-                 </Button>
-              </footer>
+               <footer className="mt-12">
+                  <Button variant="primary" size="lg" className="w-full rounded-[24px] h-16 text-lg font-bold shadow-2xl shadow-[#003262]/20" onClick={() => setSelected(null)}>
+                   關閉詳情並返回中心
+                  </Button>
+               </footer>
             </motion.div>
           </div>
         )}
