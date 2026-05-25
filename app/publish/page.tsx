@@ -395,7 +395,7 @@ export default function PublishPage() {
                            <span className="font-bold text-[#009E9D] bg-[#009E9D]/5 px-2 py-0.5 rounded">On-Chain Vault</span>
                         </div>
                      </div>
-                     <Button variant="glass" fullWidth size="sm" className="bg-white/40 border-white/60">
+                     <Button variant="glass" size="sm" className="w-full bg-white/40 border-white/60">
                         <Share2 size={14} className="mr-2"/> 配置 Webhook 推送
                      </Button>
                   </div>
