@@ -23,7 +23,7 @@ interface DataTableProps<T> {
   className?: string;
 }
 
-export function DataTable<T extends Record<string, unknown>>({
+export function DataTable<T extends object>({
   columns, data, loading = false, searchable = false,
   searchPlaceholder = '搜尋…', emptyMessage = '尚無資料',
   rowKey, onRowClick, className,
@@ -43,8 +43,8 @@ export function DataTable<T extends Record<string, unknown>>({
 
   if (sortKey) {
     filtered = [...filtered].sort((a, b) => {
-      const av = String(a[sortKey] ?? '');
-      const bv = String(b[sortKey] ?? '');
+      const av = String((a as any)[sortKey] ?? '');
+      const bv = String((b as any)[sortKey] ?? '');
       return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
     });
   }
@@ -123,8 +123,8 @@ export function DataTable<T extends Record<string, unknown>>({
                   {columns.map((col) => (
                     <td key={String(col.key)} className="px-4 py-3 text-[13px] text-[#374151]">
                       {col.render
-                        ? col.render(row[col.key as keyof T], row)
-                        : String(row[col.key as keyof T] ?? '—')}
+                        ? col.render((row as any)[col.key], row)
+                        : String((row as any)[col.key] ?? '—')}
                     </td>
                   ))}
                 </tr>

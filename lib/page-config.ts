@@ -6,8 +6,8 @@ export interface PageAction {
   id: string;
   label: string;
   icon?: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'gold';
-  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'gold' | 'glass';
+  onClick?: () => void;
   loading?: boolean;
   disabled?: boolean;
 }

@@ -1,39 +1,52 @@
-﻿import * as React from 'react';
-import { cn } from '../../lib/utils';
+// components/ui/Input.tsx
+import { cn } from '@/lib/utils';
+import { InputHTMLAttributes, forwardRef } from 'react';
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: React.ReactNode;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
   error?: string;
+  icon?: React.ReactNode;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, error, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, label, error, icon, ...props }, ref) => {
     return (
-      <div className="relative w-full group">
-        {icon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-berkeley-blue transition-colors">
-            {icon}
-          </div>
+      <div className="w-full">
+        {label && (
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {label}
+          </label>
         )}
-        <input
-          type={type}
-          className={cn(
-            'flex h-12 w-full rounded-input border border-slate-200/60 bg-white/40 px-4 py-2 text-sm backdrop-blur-md transition-all file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-8 focus-visible:ring-berkeley-blue/5 focus-visible:border-berkeley-blue/30 disabled:cursor-not-allowed disabled:opacity-50 shadow-inner font-medium',
-            icon && 'pl-11',
-            error && 'border-error focus-visible:ring-error/10 focus-visible:border-error',
-            className
+       
+        <div className="relative">
+          {icon && (
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+              {icon}
+            </div>
           )}
-          ref={ref}
-          {...props}
-        />
+         
+          <input
+            ref={ref}
+            className={cn(
+              'w-full rounded-input border px-4 py-2',
+              'bg-white/50 backdrop-blur-sm',
+              'transition-all duration-200',
+              'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
+              icon && 'pl-10',
+              error && 'border-error focus:ring-error',
+              !error && 'border-gray-300',
+              className
+            )}
+            {...props}
+          />
+        </div>
+       
         {error && (
-          <p className="mt-1.5 text-[10px] font-bold text-error uppercase tracking-widest ml-1">{error}</p>
+          <p className="mt-1 text-sm text-error">{error}</p>
         )}
       </div>
     );
   }
 );
-Input.displayName = 'Input';
 
-export { Input };
+Input.displayName = 'Input';

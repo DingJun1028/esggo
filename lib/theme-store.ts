@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type SidebarTheme = 'light' | 'dark';
+export type SidebarTheme = 'light' | 'dark' | 'glass';
 
 interface ThemeStore {
   sidebarTheme: SidebarTheme;

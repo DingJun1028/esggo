@@ -8,7 +8,7 @@ interface BrandCardProps {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   border?: boolean;
   shadow?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'glass';
+  variant?: 'default' | 'glass' | 'liquid';
   onClick?: () => void;
   style?: React.CSSProperties;
 }

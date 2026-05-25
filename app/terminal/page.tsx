@@ -8,7 +8,10 @@ import {
   Search, RefreshCw, Send, Sparkles, Server, Network
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { BrandStatusDot, BrandBadge, BrandButton } from '../../components/brand';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { BrandStatusDot } from '../../components/brand';
+import { fadeIn, staggerContainer } from '../../lib/animations';
 
 interface TerminalLine {
   type: 'cmd' | 'out' | 'err' | 'info' | 'success' | 'trace';
@@ -115,126 +118,142 @@ export default function HermesTerminalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] p-4 md:p-10 flex flex-col font-mono selection:bg-[#FDB515]/30">
+    <div className="min-h-screen bg-slate-50/50 p-4 md:p-10 flex flex-col font-mono selection:bg-california-gold/30">
       {/* Top Chrome */}
-      <header className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-[0_0_20px_rgba(37,99,235,0.4)]">
-            <Terminal size={20} />
+      <motion.header 
+        initial="initial"
+        animate="animate"
+        variants={staggerContainer}
+        className="mb-8 flex items-center justify-between"
+      >
+        <motion.div variants={fadeIn} className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-berkeley-blue flex items-center justify-center text-california-gold shadow-lg">
+            <Terminal size={24} />
           </div>
           <div>
-            <h1 className="text-white text-lg font-black tracking-tighter uppercase">Hermes Agent OS</h1>
-            <p className="text-[#94a3b8] text-[10px] font-bold uppercase tracking-[0.3em]">oX Pro-Dev Console</p>
+            <h1 className="text-berkeley-blue text-xl font-black tracking-tighter uppercase">Hermes Agent OS</h1>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">oX Pro-Dev Console • v2.1.0</p>
           </div>
-        </div>
-        <div className="hidden md:flex items-center gap-8 px-6 py-2 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl">
+        </motion.div>
+        
+        <motion.div variants={fadeIn} className="hidden md:flex items-center gap-8 px-6 py-2.5 bg-white/60 rounded-2xl border border-white/60 backdrop-blur-xl shadow-glass">
            <div className="flex items-center gap-2">
               <BrandStatusDot status="active" pulse />
-              <span className="text-[10px] text-white font-black uppercase">Kernel Online</span>
+              <span className="text-[10px] text-berkeley-blue font-black uppercase">Kernel Online</span>
            </div>
-           <div className="h-4 w-px bg-white/10" />
+           <div className="h-4 w-px bg-slate-200" />
            <div className="flex items-center gap-2">
-              <Activity size={14} className="text-emerald-400" />
-              <span className="text-[10px] text-white font-black uppercase">Load: 1.42</span>
+              <Activity size={14} className="text-verified" />
+              <span className="text-[10px] text-slate-500 font-black uppercase tracking-wider">Load: 1.42</span>
            </div>
-        </div>
-      </header>
+        </motion.div>
+      </motion.header>
 
       {/* Terminal Main Window */}
-      <main className="flex-1 bg-[#010409] rounded-[2.5rem] border border-white/5 shadow-2xl flex flex-col overflow-hidden relative group">
-        {/* Glow Effects */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/5 blur-[120px] pointer-events-none" />
+      <motion.main 
+        variants={fadeIn}
+        initial="initial"
+        animate="animate"
+        className="flex-1 bg-white/60 backdrop-blur-2xl rounded-[3rem] border border-white/80 shadow-glass flex flex-col overflow-hidden relative group"
+      >
+        {/* Glow Effects (Subtle) */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-berkeley-blue/5 blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-california-gold/5 blur-[100px] pointer-events-none" />
 
         {/* Window Header */}
-        <div className="h-10 px-6 bg-white/5 border-b border-white/5 flex items-center justify-between">
-           <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-              <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
+        <div className="h-12 px-8 bg-slate-100/30 border-b border-slate-200/50 flex items-center justify-between">
+           <div className="flex gap-2.5">
+              <div className="w-3 h-3 rounded-full bg-error/20 border border-error/30" />
+              <div className="w-3 h-3 rounded-full bg-warning/20 border border-warning/30" />
+              <div className="w-3 h-3 rounded-full bg-verified/20 border border-verified/30" />
            </div>
            <div className="flex items-center gap-3">
-              <Hash size={12} className="text-[#FDB515]" />
-              <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest">session: ox-742-gamma</span>
+              <Hash size={12} className="text-california-gold" />
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">session: ox-742-gamma</span>
            </div>
         </div>
 
         {/* Console Output */}
         <div 
           ref={scrollRef}
-          className="flex-1 p-8 overflow-y-auto space-y-2 no-scrollbar scroll-smooth"
+          className="flex-1 p-10 overflow-y-auto space-y-3 no-scrollbar scroll-smooth"
         >
           {lines.map((l, i) => (
             <motion.div 
               key={i}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex gap-4 group/line"
+              className="flex gap-6 group/line"
             >
-              <span className="text-white/10 text-[9px] w-16 flex-shrink-0 mt-1">{l.timestamp}</span>
+              <span className="text-slate-300 text-[10px] w-20 flex-shrink-0 mt-1 font-medium">{l.timestamp}</span>
               <div className={cn(
-                "text-xs leading-relaxed break-all",
-                l.type === 'cmd' ? "text-white font-black" :
-                l.type === 'err' ? "text-red-400" :
-                l.type === 'success' ? "text-emerald-400" :
-                l.type === 'info' ? "text-blue-400" :
-                l.type === 'trace' ? "text-purple-400 italic" : "text-[#cbd5e1]"
+                "text-[13px] leading-relaxed break-all font-medium",
+                l.type === 'cmd' ? "text-berkeley-blue font-bold" :
+                l.type === 'err' ? "text-error" :
+                l.type === 'success' ? "text-verified font-bold" :
+                l.type === 'info' ? "text-berkeley-blue/70" :
+                l.type === 'trace' ? "text-purple-600 italic opacity-80" : "text-slate-600"
               )}>
-                {l.type === 'cmd' && <span className="text-blue-500 mr-2">$</span>}
+                {l.type === 'cmd' && <span className="text-california-gold font-black mr-2">❯</span>}
                 {l.content}
               </div>
             </motion.div>
           ))}
           
           {/* Active Input Line */}
-          <div className="flex items-center gap-4 mt-6 pt-4 border-t border-white/5">
-            <span className="text-blue-500 font-black text-sm">$</span>
+          <div className="flex items-center gap-4 mt-8 pt-6 border-t border-slate-100">
+            <span className="text-california-gold font-black text-lg">❯</span>
             <input 
               autoFocus
-              className="flex-1 bg-transparent border-none outline-none text-white text-sm font-bold caret-blue-500"
+              className="flex-1 bg-transparent border-none outline-none text-berkeley-blue text-sm font-bold caret-berkeley-blue placeholder:text-slate-300"
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleCommand(input)}
-              placeholder={isProcessing ? "Executing..." : "Enter command..."}
+              placeholder={isProcessing ? "EXECUTION IN PROGRESS..." : "ENTER COMMAND..."}
               disabled={isProcessing}
               spellCheck={false}
               autoComplete="off"
             />
-            {isProcessing && <RefreshCw size={14} className="text-blue-500 animate-spin mr-4" />}
+            {isProcessing && <RefreshCw size={16} className="text-berkeley-blue animate-spin mr-4" />}
           </div>
         </div>
 
         {/* Floating AI Helper */}
-        <div className="absolute bottom-10 right-10 flex flex-col items-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-           <div className="p-4 bg-blue-600 rounded-3xl shadow-2xl text-[10px] text-white font-black uppercase tracking-widest max-w-[200px] border border-white/20">
-              <div className="flex items-center gap-2 mb-2">
-                 <Zap size={12} className="text-[#FDB515]" />
-                 <span>Hermes Suggestion</span>
+        <div className="absolute bottom-10 right-10 flex flex-col items-end gap-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+           <div className="p-6 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-glass border border-white/60 text-[11px] text-berkeley-blue font-bold uppercase tracking-widest max-w-[240px]">
+              <div className="flex items-center gap-2 mb-3 text-california-gold">
+                 <Zap size={14} fill="currentColor" />
+                 <span className="text-berkeley-blue">Hermes Oracle</span>
               </div>
-              <p className="leading-relaxed text-blue-100/80 lowercase italic font-normal">
-                Try "agent list" to see available workers or "5t seal" to secure current buffer.
+              <p className="leading-relaxed text-slate-500 lowercase italic font-medium normal-case">
+                Try <span className="text-berkeley-blue font-black">"agent list"</span> to see active workers or <span className="text-berkeley-blue font-black">"5t seal"</span> to anchor current data.
               </p>
            </div>
-           <div className="w-12 h-12 rounded-2xl bg-[#003262] flex items-center justify-center text-[#FDB515] shadow-extreme">
-              <Bot size={24} />
+           <div className="w-14 h-14 rounded-2xl bg-berkeley-blue flex items-center justify-center text-california-gold shadow-lg hover:scale-110 transition-transform cursor-pointer">
+              <Bot size={28} />
            </div>
         </div>
-      </main>
+      </motion.main>
 
       {/* Keyboard Shortcuts Footer */}
-      <footer className="mt-6 flex items-center justify-center gap-10">
+      <motion.footer 
+        variants={fadeIn}
+        initial="initial"
+        animate="animate"
+        className="mt-8 flex items-center justify-center gap-12"
+      >
          {[
            { k: 'ALT + C', label: 'Clear' },
            { k: 'TAB', label: 'Autocomplete' },
            { k: 'ESC', label: 'Exit' },
            { k: 'CMD + K', label: 'Search History' },
          ].map(s => (
-           <div key={s.k} className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-white/5 border border-white/10 rounded text-[9px] text-white/40">{s.k}</kbd>
-              <span className="text-[9px] text-white/20 font-black uppercase tracking-widest">{s.label}</span>
+           <div key={s.k} className="flex items-center gap-3 group cursor-help">
+              <kbd className="px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-[10px] text-slate-500 font-bold shadow-sm group-hover:border-berkeley-blue/30 transition-colors">{s.k}</kbd>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] group-hover:text-berkeley-blue transition-colors">{s.label}</span>
            </div>
          ))}
-      </footer>
+      </motion.footer>
     </div>
   );
 }

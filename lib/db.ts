@@ -194,7 +194,14 @@ export const getEvidenceFiles = async (): Promise<any> => [];
 export const insertEvidence = async (data: any): Promise<any> => 'dummy_id';
 export const sealEvidence = async (id: any): Promise<any> => true;
 export const getReadingRoomReports = async (): Promise<any> => [];
-export const secureHash = (data: any): any => 'dummy_hash';
+
+export const secureHash = async (data: any): Promise<string> => {
+  const str = typeof data === 'string' ? data : JSON.stringify(data);
+  const msgBuffer = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
 
 export const saveAdvisorySession = async (session: any, p2?: any): Promise<any> => true;
 export const getAdvisorySession = async (ownerId: any): Promise<any> => null;

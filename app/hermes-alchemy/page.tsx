@@ -9,11 +9,13 @@ import {
   Maximize2, RefreshCw, BarChart3, Bot, Sparkles,
   Eye, Lock, Hash, Activity, Edit3
 } from 'lucide-react';
-import { 
-  BrandCard, BrandButton, BrandBadge, BrandCardHeader, 
-  BrandStatusDot, BrandTable, BrandPageHeader, StandardPage
-} from '../../components/brand';
 import { cn } from '../../lib/utils';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Card } from '../../components/ui/Card';
+import { BrandStatusDot } from '../../components/brand';
+import StandardPage from '../../components/brand/StandardPage';
+import { fadeIn, staggerContainer } from '../../lib/animations';
 import { UniversalPageConfig } from '../../lib/page-config';
 
 interface AlchemyResult {
@@ -129,7 +131,7 @@ export default function HermesAlchemyPage() {
     id: 'hermes-alchemy',
     title: 'Hermes Alchemy 煉金術',
     subtitle: '多模態憑證智能提取中心 · 5T 數據轉化 · 自動化 GRI 映射。',
-    icon: <Sparkles size={32} className="text-[#003262]" />,
+    icon: <Sparkles size={32} className="text-berkeley-blue" />,
     griReference: 'Intelligence / Vision',
     activeT5Tags: ['T1', 'T2', 'T4'],
     isOXModule: true,
@@ -155,14 +157,14 @@ export default function HermesAlchemyPage() {
             <div 
               className={cn(
                 "border-2 border-dashed rounded-[2rem] p-10 text-center transition-all duration-500 group",
-                uploadedFile ? "border-emerald-200 bg-emerald-50/30" : "border-slate-200 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/30"
+                uploadedFile ? "border-verified/30 bg-verified/5" : "border-slate-200 bg-slate-50/50 hover:border-berkeley-blue/40 hover:bg-berkeley-blue/5"
               )}
             >
               <input type="file" id="alchemy-upload" className="hidden" onChange={handleFileUpload} />
               <label htmlFor="alchemy-upload" className="cursor-pointer block space-y-4">
                 <div className={cn(
                   "w-16 h-16 rounded-3xl mx-auto flex items-center justify-center transition-transform group-hover:scale-110",
-                  uploadedFile ? "bg-emerald-100 text-emerald-600" : "bg-white text-slate-400 shadow-sm"
+                  uploadedFile ? "bg-verified/20 text-verified" : "bg-white text-slate-300 shadow-sm border border-slate-100"
                 )}>
                   {uploadedFile ? <CheckCircle size={32} /> : <Upload size={32} />}
                 </div>
@@ -173,22 +175,21 @@ export default function HermesAlchemyPage() {
               </label>
             </div>
 
-            <BrandButton 
+            <Button 
               variant="primary" 
-              fullWidth 
-              size="lg" 
+              className="w-full h-14 rounded-2xl text-sm tracking-widest uppercase shadow-glass"
               onClick={startAlchemy} 
               disabled={!uploadedFile || isScanning}
-              loading={isScanning && scanStep < SCAN_STEPS.length}
+              isLoading={isScanning && scanStep < SCAN_STEPS.length}
             >
-              <Zap size={18} className="mr-2" /> 啟動 Multi-modal Alchemy
-            </BrandButton>
+              <Zap size={18} className="mr-2" fill="currentColor" /> 啟動 Multi-modal Alchemy
+            </Button>
 
-            <div className="p-6 bg-[#003262] rounded-[2rem] text-white space-y-4 relative overflow-hidden">
-               <p className="text-[10px] font-black text-blue-300 uppercase tracking-[0.3em] relative z-10">AI Engine Status</p>
+            <div className="p-6 bg-berkeley-blue rounded-[2rem] text-white space-y-4 relative overflow-hidden shadow-lg">
+               <p className="text-[10px] font-black text-california-gold uppercase tracking-[0.3em] relative z-10">AI Engine Status</p>
                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <p className="text-xs font-bold">Nous-Hermes-Vision-v2 Ready</p>
+                  <div className="w-1.5 h-1.5 rounded-full bg-verified animate-pulse shadow-[0_0_8px_#10b981]" />
+                  <p className="text-xs font-bold text-white/90">Nous-Hermes-Vision-v2 Ready</p>
                </div>
                <Bot size={80} className="absolute -bottom-6 -right-6 text-white/5 rotate-12" />
             </div>
@@ -211,11 +212,11 @@ export default function HermesAlchemyPage() {
                   className="flex-1 flex flex-col items-center justify-center space-y-8"
                 >
                   <div className="relative">
-                    <div className="w-24 h-24 rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin" />
-                    <Bot size={32} className="absolute inset-0 m-auto text-blue-600" />
+                    <div className="w-24 h-24 rounded-full border-4 border-slate-100 border-t-berkeley-blue animate-spin" />
+                    <Bot size={32} className="absolute inset-0 m-auto text-berkeley-blue" />
                   </div>
                   <div className="text-center space-y-2">
-                    <h4 className="text-xl font-black text-[#003262]">{SCAN_STEPS[scanStep]}</h4>
+                    <h4 className="text-xl font-black text-berkeley-blue tracking-tight">{SCAN_STEPS[scanStep]}</h4>
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Processing Multi-modal Tokens...</p>
                   </div>
                 </motion.div>
@@ -226,86 +227,97 @@ export default function HermesAlchemyPage() {
                   animate={{ opacity: 1 }}
                   className="space-y-6"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">提取指標數據 (Extracted Metrics)</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-5">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">提取指標數據 (Extracted Metrics)</p>
                       <div className="space-y-3">
                         {results.extractedMetrics.map((m, i) => (
-                          <div key={i} className="p-4 bg-white border border-slate-100 rounded-2xl shadow-sm flex items-center justify-between group hover:border-blue-300 transition-all">
+                          <div key={i} className="p-4 bg-white/40 border border-white/60 rounded-2xl shadow-sm flex items-center justify-between group hover:border-berkeley-blue/30 transition-all backdrop-blur-sm">
                             <div>
-                              <p className="text-[10px] font-black text-blue-600 uppercase">{m.gri}</p>
+                              <p className="text-[10px] font-black text-berkeley-blue uppercase mb-0.5">{m.gri}</p>
                               <p className="text-sm font-black text-slate-700">{m.key}</p>
                             </div>
                             <div className="text-right">
-                              <p className="text-lg font-black text-[#003262] font-mono leading-none">{m.value.toLocaleString()}</p>
-                              <p className="text-[9px] font-bold text-slate-400 uppercase mt-1">{m.unit}</p>
+                              <p className="text-xl font-black text-berkeley-blue font-mono leading-none">{m.value.toLocaleString()}</p>
+                              <p className="text-[9px] font-bold text-slate-400 uppercase mt-1.5">{m.unit}</p>
                             </div>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">AI 信心與缺口分析</p>
-                      <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 space-y-4">
+                    <div className="space-y-5">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">AI 信心與缺口分析</p>
+                      <Card className="p-6 bg-slate-50/50 rounded-[2rem] border-slate-100/50 space-y-5">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-500">信任評分 (Trust Score)</span>
-                          <BrandBadge variant={results.confidence > 0.9 ? 'success' : 'warning'} size="sm">
+                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">信任評分 (Trust Score)</span>
+                          <Badge variant={results.confidence > 0.9 ? 'verified' : 'warning'} className="px-3 py-1">
                             {Math.round(results.confidence * 100)}%
-                          </BrandBadge>
+                          </Badge>
                         </div>
-                        <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-slate-200/50 rounded-full overflow-hidden">
                           <motion.div 
-                            className="h-full bg-gradient-to-r from-blue-500 to-emerald-500" 
+                            className="h-full bg-gradient-to-r from-berkeley-blue to-verified" 
                             initial={{ width: 0 }}
                             animate={{ width: `${results.confidence * 100}%` }}
                             transition={{ duration: 1, delay: 0.5 }}
                           />
                         </div>
-                        <p className="text-xs text-slate-600 leading-relaxed italic">
-                          "{results.gapAnalysis}"
-                        </p>
-                      </div>
+                        <div className="p-4 bg-white/60 rounded-xl border border-white/80 shadow-sm">
+                           <p className="text-[13px] text-slate-600 leading-relaxed italic font-medium">
+                              "{results.gapAnalysis}"
+                           </p>
+                        </div>
+                      </Card>
                     </div>
                   </div>
 
                   {results.sealed ? (
-                    <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-[2.5rem] flex items-center justify-between animate-in zoom-in-95">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                          <Lock size={24} />
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="p-8 bg-verified/5 border border-verified/20 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6"
+                    >
+                      <div className="flex items-center gap-5">
+                        <div className="w-14 h-14 rounded-2xl bg-verified/10 flex items-center justify-center text-verified shadow-sm">
+                          <Lock size={28} />
                         </div>
                         <div>
-                          <p className="text-sm font-black text-emerald-800 uppercase tracking-tight">5T 實證刻印完成</p>
-                          <code className="text-[10px] text-emerald-600/60 font-mono">{results.sealHash}</code>
+                          <p className="text-base font-black text-slate-800 uppercase tracking-tight">5T 實證刻印完成</p>
+                          <div className="flex items-center gap-2 mt-1">
+                             <Hash size={12} className="text-verified" />
+                             <code className="text-[10px] text-verified font-mono font-bold">{results.sealHash}</code>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Link href={`/editor?chapter=energy&fill=${results.sealHash}`}>
-                          <BrandButton variant="primary" size="sm" className="bg-emerald-600 hover:bg-emerald-700">
-                            進入永續撰寫 <Edit3 size={14} className="ml-1" />
-                          </BrandButton>
+                      <div className="flex gap-3 w-full md:w-auto">
+                        <Link href={`/editor?chapter=energy&fill=${results.sealHash}`} className="flex-1">
+                          <Button variant="primary" className="w-full bg-verified hover:bg-emerald-600 border-none text-white h-12 px-6 rounded-xl">
+                            進入永續撰寫 <Edit3 size={16} className="ml-2" />
+                          </Button>
                         </Link>
-                        <BrandButton variant="secondary" size="sm" className="border-emerald-200 text-emerald-700 bg-white">
-                          查看聖碑紀錄 <ArrowUpRight size={14} className="ml-1" />
-                        </BrandButton>
+                        <Button variant="glass" className="h-12 px-6 rounded-xl border-verified/20 text-verified hover:bg-verified/10">
+                          查看聖碑紀錄 <ArrowUpRight size={16} className="ml-2" />
+                        </Button>
                       </div>
-                    </div>
+                    </motion.div>
                   ) : (
                     <div className="flex gap-4">
-                      <BrandButton variant="primary" size="lg" className="flex-1 rounded-2xl" onClick={handleSeal}>
-                        <Hash size={18} className="mr-2" /> 執行 5T 封印並提交至金庫
-                      </BrandButton>
-                      <BrandButton variant="secondary" size="lg" className="rounded-2xl">
-                        <Maximize2 size={18} />
-                      </BrandButton>
+                      <Button variant="primary" size="lg" className="flex-1 h-16 rounded-2xl shadow-glass text-base tracking-widest" onClick={handleSeal}>
+                        <Hash size={20} className="mr-3" /> 執行 5T 封印並提交至金庫
+                      </Button>
+                      <Button variant="glass" size="lg" className="h-16 w-16 rounded-2xl p-0">
+                        <Maximize2 size={24} />
+                      </Button>
                     </div>
                   )}
                 </motion.div>
               ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-slate-300 space-y-4 opacity-50">
-                  <Database size={64} strokeWidth={1} />
-                  <p className="text-sm font-bold uppercase tracking-widest">等待憑證輸入中...</p>
+                <div className="flex-1 flex flex-col items-center justify-center text-slate-300 space-y-6 opacity-40">
+                  <div className="w-24 h-24 rounded-[2.5rem] bg-slate-100 flex items-center justify-center">
+                    <Database size={48} strokeWidth={1.5} />
+                  </div>
+                  <p className="text-xs font-black uppercase tracking-[0.4em]">等待憑證輸入中...</p>
                 </div>
               )}
             </AnimatePresence>

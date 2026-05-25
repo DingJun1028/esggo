@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -8,13 +8,15 @@ import {
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
-  Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket
+  Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
 import ComposerFooter from '../components/brand/ComposerFooter';
 import HermesControlCenter from '../components/brand/HermesControlCenter';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../lib/utils';
+import { useOmniResonance } from '../src/client/hooks/useOmniResonance';
 
 const navGroups = [
   {
@@ -33,7 +35,6 @@ const navGroups = [
     items: [
       { href: '/walkthrough', label: '新手教學', sub: 'Onboarding', icon: <Rocket size={18} /> },
       { href: '/hermes-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
-      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <Globe size={18} /> },
       { href: '/hermes-alchemy', label: '煉金術', sub: 'Alchemy Scan', icon: <Sparkles size={18} /> },
       { href: '/best-practice', label: '最佳實踐', sub: 'Best Practice', icon: <Trophy size={18} /> },
       { href: '/strategy-lab', label: '策略實驗室', sub: 'Strategy Lab', icon: <Brain size={18} /> },
@@ -52,6 +53,7 @@ const navGroups = [
   {
     label: 'GOVERNANCE',
     items: [
+      { href: '/matrix', label: '終始矩陣', sub: 'E2E Matrix', icon: <Grid3X3 size={18} /> },
       { href: '/materiality', label: '重大性矩陣', sub: 'Materiality', icon: <Hexagon size={18} /> },
       { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: <ListChecks size={18} /> },
       { href: '/vault', label: '證據金庫', sub: 'Evidence Vault', icon: <Lock size={18} /> },
@@ -59,35 +61,11 @@ const navGroups = [
       { href: '/auditor', label: '審計助手', sub: 'Auditor', icon: <Shield size={18} /> },
     ],
   },
-  {
-    label: 'INSIGHTS',
-    items: [
-      { href: '/roadmap', label: '淨零路線圖', sub: 'Net-Zero', icon: <Map size={18} /> },
-      { href: '/publish', label: '報告發布', sub: 'Publish', icon: <BookOpen size={18} /> },
-      { href: '/reading-room', label: '永續閱覽室', sub: 'Reading Room', icon: <Library size={18} /> },
-      { href: '/library', label: '永續智庫', sub: 'Library', icon: <Building2 size={18} /> },
-      { href: '/finance', label: '永續財務', sub: 'Finance', icon: <Wallet size={18} /> },
-      { href: '/supply-chain', label: '供應鏈透明', sub: 'Supply Chain', icon: <Link2 size={18} /> },
-      { href: '/stakeholders', label: '利害關係人', sub: 'Stakeholders', icon: <Handshake size={18} /> },
-      { href: '/audit-verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: <CheckCircle2 size={18} /> },
-      { href: '/strategy-lab', label: '策略實驗室', sub: 'Strategy Lab', icon: <Zap size={18} /> },
-    ],
-  },
-  {
-    label: 'SYSTEM',
-    items: [
-      { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: <CheckSquare size={18} /> },
-      { href: '/profile', label: '企業管理', sub: 'Profile', icon: <Building2 size={18} /> },
-      { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: <Cable size={18} /> },
-      { href: '/ai-platform', label: 'AI 平台', sub: 'AI Platform', icon: <Bot size={18} /> },
-    ],
-  },
 ];
 
 function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<any[]>([]);
-  const [searching, setScanning] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -95,384 +73,193 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
       setResults(navGroups.flatMap(g => g.items).slice(0, 6));
       return;
     }
-
-    const timer = setTimeout(async () => {
-      setScanning(true);
-      try {
-        const { globalSearch } = await import('../lib/db');
-        const dbResults = await globalSearch(query);
-        
-        const navMatches = navGroups.flatMap(g => g.items).filter(i => 
-          i.label.includes(query) || i.sub.toLowerCase().includes(query.toLowerCase())
-        );
-
-        setResults([...navMatches, ...dbResults]);
-      } catch (e) {
-        setResults([]);
-      } finally {
-        setScanning(false);
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
+    const filtered = navGroups.flatMap(g => g.items).filter(item => 
+      item.label.includes(query) || item.sub.toLowerCase().includes(query.toLowerCase())
+    );
+    setResults(filtered);
   }, [query]);
-
-  const handleSelect = (href: string) => {
-    router.push(href);
-    onClose();
-  };
-
-  const getIcon = (item: any) => {
-    if (item.icon) return item.icon;
-    switch (item.type) {
-      case 'metric': return <BarChart3 size={18} />;
-      case 'task':   return <CheckSquare size={18} />;
-      case 'audit':  return <Shield size={18} />;
-      default:       return <FileText size={18} />;
-    }
-  };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-300">
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
-      <div className="relative w-full max-w-2xl bg-white/90 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-extreme overflow-hidden">
-        <div className="flex items-center gap-4 p-5 border-b border-slate-100">
-          <Search size={20} className={searching ? "text-blue-500 animate-spin" : "text-slate-400"} />
-          <input 
-            autoFocus
-            placeholder="搜尋功能、指標數據或 5T 紀錄..."
-            className="flex-1 bg-transparent border-none outline-none text-base font-bold text-[#003262] placeholder:text-slate-300"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <kbd className="px-2 py-1 bg-slate-50 rounded-lg border border-slate-100 text-[9px] font-black text-slate-400">ESC</kbd>
+    <div className="fixed inset-0 z-[11000] flex items-start justify-center pt-[15vh] px-4">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/20 backdrop-blur-md" onClick={onClose} />
+      <motion.div initial={{ scale: 0.95, opacity: 0, y: -20 }} animate={{ scale: 1, opacity: 1, y: 0 }} className="relative bg-white/90 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-2xl w-full max-w-2xl overflow-hidden">
+        <div className="p-6 border-b border-slate-100 flex items-center gap-4">
+          <Search size={20} className="text-slate-400" />
+          <input className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-berkeley-blue placeholder:text-slate-300" placeholder="搜尋功能或指令..." value={query} onChange={e => setQuery(e.target.value)} autoFocus />
+          <div className="px-2 py-1 bg-slate-100 rounded-lg text-[10px] font-black text-slate-400 uppercase tracking-widest">ESC</div>
         </div>
-
-        <div className="max-h-[60vh] overflow-y-auto p-3 no-scrollbar">
-          {results.length > 0 ? (
-            <div className="space-y-1">
-              {results.map((item, idx) => (
-                <button
-                  key={`${item.href}-${idx}`}
-                  onClick={() => handleSelect(item.href)}
-                  className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-[#003262]/5 transition-all group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-[#003262] group-hover:border-[#003262]/20 transition-all shadow-sm">
-                      {getIcon(item)}
-                    </div>
-                    <div className="text-left">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-black text-[#003262]">{item.label || item.title}</p>
-                        {item.type && <span className="px-1.5 py-0.5 bg-slate-100 rounded text-[8px] font-black uppercase tracking-tighter opacity-40">{item.type}</span>}
-                      </div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub || item.subtitle}</p>
-                    </div>
-                  </div>
-                  <ArrowUpRight size={14} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100" />
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="p-12 text-center">
-              <Bot size={40} className="mx-auto text-slate-200 mb-4 animate-bounce" />
-              <p className="text-sm font-bold text-slate-400 italic">查無結果</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SidebarContent({ collapsed, onCollapse, onSearch, onOpenSettings }: { collapsed: boolean; onCollapse: () => void; onSearch: () => void; onOpenSettings: () => void }) {
-  const pathname = usePathname() ?? '/';
-
-  const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
-    return pathname.startsWith(href);
-  };
-
-  return (
-    <aside className={`sidebar ${collapsed ? 'collapsed' : ''} bg-[#003262] border-r border-white/5 shadow-2xl shadow-black/20 flex flex-col`}>
-      <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/5 min-h-[56px]">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#FDB515] to-[#f4a100] flex items-center justify-center font-black text-[#003262] text-[11px] shadow-lg flex-shrink-0">
-          ESG
-        </div>
-        {!collapsed && (
-          <div className="animate-in fade-in duration-500 slide-in-from-left-4 min-w-0">
-            <div className="text-[#FDB515] font-black text-sm leading-none tracking-tight">OmniHermes</div>
-            <div className="text-white/30 text-[9px] font-black uppercase tracking-[0.3em] mt-0.5">Enterprise OS</div>
-          </div>
-        )}
-        <button
-          onClick={onCollapse}
-          className="ml-auto p-1.5 rounded-lg bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-white/5"
-        >
-          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-        </button>
-      </div>
-
-      <div className="px-3 py-2">
-        <button 
-          onClick={onSearch}
-          className={`flex items-center gap-2.5 w-full p-2.5 rounded-xl bg-white/5 border border-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-all group ${collapsed ? 'justify-center' : ''}`}
-        >
-          <Search size={15} className="group-hover:scale-110 transition-transform flex-shrink-0" />
-          {!collapsed && (
-            <>
-              <span className="flex-1 text-left text-[12px] font-bold">快速搜尋...</span>
-              <div className="flex items-center gap-1 px-1.5 py-0.5 bg-white/5 rounded border border-white/10 text-[8px] font-black opacity-50">
-                <Command size={9} />K
+        <div className="p-4 max-h-[50vh] overflow-y-auto no-scrollbar">
+          {results.map((item, i) => (
+            <button key={i} onClick={() => { router.push(item.href); onClose(); }} className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-berkeley-blue hover:text-white transition-all group">
+              <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-white/10 group-hover:text-california-gold">{item.icon}</div>
+              <div className="text-left">
+                <p className="text-sm font-black uppercase tracking-tight">{item.label}</p>
+                <p className="text-[10px] font-bold opacity-40 uppercase tracking-widest">{item.sub}</p>
               </div>
-            </>
-          )}
-        </button>
-      </div>
-
-      <nav className="flex-1 py-1 overflow-y-auto no-scrollbar scroll-smooth">
-        {navGroups.map((group) => (
-          <div key={group.label} className="px-3 mb-4 last:mb-0">
-            {!collapsed && (
-              <div className="px-3 mb-1.5 text-[9px] font-black text-white/20 uppercase tracking-[0.35em]">
-                {group.label}
-              </div>
-            )}
-            <div className="space-y-0.5">
-               {group.items.map((item) => (
-                 <Link
-                   key={item.href}
-                   href={item.href}
-                   className={`flex items-center gap-2.5 py-2 px-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
-                     isActive(item.href) 
-                       ? 'bg-white/10 text-[#FDB515]' 
-                       : 'text-white/50 hover:bg-white/5 hover:text-white'
-                   }`}
-                   title={collapsed ? `${item.label} · ${item.sub}` : undefined}
-                 >
-                   {isActive(item.href) && (
-                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#FDB515] rounded-full" />
-                   )}
-                   <span className={`flex-shrink-0 transition-all duration-300 ${isActive(item.href) ? 'text-[#FDB515]' : 'group-hover:text-white'}`}>
-                     {React.cloneElement(item.icon as React.ReactElement, { size: 15 })}
-                   </span>
-                   {!collapsed && (
-                     <div className="overflow-hidden min-w-0">
-                       <div className="text-[12px] font-bold whitespace-nowrap leading-none">
-                         {item.label}
-                       </div>
-                       <div className={`text-[8px] uppercase font-bold tracking-widest mt-0.5 ${isActive(item.href) ? 'text-[#FDB515]/50' : 'text-white/20 group-hover:text-white/30'}`}>
-                         {item.sub}
-                       </div>
-                     </div>
-                   )}
-                 </Link>
-               ))}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* Control Center Trigger */}
-      <div className="px-3 py-2 border-t border-white/5">
-         <button 
-          onClick={onOpenSettings}
-          className={`flex items-center gap-2.5 w-full p-2.5 rounded-xl bg-white/5 border border-white/5 text-white/40 hover:bg-white/10 hover:text-white transition-all group ${collapsed ? 'justify-center' : ''}`}
-         >
-            <Settings2 size={15} className="group-hover:rotate-90 transition-transform flex-shrink-0" />
-            {!collapsed && <span className="text-[12px] font-bold">控制中心</span>}
-         </button>
-      </div>
-
-      <div className={`px-4 py-3 border-t border-white/5 ${collapsed ? 'flex justify-center' : ''}`}>
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-          {!collapsed && (
-            <span className="text-white/30 text-[9px] font-black uppercase tracking-[0.2em]">5T Node · Active</span>
-          )}
+              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+            </button>
+          ))}
         </div>
-      </div>
-    </aside>
-  );
-}
-
-function MobileNav() {
-  const pathname = usePathname() ?? '/';
-  const quickItems = [
-    { href: '/', label: '控制', icon: <LayoutDashboard size={18} /> },
-    { href: '/advisory', label: '諮詢', icon: <MessageSquare size={18} /> },
-    { href: '/environmental', label: '環境', icon: <Leaf size={18} /> },
-    { href: '/vault', label: '金庫', icon: <Lock size={18} /> },
-    { href: '/editor', label: '撰寫', icon: <FileText size={18} /> },
-  ];
-
-  return (
-    <nav className="mobile-nav">
-      {quickItems.map((item) => {
-        const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-        return (
-          <Link 
-            key={item.href} 
-            href={item.href} 
-            className={`flex flex-col items-center justify-center gap-1.5 flex-1 py-3 transition-all relative ${active ? 'text-[#003262]' : 'text-slate-400'}`}
-          >
-            <div className={`transition-all duration-300 ${active ? 'scale-110 -translate-y-1 text-[#FDB515]' : ''}`}>
-              {item.icon}
-            </div>
-            <span className={`text-[9px] font-black uppercase tracking-widest transition-all ${active ? 'text-[#003262] opacity-100 scale-105' : 'opacity-60'}`}>
-              {item.label}
-            </span>
-            {active && (
-              <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#FDB515] shadow-[0_0_8px_#FDB515]" />
-            )}
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
-
-function MobileIntegrityAlert() {
-  const [activeAlert, setActiveAlert] = useState<any>(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      // Simulate random 5T events for mobile engagement
-      if (Math.random() > 0.85) {
-        const events = [
-          { title: 'ZKP 驗證成功', body: '年度碳排放數據已通過零知識區間驗證。', icon: <Lock size={16}/>, color: 'text-purple-600' },
-          { title: '蜂群共識達成', body: 'Agent 蜂群已批准 2030 綠能轉型戰略。', icon: <Zap size={16}/>, color: 'text-gold-600' },
-          { title: '5T 封印寫入', body: '範疇三供應商數據已完成公共帳本錨定。', icon: <Shield size={16}/>, color: 'text-emerald-600' },
-        ];
-        setActiveAlert(events[Math.floor(Math.random() * events.length)]);
-        setTimeout(() => setActiveAlert(null), 5000);
-      }
-    }, 15000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {activeAlert && (
-        <motion.div 
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -100, opacity: 0 }}
-          className="fixed top-4 left-4 right-4 z-[9999] lg:left-auto lg:right-4 lg:w-80"
-        >
-          <div className="bg-white/90 backdrop-blur-2xl rounded-3xl border border-white shadow-extreme p-4 flex items-start gap-4">
-             <div className={`w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 ${activeAlert.color}`}>
-                {activeAlert.icon}
-             </div>
-             <div className="min-w-0 flex-1">
-                <p className="text-xs font-black text-berkeley-blue uppercase tracking-tight">{activeAlert.title}</p>
-                <p className="text-[10px] text-slate-500 font-medium leading-relaxed mt-0.5 line-clamp-2">{activeAlert.body}</p>
-             </div>
-             <button onClick={() => setActiveAlert(null)} className="text-slate-300 hover:text-slate-600"><X size={14}/></button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
-function AppShellInner({ children }: { children: React.ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
-  const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const check = () => setIsMobile(window.innerWidth < 1024);
-    check();
-    window.addEventListener('resize', check, { passive: true });
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsSearchOpen(true);
-      }
-      if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
-        e.preventDefault();
-        setIsWorkspaceOpen(prev => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('resize', check);
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  if (!mounted) return null;
-
-  return (
-    <div className="app-shell min-h-screen font-sans bg-[#F8FAFC] flex overflow-hidden">
-      {!isMobile && (
-        <SidebarContent 
-          collapsed={collapsed} 
-          onCollapse={() => setCollapsed(!collapsed)} 
-          onSearch={() => setIsSearchOpen(true)}
-          onOpenSettings={() => setIsControlCenterOpen(true)}
-        />
-      )}
-      
-      <div className="flex-1 flex flex-col relative overflow-hidden min-h-screen">
-        <main className={`main-content flex-1 transition-all duration-500 relative ${!isMobile && collapsed ? 'sidebar-collapsed' : ''} ${isMobile ? 'mobile-mode' : ''} ${isWorkspaceOpen ? 'mr-[400px]' : ''} pb-32 overflow-y-auto no-scrollbar`}>
-          <div className="fixed inset-0 pointer-events-none -z-10 bg-gradient-to-br from-[#F8FAFC] via-[#F1F5F9] to-[#E2E8F0]" />
-          <div className="relative z-10 p-6 lg:p-10">
-            {children}
-          </div>
-        </main>
-
-        {!isMobile && <ComposerFooter />}
-      </div>
-
-      {!isMobile && (
-        <WorkspacePanel 
-          isOpen={isWorkspaceOpen} 
-          onClose={() => setIsWorkspaceOpen(false)} 
-        />
-      )}
-      
-      {/* Workspace Trigger (Desktop Only) */}
-      {!isMobile && !isWorkspaceOpen && (
-        <button 
-          onClick={() => setIsWorkspaceOpen(true)}
-          className="fixed right-6 top-1/2 -translate-y-1/2 w-10 h-24 bg-white/80 backdrop-blur-xl border border-slate-100 shadow-premium rounded-full flex flex-col items-center justify-center gap-4 text-slate-300 hover:text-[#003262] hover:border-blue-100 transition-all z-40 group"
-        >
-           <Layout size={18} className="group-hover:scale-110 transition-transform" />
-           <div className="h-8 w-px bg-slate-100 group-hover:bg-blue-100 transition-colors" />
-           <ChevronLeft size={16} />
-        </button>
-      )}
-      
-      <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-      <HermesControlCenter isOpen={isControlCenterOpen} onClose={() => setIsControlCenterOpen(false)} />
-      {isMobile && <MobileNav />}
-      <MobileIntegrityAlert />
-      <HermesFloatingAgent />
+      </motion.div>
     </div>
   );
 }
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const { rs, status: rsStatus } = useOmniResonance();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen(true);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === '/') {
+        e.preventDefault();
+        setIsControlCenterOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center h-screen bg-[#F8FAFC]">
-        <div className="relative">
-          <div className="w-12 h-12 rounded-2xl bg-[#003262] animate-pulse" />
-          <div className="absolute inset-0 w-12 h-12 border-4 border-[#FDB515] border-t-transparent rounded-2xl animate-spin" />
+    <div className="flex h-screen bg-slate-50/50 overflow-hidden font-sans selection:bg-berkeley-blue/10">
+      {/* Sidebar Navigation */}
+      <motion.aside 
+        animate={{ width: isSidebarOpen ? 320 : 0, opacity: isSidebarOpen ? 1 : 0 }}
+        className="h-full bg-white/40 backdrop-blur-2xl border-r border-slate-200/50 flex flex-col relative z-50 overflow-hidden shadow-sm"
+      >
+        <div className="p-8 border-b border-slate-100/50">
+           <Link href="/" className="flex items-center gap-4 group">
+              <div className="w-12 h-12 rounded-2xl bg-berkeley-blue flex items-center justify-center text-california-gold shadow-lg group-hover:scale-105 transition-transform duration-500">
+                 <Fingerprint size={28} />
+              </div>
+              <div className="overflow-hidden">
+                 <h2 className="text-xl font-black text-berkeley-blue tracking-tighter uppercase whitespace-nowrap">ESG GO | oX</h2>
+                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mt-0.5">OmniCore Genesis</p>
+              </div>
+           </Link>
         </div>
+
+        <nav className="flex-1 overflow-y-auto py-8 px-6 space-y-10 no-scrollbar">
+           {navGroups.map((group, i) => (
+             <div key={i} className="space-y-3">
+                <p className="px-4 text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">{group.label}</p>
+                <div className="space-y-1">
+                   {group.items.map((item, j) => {
+                      const isActive = pathname === item.href;
+                      return (
+                        <Link 
+                          key={j} 
+                          href={item.href}
+                          className={cn(
+                            "flex items-center gap-4 px-5 py-3.5 rounded-2xl text-[13px] font-black transition-all duration-300 group",
+                            isActive 
+                              ? "bg-berkeley-blue text-white shadow-lg scale-[1.02]" 
+                              : "text-slate-500 hover:text-berkeley-blue hover:bg-white/60"
+                          )}
+                        >
+                           <span className={cn("transition-colors", isActive ? "text-california-gold" : "group-hover:text-berkeley-blue")}>
+                              {item.icon}
+                           </span>
+                           <span className="flex-1">{item.label}</span>
+                           <span className={cn("text-[9px] font-bold opacity-0 group-hover:opacity-40 uppercase transition-opacity", isActive && "opacity-20")}>{item.sub}</span>
+                        </Link>
+                      );
+                   })}
+                </div>
+             </div>
+           ))}
+        </nav>
+
+        {/* Global Resonance Status Bar */}
+        <div className="p-6 border-t border-slate-100/50 space-y-6 bg-slate-50/30">
+           <div className="space-y-3">
+              <div className="flex justify-between items-center px-1">
+                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Resonance Index</span>
+                 <span className="text-[11px] font-black font-mono text-berkeley-blue">Rs {(rs * 100).toFixed(1)}%</span>
+              </div>
+              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                 <motion.div 
+                   animate={{ width: `${rs * 100}%` }} 
+                   className={cn("h-full transition-colors duration-1000", rs >= 0.9 ? 'bg-verified' : 'bg-california-gold')} 
+                 />
+              </div>
+              <p className="text-[9px] text-center font-black text-slate-400 uppercase tracking-[0.2em]">{rsStatus}</p>
+           </div>
+           
+           <div className="grid grid-cols-2 gap-3">
+              <button 
+                onClick={() => setIsControlCenterOpen(true)}
+                className="flex items-center justify-center gap-2 py-3.5 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500 hover:border-berkeley-blue hover:text-berkeley-blue transition-all shadow-sm uppercase tracking-widest"
+              >
+                 <Settings2 size={12} /> KERNEL
+              </button>
+              <button 
+                onClick={() => setIsCommandPaletteOpen(true)}
+                className="flex items-center justify-center gap-2 py-3.5 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500 hover:border-berkeley-blue hover:text-berkeley-blue transition-all shadow-sm uppercase tracking-widest"
+              >
+                 <Command size={12} /> OS_CMD
+              </button>
+           </div>
+        </div>
+      </motion.aside>
+
+      {/* Main Framework Area */}
+      <div className="flex-1 flex flex-col min-w-0 relative">
+        <header className="h-20 bg-white/40 backdrop-blur-xl border-b border-slate-200/50 flex items-center justify-between px-10 sticky top-0 z-40">
+           <div className="flex items-center gap-6">
+              <button 
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-berkeley-blue transition-all"
+              >
+                 {isSidebarOpen ? <ChevronLeft size={20} /> : <Layout size={20} />}
+              </button>
+              <div className="h-6 w-px bg-slate-200" />
+              <div className="flex items-center gap-3">
+                 <div className="w-2 h-2 rounded-full bg-verified animate-pulse shadow-[0_0_8px_#10b981]" />
+                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">OmniSync: Operational</span>
+              </div>
+           </div>
+
+           <div className="flex items-center gap-6">
+              <div className="hidden md:flex items-center gap-3 px-6 py-2.5 bg-slate-100/50 rounded-2xl border border-slate-200/50">
+                 <Activity size={14} className="text-berkeley-blue" />
+                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Ren/Du Balancer: <span className="text-berkeley-blue uppercase">Balanced</span></span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center">
+                 <Users size={20} className="text-slate-400" />
+              </div>
+           </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto no-scrollbar relative p-8 lg:p-12">
+           <AnimatePresence mode="wait">
+              <motion.div
+                key={pathname}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                className="max-w-[1600px] mx-auto"
+              >
+                 {children}
+              </motion.div>
+           </AnimatePresence>
+        </main>
+        
+        {/* Universal Components */}
+        <HermesFloatingAgent />
+        <HermesControlCenter isOpen={isControlCenterOpen} onClose={() => setIsControlCenterOpen(false)} />
+        <CommandPalette isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
       </div>
-    }>
-      <AppShellInner>{children}</AppShellInner>
-    </Suspense>
+    </div>
   );
 }

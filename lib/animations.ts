@@ -1,6 +1,12 @@
+// lib/animations.ts
+
+/**
+ * InfoOne v8.1.0 Framer Motion Animations
+ */
+
 export const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
+  initial: { opacity: 0, y: 20 },
+  animate: { 
     opacity: 1, 
     y: 0,
     transition: { duration: 0.4, ease: 'easeOut' }
@@ -8,8 +14,8 @@ export const fadeIn = {
 };
 
 export const slideIn = {
-  hidden: { x: -100, opacity: 0 },
-  visible: {
+  initial: { x: -100, opacity: 0 },
+  animate: {
     x: 0,
     opacity: 1,
     transition: { duration: 0.5, ease: 'easeOut' }
@@ -17,8 +23,8 @@ export const slideIn = {
 };
 
 export const scaleIn = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
+  initial: { scale: 0.9, opacity: 0 },
+  animate: {
     scale: 1,
     opacity: 1,
     transition: { duration: 0.3, ease: 'easeOut' }
@@ -26,8 +32,8 @@ export const scaleIn = {
 };
 
 export const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
+  initial: { opacity: 0 },
+  animate: {
     opacity: 1,
     transition: {
       staggerChildren: 0.1

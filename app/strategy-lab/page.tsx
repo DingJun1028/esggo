@@ -8,14 +8,17 @@ import {
   Layers, Database, PieChart, Activity, AlertTriangle, 
   Award, ArrowUpRight, ZapOff, Sparkle, Globe, Network
 } from 'lucide-react';
-import { 
-  BrandButton, BrandCard, BrandBadge, BrandPageHeader, 
-  BrandCardHeader, StandardPage, BrandTabs, BrandStatusDot
-} from '../../components/brand';
+import { cn } from '../../lib/utils';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Card } from '../../components/ui/Card';
+import { Tabs } from '../../components/ui/Tabs';
+import { BrandStatusDot } from '../../components/brand';
+import StandardPage from '../../components/brand/StandardPage';
+import { fadeIn, staggerContainer } from '../../lib/animations';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { ConsensusVisualizer } from '../../components/ui/ConsensusVisualizer';
 import { swarmConsensusEngine, ConsensusResult } from '../../lib/swarm-consensus-engine';
-import { cn } from '../../lib/utils';
 import { useSystemEvolution } from '../../hooks/useSystemEvolution';
 
 export default function StrategyLabPage() {
@@ -65,7 +68,7 @@ export default function StrategyLabPage() {
     id: 'strategy-lab',
     title: '戰略與進化實驗室 Strategy Lab',
     subtitle: 'Swarm Consensus · 自主進化模擬 · 5T 戰略封印。',
-    icon: <Brain size={32} className="text-[#003262]" />,
+    icon: <Brain size={32} className="text-berkeley-blue" />,
     griReference: 'Governance / Self-Evolution',
     activeT5Tags: ['T2', 'T4', 'T5'],
     isOXModule: true,
@@ -79,7 +82,7 @@ export default function StrategyLabPage() {
     kpis: [
       { key: 'consensus-rate', label: '蜂群共識率', value: '84', unit: '%', icon: <Activity size={18}/> },
       { key: 'evo-stage', label: '進化階段', value: 'OX-3', icon: <Layers size={18}/>, verified: true },
-      { key: 'trust-score', label: '戰略信任分', value: '96.8', icon: <Award size={18} className="text-amber-500"/> },
+      { key: 'trust-score', label: '戰略信任分', value: '96.8', icon: <Award size={18} className="text-california-gold"/> },
     ],
 
     sections: [
@@ -88,14 +91,15 @@ export default function StrategyLabPage() {
         title: '實驗室模式',
         columns: 12,
         component: (
-          <BrandTabs 
-            activeTab={activeMode}
-            onTabChange={(t) => setActiveTab(t as any)}
+          <Tabs 
+            active={activeMode}
+            onChange={(t) => setActiveTab(t as any)}
             tabs={[
-              { id: 'consensus', label: '蜂群共識模擬 (Consensus)', icon: <Bot size={14}/> },
-              { id: 'roadmap', label: '動態進化路徑 (Roadmap)', icon: <TrendingUp size={14}/> },
-              { id: 'evolution', label: '架構自我成長 (Evo)', icon: <RefreshCw size={14}/> },
+              { key: 'consensus', label: '蜂群共識模擬 (Consensus)', icon: <Bot size={14}/> },
+              { key: 'roadmap', label: '動態進化路徑 (Roadmap)', icon: <TrendingUp size={14}/> },
+              { key: 'evolution', label: '架構自我成長 (Evo)', icon: <RefreshCw size={14}/> },
             ]}
+            variant="pills"
           />
         )
       },
@@ -106,78 +110,87 @@ export default function StrategyLabPage() {
         hidden: activeMode !== 'consensus',
         component: (
           <div className="space-y-6">
-            <BrandCard padding="lg" className="border-none shadow-premium bg-white/80 backdrop-blur-md relative overflow-hidden">
-               <div className="relative z-10 space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">戰略願景 (Strategic Vision)</label>
+            <Card className="p-8 bg-white/60 backdrop-blur-xl border-white/60 shadow-glass relative overflow-hidden">
+               <div className="relative z-10 space-y-8">
+                  <div className="space-y-3">
+                    <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">戰略願景 (Strategic Vision)</label>
                     <textarea 
-                      className="w-full h-64 bg-slate-50 rounded-[2rem] p-6 text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 outline-none transition-all resize-none leading-relaxed"
+                      className="w-full h-80 bg-slate-50/50 border border-slate-100/50 rounded-[2.5rem] p-8 text-sm font-medium focus:bg-white focus:ring-4 focus:ring-berkeley-blue/5 outline-none transition-all resize-none leading-relaxed shadow-inner"
                       placeholder="請輸入您的企業戰略提案。例如：將全台 24 處營運據點轉化為 100% 綠電節點，並實施 5T 即時確信..."
                       value={proposal}
                       onChange={e => setProposal(e.target.value)}
                     />
                   </div>
-                  <BrandButton 
+                  <Button 
                     variant="primary" 
-                    fullWidth 
-                    size="lg" 
-                    className="h-16 text-base font-black shadow-xl"
+                    className="w-full h-16 text-base tracking-[0.2em] uppercase shadow-glass rounded-[2rem]"
                     onClick={handleEvaluate}
                     disabled={isEvaluating || !proposal.trim()}
-                    loading={isEvaluating}
+                    isLoading={isEvaluating}
                   >
                     {isEvaluating ? '召喚蜂群共識中...' : '啟動蜂群戰略審核'}
-                    {!isEvaluating && <Sparkles size={18} className="ml-2" />}
-                  </BrandButton>
+                    {!isEvaluating && <Sparkles size={20} className="ml-3" />}
+                  </Button>
                </div>
-               <Bot size={120} className="absolute -bottom-10 -left-10 text-slate-100 opacity-50 -rotate-12" />
-            </BrandCard>
+               <Bot size={160} className="absolute -bottom-16 -left-16 text-slate-100 opacity-20 -rotate-12 pointer-events-none" />
+            </Card>
           </div>
         )
       },
       {
         id: 'consensus-result',
         title: '蜂群決策結果',
-        columns: 7,
+        columns: 8,
         hidden: activeMode !== 'consensus',
         component: (
           <div className="h-full">
             <AnimatePresence mode="wait">
               {result ? (
-                <motion.div key="result" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-                   <ConsensusVisualizer result={result} />
-                   <div className="mt-6 p-6 bg-slate-900 rounded-[2.5rem] text-white flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                         <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-[#FDB515]">
-                            <Lock size={24} />
+                <motion.div key="result" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
+                   <Card className="p-8 bg-white/40 backdrop-blur-sm border-white/60 shadow-sm overflow-hidden">
+                      <ConsensusVisualizer result={result} />
+                   </Card>
+                   <motion.div 
+                     initial={{ y: 20, opacity: 0 }}
+                     animate={{ y: 0, opacity: 1 }}
+                     className="p-8 bg-berkeley-blue rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden"
+                   >
+                      <div className="flex items-center gap-6 relative z-10">
+                         <div className="w-16 h-16 rounded-[1.5rem] bg-white/10 flex items-center justify-center text-california-gold shadow-inner border border-white/10">
+                            <Lock size={32} />
                          </div>
                          <div>
-                            <p className="text-xs font-black uppercase tracking-widest">5T Strategic Seal</p>
-                            <p className="text-[10px] text-white/40 font-mono">sha256:ox_strat_{Math.random().toString(36).substring(7)}</p>
+                            <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-200 mb-1">5T Strategic Seal</p>
+                            <code className="text-[12px] text-white/60 font-mono font-bold">sha256:ox_strat_{Math.random().toString(36).substring(7)}</code>
                          </div>
                       </div>
-                      <BrandButton variant="secondary" size="sm" className="border-white/10 text-white hover:bg-white/10" onClick={handleSealStrategy}>
-                         提交至聖碑
-                      </BrandButton>
-                   </div>
+                      <Button variant="glass" className="w-full md:w-auto px-10 h-14 rounded-2xl border-white/20 text-white hover:bg-white/10 font-black relative z-10" onClick={handleSealStrategy}>
+                         提交至永恆聖碑
+                      </Button>
+                      <div className="absolute top-1/2 right-0 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+                         <Shield size={240} className="text-white" />
+                      </div>
+                   </motion.div>
                 </motion.div>
               ) : isEvaluating ? (
-                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full min-h-[400px] border border-slate-100 rounded-[3rem] bg-white/50 flex flex-col items-center justify-center p-12 text-center">
+                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full min-h-[500px] border border-slate-100 rounded-[3rem] bg-white/60 backdrop-blur-md flex flex-col items-center justify-center p-12 text-center shadow-inner">
                    <div className="relative">
-                      <div className="w-24 h-24 rounded-full border-4 border-blue-700 border-t-transparent animate-spin" />
-                      <Brain size={40} className="absolute inset-0 m-auto text-blue-700 animate-pulse" />
+                      <div className="w-28 h-28 rounded-full border-4 border-berkeley-blue/20 border-t-berkeley-blue animate-spin" />
+                      <Brain size={48} className="absolute inset-0 m-auto text-berkeley-blue animate-pulse" />
                    </div>
-                   <h3 className="text-xl font-black text-[#003262] uppercase tracking-widest mt-8">多維度權重演算中</h3>
-                   <div className="mt-4 space-y-2">
-                       <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2"><BrandStatusDot status="active" pulse size="sm"/> Z0-Auditor 正在檢查法規合規性...</p>
-                       <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2"><BrandStatusDot status="active" pulse size="sm"/> H1-Diplomat 正在模擬社會影響力...</p>
+                   <h3 className="text-2xl font-black text-berkeley-blue uppercase tracking-widest mt-10">多維度權重演算中</h3>
+                   <div className="mt-6 space-y-3">
+                       <p className="text-[11px] font-bold text-slate-500 flex items-center justify-center gap-3"><BrandStatusDot status="active" pulse /> Z0-Auditor 正在檢查法規合規性...</p>
+                       <p className="text-[11px] font-bold text-slate-500 flex items-center justify-center gap-3"><BrandStatusDot status="active" pulse /> H1-Diplomat 正在模擬社會影響力...</p>
                    </div>
                 </motion.div>
               ) : (
-                <div className="h-full min-h-[400px] border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center bg-slate-50/30 text-slate-300 p-12 text-center">
-                   <Rocket size={48} className="opacity-20 mb-6" />
-                   <p className="text-sm font-bold uppercase tracking-widest">等待提案提交</p>
-                   <p className="text-[10px] mt-2 max-w-xs leading-relaxed">請在左側輸入您的企業願景，啟動 AI 自主治理流程。Hermes 將匯集所有專家的共識權重。</p>
+                <div className="h-full min-h-[500px] border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center bg-slate-50/50 text-slate-300 p-12 text-center group hover:border-berkeley-blue/20 transition-all">
+                   <div className="w-24 h-24 rounded-[2.5rem] bg-slate-100 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                      <Rocket size={48} className="opacity-40" />
+                   </div>
+                   <p className="text-sm font-black uppercase tracking-[0.4em] text-slate-400">等待提案提交</p>
+                   <p className="text-[12px] mt-4 max-w-xs leading-relaxed font-medium text-slate-400/80">請在左側輸入您的企業願景，啟動 AI 自主治理流程。Hermes 將匯集所有專家的共識權重。</p>
                 </div>
               )}
             </AnimatePresence>
@@ -190,30 +203,30 @@ export default function StrategyLabPage() {
         columns: 12,
         hidden: activeMode !== 'roadmap',
         component: (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {GROWTH_PATHWAYS.map((path, i) => (
-              <BrandCard key={i} hover padding="lg" className="border-none shadow-premium relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700" />
-                <div className="relative z-10 space-y-6">
-                  <div className="w-12 h-12 rounded-2xl bg-[#003262] text-[#FDB515] flex items-center justify-center shadow-lg">
-                    {i === 0 ? <Shield size={24}/> : i === 1 ? <Zap size={24}/> : <Globe size={24}/>}
+              <Card key={i} hoverEffect className="p-10 bg-white/60 backdrop-blur-md border-white/80 shadow-glass relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-berkeley-blue/5 rounded-full -mr-20 -mt-20 group-hover:scale-125 transition-transform duration-1000" />
+                <div className="relative z-10 space-y-8">
+                  <div className="w-16 h-16 rounded-[1.5rem] bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center shadow-inner border border-berkeley-blue/10">
+                    {i === 0 ? <Shield size={32}/> : i === 1 ? <Zap size={32} fill="currentColor"/> : <Globe size={32}/>}
                   </div>
                   <div>
-                    <h4 className="text-xl font-black text-[#003262] mb-1">{path.title}</h4>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{path.focus}</p>
+                    <h4 className="text-2xl font-black text-berkeley-blue mb-2 tracking-tight">{path.title}</h4>
+                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{path.focus}</p>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-blue-600">預計達成: {path.target}</span>
-                    <div className="flex items-center gap-1 text-emerald-500 font-black">
-                      <TrendingUp size={14}/>
-                      <span className="text-sm">{path.impact}%</span>
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-xs font-black text-berkeley-blue/80 uppercase tracking-wider">預計達成: {path.target}</span>
+                    <div className="flex items-center gap-1.5 text-verified font-black">
+                      <TrendingUp size={16}/>
+                      <span className="text-base">{path.impact}%</span>
                     </div>
                   </div>
-                  <BrandButton variant="primary" fullWidth size="sm" className="rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    展開進化細節 <ArrowUpRight size={14} className="ml-1"/>
-                  </BrandButton>
+                  <Button variant="primary" className="w-full h-12 rounded-xl opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 shadow-lg">
+                    展開進化細節 <ArrowUpRight size={18} className="ml-2"/>
+                  </Button>
                 </div>
-              </BrandCard>
+              </Card>
             ))}
           </div>
         )
@@ -224,21 +237,22 @@ export default function StrategyLabPage() {
         columns: 12,
         hidden: activeMode !== 'evolution',
         component: (
-          <div className="p-12 bg-slate-900 rounded-[3rem] text-center space-y-8 relative overflow-hidden border border-white/5">
-             <div className="relative z-10 space-y-4">
-                <div className="w-24 h-24 rounded-[2.5rem] bg-gradient-to-br from-blue-500 to-purple-600 mx-auto flex items-center justify-center shadow-2xl shadow-blue-500/20">
-                   <RefreshCw size={48} className="text-white animate-spin-slow" />
+          <div className="p-20 bg-slate-50/50 rounded-[4rem] text-center space-y-10 relative overflow-hidden border border-white shadow-glass">
+             <div className="relative z-10 space-y-6">
+                <div className="w-32 h-32 rounded-[3rem] bg-white shadow-glass border border-white/80 mx-auto flex items-center justify-center relative group">
+                   <RefreshCw size={56} className="text-berkeley-blue animate-spin-slow group-hover:text-california-gold transition-colors" />
+                   <div className="absolute inset-0 rounded-full border-2 border-dashed border-berkeley-blue/20 animate-spin-slow-reverse" />
                 </div>
-                <h3 className="text-2xl font-black text-white uppercase tracking-tight">oX Self-Evolution Active</h3>
-                <p className="text-blue-100/50 text-sm max-w-xl mx-auto leading-relaxed">
+                <h3 className="text-3xl font-black text-berkeley-blue uppercase tracking-tight">oX Self-Evolution Active</h3>
+                <p className="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed font-medium">
                    Hermes 正在即時監控全域數據流。當偵測到結構性治理模式時，系統將自動提議架構升級（如：新增 5T 驗證節點或擴展 Swarm 角色）。
                 </p>
-                <div className="pt-8">
-                   <BrandBadge variant="gold" size="md" className="px-6 py-2 rounded-full font-black">Current Tier: Autonomous OX-3</BrandBadge>
+                <div className="pt-10">
+                   <Badge variant="verified" className="px-10 py-3 rounded-full font-black text-sm shadow-sm tracking-[0.2em]">Current Tier: Autonomous OX-3</Badge>
                 </div>
              </div>
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 scale-[2] pointer-events-none">
-                <Network size={400} className="text-white" />
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] scale-[1.5] pointer-events-none">
+                <Network size={600} className="text-berkeley-blue" />
              </div>
           </div>
         )

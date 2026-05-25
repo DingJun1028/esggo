@@ -1,8 +1,10 @@
-﻿'use client';
+'use client';
 import React from 'react';
+import { SACRED_GATES, ProtocolGateCode } from '../../types/protocol';
+import { motion } from 'framer-motion';
 
 interface T5Item {
-  code: 'T1' | 'T2' | 'T3' | 'T4' | 'T5';
+  code: ProtocolGateCode;
   active?: boolean;
 }
 
@@ -10,15 +12,8 @@ interface BrandT5StripProps {
   items?: T5Item[];
   compact?: boolean;
   className?: string;
+  animate?: boolean;
 }
-
-const t5Config = {
-  T1: { label: '可感知', color: '#10B981', bg: '#f0fdf4' },
-  T2: { label: '可溯源', color: '#3B7EA1', bg: '#EBF2FA' },
-  T3: { label: '可追蹤', color: '#8B5CF6', bg: '#F5F3FF' },
-  T4: { label: '透明', color: '#F59E0B', bg: '#FEF3C7' },
-  T5: { label: '不可篡改', color: '#003262', bg: '#EBF2FA' },
-};
 
 export default function BrandT5Strip({
   items = [
@@ -30,25 +25,36 @@ export default function BrandT5Strip({
   ],
   compact = false,
   className = '',
+  animate = true,
 }: BrandT5StripProps) {
   return (
-    <div className={`flex items-center gap-${compact ? '1' : '1.5'} flex-wrap ${className}`}>
-      {items.map(item => {
-        const config = t5Config[item.code];
+    <div className={`flex items-center gap-${compact ? '1.5' : '2'} flex-wrap ${className}`}>
+      {items.map((item, idx) => {
+        const config = SACRED_GATES[item.code];
         const active = item.active !== false;
+        
         return (
-          <div
+          <motion.div
             key={item.code}
-            className={`inline-flex items-center gap-1 rounded-full font-medium ${compact ? 'text-[10px] px-2 py-0.5' : 'text-xs px-2.5 py-1'}`}
+            initial={animate ? { opacity: 0, scale: 0.8 } : false}
+            animate={animate ? { opacity: 1, scale: 1 } : false}
+            transition={{ delay: idx * 0.1 }}
+            className={`
+              inline-flex items-center gap-1.5 rounded-2xl font-black transition-all border-2
+              ${compact ? 'text-[9px] px-2.5 py-0.5' : 'text-[10px] px-3.5 py-1.5'}
+            `}
             style={{
-              backgroundColor: active ? config.bg : '#f1f5f9',
-              color: active ? config.color : '#94a3b8',
-              border: `1px solid ${active ? config.color + '40' : '#e2e8f0'}`,
+              backgroundColor: active ? `${config.color}15` : '#f8fafc',
+              color: active ? config.color : '#cbd5e1',
+              borderColor: active ? `${config.color}30` : '#f1f5f9',
+              boxShadow: active ? `0 0 12px ${config.color}10` : 'none',
             }}
           >
-            <span className="font-bold">{item.code}</span>
-            {!compact && <span>{config.label}</span>}
-          </div>
+            <span className="opacity-40">{item.code}</span>
+            <div className={`w-1 h-1 rounded-full ${active ? '' : 'bg-slate-300'}`} style={{ backgroundColor: active ? config.color : undefined }} />
+            <span>{config.labelZh}</span>
+            {!compact && <span className="text-[8px] opacity-40 font-bold ml-0.5">{config.titleZh.split('(')[1]?.replace(')', '')}</span>}
+          </motion.div>
         );
       })}
     </div>

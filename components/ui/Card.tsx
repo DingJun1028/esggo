@@ -1,62 +1,64 @@
-﻿import * as React from 'react';
-import { cn } from '../../lib/utils';
-import { motion, HTMLMotionProps } from 'framer-motion';
+// components/ui/Card.tsx
+import { cn } from '@/lib/utils';
+import { HTMLAttributes, forwardRef } from 'react';
 
-export interface CardProps extends HTMLMotionProps<"div"> {
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  hover?: boolean;
   hoverEffect?: boolean;
+  glow?: boolean;
 }
 
-const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, hoverEffect = false, ...props }, ref) => {
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, hover = false, hoverEffect = false, glow = false, children, ...props }, ref) => {
+    const isHoverable = hover || hoverEffect;
+
     return (
-      <motion.div
-        ref={ref as any}
-        whileHover={hoverEffect ? { y: -4, boxShadow: '0 12px 64px rgba(0, 50, 98, 0.1)' } : undefined}
+      <div
+        ref={ref}
         className={cn(
-          'rounded-card border border-slate-100/50 bg-white/80 p-card text-slate-950 shadow-glass backdrop-blur transition-all',
-          hoverEffect && 'cursor-pointer',
+          // 液態玻璃基礎效果
+          'relative rounded-card backdrop-blur-lg',
+          'bg-white/60 border border-white/60',
+          'shadow-glass',
+          'p-card overflow-hidden',
+         
+          // Hover 效果
+          isHoverable && 'transition-all duration-500 hover:shadow-xl hover:scale-[1.01] hover:bg-white/80 hover:border-white/80',
+         
+          // 發光效果（用於重要卡片）
+          glow && 'before:absolute before:inset-0 before:-z-10 before:rounded-card before:bg-gradient-to-r before:from-berkeley-blue/5 before:to-verified/5 before:blur-2xl',
+         
           className
         )}
         {...props}
-      />
+      >
+        {children}
+      </div>
     );
   }
 );
+
 Card.displayName = 'Card';
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('flex flex-col space-y-1.5 mb-4', className)}
-    {...props}
-  />
-));
-CardHeader.displayName = 'CardHeader';
+export function CardHeader({ title, subtitle, icon, className, children }: { title?: string; subtitle?: string; icon?: React.ReactNode; className?: string; children?: React.ReactNode }) {
+  return (
+    <div className={cn("flex items-start justify-between mb-6", className)}>
+      <div className="space-y-1">
+        <div className="flex items-center gap-3">
+          {icon && <div className="text-berkeley-blue">{icon}</div>}
+          {title && <h3 className="text-lg font-black text-berkeley-blue uppercase tracking-tight">{title}</h3>}
+        </div>
+        {subtitle && <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{subtitle}</p>}
+      </div>
+      {children}
+    </div>
+  );
+}
 
-const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      'text-lg font-bold leading-none tracking-tight text-berkeley-blue',
-      className
-    )}
-    {...props}
-  />
-));
-CardTitle.displayName = 'CardTitle';
+export function CardContent({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cn("relative z-10", className)}>{children}</div>;
+}
 
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('', className)} {...props} />
-));
-CardContent.displayName = 'CardContent';
-
-export { Card, CardHeader, CardTitle, CardContent };
+export function CardTitle({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <h3 className={cn("text-lg font-black text-berkeley-blue tracking-tight", className)}>{children}</h3>;
+}

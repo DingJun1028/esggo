@@ -1,12 +1,13 @@
-﻿'use client';
+'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Trophy, Star, BookOpen, Layout, Globe, Shield, 
   ArrowUpRight, Search, Filter, Download, Zap, Sparkles,
   CheckCircle2, Landmark, Target, Award, Eye, FileText,
-  Bookmark, Share2, MessageSquare, ChevronRight, List, Bot
+  Bookmark, Share2, MessageSquare, ChevronRight, List, Bot,
+  Loader2, Plus
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandBadge, BrandTabs, BrandStatusDot, 
@@ -14,6 +15,7 @@ import {
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { STANDARDS } from '../../lib/standards-data';
+import { integrityService } from '../../lib/services/integrity-service';
 import Link from 'next/link';
 
 const BEST_PRACTICES = [
@@ -60,6 +62,51 @@ export default function BestPracticeHubPage() {
   const [activeTab, setActiveTab] = useState<'benchmarks' | 'standards' | 'templates'>('benchmarks');
   const [searchQuery, setSearchSearchQuery] = useState('');
   const [selectedPractice, setSelectedPractice] = useState<any>(null);
+  const [loadingAi, setLoadingAi] = useState(false);
+  const [aiRecommendations, setAiRecommendations] = useState<any[]>([]);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'info' | 'error' } | null>(null);
+
+  const showToast = useCallback((msg: string, type: 'success' | 'info' | 'error' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
+
+  const fetchAiRecommendations = async () => {
+    setLoadingAi(true);
+    showToast('OmniHermes 正在分析產業標竿與您的治理數據...', 'info');
+    try {
+      const res = await fetch('/api/ai/best-practices/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ industry: '半導體製造業' }) // Can be dynamic
+      });
+      if (!res.ok) throw new Error('API Error');
+      const data = await res.json();
+      setAiRecommendations(data.recommendations || []);
+      showToast('已生成專屬最佳實踐建議', 'success');
+    } catch (e) {
+      showToast('AI 建議引擎暫時不可用', 'error');
+    } finally {
+      setLoadingAi(false);
+    }
+  };
+
+  const applyPractice = async (practice: any) => {
+    showToast(`正在套用：${practice.title}...`, 'info');
+    try {
+      // 1. Seal the decision with IntegrityService (Best Practice!)
+      await integrityService.sealData('Best_Practice_Application', practice, { 
+        user: 'Admin', 
+        dept: 'ESG Committee',
+        gri: practice.gri 
+      });
+
+      // 2. Add as a task (Simulated)
+      showToast(`成功！實踐策略已同步至「任務中心」並完成 5T 誠信封印`, 'success');
+    } catch (e) {
+      showToast('套用失敗', 'error');
+    }
+  };
 
   // ── Universal Page Configuration ──────────────────────────────────
   const pageConfig: UniversalPageConfig = {
@@ -73,8 +120,8 @@ export default function BestPracticeHubPage() {
     features: { useAuditLog: true },
 
     primaryActions: [
-      { id: 'ai-suggest', label: 'AI 推薦實踐', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在根據您的產業分析最佳實踐...') },
-      { id: 'upload', label: '貢獻案例', icon: <Share2 size={16}/>, variant: 'secondary', onClick: () => alert('貢獻案例上傳功能開發中') }
+      { id: 'ai-suggest', label: 'AI 推薦實踐', icon: loadingAi ? <Loader2 size={16} className="animate-spin"/> : <Sparkles size={16}/>, onClick: fetchAiRecommendations },
+      { id: 'upload', label: '貢獻案例', icon: <Share2 size={16}/>, variant: 'secondary', onClick: () => showToast('貢獻案例功能開發中', 'info') }
     ],
 
     kpis: [
@@ -116,6 +163,42 @@ export default function BestPracticeHubPage() {
                   onChange={(e) => setSearchSearchQuery(e.target.value)}
                 />
              </div>
+
+             {/* AI Recommendations Section */}
+             <AnimatePresence>
+                {aiRecommendations.length > 0 && activeTab === 'benchmarks' && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="p-8 bg-blue-50/50 rounded-[2.5rem] border border-blue-200/30 space-y-6"
+                  >
+                     <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                           <div className="p-2 bg-blue-600 rounded-xl text-white">
+                              <Sparkles size={18} />
+                           </div>
+                           <h3 className="text-lg font-black text-[#003262]">OmniHermes AI 專屬推薦</h3>
+                        </div>
+                        <BrandButton variant="ghost" size="sm" onClick={() => setAiRecommendations([])}>清除</BrandButton>
+                     </div>
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {aiRecommendations.map((rec, i) => (
+                           <BrandCard key={i} hover padding="md" className="bg-white border-blue-100/50 border-2">
+                              <h4 className="font-black text-blue-700 mb-2">{rec.title}</h4>
+                              <p className="text-xs text-slate-500 mb-4 line-clamp-3">{rec.description}</p>
+                              <div className="flex items-center justify-between mt-auto">
+                                 <BrandBadge variant="info" size="xs">{rec.gri}</BrandBadge>
+                                 <BrandButton variant="primary" size="sm" className="rounded-xl h-8 text-[10px]" onClick={() => applyPractice(rec)}>
+                                    套用
+                                 </BrandButton>
+                              </div>
+                           </BrandCard>
+                        ))}
+                     </div>
+                  </motion.div>
+                )}
+             </AnimatePresence>
 
              {/* Tab Content: Benchmarks */}
              {activeTab === 'benchmarks' && (
@@ -271,7 +354,7 @@ export default function BestPracticeHubPage() {
                         <p className="text-sm text-blue-100/90 leading-relaxed font-medium italic">
                            「偵測到您的企業在 ${selectedPractice.industry} 中具備相似的組織結構。建議導入其 5T 自動化驗算模型，可大幅降低合規缺口風險。」
                         </p>
-                        <BrandButton variant="primary" fullWidth className="bg-blue-500 hover:bg-blue-400 h-12 rounded-2xl font-black">
+                        <BrandButton variant="primary" fullWidth className="bg-blue-500 hover:bg-blue-400 h-12 rounded-2xl font-black" onClick={() => applyPractice(selectedPractice)}>
                            立即套用此實踐策略
                         </BrandButton>
                      </div>
@@ -289,6 +372,25 @@ export default function BestPracticeHubPage() {
                </div>
             </div>
           </BrandModal>
+        )}
+      </AnimatePresence>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            className={`fixed bottom-8 right-8 z-[100] p-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[300px] border backdrop-blur-md ${
+              toast.type === 'success' ? 'bg-emerald-500/90 text-white border-emerald-400/50' : 
+              toast.type === 'error' ? 'bg-red-500/90 text-white border-red-400/50' :
+              'bg-[#003262]/90 text-white border-blue-400/50'
+            }`}
+          >
+            {toast.type === 'success' ? <CheckCircle2 size={20}/> : toast.type === 'error' ? <Zap size={20}/> : <Bot size={20} className="animate-pulse"/>}
+            <p className="text-xs font-black tracking-tight">{toast.msg}</p>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

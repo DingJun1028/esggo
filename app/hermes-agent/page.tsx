@@ -1,16 +1,23 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bot, Terminal, Cpu, Zap, Shield, Globe, Layers, Video, 
   Code, Database, Activity, ExternalLink, ChevronRight, 
   Download, FileJson, MessageSquare, Gauge, Plus, Copy,
-  CheckCircle, ArrowUpRight, PlayCircle
+  CheckCircle, ArrowUpRight, PlayCircle, Hash, Lock, Activity as ActivityIcon, Sparkles
 } from 'lucide-react';
-import { 
-  BrandCard, BrandButton, BrandTabs, BrandBadge, BrandCardHeader, 
-  BrandStatusDot, BrandTable, BrandPageHeader 
-} from '../../components/brand';
+import { cn } from '../../lib/utils';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Card } from '../../components/ui/Card';
+import { Tabs } from '../../components/ui/Tabs';
+import { DataTable } from '../../components/ui/DataTable';
+import { BrandStatusDot } from '../../components/brand';
+import StandardPage from '../../components/brand/StandardPage';
+import { fadeIn, staggerContainer } from '../../lib/animations';
+import { UniversalPageConfig } from '../../lib/page-config';
 
 /**
  * Full-Stack Bidirectional TypeScript Models
@@ -99,366 +106,386 @@ export default function HermesAgentPage() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  return (
-    <div className="page-container max-w-7xl mx-auto p-6 space-y-6 fade-in">
-      
-      {/* Stitch-Style Header */}
-      <BrandPageHeader 
-        title="OmniHermes Agent 系統 ☤"
-        subtitle="超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心"
-        eyebrow="v0.14.1 · Self-Improving Agent"
-        icon={<Bot size={32} />}
-        actions={
-          <div className="flex items-center gap-3">
-            <BrandBadge variant="blue" size="md" dot>v0.14.0 Stable</BrandBadge>
-            <BrandStatusDot status="active" label="Runtime Online" pulse />
-          </div>
-        }
-      />
+  const pageConfig: UniversalPageConfig = {
+    id: 'hermes-agent',
+    title: 'OmniHermes Agent 系統 ☤',
+    subtitle: '超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心。',
+    icon: <Bot size={32} className="text-berkeley-blue" />,
+    griReference: 'Agent System / oX',
+    activeT5Tags: ['T4', 'T5'],
+    isOXModule: true,
+    features: { useAuditLog: true },
 
-      {/* Main Tabs */}
-      <BrandTabs 
-        activeTab={activeTab}
-        onTabChange={(id) => setActiveTab(id as any)}
-        tabs={[
-          { id: 'overview', label: '總覽', icon: <Activity size={14}/> },
-          { id: 'quickstart', label: '快速上手', icon: <Zap size={14}/> },
-          { id: 'architecture', label: '系統架構', icon: <Layers size={14}/> },
-          { id: 'tools', label: '工具箱', icon: <Terminal size={14}/> },
-          { id: 'research', label: '技術研究', icon: <Database size={14}/> },
-          { id: 'releases', label: '版本紀錄', icon: <Activity size={14}/> },
-        ]}
-      />
+    primaryActions: [
+      { id: 'download', label: '下載離線套件', icon: <Download size={16}/>, onClick: () => alert('正在準備離線套件...') },
+      { id: 'status', label: '系統狀態', icon: <Activity size={16}/>, variant: 'secondary', onClick: () => alert('Agent Runtime: Online') }
+    ],
 
-      <div className="mt-6">
-        {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 fade-in">
-            <div className="lg:col-span-8 space-y-6">
-              <BrandCard padding="lg">
-                <BrandCardHeader title="核心能力 (Core Pillars)" subtitle="定義自主代理的四大維度" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                  {[
-                    { icon: <Activity size={20} />, t: '閉環學習', d: '透過經驗創造 Skill，並在任務中持續自我優化。' },
-                    { icon: <Database size={20} />, t: '方言記憶', d: '具備 FTS5 歷史對話搜尋與 LLM 長期記憶摘要。' },
-                    { icon: <Globe size={20} />, t: '20+ 平台閘道', d: '一個進程同時驅動 Telegram, Discord, Slack 等。' },
-                    { icon: <Layers size={20} />, t: '七大後端', d: '支持 Docker, SSH, Singularity, Modal 與 Daytona。' },
-                  ].map(item => (
-                    <div key={item.t} className="p-4 rounded-lg border border-slate-100 bg-slate-50/50 hover:border-blue-200 transition-all group">
-                      <div className="text-blue-700 mb-3 group-hover:scale-110 transition-transform">{item.icon}</div>
-                      <div className="font-bold text-slate-800 text-sm mb-1">{item.t}</div>
-                      <div className="text-xs text-slate-500 leading-relaxed">{item.d}</div>
-                    </div>
-                  ))}
-                </div>
-              </BrandCard>
+    kpis: [
+      { key: 'uptime', label: 'Uptime', value: '99.98', unit: '%', icon: <Activity size={18}/> },
+      { key: 'latency', label: 'Latency', value: '142', unit: 'ms', icon: <Gauge size={18}/> },
+      { key: 'tps', label: 'Token/sec', value: '85', icon: <Zap size={18}/>, verified: true },
+    ],
 
-              <BrandCard padding="lg" className="bg-[#003262]/5 border-blue-100">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 flex-shrink-0">
-                    <Zap size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-[#003262] mb-1">新特性: ACP ADAPTER</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 Hermes 能直接作為 Zed 的 AI 後端，實時同步代碼上下文。
-                    </p>
-                    <BrandButton variant="ghost" size="sm" className="mt-3 p-0 h-auto text-blue-700 font-bold hover:bg-transparent">
-                      查看開發文檔 <ArrowUpRight size={14} className="ml-1" />
-                    </BrandButton>
-                  </div>
-                </div>
-              </BrandCard>
-            </div>
-
-            <div className="lg:col-span-4 space-y-6">
-              <BrandCard padding="lg">
-                <BrandCardHeader title="快速部署" />
-                <div className="mt-4 space-y-4">
-                  <div className="p-3 bg-slate-900 rounded-lg font-mono text-[10px] text-emerald-400 border border-slate-800 relative group">
-                    <code>curl -fsSL https://hermes.ai/install.sh | bash</code>
-                    <button className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-white">
-                      <Copy size={12} />
-                    </button>
-                  </div>
-                  <p className="text-[10px] text-slate-400 leading-relaxed">
-                    * 支持 Ubuntu, macOS 與 WSL2 環境。<br/>
-                    * 自動安裝 Node.js 22, Python 3.11 與所需工具。
-                  </p>
-                  <BrandButton variant="primary" fullWidth size="sm">
-                    <Download size={14} className="mr-2" /> 下載離線套件
-                  </BrandButton>
-                </div>
-              </BrandCard>
-
-              <BrandCard padding="lg">
-                <BrandCardHeader title="實時指標" />
-                <div className="mt-4 space-y-4">
-                  {[
-                    { label: 'Uptime', value: '99.98%', icon: <Activity size={12}/> },
-                    { label: 'Latency', value: '142ms', icon: <Gauge size={12}/> },
-                    { label: 'Token/sec', value: '85', icon: <Zap size={12}/> },
-                  ].map(stat => (
-                    <div key={stat.label} className="flex justify-between items-center border-b border-slate-50 pb-2 last:border-0">
-                      <div className="flex items-center gap-2 text-xs text-slate-500">
-                        {stat.icon} {stat.label}
+    sections: [
+      {
+        id: 'nav',
+        title: '功能導覽',
+        columns: 12,
+        component: (
+          <Tabs 
+            active={activeTab}
+            onChange={(id) => setActiveTab(id as any)}
+            tabs={[
+              { key: 'overview', label: '總覽', icon: <Activity size={14}/> },
+              { key: 'quickstart', label: '快速上手', icon: <Zap size={14}/> },
+              { key: 'architecture', label: '系統架構', icon: <Layers size={14}/> },
+              { key: 'tools', label: '工具箱', icon: <Terminal size={14}/> },
+              { key: 'research', label: '技術研究', icon: <Database size={14}/> },
+              { key: 'releases', label: '版本紀錄', icon: <Activity size={14}/> },
+            ]}
+            variant="pills"
+          />
+        )
+      },
+      {
+        id: 'main-view',
+        title: activeTab.toUpperCase(),
+        columns: 12,
+        component: (
+          <div className="min-h-[500px]">
+            {activeTab === 'overview' && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in">
+                <div className="lg:col-span-8 space-y-8">
+                  <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
+                    <div className="flex items-center gap-3 mb-8">
+                      <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center">
+                        <ActivityIcon size={20} />
                       </div>
-                      <span className="text-xs font-mono font-bold text-slate-700">{stat.value}</span>
+                      <h4 className="text-sm font-black text-berkeley-blue uppercase tracking-tight">核心能力 (Core Pillars)</h4>
                     </div>
-                  ))}
-                </div>
-              </BrandCard>
-            </div>
-          </div>
-        )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {[
+                        { icon: <ActivityIcon size={24} />, t: '閉環學習', d: '透過經驗創造 Skill，並在任務中持續自我優化。' },
+                        { icon: <Database size={24} />, t: '方言記憶', d: '具備 FTS5 歷史對話搜尋與 LLM 長期記憶摘要。' },
+                        { icon: <Globe size={24} />, t: '20+ 平台閘道', d: '一個進程同時驅動 Telegram, Discord, Slack 等。' },
+                        { icon: <Layers size={24} />, t: '七大後端', d: '支持 Docker, SSH, Singularity, Modal 與 Daytona。' },
+                      ].map(item => (
+                        <div key={item.t} className="p-6 rounded-2xl border border-slate-100 bg-slate-50/30 hover:border-berkeley-blue/30 transition-all group shadow-sm hover:shadow-md">
+                          <div className="text-berkeley-blue mb-4 group-hover:scale-110 transition-transform">{item.icon}</div>
+                          <div className="font-black text-slate-800 text-sm mb-2">{item.t}</div>
+                          <div className="text-xs text-slate-500 leading-relaxed font-medium">{item.d}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
 
-        {activeTab === 'quickstart' && (
-          <div className="max-w-5xl mx-auto fade-in">
-            <BrandCard padding="lg">
-              <BrandCardHeader 
-                title="Hermes Agent + ESG GO Quickstart" 
-                subtitle="從零開始構建您的 5T 誠信代理蜂群"
-              />
-              
-              <div className="mt-8 flex flex-col md:flex-row gap-8">
-                {/* Left: Progress Stepper */}
-                <div className="w-full md:w-64 flex-shrink-0">
-                  <div className="sticky top-6">
-                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Installation Steps</h4>
-                    <div className="space-y-6">
-                      {QUICKSTART_STEPS.map((step, idx) => (
-                        <div key={step.id} className="flex gap-4">
-                          <div className="flex flex-col items-center">
-                            <div 
-                              className={`w-8 h-8 rounded-full flex items-center justify-center text-white flex-shrink-0 shadow-sm cursor-pointer transition-all hover:scale-110`}
-                              style={{ backgroundColor: step.color }}
-                              onClick={() => {
-                                // In a real app, this would change the active step
-                                // For now, we just scroll to it
-                                document.getElementById(`step-${step.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }}
-                            >
-                              {step.icon}
-                            </div>
-                            {idx < QUICKSTART_STEPS.length - 1 && (
-                              <div className="w-[2px] h-full bg-slate-100 my-2" />
-                            )}
+                  <Card className="p-8 bg-berkeley-blue/5 border-berkeley-blue/10 shadow-sm relative overflow-hidden">
+                    <div className="flex items-start gap-6 relative z-10">
+                      <div className="w-14 h-14 rounded-2xl bg-berkeley-blue text-california-gold flex items-center justify-center shadow-lg">
+                        <Zap size={32} fill="currentColor" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-black text-berkeley-blue mb-2 uppercase tracking-tight">新特性: ACP ADAPTER</h3>
+                        <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                          v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 Hermes 能直接作為 Zed 的 AI 後端，實時同步代碼上下文，實現 5T 等級的協同開發。
+                        </p>
+                        <Button variant="glass" size="sm" className="mt-5 px-6 rounded-xl text-berkeley-blue font-black border-berkeley-blue/20">
+                          查看開發文檔 <ArrowUpRight size={16} className="ml-2" />
+                        </Button>
+                      </div>
+                    </div>
+                    <Bot size={140} className="absolute -bottom-10 -right-10 text-berkeley-blue/5 rotate-12" />
+                  </Card>
+                </div>
+
+                <div className="lg:col-span-4 space-y-8">
+                  <Card className="p-8 bg-slate-900 rounded-[3rem] text-white shadow-xl relative overflow-hidden">
+                    <div className="relative z-10 space-y-6">
+                      <h4 className="text-xs font-black uppercase tracking-[0.2em] text-blue-300">快速部署 (Quick Deploy)</h4>
+                      <div className="p-4 bg-black/40 rounded-2xl font-mono text-[11px] text-emerald-400 border border-white/5 relative group shadow-inner">
+                        <code>curl -fsSL https://hermes.ai/install.sh | bash</code>
+                        <button className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-white">
+                          <Copy size={14} />
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-blue-100/50 leading-relaxed font-medium">
+                        * 支持 Ubuntu, macOS 與 WSL2 環境。<br/>
+                        * 自動安裝 Node.js 22, Python 3.11 與所需工具。
+                      </p>
+                      <Button variant="primary" className="w-full h-12 bg-blue-600 hover:bg-blue-500 border-none shadow-lg rounded-xl font-black">
+                        <Download size={18} className="mr-3" /> 下載離線套件
+                      </Button>
+                    </div>
+                    <Terminal size={120} className="absolute -bottom-10 -right-10 text-white/5" />
+                  </Card>
+
+                  <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
+                    <h4 className="text-xs font-black uppercase tracking-[0.2em] text-berkeley-blue mb-6">實時指標</h4>
+                    <div className="space-y-5">
+                      {[
+                        { label: 'Uptime', value: '99.98%', icon: <ActivityIcon size={14}/> },
+                        { label: 'Latency', value: '142ms', icon: <Gauge size={14}/> },
+                        { label: 'Token/sec', value: '85', icon: <Zap size={14}/> },
+                      ].map(stat => (
+                        <div key={stat.label} className="flex justify-between items-center border-b border-slate-50 pb-4 last:border-0">
+                          <div className="flex items-center gap-3 text-xs text-slate-500 font-bold uppercase tracking-wider">
+                            <span className="text-berkeley-blue/40">{stat.icon}</span> {stat.label}
                           </div>
-                          <div className="pb-6">
-                            <p className="text-sm font-bold text-slate-800">{step.title}</p>
+                          <span className="text-sm font-mono font-black text-berkeley-blue">{stat.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'quickstart' && (
+              <div className="max-w-5xl mx-auto animate-in fade-in">
+                <Card className="p-10 bg-white/60 border-white/80 shadow-glass">
+                  <div className="mb-10 text-center">
+                    <h3 className="text-2xl font-black text-berkeley-blue mb-2 tracking-tight">Hermes Agent + ESG GO Quickstart</h3>
+                    <p className="text-sm text-slate-500 font-medium">從零開始構建您的 5T 誠信代理蜂群</p>
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row gap-12">
+                    {/* Left: Progress Stepper */}
+                    <div className="w-full md:w-64 flex-shrink-0">
+                      <div className="sticky top-6">
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8">Installation Steps</h4>
+                        <div className="space-y-10">
+                          {QUICKSTART_STEPS.map((step, idx) => (
+                            <div key={step.id} className="flex gap-5 group cursor-pointer" onClick={() => document.getElementById(`step-${step.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>
+                              <div className="flex flex-col items-center">
+                                <div 
+                                  className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0 shadow-lg transition-all group-hover:scale-110"
+                                  style={{ backgroundColor: step.color }}
+                                >
+                                  {step.icon}
+                                </div>
+                                {idx < QUICKSTART_STEPS.length - 1 && (
+                                  <div className="w-0.5 h-12 bg-slate-100 mt-2" />
+                                )}
+                              </div>
+                              <div className="pt-2">
+                                <p className="text-sm font-black text-slate-800 uppercase tracking-tight group-hover:text-berkeley-blue transition-colors">{step.title.split('. ')[1]}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right: Step Details */}
+                    <div className="flex-1 space-y-16">
+                      {QUICKSTART_STEPS.map((step) => (
+                        <div key={step.id} id={`step-${step.id}`} className="scroll-mt-24">
+                          <div className="mb-6">
+                            <div className="flex items-center gap-3 mb-2">
+                               <Badge style={{ backgroundColor: step.color }} className="text-white border-none px-3 py-1 text-[10px]">STEP {step.id}</Badge>
+                               <h3 className="text-xl font-black text-berkeley-blue tracking-tight">{step.title.split('. ')[1]}</h3>
+                            </div>
+                            <p className="text-sm text-slate-500 font-medium leading-relaxed">{step.description}</p>
+                          </div>
+
+                          <div className="relative group/code">
+                            <pre className="p-6 bg-slate-900 rounded-[2rem] border border-slate-800 font-mono text-sm overflow-x-auto text-blue-50 leading-relaxed shadow-xl">
+                              {step.isSnippet ? (
+                                <code>
+                                  {step.command.split('\n').map((line, i) => {
+                                    if (line.startsWith('import') || line.startsWith('const')) {
+                                      const parts = line.split(' ');
+                                      return (
+                                        <span key={i}>
+                                          <span className="text-blue-400">{parts[0]}</span> {parts.slice(1).join(' ')}
+                                          {'\n'}
+                                        </span>
+                                      );
+                                    }
+                                    return <span key={i} className="text-slate-300">{line + '\n'}</span>;
+                                  })}
+                                </code>
+                              ) : (
+                                <code>
+                                  {step.command.split('\n').map((line, i) => (
+                                    <span key={i}>
+                                      {line.startsWith('#') ? <span className="text-emerald-500/60 italic">{line}</span> : <span className="text-emerald-400 font-bold">{line}</span>}
+                                      {'\n'}
+                                    </span>
+                                  ))}
+                                </code>
+                              )}
+                            </pre>
+                            <button 
+                              onClick={() => handleCopy(step.id, step.command)}
+                              className="absolute top-4 right-4 p-2 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 text-white/40 hover:text-white transition-all opacity-0 group-hover/code:opacity-100"
+                            >
+                              {copied === step.id ? <CheckCircle size={16} className="text-verified" /> : <Copy size={16} />}
+                            </button>
+                          </div>
+                          
+                          <div className="mt-6 flex gap-4">
+                            {!step.isSnippet && (
+                              <Button 
+                                variant="glass" 
+                                size="sm" 
+                                className="h-10 px-5 rounded-xl text-berkeley-blue font-black border-berkeley-blue/20"
+                                onClick={() => alert(`執行指令: ${step.command.split('\n')[0]}`)}
+                              >
+                                <PlayCircle size={16} className="mr-2" /> 執行指令 (Execute)
+                              </Button>
+                            )}
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                </div>
 
-                {/* Right: Step Details */}
-                <div className="flex-1 space-y-12">
-                  {QUICKSTART_STEPS.map((step) => (
-                    <div key={step.id} id={`step-${step.id}`} className="scroll-mt-24">
-                      <div className="mb-4">
-                        <h3 className="text-lg font-bold text-[#003262] flex items-center gap-2">
-                          <span style={{ color: step.color }}>{step.icon}</span>
-                          {step.title}
-                        </h3>
-                        <p className="text-sm text-slate-500 mt-1">{step.description}</p>
+                  <div className="mt-16 p-10 bg-berkeley-blue rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl">
+                    <div className="flex items-center gap-6 relative z-10">
+                      <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-california-gold shadow-inner border border-white/10">
+                        <PlayCircle size={32} fill="currentColor" />
                       </div>
-
-                      <div className="relative group/code">
-                        <pre className="p-4 bg-[#1e1e1e] rounded-lg border border-slate-800 font-mono text-sm overflow-x-auto text-[#d4d4d4] leading-relaxed shadow-inner">
-                          {step.isSnippet ? (
-                            <code>
-                              {step.command.split('\n').map((line, i) => {
-                                if (line.startsWith('import') || line.startsWith('const')) {
-                                  const parts = line.split(' ');
-                                  return (
-                                    <span key={i}>
-                                      <span className="text-[#569cd6]">{parts[0]}</span> {parts.slice(1).join(' ')}
-                                      {'\n'}
-                                    </span>
-                                  );
-                                }
-                                return line + '\n';
-                              })}
-                            </code>
-                          ) : (
-                            <code>
-                              {step.command.split('\n').map((line, i) => (
-                                <span key={i}>
-                                  {line.startsWith('#') ? <span className="text-[#6a9955]">{line}</span> : line}
-                                  {'\n'}
-                                </span>
-                              ))}
-                            </code>
-                          )}
-                        </pre>
-                        <button 
-                          onClick={() => handleCopy(step.id, step.command)}
-                          className="absolute top-3 right-3 p-1.5 bg-white/5 hover:bg-white/10 rounded border border-white/10 text-white/40 hover:text-white transition-all opacity-0 group-hover/code:opacity-100"
-                        >
-                          {copied === step.id ? <CheckCircle size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                        </button>
-                      </div>
-                      
-                      <div className="mt-4 flex gap-3">
-                        {!step.isSnippet && (
-                          <BrandButton 
-                            variant="primary" 
-                            size="sm" 
-                            onClick={() => {
-                              console.log(`執行指令: ${step.command.split('\n')[0]}`, 'info');
-                            }}
-                          >
-                            <PlayCircle size={14} className="mr-2" /> 執行指令 (Execute)
-                          </BrandButton>
-                        )}
+                      <div>
+                        <h5 className="font-black text-lg uppercase tracking-tight">準備好進行實測了嗎？</h5>
+                        <p className="text-sm text-blue-100/70 font-medium">進入調度中心啟動您的第一個 5T 任務</p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-12 p-6 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-md">
-                    <PlayCircle size={20} />
+                    <Button variant="glass" className="w-full md:w-auto px-10 h-14 rounded-2xl border-white/20 text-white hover:bg-white/10 font-black relative z-10" onClick={() => window.location.href='/hermes-orchestrator'}>
+                      前往調度中心 <ChevronRight size={20} className="ml-2" />
+                    </Button>
+                    <ActivityIcon size={200} className="absolute -bottom-20 -right-20 text-white/5" />
                   </div>
-                  <div>
-                    <h5 className="font-bold text-sm text-slate-800">準備好進行實測了嗎？</h5>
-                    <p className="text-xs text-slate-500">進入調度中心啟動您的第一個 5T 任務</p>
-                  </div>
-                </div>
-                <BrandButton variant="secondary" onClick={() => window.location.href='/hermes-orchestrator'}>
-                  前往調度中心 <ChevronRight size={16} className="ml-1" />
-                </BrandButton>
+                </Card>
               </div>
-            </BrandCard>
-          </div>
-        )}
+            )}
 
-        {activeTab === 'architecture' && (
-          <div className="space-y-6 fade-in">
-            <BrandCard padding="none">
-              <BrandCardHeader title="代碼模組地圖 (Source Map)" subtitle="Hermes 代理核心的架構分層" />
-              <div className="mt-4">
-                <BrandTable 
+            {activeTab === 'architecture' && (
+              <div className="space-y-8 animate-in fade-in">
+                <DataTable 
                   columns={[
-                    { key: 'path', label: '模組路徑', render: (v) => <code className="font-bold text-blue-700">{v}</code> },
-                    { key: 'desc', label: '功能定義' },
-                    { key: 'status', label: '當前狀態', render: (v) => (
-                      <BrandBadge 
-                        variant={v === 'Hot' ? 'error' : v === 'New' ? 'gold' : v === 'Research' ? 'purple' : 'success'} 
-                        size="xs"
+                    { key: 'path', header: '模組路徑', render: (v: any) => <code className="font-black text-berkeley-blue">{v}</code> },
+                    { key: 'desc', header: '功能定義' },
+                    { key: 'status', header: '當前狀態', render: (v: any) => (
+                      <Badge 
+                        variant={v === 'Hot' ? 'error' : v === 'New' ? 'warning' : v === 'Research' ? 'primary' : 'verified'} 
+                        className="px-3 py-1 font-black tracking-widest uppercase text-[9px]"
                       >
                         {v}
-                      </BrandBadge>
+                      </Badge>
                     )}
                   ]}
-                  data={REPO_MODULES}
+                  data={REPO_MODULES as any[]}
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                   <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
+                      <div className="flex items-center gap-3 mb-6">
+                         <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center">
+                            <Gauge size={20} />
+                         </div>
+                         <h4 className="text-sm font-black text-berkeley-blue uppercase tracking-tight">系統流轉層 (Runtime)</h4>
+                      </div>
+                      <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
+                        底層基於 Node.js 22 與 Python 3.11 混合架構，確保了高效的 I/O 處理與強大的數據運算能力。
+                        所有執行均在受控的 Sandbox 中進行，支援 5T 完整性簽章。
+                      </p>
+                   </Card>
+                   <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
+                      <div className="flex items-center gap-3 mb-6">
+                         <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center">
+                            <Shield size={20} />
+                         </div>
+                         <h4 className="text-sm font-black text-berkeley-blue uppercase tracking-tight">認證與安全</h4>
+                      </div>
+                      <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
+                        整合 Nous Research 認證體系，每一筆指令均附帶 Actor ID 與 Policy Guard 決策雜湊，
+                        符合 Berkeley Academy 最嚴苛的治理標準與 oX 安全協議。
+                      </p>
+                   </Card>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'tools' && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-in fade-in">
+                <Card hoverEffect className="p-8 bg-white/60 border-white/80 shadow-glass group">
+                  <div className="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                    <Video size={32} />
+                  </div>
+                  <h4 className="text-lg font-black text-slate-800 mb-3 tracking-tight">video_generate</h4>
+                  <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
+                    v0.14.0 統一了影片生成接口，支持多供應商插件（如 Luma, Kling），支援 ESG 視覺化簡報生成。
+                  </p>
+                </Card>
+                <Card hoverEffect className="p-8 bg-white/60 border-white/80 shadow-glass group">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                    <Code size={32} />
+                  </div>
+                  <h4 className="text-lg font-black text-slate-800 mb-3 tracking-tight">agent-browser v0.26</h4>
+                  <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
+                    強化了瀏覽器自動化能力，支持長期空閒守護進程，提升網路數據抓取與 GRI 標竿比對效率。
+                  </p>
+                </Card>
+                <Card hoverEffect className="p-8 bg-white/60 border-white/80 shadow-glass group">
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                    <Shield size={32} />
+                  </div>
+                  <h4 className="text-lg font-black text-slate-800 mb-3 tracking-tight">Secure Sandbox</h4>
+                  <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
+                    硬化容器隔離技術，支持唯讀根文件系統與命名空間隔離，確保 5T 數據處理過程不被外部污染。
+                  </p>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'releases' && (
+              <div className="animate-in fade-in">
+                <DataTable 
+                  columns={[
+                    { key: 'v', header: '版本', render: (v: any) => <span className="font-black text-berkeley-blue">{v}</span> },
+                    { key: 'date', header: '更新時間', render: (v: any) => <span className="text-slate-400 font-bold text-xs uppercase">{v}</span> },
+                    { key: 'note', header: '主要變動', render: (v: any) => <Badge variant="verified" className="px-3 py-1 font-medium">{v}</Badge> }
+                  ]}
+                  data={RELEASE_HISTORY}
                 />
               </div>
-            </BrandCard>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <BrandCard padding="lg">
-                  <BrandCardHeader title="系統流轉層 (Runtime)" />
-                  <p className="mt-4 text-xs text-slate-500 leading-relaxed">
-                    底層基於 Node.js 22 與 Python 3.11 混合架構，確保了高效的 I/O 處理與強大的數據運算能力。
-                    所有執行均在受控的 Sandbox 中進行，支援 5T 完整性簽章。
-                  </p>
-               </BrandCard>
-               <BrandCard padding="lg">
-                  <BrandCardHeader title="認證與安全" />
-                  <p className="mt-4 text-xs text-slate-500 leading-relaxed">
-                    整合 Nous Research 認證體系，每一筆指令均附帶 Actor ID 與 Policy Guard 決策雜湊，
-                    符合 Berkeley Academy 最嚴苛的治理標準。
-                  </p>
-               </BrandCard>
-            </div>
+            )}
           </div>
-        )}
+        )
+      }
+    ]
+  };
 
-        {activeTab === 'tools' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in">
-            <BrandCard padding="lg" hover>
-              <Video size={24} className="text-purple-500 mb-4" />
-              <h4 className="font-bold text-slate-800">video_generate</h4>
-              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                v0.14.0 統一了影片生成接口，支持多供應商插件（如 Luma, Kling），支援 ESG 視覺化簡報生成。
-              </p>
-            </BrandCard>
-            <BrandCard padding="lg" hover>
-              <Code size={24} className="text-blue-600 mb-4" />
-              <h4 className="font-bold text-slate-800">agent-browser v0.26</h4>
-              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                強化了瀏覽器自動化能力，支持長期空閒守護進程，提升網路數據抓取與 GRI 標竿比對效率。
-              </p>
-            </BrandCard>
-            <BrandCard padding="lg" hover>
-              <Shield size={24} className="text-emerald-500 mb-4" />
-              <h4 className="font-bold text-slate-800">Secure Sandbox</h4>
-              <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                硬化容器隔離技術，支持唯讀根文件系統與命名空間隔離，確保 5T 數據處理過程不被外部污染。
-              </p>
-            </BrandCard>
-          </div>
-        )}
-
-        {activeTab === 'research' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 fade-in">
-            <BrandCard padding="lg" className="border-l-4 border-l-purple-500">
-               <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-1">Advanced RL</p>
-               <h4 className="font-bold text-slate-800 text-lg mb-3">Trajectory Compression</h4>
-               <p className="text-xs text-slate-500 leading-relaxed">
-                 專為訓練下一代工具調用模型設計。Hermes 能將複雜的任務解決軌跡（Trajectories）壓縮為高效的訓練樣本，並匯出為 ShareGPT 格式，助力企業建立專屬私有 ESG 模型。
-               </p>
-            </BrandCard>
-            <BrandCard padding="lg" className="border-l-4 border-l-emerald-500">
-               <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Model Training</p>
-               <h4 className="font-bold text-slate-800 text-lg mb-3">Atropos Integration</h4>
-               <p className="text-xs text-slate-500 leading-relaxed">
-                 整合 `tinker-atropos` 環境，支持在多步 Web 研究任務中進行強化學習（RL）環境模擬與數據生成，讓 Agent 具備自我演進的邏輯推理能力。
-               </p>
-            </BrandCard>
-          </div>
-        )}
-
-        {activeTab === 'releases' && (
-          <BrandCard padding="none" className="fade-in">
-            <BrandCardHeader title="版本發佈軌跡" subtitle="持續進化的系統核心" />
-            <div className="mt-4">
-              <BrandTable 
-                columns={[
-                  { key: 'v', label: '版本', render: (v) => <span className="font-bold text-blue-700">{v}</span> },
-                  { key: 'date', label: '更新時間', render: (v) => <span className="text-slate-400">{v}</span> },
-                  { key: 'note', label: '主要變動', render: (v) => <BrandBadge variant="outline" size="xs">{v}</BrandBadge> }
-                ]}
-                data={RELEASE_HISTORY}
-              />
-            </div>
-          </BrandCard>
-        )}
-      </div>
-
+  return (
+    <div className="relative h-full">
+      <StandardPage config={pageConfig} />
+      
       {/* Stitch Footer Branding */}
-      <BrandCard padding="sm" className="bg-white border-slate-100">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Bot size={18} className="text-[#003262]" />
-            <span className="text-[10px] font-bold text-[#003262] uppercase tracking-[0.2em] font-mono">
-              OMNIHERMES-AGENT SYSTEM v0.14.1
-            </span>
+      <motion.div 
+        variants={fadeIn}
+        initial="initial"
+        animate="animate"
+        className="mt-12 p-8 bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2.5rem] shadow-glass flex flex-col md:flex-row items-center justify-between gap-6"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center">
+            <Bot size={24} />
           </div>
-          <div className="flex gap-4">
-            <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" className="text-[10px] text-slate-400 font-bold hover:text-blue-700 flex items-center gap-1.5 transition-colors">
-              <Terminal size={12} /> DOCUMENTATION
-            </a>
-            <a href="https://discord.gg/NousResearch" target="_blank" rel="noreferrer" className="text-[10px] text-slate-400 font-bold hover:text-blue-700 flex items-center gap-1.5 transition-colors">
-              <MessageSquare size={12} /> DISCORD
-            </a>
-          </div>
+          <span className="text-[11px] font-black text-berkeley-blue uppercase tracking-[0.3em] font-mono">
+            OMNIHERMES-AGENT SYSTEM v0.14.1
+          </span>
         </div>
-      </BrandCard>
+        <div className="flex gap-8">
+          <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
+            <Terminal size={14} /> DOCUMENTATION
+          </a>
+          <a href="https://discord.gg/NousResearch" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
+            <MessageSquare size={14} /> DISCORD
+          </a>
+        </div>
+      </motion.div>
     </div>
   );
 }
