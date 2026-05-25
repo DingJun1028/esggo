@@ -306,7 +306,7 @@ export default function AuditLogPage() {
                   </div>
                   
                   <footer className="mt-10">
-                     <Button variant="primary" fullWidth size="lg" className="rounded-2xl h-16 font-bold shadow-xl" onClick={() => setSelected(null)}>
+                     <Button variant="primary" size="lg" className="w-full rounded-2xl h-16 font-bold shadow-xl" onClick={() => setSelected(null)}>
                       返回審計控制台
                      </Button>
                   </footer>
