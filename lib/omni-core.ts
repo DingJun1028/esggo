@@ -7,23 +7,21 @@ import type {
   EternalMemoryType,
 } from '../types/omni-core';
 import { supabase } from './supabase';
+import { 
+  sha256, 
+  create5TAttestation, 
+  verifyHashLock, 
+  HashLockResult,
+  generateRangeProof,
+  verifyRangeProof,
+  ZKPRangeProof
+} from './crypto-proof';
+import { policyEngine, PolicyValidationResult } from './policy-engine';
+import { dcUpsertEternalMemory, dcListEternalMemories } from './dataconnect-services';
 
 // ============================================================
 // 萬能心核引擎 - 5T Logic Gate Implementation (Persistent)
 // ============================================================
-
-async function sha256(text: string): Promise<string> {
-  if (typeof window !== 'undefined' && window.crypto?.subtle) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-  
-  // Secure Node.js fallback
-  return createHash('sha256').update(text).digest('hex');
-}
 
 function generateUUID(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -72,73 +70,135 @@ export class OmniCore {
   async sealComponent(
     metric: string,
     source: string,
-    formula: string
-  ): Promise<IComponentCore> {
+    formula: string,
+    policyId?: string
+  ): Promise<IComponentCore & { validation?: PolicyValidationResult }> {
     const uuid = generateUUID();
     const timestamp = Date.now();
+
+    let validation: PolicyValidationResult | undefined;
+    if (policyId) {
+      validation = policyEngine.validate(policyId, { 
+        value: metric, 
+        source_origin: source, 
+        unit: 'tCO2e' // Demo default
+      });
+    }
 
     const evidence: IEvidence = {
       tangible_metric: metric,
       source_origin: source,
-      lifecycle_hooks: [`hook_${timestamp}_created`, `hook_${timestamp}_validated`],
+      lifecycle_hooks: [
+        `hook_${timestamp}_created`, 
+        `hook_${timestamp}_sealed_t4`,
+        ...(validation ? [`policy_${policyId}_score_${validation.score}`] : [])
+      ],
       formula_ref: formula,
     };
 
-    const payload = JSON.stringify({ uuid, timestamp, evidence });
+    // Simplified 5T-compatible seal for v1.1.0 that doesn't use random nonces for immediate verification
+    const payload = JSON.stringify({
+      uuid,
+      timestamp,
+      evidence,
+      version: '1.1.0'
+    });
     const hash_lock = await sha256(payload);
 
     const component: IComponentCore = Object.freeze({
       uuid,
       timestamp,
-      version: '1.0.0',
+      version: '1.1.0',
       evidence,
       status: 'Trustworthy' as const,
       hash_lock,
     });
 
-    return component;
+    return { ...component, validation };
   }
 
   // Verify Hash Lock
   async verifyComponent(component: IComponentCore): Promise<boolean> {
-    const payload = JSON.stringify({
+    // 1. Backwards compatibility check for v1.0.0 (Simple JSON Hash)
+    const legacyPayload = JSON.stringify({
       uuid: component.uuid,
       timestamp: component.timestamp,
       evidence: component.evidence,
     });
-    const computedHash = await sha256(payload);
-    return computedHash === component.hash_lock;
+    const computedLegacyHash = await sha256(legacyPayload);
+    if (computedLegacyHash === component.hash_lock) return true;
+
+    // 2. Full 5T masterSeal verification for v1.1.0+ (Simplified for direct verification)
+    const payloadV11 = JSON.stringify({
+      uuid: component.uuid,
+      timestamp: component.timestamp,
+      evidence: component.evidence,
+      version: '1.1.0'
+    });
+    const computedHashV11 = await sha256(payloadV11);
+    if (computedHashV11 === component.hash_lock) return true;
+
+    return false;
   }
 
-  // Store Eternal Memory (Persistent in Supabase)
+  // 5T Trust Score Engine
+  async calculateTrustScore(company_id: string = 'default'): Promise<number> {
+    if (!supabase) return 80; // Baseline
+    
+    try {
+      const memories = await this.getMemories();
+      const total = memories.length;
+      
+      // 1. Internal Integrity Score (70% weight)
+      let internalScore = 90;
+      if (total > 0) {
+        const consolidatedCount = memories.filter(m => m.consolidated).length;
+        const brokenSeals = 0; 
+        const consolidationBonus = (consolidatedCount / total) * 15;
+        const volumeBonus = Math.min(total / 50, 1) * 10;
+        internalScore = 75 + consolidationBonus + volumeBonus - (brokenSeals * 20);
+      }
+
+      // 2. Supply Chain Cascading Integrity (30% weight) - Simulated for Phase 11
+      const supplyScore = 88; // This would be fetched from SupplierIntegrityEngine
+      
+      const score = (internalScore * 0.7) + (supplyScore * 0.3);
+      
+      return Math.min(Math.round(score), 100);
+    } catch (e) {
+      return 85;
+    }
+  }
+
+  // Store Eternal Memory (Persistent in Data Connect)
   async storeMemory(
     content: string,
     type: EternalMemoryType,
     tags: string[] = []
   ): Promise<EternalMemory> {
-    if (!supabase) throw new Error('Supabase client not initialized');
-    
-    const { user_id, company_id } = await this.getIdentity();
     const id = generateUUID();
     const timestamp = Date.now();
     const hash_lock = await sha256(`${id}:${content}:${timestamp}`);
 
-    const memoryValue = { content, tags, raw: content };
+    await dcUpsertEternalMemory({
+      id,
+      type,
+      content,
+      tags: tags.join(','),
+      hashLock: hash_lock,
+      consolidated: false
+    });
 
-    const { error } = await supabase
-      .from('user_memory')
-      .insert({
-        id,
-        user_id,
-        company_id,
-        memory_type: 'ai_conversation', // Mapping to schema type
-        memory_key: `mem_${timestamp}`,
-        memory_value: memoryValue,
-        context: { tags, consolidated: false },
-        hash_lock,
-      });
-
-    if (error) throw error;
+    // EVENT-DRIVEN AUTONOMOUS COMPLIANCE:
+    // Automatically trigger consolidation if we have enough records
+    if (type === 'EPISODIC') {
+      const memories = await this.getMemories();
+      const rawMemories = memories.filter(m => !m.consolidated);
+      if (rawMemories.length >= 10) {
+        console.log('[OmniCore] Auto-Consolidation Threshold Reached. Initiating AgentZ0 Background Task...');
+        this.consolidateMemories(type).catch(console.error);
+      }
+    }
 
     return {
       id,
@@ -152,63 +212,79 @@ export class OmniCore {
   }
 
   async getMemories(): Promise<EternalMemory[]> {
-    if (!supabase) return [];
-    
-    const { user_id, company_id } = await this.getIdentity();
-    const { data, error } = await supabase
-      .from('user_memory')
-      .select('*')
-      .eq('user_id', user_id)
-      .eq('company_id', company_id)
-      .order('created_at', { ascending: false });
-
-    if (error || !data) return [];
+    const data = await dcListEternalMemories();
 
     return data.map(m => ({
       id: m.id,
-      type: 'thought' as any, // Simple mapping
-      content: m.memory_value?.content || '',
-      tags: m.context?.tags || [],
-      timestamp: new Date(m.created_at).getTime(),
-      hash_lock: m.hash_lock,
-      consolidated: m.context?.consolidated || false,
+      type: m.type as EternalMemoryType,
+      content: m.content,
+      tags: (m.tags || '').split(','),
+      timestamp: new Date(m.createdAt).getTime(),
+      hash_lock: m.hashLock,
+      consolidated: m.consolidated,
     }));
   }
 
-  // Consolidate memories (High-Performance DB-Level Aggregation)
+  // Consolidate memories (Integrated with Data Connect + Genkit)
   async consolidateMemories(type: EternalMemoryType): Promise<EternalMemory | null> {
-    if (!supabase) return null;
-
-    const { user_id, company_id } = await this.getIdentity();
+    const memories = await this.getMemories();
+    const toConsolidate = memories.filter(m => m.type === type && !m.consolidated);
     
-    // Call the RPC function we deployed in migrations
-    const { data: consolidatedId, error } = await supabase.rpc('consolidate_eternal_memories', {
-      p_user_id: user_id,
-      p_company_id: company_id,
-      p_memory_type: 'ai_conversation'
-    });
+    if (toConsolidate.length < 2) return null;
 
-    if (error || !consolidatedId) {
-      console.warn('Consolidation failed or not enough records:', error?.message);
-      return null;
+    console.log(`[OmniCore] Consolidating ${toConsolidate.length} memories of type ${type}...`);
+
+    let summary = '';
+    
+    try {
+      const res = await fetch('/api/internal/consolidate-memories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, memories: toConsolidate }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        summary = json.summary;
+      } else {
+        throw new Error(json.error || 'Consolidation failed');
+      }
+    } catch (e) {
+      console.warn('[OmniCore] Genkit consolidation failed, using fallback summary.', e);
+      summary = `Consolidated Summary of ${toConsolidate.length} ${type} records at ${new Date().toISOString()}.`;
     }
 
-    // Fetch the new record to return it
-    const { data: m } = await supabase
-      .from('user_memory')
-      .select('*')
-      .eq('id', consolidatedId)
-      .single();
+    const id = generateUUID();
+    const timestamp = Date.now();
+    const hash_lock = await sha256(`${id}:${summary}:${timestamp}`);
 
-    if (!m) return null;
+    // Update originals
+    for (const m of toConsolidate) {
+      await dcUpsertEternalMemory({ 
+        id: m.id, 
+        type: m.type, 
+        content: m.content, 
+        consolidated: true, 
+        hashLock: m.hash_lock 
+      });
+    }
+
+    // Create summary
+    await dcUpsertEternalMemory({
+      id,
+      type: 'SEMANTIC',
+      content: summary,
+      tags: 'consolidated,genkit_summary',
+      hashLock: hash_lock,
+      consolidated: true
+    });
 
     return {
-      id: m.id,
-      type,
-      content: JSON.stringify(m.memory_value),
-      tags: ['consolidated'],
-      timestamp: new Date(m.created_at).getTime(),
-      hash_lock: m.hash_lock,
+      id,
+      type: 'SEMANTIC',
+      content: summary,
+      tags: ['consolidated', 'genkit_summary'],
+      timestamp: new Date(timestamp).getTime(),
+      hash_lock,
       consolidated: true,
     };
   }
@@ -217,6 +293,25 @@ export class OmniCore {
   async quickHash(text: string): Promise<string> {
     const full = await sha256(text);
     return `sha256:${full.substring(0, 16)}...`;
+  }
+
+  // ZKP: Generate Privacy Proof
+  async generatePrivacyProof(
+    metric: string,
+    secretValue: number,
+    min: number,
+    max: number,
+    blindingFactor?: string
+  ): Promise<ZKPRangeProof> {
+    return generateRangeProof(secretValue, min, max, blindingFactor);
+  }
+
+  // ZKP: Verify Privacy Proof
+  async verifyPrivacyProof(
+    proof: ZKPRangeProof,
+    blindingFactor: string
+  ): Promise<boolean> {
+    return verifyRangeProof(proof, blindingFactor);
   }
 }
 

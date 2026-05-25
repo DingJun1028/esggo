@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { hermesAI, hermesConfig } from '../../../../lib/hermes.config';
+import { getHermesAI, hermesConfig } from '../../../../lib/hermes.config';
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     // Call the model using genkit (Mocked or real based on key availability)
     let generatedContent = '';
     try {
-        const response = await hermesAI.generate({
+        const response = await (await getHermesAI()).generate({
           prompt: prompt,
         });
         generatedContent = response.text;
