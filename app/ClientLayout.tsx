@@ -18,6 +18,7 @@ import { useFcmToken } from '../hooks/useFcmToken';
 import HermesControlCenter from '../components/brand/HermesControlCenter';
 import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
+import { ToastProvider, ToastContainer } from '../components/ui';
 
 function SystemHealthBanner() {
   const { systemStatus } = useAuth();
@@ -81,7 +82,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   // 1. Public Routes
   if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
-    return <>{children}</>;
+    return <><ToastContainer />{children}</>;
   }
 
   // 2. Loading State
@@ -139,6 +140,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
             <div className="min-h-full pb-20">
               {children}
             </div>
+            <ToastContainer />
           </main>
 
           <AnimatePresence>
@@ -166,11 +168,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <Suspense fallback={null}>
       <ErrorBoundary>
-        <AuthProvider>
-          <SaaSProvider>
-            <AppContent>{children}</AppContent>
-          </SaaSProvider>
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <SaaSProvider>
+              <AppContent>{children}</AppContent>
+            </SaaSProvider>
+          </AuthProvider>
+        </ToastProvider>
       </ErrorBoundary>
     </Suspense>
   );

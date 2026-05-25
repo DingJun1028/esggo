@@ -45,7 +45,7 @@ export default function SwarmPage() {
     return () => { supabase.removeChannel(channel); };
   }, [fetchHealingLogs]);
 
-  const activeTaskCount = swarmTasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING').length;
+  const activeTaskCount = swarmTasks.filter(t => t.status === 'approved_for_execution' || t.status === 'pending').length;
 
   const handleEvaluateProposal = useCallback(async () => {
     if (!proposalText.trim()) return;
@@ -199,7 +199,7 @@ export default function SwarmPage() {
                        variant="primary"
                        className="w-full h-12 rounded-2xl font-black text-xs uppercase tracking-widest"
                        onClick={handleEvaluateProposal}
-                       isLoading={evaluating}
+                        loading={evaluating}
                        disabled={!proposalText.trim() || evaluating}
                      >
                        <ThumbsUp size={14} className="mr-2" /> 啟動蜂群共識

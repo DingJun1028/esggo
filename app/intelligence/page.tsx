@@ -6,7 +6,7 @@ import {
   AlertTriangle, BookOpen, Bookmark, ExternalLink, Search, 
   BarChart3, Globe, Zap, RefreshCw, Network, Sparkles,
   Trophy, TrendingUp, ShieldAlert, Newspaper, PieChart,
-  Target, ZapOff, Activity, Bot, ArrowRight, ChevronRight
+  Target, ZapOff, Activity, Bot, ArrowUpRight, ChevronRight
 } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandStatusDot, BrandCard,
@@ -105,8 +105,29 @@ export default function IntelligencePage() {
     return matchS && matchC;
   });
 
-  const handleDispatchTask = (item: any) => {
-    alert(`[oX Dispatch] 已啟動針對 "${item.title}" 的自動化實證掃描任務。`);
+  const handleDispatchTask = async (item: any) => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/agent/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          actorId: 'SYSTEM_INTELLIGENCE_TRIGGER', 
+          taskType: 'compliance_review', 
+          title: `法規應對: ${item.title}`, 
+          description: `由商情中心自動觸發。針對項目: "${item.title}" (${item.category}) 進行 5T 合規性掃描與缺口分析。`,
+          skillKey: 'gri_compliance_checker'
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`[oX Sovereign Dispatch] 已成功啟動蜂群任務！\n任務 ID: ${data.task.id.slice(-8)}\n代理人: Z0-Auditor 已介入。`);
+      }
+    } catch (e) {
+      console.error('Dispatch failed', e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ── Universal Page Configuration ──────────────────────────────────
@@ -122,7 +143,7 @@ export default function IntelligencePage() {
 
     primaryActions: [
       { id: 'ai-analyze', label: 'AI 市場分析', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在生成本週 ESG 策略報表...') },
-      { id: 'refresh', label: '刷新數據', icon: <RefreshCw size={16}/>, variant: 'outline' }
+      { id: 'refresh', label: '刷新數據', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: () => window.location.reload() }
     ],
 
     kpis: [
@@ -208,7 +229,7 @@ export default function IntelligencePage() {
                                     <Zap size={10} className="mr-1"/> 啟動自動應對
                                   </BrandButton>
                                 )}
-                                <BrandButton variant="ghost" size="sm" className="p-0 h-auto text-blue-600 font-black">READ <ArrowRight size={12} className="ml-1"/></BrandButton>
+                                <BrandButton variant="ghost" size="sm" className="p-0 h-auto text-blue-600 font-black">READ <ArrowUpRight size={12} className="ml-1"/></BrandButton>
                               </div>
                             </div>
                           </BrandCard>

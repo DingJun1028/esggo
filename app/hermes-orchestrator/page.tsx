@@ -5,7 +5,7 @@ import { cn } from '../../lib/utils';
 import {
   Bot, Plus, Play, CheckCircle, XCircle, AlertTriangle,
   Clock, FileText, Shield, Activity, RefreshCw, Zap,
-  Search, ChevronRight, ArrowRight, Info, Layers, List, Lock
+  Search, ChevronRight, ArrowUpRight, Info, Layers, List, Lock
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandBadge, BrandStatusDot, BrandTable, 
@@ -150,7 +150,7 @@ export default function OrchestratorPage() {
 
     primaryActions: [
       { id: 'create', label: '建立代理任務', icon: <Plus size={16}/>, onClick: () => setActiveTab('create') },
-      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'outline', onClick: fetchTasks }
+      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: fetchTasks }
     ],
 
     kpis: [
@@ -241,7 +241,7 @@ export default function OrchestratorPage() {
                             <motion.div layoutId={r.task.id} key={r.task.id} onClick={() => setSelected(r)} className="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 cursor-pointer hover:border-blue-400 hover:shadow-premium transition-all group">
                                <div className="flex items-center justify-between mb-4">
                                   <div style={{ color: TASK_TYPE_META[r.task.taskType]?.color }}>{TASK_ICONS[r.task.taskType]}</div>
-                                  <BrandStatusDot status={r.execution?.status === 'running' ? 'active' : 'idle'} pulse={r.execution?.status === 'running'} size="xs" />
+                                   <BrandStatusDot status={r.execution?.status === 'running' ? 'active' : 'inactive'} pulse={r.execution?.status === 'running'} size="sm" />
                                </div>
                                <p className="text-xs font-black text-slate-800 line-clamp-2 leading-tight mb-4">{r.task.title}</p>
                                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity pt-4 border-t border-slate-50">
@@ -286,7 +286,7 @@ export default function OrchestratorPage() {
                     </div>
                     <div className="flex gap-4">
                        <BrandButton variant="primary" fullWidth className="h-14 rounded-2xl font-black shadow-lg">核准並封印</BrandButton>
-                       <BrandButton variant="outline" fullWidth className="h-14 rounded-2xl border-slate-200 text-slate-400">要求修改</BrandButton>
+                       <BrandButton variant="secondary" fullWidth className="h-14 rounded-2xl border-slate-200 text-slate-400">要求修改</BrandButton>
                     </div>
                  </div>
                ) : (

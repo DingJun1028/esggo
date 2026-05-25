@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Activity, Database, Code, Zap, CheckCircle, AlertTriangle,
   Play, Copy, RefreshCw, Terminal, BookOpen, GitBranch, Shield,
-  Search, ArrowRight, ChevronDown, ChevronUp
+  Search, ArrowUpRight, ChevronDown, ChevronUp
 } from 'lucide-react';
 
 const SAMPLE_QUERIES = [
@@ -483,7 +483,7 @@ export default function ApolloStudioPage() {
                       <div style={{ fontSize: '11px', color: '#64748b' }}>{op.gri}</div>
                     </div>
                     <button onClick={() => { setSelectedQuery(op); setActiveTab('explorer'); }} style={{ background: '#003262', color: '#fff', border: 'none', borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      Run <ArrowRight size={12} />
+                      Run <ArrowUpRight size={12} />
                     </button>
                   </div>
                 ))}

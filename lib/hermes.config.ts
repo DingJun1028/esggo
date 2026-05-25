@@ -1,4 +1,4 @@
-import { z } from 'genkit';
+import { z } from 'zod';
 
 let _hermesAI: any = null;
 export async function getHermesAI() {

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
   Edit3, Save, Palette, CheckCircle, RefreshCw, Eye, Sparkles, Building, 
-  Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, MapPin, Landmark, X, ArrowRight 
+  Target, Users, Globe, CreditCard, ExternalLink, Zap, ArrowUpRight, MapPin, Landmark, X
 } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandCardHeader, BrandStatusDot } from '../../components/brand';
 import { dcGetCompanyProfile, dcUpsertCompanyProfile } from '../../lib/dataconnect-services';
@@ -122,7 +122,7 @@ export default function ProfilePage() {
         </div>
         <div className="col-span-12 lg:col-span-4 space-y-8">
            <BrandCard padding="lg" className="glass-panel border-none shadow-premium bg-white/60 text-center"><div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto text-emerald-600 shadow-inner"><CheckCircle size={32} /></div><h4 className="font-black text-[#003262] uppercase tracking-tight">樣貌一致性檢查</h4><p className="text-[11px] text-slate-500 font-medium">系統已自動將您的 **{activePalette.name}** 調色盤延伸至所有的 5T 標籤。</p></BrandCard>
-           <BrandCard padding="lg" className="glass-panel border-none shadow-premium relative overflow-hidden group"><div className="relative z-10 space-y-4"><h4 className="text-sm font-black uppercase tracking-widest text-slate-400">AI 品牌顧問建議</h4><p className="text-sm font-bold italic text-slate-700 leading-relaxed">「基於您的產業別，使用 **{activePalette.name}** 系列能有效建立專業感。」</p><button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest" style={{ color: activePalette.primary }}>獲取更多品牌洞察 <ArrowRight size={14} /></button></div><Sparkles size={100} className="absolute -top-10 -right-10 opacity-5 rotate-12" /></BrandCard>
+           <BrandCard padding="lg" className="glass-panel border-none shadow-premium relative overflow-hidden group"><div className="relative z-10 space-y-4"><h4 className="text-sm font-black uppercase tracking-widest text-slate-400">AI 品牌顧問建議</h4><p className="text-sm font-bold italic text-slate-700 leading-relaxed">「基於您的產業別，使用 **{activePalette.name}** 系列能有效建立專業感。」</p><button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest" style={{ color: activePalette.primary }}>獲取更多品牌洞察 <ArrowUpRight size={14} /></button></div><Sparkles size={100} className="absolute -top-10 -right-10 opacity-5 rotate-12" /></BrandCard>
         </div>
       </section>
     </div>

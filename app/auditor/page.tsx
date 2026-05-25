@@ -262,7 +262,7 @@ export default function AuditorPortal() {
                       <Tag size={14} className="text-berkeley-blue" />
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">受影響 ESG 類別:</span>
                       {diffResult.esgTags.map(tag => (
-                        <BrandBadge key={tag} variant="primary" size="sm">{tag}</BrandBadge>
+                        <BrandBadge key={tag} variant="blue" size="sm">{tag}</BrandBadge>
                       ))}
                     </div>
                   )}

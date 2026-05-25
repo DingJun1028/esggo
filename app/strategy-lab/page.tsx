@@ -31,6 +31,21 @@ export default function StrategyLabPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
+  const handleEvaluate = async () => {
+    if (!proposal.trim()) return;
+    setIsEvaluating(true);
+    setResult(null);
+    try {
+      const consensusResult = await swarmConsensusEngine.evaluateProposal(proposal);
+      setResult(consensusResult);
+      showToast('蜂群共識已完成', 'success');
+    } catch (e) {
+      showToast('評估失敗', 'error');
+    } finally {
+      setIsEvaluating(false);
+    }
+  };
+
   const handleSealStrategy = async () => {
     if (!result) return;
     showToast('正在執行 5T 戰略封印...', 'info');
@@ -58,7 +73,7 @@ export default function StrategyLabPage() {
 
     primaryActions: [
       { id: 'ai-growth', label: 'AI 進化建議', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在基於 5T 歷史數據計算進化路徑...') },
-      { id: 'reset', label: '重置', icon: <RefreshCw size={16}/>, variant: 'outline', onClick: () => { setProposal(''); setResult(null); } }
+      { id: 'reset', label: '重置', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: () => { setProposal(''); setResult(null); } }
     ],
 
     kpis: [
@@ -87,7 +102,7 @@ export default function StrategyLabPage() {
       {
         id: 'consensus-input',
         title: '戰略提案模擬',
-        columns: 5,
+        columns: 4,
         hidden: activeMode !== 'consensus',
         component: (
           <div className="space-y-6">
@@ -141,7 +156,7 @@ export default function StrategyLabPage() {
                             <p className="text-[10px] text-white/40 font-mono">sha256:ox_strat_{Math.random().toString(36).substring(7)}</p>
                          </div>
                       </div>
-                      <BrandButton variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/10" onClick={handleSealStrategy}>
+                      <BrandButton variant="secondary" size="sm" className="border-white/10 text-white hover:bg-white/10" onClick={handleSealStrategy}>
                          提交至聖碑
                       </BrandButton>
                    </div>
@@ -154,8 +169,8 @@ export default function StrategyLabPage() {
                    </div>
                    <h3 className="text-xl font-black text-[#003262] uppercase tracking-widest mt-8">多維度權重演算中</h3>
                    <div className="mt-4 space-y-2">
-                      <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2"><BrandStatusDot status="active" pulse size="xs"/> Z0-Auditor 正在檢查法規合規性...</p>
-                      <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2"><BrandStatusDot status="active" pulse size="xs"/> H1-Diplomat 正在模擬社會影響力...</p>
+                       <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2"><BrandStatusDot status="active" pulse size="sm"/> Z0-Auditor 正在檢查法規合規性...</p>
+                       <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2"><BrandStatusDot status="active" pulse size="sm"/> H1-Diplomat 正在模擬社會影響力...</p>
                    </div>
                 </motion.div>
               ) : (

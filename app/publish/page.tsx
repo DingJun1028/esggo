@@ -267,7 +267,7 @@ export default function PublishPage() {
                        <span className="font-bold text-blue-600">On-Chain Vault</span>
                     </div>
                  </div>
-                 <BrandButton variant="outline" fullWidth size="sm">
+                 <BrandButton variant="secondary" fullWidth size="sm">
                     <Share2 size={14} className="mr-2"/> 配置 Webhook 推送
                  </BrandButton>
               </div>

@@ -6,7 +6,7 @@ import {
   BookOpen, Shield, Leaf, Users, Building, TrendingUp,
   Search, Filter, Eye, Lock, Unlock, Globe, Award,
   Target, Calendar, Bell, Info, ChevronDown, ChevronUp,
-  Layers, Database, Cpu, Activity, ArrowRight, Hash
+  Layers, Database, Cpu, Activity, ArrowUpRight, Hash
 } from 'lucide-react';
 
 const GRI_CHAPTERS = [

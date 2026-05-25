@@ -143,8 +143,6 @@ export class OmniCore {
 
   // 5T Trust Score Engine
   async calculateTrustScore(company_id: string = 'default'): Promise<number> {
-    if (!supabase) return 80; // Baseline
-    
     try {
       const memories = await this.getMemories();
       const total = memories.length;
@@ -153,20 +151,38 @@ export class OmniCore {
       let internalScore = 90;
       if (total > 0) {
         const consolidatedCount = memories.filter(m => m.consolidated).length;
-        const brokenSeals = 0; 
+        
+        // 實時校驗每一條 Eternal Memory 的誠信狀態
+        let brokenSeals = 0;
+        for (const memory of memories) {
+           const payload = JSON.stringify({
+             id: memory.id,
+             type: memory.type,
+             content: memory.content,
+             timestamp: memory.timestamp
+           });
+           const computedHash = await sha256(payload);
+           if (computedHash !== memory.hash_lock) {
+             brokenSeals++;
+           }
+        }
+
         const consolidationBonus = (consolidatedCount / total) * 15;
         const volumeBonus = Math.min(total / 50, 1) * 10;
-        internalScore = 75 + consolidationBonus + volumeBonus - (brokenSeals * 20);
+        // 篡改懲罰極重：每處損壞扣 25 分
+        internalScore = 75 + consolidationBonus + volumeBonus - (brokenSeals * 25);
       }
 
-      // 2. Supply Chain Cascading Integrity (30% weight) - Simulated for Phase 11
-      const supplyScore = 88; // This would be fetched from SupplierIntegrityEngine
+      // 2. Supply Chain Cascading Integrity (30% weight)
+      // 未來會與 SupplierIntegrityEngine 完整串接
+      const supplyScore = 88; 
       
       const score = (internalScore * 0.7) + (supplyScore * 0.3);
       
-      return Math.min(Math.round(score), 100);
+      return Math.min(Math.max(Math.round(score), 0), 100);
     } catch (e) {
-      return 85;
+      console.error('[OmniCore] Trust score calculation failed:', e);
+      return 85; // 安全降級評分
     }
   }
 
@@ -176,9 +192,12 @@ export class OmniCore {
     type: EternalMemoryType,
     tags: string[] = []
   ): Promise<EternalMemory> {
+    const { company_id } = await this.getIdentity();
     const id = generateUUID();
     const timestamp = Date.now();
-    const hash_lock = await sha256(`${id}:${content}:${timestamp}`);
+    
+    // Hash includes company_id to prevent cross-tenant collisions or impersonation
+    const hash_lock = await sha256(`${company_id}:${id}:${content}:${timestamp}`);
 
     await dcUpsertEternalMemory({
       id,
@@ -187,6 +206,7 @@ export class OmniCore {
       tags: tags.join(','),
       hashLock: hash_lock,
       consolidated: false
+      // In a real RLS setup, Data Connect would handle company_id via auth claims
     });
 
     // EVENT-DRIVEN AUTONOMOUS COMPLIANCE:
@@ -195,7 +215,7 @@ export class OmniCore {
       const memories = await this.getMemories();
       const rawMemories = memories.filter(m => !m.consolidated);
       if (rawMemories.length >= 10) {
-        console.log('[OmniCore] Auto-Consolidation Threshold Reached. Initiating AgentZ0 Background Task...');
+        console.log(`[OmniCore] Auto-Consolidation Threshold Reached for ${company_id}.`);
         this.consolidateMemories(type).catch(console.error);
       }
     }
@@ -212,6 +232,7 @@ export class OmniCore {
   }
 
   async getMemories(): Promise<EternalMemory[]> {
+    // In production, dcListEternalMemories is limited by the server's RLS policy based on the requester's identity.
     const data = await dcListEternalMemories();
 
     return data.map(m => ({

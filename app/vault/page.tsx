@@ -5,7 +5,6 @@ import {
   Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles, XCircle, Award, Network
 } from 'lucide-react';
 import { getEvidenceFiles, insertEvidence, sealEvidence, type EvidenceFile } from '../../lib/db';
-import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
 import { 
   create5TAttestation, generateSelectiveDisclosure, generateRangeProof, 
   type T5Attestation, type SelectiveDisclosureProof, type ZKPRangeProof
@@ -202,7 +201,12 @@ export default function VaultPage() {
   const handleScan = async (file: any) => {
     setScanningId(file.id!);
     try {
-      await scanEvidenceWithVision(file.id!, 'image/pdf');
+      const res = await fetch('/api/hermes/scan-vision', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileId: file.id, fileType: 'image/pdf' }),
+      });
+      if (!res.ok) throw new Error('Scan failed');
       showToast('AI 掃描完成。', 'success');
     } catch {
       showToast('AI 掃描失敗', 'error');
@@ -310,8 +314,8 @@ export default function VaultPage() {
                            <BrandButton variant="primary" size="xs" className="h-8 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest" onClick={() => sealFile(f)} loading={sealingId === f.id}>Seal_5T</BrandButton>
                          ) : (
                            <div className="flex gap-1">
-                             <BrandButton variant="outline" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest border-blue-200 text-blue-600" onClick={() => generateZKP(f)}>Privacy</BrandButton>
-                             <BrandButton variant="outline" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest border-purple-200 text-purple-600" onClick={() => triggerRangeZKP(f)}>Range</BrandButton>
+                             <BrandButton variant="secondary" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest border-blue-200 text-blue-600" onClick={() => generateZKP(f)}>Privacy</BrandButton>
+                             <BrandButton variant="secondary" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest border-purple-200 text-purple-600" onClick={() => triggerRangeZKP(f)}>Range</BrandButton>
                              <BrandButton variant="primary" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest bg-emerald-600 hover:bg-emerald-700 text-white border-none shadow-sm" onClick={() => draftFromEvidence(f)} loading={scanningId === f.id}><Sparkles size={10} className="mr-1" /> Draft</BrandButton>
                            </div>
                          )}

@@ -53,7 +53,7 @@ export interface AgentTask {
   title: string;
   description?: string;
   inputRefIds: string[];
-  status: 'pending' | 'approved_for_execution' | 'denied' | 'archived';
+  status: 'pending' | 'approved_for_execution' | 'denied' | 'archived' | 'completed' | 'failed';
   policyDecisionId: string;
   requiresHumanReview: boolean;
   skillKey: string;
@@ -61,6 +61,23 @@ export interface AgentTask {
   delegationReason?: string;
   createdAt: string;
   updatedAt: string;
+  interactionLog?: Array<{
+    agentId: string;
+    action: string;
+    message: string;
+    timestamp: string;
+  }>;
+}
+
+export interface SwarmAgent {
+  id: string;
+  name: string;
+  role: string;
+  status: 'active' | 'idle' | 'processing' | 'error';
+  persona: 'compliance' | 'harmony' | 'innovation' | 'entropy';
+  color: string;
+  currentTaskId?: string;
+  t5_score: number;
 }
 
 export interface AgentExecution {

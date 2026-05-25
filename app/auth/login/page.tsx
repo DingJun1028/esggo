@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef } from 'react';
-import { Leaf, ShieldCheck, ArrowRight, Github, AlertCircle, Zap, Shield, Terminal, Layout, Globe, Key, AlertTriangle } from 'lucide-react';
+import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Terminal, Layout, Globe, Key, AlertTriangle } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -175,7 +175,7 @@ export default function LoginPage() {
                    className="bg-[#003262] h-14 text-sm font-black shadow-xl shadow-blue-900/20 rounded-2xl group"
                    loading={loading}
                  >
-                    啟動主權連線 <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                    啟動主權連線 <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
                  </BrandButton>
                  
                  <div className="text-center">
@@ -202,10 +202,10 @@ export default function LoginPage() {
                  </BrandButton>
                  
                  <div className="grid grid-cols-2 gap-3">
-                    <BrandButton variant="outline" className="border-slate-100 text-slate-500 hover:bg-slate-50 h-12 text-[10px] font-black bg-white rounded-xl shadow-sm uppercase tracking-widest">
+                    <BrandButton variant="secondary" className="border-slate-100 text-slate-500 hover:bg-slate-50 h-12 text-[10px] font-black bg-white rounded-xl shadow-sm uppercase tracking-widest">
                        <Github size={14} className="mr-2 opacity-40" /> GitHub
                     </BrandButton>
-                    <BrandButton variant="outline" className="border-slate-100 text-slate-500 hover:bg-slate-50 h-12 text-[10px] font-black bg-white rounded-xl shadow-sm uppercase tracking-widest">
+                    <BrandButton variant="secondary" className="border-slate-100 text-slate-500 hover:bg-slate-50 h-12 text-[10px] font-black bg-white rounded-xl shadow-sm uppercase tracking-widest">
                        <ShieldCheck size={14} className="mr-2 opacity-40" /> SSO_SAML
                     </BrandButton>
                  </div>

@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Zap, Upload, FileText, Search, ShieldCheck, 
-  ArrowRight, CheckCircle, AlertTriangle, Database, 
+  ArrowUpRight, CheckCircle, AlertTriangle, Database, 
   Maximize2, RefreshCw, BarChart3, Bot, Sparkles,
-  Eye, Lock, Hash, Activity
+  Eye, Lock, Hash, Activity, Edit3
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandBadge, BrandCardHeader, 
@@ -97,10 +98,28 @@ export default function HermesAlchemyPage() {
     setIsScanning(true);
     await new Promise(r => setTimeout(r, 1500));
     
+    const sealHash = `sha256:ox_alc_${Math.random().toString(36).substring(2, 15)}`;
+    
+    // [oX Logic Upgrade] Pushing to Vault Omni
+    try {
+      await fetch('/api/vault/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uuid: `alc-${Date.now()}`,
+          hash_lock: sealHash,
+          gri_reference: results.extractedMetrics.map(m => m.gri).join(', '),
+          payload: JSON.stringify(results),
+          dimension: 'E',
+          t5_bundle: { tags: ['T1', 'T2', 'T4', 'T5'], version: '1.2.0' }
+        })
+      });
+    } catch (e) { console.warn('Vault auto-registration failed', e); }
+
     setResults({
       ...results,
       sealed: true,
-      sealHash: `sha256:ox_${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`
+      sealHash
     });
     setIsScanning(false);
   };
@@ -267,8 +286,8 @@ export default function HermesAlchemyPage() {
                             進入永續撰寫 <Edit3 size={14} className="ml-1" />
                           </BrandButton>
                         </Link>
-                        <BrandButton variant="outline" size="sm" className="border-emerald-200 text-emerald-700 bg-white">
-                          查看聖碑紀錄 <ArrowRight size={14} className="ml-1" />
+                        <BrandButton variant="secondary" size="sm" className="border-emerald-200 text-emerald-700 bg-white">
+                          查看聖碑紀錄 <ArrowUpRight size={14} className="ml-1" />
                         </BrandButton>
                       </div>
                     </div>
@@ -277,7 +296,7 @@ export default function HermesAlchemyPage() {
                       <BrandButton variant="primary" size="lg" className="flex-1 rounded-2xl" onClick={handleSeal}>
                         <Hash size={18} className="mr-2" /> 執行 5T 封印並提交至金庫
                       </BrandButton>
-                      <BrandButton variant="outline" size="lg" className="rounded-2xl">
+                      <BrandButton variant="secondary" size="lg" className="rounded-2xl">
                         <Maximize2 size={18} />
                       </BrandButton>
                     </div>

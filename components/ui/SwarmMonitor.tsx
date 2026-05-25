@@ -27,7 +27,7 @@ const MOCK_AGENTS: SwarmAgent[] = [
 ];
 
 export function SwarmMonitor() {
-  const { tasks, loading, error, refresh } = useSwarmSync(5000);
+  const { tasks, agents, loading, error, refresh } = useSwarmSync(5000);
 
   return (
     <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg bg-gradient-to-br from-white/90 to-slate-50/50">
@@ -50,9 +50,8 @@ export function SwarmMonitor() {
       <div className="flex-1 p-4 sm:p-5 space-y-6">
         {/* Active Agents Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {MOCK_AGENTS.map((agent) => {
-            const agentTasks = tasks.filter(t => t.status === 'executing' || t.status === 'approved_for_execution');
-            const isProcessing = agent.id === 'agt-01' && agentTasks.length > 0;
+          {(agents.length > 0 ? agents : []).map((agent) => {
+            const isProcessing = agent.status === 'processing';
             
             return (
               <div key={agent.id} className="p-3 rounded-xl bg-white border border-slate-100 shadow-sm flex flex-row sm:flex-col items-center text-left sm:text-center gap-4 sm:gap-2 transition-all hover:border-blue-200">
@@ -63,13 +62,13 @@ export function SwarmMonitor() {
                   <Bot size={20} style={{ color: agent.color }} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[9px] font-black text-slate-800 uppercase truncate w-full">{agent.name.split('-')[1]}</p>
+                  <p className="text-[9px] font-black text-slate-800 uppercase truncate w-full">{agent.name.split('-')[1] || agent.name}</p>
                   <div className="flex items-center sm:justify-center gap-1">
                     <div className={cn("w-1 h-1 rounded-full", 
                       isProcessing ? "bg-blue-500" : 
                       agent.status === 'active' ? "bg-emerald-500" : "bg-slate-300"
                     )} />
-                    <span className="text-[8px] font-bold text-slate-400 uppercase">{isProcessing ? 'processing' : agent.status}</span>
+                    <span className="text-[8px] font-bold text-slate-400 uppercase">{agent.status}</span>
                   </div>
                 </div>
               </div>
@@ -97,7 +96,7 @@ export function SwarmMonitor() {
                   className="p-3 bg-white/80 rounded-xl border border-slate-100 flex items-center gap-3 group transition-all hover:bg-blue-50/50"
                 >
                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
-                    <Activity size={16} className={task.status === 'executing' ? "animate-pulse" : ""} />
+                    <Activity size={16} className={task.status === 'approved_for_execution' ? "animate-pulse" : ""} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] font-bold text-berkeley-blue truncate">{task.title}</p>

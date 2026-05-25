@@ -7,7 +7,7 @@ interface BrandStatusDotProps {
   status: StatusType;
   label?: string;
   pulse?: boolean;
-  size?: 'sm' | 'md';
+  size?: 'xs' | 'sm' | 'md';
 }
 
 const statusConfig: Record<StatusType, { color: string; label: string }> = {
@@ -26,7 +26,7 @@ export default function BrandStatusDot({
   size = 'sm',
 }: BrandStatusDotProps) {
   const config = statusConfig[status];
-  const dotSize = size === 'sm' ? 'w-2 h-2' : 'w-2.5 h-2.5';
+  const dotSize = size === 'xs' ? 'w-1.5 h-1.5' : size === 'sm' ? 'w-2 h-2' : 'w-2.5 h-2.5';
 
   return (
     <div className="flex items-center gap-1.5">

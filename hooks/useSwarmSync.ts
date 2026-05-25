@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { dcListSwarmAgentTasks } from '../lib/dataconnect-services';
-import { AgentTask } from '../lib/agent/types';
+import { AgentTask, SwarmAgent } from '../lib/agent/types';
 
 /**
- * Custom Hook for real-time (polling) Swarm Agent Task synchronization.
- * Connects directly to the Data Connect service layer.
+ * Custom Hook for real-time (polling) Swarm Agent synchronization.
  */
 export function useSwarmSync(intervalMs: number = 3000) {
   const [tasks, setTasks] = useState<AgentTask[]>([]);
+  const [agents, setAgents] = useState<SwarmAgent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const lastSyncRef = useRef<string>(new Date().toISOString());
@@ -18,7 +18,6 @@ export function useSwarmSync(intervalMs: number = 3000) {
     try {
       const remoteTasks = await dcListSwarmAgentTasks();
       
-      // Map schema type to AgentTask interface
       const mappedTasks: AgentTask[] = remoteTasks.map(t => ({
         id: t.id,
         title: t.title,
@@ -35,10 +34,44 @@ export function useSwarmSync(intervalMs: number = 3000) {
       }));
 
       setTasks(mappedTasks);
+
+      // Derive active agents from tasks or fetch from separate service
+      // For now, we simulate agent status based on active tasks
+      const derivedAgents: SwarmAgent[] = [
+        { 
+          id: 'agt-z0', 
+          name: 'Z0-Compliance', 
+          role: 'Regulatory Auditor', 
+          status: mappedTasks.some(t => t.status === 'approved_for_execution') ? 'processing' : 'active', 
+          persona: 'compliance', 
+          color: '#003262',
+          t5_score: 98
+        },
+        { 
+          id: 'agt-h1', 
+          name: 'H1-Harmony', 
+          role: 'Social Impact Analyst', 
+          status: 'active', 
+          persona: 'harmony', 
+          color: '#10B981',
+          t5_score: 94
+        },
+        { 
+          id: 'agt-v4', 
+          name: 'V4-Vault', 
+          role: 'Security & ZKP Guard', 
+          status: 'idle', 
+          persona: 'innovation', 
+          color: '#8B5CF6',
+          t5_score: 99
+        },
+      ];
+      setAgents(derivedAgents);
+
       lastSyncRef.current = new Date().toISOString();
       setError(null);
     } catch (e: any) {
-      console.error('SwarmSync: Failed to poll tasks', e);
+      console.error('SwarmSync: Failed to poll swarm state', e);
       setError(e.message);
     } finally {
       setLoading(false);
@@ -51,5 +84,5 @@ export function useSwarmSync(intervalMs: number = 3000) {
     return () => clearInterval(interval);
   }, [intervalMs]);
 
-  return { tasks, loading, error, lastSync: lastSyncRef.current, refresh: sync };
+  return { tasks, agents, loading, error, lastSync: lastSyncRef.current, refresh: sync };
 }

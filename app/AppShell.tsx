@@ -8,7 +8,7 @@ import {
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
-  Search, Command, X, ArrowRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers
+  Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
@@ -31,6 +31,7 @@ const navGroups = [
   {
     label: 'OMNIHERMES oX',
     items: [
+      { href: '/walkthrough', label: '新手教學', sub: 'Onboarding', icon: <Rocket size={18} /> },
       { href: '/hermes-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
       { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <Globe size={18} /> },
       { href: '/hermes-alchemy', label: '煉金術', sub: 'Alchemy Scan', icon: <Sparkles size={18} /> },
@@ -170,7 +171,7 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub || item.subtitle}</p>
                     </div>
                   </div>
-                  <ArrowRight size={14} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100" />
+                  <ArrowUpRight size={14} className="text-slate-200 group-hover:text-[#003262] transition-all opacity-0 group-hover:opacity-100" />
                 </button>
               ))}
             </div>

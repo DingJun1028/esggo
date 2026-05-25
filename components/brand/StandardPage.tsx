@@ -7,9 +7,10 @@ import {
 
 interface StandardPageProps {
   config: UniversalPageConfig;
+  children?: React.ReactNode;
 }
 
-export default function StandardPage({ config }: StandardPageProps) {
+export default function StandardPage({ config, children }: StandardPageProps) {
   const activeKpis = config.kpis?.slice(0, 6) ?? [];
 
   return (
@@ -111,6 +112,9 @@ export default function StandardPage({ config }: StandardPageProps) {
           ))}
         </div>
       )}
+
+      {/* ─── Custom Children ───────────────────────────────────────── */}
+      {children}
 
       {/* ─── Bento Grid Sections ─────────────────────────────────────── */}
       <div className="bento">

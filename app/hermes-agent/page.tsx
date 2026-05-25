@@ -5,7 +5,7 @@ import {
   Bot, Terminal, Cpu, Zap, Shield, Globe, Layers, Video, 
   Code, Database, Activity, ExternalLink, ChevronRight, 
   Download, FileJson, MessageSquare, Gauge, Plus, Copy,
-  CheckCircle, ArrowRight, PlayCircle
+  CheckCircle, ArrowUpRight, PlayCircle
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandTabs, BrandBadge, BrandCardHeader, 
@@ -163,7 +163,7 @@ export default function HermesAgentPage() {
                       v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 Hermes 能直接作為 Zed 的 AI 後端，實時同步代碼上下文。
                     </p>
                     <BrandButton variant="ghost" size="sm" className="mt-3 p-0 h-auto text-blue-700 font-bold hover:bg-transparent">
-                      查看開發文檔 <ArrowRight size={14} className="ml-1" />
+                      查看開發文檔 <ArrowUpRight size={14} className="ml-1" />
                     </BrandButton>
                   </div>
                 </div>

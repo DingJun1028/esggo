@@ -7,7 +7,8 @@ import {
   Plus, Search, Filter, Download, Eye, Lock, Unlock,
   FileText, Zap, Database, Globe, ChevronDown, X,
   Activity, BarChart3, Leaf, Sparkles, Layout, Landmark,
-  ShieldCheck, ArrowRight, RefreshCw, Send, Network, Cpu
+  ShieldCheck, ArrowUpRight, RefreshCw, Send, Network, Cpu,
+  List, Users
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandBadge, BrandStatusDot, BrandTable, 
@@ -127,7 +128,7 @@ export default function VaultOmniPage() {
 
     primaryActions: [
       { id: 'scan', label: 'Alchemy 提取', icon: <Sparkles size={16}/>, onClick: () => window.location.href = '/hermes-alchemy' },
-      { id: 'export', label: '導出實證日誌', icon: <Download size={16}/>, variant: 'outline' }
+      { id: 'export', label: '導出實證日誌', icon: <Download size={16}/>, variant: 'secondary', onClick: () => {} }
     ],
 
     kpis: [
@@ -270,7 +271,7 @@ export default function VaultOmniPage() {
                </div>
 
                <div className="flex gap-4">
-                  <BrandButton variant="outline" fullWidth className="h-14 rounded-2xl border-slate-200">
+                  <BrandButton variant="secondary" fullWidth className="h-14 rounded-2xl border-slate-200">
                     <Download size={18} className="mr-2"/> 下載存證包
                   </BrandButton>
                   <BrandButton variant="ghost" fullWidth className="h-14 rounded-2xl">

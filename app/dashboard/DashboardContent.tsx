@@ -394,19 +394,33 @@ function GovernanceLoopMonitor() {
 export default function DashboardContent() {
   const [now, setNow] = useState(new Date());
   const [trustScore, setTrustScore] = useState(90);
+  const [resonance, setResonance] = useState(84);
   const { stats, loading: statsLoading } = useDashboardStats();
   const { growth, loading: growthLoading } = useSystemEvolution();
 
-  const updateScore = useCallback(async () => {
-    const score = await omniCore.calculateTrustScore();
-    setTrustScore(score);
+  const updateDashboardIntelligence = useCallback(async () => {
+    try {
+      const [tScore, resResponse] = await Promise.all([
+        omniCore.calculateTrustScore(),
+        fetch('/api/governance/resonance').then(r => r.json())
+      ]);
+      setTrustScore(tScore);
+      if (resResponse.success && resResponse.data) {
+        setResonance(resResponse.data.overall);
+      }
+    } catch (e) {
+      console.error('Failed to update dashboard intelligence', e);
+    }
   }, []);
 
   useEffect(() => {
-    updateScore();
-    const t = setInterval(() => setNow(new Date()), 60000);
+    updateDashboardIntelligence();
+    const t = setInterval(() => {
+      setNow(new Date());
+      updateDashboardIntelligence();
+    }, 60000);
     return () => clearInterval(t);
-  }, [updateScore]);
+  }, [updateDashboardIntelligence]);
 
   const KPIS = getKpis(stats, statsLoading);
 
@@ -426,7 +440,7 @@ export default function DashboardContent() {
              </div>
              <div className="flex items-center gap-2 bg-purple-50/50 backdrop-blur-sm px-3 py-1 rounded-full border border-purple-100/50">
                 <Zap size={14} className="text-purple-600" />
-                <span className="text-[9px] font-black text-purple-700 uppercase tracking-widest">Resonance: 84%</span>
+                <span className="text-[9px] font-black text-purple-700 uppercase tracking-widest">Resonance: {resonance}%</span>
              </div>
           </div>
           <div className="space-y-1">

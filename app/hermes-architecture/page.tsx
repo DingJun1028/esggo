@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Layers, Shield, Zap, Bot, Database, Hash, 
-  Activity, Globe, Lock, ArrowRight, Sparkles, 
+  Activity, Globe, Lock, ArrowUpRight, Sparkles, 
   Trophy, CheckCircle, AlertTriangle, Cpu, Network,
   Eye, RefreshCw, ChevronRight, Server
 } from 'lucide-react';
@@ -61,7 +61,7 @@ export default function HermesArchitecturePage() {
 
     primaryActions: [
       { id: 'audit', label: '啟動全域審計', icon: <Shield size={16}/>, onClick: () => alert('正在掃描全域 5T 誠信鏈結...') },
-      { id: 'topology', label: '拓撲刷新', icon: <RefreshCw size={16}/>, variant: 'outline' }
+      { id: 'topology', label: '拓撲刷新', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: () => window.location.reload() }
     ],
 
     kpis: [
@@ -200,7 +200,7 @@ export default function HermesArchitecturePage() {
                      </motion.div>
                    )}
 
-                   <BrandButton variant="outline" fullWidth className="rounded-2xl border-slate-200">
+                   <BrandButton variant="secondary" fullWidth className="rounded-2xl border-slate-200">
                       調整系統自主權限制 <ChevronRight size={14} className="ml-1" />
                    </BrandButton>
                 </div>

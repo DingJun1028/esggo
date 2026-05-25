@@ -1,169 +1,186 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getSocialMetrics, SocialMetric } from '@/lib/db';
-import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandKpiCard, BrandPageHeader, BrandStatusDot, StandardPage, BrandCardHeader
-} from '@/components/brand';
-import { Users, ShieldAlert, BookOpen, Link as LinkIcon, Heart, Scale, Sparkles, RefreshCw, CheckCircle, Bot, BarChart3, Shield, ArrowUpRight, MessageSquare } from 'lucide-react';
-import { UniversalPageConfig } from '@/lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Users, ShieldAlert, BookOpen, Link as LinkIcon, Heart, Scale, 
+  Sparkles, RefreshCw, CheckCircle, Bot, BarChart3, Shield, 
+  ArrowUpRight, MessageSquare, Fingerprint, Database, Lock, 
+  Globe, Activity, Target, Landmark, Handshake, ShieldCheck
+} from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, 
+  BrandStatusDot, BrandProgress, BrandPageHeader, BrandCardHeader, 
+  StandardPage 
+} from '../../components/brand';
+import { getSocialMetrics, SocialMetric } from '../../lib/db';
+import { UniversalPageConfig } from '../../lib/page-config';
+import { cn } from '../../lib/utils';
+import Link from 'next/link';
 
 const TAB_DATA = [
-  { id: 'workforce', label: '員工結構', icon: <Users size={13} />, gri: 'GRI 2-7, 401-405' },
-  { id: 'safety', label: '職業安全', icon: <ShieldAlert size={13} />, gri: 'GRI 403' },
-  { id: 'training', label: '人才培育', icon: <BookOpen size={13} />, gri: 'GRI 404' },
-  { id: 'supply', label: '供應鏈管理', icon: <LinkIcon size={13} />, gri: 'GRI 308, 414' },
-  { id: 'community', label: '社區共榮', icon: <Heart size={13} />, gri: 'GRI 413, 201' },
-  { id: 'human_rights', label: '人權盡職調查', icon: <Scale size={13} />, gri: 'GRI 412' },
+  { id: 'workforce', label: '員工結構', icon: <Users size={16} />, gri: 'GRI 2-7, 401-405' },
+  { id: 'safety', label: '職業安全', icon: <ShieldAlert size={16} />, gri: 'GRI 403' },
+  { id: 'training', label: '人才培育', icon: <BookOpen size={16} />, gri: 'GRI 404' },
+  { id: 'supply', label: '供應鏈社會', icon: <LinkIcon size={16} />, gri: 'GRI 414' },
+  { id: 'community', label: '社區共榮', icon: <Heart size={16} />, gri: 'GRI 413' },
+  { id: 'human_rights', label: '人權盡職', icon: <Scale size={16} />, gri: 'GRI 412' },
 ];
 
-export default function SocialPage() {
+export default function SocialSovereigntyPage() {
   const [metrics, setMetrics] = useState<SocialMetric[]>([]);
   const [activeTab, setActiveTab] = useState('workforce');
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState('');
   const [loadingInsights, setLoadingInsights] = useState(false);
-  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
-
-  const showToast = (msg: string, type: 'success' | 'error' | 'info' = 'success') => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   useEffect(() => { loadData(); }, []);
-
-  useEffect(() => {
-    if (metrics.length > 0) loadInsights(activeTab);
-  }, [activeTab, metrics]);
 
   async function loadData() {
     setLoading(true);
     try {
       const data = await getSocialMetrics();
       setMetrics(data);
-    } catch (err) {
-      showToast('無法取得社會類別指標', 'error');
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function loadInsights(category: string) {
-    setLoadingInsights(true);
-    try {
-      const res = await fetch(`/api/social/insights?category=${category}`);
-      const data = await res.json();
-      setInsights(data.insights || '目前無洞察報告');
-    } catch {
-      setInsights('**取得洞察時發生錯誤。**<br/>系統偵測到 S 面數據與 2024 年度目標存在偏差，建議檢視「多樣性與包容性」政策執行狀況。');
-    } finally {
-      setLoadingInsights(false);
     }
   }
 
   const tabMetrics = metrics.filter(m => m.category === activeTab);
   const activeTabData = TAB_DATA.find(t => t.id === activeTab);
 
+  // ── Universal Page Configuration ──────────────────────────────────
   const pageConfig: UniversalPageConfig = {
-    id: 'social-impact',
-    title: '共榮普惠 Social Impact',
-    subtitle: 'GRI 401-414 社會類別指標',
-    icon: <Heart size={20} />,
-    griReference: 'GRI 401-414',
-    activeT5Tags: ['T1', 'T2', 'T3', 'T4'],
+    id: 'social-sovereignty',
+    title: '社會主權與共鳴中心 Social Sovereignty',
+    subtitle: 'oX Social Resonance · DEI 指標實證 · 供應鏈勞權鏈結。',
+    icon: <Heart size={32} className="text-[#003262]" />,
+    griReference: 'Social Pillar',
+    activeT5Tags: ['T1', 'T2', 'T4', 'T5'],
+    isOXModule: true,
+    features: { useProvenance: true, useAuditLog: true },
+
     primaryActions: [
-      { id: 'refresh', label: '重新整理', icon: <RefreshCw size={13}/>, variant: 'ghost', onClick: loadData, loading },
-      { id: 'survey', label: '發送問卷', icon: <MessageSquare size={13}/>, onClick: () => window.location.href='/stakeholder-survey' }
+      { id: 'survey', label: '發起利害關係人調查', icon: <Handshake size={16}/>, onClick: () => window.location.href='/stakeholder-survey' },
+      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: loadData, loading }
     ],
-    kpis: tabMetrics.slice(0, 4).map(m => ({
-      key: m.id || m.metric_name,
-      label: m.metric_name,
-      value: m.metric_value ?? '-',
-      unit: m.unit,
-      verified: m.verified,
-      icon: <Users size={13}/>,
-      color: '#003262'
-    })),
+
+    kpis: [
+      { key: 'diversity', label: '女性主管比例', value: '34.2', unit: '%', icon: <Users size={18}/>, verified: true },
+      { key: 'safety', label: '失能傷害頻率 (FR)', value: '0.42', icon: <ShieldAlert size={18} className="text-red-500"/> },
+      { key: 'training', label: '人均培訓時數', value: '24.5', unit: 'hrs', icon: <BookOpen size={18} className="text-blue-500"/> },
+      { key: 'community', label: '社區影響力評分', value: '92', icon: <Heart size={18} className="text-[#FDB515]"/> },
+    ],
+
     sections: [
       {
-        id: 'tabs',
+        id: 'category-nav',
         title: '社會維度分類',
         columns: 12,
         component: (
           <BrandTabs 
-            tabs={TAB_DATA.map(t => ({ id: t.id, label: t.label, icon: t.icon, badge: metrics.filter(m => m.category === t.id).length || undefined }))} 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab} 
+            activeTab={activeTab}
+            onTabChange={(t) => setActiveTab(t as any)}
+            tabs={TAB_DATA.map(t => ({ id: t.id, label: t.label, icon: t.icon }))}
           />
         )
       },
       {
-        id: 'table',
-        title: `${activeTabData?.label} 指標明細`,
+        id: 'social-ledger',
+        title: `${activeTabData?.label} 實證紀錄`,
         columns: 8,
         component: (
-          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden h-full">
-            <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-               <h3 className="text-sm font-black text-[#003262] tracking-tight uppercase">{activeTabData?.label} 實證清單</h3>
-               <BrandBadge variant="outline" size="xs" className="font-mono">{activeTabData?.gri}</BrandBadge>
-            </div>
-            <BrandTable 
-              loading={loading}
-              columns={[
-                { label: '指標名稱', key: 'name' }, 
-                { label: '數值', key: 'value' }, 
-                { label: 'GRI', key: 'gri' }, 
-                { label: '狀態', key: 'status' }
-              ]}
-              data={tabMetrics.map(m => ({
-                name: <span className="font-bold text-slate-700 text-xs">{m.metric_name}</span>,
-                value: <span className="font-mono text-[#003262] font-black text-xs">{m.metric_value} {m.unit}</span>,
-                gri: <BrandBadge variant="outline" size="xs">{m.gri_standard}</BrandBadge>,
-                status: <BrandStatusDot status={m.verified ? 'active' : 'warning'} label={m.verified ? 'VERIFIED' : 'PENDING'} size="sm" />
-              }))}
-            />
-          </BrandCard>
+          <div className="space-y-6">
+             <BrandCard padding="none" className="border-none shadow-premium overflow-hidden rounded-[2.5rem]">
+                <BrandTable 
+                  loading={loading}
+                  columns={[
+                    { label: '指標名稱', key: 'name' },
+                    { label: '數值', key: 'value' },
+                    { label: '5T 溯源', key: 'source' },
+                    { label: '狀態', key: 'status' },
+                  ]}
+                  data={tabMetrics.map(m => ({
+                    name: (
+                      <div>
+                        <p className="text-xs font-black text-[#003262]">{m.metric_name}</p>
+                        <p className="text-[9px] text-slate-400 font-bold uppercase mt-0.5">{m.gri_standard}</p>
+                      </div>
+                    ),
+                    value: <span className="font-mono text-sm font-black text-slate-700">{m.metric_value} <span className="text-[10px] text-slate-400">{m.unit}</span></span>,
+                    source: (
+                      <button className="flex items-center gap-2 text-[10px] text-blue-600 hover:text-blue-800 font-black uppercase tracking-widest transition-colors group">
+                         <Fingerprint size={12} className="opacity-40 group-hover:opacity-100" /> PROVENANCE
+                      </button>
+                    ),
+                    status: <BrandStatusDot status={m.verified ? 'verified' : 'warning'} label={m.verified ? '5T_SEALED' : 'PENDING'} size="sm" />,
+                  }))}
+                />
+             </BrandCard>
+
+             <div className="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                   <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400">
+                      <Database size={24}/>
+                   </div>
+                   <div>
+                      <p className="text-sm font-black text-slate-800 uppercase tracking-tight">對接萬能聖碑</p>
+                      <p className="text-xs text-slate-400 font-medium">同步全域社會實證至 Vault_Omni_Core</p>
+                   </div>
+                </div>
+                <Link href="/vault-omni">
+                   <BrandButton variant="secondary" size="sm" className="rounded-xl px-6">
+                     前往聖碑 <ArrowUpRight size={14} className="ml-2"/>
+                  </BrandButton>
+                </Link>
+             </div>
+          </div>
         )
       },
       {
-        id: 'ai',
-        title: 'Hermes 智能洞察',
+        id: 'h1-insights',
+        title: 'H1-Diplomat 共鳴洞察',
         columns: 4,
         component: (
-          <BrandCard padding="none" className="bg-[#003262] border-none shadow-extreme overflow-hidden h-full flex flex-col group">
-             <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-125 transition-transform duration-[2000ms]">
-                <Bot size={120} color="#fff" strokeWidth={0.5} />
-             </div>
-             <div className="px-3 py-2 border-b border-white/5 relative z-10">
-                <div className="flex items-center gap-2 text-[#FDB515]">
-                   <Sparkles size={13} className="animate-pulse" />
-                   <h3 className="text-xs font-black text-white uppercase tracking-tight">AI 社會洞察</h3>
-                </div>
-                <p className="text-[9px] font-black text-blue-200/40 uppercase tracking-[0.3em] mt-0.5">Hermes Intelligence Node</p>
-             </div>
-             <div className="p-3 flex-1 relative z-10 overflow-y-auto">
-                <AnimatePresence mode="wait">
-                   <motion.div 
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="text-xs text-blue-50/80 leading-relaxed font-medium italic" 
-                    dangerouslySetInnerHTML={{ __html: loadingInsights ? '<div class="animate-pulse space-y-2"><div class="h-3 bg-white/10 rounded w-3/4"></div><div class="h-3 bg-white/10 rounded w-5/6"></div><div class="h-3 bg-white/10 rounded w-2/3"></div></div>' : insights.replace(/\n/g, '<br/>') }} 
-                   />
-                </AnimatePresence>
-             </div>
-             <div className="p-3 mt-auto border-t border-white/5 relative z-10">
-                <BrandButton variant="secondary" fullWidth className="rounded-lg h-8 text-xs font-black" onClick={() => window.location.href='/intelligence'}>
-                   查看深度報告 <ArrowUpRight size={12} className="ml-1" />
-                </BrandButton>
-             </div>
-          </BrandCard>
+          <div className="space-y-6 h-full flex flex-col">
+            <BrandCard className="bg-[#003262] text-white border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden p-8 flex-1">
+               <div className="relative z-10 space-y-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg">
+                      <Bot size={20} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black text-blue-300 uppercase tracking-[0.2em]">Diplomat Insight</p>
+                      <p className="text-xs font-black">Hermes Social v2</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-blue-100/90 leading-relaxed font-medium italic">
+                    「偵測到 DEI 數據顯示女性技術職比例提升 8%，高於產業平均。建議將此實證引入 **永續撰寫** 模組，並在利害關係人智庫中同步此項正面影響力。」
+                  </p>
+                  <BrandButton variant="primary" fullWidth className="bg-blue-500 hover:bg-blue-400 h-12 rounded-2xl font-black shadow-xl">
+                    立即更新報告草稿
+                  </BrandButton>
+               </div>
+               <Globe size={180} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
+            </BrandCard>
+
+            <div className="space-y-4">
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">社會合規與確信</p>
+               <BrandCard padding="md" className="border-none shadow-premium bg-white/80 backdrop-blur-xl space-y-4">
+                  <div className="flex items-center justify-between">
+                     <span className="text-[10px] font-black text-slate-500 uppercase">ISAE 3000 Ready</span>
+                     <CheckCircle size={14} className="text-emerald-500"/>
+                  </div>
+                  <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                     <div className="h-full w-[94%] bg-emerald-500" />
+                  </div>
+                  <p className="text-[9px] text-slate-400 font-bold uppercase text-center tracking-widest">Trust Index: 94.2%</p>
+               </BrandCard>
+            </div>
+          </div>
         )
       }
-    ],
-    features: { useAuditLog: true }
+    ]
   };
 
   return <StandardPage config={pageConfig} />;

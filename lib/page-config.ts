@@ -53,7 +53,7 @@ export interface UniversalPageConfig {
   sections: PageSection[];
   
   // Feature Toggles
-  features: {
+  features?: {
     useSelectionHouse?: boolean;
     useProvenance?: boolean;
     useVoiceInput?: boolean;

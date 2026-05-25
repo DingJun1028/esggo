@@ -20,18 +20,19 @@ const mockComponent: IComponentCore = {
 
 const mockPolicy: RegulatoryPolicy = {
   id: 'pol-001',
+  standard: 'TCFD',
+  code: 'CLIMATE-01',
   name: 'TCFD Climate Disclosure',
-  category: 'E',
-  effectiveDate: '2025-01-01',
-  status: 'ACTIVE'
+  description: 'Climate-related financial disclosures',
+  rules: []
 };
 
 const mockResonance: ResonanceResult = {
   topicId: 'topic-climate',
   label: '氣候變遷',
-  stakeholderPriority: 90,
-  resonance: 85,
-  category: 'E'
+  internalPriority: 90,
+  stakeholderPriority: 85,
+  resonance: 87.5
 };
 
 describe('MemoryGraphEngine', () => {

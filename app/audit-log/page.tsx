@@ -237,7 +237,7 @@ export default function AuditLogPage() {
                    ))}
                 </div>
                 <div className="mt-8">
-                   <BrandButton variant="outline" fullWidth onClick={() => setSelected(null)}>關閉詳情</BrandButton>
+                   <BrandButton variant="secondary" fullWidth onClick={() => setSelected(null)}>關閉詳情</BrandButton>
                 </div>
              </BrandCard>
           </div>

@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Trophy, Star, BookOpen, Layout, Globe, Shield, 
-  ArrowRight, Search, Filter, Download, Zap, Sparkles,
+  ArrowUpRight, Search, Filter, Download, Zap, Sparkles,
   CheckCircle2, Landmark, Target, Award, Eye, FileText,
-  Bookmark, Share2, MessageSquare, ChevronRight, List
+  Bookmark, Share2, MessageSquare, ChevronRight, List, Bot
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandBadge, BrandTabs, BrandStatusDot, 
@@ -74,7 +74,7 @@ export default function BestPracticeHubPage() {
 
     primaryActions: [
       { id: 'ai-suggest', label: 'AI 推薦實踐', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在根據您的產業分析最佳實踐...') },
-      { id: 'upload', label: '貢獻案例', icon: <Share2 size={16}/>, variant: 'outline' }
+      { id: 'upload', label: '貢獻案例', icon: <Share2 size={16}/>, variant: 'secondary', onClick: () => alert('貢獻案例上傳功能開發中') }
     ],
 
     kpis: [
@@ -142,7 +142,7 @@ export default function BestPracticeHubPage() {
                        <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
                           <span className="text-[10px] font-black text-blue-600 uppercase">{p.industry}</span>
                           <BrandButton variant="ghost" size="sm" className="p-0 h-auto text-slate-400 hover:text-[#003262]">
-                             詳情 <ArrowRight size={14} className="ml-1" />
+                             詳情 <ArrowUpRight size={14} className="ml-1" />
                           </BrandButton>
                        </div>
                     </BrandCard>
@@ -170,7 +170,7 @@ export default function BestPracticeHubPage() {
                              <span className="text-xs font-bold text-slate-700">{s.effectiveDate}</span>
                           </div>
                           <Link href="/standards">
-                            <BrandButton variant="outline" size="sm" className="rounded-xl border-slate-200 text-slate-500">
+                            <BrandButton variant="secondary" size="sm" className="rounded-xl border-slate-200 text-slate-500">
                                瀏覽指南
                             </BrandButton>
                           </Link>
@@ -280,7 +280,7 @@ export default function BestPracticeHubPage() {
                </div>
 
                <div className="flex gap-4">
-                  <BrandButton variant="outline" fullWidth className="h-14 rounded-2xl border-slate-200">
+                  <BrandButton variant="secondary" fullWidth className="h-14 rounded-2xl border-slate-200">
                      <Bookmark size={18} className="mr-2"/> 收藏至智庫
                   </BrandButton>
                   <BrandButton variant="ghost" fullWidth className="h-14 rounded-2xl">

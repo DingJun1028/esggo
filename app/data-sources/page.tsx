@@ -5,7 +5,7 @@ import {
   Search, Filter, ExternalLink, ChevronDown, ChevronRight,
   Activity, Zap, Eye, Target, BarChart3, Layers,
   BookOpen, Package, MapPin, Ship, DollarSign, Users,
-  CheckCircle, ArrowRight, Info, Star, Radio
+  CheckCircle, ArrowUpRight, Info, Star, Radio
 } from 'lucide-react';
 import {
   DATA_SOURCES, INTEL_MODULES, GROUP_COLORS, GROUP_LABELS,
@@ -603,7 +603,7 @@ export default function DataSourcesPage() {
                           <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px', lineHeight: 1.3 }}>{mod.nameZh}</div>
                         </div>
                         {idx < 8 && (
-                          <ArrowRight size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                          <ArrowUpRight size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                         )}
                       </div>
                     );

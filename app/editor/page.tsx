@@ -132,8 +132,13 @@ export default function EditorPage() {
         return; 
       }
 
-      const { extractMetricsFromEvidence } = await import('../../lib/hermes-gateway');
-      const { metrics } = await extractMetricsFromEvidence(alchemyRecord.artifact_id);
+      const res = await fetch('/api/hermes/extract-metrics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileId: alchemyRecord.artifact_id }),
+      });
+      if (!res.ok) throw new Error('Extraction failed');
+      const { metrics } = await res.json();
       
       metrics.forEach(m => {
         if (m.gri === chapter.gri || chapter.gri.includes(m.gri)) {

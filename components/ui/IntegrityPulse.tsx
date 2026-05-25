@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Zap, Activity, CheckCircle2, Lock, Database } from 'lucide-react';
-import { BrandCard, BrandBadge } from '../brand';
+import { BrandCard, BrandBadge, BrandStatusDot } from '../brand';
 import { cn } from '../../lib/utils';
 
 interface PulseEvent {

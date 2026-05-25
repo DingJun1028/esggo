@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {
   ShieldCheck, CheckCircle, AlertTriangle, XCircle,
   Layers, Zap, Eye, Code, Smartphone, Accessibility,
-  ArrowRight, BookOpen, Target, Clipboard, BarChart3,
+  ArrowUpRight, BookOpen, Target, Clipboard, BarChart3,
   ChevronDown, ChevronRight, Info, Download,
 } from 'lucide-react';
 import {
@@ -477,7 +477,7 @@ export default function AuditGovernancePage() {
                     </div>
                   </div>
                   {pi < CHECKLIST_PHASES.length - 1 && (
-                    <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
+                    <ArrowUpRight size={16} style={{ color: 'var(--text-muted)' }} />
                   )}
                 </div>
                 <div className="card-body" style={{ paddingTop: '0.75rem' }}>

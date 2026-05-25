@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Shield, Zap, ArrowRight, Cpu, Bot, CheckCircle, Database, Leaf, Users, Play, Activity, Sparkles, AlertTriangle, BarChart, Globe, Target, Search, RefreshCw, Lock } from 'lucide-react';
+import { Shield, Zap, ArrowUpRight, Cpu, Bot, CheckCircle, Database, Leaf, Users, Play, Activity, Sparkles, AlertTriangle, BarChart, Globe, Target, Search, RefreshCw, Lock } from 'lucide-react';
 import { BrandButton, BrandCard, BrandBadge, BrandStatusDot, BrandProgress } from '../components/brand';
 import { AgentStep } from '../lib/agent/v3-shared';
 
@@ -128,10 +128,10 @@ export default function LandingPage() {
           >
             <Link href="/dashboard">
                <BrandButton variant="primary" className="rounded-2xl px-8 h-14 text-lg shadow-xl shadow-blue-600/20 group">
-                 開始體驗 <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                 開始體驗 <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
                </BrandButton>
             </Link>
-            <BrandButton variant="outline" className="rounded-2xl px-8 h-14 text-lg border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white" onClick={() => document.getElementById('swarm-showcase')?.scrollIntoView({behavior: 'smooth'})}>
+            <BrandButton variant="secondary" className="rounded-2xl px-8 h-14 text-lg border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white" onClick={() => document.getElementById('swarm-showcase')?.scrollIntoView({behavior: 'smooth'})}>
               觀看 Swarm V3 演示
             </BrandButton>
           </motion.div>

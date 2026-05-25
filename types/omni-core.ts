@@ -97,6 +97,48 @@ export interface AgentSession {
   memory_count: number;
 }
 
+// ============================================================
+// Hermes Agent Types
+// ============================================================
+
+export interface HermesVisionResult {
+  extraction: string;
+  confidence: number;
+  gapAnalysis: string;
+}
+
+export interface HermesMetric {
+  key: string;
+  value: number | string;
+  unit: string;
+  gri: string;
+}
+
+export interface HermesMetricExtraction {
+  metrics: HermesMetric[];
+  confidence: number;
+}
+
+// ============================================================
+// API Payload Types
+// ============================================================
+
+export interface SealRequestPayload {
+  metric: string;
+  source: string;
+  formula: string;
+  policyId?: string;
+}
+
+export interface VerifyRequestPayload {
+  component: IComponentCore;
+}
+
+export interface ZKPVerifyRequestPayload {
+  proof: any; // Using any for ZKPRangeProof due to potential complex types in lib/crypto-proof
+  blindingFactor: string;
+}
+
 export interface SwarmAgent {
   id: string;
   name: string;

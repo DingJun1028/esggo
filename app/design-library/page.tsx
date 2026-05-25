@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { 
   Bot, Terminal, Zap, Shield, Globe, Layers, Activity, 
   Search, Bell, Mail, Lock, User, CheckCircle, AlertCircle,
-  Info, ArrowRight, Download, Share2, Plus, Filter,
+  Info, ArrowUpRight, Download, Share2, Plus, Filter,
   LayoutDashboard, FileText, Database, Code, Settings
 } from 'lucide-react';
 import { 
@@ -77,7 +77,7 @@ export default function DesignLibraryPage() {
               <div className="flex flex-wrap gap-4 items-center">
                 <BrandButton variant="primary">Primary Button</BrandButton>
                 <BrandButton variant="secondary">Secondary Button</BrandButton>
-                <BrandButton variant="outline">Outline Button</BrandButton>
+                <BrandButton variant="secondary">Outline Button</BrandButton>
                 <BrandButton variant="ghost">Ghost Button</BrandButton>
                 <BrandButton variant="primary" loading>Loading</BrandButton>
                 <BrandButton variant="primary" disabled>Disabled</BrandButton>
