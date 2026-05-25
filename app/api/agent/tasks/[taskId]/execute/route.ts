@@ -4,8 +4,6 @@ import { executeHermesTask } from '../../../../../../lib/hermes-gateway';
 import { addExecution, addArtifact } from '../../../../../../lib/agent/store';
 import type { AgentTask } from '../../../../../../lib/agent/types';
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
@@ -45,7 +43,8 @@ export async function POST(
         // [Genkit Real Integration]
         try {
           const { getHermesAI, hermesConfig, ESGArtifactSchema } = await import('@/lib/hermes.config');
-          const prompt = `你現在是 AgentZ0，一個嚴格遵循 5T Integrity Protocol 的 ESG 稽核 AI。請根據以下任務詳細內容，生成一份符合 5T 標準的稽核結果。\n\n任務標題: ${task.title}\n任務類型: ${task.taskType}\n任務說明: ${task.description}`;
+          const systemInstruction = `${hermesConfig.personas.auditor}\n\n你現在是 AgentZ0，一個嚴格遵循 5T Integrity Protocol 的 ESG 稽核 AI。`;
+          const prompt = `請根據以下任務詳細內容，生成一份符合 5T 標準的稽核結果。\n\n任務標題: ${task.title}\n任務類型: ${task.taskType}\n任務說明: ${task.description}`;
           const response = await (await getHermesAI()).generate({
             system: systemInstruction,
             prompt,

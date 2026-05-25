@@ -8,7 +8,7 @@ import {
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
-  Search, Command, X, ArrowRight, Settings2, Layout, Zap
+  Search, Command, X, ArrowRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
