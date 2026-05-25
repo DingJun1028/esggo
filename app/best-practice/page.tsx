@@ -65,10 +65,12 @@ export default function BestPracticeHubPage() {
   const pageConfig: UniversalPageConfig = {
     id: 'best-practice-hub',
     title: '最佳實踐化系統平台',
-    subtitle: '標竿案例 · 專家模板 · 國際標準。OmniHermes 智慧索引，為企業提供最精準的 ESG 治理路徑。',
-    icon: <Trophy size={32} className="text-[#FDB515]" />,
+    subtitle: '標竿案例 · 專家模板 · 國際標準。OmniHermes 智慧索引。',
+    icon: <Trophy size={32} className="text-[#003262]" />,
     griReference: 'Best Practices',
     activeT5Tags: ['T1', 'T4', 'T5'],
+    isOXModule: true,
+    features: { useAuditLog: true },
 
     primaryActions: [
       { id: 'ai-suggest', label: 'AI 推薦實踐', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在根據您的產業分析最佳實踐...') },

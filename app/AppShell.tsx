@@ -32,10 +32,12 @@ const navGroups = [
     label: 'OMNIHERMES oX',
     items: [
       { href: '/hermes-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
+      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <Globe size={18} /> },
+      { href: '/hermes-alchemy', label: '煉金術', sub: 'Alchemy Scan', icon: <Sparkles size={18} /> },
       { href: '/best-practice', label: '最佳實踐', sub: 'Best Practice', icon: <Trophy size={18} /> },
-      { href: '/hermes-alchemy', label: 'Hermes 煉金術', sub: 'Multi-modal Scan', icon: <Sparkles size={18} /> },
-      { href: '/hermes-agent', label: '代理系統', sub: 'Agent OS', icon: <Terminal size={18} /> },
-      { href: '/hermes-architecture', label: '架構治理', sub: 'Architecture', icon: <Layers size={18} /> },
+      { href: '/strategy-lab', label: '策略實驗室', sub: 'Strategy Lab', icon: <Brain size={18} /> },
+      { href: '/hermes-architecture', label: '架構治理', sub: 'Living Arch', icon: <Layers size={18} /> },
+      { href: '/terminal', label: '終端系統', sub: 'Agent OS', icon: <Command size={18} /> },
     ],
   },
   {

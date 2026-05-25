@@ -52,10 +52,12 @@ export default function HermesArchitecturePage() {
   const pageConfig: UniversalPageConfig = {
     id: 'hermes-architecture',
     title: '動態架構治理中心',
-    subtitle: 'Living Architecture · 模組即時拓撲 · 5T 邊界防禦 · 數位主權守護。',
-    icon: <Network size={32} className="text-[#FDB515]" />,
+    subtitle: 'Living Architecture · 模組即時拓撲 · 5T 邊界防禦。',
+    icon: <Network size={32} className="text-[#003262]" />,
     griReference: 'Governance / Systems',
     activeT5Tags: ['T4', 'T5'],
+    isOXModule: true,
+    features: { useAuditLog: true },
 
     primaryActions: [
       { id: 'audit', label: '啟動全域審計', icon: <Shield size={16}/>, onClick: () => alert('正在掃描全域 5T 誠信鏈結...') },

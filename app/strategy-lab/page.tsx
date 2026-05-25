@@ -49,10 +49,12 @@ export default function StrategyLabPage() {
   const pageConfig: UniversalPageConfig = {
     id: 'strategy-lab',
     title: '戰略與進化實驗室 Strategy Lab',
-    subtitle: 'Swarm Consensus · 自主進化模擬 · 5T 戰略封印。由 Hermes AI 引導您的企業從數據治理走向主權進化。',
+    subtitle: 'Swarm Consensus · 自主進化模擬 · 5T 戰略封印。',
     icon: <Brain size={32} className="text-[#003262]" />,
     griReference: 'Governance / Self-Evolution',
     activeT5Tags: ['T2', 'T4', 'T5'],
+    isOXModule: true,
+    features: { useAuditLog: true },
 
     primaryActions: [
       { id: 'ai-growth', label: 'AI 進化建議', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在基於 5T 歷史數據計算進化路徑...') },

@@ -62,6 +62,7 @@ export interface UniversalPageConfig {
 
   // Branding Overrides
   theme?: 'berkeley' | 'dark-navy' | 'minimal-blue';
+  isOXModule?: boolean;
 }
 
 /**

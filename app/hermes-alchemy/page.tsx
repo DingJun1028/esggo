@@ -110,9 +110,11 @@ export default function HermesAlchemyPage() {
     id: 'hermes-alchemy',
     title: 'Hermes Alchemy 煉金術',
     subtitle: '多模態憑證智能提取中心 · 5T 數據轉化 · 自動化 GRI 映射。',
-    icon: <Sparkles size={32} className="text-[#FDB515]" />,
+    icon: <Sparkles size={32} className="text-[#003262]" />,
     griReference: 'Intelligence / Vision',
     activeT5Tags: ['T1', 'T2', 'T4'],
+    isOXModule: true,
+    features: { useAuditLog: true },
 
     primaryActions: [
       { id: 'reset', label: '重置掃描', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: () => { setUploadedFile(null); setResults(null); } },
