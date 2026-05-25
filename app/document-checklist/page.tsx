@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import { documentChecklist, categoryMeta, statusMeta, type DocStatus, type ESGDocument } from '../../lib/document-checklist-data';

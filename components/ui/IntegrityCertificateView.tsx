@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import { Shield, CheckCircle2, Download, ExternalLink, Award, FileCheck, Map, Landmark } from 'lucide-react';

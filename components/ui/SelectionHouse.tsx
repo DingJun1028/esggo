@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState, useEffect } from 'react';
 import { X, Search, ChevronRight, Globe, Users, Shield, Zap, LayoutGrid, List } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandInput, BrandButton } from '../brand';

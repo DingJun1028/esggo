@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { Search } from 'lucide-react';
 
 const modules = [

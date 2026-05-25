@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { 
   Activity, Shield, Database, Cpu, Globe, CheckCircle, 

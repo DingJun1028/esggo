@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import {
   Shield, CheckCircle, Lock, Globe, Fingerprint, Plus,

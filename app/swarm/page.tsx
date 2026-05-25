@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
   Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle, Users, Sparkles, CheckCircle, HeartPulse, ShieldCheck, Scale, ThumbsUp, ThumbsDown, Minus

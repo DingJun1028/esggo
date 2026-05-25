@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { CheckCircle, AlertCircle, BarChart3, ArrowUpRight, Lightbulb, Shield, Users, Leaf } from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandProgress } from '../../components/brand';

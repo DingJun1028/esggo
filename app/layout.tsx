@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import './globals.css';
 import ClientLayout from './ClientLayout';

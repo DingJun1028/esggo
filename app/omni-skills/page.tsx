@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Bot, Network, Globe, Activity, Database, CheckCircle, RefreshCcw } from 'lucide-react';

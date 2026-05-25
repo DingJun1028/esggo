@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { Palette, Star, StarOff, Check, Heart } from 'lucide-react';
 import {

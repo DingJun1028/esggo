@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState, useEffect } from 'react';
 import { X, History, FileText, Bot, User, CheckCircle, ChevronRight, Link2, ExternalLink } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandTimeline } from '../brand';
