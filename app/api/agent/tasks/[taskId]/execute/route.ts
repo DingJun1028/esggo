@@ -36,19 +36,32 @@ export async function POST(
       return NextResponse.json({ ...result, ok: true });
     } catch (e: any) {
       if (e.message === 'HERMES_GATEWAY_UNREACHABLE') {
-        console.info(`Falling back to local AI execution for task: ${task.id}`);
+        console.info(`Falling back to local Genkit execution for task: ${task.id}`);
         
         let content = '';
-        
-        // [Real LLM Integration] 若有本地 Key 則嘗試直連，否則使用 Mock
-        if (GEMINI_API_KEY && GEMINI_API_KEY !== 'your_gemini_key') {
-          const { callGeminiWithTools } = await import('@/lib/services/ai-server');
-          const systemInstruction = `你現在是 Hermes Agent。請執行 ESG 分析與撰寫任務。你具備調用工具查詢真實數據（GHG、社會指標、任務列表）的能力。請產出專業、符合 GRI 準則的報告。`;
-          const prompt = `標題：${task.title}\n描述：${task.description || '無'}\n類型：${task.taskType}\n請開始執行任務。`;
-          
-          content = await callGeminiWithTools(prompt, systemInstruction);
-        } else {
-          // 全 Mock Fallback
+        let confidence = 0.85;
+        let gaps: string[] = [];
+
+        // [Genkit Real Integration]
+        try {
+          const { getHermesAI, hermesConfig, ESGArtifactSchema } = await import('@/lib/hermes.config');
+          const prompt = `你現在是 AgentZ0，一個嚴格遵循 5T Integrity Protocol 的 ESG 稽核 AI。請根據以下任務詳細內容，生成一份符合 5T 標準的稽核結果。\n\n任務標題: ${task.title}\n任務類型: ${task.taskType}\n任務說明: ${task.description}`;
+          const response = await (await getHermesAI()).generate({
+            system: systemInstruction,
+            prompt,
+            output: { schema: ESGArtifactSchema }
+          });
+
+          const output = response.output();
+          if (output) {
+            content = output.content;
+            confidence = output.confidence;
+            gaps = output.gaps || [];
+          } else {
+            content = response.text();
+          }
+        } catch (genkitErr) {
+          console.warn('Genkit execution failed, falling back to mock.', genkitErr);
           await new Promise(r => setTimeout(r, 1200));
           content = generateMockArtifact(task, execution).content;
         }
@@ -58,10 +71,23 @@ export async function POST(
 
         const artifact = generateMockArtifact(task, execution);
         artifact.content = content;
+        artifact.confidence = confidence;
         execution.outputRefIds = [artifact.id];
 
         addExecution(execution);
         addArtifact(artifact);
+
+        // [Phase 3] Autonomous Swarm Trigger
+        // 如果信心度過低或偵測到重大缺口，自動啟動子任務委派
+        if (confidence < (await import('@/lib/hermes.config').then(m => m.hermesConfig.adkOptions.swarmThreshold)) || gaps.length > 0) {
+          console.log(`[Swarm Trigger] Low confidence (${confidence}) or gaps detected. Dispatching sub-task...`);
+          const { dispatchSwarmHandoff } = await import('@/lib/agent/orchestrator');
+          await dispatchSwarmHandoff(
+            task.id, 
+            'compliance_gap_analysis', 
+            `自動觸發：信心度不足 (${confidence}) 或發現 ${gaps.length} 個缺口，需合規專家介入。`
+          );
+        }
 
         return NextResponse.json({ execution, artifact, ok: true });
       }
