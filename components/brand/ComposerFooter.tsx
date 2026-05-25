@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Square, Paperclip, Mic, Bot, ChevronUp, Sparkles, Zap, ShieldCheck } from 'lucide-react';

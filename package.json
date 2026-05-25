@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check-encoding": "grep -Prn '[\\x{4e00}-\\x{9fff}]' src/ app/ components/ || echo 'All Chinese characters processed'"
   },
   "dependencies": {
     "@apollo/client": "^4.2.0",

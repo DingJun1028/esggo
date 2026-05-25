@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { Shield, Lock, AlertTriangle, CheckCircle, Activity, Server } from 'lucide-react';
 
 const METRICS = [

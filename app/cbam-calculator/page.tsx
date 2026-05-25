@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useMemo } from 'react';
 import { Globe, Calculator, AlertTriangle, CheckCircle, TrendingUp, Download, Plus, Trash2, Bot, RefreshCw, Landmark, ArrowUpRight, Sparkles, X, History, CheckCircle2, ShieldCheck, Gauge } from 'lucide-react';
 import { 

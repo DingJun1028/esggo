@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Settings, Link, Webhook, CheckCircle, AlertCircle, Database, Key, RefreshCw, Plus, Zap } from 'lucide-react';
 

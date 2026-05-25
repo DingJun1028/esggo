@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React from 'react';
 
 type StatusType = 'active' | 'inactive' | 'warning' | 'error' | 'pending' | 'verified';

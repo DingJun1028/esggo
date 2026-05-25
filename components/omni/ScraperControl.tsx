@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Play, Loader2, CheckCircle, AlertTriangle, FileText, Globe } from 'lucide-react';

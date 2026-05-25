@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import {
   GraduationCap, BookOpen, Users, Award, Clock, Star,

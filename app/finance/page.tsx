@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { TrendingUp, DollarSign, AlertTriangle, BarChart2, Shield, Leaf, Users, Building2, Landmark, Receipt, Scale, ArrowUpRight, CheckCircle2, PieChart, ShieldCheck } from 'lucide-react';
 import { 

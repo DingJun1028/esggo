@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React from 'react';
 
 type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'gold' | 'blue' | 'purple' | 'outline' | 'sealed';

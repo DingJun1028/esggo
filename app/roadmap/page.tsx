@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { Target, Plus, X, CheckCircle, Map, TrendingDown, ShieldCheck, Flag, ArrowUpRight, Sparkles, Bot, Clock, RefreshCw, CheckCircle2 } from 'lucide-react';

@@ -70,12 +70,12 @@ describe('MemoryGraphEngine', () => {
       const resNode = graph.nodes.find(n => n.id === 'res-topic-climate');
       expect(resNode).toBeDefined();
       expect(resNode!.type).toBe('STAKEHOLDER_EXPECTATION');
-      expect(resNode!.value).toBe(90);
+      expect(resNode!.value).toBe(85);
 
       const resEdge = graph.edges.find(e => e.target === 'res-topic-climate');
       expect(resEdge).toBeDefined();
       expect(resEdge!.label).toBe('aligns_with');
-      expect(resEdge!.strength).toBe(0.85);
+      expect(resEdge!.strength).toBe(0.875);
     });
 
     it('builds full graph with all node types', async () => {

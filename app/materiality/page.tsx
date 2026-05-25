@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Grid, List, Plus, Save, Bot, Sparkles, RefreshCw } from 'lucide-react';
 

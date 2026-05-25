@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Command, Bot, Database, FileText, Layout, X, Zap, Shield, ArrowRight } from 'lucide-react';

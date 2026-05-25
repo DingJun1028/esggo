@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Bot, Send, RefreshCw, Trash2, User, Sparkles } from 'lucide-react';
 import { saveAdvisorySession, getAdvisorySession, logAudit, type AdvisoryMessage } from '../../lib/db';

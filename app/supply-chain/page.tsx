@@ -51,7 +51,7 @@ const RISK_META = {
 export default function SupplyChainPage() {
   const [suppliers, setSuppliers] = useState<Supplier[]>(MOCK_SUPPLIERS);
   const [search, setSearch] = useState('');
-  const [riskFilter, setRiskFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState<'topology' | 'rba-list' | 'audit-queue'>('topology');
   const [selected, setSelected] = useState<Supplier | null>(null);
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
 
@@ -59,7 +59,6 @@ export default function SupplyChainPage() {
     setVerifyingId(id);
     await new Promise(r => setTimeout(r, 1500));
     
-    // Simulate receiving a 5T attestation from supplier
     const mockAttestation: any = {
       masterSeal: id === 'S3' || id === 'S6' ? 'BROKEN_SEAL' : 'VALID_SEAL',
       t1_traceable: { hash: 'h1' },
@@ -67,22 +66,29 @@ export default function SupplyChainPage() {
       t5_trackable: { chainBlock: { hash: '00_hash' } }
     };
     
-    // Use engine to verify
+    // Trigger Refined Engine Logic
     const result = await supplierIntegrityEngine.verifySupplierAttestation(id, mockAttestation);
     
-    setSuppliers(prev => prev.map(s => s.id === id ? { ...s, verification: result, aiConfidence: result.isVerified ? 99 : 30 } : s));
+    setSuppliers(prev => prev.map(s => s.id === id ? { 
+      ...s, 
+      verification: result, 
+      aiConfidence: result.aiAudit?.ocrConfidence || 0 
+    } : s));
     setVerifyingId(null);
   };
 
   const filtered = suppliers.filter(s => {
     const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.country.includes(search) || s.industry.includes(search);
-    const matchRisk = riskFilter === 'all' || s.riskLevel === riskFilter;
-    return matchSearch && matchRisk;
+    return matchSearch;
   });
 
   const verifiedCount = suppliers.filter(s => s.verification?.isVerified).length;
   const aggregateScore = supplierIntegrityEngine.getAggregateSupplyScore(
-    suppliers.map(s => s.verification).filter(Boolean) as any
+    suppliers.map(s => s.verification).filter(Boolean) as SupplierVerificationResult[]
+  );
+
+  const auditQueue = supplierIntegrityEngine.getAuditQueue(
+    suppliers.map(s => s.verification).filter(Boolean) as SupplierVerificationResult[]
   );
 
   const pageConfig: UniversalPageConfig = {
@@ -252,6 +258,46 @@ export default function SupplyChainPage() {
                  )
                }))}
              />
+          </div>
+        )
+      },
+      {
+        id: 'sampling',
+        title: `人工複核隊列 (${suppliers.filter(s => s.aiConfidence < 80).length})`,
+        subtitle: 'Risk-Based Sampling Priority (AI-First)',
+        columns: 12,
+        component: (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             {suppliers.filter(s => s.aiConfidence < 80).map(s => (
+               <Card key={s.id} className="p-6 bg-red-50/20 border-red-100/50 flex flex-col gap-4 group">
+                  <div className="flex justify-between items-start">
+                     <div className="w-12 h-12 rounded-2xl bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-500/20">
+                        <AlertTriangle size={20}/>
+                     </div>
+                     <Badge variant="error" className="text-[10px] font-black uppercase">Low Confidence</Badge>
+                  </div>
+                  <div>
+                     <p className="text-base font-bold text-[#003262]">{s.name}</p>
+                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{s.id} · {s.industry}</p>
+                  </div>
+                  <div className="pt-4 border-t border-red-100/50 flex items-center justify-between">
+                     <div className="flex flex-col">
+                        <span className="text-[8px] font-black text-slate-400 uppercase">OCR Confidence</span>
+                        <span className="text-sm font-mono font-black text-red-600">{s.aiConfidence}%</span>
+                     </div>
+                     <Button variant="primary" size="sm" onClick={() => setSelected(s)} className="rounded-xl font-bold text-[10px] uppercase">
+                        進入查驗
+                     </Button>
+                  </div>
+               </Card>
+             ))}
+             {suppliers.filter(s => s.aiConfidence < 80).length === 0 && (
+               <div className="col-span-full py-16 text-center bg-emerald-50/20 rounded-[32px] border border-emerald-100/50">
+                  <CheckCircle2 size={40} className="text-emerald-500 mx-auto mb-4"/>
+                  <p className="text-lg font-bold text-emerald-800">所有供應商憑證均通過 AI 自動核對</p>
+                  <p className="text-xs text-emerald-600/60 font-medium uppercase tracking-widest mt-1">Audit Queue Clear</p>
+               </div>
+             )}
           </div>
         )
       }

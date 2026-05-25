@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { Network, Gift } from 'lucide-react';
 
 const agents = [

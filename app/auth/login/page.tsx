@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState, useRef } from 'react';
 import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Terminal, Layout, Globe, Key, AlertTriangle } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, Info, X, ShieldCheck, ChevronRight, Hash, Database, Layers } from 'lucide-react';
 import BrandFormula from './BrandFormula';
