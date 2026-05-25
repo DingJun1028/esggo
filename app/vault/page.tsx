@@ -54,6 +54,7 @@ export default function VaultPage() {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showRange, setShowRange] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
+  const [anchorageReceipt, setAnchorageReceipt] = useState<any | null>(null);
 
   const showToast = useCallback((msg: string, type: 'success' | 'error' | 'info' = 'success') => {
     setToast({ msg, type });
@@ -90,6 +91,7 @@ export default function VaultPage() {
         }).eq('id', file.id);
       }
       
+      setAnchorageReceipt(receipt);
       showToast(`已成功錨定 ${seals.length} 筆憑證至公共帳本`, 'success');
       await load();
     } catch (e) {
@@ -401,6 +403,47 @@ export default function VaultPage() {
               <IntegrityCertificateView certificate={certificate} onClose={() => setShowCertificate(false)} />
             </motion.div>
           </div>
+        )}
+
+        {anchorageReceipt && (
+          <BrandModal open={!!anchorageReceipt} onClose={() => setAnchorageReceipt(null)} title="區塊鏈錨定收據" size="lg">
+            <div className="space-y-6">
+              <div className="flex items-center gap-4 p-5 bg-emerald-50 rounded-2xl border border-emerald-200">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center"><Network size={28} className="text-emerald-700" /></div>
+                <div>
+                  <h4 className="text-base font-black text-emerald-900">批次錨定成功</h4>
+                  <p className="text-sm text-emerald-700 font-medium">記錄已寫入公共帳本</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Transaction Hash</p>
+                  <p className="text-xs font-mono break-all text-slate-800">{anchorageReceipt.txHash}</p>
+                </div>
+                {anchorageReceipt.blockNumber && (
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Block Number</p>
+                    <p className="text-sm font-bold text-slate-800">{anchorageReceipt.blockNumber}</p>
+                  </div>
+                )}
+                {anchorageReceipt.merkleRoot && (
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Merkle Root</p>
+                    <p className="text-xs font-mono break-all text-slate-800">{anchorageReceipt.merkleRoot}</p>
+                  </div>
+                )}
+                {anchorageReceipt.timestamp && (
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Timestamp</p>
+                    <p className="text-sm font-bold text-slate-800">{new Date(anchorageReceipt.timestamp).toLocaleString()}</p>
+                  </div>
+                )}
+              </div>
+              <BrandButton variant="primary" fullWidth onClick={() => setAnchorageReceipt(null)}>
+                關閉收據
+              </BrandButton>
+            </div>
+          </BrandModal>
         )}
       </AnimatePresence>
 
