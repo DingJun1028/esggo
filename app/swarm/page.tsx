@@ -1,13 +1,16 @@
 'use client';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { 
-  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle, Users, Sparkles, CheckCircle, HeartPulse, ShieldCheck
+  Cpu, Play, Pause, Activity, CheckSquare, Inbox, Zap, Send, MessageSquare, Shield, RefreshCw, Bot, Code, Terminal, AlertCircle, Users, Sparkles, CheckCircle, HeartPulse, ShieldCheck, Scale, ThumbsUp, ThumbsDown, Minus
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandStatusDot, BrandTabs, BrandProgress, BrandTimeline } from '../../components/brand';
 import { cn } from '../../lib/utils';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
+import { swarmConsensusEngine, ConsensusResult } from '../../lib/swarm-consensus-engine';
+import { useSwarmSync } from '../../hooks/useSwarmSync';
+import { ConsensusVisualizer } from '../../components/ui/ConsensusVisualizer';
 
 interface SwarmAgent {
   id: string; name: string; status: 'idle' | 'busy' | 'syncing'; role: string; load: number; lastAction: string;
@@ -24,6 +27,10 @@ export default function SwarmPage() {
 
   const [isAutonomous, setIsAutonomous] = useState(false);
   const [healingLogs, setHealingLogs] = useState<any[]>([]);
+  const { tasks: swarmTasks, loading: swarmLoading, lastSync } = useSwarmSync(5000);
+  const [proposalText, setProposalText] = useState('');
+  const [consensusResult, setConsensusResult] = useState<ConsensusResult | null>(null);
+  const [evaluating, setEvaluating] = useState(false);
 
   const fetchHealingLogs = useCallback(async () => {
     const { data } = await supabase.from('healing_log').select('*').order('created_at', { ascending: false }).limit(5);
@@ -37,6 +44,21 @@ export default function SwarmPage() {
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [fetchHealingLogs]);
+
+  const activeTaskCount = swarmTasks.filter(t => t.status === 'IN_PROGRESS' || t.status === 'PENDING').length;
+
+  const handleEvaluateProposal = useCallback(async () => {
+    if (!proposalText.trim()) return;
+    setEvaluating(true);
+    try {
+      const result = await swarmConsensusEngine.evaluateProposal(proposalText);
+      setConsensusResult(result);
+    } catch (e) {
+      console.error('Proposal evaluation failed:', e);
+    } finally {
+      setEvaluating(false);
+    }
+  }, [proposalText]);
 
   const handleAutoFix = async () => {
     setIsAutonomous(true);
@@ -134,18 +156,61 @@ export default function SwarmPage() {
               </section>
            </div>
 
-           <div className="col-span-12 lg:col-span-4 space-y-8">
-              <BrandCard padding="lg" className="bg-gradient-to-br from-[#003262] to-[#1a4a7a] border-none text-white shadow-extreme rounded-[2.5rem] relative overflow-hidden">
-                 <div className="relative z-10 space-y-6">
-                    <h3 className="text-xl font-black uppercase tracking-tight">自主治理效能</h3>
-                    <div className="grid grid-cols-2 gap-6">
-                       <div><p className="text-[10px] font-black text-blue-300/60 uppercase mb-1">修復成功率</p><p className="text-3xl font-black font-mono">100%</p></div>
-                       <div><p className="text-[10px] font-black text-blue-300/60 uppercase mb-1">自主決策數</p><p className="text-3xl font-black font-mono">152</p></div>
-                    </div>
-                    <div className="pt-6 border-t border-white/10"><p className="text-[10px] font-black text-blue-300/60 uppercase mb-3 tracking-widest">系統健康度</p><div className="flex items-center gap-3"><HeartPulse size={14} className="text-emerald-400" /><span className="text-xs font-bold">治理脈動穩定：全域鏈路完整</span></div></div>
-                 </div>
-              </BrandCard>
-           </div>
+            <div className="col-span-12 lg:col-span-4 space-y-8">
+               <BrandCard padding="lg" className="bg-gradient-to-br from-[#003262] to-[#1a4a7a] border-none text-white shadow-extreme rounded-[2.5rem] relative overflow-hidden">
+                  <div className="relative z-10 space-y-6">
+                     <h3 className="text-xl font-black uppercase tracking-tight">自主治理效能</h3>
+                     <div className="grid grid-cols-2 gap-6">
+                        <div><p className="text-[10px] font-black text-blue-300/60 uppercase mb-1">修復成功率</p><p className="text-3xl font-black font-mono">100%</p></div>
+                        <div><p className="text-[10px] font-black text-blue-300/60 uppercase mb-1">自主決策數</p><p className="text-3xl font-black font-mono">152</p></div>
+                     </div>
+                     <div className="pt-6 border-t border-white/10 space-y-3">
+                        <p className="text-[10px] font-black text-blue-300/60 uppercase mb-3 tracking-widest">系統健康度</p>
+                        <div className="flex items-center gap-3"><HeartPulse size={14} className="text-emerald-400" /><span className="text-xs font-bold">治理脈動穩定：全域鏈路完整</span></div>
+                        <div className="pt-3 border-t border-white/5">
+                           <p className="text-[9px] font-black text-blue-300/40 uppercase tracking-widest mb-2">Swarm Sync</p>
+                           <div className="flex items-center justify-between">
+                              <span className="text-xs text-blue-200/70">Active Tasks</span>
+                              <span className="text-lg font-black font-mono text-[#FDB515]">{swarmLoading ? '...' : activeTaskCount}</span>
+                           </div>
+                           <div className="flex items-center justify-between mt-1">
+                              <span className="text-xs text-blue-200/70">Last Sync</span>
+                              <span className="text-[10px] font-mono text-blue-300/60">{lastSync ? new Date(lastSync).toLocaleTimeString() : '—'}</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </BrandCard>
+
+               {/* Proposal Evaluator */}
+               <BrandCard padding="lg" className="glass-panel border-none shadow-premium rounded-[2.5rem]">
+                  <div className="space-y-4">
+                     <div className="flex items-center gap-3">
+                        <Scale size={16} className="text-purple-600" />
+                        <h3 className="text-sm font-black text-[#003262] uppercase tracking-tight">蜂群共識評估</h3>
+                     </div>
+                     <textarea
+                       value={proposalText}
+                       onChange={e => setProposalText(e.target.value)}
+                       placeholder="輸入 ESG 策略提案，例如：我們應在 2027 年前將範疇一排放減少 30%。"
+                       className="w-full h-28 p-4 text-xs bg-slate-50 border border-slate-100 rounded-2xl outline-none resize-none"
+                     />
+                     <BrandButton
+                       variant="primary"
+                       className="w-full h-12 rounded-2xl font-black text-xs uppercase tracking-widest"
+                       onClick={handleEvaluateProposal}
+                       isLoading={evaluating}
+                       disabled={!proposalText.trim() || evaluating}
+                     >
+                       <ThumbsUp size={14} className="mr-2" /> 啟動蜂群共識
+                     </BrandButton>
+                  </div>
+               </BrandCard>
+
+               {consensusResult && (
+                 <ConsensusVisualizer result={consensusResult} />
+               )}
+            </div>
         </div>
 
         {/* Global Control Terminal */}

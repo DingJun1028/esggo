@@ -8,6 +8,7 @@ import {
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
+import { governanceEngine, MaterialityTopic, ResonanceResult } from '../../lib/governance-engine';
 
 const GOV_CATEGORIES = [
   { id: 'board', label: '董事會結構', gri: 'GRI 2-9/2-10', icon: <Landmark size={14}/>, color: '#003262' },
@@ -49,6 +50,32 @@ export default function GovernancePage() {
   }, [activeTab]);
 
   useEffect(() => { fetchInsights(); }, [fetchInsights]);
+
+  const [resonanceResults, setResonanceResults] = useState<ResonanceResult[]>([]);
+  const [overallResonance, setOverallResonance] = useState(0);
+
+  useEffect(() => {
+    const demoTopics: MaterialityTopic[] = [
+      { id: 'board', label: '董事會結構', category: 'G', internalWeight: 5 },
+      { id: 'ethics', label: '商業道德', category: 'G', internalWeight: 4 },
+      { id: 'tax', label: '稅務透明', category: 'G', internalWeight: 3 },
+      { id: 'risk', label: '風險管理', category: 'G', internalWeight: 5 },
+    ];
+
+    const demoVotes = [
+      { id: 'v1', stakeholderType: 'INVESTOR' as const, topicId: 'board', priorityScore: 5, timestamp: '', hashLock: '' },
+      { id: 'v2', stakeholderType: 'INVESTOR' as const, topicId: 'ethics', priorityScore: 4, timestamp: '', hashLock: '' },
+      { id: 'v3', stakeholderType: 'EMPLOYEE' as const, topicId: 'board', priorityScore: 4, timestamp: '', hashLock: '' },
+      { id: 'v4', stakeholderType: 'EMPLOYEE' as const, topicId: 'risk', priorityScore: 5, timestamp: '', hashLock: '' },
+      { id: 'v5', stakeholderType: 'SUPPLIER' as const, topicId: 'tax', priorityScore: 3, timestamp: '', hashLock: '' },
+      { id: 'v6', stakeholderType: 'COMMUNITY' as const, topicId: 'ethics', priorityScore: 5, timestamp: '', hashLock: '' },
+      { id: 'v7', stakeholderType: 'COMMUNITY' as const, topicId: 'risk', priorityScore: 4, timestamp: '', hashLock: '' },
+    ];
+
+    const results = governanceEngine.calculateResonance(demoTopics, demoVotes);
+    setResonanceResults(results);
+    setOverallResonance(governanceEngine.getOverallResonanceIndex(results));
+  }, []);
 
   const activeCategory = GOV_CATEGORIES.find(c => c.id === activeTab)!;
 
@@ -143,6 +170,39 @@ export default function GovernancePage() {
     ],
     features: { useAuditLog: true }
   };
+
+  if (overallResonance > 0) {
+    pageConfig.sections.push({
+      id: 'resonance',
+      title: '利害關係人共鳴指數',
+      columns: 12,
+      component: (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {resonanceResults.map(r => (
+              <div key={r.topicId} className="p-5 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">{r.label}</p>
+                <div className="flex items-end justify-between mb-3">
+                  <span className="text-3xl font-black font-mono" style={{ color: r.resonance >= 80 ? '#10B981' : r.resonance >= 50 ? '#F59E0B' : '#EF4444' }}>{r.resonance}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${r.resonance}%`, backgroundColor: r.resonance >= 80 ? '#10B981' : r.resonance >= 50 ? '#F59E0B' : '#EF4444' }} />
+                </div>
+                <div className="flex justify-between mt-2 text-[9px] font-bold text-slate-400">
+                  <span>內控: {r.internalPriority}/5</span>
+                  <span>外部: {r.stakeholderPriority.toFixed(1)}/5</span>
+                </div>
+              </div>
+            ))}
+            <div className="p-5 bg-[#003262] rounded-3xl text-white flex flex-col justify-center">
+              <p className="text-[9px] font-black text-blue-300/60 uppercase tracking-widest mb-2">總體共鳴</p>
+              <span className="text-4xl font-black font-mono text-[#FDB515]">{overallResonance}%</span>
+            </div>
+          </div>
+        </div>
+      )
+    });
+  }
 
   return <StandardPage config={pageConfig} />;
 }
