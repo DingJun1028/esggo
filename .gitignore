@@ -15,6 +15,35 @@ next-env.d.ts
 .env.local
 .env.*.local
 
+# Debug / build logs
+*.log
+build.log
+dc-debug*.log
+debug.log
+
+# Migration / test scripts (single-use)
+deploy-schema.mjs
+drop-new-tables.cjs
+drop-old-columns.cjs
+run-full-migration.cjs
+run-migration.cjs
+test-auth-connect.cjs
+test-auth-connect.mjs
+test-connection.mjs
+cli/stress_test.mjs
+
+# Data dumps
+schema-payload.json
+users.json
+
+# Windows artifacts
+nul
+
 # Data Connect Generated (Optional: keep if you want type safety in CI without firebase login)
 # src/dataconnect-generated/
+
+# Service account keys
+service-account-key.json
+*.service-account-key.json
+
 node_modules
