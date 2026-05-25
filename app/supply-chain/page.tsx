@@ -7,13 +7,17 @@ import {
   ShieldCheck, TrendingDown, Globe, MoreHorizontal, ArrowUpRight, 
   CheckCircle2, AlertCircle, MapPin, Network, Zap, Shield, Database, Lock
 } from 'lucide-react';
+import { Button } from '../../components/ui/Button';
+import { Card } from '../../components/ui/Card';
+import { Badge } from '../../components/ui/Badge';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, 
-  BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
+  BrandTable, BrandTabs, 
+  BrandStatusDot, BrandProgress, StandardPage 
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { supplierIntegrityEngine, SupplierVerificationResult } from '../../lib/supplier-integrity-engine';
 import { cn } from '../../lib/utils';
+import { fadeIn, slideIn } from '../../lib/animations';
 
 interface Supplier {
   id: string;
@@ -98,36 +102,51 @@ export default function SupplyChainPage() {
         title: '全球誠信拓撲圖',
         columns: 12,
         component: (
-          <BrandCard padding="none" className="bg-slate-900 border-none shadow-premium h-64 relative overflow-hidden flex items-center justify-center">
-             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-             <div className="relative z-10 flex gap-12 items-center">
-                <div className="w-16 h-16 rounded-full bg-blue-600 shadow-[0_0_40px_rgba(37,99,235,0.6)] flex items-center justify-center border-2 border-white">
-                   <Shield size={32} className="text-white" />
-                </div>
-                <div className="flex gap-4">
+          <div className="bg-slate-900 rounded-[32px] border border-white/10 shadow-2xl h-72 relative overflow-hidden flex items-center justify-center group">
+             {/* Dynamic background */}
+             <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#475569 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+             <motion.div 
+               className="absolute inset-0 bg-gradient-to-tr from-[#003262]/40 to-transparent"
+               animate={{ opacity: [0.2, 0.4, 0.2] }}
+               transition={{ duration: 5, repeat: Infinity }}
+             />
+
+             <div className="relative z-10 flex gap-16 items-center">
+                <motion.div 
+                  className="w-20 h-20 rounded-full bg-[#003262] shadow-[0_0_50px_rgba(0,50,98,0.6)] flex items-center justify-center border-2 border-white/20 backdrop-blur-md"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                   <Shield size={40} className="text-[#FDB515]" />
+                </motion.div>
+                
+                <div className="flex gap-6">
                    {suppliers.map((s, i) => (
                      <motion.div 
                        key={s.id}
-                       initial={{ opacity: 0, scale: 0 }}
-                       animate={{ opacity: 1, scale: 1 }}
-                       transition={{ delay: i * 0.1 }}
+                       initial={{ opacity: 0, y: 20 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       transition={{ delay: i * 0.15 }}
                        className="relative"
                      >
-                        <div className="w-px h-12 bg-white/20 absolute -top-12 left-1/2" />
+                        <div className="w-px h-16 bg-gradient-to-t from-white/20 to-transparent absolute -top-16 left-1/2" />
                         <div className={cn(
-                          "w-10 h-10 rounded-xl border-2 flex items-center justify-center bg-slate-800",
-                          s.verification?.isVerified ? "border-emerald-500 text-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]" : 
-                          s.verification ? "border-red-500 text-red-500" : "border-slate-600 text-slate-500"
+                          "w-12 h-12 rounded-2xl border-2 flex items-center justify-center bg-slate-800/80 backdrop-blur-md transition-all duration-500",
+                          s.verification?.isVerified ? "border-emerald-500 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)]" : 
+                          s.verification ? "border-red-500 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.2)]" : "border-slate-600 text-slate-500"
                         )}>
-                           <Database size={18} />
+                           <Database size={20} />
                         </div>
-                        <p className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap text-[8px] font-black text-white/40 uppercase tracking-widest">{s.id}</p>
+                        <p className="absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">{s.id}</p>
                      </motion.div>
                    ))}
                 </div>
              </div>
-             <p className="absolute bottom-4 left-6 text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">Integrity Mesh Network v1.0</p>
-          </BrandCard>
+             <div className="absolute bottom-6 left-8 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Integrity Mesh Active</p>
+             </div>
+          </div>
         )
       },
       {
@@ -135,7 +154,7 @@ export default function SupplyChainPage() {
         title: '供應商誠信清單',
         columns: 12,
         component: (
-          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
+          <div className="bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm overflow-hidden">
              <BrandTable 
                columns={[
                  { label: '供應商名稱', key: 'name' },
@@ -147,53 +166,64 @@ export default function SupplyChainPage() {
                data={filtered.map(s => ({
                  name: (
                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-berkeley-blue"><Truck size={14}/></div>
-                      <span className="font-black text-berkeley-blue">{s.name}</span>
+                      <div className="w-10 h-10 rounded-xl bg-[#003262]/5 flex items-center justify-center text-[#003262]">
+                        <Truck size={18}/>
+                      </div>
+                      <span className="font-bold text-[#003262]">{s.name}</span>
                    </div>
                  ),
                  info: (
                    <div className="flex items-center gap-2">
-                      <BrandBadge variant="outline" size="xs" className="opacity-60">{s.country}</BrandBadge>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">{s.industry}</span>
+                      <Badge variant="draft" className="bg-slate-100/50 text-slate-500 border-slate-200">{s.country}</Badge>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.industry}</span>
                    </div>
                  ),
                  status: (
                    <div className="flex items-center gap-2">
                       {s.verification ? (
                         s.verification.isVerified ? (
-                          <BrandBadge variant="success" size="xs">SEALED</BrandBadge>
+                          <Badge variant="verified">SEALED</Badge>
                         ) : (
-                          <BrandBadge variant="error" size="xs">INVALID</BrandBadge>
+                          <Badge variant="error">INVALID</Badge>
                         )
                       ) : (
-                        <BrandBadge variant="default" size="xs">UNVERIFIED</BrandBadge>
+                        <Badge variant="draft">UNVERIFIED</Badge>
                       )}
                    </div>
                  ),
                  score: (
-                   <div className="flex items-center gap-3 w-24">
-                      <div className="flex-1 h-1 bg-slate-100 rounded-full overflow-hidden">
-                         <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${s.verification?.score || 0}%`, backgroundColor: (s.verification?.score || 0) >= 80 ? '#10B981' : '#EF4444' }} />
+                   <div className="flex items-center gap-4 w-32">
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                         <motion.div 
+                          className="h-full rounded-full" 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${s.verification?.score || 0}%` }}
+                          style={{ backgroundColor: (s.verification?.score || 0) >= 80 ? '#10B981' : '#EF4444' }} 
+                         />
                       </div>
-                      <span className="font-mono text-[10px] font-black">{s.verification?.score || '--'}</span>
+                      <span className="font-mono text-xs font-bold text-slate-700">{s.verification?.score || '--'}</span>
                    </div>
                  ),
                  actions: (
                    <div className="flex gap-2">
-                      <BrandButton 
-                        variant="primary" size="xs" className="h-8 px-4 rounded-lg text-[9px] font-black uppercase tracking-widest"
+                      <Button 
+                        variant={s.verification ? "glass" : "primary"} 
+                        size="sm" 
+                        className="h-9 px-4 rounded-xl text-[10px] font-bold uppercase tracking-widest"
                         onClick={() => handleVerify(s.id)}
-                        loading={verifyingId === s.id}
+                        isLoading={verifyingId === s.id}
                         disabled={!!s.verification}
                       >
                          {s.verification ? 'Re-Verify' : 'Verify_5T'}
-                      </BrandButton>
-                      <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0" onClick={() => setSelected(s)}><MoreHorizontal size={14}/></BrandButton>
+                      </Button>
+                      <Button variant="glass" size="sm" className="w-9 h-9 p-0 rounded-xl" onClick={() => setSelected(s)}>
+                        <MoreHorizontal size={16}/>
+                      </Button>
                    </div>
                  )
                }))}
              />
-          </BrandCard>
+          </div>
         )
       }
     ],
@@ -207,66 +237,99 @@ export default function SupplyChainPage() {
       {/* Detail Modal */}
       <AnimatePresence>
         {selected && (
-          <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setSelected(null)} />
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white rounded-[40px] border border-white shadow-extreme p-10 max-w-xl w-full"
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              className="absolute inset-0 bg-[#003262]/40 backdrop-blur-xl" 
+              onClick={() => setSelected(null)} 
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 40 }} 
+              animate={{ opacity: 1, scale: 1, y: 0 }} 
+              exit={{ opacity: 0, scale: 0.9, y: 40 }}
+              className="relative bg-white/90 backdrop-blur-2xl rounded-[48px] border border-white shadow-[0_40px_80px_rgba(0,0,0,0.15)] p-12 max-w-2xl w-full"
             >
-              <header className="flex justify-between items-start mb-8">
-                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-berkeley-blue"><Truck size={24}/></div>
+              <header className="flex justify-between items-start mb-10">
+                 <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-[24px] bg-[#003262] text-white flex items-center justify-center shadow-xl shadow-[#003262]/20">
+                      <Truck size={32}/>
+                    </div>
                     <div>
-                       <h3 className="text-xl font-black text-berkeley-blue">{selected.name}</h3>
-                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{selected.country} · {selected.industry}</p>
+                       <h3 className="text-2xl font-bold text-[#003262] tracking-tight">{selected.name}</h3>
+                       <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">{selected.country} · {selected.industry}</p>
                     </div>
                  </div>
-                 <button onClick={() => setSelected(null)} className="text-slate-300 hover:text-slate-600 transition-colors"><X size={24}/></button>
+                 <Button variant="glass" size="sm" className="w-12 h-12 p-0 rounded-full" onClick={() => setSelected(null)}>
+                  <X size={24}/>
+                 </Button>
               </header>
 
-              <div className="space-y-6">
-                 <div className="p-5 bg-slate-50 rounded-3xl border border-slate-100">
-                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">5T Integrity Evidence</h4>
+              <div className="space-y-8">
+                 <Card className="p-8 bg-slate-50/50 border-slate-100 rounded-[32px]">
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.25em] mb-6">5T Integrity Evidence Matrix</h4>
                     {selected.verification ? (
-                      <div className="grid grid-cols-5 gap-2">
+                      <div className="grid grid-cols-5 gap-4">
                          {Object.entries(selected.verification.integrityMatrix).map(([gate, passed]) => (
-                           <div key={gate} className="text-center space-y-2">
-                              <p className="text-[8px] font-black text-berkeley-blue/40 uppercase">{gate}</p>
-                              <div className={cn("w-full h-1.5 rounded-full", passed ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" : "bg-red-500")} />
+                           <div key={gate} className="text-center space-y-3">
+                              <p className="text-[9px] font-bold text-[#003262]/40 uppercase tracking-widest">{gate}</p>
+                              <div className={cn(
+                                "h-2 rounded-full shadow-inner", 
+                                passed ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]" : "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
+                              )} />
+                              <Badge variant={passed ? 'verified' : 'error'} className="text-[8px] px-1.5 py-0 h-4">
+                                {passed ? 'PASS' : 'FAIL'}
+                              </Badge>
                            </div>
                          ))}
                       </div>
                     ) : (
-                      <div className="py-4 text-center border-2 border-dashed border-slate-200 rounded-2xl">
-                         <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">No 5T Payload Received</p>
+                      <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-[24px] bg-white/40">
+                         <p className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">No 5T Payload Received</p>
                       </div>
                     )}
-                 </div>
+                 </Card>
 
                  {selected.verification && !selected.verification.isVerified && (
-                   <div className="p-4 bg-red-50 rounded-2xl border border-red-100 flex items-start gap-3">
-                      <AlertTriangle size={20} className="text-red-600 mt-1" />
-                      <div className="space-y-1">
-                         <p className="text-xs font-bold text-red-800">5T 封印破損 (Seal Broken)</p>
-                         <p className="text-[10px] text-red-600">偵測到數據指紋不匹配。此供應商報告的 Scope 3 數據可能存在非授權篡改，或憑證來源 (T1) 無法驗證。</p>
+                   <motion.div 
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    className="p-5 bg-red-50/80 backdrop-blur-md rounded-[24px] border border-red-100 flex items-start gap-4 shadow-lg shadow-red-500/5"
+                   >
+                      <div className="w-10 h-10 rounded-xl bg-red-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-red-500/20">
+                        <AlertTriangle size={20} />
                       </div>
-                   </div>
+                      <div className="space-y-1">
+                         <p className="text-sm font-bold text-red-900">5T 封印破損 (Seal Broken)</p>
+                         <p className="text-xs text-red-700 leading-relaxed">
+                          偵測到數據指紋不匹配。此供應商報告的 Scope 3 數據可能存在非授權篡改，或憑證來源 (T1) 無法驗證。
+                         </p>
+                      </div>
+                   </motion.div>
                  )}
 
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                       <p className="text-[9px] font-black text-slate-400 uppercase mb-1">風險分級</p>
-                       <BrandBadge variant="outline" size="xs" style={{ color: RISK_META[selected.riskLevel].color, backgroundColor: RISK_META[selected.riskLevel].bg, borderColor: 'transparent' }}>{RISK_META[selected.riskLevel].label}</BrandBadge>
-                    </div>
-                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                       <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Last Audit</p>
-                       <span className="text-xs font-bold text-berkeley-blue font-mono">{selected.lastAudit}</span>
-                    </div>
+                 <div className="grid grid-cols-2 gap-6">
+                    <Card className="p-6 bg-slate-50/50 border-slate-100 rounded-[24px] flex flex-col justify-center items-center text-center">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">風險分級 Risk Level</p>
+                       <Badge 
+                        variant={selected.riskLevel === 'low' ? 'verified' : selected.riskLevel === 'medium' ? 'warning' : 'error'}
+                        className="text-sm px-6 py-1.5 h-auto rounded-full shadow-sm"
+                       >
+                        {RISK_META[selected.riskLevel].label}
+                       </Badge>
+                    </Card>
+                    <Card className="p-6 bg-slate-50/50 border-slate-100 rounded-[24px] flex flex-col justify-center items-center text-center">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Last Audit Date</p>
+                       <span className="text-xl font-bold text-[#003262] font-mono tracking-tight">{selected.lastAudit}</span>
+                    </Card>
                  </div>
               </div>
 
-              <footer className="mt-10">
-                 <BrandButton variant="primary" fullWidth className="rounded-2xl h-14 font-black shadow-xl" onClick={() => setSelected(null)}>關閉詳情</BrandButton>
+              <footer className="mt-12">
+                 <Button variant="primary" fullWidth size="lg" className="rounded-[24px] h-16 text-lg font-bold shadow-2xl shadow-[#003262]/20" onClick={() => setSelected(null)}>
+                  關閉詳情並返回中心
+                 </Button>
               </footer>
             </motion.div>
           </div>
