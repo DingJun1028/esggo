@@ -3,18 +3,24 @@
 import React, { useState } from 'react';
 import { 
   Shield, Search, CheckCircle2, XCircle, Database, 
-  Globe, ExternalLink, Cpu, FileText, AlertTriangle, Key, Network 
+  Globe, ExternalLink, Cpu, FileText, AlertTriangle, Key, Network, GitCompare, Plus, Minus, Tag
 } from 'lucide-react';
 import { 
   BrandCard, BrandBadge, BrandButton, BrandInput, BrandStatusDot, BrandProgress 
 } from '../../components/brand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sha256, verifyZKPProof } from '../../lib/crypto-proof';
+import { DiffEngine, DiffResult } from '../../lib/sonar/core/diff-engine';
 
 export default function AuditorPortal() {
   const [sealId, setSealId] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [result, setResult] = useState<any>(null);
+
+  const [mode, setMode] = useState<'verify' | 'diff'>('verify');
+  const [oldText, setOldText] = useState('');
+  const [newText, setNewText] = useState('');
+  const [diffResult, setDiffResult] = useState<DiffResult | null>(null);
 
   const handleVerify = async () => {
     if (!sealId.trim()) return;
@@ -53,9 +59,15 @@ export default function AuditorPortal() {
     setIsVerifying(false);
   };
 
+  const handleCompare = () => {
+    if (!oldText.trim() || !newText.trim()) return;
+    const result = DiffEngine.compareLines(oldText, newText);
+    setDiffResult(result);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      <div className="max-w-3xl w-full space-y-12">
+      <div className="max-w-4xl w-full space-y-12">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="w-20 h-20 bg-berkeley-blue rounded-[2.5rem] flex items-center justify-center text-white mx-auto shadow-xl border-4 border-white">
@@ -71,6 +83,26 @@ export default function AuditorPortal() {
           </div>
         </div>
 
+        {/* Mode Tabs */}
+        <div className="flex justify-center">
+          <div className="inline-flex bg-white rounded-2xl p-1.5 shadow-premium border border-slate-100">
+            <button
+              onClick={() => setMode('verify')}
+              className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 ${mode === 'verify' ? 'bg-berkeley-blue text-white shadow-lg' : 'text-slate-400 hover:text-slate-700'}`}
+            >
+              <Search size={14} /> 驗證 Seal
+            </button>
+            <button
+              onClick={() => setMode('diff')}
+              className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 ${mode === 'diff' ? 'bg-berkeley-blue text-white shadow-lg' : 'text-slate-400 hover:text-slate-700'}`}
+            >
+              <GitCompare size={14} /> 版本比對
+            </button>
+          </div>
+        </div>
+
+        {mode === 'verify' && (
+        <>
         {/* Search Area */}
         <BrandCard padding="lg" className="shadow-premium border-none bg-white/80 backdrop-blur-xl">
            <div className="space-y-6">
@@ -181,7 +213,98 @@ export default function AuditorPortal() {
                )}
             </motion.div>
           )}
-        </AnimatePresence>
+         </AnimatePresence>
+        </>
+        )}
+
+        {mode === 'diff' && (
+          <>
+            {/* Diff Input */}
+            <BrandCard padding="lg" className="shadow-premium border-none bg-white/80 backdrop-blur-xl">
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <GitCompare size={20} className="text-berkeley-blue" />
+                  <h2 className="text-sm font-black text-berkeley-blue uppercase tracking-wider">法規 / 揭露版本比對</h2>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">舊版本 (Old)</label>
+                    <textarea
+                      className="w-full h-48 bg-slate-50 border border-slate-100 rounded-2xl p-4 text-xs font-mono focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all outline-none resize-none"
+                      placeholder="Paste old regulation / disclosure text..."
+                      value={oldText}
+                      onChange={e => setOldText(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">新版本 (New)</label>
+                    <textarea
+                      className="w-full h-48 bg-slate-50 border border-slate-100 rounded-2xl p-4 text-xs font-mono focus:bg-white focus:ring-4 focus:ring-blue-500/5 transition-all outline-none resize-none"
+                      placeholder="Paste new regulation / disclosure text..."
+                      value={newText}
+                      onChange={e => setNewText(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <BrandButton variant="primary" className="rounded-2xl font-black" onClick={handleCompare}>
+                  <GitCompare size={16} className="mr-2" /> 開始比對
+                </BrandButton>
+              </div>
+            </BrandCard>
+
+            {/* Diff Results */}
+            <AnimatePresence>
+              {diffResult && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="space-y-6">
+                  {/* ESG Tags */}
+                  {diffResult.esgTags && diffResult.esgTags.length > 0 && (
+                    <div className="flex items-center gap-3">
+                      <Tag size={14} className="text-berkeley-blue" />
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">受影響 ESG 類別:</span>
+                      {diffResult.esgTags.map(tag => (
+                        <BrandBadge key={tag} variant="primary" size="sm">{tag}</BrandBadge>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Removed */}
+                    <BrandCard padding="lg" className="space-y-4 border-none shadow-premium bg-red-50/50">
+                      <div className="flex items-center gap-2">
+                        <Minus size={16} className="text-red-500" />
+                        <h3 className="text-xs font-black text-red-700 uppercase tracking-wider">移除 ({diffResult.removed.length})</h3>
+                      </div>
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {diffResult.removed.map((line, i) => (
+                          <div key={i} className="p-3 bg-white rounded-xl border border-red-100 text-[10px] font-mono text-red-700 leading-relaxed">{line}</div>
+                        ))}
+                        {diffResult.removed.length === 0 && (
+                          <p className="text-xs text-slate-400 font-medium italic">無移除內容</p>
+                        )}
+                      </div>
+                    </BrandCard>
+
+                    {/* Added */}
+                    <BrandCard padding="lg" className="space-y-4 border-none shadow-premium bg-emerald-50/50">
+                      <div className="flex items-center gap-2">
+                        <Plus size={16} className="text-emerald-600" />
+                        <h3 className="text-xs font-black text-emerald-700 uppercase tracking-wider">新增 ({diffResult.added.length})</h3>
+                      </div>
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {diffResult.added.map((line, i) => (
+                          <div key={i} className="p-3 bg-white rounded-xl border border-emerald-100 text-[10px] font-mono text-emerald-700 leading-relaxed">{line}</div>
+                        ))}
+                        {diffResult.added.length === 0 && (
+                          <p className="text-xs text-slate-400 font-medium italic">無新增內容</p>
+                        )}
+                      </div>
+                    </BrandCard>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+        </>
+        )}
 
         {/* Footer Info */}
         <div className="text-center">

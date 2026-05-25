@@ -113,10 +113,12 @@ export default function IntelligencePage() {
   const pageConfig: UniversalPageConfig = {
     id: 'intelligence-hub',
     title: '商情中心 Intelligence Hub',
-    subtitle: '即時法規追蹤 · 產業標竿對照 · 數據因果圖譜。Hermes AI 驅動的全域永續決策支援系統。',
+    subtitle: '即時法規追蹤 · 產業標竿對照 · 數據因果圖譜。',
     icon: <Globe size={32} className="text-[#003262]" />,
     griReference: 'Market Intelligence',
     activeT5Tags: ['T1', 'T2', 'T4'],
+    isOXModule: true,
+    features: { useAuditLog: true },
 
     primaryActions: [
       { id: 'ai-analyze', label: 'AI 市場分析', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在生成本週 ESG 策略報表...') },

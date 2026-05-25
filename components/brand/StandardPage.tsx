@@ -49,9 +49,17 @@ export default function StandardPage({ config }: StandardPageProps) {
           )}
 
           {/* Module badge */}
-          <BrandBadge variant="gold" size="xs" className="hidden sm:flex flex-shrink-0 font-black tracking-widest">
-            {config.griReference || 'ESG-OS'}
-          </BrandBadge>
+          <div className="flex items-center gap-2">
+            <BrandBadge variant="gold" size="xs" className="flex-shrink-0 font-black tracking-widest">
+              {config.griReference || 'ESG-OS'}
+            </BrandBadge>
+            {config.isOXModule && (
+              <div className="hidden md:flex items-center gap-1.5 px-2 py-0.5 bg-[#003262] rounded-full border border-[#FDB515]/30">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#FDB515] animate-pulse" />
+                <span className="text-[8px] font-black text-[#FDB515] uppercase tracking-[0.2em]">oX_INTEGRATED</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Status + Actions (right side) */}
