@@ -47,6 +47,12 @@ It has the same format as `CompanyProfile_Key`, but is only used as mutation ret
 """
 scalar CompanyProfile_KeyOutput
 """
+✨ `EternalMemory_KeyOutput` returns the primary key fields of table type `EternalMemory`.
+
+It has the same format as `EternalMemory_Key`, but is only used as mutation return value.
+"""
+scalar EternalMemory_KeyOutput
+"""
 ✨ `IntelligenceModule_KeyOutput` returns the primary key fields of table type `IntelligenceModule`.
 
 It has the same format as `IntelligenceModule_Key`, but is only used as mutation return value.
@@ -58,6 +64,12 @@ scalar IntelligenceModule_KeyOutput
 It has the same format as `IntelligenceSource_Key`, but is only used as mutation return value.
 """
 scalar IntelligenceSource_KeyOutput
+"""
+✨ `RegulatoryPolicy_KeyOutput` returns the primary key fields of table type `RegulatoryPolicy`.
+
+It has the same format as `RegulatoryPolicy_Key`, but is only used as mutation return value.
+"""
+scalar RegulatoryPolicy_KeyOutput
 """
 ✨ `Report_KeyOutput` returns the primary key fields of table type `Report`.
 
@@ -88,6 +100,12 @@ scalar ScrapedArticle_KeyOutput
 It has the same format as `SocialConnection_Key`, but is only used as mutation return value.
 """
 scalar SocialConnection_KeyOutput
+"""
+✨ `SwarmAgentTask_KeyOutput` returns the primary key fields of table type `SwarmAgentTask`.
+
+It has the same format as `SwarmAgentTask_Key`, but is only used as mutation return value.
+"""
+scalar SwarmAgentTask_KeyOutput
 """
 ✨ `Task_KeyOutput` returns the primary key fields of table type `Task`.
 
@@ -121,13 +139,13 @@ input Action_Data {
   """
   categoryId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Action`.`userId` of type `UUID`
+  ✨ Generated from Field `Action`.`userUid` of type `String`
   """
-  userId: UUID
+  userUid: String
   """
-  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `Action`.`userId` of type `UUID`)
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `Action`.`userUid` of type `String`)
   """
-  userId_expr: UUID_Expr @fdc_forbiddenInVariables
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Action`.`category` of type `Category!`
   """
@@ -226,9 +244,9 @@ input Action_Filter {
   """
   categoryId: UUID_Filter
   """
-  ✨ Generated from Field `Action`.`userId` of type `UUID`
+  ✨ Generated from Field `Action`.`userUid` of type `String`
   """
-  userId: UUID_Filter
+  userUid: String_Filter
   """
   ✨ Generated from Field `Action`.`category` of type `Category!`
   """
@@ -340,9 +358,9 @@ input Action_Having {
   """
   title_count: Int_Filter
   """
-  ✨ Generated from Field `Action`.`userId_count` of type `Int!`
+  ✨ Generated from Field `Action`.`userUid_count` of type `Int!`
   """
-  userId_count: Int_Filter
+  userUid_count: Int_Filter
   """
   ✨ Generated from Field `Action`.`loggedAt_min` of type `Timestamp`
   """
@@ -391,9 +409,9 @@ input Action_Order {
   """
   categoryId: OrderDirection
   """
-  ✨ Generated from Field `Action`.`userId` of type `UUID`
+  ✨ Generated from Field `Action`.`userUid` of type `String`
   """
-  userId: OrderDirection
+  userUid: OrderDirection
   """
   ✨ Generated from Field `Action`.`category` of type `Category!`
   """
@@ -471,9 +489,9 @@ input Action_Order {
   """
   title_count: OrderDirection
   """
-  ✨ Generated from Field `Action`.`userId_count` of type `Int!`
+  ✨ Generated from Field `Action`.`userUid_count` of type `Int!`
   """
-  userId_count: OrderDirection
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `Action`.`loggedAt_min` of type `Timestamp`
   """
@@ -495,6 +513,18 @@ input AuditRecord_Data {
   ✨ `_expr` server value variant of `id` (✨ Generated from Field `AuditRecord`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditRecord`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `AuditRecord`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditRecord`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `AuditRecord`.`algorithm` of type `String`
   """
@@ -636,6 +666,14 @@ input AuditRecord_Filter {
   ✨ Generated from Field `AuditRecord`.`id` of type `UUID!`
   """
   id: UUID_Filter
+  """
+  ✨ Generated from Field `AuditRecord`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `AuditRecord`.`user` of type `User!`
+  """
+  user: User_Filter
   """
   ✨ Generated from Field `AuditRecord`.`algorithm` of type `String`
   """
@@ -783,6 +821,10 @@ input AuditRecord_Having {
   """
   title_count: Int_Filter
   """
+  ✨ Generated from Field `AuditRecord`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
   ✨ Generated from Field `AuditRecord`.`verifierKey_count` of type `Int!`
   """
   verifierKey_count: Int_Filter
@@ -833,6 +875,14 @@ input AuditRecord_Order {
   ✨ Generated from Field `AuditRecord`.`id` of type `UUID!`
   """
   id: OrderDirection
+  """
+  ✨ Generated from Field `AuditRecord`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `AuditRecord`.`user` of type `User!`
+  """
+  user: User_Order
   """
   ✨ Generated from Field `AuditRecord`.`algorithm` of type `String`
   """
@@ -945,6 +995,10 @@ input AuditRecord_Order {
   ✨ Generated from Field `AuditRecord`.`title_count` of type `Int!`
   """
   title_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditRecord`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `AuditRecord`.`verifierKey_count` of type `Int!`
   """
@@ -1174,13 +1228,13 @@ input Challenge_Data {
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Challenge`.`creatorId` of type `UUID`
+  ✨ Generated from Field `Challenge`.`creatorUid` of type `String`
   """
-  creatorId: UUID
+  creatorUid: String
   """
-  ✨ `_expr` server value variant of `creatorId` (✨ Generated from Field `Challenge`.`creatorId` of type `UUID`)
+  ✨ `_expr` server value variant of `creatorUid` (✨ Generated from Field `Challenge`.`creatorUid` of type `String`)
   """
-  creatorId_expr: UUID_Expr @fdc_forbiddenInVariables
+  creatorUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Challenge`.`creator` of type `User`
   """
@@ -1283,9 +1337,9 @@ input Challenge_Filter {
   """
   id: UUID_Filter
   """
-  ✨ Generated from Field `Challenge`.`creatorId` of type `UUID`
+  ✨ Generated from Field `Challenge`.`creatorUid` of type `String`
   """
-  creatorId: UUID_Filter
+  creatorUid: String_Filter
   """
   ✨ Generated from Field `Challenge`.`creator` of type `User`
   """
@@ -1365,9 +1419,9 @@ input Challenge_Having {
   """
   _count: Int_Filter
   """
-  ✨ Generated from Field `Challenge`.`creatorId_count` of type `Int!`
+  ✨ Generated from Field `Challenge`.`creatorUid_count` of type `Int!`
   """
-  creatorId_count: Int_Filter
+  creatorUid_count: Int_Filter
   """
   ✨ Generated from Field `Challenge`.`description_count` of type `Int!`
   """
@@ -1452,9 +1506,9 @@ input Challenge_Order {
   """
   id: OrderDirection
   """
-  ✨ Generated from Field `Challenge`.`creatorId` of type `UUID`
+  ✨ Generated from Field `Challenge`.`creatorUid` of type `String`
   """
-  creatorId: OrderDirection
+  creatorUid: OrderDirection
   """
   ✨ Generated from Field `Challenge`.`creator` of type `User`
   """
@@ -1492,9 +1546,9 @@ input Challenge_Order {
   """
   _count: OrderDirection
   """
-  ✨ Generated from Field `Challenge`.`creatorId_count` of type `Int!`
+  ✨ Generated from Field `Challenge`.`creatorUid_count` of type `Int!`
   """
-  creatorId_count: OrderDirection
+  creatorUid_count: OrderDirection
   """
   ✨ Generated from Field `Challenge`.`description_count` of type `Int!`
   """
@@ -1549,13 +1603,13 @@ input Challenge_Order {
 """
 input ChallengeParticipation_Data {
   """
-  ✨ Generated from Field `ChallengeParticipation`.`userId` of type `UUID!`
+  ✨ Generated from Field `ChallengeParticipation`.`userUid` of type `String!`
   """
-  userId: UUID
+  userUid: String
   """
-  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `ChallengeParticipation`.`userId` of type `UUID!`)
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `ChallengeParticipation`.`userUid` of type `String!`)
   """
-  userId_expr: UUID_Expr @fdc_forbiddenInVariables
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `ChallengeParticipation`.`challengeId` of type `UUID!`
   """
@@ -1614,9 +1668,9 @@ input ChallengeParticipation_Filter {
   """
   _or: [ChallengeParticipation_Filter!]
   """
-  ✨ Generated from Field `ChallengeParticipation`.`userId` of type `UUID!`
+  ✨ Generated from Field `ChallengeParticipation`.`userUid` of type `String!`
   """
-  userId: UUID_Filter
+  userUid: String_Filter
   """
   ✨ Generated from Field `ChallengeParticipation`.`challengeId` of type `UUID!`
   """
@@ -1688,9 +1742,9 @@ input ChallengeParticipation_Having {
   """
   progressMetric_count: Int_Filter
   """
-  ✨ Generated from Field `ChallengeParticipation`.`userId_count` of type `Int!`
+  ✨ Generated from Field `ChallengeParticipation`.`userUid_count` of type `Int!`
   """
-  userId_count: Int_Filter
+  userUid_count: Int_Filter
   """
   ✨ Generated from Field `ChallengeParticipation`.`joinedAt_min` of type `Timestamp`
   """
@@ -1705,13 +1759,13 @@ input ChallengeParticipation_Having {
 """
 input ChallengeParticipation_Key {
   """
-  ✨ Generated from Field `ChallengeParticipation`.`userId` of type `UUID!`
+  ✨ Generated from Field `ChallengeParticipation`.`userUid` of type `String!`
   """
-  userId: UUID
+  userUid: String
   """
-  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `ChallengeParticipation`.`userId` of type `UUID!`)
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `ChallengeParticipation`.`userUid` of type `String!`)
   """
-  userId_expr: UUID_Expr @fdc_forbiddenInVariables
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `ChallengeParticipation`.`challengeId` of type `UUID!`
   """
@@ -1739,9 +1793,9 @@ input ChallengeParticipation_ListFilter {
 """
 input ChallengeParticipation_Order {
   """
-  ✨ Generated from Field `ChallengeParticipation`.`userId` of type `UUID!`
+  ✨ Generated from Field `ChallengeParticipation`.`userUid` of type `String!`
   """
-  userId: OrderDirection
+  userUid: OrderDirection
   """
   ✨ Generated from Field `ChallengeParticipation`.`challengeId` of type `UUID!`
   """
@@ -1779,9 +1833,9 @@ input ChallengeParticipation_Order {
   """
   progressMetric_count: OrderDirection
   """
-  ✨ Generated from Field `ChallengeParticipation`.`userId_count` of type `Int!`
+  ✨ Generated from Field `ChallengeParticipation`.`userUid_count` of type `Int!`
   """
-  userId_count: OrderDirection
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `ChallengeParticipation`.`joinedAt_min` of type `Timestamp`
   """
@@ -1804,13 +1858,13 @@ input Comment_Data {
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Comment`.`userId` of type `UUID!`
+  ✨ Generated from Field `Comment`.`userUid` of type `String!`
   """
-  userId: UUID
+  userUid: String
   """
-  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `Comment`.`userId` of type `UUID!`)
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `Comment`.`userUid` of type `String!`)
   """
-  userId_expr: UUID_Expr @fdc_forbiddenInVariables
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Comment`.`user` of type `User!`
   """
@@ -1845,9 +1899,9 @@ input Comment_Filter {
   """
   id: UUID_Filter
   """
-  ✨ Generated from Field `Comment`.`userId` of type `UUID!`
+  ✨ Generated from Field `Comment`.`userUid` of type `String!`
   """
-  userId: UUID_Filter
+  userUid: String_Filter
   """
   ✨ Generated from Field `Comment`.`user` of type `User!`
   """
@@ -1903,9 +1957,9 @@ input Comment_Having {
   """
   id_count: Int_Filter
   """
-  ✨ Generated from Field `Comment`.`userId_count` of type `Int!`
+  ✨ Generated from Field `Comment`.`userUid_count` of type `Int!`
   """
-  userId_count: Int_Filter
+  userUid_count: Int_Filter
 }
 """
 ✨ Generated key input type for table 'Comment'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1942,9 +1996,9 @@ input Comment_Order {
   """
   id: OrderDirection
   """
-  ✨ Generated from Field `Comment`.`userId` of type `UUID!`
+  ✨ Generated from Field `Comment`.`userUid` of type `String!`
   """
-  userId: OrderDirection
+  userUid: OrderDirection
   """
   ✨ Generated from Field `Comment`.`user` of type `User!`
   """
@@ -1966,9 +2020,9 @@ input Comment_Order {
   """
   id_count: OrderDirection
   """
-  ✨ Generated from Field `Comment`.`userId_count` of type `Int!`
+  ✨ Generated from Field `Comment`.`userUid_count` of type `Int!`
   """
-  userId_count: OrderDirection
+  userUid_count: OrderDirection
 }
 """
 ✨ Generated data input type for table 'CompanyMetric'. It includes all necessary fields for creating or upserting rows into table.
@@ -1991,9 +2045,21 @@ input CompanyMetric_Data {
   """
   companyId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `CompanyMetric`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `CompanyMetric`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `CompanyMetric`.`company` of type `CompanyProfile!`
   """
   company: CompanyProfile_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `CompanyMetric`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `CompanyMetric`.`category` of type `String!`
   """
@@ -2088,9 +2154,17 @@ input CompanyMetric_Filter {
   """
   companyId: UUID_Filter
   """
+  ✨ Generated from Field `CompanyMetric`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
   ✨ Generated from Field `CompanyMetric`.`company` of type `CompanyProfile!`
   """
   company: CompanyProfile_Filter
+  """
+  ✨ Generated from Field `CompanyMetric`.`user` of type `User!`
+  """
+  user: User_Filter
   """
   ✨ Generated from Field `CompanyMetric`.`category` of type `String!`
   """
@@ -2190,6 +2264,10 @@ input CompanyMetric_Having {
   """
   updatedAt_count: Int_Filter
   """
+  ✨ Generated from Field `CompanyMetric`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
   ✨ Generated from Field `CompanyMetric`.`verified_count` of type `Int!`
   """
   verified_count: Int_Filter
@@ -2257,9 +2335,17 @@ input CompanyMetric_Order {
   """
   companyId: OrderDirection
   """
+  ✨ Generated from Field `CompanyMetric`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
   ✨ Generated from Field `CompanyMetric`.`company` of type `CompanyProfile!`
   """
   company: CompanyProfile_Order
+  """
+  ✨ Generated from Field `CompanyMetric`.`user` of type `User!`
+  """
+  user: User_Order
   """
   ✨ Generated from Field `CompanyMetric`.`category` of type `String!`
   """
@@ -2325,6 +2411,10 @@ input CompanyMetric_Order {
   """
   updatedAt_count: OrderDirection
   """
+  ✨ Generated from Field `CompanyMetric`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
   ✨ Generated from Field `CompanyMetric`.`verified_count` of type `Int!`
   """
   verified_count: OrderDirection
@@ -2366,13 +2456,13 @@ input CompanyProfile_Data {
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `CompanyProfile`.`userId` of type `UUID`
+  ✨ Generated from Field `CompanyProfile`.`userUid` of type `String`
   """
-  userId: UUID
+  userUid: String
   """
-  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `CompanyProfile`.`userId` of type `UUID`)
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `CompanyProfile`.`userUid` of type `String`)
   """
-  userId_expr: UUID_Expr @fdc_forbiddenInVariables
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `CompanyProfile`.`user` of type `User`
   """
@@ -2499,9 +2589,9 @@ input CompanyProfile_Filter {
   """
   id: UUID_Filter
   """
-  ✨ Generated from Field `CompanyProfile`.`userId` of type `UUID`
+  ✨ Generated from Field `CompanyProfile`.`userUid` of type `String`
   """
-  userId: UUID_Filter
+  userUid: String_Filter
   """
   ✨ Generated from Field `CompanyProfile`.`user` of type `User`
   """
@@ -2625,9 +2715,9 @@ input CompanyProfile_Having {
   """
   revenueTwd_count: Int_Filter
   """
-  ✨ Generated from Field `CompanyProfile`.`userId_count` of type `Int!`
+  ✨ Generated from Field `CompanyProfile`.`userUid_count` of type `Int!`
   """
-  userId_count: Int_Filter
+  userUid_count: Int_Filter
   """
   ✨ Generated from Field `CompanyProfile`.`vision_count` of type `Int!`
   """
@@ -2724,9 +2814,9 @@ input CompanyProfile_Order {
   """
   id: OrderDirection
   """
-  ✨ Generated from Field `CompanyProfile`.`userId` of type `UUID`
+  ✨ Generated from Field `CompanyProfile`.`userUid` of type `String`
   """
-  userId: OrderDirection
+  userUid: OrderDirection
   """
   ✨ Generated from Field `CompanyProfile`.`user` of type `User`
   """
@@ -2808,9 +2898,9 @@ input CompanyProfile_Order {
   """
   revenueTwd_count: OrderDirection
   """
-  ✨ Generated from Field `CompanyProfile`.`userId_count` of type `Int!`
+  ✨ Generated from Field `CompanyProfile`.`userUid_count` of type `Int!`
   """
-  userId_count: OrderDirection
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `CompanyProfile`.`vision_count` of type `Int!`
   """
@@ -2871,6 +2961,329 @@ input CompanyProfile_Order {
   ✨ Generated from Field `CompanyProfile`.`revenueTwd_max` of type `Float`
   """
   revenueTwd_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'EternalMemory'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input EternalMemory_Data {
+  """
+  ✨ Generated from Field `EternalMemory`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `EternalMemory`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `EternalMemory`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`consolidated` of type `Boolean!`
+  """
+  consolidated: Boolean
+  """
+  ✨ `_expr` server value variant of `consolidated` (✨ Generated from Field `EternalMemory`.`consolidated` of type `Boolean!`)
+  """
+  consolidated_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`content` of type `String!`
+  """
+  content: String
+  """
+  ✨ `_expr` server value variant of `content` (✨ Generated from Field `EternalMemory`.`content` of type `String!`)
+  """
+  content_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `EternalMemory`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `EternalMemory`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `EternalMemory`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`hashLock` of type `String!`
+  """
+  hashLock: String
+  """
+  ✨ `_expr` server value variant of `hashLock` (✨ Generated from Field `EternalMemory`.`hashLock` of type `String!`)
+  """
+  hashLock_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`tags` of type `String`
+  """
+  tags: String
+  """
+  ✨ `_expr` server value variant of `tags` (✨ Generated from Field `EternalMemory`.`tags` of type `String`)
+  """
+  tags_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`type` of type `String!`
+  """
+  type: String
+  """
+  ✨ `_expr` server value variant of `type` (✨ Generated from Field `EternalMemory`.`type` of type `String!`)
+  """
+  type_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'EternalMemory'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input EternalMemory_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [EternalMemory_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: EternalMemory_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [EternalMemory_Filter!]
+  """
+  ✨ Generated from Field `EternalMemory`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`consolidated` of type `Boolean!`
+  """
+  consolidated: Boolean_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`content` of type `String!`
+  """
+  content: String_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`hashLock` of type `String!`
+  """
+  hashLock: String_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`tags` of type `String`
+  """
+  tags: String_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`type` of type `String!`
+  """
+  type: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'EternalMemory'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input EternalMemory_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [EternalMemory_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: EternalMemory_Filter
+}
+"""
+✨ Generated having input type for table 'EternalMemory'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input EternalMemory_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [EternalMemory_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: EternalMemory_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [EternalMemory_Having!]
+  """
+  ✨ Generated from Field `EternalMemory`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`consolidated_count` of type `Int!`
+  """
+  consolidated_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`content_count` of type `Int!`
+  """
+  content_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`hashLock_count` of type `Int!`
+  """
+  hashLock_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`tags_count` of type `Int!`
+  """
+  tags_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`type_count` of type `Int!`
+  """
+  type_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'EternalMemory'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input EternalMemory_Key {
+  """
+  ✨ Generated from Field `EternalMemory`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `EternalMemory`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'EternalMemory'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input EternalMemory_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: EternalMemory_Filter
+}
+"""
+✨ Generated order input type for table 'EternalMemory'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input EternalMemory_Order {
+  """
+  ✨ Generated from Field `EternalMemory`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `EternalMemory`.`consolidated` of type `Boolean!`
+  """
+  consolidated: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`content` of type `String!`
+  """
+  content: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`hashLock` of type `String!`
+  """
+  hashLock: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`tags` of type `String`
+  """
+  tags: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`type` of type `String!`
+  """
+  type: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`consolidated_count` of type `Int!`
+  """
+  consolidated_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`content_count` of type `Int!`
+  """
+  content_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`hashLock_count` of type `Int!`
+  """
+  hashLock_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`tags_count` of type `Int!`
+  """
+  tags_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`type_count` of type `Int!`
+  """
+  type_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
 }
 """
 ✨ Generated data input type for table 'IntelligenceModule'. It includes all necessary fields for creating or upserting rows into table.
@@ -3375,6 +3788,269 @@ input IntelligenceSource_Order {
   type_count: OrderDirection
 }
 """
+✨ Generated data input type for table 'RegulatoryPolicy'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input RegulatoryPolicy_Data {
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`
+  """
+  id: String
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`)
+  """
+  id_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`
+  """
+  code: String
+  """
+  ✨ `_expr` server value variant of `code` (✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`)
+  """
+  code_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `RegulatoryPolicy`.`description` of type `String`)
+  """
+  description_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`isGlobal` of type `Boolean!`
+  """
+  isGlobal: Boolean
+  """
+  ✨ `_expr` server value variant of `isGlobal` (✨ Generated from Field `RegulatoryPolicy`.`isGlobal` of type `Boolean!`)
+  """
+  isGlobal_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `RegulatoryPolicy`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`rulesJson` of type `String!`
+  """
+  rulesJson: String
+  """
+  ✨ `_expr` server value variant of `rulesJson` (✨ Generated from Field `RegulatoryPolicy`.`rulesJson` of type `String!`)
+  """
+  rulesJson_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`standard` of type `String!`
+  """
+  standard: String
+  """
+  ✨ `_expr` server value variant of `standard` (✨ Generated from Field `RegulatoryPolicy`.`standard` of type `String!`)
+  """
+  standard_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'RegulatoryPolicy'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input RegulatoryPolicy_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [RegulatoryPolicy_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: RegulatoryPolicy_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [RegulatoryPolicy_Filter!]
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`
+  """
+  id: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`
+  """
+  code: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`isGlobal` of type `Boolean!`
+  """
+  isGlobal: Boolean_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`rulesJson` of type `String!`
+  """
+  rulesJson: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`standard` of type `String!`
+  """
+  standard: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'RegulatoryPolicy'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input RegulatoryPolicy_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [RegulatoryPolicy_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: RegulatoryPolicy_Filter
+}
+"""
+✨ Generated having input type for table 'RegulatoryPolicy'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input RegulatoryPolicy_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [RegulatoryPolicy_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: RegulatoryPolicy_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [RegulatoryPolicy_Having!]
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`code_count` of type `Int!`
+  """
+  code_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`isGlobal_count` of type `Int!`
+  """
+  isGlobal_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`rulesJson_count` of type `Int!`
+  """
+  rulesJson_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`standard_count` of type `Int!`
+  """
+  standard_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'RegulatoryPolicy'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input RegulatoryPolicy_Key {
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`
+  """
+  id: String
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`)
+  """
+  id_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'RegulatoryPolicy'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input RegulatoryPolicy_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: RegulatoryPolicy_Filter
+}
+"""
+✨ Generated order input type for table 'RegulatoryPolicy'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input RegulatoryPolicy_Order {
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`
+  """
+  code: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`isGlobal` of type `Boolean!`
+  """
+  isGlobal: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`rulesJson` of type `String!`
+  """
+  rulesJson: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`standard` of type `String!`
+  """
+  standard: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`code_count` of type `Int!`
+  """
+  code_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`description_count` of type `Int!`
+  """
+  description_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`isGlobal_count` of type `Int!`
+  """
+  isGlobal_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`rulesJson_count` of type `Int!`
+  """
+  rulesJson_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`standard_count` of type `Int!`
+  """
+  standard_count: OrderDirection
+}
+"""
 ✨ Generated data input type for table 'Report'. It includes all necessary fields for creating or upserting rows into table.
 """
 input Report_Data {
@@ -3395,9 +4071,21 @@ input Report_Data {
   """
   companyId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `Report`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `Report`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `Report`.`company` of type `CompanyProfile!`
   """
   company: CompanyProfile_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Report`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Report`.`createdAt` of type `Timestamp!`
   """
@@ -3504,9 +4192,17 @@ input Report_Filter {
   """
   companyId: UUID_Filter
   """
+  ✨ Generated from Field `Report`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
   ✨ Generated from Field `Report`.`company` of type `CompanyProfile!`
   """
   company: CompanyProfile_Filter
+  """
+  ✨ Generated from Field `Report`.`user` of type `User!`
+  """
+  user: User_Filter
   """
   ✨ Generated from Field `Report`.`createdAt` of type `Timestamp!`
   """
@@ -3614,6 +4310,10 @@ input Report_Having {
   """
   title_count: Int_Filter
   """
+  ✨ Generated from Field `Report`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
   ✨ Generated from Field `Report`.`progress_sum` of type `Int`
   """
   progress_sum: Int_Filter
@@ -3685,9 +4385,17 @@ input Report_Order {
   """
   companyId: OrderDirection
   """
+  ✨ Generated from Field `Report`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
   ✨ Generated from Field `Report`.`company` of type `CompanyProfile!`
   """
   company: CompanyProfile_Order
+  """
+  ✨ Generated from Field `Report`.`user` of type `User!`
+  """
+  user: User_Order
   """
   ✨ Generated from Field `Report`.`createdAt` of type `Timestamp!`
   """
@@ -3756,6 +4464,10 @@ input Report_Order {
   ✨ Generated from Field `Report`.`title_count` of type `Int!`
   """
   title_count: OrderDirection
+  """
+  ✨ Generated from Field `Report`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `Report`.`progress_sum` of type `Int`
   """
@@ -4101,6 +4813,18 @@ input RoadmapMilestone_Data {
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `RoadmapMilestone`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `RoadmapMilestone`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RoadmapMilestone`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `RoadmapMilestone`.`category` of type `String!`
   """
   category: String
@@ -4201,6 +4925,14 @@ input RoadmapMilestone_Filter {
   ✨ Generated from Field `RoadmapMilestone`.`id` of type `UUID!`
   """
   id: UUID_Filter
+  """
+  ✨ Generated from Field `RoadmapMilestone`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `RoadmapMilestone`.`user` of type `User!`
+  """
+  user: User_Filter
   """
   ✨ Generated from Field `RoadmapMilestone`.`category` of type `String!`
   """
@@ -4308,6 +5040,10 @@ input RoadmapMilestone_Having {
   """
   unit_count: Int_Filter
   """
+  ✨ Generated from Field `RoadmapMilestone`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
   ✨ Generated from Field `RoadmapMilestone`.`targetValue_sum` of type `Float`
   """
   targetValue_sum: Float_Filter
@@ -4383,6 +5119,14 @@ input RoadmapMilestone_Order {
   """
   id: OrderDirection
   """
+  ✨ Generated from Field `RoadmapMilestone`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `RoadmapMilestone`.`user` of type `User!`
+  """
+  user: User_Order
+  """
   ✨ Generated from Field `RoadmapMilestone`.`category` of type `String!`
   """
   category: OrderDirection
@@ -4454,6 +5198,10 @@ input RoadmapMilestone_Order {
   ✨ Generated from Field `RoadmapMilestone`.`unit_count` of type `Int!`
   """
   unit_count: OrderDirection
+  """
+  ✨ Generated from Field `RoadmapMilestone`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `RoadmapMilestone`.`targetValue_sum` of type `Float`
   """
@@ -4883,21 +5631,21 @@ input ScrapedArticle_Order {
 """
 input SocialConnection_Data {
   """
-  ✨ Generated from Field `SocialConnection`.`followerId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followerUid` of type `String!`
   """
-  followerId: UUID
+  followerUid: String
   """
-  ✨ `_expr` server value variant of `followerId` (✨ Generated from Field `SocialConnection`.`followerId` of type `UUID!`)
+  ✨ `_expr` server value variant of `followerUid` (✨ Generated from Field `SocialConnection`.`followerUid` of type `String!`)
   """
-  followerId_expr: UUID_Expr @fdc_forbiddenInVariables
+  followerUid_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `SocialConnection`.`followedId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followedUid` of type `String!`
   """
-  followedId: UUID
+  followedUid: String
   """
-  ✨ `_expr` server value variant of `followedId` (✨ Generated from Field `SocialConnection`.`followedId` of type `UUID!`)
+  ✨ `_expr` server value variant of `followedUid` (✨ Generated from Field `SocialConnection`.`followedUid` of type `String!`)
   """
-  followedId_expr: UUID_Expr @fdc_forbiddenInVariables
+  followedUid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `SocialConnection`.`followed` of type `User!`
   """
@@ -4940,13 +5688,13 @@ input SocialConnection_Filter {
   """
   _or: [SocialConnection_Filter!]
   """
-  ✨ Generated from Field `SocialConnection`.`followerId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followerUid` of type `String!`
   """
-  followerId: UUID_Filter
+  followerUid: String_Filter
   """
-  ✨ Generated from Field `SocialConnection`.`followedId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followedUid` of type `String!`
   """
-  followedId: UUID_Filter
+  followedUid: String_Filter
   """
   ✨ Generated from Field `SocialConnection`.`followed` of type `User!`
   """
@@ -5002,13 +5750,13 @@ input SocialConnection_Having {
   """
   connectedAt_count: Int_Filter
   """
-  ✨ Generated from Field `SocialConnection`.`followedId_count` of type `Int!`
+  ✨ Generated from Field `SocialConnection`.`followedUid_count` of type `Int!`
   """
-  followedId_count: Int_Filter
+  followedUid_count: Int_Filter
   """
-  ✨ Generated from Field `SocialConnection`.`followerId_count` of type `Int!`
+  ✨ Generated from Field `SocialConnection`.`followerUid_count` of type `Int!`
   """
-  followerId_count: Int_Filter
+  followerUid_count: Int_Filter
   """
   ✨ Generated from Field `SocialConnection`.`connectedAt_min` of type `Timestamp`
   """
@@ -5023,21 +5771,21 @@ input SocialConnection_Having {
 """
 input SocialConnection_Key {
   """
-  ✨ Generated from Field `SocialConnection`.`followerId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followerUid` of type `String!`
   """
-  followerId: UUID
+  followerUid: String
   """
-  ✨ `_expr` server value variant of `followerId` (✨ Generated from Field `SocialConnection`.`followerId` of type `UUID!`)
+  ✨ `_expr` server value variant of `followerUid` (✨ Generated from Field `SocialConnection`.`followerUid` of type `String!`)
   """
-  followerId_expr: UUID_Expr @fdc_forbiddenInVariables
+  followerUid_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `SocialConnection`.`followedId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followedUid` of type `String!`
   """
-  followedId: UUID
+  followedUid: String
   """
-  ✨ `_expr` server value variant of `followedId` (✨ Generated from Field `SocialConnection`.`followedId` of type `UUID!`)
+  ✨ `_expr` server value variant of `followedUid` (✨ Generated from Field `SocialConnection`.`followedUid` of type `String!`)
   """
-  followedId_expr: UUID_Expr @fdc_forbiddenInVariables
+  followedUid_expr: String_Expr @fdc_forbiddenInVariables
 }
 """
 ✨ Generated list filter input type for table 'SocialConnection'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
@@ -5057,13 +5805,13 @@ input SocialConnection_ListFilter {
 """
 input SocialConnection_Order {
   """
-  ✨ Generated from Field `SocialConnection`.`followerId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followerUid` of type `String!`
   """
-  followerId: OrderDirection
+  followerUid: OrderDirection
   """
-  ✨ Generated from Field `SocialConnection`.`followedId` of type `UUID!`
+  ✨ Generated from Field `SocialConnection`.`followedUid` of type `String!`
   """
-  followedId: OrderDirection
+  followedUid: OrderDirection
   """
   ✨ Generated from Field `SocialConnection`.`followed` of type `User!`
   """
@@ -5085,13 +5833,13 @@ input SocialConnection_Order {
   """
   connectedAt_count: OrderDirection
   """
-  ✨ Generated from Field `SocialConnection`.`followedId_count` of type `Int!`
+  ✨ Generated from Field `SocialConnection`.`followedUid_count` of type `Int!`
   """
-  followedId_count: OrderDirection
+  followedUid_count: OrderDirection
   """
-  ✨ Generated from Field `SocialConnection`.`followerId_count` of type `Int!`
+  ✨ Generated from Field `SocialConnection`.`followerUid_count` of type `Int!`
   """
-  followerId_count: OrderDirection
+  followerUid_count: OrderDirection
   """
   ✨ Generated from Field `SocialConnection`.`connectedAt_min` of type `Timestamp`
   """
@@ -5100,6 +5848,437 @@ input SocialConnection_Order {
   ✨ Generated from Field `SocialConnection`.`connectedAt_max` of type `Timestamp`
   """
   connectedAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'SwarmAgentTask'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input SwarmAgentTask_Data {
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `SwarmAgentTask`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `SwarmAgentTask`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`agentId` of type `String`
+  """
+  agentId: String
+  """
+  ✨ `_expr` server value variant of `agentId` (✨ Generated from Field `SwarmAgentTask`.`agentId` of type `String`)
+  """
+  agentId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `SwarmAgentTask`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `SwarmAgentTask`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `SwarmAgentTask`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress` of type `Int!`
+  """
+  progress: Int
+  """
+  ✨ `_expr` server value variant of `progress` (✨ Generated from Field `SwarmAgentTask`.`progress` of type `Int!`)
+  """
+  progress_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `progress` (✨ Generated from Field `SwarmAgentTask`.`progress` of type `Int!`)
+  """
+  progress_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`skillKey` of type `String`
+  """
+  skillKey: String
+  """
+  ✨ `_expr` server value variant of `skillKey` (✨ Generated from Field `SwarmAgentTask`.`skillKey` of type `String`)
+  """
+  skillKey_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `SwarmAgentTask`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`taskType` of type `String!`
+  """
+  taskType: String
+  """
+  ✨ `_expr` server value variant of `taskType` (✨ Generated from Field `SwarmAgentTask`.`taskType` of type `String!`)
+  """
+  taskType_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `SwarmAgentTask`.`title` of type `String!`)
+  """
+  title_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `SwarmAgentTask`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `SwarmAgentTask`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `SwarmAgentTask`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'SwarmAgentTask'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input SwarmAgentTask_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [SwarmAgentTask_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: SwarmAgentTask_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [SwarmAgentTask_Filter!]
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`agentId` of type `String`
+  """
+  agentId: String_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress` of type `Int!`
+  """
+  progress: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`skillKey` of type `String`
+  """
+  skillKey: String_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`taskType` of type `String!`
+  """
+  taskType: String_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`title` of type `String!`
+  """
+  title: String_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'SwarmAgentTask'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input SwarmAgentTask_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [SwarmAgentTask_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: SwarmAgentTask_Filter
+}
+"""
+✨ Generated having input type for table 'SwarmAgentTask'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input SwarmAgentTask_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [SwarmAgentTask_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: SwarmAgentTask_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [SwarmAgentTask_Having!]
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`agentId_count` of type `Int!`
+  """
+  agentId_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_count` of type `Int!`
+  """
+  progress_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`skillKey_count` of type `Int!`
+  """
+  skillKey_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`taskType_count` of type `Int!`
+  """
+  taskType_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`title_count` of type `Int!`
+  """
+  title_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_sum` of type `Int`
+  """
+  progress_sum: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_avg` of type `Float`
+  """
+  progress_avg: Float_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_min` of type `Int`
+  """
+  progress_min: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_max` of type `Int`
+  """
+  progress_max: Int_Filter
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'SwarmAgentTask'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input SwarmAgentTask_Key {
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `SwarmAgentTask`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'SwarmAgentTask'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input SwarmAgentTask_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: SwarmAgentTask_Filter
+}
+"""
+✨ Generated order input type for table 'SwarmAgentTask'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input SwarmAgentTask_Order {
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`agentId` of type `String`
+  """
+  agentId: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress` of type `Int!`
+  """
+  progress: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`skillKey` of type `String`
+  """
+  skillKey: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`taskType` of type `String!`
+  """
+  taskType: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`title` of type `String!`
+  """
+  title: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`agentId_count` of type `Int!`
+  """
+  agentId_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_count` of type `Int!`
+  """
+  progress_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`skillKey_count` of type `Int!`
+  """
+  skillKey_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`taskType_count` of type `Int!`
+  """
+  taskType_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`title_count` of type `Int!`
+  """
+  title_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_sum` of type `Int`
+  """
+  progress_sum: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_avg` of type `Float`
+  """
+  progress_avg: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_min` of type `Int`
+  """
+  progress_min: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`progress_max` of type `Int`
+  """
+  progress_max: OrderDirection
+  """
+  ✨ Generated from Field `SwarmAgentTask`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
 }
 """
 ✨ Generated data input type for table 'Task'. It includes all necessary fields for creating or upserting rows into table.
@@ -5113,6 +6292,18 @@ input Task_Data {
   ✨ `_expr` server value variant of `id` (✨ Generated from Field `Task`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `Task`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Task`.`assignee` of type `String`
   """
@@ -5247,6 +6438,14 @@ input Task_Filter {
   """
   id: UUID_Filter
   """
+  ✨ Generated from Field `Task`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `Task`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
   ✨ Generated from Field `Task`.`assignee` of type `String`
   """
   assignee: String_Filter
@@ -5377,6 +6576,10 @@ input Task_Having {
   """
   updatedAt_count: Int_Filter
   """
+  ✨ Generated from Field `Task`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
   ✨ Generated from Field `Task`.`createdAt_min` of type `Timestamp`
   """
   createdAt_min: Timestamp_Filter
@@ -5435,6 +6638,14 @@ input Task_Order {
   ✨ Generated from Field `Task`.`id` of type `UUID!`
   """
   id: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`user` of type `User!`
+  """
+  user: User_Order
   """
   ✨ Generated from Field `Task`.`assignee` of type `String`
   """
@@ -5532,6 +6743,10 @@ input Task_Order {
   """
   updatedAt_count: OrderDirection
   """
+  ✨ Generated from Field `Task`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
   ✨ Generated from Field `Task`.`createdAt_min` of type `Timestamp`
   """
   createdAt_min: OrderDirection
@@ -5561,13 +6776,13 @@ input Task_Order {
 """
 input User_Data {
   """
-  ✨ Generated from Field `User`.`id` of type `UUID!`
+  ✨ Generated from Field `User`.`uid` of type `String!`
   """
-  id: UUID
+  uid: String
   """
-  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `User`.`uid` of type `String!`)
   """
-  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  uid_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `User`.`bio` of type `String`
   """
@@ -5645,6 +6860,10 @@ input User_Data {
   """
   actions_on_user: [Action_Data!]
   """
+  ✨ Generated from Field `User`.`auditRecords_on_user` of type `[AuditRecord!]!`
+  """
+  auditRecords_on_user: [AuditRecord_Data!]
+  """
   ✨ Generated from Field `User`.`challenges_on_creator` of type `[Challenge!]!`
   """
   challenges_on_creator: [Challenge_Data!]
@@ -5657,9 +6876,25 @@ input User_Data {
   """
   comments_on_user: [Comment_Data!]
   """
+  ✨ Generated from Field `User`.`companyMetrics_on_user` of type `[CompanyMetric!]!`
+  """
+  companyMetrics_on_user: [CompanyMetric_Data!]
+  """
   ✨ Generated from Field `User`.`companyProfiles_on_user` of type `[CompanyProfile!]!`
   """
   companyProfiles_on_user: [CompanyProfile_Data!]
+  """
+  ✨ Generated from Field `User`.`eternalMemories_on_user` of type `[EternalMemory!]!`
+  """
+  eternalMemories_on_user: [EternalMemory_Data!]
+  """
+  ✨ Generated from Field `User`.`reports_on_user` of type `[Report!]!`
+  """
+  reports_on_user: [Report_Data!]
+  """
+  ✨ Generated from Field `User`.`roadmapMilestones_on_user` of type `[RoadmapMilestone!]!`
+  """
+  roadmapMilestones_on_user: [RoadmapMilestone_Data!]
   """
   ✨ Generated from Field `User`.`socialConnections_on_followed` of type `[SocialConnection!]!`
   """
@@ -5668,6 +6903,14 @@ input User_Data {
   ✨ Generated from Field `User`.`socialConnections_on_follower` of type `[SocialConnection!]!`
   """
   socialConnections_on_follower: [SocialConnection_Data!]
+  """
+  ✨ Generated from Field `User`.`swarmAgentTasks_on_user` of type `[SwarmAgentTask!]!`
+  """
+  swarmAgentTasks_on_user: [SwarmAgentTask_Data!]
+  """
+  ✨ Generated from Field `User`.`tasks_on_user` of type `[Task!]!`
+  """
+  tasks_on_user: [Task_Data!]
 }
 """
 ✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
@@ -5686,9 +6929,9 @@ input User_Filter {
   """
   _or: [User_Filter!]
   """
-  ✨ Generated from Field `User`.`id` of type `UUID!`
+  ✨ Generated from Field `User`.`uid` of type `String!`
   """
-  id: UUID_Filter
+  uid: String_Filter
   """
   ✨ Generated from Field `User`.`bio` of type `String`
   """
@@ -5726,6 +6969,10 @@ input User_Filter {
   """
   actions_on_user: Action_ListFilter
   """
+  ✨ Generated from Field `User`.`auditRecords_on_user` of type `[AuditRecord!]!`
+  """
+  auditRecords_on_user: AuditRecord_ListFilter
+  """
   ✨ Generated from Field `User`.`challenges_on_creator` of type `[Challenge!]!`
   """
   challenges_on_creator: Challenge_ListFilter
@@ -5738,9 +6985,25 @@ input User_Filter {
   """
   comments_on_user: Comment_ListFilter
   """
+  ✨ Generated from Field `User`.`companyMetrics_on_user` of type `[CompanyMetric!]!`
+  """
+  companyMetrics_on_user: CompanyMetric_ListFilter
+  """
   ✨ Generated from Field `User`.`companyProfiles_on_user` of type `[CompanyProfile!]!`
   """
   companyProfiles_on_user: CompanyProfile_ListFilter
+  """
+  ✨ Generated from Field `User`.`eternalMemories_on_user` of type `[EternalMemory!]!`
+  """
+  eternalMemories_on_user: EternalMemory_ListFilter
+  """
+  ✨ Generated from Field `User`.`reports_on_user` of type `[Report!]!`
+  """
+  reports_on_user: Report_ListFilter
+  """
+  ✨ Generated from Field `User`.`roadmapMilestones_on_user` of type `[RoadmapMilestone!]!`
+  """
+  roadmapMilestones_on_user: RoadmapMilestone_ListFilter
   """
   ✨ Generated from Field `User`.`socialConnections_on_followed` of type `[SocialConnection!]!`
   """
@@ -5749,6 +7012,14 @@ input User_Filter {
   ✨ Generated from Field `User`.`socialConnections_on_follower` of type `[SocialConnection!]!`
   """
   socialConnections_on_follower: SocialConnection_ListFilter
+  """
+  ✨ Generated from Field `User`.`swarmAgentTasks_on_user` of type `[SwarmAgentTask!]!`
+  """
+  swarmAgentTasks_on_user: SwarmAgentTask_ListFilter
+  """
+  ✨ Generated from Field `User`.`tasks_on_user` of type `[Task!]!`
+  """
+  tasks_on_user: Task_ListFilter
   """
   ✨ Generated from Field `User`.`challenges_via_ChallengeParticipation` of type `[Challenge!]!`
   """
@@ -5816,10 +7087,6 @@ input User_Having {
   """
   email_count: Int_Filter
   """
-  ✨ Generated from Field `User`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
   ✨ Generated from Field `User`.`passwordHash_count` of type `Int!`
   """
   passwordHash_count: Int_Filter
@@ -5831,6 +7098,10 @@ input User_Having {
   ✨ Generated from Field `User`.`publicProfile_count` of type `Int!`
   """
   publicProfile_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`uid_count` of type `Int!`
+  """
+  uid_count: Int_Filter
   """
   ✨ Generated from Field `User`.`username_count` of type `Int!`
   """
@@ -5849,13 +7120,13 @@ input User_Having {
 """
 input User_Key {
   """
-  ✨ Generated from Field `User`.`id` of type `UUID!`
+  ✨ Generated from Field `User`.`uid` of type `String!`
   """
-  id: UUID
+  uid: String
   """
-  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `User`.`uid` of type `String!`)
   """
-  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  uid_expr: String_Expr @fdc_forbiddenInVariables
 }
 """
 ✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
@@ -5875,9 +7146,9 @@ input User_ListFilter {
 """
 input User_Order {
   """
-  ✨ Generated from Field `User`.`id` of type `UUID!`
+  ✨ Generated from Field `User`.`uid` of type `String!`
   """
-  id: OrderDirection
+  uid: OrderDirection
   """
   ✨ Generated from Field `User`.`bio` of type `String`
   """
@@ -5931,10 +7202,6 @@ input User_Order {
   """
   email_count: OrderDirection
   """
-  ✨ Generated from Field `User`.`id_count` of type `Int!`
-  """
-  id_count: OrderDirection
-  """
   ✨ Generated from Field `User`.`passwordHash_count` of type `Int!`
   """
   passwordHash_count: OrderDirection
@@ -5946,6 +7213,10 @@ input User_Order {
   ✨ Generated from Field `User`.`publicProfile_count` of type `Int!`
   """
   publicProfile_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`uid_count` of type `Int!`
+  """
+  uid_count: OrderDirection
   """
   ✨ Generated from Field `User`.`username_count` of type `Int!`
   """

@@ -10,5 +10,14 @@
   },
   "dataconnect": {
     "source": "dataconnect"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "ESG GO",
+        "supportEmail": "dingjunhong1028@gmail.com"
+      }
+    }
   }
 }

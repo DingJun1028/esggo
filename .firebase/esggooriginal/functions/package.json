@@ -7,13 +7,14 @@
   },
   "dependencies": {
     "@apollo/client": "^4.2.0",
+    "@dataconnect/generated": "file:dataconnect-generated-1.0.0.tgz",
     "@genkit-ai/google-genai": "^1.35.0",
     "@genkit-ai/googleai": "^1.28.0",
     "@google/adk": "^1.1.0",
     "@google/generative-ai": "0.21.0",
     "@graphql-tools/schema": "^10.0.33",
     "@next/swc-wasm-nodejs": "15.5.18",
-    "@prisma/client": "^7.8.0",
+    "@prisma/client": "^5.22.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
     "@types/uuid": "^10.0.0",
@@ -22,6 +23,7 @@
     "clsx": "2.1.1",
     "date-fns": "3.6.0",
     "firebase": "^12.13.0",
+    "firebase-admin": "^13.10.0",
     "framer-motion": "11.15.0",
     "genkit": "^1.35.0",
     "graphql": "^16.14.0",
@@ -38,8 +40,7 @@
     "zod": "^4.4.3",
     "zustand": "4.5.5",
     "firebase-frameworks": "^0.11.0",
-    "firebase-functions": "^6.0.1",
-    "firebase-admin": "^11.11.1"
+    "firebase-functions": "^6.0.1"
   },
   "overrides": {
     "react": "19.0.0",

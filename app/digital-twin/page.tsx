@@ -1,16 +1,25 @@
 'use client';
-import { useState, useRef } from 'react';
-import { Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, ChevronDown, ChevronUp, Upload, FileText, CheckCircle, RefreshCw, Shield, AlertCircle } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, BrandProgress, BrandScoreRing, BrandPageHeader, BrandCardHeader
+  Brain, Book, Dna, MessageSquare, Lock, Zap, Plus, Send, 
+  ChevronDown, ChevronUp, Upload, FileText, CheckCircle, 
+  RefreshCw, Shield, AlertCircle, Info 
+} from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTabs, BrandStatusDot, 
+  BrandProgress, BrandScoreRing, BrandPageHeader, BrandCardHeader
 } from '../../components/brand';
 import { addToKnowledgeBase, KNOWLEDGE_BASE } from '../../lib/agent/rag-engine';
 import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
 import ProvenanceDrawer, { ProvenanceStep } from '../../components/ui/ProvenanceDrawer';
+import { ScenarioVisualizer } from '../../components/ui/ScenarioVisualizer';
+import { digitalTwinEngine, ProjectionResult } from '../../lib/digital-twin-engine';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const tabs = [
   { id: 'overview', label: '狀態總覽', icon: <Brain size={14} /> },
   { id: 'knowledge', label: '知識倉庫', icon: <Book size={14} /> },
+  { id: 'simulation', label: '模擬實驗室', icon: <Zap size={14} /> },
   { id: 'dna', label: '道德 DNA', icon: <Dna size={14} /> },
   { id: 'chat', label: '智慧對話', icon: <MessageSquare size={14} /> },
   { id: 'ledger', label: '主權帳本', icon: <Lock size={14} /> },
@@ -51,6 +60,14 @@ export default function DigitalTwinPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [knowledge, setKnowledge] = useState(KNOWLEDGE_BASE);
+
+  // Simulation State
+  const [simulationResult, setSimulationResult] = useState<ProjectionResult | null>(null);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [modifiers, setModifiers] = useState({
+    carbonEmissions: -0.15,
+    energyUsage: -0.10
+  });
 
   const kbCategories: SelectionCategory[] = [
     {
@@ -118,6 +135,37 @@ export default function DigitalTwinPage() {
     setKnowledge([...KNOWLEDGE_BASE]);
     setUploading(false);
     setExtractionProgress(0);
+  };
+
+  const runSimulation = async () => {
+    setIsSimulating(true);
+    await new Promise(r => setTimeout(r, 1500)); // AI calculation feel
+
+    const baseline = {
+      carbonEmissions: 1250,
+      energyUsage: 50000,
+      waterUsage: 800,
+      wasteGenerated: 120
+    };
+
+    const scenario = {
+      id: 'pivot-2026',
+      name: '綠能轉型計畫',
+      modifiers: [
+        { targetField: 'carbonEmissions' as const, valueChange: modifiers.carbonEmissions },
+        { targetField: 'energyUsage' as const, valueChange: modifiers.energyUsage },
+      ]
+    };
+
+    const result = await digitalTwinEngine.simulate(scenario, baseline);
+    setSimulationResult(result);
+    setIsSimulating(false);
+    
+    // Auto-update message
+    setMessages(prev => [...prev, { 
+      role: 'assistant', 
+      content: `已完成「${scenario.name}」模擬。預計碳排放將減少 ${Math.abs(modifiers.carbonEmissions * 100)}%，法規符合度評分提升至 ${result.complianceProjections.carbonEmissions.score}%。` 
+    }]);
   };
 
   return (
@@ -278,6 +326,78 @@ export default function DigitalTwinPage() {
         </div>
       )}
 
+      {activeTab === 'simulation' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 fade-in">
+           <div className="lg:col-span-4 space-y-4 sm:space-y-6">
+              <BrandCard padding="md sm:padding-lg">
+                 <BrandCardHeader title="決策模擬因子" subtitle="Adjust Scenario Modifiers" />
+                 <div className="space-y-6 sm:space-y-8 mt-6 sm:mt-8">
+                    <div className="space-y-3 sm:space-y-4">
+                       <div className="flex justify-between">
+                          <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase">再生能源比例</span>
+                          <span className="text-xs font-black text-blue-700">{Math.abs(modifiers.carbonEmissions * 100)}%</span>
+                       </div>
+                       <input 
+                         type="range" min="-100" max="0" value={modifiers.carbonEmissions * 100} 
+                         onChange={e => setModifiers({...modifiers, carbonEmissions: parseInt(e.target.value) / 100})}
+                         className="w-full h-1.5 sm:h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-700"
+                       />
+                    </div>
+                    <div className="space-y-3 sm:space-y-4">
+                       <div className="flex justify-between">
+                          <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase">節能設備投資</span>
+                          <span className="text-xs font-black text-blue-700">{Math.abs(modifiers.energyUsage * 100)}%</span>
+                       </div>
+                       <input 
+                         type="range" min="-100" max="0" value={modifiers.energyUsage * 100} 
+                         onChange={e => setModifiers({...modifiers, energyUsage: parseInt(e.target.value) / 100})}
+                         className="w-full h-1.5 sm:h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-700"
+                       />
+                    </div>
+                    <BrandButton variant="primary" fullWidth size="lg" onClick={runSimulation} loading={isSimulating} className="h-14 sm:h-16">
+                       <Zap size={18} className="mr-2" /> 執行數位分身演算
+                    </BrandButton>
+                 </div>
+              </BrandCard>
+              
+              <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100 flex items-start gap-3">
+                 <Info size={16} className="text-blue-500 shrink-0 mt-0.5" />
+                 <p className="text-[10px] text-blue-700 leading-relaxed font-medium">
+                    模擬引擎將根據「證據金庫」中的 5T 歷史基準數據進行外推演算法。
+                 </p>
+              </div>
+           </div>
+
+           <div className="lg:col-span-8">
+              {!simulationResult && !isSimulating ? (
+                <div className="h-full min-h-[300px] border-2 border-dashed border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center justify-center bg-slate-50/30 text-slate-400 p-8 sm:p-12 text-center">
+                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl bg-white shadow-sm flex items-center justify-center mb-4"><Brain size={28} className="opacity-20 sm:w-8 sm:h-8" /></div>
+                   <p className="text-xs sm:text-sm font-bold uppercase tracking-widest">等待演算指令...</p>
+                   <p className="text-[10px] sm:text-xs mt-2 max-w-xs">調整左側參數並啟動數位分身，即可預覽決策對 5T 指標的長期衝擊。</p>
+                </div>
+              ) : isSimulating ? (
+                <div className="h-full min-h-[300px] border-2 border-slate-100 rounded-[2rem] sm:rounded-[2.5rem] flex flex-col items-center justify-center bg-white p-8 sm:p-12 text-center">
+                   <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-blue-700 border-t-transparent animate-spin mb-6" />
+                   <h3 className="text-base sm:text-lg font-black text-berkeley-blue uppercase tracking-widest">AI 智慧模擬中</h3>
+                   <p className="text-[10px] sm:text-xs text-slate-400 mt-2">正在計算 5T 數據外推與法規符合度...</p>
+                </div>
+              ) : (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+                   {simulationResult && <ScenarioVisualizer result={simulationResult} />}
+                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                      <BrandButton variant="ghost" fullWidth className="rounded-2xl border-slate-200 h-12 sm:h-14">
+                         保存為策略草稿
+                      </BrandButton>
+                      <BrandButton variant="secondary" fullWidth className="rounded-2xl h-12 sm:h-14" onClick={() => setActiveTab('chat')}>
+                         詢問 AI 建議
+                      </BrandButton>
+                   </div>
+                </motion.div>
+              )}
+           </div>
+        </div>
+      )}
+
       {activeTab === 'dna' && (
         <BrandCard padding="lg">
            <BrandCardHeader 
@@ -308,7 +428,7 @@ export default function DigitalTwinPage() {
                  <h3 className="font-bold mb-2">人格特質摘要 (Identity Brief)</h3>
                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-xl">
                     當前數位分身傾向於 <strong>高誠信、中等果斷</strong> 的治理風格。在面對碳揭露爭議時，
-                    分身將優先選擇透明化揭露（Integrity 90%）而非規避風險，並會主動尋求 5T 實證鏈結。
+                    分身將優先選擇透明化揭露（Integrity 90%）而非規備風險，並會主動尋求 5T 實證鏈結。
                  </p>
               </div>
            </div>

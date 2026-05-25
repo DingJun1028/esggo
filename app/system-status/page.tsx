@@ -1,127 +1,184 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Activity, Shield, Database, Cpu, Globe, CheckCircle, RefreshCw, Zap, Server, Lock, HardDrive, Wifi } from 'lucide-react';
+import { 
+  Activity, Shield, Database, Cpu, Globe, CheckCircle, 
+  RefreshCw, Zap, Server, Lock, HardDrive, Wifi, 
+  CloudLightning, AlertTriangle, Terminal, Info
+} from 'lucide-react';
+import { BrandCard, BrandBadge, BrandButton } from '../../components/brand';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const SERVICES = [
   { id: 'db', name: 'Supabase PostgreSQL', category: 'Storage', icon: Database, provider: 'PostgreSQL 15', status: 'online' },
   { id: 'ai', name: 'Google Gemini 2.0', category: 'Intelligence', icon: Cpu, provider: 'Flash-Exp', status: 'online' },
+  { id: 'bluecc', name: 'BlueCC Control Plane', category: 'Cloud', icon: CloudLightning, provider: 'Hybrid Kubernetes', status: 'online' },
   { id: 'zkp', name: 'ZKP Engine', category: 'Security', icon: Lock, provider: 'WebCrypto Native', status: 'online' },
   { id: 'audit', name: '5T Audit Logger', category: 'Compliance', icon: Activity, provider: 'Edge Functions', status: 'online' },
-  { id: 'vault', name: 'Evidence Vault', category: 'Storage', icon: HardDrive, provider: 'Supabase Storage', status: 'online' },
-  { id: 'realtime', name: 'Realtime Sync', category: 'Network', icon: Wifi, provider: 'Supabase Realtime', status: 'online' },
-];
-
-const LOGS = [
-  { time: '14:32:18', level: 'INFO', msg: '5T_GATE: New evidence sealed. UUID: a3f7...', color: '#22c55e' },
-  { time: '14:31:55', level: 'INFO', msg: 'ZKP_ENGINE: Proof generated for GRI 305-1.', color: '#3b7ea1' },
-  { time: '14:31:22', level: 'WARN', msg: 'RATE_LIMIT: High API call frequency detected.', color: '#f59e0b' },
-  { time: '14:30:40', level: 'INFO', msg: 'AUTH_SERVICE: User session extended.', color: '#22c55e' },
-  { time: '14:30:01', level: 'INFO', msg: 'GEMINI_API: GRI chapter draft generated.', color: '#3b7ea1' },
 ];
 
 export default function SystemStatusPage() {
-  const [latency, setLatency] = useState(28);
-  const [refreshing, setRefreshing] = useState(false);
-  const [tps, setTps] = useState([40, 60, 35, 80, 45, 90, 55, 70, 30, 85, 50, 95, 60, 40]);
+  const [status, setStatus] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [logs, setLogs] = useState([
+    { time: new Date().toLocaleTimeString(), level: 'INFO', msg: '系統初始化完成。', color: '#22c55e' },
+    { time: new Date().toLocaleTimeString(), level: 'INFO', msg: 'BlueCC 叢集連線穩定。', color: '#3b7ea1' },
+  ]);
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setLatency(Math.floor(Math.random() * 30) + 15);
-      setTps(Array.from({ length: 14 }, () => Math.floor(Math.random() * 70) + 25));
-      setRefreshing(false);
-    }, 1500);
+  const fetchStatus = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/blue');
+      const data = await res.json();
+      if (data.ok) {
+        setStatus(data.status);
+        setLogs(prev => [
+          { time: new Date().toLocaleTimeString(), level: 'INFO', msg: 'Telemetry data synced with BlueCC.', color: '#22c55e' },
+          ...prev.slice(0, 8)
+        ]);
+      }
+    } catch (e) {
+      console.error('Failed to fetch status:', e);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
-        <div>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#003262', margin: 0 }}>系統狀態 System Status</h1>
-          <p style={{ color: '#64748b', marginTop: '4px', fontSize: '14px' }}>即時監控 · 5T 協議健康度 · API 延遲診斷</p>
+    <div className="p-8 max-w-7xl mx-auto space-y-8">
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-black text-berkeley-blue tracking-tight uppercase">系統狀態 System Status</h1>
+          <p className="text-slate-500 text-sm font-medium">即時監控 · 5T 協議健康度 · BlueCC 混合雲實時電傳</p>
         </div>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: '#003262', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}
+        <BrandButton 
+          variant="primary" 
+          size="sm" 
+          onClick={fetchStatus} 
+          loading={loading}
+          className="rounded-xl shadow-lg"
         >
-          <RefreshCw size={14} style={{ animation: refreshing ? 'spin 1s linear infinite' : 'none' }} />
-          刷新狀態
-        </button>
+          <RefreshCw size={14} className="mr-2" />
+          重新掃描
+        </BrandButton>
       </div>
 
-      {/* KPI Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
-        {[
-          { label: '平均延遲', value: `${latency}ms`, color: '#22c55e', icon: Zap },
-          { label: '系統可用率', value: '99.98%', color: '#003262', icon: Globe },
-          { label: '數據完整性', value: '100%', color: '#8b5cf6', icon: Shield },
-          { label: '已刻印聖璽', value: '1,247', color: '#f59e0b', icon: HardDrive },
-        ].map((s, i) => (
-          <div key={i} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600' }}>{s.label}</span>
-              <s.icon size={16} color={s.color} />
-            </div>
-            <div style={{ fontSize: '28px', fontWeight: '800', color: s.color }}>{s.value}</div>
+      {/* BlueCC Real-time Cluster Telemetry */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <BrandCard className="lg:col-span-2 overflow-hidden border-berkeley-blue/10 bg-gradient-to-br from-white to-blue-50/30">
+          <div className="flex justify-between items-center mb-6">
+             <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-berkeley-blue text-white flex items-center justify-center">
+                   <CloudLightning size={20} />
+                </div>
+                <div>
+                   <h3 className="text-sm font-black text-berkeley-blue uppercase tracking-widest">BlueCC Cluster Telemetry</h3>
+                   <p className="text-[10px] text-slate-400 font-bold uppercase">Region: {status?.region || 'asia-east1'} • {status?.cluster_id}</p>
+                </div>
+             </div>
+             <BrandBadge variant="success" dot>ONLINE</BrandBadge>
           </div>
+
+          <div className="grid grid-cols-3 gap-8">
+             <div className="space-y-4">
+                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase">
+                   <span>CPU Load</span>
+                   <span>{status?.load?.cpu || 0}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                   <motion.div initial={{ width: 0 }} animate={{ width: `${status?.load?.cpu || 0}%` }} className="h-full bg-blue-500" />
+                </div>
+             </div>
+             <div className="space-y-4">
+                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase">
+                   <span>GPU (H100)</span>
+                   <span>{status?.load?.gpu || 0}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                   <motion.div initial={{ width: 0 }} animate={{ width: `${status?.load?.gpu || 0}%` }} className="h-full bg-indigo-500" />
+                </div>
+             </div>
+             <div className="space-y-4">
+                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase">
+                   <span>Memory</span>
+                   <span>{status?.load?.memory || 0}%</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                   <motion.div initial={{ width: 0 }} animate={{ width: `${status?.load?.memory || 0}%` }} className="h-full bg-violet-500" />
+                </div>
+             </div>
+          </div>
+
+          <div className="mt-8 p-4 bg-white/60 rounded-xl border border-blue-100 flex items-center justify-between">
+             <div className="flex items-center gap-4">
+                <div className="text-center px-4 border-r border-slate-100">
+                   <p className="text-[9px] font-black text-slate-400 uppercase">Active Nodes</p>
+                   <p className="text-xl font-black text-berkeley-blue">{status?.active_nodes || 0}</p>
+                </div>
+                <div className="text-center px-4">
+                   <p className="text-[9px] font-black text-slate-400 uppercase">Network Latency</p>
+                   <p className="text-xl font-black text-emerald-600">{status?.latency_ms || 0}ms</p>
+                </div>
+             </div>
+             <div className="flex items-center gap-2 text-[10px] font-bold text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg">
+                <Zap size={12} />
+                {status?.mode || 'AUTO_OPTIMIZING'}
+             </div>
+          </div>
+        </BrandCard>
+
+        <BrandCard className="bg-slate-900 border-none shadow-2xl text-slate-300">
+           <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
+              <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                 <Terminal size={14} /> System Audit Logs
+              </h4>
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+           </div>
+           <div className="space-y-3 font-mono text-[10px] max-h-[280px] overflow-y-auto no-scrollbar">
+              {logs.map((l, i) => (
+                <div key={i} className="flex gap-3 pb-2 border-b border-slate-800/50 last:border-0">
+                  <span className="text-slate-600">[{l.time}]</span>
+                  <span style={{ color: l.color }}>[{l.level}]</span>
+                  <span className="text-slate-400">{l.msg}</span>
+                </div>
+              ))}
+           </div>
+        </BrandCard>
+      </section>
+
+      {/* Services Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {SERVICES.map(s => (
+          <BrandCard key={s.id} padding="sm" className="flex items-center gap-4 hover:border-blue-200 transition-all">
+            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-berkeley-blue border border-slate-100">
+              <s.icon size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-black text-berkeley-blue truncate">{s.name}</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Healthy</span>
+              </div>
+            </div>
+          </BrandCard>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-        {/* Services */}
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-          <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Server size={18} /> 服務節點狀態
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {SERVICES.map(s => (
-              <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>
-                  <s.icon size={18} color="#003262" />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b' }}>{s.name}</div>
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>{s.category} · {s.provider}</div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: '600', color: '#22c55e' }}>
-                  <CheckCircle size={14} />
-                  正常
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* TPS Chart + Logs */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px' }}>
-            <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#003262', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Activity size={18} /> 實時資料流量 (TPS)
-            </h3>
-            <div style={{ height: '120px', display: 'flex', alignItems: 'flex-end', gap: '4px', paddingBottom: '8px' }}>
-              {tps.map((h, i) => (
-                <div key={i} style={{ flex: 1, height: `${h}%`, background: 'linear-gradient(to top, #003262, #3b7ea1)', borderRadius: '2px 2px 0 0', opacity: 0.6 + (h / 200) }} />
-              ))}
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#94a3b8', fontFamily: 'monospace' }}>
-              <span>60s ago</span><span>30s ago</span><span>Now</span>
-            </div>
-          </div>
-
-          <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px', flex: 1 }}>
-            <h4 style={{ color: '#94a3b8', fontSize: '11px', fontWeight: '700', marginBottom: '12px', letterSpacing: '0.1em' }}>系統日誌</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {LOGS.map((l, i) => (
-                <div key={i} style={{ fontFamily: 'monospace', fontSize: '11px', borderBottom: '1px solid #1e293b', paddingBottom: '6px', color: '#94a3b8' }}>
-                  <span style={{ color: '#475569' }}>[{l.time}] </span>
-                  <span style={{ color: l.color }}>[{l.level}] </span>
-                  <span>{l.msg}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      <div className="p-6 bg-amber-50/50 rounded-[2rem] border border-amber-100 flex items-start gap-4">
+         <div className="w-12 h-12 rounded-2xl bg-amber-500 flex items-center justify-center text-white shrink-0 shadow-lg">
+            <AlertTriangle size={24} />
+         </div>
+         <div className="space-y-1">
+            <h3 className="text-sm font-black text-amber-800 uppercase tracking-widest">Auto-Degradation Alert</h3>
+            <p className="text-xs text-amber-700 leading-relaxed font-medium">
+               當 BlueCC 延遲超過 <span className="font-black">200ms</span> 時，系統將自動切換為本地 Edge 運算模式以確保業務連續性。當前狀態：<span className="text-emerald-700 font-black">雲端最佳化運作中</span>。
+            </p>
+         </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { ListAllTasksData, GetTaskByIdData, GetTaskByIdVariables, UpsertTaskData, UpsertTaskVariables, ListAuditRecordsData, ListScrapedArticlesData, ListRoadmapMilestonesData, UpsertRoadmapMilestoneData, UpsertRoadmapMilestoneVariables, GetCompanyProfileData, GetCompanyProfileVariables, UpsertCompanyProfileData, UpsertCompanyProfileVariables, GetReportByIdData, GetReportByIdVariables, UpsertReportData, UpsertReportVariables, ListReportsData, ListCompanyMetricsByCategoryData, ListCompanyMetricsByCategoryVariables, UpsertCompanyMetricData, UpsertCompanyMetricVariables, UpsertScrapedArticleData, UpsertScrapedArticleVariables, CreateDemoDataData } from '../';
+import { ListAllTasksData, GetTaskByIdData, GetTaskByIdVariables, UpsertTaskData, UpsertTaskVariables, ListAuditRecordsData, ListScrapedArticlesData, ListRoadmapMilestonesData, UpsertRoadmapMilestoneData, UpsertRoadmapMilestoneVariables, GetCompanyProfileData, GetCompanyProfileVariables, UpsertCompanyProfileData, UpsertCompanyProfileVariables, GetReportByIdData, GetReportByIdVariables, UpsertReportData, UpsertReportVariables, ListReportsData, ListCompanyMetricsByCategoryData, ListCompanyMetricsByCategoryVariables, UpsertCompanyMetricData, UpsertCompanyMetricVariables, UpsertScrapedArticleData, UpsertScrapedArticleVariables, ListEternalMemoriesData, UpsertEternalMemoryData, UpsertEternalMemoryVariables, ListSwarmAgentTasksData, UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables, ListRegulatoryPoliciesData, CreateDemoDataData } from '../';
 import { UseDataConnectQueryResult, useDataConnectQueryOptions, UseDataConnectMutationResult, useDataConnectMutationOptions} from '@tanstack-query-firebase/react/data-connect';
 import { UseQueryResult, UseMutationResult} from '@tanstack/react-query';
 import { DataConnect } from 'firebase/data-connect';
@@ -49,6 +49,21 @@ export function useUpsertCompanyMetric(dc: DataConnect, options?: useDataConnect
 
 export function useUpsertScrapedArticle(options?: useDataConnectMutationOptions<UpsertScrapedArticleData, FirebaseError, UpsertScrapedArticleVariables>): UseDataConnectMutationResult<UpsertScrapedArticleData, UpsertScrapedArticleVariables>;
 export function useUpsertScrapedArticle(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertScrapedArticleData, FirebaseError, UpsertScrapedArticleVariables>): UseDataConnectMutationResult<UpsertScrapedArticleData, UpsertScrapedArticleVariables>;
+
+export function useListEternalMemories(options?: useDataConnectQueryOptions<ListEternalMemoriesData>): UseDataConnectQueryResult<ListEternalMemoriesData, undefined>;
+export function useListEternalMemories(dc: DataConnect, options?: useDataConnectQueryOptions<ListEternalMemoriesData>): UseDataConnectQueryResult<ListEternalMemoriesData, undefined>;
+
+export function useUpsertEternalMemory(options?: useDataConnectMutationOptions<UpsertEternalMemoryData, FirebaseError, UpsertEternalMemoryVariables>): UseDataConnectMutationResult<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+export function useUpsertEternalMemory(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertEternalMemoryData, FirebaseError, UpsertEternalMemoryVariables>): UseDataConnectMutationResult<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+
+export function useListSwarmAgentTasks(options?: useDataConnectQueryOptions<ListSwarmAgentTasksData>): UseDataConnectQueryResult<ListSwarmAgentTasksData, undefined>;
+export function useListSwarmAgentTasks(dc: DataConnect, options?: useDataConnectQueryOptions<ListSwarmAgentTasksData>): UseDataConnectQueryResult<ListSwarmAgentTasksData, undefined>;
+
+export function useUpsertSwarmAgentTask(options?: useDataConnectMutationOptions<UpsertSwarmAgentTaskData, FirebaseError, UpsertSwarmAgentTaskVariables>): UseDataConnectMutationResult<UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables>;
+export function useUpsertSwarmAgentTask(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertSwarmAgentTaskData, FirebaseError, UpsertSwarmAgentTaskVariables>): UseDataConnectMutationResult<UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables>;
+
+export function useListRegulatoryPolicies(options?: useDataConnectQueryOptions<ListRegulatoryPoliciesData>): UseDataConnectQueryResult<ListRegulatoryPoliciesData, undefined>;
+export function useListRegulatoryPolicies(dc: DataConnect, options?: useDataConnectQueryOptions<ListRegulatoryPoliciesData>): UseDataConnectQueryResult<ListRegulatoryPoliciesData, undefined>;
 
 export function useCreateDemoData(options?: useDataConnectMutationOptions<CreateDemoDataData, FirebaseError, void>): UseDataConnectMutationResult<CreateDemoDataData, undefined>;
 export function useCreateDemoData(dc: DataConnect, options?: useDataConnectMutationOptions<CreateDemoDataData, FirebaseError, void>): UseDataConnectMutationResult<CreateDemoDataData, undefined>;

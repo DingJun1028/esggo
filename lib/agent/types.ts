@@ -97,6 +97,8 @@ export interface AgentArtifact {
   sourceRefIds: string[];
   reviewStatus: ReviewStatus;
   version: number;
+  confidence?: number;
+  gaps?: string[];
   reviewNote?: string;
   reviewedBy?: string;
   reviewedAt?: string;

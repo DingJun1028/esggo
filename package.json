@@ -58,6 +58,7 @@
     "@types/react-dom": "18.2.18",
     "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "10.4.17",
+    "axios": "^1.16.1",
     "commander": "^14.0.3",
     "dotenv": "^17.4.2",
     "firebase-tools": "^15.18.0",

@@ -10,19 +10,80 @@ import {
   upsertRoadmapMilestone,
   getCompanyProfile,
   upsertCompanyProfile,
+  listEternalMemories,
+  upsertEternalMemory,
+  listSwarmAgentTasks,
+  upsertSwarmAgentTask,
+  listRegulatoryPolicies,
   ListReportsData,
   GetReportByIdData,
   ListScrapedArticlesData,
   ListAuditRecordsData,
   ListAllTasksData,
   ListRoadmapMilestonesData,
-  GetCompanyProfileData
+  GetCompanyProfileData,
+  ListEternalMemoriesData,
+  ListSwarmAgentTasksData,
+  ListRegulatoryPoliciesData
 } from '@dataconnect/generated';
 
 /**
  * Data Connect Service Layer
  * This module provides type-safe access to the PostgreSQL backend via GraphQL.
  */
+
+// --- Eternal Memory ---
+export const dcListEternalMemories = async (): Promise<ListEternalMemoriesData['eternalMemories']> => {
+  try {
+    const response = await listEternalMemories(dataConnect);
+    return response.data.eternalMemories;
+  } catch (error) {
+    console.error('Data Connect: Failed to list eternal memories', error);
+    return [];
+  }
+};
+
+export const dcUpsertEternalMemory = async (input: any) => {
+  try {
+    const response = await upsertEternalMemory(dataConnect, input);
+    return response.data.eternalMemory_upsert;
+  } catch (error) {
+    console.error('Data Connect: Failed to upsert eternal memory', error);
+    throw error;
+  }
+};
+
+// --- Swarm Agent Tasks ---
+export const dcListSwarmAgentTasks = async (): Promise<ListSwarmAgentTasksData['swarmAgentTasks']> => {
+  try {
+    const response = await listSwarmAgentTasks(dataConnect);
+    return response.data.swarmAgentTasks;
+  } catch (error) {
+    console.error('Data Connect: Failed to list swarm agent tasks', error);
+    return [];
+  }
+};
+
+export const dcUpsertSwarmAgentTask = async (input: any) => {
+  try {
+    const response = await upsertSwarmAgentTask(dataConnect, input);
+    return response.data.swarmAgentTask_upsert;
+  } catch (error) {
+    console.error('Data Connect: Failed to upsert swarm agent task', error);
+    throw error;
+  }
+};
+
+// --- Regulatory Policies ---
+export const dcListRegulatoryPolicies = async (): Promise<ListRegulatoryPoliciesData['regulatoryPolicies']> => {
+  try {
+    const response = await listRegulatoryPolicies(dataConnect);
+    return response.data.regulatoryPolicies;
+  } catch (error) {
+    console.error('Data Connect: Failed to list regulatory policies', error);
+    return [];
+  }
+};
 
 // --- Reports ---
 export const dcGetReports = async (): Promise<ListReportsData['reports']> => {

@@ -24,13 +24,22 @@ export class BlueCCClient {
 
   async getSystemStatus() {
     console.log('[BlueCC] Fetching global agent cluster status...');
-    // Simulated cloud control plane response
+    // Simulated cloud control plane response with enhanced telemetry
     return {
-      cluster_id: 'blue-cluster-01',
+      cluster_id: 'blue-cluster-omni-production',
       region: 'asia-east1',
-      active_instances: 12,
+      active_nodes: 3,
+      total_instances: 12,
       healthy: true,
+      load: {
+        cpu: 34.2,
+        gpu: 42.8, // H100 Load
+        memory: 68.1
+      },
+      latency_ms: 48,
       last_sync: new Date().toISOString(),
+      provider_status: 'operational',
+      mode: 'CLOUD_OPTIMIZED'
     };
   }
 

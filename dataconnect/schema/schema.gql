@@ -1,4 +1,5 @@
-type User @table {
+type User @table(key: ["uid"]) {
+  uid: String! # Firebase Auth UID
   username: String!
   email: String!
   passwordHash: String!
@@ -53,6 +54,7 @@ type SocialConnection @table(key: ["follower", "followed"]) {
 
 type Task @table {
   id: UUID! @default(expr: "uuidV4()")
+  user: User! # Added for security
   title: String!
   description: String
   completed: Boolean!
@@ -68,6 +70,7 @@ type Task @table {
 
 type RoadmapMilestone @table {
   id: UUID! @default(expr: "uuidV4()")
+  user: User! # Added for security
   title: String!
   targetYear: Int!
   category: String!
@@ -85,6 +88,7 @@ type Comment @table {
 
 type AuditRecord @table {
   id: UUID! @default(expr: "uuidV4()")
+  user: User! # Added for security
   title: String!
   dataType: String!
   source: String!
@@ -136,6 +140,7 @@ type CompanyProfile @table {
 
 type Report @table {
   id: UUID! @default(expr: "uuidV4()")
+  user: User! # Added for security
   company: CompanyProfile!
   templateId: String!
   title: String!
@@ -158,6 +163,7 @@ type ReportSection @table {
 
 type CompanyMetric @table {
   id: UUID! @default(expr: "uuidV4()")
+  user: User! # Added for security
   company: CompanyProfile!
   metricName: String!
   metricValue: Float
@@ -179,4 +185,40 @@ type ScrapedArticle @table {
   tags: String
   impactLevel: String!
   scrapedAt: Timestamp! @default(expr: "request.time")
+}
+
+# --- Phase 13: Universal Data Layers ---
+
+type EternalMemory @table {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  type: String! # EPISODIC, SEMANTIC, etc.
+  content: String!
+  tags: String # Comma separated or JSON string
+  hashLock: String!
+  consolidated: Boolean! @default(value: false)
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type SwarmAgentTask @table {
+  id: UUID! @default(expr: "uuidV4()")
+  user: User!
+  title: String!
+  taskType: String!
+  status: String! # pending, approved, executing, completed, failed
+  agentId: String # agt-z0, etc.
+  progress: Int! @default(value: 0)
+  skillKey: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+type RegulatoryPolicy @table {
+  id: String! @default(expr: "uuidV4()")
+  standard: String! # CSRD, GRI, etc.
+  code: String! # ESRS E1-1
+  name: String!
+  description: String
+  rulesJson: String! # JSON array of rules
+  isGlobal: Boolean! @default(value: true)
 }

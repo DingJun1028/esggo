@@ -24,7 +24,7 @@ __export(next_config_exports, {
 module.exports = __toCommonJS(next_config_exports);
 var nextConfig = {
   typescript: { ignoreBuildErrors: true },
-  serverExternalPackages: ["sharp"],
+  serverExternalPackages: ["sharp", "firebase-admin"],
   images: {
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }]
   }

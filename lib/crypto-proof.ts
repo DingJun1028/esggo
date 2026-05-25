@@ -46,49 +46,84 @@ export interface HashChainBlock {
   nonce: number;
 }
 
-// ── Real SHA-256 via Web Crypto API ─────────────────────────────
+import * as cryptoNode from 'crypto';
+
+// ── Real SHA-256 via Web Crypto API with Node.js Fallback ───────
 export async function sha256(message: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  // Use Node.js crypto if in Node environment (preferred for stability in tests)
+  if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+    return cryptoNode.createHash('sha256').update(message).digest('hex');
+  }
+
+  if (typeof window !== 'undefined' && window.crypto?.subtle) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  
+  return ''; // Fallback for unsupported environments
 }
 
 // ── SHA-512 for higher security contexts ────────────────────────
 export async function sha512(message: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-512', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+    return cryptoNode.createHash('sha512').update(message).digest('hex');
+  }
+
+  if (typeof window !== 'undefined' && window.crypto?.subtle) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-512', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  
+  return '';
 }
 
 // ── HMAC-SHA256 (message authentication) ────────────────────────
 export async function hmacSHA256(key: string, message: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const keyData = encoder.encode(key);
-  const messageData = encoder.encode(message);
+  if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+    return cryptoNode.createHmac('sha256', key).update(message).digest('hex');
+  }
 
-  const cryptoKey = await crypto.subtle.importKey(
-    'raw',
-    keyData,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
+  if (typeof window !== 'undefined' && window.crypto?.subtle) {
+    const encoder = new TextEncoder();
+    const keyData = encoder.encode(key);
+    const messageData = encoder.encode(message);
 
-  const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
-  return Array.from(new Uint8Array(signature))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+    const cryptoKey = await window.crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    const signature = await window.crypto.subtle.sign('HMAC', cryptoKey, messageData);
+    return Array.from(new Uint8Array(signature))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+  
+  return '';
 }
 
 // ── Generate cryptographically secure random nonce ───────────────
 export function generateNonce(bytes = 16): string {
-  const array = new Uint8Array(bytes);
-  crypto.getRandomValues(array);
-  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+  if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+    return cryptoNode.randomBytes(bytes).toString('hex');
+  }
+
+  if (typeof window !== 'undefined' && window.crypto) {
+    const array = new Uint8Array(bytes);
+    window.crypto.getRandomValues(array);
+    return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  
+  return Math.random().toString(36).substring(2); // Last resort insecure fallback
 }
 
 // ── T4 Trustworthy: Hash Lock ────────────────────────────────────
@@ -127,10 +162,11 @@ export async function verifyHashLock(
 // Verifier checks: H(commitment || timestamp) == proofSignature
 export async function createZKPCommitment(
   secretValue: string | number,
-  domainLabel = 'ESG_DATA'
+  domainLabel = 'ESG_DATA',
+  providedBlindingFactor?: string
 ): Promise<ZKPCommitment> {
   const timestamp = new Date().toISOString();
-  const blindingFactor = generateNonce(32); // 256-bit blinding factor
+  const blindingFactor = providedBlindingFactor || generateNonce(32); // Use provided or generate new
   const valueStr = String(secretValue);
 
   // Public hash — reveals category/range without exact value
@@ -257,9 +293,10 @@ export interface ZKPRangeProof {
 export async function generateRangeProof(
   secretValue: number,
   min: number,
-  max: number
+  max: number,
+  providedBlindingFactor?: string
 ): Promise<ZKPRangeProof> {
-  const commitment = await createZKPCommitment(secretValue);
+  const commitment = await createZKPCommitment(secretValue, 'ESG_DATA', providedBlindingFactor);
   const inRange = secretValue >= min && secretValue <= max;
   
   // Bind the range claim to the commitment via HMAC
@@ -291,9 +328,10 @@ export async function verifyRangeProof(
 export async function generateSelectiveDisclosure(
   metricValue: number | string,
   criteria: (val: any) => boolean,
-  claimText: string
+  claimText: string,
+  providedBlindingFactor?: string
 ): Promise<SelectiveDisclosureProof> {
-  const commitment = await createZKPCommitment(metricValue);
+  const commitment = await createZKPCommitment(metricValue, 'ESG_DATA', providedBlindingFactor);
   const isTruth = criteria(metricValue);
   
   // In a real ZKP, this would be a zk-SNARK proof. 

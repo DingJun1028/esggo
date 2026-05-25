@@ -314,6 +314,8 @@ export function generateMockArtifact(task: AgentTask, execution: AgentExecution)
     sourceRefIds: task.inputRefIds,
     reviewStatus: 'awaiting_review',
     version: 1,
+    confidence: 0.92,
+    gaps: task.taskType === 'compliance_review' ? ['GRI 305-3 未揭露', 'TCFD 情境分析缺失'] : [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

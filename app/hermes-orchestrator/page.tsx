@@ -393,11 +393,38 @@ export default function HermesOrchestratorPage() {
              
              {selected.artifact && (
                <div className="space-y-4">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">產出草稿 (v{selected.artifact.version})</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">產出草稿 (v{selected.artifact.version})</p>
+                    {selected.artifact.confidence && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold text-slate-400">AI 信心度:</span>
+                        <BrandBadge variant={selected.artifact.confidence > 0.9 ? 'success' : selected.artifact.confidence > 0.7 ? 'warning' : 'error'} size="xs">
+                          {Math.round(selected.artifact.confidence * 100)}%
+                        </BrandBadge>
+                      </div>
+                    )}
+                  </div>
+
                   <div className="p-4 bg-white border border-slate-200 rounded-2xl text-xs text-slate-600 leading-relaxed font-mono max-h-64 overflow-y-auto">
                      {selected.artifact.content}
                   </div>
                   
+                  {selected.artifact.gaps && selected.artifact.gaps.length > 0 && (
+                    <div className="p-4 bg-red-50 border border-red-100 rounded-2xl">
+                      <p className="text-[10px] font-bold text-red-600 uppercase mb-2 flex items-center gap-1">
+                        <AlertTriangle size={12}/> 偵測到合規缺口
+                      </p>
+                      <ul className="space-y-1">
+                        {selected.artifact.gaps.map((gap, i) => (
+                          <li key={i} className="text-[11px] text-red-700 flex items-start gap-2">
+                            <span className="mt-1 w-1 h-1 rounded-full bg-red-400 flex-shrink-0" />
+                            {gap}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                   {selected.artifact.reviewStatus === 'awaiting_review' && (
                     <div className="flex gap-2">
                        <BrandButton variant="primary" fullWidth onClick={() => handleReview(selected, 'approve')} loading={loading}>核准</BrandButton>

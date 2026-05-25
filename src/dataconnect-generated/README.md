@@ -19,6 +19,9 @@ This README will guide you through the process of using the generated JavaScript
   - [*GetReportById*](#getreportbyid)
   - [*ListReports*](#listreports)
   - [*ListCompanyMetricsByCategory*](#listcompanymetricsbycategory)
+  - [*ListEternalMemories*](#listeternalmemories)
+  - [*ListSwarmAgentTasks*](#listswarmagenttasks)
+  - [*ListRegulatoryPolicies*](#listregulatorypolicies)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
   - [*UpsertRoadmapMilestone*](#upsertroadmapmilestone)
@@ -26,6 +29,8 @@ This README will guide you through the process of using the generated JavaScript
   - [*UpsertReport*](#upsertreport)
   - [*UpsertCompanyMetric*](#upsertcompanymetric)
   - [*UpsertScrapedArticle*](#upsertscrapedarticle)
+  - [*UpsertEternalMemory*](#upserteternalmemory)
+  - [*UpsertSwarmAgentTask*](#upsertswarmagenttask)
   - [*CreateDemoData*](#createdemodata)
 
 # Accessing the connector
@@ -221,15 +226,18 @@ The `data` property is an object of type `GetTaskByIdData`, which is defined in 
 export interface GetTaskByIdData {
   task?: {
     id: UUIDString;
-    title: string;
-    description?: string | null;
-    completed: boolean;
-    status: string;
-    priority: string;
-    assignee?: string | null;
-    department?: string | null;
-    griReference?: string | null;
-    dueDate?: DateString | null;
+    user: {
+      uid: string;
+    } & User_Key;
+      title: string;
+      description?: string | null;
+      completed: boolean;
+      status: string;
+      priority: string;
+      assignee?: string | null;
+      department?: string | null;
+      griReference?: string | null;
+      dueDate?: DateString | null;
   } & Task_Key;
 }
 ```
@@ -652,6 +660,9 @@ export interface GetCompanyProfileData {
     employeeCount?: number | null;
     revenueTwd?: number | null;
     capitalTwd?: number | null;
+    user?: {
+      uid: string;
+    } & User_Key;
   } & CompanyProfile_Key;
 }
 ```
@@ -772,6 +783,9 @@ export interface GetReportByIdData {
     company: {
       id: UUIDString;
       name: string;
+      user?: {
+        uid: string;
+      } & User_Key;
     } & CompanyProfile_Key;
   } & Report_Key;
 }
@@ -1060,6 +1074,304 @@ console.log(data.companyMetrics);
 executeQuery(ref).then((response) => {
   const data = response.data;
   console.log(data.companyMetrics);
+});
+```
+
+## ListEternalMemories
+You can execute the `ListEternalMemories` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+listEternalMemories(options?: ExecuteQueryOptions): QueryPromise<ListEternalMemoriesData, undefined>;
+
+interface ListEternalMemoriesRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<ListEternalMemoriesData, undefined>;
+}
+export const listEternalMemoriesRef: ListEternalMemoriesRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+listEternalMemories(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListEternalMemoriesData, undefined>;
+
+interface ListEternalMemoriesRef {
+  ...
+  (dc: DataConnect): QueryRef<ListEternalMemoriesData, undefined>;
+}
+export const listEternalMemoriesRef: ListEternalMemoriesRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the listEternalMemoriesRef:
+```typescript
+const name = listEternalMemoriesRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `ListEternalMemories` query has no variables.
+### Return Type
+Recall that executing the `ListEternalMemories` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `ListEternalMemoriesData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface ListEternalMemoriesData {
+  eternalMemories: ({
+    id: UUIDString;
+    type: string;
+    content: string;
+    tags?: string | null;
+    hashLock: string;
+    consolidated: boolean;
+    createdAt: TimestampString;
+  } & EternalMemory_Key)[];
+}
+```
+### Using `ListEternalMemories`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, listEternalMemories } from '@dataconnect/generated';
+
+
+// Call the `listEternalMemories()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await listEternalMemories();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await listEternalMemories(dataConnect);
+
+console.log(data.eternalMemories);
+
+// Or, you can use the `Promise` API.
+listEternalMemories().then((response) => {
+  const data = response.data;
+  console.log(data.eternalMemories);
+});
+```
+
+### Using `ListEternalMemories`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, listEternalMemoriesRef } from '@dataconnect/generated';
+
+
+// Call the `listEternalMemoriesRef()` function to get a reference to the query.
+const ref = listEternalMemoriesRef();
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = listEternalMemoriesRef(dataConnect);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.eternalMemories);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.eternalMemories);
+});
+```
+
+## ListSwarmAgentTasks
+You can execute the `ListSwarmAgentTasks` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+listSwarmAgentTasks(options?: ExecuteQueryOptions): QueryPromise<ListSwarmAgentTasksData, undefined>;
+
+interface ListSwarmAgentTasksRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<ListSwarmAgentTasksData, undefined>;
+}
+export const listSwarmAgentTasksRef: ListSwarmAgentTasksRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+listSwarmAgentTasks(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListSwarmAgentTasksData, undefined>;
+
+interface ListSwarmAgentTasksRef {
+  ...
+  (dc: DataConnect): QueryRef<ListSwarmAgentTasksData, undefined>;
+}
+export const listSwarmAgentTasksRef: ListSwarmAgentTasksRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the listSwarmAgentTasksRef:
+```typescript
+const name = listSwarmAgentTasksRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `ListSwarmAgentTasks` query has no variables.
+### Return Type
+Recall that executing the `ListSwarmAgentTasks` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `ListSwarmAgentTasksData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface ListSwarmAgentTasksData {
+  swarmAgentTasks: ({
+    id: UUIDString;
+    title: string;
+    taskType: string;
+    status: string;
+    agentId?: string | null;
+    progress: number;
+    skillKey?: string | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & SwarmAgentTask_Key)[];
+}
+```
+### Using `ListSwarmAgentTasks`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, listSwarmAgentTasks } from '@dataconnect/generated';
+
+
+// Call the `listSwarmAgentTasks()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await listSwarmAgentTasks();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await listSwarmAgentTasks(dataConnect);
+
+console.log(data.swarmAgentTasks);
+
+// Or, you can use the `Promise` API.
+listSwarmAgentTasks().then((response) => {
+  const data = response.data;
+  console.log(data.swarmAgentTasks);
+});
+```
+
+### Using `ListSwarmAgentTasks`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, listSwarmAgentTasksRef } from '@dataconnect/generated';
+
+
+// Call the `listSwarmAgentTasksRef()` function to get a reference to the query.
+const ref = listSwarmAgentTasksRef();
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = listSwarmAgentTasksRef(dataConnect);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.swarmAgentTasks);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.swarmAgentTasks);
+});
+```
+
+## ListRegulatoryPolicies
+You can execute the `ListRegulatoryPolicies` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+listRegulatoryPolicies(options?: ExecuteQueryOptions): QueryPromise<ListRegulatoryPoliciesData, undefined>;
+
+interface ListRegulatoryPoliciesRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<ListRegulatoryPoliciesData, undefined>;
+}
+export const listRegulatoryPoliciesRef: ListRegulatoryPoliciesRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+listRegulatoryPolicies(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListRegulatoryPoliciesData, undefined>;
+
+interface ListRegulatoryPoliciesRef {
+  ...
+  (dc: DataConnect): QueryRef<ListRegulatoryPoliciesData, undefined>;
+}
+export const listRegulatoryPoliciesRef: ListRegulatoryPoliciesRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the listRegulatoryPoliciesRef:
+```typescript
+const name = listRegulatoryPoliciesRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `ListRegulatoryPolicies` query has no variables.
+### Return Type
+Recall that executing the `ListRegulatoryPolicies` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `ListRegulatoryPoliciesData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface ListRegulatoryPoliciesData {
+  regulatoryPolicies: ({
+    id: string;
+    standard: string;
+    code: string;
+    name: string;
+    description?: string | null;
+    rulesJson: string;
+  } & RegulatoryPolicy_Key)[];
+}
+```
+### Using `ListRegulatoryPolicies`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, listRegulatoryPolicies } from '@dataconnect/generated';
+
+
+// Call the `listRegulatoryPolicies()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await listRegulatoryPolicies();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await listRegulatoryPolicies(dataConnect);
+
+console.log(data.regulatoryPolicies);
+
+// Or, you can use the `Promise` API.
+listRegulatoryPolicies().then((response) => {
+  const data = response.data;
+  console.log(data.regulatoryPolicies);
+});
+```
+
+### Using `ListRegulatoryPolicies`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, listRegulatoryPoliciesRef } from '@dataconnect/generated';
+
+
+// Call the `listRegulatoryPoliciesRef()` function to get a reference to the query.
+const ref = listRegulatoryPoliciesRef();
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = listRegulatoryPoliciesRef(dataConnect);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.regulatoryPolicies);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.regulatoryPolicies);
 });
 ```
 
@@ -1861,6 +2173,257 @@ console.log(data.scrapedArticle_upsert);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.scrapedArticle_upsert);
+});
+```
+
+## UpsertEternalMemory
+You can execute the `UpsertEternalMemory` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+upsertEternalMemory(vars: UpsertEternalMemoryVariables): MutationPromise<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+
+interface UpsertEternalMemoryRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpsertEternalMemoryVariables): MutationRef<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+}
+export const upsertEternalMemoryRef: UpsertEternalMemoryRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+upsertEternalMemory(dc: DataConnect, vars: UpsertEternalMemoryVariables): MutationPromise<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+
+interface UpsertEternalMemoryRef {
+  ...
+  (dc: DataConnect, vars: UpsertEternalMemoryVariables): MutationRef<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+}
+export const upsertEternalMemoryRef: UpsertEternalMemoryRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the upsertEternalMemoryRef:
+```typescript
+const name = upsertEternalMemoryRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpsertEternalMemory` mutation requires an argument of type `UpsertEternalMemoryVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpsertEternalMemoryVariables {
+  id?: UUIDString | null;
+  type: string;
+  content: string;
+  tags?: string | null;
+  hashLock: string;
+  consolidated: boolean;
+}
+```
+### Return Type
+Recall that executing the `UpsertEternalMemory` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpsertEternalMemoryData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpsertEternalMemoryData {
+  eternalMemory_upsert: EternalMemory_Key;
+}
+```
+### Using `UpsertEternalMemory`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, upsertEternalMemory, UpsertEternalMemoryVariables } from '@dataconnect/generated';
+
+// The `UpsertEternalMemory` mutation requires an argument of type `UpsertEternalMemoryVariables`:
+const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
+  id: ..., // optional
+  type: ..., 
+  content: ..., 
+  tags: ..., // optional
+  hashLock: ..., 
+  consolidated: ..., 
+};
+
+// Call the `upsertEternalMemory()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await upsertEternalMemory(upsertEternalMemoryVars);
+// Variables can be defined inline as well.
+const { data } = await upsertEternalMemory({ id: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await upsertEternalMemory(dataConnect, upsertEternalMemoryVars);
+
+console.log(data.eternalMemory_upsert);
+
+// Or, you can use the `Promise` API.
+upsertEternalMemory(upsertEternalMemoryVars).then((response) => {
+  const data = response.data;
+  console.log(data.eternalMemory_upsert);
+});
+```
+
+### Using `UpsertEternalMemory`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, upsertEternalMemoryRef, UpsertEternalMemoryVariables } from '@dataconnect/generated';
+
+// The `UpsertEternalMemory` mutation requires an argument of type `UpsertEternalMemoryVariables`:
+const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
+  id: ..., // optional
+  type: ..., 
+  content: ..., 
+  tags: ..., // optional
+  hashLock: ..., 
+  consolidated: ..., 
+};
+
+// Call the `upsertEternalMemoryRef()` function to get a reference to the mutation.
+const ref = upsertEternalMemoryRef(upsertEternalMemoryVars);
+// Variables can be defined inline as well.
+const ref = upsertEternalMemoryRef({ id: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = upsertEternalMemoryRef(dataConnect, upsertEternalMemoryVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.eternalMemory_upsert);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.eternalMemory_upsert);
+});
+```
+
+## UpsertSwarmAgentTask
+You can execute the `UpsertSwarmAgentTask` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+upsertSwarmAgentTask(vars: UpsertSwarmAgentTaskVariables): MutationPromise<UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables>;
+
+interface UpsertSwarmAgentTaskRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpsertSwarmAgentTaskVariables): MutationRef<UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables>;
+}
+export const upsertSwarmAgentTaskRef: UpsertSwarmAgentTaskRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+upsertSwarmAgentTask(dc: DataConnect, vars: UpsertSwarmAgentTaskVariables): MutationPromise<UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables>;
+
+interface UpsertSwarmAgentTaskRef {
+  ...
+  (dc: DataConnect, vars: UpsertSwarmAgentTaskVariables): MutationRef<UpsertSwarmAgentTaskData, UpsertSwarmAgentTaskVariables>;
+}
+export const upsertSwarmAgentTaskRef: UpsertSwarmAgentTaskRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the upsertSwarmAgentTaskRef:
+```typescript
+const name = upsertSwarmAgentTaskRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpsertSwarmAgentTask` mutation requires an argument of type `UpsertSwarmAgentTaskVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpsertSwarmAgentTaskVariables {
+  id?: UUIDString | null;
+  title: string;
+  taskType: string;
+  status: string;
+  agentId?: string | null;
+  progress: number;
+  skillKey?: string | null;
+}
+```
+### Return Type
+Recall that executing the `UpsertSwarmAgentTask` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpsertSwarmAgentTaskData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpsertSwarmAgentTaskData {
+  swarmAgentTask_upsert: SwarmAgentTask_Key;
+}
+```
+### Using `UpsertSwarmAgentTask`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, upsertSwarmAgentTask, UpsertSwarmAgentTaskVariables } from '@dataconnect/generated';
+
+// The `UpsertSwarmAgentTask` mutation requires an argument of type `UpsertSwarmAgentTaskVariables`:
+const upsertSwarmAgentTaskVars: UpsertSwarmAgentTaskVariables = {
+  id: ..., // optional
+  title: ..., 
+  taskType: ..., 
+  status: ..., 
+  agentId: ..., // optional
+  progress: ..., 
+  skillKey: ..., // optional
+};
+
+// Call the `upsertSwarmAgentTask()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await upsertSwarmAgentTask(upsertSwarmAgentTaskVars);
+// Variables can be defined inline as well.
+const { data } = await upsertSwarmAgentTask({ id: ..., title: ..., taskType: ..., status: ..., agentId: ..., progress: ..., skillKey: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await upsertSwarmAgentTask(dataConnect, upsertSwarmAgentTaskVars);
+
+console.log(data.swarmAgentTask_upsert);
+
+// Or, you can use the `Promise` API.
+upsertSwarmAgentTask(upsertSwarmAgentTaskVars).then((response) => {
+  const data = response.data;
+  console.log(data.swarmAgentTask_upsert);
+});
+```
+
+### Using `UpsertSwarmAgentTask`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, upsertSwarmAgentTaskRef, UpsertSwarmAgentTaskVariables } from '@dataconnect/generated';
+
+// The `UpsertSwarmAgentTask` mutation requires an argument of type `UpsertSwarmAgentTaskVariables`:
+const upsertSwarmAgentTaskVars: UpsertSwarmAgentTaskVariables = {
+  id: ..., // optional
+  title: ..., 
+  taskType: ..., 
+  status: ..., 
+  agentId: ..., // optional
+  progress: ..., 
+  skillKey: ..., // optional
+};
+
+// Call the `upsertSwarmAgentTaskRef()` function to get a reference to the mutation.
+const ref = upsertSwarmAgentTaskRef(upsertSwarmAgentTaskVars);
+// Variables can be defined inline as well.
+const ref = upsertSwarmAgentTaskRef({ id: ..., title: ..., taskType: ..., status: ..., agentId: ..., progress: ..., skillKey: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = upsertSwarmAgentTaskRef(dataConnect, upsertSwarmAgentTaskVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.swarmAgentTask_upsert);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.swarmAgentTask_upsert);
 });
 ```
 

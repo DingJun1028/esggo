@@ -5,6 +5,8 @@
 // 5T Integrity Protocol + IComponentCore + State Machine
 // ============================================================
 
+import { ZKPRangeProof } from '../lib/crypto-proof';
+
 export type OmniRequestType =
   | 'query'
   | 'seal'
@@ -43,6 +45,7 @@ export interface IComponentCore {
   readonly evidence: IEvidence;
   readonly status: ComponentStatus;
   readonly hash_lock: string;
+  readonly zkp_proof?: ZKPRangeProof; // Added ZKP support
 }
 
 export interface T5GateState {

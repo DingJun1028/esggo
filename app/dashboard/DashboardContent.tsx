@@ -11,6 +11,8 @@ import { cn } from '../../lib/utils';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandCardHeader, BrandProgress, BrandTimeline, BrandStatusDot, BrandKpiCard
 } from '../../components/brand';
+import { SwarmMonitor } from '../../components/ui/SwarmMonitor';
+import { IntegrityPulse } from '../../components/ui/IntegrityPulse';
 import { EnvironmentalTrajectory } from '../../components/brand/EnvironmentalTrajectory';
 import { useDashboardStats } from '../../hooks/useDashboard';
 import { useSystemEvolution } from '../../hooks/useSystemEvolution';
@@ -353,13 +355,20 @@ const QUICK_ACTIONS = [
 
 export default function DashboardContent() {
   const [now, setNow] = useState(new Date());
+  const [trustScore, setTrustScore] = useState(90);
   const { stats, loading: statsLoading } = useDashboardStats();
   const { growth, loading: growthLoading } = useSystemEvolution();
 
+  const updateScore = useCallback(async () => {
+    const score = await omniCore.calculateTrustScore();
+    setTrustScore(score);
+  }, []);
+
   useEffect(() => {
+    updateScore();
     const t = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(t);
-  }, []);
+  }, [updateScore]);
 
   const KPIS = getKpis(stats, statsLoading);
 
@@ -372,6 +381,14 @@ export default function DashboardContent() {
              <div className="flex items-center gap-2 bg-emerald-50/50 backdrop-blur-sm px-3 py-1 rounded-full border border-emerald-100/50">
                 <BrandStatusDot status="active" pulse size="sm" />
                 <span className="text-[9px] font-black text-emerald-700 uppercase tracking-widest">Node Active</span>
+             </div>
+             <div className="flex items-center gap-2 bg-berkeley-blue/5 backdrop-blur-sm px-3 py-1 rounded-full border border-berkeley-blue/10">
+                <ShieldCheck size={14} className="text-berkeley-blue" />
+                <span className="text-[9px] font-black text-berkeley-blue uppercase tracking-widest">Trust Score: {trustScore}</span>
+             </div>
+             <div className="flex items-center gap-2 bg-purple-50/50 backdrop-blur-sm px-3 py-1 rounded-full border border-purple-100/50">
+                <Zap size={14} className="text-purple-600" />
+                <span className="text-[9px] font-black text-purple-700 uppercase tracking-widest">Resonance: 84%</span>
              </div>
           </div>
           <div className="space-y-1">
@@ -403,11 +420,13 @@ export default function DashboardContent() {
             <div className="p-6 lg:p-10"><div className="h-[240px] lg:h-[360px] relative"><EnvironmentalTrajectory title="" /></div><div className="mt-8 p-5 bg-slate-50/50 rounded-2xl border border-slate-100 flex items-start gap-4 transition-all hover:bg-blue-50/30 group"><div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-white flex-shrink-0 shadow-lg shadow-[#003262]/20"><Info size={20} /></div><div className="space-y-1"><p className="text-xs text-[#003262] font-black leading-tight uppercase tracking-widest">AI 洞察</p><p className="text-sm text-slate-500 leading-relaxed font-medium">排放軌跡優於預期 <span className="text-emerald-600 font-black">18%</span>，範疇二綠電採購發揮關鍵作用。</p></div></div></div>
           </BrandCard>
         </div>
+
         <div className="col-span-12 lg:col-span-4 space-y-6 lg:space-y-8">
+          <SwarmMonitor />
+          <IntegrityPulse />
           <AIRiskAlerter />
           <HealingGuardian />
           <GapGuardian />
-          <IntegrityTrace />
           <DataAlchemyWidget />
         </div>
       </div>

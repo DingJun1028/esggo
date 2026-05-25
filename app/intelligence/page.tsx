@@ -1,8 +1,14 @@
 'use client';
+
 import { useState, useEffect } from 'react';
-import { AlertTriangle, BookOpen, Bookmark, ExternalLink, Search, BarChart2, Globe, Zap, RefreshCw } from 'lucide-react';
-import { BrandButton, BrandBadge, BrandStatusDot } from '../../components/brand';
+import { 
+  AlertTriangle, BookOpen, Bookmark, ExternalLink, Search, 
+  BarChart2, Globe, Zap, RefreshCw, Network 
+} from 'lucide-react';
+import { BrandButton, BrandBadge, BrandStatusDot, BrandCard } from '../../components/brand';
 import { dcListScrapedArticles } from '../../lib/dataconnect-services';
+import { MemoryGraphVisualizer } from '../../components/ui/MemoryGraphVisualizer';
+import { memoryGraphEngine, MemoryGraph } from '../../lib/memory-graph-engine';
 
 // Static benchmarks & risk alerts for now (can be migrated later)
 const benchmarks = [
@@ -30,13 +36,37 @@ export default function IntelligencePage() {
   const [bookmarked, setBookmarked] = useState<string[]>([]);
   const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Graph State
+  const [sampleGraph, setSampleGraph] = useState<MemoryGraph | null>(null);
 
   useEffect(() => {
     async function loadArticles() {
       setLoading(true);
-      const data = await dcListScrapedArticles();
-      setArticles(data || []);
-      setLoading(false);
+      try {
+        const data = await dcListScrapedArticles();
+        setArticles(data || []);
+        
+        // Build sample graph
+        const g = await memoryGraphEngine.buildLineageGraph({
+          uuid: 'comp-abc-123',
+          timestamp: Date.now(),
+          version: '1.1.0',
+          status: 'Trustworthy',
+          hash_lock: 'hash_xyz',
+          evidence: {
+            tangible_metric: '12,450 kWh (碳排放計算基礎)',
+            source_origin: '/vault/electricity_bill_2024.pdf',
+            lifecycle_hooks: [],
+            formula_ref: 'GRI[305-1]'
+          }
+        });
+        setSampleGraph(g);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
     }
     loadArticles();
   }, []);
@@ -93,7 +123,12 @@ export default function IntelligencePage() {
           <div className="section-card">
             <div className="section-card-header flex-wrap gap-2">
               <div className="flex items-center gap-1">
-                {[{ key: 'news', label: '情報中心', icon: <Globe size={12}/> }, { key: 'benchmark', label: '產業標竿', icon: <BarChart2 size={12}/> }, { key: 'risk', label: '風險預警', icon: <AlertTriangle size={12}/> }].map(tab => (
+                {[
+                  { key: 'news', label: '情報中心', icon: <Globe size={12}/> }, 
+                  { key: 'graph', label: '記憶圖譜', icon: <Network size={12}/> },
+                  { key: 'benchmark', label: '產業標竿', icon: <BarChart2 size={12}/> }, 
+                  { key: 'risk', label: '風險預警', icon: <AlertTriangle size={12}/> }
+                ].map(tab => (
                   <button key={tab.key} onClick={() => setActiveTab(tab.key)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${activeTab === tab.key ? 'bg-[#003262] text-white' : 'text-slate-500 hover:bg-slate-100'}`}>
                     {tab.icon}{tab.label}
@@ -111,7 +146,7 @@ export default function IntelligencePage() {
                 </div>
               )}
             </div>
-            <div className="section-card-body min-h-[300px]">
+            <div className="section-card-body min-h-[400px]">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-4">
                    <RefreshCw size={32} className="text-[#003262]/20 animate-spin" />
@@ -153,7 +188,19 @@ export default function IntelligencePage() {
                       )}
                     </div>
                   )}
-                  {/* benchmark and risk tabs remain same but could use dataConnect too */}
+
+                  {activeTab === 'graph' && sampleGraph && (
+                    <div className="space-y-6 fade-in">
+                       <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100 flex items-start gap-3">
+                          <Zap size={16} className="text-blue-600 mt-1" />
+                          <p className="text-[11px] text-blue-800 leading-relaxed font-medium">
+                             <strong>因果追蹤啟動：</strong> 正在追蹤數據鏈路。從原始憑證 (T1) 到法規校驗 (T2)，建立不可篡改的證據網絡。
+                          </p>
+                       </div>
+                       <MemoryGraphVisualizer graph={sampleGraph} />
+                    </div>
+                  )}
+
                   {activeTab === 'benchmark' && (
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
@@ -189,6 +236,7 @@ export default function IntelligencePage() {
                       </table>
                     </div>
                   )}
+
                   {activeTab === 'risk' && (
                     <div className="space-y-2">
                       {riskAlerts.map((alert, idx) => (

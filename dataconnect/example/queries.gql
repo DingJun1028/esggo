@@ -1,5 +1,5 @@
 query ListAllTasks @auth(level: USER) {
-  tasks(orderBy: [{createdAt: DESC}]) {
+  tasks(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
     id
     title
     description
@@ -15,8 +15,11 @@ query ListAllTasks @auth(level: USER) {
 }
 
 query GetTaskById($id: UUID!) @auth(level: USER) {
-  task(key: {id: $id}) {
+  task(first: { where: { id: { eq: $id }, user: { uid: { eq_expr: "auth.uid" } } } }) {
     id
+    user {
+      uid
+    }
     title
     description
     completed
@@ -32,6 +35,7 @@ query GetTaskById($id: UUID!) @auth(level: USER) {
 mutation UpsertTask($id: UUID, $title: String!, $description: String, $completed: Boolean!, $status: String!, $priority: String!, $assignee: String, $department: String, $griReference: String, $dueDate: Date) @auth(level: USER) {
   task_upsert(data: {
     id: $id,
+    user: { uid_expr: "auth.uid" },
     title: $title,
     description: $description,
     completed: $completed,
@@ -45,7 +49,7 @@ mutation UpsertTask($id: UUID, $title: String!, $description: String, $completed
 }
 
 query ListAuditRecords @auth(level: USER) {
-  auditRecords(orderBy: [{createdAt: DESC}], limit: 50) {
+  auditRecords(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}], limit: 50) {
     id
     title
     dataType
@@ -58,7 +62,7 @@ query ListAuditRecords @auth(level: USER) {
   }
 }
 
-query ListScrapedArticles @auth(level: PUBLIC) {
+query ListScrapedArticles @auth(level: USER) {
   scrapedArticles(orderBy: [{scrapedAt: DESC}], limit: 50) {
     id
     title
@@ -74,7 +78,7 @@ query ListScrapedArticles @auth(level: PUBLIC) {
 }
 
 query ListRoadmapMilestones @auth(level: USER) {
-  roadmapMilestones(orderBy: [{targetYear: ASC}]) {
+  roadmapMilestones(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{targetYear: ASC}]) {
     id
     title
     targetYear
@@ -89,6 +93,7 @@ query ListRoadmapMilestones @auth(level: USER) {
 mutation UpsertRoadmapMilestone($id: UUID, $title: String!, $targetYear: Int!, $category: String!, $status: String!, $targetValue: Float, $unit: String, $sbtiAligned: Boolean!) @auth(level: USER) {
   roadmapMilestone_upsert(data: {
     id: $id,
+    user: { uid_expr: "auth.uid" },
     title: $title,
     targetYear: $targetYear,
     category: $category,
@@ -100,7 +105,7 @@ mutation UpsertRoadmapMilestone($id: UUID, $title: String!, $targetYear: Int!, $
 }
 
 query GetCompanyProfile($id: UUID!) @auth(level: USER) {
-  companyProfile(key: {id: $id}) {
+  companyProfile(first: { where: { id: { eq: $id }, user: { uid: { eq_expr: "auth.uid" } } } }) {
     id
     name
     industry
@@ -110,12 +115,16 @@ query GetCompanyProfile($id: UUID!) @auth(level: USER) {
     employeeCount
     revenueTwd
     capitalTwd
+    user {
+      uid
+    }
   }
 }
 
 mutation UpsertCompanyProfile($id: UUID, $name: String!, $industry: String, $vision: String, $mission: String, $employeeCount: Int, $revenueTwd: Float, $capitalTwd: Float) @auth(level: USER) {
   companyProfile_upsert(data: {
     id: $id,
+    user: { uid_expr: "auth.uid" },
     name: $name,
     industry: $industry,
     vision: $vision,
@@ -127,7 +136,7 @@ mutation UpsertCompanyProfile($id: UUID, $name: String!, $industry: String, $vis
 }
 
 query GetReportById($id: UUID!) @auth(level: USER) {
-  report(key: {id: $id}) {
+  report(first: { where: { id: { eq: $id }, user: { uid: { eq_expr: "auth.uid" } } } }) {
     id
     title
     progress
@@ -138,6 +147,9 @@ query GetReportById($id: UUID!) @auth(level: USER) {
     company {
       id
       name
+      user {
+        uid
+      }
     }
   }
 }
@@ -145,6 +157,7 @@ query GetReportById($id: UUID!) @auth(level: USER) {
 mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title: String!, $language: String!, $progress: Int!, $status: String!) @auth(level: USER) {
   report_upsert(data: {
     id: $id,
+    user: { uid_expr: "auth.uid" },
     companyId: $companyId,
     templateId: $templateId,
     title: $title,
@@ -155,7 +168,7 @@ mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title
 }
 
 query ListReports @auth(level: USER) {
-  reports(orderBy: [{createdAt: DESC}]) {
+  reports(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
     id
     title
     progress
@@ -172,7 +185,8 @@ query ListReports @auth(level: USER) {
 
 query ListCompanyMetricsByCategory($companyId: UUID!, $category: String!) @auth(level: USER) {
   companyMetrics(where: {
-    company: {id: {eq: $companyId}},
+    user: { uid: { eq_expr: "auth.uid" } },
+    company: { id: {eq: $companyId} },
     category: {eq: $category}
   }) {
     id
@@ -189,6 +203,7 @@ query ListCompanyMetricsByCategory($companyId: UUID!, $category: String!) @auth(
 mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!, $metricValue: Float, $unit: String, $category: String!, $verified: Boolean!, $griStandard: String) @auth(level: USER) {
   companyMetric_upsert(data: {
     id: $id,
+    user: { uid_expr: "auth.uid" },
     companyId: $companyId,
     metricName: $metricName,
     metricValue: $metricValue,
@@ -199,7 +214,7 @@ mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!,
   })
 }
 
-mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: PUBLIC) {
+mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: USER) {
   scrapedArticle_upsert(data: {
     id: $id,
     title: $title,
@@ -211,4 +226,68 @@ mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url
     tags: $tags,
     impactLevel: $impactLevel
   })
+}
+
+# --- Phase 13 Operations ---
+
+query ListEternalMemories @auth(level: USER) {
+  eternalMemories(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
+    id
+    type
+    content
+    tags
+    hashLock
+    consolidated
+    createdAt
+  }
+}
+
+mutation UpsertEternalMemory($id: UUID, $type: String!, $content: String!, $tags: String, $hashLock: String!, $consolidated: Boolean!) @auth(level: USER) {
+  eternalMemory_upsert(data: {
+    id: $id,
+    user: { uid_expr: "auth.uid" },
+    type: $type,
+    content: $content,
+    tags: $tags,
+    hashLock: $hashLock,
+    consolidated: $consolidated
+  })
+}
+
+query ListSwarmAgentTasks @auth(level: USER) {
+  swarmAgentTasks(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{updatedAt: DESC}]) {
+    id
+    title
+    taskType
+    status
+    agentId
+    progress
+    skillKey
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpsertSwarmAgentTask($id: UUID, $title: String!, $taskType: String!, $status: String!, $agentId: String, $progress: Int!, $skillKey: String) @auth(level: USER) {
+  swarmAgentTask_upsert(data: {
+    id: $id,
+    user: { uid_expr: "auth.uid" },
+    title: $title,
+    taskType: $taskType,
+    status: $status,
+    agentId: $agentId,
+    progress: $progress,
+    skillKey: $skillKey
+  })
+}
+
+query ListRegulatoryPolicies @auth(level: USER) {
+  regulatoryPolicies(where: { isGlobal: { eq: true } }) {
+    id
+    standard
+    code
+    name
+    description
+    rulesJson
+  }
 }

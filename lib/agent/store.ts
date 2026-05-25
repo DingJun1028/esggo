@@ -1,22 +1,80 @@
 import type { AgentTask, AgentExecution, AgentArtifact } from './types';
+import { dcUpsertSwarmAgentTask, dcListSwarmAgentTasks } from '../dataconnect-services';
 
-// In-memory store for dev/prototype purposes.
-// Note: This will reset when the Next.js dev server restarts.
+// Note: Global in-memory lists are now fallback/cache-only.
+// Real persistence is now handled via Firebase Data Connect.
 
-export const GLOBAL_TASKS: AgentTask[] = [];
+export let GLOBAL_TASKS: AgentTask[] = [];
 export const GLOBAL_EXECUTIONS: AgentExecution[] = [];
 export const GLOBAL_ARTIFACTS: AgentArtifact[] = [];
 
-export function addTask(task: AgentTask) {
-  GLOBAL_TASKS.unshift(task);
-}
-
-export function updateTask(taskId: string, patch: Partial<AgentTask>) {
-  const idx = GLOBAL_TASKS.findIndex(t => t.id === taskId);
-  if (idx !== -1) {
-    GLOBAL_TASKS[idx] = { ...GLOBAL_TASKS[idx], ...patch, updatedAt: new Date().toISOString() };
+/**
+ * Persists task to Data Connect and updates local cache.
+ */
+export async function addTask(task: AgentTask) {
+  try {
+    await dcUpsertSwarmAgentTask({
+      id: task.id,
+      title: task.title,
+      taskType: task.taskType,
+      status: task.status,
+      skillKey: task.skillKey,
+      progress: 0
+    });
+    GLOBAL_TASKS.unshift(task);
+  } catch (e) {
+    console.warn('AgentStore: Failed to persist task, using in-memory only.', e);
+    GLOBAL_TASKS.unshift(task);
   }
 }
+
+/**
+ * Updates task in Data Connect and local cache.
+ */
+export async function updateTask(taskId: string, patch: Partial<AgentTask>) {
+  const idx = GLOBAL_TASKS.findIndex(t => t.id === taskId);
+  if (idx !== -1) {
+    const updated = { ...GLOBAL_TASKS[idx], ...patch, updatedAt: new Date().toISOString() };
+    GLOBAL_TASKS[idx] = updated;
+
+    try {
+      await dcUpsertSwarmAgentTask({
+        id: taskId,
+        title: updated.title,
+        taskType: updated.taskType,
+        status: updated.status,
+        skillKey: updated.skillKey,
+        progress: 0 // Default or extract from patch if added to AgentTask type
+      });
+    } catch (e) {
+      console.error('AgentStore: Update persistence failed', e);
+    }
+  }
+}
+
+/**
+ * Syncs the local cache with the latest Data Connect state.
+ */
+export async function syncTasksFromDB() {
+  const remoteTasks = await dcListSwarmAgentTasks();
+  // Map schema type to AgentTask interface
+  GLOBAL_TASKS = remoteTasks.map(t => ({
+    id: t.id,
+    title: t.title,
+    taskType: t.taskType as any,
+    status: t.status as any,
+    skillKey: t.skillKey || undefined,
+    createdAt: t.createdAt,
+    updatedAt: t.updatedAt,
+    tenantId: 'default',
+    actorId: 'system',
+    inputRefIds: [],
+    policyDecisionId: 'none',
+    requiresHumanReview: false
+  }));
+}
+
+// --- Executions & Artifacts (Remaining In-Memory for now) ---
 
 export function addExecution(exec: AgentExecution) {
   GLOBAL_EXECUTIONS.unshift(exec);

@@ -1,11 +1,21 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { Users, TrendingUp, MessageSquare, Star, Plus, Filter, ShieldCheck, Heart, BarChart3, ArrowUpRight, CheckCircle2, AlertCircle, Bot, Sparkles, X, History } from 'lucide-react';
+
+import { useState, useEffect, useCallback } from 'react';
 import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
+  Users, TrendingUp, MessageSquare, Star, Plus, Filter, ShieldCheck, Heart, 
+  BarChart3, ArrowUpRight, CheckCircle2, AlertTriangle, Bot, Sparkles, X, 
+  History, Vote, Shield, Zap, Target 
+} from 'lucide-react';
+import { 
+  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, 
+  BrandProgress, StandardPage, BrandCardHeader, BrandModal
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ResonanceMatrix } from '../../components/ui/ResonanceMatrix';
+import { governanceEngine, StakeholderVote, MaterialityTopic, ResonanceResult } from '../../lib/governance-engine';
+import { useAuth } from '../../hooks/useAuth';
+import { cn } from '../../lib/utils';
 
 interface Stakeholder {
   id: string;
@@ -32,26 +42,67 @@ const SENTIMENT_META = {
   negative: { label: '負向', color: '#EF4444', bg: 'rgba(239, 68, 68, 0.1)' },
 };
 
+const MATERIALITY_TOPICS: MaterialityTopic[] = [
+  { id: 't-1', label: '氣候變遷 (碳排放)', category: 'E', internalWeight: 5 },
+  { id: 't-2', label: '水資源管理', category: 'E', internalWeight: 3 },
+  { id: 't-3', label: '員工權益與多元化', category: 'S', internalWeight: 4 },
+  { id: 't-4', label: '供應鏈人權', category: 'S', internalWeight: 2 },
+  { id: 't-5', label: '商業道德與合規', category: 'G', internalWeight: 5 },
+];
+
 export default function StakeholdersPage() {
+  const { user } = useAuth();
   const [stakeholders] = useState<Stakeholder[]>(MOCK_STAKEHOLDERS);
   const [activeTab, setActiveTab] = useState('matrix');
   const [selected, setSelected] = useState<Stakeholder | null>(null);
+  
+  // Governance State
+  const [votes, setVotes] = useState<StakeholderVote[]>([]);
+  const [resonanceResults, setResonanceResults] = useState<ResonanceResult[]>([]);
+  const [showVoteModal, setShowVoteModal] = useState(false);
+  const [isCasting, setIsCasting] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState(MATERIALITY_TOPICS[0]);
+  const [voteScore, setVoteScore] = useState(3);
+
+  useEffect(() => {
+    // Initial calculation
+    const results = governanceEngine.calculateResonance(MATERIALITY_TOPICS, votes);
+    setResonanceResults(results);
+  }, [votes]);
+
+  const castVote = async () => {
+    setIsCasting(true);
+    await new Promise(r => setTimeout(r, 1000));
+    
+    const newVote = await governanceEngine.castVote({
+      stakeholderType: 'INVESTOR', // Mocking as investor for demo
+      topicId: selectedTopic.id,
+      priorityScore: voteScore
+    });
+
+    setVotes(prev => [...prev, newVote]);
+    setIsCasting(false);
+    setShowVoteModal(false);
+  };
+
+  const overallResonance = governanceEngine.getOverallResonanceIndex(resonanceResults);
 
   const pageConfig: UniversalPageConfig = {
     id: 'stakeholders',
     title: '利害關係人 Stakeholders',
-    subtitle: 'GRI 2-29 · 影響力矩陣 · 情感追蹤：系統化管理與各群體的議合動態與關注議題。',
+    subtitle: 'GRI 2-29 · 影響力矩陣 · 共鳴分析：建立企業與外部利害關係人的「信任共鳴」機制。',
     icon: <Users size={32} />,
     griReference: 'GRI 2-29',
-    activeT5Tags: ['T1', 'T2', 'T3'],
+    activeT5Tags: ['T1', 'T2', 'T3', 'T4'],
     primaryActions: [
-      { id: 'add', label: '新增關係人', icon: <Plus size={16}/>, onClick: () => alert('新增流程...') }
+      { id: 'vote', label: '參與重大性投票', icon: <Vote size={16}/>, variant: 'primary', onClick: () => setShowVoteModal(true) },
+      { id: 'add', label: '新增關係人', icon: <Plus size={16}/>, variant: 'ghost', onClick: () => alert('新增流程...') }
     ],
     kpis: [
       { key: 'total', label: '關係人總數', value: stakeholders.length, icon: <Users size={18}/>, color: '#003262' },
+      { key: 'resonance', label: '共鳴指數', value: overallResonance, unit: '%', icon: <Zap size={18}/>, color: '#8B5CF6', verified: true },
       { key: 'positive', label: '正向情感', value: '75', unit: '%', icon: <Heart size={18}/>, color: '#10B981', verified: true },
-      { key: 'engage', label: '本季議合', value: '59', unit: '次', icon: <MessageSquare size={18}/>, color: '#3B7EA1', verified: true },
-      { key: 'high', label: '高影響力', value: stakeholders.filter(s => s.influence >= 8).length, icon: <ShieldCheck size={18}/>, color: '#8B5CF6' },
+      { key: 'high', label: '高影響力', value: stakeholders.filter(s => s.influence >= 8).length, icon: <ShieldCheck size={18}/>, color: '#3B7EA1' },
     ],
     sections: [
       {
@@ -64,15 +115,16 @@ export default function StakeholdersPage() {
             onTabChange={setActiveTab}
             tabs={[
               { id: 'matrix', label: '影響力矩陣', icon: <BarChart3 size={16}/> },
-              { id: 'list',   label: '名冊清單',   icon: <Plus size={16}/> },
+              { id: 'resonance', label: '共鳴矩陣 (New)', icon: <Zap size={16}/> },
+              { id: 'list',   label: '名冊清單',   icon: <Users size={16}/> },
             ]}
           />
         )
       },
       {
         id: 'main',
-        title: activeTab === 'matrix' ? '影響力 vs 關注度 矩陣' : '利害關係人名冊',
-        columns: 8,
+        title: activeTab === 'matrix' ? '影響力 vs 關注度 矩陣' : activeTab === 'resonance' ? '利益相關者期望共鳴' : '利害關係人名冊',
+        columns: activeTab === 'resonance' ? 12 : 8,
         component: (
           <div className="fade-in h-full">
             {activeTab === 'matrix' ? (
@@ -114,6 +166,8 @@ export default function StakeholdersPage() {
                     ))}
                  </div>
               </BrandCard>
+            ) : activeTab === 'resonance' ? (
+               <ResonanceMatrix results={resonanceResults} />
             ) : (
               <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
                  <BrandTable 
@@ -138,7 +192,7 @@ export default function StakeholdersPage() {
           </div>
         )
       },
-      {
+      activeTab !== 'resonance' ? {
         id: 'ai',
         title: 'Hermes 關係人分析',
         columns: 4,
@@ -164,14 +218,68 @@ export default function StakeholdersPage() {
              </div>
           </BrandCard>
         )
-      }
-    ],
+      } : null as any
+    ].filter(Boolean) as any,
     features: { useAuditLog: true }
   };
 
   return (
     <>
       <StandardPage config={pageConfig} />
+      
+      {/* Vote Modal */}
+      <BrandModal open={showVoteModal} onClose={() => setShowVoteModal(false)} title="重大性議題投票 (Stakeholder Voting)" size="md">
+        <div className="space-y-8">
+           <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-3">
+              <Shield size={20} className="text-blue-600 mt-1" />
+              <p className="text-xs text-blue-800 leading-relaxed">
+                 您的投票將經過 <strong>T4 雜湊鎖定</strong> 並匿名存入 5T 帳本。企業管理層無法單方面修改您的投票結果。
+              </p>
+           </div>
+
+           <div className="space-y-4">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">選擇 ESG 議題</label>
+              <div className="grid grid-cols-1 gap-2">
+                 {MATERIALITY_TOPICS.map(t => (
+                   <button 
+                     key={t.id} 
+                     onClick={() => setSelectedTopic(t)}
+                     className={cn(
+                       "p-4 rounded-xl border transition-all text-left flex justify-between items-center",
+                       selectedTopic.id === t.id ? "bg-berkeley-blue text-white border-berkeley-blue shadow-lg" : "bg-white border-slate-100 text-slate-700 hover:border-blue-200"
+                     )}
+                   >
+                     <span className="font-bold text-sm">{t.label}</span>
+                     <BrandBadge variant="outline" size="xs" className={selectedTopic.id === t.id ? "text-white border-white/30" : "opacity-60"}>{t.category}</BrandBadge>
+                   </button>
+                 ))}
+              </div>
+           </div>
+
+           <div className="space-y-4">
+              <div className="flex justify-between items-end">
+                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">優先級權重 (Priority)</label>
+                 <span className="text-2xl font-black text-berkeley-blue font-mono">{voteScore}</span>
+              </div>
+              <input 
+                type="range" min="1" max="5" value={voteScore} 
+                onChange={e => setVoteScore(parseInt(e.target.value))}
+                className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-berkeley-blue"
+              />
+              <div className="flex justify-between text-[8px] font-black text-slate-300 uppercase px-1">
+                 <span>低優先</span>
+                 <span>中立</span>
+                 <span>極高優先</span>
+              </div>
+           </div>
+
+           <BrandButton variant="primary" fullWidth size="lg" className="h-14 shadow-xl" onClick={castVote} loading={isCasting}>
+              <CheckCircle2 size={18} className="mr-2" /> 投下加密選票
+           </BrandButton>
+        </div>
+      </BrandModal>
+
+      {/* Existing Stakeholder Detail Modal (Truncated for brevity in this replace) */}
       <AnimatePresence>
         {selected && (
           <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">

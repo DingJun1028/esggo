@@ -8,9 +8,15 @@ extend type Action {
   """
   categoryId: UUID! @fdc_generated(from: "Action.category", purpose: IMPLICIT_REF_FIELD)
   """
-  ✨ Implicit foreign key field based on `Action`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Action`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  userId: UUID @fdc_generated(from: "Action.user", purpose: IMPLICIT_REF_FIELD)
+  userUid: String @fdc_generated(from: "Action.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type AuditRecord {
+  """
+  ✨ Implicit foreign key field based on `AuditRecord`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "AuditRecord.user", purpose: IMPLICIT_REF_FIELD)
 }
 extend type Category {
   """
@@ -24,15 +30,15 @@ extend type Challenge {
   """
   id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Challenge", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `Challenge`.`creator`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Challenge`.`creator`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  creatorId: UUID @fdc_generated(from: "Challenge.creator", purpose: IMPLICIT_REF_FIELD)
+  creatorUid: String @fdc_generated(from: "Challenge.creator", purpose: IMPLICIT_REF_FIELD)
 }
 extend type ChallengeParticipation {
   """
-  ✨ Implicit foreign key field based on `ChallengeParticipation`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `ChallengeParticipation`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  userId: UUID! @fdc_generated(from: "ChallengeParticipation.user", purpose: IMPLICIT_REF_FIELD)
+  userUid: String! @fdc_generated(from: "ChallengeParticipation.user", purpose: IMPLICIT_REF_FIELD)
   """
   ✨ Implicit foreign key field based on `ChallengeParticipation`.`challenge`. It must match the value of `Challenge`.`id`. See `@ref` for how to customize it.
   """
@@ -44,27 +50,41 @@ extend type Comment {
   """
   id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Comment", purpose: IMPLICIT_KEY_FIELD)
   """
-  ✨ Implicit foreign key field based on `Comment`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Comment`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  userId: UUID! @fdc_generated(from: "Comment.user", purpose: IMPLICIT_REF_FIELD)
+  userUid: String! @fdc_generated(from: "Comment.user", purpose: IMPLICIT_REF_FIELD)
 }
 extend type CompanyMetric {
   """
   ✨ Implicit foreign key field based on `CompanyMetric`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
   """
   companyId: UUID! @fdc_generated(from: "CompanyMetric.company", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `CompanyMetric`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "CompanyMetric.user", purpose: IMPLICIT_REF_FIELD)
 }
 extend type CompanyProfile {
   """
-  ✨ Implicit foreign key field based on `CompanyProfile`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `CompanyProfile`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  userId: UUID @fdc_generated(from: "CompanyProfile.user", purpose: IMPLICIT_REF_FIELD)
+  userUid: String @fdc_generated(from: "CompanyProfile.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type EternalMemory {
+  """
+  ✨ Implicit foreign key field based on `EternalMemory`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "EternalMemory.user", purpose: IMPLICIT_REF_FIELD)
 }
 extend type Report {
   """
   ✨ Implicit foreign key field based on `Report`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
   """
   companyId: UUID! @fdc_generated(from: "Report.company", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Report`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "Report.user", purpose: IMPLICIT_REF_FIELD)
 }
 extend type ReportSection {
   """
@@ -72,19 +92,31 @@ extend type ReportSection {
   """
   reportId: UUID! @fdc_generated(from: "ReportSection.report", purpose: IMPLICIT_REF_FIELD)
 }
+extend type RoadmapMilestone {
+  """
+  ✨ Implicit foreign key field based on `RoadmapMilestone`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "RoadmapMilestone.user", purpose: IMPLICIT_REF_FIELD)
+}
 extend type SocialConnection {
   """
-  ✨ Implicit foreign key field based on `SocialConnection`.`follower`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `SocialConnection`.`follower`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  followerId: UUID! @fdc_generated(from: "SocialConnection.follower", purpose: IMPLICIT_REF_FIELD)
+  followerUid: String! @fdc_generated(from: "SocialConnection.follower", purpose: IMPLICIT_REF_FIELD)
   """
-  ✨ Implicit foreign key field based on `SocialConnection`.`followed`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `SocialConnection`.`followed`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  followedId: UUID! @fdc_generated(from: "SocialConnection.followed", purpose: IMPLICIT_REF_FIELD)
+  followedUid: String! @fdc_generated(from: "SocialConnection.followed", purpose: IMPLICIT_REF_FIELD)
 }
-extend type User {
+extend type SwarmAgentTask {
   """
-  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  ✨ Implicit foreign key field based on `SwarmAgentTask`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "User", purpose: IMPLICIT_KEY_FIELD)
+  userUid: String! @fdc_generated(from: "SwarmAgentTask.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Task {
+  """
+  ✨ Implicit foreign key field based on `Task`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "Task.user", purpose: IMPLICIT_REF_FIELD)
 }

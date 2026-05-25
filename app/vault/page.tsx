@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
-  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles, XCircle
+  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles, XCircle, Award, Network
 } from 'lucide-react';
 import { getEvidenceFiles, insertEvidence, sealEvidence, type EvidenceFile } from '../../lib/db';
 import { scanEvidenceWithVision } from '../../lib/hermes-gateway';
@@ -14,11 +14,18 @@ import {
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip, StandardPage, BrandCardHeader
 } from '../../components/brand';
 import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
+import { ZKPRangeProofVisualizer } from '../../components/ui/ZKPRangeProofVisualizer';
+import { IntegrityCertificateView } from '../../components/ui/IntegrityCertificateView';
+import { AnchoredBadge } from '../../components/ui/AnchoredBadge';
+import { generateIntegrityCertificate, type IntegrityCertificate } from '../../lib/proof-export';
+import { policyEngine } from '../../lib/policy-engine';
+import { anchorageEngine } from '../../lib/anchorage-engine';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { cn } from '../../lib/utils';
+import { omniCore } from '../../lib/omni-core';
 
 const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
 const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
@@ -38,13 +45,15 @@ export default function VaultPage() {
   const [selectionHouse, setSelectionHouse] = useState<{ open: boolean, type: 'category' | 'gri' | null }>({ open: false, type: null });
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
 
-  // ZKP Application Scope State
-  const [proofBundle, setProofBundle] = useState<T5Attestation | null>(null);
+  // ZKP & Anchorage State
+  const [proofBundle, setProofBundle] = useState<any | null>(null);
   const [privacyProof, setPrivacyProof] = useState<SelectiveDisclosureProof | null>(null);
   const [rangeProof, setRangeProof] = useState<ZKPRangeProof | null>(null);
+  const [certificate, setCertificate] = useState<IntegrityCertificate | null>(null);
   const [showProof, setShowProof] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showRange, setShowRange] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
 
   const showToast = useCallback((msg: string, type: 'success' | 'error' | 'info' = 'success') => {
     setToast({ msg, type });
@@ -60,6 +69,35 @@ export default function VaultPage() {
   };
 
   useEffect(() => { load(); }, []);
+
+  const anchorFiles = async () => {
+    const verifiedUnanchored = files.filter(f => f.status === 'verified' && !f.anchored);
+    if (verifiedUnanchored.length === 0) {
+      showToast('目前沒有可錨定的已驗證憑證', 'info');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const seals = verifiedUnanchored.map(f => f.hash_lock);
+      const receipt = await anchorageEngine.anchorBatch(seals);
+      
+      for (const file of verifiedUnanchored) {
+        await supabase.from('evidence_vault').update({ 
+          anchored: true, 
+          tx_hash: receipt.txHash,
+          anchored_at: receipt.timestamp 
+        }).eq('id', file.id);
+      }
+      
+      showToast(`已成功錨定 ${seals.length} 筆憑證至公共帳本`, 'success');
+      await load();
+    } catch (e) {
+      showToast('錨定失敗', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const autoTagFile = async () => {
     if (!form.file_name) { showToast('請先輸入檔案名稱以供 AI 分析', 'info'); return; }
@@ -84,24 +122,56 @@ export default function VaultPage() {
   const sealFile = async (file: any) => {
     setSealingId(file.id!);
     try {
-      const attestation = await create5TAttestation(
-        file.gri_reference || 'GENERAL_METRIC',
-        'VERIFIED_BY_SCAN',
-        'UNIT_AUTO',
+      const policyId = file.category === 'E' ? 'policy_csrd_e1_1' : 'policy_gri_305_1';
+      const result = await omniCore.sealComponent(
+        file.file_name,
         `/vault/${file.id}`,
-        '[5T_GOVERNANCE_PROTOCOL_V1]'
+        file.gri_reference || '[GENERAL_METRIC]',
+        policyId
       );
+
+      if (result.validation && !result.validation.isValid) {
+        showToast(`合規檢查未通過 (Score: ${result.validation.score}): ${result.validation.violations[0]}`, 'error');
+      }
+
       const { error } = await supabase.from('evidence_vault').update({ 
-        status: 'verified', zkp_proof: true, hash_lock: attestation.masterSeal, t5_bundle: attestation
+        status: 'verified', zkp_proof: true, hash_lock: result.hash_lock, t5_bundle: result
       }).eq('id', file.id);
+
       if (error) throw error;
       await load();
-      showToast('5T 誠信封印完成', 'success');
+      showToast('5T 誠信封印 & 政策驗證完成', 'success');
     } catch (e) {
       showToast('5T 封印失敗', 'error');
     } finally {
       setSealingId(null);
     }
+  };
+
+  const showIntegrityCertificate = async (file: any) => {
+    if (!file.hash_lock) return;
+    const component = {
+      uuid: file.id,
+      timestamp: new Date(file.created_at).getTime(),
+      version: '1.1.0',
+      evidence: {
+        tangible_metric: file.file_name,
+        source_origin: `/vault/${file.id}`,
+        lifecycle_hooks: [],
+        formula_ref: file.gri_reference
+      },
+      status: 'Trustworthy' as const,
+      hash_lock: file.hash_lock
+    };
+    const cert = await generateIntegrityCertificate(component, 'ESG GO Enterprise Partner');
+    
+    if (file.anchored) {
+      cert.verificationUrl += `?tx=${file.tx_hash}`;
+      cert.masterSeal = `${cert.masterSeal} (Anchored: ${file.tx_hash.substring(0,10)}...)`;
+    }
+
+    setCertificate(cert);
+    setShowCertificate(true);
   };
 
   const draftFromEvidence = async (file: any) => {
@@ -115,11 +185,11 @@ export default function VaultPage() {
           actorId: user?.email || 'vault_user',
           taskType: 'report_drafting',
           title: `憑證自動撰寫: ${file.file_name}`,
-          description: `基於憑證 [${file.id}] 的內容，撰寫對應 ${file.gri_reference} 的 5000 字深度章節。`,
+          description: `基於憑證 [${file.id}] 的內容，撰寫對應 ${file.gri_reference} 的章節。`,
           skillKey: 'gri_report_draft'
         })
       });
-      showToast('草稿生成任務已排入蜂群，請至調度中心查看', 'success');
+      showToast('草稿生成任務已排入蜂群', 'success');
     } catch (e) {
       showToast('自動撰寫引擎故障', 'error');
     } finally {
@@ -131,7 +201,7 @@ export default function VaultPage() {
     setScanningId(file.id!);
     try {
       await scanEvidenceWithVision(file.id!, 'image/pdf');
-      showToast('AI 掃描完成，已提取關鍵指標。', 'success');
+      showToast('AI 掃描完成。', 'success');
     } catch {
       showToast('AI 掃描失敗', 'error');
     } finally {
@@ -171,13 +241,13 @@ export default function VaultPage() {
   const pageConfig: UniversalPageConfig = {
     id: 'evidence-vault',
     title: '證據金庫 Vault',
-    subtitle: '5T 誠信協議 · ZKP 零知識證明 · SHA-256 數位鎖定：建立企業永續治理的「誠信主權」。',
+    subtitle: '5T 誠信協議 · ZKP 零知識證明 · 公共帳本錨定：建立企業永續治理的「誠信主權」。',
     icon: <Database size={32} />,
     griReference: 'Governance Vault',
     activeT5Tags: ['T1', 'T2', 'T4', 'T5'],
     primaryActions: [
       { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: load, loading },
-      { id: 'batch', label: '批次封印', icon: <CheckSquare size={16}/>, variant: 'secondary', onClick: () => showToast('批次處理引擎準備中', 'info') },
+      { id: 'anchor', label: '批次錨定', icon: <Network size={16}/>, variant: 'secondary', onClick: anchorFiles, loading },
       { id: 'upload', label: '上傳佐證', icon: <Upload size={16}/>, onClick: () => setShowUpload(true) }
     ],
     kpis: [
@@ -221,9 +291,13 @@ export default function VaultPage() {
                     cat: <BrandBadge variant="outline" size="xs" className="opacity-60">{CAT_LABELS[f.category || 'E']}</BrandBadge>,
                     gri: <BrandBadge variant="info" size="xs" className="font-mono">{f.gri_reference || '-'}</BrandBadge>,
                     zkp: f.zkp_proof ? (
-                      <div className="flex items-center gap-2">
-                        <BrandBadge variant="gold" size="xs" className="font-black">T5_SEALED</BrandBadge>
-                        <button onClick={() => { setProofBundle(f.t5_bundle); setShowProof(true); }} className="text-blue-500 hover:text-blue-700"><Share2 size={12}/></button>
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center gap-2">
+                           <BrandBadge variant="gold" size="xs" className="font-black">T5_SEALED</BrandBadge>
+                           <button onClick={() => showIntegrityCertificate(f)} className="text-blue-500 hover:text-blue-700" title="查看誠信憑證"><Award size={14}/></button>
+                           <button onClick={() => { setProofBundle(f.t5_bundle); setShowProof(true); }} className="text-slate-400 hover:text-blue-500" title="查看原始 5T Bundle"><Share2 size={12}/></button>
+                        </div>
+                        {f.anchored && <AnchoredBadge txHash={f.tx_hash} />}
                       </div>
                     ) : <span className="text-[10px] font-black text-slate-300">UNSEALED</span>,
                     actions: (
@@ -308,14 +382,25 @@ export default function VaultPage() {
 
         {showRange && rangeProof && (
           <BrandModal open={showRange} onClose={() => setShowRange(false)} title="ZKP 閾值範圍證明 (Range Proof)" size="md">
-             <div className="space-y-6 text-center">
-                <div className="w-20 h-20 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto mb-4 border border-purple-100 shadow-sm rotate-3"><Shield size={32} className="text-purple-600" /></div>
-                <h4 className="text-xl font-black text-[#003262]">誠信閾值驗算成功</h4>
-                <div className="p-6 bg-gradient-to-br from-purple-600 to-indigo-700 rounded-3xl text-white shadow-xl relative overflow-hidden"><div className="relative z-10"><p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-3 text-purple-200">Compliance Statement</p><p className="text-base font-bold mb-4">"指標數值符合 ESG 排放減量閾值"</p><div className="flex items-center justify-center gap-4 bg-white/10 py-3 rounded-xl backdrop-blur-md"><div className="text-center"><p className="text-[8px] uppercase font-black text-purple-200">Min</p><p className="text-xs font-mono font-bold">{rangeProof.min}</p></div><div className="w-12 h-px bg-white/20" /><div className="w-8 h-8 rounded-full bg-emerald-400 flex items-center justify-center shadow-lg"><CheckCircle size={16} className="text-emerald-900" /></div><div className="w-12 h-px bg-white/20" /><div className="text-center"><p className="text-[8px] uppercase font-black text-purple-200">Max (Target)</p><p className="text-xs font-mono font-bold">{rangeProof.max}</p></div></div></div><Zap size={100} className="absolute -bottom-6 -right-6 text-white/10 rotate-12" /></div>
-                <div className="text-left space-y-3"><div className="p-4 bg-slate-50 rounded-2xl border border-slate-100"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Range Signature (ZKP)</p><p className="text-[9px] font-mono break-all text-slate-500 leading-tight">{rangeProof.rangeSignature}</p></div></div>
+             <div className="space-y-6">
+                <ZKPRangeProofVisualizer proof={rangeProof} />
+                <div className="text-left space-y-3 px-2">
+                   <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
+                      請在上方輸入 Prover 提供之「盲化因子」進行本地加密驗算。此過程不會將敏感數據上傳至伺服器。
+                   </p>
+                </div>
                 <BrandButton variant="primary" fullWidth className="bg-purple-600 hover:bg-purple-700" onClick={() => setShowRange(false)}>完成驗算</BrandButton>
              </div>
           </BrandModal>
+        )}
+
+        {showCertificate && certificate && (
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setShowCertificate(false)} />
+            <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative z-10 w-full max-w-2xl">
+              <IntegrityCertificateView certificate={certificate} onClose={() => setShowCertificate(false)} />
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
