@@ -45,5 +45,7 @@ nul
 # Service account keys
 service-account-key.json
 *.service-account-key.json
+%USERPROFILE%/
+*-admin-key.json
 
 node_modules
