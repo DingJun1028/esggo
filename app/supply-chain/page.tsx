@@ -241,7 +241,7 @@ export default function SupplyChainPage() {
                         size="sm" 
                         className={cn("h-9 px-4 rounded-xl text-[10px] font-bold uppercase tracking-widest", s.aiConfidence < 80 && "shadow-lg shadow-blue-500/20")}
                         onClick={() => handleVerify(s.id)}
-                        loading={verifyingId === s.id}
+                        isLoading={verifyingId === s.id}
                       >
                          {s.aiConfidence < 80 ? '人工複核' : '重新校驗'}
                       </Button>
@@ -379,7 +379,7 @@ export default function SupplyChainPage() {
                     )}
 
                     <div className="grid grid-cols-1 gap-4">
-                       <Button variant="glass" fullWidth size="lg" className="rounded-2xl h-14 font-black flex items-center justify-center gap-3">
+                       <Button variant="glass" size="lg" className="w-full rounded-2xl h-14 font-black flex items-center justify-center gap-3">
                           <Activity size={18} />
                           <span>進入遠距查證環境 (Remote Audit)</span>
                        </Button>
@@ -387,14 +387,14 @@ export default function SupplyChainPage() {
                  </div>
               </div>
 
-              <footer className="mt-12 flex gap-4">
-                 <Button variant="glass" fullWidth size="lg" className="rounded-[24px] h-16 text-lg font-bold" onClick={() => setSelected(null)}>
-                  暫存並退出
-                 </Button>
-                 <Button variant="primary" fullWidth size="lg" className="rounded-[24px] h-16 text-lg font-bold shadow-2xl shadow-[#003262]/20" onClick={() => setSelected(null)}>
-                  核准並封印 5T 憑證
-                 </Button>
-              </footer>
+               <footer className="mt-12 flex gap-4">
+                  <Button variant="glass" size="lg" className="flex-1 rounded-[24px] h-16 text-lg font-bold" onClick={() => setSelected(null)}>
+                   暫存並退出
+                  </Button>
+                  <Button variant="primary" size="lg" className="flex-1 rounded-[24px] h-16 text-lg font-bold shadow-2xl shadow-[#003262]/20" onClick={() => setSelected(null)}>
+                   核准並封印 5T 憑證
+                  </Button>
+               </footer>
             </motion.div>
           </div>
         )}
