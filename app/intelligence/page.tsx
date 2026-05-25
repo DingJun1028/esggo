@@ -17,6 +17,7 @@ import { MemoryGraphVisualizer } from '../../components/ui/MemoryGraphVisualizer
 import { memoryGraphEngine, MemoryGraph } from '../../lib/memory-graph-engine';
 import { cn } from '../../lib/utils';
 import { UniversalPageConfig } from '../../lib/page-config';
+import { supabase } from '../../lib/supabase';
 
 const benchmarks = [
   { company: '台積電', industry: '半導體', eScore: 92, sScore: 88, gScore: 94, overall: 91, certified: true },
@@ -49,6 +50,36 @@ export default function IntelligencePage() {
       try {
         const data = await dcListScrapedArticles();
         setArticles(data || []);
+
+        // Build graph from real vault evidence
+        if (supabase) {
+          const { data: vaultFiles } = await supabase
+            .from('evidence_vault')
+            .select('*')
+            .not('hash_lock', 'is', null)
+            .order('created_at', { ascending: false })
+            .limit(1);
+          const file = vaultFiles?.[0];
+          if (file) {
+            const g = await memoryGraphEngine.buildLineageGraph({
+              uuid: file.id,
+              timestamp: new Date(file.created_at).getTime(),
+              version: file.t5_bundle?.version || '1.1.0',
+              status: 'Trustworthy',
+              hash_lock: file.hash_lock,
+              evidence: {
+                tangible_metric: file.file_name || 'Vault Evidence',
+                source_origin: `/vault/${file.id}`,
+                lifecycle_hooks: [],
+                formula_ref: file.gri_reference || 'GRI'
+              }
+            });
+            setSampleGraph(g);
+            return;
+          }
+        }
+
+        // Fallback to default graph
         const g = await memoryGraphEngine.buildLineageGraph({
           uuid: 'comp-abc-123',
           timestamp: Date.now(),
