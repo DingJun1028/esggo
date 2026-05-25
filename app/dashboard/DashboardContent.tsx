@@ -353,6 +353,44 @@ const QUICK_ACTIONS = [
   { href: '/terminal',     icon: <Code size={18}/>,      label: '終端主控', color: '#003262' },
 ];
 
+function GovernanceLoopMonitor() {
+  const [activities, setActivities] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Simulated deep integration feed
+    setActivities([
+      { type: 'intelligence', msg: 'Intelligence Hub 自動觸發了 1 項 5T 實證蒐集任務', time: '10 分鐘前', icon: <Globe size={14}/> },
+      { type: 'alchemy', msg: 'Alchemy 提取數據已同步至 SustainWrite 能源管理章節', time: '30 分鐘前', icon: <Sparkles size={14}/> },
+      { type: 'strategy', msg: '戰略實驗室：5T 供應鏈自動化提案已同步至動態架構', time: '2 小時前', icon: <Target size={14}/> },
+    ]);
+  }, []);
+
+  return (
+    <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-xl bg-gradient-to-br from-slate-900 to-[#003262] text-white">
+      <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
+        <div>
+          <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-[0.2em]">oX Governance Loop</h4>
+          <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-0.5">Cross-Module Deep Integration</p>
+        </div>
+        <RefreshCw size={14} className="text-blue-400 animate-spin-slow" />
+      </div>
+      <div className="flex-1 p-4 space-y-3">
+        {activities.map((a, i) => (
+          <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/10 flex gap-4 hover:bg-white/10 transition-all cursor-default group">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+              {a.icon}
+            </div>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-blue-100 leading-snug">{a.msg}</p>
+              <p className="text-[9px] text-white/30 font-bold uppercase mt-1">{a.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </BrandCard>
+  );
+}
+
 export default function DashboardContent() {
   const [now, setNow] = useState(new Date());
   const [trustScore, setTrustScore] = useState(90);
@@ -422,6 +460,7 @@ export default function DashboardContent() {
         </div>
 
         <div className="col-span-12 lg:col-span-4 space-y-6 lg:space-y-8">
+          <GovernanceLoopMonitor />
           <SwarmMonitor />
           <IntegrityPulse />
           <AIRiskAlerter />
