@@ -36,6 +36,18 @@ export default function HermesArchitecturePage() {
     return () => clearInterval(interval);
   }, []);
 
+  const [lastEvo, setLastEvo] = useState<any>(null);
+
+  useEffect(() => {
+    const checkEvo = () => {
+      const local = localStorage.getItem('hermes_ox_evolution');
+      if (local) setLastEvo(JSON.parse(local));
+    };
+    checkEvo();
+    window.addEventListener('storage', checkEvo);
+    return () => window.removeEventListener('storage', checkEvo);
+  }, []);
+
   // ── Universal Page Configuration ──────────────────────────────────
   const pageConfig: UniversalPageConfig = {
     id: 'hermes-architecture',
@@ -169,6 +181,23 @@ export default function HermesArchitecturePage() {
                       </div>
                       <Bot size={80} className="absolute -bottom-4 -right-4 text-white/5" />
                    </div>
+                   
+                   {lastEvo && (
+                     <motion.div 
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center gap-4"
+                     >
+                        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                           <Sparkles size={16} />
+                        </div>
+                        <div>
+                           <p className="text-[10px] font-black text-blue-600 uppercase">最新進化提案已同步</p>
+                           <p className="text-xs font-bold text-slate-700">{lastEvo.title}</p>
+                        </div>
+                     </motion.div>
+                   )}
+
                    <BrandButton variant="outline" fullWidth className="rounded-2xl border-slate-200">
                       調整系統自主權限制 <ChevronRight size={14} className="ml-1" />
                    </BrandButton>

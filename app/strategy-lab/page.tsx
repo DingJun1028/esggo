@@ -23,17 +23,14 @@ export default function StrategyLabPage() {
   const [result, setResult] = useState<ConsensusResult | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
 
-  const handleEvaluate = async () => {
-    if (!proposal.trim()) return;
-    setIsEvaluating(true);
-    setResult(null);
-    
-    // AI simulation delay
-    await new Promise(r => setTimeout(r, 2000));
-    
-    const res = await swarmConsensusEngine.evaluateProposal(proposal);
-    setResult(res);
-    setIsEvaluating(false);
+  const { submitEvolution } = await import('../../hooks/useSystemEvolution').then(m => m.useSystemEvolution());
+
+  const handleSealStrategy = async () => {
+    if (!result) return;
+    showToast('正在執行 5T 戰略封印...', 'info');
+    await new Promise(r => setTimeout(r, 1500));
+    await submitEvolution(proposal.substring(0, 30) + '...', result.confidence * 100);
+    showToast('戰略封印完成，系統架構已同步更新', 'success');
   };
 
   const GROWTH_PATHWAYS = [
@@ -136,7 +133,7 @@ export default function StrategyLabPage() {
                             <p className="text-[10px] text-white/40 font-mono">sha256:ox_strat_{Math.random().toString(36).substring(7)}</p>
                          </div>
                       </div>
-                      <BrandButton variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/10">
+                      <BrandButton variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/10" onClick={handleSealStrategy}>
                          提交至聖碑
                       </BrandButton>
                    </div>

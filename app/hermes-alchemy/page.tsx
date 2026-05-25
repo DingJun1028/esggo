@@ -259,9 +259,16 @@ export default function HermesAlchemyPage() {
                           <code className="text-[10px] text-emerald-600/60 font-mono">{results.sealHash}</code>
                         </div>
                       </div>
-                      <BrandButton variant="outline" size="sm" className="border-emerald-200 text-emerald-700 bg-white">
-                        查看聖碑紀錄 <ArrowRight size={14} className="ml-1" />
-                      </BrandButton>
+                      <div className="flex gap-2">
+                        <Link href={`/editor?chapter=energy&fill=${results.sealHash}`}>
+                          <BrandButton variant="primary" size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+                            進入永續撰寫 <Edit3 size={14} className="ml-1" />
+                          </BrandButton>
+                        </Link>
+                        <BrandButton variant="outline" size="sm" className="border-emerald-200 text-emerald-700 bg-white">
+                          查看聖碑紀錄 <ArrowRight size={14} className="ml-1" />
+                        </BrandButton>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex gap-4">
