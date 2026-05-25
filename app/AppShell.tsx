@@ -8,12 +8,13 @@ import {
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
-  Search, Command, X, ArrowRight, Settings2, Layout
+  Search, Command, X, ArrowRight, Settings2, Layout, Zap
 } from 'lucide-react';
 import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
 import ComposerFooter from '../components/brand/ComposerFooter';
 import HermesControlCenter from '../components/brand/HermesControlCenter';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navGroups = [
   {
@@ -25,6 +26,16 @@ const navGroups = [
       { href: '/health-check', label: '企業健檢', sub: 'Health Check', icon: <HeartPulse size={18} /> },
       { href: '/advisory', label: '專家諮詢', sub: 'Advisory', icon: <MessageSquare size={18} /> },
       { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <BarChart3 size={18} /> },
+    ],
+  },
+  {
+    label: 'OMNIHERMES oX',
+    items: [
+      { href: '/hermes-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
+      { href: '/best-practice', label: '最佳實踐', sub: 'Best Practice', icon: <Trophy size={18} /> },
+      { href: '/hermes-alchemy', label: 'Hermes 煉金術', sub: 'Multi-modal Scan', icon: <Sparkles size={18} /> },
+      { href: '/hermes-agent', label: '代理系統', sub: 'Agent OS', icon: <Terminal size={18} /> },
+      { href: '/hermes-architecture', label: '架構治理', sub: 'Architecture', icon: <Layers size={18} /> },
     ],
   },
   {
@@ -42,6 +53,7 @@ const navGroups = [
       { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: <ListChecks size={18} /> },
       { href: '/vault', label: '證據金庫', sub: 'Evidence Vault', icon: <Lock size={18} /> },
       { href: '/document-checklist', label: '文件清單', sub: 'Doc Checklist', icon: <ClipboardList size={18} /> },
+      { href: '/auditor', label: '審計助手', sub: 'Auditor', icon: <Shield size={18} /> },
     ],
   },
   {
@@ -55,6 +67,7 @@ const navGroups = [
       { href: '/supply-chain', label: '供應鏈透明', sub: 'Supply Chain', icon: <Link2 size={18} /> },
       { href: '/stakeholders', label: '利害關係人', sub: 'Stakeholders', icon: <Handshake size={18} /> },
       { href: '/audit-verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: <CheckCircle2 size={18} /> },
+      { href: '/strategy-lab', label: '策略實驗室', sub: 'Strategy Lab', icon: <Zap size={18} /> },
     ],
   },
   {
@@ -91,6 +104,8 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
         );
 
         setResults([...navMatches, ...dbResults]);
+      } catch (e) {
+        setResults([]);
       } finally {
         setScanning(false);
       }
@@ -316,6 +331,50 @@ function MobileNav() {
   );
 }
 
+function MobileIntegrityAlert() {
+  const [activeAlert, setActiveAlert] = useState<any>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // Simulate random 5T events for mobile engagement
+      if (Math.random() > 0.85) {
+        const events = [
+          { title: 'ZKP 驗證成功', body: '年度碳排放數據已通過零知識區間驗證。', icon: <Lock size={16}/>, color: 'text-purple-600' },
+          { title: '蜂群共識達成', body: 'Agent 蜂群已批准 2030 綠能轉型戰略。', icon: <Zap size={16}/>, color: 'text-gold-600' },
+          { title: '5T 封印寫入', body: '範疇三供應商數據已完成公共帳本錨定。', icon: <Shield size={16}/>, color: 'text-emerald-600' },
+        ];
+        setActiveAlert(events[Math.floor(Math.random() * events.length)]);
+        setTimeout(() => setActiveAlert(null), 5000);
+      }
+    }, 15000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {activeAlert && (
+        <motion.div 
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -100, opacity: 0 }}
+          className="fixed top-4 left-4 right-4 z-[9999] lg:left-auto lg:right-4 lg:w-80"
+        >
+          <div className="bg-white/90 backdrop-blur-2xl rounded-3xl border border-white shadow-extreme p-4 flex items-start gap-4">
+             <div className={`w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 ${activeAlert.color}`}>
+                {activeAlert.icon}
+             </div>
+             <div className="min-w-0 flex-1">
+                <p className="text-xs font-black text-berkeley-blue uppercase tracking-tight">{activeAlert.title}</p>
+                <p className="text-[10px] text-slate-500 font-medium leading-relaxed mt-0.5 line-clamp-2">{activeAlert.body}</p>
+             </div>
+             <button onClick={() => setActiveAlert(null)} className="text-slate-300 hover:text-slate-600"><X size={14}/></button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function AppShellInner({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -394,6 +453,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
       <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       <HermesControlCenter isOpen={isControlCenterOpen} onClose={() => setIsControlCenterOpen(false)} />
       {isMobile && <MobileNav />}
+      <MobileIntegrityAlert />
       <HermesFloatingAgent />
     </div>
   );
