@@ -12,10 +12,12 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "fix-encoding": "powershell -ExecutionPolicy Bypass -File scripts/fix-encoding.ps1",
     "check-encoding": "grep -Prn '[\\x{4e00}-\\x{9fff}]' src/ app/ components/ || echo 'All Chinese characters processed'"
   },
   "dependencies": {
     "@apollo/client": "^4.2.0",
+    "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@genkit-ai/google-genai": "^1.35.0",
     "@genkit-ai/googleai": "^1.28.0",
@@ -26,6 +28,10 @@
     "@prisma/client": "^5.22.0",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.1",
+    "@tanstack/react-query": "^5.100.14",
+    "@trpc/client": "^11.17.0",
+    "@trpc/react-query": "^11.17.0",
+    "@trpc/server": "^11.17.0",
     "@types/uuid": "^10.0.0",
     "cheerio": "^1.2.0",
     "class-variance-authority": "0.7.1",

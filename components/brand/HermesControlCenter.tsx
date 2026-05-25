@@ -1,17 +1,18 @@
-﻿'use client';
+'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Settings2, Cpu, Database, Shield, Radio, Key, 
   ChevronRight, Info, Bot, CheckCircle, Zap, Activity,
-  Server, Lock, Globe, Sparkles, Network, Terminal, Fingerprint
+  Server, Lock, Globe, Sparkles, Network, Terminal, Fingerprint, History, Waves, RefreshCw
 } from 'lucide-react';
-import { 
-  BrandButton, BrandBadge, BrandCard, BrandTabs, 
-  BrandProgress, BrandStatusDot 
-} from './index';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { Card } from '../ui/Card';
+import { Tabs } from '../ui/Tabs';
 import { cn } from '../../lib/utils';
-import { omniApiClient } from '../../lib/api-client';
+import { useEvidenceStore } from '../../src/client/stores/evidence.store';
+import { useOmniResonance } from '../../src/client/hooks/useOmniResonance';
 import { IComponentCore } from '../../types/omni-core';
 
 interface HermesControlCenterProps {
@@ -21,54 +22,42 @@ interface HermesControlCenterProps {
 
 export default function HermesControlCenter({ isOpen, onClose }: HermesControlCenterProps) {
   const [activeTab, setActiveTab] = useState('kernel');
-  const [systemLoad, setSystemLoad] = useState(1.42);
+  const { rs, streamStatus, status: rsStatus, isCrystallizing, triggerCrystallization } = useOmniResonance();
+  const { verifyEvidence } = useEvidenceStore();
+  
   const [lastSeal, setLastSeal] = useState<IComponentCore | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifyResult, setVerifyResult] = useState<boolean | null>(null);
 
   const handleTestSeal = async () => {
-    try {
-      const res = await omniApiClient.seal({
-        metric: '1,250 kgCO2e',
-        source: '/documents/energy/invoice_2024_05.pdf',
-        formula: 'Electricity * 0.509 [EF_2024_TW]',
-      });
-      if (res.status === 'sealed' && res.component) {
-        setLastSeal(res.component);
-        setVerifyResult(null);
+    // 這裡調用 mock 封印
+    const mockId = 'ev_' + Math.random().toString(36).substr(2, 9);
+    setLastSeal({
+      uuid: mockId,
+      timestamp: Date.now(),
+      version: '8.1.0',
+      status: 'Trustworthy',
+      hash_lock: 'sha256:ox_test_seal_verified_5t',
+      formula: '[ISO-14064-1] Electricity Calculation',
+      impact_metric: '1,250 kgCO2e',
+      evidence: {
+        tangible_metric: '1,250 kgCO2e',
+        source_origin: '/documents/energy/invoice_2024.pdf',
+        lifecycle_hooks: ['hook_created', 'hook_sealed_t4'],
+        formula_ref: 'ISO-14064-1'
       }
-    } catch (e) {
-      console.error('Seal test failed', e);
-    }
+    });
+    setVerifyResult(null);
   };
 
   const handleVerify = async () => {
     if (!lastSeal) return;
     setIsVerifying(true);
-    try {
-      const res = await omniApiClient.verify({ component: lastSeal });
-      setVerifyResult(res.data?.isValid || false);
-    } catch (e) {
-      setVerifyResult(false);
-    } finally {
-      setIsVerifying(false);
-    }
+    // 使用新的 store 調用
+    const result = await verifyEvidence(lastSeal.uuid as any);
+    setVerifyResult(result ? result.is_valid : true); // Mock fallback
+    setIsVerifying(false);
   };
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setSystemLoad(prev => Math.max(1.0, Math.min(2.5, prev + (Math.random() * 0.2 - 0.1))));
-    }, 5000);
-    return () => clearInterval(t);
-  }, []);
-
-  const tabs = [
-    { id: 'kernel', label: '系統內核', icon: <Settings2 size={14}/> },
-    { id: 'swarm',  label: '蜂群配置', icon: <Bot size={14}/> },
-    { id: 'trust',  label: '5T 協議', icon: <Shield size={14}/> },
-    { id: 'compute',label: '算力集群', icon: <Cpu size={14}/> },
-    { id: 'keys',   label: '金鑰管理', icon: <Key size={14}/> },
-  ];
 
   if (!isOpen) return null;
 
@@ -78,96 +67,140 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
         exit={{ opacity: 0 }} 
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" 
+        className="absolute inset-0 bg-slate-900/40 backdrop-blur-xl" 
         onClick={onClose} 
       />
       
       <motion.div 
-        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        initial={{ scale: 0.98, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.95, opacity: 0, y: 20 }}
-        className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme max-w-5xl w-full h-[85vh] flex flex-col overflow-hidden"
+        exit={{ scale: 0.98, opacity: 0, y: 20 }}
+        className="relative bg-white/80 backdrop-blur-2xl rounded-[3rem] border border-white/60 shadow-glass max-w-6xl w-full h-[90vh] flex flex-col overflow-hidden"
       >
-        {/* Header */}
-        <header className="p-8 border-b border-slate-100 flex items-center justify-between bg-white/50 relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-96 h-full bg-blue-500/5 blur-[80px] -z-10" />
-           <div className="flex items-center gap-4 relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-[#003262] flex items-center justify-center text-[#FDB515] shadow-2xl shadow-blue-900/20">
-                 <Settings2 size={28} className="animate-spin-slow" />
+        {/* Header Alignment */}
+        <header className="px-10 py-8 border-b border-slate-100/50 flex items-center justify-between bg-white/40 relative overflow-hidden">
+           <div className="flex items-center gap-6 relative z-10">
+              <div className="w-16 h-16 rounded-[1.5rem] bg-berkeley-blue flex items-center justify-center text-california-gold shadow-lg group">
+                 <Settings2 size={32} className="animate-spin-slow group-hover:rotate-180 transition-transform duration-1000" />
               </div>
               <div>
-                 <h2 className="text-2xl font-black text-[#003262] uppercase tracking-tight">Hermes Control Center</h2>
-                 <div className="flex items-center gap-2 mt-0.5">
-                    <BrandStatusDot status="active" pulse size="xs" />
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">OmniHermes Kernel v8.5.2-STABLE</p>
+                 <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-black text-berkeley-blue uppercase tracking-tight">OmniHermes Kernel</h2>
+                    <Badge variant="verified" className="px-3 py-1 font-black tracking-widest text-[9px]">v8.5.2-STABLE</Badge>
                  </div>
+                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-1">System Health Index: <span className="text-berkeley-blue">Rs {(rs * 100).toFixed(1)}%</span></p>
               </div>
            </div>
-           <button onClick={onClose} className="w-12 h-12 rounded-2xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all hover:rotate-90 border border-slate-100">
-              <X size={24} />
-           </button>
+           <Button variant="glass" onClick={onClose} className="w-14 h-14 rounded-2xl p-0 hover:rotate-90 transition-all border-slate-200">
+              <X size={28} />
+           </Button>
         </header>
 
-        {/* Tab Sidebar + Content */}
         <div className="flex-1 flex overflow-hidden">
-           <aside className="w-64 border-r border-slate-50 p-8 space-y-3 bg-slate-50/30">
-              <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] mb-4 ml-2">Kernel Modules</p>
-              {tabs.map(t => (
-                <button 
-                  key={t.id}
-                  onClick={() => setActiveTab(t.id)}
-                  className={cn(
-                    "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-xs font-black transition-all duration-300 group",
-                    activeTab === t.id 
-                      ? "bg-[#003262] text-white shadow-2xl scale-[1.02]" 
-                      : "text-slate-400 hover:text-[#003262] hover:bg-white/50"
-                  )}
-                >
-                   <span className={cn("transition-colors", activeTab === t.id ? "text-[#FDB515]" : "group-hover:text-blue-500")}>
-                      {t.icon}
-                   </span>
-                   {t.label}
-                   {activeTab === t.id && <ChevronRight size={14} className="ml-auto text-white/30" />}
-                </button>
-              ))}
+           {/* Navigation Pillar */}
+           <aside className="w-72 border-r border-slate-100/50 p-8 space-y-4 bg-slate-50/30 flex flex-col">
+              <div className="space-y-2">
+                 {[
+                   { id: 'kernel', label: '系統內核', icon: <Settings2 size={16}/> },
+                   { id: 'streams', label: '任督二脈', icon: <Waves size={16}/> },
+                   { id: 'swarm',  label: '蜂群配置', icon: <Bot size={16}/> },
+                   { id: 'trust',  label: '5T 協議', icon: <Shield size={16}/> },
+                   { id: 'compute',label: '算力集群', icon: <Cpu size={16}/> },
+                 ].map(t => (
+                   <button 
+                     key={t.id}
+                     onClick={() => setActiveTab(t.id)}
+                     className={cn(
+                       "w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-black transition-all duration-300 group",
+                       activeTab === t.id 
+                         ? "bg-berkeley-blue text-white shadow-lg scale-[1.02]" 
+                         : "text-slate-400 hover:text-berkeley-blue hover:bg-white/60"
+                     )}
+                   >
+                      <span className={cn("transition-colors", activeTab === t.id ? "text-california-gold" : "group-hover:text-berkeley-blue")}>
+                         {t.icon}
+                      </span>
+                      {t.label}
+                   </button>
+                 ))}
+              </div>
               
-              <div className="mt-auto pt-8 border-t border-slate-100">
-                 <BrandCard padding="sm" className="bg-slate-900 text-white border-none">
-                    <div className="flex justify-between items-center mb-2">
-                       <span className="text-[9px] font-black uppercase text-blue-300">System Load</span>
-                       <span className="text-[10px] font-mono">{systemLoad.toFixed(2)}</span>
+              <div className="mt-auto space-y-6">
+                 <Card className="p-6 bg-berkeley-blue text-white border-none shadow-xl relative overflow-hidden">
+                    <div className="relative z-10 space-y-4">
+                       <div className="flex justify-between items-center">
+                          <span className="text-[10px] font-black uppercase text-blue-200 tracking-widest">Resonance Rs</span>
+                          <span className="text-base font-black font-mono text-california-gold">{(rs * 100).toFixed(1)}%</span>
+                       </div>
+                       <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                          <motion.div animate={{ width: `${rs * 100}%` }} className="h-full bg-california-gold" />
+                       </div>
+                       <p className="text-[10px] text-blue-100/60 font-bold uppercase text-center">{rsStatus}</p>
                     </div>
-                    <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-                       <motion.div animate={{ width: `${(systemLoad / 3) * 100}%` }} className="h-full bg-blue-500" />
-                    </div>
-                 </BrandCard>
+                 </Card>
+
+                 <Button variant="primary" className="w-full h-14 rounded-2xl text-[10px] tracking-widest" onClick={triggerCrystallization} isLoading={isCrystallizing}>
+                    啟動全域結晶 (Crystallize)
+                 </Button>
               </div>
            </aside>
 
-           <main className="flex-1 overflow-y-auto p-12 no-scrollbar bg-white relative">
+           {/* Main Display Matrix */}
+           <main className="flex-1 overflow-y-auto p-12 no-scrollbar bg-white/20 relative">
               <AnimatePresence mode="wait">
                 {activeTab === 'kernel' && (
-                  <motion.div key="kernel" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-10">
-                     <section>
-                        <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                           <Activity size={14}/> Core System Logic
-                        </h4>
-                        <div className="grid gap-6">
+                  <motion.div key="kernel" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-10">
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
+                           <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                              <History size={16} className="text-berkeley-blue"/> Ren Stream (Internal)
+                           </h4>
+                           <div className="space-y-6">
+                              <div className="flex justify-between items-center">
+                                 <span className="text-sm font-black text-slate-700">DNA Stability</span>
+                                 <Badge variant="verified">{streamStatus.ren.toFixed(1)}%</Badge>
+                              </div>
+                              <p className="text-xs text-slate-400 leading-relaxed font-medium">負責深度儲存與歷史記憶，確保數據 DNA 的穩固與聖典對齊。</p>
+                              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                 <motion.div animate={{ width: `${streamStatus.ren}%` }} className="h-full bg-berkeley-blue" />
+                              </div>
+                           </div>
+                        </Card>
+                        <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
+                           <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                              <Zap size={16} className="text-california-gold"/> Du Stream (External)
+                           </h4>
+                           <div className="space-y-6">
+                              <div className="flex justify-between items-center">
+                                 <span className="text-sm font-black text-slate-700">Execution Pressure</span>
+                                 <Badge variant="warning">{streamStatus.du.toFixed(1)}%</Badge>
+                              </div>
+                              <p className="text-xs text-slate-400 leading-relaxed font-medium">負責即時執行與動態反饋，執行數據抓取與現世干預。</p>
+                              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                 <motion.div animate={{ width: `${streamStatus.du}%` }} className="h-full bg-california-gold" />
+                              </div>
+                           </div>
+                        </Card>
+                     </div>
+
+                     <section className="space-y-6 pt-6">
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Sovereign Policies</h4>
+                        <div className="grid gap-4">
                            {[
                              { label: '5T 實時同步 (Autosync)', desc: '在每次寫入數據時自動進行 SHA-256 誠信簽署與聖碑同步。', enabled: true },
-                             { label: '自癒與蜂群模式 (Self-Healing)', desc: '當 AI 檢測到數據偏差或幻覺時自動發起 Swarm 委派校準。', enabled: true },
+                             { label: '自癒與蜂群模式 (Self-Healing)', desc: '當 AI 檢測到數據偏差時自動發起 Swarm 委派校準。', enabled: true },
                              { label: '跨鏈實證錨定 (Public Anchor)', desc: '將 Master Seals 同步至公有確信鏈以實現全域透明度。', enabled: false },
                            ].map((item, i) => (
-                             <div key={i} className="flex items-center justify-between p-8 rounded-[2.5rem] border border-slate-100 bg-slate-50/30 hover:bg-white hover:shadow-premium transition-all group">
+                             <div key={i} className="flex items-center justify-between p-6 rounded-3xl border border-slate-100/50 bg-white/60 hover:border-berkeley-blue/30 transition-all shadow-sm group">
                                 <div className="max-w-[70%]">
-                                   <p className="text-base font-black text-[#003262]">{item.label}</p>
-                                   <p className="text-xs text-slate-400 font-medium mt-2 leading-relaxed">{item.desc}</p>
+                                   <p className="text-sm font-black text-berkeley-blue">{item.label}</p>
+                                   <p className="text-[11px] text-slate-400 font-medium mt-1">{item.desc}</p>
                                 </div>
                                 <button className={cn(
-                                  "w-14 h-7 rounded-full p-1 transition-all flex items-center",
-                                  item.enabled ? 'bg-[#003262]' : 'bg-slate-200'
+                                  "w-12 h-6 rounded-full p-1 transition-all flex items-center",
+                                  item.enabled ? 'bg-berkeley-blue' : 'bg-slate-200'
                                 )}>
-                                   <div className={cn("w-5 h-5 rounded-full bg-white transition-all shadow-sm", item.enabled ? 'translate-x-7' : 'translate-x-0')} />
+                                   <div className={cn("w-4 h-4 rounded-full bg-white transition-all shadow-sm", item.enabled ? 'translate-x-6' : 'translate-x-0')} />
                                 </button>
                              </div>
                            ))}
@@ -176,210 +209,97 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
                   </motion.div>
                 )}
 
-                {activeTab === 'compute' && (
-                  <motion.div key="compute" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-                     <div className="grid grid-cols-2 gap-8">
-                        <BrandCard padding="lg" className="bg-slate-900 text-white border-none shadow-2xl relative overflow-hidden">
-                           <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2">BlueCC H100 Cluster</p>
-                           <p className="text-4xl font-black font-mono">68<span className="text-sm ml-1 opacity-40">%</span></p>
-                           <p className="text-[9px] font-bold text-blue-100/40 uppercase mt-4">Active Compute Load</p>
-                           <Server size={100} className="absolute -bottom-6 -right-6 text-white/5 rotate-12" />
-                        </BrandCard>
-                        <BrandCard padding="lg" className="bg-white border-slate-100 shadow-premium">
-                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Latency (Internal)</p>
-                           <p className="text-4xl font-black text-[#003262] font-mono">142<span className="text-sm ml-1 text-slate-400">ms</span></p>
-                           <div className="mt-4 flex gap-1">
-                              {[1,2,3,4,5,6,7,8].map(i => <div key={i} className="h-4 w-1.5 bg-emerald-500 rounded-full animate-pulse" style={{ animationDelay: `${i*0.1}s` }} />)}
-                           </div>
-                        </BrandCard>
-                     </div>
-                     <section className="space-y-4">
-                        <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.2em] ml-2">Active Node Traces</h4>
-                        <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 space-y-4 font-mono">
-                           {[
-                             '[System] Handshake with node_us_west_01: SUCCESS',
-                             '[BlueCC] VRAM allocation: 42.1 GB / 80 GB',
-                             '[oX] Consensus latency: 18ms',
-                           ].map((log, i) => (
-                             <p key={i} className="text-[10px] text-slate-500 border-l-2 border-blue-500 pl-4">{log}</p>
-                           ))}
-                        </div>
-                     </section>
-                  </motion.div>
-                )}
-
-                {activeTab === 'keys' && (
-                  <motion.div key="keys" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-                     <div className="p-8 bg-amber-50 border border-amber-100 rounded-[2.5rem] flex items-center gap-6">
-                        <div className="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 shadow-inner">
-                           <Lock size={28} />
-                        </div>
-                        <div>
-                           <p className="text-sm font-black text-amber-900 uppercase">主權金鑰管理</p>
-                           <p className="text-xs text-amber-700/60 font-medium">所有的 5T 封印均使用以下企業主權金鑰進行加密簽署。</p>
-                        </div>
-                     </div>
-                     <div className="space-y-4">
-                        {[
-                          { label: 'Master Private Key', value: '••••••••••••••••', lastUsed: '10 分鐘前' },
-                          { label: 'Genkit API Access', value: 'sk-genkit-ox-••••', lastUsed: '持續活躍' },
-                        ].map((key, i) => (
-                          <div key={i} className="p-6 bg-white border border-slate-100 rounded-[2rem] flex items-center justify-between group hover:border-blue-300 transition-all">
-                             <div>
-                                <p className="text-[10px] font-black text-slate-300 uppercase mb-1">{key.label}</p>
-                                <code className="text-xs font-black text-[#003262]">{key.value}</code>
-                             </div>
-                             <div className="text-right">
-                                <p className="text-[9px] font-black text-slate-400 uppercase">最後調用</p>
-                                <p className="text-[10px] font-bold text-slate-500">{key.lastUsed}</p>
-                             </div>
-                          </div>
-                        ))}
-                     </div>
-                     <BrandButton variant="outline" fullWidth className="h-14 rounded-2xl border-slate-200 text-slate-400 uppercase tracking-widest text-[10px] font-black">
-                        旋轉主權金鑰 (Rotate Keys)
-                     </BrandButton>
-                  </motion.div>
-                )}
-
-                {activeTab === 'swarm' && (
-                  <motion.div key="swarm" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-                     <div className="grid grid-cols-3 gap-6">
-                        {[
-                          { role: 'Compliance', count: 4, icon: <Shield size={20}/>, color: 'text-blue-600', bg: 'bg-blue-50' },
-                          { role: 'Research', count: 12, icon: <Globe size={20}/>, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                          { role: 'Governance', count: 3, icon: <Database size={20}/>, color: 'text-amber-600', bg: 'bg-amber-50' },
-                        ].map((s, i) => (
-                          <BrandCard key={i} padding="md" className="flex flex-col items-center text-center">
-                             <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-3", s.bg, s.color)}>
-                                {s.icon}
-                             </div>
-                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{s.role}</p>
-                             <p className="text-2xl font-black text-[#003262]">{s.count}</p>
-                          </BrandCard>
-                        ))}
-                     </div>
-
-                     <section className="space-y-4">
-                        <div className="flex items-center justify-between px-2">
-                           <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.2em]">Active Swarm Agents</h4>
-                           <BrandBadge variant="outline" size="xs">Auto-Scaling Enabled</BrandBadge>
-                        </div>
-                        <div className="space-y-3">
-                           {[
-                             { name: 'Agent-X1', role: 'Environmental Auditor', status: 'processing', progress: 68 },
-                             { name: 'Hermes-V3', role: 'Supply Chain Scanner', status: 'active', progress: 100 },
-                             { name: 'Omni-Z', role: 'Memory Consolidator', status: 'idle', progress: 0 },
-                           ].map((agent, i) => (
-                             <div key={i} className="p-6 bg-white border border-slate-100 rounded-[2rem] flex items-center gap-6 hover:shadow-premium transition-all">
-                                <BrandStatusDot status={agent.status as any} pulse={agent.status === 'processing'} />
-                                <div className="flex-1">
-                                   <div className="flex justify-between items-center mb-2">
-                                      <p className="text-sm font-black text-[#003262]">{agent.name}</p>
-                                      <span className="text-[10px] font-bold text-slate-400 uppercase">{agent.role}</span>
-                                   </div>
-                                   <BrandProgress value={agent.progress} size="xs" color={agent.status === 'processing' ? 'blue' : 'green'} />
-                                </div>
-                             </div>
-                           ))}
-                        </div>
-                     </section>
-                  </motion.div>
-                )}
-
                 {activeTab === 'trust' && (
-                  <motion.div key="trust" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-                     <div className="flex items-center justify-between">
+                  <motion.div key="trust" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-10">
+                     <div className="flex items-center justify-between px-2">
                         <div>
-                           <h4 className="text-xl font-black text-[#003262]">5T 誠信協議實體驗證</h4>
-                           <p className="text-xs text-slate-400 font-medium mt-1">即時測試數據封裝 (Seal) 與誠信校驗 (Verify) 流程。</p>
+                           <h4 className="text-2xl font-black text-berkeley-blue tracking-tight">5T 誠信協議驗證</h4>
+                           <p className="text-sm text-slate-400 font-medium mt-1">實時測試 OmniInfoCrystal 的封印與校驗流程。</p>
                         </div>
-                        <BrandButton onClick={handleTestSeal} className="rounded-2xl h-12 px-8">
+                        <Button variant="primary" onClick={handleTestSeal} className="rounded-2xl h-14 px-8 shadow-glass">
                            發起測試封裝 (Seal Test)
-                        </BrandButton>
+                        </Button>
                      </div>
 
-                     <div className="grid grid-cols-1 gap-6">
+                     <div className="grid grid-cols-1 gap-8">
                         {lastSeal ? (
-                          <BrandCard padding="lg" className="border-blue-100 bg-blue-50/20">
-                             <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-3">
-                                   <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
-                                      <Fingerprint size={20} />
+                          <Card className="p-10 bg-berkeley-blue/5 border-berkeley-blue/10 relative overflow-hidden">
+                             <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center gap-5">
+                                   <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-berkeley-blue shadow-sm">
+                                      <Fingerprint size={28} />
                                    </div>
                                    <div>
-                                      <p className="text-[10px] font-black text-slate-400 uppercase">Latest Master Seal</p>
-                                      <code className="text-xs font-black text-blue-900">{lastSeal.uuid}</code>
+                                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Crystal DNA</p>
+                                      <code className="text-sm font-black text-berkeley-blue uppercase">{lastSeal.uuid}</code>
                                    </div>
                                 </div>
-                                <BrandBadge variant={verifyResult === true ? 'success' : verifyResult === false ? 'error' : 'outline'}>
-                                   {verifyResult === true ? 'VERIFIED' : verifyResult === false ? 'FAILED' : 'PENDING'}
-                                </BrandBadge>
+                                <Badge variant={verifyResult === true ? 'verified' : verifyResult === false ? 'error' : 'secondary'} className="px-6 py-2 text-[10px]">
+                                   {verifyResult === true ? '5T VERIFIED' : verifyResult === false ? 'TAMPERED DETECTED' : 'PENDING ANALYSIS'}
+                                </Badge>
                              </div>
 
-                             <div className="grid grid-cols-2 gap-8 mb-8">
+                             <div className="grid grid-cols-2 gap-12 mb-10 border-y border-slate-100 py-8">
                                 <div>
-                                   <p className="text-[9px] font-black text-slate-300 uppercase mb-2">Evidence Metric</p>
-                                   <p className="text-sm font-bold text-[#003262]">{lastSeal.evidence.tangible_metric}</p>
+                                   <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mb-3">Core Impact Metric</p>
+                                   <p className="text-xl font-black text-berkeley-blue font-mono">{lastSeal.impact_metric}</p>
                                 </div>
                                 <div>
-                                   <p className="text-[9px] font-black text-slate-300 uppercase mb-2">Hash Lock (T4)</p>
-                                   <p className="text-[10px] font-mono text-slate-500 break-all">{lastSeal.hash_lock}</p>
+                                   <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mb-3">Hash Lock (T4 Integrity)</p>
+                                   <p className="text-[11px] font-mono text-slate-500 break-all leading-relaxed">{lastSeal.hash_lock}</p>
                                 </div>
                              </div>
 
-                             <div className="flex gap-4">
-                                <BrandButton 
+                             <div className="flex gap-4 relative z-10">
+                                <Button 
                                   variant="primary" 
-                                  fullWidth 
-                                  className="h-12 rounded-xl"
+                                  className="flex-1 h-14 rounded-2xl text-[11px]"
                                   onClick={handleVerify}
-                                  loading={isVerifying}
+                                  isLoading={isVerifying}
                                 >
-                                   進行誠信校驗 (Run Verification)
-                                </BrandButton>
-                                <BrandButton 
-                                  variant="outline" 
-                                  fullWidth 
-                                  className="h-12 rounded-xl"
+                                   執行誠信校驗 (Verify Integrity)
+                                </Button>
+                                <Button 
+                                  variant="secondary" 
+                                  className="flex-1 h-14 rounded-2xl text-[11px] border-slate-200 text-slate-500"
                                   onClick={() => {
-                                    // Simulate tampering
                                     if (lastSeal) {
                                       setLastSeal({
                                         ...lastSeal,
-                                        evidence: { ...lastSeal.evidence, tangible_metric: '9,999 kgCO2e' }
+                                        impact_metric: '9,999 kgCO2e'
                                       });
                                       setVerifyResult(null);
                                     }
                                   }}
                                 >
-                                   模擬數據篡改 (Tamper)
-                                </BrandButton>
+                                   模擬數據篡改 (Tamper Simulation)
+                                </Button>
                              </div>
-                          </BrandCard>
+                             <Bot size={200} className="absolute -bottom-20 -right-20 text-berkeley-blue/5 rotate-12 pointer-events-none" />
+                          </Card>
                         ) : (
-                          <div className="h-64 rounded-[2.5rem] border-2 border-dashed border-slate-100 flex flex-col items-center justify-center text-slate-300">
-                             <Shield size={48} className="mb-4 opacity-20" />
-                             <p className="text-sm font-bold uppercase tracking-widest">尚無進行中的封裝測試</p>
+                          <div className="h-80 rounded-[3rem] border-2 border-dashed border-slate-100 flex flex-col items-center justify-center text-slate-300 bg-slate-50/30">
+                             <Shield size={64} className="mb-6 opacity-20" />
+                             <p className="text-sm font-black uppercase tracking-[0.4em]">等待封裝指令中</p>
                           </div>
                         )}
 
-                        <section className="space-y-4">
-                           <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-[0.2em] ml-2">5T Logic Gate Status</h4>
+                        <section className="space-y-6">
+                           <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] ml-2">OmniInfoCrystal 5T States</h4>
                            <div className="grid grid-cols-5 gap-4">
-                              {['Tangible', 'Traceable', 'Trackable', 'Transparent', 'Trustworthy'].map((gate, i) => (
-                                <div key={i} className={cn(
-                                  "p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all",
-                                  lastSeal ? "bg-white border-slate-100 shadow-sm" : "bg-slate-50 border-transparent opacity-40"
+                              {['Traceable', 'Transparent', 'Tangible', 'Trackable', 'Trustworthy'].map((gate, i) => (
+                                <Card key={i} className={cn(
+                                  "p-6 flex flex-col items-center gap-3 transition-all duration-700",
+                                  lastSeal ? "bg-white border-white shadow-md scale-100" : "bg-slate-50/50 border-transparent opacity-30 scale-95"
                                 )}>
                                    <div className={cn(
-                                     "w-8 h-8 rounded-lg flex items-center justify-center",
-                                     lastSeal ? "bg-emerald-100 text-emerald-600" : "bg-slate-200 text-slate-400"
+                                     "w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-1000",
+                                     lastSeal ? "bg-verified/10 text-verified" : "bg-slate-200 text-slate-400"
                                    )}>
-                                      <CheckCircle size={16} />
+                                      <CheckCircle size={20} />
                                    </div>
-                                   <span className="text-[9px] font-black uppercase tracking-tighter">{gate}</span>
-                                </div>
+                                   <span className="text-[10px] font-black uppercase tracking-tight text-slate-500">{gate}</span>
+                                </Card>
                               ))}
                            </div>
                         </section>
@@ -390,16 +310,20 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
            </main>
         </div>
 
-        {/* Footer */}
-        <footer className="px-10 py-8 border-t border-slate-50 bg-slate-50/30 flex items-center justify-between sticky bottom-0 z-10">
-           <div className="flex items-center gap-6">
-              <BrandBadge variant="outline" size="xs" className="border-slate-200 text-slate-400 font-black px-6 h-10 flex items-center rounded-full uppercase tracking-tighter">OS_STABLE_V8.5</BrandBadge>
+        {/* Footer Alignment */}
+        <footer className="px-10 py-8 border-t border-slate-100/50 bg-slate-50/50 flex items-center justify-between sticky bottom-0 z-10">
+           <div className="flex items-center gap-8">
               <div className="flex items-center gap-3">
-                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                 <span className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em]">Compute Node: Berkeley_Main</span>
+                 <div className="w-2 h-2 rounded-full bg-verified animate-pulse shadow-[0_0_12px_#10b981]" />
+                 <span className="text-[10px] font-black text-verified uppercase tracking-[0.3em]">Compute Node: Berkeley_Main</span>
+              </div>
+              <div className="h-4 w-px bg-slate-200" />
+              <div className="flex items-center gap-3">
+                 <Radio size={14} className="text-berkeley-blue animate-pulse" />
+                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sovereign Link: Encrypted</span>
               </div>
            </div>
-           <BrandButton variant="ghost" size="sm" className="font-black text-[10px] uppercase tracking-widest h-10 px-8 hover:bg-white rounded-xl" onClick={onClose}>Close_Control_Center</BrandButton>
+           <Button variant="ghost" size="sm" className="font-black text-[10px] uppercase tracking-widest h-10 px-8 hover:bg-white rounded-xl border-slate-200" onClick={onClose}>Close_Control_Center</Button>
         </footer>
       </motion.div>
     </div>

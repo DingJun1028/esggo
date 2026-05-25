@@ -8,11 +8,13 @@ import {
   Fingerprint, Activity, FileText, Layers, List, Lock as LockIcon,
   Search, Award, HelpCircle, ChevronRight, ChevronLeft, Play, Trophy
 } from 'lucide-react';
-import { 
-  BrandButton, BrandBadge, BrandCard, BrandStatusDot, 
-  BrandPageHeader, BrandCardHeader, StandardPage, BrandTabs
-} from '../../components/brand';
 import { cn } from '../../lib/utils';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Card } from '../../components/ui/Card';
+import { BrandStatusDot } from '../../components/brand';
+import StandardPage from '../../components/brand/StandardPage';
+import { fadeIn, staggerContainer } from '../../lib/animations';
 import { UniversalPageConfig } from '../../lib/page-config';
 
 const ONBOARDING_STEPS = [
@@ -105,7 +107,7 @@ export default function SovereignOnboardingPage() {
     id: 'onboarding-guide',
     title: '主權治理新手教學 Sovereign Onboarding',
     subtitle: 'oX Platform Guide · 從零到一 · 五步達成全域 5T 治理閉環。',
-    icon: <Rocket size={32} className="text-[#003262]" />,
+    icon: <Rocket size={32} className="text-berkeley-blue" />,
     griReference: 'Guide / 0-1',
     activeT5Tags: ['T1', 'T2', 'T3', 'T4', 'T5'],
     isOXModule: true,
@@ -129,9 +131,9 @@ export default function SovereignOnboardingPage() {
         component: (
           <div className="space-y-10 relative">
              {/* Progress Line */}
-             <div className="absolute left-10 top-0 bottom-0 w-0.5 bg-slate-100 -z-10" />
+             <div className="absolute left-12 top-0 bottom-0 w-0.5 bg-slate-100 -z-10" />
 
-             <div className="space-y-6">
+             <div className="space-y-8">
                 {ONBOARDING_STEPS.map((step, idx) => (
                   <motion.div 
                     key={step.id}
@@ -139,28 +141,32 @@ export default function SovereignOnboardingPage() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1 }}
                   >
-                    <BrandCard 
-                      hover 
-                      padding="lg" 
+                    <Card 
+                      hoverEffect 
                       className={cn(
-                        "border-none shadow-sm transition-all relative overflow-hidden",
-                        currentStep === idx ? "ring-2 ring-blue-500 shadow-premium" : "opacity-60 grayscale hover:opacity-100 hover:grayscale-0"
+                        "p-10 border-white/60 shadow-glass transition-all relative overflow-hidden cursor-pointer",
+                        currentStep === idx ? "ring-2 ring-berkeley-blue bg-white/90 scale-[1.02]" : "bg-white/60 opacity-60 grayscale hover:opacity-100 hover:grayscale-0"
                       )}
                       onClick={() => setCurrentStep(idx)}
                     >
-                       <div className="flex items-start gap-8">
+                       <div className="flex items-start gap-10">
                           <div className={cn(
-                            "w-20 h-20 rounded-[2rem] flex items-center justify-center shrink-0 shadow-lg",
-                            currentStep === idx ? "bg-[#003262] text-[#FDB515]" : "bg-slate-100 text-slate-400"
+                            "w-24 h-24 rounded-[2.5rem] flex items-center justify-center shrink-0 shadow-lg transition-transform",
+                            currentStep === idx ? "bg-berkeley-blue text-california-gold scale-110" : "bg-slate-50 text-slate-400"
                           )}>
-                             {step.icon}
+                             {React.cloneElement(step.icon as React.ReactElement, { size: 32 })}
                           </div>
                           <div className="flex-1">
-                             <div className="flex justify-between items-center mb-2">
-                                <h3 className="text-xl font-black text-[#003262] uppercase tracking-tight">{step.title}</h3>
-                                {currentStep === idx && <BrandStatusDot status="active" pulse size="sm" />}
+                             <div className="flex justify-between items-center mb-3">
+                                <h3 className="text-2xl font-black text-berkeley-blue uppercase tracking-tight">{step.title}</h3>
+                                {currentStep === idx && (
+                                  <div className="flex items-center gap-2">
+                                     <div className="w-2 h-2 rounded-full bg-verified animate-ping" />
+                                     <span className="text-[10px] font-black text-verified uppercase tracking-widest">Focused</span>
+                                  </div>
+                                )}
                              </div>
-                             <p className="text-sm text-slate-600 font-bold mb-4">{step.desc}</p>
+                             <p className="text-base text-slate-600 font-bold mb-6">{step.desc}</p>
                              
                              <AnimatePresence>
                                {currentStep === idx && (
@@ -170,22 +176,25 @@ export default function SovereignOnboardingPage() {
                                     exit={{ height: 0, opacity: 0 }}
                                     className="overflow-hidden"
                                  >
-                                    <ul className="space-y-2 mb-6">
-                                       {step.details.map((d, i) => (
-                                         <li key={i} className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                                            <div className="w-1 h-1 rounded-full bg-blue-400" /> {d}
-                                         </li>
-                                       ))}
-                                    </ul>
-                                    <BrandButton variant="primary" size="sm" className="rounded-xl px-6" onClick={(e) => { e.stopPropagation(); window.location.href = step.link; }}>
-                                       {step.action} <ArrowUpRight size={14} className="ml-2"/>
-                                    </BrandButton>
+                                    <div className="p-8 bg-slate-50/50 rounded-[2rem] border border-slate-100 shadow-inner mb-8">
+                                       <ul className="space-y-4">
+                                          {step.details.map((d, i) => (
+                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-500 font-medium">
+                                               <div className="w-1.5 h-1.5 rounded-full bg-berkeley-blue mt-1.5 shadow-[0_0_8px_#003262]" /> 
+                                               <span className="leading-relaxed">{d}</span>
+                                            </li>
+                                          ))}
+                                       </ul>
+                                    </div>
+                                    <Button variant="primary" className="h-14 rounded-2xl px-10 text-base tracking-widest uppercase shadow-lg" onClick={(e) => { e.stopPropagation(); window.location.href = step.link; }}>
+                                       {step.action} <ArrowUpRight size={20} className="ml-3"/>
+                                    </Button>
                                  </motion.div>
                                )}
                              </AnimatePresence>
                           </div>
                        </div>
-                    </BrandCard>
+                    </Card>
                   </motion.div>
                 ))}
              </div>
@@ -197,36 +206,39 @@ export default function SovereignOnboardingPage() {
         title: 'oX 模組功能手冊',
         columns: 4,
         component: (
-          <div className="space-y-6">
-             <BrandCard className="bg-[#003262] text-white p-8 rounded-[2.5rem] border-none shadow-2xl relative overflow-hidden">
-                <div className="relative z-10 space-y-4">
-                   <p className="text-[10px] font-black text-blue-300 uppercase tracking-[0.3em]">Quick Tip</p>
-                   <p className="text-sm font-black leading-relaxed italic">
-                     「您可以隨時在側邊欄切換模組，5T 實證會自動在後台進行跨維度同步。」
+          <div className="space-y-10">
+             <Card className="bg-berkeley-blue text-white p-10 rounded-[3rem] border-none shadow-2xl relative overflow-hidden">
+                <div className="relative z-10 space-y-6">
+                   <div className="flex items-center gap-3 text-california-gold">
+                      <Sparkles size={20} fill="currentColor" />
+                      <p className="text-[11px] font-black uppercase tracking-[0.3em]">Quick Tip</p>
+                   </div>
+                   <p className="text-base font-black leading-relaxed italic text-blue-50/90">
+                     「您可以隨時在側邊欄切換模組，5T 實證會自動在後台進行跨維度同步，實現真正的數位主權。」
                    </p>
                 </div>
-                <HelpCircle size={100} className="absolute -bottom-8 -right-8 text-white/5 rotate-12" />
-             </BrandCard>
+                <HelpCircle size={140} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
+             </Card>
 
-             <div className="space-y-4">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">功能辭典</p>
-                <div className="grid gap-3">
+             <div className="space-y-6">
+                <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] px-2 ml-1">功能辭典 (Registry)</p>
+                <div className="grid gap-4">
                    {FEATURE_MANIFEST.map((f, i) => (
-                     <div key={i} className="p-4 bg-white border border-slate-50 rounded-2xl flex items-start gap-4 hover:border-blue-200 transition-all shadow-sm group">
-                        <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                           {f.icon}
+                     <div key={i} className="p-5 bg-white/60 backdrop-blur-md border border-white/80 rounded-[1.5rem] flex items-start gap-5 hover:border-berkeley-blue/30 transition-all shadow-sm group">
+                        <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center shrink-0 group-hover:bg-berkeley-blue group-hover:text-california-gold transition-all shadow-inner">
+                           {React.cloneElement(f.icon as React.ReactElement, { size: 20 })}
                         </div>
                         <div>
-                           <p className="text-[11px] font-black text-[#003262]">{f.module}</p>
-                           <p className="text-[8px] font-bold text-slate-300 uppercase tracking-tighter mb-1">{f.sub}</p>
-                           <p className="text-[10px] text-slate-500 leading-relaxed line-clamp-2">{f.desc}</p>
+                           <p className="text-[13px] font-black text-berkeley-blue uppercase tracking-tight">{f.module}</p>
+                           <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mb-1.5">{f.sub}</p>
+                           <p className="text-xs text-slate-500 leading-relaxed font-medium line-clamp-2">{f.desc}</p>
                         </div>
                      </div>
                    ))}
                 </div>
-                <BrandButton variant="ghost" fullWidth className="text-[10px] font-black text-blue-600 hover:bg-blue-50 h-10 rounded-xl">
-                   查看全模組技術規格 <ArrowUpRight size={12} className="ml-1"/>
-                </BrandButton>
+                <Button variant="glass" className="w-full h-12 text-[11px] font-black text-berkeley-blue hover:text-berkeley-dark h-12 rounded-xl border-slate-200">
+                   查看全模組技術規格 <ArrowUpRight size={16} className="ml-2"/>
+                </Button>
              </div>
           </div>
         )

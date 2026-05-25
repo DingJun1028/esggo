@@ -8,5 +8,13 @@
   "tailwindCSS.includeLanguages": {
     "typescript": "html",
     "typescriptreact": "html"
-  }
+  },
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "args": ["-NoExit", "-Command", "$OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; chcp 65001"]
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "files.encoding": "utf8"
 }

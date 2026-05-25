@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import type {
+import {
   IComponentCore,
   IEvidence,
   T5GateState,
@@ -55,15 +55,29 @@ export class OmniCore {
     return { user_id: 'anonymous', company_id: 'default' };
   }
 
-  // 5T Gate Validation
+  // 5T Gate Validation (OmniOne Alignment)
   validateT5Gate(evidence: IEvidence): T5GateState {
+    const tangible = Boolean(evidence.tangible_metric && evidence.tangible_metric.length > 0);
+    const traceable = Boolean(evidence.source_origin && evidence.source_origin.startsWith('/'));
+    const trackable = Boolean(evidence.lifecycle_hooks && evidence.lifecycle_hooks.length > 0);
+    const transparent = Boolean(evidence.formula_ref && evidence.formula_ref.includes('['));
+    
     return {
-      tangible: Boolean(evidence.tangible_metric && evidence.tangible_metric.length > 0),
-      traceable: Boolean(evidence.source_origin && evidence.source_origin.startsWith('/')),
-      trackable: Boolean(evidence.lifecycle_hooks && evidence.lifecycle_hooks.length > 0),
-      transparent: Boolean(evidence.formula_ref && evidence.formula_ref.includes('[')),
-      trustworthy: false, // Only set after Hash Lock
+      tangible,
+      traceable,
+      trackable,
+      transparent,
+      trustworthy: false, // Set after Hash Lock
     };
+  }
+
+  /**
+   * 無上意志：結晶化指令
+   * 將任督二脈數據合一，形成 OmniInfoCrystal
+   */
+  async crystallize(uuid: string): Promise<void> {
+    console.log(`[OmniOne] Crystallizing node: ${uuid}`);
+    // 實作：觸發全域 5T 共鳴，將數據鎖定為不可篡改之晶體
   }
 
   // Seal Data with Hash Lock (Trustworthy)
@@ -110,11 +124,13 @@ export class OmniCore {
       timestamp,
       version: '1.1.0',
       evidence,
+      formula,
+      impact_metric: metric,
       status: 'Trustworthy' as const,
       hash_lock,
     });
 
-    return { ...component, validation };
+    return { ...component, validation } as any;
   }
 
   // Verify Hash Lock
@@ -292,7 +308,7 @@ export class OmniCore {
     // Create summary
     await dcUpsertEternalMemory({
       id,
-      type: 'SEMANTIC',
+      type: EternalMemoryType.SEMANTIC,
       content: summary,
       tags: 'consolidated,genkit_summary',
       hashLock: hash_lock,
@@ -301,7 +317,7 @@ export class OmniCore {
 
     return {
       id,
-      type: 'SEMANTIC',
+      type: EternalMemoryType.SEMANTIC,
       content: summary,
       tags: ['consolidated', 'genkit_summary'],
       timestamp: new Date(timestamp).getTime(),

@@ -23,8 +23,7 @@ __export(next_config_exports, {
 });
 module.exports = __toCommonJS(next_config_exports);
 var nextConfig = {
-  typescript: { ignoreBuildErrors: true },
-  serverExternalPackages: ["sharp", "firebase-admin"],
+  serverExternalPackages: ["sharp", "firebase-admin", "@genkit-ai/googleai", "@grpc/grpc-js", "@opentelemetry/sdk-node"],
   images: {
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }]
   }

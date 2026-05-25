@@ -13,6 +13,16 @@ import { createHash } from 'crypto';
 
 dotenv.config();
 
+// -- Root Cause Fix: Force UTF-8 for Windows Terminal --------------------------
+if (process.platform === 'win32') {
+  try {
+    const { execSync } = await import('child_process');
+    execSync('chcp 65001', { stdio: 'ignore' });
+  } catch (e) {
+    // Fallback if chcp fails
+  }
+}
+
 const program = new Command();
 
 const DEFAULT_HERMES_GATEWAY_URL = 'http://161.118.248.180:8642';

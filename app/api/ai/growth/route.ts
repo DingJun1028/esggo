@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuditLogs, getDashboardStats, logAudit } from '../../../../lib/db';
+import { callGemini } from '../../../../lib/ai-helper';
 
 /**
  * [Infinite Evolution] Self-Growth Hub API
@@ -13,21 +14,20 @@ export async function GET() {
       getDashboardStats()
     ]);
 
-    // Simple heuristic for "Self-Growth" logic
-    // In a production environment, this would involve a RAG-based LLM analysis of the logs
-    let suggestion = "";
-    let impactScore = 0;
+    const systemPrompt = "你是一位專業的 ESG 治理 AI 調度員 OmniHermes。你的任務是分析系統的審計日誌與當前數據，並提出下一階段的「自我演化」建議。請以 JSON 格式輸出：{\"suggestion\": \"...\", \"impactScore\": 0, \"focusAreas\": []}";
 
-    if (stats.complianceRate < 80) {
-      suggestion = "系統偵測到合規率低於預期。建議優先執行 T4 雜湊封印任務，以提升數據的可信度與主權完整性。";
-      impactScore = 85;
-    } else if (stats.griCoverage < 90) {
-      suggestion = "GRI 指標覆蓋率尚有提升空間。建議檢視「證據金庫」中的待驗證文件，並補齊 GRI 300 系列的環境揭露。";
-      impactScore = 70;
-    } else {
-      suggestion = "當前治理狀態優異。建議進入「深度效能優化」階段，透過 BlueCC 調度更高等級的算力進行跨年度趨勢模擬。";
-      impactScore = 95;
-    }
+    const prompt = `
+當前系統狀態：
+- 合規率：${stats.complianceRate}%
+- GRI 覆蓋率：${stats.griCoverage}%
+- 最近 5 筆審計日誌概要：
+${logs.slice(0, 5).map((l: any) => `- ${l.action}: ${l.details}`).join('\n')}
+
+請分析這些數據，並提供一個具體的治理優化建議。`;
+
+    const rawResponse = await callGemini(prompt, systemPrompt);
+    const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+    const result = JSON.parse(jsonMatch?.[0] ?? '{"suggestion":"治理分析暫停","impactScore":0,"focusAreas":[]}');
 
     // Self-evolution record: AI analyzes itself
     await logAudit({
@@ -35,20 +35,21 @@ export async function GET() {
       resource: 'Governance Meta-Analysis',
       user_name: 'Omni-Orchestrator',
       t5_tag: 'T5',
-      details: `Analysis complete. Impact Score: ${impactScore}%`
+      details: `Analysis complete. Impact Score: ${result.impactScore}%`
     });
 
     return NextResponse.json({
       status: 'evolution_active',
       analysis: {
         lastScan: new Date().toISOString(),
-        growthSuggestion: suggestion,
-        impactScore,
-        focusAreas: ['Integrity', 'Coverage', 'Compute Efficiency']
+        growthSuggestion: result.suggestion,
+        impactScore: result.impactScore,
+        focusAreas: result.focusAreas || ['Integrity']
       },
       auditCount: logs.length
     });
   } catch (error) {
+    console.error('Growth API Error:', error);
     return NextResponse.json({ error: 'Evolution pause: analysis failed' }, { status: 500 });
   }
 }

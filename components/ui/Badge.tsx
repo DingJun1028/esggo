@@ -1,41 +1,47 @@
-﻿import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../lib/utils';
+// components/ui/Badge.tsx
+import { cn } from '@/lib/utils';
 
-const badgeVariants = cva(
-  'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default:
-          'border-transparent bg-berkeley-blue text-white hover:bg-berkeley-dark',
-        primary:
-          'border-transparent bg-primary-50 text-berkeley-blue border-primary-200',
-        verified:
-          'border-transparent bg-verified/10 text-verified border-verified/20',
-        warning:
-          'border-transparent bg-warning/10 text-warning border-warning/20',
-        error:
-          'border-transparent bg-error/10 text-error border-error/20',
-        draft:
-          'border-transparent bg-draft/10 text-draft border-draft/20',
-        outline: 'text-slate-950',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+export type BadgeVariant = 'verified' | 'draft' | 'warning' | 'error' | 'primary' | 'secondary' | 'info' | 'success' | 'default' | 'outline';
 
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
-
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  );
+interface BadgeProps {
+  status?: BadgeVariant;
+  variant?: BadgeVariant;
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-export { Badge, badgeVariants };
+export function Badge({ status, variant, children, className, style }: BadgeProps) {
+  const v = variant || status || 'default';
+  
+  return (
+    <span
+      style={style}
+      className={cn(
+        'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold transition-colors',
+        {
+          'bg-verified/10 text-verified border border-verified/20': v === 'verified' || v === 'success',
+          'bg-draft/10 text-draft border border-draft/20': v === 'draft' || v === 'default',
+          'bg-warning/10 text-warning border border-warning/20': v === 'warning',
+          'bg-error/10 text-error border border-error/20': v === 'error',
+          'bg-primary-500/10 text-primary-600 border border-primary-500/20': v === 'primary',
+          'bg-berkeley-blue/10 text-berkeley-blue border border-berkeley-blue/20': v === 'secondary' || v === 'info',
+        },
+        className
+      )}
+    >
+      <span className={cn(
+        'w-1.5 h-1.5 rounded-full mr-1.5',
+        {
+          'bg-verified': v === 'verified' || v === 'success',
+          'bg-draft': v === 'draft' || v === 'default',
+          'bg-warning': v === 'warning',
+          'bg-error': v === 'error',
+          'bg-primary-500': v === 'primary',
+          'bg-berkeley-blue': v === 'secondary' || v === 'info',
+        }
+      )} />
+      {children}
+    </span>
+  );
+}

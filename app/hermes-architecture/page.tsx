@@ -8,11 +8,13 @@ import {
   Trophy, CheckCircle, AlertTriangle, Cpu, Network,
   Eye, RefreshCw, ChevronRight, Server
 } from 'lucide-react';
-import { 
-  BrandCard, BrandButton, BrandBadge, BrandTabs, 
-  BrandStatusDot, BrandPageHeader, StandardPage, BrandCardHeader
-} from '../../components/brand';
 import { cn } from '../../lib/utils';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Card } from '../../components/ui/Card';
+import { BrandStatusDot } from '../../components/brand';
+import StandardPage from '../../components/brand/StandardPage';
+import { fadeIn, staggerContainer } from '../../lib/animations';
 import { UniversalPageConfig } from '../../lib/page-config';
 
 const ARCH_NODES = [
@@ -53,7 +55,7 @@ export default function HermesArchitecturePage() {
     id: 'hermes-architecture',
     title: '動態架構治理中心',
     subtitle: 'Living Architecture · 模組即時拓撲 · 5T 邊界防禦。',
-    icon: <Network size={32} className="text-[#003262]" />,
+    icon: <Network size={32} className="text-berkeley-blue" />,
     griReference: 'Governance / Systems',
     activeT5Tags: ['T4', 'T5'],
     isOXModule: true,
@@ -76,12 +78,12 @@ export default function HermesArchitecturePage() {
         title: 'oX 平台動態拓撲 (Integrated oX Map)',
         columns: 12,
         component: (
-          <div className="relative min-h-[500px] bg-slate-900 rounded-[3rem] p-12 overflow-hidden border border-white/5 shadow-2xl">
+          <div className="relative min-h-[500px] bg-slate-50/50 rounded-[3rem] p-12 overflow-hidden border border-white shadow-glass">
              {/* Background Grid */}
-             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #003262 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
              
              {/* Connection Lines (Simulated) */}
-             <svg className="absolute inset-0 w-full h-full pointer-events-none">
+             <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40">
                 <defs>
                    <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#3B7EA1" stopOpacity="0" />
@@ -89,8 +91,8 @@ export default function HermesArchitecturePage() {
                       <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
                    </linearGradient>
                 </defs>
-                <path d="M 200 250 Q 400 100 600 250" stroke="url(#line-grad)" strokeWidth="1" fill="none" className="animate-pulse opacity-20" />
-                <path d="M 600 250 Q 800 400 1000 250" stroke="url(#line-grad)" strokeWidth="1" fill="none" className="animate-pulse opacity-20" />
+                <path d="M 200 250 Q 400 100 600 250" stroke="url(#line-grad)" strokeWidth="2" fill="none" className="animate-pulse" />
+                <path d="M 600 250 Q 800 400 1000 250" stroke="url(#line-grad)" strokeWidth="2" fill="none" className="animate-pulse" />
              </svg>
 
              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12 h-full">
@@ -106,27 +108,27 @@ export default function HermesArchitecturePage() {
                       scale: { duration: 0.5 }
                     }}
                     className={cn(
-                      "w-48 p-6 rounded-[2.5rem] border border-white/10 backdrop-blur-xl flex flex-col items-center text-center transition-all",
-                      pulseNode === node.id ? "bg-white/20 border-white/30 shadow-[0_0_50px_rgba(255,255,255,0.1)]" : "bg-white/5"
+                      "w-48 p-8 rounded-[3rem] border backdrop-blur-xl flex flex-col items-center text-center transition-all duration-500 shadow-glass",
+                      pulseNode === node.id ? "bg-white/90 border-berkeley-blue/30 shadow-xl" : "bg-white/60 border-white/80"
                     )}
                   >
                     <div 
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-2xl"
-                      style={{ backgroundColor: `${node.color}20`, color: node.color, border: `1px solid ${node.color}40` }}
+                      className="w-16 h-16 rounded-[1.5rem] flex items-center justify-center mb-5 shadow-inner"
+                      style={{ backgroundColor: `${node.color}15`, color: node.color, border: `1px solid ${node.color}30` }}
                     >
-                      {node.icon}
+                      {React.cloneElement(node.icon as React.ReactElement, { size: 28 })}
                     </div>
-                    <h4 className="text-white text-sm font-black uppercase tracking-tight">{node.label}</h4>
-                    <p className="text-white/40 text-[9px] font-bold uppercase tracking-[0.2em] mt-1">{node.sub}</p>
+                    <h4 className="text-berkeley-blue text-sm font-black uppercase tracking-tight">{node.label}</h4>
+                    <p className="text-slate-400 text-[9px] font-bold uppercase tracking-[0.2em] mt-2">{node.sub}</p>
                     
                     {pulseNode === node.id && (
                       <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-4 flex items-center gap-1.5"
+                        className="mt-5 flex items-center gap-2"
                       >
-                        <div className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
-                        <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest">Active Pulse</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-verified animate-ping" />
+                        <span className="text-[9px] font-black text-verified uppercase tracking-widest">Active Pulse</span>
                       </motion.div>
                     )}
                   </motion.div>
@@ -134,8 +136,8 @@ export default function HermesArchitecturePage() {
              </div>
 
              {/* Center Label */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
-                <h2 className="text-[120px] font-black text-white whitespace-nowrap">OMNIHERMES oX</h2>
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+                <h2 className="text-[120px] font-black text-berkeley-blue whitespace-nowrap">OMNIHERMES oX</h2>
              </div>
           </div>
         )
@@ -146,65 +148,80 @@ export default function HermesArchitecturePage() {
         columns: 12,
         component: (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <BrandCard padding="lg" className="border-none shadow-premium bg-white/50 backdrop-blur-sm">
-                <BrandCardHeader title="5T 誠信邊界 (Trust Boundaries)" icon={<Lock size={18}/>} />
-                <div className="space-y-4 mt-6">
+             <Card className="p-8 bg-white/60 backdrop-blur-md border-white/60 shadow-glass">
+                <div className="flex items-center gap-3 mb-8">
+                   <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center">
+                      <Lock size={20} />
+                   </div>
+                   <h4 className="text-sm font-black text-berkeley-blue uppercase tracking-tight">5T 誠信邊界 (Trust Boundaries)</h4>
+                </div>
+                <div className="space-y-4">
                    {[
                      { t: 'T1 Truth', desc: '原始影像像素必須在 Alchemy 層完成 Hash 定義，不可在傳輸中篡改。', status: 'Enforced' },
                      { t: 'T2 Traceable', desc: '每一筆提取的指標必須鏈結至標竿案例中的 GRI 代碼，實現溯源。', status: 'Active' },
                      { t: 'T4 Transparent', desc: 'Genkit 的推理鏈 (Reasoning Chain) 必須完整記錄於調度日誌。', status: 'Monitoring' },
                    ].map((b, i) => (
-                     <div key={i} className="p-4 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group hover:border-blue-400 transition-all">
+                     <div key={i} className="p-4 bg-white/40 border border-white/80 rounded-2xl flex items-center justify-between group hover:border-berkeley-blue/30 transition-all">
                         <div className="flex-1">
-                           <p className="text-[10px] font-black text-blue-600 uppercase mb-1">{b.t}</p>
-                           <p className="text-xs text-slate-500 leading-relaxed font-medium">{b.desc}</p>
+                           <p className="text-[10px] font-black text-berkeley-blue uppercase mb-1.5">{b.t}</p>
+                           <p className="text-[13px] text-slate-500 leading-relaxed font-medium">{b.desc}</p>
                         </div>
-                        <BrandBadge variant={b.status === 'Enforced' ? 'success' : 'info'} size="xs" className="ml-4">{b.status}</BrandBadge>
+                        <Badge variant={b.status === 'Enforced' ? 'verified' : 'primary'} className="ml-4 px-3 py-1">{b.status}</Badge>
                      </div>
                    ))}
                 </div>
-             </BrandCard>
+             </Card>
 
-             <BrandCard padding="lg" className="border-none shadow-premium bg-white/50 backdrop-blur-sm">
-                <BrandCardHeader title="AI 自主權限等級 (Agent Sovereign Levels)" icon={<Shield size={18}/>} />
-                <div className="space-y-4 mt-6">
-                   <div className="p-6 bg-slate-900 rounded-3xl text-white relative overflow-hidden">
-                      <div className="relative z-10 space-y-4">
+             <Card className="p-8 bg-white/60 backdrop-blur-md border-white/60 shadow-glass">
+                <div className="flex items-center gap-3 mb-8">
+                   <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center">
+                      <Shield size={20} />
+                   </div>
+                   <h4 className="text-sm font-black text-berkeley-blue uppercase tracking-tight">AI 自主權限等級 (Agent Sovereign Levels)</h4>
+                </div>
+                <div className="space-y-5">
+                   <div className="p-8 bg-berkeley-blue rounded-[2.5rem] text-white relative overflow-hidden shadow-xl">
+                      <div className="relative z-10 space-y-5">
                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black text-blue-300 uppercase tracking-widest">Level 4: Autonomous Governance</span>
+                            <span className="text-[11px] font-black text-california-gold uppercase tracking-[0.2em]">Level 4: Autonomous Governance</span>
                             <BrandStatusDot status="active" pulse />
                          </div>
-                         <p className="text-xs text-blue-100/70 leading-relaxed">
+                         <p className="text-[13px] text-blue-50/80 leading-relaxed font-medium">
                             Hermes 目前具備 **L4 自主權**：能在偵測到合規缺口時自動發起 Swarm 委派，無需等待人工介入。
                          </p>
-                         <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-                            <div className="h-full w-[85%] bg-blue-500" />
+                         <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                            <motion.div 
+                              className="h-full bg-california-gold" 
+                              initial={{ width: 0 }}
+                              animate={{ width: '85%' }}
+                              transition={{ duration: 1.5, ease: "easeOut" }}
+                            />
                          </div>
                       </div>
-                      <Bot size={80} className="absolute -bottom-4 -right-4 text-white/5" />
+                      <Bot size={120} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
                    </div>
                    
                    {lastEvo && (
                      <motion.div 
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-center gap-4"
+                        className="p-5 bg-berkeley-blue/5 border border-berkeley-blue/10 rounded-2xl flex items-center gap-5 shadow-sm"
                      >
-                        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
-                           <Sparkles size={16} />
+                        <div className="w-10 h-10 rounded-xl bg-berkeley-blue flex items-center justify-center text-california-gold">
+                           <Sparkles size={18} />
                         </div>
                         <div>
-                           <p className="text-[10px] font-black text-blue-600 uppercase">最新進化提案已同步</p>
-                           <p className="text-xs font-bold text-slate-700">{lastEvo.title}</p>
+                           <p className="text-[10px] font-black text-berkeley-blue uppercase tracking-wider">最新進化提案已同步</p>
+                           <p className="text-sm font-bold text-slate-700 mt-0.5">{lastEvo.title}</p>
                         </div>
                      </motion.div>
                    )}
 
-                   <BrandButton variant="secondary" fullWidth className="rounded-2xl border-slate-200">
-                      調整系統自主權限制 <ChevronRight size={14} className="ml-1" />
-                   </BrandButton>
+                   <Button variant="glass" className="w-full h-14 rounded-2xl border-slate-200 text-slate-600 hover:text-berkeley-blue">
+                      調整系統自主權限制 <ChevronRight size={16} className="ml-2" />
+                   </Button>
                 </div>
-             </BrandCard>
+             </Card>
           </div>
         )
       }
@@ -216,18 +233,23 @@ export default function HermesArchitecturePage() {
       <StandardPage config={pageConfig} />
       
       {/* Topology Overlay Legend */}
-      <div className="fixed bottom-12 right-12 z-50 p-4 bg-white/90 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-extreme flex gap-6 items-center">
-         <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+      <motion.div 
+        variants={fadeIn}
+        initial="initial"
+        animate="animate"
+        className="fixed bottom-12 right-12 z-50 p-5 bg-white/80 backdrop-blur-2xl border border-white/60 rounded-[2rem] shadow-glass flex gap-8 items-center"
+      >
+         <div className="flex items-center gap-3">
+            <div className="w-2.5 h-2.5 rounded-full bg-verified animate-pulse shadow-[0_0_8px_#10b981]" />
             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">5T Verified</span>
          </div>
-         <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-blue-500" />
+         <div className="flex items-center gap-3">
+            <div className="w-2.5 h-2.5 rounded-full bg-berkeley-blue shadow-[0_0_8px_#003262]" />
             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Agent Active</span>
          </div>
-         <div className="h-4 w-px bg-slate-200" />
-         <button className="text-[10px] font-black text-blue-600 hover:underline uppercase tracking-widest">Export Specs</button>
-      </div>
+         <div className="h-5 w-px bg-slate-200" />
+         <button className="text-[10px] font-black text-berkeley-blue hover:text-berkeley-dark transition-colors uppercase tracking-widest">Export Specs</button>
+      </motion.div>
     </div>
   );
 }
