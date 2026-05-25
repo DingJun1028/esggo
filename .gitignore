@@ -5,8 +5,9 @@ firebase-debug.log*
 dataconnect/.dataconnect/
 dataconnect-debug.log*
 
-# Next.js
+# Next.js / Vercel
 .next/
+.vercel/output/
 out/
 next-env.d.ts
 
