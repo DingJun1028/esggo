@@ -6,12 +6,6 @@ export const connectorConfig = {
   location: 'asia-east1'
 };
 
-export function createDemoData(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
-}
-
 export function listAllTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
@@ -130,5 +124,11 @@ export function listRegulatoryPolicies(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
   return dcInstance.executeQuery('ListRegulatoryPolicies', undefined, inputOpts);
+}
+
+export function createDemoData(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
 }
 

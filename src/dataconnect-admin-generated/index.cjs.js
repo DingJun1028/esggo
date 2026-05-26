@@ -7,13 +7,6 @@ const connectorConfig = {
 };
 exports.connectorConfig = connectorConfig;
 
-function createDemoData(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
-}
-exports.createDemoData = createDemoData;
-
 function listAllTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
@@ -153,4 +146,11 @@ function listRegulatoryPolicies(dcOrOptions, options) {
   return dcInstance.executeQuery('ListRegulatoryPolicies', undefined, inputOpts);
 }
 exports.listRegulatoryPolicies = listRegulatoryPolicies;
+
+function createDemoData(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
+}
+exports.createDemoData = createDemoData;
 

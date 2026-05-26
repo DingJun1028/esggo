@@ -40,12 +40,12 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
       hash_lock: 'sha256:ox_test_seal_verified_5t',
       formula: '[ISO-14064-1] Electricity Calculation',
       impact_metric: '1,250 kgCO2e',
-      evidence: {
+      evidence: [{
         tangible_metric: '1,250 kgCO2e',
         source_origin: '/documents/energy/invoice_2024.pdf',
         lifecycle_hooks: ['hook_created', 'hook_sealed_t4'],
         formula_ref: 'ISO-14064-1'
-      }
+      }]
     });
     setVerifyResult(null);
   };
