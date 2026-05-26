@@ -14,15 +14,16 @@ async function main() {
     timestamp: Date.now(),
     evidence: [
       {
-        id: 'ev-1',
         source_origin: 'contract-123',
-        iso_standard_ref: 'ISO-14064-1',
-        hash_value: 'SHA256-test',
-        lifecycle_path: ['draft', 'verified', 'locked'],
+        formula_ref: 'ISO-14064-1',
+        tangible_metric: 'metric-1',
+        lifecycle_hooks: ['draft', 'verified', 'locked'],
       },
     ],
     formula: 'test-formula',
     impact_metric: 'test-impact',
+    status: 'Trustworthy',
+    hash_lock: 'temp-hash'
   };
   
   try {

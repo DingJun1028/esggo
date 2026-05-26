@@ -1,7 +1,8 @@
 import { T5Validator } from './T5Protocol';
 import { IComponentCore, IEvidence } from '../../lib/core-types';
 import { COLLECTIONS, Contract, AuditLog, EvidenceRecord } from '../lib/firestore-types';
-import { firestore } from '../../lib/firebase'; // Firebase client
+import { db } from '../../lib/firebase'; // Firebase client
+import { collection, doc, setDoc, addDoc } from 'firebase/firestore';
 import { UIRenderer, RenderParams } from './UIRenderer';
 import { useThemeStore } from '../../lib/theme-store';
 
@@ -33,7 +34,7 @@ export class GlobalEvidenceService {
     
     if (!isValid) throw new Error('Evidence failed 5T validation');
     
-    await firestore.collection(COLLECTIONS.EVIDENCE_RECORDS).doc(evidenceId).set(evidenceRecord);
+    await setDoc(doc(db, COLLECTIONS.EVIDENCE_RECORDS, evidenceId), evidenceRecord);
     return evidenceRecord;
   }
   
@@ -43,7 +44,7 @@ export class GlobalEvidenceService {
       timestamp: new Date(),
       ...audit,
     };
-    await firestore.collection(COLLECTIONS.AUDIT_LOGS).add(log);
+    await addDoc(collection(db, COLLECTIONS.AUDIT_LOGS), log);
   }
 }
 
@@ -58,7 +59,7 @@ export class ContractService {
       updated_at: new Date(),
       ...contract,
     };
-    await firestore.collection(COLLECTIONS.CONTRACTS).doc(newContract.id).set(newContract);
+    await setDoc(doc(db, COLLECTIONS.CONTRACTS, newContract.id), newContract);
     return newContract;
   }
 }

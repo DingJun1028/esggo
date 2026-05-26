@@ -12,12 +12,12 @@ const mockComponent: IComponentCore = {
   formula: 'GRI 305-1',
   impact_metric: 'Test Carbon Emission',
   hash_lock: 'hash_test_lock',
-  evidence: {
+  evidence: [{
     tangible_metric: 'Test Carbon Emission',
     source_origin: 'test-source',
     lifecycle_hooks: [],
     formula_ref: 'GRI 305-1'
-  }
+  }]
 };
 
 const mockPolicy: RegulatoryPolicy = {

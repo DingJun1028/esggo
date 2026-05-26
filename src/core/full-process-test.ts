@@ -18,9 +18,20 @@ async function runFullProcess() {
   const healingResult = await healingService.healCard(card);
   console.log('HealingResult:', healingResult);
 
+  const coreCard: any = {
+    uuid: card.uuid,
+    version: '1.0.0',
+    timestamp: card.lastUpdated,
+    evidence: [],
+    formula: '',
+    impact_metric: '',
+    status: 'Trustworthy',
+    hash_lock: ''
+  };
+
   // 2. 全維共鳴計算
   const resonanceEngine = new ResonanceEngine();
-  const resonanceResult = await resonanceEngine.calculateResonance([card]);
+  const resonanceResult = await resonanceEngine.calculateResonance([coreCard]);
   console.log('ResonanceResult:', resonanceResult);
 }
 

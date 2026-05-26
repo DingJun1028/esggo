@@ -61,7 +61,7 @@ export class ProofExportEngine {
       ${verificationUrl}
       
       INCLUDED COMPONENTS:
-      ${metadata.components.map(c => `- ${c.uuid}: ${c.evidence.tangible_metric} (Hash: ${c.hash_lock.substring(0, 16)}...)`).join('\n')}
+      ${metadata.components.map(c => `- ${c.uuid}: ${c.evidence[0]?.tangible_metric || 'Unknown'} (Hash: ${c.hash_lock.substring(0, 16)}...)`).join('\n')}
     `;
 
     return {
@@ -113,15 +113,15 @@ export async function generateIntegrityCertificate(
     masterSeal: seal,
     verificationUrl,
     dataSummary: {
-      metric: component.evidence.tangible_metric,
-      source: component.evidence.source_origin,
+      metric: component.evidence[0]?.tangible_metric || 'Unknown',
+      source: component.evidence[0]?.source_origin || 'Unknown',
       version: component.version,
     },
     integrityMatrix: {
       tangible: component.hash_lock,
-      traceable: component.evidence.source_origin,
-      trackable: component.evidence.formula_ref,
-      transparent: component.evidence.lifecycle_hooks.join(',') || 'N/A',
+      traceable: component.evidence[0]?.source_origin || 'Unknown',
+      trackable: component.evidence[0]?.formula_ref || 'Unknown',
+      transparent: component.evidence[0]?.lifecycle_hooks.join(',') || 'N/A',
       trustworthy: component.status,
     },
   };

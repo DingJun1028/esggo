@@ -1,7 +1,7 @@
 // Universal Resonance Engine
 // ESG GO v9.0.0 - 全維共鳴計算引擎
 
-import { OmniCard, ResonanceResult } from '../../lib/core-types';
+import { IComponentCore, ResonanceResult } from '../../lib/core-types';
 import { GPLClient } from '../clients/gpl-client';
 import { NotionClient } from '../clients/notion-client';
 import { AlTableClient } from '../clients/altable-client';
@@ -11,7 +11,7 @@ export class ResonanceEngine {
   private notion = new NotionClient();
   private altable = new AlTableClient();
 
-  async calculateResonance(cards: OmniCard[]): Promise<ResonanceResult> {
+  async calculateResonance(cards: IComponentCore[]): Promise<ResonanceResult> {
     const results: ResonanceResult[] = [];
     
     for (const card of cards) {
@@ -48,18 +48,18 @@ export class ResonanceEngine {
     return results[0]; // 簡化：返回第一張卡片的結果
   }
 
-  private calculateTemporalResonance(card: OmniCard, truth: any): number {
+  private calculateTemporalResonance(card: IComponentCore, truth: any): number {
     // 檢查 timestamp 匹配度
     const timeDiff = Math.abs(card.timestamp - truth.timestamp);
     return Math.max(0, 1 - timeDiff / 3600000); // 1小時內認為匹配
   }
 
-  private calculateStructuralResonance(card: OmniCard, truth: any): number {
+  private calculateStructuralResonance(card: IComponentCore, truth: any): number {
     // 檢查結構相似度 (UUID, version 等)
     return card.version === truth.version ? 1 : 0.5;
   }
 
-  private calculateContentResonance(card: OmniCard, truth: any): number {
+  private calculateContentResonance(card: IComponentCore, truth: any): number {
     // 檢查內容相似度 (evidence 數量、類型)
     const evidenceMatch = card.evidence.length === truth.evidence?.length 
       ? 1 

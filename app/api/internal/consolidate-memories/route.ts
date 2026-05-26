@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getOmniAgentAI } from '../../../../lib/omniagent.config';
+import { getOmniAgentAI } from '../../../../lib/omni.config';
 
 export async function POST(req: NextRequest) {
   try {

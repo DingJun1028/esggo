@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { extractMetricsFromEvidence } from '@/lib/omniagent-gateway';
+import { extractMetricsFromEvidence } from '@/lib/omni-gateway';
 import { ApiResponse } from '@/types/omni-core';
 
 export async function POST(req: Request) {

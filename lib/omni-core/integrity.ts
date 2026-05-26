@@ -63,7 +63,7 @@ export class IntegrityModule {
       timestamp,
       formula: purifiedEvidence.formula_ref,
       impact_metric: purifiedEvidence.tangible_metric,
-      evidence: purifiedEvidence,
+      evidence: [purifiedEvidence],
     });
 
     const hashLock = await sha256(payload);
@@ -77,7 +77,7 @@ export class IntegrityModule {
       impact_metric: purifiedEvidence.tangible_metric,
       status: 'Trustworthy' as const,
       hash_lock: hashLock,
-      evidence: purifiedEvidence
+      evidence: [purifiedEvidence]
     });
 
     console.log(`[刻印成功] 組件已轉化為不可篡改狀態。Hash: ${hashLock.substring(0, 16)}...`);

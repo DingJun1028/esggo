@@ -60,7 +60,7 @@ export async function executeOmniAgentTask(task: AgentTask): Promise<{ execution
   }
 }
 
-import { getOmniAgentAI } from './omniagent.config';
+import { getOmniAgentAI } from './omni.config';
 import type { 
   OmniAgentVisionResult, 
   OmniAgentMetricExtraction, 

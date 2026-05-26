@@ -15,7 +15,7 @@ describe('OmniCoreIntegrity Module - 5T State Machine Validation', () => {
 
     // 1. Traceable (可溯源)
     expect(crystal.uuid).toBeDefined();
-    expect(crystal.evidence.source_origin).toBe('/Energy Bills 2025');
+    expect(crystal.evidence[0].source_origin).toBe('/Energy Bills 2025');
 
     // 2. Transparent (可透明)
     expect(crystal.formula).toBe('ISO-14064-1:2018');
@@ -25,8 +25,8 @@ describe('OmniCoreIntegrity Module - 5T State Machine Validation', () => {
 
     // 4. Trackable (可追蹤)
     expect(crystal.timestamp).toBeGreaterThan(0);
-    expect(crystal.evidence.lifecycle_hooks).toContain('initial_entry');
-    expect(crystal.evidence.lifecycle_hooks.some(h => h.startsWith('purified_at_'))).toBe(true);
+    expect(crystal.evidence[0].lifecycle_hooks).toContain('initial_entry');
+    expect(crystal.evidence[0].lifecycle_hooks.some(h => h.startsWith('purified_at_'))).toBe(true);
 
     // 5. Trustworthy (不可篡改)
     expect(crystal.status).toBe('Trustworthy');

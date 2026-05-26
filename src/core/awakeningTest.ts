@@ -1,4 +1,4 @@
-import { executeAwakenedSovereignty, UserIntent } from './OmniAgentAwakening';
+import { executeAwakenedSovereignty, UserIntent } from './OmniHermesAwakening';
 
 const sampleIntent: UserIntent = {
   description: 'Deploy the universal diffusion mechanism',

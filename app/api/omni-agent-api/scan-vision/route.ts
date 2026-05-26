@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { scanEvidenceWithVision } from '../../../../lib/omniagent-gateway';
+import { scanEvidenceWithVision } from '../../../../lib/omni-gateway';
 
 export async function POST(request: NextRequest) {
   try {

@@ -4,7 +4,7 @@
  */
 
 import { getEnvironmentalData, getSocialMetrics } from '../db';
-import { fetchOmniAgentStatus } from '../omniagent-gateway';
+import { fetchOmniAgentStatus } from '../omni-gateway';
 import { blueCC } from './blue-cc';
 
 export async function gatherSystemContext() {

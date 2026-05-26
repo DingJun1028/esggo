@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
@@ -13,7 +13,7 @@ import {
   Shield,
 } from 'lucide-react';
 import ThemeSelector from './ThemeSelector';
-import OmniAgentFloatingAgent from './brand/OmniAgentFloatingAgent';
+import OmniAgentFloatingAgent from './brand/OmniAgentFloating';
 import { THEMES, type ThemeId, applyTheme, getSavedTheme } from '../lib/theme-config';
 
 interface NavItem {

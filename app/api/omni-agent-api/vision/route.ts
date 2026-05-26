@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { scanEvidenceWithVision } from '@/lib/omniagent-gateway';
+import { scanEvidenceWithVision } from '@/lib/omni-gateway';
 import { ApiResponse } from '@/types/omni-core';
 
 export async function POST(req: Request) {

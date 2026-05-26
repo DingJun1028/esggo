@@ -66,12 +66,12 @@ export function buildComponent(params: {
     formula: params.formula ?? '[ISO-14064-1] Generic Calculation',
     impact_metric: params.impactMetric ?? '0.00 tCO2e',
     hash_lock: hashLock,
-    evidence: {
+    evidence: [{
       tangible_metric: params.impactMetric ?? '0.00 tCO2e',
       source_origin: params.sourceOrigin,
       lifecycle_hooks: lifecyclePath,
       formula_ref: params.griReference ?? params.formula ?? '[ISO-14064-1] Generic Calculation',
-    },
+    }],
     status: 'Trustworthy',
   });
 
@@ -86,8 +86,8 @@ export function flattenToRecord(component: IComponentCore, dimension: VaultDimen
   const payload = JSON.stringify(component);
   const metadata = JSON.stringify({
     version: component.version,
-    origin: component.evidence.source_origin,
-    pathCount: component.evidence.lifecycle_hooks.length,
+    origin: component.evidence[0]?.source_origin || '',
+    pathCount: component.evidence[0]?.lifecycle_hooks.length || 0,
   });
 
   return {
@@ -161,7 +161,7 @@ export async function engraveToSingleTable(component: IComponentCore): Promise<{
   await supabase.rpc('create_evidence_seal', {
     p_secret: record.payload,
     p_name: `omni_seal_${record.uuid}`,
-    p_description: `Semantic Governance Seal: ${component.evidence.source_origin}`
+    p_description: `Semantic Governance Seal: ${component.evidence[0]?.source_origin || 'Unknown'}`
   });
 
   // 審計日誌 (T4 Trackable)
@@ -171,7 +171,7 @@ export async function engraveToSingleTable(component: IComponentCore): Promise<{
     user_name: 'OmniAgent-Engraver',
     t5_tag: 'T1+T4+T5',
     hash_lock: record.hash_lock,
-    details: `[信] 聖碑刻印完成。源起：${component.evidence.source_origin}`,
+    details: `[信] 聖碑刻印完成。源起：${component.evidence[0]?.source_origin || 'Unknown'}`,
   }).maybeSingle();
 
   return { success: true, id: data?.uuid ?? record.uuid };

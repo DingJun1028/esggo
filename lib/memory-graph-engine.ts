@@ -57,7 +57,7 @@ export class MemoryGraphEngine {
     nodes.push({
       id: evidenceId,
       type: 'EVIDENCE',
-      label: component.evidence.tangible_metric,
+      label: component.evidence[0]?.tangible_metric || 'Unknown',
       status: component.status
     });
 

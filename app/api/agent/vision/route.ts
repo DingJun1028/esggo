@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getOmniAgentAI, omniagentConfig } from '../../../../lib/omniagent.config';
+import { getOmniAgentAI, omniagentConfig } from '../../../../lib/omni.config';
 import { z } from 'genkit';
 
 const VisionOutputSchema = z.object({

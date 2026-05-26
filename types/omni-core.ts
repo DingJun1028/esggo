@@ -69,3 +69,15 @@ export interface VerifyRequestPayload {
   uuid?: string;
   component?: any; // Legacy support
 }
+
+export interface ResonanceResult {
+  totalResonance: number;
+  dimensionalResonance: {
+    GPL: number;
+    Notion: number;
+    AlTable: number;
+    Others: number;
+  };
+  conflicts: any[];
+  harmonyRecommendations: any[];
+}

@@ -10,7 +10,7 @@ import {
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
   Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity
 } from 'lucide-react';
-import OmniAgentFloatingAgent from '../components/brand/OmniAgentFloatingAgent';
+import OmniAgentFloatingAgent from '../components/brand/OmniAgentFloating';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
 import ComposerFooter from '../components/brand/ComposerFooter';
 import OmniAgentControlCenter from '../components/brand/OmniAgentControlCenter';

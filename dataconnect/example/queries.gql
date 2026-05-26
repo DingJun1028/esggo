@@ -62,7 +62,7 @@ query ListAuditRecords @auth(level: USER) {
   }
 }
 
-query ListScrapedArticles @auth(level: PUBLIC) {
+query ListScrapedArticles @auth(level: USER) {
   scrapedArticles(orderBy: [{scrapedAt: DESC}], limit: 50) {
     id
     title
@@ -214,7 +214,7 @@ mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!,
   })
 }
 
-mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: PUBLIC) {
+mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: USER) {
   scrapedArticle_upsert(data: {
     id: $id,
     title: $title,
@@ -281,7 +281,7 @@ mutation UpsertSwarmAgentTask($id: UUID, $title: String!, $taskType: String!, $s
   })
 }
 
-query ListRegulatoryPolicies @auth(level: PUBLIC) {
+query ListRegulatoryPolicies @auth(level: USER) {
   regulatoryPolicies(where: { isGlobal: { eq: true } }) {
     id
     standard

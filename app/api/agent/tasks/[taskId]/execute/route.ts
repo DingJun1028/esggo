@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createExecution, generateMockArtifact } from '../../../../../../lib/agent/orchestrator';
-import { executeOmniAgentTask } from '../../../../../../lib/omniagent-gateway';
+import { executeOmniAgentTask } from '../../../../../../lib/omni-gateway';
 import { addExecution, addArtifact } from '../../../../../../lib/agent/store';
 import type { AgentTask } from '../../../../../../lib/agent/types';
 
@@ -42,7 +42,7 @@ export async function POST(
 
         // [Genkit Real Integration]
         try {
-          const { getOmniAgentAI, omniagentConfig, ESGArtifactSchema } = await import('@/lib/omniagent.config');
+          const { getOmniAgentAI, omniagentConfig, ESGArtifactSchema } = await import('@/lib/omni.config');
           const systemInstruction = `${omniagentConfig.personas.auditor}\n\n你現在是 AgentZ0，一個嚴格遵循 5T Integrity Protocol 的 ESG 稽核 AI。`;
           const prompt = `請根據以下任務詳細內容，生成一份符合 5T 標準的稽核結果。\n\n任務標題: ${task.title}\n任務類型: ${task.taskType}\n任務說明: ${task.description}`;
           const response = await (await getOmniAgentAI()).generate({
@@ -78,7 +78,7 @@ export async function POST(
 
         // [Phase 3] Autonomous Swarm Trigger
         // 如果信心度過低或偵測到重大缺口，自動啟動子任務委派
-        if (confidence < (await import('@/lib/omniagent.config').then(m => m.omniagentConfig.adkOptions.swarmThreshold)) || gaps.length > 0) {
+        if (confidence < (await import('@/lib/omni.config').then(m => m.omniagentConfig.adkOptions.swarmThreshold)) || gaps.length > 0) {
           console.log(`[Swarm Trigger] Low confidence (${confidence}) or gaps detected. Dispatching sub-task...`);
           const { dispatchSwarmHandoff } = await import('@/lib/agent/orchestrator');
           await dispatchSwarmHandoff(
