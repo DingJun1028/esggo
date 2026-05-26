@@ -32,6 +32,13 @@
 - API contract in `/docs/api.md`.
 - CI/CD config in `firebase.json`, `vercel.json`.
 
+## 🛠️ Omni CLI Usage
+Manage the system and interact with the agent directly from the terminal:
+- `node cli/omni.mjs agent run "Analyze GRI 302-1 trends"`: Invoke the agent for a specific ESG task.
+- `node cli/omni.mjs agent browse "Search for ESG trends on Twitter"`: Run a web agent task via Browser Use V3.
+- `node cli/omni.mjs vault list`: View recent cryptographic evidence records.
+- `node cli/omni.mjs audit report`: Generate a 5T integrity compliance summary.
+
 ## 🔧 Development
 - Tests: `npm run test`.
 - Lint: `npm run lint`.

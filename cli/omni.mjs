@@ -10,6 +10,7 @@ import pc from 'picocolors';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
+import { BrowserUse } from 'browser-use-sdk/v3';
 
 dotenv.config();
 
@@ -146,6 +147,7 @@ agent.command('tools')
       { id: 'terminal', category: 'Execution', desc: 'Safe shell execution' },
       { id: 'video_generate', category: 'Creative', desc: 'Video generation v0.14' },
       { id: 'mcp_bridge', category: 'System', desc: 'Connect to MCP servers' },
+      { id: 'browser_use', category: 'Agentic', desc: 'Browser Use Cloud V3 (BYOK)' },
       { id: 'vault_seal', category: 'Security', desc: 'SHA-256 + ZKP sealing' }
     ];
 
@@ -196,6 +198,28 @@ agent.command('run <task>')
       }
     } catch (err) {
       console.log(pc.red(`❌ Agent Execution Error: ${err.message}`));
+    }
+  });
+
+agent.command('browse <prompt>')
+  .description('Run a web agent task via Browser Use Cloud (V3)')
+  .option('-m, --model <model>', 'LLM model to use', 'claude-opus-4.7')
+  .action(async (prompt, options) => {
+    console.log(pc.blue(`🌐 Initiating BrowserUse V3 Task: "${prompt}"...`));
+    const apiKey = process.env.BROWSER_USE_API_KEY || 'bu_Oc5acIXHRzHGwGJrV67ze9Pa7dFLcTp73idvlL6_V6A';
+    const client = new BrowserUse({ apiKey });
+
+    try {
+      const result = await client.run(prompt, {
+        model: options.model,
+        proxyCountryCode: 'us',
+      });
+      console.log(pc.green('✅ Web Agent task completed.'));
+      console.log(pc.white('──────────────────────────────────────────────────'));
+      console.log(pc.yellow(result.output));
+      console.log(pc.white('──────────────────────────────────────────────────'));
+    } catch (err) {
+      console.log(pc.red(`❌ BrowserUse Error: ${err.message}`));
     }
   });
 
