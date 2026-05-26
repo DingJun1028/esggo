@@ -28,6 +28,7 @@ const navGroups = [
       { href: '/health-check', label: '企業健檢', sub: 'Health Check', icon: <HeartPulse size={18} /> },
       { href: '/advisory', label: '專家諮詢', sub: 'Advisory', icon: <MessageSquare size={18} /> },
       { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <BarChart3 size={18} /> },
+      { href: '/data-sources', label: '數據中樞', sub: 'Data Hub', icon: <Cable size={18} /> },
     ],
   },
   {
