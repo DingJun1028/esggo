@@ -1,5 +1,5 @@
-# ESG GO Platform Control Script (ctl.ps1) v1.1
-# Windows PowerShell version of ctl.sh
+# ESG GO Platform Control Script (ctl.ps1) v1.2
+# Windows PowerShell version - High Compatibility Mode (No Emojis)
 
 $APP_DIR = Get-Location
 $LOG_FILE = "./omni_trace.log"
@@ -13,13 +13,13 @@ function Start-Platform {
     if (Test-Path $PID_FILE) {
         $pid_val = Get-Content $PID_FILE
         if (Get-Process -Id $pid_val -ErrorAction SilentlyContinue) {
-            Write-Host "⚠️ Platform is already running (PID: $pid_val)" -ForegroundColor Yellow
+            Write-Host "[!] Platform is already running (PID: $pid_val)" -ForegroundColor Yellow
             return
         }
         Remove-Item $PID_FILE
     }
 
-    Write-Host "🚀 Starting OmniAgent Platform (Next.js + Gateway)..." -ForegroundColor Green
+    Write-Host "[*] Starting OmniAgent Platform (Next.js + Gateway)..." -ForegroundColor Green
     
     # Start Next.js in background
     $nextProcess = Start-Process npm -ArgumentList "run dev" -NoNewWindow -PassThru -RedirectStandardOutput $LOG_FILE -RedirectStandardError $LOG_FILE
@@ -30,8 +30,8 @@ function Start-Platform {
     # Record PIDs
     "$($nextProcess.Id), $($gatewayProcess.Id)" | Out-File -FilePath $PID_FILE -Encoding ascii
     
-    Write-Host "✅ Platform processes launched." -ForegroundColor Green
-    Write-Host "📡 Logs: Get-Content -Path $LOG_FILE -Wait" -ForegroundColor Cyan
+    Write-Host "[v] Platform processes launched." -ForegroundColor Green
+    Write-Host "[i] Logs: Get-Content -Path $LOG_FILE -Wait" -ForegroundColor Cyan
 }
 
 function Stop-Platform {
@@ -40,21 +40,21 @@ function Stop-Platform {
         foreach ($p in $pids) {
             $id = $p.Trim()
             if (Get-Process -Id $id -ErrorAction SilentlyContinue) {
-                Write-Host "🛑 Stopping Process $id..." -ForegroundColor Red
+                Write-Host "[-] Stopping Process $id..." -ForegroundColor Red
                 Stop-Process -Id $id -Force
             }
         }
         Remove-Item $PID_FILE
-        Write-Host "✅ Platform stopped." -ForegroundColor Green
+        Write-Host "[v] Platform stopped." -ForegroundColor Green
     } else {
-        Write-Host "⚠️ No platform process found." -ForegroundColor Yellow
+        Write-Host "[!] No platform process found." -ForegroundColor Yellow
     }
 }
 
 function Get-PlatformStatus {
     if (Test-Path $PID_FILE) {
         $pids = (Get-Content $PID_FILE) -split ","
-        Write-Host "📊 Platform Status:" -ForegroundColor Blue
+        Write-Host ">>> Platform Status:" -ForegroundColor Blue
         foreach ($p in $pids) {
             $id = $p.Trim()
             $proc = Get-Process -Id $id -ErrorAction SilentlyContinue
@@ -65,7 +65,7 @@ function Get-PlatformStatus {
             }
         }
     } else {
-        Write-Host "⚪ Platform is not running." -ForegroundColor Gray
+        Write-Host "[.] Platform is not running." -ForegroundColor Gray
     }
 }
 
@@ -73,7 +73,7 @@ function Show-Logs {
     if (Test-Path $LOG_FILE) {
         Get-Content -Path $LOG_FILE -Tail 50 -Wait
     } else {
-        Write-Host "⚠️ Log file not found." -ForegroundColor Yellow
+        Write-Host "[!] Log file not found." -ForegroundColor Yellow
     }
 }
 
