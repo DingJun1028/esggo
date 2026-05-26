@@ -30,8 +30,6 @@ export class GlobalEvidenceService {
       status: 'Trustworthy',
       hash_lock: 'temp-lock'
     } as IComponentCore);
-      hash_lock: 'temp-lock'
-    } as IComponentCore);
     
     if (!isValid) throw new Error('Evidence failed 5T validation');
     
