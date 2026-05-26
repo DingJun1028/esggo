@@ -1,13 +1,14 @@
 // ESG GO v9.0.0 - Global Integration Test
-import { EvidenceService, ContractService, GlobalStateManager } from './GlobalIntegration';
+import { GlobalEvidenceService, ContractService, GlobalStateManager } from './GlobalIntegration';
 import { T5Validator } from './T5Protocol';
+import { IComponentCore } from '../../lib/core-types';
 
 async function main() {
   console.log('=== ESG GO v9.0.0 Global Integration ===\n');
   
   // 1. Test 5T Validation
   console.log('1. Testing 5T Validation...');
-  const testEvidence = {
+  const testEvidence: IComponentCore = {
     uuid: 'test-uuid-123',
     version: '1.0.0',
     timestamp: Date.now(),
@@ -20,10 +21,12 @@ async function main() {
         lifecycle_path: ['draft', 'verified', 'locked'],
       },
     ],
+    formula: 'test-formula',
+    impact_metric: 'test-impact',
   };
   
   try {
-    const isValid = await T5Validator.validate(testEvidence as any);
+    const isValid = await T5Validator.validate(testEvidence);
     console.log(`✅ 5T Validation passed: ${isValid}`);
   } catch (error) {
     console.error(`❌ 5T Validation failed:`, error);
@@ -32,12 +35,17 @@ async function main() {
   // 2. Test Evidence Service
   console.log('\n2. Testing Evidence Service...');
   try {
-    const evidence = await EvidenceService.createEvidenceRecord({
+    const evidence = await GlobalEvidenceService.createEvidenceRecord({
       uuid: 'test-uuid-123',
       version: '1.0.0',
-      timestamp: Date.now(),
       evidence: testEvidence.evidence,
-    });
+      evidence_bundle_id: 'bundle-123',
+      hash_value: 'hash-123',
+      source_origin: 'test',
+      iso_standard_ref: 'ISO-14064',
+      lifecycle_path: ['step1'],
+      company_id: 'company-123'
+    } as any);
     console.log(`✅ Evidence created: ${evidence.id}`);
   } catch (error) {
     console.error(`❌ Evidence creation failed:`, error);
@@ -51,6 +59,8 @@ async function main() {
       counterparty_tax_id: '123456789',
       evidence_bundle_id: 'evidence-bundle-123',
       company_id: 'company-123',
+      status: 'draft',
+      created_by: 'system'
     });
     console.log(`✅ Contract created: ${contract.id}`);
   } catch (error) {

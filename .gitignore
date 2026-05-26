@@ -50,3 +50,6 @@ service-account-key.json
 *-admin-key.json
 
 node_modules
+
+*storybook.log
+storybook-static

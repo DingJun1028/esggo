@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       source_origin: data.source_origin,
       timestamp: data.timestamp
     };
-    
+
     const computedHash = createHash('sha256')
       .update(JSON.stringify(dataToHash))
       .digest('hex');
@@ -64,10 +64,11 @@ export async function POST(request: NextRequest) {
       },
       meta: { timestamp: Date.now(), requestId },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : '驗證過程中發生未知的伺服器內部錯誤';
     return NextResponse.json<ApiResponse>({
       success: false,
-      error: { code: 'VERIFICATION_FAILED', message: error.message || '驗證失敗' },
+      error: { code: 'VERIFICATION_FAILED', message: errorMessage },
       meta: { timestamp: Date.now(), requestId },
     }, { status: 500 });
   }

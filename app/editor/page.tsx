@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -44,15 +44,15 @@ const CHAPTERS: Chapter[] = [
 ];
 
 const PERSONA_META = {
-  compliance: { label: '合規守衛', color: '#003262', icon: <Shield size={14} />, className: 'text-[#003262] bg-[#003262]/5' },
-  harmony:    { label: '共榮引導', color: '#10B981', icon: <Users size={14} />, className: 'text-[#10B981] bg-[#10B981]/5' },
-  innovation: { label: '創新先行', color: '#8B5CF6', icon: <Zap size={14} />, className: 'text-[#8B5CF6] bg-[#8B5CF6]/5' },
+  compliance: { label: '合規守衛', color: '#06b6d4', icon: <Shield size={14} />, className: 'text-cyan-400 bg-cyan-950/20 border-cyan-500/20 hover:border-cyan-400/40' },
+  harmony:    { label: '共榮引導', color: '#10b981', icon: <Users size={14} />, className: 'text-emerald-400 bg-emerald-950/20 border-emerald-500/20 hover:border-emerald-400/40' },
+  innovation: { label: '創新先行', color: '#a855f7', icon: <Zap size={14} />, className: 'text-purple-400 bg-purple-950/20 border-purple-500/20 hover:border-purple-400/40' },
 };
 
 const CATEGORY_META = {
-  G: { label: '治理', color: '#003262', text: 'text-[#003262]' },
-  E: { label: '環境', color: '#10B981', text: 'text-[#10B981]' },
-  S: { label: '社會', color: '#8B5CF6', text: 'text-[#8B5CF6]' },
+  G: { label: '治理', color: '#06b6d4', text: 'text-cyan-400', border: 'border-cyan-500/20' },
+  E: { label: '環境', color: '#10b981', text: 'text-emerald-400', border: 'border-emerald-500/20' },
+  S: { label: '社會', color: '#a855f7', text: 'text-purple-400', border: 'border-purple-500/20' },
 };
 
 export default function EditorPage() {
@@ -182,33 +182,358 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F8FAFC] text-slate-900 font-sans selection:bg-blue-500/10">
-      <header className="h-16 bg-white/80 backdrop-blur-2xl border-b border-slate-200 px-8 flex items-center justify-between z-30 shadow-sm">
-        <div className="flex items-center gap-6"><div className="w-10 h-10 rounded-xl bg-[#003262] flex items-center justify-center text-[#FDB515] shadow-lg"><Edit3 size={20} /></div><div><h1 className="text-lg font-black text-[#003262] tracking-tighter uppercase">SustainWrite <span className="text-blue-500/60 ml-2">GRI Master</span></h1><p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">250-Page Enterprise Document Engine</p></div></div>
-        <div className="flex items-center gap-4"><div className="flex items-center gap-4 px-6 py-2 bg-slate-50 rounded-2xl border border-slate-100 mr-4"><div className="text-right"><p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Global Integrity</p><p className="text-xs font-black text-[#003262] font-mono uppercase">T5_CERTIFIED</p></div><BrandStatusDot status="active" pulse size="md" /></div><Button variant="primary" size="md" onClick={handleSeal} isLoading={sealing} disabled={isSealed} className="rounded-2xl px-8 shadow-xl shadow-blue-500/10"><Lock size={18} className="mr-2" /> {isSealed ? '已封印' : '5T 封印'}</Button></div>
+    <div className="flex flex-col h-screen overflow-hidden bg-[#020617] text-slate-100 font-sans selection:bg-cyan-500/20 relative">
+      {/* Background neon dynamic grid and glowing nodes */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-cyan-500/10 to-transparent blur-[120px] rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-emerald-500/10 to-transparent blur-[150px] rounded-full" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
+      </div>
+
+      <header className="h-16 bg-slate-950/60 backdrop-blur-2xl border-b border-white/[0.08] px-8 flex items-center justify-between z-30 relative">
+        <div className="flex items-center gap-6">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+            <Edit3 size={18} />
+          </div>
+          <div>
+            <h1 className="text-md font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 tracking-wider uppercase flex items-center gap-2">
+              SustainWrite <span className="text-[10px] px-2 py-0.5 rounded-md bg-cyan-950/60 border border-cyan-500/20 text-cyan-300">GRI Master</span>
+            </h1>
+            <p className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.25em] mt-0.5">250-Page Enterprise Document Engine</p>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 px-5 py-1.5 bg-slate-950/50 backdrop-blur-md rounded-xl border border-white/[0.08]">
+            <div className="text-right">
+              <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Global Integrity</p>
+              <p className="text-[10px] font-black text-cyan-400 font-mono uppercase">T5_CERTIFIED</p>
+            </div>
+            <BrandStatusDot status="active" pulse size="md" />
+          </div>
+          <Button 
+            variant="ghost" 
+            size="md" 
+            onClick={handleSeal} 
+            isLoading={sealing} 
+            disabled={isSealed} 
+            className={cn(
+              "rounded-xl px-6 font-black text-xs tracking-wider transition-all duration-300 border backdrop-blur-md",
+              isSealed 
+                ? "bg-emerald-950/40 border-emerald-500/30 text-emerald-400 cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                : "bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)] active:scale-95"
+            )}
+          >
+            <Lock size={14} className="mr-2" /> {isSealed ? '已封印' : '5T 封印'}
+          </Button>
+        </div>
       </header>
-      <div className="flex-1 flex overflow-hidden">
-        <aside className={cn("bg-white/60 backdrop-blur-2xl border-r border-slate-200 transition-all duration-500 flex flex-col z-20 shadow-xl", navCollapsed ? 'w-20' : 'w-72')}><div className="px-6 py-5 flex items-center justify-between border-b border-slate-100">{!navCollapsed && <span className="text-[10px] font-black text-[#003262] uppercase tracking-[0.3em]">Module Index</span>}<button onClick={() => setNavCollapsed(!navCollapsed)} className="p-2 hover:bg-blue-50 rounded-xl transition-all ml-auto text-slate-400">{navCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}</button></div><div className="flex-1 overflow-y-auto px-4 py-6 space-y-2 no-scrollbar">{CHAPTERS.map(c => (<button key={c.id} onClick={() => setSelectedChapterId(c.id)} className={cn("w-full flex items-center gap-4 p-3.5 rounded-2xl transition-all duration-300 group", selectedChapterId === c.id ? 'bg-[#003262] text-white shadow-2xl scale-[1.02]' : 'text-slate-500 hover:bg-blue-50/50')}><div className={cn("w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs transition-all", selectedChapterId === c.id ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-400')}>{c.num}</div>{!navCollapsed && (<div className="text-left flex-1 min-w-0"><p className="text-[11px] font-black truncate uppercase tracking-tight">{c.title}</p><p className={cn("text-[8px] font-bold uppercase opacity-60", selectedChapterId === c.id ? 'text-blue-100' : 'text-slate-400')}>{c.gri}</p></div>)}{chapterStatuses[c.id] === 'sealed' && <div className="p-1 bg-emerald-400 rounded-full shadow-sm animate-pulse"><CheckCircle size={10} className="text-white"/></div>}</button>))}</div></aside>
-        <main className="flex-1 flex flex-col overflow-hidden relative"><div className="px-10 py-8 border-b border-slate-100 bg-white/40 backdrop-blur-md"><div className="flex items-center gap-4 mb-4"><Badge variant="outline" className="bg-[#003262] text-white border-none px-4 py-1.5 rounded-full font-black text-[10px] tracking-widest">{chapter.gri}</Badge><div className="h-1 w-1 rounded-full bg-slate-300" /><span className={cn("text-[10px] font-black uppercase tracking-[0.3em]", CATEGORY_META[chapter.category].text)}>{CATEGORY_META[chapter.category].label} Master Segment</span></div><h2 className="text-4xl font-black text-[#003262] tracking-tighter mb-8">{chapter.title}</h2><div className="flex gap-4">{['write', 'data', 'preview'].map((t) => (<button key={t} onClick={() => setActivePanel(t as any)} className={cn("px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all", activePanel === t ? 'bg-white text-[#003262] shadow-premium' : 'text-slate-400 hover:text-[#003262]')}>{t}</button>))}</div></div>
-           <div className="flex-1 overflow-y-auto p-10 flex flex-col xl:flex-row gap-10">
-              <div className="w-full xl:w-[320px] space-y-8 flex-shrink-0"><Card className="border-none shadow-premium bg-white/80 backdrop-blur-xl rounded-[2.5rem] overflow-hidden"><CardHeader className="p-8 pb-4"><CardTitle className="text-[10px] font-black text-[#003262] uppercase tracking-[0.3em] flex items-center gap-2"><Users size={14}/> AI Expert Persona</CardTitle></CardHeader><CardContent className="p-8 pt-0 space-y-6"><div className="space-y-3">{Object.entries(PERSONA_META).map(([p, meta]) => (<button key={p} onClick={() => setSelectedPersona(p as any)} className={cn("w-full p-5 rounded-3xl border transition-all duration-500 text-left flex items-center justify-between group", selectedPersona === p ? 'bg-[#003262] border-[#003262] text-white shadow-2xl rotate-1' : 'bg-white border-slate-100 hover:border-[#003262]/20')}><span className="text-[11px] font-black uppercase tracking-widest">{meta.label}</span><div className={cn("p-2 rounded-xl", selectedPersona === p ? 'bg-white/20' : 'bg-slate-50')}>{meta.icon}</div></button>))}</div><div className="pt-8 border-t border-slate-100 space-y-4"><p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em]">Expert Master Toolset</p><Button variant="primary" className="w-full h-16 rounded-[2rem] shadow-extreme font-black text-xs tracking-widest" onClick={() => handleGenerate(5000)} disabled={generating}><Sparkles size={20} className="mr-3 text-[#FDB515]" /> 啟動 5000 字撰寫</Button>
-                     <div className="grid grid-cols-2 gap-3">
-                        <Button variant="ghost" className="h-14 rounded-2xl bg-blue-50/50 text-blue-700 text-[9px] font-black uppercase" onClick={handleRecursiveExpand}><Plus size={14} className="mr-2"/> 遞迴擴充</Button>
-                        <Button variant="ghost" className="h-14 rounded-2xl bg-amber-50/50 text-amber-700 text-[9px] font-black uppercase" onClick={applyBestPractice}><Trophy size={14} className="mr-2"/> 最佳實踐</Button>
-                     </div>
-                     <Button variant="primary" className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl shadow-lg" onClick={async () => { showToast('正在呼叫 OmniHermes 蜂群...', 'info'); try { await fetch('/api/agent/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ actorId: user?.email || 'user', taskType: 'compliance_review', title: `審查: ${chapter.title}`, skillKey: 'gri_compliance_checker' }) }); showToast('OmniHermes 已接收任務', 'success'); } catch (e) { showToast('呼叫失敗', 'error'); } }}><Bot size={16} className="mr-2" /> 呼叫 OmniHermes</Button>
-                     <Button variant="ghost" className="w-full h-14 border-dashed border-[#003262]/20 text-[#003262] text-[10px] font-black uppercase rounded-2xl" onClick={applyExpertTemplate}><Database size={16} className="mr-2" /> 零算力專家模板</Button></div></CardContent></Card></div>
-              <div className="flex-1 flex flex-col"><Card className="flex-1 border-none shadow-premium bg-white rounded-[3rem] overflow-hidden flex flex-col relative ring-1 ring-slate-100"><div className="h-12 px-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30"><div className="flex items-center gap-3"><Type size={14} className="text-slate-400" /><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">GRI Master Workspace</span></div>{dataGaps.length > 0 && (<div className="flex items-center gap-2 bg-red-50 px-3 py-1 rounded-full border border-red-100 animate-pulse"><AlertTriangle size={10} className="text-red-500" /><span className="text-[9px] font-black text-red-600 uppercase">Data_Mismatch</span></div>)}</div><div className="flex-1 relative overflow-hidden">
-                 {activePanel === 'write' && (<textarea value={generatedContent[chapter.id] || ''} onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} className="w-full h-full p-12 text-lg font-medium leading-[2.2] text-slate-700 outline-none resize-none bg-transparent" placeholder="ESG 治理主權由您執筆..." />)}
-                 {activePanel === 'data' && (<div className="p-12 space-y-8 fade-in"><div className="flex items-center justify-between"><div><h3 className="text-xl font-black text-[#003262]">數據指標填報</h3><p className="text-xs text-slate-400 font-bold uppercase mt-1">GRI Metric Input Hub</p></div><BrandButton variant="primary" size="sm" onClick={handleAutoPopulate} loading={generating} className="bg-emerald-600 hover:bg-emerald-700 rounded-xl h-10 px-6"><Bot size={14} className="mr-2" /> Hermes_Auto-Fill</BrandButton></div><div className="grid gap-6">{chapter.fields?.map(f => (<div key={f.id} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between group hover:bg-white transition-all"><div className="space-y-1"><p className="text-[10px] font-black text-slate-400 uppercase">{f.gri}</p><p className="text-sm font-black text-slate-700">{f.label}</p></div><div className="flex items-center gap-3"><input className="w-32 h-12 bg-white border border-slate-200 rounded-xl px-4 text-sm font-mono font-black text-[#003262] outline-none" value={fieldValues[chapter.id]?.[f.id] || ''} onChange={e => updateFieldValue(chapter.id, f.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} /><span className="text-[10px] font-bold text-slate-400 uppercase w-12">{f.unit}</span></div></div>)) || (<div className="py-20 text-center opacity-30"><Database size={48} className="mx-auto mb-4" /><p className="text-sm font-bold">此章節無需量化指標數據</p></div>)}</div></div>)}
-                 {activePanel === 'preview' && (<div className="p-12 prose max-w-none fade-in h-full overflow-y-auto"><h1 className="text-[#003262] font-black">{chapter.title}</h1><div className="whitespace-pre-wrap leading-relaxed text-slate-700">{generatedContent[chapter.id]}</div></div>)}
-                 {generating && activePanel === 'write' && (<div className="absolute inset-0 bg-white/80 backdrop-blur-xl flex items-center justify-center z-20"><motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-[400px] p-10 bg-[#003262] rounded-[3rem] text-white shadow-extreme relative overflow-hidden"><div className="relative z-10 space-y-8"><div className="flex justify-between items-end"><div className="space-y-1"><p className="text-[10px] font-black text-blue-300 uppercase tracking-[0.3em]">AI Recursive Expansion</p><h4 className="text-xl font-black">{genProgress.label}</h4></div><span className="text-2xl font-black font-mono text-[#FDB515]">{Math.round((genProgress.step / genProgress.total) * 100)}%</span></div><div className="h-2 w-full bg-white/10 rounded-full overflow-hidden"><motion.div className="h-full bg-gradient-to-r from-blue-400 to-[#FDB515]" initial={{ width: 0 }} animate={{ width: `${(genProgress.step / genProgress.total) * 100}%` }} transition={{ duration: 1 }} /></div><div className="flex items-center gap-4 text-blue-200/60"><RefreshCw size={16} className="animate-spin" /><p className="text-[10px] font-bold uppercase tracking-widest">目標：5000 字專家級深度撰寫</p></div></div><Zap size={180} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" /></motion.div></div>)}
-              </div>
-              <div className="h-24 px-12 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between"><BrandT5Strip items={['T1','T2','T3','T4','T5'].map((t, i) => ({ code: t as any, active: isSealed || i < 3 }))} /><div className="flex items-center gap-12"><div className="text-right"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Words</p><p className="text-xl font-black text-[#003262] font-mono tracking-tighter">{(generatedContent[chapter.id] || '').length.toLocaleString()}</p></div><div className="text-right border-l border-slate-200 pl-12"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">A4 Pages (Est.)</p><p className="text-xl font-black text-[#003262] font-mono tracking-tighter">{Math.ceil((generatedContent[chapter.id] || '').length / 1200)} / 250</p></div></div></div></Card></div>
-           </div>
+
+      <div className="flex-1 flex overflow-hidden z-10 relative">
+        <aside className={cn("bg-slate-950/40 backdrop-blur-2xl border-r border-white/[0.08] transition-all duration-500 flex flex-col z-20 shadow-2xl", navCollapsed ? 'w-20' : 'w-80')}>
+          <div className="px-6 py-4 flex items-center justify-between border-b border-white/[0.06]">
+            {!navCollapsed && <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Module Index</span>}
+            <button onClick={() => setNavCollapsed(!navCollapsed)} className="p-2 hover:bg-white/[0.04] rounded-lg transition-all ml-auto text-slate-500 hover:text-slate-300">
+              {navCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+            {CHAPTERS.map(c => (
+              <button 
+                key={c.id} 
+                onClick={() => setSelectedChapterId(c.id)} 
+                className={cn(
+                  "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group border",
+                  selectedChapterId === c.id 
+                    ? 'bg-gradient-to-r from-cyan-950/40 to-slate-950/60 border-cyan-500/30 text-white shadow-[0_0_20px_rgba(6,182,212,0.1)]' 
+                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'
+                )}
+              >
+                <div className={cn(
+                  "w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs transition-all border",
+                  selectedChapterId === c.id 
+                    ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-300' 
+                    : 'bg-slate-900/50 border-white/[0.04] text-slate-500'
+                )}>
+                  {c.num}
+                </div>
+                {!navCollapsed && (
+                  <div className="text-left flex-1 min-w-0">
+                    <p className="text-[11px] font-black truncate tracking-wide text-slate-300 group-hover:text-white transition-colors">{c.title}</p>
+                    <p className={cn("text-[8px] font-bold uppercase tracking-wider mt-0.5", selectedChapterId === c.id ? 'text-cyan-400/80' : 'text-slate-500')}>{c.gri}</p>
+                  </div>
+                )}
+                {chapterStatuses[c.id] === 'sealed' && (
+                  <div className="p-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.2)] animate-pulse">
+                    <CheckCircle size={10} className="text-emerald-400"/>
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        <main className="flex-1 flex flex-col overflow-hidden relative">
+          <div className="px-10 py-6 border-b border-white/[0.08] bg-slate-950/20 backdrop-blur-md">
+            <div className="flex items-center gap-3 mb-3">
+              <Badge variant="outline" className="bg-cyan-950/40 text-cyan-300 border-cyan-500/20 px-3 py-1 rounded-md font-black text-[9px] tracking-widest">
+                {chapter.gri}
+              </Badge>
+              <div className="h-1 w-1 rounded-full bg-slate-700" />
+              <span className={cn("text-[9px] font-black uppercase tracking-[0.25em]", CATEGORY_META[chapter.category].text)}>
+                {CATEGORY_META[chapter.category].label} Master Segment
+              </span>
+            </div>
+            <h2 className="text-2xl font-black text-slate-100 tracking-tight mb-6">{chapter.title}</h2>
+            <div className="flex gap-2">
+              {['write', 'data', 'preview'].map((t) => (
+                <button 
+                  key={t} 
+                  onClick={() => setActivePanel(t as any)} 
+                  className={cn(
+                    "px-6 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all duration-300 border",
+                    activePanel === t 
+                      ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.1)]' 
+                      : 'bg-transparent border-transparent text-slate-400 hover:text-slate-200'
+                  )}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-8 flex flex-col xl:flex-row gap-8 scrollbar-thin scrollbar-thumb-slate-900 scrollbar-track-transparent">
+            <div className="w-full xl:w-[340px] space-y-6 flex-shrink-0">
+              <Card className="border border-white/[0.08] bg-slate-950/40 backdrop-blur-xl rounded-2xl overflow-hidden shadow-2xl">
+                <CardHeader className="p-6 pb-2">
+                  <CardTitle className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] flex items-center gap-2">
+                    <Users size={12}/> AI Expert Persona
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 space-y-6">
+                  <div className="space-y-2">
+                    {Object.entries(PERSONA_META).map(([p, meta]) => (
+                      <button 
+                        key={p} 
+                        onClick={() => setSelectedPersona(p as any)} 
+                        className={cn(
+                          "w-full p-4 rounded-xl border transition-all duration-300 text-left flex items-center justify-between group",
+                          selectedPersona === p 
+                            ? 'bg-slate-900/60 border-cyan-500/40 text-white shadow-[0_0_15px_rgba(6,182,212,0.1)] translate-x-1' 
+                            : 'bg-transparent border-white/[0.04] text-slate-400 hover:border-white/10 hover:text-slate-200'
+                        )}
+                      >
+                        <span className="text-[10px] font-black uppercase tracking-widest">{meta.label}</span>
+                        <div className={cn("p-1.5 rounded-lg border transition-all", selectedPersona === p ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400' : 'bg-slate-900/40 border-white/[0.06]')}>
+                          {meta.icon}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="pt-6 border-t border-white/[0.06] space-y-4">
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-[0.3em]">Expert Master Toolset</p>
+                    <Button 
+                      variant="primary" 
+                      className="w-full h-14 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white border-none rounded-xl font-black text-xs tracking-wider shadow-lg shadow-cyan-500/10 active:scale-[0.98] transition-all" 
+                      onClick={() => handleGenerate(5000)} 
+                      disabled={generating}
+                    >
+                      <Sparkles size={16} className="mr-2 text-cyan-100 animate-pulse" /> 啟動 5000 字撰寫
+                    </Button>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <Button 
+                        variant="ghost" 
+                        className="h-11 rounded-lg bg-slate-900/40 border border-white/[0.06] hover:border-cyan-500/20 text-cyan-400 text-[8px] font-black uppercase tracking-wider" 
+                        onClick={handleRecursiveExpand}
+                      >
+                        <Plus size={10} className="mr-1.5"/> 遞迴擴充
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        className="h-11 rounded-lg bg-slate-900/40 border border-white/[0.06] hover:border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-wider" 
+                        onClick={applyBestPractice}
+                      >
+                        <Trophy size={10} className="mr-1.5"/> 最佳實踐
+                      </Button>
+                    </div>
+                    <Button 
+                      variant="primary" 
+                      className="w-full h-12 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg shadow-md transition-all active:scale-[0.98]" 
+                      onClick={async () => { 
+                        showToast('正在呼叫 OmniHermes 蜂群...', 'info'); 
+                        try { 
+                          await fetch('/api/agent/tasks', { 
+                            method: 'POST', 
+                            headers: { 'Content-Type': 'application/json' }, 
+                            body: JSON.stringify({ actorId: user?.email || 'user', taskType: 'compliance_review', title: `審查: ${chapter.title}`, skillKey: 'gri_compliance_checker' }) 
+                          }); 
+                          showToast('OmniHermes 已接收任務', 'success'); 
+                        } catch (e) { 
+                          showToast('呼叫失敗', 'error'); 
+                        } 
+                      }}
+                    >
+                      <Bot size={14} className="mr-2 animate-bounce" /> 呼叫 OmniHermes
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full h-12 border border-dashed border-white/[0.08] hover:border-cyan-500/30 text-slate-300 hover:text-cyan-400 text-[9px] font-black uppercase rounded-lg transition-all" 
+                      onClick={applyExpertTemplate}
+                    >
+                      <Database size={14} className="mr-2" /> 零算力專家模板
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="flex-1 flex flex-col min-w-0">
+              <Card className="flex-1 border border-white/[0.08] bg-slate-950/40 backdrop-blur-xl rounded-2xl overflow-hidden flex flex-col relative shadow-2xl">
+                <div className="h-12 px-8 border-b border-white/[0.06] flex items-center justify-between bg-slate-950/20">
+                  <div className="flex items-center gap-2">
+                    <Type size={12} className="text-cyan-400" />
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">GRI Master Workspace</span>
+                  </div>
+                  {dataGaps.length > 0 && (
+                    <div className="flex items-center gap-1.5 bg-red-950/30 px-3 py-1 rounded-full border border-red-500/20 animate-pulse">
+                      <AlertTriangle size={10} className="text-red-400" />
+                      <span className="text-[8px] font-black text-red-400 uppercase">Data_Mismatch</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 relative overflow-hidden min-h-[400px]">
+                  {activePanel === 'write' && (
+                    <textarea 
+                      value={generatedContent[chapter.id] || ''} 
+                      onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
+                      className="w-full h-full p-8 md:p-10 text-sm font-medium leading-[2.2] text-slate-200 outline-none resize-none bg-transparent scrollbar-thin scrollbar-thumb-slate-900 scrollbar-track-transparent focus:ring-1 focus:ring-cyan-500/10" 
+                      placeholder="ESG 治理主權由您執筆..." 
+                    />
+                  )}
+                  {activePanel === 'data' && (
+                    <div className="p-8 md:p-10 space-y-6 fade-in h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900 scrollbar-track-transparent">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <h3 className="text-lg font-black text-slate-200">數據指標填報</h3>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">GRI Metric Input Hub</p>
+                        </div>
+                        <BrandButton 
+                          variant="primary" 
+                          size="sm" 
+                          onClick={handleAutoPopulate} 
+                          loading={generating} 
+                          className="bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-xl h-10 px-5 shadow-lg active:scale-95"
+                        >
+                          <Bot size={12} className="mr-1.5" /> Hermes_Auto-Fill
+                        </BrandButton>
+                      </div>
+                      <div className="grid gap-4">
+                        {chapter.fields?.map(f => (
+                          <div key={f.id} className="p-5 bg-slate-900/30 rounded-xl border border-white/[0.04] flex items-center justify-between group hover:border-cyan-500/20 hover:bg-slate-900/50 transition-all">
+                            <div className="space-y-0.5">
+                              <p className="text-[8px] font-black text-cyan-400/75 uppercase tracking-wider">{f.gri}</p>
+                              <p className="text-xs font-black text-slate-300">{f.label}</p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <input 
+                                className="w-28 h-10 bg-slate-950/60 border border-white/[0.08] group-hover:border-cyan-500/20 rounded-lg px-3 text-xs font-mono font-black text-cyan-300 outline-none focus:border-cyan-500/40 text-center" 
+                                value={fieldValues[chapter.id]?.[f.id] || ''} 
+                                onChange={e => updateFieldValue(chapter.id, f.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
+                              />
+                              <span className="text-[9px] font-bold text-slate-500 uppercase w-10">{f.unit}</span>
+                            </div>
+                          </div>
+                        )) || (
+                          <div className="py-20 text-center opacity-30">
+                            <Database size={40} className="mx-auto mb-3 text-slate-500" />
+                            <p className="text-xs font-bold text-slate-400">此章節無需量化指標數據</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {activePanel === 'preview' && (
+                    <div className="p-8 md:p-10 prose prose-invert max-w-none fade-in h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-900 scrollbar-track-transparent">
+                      <h1 className="text-slate-100 font-black text-xl mb-4">{chapter.title}</h1>
+                      <div className="whitespace-pre-wrap leading-relaxed text-sm text-slate-300">{generatedContent[chapter.id]}</div>
+                    </div>
+                  )}
+
+                  {generating && activePanel === 'write' && (
+                    <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-20">
+                      <motion.div 
+                        initial={{ scale: 0.95, opacity: 0 }} 
+                        animate={{ scale: 1, opacity: 1 }} 
+                        className="w-[380px] p-8 bg-slate-900 border border-cyan-500/30 rounded-2xl text-white shadow-[0_0_30px_rgba(6,182,212,0.15)] relative overflow-hidden"
+                      >
+                        <div className="relative z-10 space-y-6">
+                          <div className="flex justify-between items-end">
+                            <div className="space-y-0.5">
+                              <p className="text-[8px] font-black text-cyan-400 uppercase tracking-[0.25em]">AI Recursive Expansion</p>
+                              <h4 className="text-md font-black text-slate-200">{genProgress.label}</h4>
+                            </div>
+                            <span className="text-xl font-black font-mono text-cyan-400">{Math.round((genProgress.step / genProgress.total) * 100)}%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-slate-950 rounded-full overflow-hidden">
+                            <motion.div 
+                              className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500" 
+                              initial={{ width: 0 }} 
+                              animate={{ width: `${(genProgress.step / genProgress.total) * 100}%` }} 
+                              transition={{ duration: 1 }} 
+                            />
+                          </div>
+                          <div className="flex items-center gap-3 text-cyan-400/60">
+                            <RefreshCw size={14} className="animate-spin" />
+                            <p className="text-[8px] font-bold uppercase tracking-wider">目標：5000 字專家級深度撰寫</p>
+                          </div>
+                        </div>
+                        <Zap size={140} className="absolute -bottom-10 -right-10 text-white/[0.02] rotate-12" />
+                      </motion.div>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="h-20 px-8 bg-slate-950/40 border-t border-white/[0.06] flex items-center justify-between">
+                  <BrandT5Strip items={['T1','T2','T3','T4','T5'].map((t, i) => ({ code: t as any, active: isSealed || i < 3 }))} />
+                  <div className="flex items-center gap-8">
+                    <div className="text-right">
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Total Words</p>
+                      <p className="text-md font-black text-cyan-400 font-mono">{(generatedContent[chapter.id] || '').length.toLocaleString()}</p>
+                    </div>
+                    <div className="text-right border-l border-white/[0.08] pl-8">
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">A4 Pages (Est.)</p>
+                      <p className="text-md font-black text-cyan-400 font-mono">{Math.ceil((generatedContent[chapter.id] || '').length / 1200)} / 250</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
         </main>
       </div>
-      <AnimatePresence>{toast && (<motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-12 right-12 z-[9999]"><div className={cn("px-8 py-5 rounded-3xl shadow-extreme backdrop-blur-2xl text-white font-black text-sm flex items-center gap-4 border border-white/20", toast.type === 'error' ? 'bg-red-600' : 'bg-[#003262]')}>{toast.type === 'error' ? <XCircle size={20} /> : <CheckCircle size={20} className="text-[#FDB515]" />}{toast.msg}</div></motion.div>)}</AnimatePresence>
+
+      <AnimatePresence>
+        {toast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: 30 }} 
+            className="fixed bottom-8 right-8 z-[9999]"
+          >
+            <div className={cn(
+              "px-6 py-4 rounded-xl shadow-2xl backdrop-blur-2xl text-white font-black text-xs flex items-center gap-3 border",
+              toast.type === 'error' 
+                ? 'bg-red-950/80 border-red-500/30 shadow-red-950/20' 
+                : 'bg-cyan-950/80 border-cyan-500/30 shadow-cyan-950/20'
+            )}>
+              {toast.type === 'error' ? <XCircle size={16} className="text-red-400" /> : <CheckCircle size={16} className="text-cyan-400" />}
+              {toast.msg}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

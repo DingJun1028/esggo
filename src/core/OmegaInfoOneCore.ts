@@ -13,11 +13,10 @@ export class OmniInfoOneCore {
     this.hash_lock = this.computeHashLock();
   }
 
-  private generateKey(): string {
+  public generateKey(): string {
     // Simplified UUID generation
     return 'xxxx-xxxx-xxxx-xxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
   }
-
   private computeHashLock(): string {
     // Placeholder for hash lock computation
     return 'LOCK-' + this.uuid;

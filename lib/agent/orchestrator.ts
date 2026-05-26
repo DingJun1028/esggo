@@ -22,8 +22,10 @@ export function policyGuard(input: CreateTaskInput): PolicyDecision {
   const id = genId('pol');
 
   if (!skill) {
-    return { id, taskId: '', allowed: false, requiresReview: true,
-      dataScope: [], denyReason: '指定技能不存在或已停用', decidedAt: new Date().toISOString() };
+    return {
+      id, taskId: '', allowed: false, requiresReview: true,
+      dataScope: [], denyReason: '指定技能不存在或已停用', decidedAt: new Date().toISOString()
+    };
   }
 
   const highRiskTypes: AgentTaskType[] = ['compliance_review'];
@@ -116,28 +118,28 @@ export async function promoteToTrustLayer(artifactId: string, actorId: string) {
   if (!artifact) throw new Error('找不到指定的產出物資料');
 
   const seal = await createHashLock({ artifactId, promotedBy: actorId });
-  
+
   // 2. 深貫：寫入治理稽核日誌
   console.log(`[OmniHermes Audit] Artifact ${artifactId} promoted to Trust Layer by ${actorId}.`);
   console.log(`[OmniHermes Audit] Master Seal Generated: ${seal.hash}`);
 
   // [Phase 5] 量子進化：自動化自我演進記憶 (Autonomous Memory Loop)
   // 將審核通過的正式內容餵回 RAG 知識庫，讓數位分身從人類決策中學習
-  addToKnowledgeBase([{
+  await addToKnowledgeBase([{
     id: `learned_${artifactId}`,
     source: `Promoted Artifact: ${artifact.title}`,
     text: `正式治理決策與揭露內容：\n${artifact.content}\n\n[驗證資訊] 此內容由 ${actorId} 於 ${new Date().toISOString()} 核准並封印。5T 雜湊鎖定值: ${seal.hash}`,
-    metadata: { 
-      type: 'learned_decision', 
-      promotedBy: actorId, 
+    metadata: {
+      type: 'learned_decision',
+      promotedBy: actorId,
       hash: seal.hash,
       originalArtifactId: artifactId,
       taskId: artifact.taskId
     }
   }]);
-  
+
   // 3. 更新狀態
-  updateArtifact(artifactId, { 
+  updateArtifact(artifactId, {
     reviewStatus: 'promoted',
     updatedAt: new Date().toISOString()
   });
@@ -183,15 +185,15 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
   try {
     // 模擬 AI 調用與算力調度
     console.log(`[Swarm Execution] Active: Task:${taskId} | Node: BlueCC_Local_Edge`);
-    await new Promise(r => setTimeout(r, 1500)); 
+    await new Promise(r => setTimeout(r, 1500));
 
     // 生成產出物
     const artifactData = generateMockArtifact(task, execution);
-    
+
     // 1. 版本控制強化：檢查是否已有產出物，若有則建立新版本
     const { addArtifact, createArtifactVersion, getLatestArtifactByTask } = await import('./store');
     const existing = getLatestArtifactByTask(taskId);
-    
+
     let finalArtifact;
     if (existing) {
       console.log(`[Version Control] Existing artifact found for Task:${taskId}. Incrementing version to v${existing.version + 1}`);
@@ -206,27 +208,29 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       }
       addArtifact(finalArtifact);
     }
-    
-    updateExecution(execution.id, { 
-      status: 'draft_generated', 
+
+    updateExecution(execution.id, {
+      status: 'draft_generated',
       outputRefIds: [finalArtifact!.id],
       finishedAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString() 
+      updatedAt: new Date().toISOString()
     });
 
     // 2. 自動演進評估：產出後檢查是否需要進一步委派
     const needsMoreExpertise = await evaluateAutonomousDelegation(task.id, finalArtifact!.content);
     if (needsMoreExpertise) {
-       await dispatchSwarmHandoff(task.id, 'legal_review_node', '檢測到合規偏差，需法務節點簽署');
+      await dispatchSwarmHandoff(task.id, 'legal_review_node', '檢測到合規偏差，需法務節點簽署');
     }
 
     return { execution, artifact: finalArtifact };
-  } catch (error: any) {
+  } catch (error: unknown) {
     // 觸發 Repair Playbook
-    const repair = REPAIR_PLAYBOOK.find(r => r.errorCode === error.code) || { strategy: 'escalate' };
-    console.warn(`[Swarm Repair] Applying strategy: ${repair.strategy} for error ${error.code}`);
-    
-    updateExecution(execution.id, { status: 'failed', errorMessage: error.message });
+    const errorCode = (error as any)?.code || 'UNKNOWN_ERROR';
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const repair = REPAIR_PLAYBOOK.find(r => r.errorCode === errorCode) || { strategy: 'escalate' };
+    console.warn(`[Swarm Repair] Applying strategy: ${repair.strategy} for error ${errorCode}`);
+
+    updateExecution(execution.id, { status: 'failed', errorCode, errorMessage });
     throw error;
   }
 }
@@ -247,14 +251,14 @@ export async function dispatchSwarmHandoff(
   // 更新原始執行的狀態為「已委派等待中」
   const sourceExec = GLOBAL_EXECUTIONS.find(e => e.taskId === sourceTaskId);
   if (sourceExec) {
-    updateExecution(sourceExec.id, { 
-      status: 'delegated_pending', 
-      updatedAt: new Date().toISOString() 
+    updateExecution(sourceExec.id, {
+      status: 'delegated_pending',
+      updatedAt: new Date().toISOString()
     });
   }
 
   console.log(`[Swarm Handoff] Initializing handoff from Task:${sourceTaskId} to Agent:${targetSkillKey}`);
-  
+
   const handoffInput: CreateTaskInput = {
     actorId: 'SYSTEM_SWARM_ORCHESTRATOR',
     taskType: 'report_drafting',
@@ -267,8 +271,8 @@ export async function dispatchSwarmHandoff(
   const { task, policy } = createTask(handoffInput);
   task.parentTaskId = sourceTaskId;
   task.delegationReason = reason;
-  
-  addTask(task);
+
+  await addTask(task);
 
   return { task, policy };
 }
@@ -279,7 +283,7 @@ export async function dispatchSwarmHandoff(
 export async function evaluateAutonomousDelegation(taskId: string, content: string): Promise<boolean> {
   // 模擬邏輯：如果內容包含「數據缺失」或「高風險」關鍵字，自動觸發專家介入
   const needsExpert = content.includes('數據缺失') || content.includes('無法校驗') || content.includes('偏移');
-  
+
   if (needsExpert) {
     console.log(`[Smart Trigger] High deviation detected in Task:${taskId}. Suggesting Swarm handoff.`);
     return true;

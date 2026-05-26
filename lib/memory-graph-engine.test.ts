@@ -9,6 +9,8 @@ const mockComponent: IComponentCore = {
   timestamp: Date.now(),
   version: '1.0.0',
   status: 'Trustworthy',
+  formula: 'GRI 305-1',
+  impact_metric: 'Test Carbon Emission',
   hash_lock: 'hash_test_lock',
   evidence: {
     tangible_metric: 'Test Carbon Emission',

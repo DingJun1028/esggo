@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { 
@@ -25,6 +25,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../hooks/useAuth';
 import { cn } from '../../lib/utils';
 import { omniCore } from '../../lib/omni-core';
+import { IComponentCore } from '../../types/omni-core';
 
 const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
 const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
@@ -151,16 +152,18 @@ export default function VaultPage() {
 
   const showIntegrityCertificate = async (file: any) => {
     if (!file.hash_lock) return;
-    const component = {
+    const component: IComponentCore = {
       uuid: file.id,
       timestamp: new Date(file.created_at).getTime(),
       version: '1.1.0',
-      evidence: {
+      formula: file.gri_reference || 'GRI-STANDARD-DEFAULT',
+      impact_metric: file.file_name,
+      evidence: [{
         tangible_metric: file.file_name,
         source_origin: `/vault/${file.id}`,
         lifecycle_hooks: [],
-        formula_ref: file.gri_reference
-      },
+        formula_ref: file.gri_reference || 'GRI-STANDARD-DEFAULT'
+      }],
       status: 'Trustworthy' as const,
       hash_lock: file.hash_lock
     };

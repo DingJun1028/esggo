@@ -1,8 +1,12 @@
-'use client'; // Actually API routes are server-side by default, but we can omit or set 'use server'? In Next.js App Router, route.ts are server components automatically, no need 'use client'. We'll not include.
-
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma'; // Assuming prisma client exists
-import { generateUUID } from '@/lib/utils'; // placeholder
+import { supabase } from '@/lib/supabase';
+import { firebaseAdmin } from '@/lib/firebase-admin';
+
+// Generate UUID using Firebase Admin Firestore (or we can use crypto)
+// Using Firebase Admin Firestore doc id as UUID
+function generateUUID(): string {
+  return firebaseAdmin.firestore().collection('_').doc().id;
+}
 
 export async function POST(request: Request) {
   try {
@@ -18,17 +22,24 @@ export async function POST(request: Request) {
     }
 
     // Generate a new contract record (simplified)
-    const contract = await prisma.contract.create({
-      data: {
-        id: generateUUID(),
-        contract_code,
-        counterparty_tax_id,
-        evidence_bundle_id,
-        created_at: new Date(),
-      },
-    });
+    const contract = {
+      id: generateUUID(),
+      contract_code,
+      counterparty_tax_id,
+      evidence_bundle_id,
+      created_at: new Date().toISOString(),
+    };
 
-    return NextResponse.json(contract, { status: 201 });
+    // Insert into Supabase table 'contracts'
+    const { data, error } = await supabase
+      .from('contracts')
+      .insert([contract])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error('Error creating contract:', error);
     return NextResponse.json(
@@ -41,9 +52,11 @@ export async function POST(request: Request) {
 // Optional: GET all contracts
 export async function GET() {
   try {
-    const contracts = await prisma.contract.findMany();
-    return NextResponse.json(contracts);
+    const { data, error } = await supabase.from('contracts').select('*');
+    if (error) throw error;
+    return NextResponse.json(data ?? [], { status: 200 });
   } catch (error) {
+    console.error('Error fetching contracts:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

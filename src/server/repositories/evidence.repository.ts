@@ -38,8 +38,8 @@ export class EvidenceRepository {
         ? new Date(Date.now() + data.expires_in_days * 24 * 60 * 60 * 1000)
         : null;
       
-      const { data: evidence, error } = await supabase
-        .from('evidences' as any)
+      const { data: evidence, error } = await (supabase as any)
+        .from('evidences')
         .insert({
           user_id: userId,
           tag: data.tag,
@@ -51,7 +51,7 @@ export class EvidenceRepository {
           integrity_status: 'unverified',
           sealed_at: data.auto_seal ? new Date().toISOString() : null,
           expires_at: expiresAt?.toISOString() || null,
-        } as any)
+        })
         .select()
         .single();
       
@@ -68,8 +68,8 @@ export class EvidenceRepository {
    */
   async findById(id: EvidenceID): Promise<Evidence | null> {
     try {
-      const { data, error } = await supabase
-        .from('evidences' as any)
+      const { data, error } = await (supabase as any)
+        .from('evidences')
         .select('*')
         .eq('id', id)
         .single();
@@ -92,7 +92,7 @@ export class EvidenceRepository {
     params: EvidenceQueryParams
   ): Promise<PaginatedResult<Evidence>> {
     try {
-      let query = supabase.from('evidences' as any).select('*', { count: 'exact' });
+      let query = (supabase as any).from('evidences').select('*', { count: 'exact' });
       
       // 應用篩選條件
       if (params.user_id) {
@@ -156,14 +156,14 @@ export class EvidenceRepository {
    */
   async update(id: EvidenceID, data: UpdateEvidenceDTO): Promise<Evidence> {
     try {
-      const { data: updated, error } = await supabase
-        .from('evidences' as any)
+      const { data: updated, error } = await (supabase as any)
+        .from('evidences')
         .update({
           tag: data.tag,
           metadata: data.metadata,
-          status: data.status as any,
+          status: data.status,
           updated_at: new Date().toISOString(),
-        } as any)
+        })
         .eq('id', id)
         .select()
         .single();

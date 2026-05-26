@@ -190,8 +190,7 @@ export async function runESGAnalysisFlow(
 
   const component = buildComponent({
     formula: result.formula,
-    isoStandard: 'GRI 2021',
-    evidence: { input, result, timestamp: Date.now() },
+    evidenceData: { input, result, timestamp: Date.now() },
     sourceOrigin: 'ESG AI Analysis Flow',
     griReference: input.griReference,
   });
@@ -200,8 +199,8 @@ export async function runESGAnalysisFlow(
 
   return {
     ...result,
-    hashLock: component.identity.hashLock,
-    vaultId: component.identity.uuid,
+    hashLock: component.hash_lock,
+    vaultId: component.uuid,
   };
 }
 

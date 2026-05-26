@@ -69,11 +69,3 @@ export interface VerifyRequestPayload {
   uuid?: string;
   component?: any; // Legacy support
 }
-
-export interface T5GateState {
-  traceable: boolean;
-  transparent: boolean;
-  tangible: boolean;
-  trackable: boolean;
-  trustworthy: boolean;
-}

@@ -1,12 +1,15 @@
 import { OmniCard, OmniEvent, OmniEventSchema } from '../../types/omni-card';
 import { createHash, randomUUID } from 'crypto';
+import { EventEmitter } from 'events';
 
 /**
  * OmniEventStore: 萬能分身事件儲存庫 (GPL - Global Processing Log)
  * 負責事件的創建、雜湊鎖定 (Hash Lock) 與永恆刻印 (靜態調用版)
  */
 export class OmniEventStore {
-  public static createEvent(eventType: string, card: OmniCard, sourcePlatform: string): OmniEvent {
+  public static readonly eventBus = new EventEmitter();
+
+  public static createEvent(eventType: string, card: OmniCard, sourcePlatform: string, cryptographicSeal?: string): OmniEvent {
     const payloadString = JSON.stringify(card);
     const hashLock = createHash('sha256').update(payloadString).digest('hex');
 
@@ -18,6 +21,7 @@ export class OmniEventStore {
       source_platform: sourcePlatform,
       created_at: Date.now(),
       hash_lock: hashLock,
+      cryptographic_seal: cryptographicSeal,
     };
 
     return OmniEventSchema.parse(rawEvent);
@@ -25,6 +29,12 @@ export class OmniEventStore {
 
   public static async saveEvent(event: OmniEvent): Promise<void> {
     console.log(`[OmniEventStore] Event engraved in GPL. Hash: ${event.hash_lock}`);
+    if (event.cryptographic_seal) {
+      console.log(`[OmniEventStore] ZKP Seal attached: ${event.cryptographic_seal}`);
+    }
+    
+    // Broadcast the event via the event bus to drive reactive UI streams or memory syncs
+    OmniEventStore.eventBus.emit('event_saved', event);
     return Promise.resolve();
   }
 }
@@ -32,12 +42,13 @@ export class OmniEventStore {
 /**
  * EventStore: 萬能分身事件儲存庫 (實例版，支援重播與自癒)
  */
-export class EventStore {
+export class EventStore extends EventEmitter {
   private events: OmniEvent[] = [];
 
-  public async appendEvent(cardUuid: string, eventType: string, card: OmniCard, sourcePlatform: string): Promise<void> {
-    const event = OmniEventStore.createEvent(eventType, card, sourcePlatform);
+  public async appendEvent(cardUuid: string, eventType: string, card: OmniCard, sourcePlatform: string, cryptographicSeal?: string): Promise<void> {
+    const event = OmniEventStore.createEvent(eventType, card, sourcePlatform, cryptographicSeal);
     this.events.push(event);
+    this.emit('event_appended', event);
   }
 
   public rebuildTruthState(cardUuid: string): OmniCard | null {
@@ -51,6 +62,10 @@ export class EventStore {
 
     // 簡單的 Last-Write-Wins (LWW) 狀態重建，可根據 5T 協議擴充
     return cardEvents[cardEvents.length - 1].payload;
+  }
+
+  public getEvents(cardUuid: string): OmniEvent[] {
+    return this.events.filter(e => e.omni_card_uuid === cardUuid);
   }
 }
 

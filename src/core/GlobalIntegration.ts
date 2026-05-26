@@ -1,9 +1,9 @@
 import { T5Validator } from './T5Protocol';
-import { IComponentCore, IEvidence } from '../lib/core-types';
-import { COLLECTIONS, Contract, AuditLog, EvidenceRecord } from './firestore-types';
-import { firestore } from './firebase'; // Firebase client
+import { IComponentCore, IEvidence } from '../../lib/core-types';
+import { COLLECTIONS, Contract, AuditLog, EvidenceRecord } from '../lib/firestore-types';
+import { firestore } from '../../lib/firebase'; // Firebase client
 import { UIRenderer, RenderParams } from './UIRenderer';
-import { useThemeStore } from './theme-store';
+import { useThemeStore } from '../../lib/theme-store';
 
 // ============================================
 // 1. Integrated Evidence Service (Global Layer)
@@ -17,14 +17,20 @@ export class GlobalEvidenceService {
       id: evidenceId,
       timestamp: Date.now(),
       ...record,
-    };
-    
+    } as EvidenceRecord;
+
     // Validate with 5T Protocol
     const isValid = await T5Validator.validate({
       uuid: record.uuid,
       version: record.version,
-      timestamp: record.timestamp,
+      timestamp: Date.now(),
       evidence: record.evidence,
+      formula: '', // optional placeholder
+      impact_metric: '', // optional placeholder
+      status: 'Trustworthy',
+      hash_lock: 'temp-lock'
+    } as IComponentCore);
+      hash_lock: 'temp-lock'
     } as IComponentCore);
     
     if (!isValid) throw new Error('Evidence failed 5T validation');

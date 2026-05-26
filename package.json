@@ -13,7 +13,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "fix-encoding": "powershell -ExecutionPolicy Bypass -File scripts/fix-encoding.ps1",
-    "check-encoding": "grep -Prn '[\\x{4e00}-\\x{9fff}]' src/ app/ components/ || echo 'All Chinese characters processed'"
+    "check-encoding": "grep -Prn '[\\x{4e00}-\\x{9fff}]' src/ app/ components/ || echo 'All Chinese characters processed'",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@apollo/client": "^4.2.0",
@@ -75,7 +77,17 @@
     "prisma": "^5.22.0",
     "tailwindcss": "3.4.1",
     "typescript": "^5.5.4",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.7",
+    "storybook": "^10.4.1",
+    "@storybook/nextjs-vite": "^10.4.1",
+    "@chromatic-com/storybook": "^5.2.1",
+    "@storybook/addon-vitest": "^10.4.1",
+    "@storybook/addon-a11y": "^10.4.1",
+    "@storybook/addon-docs": "^10.4.1",
+    "@storybook/addon-mcp": "^0.6.0",
+    "vite": "^8.0.14",
+    "@vitest/browser-playwright": "^4.1.7",
+    "@vitest/coverage-v8": "^4.1.7"
   },
   "overrides": {
     "react": "19.0.0",

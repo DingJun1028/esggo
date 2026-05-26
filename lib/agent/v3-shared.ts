@@ -21,8 +21,8 @@ export const AgentStepSchema = z.object({
   agentName: z.string(),
   status: AgentStatusEnum,
   message: z.string(),
-  payload: z.any().optional(), // Metadata like code, tool output, or error stack
-  timestamp: z.string(),
+  payload: z.record(z.string(), z.unknown()).optional(),
+  timestamp: z.string().datetime({ offset: true }).default(() => new Date().toISOString()),
 });
 
 export type AgentStep = z.infer<typeof AgentStepSchema>;

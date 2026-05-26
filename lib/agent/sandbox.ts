@@ -41,13 +41,13 @@ export async function runInSandbox(
  */
 async function runProductionE2B(code: string, options: SandboxOptions): Promise<SandboxResult> {
   console.log(`[Sandbox] Executing production code via E2B (${options.language})...`);
-  
+
   // Implementation note: In a real environment, we would use:
   // const { CodeInterpreter } = await import('@e2b/code-interpreter');
   // const sandbox = await CodeInterpreter.create();
   // const execution = await sandbox.runCode(code);
   // ...
-  
+
   throw new Error("E2B Integration requires @e2b/code-interpreter package installation.");
 }
 
@@ -57,31 +57,42 @@ async function runProductionE2B(code: string, options: SandboxOptions): Promise<
  */
 async function runSimulatedSandbox(code: string, options: SandboxOptions): Promise<SandboxResult> {
   console.log(`[Sandbox] Executing simulated code (${options.language})...`);
-  
-  // Artificial delay to simulate cloud execution
-  await new Promise(r => setTimeout(r, 1500));
 
-  // Basic simulation logic
-  if (code.includes('error') || code.includes('fail')) {
+  const executionPromise = async (): Promise<SandboxResult> => {
+    // Artificial delay to simulate cloud execution
+    await new Promise(r => setTimeout(r, 1500));
+
+    // Basic simulation logic
+    if (code.includes('error') || code.includes('fail')) {
+      return {
+        stdout: "",
+        stderr: "Traceback (most recent call last):\n  File \"main.py\", line 4, in <module>\n    raise Exception(\"Simulated error\")",
+        exitCode: 1,
+        error: "Runtime execution failed in simulation.",
+        isSimulated: true
+      };
+    }
+
+    // Extract a simulated result if the code looks like a calculation
+    let simulatedOutput = "Output captured from simulated execution.";
+    if (code.includes('Emission Gap')) {
+      simulatedOutput = "Emission Gap: 247 tCO2e";
+    }
+
     return {
-      stdout: "",
-      stderr: "Traceback (most recent call last):\n  File \"main.py\", line 4, in <module>\n    raise Exception(\"Simulated error\")",
-      exitCode: 1,
-      error: "Runtime execution failed in simulation.",
+      stdout: simulatedOutput,
+      stderr: "",
+      exitCode: 0,
       isSimulated: true
     };
-  }
-
-  // Extract a simulated result if the code looks like a calculation
-  let simulatedOutput = "Output captured from simulated execution.";
-  if (code.includes('Emission Gap')) {
-    simulatedOutput = "Emission Gap: 247 tCO2e";
-  }
-
-  return {
-    stdout: simulatedOutput,
-    stderr: "",
-    exitCode: 0,
-    isSimulated: true
   };
+
+  if (options.timeoutMs) {
+    const timeoutPromise = new Promise<SandboxResult>((_, reject) =>
+      setTimeout(() => reject(new Error(`Sandbox execution timed out after ${options.timeoutMs}ms`)), options.timeoutMs)
+    );
+    return Promise.race([executionPromise(), timeoutPromise]);
+  }
+
+  return executionPromise();
 }

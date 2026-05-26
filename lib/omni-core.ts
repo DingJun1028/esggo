@@ -5,8 +5,9 @@ import {
   T5GateState,
   EternalMemory,
   EternalMemoryType,
-} from '../types/omni-core';
+} from '../shared/types';
 import { supabase } from './supabase';
+import { integrityModule } from './omni-core/integrity';
 import { 
   sha256, 
   create5TAttestation, 
@@ -60,7 +61,12 @@ export class OmniCore {
     const tangible = Boolean(evidence.tangible_metric && evidence.tangible_metric.length > 0);
     const traceable = Boolean(evidence.source_origin && evidence.source_origin.startsWith('/'));
     const trackable = Boolean(evidence.lifecycle_hooks && evidence.lifecycle_hooks.length > 0);
-    const transparent = Boolean(evidence.formula_ref && evidence.formula_ref.includes('['));
+    const transparent = Boolean(
+      evidence.formula_ref &&
+      evidence.formula_ref !== 'GRI-STANDARD-DEFAULT' &&
+      evidence.formula_ref.includes('[') &&
+      evidence.formula_ref.includes(']')
+    );
     
     return {
       tangible,
@@ -80,16 +86,13 @@ export class OmniCore {
     // 實作：觸發全域 5T 共鳴，將數據鎖定為不可篡改之晶體
   }
 
-  // Seal Data with Hash Lock (Trustworthy)
+  // Seal Data with Hash Lock (Trustworthy) using the new IntegrityModule
   async sealComponent(
     metric: string,
     source: string,
     formula: string,
     policyId?: string
   ): Promise<IComponentCore & { validation?: PolicyValidationResult }> {
-    const uuid = generateUUID();
-    const timestamp = Date.now();
-
     let validation: PolicyValidationResult | undefined;
     if (policyId) {
       validation = policyEngine.validate(policyId, { 
@@ -99,62 +102,20 @@ export class OmniCore {
       });
     }
 
-    const evidence: IEvidence = {
-      tangible_metric: metric,
-      source_origin: source,
-      lifecycle_hooks: [
-        `hook_${timestamp}_created`, 
-        `hook_${timestamp}_sealed_t4`,
-        ...(validation ? [`policy_${policyId}_score_${validation.score}`] : [])
-      ],
-      formula_ref: formula,
-    };
-
-    // Simplified 5T-compatible seal for v1.1.0 that doesn't use random nonces for immediate verification
-    const payload = JSON.stringify({
-      uuid,
-      timestamp,
-      evidence,
-      version: '1.1.0'
-    });
-    const hash_lock = await sha256(payload);
-
-    const component: IComponentCore = Object.freeze({
-      uuid,
-      timestamp,
-      version: '1.1.0',
-      evidence,
+    // 使用新的 IntegrityModule 進行封印
+    const crystal = await integrityModule.sacredSeal({
+      metric,
+      source,
       formula,
-      impact_metric: metric,
-      status: 'Trustworthy' as const,
-      hash_lock,
+      hooks: validation ? [`policy_${policyId}_score_${validation.score}`] : []
     });
 
-    return { ...component, validation } as any;
+    return { ...crystal, validation } as any;
   }
 
-  // Verify Hash Lock
+  // Verify Hash Lock using the new IntegrityModule
   async verifyComponent(component: IComponentCore): Promise<boolean> {
-    // 1. Backwards compatibility check for v1.0.0 (Simple JSON Hash)
-    const legacyPayload = JSON.stringify({
-      uuid: component.uuid,
-      timestamp: component.timestamp,
-      evidence: component.evidence,
-    });
-    const computedLegacyHash = await sha256(legacyPayload);
-    if (computedLegacyHash === component.hash_lock) return true;
-
-    // 2. Full 5T masterSeal verification for v1.1.0+ (Simplified for direct verification)
-    const payloadV11 = JSON.stringify({
-      uuid: component.uuid,
-      timestamp: component.timestamp,
-      evidence: component.evidence,
-      version: '1.1.0'
-    });
-    const computedHashV11 = await sha256(payloadV11);
-    if (computedHashV11 === component.hash_lock) return true;
-
-    return false;
+    return await integrityModule.verify(component);
   }
 
   // 5T Trust Score Engine

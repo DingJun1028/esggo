@@ -23,6 +23,9 @@ export interface I5TGovernance {
   readonly trustworthy: boolean;  // 信 (Trust)：數據不可篡改 (Hash Locked)
 }
 
+export type T5GateState = I5TGovernance;
+
+
 /** 5T 門徑代碼 */
 export type T5Status =
   | 'Traceable'    // 真
@@ -62,7 +65,7 @@ export interface IComponentCore {
   readonly impact_metric: string;     // 具體影響力指標 (Tangible)
   readonly status: "Trustworthy";     // 唯一的不可狀態 (Trustworthy)
   readonly hash_lock: string;         // 數據真理哈希鎖
-  readonly evidence: IEvidence;       // 證據佐證庫
+  readonly evidence: IEvidence[];     // 證據佐證庫
 }
 
 // ============================================================
