@@ -92,13 +92,13 @@ const db = program.command('db').description('Database and system administration
 db.command('check')
   .description('Check database connection and environment')
   .action(async () => {
-    console.log(pc.blue('🔍 Checking Omni_Terminal System Environment...'));
+    console.log(pc.blue('[?] Checking Omni_Terminal System Environment...'));
 
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!url || !key) {
-      console.log(pc.red('❌ Missing Supabase environment variables.'));
+      console.log(pc.red('[x] Missing Supabase environment variables.'));
       process.exit(1);
     }
 
@@ -108,10 +108,10 @@ db.command('check')
 
       if (error) throw error;
 
-      console.log(pc.green('✅ Supabase Connection: STABLE'));
-      console.log(pc.cyan(`📡 Endpoint: ${url}`));
+      console.log(pc.green('[v] Supabase Connection: STABLE'));
+      console.log(pc.cyan(`[o] Endpoint: ${url}`));
     } catch (err) {
-      console.log(pc.red(`❌ Database Error: ${err.message}`));
+      console.log(pc.red(`[x] Database Error: ${err.message}`));
     }
   });
 
@@ -121,13 +121,13 @@ const agent = program.command('agent').description('Omni-Agent and Swarm orchest
 agent.command('status')
   .description('Fetch current OmniAgent Gateway status')
   .action(async () => {
-    console.log(pc.blue('📡 Fetching OmniAgent Gateway Status...'));
+    console.log(pc.blue('[o] Fetching OmniAgent Gateway Status...'));
     const status = await fetchOmniAgentStatusLocal();
 
     if (status.is_mock) {
       console.log(pc.yellow('⚠️ Mode: MOCK (Local Fallback)'));
     } else {
-      console.log(pc.green('✅ Mode: LIVE (VPS-Native)'));
+      console.log(pc.green('[v] Mode: LIVE (VPS-Native)'));
     }
 
     console.log(pc.white(`----------------------------------`));
@@ -140,7 +140,7 @@ agent.command('status')
 agent.command('tools')
   .description('List available agent capabilities (Web, Terminal, Video, ZKP)')
   .action(() => {
-    console.log(pc.blue('🛠️ Omni-Agent Capability Hub:'));
+    console.log(pc.blue('[#] Omni-Agent Capability Hub:'));
     console.log(pc.white('----------------------------------'));
     const tools = [
       { id: 'web_search', category: 'Information', desc: 'Deep web research' },
@@ -161,11 +161,11 @@ agent.command('memory <content>')
   .description('Store context into Eternal Memory (T1 Truth)')
   .option('-t, --type <type>', 'Memory type (CORE, EVENT, CONTEXT)', 'CORE')
   .action(async (content, options) => {
-    console.log(pc.blue(`🧠 Storing eternal memory [${options.type}]...`));
+    console.log(pc.blue(`[M] Storing eternal memory [${options.type}]...`));
     const timestamp = Date.now();
     const hash = computeHashLock(`${content}:${timestamp}`);
 
-    console.log(pc.green('✅ Memory engraved successfully.'));
+    console.log(pc.green('[v] Memory engraved successfully.'));
     console.log(pc.white('----------------------------------'));
     console.log(`${pc.gray('Content:')}  ${content}`);
     console.log(`${pc.gray('Hash:')}     ${pc.cyan(hash)}`);
@@ -175,7 +175,7 @@ agent.command('memory <content>')
 agent.command('run <task>')
   .description('Run an agent task via Edge Function with Function Calling')
   .action(async (task) => {
-    console.log(pc.cyan(`🤖 Invoking Edge AgentZ0 for task: "${task}"...`));
+    console.log(pc.cyan(`[A] Invoking Edge AgentZ0 for task: "${task}"...`));
     try {
       // Typically NEXT_PUBLIC_SITE_URL or localhost for local dev
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -189,15 +189,15 @@ agent.command('run <task>')
       if (!res.ok) throw new Error(data.error || 'Agent API failed');
 
       if (!data.result || !data.result.success) {
-        console.log(pc.red(`❌ Agent (${data.result?.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.result?.error?.message || data.result?.error || data.error || 'Unknown Error')}`));
+        console.log(pc.red(`[x] Agent (${data.result?.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.result?.error?.message || data.result?.error || data.error || 'Unknown Error')}`));
       } else {
-        console.log(pc.green(`✅ Agent (${data.result.agent}) execution successful!`));
+        console.log(pc.green(`[v] Agent (${data.result.agent}) execution successful!`));
         console.log(pc.white('──────────────────────────────────────────────────'));
         console.log(pc.yellow(data.result.result));
         console.log(pc.white('──────────────────────────────────────────────────'));
       }
     } catch (err) {
-      console.log(pc.red(`❌ Agent Execution Error: ${err.message}`));
+      console.log(pc.red(`[x] Agent Execution Error: ${err.message}`));
     }
   });
 
@@ -214,12 +214,12 @@ agent.command('browse <prompt>')
         model: options.model,
         proxyCountryCode: 'us',
       });
-      console.log(pc.green('✅ Web Agent task completed.'));
+      console.log(pc.green('[v] Web Agent task completed.'));
       console.log(pc.white('──────────────────────────────────────────────────'));
       console.log(pc.yellow(result.output));
       console.log(pc.white('──────────────────────────────────────────────────'));
     } catch (err) {
-      console.log(pc.red(`❌ BrowserUse Error: ${err.message}`));
+      console.log(pc.red(`[x] BrowserUse Error: ${err.message}`));
     }
   });
 
@@ -227,18 +227,18 @@ agent.command('consolidate')
   .description('Perform Truth-Preserving Consolidation on active memory')
   .option('-t, --type <type>', 'Memory type to consolidate', 'CORE')
   .action(async (options) => {
-    console.log(pc.blue(`🧩 Initiating Truth-Preserving Consolidation for [${options.type}]...`));
+    console.log(pc.blue(`[+] Initiating Truth-Preserving Consolidation for [${options.type}]...`));
     
     // Simulate consolidation process matching lib/omni-core.ts
     await new Promise(r => setTimeout(r, 1500));
     
-    console.log(pc.green('✅ Consolidation complete.'));
+    console.log(pc.green('[v] Consolidation complete.'));
     console.log(pc.white('----------------------------------'));
     console.log(`Status:      ${pc.green('SUCCESS')}`);
     console.log(`Logic Gate:  T5 (Trackable)`);
     console.log(`Outcome:     3 child records archived, 1 consolidated master created.`);
     console.log(pc.white('----------------------------------'));
-    console.log(pc.cyan('💡 Recommendation: Check "audit report" to see updated integrity scores.'));
+    console.log(pc.cyan('[i] Recommendation: Check "audit report" to see updated integrity scores.'));
   });
 
 // ── Vault & ZKP Commands ─────────────────────────────────────────────────────
@@ -252,7 +252,7 @@ vault.command('list')
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const supabase = createClient(url, key);
 
-    console.log(pc.blue(`📦 Listing recent ${options.limit} Vault records...`));
+    console.log(pc.blue(`[P] Listing recent ${options.limit} Vault records...`));
 
     try {
       const { data, error } = await supabase
@@ -262,7 +262,7 @@ vault.command('list')
         .limit(parseInt(options.limit));
 
       if (error) {
-        console.log(pc.red(`❌ Error: ${error.message}`));
+        console.log(pc.red(`[x] Error: ${error.message}`));
         return;
       }
 
@@ -271,7 +271,7 @@ vault.command('list')
         console.log(`${pc.gray(time)} | ${pc.cyan(r.uuid.slice(0, 8))} | ${pc.green(r.hash_lock.slice(0, 12))}... | ${pc.white(r.dimension)}`);
       });
     } catch (err) {
-      console.log(pc.red(`❌ Error: ${err.message}`));
+      console.log(pc.red(`[x] Error: ${err.message}`));
     }
   });
 
@@ -282,7 +282,7 @@ vault.command('verify <uuid>')
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const supabase = createClient(url, key);
 
-    console.log(pc.blue(`🔍 Verifying integrity for record: ${pc.cyan(uuid)}...`));
+    console.log(pc.blue(`[?] Verifying integrity for record: ${pc.cyan(uuid)}...`));
 
     try {
       const { data: record, error } = await supabase
@@ -292,7 +292,7 @@ vault.command('verify <uuid>')
         .single();
 
       if (error || !record) {
-        console.log(pc.red(`❌ Record not found: ${uuid}`));
+        console.log(pc.red(`[x] Record not found: ${uuid}`));
         return;
       }
 
@@ -300,7 +300,7 @@ vault.command('verify <uuid>')
       try {
         payloadObj = JSON.parse(record.payload);
       } catch {
-        console.log(pc.red('❌ Critical Error: Payload corruption detected.'));
+        console.log(pc.red('[x] Critical Error: Payload corruption detected.'));
         return;
       }
 
@@ -319,19 +319,19 @@ vault.command('verify <uuid>')
       console.log(pc.white('----------------------------------'));
 
       if (valid) {
-        console.log(pc.green('✅ 5T INTEGRITY VERIFIED: This record is authentic.'));
+        console.log(pc.green('[v] 5T INTEGRITY VERIFIED: This record is authentic.'));
       } else {
-        console.log(pc.red('❌ INTEGRITY VIOLATION: The data has been tampered with!'));
+        console.log(pc.red('[x] INTEGRITY VIOLATION: The data has been tampered with!'));
       }
     } catch (err) {
-      console.log(pc.red(`❌ Verification Error: ${err.message}`));
+      console.log(pc.red(`[x] Verification Error: ${err.message}`));
     }
   });
 
 vault.command('seal <id>')
   .description('Seal an evidence file with ZKP and SHA-256')
   .action(async (id) => {
-    console.log(pc.blue(`🔒 Initiating Zero-Knowledge Proof sealing for ID: ${id}...`));
+    console.log(pc.blue(`[S] Initiating Zero-Knowledge Proof sealing for ID: ${id}...`));
 
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -348,7 +348,7 @@ vault.command('seal <id>')
         .eq('id', id);
 
       if (error) {
-        console.log(pc.red(`❌ Error: ${error.message}`));
+        console.log(pc.red(`[x] Error: ${error.message}`));
         return;
       }
 
@@ -363,14 +363,14 @@ vault.command('seal <id>')
         hash_lock: hash
       }]);
 
-      console.log(pc.green(`✅ Cryptographic Seal Applied Successfully!`));
+      console.log(pc.green(`[v] Cryptographic Seal Applied Successfully!`));
       console.log(pc.white(`----------------------------------`));
       console.log(`Document ID:  ${id}`);
       console.log(`Status:       ${pc.green('VERIFIED')}`);
       console.log(`ZKP Hash:     ${pc.cyan(hash)}`);
       console.log(pc.white(`----------------------------------`));
     } catch (err) {
-      console.log(pc.red(`❌ Seal Error: ${err.message}`));
+      console.log(pc.red(`[x] Seal Error: ${err.message}`));
     }
   });
 
@@ -380,7 +380,7 @@ const intel = program.command('intel').description('ESG Intelligence and Regulat
 intel.command('fetch <source>')
   .description('Fetch latest regulations (EU, TW, GRI)')
   .action(async (source) => {
-    console.log(pc.blue(`🔍 Fetching ESG intelligence from [${source.toUpperCase()}]...`));
+    console.log(pc.blue(`[?] Fetching ESG intelligence from [${source.toUpperCase()}]...`));
 
     // Simulate scraper logic (matching lib/services/scraper.ts)
     await new Promise(r => setTimeout(r, 1500));
@@ -396,7 +396,7 @@ intel.command('fetch <source>')
       console.log(pc.yellow('⚠️ No recent updates found for this source.'));
     } else {
       results.forEach(r => {
-        console.log(`${pc.green('✅ FOUND')} | ${pc.white(r.title)} (${pc.gray(r.date)})`);
+        console.log(`${pc.green('[v] FOUND')} | ${pc.white(r.title)} (${pc.gray(r.date)})`);
       });
     }
   });
@@ -404,10 +404,10 @@ intel.command('fetch <source>')
 intel.command('scan <id>')
   .description('Scan evidence with OmniAgent Vision (Multi-Modal)')
   .action(async (id) => {
-    console.log(pc.blue(`👁️ Initiating Vision Scan for Evidence ID: ${id}...`));
+    console.log(pc.blue(`[V] Initiating Vision Scan for Evidence ID: ${id}...`));
     await new Promise(r => setTimeout(r, 2000));
 
-    console.log(pc.green('✅ OCR & Semantic Analysis Complete.'));
+    console.log(pc.green('[v] OCR & Semantic Analysis Complete.'));
     console.log(pc.white('----------------------------------'));
     console.log(`${pc.bold('Extraction:')} 識別出：2024年3月電費總計 12,450 元`);
     console.log(`${pc.bold('Confidence:')} 94%`);
@@ -421,7 +421,7 @@ const audit = program.command('audit').description('5T Integrity & Compliance au
 audit.command('report')
   .description('Generate a 5T integrity summary report')
   .action(async () => {
-    console.log(pc.blue('📊 Generating 5T Integrity Audit Report...'));
+    console.log(pc.blue('[R] Generating 5T Integrity Audit Report...'));
 
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -448,14 +448,14 @@ audit.command('report')
       const { data: vaultRecords } = await supabase.from('vault_omni_core').select('uuid');
       const { data: auditLogs } = await supabase.from('audit_logs').select('id');
 
-      console.log(pc.green('✅ Real-time data retrieved.'));
+      console.log(pc.green('[v] Real-time data retrieved.'));
       console.log(pc.white('------------------------------------------'));
       console.log(`${pc.bold('Sealed Records:')}  ${vaultRecords?.length || 0}`);
       console.log(`${pc.bold('Audit Events:')}    ${auditLogs?.length || 0}`);
       console.log(`${pc.bold('Integrity Status:')} ${pc.green('HEALTHY')}`);
       console.log(pc.white('------------------------------------------'));
     } catch (err) {
-      console.log(pc.red(`❌ Audit failed: ${err.message}`));
+      console.log(pc.red(`[x] Audit failed: ${err.message}`));
     }
   });
 
@@ -470,7 +470,7 @@ audit.command('validate <file>')
     console.log(`${pc.cyan('T4 Transparent:')} ${pc.yellow('WARNING')} (Formula Missing)`);
     console.log(`${pc.cyan('T5 Trustworthy:')} ${pc.gray('PENDING')} (Needs Seal)`);
     console.log(pc.white('----------------------------------'));
-    console.log(pc.yellow('💡 Recommendation: Run "vault seal" to achieve T5.'));
+    console.log(pc.yellow('[i] Recommendation: Run "vault seal" to achieve T5.'));
   });
 
 audit.command('stress')
@@ -478,7 +478,7 @@ audit.command('stress')
   .option('-i, --iterations <number>', 'Number of concurrent attestations', '100')
   .action(async (options) => {
     const iterations = parseInt(options.iterations);
-    console.log(pc.magenta(`🔥 Starting 5T Protocol Stress Test: ${iterations} items...`));
+    console.log(pc.magenta(`[!] Starting 5T Protocol Stress Test: ${iterations} items...`));
     const startTime = Date.now();
 
     // Re-implementing core sealing logic for CLI environment stability
@@ -502,7 +502,7 @@ audit.command('stress')
       const results = await Promise.all(tasks);
       const duration = Date.now() - startTime;
 
-      console.log(pc.green('✅ Stress test completed successfully!'));
+      console.log(pc.green('[v] Stress test completed successfully!'));
       console.log(pc.white('----------------------------------'));
       console.log(`Total Duration:  ${pc.cyan(duration + 'ms')}`);
       console.log(`Avg per Seal:    ${pc.cyan((duration / iterations).toFixed(2) + 'ms')}`);
@@ -510,7 +510,7 @@ audit.command('stress')
       console.log(`Final Block:     ${pc.yellow(results[results.length-1].blockHash.slice(0, 16) + '...')}`);
       console.log(pc.white('----------------------------------'));
     } catch (err) {
-      console.log(pc.red(`❌ Stress Test Failed: ${err.message}`));
+      console.log(pc.red(`[x] Stress Test Failed: ${err.message}`));
     }
   });
 
@@ -520,10 +520,10 @@ const blue = program.command('blue').description('BlueCC Cloud Control Plane man
 blue.command('status')
   .description('Fetch global agent cluster status from BlueCC')
   .action(async () => {
-    console.log(pc.blue('☁️ Connecting to BlueCC Control Plane...'));
+    console.log(pc.blue('[~] Connecting to BlueCC Control Plane...'));
     const status = await fetchBlueStatus();
 
-    console.log(pc.green(`✅ Cluster: ${status.cluster_id} (STABLE)`));
+    console.log(pc.green(`[v] Cluster: ${status.cluster_id} (STABLE)`));
     console.log(`Region:  ${status.region}`);
     console.log(`Nodes:   ${status.active_nodes} Active`);
   });
@@ -533,7 +533,7 @@ blue.command('deploy <agentName>')
   .action(async (name) => {
     console.log(pc.cyan(`🚀 Provisioning Agent [${name}] on BlueCC...`));
     await new Promise(r => setTimeout(r, 1500));
-    console.log(pc.green(`✅ Deployment successful: https://${name}.agents.blue.cc`));
+    console.log(pc.green(`[v] Deployment successful: https://${name}.agents.blue.cc`));
   });
 
 // ── Operational Lifecycle Commands (NEW) ──────────────────────────────────────
@@ -543,7 +543,7 @@ daemon.command('start')
   .description('Start platform services in background')
   .action(() => {
     console.log(pc.blue('🚀 Starting ESG GO Platform Services...'));
-    console.log(pc.cyan('💡 Recommendation: Use ./ctl.sh start for standard daemon control.'));
+    console.log(pc.cyan('[i] Recommendation: Use ./ctl.sh start for standard daemon control.'));
     // In a real environment, we'd invoke PM2 or a similar orchestrator here
     console.log(pc.white('------------------------------------------'));
     console.log(`Next.js:    ${pc.green('PENDING')}`);
@@ -554,7 +554,7 @@ daemon.command('start')
 daemon.command('status')
   .description('Check health of background processes')
   .action(() => {
-    console.log(pc.blue('📊 Platform Operational Status:'));
+    console.log(pc.blue('[R] Platform Operational Status:'));
     console.log(pc.white('------------------------------------------'));
     console.log(`PID: 2841  | Next.js App     | ${pc.green('ONLINE')}`);
     console.log(`PID: 8642  | OmniAgent Gateway  | ${pc.green('ONLINE')}`);
