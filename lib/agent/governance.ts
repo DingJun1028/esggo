@@ -66,7 +66,7 @@ export interface ArchitectureLayer {
   accessType?: 'direct' | 'via_adapter' | 'none';
 }
 
-export const RISK_REGISTRY: RiskItem[] = [
+export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R01',
     title: '權限穿透風險',
@@ -186,7 +186,7 @@ export const RISK_REGISTRY: RiskItem[] = [
   },
 ];
 
-export const BOUNDARY_RULES: BoundaryRule[] = [
+export const BOUNDARY_RULES: readonly BoundaryRule[] = [
   {
     id: 'B01',
     boundaryType: 'data',
@@ -233,7 +233,7 @@ export const BOUNDARY_RULES: BoundaryRule[] = [
   },
 ];
 
-export const ARCHITECTURE_LAYERS: ArchitectureLayer[] = [
+export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
   {
     id: 'presentation',
     name: '呈現層',
@@ -302,7 +302,18 @@ export const ARCHITECTURE_LAYERS: ArchitectureLayer[] = [
   },
 ];
 
-export const PHASE_PLAN = [
+export type PhaseStatus = 'current' | 'planned' | 'future';
+
+export interface PhasePlanItem {
+  phase: string;
+  title: string;
+  status: PhaseStatus;
+  color: string;
+  items: string[];
+  description: string;
+}
+
+export const PHASE_PLAN: readonly PhasePlanItem[] = [
   {
     phase: 'Phase 1',
     title: '基礎導入',
@@ -330,21 +341,21 @@ export const PHASE_PLAN = [
 ];
 
 export function getRiskColor(level: GovernanceRiskLevel): { text: string; bg: string; border: string } {
-  const map = {
+  const map: Record<GovernanceRiskLevel, { text: string; bg: string; border: string }> = {
     critical: { text: '#991B1B', bg: '#FFF1F2', border: '#FECDD3' },
-    high:     { text: '#92400E', bg: '#FEF3C7', border: '#FDE68A' },
-    medium:   { text: '#1D4ED8', bg: '#DBEAFE', border: '#BFDBFE' },
-    low:      { text: '#166534', bg: '#DCFCE7', border: '#BBF7D0' },
+    high: { text: '#92400E', bg: '#FEF3C7', border: '#FDE68A' },
+    medium: { text: '#1D4ED8', bg: '#DBEAFE', border: '#BFDBFE' },
+    low: { text: '#166534', bg: '#DCFCE7', border: '#BBF7D0' },
   };
   return map[level];
 }
 
 export function getBoundaryColor(type: GovernanceBoundaryType): { text: string; bg: string } {
-  const map = {
-    data:    { text: '#003262', bg: '#EBF2FA' },
+  const map: Record<GovernanceBoundaryType, { text: string; bg: string }> = {
+    data: { text: '#003262', bg: '#EBF2FA' },
     process: { text: '#8B5CF6', bg: '#F5F3FF' },
-    trust:   { text: '#15803D', bg: '#DCFCE7' },
-    role:    { text: '#92400E', bg: '#FEF3C7' },
+    trust: { text: '#15803D', bg: '#DCFCE7' },
+    role: { text: '#92400E', bg: '#FEF3C7' },
   };
   return map[type];
 }

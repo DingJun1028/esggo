@@ -1,11 +1,21 @@
-﻿'use client';
+'use client';
 
-import { useThemeStore } from '../lib/theme-store';
+import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 
 export default function ThemeSwitcher() {
   const { sidebarTheme, setSidebarTheme } = useThemeStore();
 
-  const themes = [
+  const themes: {
+    id: SidebarTheme;
+    label: string;
+    bg: string;
+    border: string;
+    text: string;
+    activeBg: string;
+    activeBorder: string;
+    activeText: string;
+    icon: string;
+  }[] = [
     {
       id: 'light',
       label: '淺色',

@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { useEvidenceStore } from '../stores/evidence.store';
-import { OmniInfoCrystal } from '../types/ucc.types';
+import { OmniInfoCrystal } from '../../shared/types/ucc.types';
 
 export function useOmniResonance() {
   const { evidences } = useEvidenceStore();

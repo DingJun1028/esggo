@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { omniCore } from './omni-core';
 import type { IEvidence } from '../types/omni-core';
 import { verifyZKPProof } from './crypto-proof';
+import { EternalMemoryType } from '../shared/types';
 
 // Mock global fetch for consolidation calls
 const mockFetch = vi.fn();
@@ -195,7 +196,7 @@ describe('OmniCore Integrity Engine', () => {
 
   describe('Eternal Memory Integrity', () => {
     it('should store memory with a valid hash lock', async () => {
-      const memory = await omniCore.storeMemory('Project Alpha initialized', 'SEMANTIC', ['init']);
+      const memory = await omniCore.storeMemory('Project Alpha initialized', EternalMemoryType.SEMANTIC, ['init']);
 
       expect(memory.hash_lock).toBeDefined();
       expect(memory.consolidated).toBe(false);
@@ -206,10 +207,10 @@ describe('OmniCore Integrity Engine', () => {
     });
 
     it('should consolidate multiple memories into one summary', async () => {
-      await omniCore.storeMemory('Event 1', 'EPISODIC', ['tag1']);
-      await omniCore.storeMemory('Event 2', 'EPISODIC', ['tag2']);
+      await omniCore.storeMemory('Event 1', EternalMemoryType.EPISODIC, ['tag1']);
+      await omniCore.storeMemory('Event 2', EternalMemoryType.EPISODIC, ['tag2']);
 
-      const consolidated = await omniCore.consolidateMemories('EPISODIC');
+      const consolidated = await omniCore.consolidateMemories(EternalMemoryType.EPISODIC);
 
       expect(consolidated).not.toBeNull();
       expect(consolidated?.consolidated).toBe(true);

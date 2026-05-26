@@ -1,9 +1,12 @@
+// ... (保留原本的 import) ...
 import { expect, test, describe, beforeEach } from 'vitest';
 import { EventStore } from './event-store';
 import { GlobalHealing, IAdapterNode } from './global-healing';
 import { OmniCard } from '../../types/omni-card';
-import { NotionAdapter, NotionPagePayload } from '../adapters/notion.adapter';
-import { AlTableAdapter, AlTableRecordPayload } from '../adapters/altable.adapter';
+import { NotionAdapter } from '../adapters/notion.adapter';
+import { AlTableAdapter } from '../adapters/altable.adapter';
+import { NotionPagePayload } from '../../types/omni-card';
+import { AlTableRecordPayload } from '../adapters/altable.adapter';
 
 // Mock Notion 適配器節點
 class MockNotionAdapterNode implements IAdapterNode {
@@ -54,6 +57,7 @@ class MockAlTableAdapterNode implements IAdapterNode {
   public id: string;
   public cardUuid: string;
   public payload: AlTableRecordPayload;
+  public isLocked: boolean = false;
 
   constructor(id: string, cardUuid: string, payload: AlTableRecordPayload) {
     this.id = id;
@@ -68,6 +72,7 @@ class MockAlTableAdapterNode implements IAdapterNode {
   }
 
   async heal(truthState: OmniCard): Promise<void> {
+    if (this.isLocked) throw new Error('量子鎖定中，拒絕寫入。');
     // 模擬將真理狀態寫回 AlTable 原始 fields (差異撫平)
     this.payload = {
       ...this.payload,
@@ -80,6 +85,10 @@ class MockAlTableAdapterNode implements IAdapterNode {
       },
       updatedTime: truthState.lastUpdated,
     };
+  }
+
+  async lock(): Promise<void> {
+    this.isLocked = true;
   }
 }
 
@@ -115,7 +124,7 @@ describe('全域痊癒與調和機制 (Global Healing & GPL Sourcing)', () => {
 
   beforeEach(() => {
     eventStore = new EventStore();
-    healer = new GlobalHealing(eventStore);
+    healer = new GlobalHealing(eventStore); // 預設 LV2_AUTO_HEAL
   });
 
   test('場景一：正常癒合（一致不處理）', async () => {
@@ -149,7 +158,7 @@ describe('全域痊癒與調和機制 (Global Healing & GPL Sourcing)', () => {
     // 5. 斷言：完全契合，不進行任何修復
     expect(result.status).toBe('SUCCESS');
     expect(result.reconciledCount).toBe(0);
-    expect(result.logs.some(log => log.includes('與 GPL 真理狀態完全契合，無需撫平'))).toBe(true);
+    expect(result.logs.some(log => log.includes('與 GPL 真理狀態完全契合'))).toBe(true);
   });
 
   test('場景二：異常撫平（異步資料落後時強制覆寫）', async () => {
@@ -258,5 +267,37 @@ describe('全域痊癒與調和機制 (Global Healing & GPL Sourcing)', () => {
     // 6. 正常節點仍需被成功修復
     const finalNormalSnapshot = await normalNode.getSnapshot();
     expect(finalNormalSnapshot.status).toBe('doing');
+  });
+
+  test('場景四：量子鎖住機制 (LV3_QUANTUM_LOCK)', async () => {
+    const lockHealer = new GlobalHealing(eventStore, 'LV3_QUANTUM_LOCK');
+    const cardUuid = '22222222-3333-4444-8555-666666666666';
+
+    const truth: OmniCard = {
+      uuid: cardUuid,
+      name: 'Critical Task',
+      status: 'done', // GPL 狀態已完成
+      attributes: ['C'],
+      abilities: ['D'],
+      lastUpdated: Date.now(),
+    };
+    await eventStore.appendEvent(cardUuid, 'CARD_UPDATED', truth, 'System');
+
+    // 終端狀態被惡意或意外竄改回 todo (狀態不符 -> CRITICAL 差異)
+    const criticalPayload: AlTableRecordPayload = {
+      recordId: 'rec-critical',
+      fields: { Name: 'Critical Task', Status: 'todo', Attributes: ['C'], Abilities: ['D'] },
+      updatedTime: Date.now(),
+    };
+    const criticalNode = new MockAlTableAdapterNode('rec-critical', cardUuid, criticalPayload);
+    lockHealer.registerNode(criticalNode);
+
+    const result = await lockHealer.applyHealing();
+
+    // 斷言：因為啟動 LV3 且差異為 CRITICAL，該節點應被鎖定且不進行覆寫
+    expect(result.status).toBe('FAILED');
+    expect(result.reconciledCount).toBe(0);
+    expect(result.logs.some(log => log.includes('啟動 LV3 深度防污染鎖定！'))).toBe(true);
+    expect(criticalNode.isLocked).toBe(true);
   });
 });

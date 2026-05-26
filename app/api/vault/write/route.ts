@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     await logAudit({
       action: 'CREATE',
       tableName: 'evidence_vault',
-      recordId: evidence.uuid,
+      recordId: evidence.core.uuid,
       userId: user.id,
       newData: evidence,
     });
@@ -89,5 +89,5 @@ async function logAudit(params: {
     record_id: params.recordId,
     user_id: params.userId,
     new_data: params.newData,
-  });
+  } as any);
 }

@@ -34,6 +34,7 @@ export const OmniEventSchema = z.object({
   source_platform: z.string().min(1).describe('來源平台 (e.g., Notion)'),
   created_at: z.number().int().positive().describe('發生時間戳 (Traceable)'),
   hash_lock: z.string().min(64).describe('防篡改哈希鎖 SHA-256 (Trustworthy)'),
+  cryptographic_seal: z.string().optional().describe('ZKP 零知識證明與密碼學封印 (Trustworthy)'),
 });
 
 export type OmniEvent = z.infer<typeof OmniEventSchema>;

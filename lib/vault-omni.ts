@@ -43,6 +43,7 @@ export function buildComponent(params: {
   impactMetric?: string;
   evidenceData?: any;
   status?: any;
+  griReference?: string;
 }): IComponentCore {
   const uuid = params.uuid ?? crypto.randomUUID();
   const timestamp = Date.now();
@@ -69,7 +70,7 @@ export function buildComponent(params: {
       tangible_metric: params.impactMetric ?? '0.00 tCO2e',
       source_origin: params.sourceOrigin,
       lifecycle_hooks: lifecyclePath,
-      formula_ref: params.formula ?? '[ISO-14064-1] Generic Calculation',
+      formula_ref: params.griReference ?? params.formula ?? '[ISO-14064-1] Generic Calculation',
     },
     status: 'Trustworthy',
   });
@@ -86,13 +87,13 @@ export function flattenToRecord(component: IComponentCore, dimension: VaultDimen
   const metadata = JSON.stringify({
     version: component.version,
     origin: component.evidence.source_origin,
-    pathCount: component.evidence.lifecycle_path.length,
+    pathCount: component.evidence.lifecycle_hooks.length,
   });
 
   return {
     uuid: component.uuid,
     dimension,
-    hash_lock: component.evidence.hash_lock,
+    hash_lock: component.hash_lock,
     payload,
     metadata,
     timestamp: component.timestamp,

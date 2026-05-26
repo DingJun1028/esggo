@@ -1,16 +1,22 @@
+import { expect, test, describe } from 'vitest';
 import { Principle, Principles, getPrincipleDescription, clampFactor, validateCorePresence } from './CorePrinciples';
 
-// Test Principle enum
-console.log('Principle:', Principle.Truth);
+describe('CorePrinciples (OmniCore 創世綱領驗證)', () => {
+  test('應該能正確取得原則列舉與描述', () => {
+    expect(Principle.Truth).toBe('Truth');
+    expect(getPrincipleDescription(Principle.Truth)).toContain('確保每筆資料不可篡改');
+    expect(getPrincipleDescription(Principle.Trust)).toContain('週期性自動修復');
+  });
 
-// Test description
-console.log('Truth description:', getPrincipleDescription(Principle.Truth));
+  test('clampFactor 應能限制或校正比例因子於 0 到 1 之間', () => {
+    expect(clampFactor(0.5)).toBe(0.5);
+    expect(clampFactor(1.5)).toBeNull();
+    expect(clampFactor(-0.1)).toBeNull();
+  });
 
-// Test clamp
-console.log('clampFactor(0.5):', clampFactor(0.5));
-console.log('clampFactor(1.5):', clampFactor(1.5));
-
-// Test validation
-const validCore = { uuid: 'test-123', hash_lock: 'LOCK-test' };
-console.log('validateCorePresence(validCore):', validateCorePresence(validCore));
-console.log('validateCorePresence({}):', validateCorePresence({}));
+  test('validateCorePresence 應能驗證核心必備屬性', () => {
+    const validCore = { uuid: 'test-123', hash_lock: 'LOCK-test' };
+    expect(validateCorePresence(validCore)).toBe(true);
+    expect(validateCorePresence({})).toBe(false);
+  });
+});

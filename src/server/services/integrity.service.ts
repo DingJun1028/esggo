@@ -50,6 +50,11 @@ export class IntegrityService {
    * 執行 5T 封印刻印 (Seal)
    * 鎖定數據並生成誠信憑證
    */
+  async sealContent(content: string): Promise<{ hash: string; timestamp: Date }> {
+    const hash = await computeSHA256(content);
+    return { hash, timestamp: new Date() };
+  }
+
   /**
    * 計算共鳴算力 Rs (Resonance)
    * 用於評估數據結晶的健康度與 5T 合規深度

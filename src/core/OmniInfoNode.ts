@@ -1,6 +1,8 @@
 /**
  * OmniInfoNode - Governance and self-healing layer (For/4)
  */
+import { OmniInfoOneCore } from './OmegaInfoOneCore';
+
 export class OmniInfoNode {
   /**
    * Process core data applying zero-hallucination verification
