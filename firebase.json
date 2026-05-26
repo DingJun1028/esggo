@@ -1,48 +1,11 @@
-{
+﻿{
   "hosting": {
     "site": "esggooriginal",
-    "public": ".next",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "**/build/**",
-      "**/.next/**"
-    ],
-    "headers": [
-      {
-        "source": "**/*.(js|css|json|png|jpg|jpeg|gif|svg|ico)",
-        "headers": [
-          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-        ]
-      },
-      {
-        "source": "**/*.(html|htm)",
-        "headers": [
-          { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
-        ]
-      },
-      {
-        "source": "/**",
-        "headers": [
-          { "key": "X-Frame-Options", "value": "DENY" },
-          { "key": "X-Content-Type-Options", "value": "nosniff" },
-          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-        ]
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ],
-    "redirects": [
-      {
-        "source": "/",
-        "destination": "/dashboard",
-        "type": 301
-      }
+      "**/node_modules/**"
     ]
   },
   "emulators": {
