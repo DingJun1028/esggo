@@ -120,7 +120,7 @@ export default function SovereignDigitalTwinPage() {
 
     primaryActions: [
       { id: 'resonance', label: '啟動全域共鳴', icon: <Zap size={16}/>, onClick: () => alert('正在同步全模組數據，喚醒分身意識...') },
-      { id: 'alchemy', label: 'Hermes Alchemy', icon: <Sparkles size={16}/>, variant: 'secondary', onClick: () => window.location.href = '/hermes-alchemy' }
+      { id: 'alchemy', label: 'OmniAgent Alchemy', icon: <Sparkles size={16}/>, variant: 'secondary', onClick: () => window.location.href = '/omniagent-alchemy' }
     ],
 
     kpis: [
@@ -363,7 +363,7 @@ export default function SovereignDigitalTwinPage() {
       },
       {
         id: 'chat-view',
-        title: '分身共鳴對話 (Hermes Resonance)',
+        title: '分身共鳴對話 (OmniAgent Resonance)',
         columns: 12,
         hidden: activeTab !== 'chat',
         component: (
@@ -412,7 +412,7 @@ export default function SovereignDigitalTwinPage() {
                 ]}
                 data={[
                   { action: <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center"><Fingerprint size={16}/></div><span className="font-black text-[#003262] text-xs">DNA_INITIALIZE</span></div>, detail: <span className="text-xs text-slate-500 font-medium">設定主權數位分身初始道德權重與決策邏輯。</span>, hash: <code className="text-[10px] text-slate-400 font-mono">sha256:ox_dna_742...</code>, time: <span className="text-[10px] text-slate-400 font-bold uppercase">2026-05-24 10:00</span> },
-                  { action: <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center"><Database size={16}/></div><span className="font-black text-emerald-700 text-xs">KB_SYNC_ALCHEMY</span></div>, detail: <span className="text-xs text-slate-500 font-medium">自動載入由 Hermes Alchemy 提取之 12,450 kWh 電費實證。</span>, hash: <code className="text-[10px] text-slate-400 font-mono">sha256:ox_kb_alc_9982...</code>, time: <span className="text-[10px] text-slate-400 font-bold uppercase">2026-05-24 14:45</span> },
+                  { action: <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center"><Database size={16}/></div><span className="font-black text-emerald-700 text-xs">KB_SYNC_ALCHEMY</span></div>, detail: <span className="text-xs text-slate-500 font-medium">自動載入由 OmniAgent Alchemy 提取之 12,450 kWh 電費實證。</span>, hash: <code className="text-[10px] text-slate-400 font-mono">sha256:ox_kb_alc_9982...</code>, time: <span className="text-[10px] text-slate-400 font-bold uppercase">2026-05-24 14:45</span> },
                 ]}
              />
           </BrandCard>

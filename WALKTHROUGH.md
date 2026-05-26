@@ -30,7 +30,7 @@ The primary ESG reporting workspace has been refactored:
 
 ## 5. Omni CLI Usage
 The system provides a native CLI tool (`omni`) for backend orchestration and agent management:
-- **Agent Tasking:** `node cli/omni.mjs agent run "..."` triggers the OmniHermes swarm for autonomous analysis.
+- **Agent Tasking:** `node cli/omni.mjs agent run "..."` triggers the OmniAgent swarm for autonomous analysis.
 - **Web Browsing:** `node cli/omni.mjs agent browse "..."` launches a V3 web agent via Browser Use Cloud.
 - **Vault Management:** `node cli/omni.mjs vault list` displays the real-time hash locks and evidence status.
 - **Audit Verification:** `node cli/omni.mjs audit report` provides a T1..T5 integrity score for the current project.

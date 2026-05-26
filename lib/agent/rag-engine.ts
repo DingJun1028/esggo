@@ -1,5 +1,5 @@
 /**
- * OmniHermes | RAG Engine (Simulated)
+ * OmniAgent | RAG Engine (Simulated)
  * Handles document fragment indexing and retrieval for grounding.
  */
 

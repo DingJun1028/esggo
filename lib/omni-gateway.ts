@@ -1,11 +1,11 @@
 /**
- * OmniHermes + ESG Go Gateway Client v0.14.1
+ * OmniAgent + ESG Go Gateway Client v0.14.1
  * 整合最新的多模態工具鏈與本地化支持
  */
 
 import type { AgentTask, AgentExecution, AgentArtifact } from './agent/types';
 
-export interface HermesAgentConfig {
+export interface OmniAgentAgentConfig {
   version: string;
   baseUrl: string;
   provider: 'Nous' | 'OpenRouter' | 'NovitaAI' | 'NVIDIA' | 'Xiaomi' | 'Moonshot' | 'OpenAI';
@@ -15,7 +15,7 @@ export interface HermesAgentConfig {
 export const CURRENT_HERMES_VERSION = '0.14.0';
 export const DEFAULT_HERMES_GATEWAY_URL = 'http://161.118.248.180:8642';
 
-export const hermesTools = [
+export const omniagentTools = [
   { id: 'web_search', category: 'Information', description: 'Deep web research and extraction' },
   { id: 'terminal', category: 'Execution', description: 'Safe sandboxed shell execution' },
   { id: 'video_generate', category: 'Creative', description: 'New v0.14: Unified video generation' },
@@ -25,13 +25,13 @@ export const hermesTools = [
 
 const BASE_URL = process.env.NEXT_PUBLIC_HERMES_GATEWAY_URL || DEFAULT_HERMES_GATEWAY_URL;
 
-export async function fetchHermesStatus() {
+export async function fetchOmniAgentStatus() {
   try {
     const res = await fetch(`${BASE_URL}/status`, { signal: AbortSignal.timeout(2000) });
     if (!res.ok) throw new Error('Gateway offline');
     return await res.json();
   } catch (e) {
-    console.warn('Hermes Gateway unreachable, falling back to mock status.');
+    console.warn('OmniAgent Gateway unreachable, falling back to mock status.');
     return {
       status: 'online',
       version: CURRENT_HERMES_VERSION,
@@ -43,7 +43,7 @@ export async function fetchHermesStatus() {
   }
 }
 
-export async function executeHermesTask(task: AgentTask): Promise<{ execution: AgentExecution; artifact: AgentArtifact }> {
+export async function executeOmniAgentTask(task: AgentTask): Promise<{ execution: AgentExecution; artifact: AgentArtifact }> {
   try {
     const res = await fetch(`${BASE_URL}/execute`, {
       method: 'POST',
@@ -55,27 +55,27 @@ export async function executeHermesTask(task: AgentTask): Promise<{ execution: A
     if (!res.ok) throw new Error(`Gateway returned ${res.status}`);
     return await res.json();
   } catch (e) {
-    console.warn(`Hermes live execution failed for task ${task.id}:`, e);
+    console.warn(`OmniAgent live execution failed for task ${task.id}:`, e);
     throw new Error('HERMES_GATEWAY_UNREACHABLE');
   }
 }
 
-import { getHermesAI } from './hermes.config';
+import { getOmniAgentAI } from './omniagent.config';
 import type { 
-  HermesVisionResult, 
-  HermesMetricExtraction, 
-  HermesMetric 
+  OmniAgentVisionResult, 
+  OmniAgentMetricExtraction, 
+  OmniAgentMetric 
 } from '../types/omni-core';
 
 /**
  * [Phase 13] 多模態視覺掃描 (Multi-Modal Vision) — 實體化
  * 調用 Genkit AI 進行真實憑證分析
  */
-export async function scanEvidenceWithVision(fileId: string, fileType: string): Promise<HermesVisionResult> {
-  console.log(`[OmniHermes Vision] Calling Genkit for file ${fileId}...`);
+export async function scanEvidenceWithVision(fileId: string, fileType: string): Promise<OmniAgentVisionResult> {
+  console.log(`[OmniAgent Vision] Calling Genkit for file ${fileId}...`);
 
   try {
-    const ai = await getHermesAI();
+    const ai = await getOmniAgentAI();
     const response = await ai.generate({
       system: "你是一個專業的 ESG 審計 AI。請分析提供的文件憑證（此處模擬文件內容讀取），提取關鍵指標並進行合規性差距分析。",
       prompt: `請分析憑證 ID: ${fileId}，檔案類型: ${fileType}。
@@ -84,9 +84,9 @@ export async function scanEvidenceWithVision(fileId: string, fileType: string): 
 
     // Handle potential formatting issues in LLM output
     const text = response.text().replace(/```json|```/g, '').trim();
-    return JSON.parse(text) as HermesVisionResult;
+    return JSON.parse(text) as OmniAgentVisionResult;
   } catch (e) {
-    console.warn('[Hermes Vision] AI call failed, using high-fidelity fallback.', e);
+    console.warn('[OmniAgent Vision] AI call failed, using high-fidelity fallback.', e);
     return {
       extraction: `[AI 備援輸出] 從 ID 為 ${fileId} 的憑證中識別出 2024 年度的能源消耗數據。`,
       confidence: 0.88,
@@ -98,11 +98,11 @@ export async function scanEvidenceWithVision(fileId: string, fileType: string): 
 /**
  * [Phase 13] 智慧指標提取 (Smart Metric Extraction) — 實體化
  */
-export async function extractMetricsFromEvidence(fileId: string): Promise<HermesMetricExtraction> {
-  console.log(`[OmniHermes Alchemy] Extracting metrics via Genkit...`);
+export async function extractMetricsFromEvidence(fileId: string): Promise<OmniAgentMetricExtraction> {
+  console.log(`[OmniAgent Alchemy] Extracting metrics via Genkit...`);
 
   try {
-    const ai = await getHermesAI();
+    const ai = await getOmniAgentAI();
     const response = await ai.generate({
       system: "你是一個 ESG 指標煉金師。請將非結構化的憑證文字轉化為結構化的 GRI 指標數據點。",
       prompt: `請從憑證 ${fileId} 中提取指標。
@@ -110,9 +110,9 @@ export async function extractMetricsFromEvidence(fileId: string): Promise<Hermes
     });
 
     const text = response.text().replace(/```json|```/g, '').trim();
-    return JSON.parse(text) as HermesMetricExtraction;
+    return JSON.parse(text) as OmniAgentMetricExtraction;
   } catch (e) {
-    console.warn('[Hermes Alchemy] AI call failed, using high-fidelity fallback.', e);
+    console.warn('[OmniAgent Alchemy] AI call failed, using high-fidelity fallback.', e);
     return {
       metrics: [
         { key: 'electricity_usage', value: 'Pending', unit: 'kWh', gri: 'GRI 302-1' }

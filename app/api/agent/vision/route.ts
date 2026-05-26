@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getHermesAI, hermesConfig } from '../../../../lib/hermes.config';
+import { getOmniAgentAI, omniagentConfig } from '../../../../lib/omniagent.config';
 import { z } from 'genkit';
 
 const VisionOutputSchema = z.object({
@@ -23,17 +23,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '缺少憑證數據' }, { status: 400 });
     }
 
-    console.info(`[Hermes Vision] Analyzing file: ${fileName} (${fileType})...`);
+    console.info(`[OmniAgent Vision] Analyzing file: ${fileName} (${fileType})...`);
 
     // [Real Genkit Multi-modal Integration]
     // Note: In a real environment, we would pass the base64Data as a part of the prompt
     // For this prototype, we'll simulate the AI processing with Genkit structure
 
-    const systemInstruction = `${hermesConfig.personas.auditor}\n\n你現在是 Hermes Vision 模組。請分析上傳的 ESG 相關憑證（如電費單、發票、認證證書），提取關鍵指標並映射至 GRI 標準。`;
+    const systemInstruction = `${omniagentConfig.personas.auditor}\n\n你現在是 OmniAgent Vision 模組。請分析上傳的 ESG 相關憑證（如電費單、發票、認證證書），提取關鍵指標並映射至 GRI 標準。`;
     const prompt = `請分析這份名為 "${fileName}" 的憑證。內容包含原始圖像像素數據。請提取量化數據並給予信任評分。`;
 
     try {
-      const response = await (await getHermesAI()).generate({
+      const response = await (await getOmniAgentAI()).generate({
         system: systemInstruction,
         prompt,
         output: { schema: VisionOutputSchema }

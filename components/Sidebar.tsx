@@ -89,8 +89,8 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
-      { href: '/swarm', label: 'Hermes Swarm', sub: 'AI Swarm', icon: Bot, badge: 'NEW' },
-      { href: '/hermes-agent', label: 'Hermes Agent', sub: 'NousResearch', icon: FlaskConical },
+      { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'NEW' },
+      { href: '/omniagent-agent', label: 'OmniAgent Agent', sub: 'NousResearch', icon: FlaskConical },
     ],
   },
 ];

@@ -75,7 +75,7 @@ export default function StrategyLabPage() {
     features: { useAuditLog: true },
 
     primaryActions: [
-      { id: 'ai-growth', label: 'AI 進化建議', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在基於 5T 歷史數據計算進化路徑...') },
+      { id: 'ai-growth', label: 'AI 進化建議', icon: <Sparkles size={16}/>, onClick: () => alert('OmniAgent 正在基於 5T 歷史數據計算進化路徑...') },
       { id: 'reset', label: '重置', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: () => { setProposal(''); setResult(null); } }
     ],
 
@@ -190,7 +190,7 @@ export default function StrategyLabPage() {
                       <Rocket size={48} className="opacity-40" />
                    </div>
                    <p className="text-sm font-black uppercase tracking-[0.4em] text-slate-400">等待提案提交</p>
-                   <p className="text-[12px] mt-4 max-w-xs leading-relaxed font-medium text-slate-400/80">請在左側輸入您的企業願景，啟動 AI 自主治理流程。Hermes 將匯集所有專家的共識權重。</p>
+                   <p className="text-[12px] mt-4 max-w-xs leading-relaxed font-medium text-slate-400/80">請在左側輸入您的企業願景，啟動 AI 自主治理流程。OmniAgent 將匯集所有專家的共識權重。</p>
                 </div>
               )}
             </AnimatePresence>
@@ -245,7 +245,7 @@ export default function StrategyLabPage() {
                 </div>
                 <h3 className="text-3xl font-black text-berkeley-blue uppercase tracking-tight">oX Self-Evolution Active</h3>
                 <p className="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed font-medium">
-                   Hermes 正在即時監控全域數據流。當偵測到結構性治理模式時，系統將自動提議架構升級（如：新增 5T 驗證節點或擴展 Swarm 角色）。
+                   OmniAgent 正在即時監控全域數據流。當偵測到結構性治理模式時，系統將自動提議架構升級（如：新增 5T 驗證節點或擴展 Swarm 角色）。
                 </p>
                 <div className="pt-10">
                    <Badge variant="verified" className="px-10 py-3 rounded-full font-black text-sm shadow-sm tracking-[0.2em]">Current Tier: Autonomous OX-3</Badge>

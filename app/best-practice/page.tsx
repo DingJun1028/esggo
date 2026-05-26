@@ -73,7 +73,7 @@ export default function BestPracticeHubPage() {
 
   const fetchAiRecommendations = async () => {
     setLoadingAi(true);
-    showToast('OmniHermes 正在分析產業標竿與您的治理數據...', 'info');
+    showToast('OmniAgent 正在分析產業標竿與您的治理數據...', 'info');
     try {
       const res = await fetch('/api/ai/best-practices/recommend', {
         method: 'POST',
@@ -112,7 +112,7 @@ export default function BestPracticeHubPage() {
   const pageConfig: UniversalPageConfig = {
     id: 'best-practice-hub',
     title: '最佳實踐化系統平台',
-    subtitle: '標竿案例 · 專家模板 · 國際標準。OmniHermes 智慧索引。',
+    subtitle: '標竿案例 · 專家模板 · 國際標準。OmniAgent 智慧索引。',
     icon: <Trophy size={32} className="text-[#003262]" />,
     griReference: 'Best Practices',
     activeT5Tags: ['T1', 'T4', 'T5'],
@@ -178,7 +178,7 @@ export default function BestPracticeHubPage() {
                            <div className="p-2 bg-blue-600 rounded-xl text-white">
                               <Sparkles size={18} />
                            </div>
-                           <h3 className="text-lg font-black text-[#003262]">OmniHermes AI 專屬推薦</h3>
+                           <h3 className="text-lg font-black text-[#003262]">OmniAgent AI 專屬推薦</h3>
                         </div>
                         <BrandButton variant="ghost" size="sm" onClick={() => setAiRecommendations([])}>清除</BrandButton>
                      </div>
@@ -349,7 +349,7 @@ export default function BestPracticeHubPage() {
                            <div className="w-8 h-8 rounded-xl bg-blue-500 flex items-center justify-center">
                               <Zap size={18} />
                            </div>
-                           <p className="text-xs font-black uppercase tracking-tight">Hermes Governance AI</p>
+                           <p className="text-xs font-black uppercase tracking-tight">OmniAgent Governance AI</p>
                         </div>
                         <p className="text-sm text-blue-100/90 leading-relaxed font-medium italic">
                            「偵測到您的企業在 ${selectedPractice.industry} 中具備相似的組織結構。建議導入其 5T 自動化驗算模型，可大幅降低合規缺口風險。」

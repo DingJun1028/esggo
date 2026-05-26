@@ -1,5 +1,5 @@
 // ESGSonar | Prisma Data Model
-// Integrated with ESG GO X OmniHermes 5T Protocol
+// Integrated with ESG GO X OmniAgent 5T Protocol
 
 generator client {
   provider = "prisma-client-js"

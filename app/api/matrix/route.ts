@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
         grid[stage][gate] = {
           status,
           timestamp: Date.now() - (6 - sIndex) * 3600000,
-          actorId: sIndex < 2 ? 'OmniHermes-Archetype' : 'Governance-Architect-Alpha',
+          actorId: sIndex < 2 ? 'OmniAgent-Archetype' : 'Governance-Architect-Alpha',
           hashLock: status === 'LOCKED' ? `sha256:ox-holy-contract-${sIndex}${gIndex}` : undefined,
           evolutionNote: `此節點已於「${stage}」階段通過「${gate}」協議驗證。演化路徑：由混沌初始至誠信刻印，完成熵減秩序之建立。`
         };

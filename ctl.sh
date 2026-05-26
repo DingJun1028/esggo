@@ -3,7 +3,7 @@
 #!/bin/bash
 
 # ESG GO Platform Control Script (ctl.sh) v1.0
-# Inspired by Hermes WebUI Standard Lifecycle
+# Inspired by OmniAgent WebUI Standard Lifecycle
 
 APP_DIR=$(pwd)
 LOG_FILE="./omni_trace.log"
@@ -13,7 +13,7 @@ show_help() {
   echo "Usage: ./ctl.sh [command]"
   echo ""
   echo "Commands:"
-  echo "  start      Start Next.js and Hermes Gateway in background"
+  echo "  start      Start Next.js and OmniAgent Gateway in background"
   echo "  status     Check status of platform processes"
   echo "  logs       Tail the system logs"
   echo "  restart    Restart all services"
@@ -26,8 +26,8 @@ start() {
   npm run dev > $LOG_FILE 2>&1 &
   NEXT_PID=$!
   
-  # Start Hermes Gateway (Simulated for local)
-  node vps/hermes-server.mjs >> $LOG_FILE 2>&1 &
+  # Start OmniAgent Gateway (Simulated for local)
+  node vps/omniagent-server.mjs >> $LOG_FILE 2>&1 &
   GATEWAY_PID=$!
 
   echo "$NEXT_PID $GATEWAY_PID" > $PID_FILE

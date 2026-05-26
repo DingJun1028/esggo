@@ -151,7 +151,7 @@ export default function SocialSovereigntyPage() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-blue-300 uppercase tracking-[0.2em]">Diplomat Insight</p>
-                      <p className="text-xs font-black">Hermes Social v2</p>
+                      <p className="text-xs font-black">OmniAgent Social v2</p>
                     </div>
                   </div>
                   <p className="text-sm text-blue-100/90 leading-relaxed font-medium italic">

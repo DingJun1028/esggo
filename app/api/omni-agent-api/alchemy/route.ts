@@ -1,29 +1,29 @@
 import { NextResponse } from 'next/server';
-import { scanEvidenceWithVision } from '@/lib/hermes-gateway';
+import { extractMetricsFromEvidence } from '@/lib/omniagent-gateway';
 import { ApiResponse } from '@/types/omni-core';
 
 export async function POST(req: Request) {
   try {
-    const { fileId, fileType } = await req.json();
+    const { fileId } = await req.json();
 
     if (!fileId) {
       return NextResponse.json(
         {
           id: Date.now().toString(),
           status: 'error',
-          content: 'Missing fileId for vision scanning',
+          content: 'Missing fileId for metric extraction',
           timestamp: Date.now(),
         } as ApiResponse,
         { status: 400 }
       );
     }
 
-    const result = await scanEvidenceWithVision(fileId, fileType || 'image/jpeg');
+    const result = await extractMetricsFromEvidence(fileId);
 
     return NextResponse.json({
       id: Date.now().toString(),
       status: 'success',
-      content: 'Hermes Vision analysis complete.',
+      content: 'OmniAgent Alchemy metric extraction complete.',
       data: result,
       timestamp: Date.now(),
     } as ApiResponse);
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       {
         id: Date.now().toString(),
         status: 'error',
-        content: error.message || 'Hermes Vision scanning failed',
+        content: error.message || 'OmniAgent Alchemy extraction failed',
         timestamp: Date.now(),
       } as ApiResponse,
       { status: 500 }

@@ -8,7 +8,7 @@ import { Badge } from '../ui/Badge';
 import { useOmniResonance } from '../../src/client/hooks/useOmniResonance';
 import { cn } from '../../lib/utils';
 
-export default function HermesFloatingAgent() {
+export default function OmniAgentFloatingAgent() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const { rs, status: rsStatus } = useOmniResonance();
@@ -38,7 +38,7 @@ export default function HermesFloatingAgent() {
                      </div>
                      <div>
                         <div className="flex items-center gap-3">
-                           <p className="text-lg font-black tracking-tight uppercase">Hermes Oracle</p>
+                           <p className="text-lg font-black tracking-tight uppercase">OmniAgent Oracle</p>
                            <Badge variant="verified" className="bg-emerald-400/20 text-emerald-300 border-none px-2 py-0.5 text-[9px]">ACTIVE</Badge>
                         </div>
                         <div className="flex items-center gap-2 mt-1">
@@ -64,7 +64,7 @@ export default function HermesFloatingAgent() {
                         <Bot size={16} />
                      </div>
                      <Card className="bg-white p-5 rounded-3xl rounded-tl-none border border-slate-100/50 shadow-sm text-[13px] text-slate-600 leading-relaxed font-medium">
-                        您好，我是您的 **OmniHermes 數據大祭司**。我正在即時平衡系統的任督二脈能量流。當前共鳴算力為 **{(rs * 100).toFixed(1)}%**，全域 5T 狀態穩定。
+                        您好，我是您的 **OmniAgent 數據大祭司**。我正在即時平衡系統的任督二脈能量流。當前共鳴算力為 **{(rs * 100).toFixed(1)}%**，全域 5T 狀態穩定。
                      </Card>
                   </div>
 

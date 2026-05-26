@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * OmniHermes + ESG Go Native CLI Tool
+ * OmniAgent + ESG Go Native CLI Tool
  * v1.1.0 | Antigravity-Style Terminal Interface
  */
 
@@ -64,7 +64,7 @@ async function fetchBlueStatus() {
   }
 }
 
-async function fetchHermesStatusLocal() {
+async function fetchOmniAgentStatusLocal() {
   const url = process.env.NEXT_PUBLIC_HERMES_GATEWAY_URL || DEFAULT_HERMES_GATEWAY_URL;
   try {
     const res = await fetch(`${url}/status`, { signal: AbortSignal.timeout(2000) });
@@ -83,7 +83,7 @@ async function fetchHermesStatusLocal() {
 
 program
   .name('omni')
-  .description('OmniHermes + ESG Go Terminal Interface')
+  .description('OmniAgent + ESG Go Terminal Interface')
   .version('1.0.0');
 
 // ── Database & System Commands ───────────────────────────────────────────────
@@ -119,10 +119,10 @@ db.command('check')
 const agent = program.command('agent').description('Omni-Agent and Swarm orchestration');
 
 agent.command('status')
-  .description('Fetch current Hermes Gateway status')
+  .description('Fetch current OmniAgent Gateway status')
   .action(async () => {
-    console.log(pc.blue('📡 Fetching OmniHermes Gateway Status...'));
-    const status = await fetchHermesStatusLocal();
+    console.log(pc.blue('📡 Fetching OmniAgent Gateway Status...'));
+    const status = await fetchOmniAgentStatusLocal();
 
     if (status.is_mock) {
       console.log(pc.yellow('⚠️ Mode: MOCK (Local Fallback)'));
@@ -402,7 +402,7 @@ intel.command('fetch <source>')
   });
 
 intel.command('scan <id>')
-  .description('Scan evidence with OmniHermes Vision (Multi-Modal)')
+  .description('Scan evidence with OmniAgent Vision (Multi-Modal)')
   .action(async (id) => {
     console.log(pc.blue(`👁️ Initiating Vision Scan for Evidence ID: ${id}...`));
     await new Promise(r => setTimeout(r, 2000));
@@ -557,7 +557,7 @@ daemon.command('status')
     console.log(pc.blue('📊 Platform Operational Status:'));
     console.log(pc.white('------------------------------------------'));
     console.log(`PID: 2841  | Next.js App     | ${pc.green('ONLINE')}`);
-    console.log(`PID: 8642  | Hermes Gateway  | ${pc.green('ONLINE')}`);
+    console.log(`PID: 8642  | OmniAgent Gateway  | ${pc.green('ONLINE')}`);
     console.log(`PID: 9119  | BlueCC Bridge   | ${pc.yellow('IDLE')}`);
     console.log(pc.white('------------------------------------------'));
     console.log(`Uptime: 24h 12m | Memory: 1.2GB`);

@@ -1,5 +1,5 @@
 /**
- * OmniHermes | AI Tool Registry
+ * OmniAgent | AI Tool Registry
  * Defines functions that can be called by Gemini to fetch real ESG data.
  */
 

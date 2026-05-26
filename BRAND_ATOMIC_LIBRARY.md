@@ -1,5 +1,5 @@
 # 🏛️ 萬能元件品牌原子庫 - 經典版 (Classic Edition)
-## ESG GO X OmniHermes | Official Component Standard v1.1
+## ESG GO X OmniAgent | Official Component Standard v1.1
 
 本原子庫為 ESG GO 系統的預設視覺與交互標準，基於 Berkeley Haass 學術精準度與 5T 誠信協議開發。
 
@@ -16,7 +16,7 @@
 
 ### 3. 生物級元件 (Organisms)
 *   **VaultOmniTable:** 萬能聖碑記錄表格，整合即時 SHA-256 驗算與 ZKP 標識。
-*   **HermesFloatingAgent:** 全域懸浮 AI 助手，支援語音與視覺掃描輸入。
+*   **OmniAgentFloatingAgent:** 全域懸浮 AI 助手，支援語音與視覺掃描輸入。
 *   **StandardPage:** 預設的 12 欄 Bento Grid 佈局頁面框架。
 
 ### 4. 品牌視覺 Token (Default)

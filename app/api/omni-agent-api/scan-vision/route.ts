@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { scanEvidenceWithVision } from '../../../../lib/hermes-gateway';
+import { scanEvidenceWithVision } from '../../../../lib/omniagent-gateway';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const result = await scanEvidenceWithVision(fileId, fileType);
     return NextResponse.json(result);
   } catch (e) {
-    console.error('[Hermes Vision API]', e);
+    console.error('[OmniAgent Vision API]', e);
     return NextResponse.json({ error: 'Vision scan failed' }, { status: 500 });
   }
 }

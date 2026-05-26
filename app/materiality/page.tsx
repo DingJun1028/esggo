@@ -24,7 +24,7 @@ export default function MaterialityPage() {
   const [selectedTopic, setSelectedTopic] = useState<typeof topics[0] | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleAskHermes = async () => {
+  const handleAskOmniAgent = async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/agent/tasks', {
@@ -40,7 +40,7 @@ export default function MaterialityPage() {
       });
       const data = await res.json();
       if (data.ok) {
-        window.location.href = '/hermes-orchestrator';
+        window.location.href = '/omniagent-orchestrator';
       }
     } catch (e) {
       console.error(e);
@@ -236,7 +236,7 @@ export default function MaterialityPage() {
 
       {/* Floating AI Assistant Button */}
       <button
-        onClick={handleAskHermes}
+        onClick={handleAskOmniAgent}
         disabled={loading}
         style={{
           position: 'fixed',
@@ -273,7 +273,7 @@ export default function MaterialityPage() {
           fontWeight: 700,
           pointerEvents: 'none',
         }}>
-          Ask OmniHermes AI 分析重大性
+          Ask OmniAgent AI 分析重大性
         </div>
       </button>
 

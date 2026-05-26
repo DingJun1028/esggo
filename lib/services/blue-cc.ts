@@ -1,5 +1,5 @@
 /**
- * OmniHermes | BlueCC Integration Client
+ * OmniAgent | BlueCC Integration Client
  * Multi-cloud Agent Control & Operational Hardening
  */
 

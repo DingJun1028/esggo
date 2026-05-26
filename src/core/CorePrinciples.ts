@@ -1,4 +1,4 @@
-// Core Principles for OmniHermes (通原則核心)
+// Core Principles for OmniAgent (通原則核心)
 export enum Principle {
   Truth = 'Truth', // 溯源鏈格
   Goodness = 'Goodness', // 零幻覺演算

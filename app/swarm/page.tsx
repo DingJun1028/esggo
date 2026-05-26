@@ -19,10 +19,10 @@ interface SwarmAgent {
 export default function SwarmPage() {
   const { companyId } = useAuth();
   const [agents, setAgents] = useState<SwarmAgent[]>([
-    { id: 'S1', name: 'Hermes-Alpha', status: 'idle', role: 'Governance Arch', load: 12, lastAction: 'Sealing GRI 305' },
-    { id: 'S2', name: 'Hermes-Beta',  status: 'busy', role: 'Data Validator', load: 88, lastAction: 'ZKP Verification' },
-    { id: 'S3', name: 'Hermes-Gamma', status: 'busy', role: 'Report Scribe',  load: 65, lastAction: 'Recursive Expansion' },
-    { id: 'S4', name: 'Hermes-Delta', status: 'syncing', role: 'Registry Sync', load: 42, lastAction: 'DB Optimization' },
+    { id: 'S1', name: 'OmniAgent-Alpha', status: 'idle', role: 'Governance Arch', load: 12, lastAction: 'Sealing GRI 305' },
+    { id: 'S2', name: 'OmniAgent-Beta',  status: 'busy', role: 'Data Validator', load: 88, lastAction: 'ZKP Verification' },
+    { id: 'S3', name: 'OmniAgent-Gamma', status: 'busy', role: 'Report Scribe',  load: 65, lastAction: 'Recursive Expansion' },
+    { id: 'S4', name: 'OmniAgent-Delta', status: 'syncing', role: 'Registry Sync', load: 42, lastAction: 'DB Optimization' },
   ]);
 
   const [isAutonomous, setIsAutonomous] = useState(false);
@@ -68,7 +68,7 @@ export default function SwarmPage() {
       if (error) throw error;
       
       const healedCount = (data as any).healed_count;
-      alert(`OmniHermes 代理人已自主代行：成功修復了 ${healedCount} 個誠信缺角。`);
+      alert(`OmniAgent 代理人已自主代行：成功修復了 ${healedCount} 個誠信缺角。`);
     } catch (e) {
       console.error('Healing failed:', e);
       alert('自主治理引擎暫時無法啟動，正在備援...');
@@ -217,9 +217,9 @@ export default function SwarmPage() {
         <section className="space-y-6">
            <div className="flex items-center gap-4 px-2"><h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Swarm_Console</h3><div className="flex-1 h-px bg-slate-100" /></div>
            <BrandCard padding="none" className="bg-slate-900 border-none rounded-[2rem] shadow-extreme overflow-hidden">
-              <div className="p-6 bg-slate-800/50 flex items-center justify-between border-b border-white/5"><div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-red-500" /><div className="w-3 h-3 rounded-full bg-amber-500" /><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="ml-4 text-[10px] font-mono text-slate-400">root@omnihermes:~/swarm_v3</span></div><BrandBadge variant="outline" size="xs" className="text-emerald-500 border-emerald-500/30">CONNECTED</BrandBadge></div>
+              <div className="p-6 bg-slate-800/50 flex items-center justify-between border-b border-white/5"><div className="flex items-center gap-3"><div className="w-3 h-3 rounded-full bg-red-500" /><div className="w-3 h-3 rounded-full bg-amber-500" /><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="ml-4 text-[10px] font-mono text-slate-400">root@omniagent:~/swarm_v3</span></div><BrandBadge variant="outline" size="xs" className="text-emerald-500 border-emerald-500/30">CONNECTED</BrandBadge></div>
               <div className="p-8 font-mono text-[11px] text-emerald-400/80 leading-relaxed max-h-[300px] overflow-y-auto no-scrollbar">
-                 <p>[SYSTEM] Initializing OmniHermes Swarm v3.0.2...</p>
+                 <p>[SYSTEM] Initializing OmniAgent Swarm v3.0.2...</p>
                  <p>[SYSTEM] Autonomous Agency Mode enabled.</p>
                  <p className="text-blue-400">[AGENT] Monitoring system_gaps_summary for self-repair opportunities...</p>
                  <p className="animate-pulse">_</p>

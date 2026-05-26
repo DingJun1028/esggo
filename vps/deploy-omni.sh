@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Hermes VPS Deployment Script v1.0
+# OmniAgent VPS Deployment Script v1.0
 # Targeted for Ubuntu 24.04
 
 echo "------------------------------------------------"
-echo "🚀 Starting Hermes Gateway Deployment on VPS..."
+echo "🚀 Starting OmniAgent Gateway Deployment on VPS..."
 echo "------------------------------------------------"
 
 # 1. Update and install Node.js (v20)
@@ -17,16 +17,16 @@ echo "⚙️ Installing PM2..."
 sudo npm install -g pm2
 
 # 3. Create app directory
-mkdir -p ~/hermes-gateway
-cd ~/hermes-gateway
+mkdir -p ~/omniagent-gateway
+cd ~/omniagent-gateway
 
 # 4. Create package.json
 echo "📝 Creating package.json..."
 cat <<EOF > package.json
 {
-  "name": "hermes-vps-gateway",
+  "name": "omniagent-vps-gateway",
   "version": "0.14.0",
-  "main": "hermes-server.mjs",
+  "main": "omniagent-server.mjs",
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
@@ -59,19 +59,19 @@ sudo ufw allow 443/tcp
 sudo ufw allow 8642/tcp
 sudo ufw --force enable
 
-# 8. Launch Hermes Server
-echo "🚀 Launching Hermes Server with PM2..."
-pm2 start hermes-server.mjs --name hermes-gateway --exp-backoff-restart-delay 100
+# 8. Launch OmniAgent Server
+echo "🚀 Launching OmniAgent Server with PM2..."
+pm2 start omniagent-server.mjs --name omniagent-gateway --exp-backoff-restart-delay 100
 
 # 9. Setup PM2 startup
 pm2 save
 sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp $HOME
 
 echo "------------------------------------------------"
-echo "✅ Hermes Gateway Deployment COMPLETE!"
+echo "✅ OmniAgent Gateway Deployment COMPLETE!"
 echo "------------------------------------------------"
 echo "🌐 LIVE URL: http://$(curl -s ifconfig.me):8642"
-echo "📝 Action Required: Edit ~/hermes-gateway/.env"
+echo "📝 Action Required: Edit ~/omniagent-gateway/.env"
 echo "💡 Tip: For SSL, install Nginx and certbot:"
 echo "   sudo apt install nginx certbot python3-certbot-nginx"
 echo "------------------------------------------------"

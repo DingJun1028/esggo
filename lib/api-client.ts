@@ -50,16 +50,16 @@ export const omniApiClient = {
   },
 
   /**
-   * Hermes Vision Scan
+   * OmniAgent Vision Scan
    * Bridges to existing vision logic or new Alchemy
    */
   scanVision: (fileId: string, fileType?: string) => 
-    fetcher<any>('/api/hermes/vision', { fileId, fileType }),
+    fetcher<any>('/api/omniagent/vision', { fileId, fileType }),
     
   /**
-   * Hermes Alchemy Extraction
+   * OmniAgent Alchemy Extraction
    * Bridges to the new UCC Engine-backed Alchemy
    */
   extractMetrics: (fileId: string) => 
-    fetcher<any>('/api/hermes/alchemy', { fileId }),
+    fetcher<any>('/api/omniagent/alchemy', { fileId }),
 };

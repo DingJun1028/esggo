@@ -91,13 +91,13 @@ export default function IntelligencePage() {
           version: '1.2.0',
           status: 'Trustworthy',
           hash_lock: 'hash_intelligence_ox',
-          formula: 'OmniHermes-v2',
+          formula: 'OmniAgent-v2',
           impact_metric: { value: 0 },
           evidence: {
             tangible_metric: 'ESG Intelligence Flow (oX Verified)',
             source_origin: 'Multi-source Scraper',
             lifecycle_hooks: [],
-            formula_ref: 'OmniHermes-v2'
+            formula_ref: 'OmniAgent-v2'
           }
         } as any);
         setSampleGraph(g);
@@ -149,7 +149,7 @@ export default function IntelligencePage() {
     features: { useAuditLog: true },
 
     primaryActions: [
-      { id: 'ai-analyze', label: 'AI 市場分析', icon: <Sparkles size={16}/>, onClick: () => alert('Hermes 正在生成本週 ESG 策略報表...') },
+      { id: 'ai-analyze', label: 'AI 市場分析', icon: <Sparkles size={16}/>, onClick: () => alert('OmniAgent 正在生成本週 ESG 策略報表...') },
       { id: 'refresh', label: '刷新數據', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: () => window.location.reload() }
     ],
 
@@ -257,7 +257,7 @@ export default function IntelligencePage() {
                             <span className="text-[11px] font-black uppercase tracking-[0.3em]">Causal Analysis Active</span>
                           </div>
                           <p className="text-sm text-blue-50/80 leading-relaxed font-medium max-w-2xl">
-                            Hermes 正在分析法規與企業數據間的聯動關係。每一筆情報都會自動映射至 5T 實證網絡，確保戰略調整具備完整的溯源背景。
+                            OmniAgent 正在分析法規與企業數據間的聯動關係。每一筆情報都會自動映射至 5T 實證網絡，確保戰略調整具備完整的溯源背景。
                           </p>
                         </div>
                         <Bot size={140} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
@@ -352,7 +352,7 @@ export default function IntelligencePage() {
       },
       {
         id: 'side-insights',
-        title: 'Hermes 策略快報',
+        title: 'OmniAgent 策略快報',
         columns: 4,
         component: (
           <div className="space-y-8">
@@ -364,7 +364,7 @@ export default function IntelligencePage() {
                     </div>
                     <div>
                       <p className="text-[11px] font-black text-blue-200 uppercase tracking-[0.2em]">Strategy Insight</p>
-                      <p className="text-sm font-black text-white mt-0.5">Hermes Governance v2.1</p>
+                      <p className="text-sm font-black text-white mt-0.5">OmniAgent Governance v2.1</p>
                     </div>
                   </div>
                   <p className="text-base text-blue-50/90 leading-relaxed font-medium italic">

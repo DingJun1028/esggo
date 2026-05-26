@@ -44,7 +44,7 @@ const resources: Resource[] = [
   // AI
   { name: 'Google Gemini API', category: 'AI', type: 'LLM', status: 'partial', notes: '需填入 NEXT_PUBLIC_GEMINI_API_KEY', version: '@google/generative-ai' },
   { name: 'OpenRouter SDK', category: 'AI', type: 'LLM Gateway', status: 'available', notes: '多模型路由，需填入 OPENROUTER_API_KEY' },
-  { name: 'Hermes Agent', category: 'AI', type: 'AI Agent', status: 'partial', notes: '頁面已建立，需本地安裝 Hermes Gateway' },
+  { name: 'OmniAgent Agent', category: 'AI', type: 'AI Agent', status: 'partial', notes: '頁面已建立，需本地安裝 OmniAgent Gateway' },
   { name: 'Genkit', category: 'AI', type: 'AI Workflow', status: 'unavailable', reason: '規劃中，尚未整合' },
   { name: 'Firebase Genkit', category: 'AI', type: 'AI Workflow', status: 'unavailable', reason: '規劃中，尚未整合' },
   { name: 'Vertex AI', category: 'AI', type: 'Cloud AI', status: 'unavailable', reason: '需 GCP 帳號，規劃中' },
@@ -99,8 +99,8 @@ const resources: Resource[] = [
   { name: '任務中心 /tasks', category: 'Pages', type: 'System', status: 'available', notes: 'Kanban + Realtime' },
   { name: '企業管理 /profile', category: 'Pages', type: 'System', status: 'available' },
   { name: '整合中心 /api-setup', category: 'Pages', type: 'System', status: 'available' },
-  { name: 'Hermes Swarm /swarm', category: 'Pages', type: 'System', status: 'available' },
-  { name: 'Hermes Agent /hermes-agent', category: 'Pages', type: 'System', status: 'available' },
+  { name: 'OmniAgent Swarm /swarm', category: 'Pages', type: 'System', status: 'available' },
+  { name: 'OmniAgent Agent /omniagent-agent', category: 'Pages', type: 'System', status: 'available' },
   { name: '設計庫 /design-library', category: 'Pages', type: 'System', status: 'available' },
   { name: '系統狀態 /system-status', category: 'Pages', type: 'System', status: 'partial', notes: '頁面存在但資料動態化待完善' },
   { name: '聯盟入口 /alliance', category: 'Pages', type: 'System', status: 'partial', notes: '基本頁面，需完善 ZKP 驗算流程' },
@@ -115,7 +115,7 @@ const resources: Resource[] = [
   { name: 'SUPABASE_SERVICE_ROLE_KEY', category: 'Env Vars', type: 'Required', status: 'partial', notes: '請填入 service_role key' },
   { name: 'NEXT_PUBLIC_GEMINI_API_KEY', category: 'Env Vars', type: 'Optional', status: 'partial', notes: '需從 Google AI Studio 取得' },
   { name: 'OPENROUTER_API_KEY', category: 'Env Vars', type: 'Optional', status: 'unavailable', reason: '尚未設定' },
-  { name: 'HERMES_API_URL', category: 'Env Vars', type: 'Optional', status: 'unavailable', reason: '需本地啟動 Hermes Gateway' },
+  { name: 'HERMES_API_URL', category: 'Env Vars', type: 'Optional', status: 'unavailable', reason: '需本地啟動 OmniAgent Gateway' },
 ];
 
 const categories = ['全部', ...Array.from(new Set(resources.map(r => r.category)))];

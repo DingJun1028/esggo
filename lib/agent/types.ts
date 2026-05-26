@@ -84,7 +84,7 @@ export interface AgentExecution {
   id: string;
   taskId: string;
   sessionId: string;
-  runtime: 'hermes';
+  runtime: 'omniagent';
   runtimeVersion?: string;
   modelProvider: string;
   modelName: string;
@@ -152,7 +152,7 @@ export interface AgentAuditEntry {
   executionId: string;
   taskType: AgentTaskType;
   triggerSource: TriggerSource;
-  runtimeName: 'hermes';
+  runtimeName: 'omniagent';
   modelProvider: string;
   modelName: string;
   inputRefIds: string[];

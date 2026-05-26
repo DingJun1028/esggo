@@ -1,5 +1,5 @@
 /**
- * OmniHermes | Sandbox Executor
+ * OmniAgent | Sandbox Executor
  * Provides an abstraction for running code in a secure, isolated environment.
  * Supports Simulated mode (Dev) and E2B mode (Production).
  */

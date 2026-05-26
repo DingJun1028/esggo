@@ -27,7 +27,7 @@ interface AlchemyResult {
   sealHash?: string;
 }
 
-export default function HermesAlchemyPage() {
+export default function OmniAgentAlchemyPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [scanStep, setScanStep] = useState(0);
   const [results, setResults] = useState<AlchemyResult | null>(null);
@@ -128,8 +128,8 @@ export default function HermesAlchemyPage() {
 
   // ── Universal Page Configuration ──────────────────────────────────
   const pageConfig: UniversalPageConfig = {
-    id: 'hermes-alchemy',
-    title: 'Hermes Alchemy 煉金術',
+    id: 'omniagent-alchemy',
+    title: 'OmniAgent Alchemy 煉金術',
     subtitle: '多模態憑證智能提取中心 · 5T 數據轉化 · 自動化 GRI 映射。',
     icon: <Sparkles size={32} className="text-berkeley-blue" />,
     griReference: 'Intelligence / Vision',
@@ -189,7 +189,7 @@ export default function HermesAlchemyPage() {
                <p className="text-[10px] font-black text-california-gold uppercase tracking-[0.3em] relative z-10">AI Engine Status</p>
                <div className="flex items-center gap-3 relative z-10">
                   <div className="w-1.5 h-1.5 rounded-full bg-verified animate-pulse shadow-[0_0_8px_#10b981]" />
-                  <p className="text-xs font-bold text-white/90">Nous-Hermes-Vision-v2 Ready</p>
+                  <p className="text-xs font-bold text-white/90">Nous-OmniAgent-Vision-v2 Ready</p>
                </div>
                <Bot size={80} className="absolute -bottom-6 -right-6 text-white/5 rotate-12" />
             </div>

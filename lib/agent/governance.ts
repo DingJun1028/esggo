@@ -62,7 +62,7 @@ export interface ArchitectureLayer {
   bgColor: string;
   components: string[];
   description: string;
-  hermesCanAccess: boolean;
+  omniagentCanAccess: boolean;
   accessType?: 'direct' | 'via_adapter' | 'none';
 }
 
@@ -70,7 +70,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R01',
     title: '權限穿透風險',
-    description: 'Hermes 若繞過 API Gateway、Policy Guard 或角色控管，可能讀取或改寫不該接觸的正式資料',
+    description: 'OmniAgent 若繞過 API Gateway、Policy Guard 或角色控管，可能讀取或改寫不該接觸的正式資料',
     riskLevel: 'critical',
     category: '存取控制',
     controls: [
@@ -84,7 +84,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R02',
     title: '正式內容誤發布風險',
-    description: '使用者可能誤把 Hermes 草稿當正式版本，或系統把 draft 直接提升成 published',
+    description: '使用者可能誤把 OmniAgent 草稿當正式版本，或系統把 draft 直接提升成 published',
     riskLevel: 'critical',
     category: '狀態管理',
     controls: [
@@ -97,7 +97,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R03',
     title: '合規誤判風險',
-    description: 'Hermes 不能被視為法遵結論本身，直接採信會造成錯誤揭露或錯誤送件',
+    description: 'OmniAgent 不能被視為法遵結論本身，直接採信會造成錯誤揭露或錯誤送件',
     riskLevel: 'high',
     category: '合規治理',
     controls: [
@@ -110,7 +110,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R04',
     title: '證據污染風險',
-    description: 'Hermes 直接把附件與段落自動綁定成已驗證證據，讓 Evidence Vault 被未核實內容污染',
+    description: 'OmniAgent 直接把附件與段落自動綁定成已驗證證據，讓 Evidence Vault 被未核實內容污染',
     riskLevel: 'high',
     category: '資料完整性',
     controls: [
@@ -123,7 +123,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R05',
     title: '審計斷鏈風險',
-    description: '若 Hermes 執行時未記錄模型、輸入來源、輸出版本與審核者，後續無法追責與還原',
+    description: '若 OmniAgent 執行時未記錄模型、輸入來源、輸出版本與審核者，後續無法追責與還原',
     riskLevel: 'high',
     category: '審計追蹤',
     controls: [
@@ -136,7 +136,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R06',
     title: '資料外洩風險',
-    description: 'Hermes 連外、多模型切換或經 gateway 傳送時未管控，敏感資料可能外流',
+    description: 'OmniAgent 連外、多模型切換或經 gateway 傳送時未管控，敏感資料可能外流',
     riskLevel: 'high',
     category: '資料安全',
     controls: [
@@ -161,7 +161,7 @@ export const RISK_REGISTRY: readonly RiskItem[] = [
   {
     id: 'R08',
     title: '任務失控風險',
-    description: 'Hermes 能自行延伸任務、呼叫未授權資料或生成未受控工作流，容易導致範圍擴張',
+    description: 'OmniAgent 能自行延伸任務、呼叫未授權資料或生成未受控工作流，容易導致範圍擴張',
     riskLevel: 'medium',
     category: '任務控制',
     controls: [
@@ -242,7 +242,7 @@ export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
     bgColor: '#EBF2FA',
     components: ['ESG GO Web', 'ESG GO Admin', '課程官網', '顧問工作台', '任務追蹤面板'],
     description: '使用者直接操作的介面層，負責狀態顯示、互動流程與治理提示',
-    hermesCanAccess: false,
+    omniagentCanAccess: false,
     accessType: 'none',
   },
   {
@@ -253,7 +253,7 @@ export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
     bgColor: '#EBF2FA',
     components: ['Report Service', 'Compliance Service', 'Evidence Service', 'Course Support', 'Task Management'],
     description: '業務邏輯層，處理各模組的核心功能，接收 Orchestrator 指令並返回結果',
-    hermesCanAccess: false,
+    omniagentCanAccess: false,
     accessType: 'none',
   },
   {
@@ -262,9 +262,9 @@ export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
     nameEn: 'Agent Orchestration Layer',
     color: '#8B5CF6',
     bgColor: '#F5F3FF',
-    components: ['Agent Orchestrator', 'Task Router', 'Hermes Runtime Adapter', 'Skill Registry', 'Session Manager', 'Execution Controller', 'Prompt Policy Composer', 'Artifact Manager'],
-    description: 'Hermes 所在層，負責任務調度、執行控制與產出管理。是唯一允許 Hermes 直接存在的層',
-    hermesCanAccess: true,
+    components: ['Agent Orchestrator', 'Task Router', 'OmniAgent Runtime Adapter', 'Skill Registry', 'Session Manager', 'Execution Controller', 'Prompt Policy Composer', 'Artifact Manager'],
+    description: 'OmniAgent 所在層，負責任務調度、執行控制與產出管理。是唯一允許 OmniAgent 直接存在的層',
+    omniagentCanAccess: true,
     accessType: 'direct',
   },
   {
@@ -274,8 +274,8 @@ export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
     color: '#FDB515',
     bgColor: '#FEF3C7',
     components: ['Policy Guard', 'Approval Flow', 'Role Permission', 'RLS', 'Audit Log', 'Version Control'],
-    description: '所有 Hermes 執行必須先通過此層的守門，確保治理優先、審核完整、日誌不斷鏈',
-    hermesCanAccess: false,
+    description: '所有 OmniAgent 執行必須先通過此層的守門，確保治理優先、審核完整、日誌不斷鏈',
+    omniagentCanAccess: false,
     accessType: 'none',
   },
   {
@@ -285,8 +285,8 @@ export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
     color: '#22C55E',
     bgColor: '#DCFCE7',
     components: ['5T Protocol', 'Evidence Vault', 'Hash Lock', 'Timestamp Proof'],
-    description: '最終不可篡改層，只有通過治理層審核的內容才能進入。Hermes 不可直接操作此層',
-    hermesCanAccess: false,
+    description: '最終不可篡改層，只有通過治理層審核的內容才能進入。OmniAgent 不可直接操作此層',
+    omniagentCanAccess: false,
     accessType: 'none',
   },
   {
@@ -296,8 +296,8 @@ export const ARCHITECTURE_LAYERS: readonly ArchitectureLayer[] = [
     color: '#64748B',
     bgColor: '#F1F5F9',
     components: ['Report Draft Store', 'Published Report Store', 'Compliance Knowledge Base', 'Evidence Candidate Store', 'Evidence Verified Store', 'Course Content Store', 'Task Store', 'Audit Store'],
-    description: '資料持久化層，分為草稿區與正式區。Hermes 只能透過 Artifact Manager 寫入草稿區',
-    hermesCanAccess: false,
+    description: '資料持久化層，分為草稿區與正式區。OmniAgent 只能透過 Artifact Manager 寫入草稿區',
+    omniagentCanAccess: false,
     accessType: 'none',
   },
 ];

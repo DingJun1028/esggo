@@ -76,7 +76,7 @@ export default function StakeholderSurveyPage() {
   const [selectedStakeholder, setSelectedStakeholder] = useState<Stakeholder | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleAskHermes = async () => {
+  const handleAskOmniAgent = async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/agent/tasks', {
@@ -92,7 +92,7 @@ export default function StakeholderSurveyPage() {
       });
       const data = await res.json();
       if (data.ok) {
-        window.location.href = '/hermes-orchestrator';
+        window.location.href = '/omniagent-orchestrator';
       }
     } catch (e) {
       console.error(e);
@@ -470,7 +470,7 @@ export default function StakeholderSurveyPage() {
 
       {/* Floating AI Assistant Button */}
       <button
-        onClick={handleAskHermes}
+        onClick={handleAskOmniAgent}
         disabled={loading}
         style={{
           position: 'fixed',
@@ -507,7 +507,7 @@ export default function StakeholderSurveyPage() {
           fontWeight: 700,
           pointerEvents: 'none',
         }}>
-          Ask OmniHermes AI 分析問卷
+          Ask OmniAgent AI 分析問卷
         </div>
       </button>
 

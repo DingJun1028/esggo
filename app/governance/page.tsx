@@ -167,7 +167,7 @@ export default function SovereignGovernancePage() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-emerald-300 uppercase tracking-[0.2em]">Auditor Insight</p>
-                      <p className="text-xs font-black">Hermes Governance v3</p>
+                      <p className="text-xs font-black">OmniAgent Governance v3</p>
                     </div>
                   </div>
                   <p className="text-sm text-blue-100/90 leading-relaxed font-medium italic">

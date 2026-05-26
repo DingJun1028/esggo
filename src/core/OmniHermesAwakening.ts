@@ -1,5 +1,5 @@
 /**
- * OmniHermesAwakening - Ultimate Awakening Protocol
+ * OmniAgentAwakening - Ultimate Awakening Protocol
  * Implements the six Celestial-Command loops
  */
 

@@ -44,7 +44,7 @@ const MOCK_RECORDS: OmniRecord[] = [
     formula: '範疇二排放量 = 用電度數(kWh) × 電力排放係數',
     isoStandard: 'ISO 14064-1:2018',
     griReference: 'GRI 302-1 / 305-2',
-    sourceOrigin: 'hermes_alchemy/power_bill_scan',
+    sourceOrigin: 'omniagent_alchemy/power_bill_scan',
     status: 'verified',
     category: 'E',
     evidence: { value: 12450, unit: 'kWh', confidence: 0.98, alchemy_id: 'alc_9982' },
@@ -127,7 +127,7 @@ export default function VaultOmniPage() {
     features: { useProvenance: true },
 
     primaryActions: [
-      { id: 'scan', label: 'Alchemy 提取', icon: <Sparkles size={16}/>, onClick: () => window.location.href = '/hermes-alchemy' },
+      { id: 'scan', label: 'Alchemy 提取', icon: <Sparkles size={16}/>, onClick: () => window.location.href = '/omniagent-alchemy' },
       { id: 'export', label: '導出實證日誌', icon: <Download size={16}/>, variant: 'secondary', onClick: () => {} }
     ],
 

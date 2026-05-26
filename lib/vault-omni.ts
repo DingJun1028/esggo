@@ -168,7 +168,7 @@ export async function engraveToSingleTable(component: IComponentCore): Promise<{
   await supabase.from('audit_logs').insert({
     action: 'VAULT_OMNI_ENGRAVE',
     resource: `vault_omni_core:${record.uuid}`,
-    user_name: 'OmniHermes-Engraver',
+    user_name: 'OmniAgent-Engraver',
     t5_tag: 'T1+T4+T5',
     hash_lock: record.hash_lock,
     details: `[信] 聖碑刻印完成。源起：${component.evidence.source_origin}`,

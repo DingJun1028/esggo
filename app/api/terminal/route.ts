@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     switch (command) {
       case 'agent':
         if (args[0] === 'status') {
-          lines.push({ type: 'info', content: '📡 Fetching OmniHermes Gateway Status...' });
+          lines.push({ type: 'info', content: '📡 Fetching OmniAgent Gateway Status...' });
           
           const memory = process.memoryUsage();
           const memMb = (memory.heapUsed / 1024 / 1024).toFixed(2);

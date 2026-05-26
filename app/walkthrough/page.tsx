@@ -25,10 +25,10 @@ const ONBOARDING_STEPS = [
     icon: <Sparkles size={24}/>,
     color: '#FDB515',
     action: '前往煉金術',
-    link: '/hermes-alchemy',
+    link: '/omniagent-alchemy',
     details: [
       '上傳電費單、發票或認證 PDF。',
-      'Hermes 自動提取 GRI 關鍵指標。',
+      'OmniAgent 自動提取 GRI 關鍵指標。',
       '完成第一次 5T 誠信封印。'
     ]
   },
@@ -53,7 +53,7 @@ const ONBOARDING_STEPS = [
     icon: <Bot size={24}/>,
     color: '#8B5CF6',
     action: '啟動調度中心',
-    link: '/hermes-orchestrator',
+    link: '/omniagent-orchestrator',
     details: [
       '指派 Z0-Auditor 執行合規性掃描。',
       '利用 SustainWrite 執行 5000 字深度撰寫。',
@@ -93,7 +93,7 @@ const ONBOARDING_STEPS = [
 const FEATURE_MANIFEST = [
   { module: '調度中心', sub: 'Orchestrator', desc: '全系統的指揮大腦，管理 AI 代理人的任務分配與執行生命週期。', icon: <Bot size={16}/> },
   { module: '商情中心', sub: 'Intelligence', desc: '即時追蹤全球 ESG 法規、碳政策與競爭對手動態。', icon: <Globe size={16}/> },
-  { module: 'Hermes 煉金術', sub: 'Alchemy', desc: '多模態 AI 視覺引擎，將紙本憑證「點石成金」變為結構化數據。', icon: <Sparkles size={16}/> },
+  { module: 'OmniAgent 煉金術', sub: 'Alchemy', desc: '多模態 AI 視覺引擎，將紙本憑證「點石成金」變為結構化數據。', icon: <Sparkles size={16}/> },
   { module: '永續撰寫', sub: 'SustainWrite', desc: '對齊 GRI 2021 的深度文案引擎，支援 5T 數據自動填報。', icon: <FileText size={16}/> },
   { module: '戰略實驗室', sub: 'Strategy Lab', desc: '蜂群共識模擬器，用於分析戰略決策的影響力與系統進化。', icon: <Zap size={16}/> },
   { module: '萬能聖碑', sub: 'Vault Omni', desc: '不可篡改的實證帳本，是企業數位主權的最終物理歸宿。', icon: <Database size={16}/> },

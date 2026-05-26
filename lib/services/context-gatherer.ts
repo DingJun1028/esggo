@@ -1,17 +1,17 @@
 /**
- * OmniHermes | Context Gathering Service (MCP inspired)
+ * OmniAgent | Context Gathering Service (MCP inspired)
  * Bridges AI agents with system data and external sources.
  */
 
 import { getEnvironmentalData, getSocialMetrics } from '../db';
-import { fetchHermesStatus } from '../hermes-gateway';
+import { fetchOmniAgentStatus } from '../omniagent-gateway';
 import { blueCC } from './blue-cc';
 
 export async function gatherSystemContext() {
   const [env, soc, status, cloud] = await Promise.all([
     getEnvironmentalData(),
     getSocialMetrics(),
-    fetchHermesStatus(),
+    fetchOmniAgentStatus(),
     blueCC.getSystemStatus()
   ]);
 

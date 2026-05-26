@@ -19,9 +19,9 @@ interface TerminalLine {
   timestamp: string;
 }
 
-export default function HermesTerminalPage() {
+export default function OmniAgentTerminalPage() {
   const [lines, setLines] = useState<TerminalLine[]>([
-    { type: 'info', content: '>>> OMNIHERMES oX | AGENT OS v2.1.0-ALPHA', timestamp: new Date().toLocaleTimeString() },
+    { type: 'info', content: '>>> OMNIAGENT oX | AGENT OS v2.1.0-ALPHA', timestamp: new Date().toLocaleTimeString() },
     { type: 'info', content: '>>> 5T INTEGRITY KERNEL: ONLINE', timestamp: new Date().toLocaleTimeString() },
     { type: 'info', content: '>>> TYPE "HELP" FOR COMMAND MANIFEST.', timestamp: new Date().toLocaleTimeString() },
   ]);
@@ -66,9 +66,9 @@ export default function HermesTerminalPage() {
       case 'agent':
         if (args[0] === 'list') {
           addLine('success', 'Active Agents Found:');
-          addLine('out', '  - [ID: hermes-researcher] Status: STANDBY');
-          addLine('out', '  - [ID: hermes-auditor]    Status: ACTIVE (Task: Alchemy_Scan)');
-          addLine('out', '  - [ID: hermes-planner]    Status: SLEEP');
+          addLine('out', '  - [ID: omniagent-researcher] Status: STANDBY');
+          addLine('out', '  - [ID: omniagent-auditor]    Status: ACTIVE (Task: Alchemy_Scan)');
+          addLine('out', '  - [ID: omniagent-planner]    Status: SLEEP');
         } else if (args[0] === 'exec') {
           addLine('info', `>>> Initializing Genkit Trace for Task: ${args[1] || 'default'}...`);
           await new Promise(r => setTimeout(r, 1500));
@@ -131,7 +131,7 @@ export default function HermesTerminalPage() {
             <Terminal size={24} />
           </div>
           <div>
-            <h1 className="text-berkeley-blue text-xl font-black tracking-tighter uppercase">Hermes Agent OS</h1>
+            <h1 className="text-berkeley-blue text-xl font-black tracking-tighter uppercase">OmniAgent Agent OS</h1>
             <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em]">oX Pro-Dev Console • v2.1.0</p>
           </div>
         </motion.div>
@@ -223,7 +223,7 @@ export default function HermesTerminalPage() {
            <div className="p-6 bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-glass border border-white/60 text-[11px] text-berkeley-blue font-bold uppercase tracking-widest max-w-[240px]">
               <div className="flex items-center gap-2 mb-3 text-california-gold">
                  <Zap size={14} fill="currentColor" />
-                 <span className="text-berkeley-blue">Hermes Oracle</span>
+                 <span className="text-berkeley-blue">OmniAgent Oracle</span>
               </div>
               <p className="leading-relaxed text-slate-500 lowercase italic font-medium normal-case">
                 Try <span className="text-berkeley-blue font-black">"agent list"</span> to see active workers or <span className="text-berkeley-blue font-black">"5t seal"</span> to anchor current data.

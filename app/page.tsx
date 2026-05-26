@@ -98,7 +98,7 @@ export default function LandingPage() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/50 border border-blue-800/50 text-blue-300 text-xs font-bold uppercase tracking-widest backdrop-blur-md"
           >
             <Sparkles size={14} className="text-blue-400" />
-            Introducing OmniHermes Swarm V3
+            Introducing OmniAgent Swarm V3
           </motion.div>
           
           <motion.h1 
@@ -141,7 +141,7 @@ export default function LandingPage() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 pt-16">
           {[
             { title: 'Evidence Vault', icon: <Shield size={24} className="text-emerald-400"/>, desc: '透過 ZKP 技術封印您的永續證據，確保資料不可篡改且隱私安全無虞。' },
-            { title: 'Agent Orchestration', icon: <Cpu size={24} className="text-blue-400"/>, desc: 'OmniHermes 自動調度多個專屬 AI 代理，並行處理數據分析與報告生成。' },
+            { title: 'Agent Orchestration', icon: <Cpu size={24} className="text-blue-400"/>, desc: 'OmniAgent 自動調度多個專屬 AI 代理，並行處理數據分析與報告生成。' },
             { title: 'GRI/CBAM Compliance', icon: <Database size={24} className="text-purple-400"/>, desc: '內建最新法規框架，即時追蹤合規完成度並自動預警異常數據。' }
           ].map((f, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
@@ -375,7 +375,7 @@ export default function LandingPage() {
 
         {/* Footer */}
         <footer className="text-center py-8 border-t border-slate-800/50 text-slate-500 text-sm">
-           <p>© 2026 ESG GO Platform. Powered by OmniHermes Swarm V3.</p>
+           <p>© 2026 ESG GO Platform. Powered by OmniAgent Swarm V3.</p>
         </footer>
 
       </div>

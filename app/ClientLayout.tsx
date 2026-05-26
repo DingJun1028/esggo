@@ -15,7 +15,7 @@ import { initAnalytics, isDemoMode } from '../lib/firebase';
 import { AuthProvider, useAuth } from '../hooks/useAuth';
 import { SaaSProvider, useSaaS } from '../hooks/useSaaS';
 import { useFcmToken } from '../hooks/useFcmToken';
-import HermesControlCenter from '../components/brand/HermesControlCenter';
+import OmniAgentControlCenter from '../components/brand/OmniAgentControlCenter';
 import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { ToastProvider, ToastContainer } from '../components/ui';
@@ -130,7 +130,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
                   className="flex items-center gap-2 px-4 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-full transition-all group border border-blue-100/50 shadow-sm"
                 >
                    <Zap size={14} className="group-hover:scale-125 transition-transform text-blue-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest">Summon_Hermes</span>
+                   <span className="text-[10px] font-black uppercase tracking-widest">Summon_OmniAgent</span>
                 </button>
                 <div className="w-8 h-8 rounded-full bg-[#003262] flex items-center justify-center text-[#FDB515] font-black text-xs shadow-md border-2 border-white">{user?.email?.charAt(0).toUpperCase() || 'A'}</div>
              </div>
@@ -145,7 +145,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
           <AnimatePresence>
             {controlCenterOpen && (
-              <HermesControlCenter isOpen={controlCenterOpen} onClose={() => setControlCenterOpen(false)} />
+              <OmniAgentControlCenter isOpen={controlCenterOpen} onClose={() => setControlCenterOpen(false)} />
             )}
           </AnimatePresence>
           

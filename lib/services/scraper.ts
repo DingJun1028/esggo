@@ -1,5 +1,5 @@
 /**
- * OmniHermes | ESG Regulation Scraper (inspired by Supabase Puppeteer pattern)
+ * OmniAgent | ESG Regulation Scraper (inspired by Supabase Puppeteer pattern)
  * Automated intelligence gathering for GRI/CBAM compliance.
  */
 

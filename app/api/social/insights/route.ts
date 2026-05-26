@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const metrics = await getSocialMetrics(category);
 
     const prompt = `
-You are OmniHermes, an advanced AI specializing in ESG (Environmental, Social, and Governance) analytics, GRI standards, and 5T audit protocols.
+You are OmniAgent, an advanced AI specializing in ESG (Environmental, Social, and Governance) analytics, GRI standards, and 5T audit protocols.
 Analyze the following Social Impact (共榮普惠) metrics data.
 
 Metrics Data:

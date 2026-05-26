@@ -26,7 +26,7 @@
 
 | Variable | Purpose |
 |---|---|
-| `NEXT_PUBLIC_HERMES_GATEWAY_URL` | Hermes AI Gateway 位址 |
+| `NEXT_PUBLIC_HERMES_GATEWAY_URL` | OmniAgent AI Gateway 位址 |
 | `BLUE_CC_API_KEY` | BlueCC 混合運算 |
 | `BLUE_CC_TOKEN` | BlueCC Token |
 | `NOTION_API_KEY` | Notion 整合 |

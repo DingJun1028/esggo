@@ -13,7 +13,7 @@ import {
   Shield,
 } from 'lucide-react';
 import ThemeSelector from './ThemeSelector';
-import HermesFloatingAgent from './brand/HermesFloatingAgent';
+import OmniAgentFloatingAgent from './brand/OmniAgentFloatingAgent';
 import { THEMES, type ThemeId, applyTheme, getSavedTheme } from '../lib/theme-config';
 
 interface NavItem {
@@ -93,7 +93,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/tasks', label: '任務中心', labelEn: 'Tasks', icon: ClipboardList },
       { href: '/profile', label: '企業管理', labelEn: 'Profile', icon: Building2 },
-      { href: '/swarm', label: 'Hermes蜂群', labelEn: 'Swarm', icon: Bot, badge: 'NEW' },
+      { href: '/swarm', label: 'OmniAgent蜂群', labelEn: 'Swarm', icon: Bot, badge: 'NEW' },
       { href: '/ai-platform', label: 'AI整合平台', labelEn: 'AI Platform', icon: Cpu },
       { href: '/api-setup', label: '整合中心', labelEn: 'API Setup', icon: Link2 },
       { href: '/design-library', label: '設計系統庫', labelEn: 'Design Library', icon: Layers },
@@ -511,7 +511,7 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
         </div>
       </main>
 
-      <HermesFloatingAgent />
+      <OmniAgentFloatingAgent />
 
       <style>{`
         @media (max-width: 768px) {

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const metrics = await getGovernanceMetrics(category);
 
     const prompt = `
-You are OmniHermes, an advanced AI specializing in ESG (Environmental, Social, and Governance) analytics, GRI standards, and 5T audit protocols.
+You are OmniAgent, an advanced AI specializing in ESG (Environmental, Social, and Governance) analytics, GRI standards, and 5T audit protocols.
 Analyze the following Governance (公司治理) metrics data.
 
 Metrics Data:

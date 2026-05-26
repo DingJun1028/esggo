@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { extractMetricsFromEvidence } from '../../../../lib/hermes-gateway';
+import { extractMetricsFromEvidence } from '../../../../lib/omniagent-gateway';
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const result = await extractMetricsFromEvidence(fileId);
     return NextResponse.json(result);
   } catch (e) {
-    console.error('[Hermes Extract API]', e);
+    console.error('[OmniAgent Extract API]', e);
     return NextResponse.json({ error: 'Extraction failed' }, { status: 500 });
   }
 }

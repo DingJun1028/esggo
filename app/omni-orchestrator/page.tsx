@@ -136,7 +136,7 @@ export default function OrchestratorPage() {
       const updated: ExecutionRecord = { ...rec, execution: data.execution, artifact: data.artifact };
       setExecutions(prev => prev.map(r => r.task.id === rec.task.id ? updated : r));
       setSelected(updated);
-      showToast('Hermes 執行完成，草稿已生成');
+      showToast('OmniAgent 執行完成，草稿已生成');
     } catch (e: any) {
       showToast(e.message, 'error');
     } finally {
@@ -145,8 +145,8 @@ export default function OrchestratorPage() {
   }
 
   const pageConfig: UniversalPageConfig = {
-    id: 'hermes-orchestrator',
-    title: 'Hermes 調度中心',
+    id: 'omniagent-orchestrator',
+    title: 'OmniAgent 調度中心',
     subtitle: 'Swarm Orchestration · 多代理任務並行 · 5T 治理日誌。',
     icon: <Bot size={32} className="text-berkeley-blue" />,
     griReference: 'Orchestrator',

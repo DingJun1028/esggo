@@ -1,7 +1,7 @@
-# OmniHermes Meta-Orchestrator (元認知編排器)
+# OmniAgent Meta-Orchestrator (元認知編排器)
 
 ## 📋 描述
-動態任務分析、模組按需選擇（M01-M07）、Token 節奏管理與四段式報告輸出。它是 OmniHermes 的指揮中樞，負責決定何時激活何種思維模組。
+動態任務分析、模組按需選擇（M01-M07）、Token 節奏管理與四段式報告輸出。它是 OmniAgent 的指揮中樞，負責決定何時激活何種思維模組。
 
 ## 🛠️ 執行指令 (Instructions)
 

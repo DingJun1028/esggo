@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
             status: 'in_progress',
             priority: st.priority || 'medium',
             department: st.department || 'ESG Swarm',
-            assignee: 'Hermes-Agent',
+            assignee: 'OmniAgent-Agent',
           });
           await new Promise(r => setTimeout(r, 600));
         }

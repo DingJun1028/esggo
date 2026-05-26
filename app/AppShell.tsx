@@ -10,10 +10,10 @@ import {
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
   Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity
 } from 'lucide-react';
-import HermesFloatingAgent from '../components/brand/HermesFloatingAgent';
+import OmniAgentFloatingAgent from '../components/brand/OmniAgentFloatingAgent';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
 import ComposerFooter from '../components/brand/ComposerFooter';
-import HermesControlCenter from '../components/brand/HermesControlCenter';
+import OmniAgentControlCenter from '../components/brand/OmniAgentControlCenter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
 import { useOmniResonance } from '../src/client/hooks/useOmniResonance';
@@ -31,14 +31,14 @@ const navGroups = [
     ],
   },
   {
-    label: 'OMNIHERMES oX',
+    label: 'OMNIAGENT oX',
     items: [
       { href: '/walkthrough', label: '新手教學', sub: 'Onboarding', icon: <Rocket size={18} /> },
-      { href: '/hermes-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
-      { href: '/hermes-alchemy', label: '煉金術', sub: 'Alchemy Scan', icon: <Sparkles size={18} /> },
+      { href: '/omniagent-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
+      { href: '/omniagent-alchemy', label: '煉金術', sub: 'Alchemy Scan', icon: <Sparkles size={18} /> },
       { href: '/best-practice', label: '最佳實踐', sub: 'Best Practice', icon: <Trophy size={18} /> },
       { href: '/strategy-lab', label: '策略實驗室', sub: 'Strategy Lab', icon: <Brain size={18} /> },
-      { href: '/hermes-architecture', label: '架構治理', sub: 'Living Arch', icon: <Layers size={18} /> },
+      { href: '/omniagent-architecture', label: '架構治理', sub: 'Living Arch', icon: <Layers size={18} /> },
       { href: '/terminal', label: '終端系統', sub: 'Agent OS', icon: <Command size={18} /> },
     ],
   },
@@ -256,8 +256,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </main>
         
         {/* Universal Components */}
-        <HermesFloatingAgent />
-        <HermesControlCenter isOpen={isControlCenterOpen} onClose={() => setIsControlCenterOpen(false)} />
+        <OmniAgentFloatingAgent />
+        <OmniAgentControlCenter isOpen={isControlCenterOpen} onClose={() => setIsControlCenterOpen(false)} />
         <CommandPalette isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
       </div>
     </div>

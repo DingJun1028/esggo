@@ -18,14 +18,14 @@ import { fadeIn, staggerContainer } from '../../lib/animations';
 import { UniversalPageConfig } from '../../lib/page-config';
 
 const ARCH_NODES = [
-  { id: 'alchemy', label: 'Hermes Alchemy', sub: 'Vision Extraction', icon: <Sparkles size={20}/>, color: '#FDB515' },
+  { id: 'alchemy', label: 'OmniAgent Alchemy', sub: 'Vision Extraction', icon: <Sparkles size={20}/>, color: '#FDB515' },
   { id: 'practice', label: 'Best Practice Hub', sub: 'Grounding Engine', icon: <Trophy size={20}/>, color: '#3B7EA1' },
   { id: 'orchestrator', label: 'Swarm Orchestrator', sub: 'Task Delegation', icon: <Bot size={20}/>, color: '#8B5CF6' },
   { id: 'omnicore', label: 'OmniCore Engine', sub: 'Semantic Memory', icon: <Cpu size={20}/>, color: '#003262' },
   { id: 't5seal', label: '5T Integrity Seal', sub: 'Immutable Proof', icon: <Lock size={20}/>, color: '#10B981' },
 ];
 
-export default function HermesArchitecturePage() {
+export default function OmniAgentArchitecturePage() {
   const [activeTab, setActiveTab] = useState<'topology' | 'governance' | 'risks'>('topology');
   const [pulseNode, setPulseNode] = useState<string | null>(null);
 
@@ -42,7 +42,7 @@ export default function HermesArchitecturePage() {
 
   useEffect(() => {
     const checkEvo = () => {
-      const local = localStorage.getItem('hermes_ox_evolution');
+      const local = localStorage.getItem('omniagent_ox_evolution');
       if (local) setLastEvo(JSON.parse(local));
     };
     checkEvo();
@@ -52,7 +52,7 @@ export default function HermesArchitecturePage() {
 
   // ── Universal Page Configuration ──────────────────────────────────
   const pageConfig: UniversalPageConfig = {
-    id: 'hermes-architecture',
+    id: 'omniagent-architecture',
     title: '動態架構治理中心',
     subtitle: 'Living Architecture · 模組即時拓撲 · 5T 邊界防禦。',
     icon: <Network size={32} className="text-berkeley-blue" />,
@@ -137,7 +137,7 @@ export default function HermesArchitecturePage() {
 
              {/* Center Label */}
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
-                <h2 className="text-[120px] font-black text-berkeley-blue whitespace-nowrap">OMNIHERMES oX</h2>
+                <h2 className="text-[120px] font-black text-berkeley-blue whitespace-nowrap">OMNIAGENT oX</h2>
              </div>
           </div>
         )
@@ -187,7 +187,7 @@ export default function HermesArchitecturePage() {
                             <BrandStatusDot status="active" pulse />
                          </div>
                          <p className="text-[13px] text-blue-50/80 leading-relaxed font-medium">
-                            Hermes 目前具備 **L4 自主權**：能在偵測到合規缺口時自動發起 Swarm 委派，無需等待人工介入。
+                            OmniAgent 目前具備 **L4 自主權**：能在偵測到合規缺口時自動發起 Swarm 委派，無需等待人工介入。
                          </p>
                          <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                             <motion.div 

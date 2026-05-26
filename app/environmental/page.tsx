@@ -67,7 +67,7 @@ export default function EnvironmentalTrajectoryPage() {
 
   const mockProvenanceSteps: ProvenanceStep[] = [
     { id: 'p1', type: 'source', title: '原始憑證載入', description: '從數位金庫讀取 PDF 憑證', actor: 'Vault_System', timestamp: '2026-05-24 14:20:00' },
-    { id: 'p2', type: 'processing', title: 'Alchemy 視覺提取', description: 'OmniHermes 自動辨識 GHG 排放量', actor: 'Hermes-Vision', timestamp: '2026-05-24 14:20:05', details: 'Confidence: 0.98' },
+    { id: 'p2', type: 'processing', title: 'Alchemy 視覺提取', description: 'OmniAgent 自動辨識 GHG 排放量', actor: 'OmniAgent-Vision', timestamp: '2026-05-24 14:20:05', details: 'Confidence: 0.98' },
     { id: 'p3', type: 'review', title: '5T 共識演算', description: 'Z0-Auditor 驗證數據一致性', actor: 'Z0-Auditor', timestamp: '2026-05-24 14:22:00' },
     { id: 'p4', type: 'result', title: '萬能聖碑刻印', description: '生成 Master Seal Hash Lock', actor: '5T_Engine', timestamp: '2026-05-24 14:22:05' },
   ];
@@ -88,7 +88,7 @@ export default function EnvironmentalTrajectoryPage() {
     features: { useProvenance: true, useAuditLog: true },
 
     primaryActions: [
-      { id: 'alchemy', label: 'Alchemy 提取', icon: <Sparkles size={16}/>, onClick: () => window.location.href='/hermes-alchemy' },
+      { id: 'alchemy', label: 'Alchemy 提取', icon: <Sparkles size={16}/>, onClick: () => window.location.href='/omniagent-alchemy' },
       { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'secondary', onClick: load, loading }
     ],
 
@@ -157,7 +157,7 @@ export default function EnvironmentalTrajectoryPage() {
       },
       {
         id: 'ai-insights',
-        title: 'Hermes 軌跡分析',
+        title: 'OmniAgent 軌跡分析',
         columns: 4,
         hidden: activeTab === 'Analysis',
         component: (
@@ -170,7 +170,7 @@ export default function EnvironmentalTrajectoryPage() {
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-blue-300 uppercase tracking-[0.2em]">Trajectory Insight</p>
-                      <p className="text-xs font-black">Hermes Environmental v3</p>
+                      <p className="text-xs font-black">OmniAgent Environmental v3</p>
                     </div>
                   </div>
                   <p className="text-sm text-blue-100/90 leading-relaxed font-medium italic">

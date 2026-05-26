@@ -18,7 +18,7 @@ Activate this skill when the user asks to:
 
 ## Instructions
 
-To execute a ZKP seal, you MUST use the OmniHermes Native CLI tool located in the project workspace. 
+To execute a ZKP seal, you MUST use the OmniAgent Native CLI tool located in the project workspace. 
 
 Follow these steps exactly:
 

@@ -100,7 +100,7 @@ export default function LoginPage() {
            <h1 className="text-4xl font-black text-[#003262] mb-2 tracking-tighter uppercase">ESG GO</h1>
            <div className="flex items-center gap-2">
               <BrandBadge variant="gold" size="xs" className="font-black px-3">PREMIUM_OS</BrandBadge>
-              <span className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em]">OmniHermes Engine</span>
+              <span className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em]">OmniAgent Engine</span>
            </div>
         </div>
 

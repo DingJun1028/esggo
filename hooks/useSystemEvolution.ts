@@ -17,7 +17,7 @@ export function useSystemEvolution() {
       const res = await fetch('/api/ai/growth');
       if (res.ok) setGrowth(await res.json());
       
-      const local = localStorage.getItem('hermes_ox_evolution');
+      const local = localStorage.getItem('omniagent_ox_evolution');
       if (local) setLastUpdate(JSON.parse(local).timestamp);
     } finally {
       setLoading(false);
@@ -26,7 +26,7 @@ export function useSystemEvolution() {
 
   const submitEvolution = useCallback(async (title: string, impact: number) => {
     const update = { title, impact, timestamp: new Date().toISOString() };
-    localStorage.setItem('hermes_ox_evolution', JSON.stringify(update));
+    localStorage.setItem('omniagent_ox_evolution', JSON.stringify(update));
     setLastUpdate(update.timestamp);
     // Real API call to update system topology would go here
     return update;

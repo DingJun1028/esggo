@@ -14,7 +14,7 @@ export async function GET() {
       getDashboardStats()
     ]);
 
-    const systemPrompt = "你是一位專業的 ESG 治理 AI 調度員 OmniHermes。你的任務是分析系統的審計日誌與當前數據，並提出下一階段的「自我演化」建議。請以 JSON 格式輸出：{\"suggestion\": \"...\", \"impactScore\": 0, \"focusAreas\": []}";
+    const systemPrompt = "你是一位專業的 ESG 治理 AI 調度員 OmniAgent。你的任務是分析系統的審計日誌與當前數據，並提出下一階段的「自我演化」建議。請以 JSON 格式輸出：{\"suggestion\": \"...\", \"impactScore\": 0, \"focusAreas\": []}";
 
     const prompt = `
 當前系統狀態：

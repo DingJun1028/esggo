@@ -18,7 +18,7 @@
 - **5T Integrity Protocol** – trace, verify, and self‑heal data.
 - **ZKP‑based compliance** – validate GRI without exposing metrics.
 - **AI‑driven ESG reports** – recursive expansion, introspection.
-- **OmniHermes** – distributed agent‑based governance.
+- **OmniAgent** – distributed agent‑based governance.
 - **Single‑page UI (React + Tailwind)** – responsive, extensible.
 - **Supabase + Firebase backend** – real‑time, server‑less.
 

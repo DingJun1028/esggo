@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
                 if (signal.aborted) return; // 跨階段前再次檢查
                 sendStep({
                     id: `step_${Date.now()}_2`,
-                    agentName: 'Hermes',
+                    agentName: 'OmniAgent',
                     status: 'EXECUTING',
                     message: '調用外部 API 與讀取 RAG 知識庫中...',
                     payload: { provider: 'Google', model: 'gemini-2.0-flash' },
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
                 if (signal.aborted) return;
                 sendStep({
                     id: `step_${Date.now()}_3`,
-                    agentName: 'Hermes',
+                    agentName: 'OmniAgent',
                     status: 'SUCCESS',
                     message: '任務執行完畢，已產生產出物。',
                     timestamp: new Date().toISOString(),

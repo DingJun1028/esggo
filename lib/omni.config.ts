@@ -1,16 +1,16 @@
 import { z } from 'zod';
 
-let _hermesAI: any = null;
-export async function getHermesAI() {
-  if (!_hermesAI) {
+let _omniagentAI: any = null;
+export async function getOmniAgentAI() {
+  if (!_omniagentAI) {
     const { genkit } = await import('genkit');
     const { googleAI } = await import('@genkit-ai/googleai');
-    _hermesAI = genkit({
+    _omniagentAI = genkit({
       plugins: [googleAI()],
       model: 'googleai/gemini-1.5-pro-latest',
     });
   }
-  return _hermesAI;
+  return _omniagentAI;
 }
 
 // Structured Output Schema for ESG Analysis
@@ -23,8 +23,8 @@ export const ESGArtifactSchema = z.object({
 });
 
 // ADK & AgentZ0 configuration
-export const hermesConfig = {
-  agentName: 'Hermes Orchestrator',
+export const omniagentConfig = {
+  agentName: 'OmniAgent Orchestrator',
   version: '1.1.0',
   agentZ0Enabled: true,
   adkOptions: {

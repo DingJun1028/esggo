@@ -1,4 +1,4 @@
-# 🏛️ OmniHermes X ESG GO | 全域 API 規格說明書 v1.2
+# 🏛️ OmniAgent X ESG GO | 全域 API 規格說明書 v1.2
 ## 數位治理主權與 5T 誠信協議標準
 
 > **版本:** 1.2-Alpha | **核心協議:** 5T Integrity v1.1 | **基礎設施:** BlueCC Hybrid Control

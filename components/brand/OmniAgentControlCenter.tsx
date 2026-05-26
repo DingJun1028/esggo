@@ -15,12 +15,12 @@ import { useEvidenceStore } from '../../src/client/stores/evidence.store';
 import { useOmniResonance } from '../../src/client/hooks/useOmniResonance';
 import { IComponentCore } from '../../types/omni-core';
 
-interface HermesControlCenterProps {
+interface OmniAgentControlCenterProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function HermesControlCenter({ isOpen, onClose }: HermesControlCenterProps) {
+export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentControlCenterProps) {
   const [activeTab, setActiveTab] = useState('kernel');
   const { rs, streamStatus, status: rsStatus, isCrystallizing, triggerCrystallization } = useOmniResonance();
   const { verifyEvidence } = useEvidenceStore();
@@ -85,7 +85,7 @@ export default function HermesControlCenter({ isOpen, onClose }: HermesControlCe
               </div>
               <div>
                  <div className="flex items-center gap-3">
-                    <h2 className="text-2xl font-black text-berkeley-blue uppercase tracking-tight">OmniHermes Kernel</h2>
+                    <h2 className="text-2xl font-black text-berkeley-blue uppercase tracking-tight">OmniAgent Kernel</h2>
                     <Badge variant="verified" className="px-3 py-1 font-black tracking-widest text-[9px]">v8.5.2-STABLE</Badge>
                  </div>
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-1">System Health Index: <span className="text-berkeley-blue">Rs {(rs * 100).toFixed(1)}%</span></p>

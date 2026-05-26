@@ -26,21 +26,21 @@ export interface OmniMetric {
   color: string;
 }
 
-export interface HermesVisionResult {
+export interface OmniAgentVisionResult {
   extraction: string;
   confidence: number;
   gapAnalysis: string;
 }
 
-export interface HermesMetric {
+export interface OmniAgentMetric {
   key: string;
   value: number | string;
   unit: string;
   gri: string;
 }
 
-export interface HermesMetricExtraction {
-  metrics: HermesMetric[];
+export interface OmniAgentMetricExtraction {
+  metrics: OmniAgentMetric[];
   confidence: number;
 }
 

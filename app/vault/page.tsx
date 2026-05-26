@@ -113,7 +113,7 @@ export default function VaultPage() {
       else if (name.includes('電') || name.includes('能')) { suggestedCat = 'E'; suggestedGri = 'GRI 302'; }
       else if (name.includes('法') || name.includes('章')) { suggestedCat = 'G'; suggestedGri = 'GRI 2-1'; }
       setForm(p => ({ ...p, category: suggestedCat, gri_reference: suggestedGri }));
-      showToast('OmniHermes 已完成標籤建議', 'success');
+      showToast('OmniAgent 已完成標籤建議', 'success');
     } catch (e) {
       showToast('AI 標籤引擎暫時離線', 'error');
     } finally {
@@ -179,7 +179,7 @@ export default function VaultPage() {
   };
 
   const draftFromEvidence = async (file: any) => {
-    showToast('OmniHermes 正在提取憑證特徵並構思草稿...', 'info');
+    showToast('OmniAgent 正在提取憑證特徵並構思草稿...', 'info');
     setScanningId(file.id);
     try {
       await fetch('/api/agent/tasks', {
@@ -204,7 +204,7 @@ export default function VaultPage() {
   const handleScan = async (file: any) => {
     setScanningId(file.id!);
     try {
-      const res = await fetch('/api/hermes/scan-vision', {
+      const res = await fetch('/api/omniagent/scan-vision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileId: file.id, fileType: 'image/pdf' }),
@@ -350,7 +350,7 @@ export default function VaultPage() {
               <div className="space-y-6 mb-10 text-left">
                  <div className="space-y-2">
                     <div className="flex justify-between items-center"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">File Name</label>
-                       <button onClick={autoTagFile} disabled={tagging} className="flex items-center gap-1.5 text-[9px] font-black text-emerald-600 hover:text-emerald-700 transition-all uppercase bg-emerald-50 px-2 py-1 rounded-lg"><Bot size={10} className={tagging ? 'animate-spin' : ''} /> {tagging ? 'Analyzing...' : 'Hermes_AutoTag'}</button>
+                       <button onClick={autoTagFile} disabled={tagging} className="flex items-center gap-1.5 text-[9px] font-black text-emerald-600 hover:text-emerald-700 transition-all uppercase bg-emerald-50 px-2 py-1 rounded-lg"><Bot size={10} className={tagging ? 'animate-spin' : ''} /> {tagging ? 'Analyzing...' : 'OmniAgent_AutoTag'}</button>
                     </div>
                     <input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white outline-none transition-all" value={form.file_name} onChange={e => setForm({...form, file_name: e.target.value})} placeholder="例如：2024Q3電力單據.pdf" />
                  </div>

@@ -1,4 +1,4 @@
-# OmniHermes M01 Deep Reasoning Engine (深度推理引擎)
+# OmniAgent M01 Deep Reasoning Engine (深度推理引擎)
 
 ## 📋 描述
 負責挖掘前提、構建單步推理鏈、執行壓力測試與信心校準。它是所有複雜決策的底層邏輯支撐。

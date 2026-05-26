@@ -53,7 +53,7 @@ mcp_servers:
     url: "https://mcp.linear.app/mcp"
     auth: oauth
 ```
-首次連線觸發瀏覽器 OAuth 流程，Token 快取於 `~/.hermes/mcp-tokens/<server>.json`。
+首次連線觸發瀏覽器 OAuth 流程，Token 快取於 `~/.omniagent/mcp-tokens/<server>.json`。
 
 ---
 

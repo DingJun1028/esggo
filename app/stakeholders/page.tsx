@@ -194,7 +194,7 @@ export default function StakeholdersPage() {
       },
       activeTab !== 'resonance' ? {
         id: 'ai',
-        title: 'Hermes 關係人分析',
+        title: 'OmniAgent 關係人分析',
         columns: 4,
         component: (
           <BrandCard padding="none" className="bg-[#003262] border-none shadow-extreme overflow-hidden h-full flex flex-col group">
@@ -206,7 +206,7 @@ export default function StakeholdersPage() {
                    <Sparkles size={20} className="animate-pulse" />
                    <h3 className="text-lg font-black text-white uppercase tracking-tight">議合風險預警</h3>
                 </div>
-                <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.3em]">Hermes Sentiment Node</p>
+                <p className="text-[10px] font-black text-blue-200/40 uppercase tracking-[0.3em]">OmniAgent Sentiment Node</p>
              </div>
              <div className="p-8 flex-1 relative z-10 text-base text-blue-50/80 leading-relaxed font-medium italic">
                 偵測到「環保聯盟」近期在公開場合對本公司廢水處理流程表示關注。建議主動發送「T1 溯源報告」。

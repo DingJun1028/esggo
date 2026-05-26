@@ -45,7 +45,7 @@ interface QuickstartStep {
 }
 
 const REPO_MODULES: RepoModule[] = [
-  { path: 'hermes-gateway', desc: 'Node.js 網關 v0.14.0 (支持 VPS 部署)', status: 'Hot' },
+  { path: 'omniagent-gateway', desc: 'Node.js 網關 v0.14.0 (支持 VPS 部署)', status: 'Hot' },
   { path: 'vps_adapter', desc: 'Ubuntu 24.04 本地化執行與自動化安裝', status: 'New' },
   { path: 'acp_adapter', desc: 'Zed 編輯器上下文協議適配器', status: 'New' },
   { path: 'agent', desc: 'Auxiliary 輔助客戶端與 Nous 認證', status: 'Stable' },
@@ -62,11 +62,11 @@ const RELEASE_HISTORY: ReleaseNote[] = [
 const QUICKSTART_STEPS: QuickstartStep[] = [
   {
     id: 1,
-    title: '1. Install Hermes Agent',
+    title: '1. Install OmniAgent Agent',
     icon: <Terminal size={18}/>,
     color: '#009E9D', // ESG Teal
-    description: 'Set up the core Hermes CLI and initialize your workspace.',
-    command: 'npm install -g @nousresearch/hermes\nhermes setup'
+    description: 'Set up the core OmniAgent CLI and initialize your workspace.',
+    command: 'npm install -g @nousresearch/omniagent\nomniagent setup'
   },
   {
     id: 2,
@@ -96,7 +96,7 @@ const QUICKSTART_STEPS: QuickstartStep[] = [
   }
 ];
 
-export default function HermesAgentPage() {
+export default function OmniAgentAgentPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'quickstart' | 'architecture' | 'tools' | 'research' | 'releases'>('overview');
   const [copied, setCopied] = useState<number | null>(null);
 
@@ -107,8 +107,8 @@ export default function HermesAgentPage() {
   };
 
   const pageConfig: UniversalPageConfig = {
-    id: 'hermes-agent',
-    title: 'OmniHermes Agent 系統 ☤',
+    id: 'omniagent-agent',
+    title: 'OmniAgent Agent 系統 ☤',
     subtitle: '超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心。',
     icon: <Bot size={32} className="text-berkeley-blue" />,
     griReference: 'Agent System / oX',
@@ -188,7 +188,7 @@ export default function HermesAgentPage() {
                       <div>
                         <h3 className="text-lg font-black text-berkeley-blue mb-2 uppercase tracking-tight">新特性: ACP ADAPTER</h3>
                         <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                          v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 Hermes 能直接作為 Zed 的 AI 後端，實時同步代碼上下文，實現 5T 等級的協同開發。
+                          v0.14.0 引入了 Zed 編輯器的 ACP 註冊元數據，讓 OmniAgent 能直接作為 Zed 的 AI 後端，實時同步代碼上下文，實現 5T 等級的協同開發。
                         </p>
                         <Button variant="glass" size="sm" className="mt-5 px-6 rounded-xl text-berkeley-blue font-black border-berkeley-blue/20">
                           查看開發文檔 <ArrowUpRight size={16} className="ml-2" />
@@ -204,7 +204,7 @@ export default function HermesAgentPage() {
                     <div className="relative z-10 space-y-6">
                       <h4 className="text-xs font-black uppercase tracking-[0.2em] text-blue-300">快速部署 (Quick Deploy)</h4>
                       <div className="p-4 bg-black/40 rounded-2xl font-mono text-[11px] text-emerald-400 border border-white/5 relative group shadow-inner">
-                        <code>curl -fsSL https://hermes.ai/install.sh | bash</code>
+                        <code>curl -fsSL https://omniagent.ai/install.sh | bash</code>
                         <button className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-white">
                           <Copy size={14} />
                         </button>
@@ -245,7 +245,7 @@ export default function HermesAgentPage() {
               <div className="max-w-5xl mx-auto animate-in fade-in">
                 <Card className="p-10 bg-white/60 border-white/80 shadow-glass">
                   <div className="mb-10 text-center">
-                    <h3 className="text-2xl font-black text-berkeley-blue mb-2 tracking-tight">Hermes Agent + ESG GO Quickstart</h3>
+                    <h3 className="text-2xl font-black text-berkeley-blue mb-2 tracking-tight">OmniAgent Agent + ESG GO Quickstart</h3>
                     <p className="text-sm text-slate-500 font-medium">從零開始構建您的 5T 誠信代理蜂群</p>
                   </div>
                   
@@ -352,7 +352,7 @@ export default function HermesAgentPage() {
                         <p className="text-sm text-blue-100/70 font-medium">進入調度中心啟動您的第一個 5T 任務</p>
                       </div>
                     </div>
-                    <Button variant="glass" className="w-full md:w-auto px-10 h-14 rounded-2xl border-white/20 text-white hover:bg-white/10 font-black relative z-10" onClick={() => window.location.href='/hermes-orchestrator'}>
+                    <Button variant="glass" className="w-full md:w-auto px-10 h-14 rounded-2xl border-white/20 text-white hover:bg-white/10 font-black relative z-10" onClick={() => window.location.href='/omniagent-orchestrator'}>
                       前往調度中心 <ChevronRight size={20} className="ml-2" />
                     </Button>
                     <ActivityIcon size={200} className="absolute -bottom-20 -right-20 text-white/5" />
@@ -474,11 +474,11 @@ export default function HermesAgentPage() {
             <Bot size={24} />
           </div>
           <span className="text-[11px] font-black text-berkeley-blue uppercase tracking-[0.3em] font-mono">
-            OMNIHERMES-AGENT SYSTEM v0.14.1
+            OMNIAGENT-AGENT SYSTEM v0.14.1
           </span>
         </div>
         <div className="flex gap-8">
-          <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
+          <a href="https://omniagent-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
             <Terminal size={14} /> DOCUMENTATION
           </a>
           <a href="https://discord.gg/NousResearch" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">

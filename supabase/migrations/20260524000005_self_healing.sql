@@ -69,7 +69,7 @@ BEGIN
   v_result := jsonb_build_object(
     'healed_count', v_healed_count,
     'timestamp', now(),
-    'agent', 'OmniHermes_Healing_Unit'
+    'agent', 'OmniAgent_Healing_Unit'
   );
   
   RETURN v_result;

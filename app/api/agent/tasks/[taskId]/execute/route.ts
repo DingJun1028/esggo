@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createExecution, generateMockArtifact } from '../../../../../../lib/agent/orchestrator';
-import { executeHermesTask } from '../../../../../../lib/hermes-gateway';
+import { executeOmniAgentTask } from '../../../../../../lib/omniagent-gateway';
 import { addExecution, addArtifact } from '../../../../../../lib/agent/store';
 import type { AgentTask } from '../../../../../../lib/agent/types';
 
@@ -28,7 +28,7 @@ export async function POST(
 
     try {
       // 優先嘗試呼叫 live Gateway (VPS)
-      const result = await executeHermesTask(task);
+      const result = await executeOmniAgentTask(task);
       addExecution(result.execution);
       addArtifact(result.artifact);
       return NextResponse.json({ ...result, ok: true });
@@ -42,10 +42,10 @@ export async function POST(
 
         // [Genkit Real Integration]
         try {
-          const { getHermesAI, hermesConfig, ESGArtifactSchema } = await import('@/lib/hermes.config');
-          const systemInstruction = `${hermesConfig.personas.auditor}\n\n你現在是 AgentZ0，一個嚴格遵循 5T Integrity Protocol 的 ESG 稽核 AI。`;
+          const { getOmniAgentAI, omniagentConfig, ESGArtifactSchema } = await import('@/lib/omniagent.config');
+          const systemInstruction = `${omniagentConfig.personas.auditor}\n\n你現在是 AgentZ0，一個嚴格遵循 5T Integrity Protocol 的 ESG 稽核 AI。`;
           const prompt = `請根據以下任務詳細內容，生成一份符合 5T 標準的稽核結果。\n\n任務標題: ${task.title}\n任務類型: ${task.taskType}\n任務說明: ${task.description}`;
-          const response = await (await getHermesAI()).generate({
+          const response = await (await getOmniAgentAI()).generate({
             system: systemInstruction,
             prompt,
             output: { schema: ESGArtifactSchema }
@@ -78,7 +78,7 @@ export async function POST(
 
         // [Phase 3] Autonomous Swarm Trigger
         // 如果信心度過低或偵測到重大缺口，自動啟動子任務委派
-        if (confidence < (await import('@/lib/hermes.config').then(m => m.hermesConfig.adkOptions.swarmThreshold)) || gaps.length > 0) {
+        if (confidence < (await import('@/lib/omniagent.config').then(m => m.omniagentConfig.adkOptions.swarmThreshold)) || gaps.length > 0) {
           console.log(`[Swarm Trigger] Low confidence (${confidence}) or gaps detected. Dispatching sub-task...`);
           const { dispatchSwarmHandoff } = await import('@/lib/agent/orchestrator');
           await dispatchSwarmHandoff(

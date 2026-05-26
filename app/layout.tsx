@@ -32,7 +32,7 @@ function LoadingFallback() {
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F8FAFC' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid #003262', borderTopColor: 'transparent', animation: 'spin 0.8s linear infinite' }} />
-        <p style={{ fontSize: 13, color: '#94A3B8', fontFamily: 'system-ui' }}>OmniHermes + ESG Go</p>
+        <p style={{ fontSize: 13, color: '#94A3B8', fontFamily: 'system-ui' }}>OmniAgent + ESG Go</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

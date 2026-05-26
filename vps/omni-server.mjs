@@ -19,7 +19,7 @@ app.get('/status', (req, res) => {
     status: 'online',
     version: '0.14.1',
     platform: 'Ubuntu 24.04 (VPS)',
-    system_name: 'OmniHermes + ESG Go',
+    system_name: 'OmniAgent + ESG Go',
     uptime: process.uptime(),
     active_workers: 8,
     memory_usage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`
@@ -28,9 +28,9 @@ app.get('/status', (req, res) => {
 
 app.post('/execute', async (req, res) => {
   const { task } = req.body;
-  console.log(`[OmniHermes VPS] Executing task: ${task.id} (${task.taskType})`);
+  console.log(`[OmniAgent VPS] Executing task: ${task.id} (${task.taskType})`);
 
-  // In a real scenario, this would call Gemini or Nous Hermes models.
+  // In a real scenario, this would call Gemini or Nous OmniAgent models.
   // For this deployment kit, we provide the logic to structure the response
   // correctly for the ESG GO dashboard.
 
@@ -38,7 +38,7 @@ app.post('/execute', async (req, res) => {
     id: genId('exec'),
     taskId: task.id,
     sessionId: genId('sess'),
-    runtime: 'hermes',
+    runtime: 'omniagent',
     runtimeVersion: '0.14.0',
     modelProvider: 'Google (VPS-Native)',
     modelName: 'gemini-2.0-flash',
@@ -57,10 +57,10 @@ app.post('/execute', async (req, res) => {
 
   // Mock content generation logic (Production-ready template)
   const contentMap = {
-    report_drafting: `## ${task.title}\n\n根據 GRI 2021 框架與最新 ESG 趨勢分析，該章節草稿已生成。重點包含：\n- 數據邊界：全集團子公司\n- 盤查基準：2024 年度\n\n> ⚠️ 此內容由 VPS 版 Hermes 生成。`,
+    report_drafting: `## ${task.title}\n\n根據 GRI 2021 框架與最新 ESG 趨勢分析，該章節草稿已生成。重點包含：\n- 數據邊界：全集團子公司\n- 盤查基準：2024 年度\n\n> ⚠️ 此內容由 VPS 版 OmniAgent 生成。`,
     compliance_review: `## 合規審查結果\n\n針對您的報告與歐盟 CSRD / ESRS 指標進行比對：\n- 符合度：85%\n- 缺失項：氣候變遷適應策略揭露不足。\n\n> ⚠️ 建議補強上述章節。`,
     evidence_mapping: `## 證據映射清單\n\n- [GRI 302-1] → 映射至 2024 電費總帳單 (Vault_ID: ev_992)\n- [GRI 403-1] → 映射至 工安委員會會議紀錄 (Vault_ID: ev_104)\n\n> ⚠️ 已自動索引至證據金庫。`,
-    course_assistant: `## 課程 FAQ 回覆\n\n您提到的「範疇三盤查難點」，主要在於供應鏈數據的獲取頻率與精準度。建議參考 ISO 14064-1 附錄內容...\n\n> ⚠️ 此回覆由 Hermes 助教生成。`,
+    course_assistant: `## 課程 FAQ 回覆\n\n您提到的「範疇三盤查難點」，主要在於供應鏈數據的獲取頻率與精準度。建議參考 ISO 14064-1 附錄內容...\n\n> ⚠️ 此回覆由 OmniAgent 助教生成。`,
     task_planning: `## 專案執行規劃\n\n1. 啟動盤查 (W1-W2)\n2. 數據初審 (W3-W5)\n3. 報告定稿 (W6-W8)\n\n> ⚠️ 規劃已同步至任務中心。`,
     stakeholder_analysis: `## 利害關係人分析 (VPS 版)\n\n### 統計結果\n- 關注度最高：環境永續 (E)\n- 影響力最高：投資人與客戶\n\n> ⚠️ 此分析由 VPS 實時計算生成。`,
     materiality_generation: `## 重大性矩陣建議\n\n基於 342 份問卷，建議將「碳風險管理」移入第一象限。衝擊度評分為 4.9，關注度評分為 4.7。\n\n> ⚠️ 建議座標：(4.9, 4.7)`,
@@ -87,5 +87,5 @@ app.post('/execute', async (req, res) => {
 });
 
 app.listen(port, '0.0.0.0', () => {
-  console.log(`🚀 Hermes Gateway Server running on port ${port} (0.0.0.0)`);
+  console.log(`🚀 OmniAgent Gateway Server running on port ${port} (0.0.0.0)`);
 });

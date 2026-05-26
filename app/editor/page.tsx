@@ -122,7 +122,7 @@ export default function EditorPage() {
 
   const handleAutoPopulate = async () => {
     setGenerating(true);
-    showToast(`Hermes 正在從 萬能聖碑 (Vault Omni) 檢索與 ${chapter.gri} 相關的實證...`, 'info');
+    showToast(`OmniAgent 正在從 萬能聖碑 (Vault Omni) 檢索與 ${chapter.gri} 相關的實證...`, 'info');
     try {
       const { data: nexus } = await supabase.rpc('get_gri_nexus', { p_gri_tag: chapter.gri });
       const alchemyRecord = nexus?.find((n: any) => n.artifact_type === 'ALCHEMY_RESULT' || n.artifact_type === 'VAULT');
@@ -132,7 +132,7 @@ export default function EditorPage() {
         return; 
       }
 
-      const res = await fetch('/api/hermes/extract-metrics', {
+      const res = await fetch('/api/omniagent/extract-metrics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileId: alchemyRecord.artifact_id }),
@@ -146,14 +146,14 @@ export default function EditorPage() {
            if (targetField) updateFieldValue(chapter.id, targetField.id, m.value.toString(), chapter.title, chapter.order, [chapter.gri]);
         }
       });
-      showToast('Hermes 已完成 5T 數據自動填報', 'success');
+      showToast('OmniAgent 已完成 5T 數據自動填報', 'success');
     } catch (e) { showToast('5T 填報引擎故障', 'error'); } finally { setGenerating(false); }
   };
 
   const applyBestPractice = async () => {
-    showToast('Hermes 正在從 最佳實踐平台 檢索標竿策略...', 'info');
+    showToast('OmniAgent 正在從 最佳實踐平台 檢索標竿策略...', 'info');
     await new Promise(r => setTimeout(r, 1200));
-    const strategy = `\n\n> 💡 **Hermes 標竿策略建議**：偵測到同業在 ${chapter.title} 採用了「自動化能源監控」策略。建議於報告中強調 T1 級別的即時數據鏈路，以對齊產業領先指標。`;
+    const strategy = `\n\n> 💡 **OmniAgent 標竿策略建議**：偵測到同業在 ${chapter.title} 採用了「自動化能源監控」策略。建議於報告中強調 T1 級別的即時數據鏈路，以對齊產業領先指標。`;
     updateContent(chapter.id, (generatedContent[chapter.id] || '') + strategy, chapter.title, chapter.order, [chapter.gri]);
     showToast('已嵌入產業最佳實踐建議', 'success');
   };
@@ -362,20 +362,20 @@ export default function EditorPage() {
                       variant="primary" 
                       className="w-full h-12 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg shadow-md transition-all active:scale-[0.98]" 
                       onClick={async () => { 
-                        showToast('正在呼叫 OmniHermes 蜂群...', 'info'); 
+                        showToast('正在呼叫 OmniAgent 蜂群...', 'info'); 
                         try { 
                           await fetch('/api/agent/tasks', { 
                             method: 'POST', 
                             headers: { 'Content-Type': 'application/json' }, 
                             body: JSON.stringify({ actorId: user?.email || 'user', taskType: 'compliance_review', title: `審查: ${chapter.title}`, skillKey: 'gri_compliance_checker' }) 
                           }); 
-                          showToast('OmniHermes 已接收任務', 'success'); 
+                          showToast('OmniAgent 已接收任務', 'success'); 
                         } catch (e) { 
                           showToast('呼叫失敗', 'error'); 
                         } 
                       }}
                     >
-                      <Bot size={14} className="mr-2 animate-bounce" /> 呼叫 OmniHermes
+                      <Bot size={14} className="mr-2 animate-bounce" /> 呼叫 OmniAgent
                     </Button>
                     <Button 
                       variant="ghost" 
@@ -426,7 +426,7 @@ export default function EditorPage() {
                           loading={generating} 
                           className="bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-xl h-10 px-5 shadow-lg active:scale-95"
                         >
-                          <Bot size={12} className="mr-1.5" /> Hermes_Auto-Fill
+                          <Bot size={12} className="mr-1.5" /> OmniAgent_Auto-Fill
                         </BrandButton>
                       </div>
                       <div className="grid gap-4">
