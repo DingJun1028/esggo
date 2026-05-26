@@ -429,6 +429,11 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
+/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to execute without passing in DataConnect. */
+export function createDemoData(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
+/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to pass in custom DataConnect instances. */
+export function createDemoData(options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
+
 /** Generated Node Admin SDK operation action function for the 'ListAllTasks' Query. Allow users to execute without passing in DataConnect. */
 export function listAllTasks(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListAllTasksData>>;
 /** Generated Node Admin SDK operation action function for the 'ListAllTasks' Query. Allow users to pass in custom DataConnect instances. */
@@ -528,9 +533,4 @@ export function upsertSwarmAgentTask(vars: UpsertSwarmAgentTaskVariables, option
 export function listRegulatoryPolicies(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListRegulatoryPoliciesData>>;
 /** Generated Node Admin SDK operation action function for the 'ListRegulatoryPolicies' Query. Allow users to pass in custom DataConnect instances. */
 export function listRegulatoryPolicies(options?: OperationOptions): Promise<ExecuteOperationResponse<ListRegulatoryPoliciesData>>;
-
-/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to execute without passing in DataConnect. */
-export function createDemoData(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
-/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to pass in custom DataConnect instances. */
-export function createDemoData(options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
 
