@@ -32,8 +32,9 @@
 - API contract in `/docs/api.md`.
 - CI/CD config in `firebase.json`, `vercel.json`.
 
-## 🛠️ Omni CLI Usage
-Manage the system and interact with the agent directly from the terminal:
+## 🛠️ OmniAgent CLI Usage
+Manage the system and interact with the agent directly from the terminal (PowerShell recommended):
+- `.\ctl.ps1 start`: Start all platform services (Next.js + Gateway).
 - `node cli/omni.mjs agent run "Analyze GRI 302-1 trends"`: Invoke the agent for a specific ESG task.
 - `node cli/omni.mjs agent browse "Search for ESG trends on Twitter"`: Run a web agent task via Browser Use V3.
 - `node cli/omni.mjs vault list`: View recent cryptographic evidence records.
@@ -43,6 +44,7 @@ Manage the system and interact with the agent directly from the terminal:
 - Tests: `npm run test`.
 - Lint: `npm run lint`.
 - Type check: `npx tsc`.
+- Windows Fix: `.\scripts\windows_fix.ps1` (Fixes grep/head errors).
 
 ## 🤝 Contributing
 - Pull requests welcome.
