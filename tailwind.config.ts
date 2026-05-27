@@ -32,15 +32,28 @@ const config: Config = {
         error: '#ef4444',       // 紅色 - 錯誤
         draft: '#6b7280',       // 灰色 - 草稿
         
-        // ── Ultimate Minimalist Palette (Zero Glow) ────────────────
-        'cyan-core': '#06B6D4',
+        // ── ESG SUNSHINE | Atomic Light Label Edition ────────────────
+        'aqua-cyan': {
+          DEFAULT: '#00FFFF',
+          highlight: '#00FFFF',
+          midtone: '#00C4D9',
+          shadow: '#008BA3',
+        },
+        'eternal-gold': {
+          DEFAULT: '#FFD700',
+          highlight: '#FFD700',
+          midtone: '#E6BE00',
+          shadow: '#C9A000',
+        },
+        
+        // ── Legacy & Semantic Mappings ────────────────
+        'cyan-core': '#00FFFF', // Updated to Aqua Cyan Core
         'emerald-soul': '#10B981',
         'void-stark': '#020617',
         'teal-mech': {
           start: '#009E9D',
           end: '#00C2A8',
         },
-        'eternal-gold': '#D4AF37',
         
         // Semantic Signals (Solid)
         'lethal': '#FF4D6D',
@@ -51,11 +64,11 @@ const config: Config = {
         'berkeley-blue': '#003262',
         'california-gold': '#FDB515',
         
-        // Protocol Mappings v2.1
-        't1-traceable': '#06B6D4',
+        // Protocol Mappings v2.1 (Linked to Atomic Core)
+        't1-traceable': '#00FFFF',
         't2-transparent': '#10B981',
-        't3-tangible': '#219EBC',
-        't4-trackable': '#FFB703',
+        't3-tangible': '#00C4D9',
+        't4-trackable': '#FFD700',
         't5-trustworthy': '#003262',
       },
       fontFamily: {

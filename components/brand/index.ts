@@ -1,3 +1,4 @@
+export { BrandLogo } from './BrandLogo';
 export { default as BrandBadge } from './BrandBadge';
 export { default as BrandButton } from './BrandButton';
 export { default as BrandCard, BrandCardHeader, BrandCardSection } from './BrandCard';

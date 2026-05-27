@@ -88,13 +88,13 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
       <motion.div initial={{ scale: 0.95, opacity: 0, y: -20 }} animate={{ scale: 1, opacity: 1, y: 0 }} className="relative bg-white/90 backdrop-blur-2xl rounded-[2.5rem] border border-white shadow-2xl w-full max-w-2xl overflow-hidden">
         <div className="p-6 border-b border-slate-100 flex items-center gap-4">
           <Search size={20} className="text-slate-400" />
-          <input className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-berkeley-blue placeholder:text-slate-300" placeholder="搜尋功能或指令..." value={query} onChange={e => setQuery(e.target.value)} autoFocus />
+          <input className="flex-1 bg-transparent border-none outline-none text-lg font-bold text-aqua-cyan-midtone placeholder:text-slate-300" placeholder="搜尋功能或指令..." value={query} onChange={e => setQuery(e.target.value)} autoFocus />
           <div className="px-2 py-1 bg-slate-100 rounded-lg text-[10px] font-black text-slate-400 uppercase tracking-widest">ESC</div>
         </div>
         <div className="p-4 max-h-[50vh] overflow-y-auto no-scrollbar">
           {results.map((item, i) => (
-            <button key={i} onClick={() => { router.push(item.href); onClose(); }} className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-berkeley-blue hover:text-white transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-white/10 group-hover:text-california-gold">{item.icon}</div>
+            <button key={i} onClick={() => { router.push(item.href); onClose(); }} className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-aqua-cyan-midtone hover:text-white transition-all group">
+              <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-white/10 group-hover:text-eternal-gold-midtone">{item.icon}</div>
               <div className="text-left">
                 <p className="text-sm font-black uppercase tracking-tight">{item.label}</p>
                 <p className="text-[10px] font-bold opacity-40 uppercase tracking-widest">{item.sub}</p>
@@ -131,7 +131,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="flex h-screen bg-slate-50/50 overflow-hidden font-sans selection:bg-berkeley-blue/10">
+    <div className="flex h-screen bg-slate-50/50 overflow-hidden font-sans selection:bg-aqua-cyan-midtone/10">
       {/* Sidebar Navigation */}
       <motion.aside 
         animate={{ width: isSidebarOpen ? 320 : 0, opacity: isSidebarOpen ? 1 : 0 }}
@@ -139,13 +139,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       >
         <div className="p-8 border-b border-slate-100/50">
            <Link href="/" className="flex items-center gap-4 group">
-              <div className="w-12 h-12 rounded-2xl bg-berkeley-blue flex items-center justify-center text-california-gold shadow-lg group-hover:scale-105 transition-transform duration-500">
-                 <Fingerprint size={28} />
-              </div>
-              <div className="overflow-hidden">
-                 <h2 className="text-xl font-black text-berkeley-blue tracking-tighter uppercase whitespace-nowrap">ESG GO | oX</h2>
-                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mt-0.5">OmniCore Genesis</p>
-              </div>
+              <BrandLogo size="sm" />
            </Link>
         </div>
 
@@ -163,11 +157,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                           className={cn(
                             "flex items-center gap-4 px-5 py-3.5 rounded-2xl text-[13px] font-black transition-all duration-300 group",
                             isActive 
-                              ? "bg-berkeley-blue text-white shadow-lg scale-[1.02]" 
-                              : "text-slate-500 hover:text-berkeley-blue hover:bg-white/60"
+                              ? "bg-aqua-cyan-midtone text-white shadow-lg scale-[1.02]" 
+                              : "text-slate-500 hover:text-aqua-cyan-midtone hover:bg-white/60"
                           )}
                         >
-                           <span className={cn("transition-colors", isActive ? "text-california-gold" : "group-hover:text-berkeley-blue")}>
+                           <span className={cn("transition-colors", isActive ? "text-eternal-gold-midtone" : "group-hover:text-aqua-cyan-midtone")}>
                               {item.icon}
                            </span>
                            <span className="flex-1">{item.label}</span>
@@ -185,12 +179,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
            <div className="space-y-3">
               <div className="flex justify-between items-center px-1">
                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Resonance Index</span>
-                 <span className="text-[11px] font-black font-mono text-berkeley-blue">Rs {(rs * 100).toFixed(1)}%</span>
+                 <span className="text-[11px] font-black font-mono text-aqua-cyan-midtone">Rs {(rs * 100).toFixed(1)}%</span>
               </div>
               <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
                  <motion.div 
                    animate={{ width: `${rs * 100}%` }} 
-                   className={cn("h-full transition-colors duration-1000", rs >= 0.9 ? 'bg-verified' : 'bg-california-gold')} 
+                   className={cn("h-full transition-colors duration-1000", rs >= 0.9 ? 'bg-verified' : 'bg-eternal-gold-midtone')} 
                  />
               </div>
               <p className="text-[9px] text-center font-black text-slate-400 uppercase tracking-[0.2em]">{rsStatus}</p>
@@ -199,13 +193,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
            <div className="grid grid-cols-2 gap-3">
               <button 
                 onClick={() => setIsControlCenterOpen(true)}
-                className="flex items-center justify-center gap-2 py-3.5 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500 hover:border-berkeley-blue hover:text-berkeley-blue transition-all shadow-sm uppercase tracking-widest"
+                className="flex items-center justify-center gap-2 py-3.5 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500 hover:border-aqua-cyan-midtone hover:text-aqua-cyan-midtone transition-all shadow-sm uppercase tracking-widest"
               >
                  <Settings2 size={12} /> KERNEL
               </button>
               <button 
                 onClick={() => setIsCommandPaletteOpen(true)}
-                className="flex items-center justify-center gap-2 py-3.5 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500 hover:border-berkeley-blue hover:text-berkeley-blue transition-all shadow-sm uppercase tracking-widest"
+                className="flex items-center justify-center gap-2 py-3.5 bg-white border border-slate-200 rounded-2xl text-[10px] font-black text-slate-500 hover:border-aqua-cyan-midtone hover:text-aqua-cyan-midtone transition-all shadow-sm uppercase tracking-widest"
               >
                  <Command size={12} /> OS_CMD
               </button>
@@ -219,7 +213,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
            <div className="flex items-center gap-6">
               <button 
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-berkeley-blue transition-all"
+                className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-aqua-cyan-midtone transition-all"
               >
                  {isSidebarOpen ? <ChevronLeft size={20} /> : <Layout size={20} />}
               </button>
@@ -232,8 +226,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
            <div className="flex items-center gap-6">
               <div className="hidden md:flex items-center gap-3 px-6 py-2.5 bg-slate-100/50 rounded-2xl border border-slate-200/50">
-                 <Activity size={14} className="text-berkeley-blue" />
-                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Ren/Du Balancer: <span className="text-berkeley-blue uppercase">Balanced</span></span>
+                 <Activity size={14} className="text-aqua-cyan-midtone" />
+                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Ren/Du Balancer: <span className="text-aqua-cyan-midtone uppercase">Balanced</span></span>
               </div>
               <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center">
                  <Users size={20} className="text-slate-400" />

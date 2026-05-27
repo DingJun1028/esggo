@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Shield, Zap, ArrowUpRight, Cpu, Bot, CheckCircle, Database, Leaf, Users, Play, Activity, Sparkles, AlertTriangle, BarChart, Globe, Target, Search, RefreshCw, Lock } from 'lucide-react';
-import { BrandButton, BrandCard, BrandBadge, BrandStatusDot, BrandProgress } from '../components/brand';
+import { BrandButton, BrandCard, BrandBadge, BrandStatusDot, BrandProgress, BrandLogo } from '../components/brand';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
@@ -76,18 +76,13 @@ export default function LandingPage() {
         
         {/* Navigation / Header Mock */}
         <header className="flex justify-between items-center w-full fade-in">
-          <div className="flex items-center gap-3">
-             <div className="w-10 h-10 bg-gradient-to-br from-cyan-50 to-emerald-50 border border-cyan-200 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.1)]">
-                <Leaf size={20} className="text-cyan-600" />
-             </div>
-             <span className="text-xl font-black tracking-tight text-slate-800">ESG <span className="text-cyan-600">GO</span></span>
-          </div>
+          <BrandLogo size="sm" />
           <div className="flex gap-4">
             <Link href="/auth/login">
               <Button variant="ghost" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl">登入</Button>
             </Link>
             <Link href="/dashboard">
-              <Button variant="primary" className="rounded-xl px-6 shadow-lg shadow-cyan-500/20 bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 border-none text-white">進入主控台</Button>
+              <Button variant="primary" className="rounded-xl px-6 shadow-lg shadow-cyan-500/20 bg-gradient-to-r from-aqua-cyan-midtone to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 border-none text-white">進入主控台</Button>
             </Link>
           </div>
         </header>
@@ -111,7 +106,7 @@ export default function LandingPage() {
             className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-[1.1]"
           >
             重塑永續治理的 <br className="hidden md:block"/>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-emerald-600">數位生態協議</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-aqua-cyan-midtone to-emerald-600">數位生態協議</span>
           </motion.h1>
 
           <motion.p 
@@ -120,7 +115,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="text-lg md:text-xl text-slate-600 max-w-2xl font-medium leading-relaxed"
           >
-            ESG GO 結合 5T 誠信協議 (真、善、美、信、通) 與液態玻璃美學，透過全域 OmniAgent 蜂群為企業自動化處理合規驗證與永續報告，實現數據不可篡改的數位主權。
+            ESG SUNSHINE 結合 5T 誠信協議 (真、善、美、信、通) 與液態玻璃美學，透過全域 OmniAgent 蜂群為企業自動化處理合規驗證與永續報告，實現數據不可篡改的數位主權。
           </motion.p>
 
           <motion.div 
@@ -130,11 +125,11 @@ export default function LandingPage() {
             className="flex flex-col sm:flex-row gap-4 mt-8"
           >
             <Link href="/dashboard">
-               <Button variant="primary" className="rounded-2xl px-8 h-14 text-lg shadow-xl shadow-cyan-600/20 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 border-none group text-white font-bold tracking-wide">
+               <Button variant="primary" className="rounded-2xl px-8 h-14 text-lg shadow-xl shadow-aqua-cyan-midtone/20 bg-gradient-to-r from-aqua-cyan-midtone to-aqua-cyan hover:from-aqua-cyan hover:to-aqua-cyan-shadow border-none group text-white font-bold tracking-wide">
                  啟動全域共鳴 <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                </Button>
             </Link>
-            <Button variant="ghost" className="rounded-2xl px-8 h-14 text-lg border border-slate-300 bg-white/50 backdrop-blur-md text-slate-700 hover:bg-white hover:text-cyan-600 font-bold" onClick={() => document.getElementById('swarm-showcase')?.scrollIntoView({behavior: 'smooth'})}>
+            <Button variant="ghost" className="rounded-2xl px-8 h-14 text-lg border border-slate-300 bg-white/50 backdrop-blur-md text-slate-700 hover:bg-white hover:text-aqua-cyan-midtone font-bold" onClick={() => document.getElementById('swarm-showcase')?.scrollIntoView({behavior: 'smooth'})}>
               觀看 OmniCore 演示
             </Button>
           </motion.div>
@@ -164,7 +159,7 @@ export default function LandingPage() {
         {/* Swarm V3 Interactive Showcase */}
         <section id="swarm-showcase" className="relative z-10 pt-16">
            <div className="text-center mb-12">
-             <h2 className="text-3xl font-black text-slate-900 mb-4">OmniCore <span className="text-cyan-600">全域動態展示</span></h2>
+             <h2 className="text-3xl font-black text-slate-900 mb-4">OmniCore <span className="text-aqua-cyan-midtone">全域動態展示</span></h2>
              <p className="text-slate-500 font-medium">體驗 5T 協議的實時任務調度與自主執行過程</p>
            </div>
            
@@ -173,7 +168,7 @@ export default function LandingPage() {
               <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 p-8 flex flex-col justify-center shadow-xl">
                  <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                       <Bot size={22} className="text-cyan-600"/>
+                       <Bot size={22} className="text-aqua-cyan-midtone"/>
                        <h3 className="text-lg font-black text-slate-800">萬能心核 (OmniCore Agents)</h3>
                     </div>
                     <Button variant="ghost" size="sm" onClick={startDemo} disabled={isExecuting} className="text-cyan-700 bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 rounded-xl font-bold">
@@ -196,7 +191,7 @@ export default function LandingPage() {
                                    <p className="text-sm font-black text-slate-800">{agent.name}</p>
                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{agent.role}</p>
                                 </div>
-                                <span className="text-xs font-black font-mono text-cyan-600">{agent.health}%</span>
+                                <span className="text-xs font-black font-mono text-aqua-cyan-midtone">{agent.health}%</span>
                              </div>
                              <BrandProgress value={agent.health} color={agent.active ? 'cyan' : 'slate'} size="xs" />
                           </div>
@@ -244,7 +239,7 @@ export default function LandingPage() {
         {/* Expected Outcomes */}
         <section className="relative z-10 pt-24 pb-12">
            <div className="text-center mb-16">
-             <h2 className="text-3xl font-black text-slate-900 mb-4">ESG GO 的 <span className="text-cyan-600">量化實績</span></h2>
+             <h2 className="text-3xl font-black text-slate-900 mb-4">ESG GO 的 <span className="text-aqua-cyan-midtone">量化實績</span></h2>
              <p className="text-slate-500 font-medium">企業級端到端永續管理的實質效益</p>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

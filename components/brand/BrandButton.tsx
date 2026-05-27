@@ -15,12 +15,12 @@ interface BrandButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-berkeley-blue text-white hover:bg-berkeley-dark shadow-sm hover:shadow-md',
-  secondary: 'bg-blue-50 text-berkeley-blue hover:bg-blue-100 border border-blue-100',
-  ghost: 'bg-transparent text-berkeley-blue hover:bg-blue-50',
-  danger: 'bg-danger text-white hover:bg-red-600 shadow-sm',
-  gold: 'bg-california-gold text-berkeley-blue hover:bg-yellow-400 shadow-sm font-semibold',
-  outline: 'bg-transparent text-berkeley-blue border border-berkeley-blue hover:bg-blue-50',
+  primary: 'bg-aqua-cyan-midtone text-white hover:bg-aqua-cyan shadow-sm hover:shadow-md',
+  secondary: 'bg-aqua-cyan/5 text-aqua-cyan-midtone hover:bg-aqua-cyan/10 border border-aqua-cyan/20',
+  ghost: 'bg-transparent text-aqua-cyan-midtone hover:bg-aqua-cyan/5',
+  danger: 'bg-lethal text-white hover:bg-red-600 shadow-sm',
+  gold: 'bg-eternal-gold-midtone text-white hover:bg-eternal-gold shadow-sm font-semibold',
+  outline: 'bg-transparent text-aqua-cyan-midtone border border-aqua-cyan-midtone hover:bg-aqua-cyan/5',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -45,9 +45,9 @@ export default function BrandButton({
   return (
     <button
       className={`
-        inline-flex items-center justify-center gap-2 rounded-lg font-medium
-        transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-berkeley-blue/30
-        disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
+        inline-flex items-center justify-center gap-2 rounded-xl font-black uppercase tracking-wider
+        transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-aqua-cyan/30
+        disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98]
         ${variantStyles[variant]}
         ${sizeStyles[size]}
         ${fullWidth ? 'w-full' : ''}
