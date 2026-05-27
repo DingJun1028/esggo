@@ -1,4 +1,4 @@
-import { 
+export { 
   listCompanyMetrics, 
   upsertCompanyMetric,
   listReports,

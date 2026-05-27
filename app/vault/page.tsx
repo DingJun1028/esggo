@@ -452,6 +452,19 @@ export default function VaultPage() {
             </div>
           </BrandModal>
         )}
+
+        {sealingId && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/80 backdrop-blur-xl" />
+             <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-cyan-900/20 backdrop-blur-3xl rounded-[40px] border border-cyan-400/30 shadow-[0_0_80px_-20px_rgba(6,182,212,0.5)] p-12 max-w-sm w-full overflow-hidden text-center flex flex-col items-center">
+               <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="w-24 h-24 rounded-full border-4 border-cyan-500/20 border-t-cyan-400 flex items-center justify-center mb-6">
+                 <Shield size={40} className="text-cyan-400" />
+               </motion.div>
+               <h3 className="text-2xl font-black text-cyan-50 uppercase tracking-widest mb-2">ZKP 封印中</h3>
+               <p className="text-cyan-200/60 text-sm font-medium">OmniAgent 正在計算零知識證明與哈希鎖定...</p>
+             </motion.div>
+          </div>
+        )}
       </AnimatePresence>
 
       <AnimatePresence>{toast && (<motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-12 right-12 z-[9999]"><div className={cn("px-8 py-5 rounded-3xl shadow-extreme backdrop-blur-2xl text-white font-black text-sm flex items-center gap-4 border border-white/20", toast.type === 'error' ? 'bg-red-600' : 'bg-[#003262]')}>{toast.type === 'error' ? <XCircle size={20} /> : <CheckCircle size={20} className="text-[#FDB515]" />}{toast.msg}</div></motion.div>)}</AnimatePresence>

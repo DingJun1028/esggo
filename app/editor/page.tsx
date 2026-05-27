@@ -9,11 +9,12 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { useSustainWriteMemory } from '../../hooks/useMemory';
 import { cn } from '../../lib/utils';
+import { fadeIn, scaleIn, staggerContainer } from '../../lib/animations';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Badge } from '../../components/ui/Badge';
-import { BrandT5Strip, BrandStatusDot, BrandButton } from '../../components/brand';
+import { BrandT5Strip, BrandStatusDot } from '../../components/brand';
 import { EXPERT_SACRED_TEMPLATES } from '../../lib/genkit-esg';
 import { supabase } from '../../lib/supabase';
 
@@ -249,7 +250,12 @@ export default function EditorPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden z-10 relative">
-        <aside className={cn("bg-white/80 backdrop-blur-2xl border-r border-slate-200 transition-all duration-500 flex flex-col z-20 shadow-xl", navCollapsed ? 'w-20' : 'w-80')}>
+        <motion.aside 
+          variants={fadeIn}
+          initial="initial"
+          animate="animate"
+          className={cn("bg-white/80 backdrop-blur-2xl border-r border-slate-200 transition-all duration-500 flex flex-col z-20 shadow-xl", navCollapsed ? 'w-20' : 'w-80')}
+        >
           <div className="px-6 py-4 flex items-center justify-between border-b border-slate-200">
             {!navCollapsed && <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em]">Module Index</span>}
             <button onClick={() => setNavCollapsed(!navCollapsed)} className="p-2 hover:bg-slate-100 rounded-lg transition-all ml-auto text-slate-500 hover:text-slate-700">
@@ -290,10 +296,14 @@ export default function EditorPage() {
               </button>
             ))}
           </div>
-        </aside>
+        </motion.aside>
 
         <main className="flex-1 flex flex-col overflow-hidden relative">
-          <div className="px-10 py-6 border-b border-slate-200 bg-white/60 backdrop-blur-md">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="px-10 py-6 border-b border-slate-200 bg-white/60 backdrop-blur-md"
+          >
             <div className="flex items-center gap-3 mb-3">
               <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 px-3 py-1 rounded-md font-black text-[9px] tracking-widest">
                 {chapter.gri}
@@ -320,10 +330,15 @@ export default function EditorPage() {
                 </button>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex-1 overflow-y-auto p-8 flex flex-col xl:flex-row gap-8 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
-            <div className="w-full xl:w-[340px] space-y-6 flex-shrink-0">
+          <motion.div 
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="flex-1 overflow-y-auto p-8 flex flex-col xl:flex-row gap-8 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent"
+          >
+            <motion.div variants={fadeIn} className="w-full xl:w-[340px] space-y-6 flex-shrink-0">
               <Card className="border border-slate-200 bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl">
                 <CardHeader className="p-6 pb-2">
                   <CardTitle className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-2">
@@ -357,7 +372,7 @@ export default function EditorPage() {
                       variant="primary" 
                       className="w-full h-14 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white border-none rounded-xl font-black text-xs tracking-wider shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition-all" 
                       onClick={() => handleGenerate(5000)} 
-                      disabled={generating}
+                      isLoading={generating}
                     >
                       <Sparkles size={16} className="mr-2 text-cyan-100 animate-pulse" /> 啟動 5000 字撰寫
                     </Button>
@@ -412,9 +427,9 @@ export default function EditorPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
 
-            <div className="flex-1 flex flex-col min-w-0">
+            <motion.div variants={scaleIn} className="flex-1 flex flex-col min-w-0">
               <Card className="flex-1 border border-slate-200 bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden flex flex-col relative shadow-xl">
                 <div className="h-12 px-8 border-b border-slate-200 flex items-center justify-between bg-slate-50">
                   <div className="flex items-center gap-2">
@@ -444,15 +459,15 @@ export default function EditorPage() {
                           <h3 className="text-lg font-black text-slate-800">數據指標填報</h3>
                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">GRI Metric Input Hub</p>
                         </div>
-                        <BrandButton 
-                          variant="primary" 
+                        <Button 
+                          variant="ghost" 
                           size="sm" 
                           onClick={handleAutoPopulate} 
-                          loading={generating} 
-                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-xl h-10 px-5 shadow-sm active:scale-95"
+                          isLoading={generating} 
+                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-xl h-10 px-5 shadow-sm active:scale-95 font-black text-[9px] uppercase"
                         >
                           <Bot size={12} className="mr-1.5" /> OmniAgent_Auto-Fill
-                        </BrandButton>
+                        </Button>
                       </div>
                       <div className="grid gap-4">
                         {chapter.fields?.map(f => (
@@ -462,7 +477,7 @@ export default function EditorPage() {
                               <p className="text-xs font-black text-slate-700">{f.label}</p>
                             </div>
                             <div className="flex items-center gap-3">
-                              <input 
+                              <Input 
                                 className="w-28 h-10 bg-white border border-slate-200 group-hover:border-cyan-300 rounded-lg px-3 text-xs font-mono font-black text-cyan-700 outline-none focus:border-cyan-400 text-center shadow-sm" 
                                 value={fieldValues[chapter.id]?.[f.id] || ''} 
                                 onChange={e => updateFieldValue(chapter.id, f.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
@@ -534,8 +549,8 @@ export default function EditorPage() {
                   </div>
                 </div>
               </Card>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </main>
       </div>
 

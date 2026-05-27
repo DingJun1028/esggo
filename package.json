@@ -79,6 +79,8 @@
     "axios": "^1.16.1",
     "commander": "^14.0.3",
     "dotenv": "^17.4.2",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
     "firebase-tools": "^15.18.0",
     "jsdom": "^29.1.1",
     "picocolors": "^1.1.1",

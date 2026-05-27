@@ -24,20 +24,22 @@ The primary ESG reporting workspace has been refactored:
 - **ZKP Sealing:** Enhanced UI feedback during the SHA-256 hashing process.
 
 ## 4. Technical Integrity
+- **Global Consolidation:** Fragmented data layers (Supabase + Firestore) have been unified into **Firebase SQL Connect (Data Connect)**.
+- **5T Protocol Schema:** The relational schema (`schema.gql`) now natively supports T1-T5 protocols with fields like `sourceOrigin` (T1) and `hashLock` (T4).
 - **Data Connect SDK:** Fully synchronized with the PostgreSQL schema, providing type-safe mutations for Reports, Tasks, and Metrics.
-- **Firebase Integration:** `firebase-admin` is now properly configured for server-side operations.
-- **Type Safety:** The entire project now passes strict `tsc` checks.
+- **Type Safety:** The entire project now passes strict `tsc` and production build checks with bi-directional type safety.
 
 ## 5. OmniAgent CLI Usage
 The system provides a native CLI tool (`omni`) for backend orchestration and agent management. **Note:** On Windows, use PowerShell for the best experience.
 
 - **Start Services:** `.\ctl.ps1 start` launches the entire environment.
+- **Agent Status:** `node cli/omni.mjs agent status` checks the health of the agent gateway.
 - **Agent Tasking:** `node cli/omni.mjs agent run "..."` triggers the OmniAgent swarm for autonomous analysis.
 - **Web Browsing:** `node cli/omni.mjs agent browse "..."` launches a V3 web agent via Browser Use Cloud.
-- **Vault Management:** `node cli/omni.mjs vault list` displays the real-time hash locks and evidence status.
+- **Vault Management:** `node cli/omni.mjs vault list` displays the real-time hash locks and evidence status from the unified Data Connect backend.
 - **Audit Verification:** `node cli/omni.mjs audit report` provides a T1..T5 integrity score for the current project.
 
 ---
-**Document Version:** v1.2.0  
-**Last Updated:** 2026-05-26
+**Document Version:** v1.3.0  
+**Last Updated:** 2026-05-27
 
