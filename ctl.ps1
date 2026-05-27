@@ -22,10 +22,10 @@ function Start-Platform {
     Write-Host "[*] Starting OmniAgent Platform (Next.js + Gateway)..." -ForegroundColor Green
     
     # Start Next.js in background
-    $nextProcess = Start-Process npm -ArgumentList "run dev" -NoNewWindow -PassThru -RedirectStandardOutput $LOG_FILE -RedirectStandardError $LOG_FILE
+    $nextProcess = Start-Process npm.cmd -ArgumentList "run dev" -NoNewWindow -PassThru -RedirectStandardOutput "./omni_trace.log" -RedirectStandardError "./omni_error.log"
     
     # Start OmniAgent Server in background
-    $gatewayProcess = Start-Process node -ArgumentList "vps/omni-server.mjs" -NoNewWindow -PassThru
+    $gatewayProcess = Start-Process node -ArgumentList "vps/omni-server.mjs" -NoNewWindow -PassThru -RedirectStandardOutput "./gateway_trace.log"
     
     # Record PIDs
     "$($nextProcess.Id), $($gatewayProcess.Id)" | Out-File -FilePath $PID_FILE -Encoding ascii
