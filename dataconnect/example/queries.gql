@@ -62,8 +62,13 @@ query ListAuditRecords @auth(level: USER) {
   }
 }
 
-query ListScrapedArticles @auth(level: PUBLIC, insecureReason: "Global data intentionally available to the public") {
-  scrapedArticles(orderBy: [{scrapedAt: DESC}], limit: 50) {
+query ListScrapedArticles @auth(level: USER, insecureReason: "Global news articles are accessible to all registered users") {
+  scrapedArticles(where: { 
+    _or: [
+      { user: { uid: { eq_expr: "auth.uid" } } },
+      { user: { uid: { eq: null } } } # Allow system-scraped data
+    ]
+  }, orderBy: [{scrapedAt: DESC}], limit: 50) {
     id
     title
     summary
@@ -294,9 +299,10 @@ query ListReports @auth(level: USER) {
   }
 }
 
-mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: NO_ACCESS, insecureReason: "Backend-only mutation, no client access") {
+mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: USER, insecureReason: "Users can contribute to the shared article pool") {
   scrapedArticle_upsert(data: {
     id: $id,
+    user: { uid_expr: "auth.uid" },
     title: $title,
     summary: $summary,
     url: $url,
@@ -349,8 +355,13 @@ mutation UpsertSwarmAgentTask($id: UUID, $title: String!, $taskType: String!, $s
   })
 }
 
-query ListRegulatoryPolicies @auth(level: PUBLIC, insecureReason: "Global policy definitions intentionally available to the public") {
-  regulatoryPolicies(where: { isGlobal: { eq: true } }) {
+query ListRegulatoryPolicies @auth(level: USER, insecureReason: "Global ESG policies are accessible to all registered users") {
+  regulatoryPolicies(where: { 
+    _or: [
+      { user: { uid: { eq_expr: "auth.uid" } } },
+      { isGlobal: { eq: true } }
+    ]
+  }) {
     id
     standard
     code

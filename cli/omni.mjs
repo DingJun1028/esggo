@@ -12,7 +12,7 @@ import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
 import { BrowserUse } from 'browser-use-sdk/v3';
 
-dotenv.config();
+dotenv.config({ override: true });
 
 // -- Root Cause Fix: Force UTF-8 for Windows Terminal --------------------------
 if (process.platform === 'win32') {
@@ -190,12 +190,25 @@ agent.command('run <task>')
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Agent API failed');
 
-      if (!data.result || !data.result.success) {
-        console.log(pc.red(`[x] Agent (${data.result?.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.result?.error?.message || data.result?.error || data.error || 'Unknown Error')}`));
+      if (!data.success) {
+        console.log(pc.red(`[x] Agent (${data.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.error || 'Unknown Error')}`));
       } else {
-        console.log(pc.green(`[v] Agent (${data.result.agent}) execution successful!`));
+        console.log(pc.green(`[v] Agent (${data.agent || 'Commander'}) execution successful!`));
         console.log(pc.white('──────────────────────────────────────────────────'));
-        console.log(pc.yellow(data.result.result));
+        
+        if (data.message) {
+          console.log(pc.white(`Message: ${data.message}`));
+        }
+
+        if (data.commanderOutput) {
+          console.log(pc.cyan('Commander Plan:'));
+          console.log(pc.yellow(data.commanderOutput));
+        } else if (data.output) {
+          console.log(pc.yellow(data.output));
+        } else if (data.results) {
+          console.log(pc.green(`Task Results: ${data.results.length} items processed.`));
+        }
+        
         console.log(pc.white('──────────────────────────────────────────────────'));
       }
     } catch (err) {
@@ -563,6 +576,56 @@ daemon.command('status')
     console.log(`PID: 9119  | BlueCC Bridge   | ${pc.yellow('IDLE')}`);
     console.log(pc.white('------------------------------------------'));
     console.log(`Uptime: 24h 12m | Memory: 1.2GB`);
+  });
+
+agent.command('pilot')
+  .description('Directly initiate Autonomous SustainWrite Pilot (Local Swarm Simulation)')
+  .action(async () => {
+    console.log(pc.magenta('⚡ [OmniAgent] DIRECT PILOT COMMAND INITIATED'));
+    console.log(pc.cyan('🚀 Starting Autonomous SustainWrite Swarm Loop...'));
+    console.log(pc.white('──────────────────────────────────────────────────'));
+
+    const chapters = [
+      { id: '01', title: '永續經營策略', gri: 'GRI 2-22' },
+      { id: '02', title: '能源與碳排', gri: 'GRI 305' },
+      { id: '03', title: '社會共融', gri: 'GRI 401' }
+    ];
+
+    for (const c of chapters) {
+      console.log(pc.blue(`[A] ESG_Researcher -> Generating content for ${c.title}...`));
+      await new Promise(r => setTimeout(r, 1000));
+      console.log(pc.green(`[v] Draft generated: ${c.title} (500 words)`));
+      
+      console.log(pc.blue(`[A] ESG_Auditor -> Verifying 5T HashLock...`));
+      await new Promise(r => setTimeout(r, 500));
+      const hash = computeHashLock(`Content for ${c.id}`);
+      console.log(pc.cyan(`[S] 5T_SEAL -> Gate T4: ${hash.slice(0, 16)}...`));
+      console.log(pc.white('─'));
+    }
+
+    console.log(pc.magenta('✨ MISSION COMPLETE: All chapters sealed in Data Connect Simulation.'));
+  });
+
+agent.command('transfer')
+  .description('Transfer all ESG content to NocoDB (No-Code Database)')
+  .action(async () => {
+    console.log(pc.cyan('[A] Initiating Bulk Transfer to NocoDB...'));
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      const res = await fetch(`${baseUrl}/api/agent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task: 'TRANSFER_TO_NOCODB', isCommand: true })
+      });
+      const data = await res.json();
+      if (data.success) {
+        console.log(pc.green(`[v] ${data.message}`));
+      } else {
+        console.log(pc.red(`[x] Transfer failed: ${data.error}`));
+      }
+    } catch (e) {
+      console.log(pc.red(`[x] Connection error: ${e.message}`));
+    }
   });
 
 program.parse();

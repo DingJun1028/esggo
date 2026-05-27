@@ -62,6 +62,13 @@ const navGroups = [
       { href: '/auditor', label: '審計助手', sub: 'Auditor', icon: <Shield size={18} /> },
     ],
   },
+  {
+    label: 'ENTERPRISE',
+    items: [
+      { href: '/contracts', label: '合約管理', sub: 'Contracts', icon: <FileText size={18} /> },
+      { href: '/grants', label: '補助案管理', sub: 'Grants', icon: <Landmark size={18} /> },
+    ],
+  },
 ];
 
 function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

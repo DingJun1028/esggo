@@ -1,8 +1,14 @@
 import { ADKAgent, ADKSwarm } from './adk-core';
 import { ai } from './genkit';
 import { createHash } from 'crypto';
-import { GRI_CHAPTERS } from '../constants/chapters';
 import { saveSustainWriteSection } from '../dataconnect-memory';
+
+const GRI_CHAPTERS = [
+  { id: 'intro', title: '永續經營與策略願景', gri: 'GRI 2-22', order: 1 },
+  { id: 'ghg', title: '溫室氣體排放與減量', gri: 'GRI 305', order: 2 },
+  { id: 'labor', title: '勞雇關係與職場安全', gri: 'GRI 401', order: 3 },
+  { id: 'board', title: '公司治理與董事會效能', gri: 'GRI 2-9', order: 4 }
+];
 
 /**
  * Hermes: High-Speed Event & Message Bus
@@ -74,6 +80,10 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       return await this.runPilotMission(context);
     }
 
+    if (task.includes('TRANSFER_TO_NOCODB')) {
+      return await this.runNocoDBMigration(context);
+    }
+
     try {
       const planResponse = await this.run(`Create an execution plan for: ${task}`, context);
       hermes.publish('COMMAND_ISSUED', { task, plan: planResponse.output });
@@ -91,26 +101,32 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
 
   private async runPilotMission(context: any) {
     const ctx = context || {};
-    console.log('[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot...');
+    console.log(`[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot with ${GRI_CHAPTERS.length} chapters...`);
     hermes.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot', totalChapters: GRI_CHAPTERS.length });
 
     const results = [];
 
     for (const chapter of GRI_CHAPTERS) {
+      console.log(`[OmniCommander] Processing chapter: ${chapter.id} (${chapter.title})`);
       hermes.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Generating content for ${chapter.title}` });
       
       const researcherAgent = this.swarm.getAgent('ESG_Researcher');
-      if (!researcherAgent) continue;
+      if (!researcherAgent) {
+        console.error(`[OmniCommander] ESG_Researcher not found in swarm for chapter ${chapter.id}`);
+        continue;
+      }
 
       try {
         const genResponse = await researcherAgent.run(`Write a detailed professional draft for the ESG report chapter: ${chapter.title} (${chapter.gri}).`, ctx);
 
         if (!genResponse.success || !genResponse.output) {
+          console.error(`[OmniCommander] Generation failed for ${chapter.id}:`, genResponse.error);
           hermes.publish('AGENT_ERROR', { agent: 'ESG_Researcher', chapter: chapter.id, error: genResponse.error });
           continue;
         }
 
         const content = genResponse.output;
+        console.log(`[OmniCommander] Generated ${content.length} chars for ${chapter.id}`);
         const hash = createHash('sha256').update(String(content)).digest('hex');
 
         await saveSustainWriteSection({
@@ -127,16 +143,65 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
 
         hermes.publish('5T_SEAL', { gate: 'T4', chapter: chapter.id, hash });
         results.push({ chapter: chapter.id, status: 'sealed', hash });
+
+        // Phase 14: Sync to Notion
+        const strategist = this.swarm.getAgent('ESG_Strategist');
+        if (strategist) {
+          hermes.publish('AGENT_TASK', { agent: 'ESG_Strategist', task: `Syncing ${chapter.title} to Notion` });
+          await strategist.run(`Create a Notion page for chapter ${chapter.title}`, { 
+            parentId: 'notion-workspace-root', 
+            title: `[GRI 2024] ${chapter.title}`,
+            content: content 
+          });
+        }
       } catch (err: any) {
         console.error(`[OmniCommander] Error in chapter ${chapter.id}:`, err);
       }
     }
 
+    console.log(`[OmniCommander] MISSION COMPLETE. Sealed ${results.length} chapters.`);
     hermes.publish('MISSION_COMPLETE', { mission: 'Autonomous SustainWrite Pilot', totalSealed: results.length });
 
     return {
       success: true,
-      message: 'Autonomous Pilot Complete.',
+      message: `Autonomous Pilot Complete. Sealed ${results.length} chapters.`,
+      results
+    };
+  }
+
+  private async runNocoDBMigration(context: any) {
+    const { loadSustainWriteSections } = require('../dataconnect-memory');
+    const { nocoClient } = require('../nocodb');
+    const cid = context?.companyId || 'default';
+
+    console.log(`[OmniCommander] 📦 Migrating content for ${cid} to NocoDB...`);
+    hermes.publish('MISSION_START', { mission: 'NocoDB Migration', companyId: cid });
+
+    const sections = await loadSustainWriteSections(cid);
+    const results = [];
+
+    for (const s of sections) {
+      hermes.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing section ${s.chapter_id} to NocoDB` });
+      
+      const nocoData = {
+        ChapterID: s.chapter_id,
+        Title: s.chapter_name,
+        Content: s.content,
+        Status: s.status,
+        HashLock: s.hash_lock,
+        GRI: (s.gri_references || []).join(', '),
+        LastUpdated: s.updated_at
+      };
+
+      const res = await nocoClient.upsertRecord('ESG_Reports', nocoData);
+      results.push({ id: s.chapter_id, success: res.success });
+    }
+
+    hermes.publish('MISSION_COMPLETE', { mission: 'NocoDB Migration', totalMigrated: results.length });
+
+    return {
+      success: true,
+      message: `Migration to NocoDB complete. ${results.length} sections processed.`,
       results
     };
   }

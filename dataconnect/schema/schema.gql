@@ -185,6 +185,7 @@ type CompanyMetric @table {
 
 type ScrapedArticle @table {
   id: UUID! @default(expr: "uuidV4()")
+  user: User # Added for security
   title: String!
   summary: String
   url: String!
@@ -225,6 +226,7 @@ type SwarmAgentTask @table {
 
 type RegulatoryPolicy @table {
   id: String! @default(expr: "uuidV4()")
+  user: User # Added for security
   standard: String! # CSRD, GRI, etc.
   code: String! # ESRS E1-1
   name: String!
