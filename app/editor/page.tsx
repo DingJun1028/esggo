@@ -6,7 +6,6 @@ import {
   RefreshCw, Save, Lock, FileCheck, Users, Zap, SearchCheck, Info, MessageSquare,
   XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye, Bot, Trophy
 } from 'lucide-react';
-import { omniCore } from '../../lib/omni-core';
 import { useAuth } from '../../hooks/useAuth';
 import { useSustainWriteMemory } from '../../hooks/useMemory';
 import { cn } from '../../lib/utils';
