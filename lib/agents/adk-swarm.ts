@@ -1,5 +1,6 @@
 import { ADKAgent, ADKSwarm } from './adk-core';
 import { ADK_STANDARD_TOOLS } from './adk-tools';
+import { agent0, OmniCommander, hermes } from './omni-commander';
 
 /**
  * ADK Swarm Deployment: ESG GO Official Agents
@@ -38,28 +39,22 @@ Focus on T3 (Tangible) outcomes and ROI for ESG investments.
   `
 });
 
+// Initialize Swarm and Register Sub-Agents
 export const omniSwarm = new ADKSwarm()
   .register(researcher)
   .register(auditor)
-  .register(strategist);
+  .register(strategist)
+  .register(agent0);
+
+// Initialize OmniAgent as Supreme Commander
+export const omniAgent = new OmniCommander(omniSwarm);
 
 /**
  * Coordinated Workflow: Global Compliance Scan
+ * Orchestrated by OmniAgent via Hermes
  */
 export async function runGlobalComplianceScan(context: any) {
-  console.log('--- Starting ADK Global Compliance Scan ---');
+  console.log('--- [OmniAgent] Initiating Global Compliance Scan ---');
   
-  // Step 1: Broad research and mapping
-  const researchResult = await researcher.run('Analyze current metrics and identify GRI gaps.', context);
-  
-  // Step 2: Integrity audit based on research
-  const auditResult = await auditor.run('Perform 5T integrity check on the following research data.', { 
-    ...context, 
-    researchOutput: researchResult.output 
-  });
-
-  return {
-    research: researchResult,
-    audit: auditResult
-  };
+  return await omniAgent.command('Perform a comprehensive GRI compliance scan and 5T audit across all active metrics.', context);
 }
