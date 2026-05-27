@@ -12,7 +12,7 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { 
-  BrandProgress, BrandTimeline, BrandStatusDot 
+  BrandProgress, BrandTimeline, BrandStatusDot, BrandLogo 
 } from '../../components/brand';
 import { SwarmMonitor } from '../../components/ui/SwarmMonitor';
 import { IntegrityPulse } from '../../components/ui/IntegrityPulse';
@@ -51,17 +51,17 @@ function DataAlchemyWidget() {
 
   return (
     <Card hoverEffect className="h-full overflow-hidden flex flex-col bg-white/60 backdrop-blur-md border-white/60">
-      <div className="p-6 border-b border-slate-100/60 flex items-center justify-between bg-[#003262]/5">
+      <div className="p-6 border-b border-slate-100/60 flex items-center justify-between bg-[var(--aqua-cyan-midtone)]/5">
         <div>
-          <h4 className="text-[10px] font-black text-[#003262] uppercase tracking-[0.2em]">Data Alchemy Furnace</h4>
+          <h4 className="text-[10px] font-black text-[var(--aqua-cyan-midtone)] uppercase tracking-[0.2em]">Data Alchemy Furnace</h4>
           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Edge Compute • RLS Identity</p>
         </div>
-        <Zap size={14} className="text-[#003262] animate-pulse" />
+        <Zap size={14} className="text-[var(--aqua-cyan-midtone)] animate-pulse" />
       </div>
       <div className="flex-1 p-6 flex flex-col justify-center items-center text-center space-y-4">
         {result ? (
           <div className="space-y-3 animate-in zoom-in-95 duration-500">
-            <div className="text-3xl font-bold text-[#003262] font-mono">
+            <div className="text-3xl font-bold text-[var(--aqua-cyan-midtone)] font-mono">
               {result.total_emissions.toLocaleString()}
               <span className="text-xs ml-1 text-slate-400 font-sans uppercase font-bold">tCO₂e</span>
             </div>
@@ -69,7 +69,7 @@ function DataAlchemyWidget() {
           </div>
         ) : (
           <div className="space-y-4">
-             <div className="w-12 h-12 rounded-2xl bg-[#003262]/5 flex items-center justify-center mx-auto text-[#003262]">
+             <div className="w-12 h-12 rounded-2xl bg-[var(--aqua-cyan-midtone)]/5 flex items-center justify-center mx-auto text-[var(--aqua-cyan-midtone)]">
                 <Cpu size={24} />
              </div>
              <p className="text-[10px] text-slate-500 font-medium px-4">
@@ -224,7 +224,7 @@ function AIRiskAlerter() {
                   <div className="mt-4 p-4 bg-slate-50/80 rounded-2xl border border-slate-100 flex items-center justify-between shadow-inner">
                      <div className="flex-1 min-w-0 mr-4">
                         <p className="text-[9px] font-black text-slate-400 uppercase mb-1">建議修正 Suggested Fix</p>
-                        <p className="text-[10px] font-bold text-[#003262] truncate">{a.suggested_fix}</p>
+                        <p className="text-[10px] font-bold text-[var(--aqua-cyan-midtone)] truncate">{a.suggested_fix}</p>
                      </div>
                      <Button variant="primary" size="sm" className="h-8 px-4 rounded-xl text-[9px] font-bold" onClick={() => handleResolve(a.id)}>已處理</Button>
                   </div>
@@ -271,7 +271,7 @@ function IntegrityTrace() {
     <Card className="h-full overflow-hidden flex flex-col bg-white/60 backdrop-blur-md border-white/60 shadow-lg">
       <div className="p-6 border-b border-slate-100/60 flex items-center justify-between bg-white/40">
         <div>
-          <h4 className="text-[10px] font-black text-[#003262] uppercase tracking-[0.2em]">5T Integrity Trace</h4>
+          <h4 className="text-[10px] font-black text-[var(--aqua-cyan-midtone)] uppercase tracking-[0.2em]">5T Integrity Trace</h4>
           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Cloud Persistence</p>
         </div>
         <Button variant="glass" size="sm" className="w-8 h-8 p-0" onClick={handleConsolidate} disabled={loading}>
@@ -285,7 +285,7 @@ function IntegrityTrace() {
               <Badge variant={m.consolidated ? "verified" : "draft"} className="scale-75 origin-left">{m.consolidated ? "CONSOLIDATED" : "TRACE"}</Badge>
               <span className="text-[8px] font-black text-slate-300 uppercase">{new Date(m.timestamp).toLocaleTimeString()}</span>
             </div>
-            <p className="text-[10px] font-bold text-[#003262]/80 line-clamp-2 leading-relaxed">{m.content}</p>
+            <p className="text-[10px] font-bold text-[var(--aqua-cyan-midtone)]/80 line-clamp-2 leading-relaxed">{m.content}</p>
             <div className="flex items-center gap-1 opacity-20 group-hover:opacity-40 transition-opacity">
               <Lock size={8} />
               <span className="text-[8px] font-mono truncate max-w-[120px]">{m.hash_lock}</span>
@@ -304,7 +304,7 @@ function IntegrityTrace() {
 
 const KPIS = [
   { key: 'compliance', icon: <CheckCircle size={18}/>, label: 'RBA 合規完成率', value: '94', unit: '%', trend: '+2.1%', trendUp: true, color: '#10B981' },
-  { key: 'carbon',     icon: <Leaf size={18}/>,        label: '群光範疇三排放',   value: '12,840', unit: 'tCO₂e', trend: '-5%', trendUp: true, color: '#003262' },
+  { key: 'carbon',     icon: <Leaf size={18}/>,        label: '群光範疇三排放',   value: '12,840', unit: 'tCO₂e', trend: '-5%', trendUp: true, color: 'var(--aqua-cyan-midtone)' },
   { key: 'ai-audit',   icon: <Brain size={18}/>,      label: 'AI 自動核對率', value: '82', unit: '%', trend: 'OCR', trendUp: true, color: '#8B5CF6' },
   { key: 'verified',   icon: <Shield size={18}/>,    label: '5T 實證項',   value: '1,562', unit: 'SEALED', trend: 'T5', trendUp: true, color: '#FDB515' },
 ];
@@ -313,17 +313,17 @@ const MODULES = [
   { href: '/environmental', label: '環境指揮', sub: 'GRI 302–306', pct: 82, color: '#10B981' },
   { href: '/social',        label: '社會影響', sub: 'GRI 401–414', pct: 74, color: '#3B82F6' },
   { href: '/supply-chain',  label: '供應鏈治理', sub: 'RBA v8.0', pct: 88, color: '#FDB515' },
-  { href: '/vault',         label: '證據金庫', sub: '5T ZKP',      pct: 88, color: '#003262' },
+  { href: '/vault',         label: '證據金庫', sub: '5T ZKP',      pct: 88, color: 'var(--aqua-cyan-midtone)' },
 ];
 
 const QUICK_ACTIONS = [
-  { href: '/editor',       icon: <FileText size={18}/>,  label: '撰寫報告', color: '#003262' },
+  { href: '/editor',       icon: <FileText size={18}/>,  label: '撰寫報告', color: 'var(--aqua-cyan-midtone)' },
   { href: '/supply-chain', icon: <Network size={18}/>,   label: 'AI 稽核隊列', color: '#8B5CF6' },
   { href: '/audit-verify', icon: <ClipboardCheck size={18}/>, label: '遠距查驗', color: '#009E9D' },
-  { href: '/audit-log',    icon: <Activity size={18}/>,  label: '審計日誌', color: '#003262' },
-  { href: '/vault',        icon: <Database size={18}/>,  label: '佐證金庫', color: '#003262' },
-  { href: '/swarm',        icon: <Users size={18}/>,     label: '代理蜂群', color: '#003262' },
-  { href: '/terminal',     icon: <Code size={18}/>,      label: '終端主控', color: '#003262' },
+  { href: '/audit-log',    icon: <Activity size={18}/>,  label: '審計日誌', color: 'var(--aqua-cyan-midtone)' },
+  { href: '/vault',        icon: <Database size={18}/>,  label: '佐證金庫', color: 'var(--aqua-cyan-midtone)' },
+  { href: '/swarm',        icon: <Users size={18}/>,     label: '代理蜂群', color: 'var(--aqua-cyan-midtone)' },
+  { href: '/terminal',     icon: <Code size={18}/>,      label: '終端主控', color: 'var(--aqua-cyan-midtone)' },
 ];
 
 function GovernanceLoopMonitor() {
@@ -341,7 +341,7 @@ function GovernanceLoopMonitor() {
     <Card className="h-full overflow-hidden flex flex-col bg-slate-900 text-white border-none shadow-2xl">
       <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
         <div>
-          <h4 className="text-[10px] font-black text-blue-300 uppercase tracking-[0.2em]">Chicony Governance Loop</h4>
+          <h4 className="text-[10px] font-black text-aqua-cyan-midtone uppercase tracking-[0.2em]">SUNSHINE Governance Loop</h4>
           <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-0.5">Real-time AI Governance</p>
         </div>
         <RefreshCw size={14} className="text-blue-400 animate-spin-slow" />
@@ -381,37 +381,38 @@ export default function DashboardContent() {
       variants={staggerContainer}
     >
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#003262]/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#FDB515]/5 rounded-full blur-[120px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[var(--aqua-500)]/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[var(--eternal-gold-shadow)]/5 rounded-full blur-[120px]" />
       </div>
 
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 relative z-10">
         <motion.div variants={fadeIn} className="space-y-6">
           <div className="flex flex-wrap items-center gap-3">
-             <Badge variant="verified" className="bg-[#FDB515] text-[#003262] border-none font-black tracking-widest px-4">CHICONY_EDITION</Badge>
+             <Badge variant="verified" className="bg-[var(--eternal-gold-midtone)] text-[var(--aqua-cyan-midtone)] border-none font-black tracking-widest px-4 shadow-sm">SUNSHINE_EDITION</Badge>
              <div className="flex items-center gap-2 bg-white/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/60 shadow-sm">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[9px] font-black text-emerald-700 uppercase tracking-widest">AI Audit Core Live</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-aqua-cyan animate-pulse shadow-[0_0_8px_rgba(0,255,255,0.5)]" />
+                <span className="text-[9px] font-black text-aqua-cyan-midtone uppercase tracking-widest">OmniAgent Swarm Active</span>
              </div>
-             <div className="flex items-center gap-2 bg-[#003262] px-3 py-1 rounded-full text-white shadow-lg shadow-[#003262]/20">
-                <ShieldCheck size={14} className="text-[#FDB515]" />
-                <span className="text-[9px] font-black uppercase tracking-widest">Trust: {trustScore}</span>
+             <div className="flex items-center gap-2 bg-[var(--aqua-cyan-midtone)] px-3 py-1 rounded-full text-white shadow-lg shadow-[var(--aqua-cyan-midtone)]/20">
+                <ShieldCheck size={14} className="text-[var(--eternal-gold-midtone)]" />
+                <span className="text-[9px] font-black uppercase tracking-widest">Trust Score: {trustScore}</span>
              </div>
           </div>
-          <div className="space-y-2">
-            <h1 className="text-4xl lg:text-6xl font-bold text-[#003262] tracking-tighter leading-none uppercase">群光電子治理主控台</h1>
+          <div className="space-y-4">
+            <BrandLogo size="lg" />
+            <h1 className="text-4xl lg:text-5xl font-bold text-[var(--aqua-cyan-midtone)] tracking-tighter leading-none uppercase">全域治理主控台</h1>
 
             <p className="text-slate-500 text-lg lg:text-xl max-w-2xl font-medium leading-relaxed">
-               AI+OCR 永續數據稽核 · RBA v8.0 供應鏈合規 · <span className="text-[#009E9D] font-bold italic underline decoration-wavy underline-offset-4">5T 誠信協議專版</span>
+               AI+OCR 永續數據稽核 · GRI 2024 全局導航 · <span className="text-aqua-cyan-midtone font-bold italic underline decoration-wavy underline-offset-4">5T 誠信協議原子版</span>
             </p>
           </div>
         </motion.div>
         <motion.div variants={fadeIn} className="flex items-stretch gap-4 min-w-[360px]">
           <div className="flex-1 px-6 py-4 bg-white/40 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm flex flex-col justify-center">
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Global Real-time Sync</p>
-            <p className="text-xl font-bold text-[#003262] font-mono leading-none tracking-tight">{now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}</p>
+            <p className="text-xl font-bold text-[var(--aqua-cyan-midtone)] font-mono leading-none tracking-tight">{now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}</p>
           </div>
-          <Button variant="primary" size="lg" className="h-full px-10 rounded-[28px] shadow-2xl shadow-[#003262]/20 gap-3 group">
+          <Button variant="primary" size="lg" className="h-full px-10 rounded-[28px] shadow-2xl shadow-[var(--aqua-cyan-midtone)]/20 gap-3 group">
             <Sparkles size={20} className="text-[#FDB515] group-hover:rotate-12 transition-transform" />
             <span className="font-bold tracking-tight text-base">啟動 AI 治理</span>
           </Button>
@@ -423,7 +424,7 @@ export default function DashboardContent() {
           <motion.div key={k.key} variants={slideIn} custom={idx}>
             <Card className="p-8 space-y-6 bg-white/60 backdrop-blur-md border-white/60 group hover:bg-white transition-all">
               <div className="flex items-center justify-between">
-                 <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[#003262] group-hover:scale-110 transition-transform shadow-inner">
+                 <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-[var(--aqua-cyan-midtone)] group-hover:scale-110 transition-transform shadow-inner">
                     {k.icon}
                  </div>
                  <Badge variant="verified" className="bg-emerald-50 text-emerald-600 border-emerald-100">{k.trend}</Badge>
@@ -431,7 +432,7 @@ export default function DashboardContent() {
               <div className="space-y-1">
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{k.label}</p>
                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-[#003262] tracking-tighter" style={{ color: k.color }}>{k.value}</span>
+                    <span className="text-4xl font-bold text-[var(--aqua-cyan-midtone)] tracking-tighter" style={{ color: k.color }}>{k.value}</span>
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{k.unit}</span>
                  </div>
               </div>
@@ -445,7 +446,7 @@ export default function DashboardContent() {
           <Card hoverEffect className="h-full overflow-hidden bg-white/60 backdrop-blur-md border-white/60">
             <div className="p-8 lg:p-12 border-b border-slate-100/60 flex items-center justify-between">
                <div>
-                  <h3 className="text-2xl font-bold text-[#003262] tracking-tight">群光全球排放與治理軌跡</h3>
+                  <h3 className="text-2xl font-bold text-[var(--aqua-cyan-midtone)] tracking-tight">SUNSHINE 全球排放與治理軌跡</h3>
                   <p className="text-sm text-slate-400 font-medium mt-1 uppercase tracking-widest">SBTi 1.5°C Strategy Alignment</p>
                </div>
                <Badge variant="verified">REAL_TIME_NODE_SYNC</Badge>
@@ -455,13 +456,13 @@ export default function DashboardContent() {
                   <EnvironmentalTrajectory title="" />
                </div>
                <div className="mt-10 p-6 bg-blue-50/50 rounded-3xl border border-blue-100 flex items-start gap-6 group hover:bg-blue-50 transition-colors">
-                  <div className="w-12 h-12 rounded-2xl bg-[#003262] flex items-center justify-center text-white shrink-0 shadow-xl shadow-[#003262]/20">
+                  <div className="w-12 h-12 rounded-2xl bg-[var(--aqua-cyan-midtone)] flex items-center justify-center text-white shrink-0 shadow-xl shadow-[var(--aqua-cyan-midtone)]/20">
                      <Brain size={24} />
                   </div>
                   <div className="space-y-1">
-                     <p className="text-xs text-[#003262] font-black leading-tight uppercase tracking-[0.2em]">Chicony AI Insights</p>
+                     <p className="text-xs text-[var(--aqua-cyan-midtone)] font-black leading-tight uppercase tracking-[0.2em]">SUNSHINE AI Insights</p>
                      <p className="text-base text-slate-600 leading-relaxed font-medium">
-                        AI 模型分析顯示，供應鏈範疇三數據辨識度提升 <span className="text-[#009E9D] font-bold">24%</span>。目前偵測到 2 筆高風險 RBA 異常，已自動排入「人工複核隊列」。
+                        AI 模型分析顯示，供應鏈範疇三數據辨識度提升 <span className="text-aqua-cyan-midtone font-bold">24%</span>。目前偵測到 2 筆 5T 異常，已自動排入「Agent0 修復隊列」。
                      </p>
 
                   </div>
@@ -491,7 +492,7 @@ export default function DashboardContent() {
                     <div className="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center mb-4 transition-all duration-500 group-hover:rotate-12 shadow-lg group-hover:shadow-xl" style={{ backgroundColor: `${a.color}10`, color: a.color }}>
                       {a.icon}
                     </div>
-                    <p className="text-xs font-bold text-[#003262] tracking-tight">{a.label}</p>
+                    <p className="text-xs font-bold text-[var(--aqua-cyan-midtone)] tracking-tight">{a.label}</p>
                   </Card>
                 </Link>
               </motion.div>

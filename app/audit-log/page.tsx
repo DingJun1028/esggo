@@ -19,7 +19,7 @@ import { cn } from '../../lib/utils';
 
 const ACTION_COLORS: Record<string, string> = {
   'ZKP_SEAL': '#8B5CF6', // Purple
-  'VAULT_OMNI_ENGRAVE': '#003262', // Berkeley Blue
+  'VAULT_OMNI_ENGRAVE': 'var(--aqua-cyan-midtone)', // Berkeley Blue
   'AGENT_EXECUTE': '#FDB515', // California Gold
   'SAVE_DRAFT': '#10B981', // Verified Green
 };
@@ -93,7 +93,7 @@ export default function AuditLogPage() {
       { id: 'refresh', label: '刷新日誌', icon: <RefreshCw size={14} className={loading ? 'animate-spin' : ''}/>, onClick: loadLogs }
     ],
     kpis: [
-      { key: 'today', label: '今日事件', value: logs.length, icon: <Activity size={18}/>, color: '#003262' },
+      { key: 'today', label: '今日事件', value: logs.length, icon: <Activity size={18}/>, color: 'var(--aqua-cyan-midtone)' },
       { key: 'seal', label: '5T 封印項', value: logs.filter(l => l.contentHash).length, icon: <Hash size={18}/>, color: '#8B5CF6', verified: true },
       { key: 'agent', label: 'Agent 調度', value: logs.filter(l => l.title?.includes('AGENT')).length, icon: <Database size={18}/>, color: '#FDB515' },
       { key: 'secure', label: '數據誠信度', value: '100%', unit: 'SECURE', icon: <CheckCircle size={18}/>, color: '#10B981', verified: true },
@@ -112,7 +112,7 @@ export default function AuditLogPage() {
             <div className="relative w-full">
               <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
               <input 
-                className="w-full bg-slate-50/50 border border-slate-200/60 rounded-[20px] pl-11 pr-4 py-3 text-sm focus:border-[#003262] focus:bg-white outline-none transition-all shadow-inner"
+                className="w-full bg-slate-50/50 border border-slate-200/60 rounded-[20px] pl-11 pr-4 py-3 text-sm focus:border-[var(--aqua-cyan-midtone)] focus:bg-white outline-none transition-all shadow-inner"
                 placeholder="搜尋日誌摘要、Hash Lock 或資源來源..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
@@ -123,8 +123,8 @@ export default function AuditLogPage() {
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 gap-6">
                    <div className="relative">
-                      <div className="w-16 h-16 rounded-full border-4 border-[#003262]/10 border-t-[#003262] animate-spin" />
-                      <Shield size={24} className="absolute inset-0 m-auto text-[#003262] animate-pulse" />
+                      <div className="w-16 h-16 rounded-full border-4 border-[var(--aqua-cyan-midtone)]/10 border-t-[var(--aqua-cyan-midtone)] animate-spin" />
+                      <Shield size={24} className="absolute inset-0 m-auto text-[var(--aqua-cyan-midtone)] animate-pulse" />
                    </div>
                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] animate-pulse">Syncing with Audit Chain...</p>
                 </div>
@@ -143,7 +143,7 @@ export default function AuditLogPage() {
                     action: (
                        <div className="flex items-center gap-3">
                           <div className="w-2 h-2 rounded-full shadow-[0_0_8px_currentColor]" style={{ background: ACTION_COLORS[log.title!] || '#cbd5e1', color: ACTION_COLORS[log.title!] || '#cbd5e1' }} />
-                          <span className="font-bold text-[#003262] text-xs tracking-tight">{log.title}</span>
+                          <span className="font-bold text-[var(--aqua-cyan-midtone)] text-xs tracking-tight">{log.title}</span>
                        </div>
                     ),
                     resource: <span className="text-xs text-slate-500 font-bold">{log.source || '-'}</span>,
@@ -155,7 +155,7 @@ export default function AuditLogPage() {
                           <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">{log.dataType || 'Node'}</span>
                        </div>
                     ),
-                    standard: <Badge variant="draft" className="bg-[#FDB515]/5 text-[#003262] border-[#FDB515]/10 font-mono text-[9px]">{log.standard || '5T_SYNC'}</Badge>,
+                    standard: <Badge variant="draft" className="bg-[#FDB515]/5 text-[var(--aqua-cyan-midtone)] border-[#FDB515]/10 font-mono text-[9px]">{log.standard || '5T_SYNC'}</Badge>,
                     hash: log.contentHash ? (
                       <div className="flex items-center gap-1.5 group/hash">
                         <Lock size={10} className="text-[#009E9D]/40"/>
@@ -205,7 +205,7 @@ export default function AuditLogPage() {
       <AnimatePresence>
         {resendingLog && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#003262]/40 backdrop-blur-xl" onClick={() => setResendingLog(null)} />
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--aqua-cyan-midtone)]/40 backdrop-blur-xl" onClick={() => setResendingLog(null)} />
              <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }} 
               animate={{ opacity: 1, scale: 1, y: 0 }} 
@@ -218,7 +218,7 @@ export default function AuditLogPage() {
                       <Mail size={24} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-[#003262]">補發 5T 實證憑證</h3>
+                      <h3 className="text-xl font-bold text-[var(--aqua-cyan-midtone)]">補發 5T 實證憑證</h3>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Resend Integrity Proof</p>
                     </div>
                   </header>
@@ -263,7 +263,7 @@ export default function AuditLogPage() {
       <AnimatePresence>
         {selected && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#003262]/40 backdrop-blur-xl" onClick={() => setSelected(null)} />
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[var(--aqua-cyan-midtone)]/40 backdrop-blur-xl" onClick={() => setSelected(null)} />
              <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }} 
               animate={{ opacity: 1, scale: 1, y: 0 }} 
@@ -273,10 +273,10 @@ export default function AuditLogPage() {
                <Card className="bg-white/90 backdrop-blur-2xl rounded-[48px] border border-white shadow-2xl p-12 max-h-[90vh] overflow-y-auto">
                   <header className="flex justify-between items-center mb-10">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-[#003262]/5 text-[#003262] flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-2xl bg-[var(--aqua-cyan-midtone)]/5 text-[var(--aqua-cyan-midtone)] flex items-center justify-center">
                         <Activity size={24} />
                       </div>
-                      <h3 className="text-2xl font-bold text-[#003262] tracking-tight">審計記錄詳情</h3>
+                      <h3 className="text-2xl font-bold text-[var(--aqua-cyan-midtone)] tracking-tight">審計記錄詳情</h3>
                     </div>
                     <Button variant="glass" size="sm" className="w-10 h-10 p-0 rounded-full" onClick={() => setSelected(null)}><X size={20}/></Button>
                   </header>
@@ -299,7 +299,7 @@ export default function AuditLogPage() {
                           ) : row.mono ? (
                             <code className="text-[11px] text-[#009E9D] font-mono break-all leading-relaxed bg-[#009E9D]/5 p-2 rounded-lg border border-[#009E9D]/10">{row.value}</code>
                           ) : (
-                            <span className={cn("text-slate-700 font-bold text-sm leading-relaxed", row.highlight && "text-[#003262] text-base")}>{row.value}</span>
+                            <span className={cn("text-slate-700 font-bold text-sm leading-relaxed", row.highlight && "text-[var(--aqua-cyan-midtone)] text-base")}>{row.value}</span>
                           )}
                        </div>
                      ))}
