@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, X, Send, Maximize2, Minimize2, Sparkles, Activity, History, Zap } from 'lucide-react';
 import { Card } from '../ui/Card';
@@ -14,6 +14,17 @@ export default function OmniAgentFloatingAgent() {
   const { rs, status: rsStatus } = useOmniResonance();
   const [input, setInput] = useState('');
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+
   return (
     <div className="fixed bottom-10 right-10 z-[10000] flex flex-col items-end">
       <AnimatePresence>
@@ -23,10 +34,10 @@ export default function OmniAgentFloatingAgent() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 40 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className={cn(
-              "mb-6 flex flex-col transition-all duration-500 origin-bottom-right",
-              isMaximized ? "w-[640px] h-[800px]" : "w-[400px] h-[580px]"
-            )}
+className={cn(
+               "mb-6 flex flex-col transition-all duration-500 origin-bottom-right",
+               isMaximized ? "w-full max-w-[90%] sm:max-w-[640px] h-[60vh] sm:h-[80vh] max-h-[80vh]" : "w-full max-w-[90%] sm:max-w-[400px] max-w-md h-[60vh] max-h-[60vh]"
+             )}
           >
             <Card className="w-full h-full flex flex-col shadow-glass border-white/60 bg-white/80 backdrop-blur-3xl rounded-[3rem] p-0 overflow-hidden">
                {/* Agent Header */}

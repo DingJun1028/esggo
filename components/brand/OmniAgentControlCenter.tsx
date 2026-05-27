@@ -29,6 +29,17 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifyResult, setVerifyResult] = useState<boolean | null>(null);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+
   const handleTestSeal = async () => {
     // 這裡調用 mock 封印
     const mockId = 'ev_' + Math.random().toString(36).substr(2, 9);

@@ -18,14 +18,24 @@
   --secondary:     #3B7EA1;
   --teal:          #009E9D;
 
-  --success:   #059669;
-  --success-bg:#ECFDF5;
-  --warning:   #D97706;
-  --warning-bg:#FFFBEB;
-  --danger:    #DC2626;
-  --danger-bg: #FEF2F2;
-  --info:      #2563EB;
-  --purple:    #7C3AED;
+   --success:   #059669;
+   --success-bg:#ECFDF5;
+   --warning:   #D97706;
+   --warning-bg:#FFFBEB;
+   --danger:    #DC2626;
+   --danger-bg: #FEF2F2;
+   --info:      #2563EB;
+   --purple:    #7C3AED;
+   --neutral:   #6B7280;
+   --primary-light: #D1D5DB;
+   --secondary-light: #A5B1C2;
+   --warning-light: #FBBF24;
+   --error-light: #F87171;
+   --pending:   #7C4DFF;
+   --completed: #10B981;
+   --in-progress: #00897B;
+   --canceled:  #D7263D;
+   --archived:  #6B7280;
 
   /* ── Light Surface System ────────────────────────────────────────── */
   --bg-void:     #F8FAFD;           /* Page background — near white, cool tint */

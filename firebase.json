@@ -1,6 +1,6 @@
-﻿{
+{
   "hosting": {
-    "site": "esggooriginal",
+    "site": "esggo-original",
     "public": "public",
     "ignore": [
       "firebase.json",

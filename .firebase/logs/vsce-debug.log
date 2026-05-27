@@ -7309,3 +7309,150 @@ Generated sources: esm\package.json [17B] index.cjs.js [7757B] package.json [632
 [debug] [2026-05-26T23:07:45.105Z] I0527 07:07:45.103813   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
 I0527 07:07:45.103813   39420 load.go:109] Finished reloading
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:07:45.103813   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0527 07:07:45.103813   39420 load.go:109] Finished reloading\n"}}
+[debug] [2026-05-26T23:25:24.820Z] I0527 07:25:24.793699   39420 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:24.793699   39420 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-26T23:25:24.975Z] I0527 07:25:24.974007   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 83fc] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5372B] 
+Connector "example": sources: example\queries.gql [6956B] example\seed_data.gql [865B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:24.974007   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 83fc] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5372B] \nConnector \"example\": sources: example\\queries.gql [6956B] example\\seed_data.gql [865B] \n"}}
+[debug] [2026-05-26T23:25:25.033Z] I0527 07:25:25.031718   39420 codegen.go:101] [connector "example" javascriptSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:25.031718   39420 codegen.go:101] [connector \"example\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-05-26T23:25:25.058Z] I0527 07:25:25.058422   39420 codegen.go:101] [connector "example" adminSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:25.058422   39420 codegen.go:101] [connector \"example\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-05-26T23:25:25.065Z] I0527 07:25:25.064692   39420 collector.go:107] schema extensions wrote into "c:\\Project\\esggo_original\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [26502B] main\mutation.gql [72417B] main\implicit.gql [6103B] prelude.gql [84989B] main\input.gql [226254B] main\relation.gql [108831B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:25.064692   39420 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo_original\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [26502B] main\\mutation.gql [72417B] main\\implicit.gql [6103B] prelude.gql [84989B] main\\input.gql [226254B] main\\relation.gql [108831B] \n"}}
+[debug] [2026-05-26T23:25:25.073Z] I0527 07:25:25.072891   39420 collector.go:107] connector "example" javascriptSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [12514B] react\esm\package.json [17B] react\esm\index.esm.js [7616B] index.cjs.js [14069B] react\index.cjs.js [8135B] .guides/usage.md [3914B] esm\package.json [17B] package.json [853B] react\index.d.ts [9892B] react\README.md [103745B] .guides/config.json [236B] README.md [99641B] react\package.json [460B] .guides/setup.md [1682B] index.d.ts [24019B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:25.072891   39420 collector.go:107] connector \"example\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [12514B] react\\esm\\package.json [17B] react\\esm\\index.esm.js [7616B] index.cjs.js [14069B] react\\index.cjs.js [8135B] .guides/usage.md [3914B] esm\\package.json [17B] package.json [853B] react\\index.d.ts [9892B] react\\README.md [103745B] .guides/config.json [236B] README.md [99641B] react\\package.json [460B] .guides/setup.md [1682B] index.d.ts [24019B] \n"}}
+[debug] [2026-05-26T23:25:25.900Z] I0527 07:25:25.138636   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+I0527 07:25:25.142554   39420 collector.go:107] connector "example" adminSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+Generated sources: index.cjs.js [7757B] package.json [632B] index.d.ts [21676B] esm\index.esm.js [6862B] esm\package.json [17B] 
+I0527 07:25:25.146768   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0527 07:25:25.146768   39420 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:25:25.138636   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0527 07:25:25.142554   39420 collector.go:107] connector \"example\" adminSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.cjs.js [7757B] package.json [632B] index.d.ts [21676B] esm\\index.esm.js [6862B] esm\\package.json [17B] \nI0527 07:25:25.146768   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0527 07:25:25.146768   39420 load.go:109] Finished reloading\n"}}
+[debug] [2026-05-26T23:28:44.791Z] I0527 07:28:44.791336   39420 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:28:44.791336   39420 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-26T23:28:44.853Z] W0527 07:28:44.852853   39420 control.go:74] [projects/emulator/locations/emulator/services/esggoalpha d85d] connector "example" has errors: example\queries.gql:65:1: On @auth: invalid expression ("auth.uid != null"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'
+ | auth.uid != null
+ | .........^
+example\queries.gql:284:1: On @auth: invalid expression ("auth.uid != null"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'
+ | auth.uid != null
+ | .........^
+
+sources: example\queries.gql [6979B] example\seed_data.gql [865B] 
+I0527 07:28:44.852853   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha d85d] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5372B] 
+Connector "example": sources: example\queries.gql [6979B] example\seed_data.gql [865B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0527 07:28:44.852853   39420 control.go:74] [projects/emulator/locations/emulator/services/esggoalpha d85d] connector \"example\" has errors: example\\queries.gql:65:1: On @auth: invalid expression (\"auth.uid != null\"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'\n | auth.uid != null\n | .........^\nexample\\queries.gql:284:1: On @auth: invalid expression (\"auth.uid != null\"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'\n | auth.uid != null\n | .........^\n\nsources: example\\queries.gql [6979B] example\\seed_data.gql [865B] \nI0527 07:28:44.852853   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha d85d] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5372B] \nConnector \"example\": sources: example\\queries.gql [6979B] example\\seed_data.gql [865B] \n"}}
+[debug] [2026-05-26T23:28:44.856Z] E0527 07:28:44.854919   39420 load.go:73] Could not load sources: 
+Errors: example\queries.gql:65:1: On @auth: invalid expression ("auth.uid != null"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'
+ | auth.uid != null
+ | .........^
+example\queries.gql:284:1: On @auth: invalid expression ("auth.uid != null"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'
+ | auth.uid != null
+ | .........^
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0527 07:28:44.854919   39420 load.go:73] Could not load sources: \nErrors: example\\queries.gql:65:1: On @auth: invalid expression (\"auth.uid != null\"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'\n | auth.uid != null\n | .........^\nexample\\queries.gql:284:1: On @auth: invalid expression (\"auth.uid != null\"): ERROR: <input>:1:10: found no matching overload for '_!=_' applied to '(string, null)'\n | auth.uid != null\n | .........^\n"}}
+[debug] [2026-05-26T23:28:44.861Z] I0527 07:28:44.861477   39420 collector.go:107] schema extensions wrote into "c:\\Project\\esggo_original\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84989B] main\input.gql [226254B] main\relation.gql [108831B] main\query.gql [26502B] main\mutation.gql [72417B] main\implicit.gql [6103B] 
+I0527 07:28:44.861477   39420 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:28:44.861477   39420 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo_original\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84989B] main\\input.gql [226254B] main\\relation.gql [108831B] main\\query.gql [26502B] main\\mutation.gql [72417B] main\\implicit.gql [6103B] \nI0527 07:28:44.861477   39420 load.go:74] Finished reloading\n"}}
+[debug] [2026-05-26T23:29:04.791Z] I0527 07:29:04.791953   39420 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:04.791953   39420 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-26T23:29:04.824Z] W0527 07:29:04.824412   39420 control.go:74] [projects/emulator/locations/emulator/services/esggoalpha 0ff3] connector "example" has errors: example\queries.gql:65:1: On @auth: invalid expression ("auth.uid != nil"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')
+ | auth.uid != nil
+ | ............^
+example\queries.gql:284:1: On @auth: invalid expression ("auth.uid != nil"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')
+ | auth.uid != nil
+ | ............^
+
+sources: example\seed_data.gql [865B] example\queries.gql [6977B] 
+I0527 07:29:04.824412   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 0ff3] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5372B] 
+Connector "example": sources: example\queries.gql [6977B] example\seed_data.gql [865B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0527 07:29:04.824412   39420 control.go:74] [projects/emulator/locations/emulator/services/esggoalpha 0ff3] connector \"example\" has errors: example\\queries.gql:65:1: On @auth: invalid expression (\"auth.uid != nil\"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')\n | auth.uid != nil\n | ............^\nexample\\queries.gql:284:1: On @auth: invalid expression (\"auth.uid != nil\"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')\n | auth.uid != nil\n | ............^\n\nsources: example\\seed_data.gql [865B] example\\queries.gql [6977B] \nI0527 07:29:04.824412   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 0ff3] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5372B] \nConnector \"example\": sources: example\\queries.gql [6977B] example\\seed_data.gql [865B] \n"}}
+[debug] [2026-05-26T23:29:04.830Z] E0527 07:29:04.830018   39420 load.go:73] Could not load sources: 
+Errors: example\queries.gql:65:1: On @auth: invalid expression ("auth.uid != nil"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')
+ | auth.uid != nil
+ | ............^
+example\queries.gql:284:1: On @auth: invalid expression ("auth.uid != nil"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')
+ | auth.uid != nil
+ | ............^
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0527 07:29:04.830018   39420 load.go:73] Could not load sources: \nErrors: example\\queries.gql:65:1: On @auth: invalid expression (\"auth.uid != nil\"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')\n | auth.uid != nil\n | ............^\nexample\\queries.gql:284:1: On @auth: invalid expression (\"auth.uid != nil\"): ERROR: <input>:1:13: undeclared reference to 'nil' (in container '')\n | auth.uid != nil\n | ............^\n"}}
+[debug] [2026-05-26T23:29:04.834Z] I0527 07:29:04.833657   39420 collector.go:107] schema extensions wrote into "c:\\Project\\esggo_original\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84989B] main\implicit.gql [6103B] main\input.gql [226254B] main\relation.gql [108831B] main\query.gql [26502B] main\mutation.gql [72417B] 
+I0527 07:29:04.833657   39420 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:04.833657   39420 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo_original\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84989B] main\\implicit.gql [6103B] main\\input.gql [226254B] main\\relation.gql [108831B] main\\query.gql [26502B] main\\mutation.gql [72417B] \nI0527 07:29:04.833657   39420 load.go:74] Finished reloading\n"}}
+[debug] [2026-05-26T23:29:34.792Z] I0527 07:29:34.791840   39420 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.791840   39420 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-26T23:29:34.840Z] I0527 07:29:34.838676   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 5551] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5372B] 
+Connector "example": sources: example\queries.gql [6971B] example\seed_data.gql [865B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.838676   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 5551] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5372B] \nConnector \"example\": sources: example\\queries.gql [6971B] example\\seed_data.gql [865B] \n"}}
+[debug] [2026-05-26T23:29:34.889Z] I0527 07:29:34.888227   39420 codegen.go:101] [connector "example" javascriptSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.888227   39420 codegen.go:101] [connector \"example\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-05-26T23:29:34.906Z] I0527 07:29:34.905909   39420 codegen.go:101] [connector "example" adminSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.905909   39420 codegen.go:101] [connector \"example\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-05-26T23:29:34.910Z] I0527 07:29:34.909174   39420 collector.go:107] schema extensions wrote into "c:\\Project\\esggo_original\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84989B] main\implicit.gql [6103B] main\input.gql [226254B] main\relation.gql [108831B] main\query.gql [26502B] main\mutation.gql [72417B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.909174   39420 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo_original\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84989B] main\\implicit.gql [6103B] main\\input.gql [226254B] main\\relation.gql [108831B] main\\query.gql [26502B] main\\mutation.gql [72417B] \n"}}
+[debug] [2026-05-26T23:29:34.921Z] I0527 07:29:34.920680   39420 collector.go:107] connector "example" javascriptSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+Generated sources: react\README.md [103745B] README.md [99641B] react\index.d.ts [9892B] react\package.json [460B] react\index.cjs.js [8135B] .guides/config.json [236B] index.d.ts [24019B] esm\package.json [17B] react\esm\package.json [17B] .guides/usage.md [4008B] .guides/setup.md [1682B] esm\index.esm.js [12514B] index.cjs.js [14069B] package.json [853B] react\esm\index.esm.js [7616B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.920680   39420 collector.go:107] connector \"example\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\nGenerated sources: react\\README.md [103745B] README.md [99641B] react\\index.d.ts [9892B] react\\package.json [460B] react\\index.cjs.js [8135B] .guides/config.json [236B] index.d.ts [24019B] esm\\package.json [17B] react\\esm\\package.json [17B] .guides/usage.md [4008B] .guides/setup.md [1682B] esm\\index.esm.js [12514B] index.cjs.js [14069B] package.json [853B] react\\esm\\index.esm.js [7616B] \n"}}
+[debug] [2026-05-26T23:29:34.924Z] I0527 07:29:34.923626   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.923626   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-05-26T23:29:34.925Z] I0527 07:29:34.925370   39420 collector.go:107] connector "example" adminSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [21676B] esm\index.esm.js [6862B] esm\package.json [17B] index.cjs.js [7757B] package.json [632B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.925370   39420 collector.go:107] connector \"example\" adminSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [21676B] esm\\index.esm.js [6862B] esm\\package.json [17B] index.cjs.js [7757B] package.json [632B] \n"}}
+[debug] [2026-05-26T23:29:34.930Z] I0527 07:29:34.929993   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0527 07:29:34.930512   39420 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:29:34.929993   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0527 07:29:34.930512   39420 load.go:109] Finished reloading\n"}}
+[debug] [2026-05-26T23:39:04.799Z] I0527 07:39:04.792960   39420 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:04.792960   39420 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-26T23:39:04.917Z] I0527 07:39:04.916680   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 3fa4] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5372B] 
+Connector "example": sources: example\queries.gql [6812B] example\seed_data.gql [865B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:04.916680   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 3fa4] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5372B] \nConnector \"example\": sources: example\\queries.gql [6812B] example\\seed_data.gql [865B] \n"}}
+[debug] [2026-05-26T23:39:04.972Z] I0527 07:39:04.972182   39420 codegen.go:101] [connector "example" javascriptSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:04.972182   39420 codegen.go:101] [connector \"example\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-05-26T23:39:04.995Z] I0527 07:39:04.995177   39420 codegen.go:101] [connector "example" adminSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:04.995177   39420 codegen.go:101] [connector \"example\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-05-26T23:39:05.006Z] I0527 07:39:05.004461   39420 collector.go:107] schema extensions wrote into "c:\\Project\\esggo_original\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\mutation.gql [72417B] prelude.gql [84989B] main\implicit.gql [6103B] main\input.gql [226254B] main\relation.gql [108831B] main\query.gql [26502B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:05.004461   39420 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo_original\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [72417B] prelude.gql [84989B] main\\implicit.gql [6103B] main\\input.gql [226254B] main\\relation.gql [108831B] main\\query.gql [26502B] \n"}}
+[debug] [2026-05-26T23:39:05.025Z] I0527 07:39:05.025206   39420 collector.go:107] connector "example" javascriptSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+Generated sources: react\package.json [460B] react\README.md [103745B] .guides/setup.md [1682B] esm\package.json [17B] react\index.d.ts [9892B] react\index.cjs.js [8135B] react\esm\index.esm.js [7616B] .guides/config.json [236B] esm\index.esm.js [12514B] index.cjs.js [14069B] README.md [99641B] react\esm\package.json [17B] .guides/usage.md [3914B] index.d.ts [24019B] package.json [853B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:05.025206   39420 collector.go:107] connector \"example\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\nGenerated sources: react\\package.json [460B] react\\README.md [103745B] .guides/setup.md [1682B] esm\\package.json [17B] react\\index.d.ts [9892B] react\\index.cjs.js [8135B] react\\esm\\index.esm.js [7616B] .guides/config.json [236B] esm\\index.esm.js [12514B] index.cjs.js [14069B] README.md [99641B] react\\esm\\package.json [17B] .guides/usage.md [3914B] index.d.ts [24019B] package.json [853B] \n"}}
+[debug] [2026-05-26T23:39:05.066Z] I0527 07:39:05.064970   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:05.064970   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-05-26T23:39:05.086Z] I0527 07:39:05.086497   39420 collector.go:107] connector "example" adminSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+Generated sources: esm\package.json [17B] index.cjs.js [7757B] package.json [632B] index.d.ts [21676B] esm\index.esm.js [6862B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:05.086497   39420 collector.go:107] connector \"example\" adminSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: esm\\package.json [17B] index.cjs.js [7757B] package.json [632B] index.d.ts [21676B] esm\\index.esm.js [6862B] \n"}}
+[debug] [2026-05-26T23:39:05.112Z] I0527 07:39:05.111695   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:05.111695   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\n"}}
+[debug] [2026-05-26T23:39:05.113Z] I0527 07:39:05.111695   39420 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:39:05.111695   39420 load.go:109] Finished reloading\n"}}
+[debug] [2026-05-26T23:41:44.792Z] I0527 07:41:44.791936   39420 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.791936   39420 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-26T23:41:44.839Z] I0527 07:41:44.839098   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 0068] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5372B] 
+Connector "example": sources: example\queries.gql [7023B] example\seed_data.gql [865B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.839098   39420 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 0068] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5372B] \nConnector \"example\": sources: example\\queries.gql [7023B] example\\seed_data.gql [865B] \n"}}
+[debug] [2026-05-26T23:41:44.890Z] I0527 07:41:44.890011   39420 codegen.go:101] [connector "example" javascriptSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.890011   39420 codegen.go:101] [connector \"example\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-05-26T23:41:44.902Z] I0527 07:41:44.902504   39420 codegen.go:101] [connector "example" adminSdk] Generating sources into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.902504   39420 codegen.go:101] [connector \"example\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-05-26T23:41:44.909Z] I0527 07:41:44.908433   39420 collector.go:107] schema extensions wrote into "c:\\Project\\esggo_original\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\mutation.gql [72417B] prelude.gql [84989B] main\implicit.gql [6103B] main\input.gql [226254B] main\relation.gql [108831B] main\query.gql [26502B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.908433   39420 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo_original\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [72417B] prelude.gql [84989B] main\\implicit.gql [6103B] main\\input.gql [226254B] main\\relation.gql [108831B] main\\query.gql [26502B] \n"}}
+[debug] [2026-05-26T23:41:44.918Z] I0527 07:41:44.916692   39420 collector.go:107] connector "example" javascriptSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-generated"
+Generated sources: .guides/usage.md [4008B] .guides/config.json [236B] esm\index.esm.js [12514B] react\package.json [460B] react\index.cjs.js [8135B] react\README.md [103745B] esm\package.json [17B] index.cjs.js [14069B] package.json [853B] index.d.ts [24019B] .guides/setup.md [1682B] README.md [99641B] react\index.d.ts [9892B] react\esm\package.json [17B] react\esm\index.esm.js [7616B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.916692   39420 collector.go:107] connector \"example\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-generated\"\nGenerated sources: .guides/usage.md [4008B] .guides/config.json [236B] esm\\index.esm.js [12514B] react\\package.json [460B] react\\index.cjs.js [8135B] react\\README.md [103745B] esm\\package.json [17B] index.cjs.js [14069B] package.json [853B] index.d.ts [24019B] .guides/setup.md [1682B] README.md [99641B] react\\index.d.ts [9892B] react\\esm\\package.json [17B] react\\esm\\index.esm.js [7616B] \n"}}
+[debug] [2026-05-26T23:41:44.925Z] I0527 07:41:44.925331   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.925331   39420 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-05-26T23:41:44.928Z] I0527 07:41:44.927808   39420 collector.go:107] connector "example" adminSdk wrote into "c:\\Project\\esggo_original\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [21676B] esm\index.esm.js [6862B] esm\package.json [17B] index.cjs.js [7757B] package.json [632B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.927808   39420 collector.go:107] connector \"example\" adminSdk wrote into \"c:\\\\Project\\\\esggo_original\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [21676B] esm\\index.esm.js [6862B] esm\\package.json [17B] index.cjs.js [7757B] package.json [632B] \n"}}
+[debug] [2026-05-26T23:41:44.930Z] I0527 07:41:44.929943   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0527 07:41:44.929943   39420 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.929943   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0527 07:41:44.929943   39420 load.go:109] Finished reloading\n"}}
