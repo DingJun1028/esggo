@@ -16,7 +16,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-ABCDEF'
 };
 
-export const isDemoMode = firebaseConfig.apiKey === 'fake-api-key';
+export const isDemoMode = true; // Forced true for local CLI testing
 
 // Initialize Firebase
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);

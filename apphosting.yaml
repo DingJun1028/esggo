@@ -1,6 +1,17 @@
-﻿kind: "AppStack"
+kind: "AppStack"
 schemaVersion: "v1"
 runConfig:
   minInstances: 0
   maxInstances: 10
   concurrency: 80
+env:
+  - variable: SUPABASE_SERVICE_ROLE_KEY
+    secret: SUPABASE_SERVICE_ROLE_KEY
+  - variable: NEXT_PUBLIC_GEMINI_API_KEY
+    secret: NEXT_PUBLIC_GEMINI_API_KEY
+  - variable: GOOGLE_API_KEY
+    secret: GOOGLE_API_KEY
+  - variable: BROWSER_USE_API_KEY
+    secret: BROWSER_USE_API_KEY
+  - variable: OPENAI_API_KEY
+    secret: OPENAI_API_KEY
