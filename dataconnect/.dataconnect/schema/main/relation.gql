@@ -1416,6 +1416,15 @@ extend type RegulatoryPolicy {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "RegulatoryPolicy.standard", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `RegulatoryPolicy` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "RegulatoryPolicy.userUid", purpose: QUERY_COUNT)
+  """
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "RegulatoryPolicy.id", purpose: ENTITY_ID)
@@ -2028,6 +2037,15 @@ extend type ScrapedArticle {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ScrapedArticle.url", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ScrapedArticle` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ScrapedArticle.userUid", purpose: QUERY_COUNT)
   """
   ✨ Minimum of the `publishedAt` field in the `ScrapedArticle` table.
   """
@@ -2673,6 +2691,40 @@ extend type User {
     having: EternalMemory_Having
   ): [EternalMemory!]! @fdc_generated(from: "EternalMemory.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
+  ✨ List `RegulatoryPolicy` objects in a one-to-many relationship (where `RegulatoryPolicy`.`user` is this object).
+  """
+  regulatoryPolicies_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RegulatoryPolicy_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RegulatoryPolicy_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RegulatoryPolicy_Having
+  ): [RegulatoryPolicy!]! @fdc_generated(from: "RegulatoryPolicy.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
   ✨ List `Report` objects in a one-to-many relationship (where `Report`.`user` is this object).
   """
   reports_on_user(
@@ -2740,6 +2792,40 @@ extend type User {
     """
     having: RoadmapMilestone_Having
   ): [RoadmapMilestone!]! @fdc_generated(from: "RoadmapMilestone.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `ScrapedArticle` objects in a one-to-many relationship (where `ScrapedArticle`.`user` is this object).
+  """
+  scrapedArticles_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ScrapedArticle_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ScrapedArticle_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ScrapedArticle_Having
+  ): [ScrapedArticle!]! @fdc_generated(from: "ScrapedArticle.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `SocialConnection` objects in a one-to-many relationship (where `SocialConnection`.`followed` is this object).
   """

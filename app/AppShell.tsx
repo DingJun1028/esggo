@@ -7,10 +7,11 @@ import {
   HeartPulse, MessageSquare, BarChart3, Leaf, Users, ShieldCheck, 
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
-  Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield,
+  Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield, Landmark,
   Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity
 } from 'lucide-react';
 import OmniAgentFloatingAgent from '../components/brand/OmniAgentFloating';
+import { BrandLogo } from '../components/brand/BrandLogo';
 import WorkspacePanel from '../components/brand/WorkspacePanel';
 import ComposerFooter from '../components/brand/ComposerFooter';
 import OmniAgentControlCenter from '../components/brand/OmniAgentControlCenter';

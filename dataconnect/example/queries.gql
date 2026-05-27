@@ -280,6 +280,8 @@ query GetReportByCompany($companyId: UUID!) @auth(level: USER) {
     id
     title
     status
+
+    
   }
 }
 

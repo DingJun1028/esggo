@@ -19,12 +19,28 @@ export class OmniMemorySync {
   private async handleEventSaved(event: OmniEvent): Promise<void> {
     console.log(`[OmniMemorySync] Intercepted new event: ${event.id} (Type: ${event.event_type})`);
     
-    try {
-      await this.syncToVectorDB(event);
-      console.log(`[OmniMemorySync] Successfully synchronized event ${event.id} to Cognitive Memory.`);
-    } catch (error) {
-      console.error(`[OmniMemorySync] Failed to sync event ${event.id} to Cognitive Memory.`, error);
-      // TODO: 實作 Retry 機制或存入 Dead Letter Queue
+    const maxRetries = 3;
+    let attempt = 0;
+    let success = false;
+
+    while (attempt < maxRetries && !success) {
+      try {
+        await this.syncToVectorDB(event);
+        console.log(`[OmniMemorySync] Successfully synchronized event ${event.id} to Cognitive Memory on attempt ${attempt + 1}.`);
+        success = true;
+      } catch (error) {
+        attempt++;
+        console.error(`[OmniMemorySync] Attempt ${attempt} failed to sync event ${event.id}.`, error);
+        
+        if (attempt < maxRetries) {
+          const delay = Math.pow(2, attempt) * 1000;
+          console.log(`[OmniMemorySync] Retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        } else {
+          console.error(`[OmniMemorySync] Max retries reached for event ${event.id}. Moving to Dead Letter logic.`);
+          // TODO: 實作存入 Dead Letter Queue (例如 Supabase table 'failed_sync_events')
+        }
+      }
     }
   }
 

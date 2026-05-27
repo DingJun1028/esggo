@@ -45,8 +45,7 @@ Maintain high technical integrity and follow the 5T protocol.
       return {
         success: true,
         agent: this.config.name,
-        output: result,
-        toolCalls: response.toolCalls
+        output: result
       };
     } catch (error: any) {
       console.error(`[ADK Agent - ${this.config.name}] Error:`, error);

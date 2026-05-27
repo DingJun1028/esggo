@@ -3892,6 +3892,18 @@ input RegulatoryPolicy_Data {
   """
   id_expr: String_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `RegulatoryPolicy`.`userUid` of type `String`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `RegulatoryPolicy`.`userUid` of type `String`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`user` of type `User`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`
   """
   code: String
@@ -3960,6 +3972,14 @@ input RegulatoryPolicy_Filter {
   ✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`
   """
   id: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`userUid` of type `String`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`user` of type `User`
+  """
+  user: User_Filter
   """
   ✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`
   """
@@ -4050,6 +4070,10 @@ input RegulatoryPolicy_Having {
   ✨ Generated from Field `RegulatoryPolicy`.`standard_count` of type `Int!`
   """
   standard_count: Int_Filter
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
 }
 """
 ✨ Generated key input type for table 'RegulatoryPolicy'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -4085,6 +4109,14 @@ input RegulatoryPolicy_Order {
   ✨ Generated from Field `RegulatoryPolicy`.`id` of type `String!`
   """
   id: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`userUid` of type `String`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`user` of type `User`
+  """
+  user: User_Order
   """
   ✨ Generated from Field `RegulatoryPolicy`.`code` of type `String!`
   """
@@ -4141,6 +4173,10 @@ input RegulatoryPolicy_Order {
   ✨ Generated from Field `RegulatoryPolicy`.`standard_count` of type `Int!`
   """
   standard_count: OrderDirection
+  """
+  ✨ Generated from Field `RegulatoryPolicy`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
 }
 """
 ✨ Generated data input type for table 'Report'. It includes all necessary fields for creating or upserting rows into table.
@@ -5540,6 +5576,18 @@ input ScrapedArticle_Data {
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `ScrapedArticle`.`userUid` of type `String`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `ScrapedArticle`.`userUid` of type `String`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ScrapedArticle`.`user` of type `User`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `ScrapedArticle`.`category` of type `String!`
   """
   category: String
@@ -5648,6 +5696,14 @@ input ScrapedArticle_Filter {
   ✨ Generated from Field `ScrapedArticle`.`id` of type `UUID!`
   """
   id: UUID_Filter
+  """
+  ✨ Generated from Field `ScrapedArticle`.`userUid` of type `String`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `ScrapedArticle`.`user` of type `User`
+  """
+  user: User_Filter
   """
   ✨ Generated from Field `ScrapedArticle`.`category` of type `String!`
   """
@@ -5763,6 +5819,10 @@ input ScrapedArticle_Having {
   """
   url_count: Int_Filter
   """
+  ✨ Generated from Field `ScrapedArticle`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
   ✨ Generated from Field `ScrapedArticle`.`publishedAt_min` of type `Date`
   """
   publishedAt_min: Date_Filter
@@ -5813,6 +5873,14 @@ input ScrapedArticle_Order {
   ✨ Generated from Field `ScrapedArticle`.`id` of type `UUID!`
   """
   id: OrderDirection
+  """
+  ✨ Generated from Field `ScrapedArticle`.`userUid` of type `String`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `ScrapedArticle`.`user` of type `User`
+  """
+  user: User_Order
   """
   ✨ Generated from Field `ScrapedArticle`.`category` of type `String!`
   """
@@ -5893,6 +5961,10 @@ input ScrapedArticle_Order {
   ✨ Generated from Field `ScrapedArticle`.`url_count` of type `Int!`
   """
   url_count: OrderDirection
+  """
+  ✨ Generated from Field `ScrapedArticle`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
   """
   ✨ Generated from Field `ScrapedArticle`.`publishedAt_min` of type `Date`
   """
@@ -7172,6 +7244,10 @@ input User_Data {
   """
   eternalMemories_on_user: [EternalMemory_Data!]
   """
+  ✨ Generated from Field `User`.`regulatoryPolicies_on_user` of type `[RegulatoryPolicy!]!`
+  """
+  regulatoryPolicies_on_user: [RegulatoryPolicy_Data!]
+  """
   ✨ Generated from Field `User`.`reports_on_user` of type `[Report!]!`
   """
   reports_on_user: [Report_Data!]
@@ -7179,6 +7255,10 @@ input User_Data {
   ✨ Generated from Field `User`.`roadmapMilestones_on_user` of type `[RoadmapMilestone!]!`
   """
   roadmapMilestones_on_user: [RoadmapMilestone_Data!]
+  """
+  ✨ Generated from Field `User`.`scrapedArticles_on_user` of type `[ScrapedArticle!]!`
+  """
+  scrapedArticles_on_user: [ScrapedArticle_Data!]
   """
   ✨ Generated from Field `User`.`socialConnections_on_followed` of type `[SocialConnection!]!`
   """
@@ -7281,6 +7361,10 @@ input User_Filter {
   """
   eternalMemories_on_user: EternalMemory_ListFilter
   """
+  ✨ Generated from Field `User`.`regulatoryPolicies_on_user` of type `[RegulatoryPolicy!]!`
+  """
+  regulatoryPolicies_on_user: RegulatoryPolicy_ListFilter
+  """
   ✨ Generated from Field `User`.`reports_on_user` of type `[Report!]!`
   """
   reports_on_user: Report_ListFilter
@@ -7288,6 +7372,10 @@ input User_Filter {
   ✨ Generated from Field `User`.`roadmapMilestones_on_user` of type `[RoadmapMilestone!]!`
   """
   roadmapMilestones_on_user: RoadmapMilestone_ListFilter
+  """
+  ✨ Generated from Field `User`.`scrapedArticles_on_user` of type `[ScrapedArticle!]!`
+  """
+  scrapedArticles_on_user: ScrapedArticle_ListFilter
   """
   ✨ Generated from Field `User`.`socialConnections_on_followed` of type `[SocialConnection!]!`
   """

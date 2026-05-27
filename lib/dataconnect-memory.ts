@@ -80,7 +80,7 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       isDone: params.status === 'completed',
       chapterOrder: params.chapter_order,
       griReferences: params.gri_references,
-      hash_lock: params.hash_lock
+      hashLock: params.hash_lock
     });
     return data;
   } catch (e) {

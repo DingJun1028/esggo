@@ -64,11 +64,11 @@ export default function GrantsPage() {
             </div>
           </td>
           <td className="px-6 py-4">
-            <Badge tone={
+            <Badge status={
               grant.status === 'approved' ? 'success' : 
               grant.status === 'reviewing' ? 'info' : 
               grant.status === 'applying' ? 'warning' : 'neutral'
-            } label={grant.status.toUpperCase()} />
+            }>{grant.status.toUpperCase()}</Badge>
           </td>
           <td className="px-6 py-4 font-mono text-[11px] text-slate-400">
              <div className="flex items-center gap-2">

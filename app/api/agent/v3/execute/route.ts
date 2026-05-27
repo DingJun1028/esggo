@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
             priority: st.priority || 'medium',
             department: st.department || 'ESG Swarm',
             assignee: 'OmniAgent-Agent',
+            completed: false,
           });
           await new Promise(r => setTimeout(r, 600));
         }
