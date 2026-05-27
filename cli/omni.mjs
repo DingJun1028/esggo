@@ -174,15 +174,17 @@ agent.command('memory <content>')
 
 agent.command('run <task>')
   .description('Run an agent task via Edge Function with Function Calling')
-  .action(async (task) => {
-    console.log(pc.cyan(`[A] Invoking Edge AgentZ0 for task: "${task}"...`));
+  .option('-c, --is-command', 'Execute as Supreme Commander (OmniAgent reasoning)')
+  .action(async (task, options) => {
+    console.log(pc.cyan(`[A] Invoking Edge Agent for task: "${task}"...`));
+    if (options.isCommand) console.log(pc.magenta('⚡ Mode: SUPREME COMMANDER'));
+    
     try {
-      // Typically NEXT_PUBLIC_SITE_URL or localhost for local dev
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
       const res = await fetch(`${baseUrl}/api/agent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task })
+        body: JSON.stringify({ task, isCommand: !!options.isCommand })
       });
 
       const data = await res.json();
