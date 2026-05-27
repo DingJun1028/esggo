@@ -72,6 +72,10 @@ extend type CompanyProfile {
 }
 extend type EternalMemory {
   """
+  ✨ Implicit foreign key field based on `EternalMemory`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
+  """
+  companyId: UUID @fdc_generated(from: "EternalMemory.company", purpose: IMPLICIT_REF_FIELD)
+  """
   ✨ Implicit foreign key field based on `EternalMemory`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
   userUid: String! @fdc_generated(from: "EternalMemory.user", purpose: IMPLICIT_REF_FIELD)

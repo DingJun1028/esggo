@@ -1,14 +1,17 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
+  saveSustainWriteSection, loadSustainWriteSections,
+} from '../lib/dataconnect-memory';
+import {
   writeMemory, readMemory, readMemoryByType,
   savePreference, loadPreference,
   saveCompanyProfile, loadCompanyProfile,
   saveFieldValues, loadFieldValues,
-  saveSustainWriteSection, loadSustainWriteSections, loadSustainWriteSection,
   saveAIConversation, loadAIConversation,
-  type MemoryType, type MemoryRecord, type SustainWriteSection, type AIMessage,
+  type MemoryType, type MemoryRecord, type AIMessage,
 } from '../lib/memory';
+import { type SustainWriteSection } from '../lib/dataconnect-memory';
 
 // ─── Generic Memory Hook ─────────────────────────────────────────────────────
 

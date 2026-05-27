@@ -80,6 +80,18 @@ export interface GetCompanyProfileVariables {
   id: UUIDString;
 }
 
+export interface GetReportByCompanyData {
+  reports: ({
+    id: UUIDString;
+    title: string;
+    status: string;
+  } & Report_Key)[];
+}
+
+export interface GetReportByCompanyVariables {
+  companyId: UUIDString;
+}
+
 export interface GetReportByIdData {
   report?: {
     id: UUIDString;
@@ -165,7 +177,7 @@ export interface ListAuditRecordsData {
   } & AuditRecord_Key)[];
 }
 
-export interface ListCompanyMetricsByCategoryData {
+export interface ListCompanyMetricsData {
   companyMetrics: ({
     id: UUIDString;
     metricName: string;
@@ -174,13 +186,30 @@ export interface ListCompanyMetricsByCategoryData {
     category: string;
     verified: boolean;
     griStandard?: string | null;
+    sourceOrigin?: string | null;
+    hashLock?: string | null;
     updatedAt: TimestampString;
   } & CompanyMetric_Key)[];
 }
 
-export interface ListCompanyMetricsByCategoryVariables {
+export interface ListCompanyMetricsVariables {
   companyId: UUIDString;
-  category: string;
+}
+
+export interface ListEternalMemoriesByCompanyData {
+  eternalMemories: ({
+    id: UUIDString;
+    type: string;
+    content: string;
+    tags?: string | null;
+    hashLock: string;
+    consolidated: boolean;
+    createdAt: TimestampString;
+  } & EternalMemory_Key)[];
+}
+
+export interface ListEternalMemoriesByCompanyVariables {
+  companyId: UUIDString;
 }
 
 export interface ListEternalMemoriesData {
@@ -204,6 +233,28 @@ export interface ListRegulatoryPoliciesData {
     description?: string | null;
     rulesJson: string;
   } & RegulatoryPolicy_Key)[];
+}
+
+export interface ListReportSectionsByReportData {
+  reportSections: ({
+    id: UUIDString;
+    sectionId: string;
+    title: string;
+    content?: string | null;
+    contentMd?: string | null;
+    fieldValuesJson?: string | null;
+    notes?: string | null;
+    documentsStateJson?: string | null;
+    isDone: boolean;
+    chapterOrder?: number | null;
+    griReferences?: string[] | null;
+    hashLock?: string | null;
+    lastUpdated: TimestampString;
+  } & ReportSection_Key)[];
+}
+
+export interface ListReportSectionsByReportVariables {
+  reportId: UUIDString;
 }
 
 export interface ListReportsData {
@@ -318,6 +369,8 @@ export interface UpsertCompanyMetricVariables {
   category: string;
   verified: boolean;
   griStandard?: string | null;
+  sourceOrigin?: string | null;
+  hashLock?: string | null;
 }
 
 export interface UpsertCompanyProfileData {
@@ -341,6 +394,7 @@ export interface UpsertEternalMemoryData {
 
 export interface UpsertEternalMemoryVariables {
   id?: UUIDString | null;
+  companyId?: UUIDString | null;
   type: string;
   content: string;
   tags?: string | null;
@@ -350,6 +404,26 @@ export interface UpsertEternalMemoryVariables {
 
 export interface UpsertReportData {
   report_upsert: Report_Key;
+}
+
+export interface UpsertReportSectionData {
+  reportSection_upsert: ReportSection_Key;
+}
+
+export interface UpsertReportSectionVariables {
+  id?: UUIDString | null;
+  reportId: UUIDString;
+  sectionId: string;
+  title: string;
+  content?: string | null;
+  contentMd?: string | null;
+  fieldValuesJson?: string | null;
+  notes?: string | null;
+  documentsStateJson?: string | null;
+  isDone: boolean;
+  chapterOrder?: number | null;
+  griReferences?: string[] | null;
+  hashLock?: string | null;
 }
 
 export interface UpsertReportVariables {
@@ -484,20 +558,45 @@ export function upsertReport(dc: DataConnect, vars: UpsertReportVariables, optio
 /** Generated Node Admin SDK operation action function for the 'UpsertReport' Mutation. Allow users to pass in custom DataConnect instances. */
 export function upsertReport(vars: UpsertReportVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertReportData>>;
 
-/** Generated Node Admin SDK operation action function for the 'ListReports' Query. Allow users to execute without passing in DataConnect. */
-export function listReports(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListReportsData>>;
-/** Generated Node Admin SDK operation action function for the 'ListReports' Query. Allow users to pass in custom DataConnect instances. */
-export function listReports(options?: OperationOptions): Promise<ExecuteOperationResponse<ListReportsData>>;
+/** Generated Node Admin SDK operation action function for the 'UpsertReportSection' Mutation. Allow users to execute without passing in DataConnect. */
+export function upsertReportSection(dc: DataConnect, vars: UpsertReportSectionVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertReportSectionData>>;
+/** Generated Node Admin SDK operation action function for the 'UpsertReportSection' Mutation. Allow users to pass in custom DataConnect instances. */
+export function upsertReportSection(vars: UpsertReportSectionVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertReportSectionData>>;
 
-/** Generated Node Admin SDK operation action function for the 'ListCompanyMetricsByCategory' Query. Allow users to execute without passing in DataConnect. */
-export function listCompanyMetricsByCategory(dc: DataConnect, vars: ListCompanyMetricsByCategoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListCompanyMetricsByCategoryData>>;
-/** Generated Node Admin SDK operation action function for the 'ListCompanyMetricsByCategory' Query. Allow users to pass in custom DataConnect instances. */
-export function listCompanyMetricsByCategory(vars: ListCompanyMetricsByCategoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListCompanyMetricsByCategoryData>>;
+/** Generated Node Admin SDK operation action function for the 'ListReportSectionsByReport' Query. Allow users to execute without passing in DataConnect. */
+export function listReportSectionsByReport(dc: DataConnect, vars: ListReportSectionsByReportVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListReportSectionsByReportData>>;
+/** Generated Node Admin SDK operation action function for the 'ListReportSectionsByReport' Query. Allow users to pass in custom DataConnect instances. */
+export function listReportSectionsByReport(vars: ListReportSectionsByReportVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListReportSectionsByReportData>>;
 
 /** Generated Node Admin SDK operation action function for the 'UpsertCompanyMetric' Mutation. Allow users to execute without passing in DataConnect. */
 export function upsertCompanyMetric(dc: DataConnect, vars: UpsertCompanyMetricVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertCompanyMetricData>>;
 /** Generated Node Admin SDK operation action function for the 'UpsertCompanyMetric' Mutation. Allow users to pass in custom DataConnect instances. */
 export function upsertCompanyMetric(vars: UpsertCompanyMetricVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertCompanyMetricData>>;
+
+/** Generated Node Admin SDK operation action function for the 'ListCompanyMetrics' Query. Allow users to execute without passing in DataConnect. */
+export function listCompanyMetrics(dc: DataConnect, vars: ListCompanyMetricsVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListCompanyMetricsData>>;
+/** Generated Node Admin SDK operation action function for the 'ListCompanyMetrics' Query. Allow users to pass in custom DataConnect instances. */
+export function listCompanyMetrics(vars: ListCompanyMetricsVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListCompanyMetricsData>>;
+
+/** Generated Node Admin SDK operation action function for the 'UpsertEternalMemory' Mutation. Allow users to execute without passing in DataConnect. */
+export function upsertEternalMemory(dc: DataConnect, vars: UpsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertEternalMemoryData>>;
+/** Generated Node Admin SDK operation action function for the 'UpsertEternalMemory' Mutation. Allow users to pass in custom DataConnect instances. */
+export function upsertEternalMemory(vars: UpsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertEternalMemoryData>>;
+
+/** Generated Node Admin SDK operation action function for the 'ListEternalMemoriesByCompany' Query. Allow users to execute without passing in DataConnect. */
+export function listEternalMemoriesByCompany(dc: DataConnect, vars: ListEternalMemoriesByCompanyVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListEternalMemoriesByCompanyData>>;
+/** Generated Node Admin SDK operation action function for the 'ListEternalMemoriesByCompany' Query. Allow users to pass in custom DataConnect instances. */
+export function listEternalMemoriesByCompany(vars: ListEternalMemoriesByCompanyVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListEternalMemoriesByCompanyData>>;
+
+/** Generated Node Admin SDK operation action function for the 'GetReportByCompany' Query. Allow users to execute without passing in DataConnect. */
+export function getReportByCompany(dc: DataConnect, vars: GetReportByCompanyVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<GetReportByCompanyData>>;
+/** Generated Node Admin SDK operation action function for the 'GetReportByCompany' Query. Allow users to pass in custom DataConnect instances. */
+export function getReportByCompany(vars: GetReportByCompanyVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<GetReportByCompanyData>>;
+
+/** Generated Node Admin SDK operation action function for the 'ListReports' Query. Allow users to execute without passing in DataConnect. */
+export function listReports(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListReportsData>>;
+/** Generated Node Admin SDK operation action function for the 'ListReports' Query. Allow users to pass in custom DataConnect instances. */
+export function listReports(options?: OperationOptions): Promise<ExecuteOperationResponse<ListReportsData>>;
 
 /** Generated Node Admin SDK operation action function for the 'UpsertScrapedArticle' Mutation. Allow users to execute without passing in DataConnect. */
 export function upsertScrapedArticle(dc: DataConnect, vars: UpsertScrapedArticleVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertScrapedArticleData>>;
@@ -508,11 +607,6 @@ export function upsertScrapedArticle(vars: UpsertScrapedArticleVariables, option
 export function listEternalMemories(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListEternalMemoriesData>>;
 /** Generated Node Admin SDK operation action function for the 'ListEternalMemories' Query. Allow users to pass in custom DataConnect instances. */
 export function listEternalMemories(options?: OperationOptions): Promise<ExecuteOperationResponse<ListEternalMemoriesData>>;
-
-/** Generated Node Admin SDK operation action function for the 'UpsertEternalMemory' Mutation. Allow users to execute without passing in DataConnect. */
-export function upsertEternalMemory(dc: DataConnect, vars: UpsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertEternalMemoryData>>;
-/** Generated Node Admin SDK operation action function for the 'UpsertEternalMemory' Mutation. Allow users to pass in custom DataConnect instances. */
-export function upsertEternalMemory(vars: UpsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertEternalMemoryData>>;
 
 /** Generated Node Admin SDK operation action function for the 'ListSwarmAgentTasks' Query. Allow users to execute without passing in DataConnect. */
 export function listSwarmAgentTasks(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListSwarmAgentTasksData>>;

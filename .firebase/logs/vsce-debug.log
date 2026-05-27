@@ -7456,3 +7456,47 @@ Generated sources: index.d.ts [21676B] esm\index.esm.js [6862B] esm\package.json
 [debug] [2026-05-26T23:41:44.930Z] I0527 07:41:44.929943   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
 I0527 07:41:44.929943   39420 load.go:109] Finished reloading
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0527 07:41:44.929943   39420 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0527 07:41:44.929943   39420 load.go:109] Finished reloading\n"}}
+[debug] [2026-05-27T02:31:33.086Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: undefined
+[debug] [2026-05-27T02:31:33.087Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-05-27T02:31:33.101Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-27T02:31:33.102Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-05-27T02:31:33.103Z] Checked if tokens are valid: false, expires at: 1779814994040
+[debug] [2026-05-27T02:31:33.104Z] Checked if tokens are valid: false, expires at: 1779814994040
+[debug] [2026-05-27T02:31:33.104Z] > refreshing access token with scopes: []
+[debug] [2026-05-27T02:31:33.107Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-27T02:31:33.107Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-27T02:31:33.111Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: undefined
+[debug] [2026-05-27T02:31:33.112Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-05-27T02:31:33.113Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-27T02:31:33.113Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-05-27T02:31:33.114Z] Checked if tokens are valid: false, expires at: 1779814994040
+[debug] [2026-05-27T02:31:33.114Z] Checked if tokens are valid: false, expires at: 1779814994040
+[debug] [2026-05-27T02:31:33.114Z] > refreshing access token with scopes: []
+[debug] [2026-05-27T02:31:33.115Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-27T02:31:33.115Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-27T02:31:33.132Z] Found emulator hub locator: {"version":"15.18.0","origins":["http://127.0.0.1:4400","http://[::1]:4400"],"pid":25360}
+[debug] [2026-05-27T02:31:33.132Z] >>> [apiv2][query] GET http://127.0.0.1:4400/emulators [none]
+[debug] [2026-05-27T02:31:33.135Z] *** [apiv2] error from fetch(http://127.0.0.1:4400/emulators, {"headers":{},"method":"GET"}): FetchError: request to http://127.0.0.1:4400/emulators failed, reason: connect ECONNREFUSED 127.0.0.1:4400
+[debug] [2026-05-27T02:31:33.136Z] >>> [apiv2][query] GET http://[::1]:4400/emulators [none]
+[debug] [2026-05-27T02:31:33.157Z] *** [apiv2] error from fetch(http://[::1]:4400/emulators, {"headers":{},"method":"GET"}): FetchError: request to http://[::1]:4400/emulators failed, reason: connect ECONNREFUSED ::1:4400
+[debug] [2026-05-27T02:31:33.223Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-27T02:31:33.223Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-27T02:31:33.256Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-05-27T02:31:33.257Z] Checked if tokens are valid: true, expires at: 1779852692223
+[debug] [2026-05-27T02:31:33.259Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-05-27T02:31:33.272Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-27T02:31:33.272Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-27T02:31:33.288Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-05-27T02:31:33.289Z] Checked if tokens are valid: true, expires at: 1779852692272
+[debug] [2026-05-27T02:31:33.289Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-05-27T02:31:33.806Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-05-27T02:31:33.806Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-05-27T02:31:34.281Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-05-27T02:31:34.282Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] +  Wrote .gemini/extensions/firebase/gemini-extension.json 
+[info] +  Wrote .gemini/extensions/firebase/gemini-extension.json 
+[info] +  Wrote .gemini/extensions/firebase/gemini-extension.json 
+[info] +  Wrote .gemini/extensions/firebase/gemini-extension.json 
+[info] +  Wrote .gemini/extensions/firebase/gemini-extension.json 

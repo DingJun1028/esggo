@@ -157,7 +157,14 @@ type ReportSection @table {
   sectionId: String!
   title: String!
   content: String
+  contentMd: String
+  fieldValuesJson: String # Serialized JSON
+  notes: String
+  documentsStateJson: String # Serialized JSON
   isDone: Boolean!
+  chapterOrder: Int @default(value: 0)
+  griReferences: [String!]
+  hashLock: String
   lastUpdated: Timestamp! @default(expr: "request.time")
 }
 
@@ -171,6 +178,8 @@ type CompanyMetric @table {
   category: String!
   verified: Boolean! @default(value: false)
   griStandard: String
+  sourceOrigin: String # [T1 Traceable]
+  hashLock: String # [T4 Trustworthy]
   updatedAt: Timestamp! @default(expr: "request.time")
 }
 
@@ -192,6 +201,7 @@ type ScrapedArticle @table {
 type EternalMemory @table {
   id: UUID! @default(expr: "uuidV4()")
   user: User!
+  company: CompanyProfile # Link to company for isolation
   type: String! # EPISODIC, SEMANTIC, etc.
   content: String!
   tags: String # Comma separated or JSON string

@@ -158,13 +158,124 @@ mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title
   report_upsert(data: {
     id: $id,
     user: { uid_expr: "auth.uid" },
-    companyId: $companyId,
+    company: { id: $companyId },
     templateId: $templateId,
     title: $title,
     language: $language,
     progress: $progress,
     status: $status
   })
+}
+
+mutation UpsertReportSection($id: UUID, $reportId: UUID!, $sectionId: String!, $title: String!, $content: String, $contentMd: String, $fieldValuesJson: String, $notes: String, $documentsStateJson: String, $isDone: Boolean!, $chapterOrder: Int, $griReferences: [String!], $hashLock: String) @auth(level: USER, insecureReason: "Report ownership validated at the Report level") {
+  reportSection_upsert(data: {
+    id: $id,
+    report: { id: $reportId },
+    sectionId: $sectionId,
+    title: $title,
+    content: $content,
+    contentMd: $contentMd,
+    fieldValuesJson: $fieldValuesJson,
+    notes: $notes,
+    documentsStateJson: $documentsStateJson,
+    isDone: $isDone,
+    chapterOrder: $chapterOrder,
+    griReferences: $griReferences,
+    hashLock: $hashLock
+  })
+}
+
+query ListReportSectionsByReport($reportId: UUID!) @auth(level: USER) {
+  reportSections(where: { 
+    report: { 
+      id: { eq: $reportId },
+      user: { uid: { eq_expr: "auth.uid" } }
+    } 
+  }, orderBy: [{chapterOrder: ASC}]) {
+    id
+    sectionId
+    title
+    content
+    contentMd
+    fieldValuesJson
+    notes
+    documentsStateJson
+    isDone
+    chapterOrder
+    griReferences
+    hashLock
+    lastUpdated
+  }
+}
+
+mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!, $metricValue: Float, $unit: String, $category: String!, $verified: Boolean!, $griStandard: String, $sourceOrigin: String, $hashLock: String) @auth(level: USER) {
+  companyMetric_upsert(data: {
+    id: $id,
+    user: { uid_expr: "auth.uid" },
+    company: { id: $companyId },
+    metricName: $metricName,
+    metricValue: $metricValue,
+    unit: $unit,
+    category: $category,
+    verified: $verified,
+    griStandard: $griStandard,
+    sourceOrigin: $sourceOrigin,
+    hashLock: $hashLock
+  })
+}
+
+query ListCompanyMetrics($companyId: UUID!) @auth(level: USER) {
+  companyMetrics(where: { 
+    company: { id: { eq: $companyId } },
+    user: { uid: { eq_expr: "auth.uid" } }
+  }) {
+    id
+    metricName
+    metricValue
+    unit
+    category
+    verified
+    griStandard
+    sourceOrigin
+    hashLock
+    updatedAt
+  }
+}
+
+mutation UpsertEternalMemory($id: UUID, $companyId: UUID, $type: String!, $content: String!, $tags: String, $hashLock: String!, $consolidated: Boolean!) @auth(level: USER) {
+  eternalMemory_upsert(data: {
+    id: $id,
+    user: { uid_expr: "auth.uid" },
+    company: { id: $companyId },
+    type: $type,
+    content: $content,
+    tags: $tags,
+    hashLock: $hashLock,
+    consolidated: $consolidated
+  })
+}
+
+query ListEternalMemoriesByCompany($companyId: UUID!) @auth(level: USER) {
+  eternalMemories(where: { company: { id: { eq: $companyId } }, user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
+    id
+    type
+    content
+    tags
+    hashLock
+    consolidated
+    createdAt
+  }
+}
+
+query GetReportByCompany($companyId: UUID!) @auth(level: USER) {
+  reports(where: { 
+    company: { id: { eq: $companyId } },
+    user: { uid: { eq_expr: "auth.uid" } }
+  }, limit: 1) {
+    id
+    title
+    status
+  }
 }
 
 query ListReports @auth(level: USER) {
@@ -181,37 +292,6 @@ query ListReports @auth(level: USER) {
       name
     }
   }
-}
-
-query ListCompanyMetricsByCategory($companyId: UUID!, $category: String!) @auth(level: USER) {
-  companyMetrics(where: {
-    user: { uid: { eq_expr: "auth.uid" } },
-    company: { id: {eq: $companyId} },
-    category: {eq: $category}
-  }) {
-    id
-    metricName
-    metricValue
-    unit
-    category
-    verified
-    griStandard
-    updatedAt
-  }
-}
-
-mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!, $metricValue: Float, $unit: String, $category: String!, $verified: Boolean!, $griStandard: String) @auth(level: USER) {
-  companyMetric_upsert(data: {
-    id: $id,
-    user: { uid_expr: "auth.uid" },
-    companyId: $companyId,
-    metricName: $metricName,
-    metricValue: $metricValue,
-    unit: $unit,
-    category: $category,
-    verified: $verified,
-    griStandard: $griStandard
-  })
 }
 
 mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: NO_ACCESS, insecureReason: "Backend-only mutation, no client access") {
@@ -240,18 +320,6 @@ query ListEternalMemories @auth(level: USER) {
     consolidated
     createdAt
   }
-}
-
-mutation UpsertEternalMemory($id: UUID, $type: String!, $content: String!, $tags: String, $hashLock: String!, $consolidated: Boolean!) @auth(level: USER) {
-  eternalMemory_upsert(data: {
-    id: $id,
-    user: { uid_expr: "auth.uid" },
-    type: $type,
-    content: $content,
-    tags: $tags,
-    hashLock: $hashLock,
-    consolidated: $consolidated
-  })
 }
 
 query ListSwarmAgentTasks @auth(level: USER) {

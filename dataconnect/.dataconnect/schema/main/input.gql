@@ -2077,6 +2077,14 @@ input CompanyMetric_Data {
   """
   griStandard_expr: String_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `CompanyMetric`.`hashLock` of type `String`
+  """
+  hashLock: String
+  """
+  ✨ `_expr` server value variant of `hashLock` (✨ Generated from Field `CompanyMetric`.`hashLock` of type `String`)
+  """
+  hashLock_expr: String_Expr @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `CompanyMetric`.`metricName` of type `String!`
   """
   metricName: String
@@ -2096,6 +2104,14 @@ input CompanyMetric_Data {
   ✨ `_update` server value variant of `metricValue` (✨ Generated from Field `CompanyMetric`.`metricValue` of type `Float`)
   """
   metricValue_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `CompanyMetric`.`sourceOrigin` of type `String`
+  """
+  sourceOrigin: String
+  """
+  ✨ `_expr` server value variant of `sourceOrigin` (✨ Generated from Field `CompanyMetric`.`sourceOrigin` of type `String`)
+  """
+  sourceOrigin_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `CompanyMetric`.`unit` of type `String`
   """
@@ -2174,6 +2190,10 @@ input CompanyMetric_Filter {
   """
   griStandard: String_Filter
   """
+  ✨ Generated from Field `CompanyMetric`.`hashLock` of type `String`
+  """
+  hashLock: String_Filter
+  """
   ✨ Generated from Field `CompanyMetric`.`metricName` of type `String!`
   """
   metricName: String_Filter
@@ -2181,6 +2201,10 @@ input CompanyMetric_Filter {
   ✨ Generated from Field `CompanyMetric`.`metricValue` of type `Float`
   """
   metricValue: Float_Filter
+  """
+  ✨ Generated from Field `CompanyMetric`.`sourceOrigin` of type `String`
+  """
+  sourceOrigin: String_Filter
   """
   ✨ Generated from Field `CompanyMetric`.`unit` of type `String`
   """
@@ -2244,6 +2268,10 @@ input CompanyMetric_Having {
   """
   griStandard_count: Int_Filter
   """
+  ✨ Generated from Field `CompanyMetric`.`hashLock_count` of type `Int!`
+  """
+  hashLock_count: Int_Filter
+  """
   ✨ Generated from Field `CompanyMetric`.`id_count` of type `Int!`
   """
   id_count: Int_Filter
@@ -2255,6 +2283,10 @@ input CompanyMetric_Having {
   ✨ Generated from Field `CompanyMetric`.`metricValue_count` of type `Int!`
   """
   metricValue_count: Int_Filter
+  """
+  ✨ Generated from Field `CompanyMetric`.`sourceOrigin_count` of type `Int!`
+  """
+  sourceOrigin_count: Int_Filter
   """
   ✨ Generated from Field `CompanyMetric`.`unit_count` of type `Int!`
   """
@@ -2355,6 +2387,10 @@ input CompanyMetric_Order {
   """
   griStandard: OrderDirection
   """
+  ✨ Generated from Field `CompanyMetric`.`hashLock` of type `String`
+  """
+  hashLock: OrderDirection
+  """
   ✨ Generated from Field `CompanyMetric`.`metricName` of type `String!`
   """
   metricName: OrderDirection
@@ -2362,6 +2398,10 @@ input CompanyMetric_Order {
   ✨ Generated from Field `CompanyMetric`.`metricValue` of type `Float`
   """
   metricValue: OrderDirection
+  """
+  ✨ Generated from Field `CompanyMetric`.`sourceOrigin` of type `String`
+  """
+  sourceOrigin: OrderDirection
   """
   ✨ Generated from Field `CompanyMetric`.`unit` of type `String`
   """
@@ -2391,6 +2431,10 @@ input CompanyMetric_Order {
   """
   griStandard_count: OrderDirection
   """
+  ✨ Generated from Field `CompanyMetric`.`hashLock_count` of type `Int!`
+  """
+  hashLock_count: OrderDirection
+  """
   ✨ Generated from Field `CompanyMetric`.`id_count` of type `Int!`
   """
   id_count: OrderDirection
@@ -2402,6 +2446,10 @@ input CompanyMetric_Order {
   ✨ Generated from Field `CompanyMetric`.`metricValue_count` of type `Int!`
   """
   metricValue_count: OrderDirection
+  """
+  ✨ Generated from Field `CompanyMetric`.`sourceOrigin_count` of type `Int!`
+  """
+  sourceOrigin_count: OrderDirection
   """
   ✨ Generated from Field `CompanyMetric`.`unit_count` of type `Int!`
   """
@@ -2564,6 +2612,10 @@ input CompanyProfile_Data {
   """
   companyMetrics_on_company: [CompanyMetric_Data!]
   """
+  ✨ Generated from Field `CompanyProfile`.`eternalMemories_on_company` of type `[EternalMemory!]!`
+  """
+  eternalMemories_on_company: [EternalMemory_Data!]
+  """
   ✨ Generated from Field `CompanyProfile`.`reports_on_company` of type `[Report!]!`
   """
   reports_on_company: [Report_Data!]
@@ -2636,6 +2688,10 @@ input CompanyProfile_Filter {
   ✨ Generated from Field `CompanyProfile`.`companyMetrics_on_company` of type `[CompanyMetric!]!`
   """
   companyMetrics_on_company: CompanyMetric_ListFilter
+  """
+  ✨ Generated from Field `CompanyProfile`.`eternalMemories_on_company` of type `[EternalMemory!]!`
+  """
+  eternalMemories_on_company: EternalMemory_ListFilter
   """
   ✨ Generated from Field `CompanyProfile`.`reports_on_company` of type `[Report!]!`
   """
@@ -2975,6 +3031,14 @@ input EternalMemory_Data {
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `EternalMemory`.`companyId` of type `UUID`
+  """
+  companyId: UUID
+  """
+  ✨ `_expr` server value variant of `companyId` (✨ Generated from Field `EternalMemory`.`companyId` of type `UUID`)
+  """
+  companyId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `EternalMemory`.`userUid` of type `String!`
   """
   userUid: String
@@ -2982,6 +3046,10 @@ input EternalMemory_Data {
   ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `EternalMemory`.`userUid` of type `String!`)
   """
   userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `EternalMemory`.`company` of type `CompanyProfile`
+  """
+  company: CompanyProfile_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `EternalMemory`.`user` of type `User!`
   """
@@ -3064,9 +3132,17 @@ input EternalMemory_Filter {
   """
   id: UUID_Filter
   """
+  ✨ Generated from Field `EternalMemory`.`companyId` of type `UUID`
+  """
+  companyId: UUID_Filter
+  """
   ✨ Generated from Field `EternalMemory`.`userUid` of type `String!`
   """
   userUid: String_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`company` of type `CompanyProfile`
+  """
+  company: CompanyProfile_Filter
   """
   ✨ Generated from Field `EternalMemory`.`user` of type `User!`
   """
@@ -3133,6 +3209,10 @@ input EternalMemory_Having {
   ✨ Generated from Field `EternalMemory`.`_count` of type `Int!`
   """
   _count: Int_Filter
+  """
+  ✨ Generated from Field `EternalMemory`.`companyId_count` of type `Int!`
+  """
+  companyId_count: Int_Filter
   """
   ✨ Generated from Field `EternalMemory`.`consolidated_count` of type `Int!`
   """
@@ -3209,9 +3289,17 @@ input EternalMemory_Order {
   """
   id: OrderDirection
   """
+  ✨ Generated from Field `EternalMemory`.`companyId` of type `UUID`
+  """
+  companyId: OrderDirection
+  """
   ✨ Generated from Field `EternalMemory`.`userUid` of type `String!`
   """
   userUid: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`company` of type `CompanyProfile`
+  """
+  company: CompanyProfile_Order
   """
   ✨ Generated from Field `EternalMemory`.`user` of type `User!`
   """
@@ -3244,6 +3332,10 @@ input EternalMemory_Order {
   ✨ Generated from Field `EternalMemory`.`_count` of type `Int!`
   """
   _count: OrderDirection
+  """
+  ✨ Generated from Field `EternalMemory`.`companyId_count` of type `Int!`
+  """
+  companyId_count: OrderDirection
   """
   ✨ Generated from Field `EternalMemory`.`consolidated_count` of type `Int!`
   """
@@ -4526,6 +4618,18 @@ input ReportSection_Data {
   """
   report: Report_Key @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder` of type `Int`
+  """
+  chapterOrder: Int
+  """
+  ✨ `_expr` server value variant of `chapterOrder` (✨ Generated from Field `ReportSection`.`chapterOrder` of type `Int`)
+  """
+  chapterOrder_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `chapterOrder` (✨ Generated from Field `ReportSection`.`chapterOrder` of type `Int`)
+  """
+  chapterOrder_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `ReportSection`.`content` of type `String`
   """
   content: String
@@ -4533,6 +4637,46 @@ input ReportSection_Data {
   ✨ `_expr` server value variant of `content` (✨ Generated from Field `ReportSection`.`content` of type `String`)
   """
   content_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ReportSection`.`contentMd` of type `String`
+  """
+  contentMd: String
+  """
+  ✨ `_expr` server value variant of `contentMd` (✨ Generated from Field `ReportSection`.`contentMd` of type `String`)
+  """
+  contentMd_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ReportSection`.`documentsStateJson` of type `String`
+  """
+  documentsStateJson: String
+  """
+  ✨ `_expr` server value variant of `documentsStateJson` (✨ Generated from Field `ReportSection`.`documentsStateJson` of type `String`)
+  """
+  documentsStateJson_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ReportSection`.`fieldValuesJson` of type `String`
+  """
+  fieldValuesJson: String
+  """
+  ✨ `_expr` server value variant of `fieldValuesJson` (✨ Generated from Field `ReportSection`.`fieldValuesJson` of type `String`)
+  """
+  fieldValuesJson_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ReportSection`.`griReferences` of type `[String!]`
+  """
+  griReferences: [String!]
+  """
+  ✨ `_update` server value variant of `griReferences` (✨ Generated from Field `ReportSection`.`griReferences` of type `[String!]`)
+  """
+  griReferences_update: [String_ListUpdate!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ReportSection`.`hashLock` of type `String`
+  """
+  hashLock: String
+  """
+  ✨ `_expr` server value variant of `hashLock` (✨ Generated from Field `ReportSection`.`hashLock` of type `String`)
+  """
+  hashLock_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `ReportSection`.`isDone` of type `Boolean!`
   """
@@ -4557,6 +4701,14 @@ input ReportSection_Data {
   ✨ `_update` server value variant of `lastUpdated` (✨ Generated from Field `ReportSection`.`lastUpdated` of type `Timestamp!`)
   """
   lastUpdated_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `ReportSection`.`notes` of type `String`
+  """
+  notes: String
+  """
+  ✨ `_expr` server value variant of `notes` (✨ Generated from Field `ReportSection`.`notes` of type `String`)
+  """
+  notes_expr: String_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `ReportSection`.`sectionId` of type `String!`
   """
@@ -4603,9 +4755,33 @@ input ReportSection_Filter {
   """
   report: Report_Filter
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder` of type `Int`
+  """
+  chapterOrder: Int_Filter
+  """
   ✨ Generated from Field `ReportSection`.`content` of type `String`
   """
   content: String_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`contentMd` of type `String`
+  """
+  contentMd: String_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`documentsStateJson` of type `String`
+  """
+  documentsStateJson: String_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`fieldValuesJson` of type `String`
+  """
+  fieldValuesJson: String_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`griReferences` of type `[String!]`
+  """
+  griReferences: String_ListFilter
+  """
+  ✨ Generated from Field `ReportSection`.`hashLock` of type `String`
+  """
+  hashLock: String_Filter
   """
   ✨ Generated from Field `ReportSection`.`isDone` of type `Boolean!`
   """
@@ -4614,6 +4790,10 @@ input ReportSection_Filter {
   ✨ Generated from Field `ReportSection`.`lastUpdated` of type `Timestamp!`
   """
   lastUpdated: Timestamp_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`notes` of type `String`
+  """
+  notes: String_Filter
   """
   ✨ Generated from Field `ReportSection`.`sectionId` of type `String!`
   """
@@ -4661,9 +4841,29 @@ input ReportSection_Having {
   """
   _count: Int_Filter
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_count` of type `Int!`
+  """
+  chapterOrder_count: Int_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`contentMd_count` of type `Int!`
+  """
+  contentMd_count: Int_Filter
+  """
   ✨ Generated from Field `ReportSection`.`content_count` of type `Int!`
   """
   content_count: Int_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`documentsStateJson_count` of type `Int!`
+  """
+  documentsStateJson_count: Int_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`fieldValuesJson_count` of type `Int!`
+  """
+  fieldValuesJson_count: Int_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`hashLock_count` of type `Int!`
+  """
+  hashLock_count: Int_Filter
   """
   ✨ Generated from Field `ReportSection`.`id_count` of type `Int!`
   """
@@ -4677,6 +4877,10 @@ input ReportSection_Having {
   """
   lastUpdated_count: Int_Filter
   """
+  ✨ Generated from Field `ReportSection`.`notes_count` of type `Int!`
+  """
+  notes_count: Int_Filter
+  """
   ✨ Generated from Field `ReportSection`.`reportId_count` of type `Int!`
   """
   reportId_count: Int_Filter
@@ -4689,9 +4893,25 @@ input ReportSection_Having {
   """
   title_count: Int_Filter
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_sum` of type `Int`
+  """
+  chapterOrder_sum: Int_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_avg` of type `Float`
+  """
+  chapterOrder_avg: Float_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_min` of type `Int`
+  """
+  chapterOrder_min: Int_Filter
+  """
   ✨ Generated from Field `ReportSection`.`lastUpdated_min` of type `Timestamp`
   """
   lastUpdated_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_max` of type `Int`
+  """
+  chapterOrder_max: Int_Filter
   """
   ✨ Generated from Field `ReportSection`.`lastUpdated_max` of type `Timestamp`
   """
@@ -4740,9 +4960,29 @@ input ReportSection_Order {
   """
   report: Report_Order
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder` of type `Int`
+  """
+  chapterOrder: OrderDirection
+  """
   ✨ Generated from Field `ReportSection`.`content` of type `String`
   """
   content: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`contentMd` of type `String`
+  """
+  contentMd: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`documentsStateJson` of type `String`
+  """
+  documentsStateJson: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`fieldValuesJson` of type `String`
+  """
+  fieldValuesJson: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`hashLock` of type `String`
+  """
+  hashLock: OrderDirection
   """
   ✨ Generated from Field `ReportSection`.`isDone` of type `Boolean!`
   """
@@ -4751,6 +4991,10 @@ input ReportSection_Order {
   ✨ Generated from Field `ReportSection`.`lastUpdated` of type `Timestamp!`
   """
   lastUpdated: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`notes` of type `String`
+  """
+  notes: OrderDirection
   """
   ✨ Generated from Field `ReportSection`.`sectionId` of type `String!`
   """
@@ -4764,9 +5008,29 @@ input ReportSection_Order {
   """
   _count: OrderDirection
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_count` of type `Int!`
+  """
+  chapterOrder_count: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`contentMd_count` of type `Int!`
+  """
+  contentMd_count: OrderDirection
+  """
   ✨ Generated from Field `ReportSection`.`content_count` of type `Int!`
   """
   content_count: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`documentsStateJson_count` of type `Int!`
+  """
+  documentsStateJson_count: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`fieldValuesJson_count` of type `Int!`
+  """
+  fieldValuesJson_count: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`hashLock_count` of type `Int!`
+  """
+  hashLock_count: OrderDirection
   """
   ✨ Generated from Field `ReportSection`.`id_count` of type `Int!`
   """
@@ -4780,6 +5044,10 @@ input ReportSection_Order {
   """
   lastUpdated_count: OrderDirection
   """
+  ✨ Generated from Field `ReportSection`.`notes_count` of type `Int!`
+  """
+  notes_count: OrderDirection
+  """
   ✨ Generated from Field `ReportSection`.`reportId_count` of type `Int!`
   """
   reportId_count: OrderDirection
@@ -4792,9 +5060,25 @@ input ReportSection_Order {
   """
   title_count: OrderDirection
   """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_sum` of type `Int`
+  """
+  chapterOrder_sum: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_avg` of type `Float`
+  """
+  chapterOrder_avg: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_min` of type `Int`
+  """
+  chapterOrder_min: OrderDirection
+  """
   ✨ Generated from Field `ReportSection`.`lastUpdated_min` of type `Timestamp`
   """
   lastUpdated_min: OrderDirection
+  """
+  ✨ Generated from Field `ReportSection`.`chapterOrder_max` of type `Int`
+  """
+  chapterOrder_max: OrderDirection
   """
   ✨ Generated from Field `ReportSection`.`lastUpdated_max` of type `Timestamp`
   """

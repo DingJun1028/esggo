@@ -84,19 +84,19 @@ function upsertReport(dcOrVarsOrOptions, varsOrOptions, options) {
 }
 exports.upsertReport = upsertReport;
 
-function listReports(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
-  dcInstance.useGen(true);
-  return dcInstance.executeQuery('ListReports', undefined, inputOpts);
-}
-exports.listReports = listReports;
-
-function listCompanyMetricsByCategory(dcOrVarsOrOptions, varsOrOptions, options) {
+function upsertReportSection(dcOrVarsOrOptions, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
   dcInstance.useGen(true);
-  return dcInstance.executeQuery('ListCompanyMetricsByCategory', inputVars, inputOpts);
+  return dcInstance.executeMutation('UpsertReportSection', inputVars, inputOpts);
 }
-exports.listCompanyMetricsByCategory = listCompanyMetricsByCategory;
+exports.upsertReportSection = upsertReportSection;
+
+function listReportSectionsByReport(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeQuery('ListReportSectionsByReport', inputVars, inputOpts);
+}
+exports.listReportSectionsByReport = listReportSectionsByReport;
 
 function upsertCompanyMetric(dcOrVarsOrOptions, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
@@ -104,6 +104,41 @@ function upsertCompanyMetric(dcOrVarsOrOptions, varsOrOptions, options) {
   return dcInstance.executeMutation('UpsertCompanyMetric', inputVars, inputOpts);
 }
 exports.upsertCompanyMetric = upsertCompanyMetric;
+
+function listCompanyMetrics(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeQuery('ListCompanyMetrics', inputVars, inputOpts);
+}
+exports.listCompanyMetrics = listCompanyMetrics;
+
+function upsertEternalMemory(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('UpsertEternalMemory', inputVars, inputOpts);
+}
+exports.upsertEternalMemory = upsertEternalMemory;
+
+function listEternalMemoriesByCompany(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeQuery('ListEternalMemoriesByCompany', inputVars, inputOpts);
+}
+exports.listEternalMemoriesByCompany = listEternalMemoriesByCompany;
+
+function getReportByCompany(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeQuery('GetReportByCompany', inputVars, inputOpts);
+}
+exports.getReportByCompany = getReportByCompany;
+
+function listReports(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
+  dcInstance.useGen(true);
+  return dcInstance.executeQuery('ListReports', undefined, inputOpts);
+}
+exports.listReports = listReports;
 
 function upsertScrapedArticle(dcOrVarsOrOptions, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
@@ -118,13 +153,6 @@ function listEternalMemories(dcOrOptions, options) {
   return dcInstance.executeQuery('ListEternalMemories', undefined, inputOpts);
 }
 exports.listEternalMemories = listEternalMemories;
-
-function upsertEternalMemory(dcOrVarsOrOptions, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('UpsertEternalMemory', inputVars, inputOpts);
-}
-exports.upsertEternalMemory = upsertEternalMemory;
 
 function listSwarmAgentTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);

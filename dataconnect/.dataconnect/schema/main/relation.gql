@@ -675,6 +675,15 @@ extend type CompanyMetric {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "CompanyMetric.griStandard", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `CompanyMetric` table where the `hashLock` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  hashLock_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "CompanyMetric.hashLock", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `CompanyMetric` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   id_count(
@@ -701,6 +710,15 @@ extend type CompanyMetric {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "CompanyMetric.metricValue", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `CompanyMetric` table where the `sourceOrigin` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  sourceOrigin_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "CompanyMetric.sourceOrigin", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `CompanyMetric` table where the `unit` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -811,6 +829,40 @@ extend type CompanyProfile {
     """
     having: CompanyMetric_Having
   ): [CompanyMetric!]! @fdc_generated(from: "CompanyMetric.company", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `EternalMemory` objects in a one-to-many relationship (where `EternalMemory`.`company` is this object).
+  """
+  eternalMemories_on_company(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: EternalMemory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [EternalMemory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: EternalMemory_Having
+  ): [EternalMemory!]! @fdc_generated(from: "EternalMemory.company", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Report` objects in a one-to-many relationship (where `Report`.`company` is this object).
   """
@@ -1052,6 +1104,15 @@ extend type EternalMemory {
   ✨ Count the number of rows in the `EternalMemory` table.
   """
   _count: Int! @fdc_generated(from: "EternalMemory.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `EternalMemory` table where the `companyId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  companyId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "EternalMemory.companyId", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `EternalMemory` table where the `consolidated` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1549,6 +1610,24 @@ extend type ReportSection {
   """
   _count: Int! @fdc_generated(from: "ReportSection.", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ReportSection` table where the `chapterOrder` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  chapterOrder_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection.chapterOrder", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ReportSection` table where the `contentMd` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  contentMd_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection.contentMd", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ReportSection` table where the `content` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   content_count(
@@ -1557,6 +1636,33 @@ extend type ReportSection {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ReportSection.content", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ReportSection` table where the `documentsStateJson` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  documentsStateJson_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection.documentsStateJson", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ReportSection` table where the `fieldValuesJson` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  fieldValuesJson_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection.fieldValuesJson", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `ReportSection` table where the `hashLock` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  hashLock_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection.hashLock", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `ReportSection` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1585,6 +1691,15 @@ extend type ReportSection {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ReportSection.lastUpdated", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `ReportSection` table where the `notes` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  notes_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "ReportSection.notes", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `ReportSection` table where the `reportId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   reportId_count(
@@ -1612,9 +1727,35 @@ extend type ReportSection {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "ReportSection.title", purpose: QUERY_COUNT)
   """
+  ✨ Sum the `chapterOrder` field in the `ReportSection` table.
+  """
+  chapterOrder_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "ReportSection.chapterOrder", purpose: QUERY_SUM)
+  """
+  ✨ Average the `chapterOrder` field in the `ReportSection` table.
+  """
+  chapterOrder_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "ReportSection.chapterOrder", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `chapterOrder` field in the `ReportSection` table.
+  """
+  chapterOrder_min: Int @fdc_generated(from: "ReportSection.chapterOrder", purpose: QUERY_MIN)
+  """
   ✨ Minimum of the `lastUpdated` field in the `ReportSection` table.
   """
   lastUpdated_min: Timestamp @fdc_generated(from: "ReportSection.lastUpdated", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `chapterOrder` field in the `ReportSection` table.
+  """
+  chapterOrder_max: Int @fdc_generated(from: "ReportSection.chapterOrder", purpose: QUERY_MAX)
   """
   ✨ Maximum of the `lastUpdated` field in the `ReportSection` table.
   """

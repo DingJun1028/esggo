@@ -149,30 +149,29 @@ export function upsertReport(dcOrVars, vars) {
   return executeMutation(upsertReportRef(dcInstance, inputVars));
 }
 
-export const listReportsRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListReports');
-}
-listReportsRef.operationName = 'ListReports';
-
-export function listReports(dcOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listReportsRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
-}
-
-export const listCompanyMetricsByCategoryRef = (dcOrVars, vars) => {
+export const upsertReportSectionRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListCompanyMetricsByCategory', inputVars);
+  return mutationRef(dcInstance, 'UpsertReportSection', inputVars);
 }
-listCompanyMetricsByCategoryRef.operationName = 'ListCompanyMetricsByCategory';
+upsertReportSectionRef.operationName = 'UpsertReportSection';
 
-export function listCompanyMetricsByCategory(dcOrVars, varsOrOptions, options) {
+export function upsertReportSection(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
+  return executeMutation(upsertReportSectionRef(dcInstance, inputVars));
+}
+
+export const listReportSectionsByReportRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListReportSectionsByReport', inputVars);
+}
+listReportSectionsByReportRef.operationName = 'ListReportSectionsByReport';
+
+export function listReportSectionsByReport(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(listCompanyMetricsByCategoryRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
+  return executeQuery(listReportSectionsByReportRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 
 export const upsertCompanyMetricRef = (dcOrVars, vars) => {
@@ -185,6 +184,70 @@ upsertCompanyMetricRef.operationName = 'UpsertCompanyMetric';
 export function upsertCompanyMetric(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
   return executeMutation(upsertCompanyMetricRef(dcInstance, inputVars));
+}
+
+export const listCompanyMetricsRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListCompanyMetrics', inputVars);
+}
+listCompanyMetricsRef.operationName = 'ListCompanyMetrics';
+
+export function listCompanyMetrics(dcOrVars, varsOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  return executeQuery(listCompanyMetricsRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
+}
+
+export const upsertEternalMemoryRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpsertEternalMemory', inputVars);
+}
+upsertEternalMemoryRef.operationName = 'UpsertEternalMemory';
+
+export function upsertEternalMemory(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
+  return executeMutation(upsertEternalMemoryRef(dcInstance, inputVars));
+}
+
+export const listEternalMemoriesByCompanyRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListEternalMemoriesByCompany', inputVars);
+}
+listEternalMemoriesByCompanyRef.operationName = 'ListEternalMemoriesByCompany';
+
+export function listEternalMemoriesByCompany(dcOrVars, varsOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  return executeQuery(listEternalMemoriesByCompanyRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
+}
+
+export const getReportByCompanyRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetReportByCompany', inputVars);
+}
+getReportByCompanyRef.operationName = 'GetReportByCompany';
+
+export function getReportByCompany(dcOrVars, varsOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  return executeQuery(getReportByCompanyRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
+}
+
+export const listReportsRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListReports');
+}
+listReportsRef.operationName = 'ListReports';
+
+export function listReports(dcOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  return executeQuery(listReportsRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 
 export const upsertScrapedArticleRef = (dcOrVars, vars) => {
@@ -210,18 +273,6 @@ export function listEternalMemories(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
   return executeQuery(listEternalMemoriesRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
-}
-
-export const upsertEternalMemoryRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpsertEternalMemory', inputVars);
-}
-upsertEternalMemoryRef.operationName = 'UpsertEternalMemory';
-
-export function upsertEternalMemory(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
-  return executeMutation(upsertEternalMemoryRef(dcInstance, inputVars));
 }
 
 export const listSwarmAgentTasksRef = (dc) => {
