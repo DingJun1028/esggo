@@ -12,26 +12,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // 主色調（深綠永續色）
-        primary: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          500: '#22c55e',  // 主要按鈕
-          600: '#16a34a',
-          900: '#14532d',
+        // --- Design Token System v10.0 | Primitive Layers ---
+        blue: {
+          50: '#F0F7FF', 100: '#E0EFFF', 200: '#B8D9FF', 300: '#8ABFFF', 
+          400: '#579DFF', 500: '#007AFF', 600: '#0062E0', 700: '#004BB3', 
+          800: '#00378F', 900: '#002666',
         },
-        // 中性色（液態玻璃背景）
-        glass: {
-          light: 'rgba(255, 255, 255, 0.08)',
-          DEFAULT: 'rgba(255, 255, 255, 0.05)',
-          dark: 'rgba(0, 0, 0, 0.05)',
+        gold: {
+          50: '#FFFBEB', 100: '#FEF3C7', 200: '#FDE68A', 300: '#FCD34D',
+          400: '#FBBF24', 500: '#F59E0B', 600: '#D97706', 700: '#B45309',
+          800: '#92400E', 900: '#78350F',
         },
-        // 狀態色
-        verified: '#10b981',    // 綠色 - 已驗證
-        warning: '#f59e0b',     // 橙色 - 警告
-        error: '#ef4444',       // 紅色 - 錯誤
-        draft: '#6b7280',       // 灰色 - 草稿
-        
+        // [Other primitive colors can be added here as needed]
+
+        // --- Semantic Tokens | Action & Status ---
+        surface: {
+          primary: '#FFFFFF',
+          secondary: '#F8FAFC',
+          tertiary: '#F1F5F9',
+          brand: 'var(--aqua-cyan-midtone)',
+        },
+        action: {
+          hover: 'rgba(0, 122, 255, 0.05)',
+          active: 'rgba(0, 122, 255, 0.1)',
+          disabled: '#CBD5E1',
+        },
+
+        // --- 5T Protocol v10.0 | BG + Text Mapping ---
+        't1-traceable': { bg: '#E0F2FE', text: '#0369A1' },
+        't2-transparent': { bg: '#DCFCE7', text: '#15803D' },
+        't3-tangible': { bg: '#FEF3C7', text: '#B45309' },
+        't4-trustworthy': { bg: '#FEE2E2', text: '#B91C1C' },
+        't5-trackable': { bg: '#F3E8FF', text: '#7E22CE' },
+
         // ── ESG SUNSHINE | Atomic Light Label Edition ────────────────
         'aqua-cyan': {
           DEFAULT: '#00FFFF',
@@ -46,64 +59,53 @@ const config: Config = {
           shadow: '#C9A000',
         },
         
-        // ── Legacy & Semantic Mappings ────────────────
-        'cyan-core': '#00FFFF', // Updated to Aqua Cyan Core
-        'emerald-soul': '#10B981',
-        'void-stark': '#020617',
-        'teal-mech': {
-          start: '#009E9D',
-          end: '#00C2A8',
-        },
-        
         // Semantic Signals (Solid)
+        'verified': '#10b981',
         'lethal': '#FF4D6D',
         'critical-signal': '#FFB703',
         'optimal': '#219EBC',
 
-        // Berkeley Legacy (Re-anchored)
+        // Legacy Support
         'berkeley-blue': '#003262',
         'california-gold': '#FDB515',
-        
-        // Protocol Mappings v2.1 (Linked to Atomic Core)
-        't1-traceable': '#00FFFF',
-        't2-transparent': '#10B981',
-        't3-tangible': '#00C4D9',
-        't4-trackable': '#FFD700',
-        't5-trustworthy': '#003262',
-      },
-      fontFamily: {
-        sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       spacing: {
-        'card': '1.5rem',      // 24px 卡片內距
-        'section': '3rem',     // 48px 區塊間距
-        'page': '4rem',        // 64px 頁面邊距
+        '1': '4px', '2': '8px', '3': '12px', '4': '16px',
+        '5': '20px', '6': '24px', '8': '32px', '10': '40px',
+        '12': '48px', '16': '64px', '20': '80px',
+        'card': '24px', 'section': '48px', 'page': '64px',
       },
       borderRadius: {
-        'card': '1rem',        // 16px 卡片圓角
-        'button': '0.5rem',    // 8px 按鈕圓角
-        'input': '0.75rem',    // 12px 輸入框圓角
-        'mech': '6px',
-        'full': '9999px',
+        'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px',
+        'xl': '16px', '2xl': '24px', 'card': '16px', 'full': '9999px',
       },
       boxShadow: {
-        'mech-base': '0 2px 8px rgba(0, 0, 0, 0.03)',
-        'mech-active': '0 4px 12px rgba(0, 0, 0, 0.06)',
+        'xs': '0 1px 2px rgba(0, 50, 98, 0.05)',
+        'sm': '0 2px 4px rgba(0, 50, 98, 0.08)',
+        'md': '0 4px 8px rgba(0, 50, 98, 0.12)',
+        'lg': '0 8px 16px rgba(0, 50, 98, 0.15)',
+        'xl': '0 12px 24px rgba(0, 50, 98, 0.20)',
         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
       },
-      backdropBlur: {
-        xs: '2px',
-        sm: '4px',
-        DEFAULT: '12px',
-        lg: '24px',
-        xl: '40px',
+      zIndex: {
+        'below': '-1',
+        'base': '0',
+        'content': '10',
+        'dropdown': '100',
+        'sticky': '200',
+        'modal': '400',
+        'toast': '500',
       },
       transitionDuration: {
-        'mech': '150ms',
+        'instant': '50ms',
+        'fast': '150ms',
+        'normal': '300ms',
+        'slow': '500ms',
+        'slower': '800ms',
       },
       transitionTimingFunction: {
-        'mech': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'ease-spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        'ease-bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
       }
     },
   },

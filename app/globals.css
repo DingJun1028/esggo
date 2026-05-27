@@ -9,64 +9,50 @@
 @tailwind utilities;
 
 :root {
-  /* ── Core Brand Tokens ───────────────────────────────────────────── */
-  --primary:       #003262;   /* Berkeley Blue — accent only */
-  --primary-50:    #EBF2FA;
-  --primary-100:   #C9DDEF;
-  --accent:        #FDB515;   /* California Gold */
-  --accent-light:  #FEF3D0;
-  --secondary:     #3B7EA1;
-  --teal:          #009E9D;
+  /* ── Design Token System v10.0 | Primitive ────────────────────────── */
+  --blue-50:  #F0F7FF; --blue-100: #E0EFFF; --blue-200: #B8D9FF;
+  --blue-500: #007AFF; --blue-700: #004BB3; --blue-900: #002666;
+  
+  --gold-50:  #FFFBEB; --gold-100: #FEF3C7; --gold-200: #FDE68A;
+  --gold-500: #F59E0B; --gold-700: #B45309; --gold-900: #78350F;
 
-   --success:   #059669;
-   --success-bg:#ECFDF5;
-   --warning:   #D97706;
-   --warning-bg:#FFFBEB;
-   --danger:    #DC2626;
-   --danger-bg: #FEF2F2;
-   --info:      #2563EB;
-   --purple:    #7C3AED;
-   --neutral:   #6B7280;
-   --primary-light: #D1D5DB;
-   --secondary-light: #A5B1C2;
-   --warning-light: #FBBF24;
-   --error-light: #F87171;
-   --pending:   #7C4DFF;
-   --completed: #10B981;
-   --in-progress: #00897B;
-   --canceled:  #D7263D;
-   --archived:  #6B7280;
+  --aqua-50:  #E0FFFF; --aqua-500: #00FFFF; --aqua-700: #00C4D9; --aqua-900: #008BA3;
 
-  /* ── Light Surface System ────────────────────────────────────────── */
-  --bg-void:     #F8FAFD;           /* Page background — near white, cool tint */
-  --bg-subtle:   #F1F5FA;           /* Section backgrounds */
-  --bg-card:     #FFFFFF;           /* Card surfaces */
-  --bg-hover:    rgba(0,50,98,0.025);
+  /* ── Semantic Tokens ─────────────────────────────────────────────── */
+  --surface-primary:   #FFFFFF;
+  --surface-secondary: #F8FAFD;
+  --surface-brand:     var(--aqua-700);
+  
+  --text-primary:      #0F172A;
+  --text-secondary:    #475569;
+  --text-brand:        #003262;
 
-  --glass-white:  rgba(255, 255, 255, 0.15);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --border-light: rgba(0, 50, 98, 0.07);
-  --border-muted: rgba(0, 50, 98, 0.10);
+  --border-primary:    #E2E8F0;
+  --border-brand:      var(--aqua-500);
 
-  /* ── Premium Light Gradients ─────────────────────────────────────── */
-  --grad-page:    linear-gradient(160deg, #FAFCFF 0%, #F5F8FD 50%, #F8FAFD 100%);
-  --grad-card:    linear-gradient(145deg, #FFFFFF 0%, #FAFCFF 100%);
-  --grad-blue:    linear-gradient(135deg, #003262 0%, #004A8F 100%);
-  --grad-accent:  linear-gradient(135deg, #FDB515 0%, #FF9500 100%);
-  --grad-surface: linear-gradient(180deg, #FFFFFF 0%, #F8FAFD 100%);
+  /* ── 5T Protocol v10.0 ───────────────────────────────────────────── */
+  --t1-bg: #E0F2FE; --t1-text: #0369A1; /* T1藍 */
+  --t2-bg: #DCFCE7; --t2-text: #15803D; /* T2綠 */
+  --t3-bg: #FEF3C7; --t3-text: #B45309; /* T3金 */
+  --t4-bg: #FEE2E2; --t4-text: #B91C1C; /* T4紅 */
+  --t5-bg: #F3E8FF; --t5-text: #7E22CE; /* T5紫 */
 
-  /* ── Spacing ─────────────────────────────────────────────────────── */
-  --space-unit:    0.75rem;
-  --sidebar-w:     248px;
-  --sidebar-w-sm:  68px;
-  --topbar-h:      52px;
-  --mobile-nav-h:  58px;
+  /* ── Spacing (4px base) ──────────────────────────────────────────── */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-20: 80px;
 
-  /* ── Z-Index ── */
-  --z-sidebar: 50;
-  --z-topbar:  40;
-  --z-modal:   100;
-  --z-overlay: 45;
+  /* ── Radius ──────────────────────────────────────────────────────── */
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 16px; --radius-full: 9999px;
+
+  /* ── Motion ──────────────────────────────────────────────────────── */
+  --duration-instant: 50ms; --duration-fast: 150ms; --duration-normal: 300ms;
+
+  /* ── Legacy & Global ── */
+  --primary:       #003262;
+  --accent:        #FDB515;
+  --bg-void:       var(--surface-secondary);
+  --bg-card:       var(--surface-primary);
 }
 
 @layer base {

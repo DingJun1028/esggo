@@ -44,15 +44,15 @@ const CHAPTERS: Chapter[] = [
 ];
 
 const PERSONA_META = {
-  compliance: { label: '合規守衛', color: '#06b6d4', icon: <Shield size={14} />, className: 'text-cyan-600 bg-cyan-50 border-cyan-200 hover:border-cyan-300' },
-  harmony:    { label: '共榮引導', color: '#10b981', icon: <Users size={14} />, className: 'text-emerald-600 bg-emerald-50 border-emerald-200 hover:border-emerald-300' },
-  innovation: { label: '創新先行', color: '#a855f7', icon: <Zap size={14} />, className: 'text-purple-600 bg-purple-50 border-purple-200 hover:border-purple-300' },
+  compliance: { label: '合規守衛', color: 'var(--aqua-700)', icon: <Shield size={14} />, className: 'text-aqua-cyan-midtone bg-aqua-cyan/5 border-aqua-cyan/20 hover:border-aqua-cyan/40' },
+  harmony:    { label: '共榮引導', color: 'var(--t2-text)', icon: <Users size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
+  innovation: { label: '創新先行', color: 'var(--t5-text)', icon: <Zap size={14} />, className: 'text-t5-text bg-t5-bg border-purple-200 hover:border-purple-300' },
 };
 
 const CATEGORY_META = {
-  G: { label: '治理', color: '#06b6d4', text: 'text-cyan-600', border: 'border-cyan-200' },
-  E: { label: '環境', color: '#10b981', text: 'text-emerald-600', border: 'border-emerald-200' },
-  S: { label: '社會', color: '#a855f7', text: 'text-purple-600', border: 'border-purple-200' },
+  G: { label: '治理', color: 'var(--aqua-700)', text: 'text-aqua-cyan-midtone', border: 'border-aqua-cyan/20' },
+  E: { label: '環境', color: 'var(--t2-text)', text: 'text-verified', border: 'border-verified/20' },
+  S: { label: '社會', color: 'var(--t5-text)', text: 'text-t5-text', border: 'border-purple-200' },
 };
 
 export default function EditorPage() {
@@ -207,7 +207,7 @@ export default function EditorPage() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-cyan-200/40 to-transparent blur-[120px] rounded-full" />
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-emerald-200/40 to-transparent blur-[150px] rounded-full" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border-primary)_1px,transparent_1px),linear-gradient(to_bottom,var(--border-primary)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
       </div>
 
       <header className="h-16 bg-white/80 backdrop-blur-2xl border-b border-slate-200 px-8 flex items-center justify-between z-30 relative shadow-sm">
