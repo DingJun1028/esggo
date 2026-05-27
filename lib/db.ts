@@ -1,4 +1,4 @@
-export { 
+import { 
   listCompanyMetrics, 
   upsertCompanyMetric,
   listReports,
@@ -9,6 +9,18 @@ export {
   listAllTasks,
   upsertTask
 } from '@dataconnect/generated';
+
+export { 
+  listCompanyMetrics, 
+  upsertCompanyMetric,
+  listReports,
+  listReportSectionsByReport,
+  listAuditRecords,
+  listRoadmapMilestones,
+  listScrapedArticles,
+  listAllTasks,
+  upsertTask
+};
 import { db } from './firebase';
 import { 
   collection, 

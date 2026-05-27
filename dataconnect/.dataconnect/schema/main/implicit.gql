@@ -80,6 +80,12 @@ extend type EternalMemory {
   """
   userUid: String! @fdc_generated(from: "EternalMemory.user", purpose: IMPLICIT_REF_FIELD)
 }
+extend type RegulatoryPolicy {
+  """
+  ✨ Implicit foreign key field based on `RegulatoryPolicy`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String @fdc_generated(from: "RegulatoryPolicy.user", purpose: IMPLICIT_REF_FIELD)
+}
 extend type Report {
   """
   ✨ Implicit foreign key field based on `Report`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
@@ -101,6 +107,12 @@ extend type RoadmapMilestone {
   ✨ Implicit foreign key field based on `RoadmapMilestone`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
   """
   userUid: String! @fdc_generated(from: "RoadmapMilestone.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ScrapedArticle {
+  """
+  ✨ Implicit foreign key field based on `ScrapedArticle`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String @fdc_generated(from: "ScrapedArticle.user", purpose: IMPLICIT_REF_FIELD)
 }
 extend type SocialConnection {
   """

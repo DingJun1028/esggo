@@ -59,11 +59,11 @@ export default function ContractsPage() {
           <td className="px-6 py-4 font-black text-text-primary text-sm">{contract.title}</td>
           <td className="px-6 py-4 font-medium text-text-secondary text-sm">{contract.party}</td>
           <td className="px-6 py-4">
-            <Badge tone={
+            <Badge status={
               contract.status === 'active' ? 'success' : 
               contract.status === 'pending' ? 'warning' : 
               contract.status === 'draft' ? 'neutral' : 'info'
-            } label={contract.status.toUpperCase()} />
+            }>{contract.status.toUpperCase()}</Badge>
           </td>
           <td className="px-6 py-4 font-mono text-[11px] text-slate-400">{contract.date}</td>
           <td className="px-6 py-4 text-right">

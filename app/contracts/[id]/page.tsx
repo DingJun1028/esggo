@@ -7,9 +7,11 @@ import {
   FileText, Shield, Clock, Users, Database, 
   Download, Lock, AlertTriangle, ChevronRight, CheckCircle 
 } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { cn } from '@/lib/utils';
 
-export default function ContractDetailPage({ params }: { params: { id: string } }) {
-  const contractId = params.id;
+export default function ContractDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const contractId = React.use(params).id;
 
   return (
     <DetailTemplate
@@ -20,7 +22,7 @@ export default function ContractDetailPage({ params }: { params: { id: string } 
         { label: '合約管理', href: '/contracts' },
         { label: contractId, href: '#' },
       ]}
-      statusBadge={<Badge tone="success" label="ACTIVE / 執行中" />}
+      statusBadge={<Badge status="success">ACTIVE / 執行中</Badge>}
       actions={
         <>
           <Button variant="ghost" className="border-slate-200">
@@ -85,9 +87,9 @@ export default function ContractDetailPage({ params }: { params: { id: string } 
                   </div>
                   <div className="flex items-center gap-6">
                     {file.status === 'verified' ? (
-                      <Badge tone="success" label="VERIFIED" />
+                      <Badge status="success">VERIFIED</Badge>
                     ) : (
-                      <Badge tone="warning" label="PENDING" />
+                      <Badge status="warning">PENDING</Badge>
                     )}
                     <button className="text-slate-400 hover:text-text-brand">
                       <ChevronRight size={20} />

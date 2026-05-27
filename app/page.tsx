@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -193,7 +193,7 @@ export default function LandingPage() {
                                 </div>
                                 <span className="text-xs font-black font-mono text-aqua-cyan-midtone">{agent.health}%</span>
                              </div>
-                             <BrandProgress value={agent.health} color={agent.active ? 'cyan' : 'slate'} size="xs" />
+                             <BrandProgress value={agent.health} color={agent.active ? 'blue' : 'auto'} size="xs" />
                           </div>
                        </div>
                     ))}

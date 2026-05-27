@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { 
   Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles, XCircle, Award, Network
 } from 'lucide-react';
-import { getEvidenceFiles, insertEvidence, sealEvidence, type EvidenceFile } from '../../lib/db';
 import { 
   create5TAttestation, generateSelectiveDisclosure, generateRangeProof, 
   type T5Attestation, type SelectiveDisclosureProof, type ZKPRangeProof
