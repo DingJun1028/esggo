@@ -260,9 +260,9 @@ export default function VaultPage() {
       { id: 'upload', label: '上傳佐證', icon: <Upload size={16}/>, onClick: () => setShowUpload(true) }
     ],
     kpis: [
-      { key: 'total', label: '總文件數', value: files.length, icon: <FileText size={18}/>, color: '#003262' },
+      { key: 'total', label: '總文件數', value: files.length, icon: <FileText size={18}/>, color: 'var(--aqua-cyan-midtone)' },
       { key: 'sealed', label: '已實證封印', value: verifiedCount, icon: <ShieldCheck size={18}/>, color: '#10B981', verified: true },
-      { key: 'pending', label: '待處理項', value: files.filter(f => f.status === 'pending').length, icon: <Clock size={18}/>, color: '#FDB515' },
+      { key: 'pending', label: '待處理項', value: files.filter(f => f.status === 'pending').length, icon: <Clock size={18}/>, color: 'var(--eternal-gold-midtone)' },
       { key: 'coverage', label: '5T 覆蓋率', value: `${Math.round((verifiedCount / (files.length || 1)) * 100)}%`, icon: <Zap size={18}/>, color: '#3B7EA1', verified: true },
     ],
     sections: [
@@ -274,12 +274,12 @@ export default function VaultPage() {
           <div className="space-y-8">
              <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1 relative group">
-                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#003262] transition-colors" />
+                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[var(--aqua-cyan-midtone)] transition-colors" />
                    <input placeholder="搜尋檔名、GRI 指標..." className="w-full h-12 bg-white rounded-2xl border border-slate-100 pl-12 pr-4 text-sm font-bold focus:ring-4 focus:ring-blue-500/5 outline-none transition-all" value={search} onChange={e => setSearch(e.target.value)} />
                 </div>
                 <div className="flex gap-2 overflow-x-auto p-1 bg-slate-50 rounded-2xl border border-slate-100 no-scrollbar">
                    {CATEGORIES.map(c => (
-                     <button key={c} onClick={() => setActiveCategory(c)} className={`px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${activeCategory === c ? 'bg-[#003262] text-white shadow-lg' : 'text-slate-400 hover:text-[#003262]'}`}>
+                     <button key={c} onClick={() => setActiveCategory(c)} className={`px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${activeCategory === c ? 'bg-[var(--aqua-cyan-midtone)] text-white shadow-lg' : 'text-slate-400 hover:text-[var(--aqua-cyan-midtone)]'}`}>
                        {c === '全部' ? 'ALL' : c}
                      </button>
                    ))}
@@ -290,9 +290,9 @@ export default function VaultPage() {
                   data={filtered.map(f => ({
                     name: (
                       <div className="flex items-center gap-3">
-                         <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-[#003262] shadow-sm"><FileText size={16} /></div>
+                         <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-[var(--aqua-cyan-midtone)] shadow-sm"><FileText size={16} /></div>
                          <div className="flex flex-col">
-                            <span className="font-bold text-[#003262]">{f.file_name}</span>
+                            <span className="font-bold text-[var(--aqua-cyan-midtone)]">{f.file_name}</span>
                             <span className="text-[8px] font-mono text-slate-400">{f.id.slice(0,8)}</span>
                          </div>
                       </div>
@@ -345,8 +345,8 @@ export default function VaultPage() {
           <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setShowUpload(false)} />
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme p-10 lg:p-14 max-w-xl w-full overflow-hidden text-center">
-              <div className="w-24 h-24 rounded-[32px] bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center mx-auto mb-8 text-slate-300 hover:border-[#003262] hover:text-[#003262] transition-all cursor-pointer"><Upload size={40} /></div>
-              <h3 className="text-2xl font-black text-[#003262] uppercase tracking-tight mb-3">上傳治理憑證</h3>
+              <div className="w-24 h-24 rounded-[32px] bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center mx-auto mb-8 text-slate-300 hover:border-[var(--aqua-cyan-midtone)] hover:text-[var(--aqua-cyan-midtone)] transition-all cursor-pointer"><Upload size={40} /></div>
+              <h3 className="text-2xl font-black text-[var(--aqua-cyan-midtone)] uppercase tracking-tight mb-3">上傳治理憑證</h3>
               <div className="space-y-6 mb-10 text-left">
                  <div className="space-y-2">
                     <div className="flex justify-between items-center"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">File Name</label>
@@ -381,7 +381,7 @@ export default function VaultPage() {
           <BrandModal open={showPrivacy} onClose={() => setShowPrivacy(false)} title="ZKP 隱私證明生成 (Selective Disclosure)" size="md">
              <div className="space-y-6 text-center">
                 <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4 border border-indigo-100 shadow-sm"><Shield size={32} className="text-indigo-600" /></div>
-                <h4 className="text-xl font-black text-[#003262]">零知識宣告成功</h4>
+                <h4 className="text-xl font-black text-[var(--aqua-cyan-midtone)]">零知識宣告成功</h4>
                 <div className="p-5 bg-indigo-600 rounded-2xl text-white"><p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-2">Claim Verified</p><p className="text-sm font-bold">{privacyProof.claim}</p></div>
                 <div className="text-left space-y-4"><div className="p-4 bg-slate-50 rounded-xl border border-slate-100"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Commitment Hash</p><p className="text-[10px] font-mono break-all text-slate-600">{privacyProof.commitment.commitment}</p></div></div>
                 <BrandButton variant="primary" fullWidth onClick={() => setShowPrivacy(false)}>完成提取</BrandButton>
@@ -467,7 +467,7 @@ export default function VaultPage() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>{toast && (<motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-12 right-12 z-[9999]"><div className={cn("px-8 py-5 rounded-3xl shadow-extreme backdrop-blur-2xl text-white font-black text-sm flex items-center gap-4 border border-white/20", toast.type === 'error' ? 'bg-red-600' : 'bg-[#003262]')}>{toast.type === 'error' ? <XCircle size={20} /> : <CheckCircle size={20} className="text-[#FDB515]" />}{toast.msg}</div></motion.div>)}</AnimatePresence>
+      <AnimatePresence>{toast && (<motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-12 right-12 z-[9999]"><div className={cn("px-8 py-5 rounded-3xl shadow-extreme backdrop-blur-2xl text-white font-black text-sm flex items-center gap-4 border border-white/20", toast.type === 'error' ? 'bg-red-600' : 'bg-[var(--aqua-cyan-midtone)]')}>{toast.type === 'error' ? <XCircle size={20} /> : <CheckCircle size={20} className="text-[var(--eternal-gold-midtone)]" />}{toast.msg}</div></motion.div>)}</AnimatePresence>
     </>
   );
 }

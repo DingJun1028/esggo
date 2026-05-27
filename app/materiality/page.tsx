@@ -1,6 +1,12 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
-import { Grid, List, Plus, Save, Bot, Sparkles, RefreshCw } from 'lucide-react';
+import { Grid, List, Plus, Save, Bot, Sparkles, RefreshCw, X } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { cn } from '@/lib/utils';
+import { fadeIn, staggerContainer, slideIn } from '@/lib/animations';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const initialTopics = [
   { id: 1, name: '溫室氣體排放', category: 'E', gri: 'GRI 305', impact: 4.5, concern: 4.8, status: 'critical' },
@@ -53,10 +59,10 @@ export default function MaterialityPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'critical': return '#ef4444';
-      case 'material': return '#003262';
-      case 'watchlist': return '#f59e0b';
-      default: return '#6b7280';
+      case 'critical': return 'var(--t4-text)';
+      case 'material': return 'var(--aqua-cyan-midtone)';
+      case 'watchlist': return 'var(--eternal-gold-midtone)';
+      default: return 'var(--text-secondary)';
     }
   };
 
@@ -70,217 +76,192 @@ export default function MaterialityPage() {
   };
 
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <div className="page-header-content">
-          <h1 className="page-title">重大性矩陣</h1>
-          <p className="page-subtitle">Materiality Matrix · GRI 3-1/3-2 · 雙重重大性評估</p>
-        </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button className={`btn ${viewMode === 'matrix' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('matrix')}>
-            <Grid size={14} style={{ display: 'inline', marginRight: 4 }} />矩陣圖
-          </button>
-          <button className={`btn ${viewMode === 'table' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setViewMode('table')}>
-            <List size={14} style={{ display: 'inline', marginRight: 4 }} />列表
-          </button>
-        </div>
-      </div>
+    <motion.div 
+      className="page-container space-y-10 lg:space-y-14 pb-24 relative z-10"
+      initial="initial"
+      animate="animate"
+      variants={staggerContainer}
+    >
+      <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 relative z-10">
+        <motion.div variants={fadeIn} className="space-y-2">
+          <h1 className="text-4xl lg:text-5xl font-bold text-aqua-cyan-midtone tracking-tighter leading-none uppercase">重大性矩陣</h1>
+          <p className="text-slate-500 text-lg font-medium leading-relaxed">Materiality Matrix · GRI 3-1/3-2 · 雙重重大性評估</p>
+        </motion.div>
+        <motion.div variants={fadeIn} className="flex gap-3">
+          <Button variant={viewMode === 'matrix' ? 'primary' : 'ghost'} onClick={() => setViewMode('matrix')} className="rounded-xl px-6 h-11 border-border-primary">
+            <Grid size={16} className="mr-2" />矩陣圖
+          </Button>
+          <Button variant={viewMode === 'table' ? 'primary' : 'ghost'} onClick={() => setViewMode('table')} className="rounded-xl px-6 h-11 border-border-primary">
+            <List size={16} className="mr-2" />列表
+          </Button>
+        </motion.div>
+      </header>
 
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+      <motion.div variants={fadeIn} className="flex gap-3 flex-wrap">
         {['ALL', 'E', 'S', 'G'].map(cat => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            style={{
-              padding: '0.375rem 1rem',
-              borderRadius: 20,
-              border: selectedCategory === cat ? '2px solid var(--berkeley-blue)' : '1px solid var(--border-light)',
-              background: selectedCategory === cat ? 'var(--berkeley-blue)' : 'var(--bg-card)',
-              color: selectedCategory === cat ? '#fff' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-            }}
+            className={cn(
+              "px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border",
+              selectedCategory === cat 
+                ? "bg-aqua-cyan-midtone text-white border-none shadow-lg shadow-aqua-cyan-midtone/20" 
+                : "bg-white/40 backdrop-blur-md border-border-primary text-slate-500 hover:text-aqua-cyan-midtone"
+            )}
           >
             {cat === 'ALL' ? '全部' : cat === 'E' ? '環境 (E)' : cat === 'S' ? '社會 (S)' : '治理 (G)'}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       {viewMode === 'matrix' ? (
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">雙重重大性矩陣</h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', margin: 0 }}>X 軸：衝擊重大性 | Y 軸：利害關係人關注度</p>
-          </div>
-          <div className="card-body">
-            <div style={{ position: 'relative', height: 400, background: 'linear-gradient(to top right, #fafafa, #f0f4ff)', border: '1px solid var(--border-light)', borderRadius: 12, overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', top: '10%', left: '50%', right: 0, bottom: 0, background: 'rgba(0, 50, 98, 0.04)', borderRadius: '0 0 0 0' }} />
-              <div style={{ position: 'absolute', top: 8, right: 12, fontSize: '0.75rem', color: '#003262', fontWeight: 600 }}>核心重大區</div>
-              <div style={{ position: 'absolute', bottom: 8, left: 12, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>觀察關注區</div>
-              <div style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>利害關係人關注度 →</div>
-              <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>衝擊重大性 →</div>
-
-              {filtered.map(topic => {
-                const x = ((topic.impact - 3) / 2) * 80 + 10;
-                const y = 90 - (((topic.concern - 3) / 2) * 80);
-                return (
-                  <div
-                    key={topic.id}
-                    onClick={() => setSelectedTopic(selectedTopic?.id === topic.id ? null : topic)}
-                    style={{
-                      position: 'absolute',
-                      left: `${x}%`,
-                      top: `${y}%`,
-                      transform: 'translate(-50%, -50%)',
-                      width: 28,
-                      height: 28,
-                      borderRadius: '50%',
-                      background: getStatusColor(topic.status),
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontSize: '0.65rem',
-                      fontWeight: 700,
-                      border: selectedTopic?.id === topic.id ? '3px solid #000' : '2px solid #fff',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                      zIndex: 2,
-                      transition: 'transform 0.15s',
-                    }}
-                    title={topic.name}
-                  >
-                    {topic.id}
-                  </div>
-                );
-              })}
-            </div>
-
-            {selectedTopic && (
-              <div className="card" style={{ marginTop: '1rem', borderLeft: `4px solid ${getStatusColor(selectedTopic.status)}` }}>
-                <div className="card-body">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
-                      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                        <span className={`badge ${selectedTopic.category === 'E' ? 'badge-green' : selectedTopic.category === 'S' ? 'badge-blue' : 'badge-yellow'}`}>{selectedTopic.category}</span>
-                        <span style={{ fontSize: '0.75rem', color: '#003262', fontWeight: 600 }}>{selectedTopic.gri}</span>
-                        <span className="badge badge-red">{getStatusLabel(selectedTopic.status)}</span>
-                      </div>
-                      <h4 style={{ fontWeight: 600, margin: '0 0 0.5rem' }}>{selectedTopic.name}</h4>
-                      <div style={{ display: 'flex', gap: '1.5rem' }}>
-                        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>衝擊重大性：<strong>{selectedTopic.impact}</strong></span>
-                        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>利害關係人關注度：<strong>{selectedTopic.concern}</strong></span>
-                      </div>
-                    </div>
-                    <button onClick={() => setSelectedTopic(null)} className="btn btn-secondary" style={{ fontSize: '0.75rem' }}>關閉</button>
-                  </div>
-                </div>
+        <motion.div variants={fadeIn}>
+          <Card className="bg-white/60 backdrop-blur-md border-border-primary overflow-hidden shadow-xl">
+            <CardHeader className="p-8 border-b border-slate-100/60 flex items-center justify-between bg-white/40">
+              <div>
+                <CardTitle className="text-xl font-bold text-aqua-cyan-midtone tracking-tight">雙重重大性矩陣</CardTitle>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">X 軸：衝擊重大性 | Y 軸：利害關係人關注度</p>
               </div>
-            )}
-          </div>
-        </div>
+              <Badge variant="verified">Sovereign_Analysis</Badge>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="relative h-[500px] bg-slate-50/30 border border-border-primary rounded-3xl overflow-hidden shadow-inner">
+                <div className="absolute top-[10%] left-[50%] right-0 bottom-0 bg-aqua-cyan/5 rounded-bl-[40px]" />
+                <div className="absolute top-8 right-10 text-[10px] font-black text-aqua-cyan-midtone uppercase tracking-[0.3em] bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-aqua-cyan/20">核心重大區 Critical Zone</div>
+                <div className="absolute bottom-8 left-10 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">觀察關注區 Watchlist</div>
+                <div className="absolute left-8 top-1/2 -translate-y-1/2 -rotate-90 text-[9px] font-black text-slate-400 uppercase tracking-[0.5em]">利害關係人關注度 Stakeholder Concern →</div>
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[9px] font-black text-slate-400 uppercase tracking-[0.5em]">衝擊重大性 Business Impact →</div>
+
+                {filtered.map(topic => {
+                  const x = ((topic.impact - 3) / 2) * 80 + 10;
+                  const y = 90 - (((topic.concern - 3) / 2) * 80);
+                  return (
+                    <motion.div
+                      key={topic.id}
+                      onClick={() => setSelectedTopic(selectedTopic?.id === topic.id ? null : topic)}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      whileHover={{ scale: 1.2, zIndex: 10 }}
+                      className="absolute cursor-pointer flex items-center justify-center text-white text-[10px] font-black rounded-full shadow-lg border-2 border-white transition-all"
+                      style={{
+                        left: `${x}%`,
+                        top: `${y}%`,
+                        width: 32,
+                        height: 32,
+                        backgroundColor: getStatusColor(topic.status),
+                        borderColor: selectedTopic?.id === topic.id ? 'var(--text-primary)' : '#fff',
+                        boxShadow: selectedTopic?.id === topic.id ? '0 0 20px rgba(0,0,0,0.2)' : '0 4px 12px rgba(0,0,0,0.1)'
+                      }}
+                      title={topic.name}
+                    >
+                      {topic.id}
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              <AnimatePresence>
+                {selectedTopic && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    className="mt-8 p-6 bg-white border rounded-3xl shadow-lg border-l-8"
+                    style={{ borderLeftColor: getStatusColor(selectedTopic.status) }}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <Badge variant="verified" className="bg-aqua-cyan/10 text-aqua-cyan-midtone border-aqua-cyan/20">{selectedTopic.category}</Badge>
+                          <span className="text-xs font-black text-slate-400 font-mono">{selectedTopic.gri}</span>
+                          <Badge variant="verified" style={{ backgroundColor: `${getStatusColor(selectedTopic.status)}10`, color: getStatusColor(selectedTopic.status), borderColor: `${getStatusColor(selectedTopic.status)}20` }}>
+                            {getStatusLabel(selectedTopic.status)}
+                          </Badge>
+                        </div>
+                        <h4 className="text-xl font-bold text-slate-800 tracking-tight">{selectedTopic.name}</h4>
+                        <div className="flex gap-8">
+                          <div className="space-y-1">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Impact Score</p>
+                            <p className="text-lg font-black text-aqua-cyan-midtone font-mono">{selectedTopic.impact}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Stakeholder Concern</p>
+                            <p className="text-lg font-black text-eternal-gold-midtone font-mono">{selectedTopic.concern}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={() => setSelectedTopic(null)} className="rounded-full w-10 h-10 p-0 text-slate-400">
+                        <X size={20} />
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        </motion.div>
       ) : (
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">重大議題列表</h3>
-          </div>
-          <div className="card-body" style={{ padding: 0 }}>
-            <div className="table-container">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>議題名稱</th>
-                    <th>類別</th>
-                    <th>GRI 對應</th>
-                    <th>衝擊重大性</th>
-                    <th>利害關係人關注度</th>
-                    <th>狀態</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map(topic => (
-                    <tr key={topic.id}>
-                      <td>{topic.id}</td>
-                      <td style={{ fontWeight: 600 }}>{topic.name}</td>
-                      <td><span className={`badge ${topic.category === 'E' ? 'badge-green' : topic.category === 'S' ? 'badge-blue' : 'badge-yellow'}`}>{topic.category}</span></td>
-                      <td style={{ fontSize: '0.8rem', color: '#003262', fontWeight: 600 }}>{topic.gri}</td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <div style={{ width: 60, height: 6, background: '#f0f0f0', borderRadius: 3 }}>
-                            <div style={{ width: `${(topic.impact / 5) * 100}%`, height: '100%', background: 'var(--berkeley-blue)', borderRadius: 3 }} />
-                          </div>
-                          <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{topic.impact}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <div style={{ width: 60, height: 6, background: '#f0f0f0', borderRadius: 3 }}>
-                            <div style={{ width: `${(topic.concern / 5) * 100}%`, height: '100%', background: '#3b7ea1', borderRadius: 3 }} />
-                          </div>
-                          <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{topic.concern}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: getStatusColor(topic.status) }}>{getStatusLabel(topic.status)}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <motion.div variants={fadeIn}>
+          <Card className="bg-white/60 backdrop-blur-md border-border-primary overflow-hidden shadow-xl">
+             <div className="overflow-x-auto">
+               <table className="w-full text-left border-collapse">
+                 <thead>
+                   <tr className="bg-white/40 border-b border-slate-100">
+                     {['#', '議題名稱', '類別', 'GRI 對應', '衝擊重大性', '利害關係人關注度', '狀態'].map((h, i) => (
+                       <th key={i} className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{h}</th>
+                     ))}
+                   </tr>
+                 </thead>
+                 <tbody className="divide-y divide-slate-50">
+                   {filtered.map(topic => (
+                     <tr key={topic.id} className="hover:bg-white/40 transition-colors group">
+                       <td className="px-8 py-5 text-xs font-mono font-black text-slate-300">{topic.id}</td>
+                       <td className="px-8 py-5 font-bold text-slate-700">{topic.name}</td>
+                       <td className="px-8 py-5">
+                         <Badge variant="verified" className="bg-aqua-cyan/5 text-aqua-cyan-midtone border-aqua-cyan/10">{topic.category}</Badge>
+                       </td>
+                       <td className="px-8 py-5 text-xs font-black text-aqua-cyan-midtone/60 font-mono">{topic.gri}</td>
+                       <td className="px-8 py-5">
+                         <div className="flex items-center gap-3">
+                           <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                             <div className="h-full bg-aqua-cyan-midtone" style={{ width: `${(topic.impact / 5) * 100}%` }} />
+                           </div>
+                           <span className="text-xs font-black text-slate-600 font-mono">{topic.impact}</span>
+                         </div>
+                       </td>
+                       <td className="px-8 py-5">
+                         <div className="flex items-center gap-3">
+                           <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                             <div className="h-full bg-eternal-gold-midtone" style={{ width: `${(topic.concern / 5) * 100}%` }} />
+                           </div>
+                           <span className="text-xs font-black text-slate-600 font-mono">{topic.concern}</span>
+                         </div>
+                       </td>
+                       <td className="px-8 py-5">
+                         <span className="text-xs font-black uppercase tracking-wider" style={{ color: getStatusColor(topic.status) }}>{getStatusLabel(topic.status)}</span>
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             </div>
+          </Card>
+        </motion.div>
       )}
 
       {/* Floating AI Assistant Button */}
-      <button
+      <motion.button
+        variants={fadeIn}
         onClick={handleAskOmniAgent}
         disabled={loading}
-        style={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          width: '64px',
-          height: '64px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #003262, #005DAA)',
-          color: '#fff',
-          border: 'none',
-          boxShadow: '0 8px 32px rgba(0, 50, 98, 0.3)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          transition: 'transform 0.2s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        className="fixed bottom-10 right-10 w-20 h-20 rounded-full bg-gradient-to-br from-aqua-cyan-midtone to-aqua-cyan text-white shadow-[0_12px_40px_-10px_rgba(0,255,255,0.4)] flex items-center justify-center z-100 group active:scale-95 transition-all"
       >
-        {loading ? <RefreshCw size={28} className="spin" /> : <Bot size={28} />}
-        <div style={{
-          position: 'absolute',
-          right: '74px',
-          background: 'white',
-          padding: '8px 16px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          whiteSpace: 'nowrap',
-          color: '#003262',
-          fontSize: '0.875rem',
-          fontWeight: 700,
-          pointerEvents: 'none',
-        }}>
-          Ask OmniAgent AI 分析重大性
+        {loading ? <RefreshCw size={32} className="animate-spin" /> : <Bot size={32} className="group-hover:rotate-12 transition-transform" />}
+        <div className="absolute right-24 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl border border-aqua-cyan/20 shadow-xl opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 pointer-events-none transition-all duration-300">
+          <p className="text-[9px] font-black text-aqua-cyan-midtone uppercase tracking-[0.2em] mb-0.5">Supreme Intelligence</p>
+          <p className="text-sm font-black text-slate-800 whitespace-nowrap">Ask OmniAgent AI 分析重大性</p>
         </div>
-      </button>
-
-      <style>{`
-        .spin { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
-    </div>
+      </motion.button>
+    </motion.div>
   );
 }
