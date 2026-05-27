@@ -1,20 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { esgResearchAgent } from '@/lib/ai/agentz0';
+import { researcher, auditor, omniSwarm } from '@/lib/agents/adk-swarm';
 
 export async function POST(req: NextRequest) {
   try {
-    const { task, dataContext } = await req.json();
+    const { task, agentName, dataContext } = await req.json();
 
     if (!task) {
-      return NextResponse.json({ error: 'Task is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Task description is required' }, { status: 400 });
     }
 
-    // Call our agent from edge function
-    const result = await esgResearchAgent.runTask(task, dataContext);
+    let result;
 
-    return NextResponse.json({ success: true, result });
+    if (agentName) {
+      const agent = omniSwarm.getAgent(agentName);
+      if (!agent) {
+        return NextResponse.json({ error: `Agent ${agentName} not found in ADK registry` }, { status: 404 });
+      }
+      result = await agent.run(task, dataContext);
+    } else {
+      // Default to researcher or swarm broadcast
+      result = await researcher.run(task, dataContext);
+    }
+
+    return NextResponse.json({ success: true, ...result });
   } catch (error: any) {
-    console.error('[Edge API Agent] Error:', error);
+    console.error('[ADK Edge API] Error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
