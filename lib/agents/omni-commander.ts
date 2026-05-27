@@ -56,7 +56,7 @@ export class OmniCommander extends ADKAgent {
     super({
       name: 'OmniAgent',
       role: 'Supreme Commander of the ESG GO Platform',
-      model: 'googleai/gemini-2.0-pro-exp-02-05', // Supreme reasoning model
+      model: 'googleai/gemini-2.0-flash-exp', // Adjusted for compatibility
       systemPrompt: `
 You are OmniAgent, the Supreme Commander.
 Your mission is to orchestrate all other agents (Researcher, Auditor, Strategist, Agent0).
