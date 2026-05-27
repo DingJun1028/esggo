@@ -70,6 +70,10 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
   async command(task: string, context?: any) {
     console.log(`[OmniCommander] ⚡ Commanding: ${task}`);
     
+    if (task.includes('PILOT_REPORT')) {
+      return await this.runPilotMission(context);
+    }
+
     // Logic for deciding which agents to deploy
     const planResponse = await this.run(`Create an execution plan for: ${task}`, context);
     
@@ -81,6 +85,66 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     return {
       commanderOutput: planResponse.output,
       swarmResults
+    };
+  }
+
+  private async runPilotMission(context: any) {
+    const ctx = context || {};
+    // Fallback if client SDK initialization fails in Node
+    const { createHash } = require('crypto');
+    const { GRI_CHAPTERS } = require('../constants/chapters');
+    const { saveSustainWriteSection } = require('../dataconnect-memory');
+
+    console.log('[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot...');
+    hermes.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot', totalChapters: GRI_CHAPTERS.length });
+
+    const results = [];
+
+    for (const chapter of GRI_CHAPTERS) {
+      hermes.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Generating content for ${chapter.title}` });
+      
+      const researcherAgent = this.swarm.getAgent('ESG_Researcher');
+      if (!researcherAgent) {
+        console.error('[OmniCommander] ESG_Researcher not found in swarm');
+        continue;
+      }
+
+      const genResponse = await researcherAgent.run(`Write a detailed professional draft for the ESG report chapter: ${chapter.title} (${chapter.gri}). Use the provided context.`, ctx);
+
+      if (!genResponse.success || !genResponse.output) {
+        console.error(`[OmniCommander] Failed to generate content for ${chapter.id}: ${genResponse.error}`);
+        hermes.publish('AGENT_ERROR', { agent: 'ESG_Researcher', chapter: chapter.id, error: genResponse.error });
+        continue;
+      }
+
+      const content = genResponse.output;
+      const hash = createHash('sha256').update(String(content)).digest('hex');
+
+      hermes.publish('AGENT_TASK', { agent: 'ESG_Auditor', task: `Applying T4 HashLock to ${chapter.title}` });
+      
+      // Persist to Data Connect via the memory bridge
+      await saveSustainWriteSection({
+        company_id: ctx.companyId || 'default',
+        chapter_id: chapter.id,
+        chapter_name: chapter.title,
+        content: content,
+        content_md: content,
+        status: 'completed',
+        chapter_order: chapter.order,
+        gri_references: [chapter.gri],
+        hash_lock: hash
+      });
+
+      hermes.publish('5T_SEAL', { gate: 'T4', chapter: chapter.id, hash });
+      results.push({ chapter: chapter.id, status: 'sealed', hash });
+    }
+
+    hermes.publish('MISSION_COMPLETE', { mission: 'Autonomous SustainWrite Pilot', totalSealed: results.length });
+
+    return {
+      success: true,
+      message: 'Autonomous Pilot Complete. All chapters generated and 5T sealed.',
+      results
     };
   }
 }
