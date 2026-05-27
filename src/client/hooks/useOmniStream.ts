@@ -13,25 +13,51 @@ export function useOmniStream() {
   const [isStreaming, setIsStreaming] = useState(false);
 
   useEffect(() => {
-    // In a real implementation, this would connect to a Server-Sent Events (SSE) endpoint.
-    // For now, we simulate an incoming stream of events.
-    setIsStreaming(true);
+    let eventSource: EventSource | null = null;
+    let isMounted = true;
 
-    const interval = setInterval(() => {
-      const types: OmniEvent['type'][] = ['TRACE', 'COMPUTE', 'SEAL', 'MEMORY'];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      const newEvent: OmniEvent = {
-        id: crypto.randomUUID(),
-        type: randomType,
-        payload: `[OmniCore] Processing standard payload for ${randomType} protocol...`,
-        timestamp: new Date().toISOString(),
+    try {
+      eventSource = new EventSource('/api/omnispace/sse');
+
+      eventSource.onopen = () => {
+        if (isMounted) setIsStreaming(true);
       };
-      
-      setEvents(prev => [newEvent, ...prev].slice(0, 50)); // Keep last 50
-    }, 3000);
+
+      eventSource.onmessage = (event) => {
+        if (!isMounted) return;
+        try {
+          const parsedData = JSON.parse(event.data);
+          
+          // Map backend event structure to OmniEvent
+          const newEvent: OmniEvent = {
+            id: parsedData.id || crypto.randomUUID(),
+            type: parsedData.type || 'TRACE',
+            payload: typeof parsedData.payload === 'string' ? parsedData.payload : JSON.stringify(parsedData.payload || parsedData),
+            timestamp: parsedData.timestamp || new Date().toISOString(),
+            integrity_hash: parsedData.integrity_hash
+          };
+          
+          setEvents(prev => [newEvent, ...prev].slice(0, 50)); // Keep last 50
+        } catch (error) {
+          console.error('[useOmniStream] Error parsing SSE data:', error);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        if (!isMounted) return;
+        console.error('[useOmniStream] SSE Error:', error);
+        setIsStreaming(false);
+      };
+    } catch (err) {
+      console.error('[useOmniStream] Failed to initialize EventSource:', err);
+      if (isMounted) setIsStreaming(false);
+    }
 
     return () => {
-      clearInterval(interval);
+      isMounted = false;
+      if (eventSource) {
+        eventSource.close();
+      }
       setIsStreaming(false);
     };
   }, []);
