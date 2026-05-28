@@ -1,20 +1,46 @@
-﻿'use client';
-import React, { useState, useRef } from 'react';
-import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Terminal, Layout, Globe, Key, AlertTriangle } from 'lucide-react';
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Globe } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth, isDemoMode } from '../../../lib/firebase';
+import { isDemoMode } from '../../../lib/firebase';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // State for dynamically loaded providers
+  const [providers, setProviders] = useState<{ email?: boolean; google?: { enabled: boolean }; emailOTP?: boolean } | null>(null);
+  const [providersLoading, setProvidersLoading] = useState(true);
+
   const leafClicksRef = useRef(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
+
+  // Fetch available authentication providers from NCB Proxy on mount
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const res = await fetch('/api/auth-providers');
+        if (res.ok) {
+          const data = await res.json();
+          setProviders(data);
+        } else {
+          console.warn('Failed to fetch auth providers, falling back to default email login.');
+          setProviders({ email: true }); // Fallback
+        }
+      } catch (err) {
+        console.error('Error fetching auth providers:', err);
+        setProviders({ email: true });
+      } finally {
+        setProvidersLoading(false);
+      }
+    };
+    fetchProviders();
+  }, []);
 
   const handleLeafClick = () => {
     leafClicksRef.current += 1;
@@ -24,7 +50,6 @@ export default function LoginPage() {
       leafClicksRef.current = 0;
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     } else {
-      // Reset counter if no click within 2 seconds
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         leafClicksRef.current = 0;
@@ -37,21 +62,39 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      if (!email || !password) throw new Error('請輸入電子郵件與密碼');
+      if (!email || !password) throw new Error('請輸入電子郵件與密碼 (Email & Password required)');
       
       if (isDemoMode) {
-        console.log('[Auth] Demo Mode Active. Bypassing Firebase.');
-        // Allow any login in demo mode for dev convenience
+        console.log('[Auth] Demo Mode Active. Developer Bypass.');
         localStorage.setItem('omni_user', JSON.stringify({ email, id: 'demo_user', role: 'admin', company_id: 'default' }));
         router.push('/dashboard');
         return;
       }
 
-      await signInWithEmailAndPassword(auth, email, password);
-      localStorage.setItem('omni_user', JSON.stringify({ email, id: auth.currentUser?.uid, role: 'authenticated', company_id: 'default' }));
+      // NoCodeBackend Auth Proxy Call
+      const res = await fetch('/api/auth/sign-in/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || data.error || '登入失敗 (Login Failed)');
+      }
+
+      // Optionally store public info in local storage (session token is secure in cookie)
+      localStorage.setItem('omni_user', JSON.stringify({ 
+        email: data.user.email, 
+        id: data.user.id,
+        name: data.user.name,
+        role: 'authenticated' 
+      }));
+      
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || '登入失敗');
+      setError(err.message || '連線錯誤 (Connection Error)');
     } finally {
       setLoading(false);
     }
@@ -65,12 +108,15 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
+    // NCB Social Login flow: 
+    // Typically involves redirecting to the provider URL which sets cookies and returns.
+    // Assuming /api/auth/sign-in/google proxy handles the redirect or provides URL.
     setLoading(true);
     setError(null);
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push('/');
+      // For now, redirecting to a generic unimplemented endpoint until Google is fully set up in NCB.
+      // window.location.href = '/api/auth/sign-in/google';
+      setError('Google 登入尚未完全配置，請聯絡管理員 (Google Auth not fully configured)');
     } catch (err: any) {
       setError('Google 登入失敗');
     } finally {
@@ -99,7 +145,7 @@ export default function LoginPage() {
            
            <h1 className="text-4xl font-black text-[#003262] mb-2 tracking-tighter uppercase">ESG GO</h1>
            <div className="flex items-center gap-2">
-              <BrandBadge variant="gold" size="xs" className="font-black px-3">PREMIUM_OS</BrandBadge>
+              <BrandBadge variant="gold" size="xs" className="font-black px-3">NCB_AUTH</BrandBadge>
               <span className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em]">OmniAgent Engine</span>
            </div>
         </div>
@@ -139,78 +185,81 @@ export default function LoginPage() {
              </div>
            )}
 
-           <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
-                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Enterprise Email</label>
-                 <BrandInput 
-                   type="email" 
-                   placeholder="name@company.com" 
-                   value={email}
-                   onChange={e => setEmail(e.target.value)}
-                   className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
-                   required
-                 />
-              </div>
+           {providersLoading ? (
+             <div className="flex justify-center items-center h-40">
+                <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+             </div>
+           ) : (
+             <>
+               {providers?.email !== false && (
+                 <form onSubmit={handleLogin} className="space-y-6">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Enterprise Email</label>
+                       <BrandInput 
+                         type="email" 
+                         placeholder="name@company.com" 
+                         value={email}
+                         onChange={e => setEmail(e.target.value)}
+                         className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
+                         required
+                       />
+                    </div>
 
-              <div className="space-y-2">
-                 <div className="flex justify-between items-center px-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Key</label>
-                    <Link href="#" className="text-[10px] text-[#3B7EA1] font-black hover:underline">Forgot_Password?</Link>
-                 </div>
-                 <BrandInput 
-                   type="password" 
-                   placeholder="••••••••" 
-                   value={password}
-                   onChange={e => setPassword(e.target.value)}
-                   className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
-                   required
-                 />
-              </div>
+                    <div className="space-y-2">
+                       <div className="flex justify-between items-center px-2">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Key</label>
+                          <Link href="#" className="text-[10px] text-[#3B7EA1] font-black hover:underline">Forgot_Password?</Link>
+                       </div>
+                       <BrandInput 
+                         type="password" 
+                         placeholder="••••••••" 
+                         value={password}
+                         onChange={e => setPassword(e.target.value)}
+                         className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
+                         required
+                       />
+                    </div>
 
-              <div className="pt-4 space-y-4">
-                 <BrandButton 
-                   variant="primary" 
-                   fullWidth 
-                   size="lg" 
-                   className="bg-[#003262] h-14 text-sm font-black shadow-xl shadow-blue-900/20 rounded-2xl group"
-                   loading={loading}
-                 >
-                    啟動主權連線 <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                 </BrandButton>
-                 
-                 <div className="text-center">
-                    <p className="text-[11px] font-bold text-slate-400">
-                       尚未擁有帳號？ <Link href="#" className="text-[#3B7EA1] font-black hover:text-[#003262] transition-colors underline underline-offset-4">立即註冊成為成員</Link>
-                    </p>
-                 </div>
-              </div>
-           </form>
+                    <div className="pt-4 space-y-4">
+                       <BrandButton 
+                         variant="primary" 
+                         fullWidth 
+                         size="lg" 
+                         className="bg-[#003262] h-14 text-sm font-black shadow-xl shadow-blue-900/20 rounded-2xl group"
+                         loading={loading}
+                       >
+                          啟動主權連線 <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                       </BrandButton>
+                       
+                       <div className="text-center">
+                          <p className="text-[11px] font-bold text-slate-400">
+                             尚未擁有帳號？ <Link href="#" className="text-[#3B7EA1] font-black hover:text-[#003262] transition-colors underline underline-offset-4">立即註冊成為成員</Link>
+                          </p>
+                       </div>
+                    </div>
+                 </form>
+               )}
 
-           <div className="mt-10 pt-10 border-t border-slate-50 space-y-6">
-              <div className="relative">
-                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-50"></div></div>
-                 <div className="relative flex justify-center text-[10px] uppercase font-black text-slate-300 tracking-[0.3em]"><span className="bg-white px-4">Trusted_Providers</span></div>
-              </div>
-              
-              <div className="grid grid-cols-1 gap-3">
-                 <BrandButton 
-                   variant="outline" 
-                   onClick={handleGoogleLogin}
-                   className="border-slate-100 text-slate-600 hover:bg-slate-50 h-14 text-xs font-black bg-white rounded-2xl shadow-sm flex items-center justify-center gap-3 group"
-                 >
-                    <Globe size={18} className="text-slate-300 group-hover:text-blue-500 transition-colors" /> Continue_with_Google
-                 </BrandButton>
-                 
-                 <div className="grid grid-cols-2 gap-3">
-                    <BrandButton variant="secondary" className="border-slate-100 text-slate-500 hover:bg-slate-50 h-12 text-[10px] font-black bg-white rounded-xl shadow-sm uppercase tracking-widest">
-                       <Github size={14} className="mr-2 opacity-40" /> GitHub
-                    </BrandButton>
-                    <BrandButton variant="secondary" className="border-slate-100 text-slate-500 hover:bg-slate-50 h-12 text-[10px] font-black bg-white rounded-xl shadow-sm uppercase tracking-widest">
-                       <ShieldCheck size={14} className="mr-2 opacity-40" /> SSO_SAML
-                    </BrandButton>
+               {(providers?.google?.enabled || false) && (
+                 <div className="mt-10 pt-10 border-t border-slate-50 space-y-6">
+                    <div className="relative">
+                       <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-50"></div></div>
+                       <div className="relative flex justify-center text-[10px] uppercase font-black text-slate-300 tracking-[0.3em]"><span className="bg-white px-4">Trusted_Providers</span></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3">
+                       <BrandButton 
+                         variant="outline" 
+                         onClick={handleGoogleLogin}
+                         className="border-slate-100 text-slate-600 hover:bg-slate-50 h-14 text-xs font-black bg-white rounded-2xl shadow-sm flex items-center justify-center gap-3 group"
+                       >
+                          <Globe size={18} className="text-slate-300 group-hover:text-blue-500 transition-colors" /> Continue_with_Google
+                       </BrandButton>
+                    </div>
                  </div>
-              </div>
-           </div>
+               )}
+             </>
+           )}
         </BrandCard>
 
         <p className="mt-10 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">

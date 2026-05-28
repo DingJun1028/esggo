@@ -132,7 +132,7 @@ export default function EditorPage() {
         return; 
       }
 
-      const res = await fetch('/api/omniagent/extract-metrics', {
+      const res = await fetch('/api/omni-agent-api/extract-metrics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileId: alchemyRecord.artifact_id }),
@@ -152,10 +152,26 @@ export default function EditorPage() {
 
   const applyBestPractice = async () => {
     showToast('OmniAgent 正在從 最佳實踐平台 檢索標竿策略...', 'info');
-    await new Promise(r => setTimeout(r, 1200));
-    const strategy = `\n\n> 💡 **OmniAgent 標竿策略建議**：偵測到同業在 ${chapter.title} 採用了「自動化能源監控」策略。建議於報告中強調 T1 級別的即時數據鏈路，以對齊產業領先指標。`;
-    updateContent(chapter.id, (generatedContent[chapter.id] || '') + strategy, chapter.title, chapter.order, [chapter.gri]);
-    showToast('已嵌入產業最佳實踐建議', 'success');
+    setGenerating(true);
+    try {
+      const res = await fetch('/api/ai/best-practices/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ industry: '科技業', category: chapter.category })
+      });
+      const data = await res.json();
+      const strategyText = data.recommendations?.map((r: any) => 
+        `> 💡 **${r.title}** (${r.t5_gate})\n> ${r.description}\n> 影響: ${r.impact}`
+      ).join('\n\n') || '尚無具體建議';
+
+      const strategy = `\n\n### 🌍 產業標竿策略建議\n\n${strategyText}\n`;
+      updateContent(chapter.id, (generatedContent[chapter.id] || '') + strategy, chapter.title, chapter.order, [chapter.gri]);
+      showToast('已嵌入產業最佳實踐建議', 'success');
+    } catch(e) {
+      showToast('無法取得標竿策略', 'error');
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const applyExpertTemplate = () => {

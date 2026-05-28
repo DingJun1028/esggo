@@ -1,4 +1,6 @@
 // Core Principles for OmniAgent (通原則核心)
+import { T5_PRINCIPLES, T5Principle } from './T5Core/principles';
+
 export enum Principle {
   Truth = 'Truth', // 溯源鏈格
   Goodness = 'Goodness', // 零幻覺演算
@@ -9,24 +11,29 @@ export enum Principle {
 export interface PrincipleInfo {
   description: string;
   impact?: number;
+  t5Principle?: T5Principle; // Reference to T5 principle
 }
 
 export const Principles: Record<Principle, PrincipleInfo> = {
   [Principle.Truth]: {
     description: '確保每筆資料不可篡改，使用 Hash Lock 與原始碼鎖定',
     impact: 10,
+    t5Principle: T5_PRINCIPLES.TRACEABLE
   },
   [Principle.Goodness]: {
     description: '公開透明演算，標註 ISO 與公式來源，消除 AI 幻覺',
     impact: 8,
+    t5Principle: T5_PRINCIPLES.TRANSPARENT
   },
   [Principle.Beauty]: {
     description: '液態玻璃 UI 以視覺回饋呈現數據健康度，提升可用性',
     impact: 6,
+    t5Principle: T5_PRINCIPLES.TANGIBLE
   },
   [Principle.Trust]: {
     description: '週期性自動修復與 Refactoring，降低熵值，保證系統永續',
     impact: 9,
+    t5Principle: T5_PRINCIPLES.TRUSTWORTHY
   },
 };
 

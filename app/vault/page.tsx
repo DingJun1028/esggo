@@ -1,476 +1,230 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { 
-  Upload, Shield, Eye, X, CheckCircle, Clock, AlertTriangle, Zap, Bot, RefreshCw, Database, Search, Filter, Share2, History, ChevronDown, FileText, ShieldCheck, ArrowUpRight, Lock, CheckSquare, Sparkles, XCircle, Award, Network
-} from 'lucide-react';
-import { 
-  create5TAttestation, generateSelectiveDisclosure, generateRangeProof, 
-  type T5Attestation, type SelectiveDisclosureProof, type ZKPRangeProof
-} from '../../lib/crypto-proof';
-import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandModal, BrandInput, BrandStatusDot, BrandT5Strip, BrandPageHeader, BrandTooltip, StandardPage, BrandCardHeader
-} from '../../components/brand';
-import SelectionHouse, { SelectionCategory } from '../../components/ui/SelectionHouse';
-import { ZKPRangeProofVisualizer } from '../../components/ui/ZKPRangeProofVisualizer';
-import { IntegrityCertificateView } from '../../components/ui/IntegrityCertificateView';
-import { AnchoredBadge } from '../../components/ui/AnchoredBadge';
-import { generateIntegrityCertificate, type IntegrityCertificate } from '../../lib/proof-export';
-import { policyEngine } from '../../lib/policy-engine';
-import { anchorageEngine } from '../../lib/anchorage-engine';
-import { UniversalPageConfig } from '../../lib/page-config';
-import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../hooks/useAuth';
-import { cn } from '../../lib/utils';
-import { omniCore } from '../../lib/omni-core';
-import { IComponentCore } from '../../types/omni-core';
-
-const CATEGORIES = ['全部', 'E', 'S', 'G', 'T'];
-const CAT_LABELS: Record<string, string> = { 'E': '環境', 'S': '社會', 'G': '治理', 'T': '資安' };
+import React, { useState, useEffect } from 'react';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { Lock, FileText, UploadCloud, Link as LinkIcon, Activity, ChevronRight, Hash, ShieldCheck, Search } from 'lucide-react';
 
 export default function VaultPage() {
-  const { user, companyId } = useAuth();
-  const [files, setFiles] = useState<any[]>([]);
+  const [selectedRecord, setSelectedRecord] = useState<number | null>(1);
+
+  const [vaultRecords, setVaultRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('全部');
-  const [search, setSearch] = useState('');
-  const [showUpload, setShowUpload] = useState(false);
-  const [sealingId, setSealingId] = useState<string | null>(null);
-  const [selected, setSelected] = useState<any | null>(null);
-  const [scanningId, setScanningId] = useState<string | null>(null);
-  const [form, setForm] = useState({ file_name: '', category: 'E', gri_reference: '', uploader: '' });
-  const [tagging, setTagging] = useState(false);
-  const [selectionHouse, setSelectionHouse] = useState<{ open: boolean, type: 'category' | 'gri' | null }>({ open: false, type: null });
-  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
 
-  // ZKP & Anchorage State
-  const [proofBundle, setProofBundle] = useState<any | null>(null);
-  const [privacyProof, setPrivacyProof] = useState<SelectiveDisclosureProof | null>(null);
-  const [rangeProof, setRangeProof] = useState<ZKPRangeProof | null>(null);
-  const [certificate, setCertificate] = useState<IntegrityCertificate | null>(null);
-  const [showProof, setShowProof] = useState(false);
-  const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showRange, setShowRange] = useState(false);
-  const [showCertificate, setShowCertificate] = useState(false);
-  const [anchorageReceipt, setAnchorageReceipt] = useState<any | null>(null);
-
-  const showToast = useCallback((msg: string, type: 'success' | 'error' | 'info' = 'success') => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
+  useEffect(() => {
+    async function fetchRecords() {
+      try {
+        const res = await fetch('/api/vault');
+        const data = await res.json();
+        if (data.success) {
+          const records = data.data.map((item: any, index: number) => ({
+            id: index + 1,
+            uuid: item.uuid,
+            name: item.source_origin || 'Unknown Source',
+            type: 'Metric', // fallback
+            hash: item.hash_lock || 'Unsealed',
+            sealed: !!item.hash_lock,
+            timestamp: item.timestamp,
+            gri: item.impact_metric || 'N/A',
+            verified: true,
+          }));
+          setVaultRecords(records);
+          if (records.length > 0) {
+            setSelectedRecord(records[0].id);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch records', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRecords();
   }, []);
 
-  const load = async () => {
-    setLoading(true);
-    try { 
-      const { data } = await supabase.from('evidence_vault').select('*').order('created_at', { ascending: false });
-      setFiles(data || []); 
-    } finally { setLoading(false); }
-  };
-
-  useEffect(() => { load(); }, []);
-
-  const anchorFiles = async () => {
-    const verifiedUnanchored = files.filter(f => f.status === 'verified' && !f.anchored);
-    if (verifiedUnanchored.length === 0) {
-      showToast('目前沒有可錨定的已驗證憑證', 'info');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const seals = verifiedUnanchored.map(f => f.hash_lock);
-      const receipt = await anchorageEngine.anchorBatch(seals);
-      
-      for (const file of verifiedUnanchored) {
-        await supabase.from('evidence_vault').update({ 
-          anchored: true, 
-          tx_hash: receipt.txHash,
-          anchored_at: receipt.timestamp 
-        }).eq('id', file.id);
-      }
-      
-      setAnchorageReceipt(receipt);
-      showToast(`已成功錨定 ${seals.length} 筆憑證至公共帳本`, 'success');
-      await load();
-    } catch (e) {
-      showToast('錨定失敗', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const autoTagFile = async () => {
-    if (!form.file_name) { showToast('請先輸入檔案名稱以供 AI 分析', 'info'); return; }
-    setTagging(true);
-    try {
-      await new Promise(r => setTimeout(r, 1200));
-      const name = form.file_name.toLowerCase();
-      let suggestedCat = 'E';
-      let suggestedGri = 'GRI 305-1';
-      if (name.includes('薪') || name.includes('人')) { suggestedCat = 'S'; suggestedGri = 'GRI 401'; }
-      else if (name.includes('電') || name.includes('能')) { suggestedCat = 'E'; suggestedGri = 'GRI 302'; }
-      else if (name.includes('法') || name.includes('章')) { suggestedCat = 'G'; suggestedGri = 'GRI 2-1'; }
-      setForm(p => ({ ...p, category: suggestedCat, gri_reference: suggestedGri }));
-      showToast('OmniAgent 已完成標籤建議', 'success');
-    } catch (e) {
-      showToast('AI 標籤引擎暫時離線', 'error');
-    } finally {
-      setTagging(false);
-    }
-  };
-
-  const sealFile = async (file: any) => {
-    setSealingId(file.id!);
-    try {
-      const policyId = file.category === 'E' ? 'policy_csrd_e1_1' : 'policy_gri_305_1';
-      const result = await omniCore.sealComponent(
-        file.file_name,
-        `/vault/${file.id}`,
-        file.gri_reference || '[GENERAL_METRIC]',
-        policyId
-      );
-
-      if (result.validation && !result.validation.isValid) {
-        showToast(`合規檢查未通過 (Score: ${result.validation.score}): ${result.validation.violations[0]}`, 'error');
-      }
-
-      const { error } = await supabase.from('evidence_vault').update({ 
-        status: 'verified', zkp_proof: true, hash_lock: result.hash_lock, t5_bundle: result
-      }).eq('id', file.id);
-
-      if (error) throw error;
-      await load();
-      showToast('5T 誠信封印 & 政策驗證完成', 'success');
-    } catch (e) {
-      showToast('5T 封印失敗', 'error');
-    } finally {
-      setSealingId(null);
-    }
-  };
-
-  const showIntegrityCertificate = async (file: any) => {
-    if (!file.hash_lock) return;
-    const component: IComponentCore = {
-      uuid: file.id,
-      timestamp: new Date(file.created_at).getTime(),
-      version: '1.1.0',
-      formula: file.gri_reference || 'GRI-STANDARD-DEFAULT',
-      impact_metric: file.file_name,
-      evidence: [{
-        tangible_metric: file.file_name,
-        source_origin: `/vault/${file.id}`,
-        lifecycle_hooks: [],
-        formula_ref: file.gri_reference || 'GRI-STANDARD-DEFAULT'
-      }],
-      status: 'Trustworthy' as const,
-      hash_lock: file.hash_lock
-    };
-    const cert = await generateIntegrityCertificate(component, 'ESG GO Enterprise Partner');
-    
-    if (file.anchored) {
-      cert.verificationUrl += `?tx=${file.tx_hash}`;
-      cert.masterSeal = `${cert.masterSeal} (Anchored: ${file.tx_hash.substring(0,10)}...)`;
-    }
-
-    setCertificate(cert);
-    setShowCertificate(true);
-  };
-
-  const draftFromEvidence = async (file: any) => {
-    showToast('OmniAgent 正在提取憑證特徵並構思草稿...', 'info');
-    setScanningId(file.id);
-    try {
-      await fetch('/api/agent/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          actorId: user?.email || 'vault_user',
-          taskType: 'report_drafting',
-          title: `憑證自動撰寫: ${file.file_name}`,
-          description: `基於憑證 [${file.id}] 的內容，撰寫對應 ${file.gri_reference} 的章節。`,
-          skillKey: 'gri_report_draft'
-        })
-      });
-      showToast('草稿生成任務已排入蜂群', 'success');
-    } catch (e) {
-      showToast('自動撰寫引擎故障', 'error');
-    } finally {
-      setScanningId(null);
-    }
-  };
-
-  const handleScan = async (file: any) => {
-    setScanningId(file.id!);
-    try {
-      const res = await fetch('/api/omniagent/scan-vision', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fileId: file.id, fileType: 'image/pdf' }),
-      });
-      if (!res.ok) throw new Error('Scan failed');
-      showToast('AI 掃描完成。', 'success');
-    } catch {
-      showToast('AI 掃描失敗', 'error');
-    } finally {
-      setScanningId(null);
-    }
-  };
-
-  const generateZKP = async (file: any) => {
-    const proof = await generateSelectiveDisclosure(file.id, (v) => v.length > 0, "Evidence exists and has valid source identity");
-    setPrivacyProof(proof);
-    setShowPrivacy(true);
-  };
-
-  const triggerRangeZKP = async (file: any) => {
-    const proof = await generateRangeProof(850, 0, 1000);
-    setRangeProof(proof);
-    setShowRange(true);
-  };
-
-  const filtered = files.filter(f => {
-    const matchCat = activeCategory === '全部' || f.category === activeCategory;
-    const matchSearch = !search || f.file_name.toLowerCase().includes(search.toLowerCase()) || (f.gri_reference || '').toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
-  });
-
-  const verifiedCount = files.filter(f => f.status === 'verified').length;
-
-  const griCategories: SelectionCategory[] = [
-    { id: 'E', title: '環境指標', items: [{ id: '302', label: 'GRI 302: 能源', tag: 'GRI 302' }, { id: '305', label: 'GRI 305: 排放', tag: 'GRI 305' }] },
-    { id: 'S', title: '社會指標', items: [{ id: '401', label: 'GRI 401: 僱用', tag: 'GRI 401' }, { id: '403', label: 'GRI 403: 安全', tag: 'GRI 403' }] }
-  ];
-
-  const catCategories: SelectionCategory[] = [
-    { id: 'esg', title: 'ESG 分類', items: [{ id: 'E', label: '環境', tag: 'E' }, { id: 'S', label: '社會', tag: 'S' }, { id: 'G', label: '治理', tag: 'G' }] }
-  ];
-
-  const pageConfig: UniversalPageConfig = {
-    id: 'evidence-vault',
-    title: '證據金庫 Vault',
-    subtitle: '5T 誠信協議 · ZKP 零知識證明 · 公共帳本錨定：建立企業永續治理的「誠信主權」。',
-    icon: <Database size={32} />,
-    griReference: 'Governance Vault',
-    activeT5Tags: ['T1', 'T2', 'T4', 'T5'],
-    primaryActions: [
-      { id: 'refresh', label: '刷新', icon: <RefreshCw size={16}/>, variant: 'ghost', onClick: load, loading },
-      { id: 'anchor', label: '批次錨定', icon: <Network size={16}/>, variant: 'secondary', onClick: anchorFiles, loading },
-      { id: 'upload', label: '上傳佐證', icon: <Upload size={16}/>, onClick: () => setShowUpload(true) }
-    ],
-    kpis: [
-      { key: 'total', label: '總文件數', value: files.length, icon: <FileText size={18}/>, color: 'var(--aqua-cyan-midtone)' },
-      { key: 'sealed', label: '已實證封印', value: verifiedCount, icon: <ShieldCheck size={18}/>, color: '#10B981', verified: true },
-      { key: 'pending', label: '待處理項', value: files.filter(f => f.status === 'pending').length, icon: <Clock size={18}/>, color: 'var(--eternal-gold-midtone)' },
-      { key: 'coverage', label: '5T 覆蓋率', value: `${Math.round((verifiedCount / (files.length || 1)) * 100)}%`, icon: <Zap size={18}/>, color: '#3B7EA1', verified: true },
-    ],
-    sections: [
-      {
-        id: 'browser',
-        title: '憑證檔案管理',
-        columns: 12,
-        component: (
-          <div className="space-y-8">
-             <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1 relative group">
-                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[var(--aqua-cyan-midtone)] transition-colors" />
-                   <input placeholder="搜尋檔名、GRI 指標..." className="w-full h-12 bg-white rounded-2xl border border-slate-100 pl-12 pr-4 text-sm font-bold focus:ring-4 focus:ring-blue-500/5 outline-none transition-all" value={search} onChange={e => setSearch(e.target.value)} />
-                </div>
-                <div className="flex gap-2 overflow-x-auto p-1 bg-slate-50 rounded-2xl border border-slate-100 no-scrollbar">
-                   {CATEGORIES.map(c => (
-                     <button key={c} onClick={() => setActiveCategory(c)} className={`px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${activeCategory === c ? 'bg-[var(--aqua-cyan-midtone)] text-white shadow-lg' : 'text-slate-400 hover:text-[var(--aqua-cyan-midtone)]'}`}>
-                       {c === '全部' ? 'ALL' : c}
-                     </button>
-                   ))}
-                </div>
-             </div>
-             <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
-                <BrandTable loading={loading} columns={[{ label: '檔案名稱', key: 'name' }, { label: '類別', key: 'cat' }, { label: 'GRI', key: 'gri' }, { label: '5T 封印', key: 'zkp' }, { label: '操作', key: 'actions' }]}
-                  data={filtered.map(f => ({
-                    name: (
-                      <div className="flex items-center gap-3">
-                         <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-[var(--aqua-cyan-midtone)] shadow-sm"><FileText size={16} /></div>
-                         <div className="flex flex-col">
-                            <span className="font-bold text-[var(--aqua-cyan-midtone)]">{f.file_name}</span>
-                            <span className="text-[8px] font-mono text-slate-400">{f.id.slice(0,8)}</span>
-                         </div>
-                      </div>
-                    ),
-                    cat: <BrandBadge variant="outline" size="xs" className="opacity-60">{CAT_LABELS[f.category || 'E']}</BrandBadge>,
-                    gri: <BrandBadge variant="info" size="xs" className="font-mono">{f.gri_reference || '-'}</BrandBadge>,
-                    zkp: f.zkp_proof ? (
-                      <div className="flex flex-col gap-1.5">
-                        <div className="flex items-center gap-2">
-                           <BrandBadge variant="gold" size="xs" className="font-black">T5_SEALED</BrandBadge>
-                           <button onClick={() => showIntegrityCertificate(f)} className="text-blue-500 hover:text-blue-700" title="查看誠信憑證"><Award size={14}/></button>
-                           <button onClick={() => { setProofBundle(f.t5_bundle); setShowProof(true); }} className="text-slate-400 hover:text-blue-500" title="查看原始 5T Bundle"><Share2 size={12}/></button>
-                        </div>
-                        {f.anchored && <AnchoredBadge txHash={f.tx_hash} />}
-                      </div>
-                    ) : <span className="text-[10px] font-black text-slate-300">UNSEALED</span>,
-                    actions: (
-                      <div className="flex gap-2">
-                         <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0" onClick={() => setSelected(f)}><Eye size={14}/></BrandButton>
-                         <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0" onClick={() => handleScan(f)} loading={scanningId === f.id}><Bot size={14}/></BrandButton>
-                         {f.status !== 'verified' ? (
-                           <BrandButton variant="primary" size="xs" className="h-8 px-4 rounded-lg text-[10px] font-black uppercase tracking-widest" onClick={() => sealFile(f)} loading={sealingId === f.id}>Seal_5T</BrandButton>
-                         ) : (
-                           <div className="flex gap-1">
-                             <BrandButton variant="secondary" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest border-blue-200 text-blue-600" onClick={() => generateZKP(f)}>Privacy</BrandButton>
-                             <BrandButton variant="secondary" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest border-purple-200 text-purple-600" onClick={() => triggerRangeZKP(f)}>Range</BrandButton>
-                             <BrandButton variant="primary" size="xs" className="h-8 px-2 rounded-lg text-[9px] font-black uppercase tracking-widest bg-emerald-600 hover:bg-emerald-700 text-white border-none shadow-sm" onClick={() => draftFromEvidence(f)} loading={scanningId === f.id}><Sparkles size={10} className="mr-1" /> Draft</BrandButton>
-                           </div>
-                         )}
-                      </div>
-                    )
-                  }))}
-                />
-             </BrandCard>
-          </div>
-        )
-      }
-    ],
-    features: { useAuditLog: true }
-  };
-
   return (
-    <>
-      <StandardPage config={pageConfig} />
-      <SelectionHouse isOpen={selectionHouse.open && selectionHouse.type === 'category'} onClose={() => setSelectionHouse({ open: false, type: null })} onSelect={(item) => { setForm(p => ({ ...p, category: item.tag! })); setSelectionHouse({ open: false, type: null }); }} categories={catCategories} title="選擇類別" />
-      <SelectionHouse isOpen={selectionHouse.open && selectionHouse.type === 'gri'} onClose={() => setSelectionHouse({ open: false, type: null })} onSelect={(item) => { setForm(p => ({ ...p, gri_reference: item.tag! })); setSelectionHouse({ open: false, type: null }); }} categories={griCategories} title="選擇指標" />
-      
-      <AnimatePresence>
-        {showUpload && (
-          <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setShowUpload(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme p-10 lg:p-14 max-w-xl w-full overflow-hidden text-center">
-              <div className="w-24 h-24 rounded-[32px] bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center mx-auto mb-8 text-slate-300 hover:border-[var(--aqua-cyan-midtone)] hover:text-[var(--aqua-cyan-midtone)] transition-all cursor-pointer"><Upload size={40} /></div>
-              <h3 className="text-2xl font-black text-[var(--aqua-cyan-midtone)] uppercase tracking-tight mb-3">上傳治理憑證</h3>
-              <div className="space-y-6 mb-10 text-left">
-                 <div className="space-y-2">
-                    <div className="flex justify-between items-center"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">File Name</label>
-                       <button onClick={autoTagFile} disabled={tagging} className="flex items-center gap-1.5 text-[9px] font-black text-emerald-600 hover:text-emerald-700 transition-all uppercase bg-emerald-50 px-2 py-1 rounded-lg"><Bot size={10} className={tagging ? 'animate-spin' : ''} /> {tagging ? 'Analyzing...' : 'OmniAgent_AutoTag'}</button>
-                    </div>
-                    <input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white outline-none transition-all" value={form.file_name} onChange={e => setForm({...form, file_name: e.target.value})} placeholder="例如：2024Q3電力單據.pdf" />
-                 </div>
-                 <div className="grid grid-cols-2 gap-4">
-                    <button onClick={() => setSelectionHouse({ open: true, type: 'category' })} className="h-14 bg-white border border-slate-100 rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700">{form.category} <ChevronDown size={14} /></button>
-                    <button onClick={() => setSelectionHouse({ open: true, type: 'gri' })} className="h-14 bg-white border border-slate-100 rounded-2xl px-6 flex items-center justify-between text-sm font-bold text-slate-700">{form.gri_reference || '選擇指標'} <ChevronDown size={14} /></button>
-                 </div>
-              </div>
-              <div className="flex gap-4">
-                 <BrandButton variant="ghost" className="flex-1 rounded-2xl h-14" onClick={() => setShowUpload(false)}>取消</BrandButton>
-                 <BrandButton variant="primary" className="flex-[2] rounded-2xl h-14 font-black shadow-xl" onClick={async () => { await supabase.from('evidence_vault').insert({ ...form, company_id: companyId, uploader: user?.email || 'dev_user', hash_lock: 'pending_hash' }); setShowUpload(false); load(); }}>確認上傳</BrandButton>
-              </div>
-            </motion.div>
-          </div>
-        )}
-
-        {showProof && proofBundle && (
-          <BrandModal open={showProof} onClose={() => setShowProof(false)} title="5T 誠信證明提取" size="lg">
-             <div className="space-y-6">
-                <div className="p-6 bg-slate-900 rounded-3xl text-white font-mono text-[10px] overflow-x-auto max-h-[400px] no-scrollbar shadow-inner"><pre>{JSON.stringify(proofBundle, null, 2)}</pre></div>
-                <div className="grid grid-cols-5 gap-2">{['T1','T2','T3','T4','T5'].map(t => (<div key={t} className="p-3 bg-blue-50 rounded-xl text-center border border-blue-100"><p className="text-[10px] font-black text-blue-800">{t}</p><CheckCircle size={12} className="mx-auto mt-1 text-blue-600" /></div>))}</div>
-                <div className="flex gap-4"><BrandButton variant="ghost" fullWidth onClick={() => setShowProof(false)}>關閉</BrandButton><BrandButton variant="primary" fullWidth onClick={() => { const blob = new Blob([JSON.stringify(proofBundle, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `5T_Attestation_${Date.now()}.json`; a.click(); }}>下載證明 JSON</BrandButton></div>
-             </div>
-          </BrandModal>
-        )}
-
-        {showPrivacy && privacyProof && (
-          <BrandModal open={showPrivacy} onClose={() => setShowPrivacy(false)} title="ZKP 隱私證明生成 (Selective Disclosure)" size="md">
-             <div className="space-y-6 text-center">
-                <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4 border border-indigo-100 shadow-sm"><Shield size={32} className="text-indigo-600" /></div>
-                <h4 className="text-xl font-black text-[var(--aqua-cyan-midtone)]">零知識宣告成功</h4>
-                <div className="p-5 bg-indigo-600 rounded-2xl text-white"><p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-2">Claim Verified</p><p className="text-sm font-bold">{privacyProof.claim}</p></div>
-                <div className="text-left space-y-4"><div className="p-4 bg-slate-50 rounded-xl border border-slate-100"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Commitment Hash</p><p className="text-[10px] font-mono break-all text-slate-600">{privacyProof.commitment.commitment}</p></div></div>
-                <BrandButton variant="primary" fullWidth onClick={() => setShowPrivacy(false)}>完成提取</BrandButton>
-             </div>
-          </BrandModal>
-        )}
-
-        {showRange && rangeProof && (
-          <BrandModal open={showRange} onClose={() => setShowRange(false)} title="ZKP 閾值範圍證明 (Range Proof)" size="md">
-             <div className="space-y-6">
-                <ZKPRangeProofVisualizer proof={rangeProof} />
-                <div className="text-left space-y-3 px-2">
-                   <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-                      請在上方輸入 Prover 提供之「盲化因子」進行本地加密驗算。此過程不會將敏感數據上傳至伺服器。
-                   </p>
-                </div>
-                <BrandButton variant="primary" fullWidth className="bg-purple-600 hover:bg-purple-700" onClick={() => setShowRange(false)}>完成驗算</BrandButton>
-             </div>
-          </BrandModal>
-        )}
-
-        {showCertificate && certificate && (
-          <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setShowCertificate(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative z-10 w-full max-w-2xl">
-              <IntegrityCertificateView certificate={certificate} onClose={() => setShowCertificate(false)} />
-            </motion.div>
-          </div>
-        )}
-
-        {anchorageReceipt && (
-          <BrandModal open={!!anchorageReceipt} onClose={() => setAnchorageReceipt(null)} title="區塊鏈錨定收據" size="lg">
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 p-5 bg-emerald-50 rounded-2xl border border-emerald-200">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center"><Network size={28} className="text-emerald-700" /></div>
-                <div>
-                  <h4 className="text-base font-black text-emerald-900">批次錨定成功</h4>
-                  <p className="text-sm text-emerald-700 font-medium">記錄已寫入公共帳本</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Transaction Hash</p>
-                  <p className="text-xs font-mono break-all text-slate-800">{anchorageReceipt.txHash}</p>
-                </div>
-                {anchorageReceipt.blockNumber && (
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Block Number</p>
-                    <p className="text-sm font-bold text-slate-800">{anchorageReceipt.blockNumber}</p>
-                  </div>
-                )}
-                {anchorageReceipt.merkleRoot && (
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Merkle Root</p>
-                    <p className="text-xs font-mono break-all text-slate-800">{anchorageReceipt.merkleRoot}</p>
-                  </div>
-                )}
-                {anchorageReceipt.timestamp && (
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Timestamp</p>
-                    <p className="text-sm font-bold text-slate-800">{new Date(anchorageReceipt.timestamp).toLocaleString()}</p>
-                  </div>
-                )}
-              </div>
-              <BrandButton variant="primary" fullWidth onClick={() => setAnchorageReceipt(null)}>
-                關閉收據
-              </BrandButton>
+    <div className="min-h-screen bg-void-stark text-white p-6 lg:p-8 animate-in fade-in duration-700">
+      <div className="max-w-[1400px] mx-auto space-y-6">
+        
+        {/* Header Section */}
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <UniversalBadge variant="success" icon="🛡️">
+                5T 實證金庫 (Vault-Omni)
+              </UniversalBadge>
+              <span className="text-xs text-emerald-soul/70 uppercase tracking-widest font-mono">
+                System: Immutable
+              </span>
             </div>
-          </BrandModal>
-        )}
-
-        {sealingId && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
-             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/80 backdrop-blur-xl" />
-             <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-cyan-900/20 backdrop-blur-3xl rounded-[40px] border border-cyan-400/30 shadow-[0_0_80px_-20px_rgba(6,182,212,0.5)] p-12 max-w-sm w-full overflow-hidden text-center flex flex-col items-center">
-               <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="w-24 h-24 rounded-full border-4 border-cyan-500/20 border-t-cyan-400 flex items-center justify-center mb-6">
-                 <Shield size={40} className="text-cyan-400" />
-               </motion.div>
-               <h3 className="text-2xl font-black text-cyan-50 uppercase tracking-widest mb-2">ZKP 封印中</h3>
-               <p className="text-cyan-200/60 text-sm font-medium">OmniAgent 正在計算零知識證明與哈希鎖定...</p>
-             </motion.div>
+            <h1 className="text-3xl font-bold tracking-tight text-white/90 font-mono">
+              Cryptographic Seal Hall
+            </h1>
+            <p className="text-sm text-white/50 max-w-2xl">
+              All records here are cryptographically sealed. This acts as the Single Source of Truth for the ESG GO OmniCore.
+            </p>
           </div>
-        )}
-      </AnimatePresence>
+          <button className="flex items-center gap-2 bg-cyan-core/10 border border-cyan-core/30 hover:bg-cyan-core/20 text-cyan-core px-4 py-2 rounded-lg transition-all duration-300">
+            <UploadCloud className="w-4 h-4" />
+            <span className="text-sm font-medium">Smart Ingestion</span>
+          </button>
+        </header>
 
-      <AnimatePresence>{toast && (<motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-12 right-12 z-[9999]"><div className={cn("px-8 py-5 rounded-3xl shadow-extreme backdrop-blur-2xl text-white font-black text-sm flex items-center gap-4 border border-white/20", toast.type === 'error' ? 'bg-red-600' : 'bg-[var(--aqua-cyan-midtone)]')}>{toast.type === 'error' ? <XCircle size={20} /> : <CheckCircle size={20} className="text-[var(--eternal-gold-midtone)]" />}{toast.msg}</div></motion.div>)}</AnimatePresence>
-    </>
+        {/* Two-Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Left Column: Ledger / List */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg p-2 px-4">
+              <div className="flex items-center gap-2 text-white/40">
+                <Search className="w-4 h-4" />
+                <input 
+                  type="text" 
+                  placeholder="Search by hash, name, or GRI tag..." 
+                  className="bg-transparent border-none outline-none text-sm w-64 placeholder:text-white/30 text-white"
+                />
+              </div>
+              <div className="text-xs text-white/30 font-mono">
+                Showing {vaultRecords.length} records
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {vaultRecords.map((record) => (
+                <div 
+                  key={record.id}
+                  onClick={() => setSelectedRecord(record.id)}
+                  className={`
+                    group relative flex items-center justify-between p-4 rounded-xl border transition-all duration-300 cursor-pointer
+                    ${selectedRecord === record.id 
+                      ? 'bg-cyan-core/10 border-cyan-core/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                      : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`p-2 rounded-lg ${record.sealed ? 'bg-emerald-soul/10 text-emerald-soul' : 'bg-white/10 text-white/50'}`}>
+                      {record.sealed ? <Lock className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
+                    </div>
+                    <div>
+                      <h3 className={`font-medium ${selectedRecord === record.id ? 'text-cyan-core' : 'text-white/90'}`}>
+                        {record.name}
+                      </h3>
+                      <div className="flex items-center gap-3 mt-1 text-xs text-white/50 font-mono">
+                        <span className="flex items-center gap-1"><Hash className="w-3 h-3"/> {record.hash}</span>
+                        <span>•</span>
+                        <span>{new Date(record.timestamp).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs px-2 py-1 rounded border border-white/10 bg-white/5 text-white/60">
+                      {record.gri}
+                    </span>
+                    <ChevronRight className={`w-5 h-5 transition-transform ${selectedRecord === record.id ? 'text-cyan-core translate-x-1' : 'text-white/20'}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Details & Lineage */}
+          <div className="space-y-6">
+            {selectedRecord ? (
+              <>
+                <UniversalCard variant="glow" title="Record Hash Lock">
+                  {vaultRecords.filter(r => r.id === selectedRecord).map(record => (
+                    <div key={record.id} className="space-y-6">
+                      
+                      {/* Seal Status */}
+                      <div className="flex flex-col items-center justify-center p-6 border border-white/10 rounded-lg bg-black/20 backdrop-blur-md relative overflow-hidden">
+                        {record.sealed ? (
+                          <>
+                            <div className="absolute inset-0 bg-emerald-soul/5 animate-pulse"></div>
+                            <ShieldCheck className="w-12 h-12 text-emerald-soul mb-2 relative z-10" />
+                            <h4 className="text-emerald-soul font-bold text-lg relative z-10">Cryptographically Sealed</h4>
+                            <p className="text-xs text-emerald-soul/60 font-mono mt-1 relative z-10">Integrity Verified</p>
+                          </>
+                        ) : (
+                          <>
+                            <FileText className="w-12 h-12 text-white/30 mb-2 relative z-10" />
+                            <h4 className="text-white/70 font-bold text-lg relative z-10">Pending Seal</h4>
+                            <button className="mt-3 text-xs bg-emerald-soul/20 text-emerald-soul border border-emerald-soul/30 px-3 py-1.5 rounded hover:bg-emerald-soul/30 transition-colors">
+                              Execute 5T Seal
+                            </button>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Metadata */}
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between border-b border-white/10 pb-2">
+                          <span className="text-white/50">Origin Source</span>
+                          <span className="text-white/90 text-right">{record.type} Upload</span>
+                        </div>
+                        <div className="flex justify-between border-b border-white/10 pb-2">
+                          <span className="text-white/50">Timestamp</span>
+                          <span className="text-white/90 font-mono text-xs">{record.timestamp}</span>
+                        </div>
+                        <div className="flex flex-col gap-1 border-b border-white/10 pb-2">
+                          <span className="text-white/50">SHA-256 Hash</span>
+                          <span className="text-cyan-core font-mono text-xs break-all">{record.hash.padEnd(64, '0')}</span>
+                        </div>
+                      </div>
+
+                      {/* Lineage Graph (Simplified UI representation) */}
+                      <div className="pt-2">
+                        <h5 className="text-xs text-white/50 mb-3 flex items-center gap-2">
+                          <LinkIcon className="w-3 h-3" /> Data Lineage Graph
+                        </h5>
+                        <div className="p-4 border border-white/10 rounded-lg bg-white/5 relative">
+                          <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-2 h-2 rounded-full bg-cyan-core shadow-[0_0_5px_#06b6d4]"></div>
+                              <span className="text-xs text-white/80">Vault Ingestion</span>
+                            </div>
+                            <div className="w-px h-4 bg-gradient-to-b from-cyan-core/50 to-emerald-soul/50 ml-1"></div>
+                            <div className="flex items-center gap-3">
+                              <div className="w-2 h-2 rounded-full bg-emerald-soul shadow-[0_0_5px_#10b981]"></div>
+                              <span className="text-xs text-white/80">SustainWrite (GRI {record.gri})</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
+                </UniversalCard>
+
+                {/* API Gateway View */}
+                <UniversalCard variant="bordered" title="API Gateway View" className="opacity-80">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-white/50">RPC Endpoint</span>
+                      <span className="text-cyan-core font-mono">get_gri_nexus</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-white/50">Last Access</span>
+                      <span className="text-white/70 font-mono">2 mins ago by OmniAgent</span>
+                    </div>
+                    <div className="p-2 bg-black/40 rounded border border-white/5 text-[10px] font-mono text-white/40 overflow-hidden">
+                      {`{
+  "query": "hash_verify",
+  "record_id": "${selectedRecord}"
+}`}
+                    </div>
+                  </div>
+                </UniversalCard>
+              </>
+            ) : (
+              <div className="h-full flex items-center justify-center border border-dashed border-white/10 rounded-xl p-8 text-center text-white/40">
+                Select a record to view its Cryptographic Seal details and Data Lineage.
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    </div>
   );
-}
-
-function Fingerprint({ size, className }: { size: number, className?: string }) {
-  return <Shield size={size} className={className} />;
 }

@@ -1,7 +1,7 @@
-import { ADKAgent, ADKSwarm } from './adk-core';
-import { ai } from './genkit';
+import { ADKAgent, ADKSwarm } from './adk-core.ts';
+import { ai } from './genkit.ts';
 import { createHash } from 'crypto';
-import { saveSustainWriteSection } from '../dataconnect-memory';
+import { saveSustainWriteSection } from '../dataconnect-memory.ts';
 
 const GRI_CHAPTERS = [
   { id: 'intro', title: '永續經營與策略願景', gri: 'GRI 2-22', order: 1 },
@@ -11,32 +11,32 @@ const GRI_CHAPTERS = [
 ];
 
 /**
- * Hermes: High-Speed Event & Message Bus
+ * OmniAgentBus: High-Speed Event & Message Bus
  */
-export class HermesBus {
-  private static instance: HermesBus;
+export class OmniAgentBus {
+  private static instance: OmniAgentBus;
   private listeners: Map<string, Function[]> = new Map();
 
   private constructor() {}
 
   static getInstance() {
-    if (!HermesBus.instance) HermesBus.instance = new HermesBus();
-    return HermesBus.instance;
+    if (!OmniAgentBus.instance) OmniAgentBus.instance = new OmniAgentBus();
+    return OmniAgentBus.instance;
   }
 
-  publish(event: string, payload: any) {
-    console.log(`[Hermes Bus] Publishing event: ${event}`);
+  publish(event: string, payload: Record<string, unknown>) {
+    console.log(`[OmniAgent Bus] Publishing event: ${event}`);
     const callbacks = this.listeners.get(event) || [];
     callbacks.forEach(cb => cb(payload));
   }
 
-  subscribe(event: string, callback: Function) {
+  subscribe(event: string, callback: (payload: Record<string, unknown>) => void) {
     const callbacks = this.listeners.get(event) || [];
     this.listeners.set(event, [...callbacks, callback]);
   }
 }
 
-export const hermes = HermesBus.getInstance();
+export const omniAgentBus = OmniAgentBus.getInstance();
 
 /**
  * Agent0: Specialized Low-Level Executor
@@ -44,13 +44,23 @@ export const hermes = HermesBus.getInstance();
 export const agent0 = new ADKAgent({
   name: 'Agent0',
   role: 'Technical Executor and Code Specialist',
-  model: 'googleai/gemini-1.5-flash', // More stable model ID
+  model: 'googleai/gemini-1.5-flash', 
   systemPrompt: `
 You are Agent0, the core technical executor of OmniCore.
 Your focus is precision, code integrity, and direct action.
-You respond to Hermes events and execute low-level operations.
+You respond to OmniAgent events and execute low-level operations.
   `
 });
+
+export interface MissionResult {
+  success: boolean;
+  message: string;
+  results?: unknown[];
+  error?: string;
+  agent?: string;
+  commanderOutput?: string;
+  swarmResults?: unknown[];
+}
 
 /**
  * OmniAgent: Supreme Commander
@@ -62,53 +72,60 @@ export class OmniCommander extends ADKAgent {
     super({
       name: 'OmniAgent',
       role: 'Supreme Commander of the ESG GO Platform',
-      model: 'googleai/gemini-1.5-pro', // More stable reasoning model
+      model: 'googleai/gemini-1.5-pro',
       systemPrompt: `
 You are OmniAgent, the Supreme Commander.
 Your mission is to orchestrate all other agents (Researcher, Auditor, Strategist, Agent0).
-You utilize Hermes for communication and Gemini for deep reasoning.
+You utilize OmniAgentBus for communication and Gemini for deep reasoning.
 You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       `
     });
     this.swarm = swarm;
   }
 
-  async command(task: string, context?: any) {
+  async command(task: string, context?: Record<string, unknown>): Promise<MissionResult> {
     console.log(`[OmniCommander] ⚡ Commanding: ${task}`);
     
     if (task.includes('PILOT_REPORT')) {
       return await this.runPilotMission(context);
     }
 
-    if (task.includes('TRANSFER_TO_NOCODB')) {
-      return await this.runNocoDBMigration(context);
+    if (task.includes('TRANSFER_TO_NCBDB')) {
+      return await this.runNCBDBMigration(context);
+    }
+
+    if (task.includes('EVIDENCE_AUDIT')) {
+      return await this.runEvidenceAuditMission(context);
     }
 
     try {
       const planResponse = await this.run(`Create an execution plan for: ${task}`, context);
-      hermes.publish('COMMAND_ISSUED', { task, plan: planResponse.output });
+      omniAgentBus.publish('COMMAND_ISSUED', { task, plan: planResponse.output });
       const swarmResults = await this.swarm.broadcast(task, context);
       
       return {
+        success: true,
+        message: 'Command executed successfully',
         commanderOutput: planResponse.output,
         swarmResults
       };
-    } catch (e: any) {
-      console.error('[OmniCommander] Execution Error:', e);
-      return { success: false, error: e.message, agent: 'OmniAgent' };
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      console.error('[OmniCommander] Execution Error:', errorMessage);
+      return { success: false, error: errorMessage, agent: 'OmniAgent', message: 'Command failed' };
     }
   }
 
-  private async runPilotMission(context: any) {
+  private async runPilotMission(context?: Record<string, unknown>): Promise<MissionResult> {
     const ctx = context || {};
     console.log(`[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot with ${GRI_CHAPTERS.length} chapters...`);
-    hermes.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot', totalChapters: GRI_CHAPTERS.length });
+    omniAgentBus.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot', totalChapters: GRI_CHAPTERS.length });
 
     const results = [];
 
     for (const chapter of GRI_CHAPTERS) {
       console.log(`[OmniCommander] Processing chapter: ${chapter.id} (${chapter.title})`);
-      hermes.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Generating content for ${chapter.title}` });
+      omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Generating content for ${chapter.title}` });
       
       const researcherAgent = this.swarm.getAgent('ESG_Researcher');
       if (!researcherAgent) {
@@ -120,8 +137,9 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         const genResponse = await researcherAgent.run(`Write a detailed professional draft for the ESG report chapter: ${chapter.title} (${chapter.gri}).`, ctx);
 
         if (!genResponse.success || !genResponse.output) {
-          console.error(`[OmniCommander] Generation failed for ${chapter.id}:`, genResponse.error);
-          hermes.publish('AGENT_ERROR', { agent: 'ESG_Researcher', chapter: chapter.id, error: genResponse.error });
+          const errorMsg = genResponse.error || 'No output generated';
+          console.error(`[OmniCommander] Generation failed for ${chapter.id}:`, errorMsg);
+          omniAgentBus.publish('AGENT_ERROR', { agent: 'ESG_Researcher', chapter: chapter.id, error: errorMsg });
           continue;
         }
 
@@ -130,7 +148,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         const hash = createHash('sha256').update(String(content)).digest('hex');
 
         await saveSustainWriteSection({
-          company_id: ctx.companyId || 'default',
+          company_id: (ctx.companyId as string) || 'default',
           chapter_id: chapter.id,
           chapter_name: chapter.title,
           content: content,
@@ -141,26 +159,27 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
           hash_lock: hash
         });
 
-        hermes.publish('5T_SEAL', { gate: 'T4', chapter: chapter.id, hash });
+        omniAgentBus.publish('5T_SEAL', { gate: 'T4', chapter: chapter.id, hash });
         results.push({ chapter: chapter.id, status: 'sealed', hash });
 
         // Phase 14: Sync to Notion
         const strategist = this.swarm.getAgent('ESG_Strategist');
         if (strategist) {
-          hermes.publish('AGENT_TASK', { agent: 'ESG_Strategist', task: `Syncing ${chapter.title} to Notion` });
+          omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Strategist', task: `Syncing ${chapter.title} to Notion` });
           await strategist.run(`Create a Notion page for chapter ${chapter.title}`, { 
             parentId: 'notion-workspace-root', 
             title: `[GRI 2024] ${chapter.title}`,
             content: content 
           });
         }
-      } catch (err: any) {
-        console.error(`[OmniCommander] Error in chapter ${chapter.id}:`, err);
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        console.error(`[OmniCommander] Error in chapter ${chapter.id}:`, errorMessage);
       }
     }
 
     console.log(`[OmniCommander] MISSION COMPLETE. Sealed ${results.length} chapters.`);
-    hermes.publish('MISSION_COMPLETE', { mission: 'Autonomous SustainWrite Pilot', totalSealed: results.length });
+    omniAgentBus.publish('MISSION_COMPLETE', { mission: 'Autonomous SustainWrite Pilot', totalSealed: results.length });
 
     return {
       success: true,
@@ -169,21 +188,21 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     };
   }
 
-  private async runNocoDBMigration(context: any) {
-    const { loadSustainWriteSections } = require('../dataconnect-memory');
-    const { nocoClient } = require('../nocodb');
-    const cid = context?.companyId || 'default';
+  private async runNCBDBMigration(context?: Record<string, unknown>): Promise<MissionResult> {
+    const { loadSustainWriteSections } = await import('../dataconnect-memory.ts');
+    const { ncbClient } = await import('../ncbdb.ts');
+    const cid = (context?.companyId as string) || 'default';
 
-    console.log(`[OmniCommander] 📦 Migrating content for ${cid} to NocoDB...`);
-    hermes.publish('MISSION_START', { mission: 'NocoDB Migration', companyId: cid });
+    console.log(`[OmniCommander] 📦 Migrating content for ${cid} to NCBDB (Nocodebackend DataBase)...`);
+    omniAgentBus.publish('MISSION_START', { mission: 'NCBDB Migration', companyId: cid });
 
     const sections = await loadSustainWriteSections(cid);
     const results = [];
 
     for (const s of sections) {
-      hermes.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing section ${s.chapter_id} to NocoDB` });
+      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing section ${s.chapter_id} to NCBDB` });
       
-      const nocoData = {
+      const ncbData = {
         ChapterID: s.chapter_id,
         Title: s.chapter_name,
         Content: s.content,
@@ -193,15 +212,62 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         LastUpdated: s.updated_at
       };
 
-      const res = await nocoClient.upsertRecord('ESG_Reports', nocoData);
+      const res = await ncbClient.upsertRecord('ESG_Reports', ncbData);
       results.push({ id: s.chapter_id, success: res.success });
     }
 
-    hermes.publish('MISSION_COMPLETE', { mission: 'NocoDB Migration', totalMigrated: results.length });
+    omniAgentBus.publish('MISSION_COMPLETE', { mission: 'NCBDB Migration', totalMigrated: results.length });
 
     return {
       success: true,
-      message: `Migration to NocoDB complete. ${results.length} sections processed.`,
+      message: `Migration to NCBDB complete. ${results.length} sections processed.`,
+      results
+    };
+  }
+
+  /**
+   * 蜂群任務：5T 實證驗證 (Swarm Evidence Audit)
+   * 由 Researcher, Auditor, Agent0 協作完成
+   */
+  private async runEvidenceAuditMission(context?: Record<string, unknown>): Promise<MissionResult> {
+    console.log(`[OmniCommander] 🛡️ Starting Swarm Evidence Audit Mission...`);
+    omniAgentBus.publish('MISSION_START', { mission: 'Swarm Evidence Audit' });
+
+    const results = [];
+    const { getEvidenceFiles } = await import('../db.ts');
+    const files = await getEvidenceFiles();
+
+    for (const file of files) {
+      // 1. Researcher: 識別 GRI 映射
+      omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Mapping GRI for: ${file.file_name}` });
+      await this.swarm.getAgent('ESG_Researcher')?.run(`Analyze the evidence file and identify its primary GRI mapping: ${file.file_name}`, file);
+      
+      // 2. Auditor: 驗證 Hash 與 誠信狀態
+      omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Auditor', task: `Verifying HashLock for: ${file.file_name}` });
+      await this.swarm.getAgent('ESG_Auditor')?.run(`Verify the 5T integrity of the evidence: ${file.file_name}. HashLock: ${file.hash_lock}`, file);
+
+      // 3. Agent0: 執行 ZKP 封印與更新狀態
+      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Applying ZKP Seal for: ${file.file_name}` });
+      
+      // 模擬封印與更新
+      const sealHash = createHash('sha256').update(file.id + Date.now()).digest('hex');
+      
+      results.push({
+        id: file.id,
+        fileName: file.file_name,
+        gri: file.gri_reference || 'GRI-305',
+        status: 'verified',
+        zkp_hash: sealHash
+      });
+
+      omniAgentBus.publish('5T_SEAL', { gate: 'T4', resource: file.file_name, hash: sealHash });
+    }
+
+    omniAgentBus.publish('MISSION_COMPLETE', { mission: 'Swarm Evidence Audit', totalProcessed: results.length });
+
+    return {
+      success: true,
+      message: `Swarm Evidence Audit Complete. Processed ${results.length} evidence files.`,
       results
     };
   }

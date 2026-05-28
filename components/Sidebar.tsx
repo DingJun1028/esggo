@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -119,6 +119,31 @@ function getThemeStyles(theme: SidebarTheme) {
       groupHeader: 'hover:bg-white/5',
       groupExpanded: 'bg-white/5',
       themeArea: 'border-t border-[#003880]',
+    };
+  }
+  if (theme === 'glass') {
+    return {
+      sidebar: 'bg-white/40 backdrop-blur-xl border-r border-white/50 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]',
+      logo: 'border-b border-white/40',
+      logoText: 'text-[#003262]',
+      logoSub: 'text-[#003262]/60',
+      groupTitle: 'text-[#003262]/40',
+      navItem: 'text-[#003262]/70 hover:bg-white/60 hover:text-[#003262]',
+      navItemActive: 'bg-white/80 text-[#003262] shadow-sm',
+      navItemSub: 'text-[#003262]/50',
+      navItemSubActive: 'text-[#003262]/80',
+      iconActive: 'text-[#003262]',
+      iconInactive: 'text-[#003262]/50',
+      badge: 'bg-[#FDB515]/20 text-[#003262]',
+      collapseBtn: 'text-[#003262]/50 hover:text-[#003262] hover:bg-white/60',
+      footer: 'border-t border-white/40',
+      footerText: 'text-[#003262]/60',
+      footerDot: 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]',
+      chevron: 'text-[#003262]/40',
+      syncText: 'text-[#003262]/60',
+      groupHeader: 'hover:bg-white/40',
+      groupExpanded: 'bg-white/60',
+      themeArea: 'border-t border-white/40',
     };
   }
   return {

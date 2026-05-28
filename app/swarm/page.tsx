@@ -82,7 +82,7 @@ export default function SwarmPage() {
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
            <div className="space-y-4">
               <div className="flex items-center gap-3">
-                 <BrandBadge variant="gold" size="sm" className="font-black tracking-[0.2em] px-4 py-1">HERMES_SWARM_V3</BrandBadge>
+                 <BrandBadge variant="gold" size="sm" className="font-black tracking-[0.2em] px-4 py-1">OMNI_AGENT_SWARM_V3</BrandBadge>
                  <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
                     <BrandStatusDot status="active" pulse size="sm" />
                     <span className="text-[9px] font-black text-emerald-700 uppercase tracking-widest">Distributed_Node_Live</span>

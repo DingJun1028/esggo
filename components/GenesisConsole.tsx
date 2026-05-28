@@ -26,11 +26,11 @@ export default function GenesisConsole() {
   const [systemHealth, setSystemHealth] = useState(98);
   const [activeMissions, setActiveActiveMissions] = useState(1);
 
-  // Simulate real-time logs from Hermes Bus
+  // Simulate real-time logs from OmniAgent Bus
   useEffect(() => {
     if (!isLive) return;
 
-    const agents = ['OmniAgent', 'Agent0', 'ESG_Researcher', 'ESG_Auditor', 'Hermes'];
+    const agents = ['OmniAgent', 'Agent0', 'ESG_Researcher', 'ESG_Auditor', 'Sentinel'];
     const messages = [
       'Synchronizing Data Connect truth layers...',
       'Verifying T4 HashLock integrity...',
@@ -255,7 +255,7 @@ export default function GenesisConsole() {
         </div>
         <div className="flex gap-6">
           <div className="text-right">
-            <p className="text-[8px] text-slate-600 uppercase font-black">Hermes Bus Latency</p>
+            <p className="text-[8px] text-slate-600 uppercase font-black">OmniAgent Bus Latency</p>
             <p className="text-[10px] text-cyan-400 font-bold">1.2ms</p>
           </div>
           <div className="text-right border-l border-white/10 pl-6">

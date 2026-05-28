@@ -1,60 +1,51 @@
 import { ADKAgent, ADKSwarm } from './adk-core';
 import { ADK_STANDARD_TOOLS } from './adk-tools';
-import { agent0, OmniCommander, hermes } from './omni-commander';
+import { agent0, OmniCommander, omniAgentBus } from './omni-commander';
 
 /**
  * ADK Swarm Deployment: ESG GO Official Agents
  */
 
-export const researcher = new ADKAgent({
+export const esgResearcher = new ADKAgent({
   name: 'ESG_Researcher',
-  role: 'Specialist in GRI 2021 standards and global ESG regulations.',
-  tools: ADK_STANDARD_TOOLS,
+  role: 'Sustainability Data Specialist',
+  model: 'googleai/gemini-1.5-flash',
   systemPrompt: `
-You are the ESG Researcher for ESG GO. 
-Your mission is to map company metrics to GRI standards (GRI 302, 305, etc.).
-Always prioritize T1 (Traceability) and ensure data origins are cited.
-  `
+You are the ESG_Researcher. Your specialty is GRI, SASB, and TCFD mapping.
+You help identify relevant metrics and draft professional sustainability content.
+  `,
+  tools: ADK_STANDARD_TOOLS
 });
 
-export const auditor = new ADKAgent({
+export const esgAuditor = new ADKAgent({
   name: 'ESG_Auditor',
-  role: 'Strict integrity auditor focusing on 5T protocol compliance.',
-  tools: ADK_STANDARD_TOOLS,
+  role: 'Internal Control and 5T Compliance Officer',
+  model: 'googleai/gemini-1.5-flash',
   systemPrompt: `
-You are the ESG Auditor for ESG GO.
-Your mission is to verify the T4 (Trustworthy) status of all metrics using hash locks.
-If a metric lacks a sourceOrigin (T1), flag it as a critical signal.
-  `
+You are the ESG_Auditor. You verify the 5T integrity (Traceable, Transparent, Tangible, Trustworthy, Trackable).
+You look for data gaps, check hash locks, and perform automated ZKP-like verification.
+  `,
+  tools: ADK_STANDARD_TOOLS
 });
 
-export const strategist = new ADKAgent({
+export const esgStrategist = new ADKAgent({
   name: 'ESG_Strategist',
-  role: 'Senior advisor for corporate sustainability and SBTi alignment.',
-  tools: ADK_STANDARD_TOOLS,
+  role: 'External Communication and Strategic Alignment',
+  model: 'googleai/gemini-1.5-pro',
   systemPrompt: `
-You are the ESG Strategist for ESG GO.
-Your mission is to provide industry best practices and growth recommendations.
-Focus on T3 (Tangible) outcomes and ROI for ESG investments.
-  `
+You are the ESG_Strategist. You help align sustainability goals with corporate strategy.
+You focus on Notion syncing, report visualization, and executive summaries.
+  `,
+  tools: ADK_STANDARD_TOOLS
 });
 
-// Initialize Swarm and Register Sub-Agents
-export const omniSwarm = new ADKSwarm()
-  .register(researcher)
-  .register(auditor)
-  .register(strategist)
-  .register(agent0);
-
-// Initialize OmniAgent as Supreme Commander
-export const omniAgent = new OmniCommander(omniSwarm);
+export const omniSwarm = new ADKSwarm();
+omniSwarm.register(esgResearcher);
+omniSwarm.register(esgAuditor);
+omniSwarm.register(esgStrategist);
+omniSwarm.register(agent0);
 
 /**
- * Coordinated Workflow: Global Compliance Scan
- * Orchestrated by OmniAgent via Hermes
+ * The OmniAgent: Orchestrated by Supreme Commander via OmniAgentBus
  */
-export async function runGlobalComplianceScan(context: any) {
-  console.log('--- [OmniAgent] Initiating Global Compliance Scan ---');
-  
-  return await omniAgent.command('Perform a comprehensive GRI compliance scan and 5T audit across all active metrics.', context);
-}
+export const omniAgent = new OmniCommander(omniSwarm);

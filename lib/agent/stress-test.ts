@@ -15,13 +15,13 @@ export async function run5TStressTest(iterations = 100, concurrencyLimit = 10) {
     for (let i = 0; i < iterations; i += concurrencyLimit) {
       const chunk = Array.from({ length: Math.min(concurrencyLimit, iterations - i) }).map((_, j) => {
         const index = i + j;
-        return create5TAttestation(
-          `TEST_METRIC_${index}`,
-          Math.random() * 1000,
-          'tCO2e',
-          `SOURCE_DOC_ID_${index}`,
-          'Emission = Activity * Factor'
-        );
+        return create5TAttestation({
+          metric: `TEST_METRIC_${index}`,
+          value: Math.random() * 1000,
+          unit: 'tCO2e',
+          source: `SOURCE_DOC_ID_${index}`,
+          formula: 'Emission = Activity * Factor'
+        });
       });
       const chunkResults = await Promise.all(chunk);
       results.push(...chunkResults);

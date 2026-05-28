@@ -15,16 +15,6 @@ import {
   listSwarmAgentTasks,
   upsertSwarmAgentTask,
   listRegulatoryPolicies,
-  ListReportsData,
-  GetReportByIdData,
-  ListScrapedArticlesData,
-  ListAuditRecordsData,
-  ListAllTasksData,
-  ListRoadmapMilestonesData,
-  GetCompanyProfileData,
-  ListEternalMemoriesData,
-  ListSwarmAgentTasksData,
-  ListRegulatoryPoliciesData
 } from '@dataconnect/generated';
 
 /**
@@ -33,7 +23,7 @@ import {
  */
 
 // --- Eternal Memory ---
-export const dcListEternalMemories = async (): Promise<ListEternalMemoriesData['eternalMemories']> => {
+export const dcListEternalMemories = async (): Promise<any> => {
   try {
     const response = await listEternalMemories(dataConnect);
     return response.data.eternalMemories;
@@ -54,7 +44,7 @@ export const dcUpsertEternalMemory = async (input: any) => {
 };
 
 // --- Swarm Agent Tasks ---
-export const dcListSwarmAgentTasks = async (): Promise<ListSwarmAgentTasksData['swarmAgentTasks']> => {
+export const dcListSwarmAgentTasks = async (): Promise<any> => {
   try {
     const response = await listSwarmAgentTasks(dataConnect);
     return response.data.swarmAgentTasks;
@@ -75,7 +65,7 @@ export const dcUpsertSwarmAgentTask = async (input: any) => {
 };
 
 // --- Regulatory Policies ---
-export const dcListRegulatoryPolicies = async (): Promise<ListRegulatoryPoliciesData['regulatoryPolicies']> => {
+export const dcListRegulatoryPolicies = async (): Promise<any> => {
   try {
     const response = await listRegulatoryPolicies(dataConnect);
     return response.data.regulatoryPolicies;
@@ -86,7 +76,7 @@ export const dcListRegulatoryPolicies = async (): Promise<ListRegulatoryPolicies
 };
 
 // --- Reports ---
-export const dcGetReports = async (): Promise<ListReportsData['reports']> => {
+export const dcGetReports = async (): Promise<any> => {
   try {
     const response = await listReports(dataConnect);
     return response.data.reports;
@@ -96,7 +86,7 @@ export const dcGetReports = async (): Promise<ListReportsData['reports']> => {
   }
 };
 
-export const dcGetReportById = async (id: string): Promise<GetReportByIdData['report'] | null> => {
+export const dcGetReportById = async (id: string): Promise<any | null> => {
   try {
     const response = await getReportById(dataConnect, { id });
     return response.data.report || null;
@@ -107,7 +97,7 @@ export const dcGetReportById = async (id: string): Promise<GetReportByIdData['re
 };
 
 // --- Intelligence ---
-export const dcListScrapedArticles = async (): Promise<ListScrapedArticlesData['scrapedArticles']> => {
+export const dcListScrapedArticles = async (): Promise<any> => {
   try {
     const response = await listScrapedArticles(dataConnect);
     return response.data.scrapedArticles;
@@ -118,7 +108,7 @@ export const dcListScrapedArticles = async (): Promise<ListScrapedArticlesData['
 };
 
 // --- Audit ---
-export const dcListAuditRecords = async (): Promise<ListAuditRecordsData['auditRecords']> => {
+export const dcListAuditRecords = async (): Promise<any> => {
   try {
     const response = await listAuditRecords(dataConnect);
     return response.data.auditRecords;
@@ -129,7 +119,7 @@ export const dcListAuditRecords = async (): Promise<ListAuditRecordsData['auditR
 };
 
 // --- Tasks ---
-export const dcGetTasks = async (): Promise<ListAllTasksData['tasks']> => {
+export const dcGetTasks = async (): Promise<any> => {
   try {
     const response = await listAllTasks(dataConnect);
     return response.data.tasks;
@@ -140,7 +130,7 @@ export const dcGetTasks = async (): Promise<ListAllTasksData['tasks']> => {
 };
 
 // --- Roadmap ---
-export const dcGetRoadmapMilestones = async (): Promise<ListRoadmapMilestonesData['roadmapMilestones']> => {
+export const dcGetRoadmapMilestones = async (): Promise<any> => {
   try {
     const response = await listRoadmapMilestones(dataConnect);
     return response.data.roadmapMilestones;
@@ -170,7 +160,7 @@ export const dcUpsertMilestone = async (input: any) => {
 };
 
 // --- Company Profile ---
-export const dcGetCompanyProfile = async (id: string): Promise<GetCompanyProfileData['companyProfile'] | null> => {
+export const dcGetCompanyProfile = async (id: string): Promise<any | null> => {
   try {
     const response = await getCompanyProfile(dataConnect, { id });
     return response.data.companyProfile || null;

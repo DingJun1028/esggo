@@ -40,46 +40,93 @@ export type T5Status =
 
 /**
  * @interface IEvidence
- * @description 證據佐證庫 - 紀錄 5T 檢驗元數據。
+ * @description 證據佐證庫 - 紀錄 5T 檢驗元數據 (觀因循果修復版)
  */
 export interface IEvidence {
-  /** 🟢 可感知 (Tangible)：具體指標定義 */
-  tangible_metric: string;
-  /** 🟢 可溯源 (Traceable)：原始資料路徑 (Source Origin) */
-  source_origin: string;
-  /** 🟢 可追蹤 (Trackable)：數據流轉日誌 (Lifecycle Hooks) */
-  lifecycle_hooks: string[];
-  /** 🟢 可透明驗算 (Transparent)：[ISO-14064-1] 等公式來源 */
-  formula_ref: string;
+  // 觀因循果結構
+  originCause: string;    // 因：原始觸發條件
+  processTrace: string[]; // 循：InfoOne 流轉路徑
+  finalEffect: string;    // 果：最終執行結果與狀態
+
+  // 兼容舊版 5T 屬性 (逐步汰除或整合)
+  tangible_metric?: string;
+  source_origin?: string;
+  lifecycle_hooks?: string[];
+  formula_ref?: string;
+  causality?: {
+    originCause: string;
+    processTrace: string[];
+    finalEffect: string;
+  };
 }
 
 /**
- * @interface IComponentCore
- * @description 萬能元件心核 (SSOT 契約) - 系統之立身之本。
+ * 萬能元件心核 - 觀因循果修復版
+ * 確保數據從因到果的完整性與不可篡改性 (SSOT 契約)
  */
 export interface IComponentCore {
-  readonly uuid: string;              // 萬能永憶主體唯一識別碼 (Traceable)
-  readonly version: string;           // 語義化版本控制
-  readonly timestamp: number;         // 刻印時間戳 (Trackable)
+  // 萬能永憶主體唯一識別碼 (Immutable)
+  readonly uuid: string; 
+  // 語義化版本控制
+  readonly version: string; 
+  // 刻印時間戳 (溯源起點)
+  readonly timestamp: number; 
+  
+  // 5T 必備屬性
   readonly formula: string;           // 碳排與影響力計算公式 (Transparent)
   readonly impact_metric: string;     // 具體影響力指標 (Tangible)
   readonly status: "Trustworthy";     // 唯一的不可狀態 (Trustworthy)
   readonly hash_lock: string;         // 數據真理哈希鎖
-  readonly evidence: IEvidence[];     // 證據佐證庫
+  
+  // 證據左證庫 (儲存觀因循果的執行軌跡)
+  evidence: IEvidence[];
+}
+
+/**
+ * @interface IRestorationProtocol
+ * @description 萬能修復協議 (Omni Restoration Protocol)
+ * 當偵測到系統熵增（亂碼、錯誤）時觸發的最高權限自癒協議。
+ */
+export interface IRestorationProtocol {
+  /** 鏈式校驗 (Chain Validation) */
+  validateChain(uuid: string): Promise<boolean>;
+  /** 殘影重組 (Ghost Recomposition) */
+  recompose(hashLock: string): Promise<IComponentCore>;
+  /** 語義修正 (Semantic Alignment) */
+  align(target: IComponentCore): Promise<IComponentCore>;
+}
+
+/** 萬能修復輸入數據結構 */
+export interface RestorationInput {
+  metric?: string;
+  source?: string;
+  formula?: string;
+  trigger?: string;
+  [key: string]: unknown;
+}
+
+/** 記憶整合結果結構 */
+export interface ConsolidationResult {
+  success: boolean;
+  summary: string;
+  count: number;
+  error?: string;
 }
 
 // ============================================================
 // 3. 永恆記憶與智庫 (Eternal Memory & Think Tank)
 // ============================================================
 
-export enum EternalMemoryType {
-  EPISODIC = 'EPISODIC',
-  SEMANTIC = 'SEMANTIC',
-  PROCEDURAL = 'PROCEDURAL',
-  SPATIAL = 'SPATIAL',
-  EMOTIONAL = 'EMOTIONAL',
-  CREATIVE = 'CREATIVE'
-}
+export const EternalMemoryType = {
+  EPISODIC: 'EPISODIC',
+  SEMANTIC: 'SEMANTIC',
+  PROCEDURAL: 'PROCEDURAL',
+  SPATIAL: 'SPATIAL',
+  EMOTIONAL: 'EMOTIONAL',
+  CREATIVE: 'CREATIVE'
+} as const;
+
+export type EternalMemoryType = typeof EternalMemoryType[keyof typeof EternalMemoryType];
 
 export interface EternalMemory {
   id: string;

@@ -352,7 +352,7 @@
 | **GOVERNANCE 治理** | 重大性矩陣、審計日誌、證據金庫 |
 | **INSIGHTS 洞察** | 淨零路線圖、VerifyLink™、報告發布、永續閱覽室、供應鏈透明、永續財務、利害關係人 |
 | **ACADEMY 學院** | 永續學院、顧問服務 |
-| **HERMES AI** | Agent 調度、架構治理 |
+| **OmniAgent AI** | Agent 調度、架構治理 |
 | **SYSTEM 系統** | 任務中心、企業管理、AI 平台、整合中心、元件庫 |
 
 ### 6.2 行動版底部導覽 (Mobile Bottom Navigation)
@@ -502,6 +502,7 @@
 
 | 原則 | 說明 |
 |------|------|
+| **參照原則** | 每一原子組件皆須具備意圖宣告與治理鏈接 |
 | **誠信第一** | 5T Protocol 視覺化貫穿所有介面 |
 | **資訊密度** | Bento Grid 最大化資訊可視性 |
 | **學術精準** | Berkeley Design System 學術嚴謹感 |

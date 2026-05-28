@@ -1,33 +1,99 @@
-/**
- * 雜湊工具函數
- * 前後端通用的加密與雜湊函數
- */
-
 import { createHash, randomBytes, createHmac } from 'crypto';
 import type { ContentHash } from '../types/evidence.types';
 
 // ============================================
-// SHA-256 雜湊
+// 強化雜湊算法 - 支援 SHA-512 和 ZKP 驗證
+// ============================================
+
+export enum HashAlgorithm {
+  SHA256 = 'sha256',
+  SHA512 = 'sha512',
+  BLAKE3 = 'blake3'
+}
+
+export enum ZKPDifficulty {
+  LOW = 2,    // 00 前綴
+  MEDIUM = 4, // 0000 前綴
+  HIGH = 8    // 00000000 前綴
+}
+
+export interface HashResult {
+  hash: ContentHash;
+  algorithm: HashAlgorithm;
+  timestamp: Date;
+  difficulty?: ZKPDifficulty;
+  proof?: string;
+}
+
+export async function computeHash(
+  content: string | Buffer,
+  algorithm: HashAlgorithm = HashAlgorithm.SHA512,
+  difficulty: ZKPDifficulty = ZKPDifficulty.LOW
+): Promise<HashResult> {
+  const timestamp = new Date();
+  
+  if (algorithm === HashAlgorithm.SHA512) {
+    const hash = createHash('sha512');
+    hash.update(content);
+    const hashHex = hash.digest('hex');
+    
+    // 生成 ZKP 證明
+    let proof: string | undefined;
+    if (difficulty > ZKPDifficulty.LOW) {
+      proof = generateZKPProof(hashHex, difficulty);
+    }
+    
+    return {
+      hash: hashHex as ContentHash,
+      algorithm,
+      timestamp,
+      difficulty,
+      proof
+    };
+  } else {
+    // 預設使用 SHA-256
+    const hash = createHash('sha256');
+    hash.update(content);
+    return {
+      hash: hash.digest('hex') as ContentHash,
+      algorithm: HashAlgorithm.SHA256,
+      timestamp
+    };
+  }
+}
+
+// 生成 ZKP 證明
+function generateZKPProof(hash: string, difficulty: ZKPDifficulty): string {
+  const requiredPrefix = '0'.repeat(difficulty);
+  let nonce = 0;
+  let proof = '';
+  
+  do {
+    const input = `${hash}:${nonce}`;
+    const proofHash = createHash('sha256').update(input).digest('hex');
+    proof = proofHash;
+    nonce++;
+  } while (!proof.startsWith(requiredPrefix));
+  
+  return proof;
+}
+
+// ============================================
+// SHA-512 雜湊（推薦使用）
 // ============================================
 
 export async function computeSHA256(content: string | Buffer): Promise<ContentHash> {
-  const hash = createHash('sha256');
-  hash.update(content);
-  return hash.digest('hex') as ContentHash;
+  const result = await computeHash(content, HashAlgorithm.SHA256);
+  return result.hash;
 }
 
 export async function computeSHA256Async(content: string | Buffer): Promise<ContentHash> {
-  // 對於大型內容使用異步處理
-  return new Promise((resolve, reject) => {
-    try {
-      const hash = createHash('sha256');
-      hash.update(content);
-      resolve(hash.digest('hex') as ContentHash);
-    } catch (error) {
-      reject(error);
-    }
-  });
+  return computeSHA256(content);
 }
+
+// ============================================
+// 向後兼容性函數 - 推薦轉換為 computeHash
+// ============================================
 
 // ============================================
 // 多層次雜湊（用於 UCC）

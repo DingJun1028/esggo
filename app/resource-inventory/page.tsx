@@ -115,7 +115,7 @@ const resources: Resource[] = [
   { name: 'SUPABASE_SERVICE_ROLE_KEY', category: 'Env Vars', type: 'Required', status: 'partial', notes: '請填入 service_role key' },
   { name: 'NEXT_PUBLIC_GEMINI_API_KEY', category: 'Env Vars', type: 'Optional', status: 'partial', notes: '需從 Google AI Studio 取得' },
   { name: 'OPENROUTER_API_KEY', category: 'Env Vars', type: 'Optional', status: 'unavailable', reason: '尚未設定' },
-  { name: 'HERMES_API_URL', category: 'Env Vars', type: 'Optional', status: 'unavailable', reason: '需本地啟動 OmniAgent Gateway' },
+  { name: 'OMNIAGENT_API_URL', category: 'Env Vars', type: 'Optional', status: 'unavailable', reason: '需本地啟動 OmniAgent Gateway' },
 ];
 
 const categories = ['全部', ...Array.from(new Set(resources.map(r => r.category)))];

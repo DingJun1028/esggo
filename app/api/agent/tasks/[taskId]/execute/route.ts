@@ -33,7 +33,7 @@ export async function POST(
       addArtifact(result.artifact);
       return NextResponse.json({ ...result, ok: true });
     } catch (e: any) {
-      if (e.message === 'HERMES_GATEWAY_UNREACHABLE') {
+      if (e.message === 'OMNIAGENT_GATEWAY_UNREACHABLE') {
         console.info(`Falling back to local Genkit execution for task: ${task.id}`);
         
         let content = '';

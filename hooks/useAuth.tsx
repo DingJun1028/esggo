@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { auth, isDemoMode } from '../lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
@@ -43,12 +43,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 2. Initial Local Sync
     try {
       const local = localStorage.getItem('omni_user');
-      if (local) {
+      if (local && local !== 'undefined') {
         const parsed = JSON.parse(local);
-        if (parsed.company_id) setCompanyId(parsed.company_id);
+        if (parsed?.company_id) setCompanyId(parsed.company_id);
       }
     } catch (e) {
-      console.warn('[Auth] Local parse fail');
+      console.warn('[Auth] Local parse fail, cleared');
+      localStorage.removeItem('omni_user');
     }
 
     // 3. Auth Listener
@@ -66,24 +67,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }).catch(() => setSystemStatus('degraded'));
 
-          const local = localStorage.getItem('omni_user');
-          if (local) {
-            const parsed = JSON.parse(local);
-            setCompanyId(parsed.company_id || 'default');
+          try {
+            const local = localStorage.getItem('omni_user');
+            if (local && local !== 'undefined') {
+              const parsed = JSON.parse(local);
+              setCompanyId(parsed?.company_id || 'default');
+            }
+          } catch (e) {
+            localStorage.removeItem('omni_user');
           }
         } else {
           // Demo Mode Fallback
-          const localUser = localStorage.getItem('omni_user');
-          if (isDemoMode && localUser) {
-             const parsed = JSON.parse(localUser);
-             setCompanyId(parsed.company_id || 'default');
-             setUser({ email: parsed.email || 'dev@esggo.com', uid: parsed.id || 'dev_user' } as any);
-          } else {
+          try {
+            const localUser = localStorage.getItem('omni_user');
+            if (isDemoMode && localUser && localUser !== 'undefined') {
+               const parsed = JSON.parse(localUser);
+               setCompanyId(parsed?.company_id || 'default');
+               setUser({ email: parsed?.email || 'dev@esggo.com', uid: parsed?.id || 'dev_user' } as any);
+            } else {
+               setUser(null);
+            }
+          } catch (e) {
+             localStorage.removeItem('omni_user');
              setUser(null);
           }
         }
       } catch (err) {
-        console.error('[Auth Critical]', err);
+        console.warn('[Auth Handled Exception]', err);
       } finally {
         setLoading(false);
       }

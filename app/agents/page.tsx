@@ -1,46 +1,104 @@
-﻿'use client';
-import { Network, Gift } from 'lucide-react';
-
-const agents = [
-  { name: '永續聯盟先鋒', tier: 'Gold', goodcoins: 3850, referrals: 23, code: 'ESGGO-GOLD-2025', active: true },
-  { name: '綠色推廣大使', tier: 'Silver', goodcoins: 1200, referrals: 8, code: 'ESGGO-SILV-2025', active: true },
-];
+import React from 'react';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 
 export default function AgentsPage() {
   return (
-    <div className="fade-in" style={{ maxWidth: 1000 }}>
-      <div className="page-header">
-        <div className="page-eyebrow"><Network size={12} /> 永續聯盟代理推廣碼 · 善向幣</div>
-        <h1 className="page-title">代理專區 Agents</h1>
-        <p className="page-sub">推廣 ESG GO 獲取善向幣 (GoodCoin) 獎勵</p>
-      </div>
-
-      <div className="g-auto">
-        {agents.map((a, i) => (
-          <div key={i} className="card" style={{ padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <div>
-                <div style={{ fontWeight: 800 }}>{a.name}</div>
-                <span className="badge badge-gold">{a.tier} 代理</span>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#FDB515' }}>⊕ {a.goodcoins.toLocaleString()}</div>
-                <div style={{ fontSize: '0.65rem', color: '#94a3b8' }}>善向幣</div>
-              </div>
-            </div>
-            <div style={{ background: '#f8fafc', borderRadius: 8, padding: '0.875rem', marginBottom: '1rem', fontFamily: 'monospace', fontSize: '0.83rem', fontWeight: 700, color: '#003262', letterSpacing: '0.05em' }}>
-              {a.code}
-            </div>
-            <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>推廣人數: {a.referrals} 人</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="card" style={{ padding: '1.5rem', marginTop: '1.5rem', textAlign: 'center' }}>
-        <Gift size={32} color="#FDB515" style={{ margin: '0 auto 1rem' }} />
-        <div style={{ fontWeight: 800, fontSize: '1.1rem', marginBottom: '0.5rem' }}>申請成為代理</div>
-        <div style={{ color: '#94a3b8', fontSize: '0.83rem', marginBottom: '1.5rem' }}>推廣 ESG GO 善向永續平台，每成功推薦一個企業可獲得善向幣獎勵</div>
-        <button className="btn btn-gold">立即申請代理</button>
+    <div className="min-h-screen bg-void-stark text-white p-8 animate-in fade-in duration-700">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <header className="space-y-4">
+          <UniversalBadge variant="success" icon="✨">
+            ESG GO 模組
+          </UniversalBadge>
+          <h1 className="text-4xl font-bold tracking-tight text-white/90">
+            代理專區 Agents
+          </h1>
+          <p className="text-lg text-white/60 max-w-3xl">
+            代理專區用於支撐平台推廣、代理體系與獎勵運營機制。...
+          </p>
+        </header>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <UniversalCard
+            title="功能定位"
+            variant="default"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="功能說明"
+            variant="glow"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="主要內容"
+            variant="bordered"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 代理階級</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 推廣碼管理</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> GoodCoin 錢包</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 推廣績效追蹤</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="使用方式"
+            variant="glass"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="使用場景"
+            variant="default"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 代理招募</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 推廣追蹤</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 獎勵機制運作</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="頁面目標"
+            variant="glow"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 建立平台外部擴散機制</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 支援代理制度與成長飛輪</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="解決的痛點"
+            variant="bordered"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 平台推廣缺乏制度化代理系統</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="目前成果"
+            variant="glass"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 已形成代理運營頁面概念</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 已導入 GoodCoin 與階級系統設定</li>
+            </ul>
+          </UniversalCard>
+        </div>
       </div>
     </div>
   );

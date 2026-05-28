@@ -1,0 +1,24 @@
+﻿app/dashboard/metrics/page.tsx(68,25): error TS2322: Type '"success" | "warning" | "neutral"' is not assignable to type '"primary" | "secondary" | "accent" | "outline"'.
+  Type '"success"' is not assignable to type '"primary" | "secondary" | "accent" | "outline"'.
+app/dashboard/metrics/page.tsx(145,15): error TS2741: Property 'dataKey' is missing in type '{ type: "bar"; data: { name: any; value: number; target: number; }[]; xAxisKey: string; series: { key: string; color: string; name: string; }[]; height: number; }' but required in type 'UniversalChartProps'.
+lib/agents/adk-core.ts(2,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/omni-commander.ts(1,36): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/omni-commander.ts(2,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/omni-commander.ts(4,41): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/sustain-scribe.ts(9,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/sustain-scribe.ts(12,41): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/sustain-scribe.ts(13,26): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/agents/sustain-scribe.ts(14,24): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/dataconnect-memory.ts(35,42): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/dataconnect-memory.ts(67,42): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/dataconnect-services.ts(1,29): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core.ts(12,26): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core.ts(13,33): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core.ts(20,8): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core.ts(22,30): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core.ts(24,62): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core.ts(294,13): error TS1361: 'EternalMemoryType' cannot be used as a value because it was imported using 'import type'.
+lib/omni-core.ts(303,13): error TS1361: 'EternalMemoryType' cannot be used as a value because it was imported using 'import type'.
+lib/omni-core/integrity.ts(1,39): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/omni-core/integrity.ts(3,52): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+lib/policy-engine.ts(7,42): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
