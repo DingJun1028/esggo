@@ -8,6 +8,7 @@ export default function EnvironmentalPage() {
   const [metrics, setMetrics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sealingId, setSealingId] = useState<string | null>(null);
+  const [verifyingId, setVerifyingId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   
@@ -66,6 +67,24 @@ export default function EnvironmentalPage() {
       alert('無法連線至封印金庫。');
     } finally {
       setSealingId(null);
+    }
+  };
+
+  const handleVerify = async (id: string, sealType: string) => {
+    setVerifyingId(id);
+    try {
+      const res = await fetch(`/api/vault/seal?evidenceUuid=${id}&sealType=${sealType}`);
+      const data = await res.json();
+      if (data.success && data.decrypted) {
+        alert(`✨ 5T 驗證成功！\n\n來自金庫的底層紀錄:\n${data.decrypted}`);
+      } else {
+        alert('❌ 驗證失敗：在金庫中找不到匹配的封印紀錄，資料可能已受損。');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('連線金庫時發生錯誤');
+    } finally {
+      setVerifyingId(null);
     }
   };
 
@@ -234,8 +253,13 @@ export default function EnvironmentalPage() {
                          T5 封印
                        </button>
                      )}
-                     <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm font-medium transition-colors">
-                       {m.hash_lock ? '檢視' : '編輯'}
+                     <button 
+                       onClick={() => m.hash_lock ? handleVerify(m.id, '5t-env') : undefined}
+                       disabled={verifyingId === m.id}
+                       className="flex items-center gap-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm font-medium transition-colors"
+                     >
+                       {verifyingId === m.id ? <Loader2 size={14} className="animate-spin" /> : null}
+                       {m.hash_lock ? '驗證 5T' : '編輯'}
                      </button>
                    </div>
                  )
