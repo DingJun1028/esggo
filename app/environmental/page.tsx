@@ -1,24 +1,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Leaf, Plus, BarChart3, Droplets, Zap, Trash2 } from 'lucide-react';
+import { Leaf, Plus, BarChart3, Droplets, Zap, Trash2, ShieldCheck, Lock, Loader2 } from 'lucide-react';
 import { StandardPage, BrandCard, BrandTable } from '../../components/brand';
 
 export default function EnvironmentalPage() {
   const [metrics, setMetrics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sealingId, setSealingId] = useState<string | null>(null);
 
   useEffect(() => {
     // Simulate fetching from Supabase environmental_metrics table
     setTimeout(() => {
       setMetrics([
-        { id: '1', year: 2023, scope1: 1250.4, scope2: 3400.2, energy: 45000, water: 1200 },
-        { id: '2', year: 2022, scope1: 1300.1, scope2: 3600.5, energy: 48000, water: 1350 },
-        { id: '3', year: 2021, scope1: 1450.0, scope2: 3900.0, energy: 52000, water: 1500 },
+        { id: '1', year: 2023, scope1: 1250.4, scope2: 3400.2, energy: 45000, water: 1200, hashLock: null },
+        { id: '2', year: 2022, scope1: 1300.1, scope2: 3600.5, energy: 48000, water: 1350, hashLock: '0x9a8b7c6d5e4f3a2b1c' },
+        { id: '3', year: 2021, scope1: 1450.0, scope2: 3900.0, energy: 52000, water: 1500, hashLock: '0x1f2e3d4c5b6a798801' },
       ]);
       setLoading(false);
     }, 800);
   }, []);
+
+  const handleSeal = async (id: string) => {
+    setSealingId(id);
+    // Simulate API call to /api/vault/seal
+    await new Promise(r => setTimeout(r, 1200));
+    const randomHash = '0x' + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16)).join('');
+    setMetrics(prev => prev.map(m => m.id === id ? { ...m, hashLock: randomHash } : m));
+    setSealingId(null);
+  };
 
   const pageConfig = {
     id: 'env-module',
@@ -89,6 +99,7 @@ export default function EnvironmentalPage() {
                  { label: 'Scope 2 (tCO2e)', key: 'scope2' },
                  { label: '總能源 (kWh)', key: 'energy' },
                  { label: '總水耗 (m³)', key: 'water' },
+                 { label: 'T5 Hash Lock', key: 'hash' },
                  { label: '操作', key: 'action' }
                ]}
                data={metrics.map(m => ({
@@ -97,7 +108,32 @@ export default function EnvironmentalPage() {
                  scope2: <span className="text-gray-700 dark:text-gray-300">{m.scope2.toLocaleString()}</span>,
                  energy: <span className="text-gray-700 dark:text-gray-300">{m.energy.toLocaleString()}</span>,
                  water: <span className="text-gray-700 dark:text-gray-300">{m.water.toLocaleString()}</span>,
-                 action: <button className="text-cyan-core dark:text-emerald-400 hover:underline text-sm font-medium">編輯紀錄</button>
+                 hash: m.hashLock ? (
+                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-mono bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                     <ShieldCheck size={12} /> {m.hashLock.substring(0, 8)}...
+                   </span>
+                 ) : (
+                   <span className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                     未封印
+                   </span>
+                 ),
+                 action: (
+                   <div className="flex items-center gap-3">
+                     {!m.hashLock && (
+                       <button 
+                         onClick={() => handleSeal(m.id)}
+                         disabled={sealingId === m.id}
+                         className="flex items-center gap-1 text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 text-sm font-medium transition-colors"
+                       >
+                         {sealingId === m.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+                         T5 封印
+                       </button>
+                     )}
+                     <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm font-medium transition-colors">
+                       {m.hashLock ? '檢視' : '編輯'}
+                     </button>
+                   </div>
+                 )
                }))}
              />
           </BrandCard>
