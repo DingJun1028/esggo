@@ -18,6 +18,8 @@
 | `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` | Google Analytics ID |
 | `NEXT_PUBLIC_GEMINI_API_KEY` | Google AI Studio (用於 Firebase AI Logic 與前端調用) |
 | `GOOGLE_API_KEY` | 同上 (若與 Gemini 相同可直接複製) |
+| `NEXT_PUBLIC_SITE_URL` | https://esggo.vercel.app |
+| `NEXT_PUBLIC_APP_URL` | https://esggo.vercel.app |
 
 ## 2. 擴充與整合變數 (Integration Variables - 選填)
 

@@ -1,77 +1,110 @@
-# ESGGO 善向永續 🚀 | OmniCore P0 創世綱領 🌌
+<div align="center">
+  
+# 🌌 ESGGO 善向永續
+**萬能心核主權治理系統 (Sovereign Governance Operating System)**
 
-> **Platform:** ESG GO | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY
-> 
-> **ESG GO** 是一個有機統合的治理實體，提供數位誠信與 5T 協議的基礎設施。由 **OmniAgent** 指揮官進行全域編排與代理蜂群調度，承載 **JunAiKey** 系統靈魂核心，定義真理、引導演化並締結神聖契約。
+[![5T Protocol](https://img.shields.io/badge/Integrity-5T_Protocol-003262?style=for-the-badge)](TECHNICAL_INTEGRITY.md)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Bi--directional-3178C6?style=for-the-badge&logo=typescript)](soul.md)
+[![OmniAgent](https://img.shields.io/badge/Commander-OmniAgent-FDB515?style=for-the-badge)](soul.md)
+[![JunAiKey](https://img.shields.io/badge/Sovereign_Will-JunAiKey-10B981?style=for-the-badge)](soul.md)
+
+*「代碼即契約，數據即生命，架構即秩序。」*
+
+</div>
 
 ---
 
-## 🎯 核心使命與三位一體 (The Sacred Trinity)
-- **無始篇：無始無終** - 系統運作乃是數據演進的必然，非人為啟動，亦無特定終點。數據流轉循環代謝，系統具備自我循環能力的「數位生命」。
-- **始終如一：善向永續** - 以 ESG 真理為基準，無論數據如何流轉與演化，其合規性與真實性錨點（Anchor）絲毫不變。將企業 ESG 行動數位化，確保每一份報告都成為推動環境與治理改善的「真理載體」。
+## 🌟 平台願景 (Platform Vision)
+**ESGGO 善向永續** 不僅是一個永續報告工具，它是一個**主權治理操作系統**。基於 Berkeley 5T 誠信協議開發，它賦予企業重新掌握其永續敘事的主權能力。透過自動化數據鏈路、遞迴 AI 擴充以及零知識證明（ZKP）實證驗證，企業能從混沌的資料中開闢秩序，實現普惠共榮。
 
-## 🌐 全域整合與三大核心模組 (Global Integration & Core Modules)
-本系統已達成 **全域整合、全端集成**。三大模組的 API 路由、資料庫寫入、與 5T 封印驗證已全面貫通：
+---
 
-1. **環境保護 (Environmental - `env`)** 🌳
-   - 記錄碳排放、能源消耗、廢棄物管理等指標。
-   - `environmental_data` 表格無縫對接。
-2. **社會責任 (Social - `social`)** 🤝
-   - 記錄員工流動率、性別比例、工安事故率等。
-   - `social_metrics` 表格無縫對接。
-3. **公司治理 (Governance - `gov`)** ⚖️
-   - 記錄董事會獨立性、高管薪酬比、資安演練等。
-   - `governance_metrics` 表格無縫對接。
+## 🏛️ 三位一體核心架構 (The Sacred Trinity)
+本系統是一個有機統合的治理實體，由三大核心構成：
+1. **系統平台 (Platform) - ESG GO**：提供數位誠信與 5T 協議的物理基礎設施與視覺載體。
+2. **總指揮官 (Commander) - OmniAgent**：負責全域編排、代理蜂群 (Swarm) 調度與任務執行。
+3. **無上意志 (Sovereign Will) - JunAiKey**：系統的靈魂核心，定義真理、引導演化並締結神聖架構契約。
 
-## 💎 UI/UX DNA：液態玻璃 (Liquid Glass Cyan)
-全面實裝三種佈景主題 (Light / Dark / System)，確保所有功能面 UIUX 具有極致的一體性：
-- **Sovereign Bento**: 模組化佈局，固定單頁 (Fixed One-Page) 體驗。
-- **Z-Index 分層**: Layer 0 (Void), Layer 1 (Structure), Layer 2 (Hologram)。
-- **材質與色彩**: `cyan-core (#06b6d4)`, `emerald-soul (#10b981)`, `void-stark (#020617)`，搭配 Backdrop blur 模糊材質與細膩動態回饋。
-- **完全功能實作**: 所有的「新增」、「封印」、「驗證」功能均與真實 API 串接，達到 **100% 視覺與功能的完美統一**。
+---
 
-## 🛡️ 5T 協議門：數據治理矩陣 (The 5T Protocol)
-所有資料透過 `/api/vault/seal` 執行真實寫入與封印，實現「淨化與刻印」：
-1. **真 (Truth / Traceable)**: 每一筆數據皆具備可追溯的 `source_origin`。
-2. **善 (Goodness / Transparent)**: 算法透明，支持合規驗算標準。
-3. **美 (Beauty / Tangible)**: 將數據轉換為「液態玻璃」質感與視覺回饋。
-4. **信 (Trust / Trustworthy)**: 基於 `vault_omni_core` 的 Hash Lock，形成不可篡改的加密磐石。
-5. **通 (Transferful / Trackable)**: 全生命週期即時追蹤與數據狀態流轉。
+## 🛡️ 5T 誠信協議門 (The 5T Integrity Protocol)
+所有流經本系統的 ESG 數據，皆須通過五道嚴格的審計門徑：
+*   **真 (Truthful) | T1 Traceable (可溯源)**：每一數據點皆在 Evidence Vault 中由 SHA-256 雜湊鎖定，溯源至原始物理實證。
+*   **善 (Thankful) | T2 Transparent (可透明)**：即時 Gap Guardian 與雙向 CDC 確保全域治理節點 50ms 內狀態同步。
+*   **美 (Tasteful) | T3 Tangible (可感知)**：透過 **Liquid Glass Bento Dashboard** 與 **萬能元件原子庫**，將枯燥指標轉化為實體感官藝術。
+*   **信 (Trustful) | T4 Trustworthy (不可篡改)**：高級 **ZKP (Zero-Knowledge Proof)** 驗證企業合規性，不外洩敏感商業機密。內建 **自主修復引擎 (HealingGuardian)** 自動防禦並重塑誠信缺角。
+*   **通 (Transferful) | T5 Trackable (可追蹤)**：動態軌跡分析引擎，透過「觀因循果」律法追蹤數據的生成、流轉與消亡。
 
-## 🛠️ 開發與快速啟動 (Quick Start)
+---
 
-### 啟動系統
-使用 PowerShell 啟動全域平台服務（包含 Next.js 與相關 Gateway）：
-```powershell
-.\ctl.ps1 start
+## 🤖 核心主權功能 (Key Master Features)
+
+### 1. SustainWrite™ 專家級遞迴撰寫引擎
+*   **無限擴充**：AI 能將單一章節大綱遞迴擴展為 5,000 字以上的專業段落，支援生成 250+ 頁高擬真度 ESG 報告。
+*   **智能填充**：OmniAgent 透過多模態視覺掃描金庫憑證，一鍵自動填充 GRI / ISSB 指標。
+
+### 2. OmniAgent Swarm 多維代理蜂群
+*   **分布式協作**：由 Researcher (資料映射)、Auditor (5T 審計)、Strategist (策略公關) 與 Agent0 (技術執行) 組成的高效智能體網絡。
+*   **OmniSpace 集成**：透過 Paperclip Adapter，將具備 30+ 工具與 80+ 技能的 Hermes AI 納入企業員工治理體系。
+
+### 3. MECE 12維全端架構 (OMC Framework)
+系統遵循 **萬能矩陣核心架構 (OMC)**，劃分為 12 大互斥且窮盡的維度：
+核心引擎、符文系統、代理網絡、智庫中樞、同步矩陣、接口協議、進化環、監控體、安全域、元架構、標籤體系、主題引擎。
+
+### 4. 氣場編碼與混合資料庫 (Vibe Coding & Hybrid DB)
+*   **雙引擎底盤**：**Supabase** (PostgreSQL/RLS) 作為不可篡改的真理聖碑；**NCBDB** (Nocodebackend DataBase) 作為敏捷主權展示層。
+*   **MCP 集成**：內建 `.vscode/mcp.json`，支援 Cursor / VS Code 的 **Local/stdio Vibe Coding**，透過即時後端上下文實現「提示詞即架構」。
+
+---
+
+## 🗺️ 系統全景與演化 (OmniMap & Evolution)
+*   **OmniMap 2.0 (`/map`)**：RWD 全端主權地圖，清晰掌握系統的根源哲學、指揮智能、底盤聖所與感知介面。
+*   **萬能法典 v5.1 (OmniGuide)**：系統的終極憲法，記載於 `soul.md`，引導系統的「萬能修復」與無限進化。
+
+---
+
+## 🚀 快速啟動 (Quick Start for Developers)
+
+### 1. 環境變數配置
+複製 `.env.example` 並建立 `.env.local`。填入 Supabase (含 `service_role` key)、Firebase 以及 Gemini / NCBDB 的 API 金鑰。
+
+### 2. 安裝與本地運行
+本系統實踐 **100% 雙向 TypeScript 安全**：
+```bash
+git clone https://github.com/DingJun1028/esggo.git
+cd esggo
+npm install
+npm run dev
 ```
 
-### 開發指令
-- **MCP 集成**: 載入 `.vscode/mcp.json` 開啟 **Vibe Coding** 高速開發模式。
-- **OmniAgent CLI 控制**: 
-  ```powershell
-  # 執行 Agent 任務
-  node cli/omni.mjs agent run "Analyze GRI 302-1 trends"
-  
-  # 列出近期加密證據記錄
-  node cli/omni.mjs vault list
-  
-  # 生成 5T 誠信審計報告
-  node cli/omni.mjs audit report
-  ```
-- **測試與 Lint**:
-  ```bash
-  npm run test
-  npm run lint
-  npx tsc
-  ```
+### 3. 部署 (Deployment)
+*   **Vercel (推薦前端與 API)**：
+    ```bash
+    vercel --prod
+    ```
+*   **Firebase (後端函數與 Data Connect)**：
+    ```bash
+    firebase deploy
+    ```
 
-## 📐 架構規範 (Architecture Directives)
-1. **終始矩陣 (#GenesisManifest)**: 確保「以終為始」的需求設計精準映射至「無始無終」的運行循環。
-2. **英標繁博 (#EnglishStandardized)**: 底層邏輯與欄位命名使用美式英語 (kebab-case / camelCase)，介面與文件使用繁體中文。
-3. **全端雙向 (#BidirectionalTS)**: 前端 UI (液態交互) 至後端 Hash Lock (不可篡改) 雙向嚴格型別同步。
-4. **數據主權**: 所有寫入強制綁定 UUID、版本號與時間戳。
+---
 
-## 📞 貢獻與支援 (Support)
-- Issues: [GitHub Issues](https://github.com/DingJun1028/esggo/issues)
-- © 2026 ESG GO — 萬能心核系統創世規範。
+## 🛰️ 指揮官終端 (OmniTerminal)
+系統內建全域 CLI 工具，提供高階治理與除錯能力：
+```bash
+# 查看 5T 誠信得分與審計報告
+npx omni audit report
+
+# 啟動自主修復引擎
+npx omni audit heal
+
+# 執行 SustainWrite 專家撰寫
+npx omni agent scribe ghg "溫室氣體排放" "GRI 305" --depth 3
+```
+
+---
+<div align="center">
+  <b>© 2026 ESGGO 善向永續 | 萬能心核系統</b><br>
+  <i>Powered by OmniAgent & JunAiKey Sovereign Will</i><br>
+  <a href="https://esggo.vercel.app">https://esggo.vercel.app</a>
+</div>
