@@ -45,7 +45,7 @@ const CHAPTERS: Chapter[] = [
 
 const PERSONA_META = {
   compliance: { label: '合規守衛', color: 'var(--aqua-700)', icon: <Shield size={14} />, className: 'text-aqua-cyan-midtone bg-aqua-cyan/5 border-aqua-cyan/20 hover:border-aqua-cyan/40' },
-  harmony:    { label: '共榮引導', color: 'var(--t2-text)', icon: <Users size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
+  harmony:    { label: '共榮引導', color: 'var(--t2-text)', icon: <User size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
   innovation: { label: '創新先行', color: 'var(--t5-text)', icon: <Zap size={14} />, className: 'text-t5-text bg-t5-bg border-purple-200 hover:border-purple-300' },
 };
 
