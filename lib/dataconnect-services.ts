@@ -1,4 +1,4 @@
-import { dataConnect } from './firebase';
+import { dataConnect } from './firebase.ts';
 import { 
   listReports, 
   getReportById, 
