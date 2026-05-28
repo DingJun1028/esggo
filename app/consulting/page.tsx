@@ -1,40 +1,105 @@
-﻿'use client';
-import { Search } from 'lucide-react';
-
-const modules = [
-  { title: '① 健檢解讀', desc: '解讀結果、釐清缺口與優先序', output: 'Top3缺口+90天Roadmap', when: '課前/課中' },
-  { title: '② 揭露輔導', desc: '揭露架構、章節建議、內容校準', output: '揭露大綱v1+章節清單', when: '課中/課後' },
-  { title: '③ 資料盤點', desc: '資料來源、權責、佐證邏輯', output: '資料清單模板+RACI', when: '課中' },
-  { title: '④ 客戶問卷', desc: '拆解題目、回覆策略、風險提示', output: '回覆框架+缺口補件清單', when: '課後/投標前' },
-  { title: '⑤ Expert Hour', desc: '針對痛點解題、給下一步', output: '會後行動項目', when: '任何時點' },
-];
+import React from 'react';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 
 export default function ConsultingPage() {
   return (
-    <div className="fade-in" style={{ maxWidth: 1100 }}>
-      <div className="page-header">
-        <div className="page-eyebrow"><Search size={12} /> Layer A+B+C · 顧問服務</div>
-        <h1 className="page-title">顧問服務 Consulting</h1>
-        <p className="page-sub">企業健檢 · 平台工具 · 5 大模組顧問輔導</p>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        {modules.map((m, i) => (
-          <div key={i} className="card" style={{ padding: '1.5rem', display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-            <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#003262', color: '#FDB515', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, flexShrink: 0 }}>
-              {i + 1}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: 4 }}>{m.title}</div>
-              <div style={{ fontSize: '0.8rem', color: '#475569' }}>{m.desc}</div>
-            </div>
-            <div style={{ textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginBottom: 4 }}>交付物</div>
-              <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>{m.output}</div>
-            </div>
-            <span className="badge badge-blue" style={{ flexShrink: 0 }}>{m.when}</span>
-          </div>
-        ))}
+    <div className="min-h-screen bg-void-stark text-white p-8 animate-in fade-in duration-700">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <header className="space-y-4">
+          <UniversalBadge variant="success" icon="✨">
+            ESG GO 模組
+          </UniversalBadge>
+          <h1 className="text-4xl font-bold tracking-tight text-white/90">
+            顧問服務 Consulting
+          </h1>
+          <p className="text-lg text-white/60 max-w-3xl">
+            顧問服務頁是平台商業服務模組的總入口。...
+          </p>
+        </header>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <UniversalCard
+            title="功能定位"
+            variant="default"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="功能說明"
+            variant="glow"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="主要內容"
+            variant="bordered"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 五大輔導模組</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 中控儀表板</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 加購市場</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 顧問服務說明</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="使用方式"
+            variant="glass"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="使用場景"
+            variant="default"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 顧問方案介紹</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 服務模組選購</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 輔導資源展示</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="頁面目標"
+            variant="glow"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 讓服務內容標準化、可理解</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 建立平台商業服務轉化入口</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="解決的痛點"
+            variant="bordered"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 顧問服務難標準化</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 企業不清楚可購買哪些模組</li>
+            </ul>
+          </UniversalCard>
+          <UniversalCard
+            title="目前成果"
+            variant="glass"
+            className="flex flex-col gap-4"
+          >
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 已具備顧問服務頁面框架</li>
+              <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 已整合五大模組概念</li>
+            </ul>
+          </UniversalCard>
+        </div>
       </div>
     </div>
   );

@@ -68,6 +68,18 @@ const config: Config = {
         // Legacy Support
         'berkeley-blue': '#003262',
         'california-gold': '#FDB515',
+
+        // ── Universal Atomic Component Theme Variables ────────────────
+        theme: {
+          primary: 'var(--theme-primary)',
+          'primary-hover': 'var(--theme-primary-hover)',
+          accent: 'var(--theme-accent)',
+          base: 'var(--theme-base)',
+          surface: 'var(--theme-surface)',
+          text: 'var(--theme-text)',
+          muted: 'var(--theme-text-muted)',
+          border: 'var(--theme-border)',
+        },
       },
       spacing: {
         '1': '4px', '2': '8px', '3': '12px', '4': '16px',

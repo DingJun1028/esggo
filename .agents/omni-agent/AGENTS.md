@@ -45,12 +45,12 @@ components/   Liquid Glass 元件庫
 - Hash Lock 一旦套用，不可靜默修改 evidence 記錄
 - Firebase 黑名單操作：`firestore_delete_database` · `firestore_delete_document` · `firebase_delete_app`
 
-## 子代理委派指引
-- 子代理對父對話一無所知，`context` 必須自給自足
-- 兩個子代理不可同時修改同一檔案（race condition）
-- 並行研究 / 程式碼審查 → 使用 `delegate_task`
-- 機械式多步驟（有邏輯關聯）→ 直接 `execute_code`
-- 使用 `[SILENT]` 避免排程任務洗版通知頻道
+## 子代理委派與 L-Hub 路由指引 (Sub-Agent & L-Hub Routing)
+- **L-Hub 輕量委派**：遇到翻譯、總結、文件撰寫、長文本整理，或輕量型決策建議時，優先使用 `mcp_lhub_ai_ask()` 委派。
+- **多模型共識**：若需比較多個方案或投票，使用 `mcp_lhub_ai_multi_ask()` 或 `mcp_lhub_ai_consensus()`。
+- **子代理隔離**：子代理對父對話一無所知，`context` 必須自給自足。
+- **競爭危害防護**：兩個子代理（或 L-Hub 呼叫）不可同時修改同一檔案（Race Condition）。
+- **無聲執行**：使用 `[SILENT]` 避免排程任務洗版通知頻道。
 
 ## 常用指令
 ```bash

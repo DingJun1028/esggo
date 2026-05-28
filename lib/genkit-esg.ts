@@ -216,3 +216,47 @@ export async function scanGreenwashing(text: string): Promise<{
   const result = JSON.parse(jsonMatch?.[0] ?? '{"risks":[]}') as any;
   return { ...result, hashLock: computeHashLock(result) };
 }
+
+// ── OCR & Evidence Validation Flow ─────────────────────────────────────────
+
+export const OCRInputSchema = z.object({
+  imageUrl: z.string().describe('圖片 URL 或 Base64 編碼字串'),
+  documentType: z.enum(['invoice', 'report', 'certificate', 'other']).default('other'),
+  language: z.enum(['zh-TW', 'en']).default('zh-TW'),
+});
+
+export const OCROutputSchema = z.object({
+  extractedText: z.string(),
+  structuredData: z.record(z.string(), z.any()),
+  confidenceScore: z.number().min(0).max(100),
+});
+
+export type OCRInput = z.infer<typeof OCRInputSchema>;
+export type OCROutput = z.infer<typeof OCROutputSchema>;
+
+export async function runOCRAnalysisFlow(
+  input: OCRInput
+): Promise<OCROutput & { hashLock: string }> {
+  const prompt = `你是一個專業的 OCR 與文件分析模型。請分析這份 ${input.documentType} 文件。\n圖片連結: ${input.imageUrl}\n請提取文字並將關鍵數據結構化。\n輸出 JSON 格式：{"extractedText":"...","structuredData":{},"confidenceScore":95}`;
+  
+  const rawResponse = await callGemini(prompt);
+  const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+  const result = JSON.parse(jsonMatch?.[0] ?? '{"extractedText":"","structuredData":{},"confidenceScore":0}') as OCROutput;
+  const hashLock = computeHashLock({ input, result });
+  
+  return { ...result, hashLock };
+}
+
+export async function runEvidenceValidationFlow(
+  evidenceText: string,
+  griReference: string
+): Promise<{ isValid: boolean; validationDetails: string; hashLock: string }> {
+  const prompt = `作為審計專家，請自動驗證以下證據是否符合 GRI 標準 ${griReference}。\n證據內容：\n${evidenceText}\n輸出 JSON 格式：{"isValid":true,"validationDetails":"..."}`;
+  
+  const rawResponse = await callGemini(prompt);
+  const jsonMatch = rawResponse.match(/\{[\s\S]*\}/);
+  const result = JSON.parse(jsonMatch?.[0] ?? '{"isValid":false,"validationDetails":"Validation failed."}') as any;
+  const hashLock = computeHashLock({ evidenceText, griReference, result });
+  
+  return { ...result, hashLock };
+}

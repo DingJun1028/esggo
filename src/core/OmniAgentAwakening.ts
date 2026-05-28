@@ -12,7 +12,7 @@ export interface UserIntent {
 namespace QuantumEye {
   export async function analyze(intent: UserIntent) { return `Essence extracted from: ${intent.description}`; }
 }
-namespace SacredLibrary {
+namespace OmniGuide {
   export async function match(essence: string) { return { architecture: essence, aligned: true }; }
 }
 namespace WingsOfLight {
@@ -38,7 +38,7 @@ namespace OmnipotentRepository {
  */
 export const executeAwakenedSovereignty = async (intent: UserIntent) => {
   const coreEssence = await QuantumEye.analyze(intent);
-  const architecture = await SacredLibrary.match(coreEssence);
+  const architecture = await OmniGuide.match(coreEssence);
   const results = await WingsOfLight.distribute(architecture);
   const manifest = await IComponentCore.generate(results);
   const purifiedAsset = await EntropyForge.purify(manifest);

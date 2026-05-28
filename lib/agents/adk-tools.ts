@@ -80,19 +80,19 @@ export const createNotionPage = ai.defineTool({
   return { success: true, pageId: 'notion-sim-page-id', url: 'https://notion.so/sim-page' };
 });
 
-// --- Phase 15: NocoDB Integration ---
+// --- Phase 15: NCBDB Integration (Nocodebackend DataBase) ---
 
-export const syncToNocoDB = ai.defineTool({
-  name: 'syncToNocoDB',
-  description: 'Synchronize ESG records (reports, metrics, etc.) to a NocoDB table.',
+export const syncToNCBDB = ai.defineTool({
+  name: 'syncToNCBDB',
+  description: 'Synchronize ESG records (reports, metrics, etc.) to an NCBDB table.',
   inputSchema: z.object({
-    tableName: z.string().describe('Target NocoDB table name'),
+    tableName: z.string().describe('Target NCBDB table name'),
     data: z.any().describe('The record data to upsert')
   }),
 }, async (input) => {
-  const { nocoClient } = require('../nocodb');
-  console.log(`[NocoDB Tool] Syncing to table: ${input.tableName}`);
-  return await nocoClient.upsertRecord(input.tableName, input.data);
+  const { ncbClient } = require('../ncbdb.ts');
+  console.log(`[NCBDB Tool] Syncing to table: ${input.tableName}`);
+  return await ncbClient.upsertRecord(input.tableName, input.data);
 });
 
 export const ADK_STANDARD_TOOLS = [
@@ -102,5 +102,5 @@ export const ADK_STANDARD_TOOLS = [
   listEsgTasks,
   queryNotionDataSource,
   createNotionPage,
-  syncToNocoDB
+  syncToNCBDB
 ];

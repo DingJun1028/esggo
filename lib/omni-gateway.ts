@@ -12,8 +12,8 @@ export interface OmniAgentAgentConfig {
   locale: string;
 }
 
-export const CURRENT_HERMES_VERSION = '0.14.0';
-export const DEFAULT_HERMES_GATEWAY_URL = 'http://161.118.248.180:8642';
+export const CURRENT_OMNIAGENT_VERSION = '0.14.0';
+export const DEFAULT_OMNIAGENT_GATEWAY_URL = 'http://161.118.248.180:8642';
 
 export const omniagentTools = [
   { id: 'web_search', category: 'Information', description: 'Deep web research and extraction' },
@@ -23,7 +23,7 @@ export const omniagentTools = [
   { id: 'mcp_bridge', category: 'System', description: 'Connect to external MCP servers' }
 ];
 
-const BASE_URL = process.env.NEXT_PUBLIC_HERMES_GATEWAY_URL || DEFAULT_HERMES_GATEWAY_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || DEFAULT_OMNIAGENT_GATEWAY_URL;
 
 export async function fetchOmniAgentStatus() {
   try {
@@ -34,7 +34,7 @@ export async function fetchOmniAgentStatus() {
     console.warn('OmniAgent Gateway unreachable, falling back to mock status.');
     return {
       status: 'online',
-      version: CURRENT_HERMES_VERSION,
+      version: CURRENT_OMNIAGENT_VERSION,
       active_workers: 4,
       memory_usage: '2.4 GB',
       last_learning_sync: new Date().toISOString(),
@@ -56,11 +56,12 @@ export async function executeOmniAgentTask(task: AgentTask): Promise<{ execution
     return await res.json();
   } catch (e) {
     console.warn(`OmniAgent live execution failed for task ${task.id}:`, e);
-    throw new Error('HERMES_GATEWAY_UNREACHABLE');
+    throw new Error('OMNIAGENT_GATEWAY_UNREACHABLE');
   }
 }
 
 import { getOmniAgentAI } from './omni.config';
+// Note: Types are usually already prefixed or named appropriately in types/omni-core
 import type { 
   OmniAgentVisionResult, 
   OmniAgentMetricExtraction, 

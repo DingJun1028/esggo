@@ -8,7 +8,6 @@ import {
   listEternalMemoriesByCompany,
   upsertReport
 } from '@dataconnect/generated';
-import { UUIDString } from '@dataconnect/generated';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -33,7 +32,7 @@ export interface SustainWriteSection {
 
 async function getOrCreateReportId(companyId: string): Promise<string> {
   try {
-    const { dataConnect } = require('./firebase');
+    const { dataConnect } = await import('./firebase');
     if (!dataConnect) throw new Error('Data Connect not initialized');
 
     const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
@@ -65,7 +64,7 @@ async function getOrCreateReportId(companyId: string): Promise<string> {
 export async function saveSustainWriteSection(params: SustainWriteSection): Promise<any> {
   try {
     const reportId = await getOrCreateReportId(params.company_id);
-    const { dataConnect } = require('./firebase');
+    const { dataConnect } = await import('./firebase');
     if (!dataConnect) throw new Error('Simulation Persistence');
 
     const { data } = await upsertReportSection({

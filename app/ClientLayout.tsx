@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -19,6 +19,7 @@ import OmniAgentControlCenter from '../components/brand/OmniAgentControlCenter';
 import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { ToastProvider, ToastContainer } from '../components/ui';
+import AppThemeSwitcher from '../components/AppThemeSwitcher';
 
 function SystemHealthBanner() {
   const { systemStatus } = useAuth();
@@ -118,12 +119,13 @@ function AppContent({ children }: { children: React.ReactNode }) {
                    <Menu size={20}/>
                 </button>
                 <div className="hidden lg:flex items-center gap-2">
-                   <BrandBadge variant="outline" size="xs" className="text-slate-400 font-mono tracking-widest border-slate-100">HERMES_v11.7</BrandBadge>
+                   <BrandBadge variant="outline" size="xs" className="text-slate-400 font-mono tracking-widest border-slate-100">OMNIAGENT_v11.7</BrandBadge>
                 </div>
              </div>
              
              <div className="flex items-center gap-4">
                 <SystemHealthBanner />
+                <AppThemeSwitcher />
                 <TenantSwitcher />
                 <button 
                   onClick={() => setControlCenterOpen(true)}
@@ -164,18 +166,22 @@ function AppContent({ children }: { children: React.ReactNode }) {
   return null;
 }
 
+import { ThemeProvider } from '../contexts/ThemeContext';
+
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <Suspense fallback={null}>
-      <ErrorBoundary>
-        <ToastProvider>
-          <AuthProvider>
-            <SaaSProvider>
-              <AppContent>{children}</AppContent>
-            </SaaSProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </ErrorBoundary>
+      <ThemeProvider>
+        <ErrorBoundary>
+          <ToastProvider>
+            <AuthProvider>
+              <SaaSProvider>
+                <AppContent>{children}</AppContent>
+              </SaaSProvider>
+            </AuthProvider>
+          </ToastProvider>
+        </ErrorBoundary>
+      </ThemeProvider>
     </Suspense>
   );
 }

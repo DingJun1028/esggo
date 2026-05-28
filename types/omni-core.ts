@@ -5,8 +5,8 @@
 
 export * from '../shared/types';
 
-import { ZKPRangeProof } from '../lib/crypto-proof';
-import { IComponentCore } from '../shared/types';
+import type { ZKPRangeProof } from '../lib/crypto-proof';
+import type { IComponentCore } from '../shared/types';
 
 // ============================================================
 // Legacy & Extended Types (To be metabolized)

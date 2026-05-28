@@ -13,9 +13,9 @@ const mockComponent: IComponentCore = {
   impact_metric: 'Test Carbon Emission',
   hash_lock: 'hash_test_lock',
   evidence: [{
-    tangible_metric: 'Test Carbon Emission',
-    source_origin: 'test-source',
-    lifecycle_hooks: [],
+    finalEffect: 'Test Carbon Emission',
+    originCause: 'test-source',
+    processTrace: [],
     formula_ref: 'GRI 305-1'
   }]
 };

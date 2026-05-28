@@ -85,6 +85,12 @@ vi.mock('./supabase', () => ({
   },
 }));
 
+// Mock vault-omni to support deep verification in tests
+vi.mock('./vault-omni', () => ({
+  engraveToSingleTable: vi.fn().mockResolvedValue({ success: true }),
+  verifyRecord: vi.fn().mockResolvedValue(true),
+}));
+
 describe('OmniCore Integrity Engine', () => {
   beforeEach(() => {
     mockMemories.length = 0;
@@ -95,10 +101,9 @@ describe('OmniCore Integrity Engine', () => {
   describe('5T Gate Validation', () => {
     it('should fail validation for empty metrics', () => {
       const evidence: IEvidence = {
-        tangible_metric: '',
-        source_origin: '/manual/entry',
-        lifecycle_hooks: ['init'],
-        formula_ref: 'GRI[302-1]'
+        finalEffect: '',
+        originCause: '/manual/entry',
+        processTrace: ['init', 'GRI[302-1]'],
       };
       const result = omniCore.validateT5Gate(evidence);
       expect(result.tangible).toBe(false);
@@ -106,10 +111,9 @@ describe('OmniCore Integrity Engine', () => {
 
     it('should fail traceable check for invalid source paths', () => {
       const evidence: IEvidence = {
-        tangible_metric: '12450 kWh',
-        source_origin: 'manual/entry', // Missing leading slash
-        lifecycle_hooks: ['init'],
-        formula_ref: 'GRI[302-1]'
+        finalEffect: '12450 kWh',
+        originCause: 'manual/entry', // Missing leading slash
+        processTrace: ['init', 'GRI[302-1]'],
       };
       const result = omniCore.validateT5Gate(evidence);
       expect(result.traceable).toBe(false);
@@ -117,10 +121,9 @@ describe('OmniCore Integrity Engine', () => {
 
     it('should fail transparent check for missing brackets in formula', () => {
       const evidence: IEvidence = {
-        tangible_metric: '12450 kWh',
-        source_origin: '/manual/entry',
-        lifecycle_hooks: ['init'],
-        formula_ref: 'GRI_302_1' // Missing []
+        finalEffect: '12450 kWh',
+        originCause: '/manual/entry',
+        processTrace: ['init', 'GRI_302_1'], // Missing []
       };
       const result = omniCore.validateT5Gate(evidence);
       expect(result.transparent).toBe(false);
@@ -128,9 +131,9 @@ describe('OmniCore Integrity Engine', () => {
 
     it('should pass all checks for valid evidence', () => {
       const evidence: IEvidence = {
-        tangible_metric: '12450 kWh',
-        source_origin: '/vault/evidence-123',
-        lifecycle_hooks: ['ingest', 'verify'],
+        finalEffect: '12450 kWh',
+        originCause: '/vault/evidence-123',
+        processTrace: ['ingest', 'verify', 'GRI[302-1]'],
         formula_ref: 'GRI[302-1]'
       };
       const result = omniCore.validateT5Gate(evidence);
@@ -168,7 +171,7 @@ describe('OmniCore Integrity Engine', () => {
         ...component,
         evidence: {
           ...component.evidence,
-          tangible_metric: '5001 kWh' // Changed value
+          finalEffect: '5001 kWh' // Changed value
         }
       };
 

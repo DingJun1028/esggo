@@ -1,54 +1,29 @@
 # ESG GO Platform | Technical Integrity Framework
+## 5T 數據信託與 ZKP 隱私保護協議
 
 This document outlines the architectural standards and cryptographic protocols used to maintain the **5T Integrity Standard** within the ESG GO ecosystem.
 
-## 1. The 5T Integrity Protocol
-The platform validates every piece of ESG evidence through five core logic gates:
+## 1. 真善美信通 5T 協議門：數據信託架構
+5T 協議是 ESG GO 的核心競爭壁壘。使用者在平台上進行永續報告撰寫時，輸入的數據連同報告書，必須通過以下五道「真善美信通」協議門。這不僅是技術規範，更是將企業誠信具象化的護城河。
 
-| Gate | Protocol | Technical Requirement | 4可1不可 狀態 |
-| :--- | :--- | :--- | :--- |
-| **T1** | **Traceable** | Source origin must be a grounded path (starts with `/`). | **可溯源** |
-| **T2** | **Transparent** | Formula references must be explicit and tagged (e.g., `GRI[302-1]`). | **可透明** |
-| **T3** | **Tangible** | Metrics must contain concrete values and units. | **可感知** |
-| **T4** | **Trustworthy** | Data must be locked with a SHA-256 cryptographic seal. | **不可篡改** |
-| **T5** | **Trackable** | Every state change must trigger a lifecycle hook in the audit log. | **可追蹤** |
+| 核心屬性 | 5T 狀態 (4可1不可) | 實作手段 (The Means) | 商業與感知價值 |
+|---|---|---|---|
+| **真 (Truthful)** | **Traceable** (可溯源) | 鏈式日誌標註 `source_origin`。 | 確保每筆數據皆有清晰的原始起點與負責人。 |
+| **善 (Thankful)** | **Transparent** (可透明) | ISO 標準算法公開 + 零幻覺驗算。 | 算法透明，符合 ISO-14064-1 等國際標準。 |
+| **美 (Tasteful)** | **Tangible** (可感知) | 液態玻璃 UI + 即時物理動態回饋。 | 枯燥指標可視化，提供沉浸式的操作體驗。 |
+| **信 (Trustful)** | **Trustworthy** (不可篡改) | 核心禁區：Hash Lock + `Object.freeze()`。 | 寫入即刻封印，任何竄改即刻失效。 |
+| **通 (Transferful)** | **Trackable** (可追蹤) | 實作生命週期 Hook 紀錄流轉路徑。 | 全程記錄數據在平台間的流轉與修改歷程。 |
 
----
-
-## 2. ZKP (Zero-Knowledge Proof) 隱私保護架護
-為解決企業在揭露 ESG 數據時對「商業機密外洩」的恐懼，ESG GO 導入 ZK-Privacy Engine，實現**「驗證事實，而不揭露數據」**的零信任防護。
-
-### ZK-Privacy 數據處理流程
-1.  **原始輸入**：接收企業機密數據（如薪資結構、合約細節、碳排參數）。
-2.  **智慧處理**：AI 自動偵測敏感欄位，並由 ZK-Privacy Engine 生成遮罩與密碼學證明。
-3.  **雙軌儲存**：
-    *   **隱私層**：原始數據加密存於企業本地端或專屬雲。
-    *   **證明層**：ZK-Proof 憑證存於 Evidence Vault，僅供公開驗證邏輯正確性。
-4.  **多層次輸出**：根據查看者身分權限（董事會、外部稽核、一般公眾）動態調整數據可視細節。
-
-### 三級去敏遮罩機制
-| 等級 | 模式 | 適用情境 | 恢復性 |
-| :--- | :--- | :--- | :--- |
-| **L1** | **模糊化 (Fuzzy)** | 薪資範圍、區域碳排統整 | 條件式授權還原 |
-| **L2** | **假名化 (Pseudo)** | 員工編號、供應商代碼 | 持有特定金鑰可還原 |
-| **L3** | **不可逆 (Irreversible)** | 生物特徵、精確地址 | 符合 GDPR，絕對不可還原 |
+### 5T 技術實現流程
+1. **數據封裝**：經 UCC Engine 進行標準化封裝。
+2. **唯一標識**：產生不可逆 Hash 值並加蓋高精度時間戳。
+3. **存證儲存**：寫入 Evidence Vault（數據永恆宮殿），確保物理級的安全隔離。
+4. **確信背書**：提供第三方機構完整追溯鏈，達成「技術即稽核」。
 
 ---
 
-## 3. Cryptographic Standards
-The `OmniCore` engine utilizes standard cryptographic primitives to ensure data immutability.
-
-### Hashing Strategy
-*   **Algorithm:** SHA-256 (Secure Hash Algorithm).
-*   **Implementation:** 
-    *   **SSR/Node:** Uses the native Node.js `crypto` module for high-performance, secure hashing.
-    *   **Client-Side:** Uses `window.crypto.subtle` for standard browser-based verification.
-*   **Verification Logic:** The engine re-computes the hash-lock by serializing the record's UUID, Timestamp, and Evidence Payload. Any character deviation results in a mismatch.
-
----
-
-## 4. 萬能元件心核：5T 實作規範 (IComponentCore)
-所有數據元件必須繼承此規範，確保符合 [4可1不可] 的嚴格標準。
+## 2. 萬能元件心核：5T 實作規範
+為了在程式碼層級落實 5T 協議，系統底層採用「萬能元件心核」（SSOT 契約）。所有數據元件必須繼承此規範，確保從資料收集到碳排公式 `E = \sum (AD \times EF)` 的計算，皆符合 [4可1不可] 的嚴格標準。
 
 ```typescript
 /**
@@ -73,20 +48,57 @@ interface IComponentCore {
 
 ---
 
-## 5. Eternal Memory & Consolidation
-To manage high-volume AI reasoning context, the platform employs a "Truth-Preserving Consolidation" strategy.
+## 3. 零知識證明 (ZKP) 隱私保護架構
+為解決企業在揭露 ESG 數據時對「商業機密外洩」的恐懼，ESG GO 導入 ZK-Privacy Engine，實現**「驗證事實，而不揭露數據」**的零信任防護。
 
-### Memory Lifecycle
-1.  **Engraving:** Raw events/data are stored as `EternalMemory` entries with their own hash-locks.
-2.  **Aggregation:** Multiple entries of the same type are merged by the `OmniCore` engine.
-3.  **Summarization:** A consolidated record is created, summarizing the children while inheriting their metadata tags.
-4.  **Archiving:** Child records are marked as `consolidated`, removing them from the active AI context window while preserving them in the T1 audit trail.
+### ZK-Privacy 數據處理流程
+1. **原始輸入**：接收企業機密數據（如薪資結構、合約細節、碳排參數）。
+2. **智慧處理**：AI 自動偵測敏感欄位，並由 ZK-Privacy Engine 生成遮罩與密碼學證明。
+3. **雙軌儲存**：
+   * **隱私層**：原始數據加密存於企業本地端或專屬雲。
+   * **證明層**：ZK-Proof 憑證存於 Evidence Vault，僅供公開驗證邏輯正確性。
+4. **多層次輸出**：根據查看者身分權限（董事會、外部稽核、一般公眾）動態調整數據可視細節。
+
+### 三級去敏遮罩機制
+| 等級 | 模式 | 適用情境 | 恢復性 |
+|---|---|---|---|
+| **L1** | 模糊化 (Fuzzy) | 薪資範圍、區域碳排統整 | 條件式授權還原 |
+| **L2** | 假名化 (Pseudo) | 員工編號、供應商代碼 | 持有特定金鑰可還原 |
+| **L3** | 不可逆 (Irreversible) | 生物特徵、精確地址 | 符合 GDPR，絕對不可還原 |
 
 ---
 
-## 6. Automated Verification
-Integrity is enforced via a regression test suite located at `lib/omni-core.test.ts`.
+## 4. 六大策略應用場景
+
+*   **供應鏈 ESG 揭露：解除中小企業恐懼**
+    *   **痛點**：擔心核心成本或製程參數流向品牌大廠。
+    *   **解法**：大廠僅取得「符合 Scope 3 減碳標準」的 ZK 憑證，無法窺探原始數值。
+*   **金融機構融資審查：加速綠色貸款**
+    *   **痛點**：財務細節涉及商業機密，不願完整提交給銀行。
+    *   **解法**：銀行收到「ESG 評分達標」證明，無需持有企業底層財務數據，降低雙方資安責任。
+*   **政府採購資格驗證：合規護照**
+    *   **痛點**：人事個資外洩風險與政府海量數據管理的壓力。
+    *   **解法**：核發「ESG 合規護照」，政府僅驗證數位憑證，實踐無紙化且高隱私的治理。
+*   **第三方確信機構：降低稽核成本**
+    *   **痛點**：傳統現場抽查耗時耗力，且企業對敏感流程極度保密。
+    *   **解法**：憑證自動驗證數據真實性，確信成本大幅降低 50%+，且符合 ISAE 3000 國際標準。
+*   **跨境數據共享：攻佔東南亞市場**
+    *   **痛點**：各國個資法（如 GDPR、PDPA、PDPL）對跨境傳輸限制嚴苛。
+    *   **解法**：原始數據留在當地，僅跨境傳輸「不含個資」的 ZK-Proof，完美規避法律風險。
+*   **集團合併揭露：化解內部政治阻力**
+    *   **痛點**：子公司不願將敏感經營數據上繳總部。
+    *   **解法**：總部透過 ZK 聚合技術計算集團總額，在不觸及子公司細節的前提下順利完成合併報告。
 
 ---
-**Standard Version:** v1.2.0  
-**Last Integrity Audit:** 2026-05-26
+
+## 5. 全球合規對應矩陣
+
+| 法規 / 標準 | 核心要求 | ESG GO ZKP 對應方案 |
+|---|---|---|
+| **台灣個資法** | 防止個資外洩 | L3 不可逆去識別技術 + 憑證化傳輸。 |
+| **GDPR (歐盟)** | 資料最小化、被遺忘權 | 原始數據不出境，從系統底層落實「隱私即設計」(PbD)。 |
+| **PDPA / PDPL** | 本地存儲、跨境限制 | 透過 ZK-Proof 實現**「結論跨境，數據在地」**。 |
+| **ISAE 3000** | 確信數據的完整性 | 密碼學級 Hash Lock 確保數據不可偽造與不可竄改。 |
+
+---
+**Standard Version:** v1.3.0 | **Maintained by:** OmniAgent Architecture Team

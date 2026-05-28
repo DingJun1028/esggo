@@ -145,6 +145,12 @@ export const getDashboardStats = async (ownerId?: any): Promise<any> => {
 // ==========================================
 
 export const getEvidenceFiles = async (): Promise<any> => {
+  if (isDemoMode) {
+    return [
+      { id: 'ev_1', file_name: '2023_Electricity_Bill.pdf', gri_reference: 'GRI 302-1', hash_lock: 'sha256:bill_hash_123', dataType: 'EVIDENCE' },
+      { id: 'ev_2', file_name: 'ISO_14064_Report.pdf', gri_reference: 'GRI 305-1', hash_lock: 'sha256:iso_hash_456', dataType: 'EVIDENCE' }
+    ];
+  }
   const { data } = await listAuditRecords();
   return (data?.auditRecords || []).filter(r => r.dataType === 'EVIDENCE');
 };

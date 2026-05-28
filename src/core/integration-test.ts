@@ -14,10 +14,9 @@ async function main() {
     timestamp: Date.now(),
     evidence: [
       {
-        source_origin: 'contract-123',
-        formula_ref: 'ISO-14064-1',
-        tangible_metric: 'metric-1',
-        lifecycle_hooks: ['draft', 'verified', 'locked'],
+        originCause: 'contract-123',
+        processTrace: ['draft', 'verified', 'locked'],
+        finalEffect: 'metric-1',
       },
     ],
     formula: 'test-formula',

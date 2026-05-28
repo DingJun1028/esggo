@@ -325,7 +325,7 @@ export default function OrchestratorPage() {
                  </div>
                ) : (
                  <Button variant="primary" className="w-full h-16 rounded-[2rem] text-lg tracking-[0.2em] shadow-xl" onClick={() => handleExecute(selected)} isLoading={loading}>
-                    <Play size={24} className="mr-4" fill="currentColor"/> 啟動 HERMES AI 執行序列
+                    <Play size={24} className="mr-4" fill="currentColor"/> 啟動 OmniAgent AI 執行序列
                  </Button>
                )}
             </div>

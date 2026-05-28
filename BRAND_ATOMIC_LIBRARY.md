@@ -1,7 +1,14 @@
 # 🏛️ 萬能元件品牌原子庫 - 經典版 (Classic Edition)
-## ESG GO X OmniAgent | Official Component Standard v1.1
+## ESG GO X OmniAgent | Official Component Standard v1.2
 
 本原子庫為 ESG GO 系統的預設視覺與交互標準，基於 Berkeley Haass 學術精準度與 5T 誠信協議開發。
+
+## 📜 核心設計原則：參照原則 (Reference Principle)
+「參照原則」是萬能原子庫的基石，確保每一 UI 組件不再是孤立的視覺元素，而是誠信協議中的一個活躍節點。
+
+1.  **意圖宣告 (Intent Declaration)**：每一組件必須聲明其設計意圖與參照的規範文檔 (Specification)。
+2.  **治理鏈接 (Governance Linkage)**：組件必須關聯至系統中的治理節點 (Governance Node)，確保其行為可被 5T 協議審計。
+3.  **誠信刻印 (Integrity Engraving)**：組件狀態受萬能心核 (IComponentCore) 保護，具備唯一的 `atomId` 與 `version` 溯源路徑。
 
 ### 1. 原子級元件 (Atoms)
 *   **BrandStatusDot:** 用於顯示 5T 協議狀態 (T1-T5)。

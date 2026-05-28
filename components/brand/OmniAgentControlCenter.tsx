@@ -52,9 +52,9 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
       formula: '[ISO-14064-1] Electricity Calculation',
       impact_metric: '1,250 kgCO2e',
       evidence: [{
-        tangible_metric: '1,250 kgCO2e',
-        source_origin: '/documents/energy/invoice_2024.pdf',
-        lifecycle_hooks: ['hook_created', 'hook_sealed_t4'],
+        finalEffect: '1,250 kgCO2e',
+        originCause: '/documents/energy/invoice_2024.pdf',
+        processTrace: ['hook_created', 'hook_sealed_t4'],
         formula_ref: 'ISO-14064-1'
       }]
     });

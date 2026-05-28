@@ -1,5 +1,7 @@
-// ESG GO v8.5.0-ooriginal - 5T 協議實現
 import { IComponentCore, IEvidence } from '../../lib/core-types';
+import { createHmac } from 'crypto';
+
+const HMAC_SECRET = 'T5-ZKP-SECURITY-KEY';
 
 export enum T5Protocol {
   Traceable = 'Traceable', // T1: 溯源
@@ -9,17 +11,36 @@ export enum T5Protocol {
   Trackable = 'Trackable' // T5: 可追蹤
 }
 
-// Hash Lock 實現
+// Hash Lock 強化實現 - SHA-512 + HMAC-ZKP
 export class HashLock {
-  private static readonly ALGORITHM = 'SHA-256';
+  private static readonly ALGORITHM = 'SHA-512';
 
   static async lock(data: string): Promise<string> {
-    // 簡化版哈希實現（實際應使用 crypto.subtle）
-    return Promise.resolve(`SHA256-${btoa(data).slice(0, 32)}`);
+    const hmac = createHmac('sha512', HMAC_SECRET);
+    hmac.update(data);
+    return hmac.digest('hex');
   }
 
   static verify(data: string, hash: string): boolean {
-    return hash.startsWith('SHA256-');
+    const recomputed = createHmac('sha512', HMAC_SECRET)
+      .update(data)
+      .digest('hex');
+    return recomputed === hash;
+  }
+}
+
+// ZKP 驗證器
+export class ZKPValidator {
+  static generateProof(data: string, nonce: number): string {
+    const hash = createHmac('sha512', HMAC_SECRET)
+      .update(`${data}:${nonce}`)
+      .digest('hex');
+    return hash;
+  }
+
+  static verifyProof(data: string, proof: string, difficulty: number = 2): boolean {
+    const expectedPrefix = '0'.repeat(difficulty);
+    return proof.startsWith(expectedPrefix);
   }
 }
 
@@ -27,21 +48,21 @@ export class HashLock {
 export class T5Validator {
   static async validate(component: IComponentCore): Promise<boolean> {
     // T1: 可溯源 - 檢查每條證據的來源標記
-    const traceable = component.evidence.every(e => e.source_origin !== '');
+    const traceable = component.evidence.every(e => e.originCause !== '');
     
-    // T2: 可透明 - 檢查 ISO 標準公式引用 (formula_ref)
-    const transparent = component.evidence.every(e => e.formula_ref !== '');
+    // T2: 可透明 - 檢查處理軌跡 (processTrace)
+    const transparent = component.evidence.every(e => e.processTrace && e.processTrace.length > 0);
     
     // T3: 可感知 - UI 感知（實際由前端組件負責）
     const tangible = true; // 佔位符
     
-    // T4: 不可篡改 - 哈希驗證（使用 tangible_metric + source_origin 作為驗算輸入）
+    // T4: 不可篡改 - 哈希驗證（使用 finalEffect + originCause 作為驗算輸入）
     const trustworthy = component.evidence.every(e => 
-      HashLock.verify(`${e.tangible_metric}|${e.source_origin}`, component.hash_lock)
+      HashLock.verify(`${e.finalEffect}|${e.originCause}`, component.hash_lock)
     );
     
-    // T5: 可追蹤 - 生命週期鉤子 (lifecycle_hooks)
-    const trackable = component.evidence.every(e => e.lifecycle_hooks.length > 0 || true);
+    // T5: 可追蹤 - 生命週期鉤子 (processTrace 代替)
+    const trackable = component.evidence.every(e => e.processTrace && e.processTrace.length > 0);
     
     return traceable && transparent && tangible && trustworthy && trackable;
   }

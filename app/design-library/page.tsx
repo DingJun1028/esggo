@@ -1,17 +1,29 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { 
   Bot, Terminal, Zap, Shield, Globe, Layers, Activity, 
   Search, Bell, Mail, Lock, User, CheckCircle, AlertCircle,
   Info, ArrowUpRight, Download, Share2, Plus, Filter,
-  LayoutDashboard, FileText, Database, Code, Settings
+  LayoutDashboard, FileText, Database, Code, Settings,
+  Moon, Sun, Monitor
 } from 'lucide-react';
 import { 
   BrandCard, BrandButton, BrandBadge, BrandInput, 
   BrandStatusDot, BrandTabs, BrandCardHeader, BrandAvatar,
   BrandProgress, BrandTable, BrandT5Strip, BrandPageHeader
 } from '../../components/brand';
+import { useTheme } from '../../contexts/ThemeContext';
+import { AppMode, AppFlavor } from '../../lib/theme-store';
+import { UniversalCard, UniversalCardHeader } from '../../components/ui/universal/UniversalCard';
+import { UniversalButton } from '../../components/ui/universal/UniversalButton';
+import { UniversalBadge } from '../../components/ui/universal/UniversalBadge';
+import { UniversalInput } from '../../components/ui/universal/UniversalInput';
+import { UniversalStatusDot } from '../../components/ui/universal/UniversalStatusDot';
+import { UniversalProgress } from '../../components/ui/universal/UniversalProgress';
+import { UniversalTable } from '../../components/ui/universal/UniversalTable';
+import { UniversalForm } from '../../components/ui/universal/UniversalForm';
+import { UniversalChart } from '../../components/ui/universal/UniversalChart';
 
 const COLOR_TOKENS = [
   { name: 'Berkeley Blue', hex: '#003262', desc: 'Primary Base' },
@@ -23,8 +35,11 @@ const COLOR_TOKENS = [
 ];
 
 export default function DesignLibraryPage() {
-  const [activeTab, setActiveTab] = useState('atoms');
+  const [activeTab, setActiveTab] = useState('universal');
   const [inputText, setInputText] = useState('');
+  
+  // Universal Theme Context
+  const themeContext = useTheme();
 
   return (
     <div className="page-container max-w-7xl mx-auto p-6 space-y-8 fade-in">
@@ -42,13 +57,188 @@ export default function DesignLibraryPage() {
         activeTab={activeTab}
         onTabChange={(id) => setActiveTab(id as any)}
         tabs={[
+          { id: 'universal', label: '萬能原子庫 (Universal)', icon: <Globe size={14}/> },
           { id: 'tokens', label: '設計標籤 (Tokens)', icon: <Zap size={14}/> },
-          { id: 'atoms', label: '原子組件 (Atoms)', icon: <Activity size={14}/> },
-          { id: 'molecules', label: '複合組件 (Molecules)', icon: <Layers size={14}/> },
+          { id: 'atoms', label: '原子組件 (Legacy Atoms)', icon: <Activity size={14}/> },
+          { id: 'molecules', label: '複合組件 (Legacy Molecules)', icon: <Layers size={14}/> },
         ]}
       />
 
       <div className="mt-8">
+        {activeTab === 'universal' && (
+          <div className="space-y-8 fade-in">
+             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                {/* Controls */}
+                <div className="lg:col-span-1 space-y-6">
+                   <BrandCard padding="md">
+                      <BrandCardHeader title="Theme Controls" subtitle="Select flavor and mode" />
+                      
+                      <div className="mt-4 space-y-4">
+                         <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Flavor</p>
+                            <div className="flex flex-col gap-2">
+                               {(['berkeley', 'sustainable', 'minimalist', 'best-practice'] as AppFlavor[]).map((flavor) => (
+                                  <button
+                                    key={flavor}
+                                    onClick={() => themeContext?.setFlavor(flavor)}
+                                    className={`text-left px-3 py-2 text-sm rounded-lg font-medium border transition-all ${themeContext?.flavor === flavor ? 'bg-blue-50 border-blue-200 text-blue-700 shadow-sm' : 'bg-transparent border-slate-200 hover:bg-slate-50 text-slate-600'}`}
+                                  >
+                                    {flavor.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                  </button>
+                               ))}
+                            </div>
+                         </div>
+                         
+                         <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mode</p>
+                            <div className="flex gap-2">
+                               <button 
+                                 onClick={() => themeContext?.setMode('light')}
+                                 className={`flex-1 flex justify-center py-2 rounded-lg border transition-all ${themeContext?.mode === 'light' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-transparent border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+                               >
+                                 <Sun size={16} />
+                               </button>
+                               <button 
+                                 onClick={() => themeContext?.setMode('dark')}
+                                 className={`flex-1 flex justify-center py-2 rounded-lg border transition-all ${themeContext?.mode === 'dark' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-transparent border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+                               >
+                                 <Moon size={16} />
+                               </button>
+                               <button 
+                                 onClick={() => themeContext?.setMode('system')}
+                                 className={`flex-1 flex justify-center py-2 rounded-lg border transition-all ${themeContext?.mode === 'system' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-transparent border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+                               >
+                                 <Monitor size={16} />
+                               </button>
+                            </div>
+                         </div>
+                      </div>
+                   </BrandCard>
+                </div>
+                
+                {/* Showcase */}
+                <div className="lg:col-span-3 space-y-6">
+                   <UniversalCard>
+                      <UniversalCardHeader 
+                        title="Universal Preview" 
+                        subtitle={`Currently showcasing ${themeContext?.flavor} flavor in ${themeContext?.mode} mode`}
+                        action={<UniversalBadge variant="primary" dot>Live Sync</UniversalBadge>}
+                      />
+                      
+                      <div className="p-6 bg-[var(--theme-surface)] rounded-xl border border-[var(--theme-border)] mt-4 space-y-8">
+                         
+                         <div className="space-y-4">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">Buttons</h4>
+                            <div className="flex flex-wrap gap-4 items-center">
+                               <UniversalButton variant="primary">Primary Action</UniversalButton>
+                               <UniversalButton variant="secondary">Secondary</UniversalButton>
+                               <UniversalButton variant="outline">Outline</UniversalButton>
+                               <UniversalButton variant="ghost">Ghost Link</UniversalButton>
+                               <UniversalButton variant="primary" loading>Processing</UniversalButton>
+                            </div>
+                         </div>
+                         
+                         
+                         <div className="space-y-4">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">Badges</h4>
+                            <div className="flex flex-wrap gap-4 items-center">
+                               <UniversalBadge variant="primary">Primary Badge</UniversalBadge>
+                               <UniversalBadge variant="secondary">Secondary</UniversalBadge>
+                               <UniversalBadge variant="accent">Accent</UniversalBadge>
+                               <UniversalBadge variant="outline">Outline</UniversalBadge>
+                               <UniversalBadge variant="primary" dot>Active</UniversalBadge>
+                            </div>
+                         </div>
+                         
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                               <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">Inputs & Form</h4>
+                               <div className="space-y-4">
+                                  <UniversalInput label="Email Address" placeholder="Enter your email..." icon={<Mail size={16} />} />
+                                  <UniversalInput label="Password" type="password" placeholder="••••••••" icon={<Lock size={16} />} error="Password must be at least 8 characters" />
+                               </div>
+                            </div>
+                            
+                            <div className="space-y-4">
+                               <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">Status & Indicators</h4>
+                               <div className="flex flex-wrap gap-6 p-4 border border-[var(--theme-border)] rounded-lg bg-[var(--theme-base)]">
+                                  <UniversalStatusDot status="active" label="System Online" pulse />
+                                  <UniversalStatusDot status="warning" label="High Load" />
+                                  <UniversalStatusDot status="error" label="Failing" pulse />
+                                  <UniversalStatusDot status="inactive" label="Offline" />
+                               </div>
+                               <div className="mt-4">
+                                  <UniversalProgress value={78} label="Migration Progress" />
+                               </div>
+                            </div>
+                         </div>
+                         
+                         <div className="space-y-4">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">Data Table (Theme Adaptive)</h4>
+                            <UniversalTable 
+                              compact
+                              columns={[
+                                { key: 'name', label: 'Atomic Component' },
+                                { key: 'type', label: 'Type', render: (v) => <UniversalBadge variant="outline">{v}</UniversalBadge> },
+                                { key: 'status', label: 'Status', render: (v) => <UniversalStatusDot status={v === 'Stable' ? 'active' : 'warning'} label={v} size="sm" /> }
+                              ]}
+                              data={[
+                                { id: 1, name: 'UniversalButton', type: 'Action', status: 'Stable' },
+                                { id: 2, name: 'UniversalCard', type: 'Layout', status: 'Stable' },
+                                { id: 3, name: 'UniversalTable', type: 'Data', status: 'Beta' },
+                              ]}
+                            />
+                         </div>
+
+                         <div className="space-y-4">
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">Form & Chart (ZKP Visualization)</h4>
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                               <UniversalForm 
+                                 fields={[
+                                   { name: 'evidence', label: 'Evidence Input', type: 'text', placeholder: 'Upload or type evidence...' },
+                                   { name: 'category', label: 'ZKP Category', type: 'enum', options: ['Environment', 'Social', 'Governance'] }
+                                 ]}
+                                 onSubmit={(d) => console.log('Submitted', d)}
+                                 submitLabel="Seal with ZKP"
+                               />
+                               
+                               <UniversalChart 
+                                 type="pie"
+                                 dataKey="value"
+                                 xAxisKey="name"
+                                 title="ZKP Sealed Status"
+                                 data={[
+                                   { name: 'Sealed', value: 75 },
+                                   { name: 'Pending', value: 15 },
+                                   { name: 'Failed', value: 10 }
+                                 ]}
+                               />
+                            </div>
+                         </div>
+                         
+                      </div>
+                   </UniversalCard>
+                   
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <UniversalCard variant="glass">
+                         <UniversalCardHeader title="Glass Card" subtitle="Backdrop blur variant" />
+                         <p className="text-sm text-[var(--theme-text-muted)] mt-2">
+                           This card automatically adapts its glassmorphism effect based on the chosen theme and light/dark mode.
+                         </p>
+                      </UniversalCard>
+                      <UniversalCard variant="outline">
+                         <UniversalCardHeader title="Outline Card" subtitle="Transparent background" />
+                         <p className="text-sm text-[var(--theme-text-muted)] mt-2">
+                           Provides clear boundaries without background fills.
+                         </p>
+                      </UniversalCard>
+                   </div>
+                </div>
+             </div>
+          </div>
+        )}
+
         {activeTab === 'tokens' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
             {COLOR_TOKENS.map(color => (

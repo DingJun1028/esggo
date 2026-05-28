@@ -4,7 +4,7 @@
  */
 
 import { createHash } from 'crypto';
-import { IComponentCore } from '@/types/omni-core';
+import type { IComponentCore } from '../types/omni-core.ts';
 import { createClient } from '@supabase/supabase-js';
 
 // ── Dimension Types ────────────────────────────────────────────────────────
@@ -23,11 +23,20 @@ export interface VaultOmniRecord {
 
 /**
  * @function computeHashLock
- * @description 數據真理哈希鎖生成器。
+ * @description 數據真理哈希鎖生成器。使用確定性 JSON 序列化與 Salt 增強安全性。
  */
 export function computeHashLock(data: unknown): string {
-  const str = typeof data === 'string' ? data : JSON.stringify(data);
-  return createHash('sha256').update(str).digest('hex');
+  // Deterministic JSON stringify to ensure consistent hashing
+  const str = typeof data === 'string' ? data : JSON.stringify(data, (key, value) =>
+    value instanceof Object && !Array.isArray(value)
+      ? Object.keys(value).sort().reduce((acc, k) => {
+          acc[k as keyof typeof acc] = value[k];
+          return acc;
+        }, {} as any)
+      : value
+  );
+  const salt = process.env.OMNI_HASH_SALT || 'esggo-genesis-salt';
+  return createHash('sha256').update(str + salt).digest('hex');
 }
 
 /**
@@ -49,30 +58,30 @@ export function buildComponent(params: {
   const timestamp = Date.now();
   const version = params.version ?? '1.0.0';
   const lifecyclePath = params.lifecyclePath ?? [params.sourceOrigin];
-  
-  // Calculate Hash Lock for the evidence bundle (T5 Trustworthy)
-  const hashLock = computeHashLock({
-    uuid,
-    version,
-    timestamp,
-    sourceOrigin: params.sourceOrigin,
-    evidenceData: params.evidenceData
-  });
 
-  const component: IComponentCore = Object.freeze({
+  // Create component structure first without hash_lock
+  const componentWithoutHash = {
     uuid,
     version,
     timestamp,
     formula: params.formula ?? '[ISO-14064-1] Generic Calculation',
     impact_metric: params.impactMetric ?? '0.00 tCO2e',
-    hash_lock: hashLock,
     evidence: [{
-      tangible_metric: params.impactMetric ?? '0.00 tCO2e',
-      source_origin: params.sourceOrigin,
-      lifecycle_hooks: lifecyclePath,
-      formula_ref: params.griReference ?? params.formula ?? '[ISO-14064-1] Generic Calculation',
+      originCause: params.sourceOrigin,
+      processTrace: lifecyclePath,
+      finalEffect: params.impactMetric ?? '0.00 tCO2e',
+      // Store evidenceData in the evidence array if needed, or as part of the structure
+      raw_data: params.evidenceData, 
     }],
-    status: 'Trustworthy',
+    status: 'Trustworthy' as any,
+  };
+
+  // Calculate Hash Lock for the entire structure (T5 Trustworthy)
+  const hashLock = computeHashLock(componentWithoutHash);
+
+  const component: IComponentCore = Object.freeze({
+    ...componentWithoutHash,
+    hash_lock: hashLock,
   });
 
   return component;
@@ -86,8 +95,8 @@ export function flattenToRecord(component: IComponentCore, dimension: VaultDimen
   const payload = JSON.stringify(component);
   const metadata = JSON.stringify({
     version: component.version,
-    origin: component.evidence[0]?.source_origin || '',
-    pathCount: component.evidence[0]?.lifecycle_hooks.length || 0,
+    origin: component.evidence[0]?.originCause || '',
+    pathCount: component.evidence[0]?.processTrace.length || 0,
   });
 
   return {
@@ -135,8 +144,10 @@ export async function verifyRecord(uuid: string): Promise<boolean> {
   const component = await readFromVault(uuid);
   if (!component) return false;
 
-  const currentHash = computeHashLock(component);
-  return currentHash === component.hash_lock;
+  // Extract hash_lock and compute hash on the remaining structure
+  const { hash_lock, ...componentWithoutHash } = component;
+  const currentHash = computeHashLock(componentWithoutHash);
+  return currentHash === hash_lock;
 }
 
 /** 
@@ -161,7 +172,7 @@ export async function engraveToSingleTable(component: IComponentCore): Promise<{
   await supabase.rpc('create_evidence_seal', {
     p_secret: record.payload,
     p_name: `omni_seal_${record.uuid}`,
-    p_description: `Semantic Governance Seal: ${component.evidence[0]?.source_origin || 'Unknown'}`
+    p_description: `Semantic Governance Seal: ${component.evidence[0]?.originCause || 'Unknown'}`
   });
 
   // 審計日誌 (T4 Trackable)
@@ -171,7 +182,7 @@ export async function engraveToSingleTable(component: IComponentCore): Promise<{
     user_name: 'OmniAgent-Engraver',
     t5_tag: 'T1+T4+T5',
     hash_lock: record.hash_lock,
-    details: `[信] 聖碑刻印完成。源起：${component.evidence[0]?.source_origin || 'Unknown'}`,
+    details: `[信] 聖碑刻印完成。源起：${component.evidence[0]?.originCause || 'Unknown'}`,
   }).maybeSingle();
 
   return { success: true, id: data?.uuid ?? record.uuid };
