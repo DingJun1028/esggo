@@ -418,50 +418,38 @@ export default function EditorPage() {
                         <Bot size={12} className="mr-1.5" /> 標竿策略載入
                       </Button>
                   </div>
-
-                        <Plus size={10} className="mr-1.5"/> 遞迴擴充
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        className="h-11 rounded-lg bg-slate-50 border border-slate-200 hover:border-emerald-300 text-emerald-600 text-[8px] font-black uppercase tracking-wider" 
-                        onClick={applyBestPractice}
-                      >
-                        <Trophy size={10} className="mr-1.5"/> 最佳實踐
-                      </Button>
-                    </div>
-                    <Button 
-                      variant="primary" 
-                      className="w-full h-12 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-600 text-[9px] font-black uppercase tracking-widest rounded-lg shadow-sm transition-all active:scale-[0.98]" 
-                      onClick={async () => { 
-                        showToast('正在呼叫 OmniAgent 蜂群...', 'info'); 
-                        try { 
-                          const res = await fetch('/api/agent/tasks', { 
-                            method: 'POST', 
-                            headers: { 'Content-Type': 'application/json' }, 
-                            body: JSON.stringify({ actorId: user?.email || 'user', taskType: 'compliance_review', title: `審查: ${chapter.title}`, skillKey: 'gri_compliance_checker' }) 
-                          }); 
-                          const data = await res.json();
-                          if (res.ok) {
-                            const sourceText = data.source === 'vps' ? 'VPS 叢集' : '本地備援';
-                            showToast(`OmniAgent 已完成任務 [${sourceText}]`, 'success'); 
-                          } else {
-                            showToast(`任務失敗: ${data.error}`, 'error');
-                          }
-                        } catch (e) { 
-                          showToast('連線失敗，無法呼叫 OmniAgent', 'error'); 
-                        } 
-                      }}
-                    >
-                      <Bot size={14} className="mr-2 animate-bounce" /> 呼叫 OmniAgent
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="w-full h-12 border border-dashed border-slate-300 hover:border-cyan-300 text-slate-500 hover:text-cyan-600 text-[9px] font-black uppercase rounded-lg transition-all" 
-                      onClick={applyExpertTemplate}
-                    >
-                      <Database size={14} className="mr-2" /> 零算力專家模板
-                    </Button>
-                  </div>
+                  <Button 
+                    variant="primary" 
+                    className="w-full h-12 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-500 text-[9px] font-black uppercase tracking-widest rounded-xl shadow-sm transition-all active:scale-[0.98] mt-2" 
+                    onClick={async () => { 
+                      showToast('正在呼叫 OmniAgent 蜂群...', 'info'); 
+                      try { 
+                        const res = await fetch('/api/agent/tasks', { 
+                          method: 'POST', 
+                          headers: { 'Content-Type': 'application/json' }, 
+                          body: JSON.stringify({ actorId: user?.email || 'user', taskType: 'compliance_review', title: `審查: ${chapter.title}`, skillKey: 'gri_compliance_checker' }) 
+                        }); 
+                        const data = await res.json();
+                        if (res.ok) {
+                          const sourceText = data.source === 'vps' ? 'VPS 叢集' : '本地備援';
+                          showToast(`OmniAgent 已完成任務 [${sourceText}]`, 'success'); 
+                        } else {
+                          showToast(`任務失敗: ${data.error}`, 'error');
+                        }
+                      } catch (e) { 
+                        showToast('連線失敗，無法呼叫 OmniAgent', 'error'); 
+                      } 
+                    }}
+                  >
+                    <Shield size={14} className="mr-2" /> 呼叫 OmniAgent 審查
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full h-12 border border-dashed border-[var(--at-border)] hover:border-[var(--at-accent)] text-[var(--at-text-sub)] hover:text-[var(--at-text-main)] text-[9px] font-black uppercase rounded-xl transition-all mt-2" 
+                    onClick={applyExpertTemplate}
+                  >
+                    <Database size={14} className="mr-2" /> 零算力專家模板
+                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
