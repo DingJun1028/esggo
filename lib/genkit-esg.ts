@@ -172,8 +172,42 @@ async function runRecursiveExpansionFlow(
 
 // ── Zero-Compute Expert Templates ────────────────────────────────────────
 export const EXPERT_SACRED_TEMPLATES: Record<string, string> = {
-  'general_v1': `# 組織概況與治理架構 (Expert Master Template)\n\n## 1. 組織詳細資訊\n[GRI 2-1] 本公司正式名稱為 {{company_name}}...`,
-  'environmental_v1': `# 環境永續報告深度框架 (T1-T5 Level)\n\n## 1. 溫室氣體管理策略\n[GRI 305] 基於 SBTi 1.5°C 情境...`
+  'general': `# 組織概況與治理架構 (零算力專家模板)
+
+## 1. 組織詳細資訊
+[GRI 2-1] 本公司正式名稱為 **{{company_name}}**。我們的總部位於 **{{hq_location}}**，在全球 **{{operating_countries}}** 個國家設有營運據點。
+我們專注於 **{{main_business_activities}}**，致力於為客戶提供最具價值的服務。
+
+## 2. 員工結構與多元化
+[GRI 2-7] 截至報告年度末，本集團全球員工總數為 **{{emp_total}}** 人。我們致力於營造多元、公平與包容的職場環境，目前女性員工占比為 **{{female_emp_ratio}}**%，高階主管中女性比例達到 **{{female_exec_ratio}}**%。
+
+## 3. 治理架構與最高治理單位
+[GRI 2-9] 我們的最高治理單位為董事會。董事會目前由 **{{board_size}}** 席董事組成，其中獨立董事 **{{independent_directors}}** 席，佔比達 **{{independent_ratio}}**%。
+董事會轄下設立「永續發展委員會」，由 **{{esg_committee_chair}}** 擔任主席，負責審議與監督集團的永續發展策略與氣候相關風險。
+
+---
+> 💡 專家提示：填妥上述雙括號 {{...}} 內之真實數據後，可切換至「AI 工具區」點擊「文章增長」或「圖表加強」進行自動擴寫。`,
+  'emissions': `# 溫室氣體排放與氣候行動 (零算力專家模板)
+
+## 1. 氣候變遷管理方針與承諾
+[GRI 305] 面對全球氣候變遷的嚴峻挑戰，本公司已正式承諾於 **{{net_zero_year}}** 年達成全價值鏈淨零排放 (Net Zero)。我們依循 TCFD 框架，將氣候風險納入企業核心風險管理機制，並已向 SBTi 提交基於 1.5°C 情境的科學減碳目標。
+
+## 2. 溫室氣體排放盤查結果
+[GRI 305-1, 305-2] 依據 ISO 14064-1 標準，本報告年度溫室氣體排放盤查結果如下：
+- **範疇一 (Scope 1) 直接排放**：**{{ghg_s1}}** 噸 CO2e
+- **範疇二 (Scope 2) 間接排放**：**{{ghg_s2}}** 噸 CO2e
+- **總排放量 (Scope 1+2)**：**{{ghg_total}}** 噸 CO2e
+
+相較於基準年 (**{{base_year}}**)，我們已成功減量 **{{reduction_rate}}**%。
+
+## 3. 減碳策略與行動方案
+為達成既定目標，我們推動了以下核心行動：
+1. **提升再生能源比例**：報告年度再生能源使用佔比已達 **{{renewable_energy_ratio}}**%。
+2. **製程能效優化**：投入 **{{capex_energy}}** 萬元進行設備汰舊換新。
+3. **供應鏈議合**：啟動「綠色價值鏈計畫」，輔導 **{{supplier_count}}** 家關鍵供應商進行碳盤查。
+
+---
+> 💡 專家提示：此為符合 GRI 標準之零算力骨架。請於「資料區」核實數據後，透過 AI 工具生成減碳趨勢圖表。`
 };
 
 // ── ESG Compliance Analysis Flow ───────────────────────────────────────────
