@@ -1,24 +1,34 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, Plus, UserPlus, HeartHandshake, ShieldAlert, BookOpen } from 'lucide-react';
+import { Users, Plus, UserPlus, HeartHandshake, ShieldAlert, BookOpen, Lock, ShieldCheck, Loader2 } from 'lucide-react';
 import { StandardPage, BrandCard, BrandTable } from '../../components/brand';
 
 export default function SocialPage() {
   const [metrics, setMetrics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sealingId, setSealingId] = useState<string | null>(null);
 
   useEffect(() => {
     // Simulate fetching from Supabase social_metrics table
     setTimeout(() => {
       setMetrics([
-        { id: '1', year: 2023, employees: 1250, femaleRatio: '45.2%', fr: 1.2, trainingHours: 24.5 },
-        { id: '2', year: 2022, employees: 1100, femaleRatio: '42.8%', fr: 1.5, trainingHours: 21.0 },
-        { id: '3', year: 2021, employees: 950, femaleRatio: '40.0%', fr: 2.1, trainingHours: 18.5 },
+        { id: '1', year: 2023, employees: 1250, femaleRatio: '45.2%', fr: 1.2, trainingHours: 24.5, hashLock: null },
+        { id: '2', year: 2022, employees: 1100, femaleRatio: '42.8%', fr: 1.5, trainingHours: 21.0, hashLock: '0xd3e5f2a1b4c6e9d8c7' },
+        { id: '3', year: 2021, employees: 950, femaleRatio: '40.0%', fr: 2.1, trainingHours: 18.5, hashLock: '0xa1b2c3d4e5f6g7h8i9' },
       ]);
       setLoading(false);
     }, 800);
   }, []);
+
+  const handleSeal = async (id: string) => {
+    setSealingId(id);
+    // Simulate API call to /api/vault/seal
+    await new Promise(r => setTimeout(r, 1200));
+    const randomHash = '0x' + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16)).join('');
+    setMetrics(prev => prev.map(m => m.id === id ? { ...m, hashLock: randomHash } : m));
+    setSealingId(null);
+  };
 
   const pageConfig = {
     id: 'social-module',
@@ -89,6 +99,7 @@ export default function SocialPage() {
                  { label: '女性員工比例', key: 'femaleRatio' },
                  { label: '失能傷害頻率 (FR)', key: 'fr' },
                  { label: '平均受訓時數', key: 'trainingHours' },
+                 { label: 'T5 Hash Lock', key: 'hash' },
                  { label: '操作', key: 'action' }
                ]}
                data={metrics.map(m => ({
@@ -97,7 +108,32 @@ export default function SocialPage() {
                  femaleRatio: <span className="text-gray-700 dark:text-gray-300">{m.femaleRatio}</span>,
                  fr: <span className="text-gray-700 dark:text-gray-300">{m.fr}</span>,
                  trainingHours: <span className="text-gray-700 dark:text-gray-300">{m.trainingHours}</span>,
-                 action: <button className="text-cyan-core dark:text-emerald-400 hover:underline text-sm font-medium">編輯紀錄</button>
+                 hash: m.hashLock ? (
+                   <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-mono bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                     <ShieldCheck size={12} /> {m.hashLock.substring(0, 8)}...
+                   </span>
+                 ) : (
+                   <span className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                     未封印
+                   </span>
+                 ),
+                 action: (
+                   <div className="flex items-center gap-3">
+                     {!m.hashLock && (
+                       <button 
+                         onClick={() => handleSeal(m.id)}
+                         disabled={sealingId === m.id}
+                         className="flex items-center gap-1 text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 text-sm font-medium transition-colors"
+                       >
+                         {sealingId === m.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+                         T5 封印
+                       </button>
+                     )}
+                     <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm font-medium transition-colors">
+                       {m.hashLock ? '檢視' : '編輯'}
+                     </button>
+                   </div>
+                 )
                }))}
              />
           </BrandCard>
