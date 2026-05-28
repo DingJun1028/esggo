@@ -355,49 +355,70 @@ export default function EditorPage() {
             className="flex-1 overflow-y-auto p-8 flex flex-col xl:flex-row gap-8 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent"
           >
             <motion.div variants={fadeIn} className="w-full xl:w-[340px] space-y-6 flex-shrink-0">
-              <Card className="border border-slate-200 bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl">
+              <Card className="border border-[var(--at-border)] bg-[var(--at-bg-glass)] backdrop-blur-[var(--at-glass-blur)] rounded-[2rem] overflow-hidden shadow-[var(--at-shadow)]">
                 <CardHeader className="p-6 pb-2">
-                  <CardTitle className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-2">
-                    <Users size={12}/> AI Expert Persona
+                  <CardTitle className="text-[10px] font-black text-[var(--at-text-sub)] uppercase tracking-[0.3em] flex items-center gap-2">
+                    <Trophy size={14} className="text-amber-500" /> SustainWrite™ 深度遞迴引擎
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
+                    <p className="text-xs text-[var(--at-text-sub)] font-medium leading-relaxed">
+                      啟動 OmniAgent 雙重遞迴展開，強制將單一章節擴充至 <span className="font-bold text-amber-500">5,000+ 字元</span> 之專家級洞察。
+                    </p>
+                    
+                    <div className="pt-4 space-y-3">
+                      <Button 
+                        variant="primary" 
+                        className="w-full h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white border-none rounded-2xl font-black text-xs tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.3)] active:scale-[0.98] transition-all" 
+                        onClick={() => handleGenerate(5000)} 
+                        isLoading={generating}
+                      >
+                        <Sparkles size={16} className="mr-2 text-orange-100 animate-pulse" /> 啟動 Depth 3 專家撰寫
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-[var(--at-border)] space-y-2">
+                    <p className="text-[9px] font-black text-[var(--at-text-sub)] uppercase tracking-[0.3em] mb-4">AI Expert Persona</p>
                     {Object.entries(PERSONA_META).map(([p, meta]) => (
                       <button 
                         key={p} 
                         onClick={() => setSelectedPersona(p as any)} 
                         className={cn(
-                          "w-full p-4 rounded-xl border transition-all duration-300 text-left flex items-center justify-between group",
+                          "w-full p-4 rounded-2xl border transition-all duration-300 text-left flex items-center justify-between group",
                           selectedPersona === p 
-                            ? 'bg-slate-50 border-cyan-300 text-slate-900 shadow-[0_0_15px_rgba(6,182,212,0.1)] translate-x-1' 
-                            : 'bg-transparent border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-700'
+                            ? 'bg-[var(--at-bg-card)]/80 border-cyan-400 text-[var(--at-text-main)] shadow-[0_0_15px_rgba(6,182,212,0.15)] translate-x-1' 
+                            : 'bg-transparent border-[var(--at-border)] text-[var(--at-text-sub)] hover:border-slate-300 hover:text-[var(--at-text-main)]'
                         )}
                       >
                         <span className="text-[10px] font-black uppercase tracking-widest">{meta.label}</span>
-                        <div className={cn("p-1.5 rounded-lg border transition-all", selectedPersona === p ? 'bg-cyan-100 border-cyan-300 text-cyan-600' : 'bg-slate-50 border-slate-200')}>
+                        <div className={cn("p-1.5 rounded-xl border transition-all", selectedPersona === p ? 'bg-cyan-500/10 border-cyan-400/30 text-cyan-500' : 'bg-[var(--at-bg-card)] border-[var(--at-border)]')}>
                           {meta.icon}
                         </div>
                       </button>
                     ))}
                   </div>
-
-                  <div className="pt-6 border-t border-slate-200 space-y-4">
-                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-[0.3em]">Expert Master Toolset</p>
-                    <Button 
-                      variant="primary" 
-                      className="w-full h-14 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white border-none rounded-xl font-black text-xs tracking-wider shadow-lg shadow-cyan-500/20 active:scale-[0.98] transition-all" 
-                      onClick={() => handleGenerate(5000)} 
-                      isLoading={generating}
-                    >
-                      <Sparkles size={16} className="mr-2 text-cyan-100 animate-pulse" /> 啟動 5000 字撰寫
-                    </Button>
-                    <div className="grid grid-cols-2 gap-2.5">
+                  
+                  <div className="grid grid-cols-2 gap-3 pt-4">
                       <Button 
                         variant="ghost" 
-                        className="h-11 rounded-lg bg-slate-50 border border-slate-200 hover:border-cyan-300 text-cyan-600 text-[8px] font-black uppercase tracking-wider" 
-                        onClick={handleRecursiveExpand}
+                        className="h-12 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-emerald-400/50 text-emerald-600 text-[9px] font-black uppercase tracking-wider shadow-sm" 
+                        onClick={handleAutoPopulate}
+                        isLoading={generating}
                       >
+                        <Database size={12} className="mr-1.5" /> 5T 自動填報
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        className="h-12 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-purple-400/50 text-purple-600 text-[9px] font-black uppercase tracking-wider shadow-sm" 
+                        onClick={applyBestPractice}
+                        isLoading={generating}
+                      >
+                        <Bot size={12} className="mr-1.5" /> 標竿策略載入
+                      </Button>
+                  </div>
+
                         <Plus size={10} className="mr-1.5"/> 遞迴擴充
                       </Button>
                       <Button 
