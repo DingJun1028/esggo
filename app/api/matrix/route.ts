@@ -4,9 +4,9 @@ import {
   EndToEndMatrix, 
   MatrixLifecycleStage, 
   MatrixQueryResponse, 
-  MatrixCell 
-} from '@/types/matrix';
-import { T5Status } from '@/types/omni-core';
+  MatrixCell,
+  T5Status
+} from '@/src/shared/types';
 
 export const runtime = 'edge';
 

@@ -1,4 +1,4 @@
-import { OmniCard, OmniCardSchema } from '../../types/omni-card';
+import { OmniCard, OmniCardSchema } from '@/src/shared/types';
 import { randomUUID } from 'crypto';
 
 /**

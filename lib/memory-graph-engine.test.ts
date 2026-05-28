@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { memoryGraphEngine, MemoryGraphEngine } from './memory-graph-engine';
-import type { IComponentCore } from '../types/omni-core';
+import type { IComponentCore } from '../src/shared/types';
 import type { RegulatoryPolicy } from './policy-engine';
 import type { ResonanceResult } from './governance-engine';
 

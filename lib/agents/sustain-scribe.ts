@@ -6,12 +6,12 @@
  * 透過多維度展開（政策、風險、量化目標、利害關係人等）確保字數與深度。
  */
 
-import { ai } from './genkit.ts';
+import { ai } from './genkit';
 import { z } from 'genkit';
 import { createHash } from 'crypto';
-import { saveSustainWriteSection } from '../dataconnect-memory.ts';
-import { omniCore } from '../omni-core.ts';
-import { omniAgentBus } from './omni-commander.ts';
+import { saveSustainWriteSection } from '../dataconnect-memory';
+import { omniCore } from '../omni-core';
+import { omniAgentBus } from './omni-commander';
 
 export interface ExpansionTask {
   chapterId: string;
@@ -159,8 +159,11 @@ export class SustainWriteScribe {
         5. 融入「觀因循果」的邏輯：說明動機（因）、執行過程（循）、以及預期或實際效益（果）。
       `;
 
-      const response = await ai.generate(prompt);
-      return response.text();
+      const response = await ai.generate({
+        model: 'googleai/gemini-1.5-pro',
+        prompt: prompt
+      });
+      return response.text;
     } catch (e) {
       console.warn('[SustainWrite] AI Generation failed, falling back to mock expert text.', e);
       return this.generateMockExpertText(mainTitle, subTitle, focus, depth);

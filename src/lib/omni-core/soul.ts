@@ -1,5 +1,5 @@
 // src/lib/omni-core/soul.ts
-import type { IComponentCore, IEvidence } from '../../../shared/types';
+import type { IComponentCore, IEvidence } from '../../../src/shared/types';
 import { sha256 } from '../../../lib/crypto-proof';
 
 // 萬能法典 (OmniGuide) - JunAIKey 核心實現

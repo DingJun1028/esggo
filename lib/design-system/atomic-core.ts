@@ -5,7 +5,7 @@
  * 遵循「參照原則」：每一組件皆需參照設計聖典與誠信協議。
  */
 
-import { IComponentCore } from '../../shared/types';
+import { IComponentCore } from '../../src/shared/types';
 
 /** 原子組件類型 */
 export type AtomicType = 'atom' | 'molecule' | 'organism' | 'template';

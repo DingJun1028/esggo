@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { omniCore } from './omni-core';
-import type { IEvidence } from '../types/omni-core';
+import type { IEvidence } from '../src/shared/types';
 import { verifyZKPProof } from './crypto-proof';
-import { EternalMemoryType } from '../shared/types';
+import { EternalMemoryType } from '../src/shared/types';
 
 // Mock global fetch for consolidation calls
 const mockFetch = vi.fn();

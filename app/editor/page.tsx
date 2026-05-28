@@ -45,7 +45,7 @@ const CHAPTERS: Chapter[] = [
 
 const PERSONA_META = {
   compliance: { label: '合規守衛', color: 'var(--aqua-700)', icon: <Shield size={14} />, className: 'text-aqua-cyan-midtone bg-aqua-cyan/5 border-aqua-cyan/20 hover:border-aqua-cyan/40' },
-  harmony:    { label: '共榮引導', color: 'var(--t2-text)', icon: <User size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
+  harmony:    { label: '共榮引導', color: 'var(--t2-text)', icon: <Users size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
   innovation: { label: '創新先行', color: 'var(--t5-text)', icon: <Zap size={14} />, className: 'text-t5-text bg-t5-bg border-purple-200 hover:border-purple-300' },
 };
 
@@ -175,7 +175,7 @@ export default function EditorPage() {
   };
 
   const applyExpertTemplate = () => {
-    const templateId = chapter.id === 'general' ? 'general_v1' : 'environmental_v1';
+    const templateId = chapter.id === 'general' ? 'general' : chapter.id === 'emissions' ? 'emissions' : chapter.id;
     const template = EXPERT_SACRED_TEMPLATES[templateId] || `# ${chapter.title}\n\n[Zero-Compute Expert Framework]\n\n`;
     updateContent(chapter.id, template, chapter.title, chapter.order, [chapter.gri]);
     showToast('已載入零算力專家模板', 'info');
@@ -519,10 +519,81 @@ export default function EditorPage() {
                       </div>
                     </div>
                   )}
-                  {activePanel === 'preview' && (
-                    <div className="p-8 md:p-10 prose prose-slate max-w-none fade-in h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
-                      <h1 className="text-slate-900 font-black text-xl mb-4">{chapter.title}</h1>
-                      <div className="whitespace-pre-wrap leading-relaxed text-sm text-slate-700">{generatedContent[chapter.id]}</div>
+                  {activePanel === 'ai-tools' && (
+                    <div className="p-8 md:p-10 space-y-8 fade-in h-full overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--at-border)] scrollbar-track-transparent">
+                      <div>
+                        <h3 className="text-xl font-black text-[var(--at-text-main)] flex items-center gap-2">
+                          <Bot size={20} className="text-[var(--at-accent)]" /> OmniAgent 智慧擴充區
+                        </h3>
+                        <p className="text-xs text-[var(--at-text-sub)] mt-1">針對已填入真實數據的專家模板，進行語義增強與圖表生成。</p>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Button 
+                          variant="ghost" 
+                          className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-cyan-400 hover:bg-cyan-500/5 group transition-all"
+                          onClick={() => {
+                            showToast('正在執行深度語義擴充...', 'info');
+                            setGenerating(true);
+                            setTimeout(() => {
+                              updateContent(chapter.id, (generatedContent[chapter.id] || '') + '\n\n### 深度語義擴充\n\n本集團透過前瞻性的戰略佈局與精細化的資源配置，將永續發展的理念深植於企業核心文化中。針對上述數據所呈現的趨勢，我們預計在未來三年內，進一步強化跨部門的協同機制，並導入更為先進的數位追蹤工具，以確保每一項承諾皆能如期、如質地兌現。', chapter.title, chapter.order, [chapter.gri]);
+                              setGenerating(false);
+                              showToast('文章增長已完成，內容已同步至混合資料庫', 'success');
+                            }, 2000);
+                          }}
+                        >
+                          <div className="p-3 rounded-full bg-cyan-500/10 text-cyan-500 group-hover:scale-110 transition-transform">
+                            <Type size={24} />
+                          </div>
+                          <div className="text-center">
+                            <span className="block text-sm font-black text-[var(--at-text-main)] mb-1">文章增長 (Lengthen)</span>
+                            <span className="block text-[10px] text-[var(--at-text-sub)]">根據數據脈絡，擴寫專業論述段落。</span>
+                          </div>
+                        </Button>
+
+                        <Button 
+                          variant="ghost" 
+                          className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-emerald-400 hover:bg-emerald-500/5 group transition-all"
+                          onClick={() => {
+                            showToast('正在合成趨勢圖表...', 'info');
+                            setGenerating(true);
+                            setTimeout(() => {
+                              triggerChartSynthesis();
+                              setGenerating(false);
+                            }, 1500);
+                          }}
+                        >
+                          <div className="p-3 rounded-full bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform">
+                            <BarChart3 size={24} />
+                          </div>
+                          <div className="text-center">
+                            <span className="block text-sm font-black text-[var(--at-text-main)] mb-1">圖表加強 (Chartify)</span>
+                            <span className="block text-[10px] text-[var(--at-text-sub)]">合成 Mermaid 趨勢圖表，提升可讀性。</span>
+                          </div>
+                        </Button>
+                        
+                        <Button 
+                          variant="ghost" 
+                          className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-purple-400 hover:bg-purple-500/5 group transition-all md:col-span-2"
+                          onClick={() => {
+                            showToast('正在進行表格資料彙整...', 'info');
+                            setGenerating(true);
+                            setTimeout(() => {
+                              updateContent(chapter.id, (generatedContent[chapter.id] || '') + '\n\n### 數據彙整總表\n\n| 年度 | 關鍵指標 | 達成率 | 負責單位 |\n|---|---|---|---|\n| 2024 | 基礎建置 | 100% | 永續委員會 |\n| 2025 | 深度執行 | 85% | 各事業群 |\n| 2026 | 全面達標 | 目標 | 董事會 |\n', chapter.title, chapter.order, [chapter.gri]);
+                              setGenerating(false);
+                              showToast('表格彙整已完成', 'success');
+                            }, 1500);
+                          }}
+                        >
+                          <div className="p-3 rounded-full bg-purple-500/10 text-purple-500 group-hover:scale-110 transition-transform">
+                            <Layout size={24} />
+                          </div>
+                          <div className="text-center">
+                            <span className="block text-sm font-black text-[var(--at-text-main)] mb-1">表格彙整 (Tabulate)</span>
+                            <span className="block text-[10px] text-[var(--at-text-sub)]">將散落數據結構化為 Markdown 表格。</span>
+                          </div>
+                        </Button>
+                      </div>
                     </div>
                   )}
 

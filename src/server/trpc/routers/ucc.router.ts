@@ -4,7 +4,7 @@
  */
 
 import { router, publicProcedure } from '../trpc';
-import { CreateUCCDTOSchema } from '../../../shared/types/ucc.types';
+import { CreateUCCDTOSchema } from '@/src/shared/types';
 import { uccService } from '../../services/ucc.service';
 
 export const uccRouter = router({

@@ -167,21 +167,24 @@ function AppContent({ children }: { children: React.ReactNode }) {
 }
 
 import { ThemeProvider } from '../contexts/ThemeContext';
+import { TRPCProvider } from '../src/client/providers/TRPCProvider';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   return (
     <Suspense fallback={null}>
-      <ThemeProvider>
-        <ErrorBoundary>
-          <ToastProvider>
-            <AuthProvider>
-              <SaaSProvider>
-                <AppContent>{children}</AppContent>
-              </SaaSProvider>
-            </AuthProvider>
-          </ToastProvider>
-        </ErrorBoundary>
-      </ThemeProvider>
+      <TRPCProvider>
+        <ThemeProvider>
+          <ErrorBoundary>
+            <ToastProvider>
+              <AuthProvider>
+                <SaaSProvider>
+                  <AppContent>{children}</AppContent>
+                </SaaSProvider>
+              </AuthProvider>
+            </ToastProvider>
+          </ErrorBoundary>
+        </ThemeProvider>
+      </TRPCProvider>
     </Suspense>
   );
 }

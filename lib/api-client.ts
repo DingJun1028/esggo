@@ -8,7 +8,7 @@ import {
   ApiResponse, 
   SealRequestPayload, 
   VerifyRequestPayload, 
-} from '@/types/omni-core';
+} from '@/src/shared/types';
 
 async function fetcher<T>(url: string, body: any): Promise<ApiResponse<T>> {
   // Bridge: If the old URL is called, we can internally redirect to the new vault/trpc logic if needed

@@ -1,4 +1,4 @@
-import { OmniCard } from '../../types/omni-card';
+import { OmniCard } from '@/src/shared/types';
 
 /**
  * 差異對比結果契約

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { OmniEvent, OmniEventSchema } from '../types/omni-card';
+import { OmniEvent, OmniEventSchema } from '@/src/shared/types';
 
 export function useOmniStream(url: string = '/api/omnispace/sse') {
   const [events, setEvents] = useState<OmniEvent[]>([]);

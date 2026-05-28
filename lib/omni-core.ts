@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import type {
+import {
   IComponentCore,
   IEvidence,
   T5GateState,
@@ -7,21 +7,21 @@ import type {
   RestorationInput,
   ConsolidationResult,
   ApiResponse,
-} from '../shared/types.ts';
-import { EternalMemoryType } from '../shared/types.ts';
-import { supabase } from './supabase.ts';
-import { integrityModule } from './omni-core/integrity.ts';
+  EternalMemoryType,
+} from '../src/shared/types';
+import { supabase } from './supabase';
+import { integrityModule } from './omni-core/integrity';
 import { 
   sha256, 
   create5TAttestation, 
   verifyHashLock, 
   generateRangeProof,
   verifyRangeProof,
-} from './crypto-proof.ts';
-import type { HashLockResult, ZKPRangeProof } from './crypto-proof.ts';
-import { policyEngine } from './policy-engine.ts';
-import type { PolicyValidationResult } from './policy-engine.ts';
-import { dcUpsertEternalMemory, dcListEternalMemories } from './dataconnect-services.ts';
+} from './crypto-proof';
+import type { HashLockResult, ZKPRangeProof } from './crypto-proof';
+import { policyEngine } from './policy-engine';
+import type { PolicyValidationResult } from './policy-engine';
+import { dcUpsertEternalMemory, dcListEternalMemories } from './dataconnect-services';
 
 // ============================================================
 // 萬能心核引擎 - 5T Logic Gate Implementation (Persistent)

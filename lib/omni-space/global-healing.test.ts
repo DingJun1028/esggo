@@ -2,10 +2,7 @@
 import { expect, test, describe, beforeEach } from 'vitest';
 import { EventStore } from './event-store';
 import { GlobalHealing, IAdapterNode } from './global-healing';
-import { OmniCard } from '../../types/omni-card';
-import { NotionAdapter } from '../adapters/notion.adapter';
-import { AlTableAdapter } from '../adapters/altable.adapter';
-import { NotionPagePayload } from '../../types/omni-card';
+import { OmniCard, NotionPagePayload } from '@/src/shared/types';
 import { AlTableRecordPayload } from '../adapters/altable.adapter';
 
 // Mock Notion 適配器節點

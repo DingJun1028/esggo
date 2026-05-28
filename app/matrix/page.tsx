@@ -17,9 +17,9 @@ import {
   EndToEndMatrix, 
   MatrixLifecycleStage, 
   MatrixQueryResponse,
-  MatrixCell
-} from '../../types/matrix';
-import { T5Status } from '../../types/omni-core';
+  MatrixCell,
+  T5Status
+} from '@/src/shared/types';
 
 /**
  * Omni_Terminal | 🏛️ 終始矩陣：語義治理介面

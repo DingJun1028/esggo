@@ -1,4 +1,4 @@
-import { OmniCard } from '../../../types/omni-card';
+import { OmniCard } from '@/src/shared/types';
 import { GlobalHealing, HealingLevel, HealingResult, IAdapterNode } from '../../../lib/omni-space/global-healing';
 import { EventStore } from '../../../lib/omni-space/event-store';
 

@@ -1,4 +1,4 @@
-import { NotionPagePayload, OmniEvent, OmniCard } from '../../types/omni-card';
+import { NotionPagePayload, OmniEvent, OmniCard } from '@/src/shared/types';
 import { NotionAdapter } from '../adapters/notion.adapter';
 import { OmniEventStore } from './event-store';
 

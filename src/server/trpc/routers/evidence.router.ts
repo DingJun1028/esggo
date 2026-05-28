@@ -10,7 +10,7 @@ import {
   CreateEvidenceDTOSchema, 
   EvidenceQueryParamsSchema,
   EvidenceID
-} from '../../../shared/types/evidence.types';
+} from '@/src/shared/types';
 
 export const evidenceRouter = router({
   // 1. 查詢證據

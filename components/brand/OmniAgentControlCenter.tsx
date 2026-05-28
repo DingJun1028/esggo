@@ -13,7 +13,7 @@ import { Tabs } from '../ui/Tabs';
 import { cn } from '../../lib/utils';
 import { useEvidenceStore } from '../../src/client/stores/evidence.store';
 import { useOmniResonance } from '../../src/client/hooks/useOmniResonance';
-import { IComponentCore } from '../../types/omni-core';
+import { IComponentCore } from '../../src/shared/types';
 
 interface OmniAgentControlCenterProps {
   isOpen: boolean;

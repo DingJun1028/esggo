@@ -1,6 +1,6 @@
 import { expect, test, describe, beforeEach } from 'vitest';
 import { GlobalHealingService } from './GlobalHealingServer';
-import { OmniCard } from '../../../types/omni-card';
+import { OmniCard } from '@/src/shared/types';
 import { IAdapterNode } from '../../../lib/omni-space/global-healing';
 
 describe('GlobalHealingService 整合與自癒測試集', () => {

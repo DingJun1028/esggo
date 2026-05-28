@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ApiResponse } from '@/types/omni-core';
+import { ApiResponse } from '@/src/shared/types';
 
 /**
  * Omni_Terminal | Resend Proof API — Realized

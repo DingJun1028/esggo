@@ -1,4 +1,4 @@
-import { OmniCard } from '../../types/omni-card';
+import { OmniCard } from '@/src/shared/types';
 import { EventStore } from './event-store';
 import { StateDiffEngine } from './diff-engine';
 

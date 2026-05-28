@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc';
 import { globalHealingService } from '../../healing/GlobalHealingServer';
-import { OmniCardSchema } from '../../../../types/omni-card';
+import { OmniCardSchema } from '@/src/shared/types';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 

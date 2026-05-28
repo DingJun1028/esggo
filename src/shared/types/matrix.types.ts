@@ -6,7 +6,7 @@
  * ensuring compliance with BS 8001:2017 principles and Berkeley 5T standards.
  */
 
-import { T5Status } from './omni-core';
+import { T5Status } from './core.types';
 
 /**
  * @type MatrixLifecycleStage

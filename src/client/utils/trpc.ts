@@ -1,44 +1,26 @@
 /**
- * tRPC Client Bridge
- * 提供前端呼叫後端的型別安全介面，底層封裝為 Fetch
+ * tRPC Client Bridge (OmniSync Bridge)
+ * v2.0 | #ProperTRPC #EndToEndTypeSafety
+ * 
+ * Establishing a proper bidirectional bridge between the frontend and backend.
+ * Provides full type inference based on the AppRouter definition.
  */
 
-import { AppRouter } from '../../server/trpc';
-
-// 這裡我們建立一個 Proxy，讓前端可以像這樣調用：
-// const results = await trpc.evidence.list.query({ ... })
-// 這將自動具備 AppRouter 的所有型別提示
-
-export const trpc = new Proxy({} as any, {
-  get(target, prop: string) {
-    return new Proxy({}, {
-      get(t, subProp: string) {
-        return async (input: any) => {
-          const path = `${prop}.${subProp}`;
-          const response = await fetch(`/api/trpc/${path}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(input),
-          });
-          const json = await response.json();
-          if (!json.success) throw new Error(json.error?.message || 'API Error');
-          return json.data;
-        };
-      }
-    });
-  }
-}) as any; // 在實際環境中，這裡應轉換為對應 AppRouter 的型別
+import { createTRPCReact } from '@trpc/react-query';
+import type { AppRouter } from '../../server/trpc';
 
 /**
- * 輔助函數：建立 API 請求
+ * tRPC React Hooks
+ * Use these hooks in your components for type-safe data fetching.
+ * Example: const { data, isLoading } = trpc.evidence.list.useQuery({ user_id: '...' });
  */
-export async function trpcCall<T>(path: string, input: any): Promise<T> {
-  const response = await fetch(`/api/trpc/${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(input),
-  });
-  const json = await response.json();
-  if (!json.success) throw new Error(json.error?.message || 'API Error');
-  return json.data;
+export const trpc = createTRPCReact<AppRouter>();
+
+/**
+ * Helper to get the base URL for tRPC calls
+ */
+export function getBaseUrl() {
+  if (typeof window !== 'undefined') return ''; // browser should use relative url
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 }

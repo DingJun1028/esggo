@@ -5,7 +5,7 @@
  * Central registry for all OmniSpace-compatible agent adapters.
  */
 
-import { omniagentAdapter } from './omniagent-adapter.ts';
+import { omniagentAdapter } from './omniagent-adapter';
 
 export interface AdapterManifest {
   adapterId: string;

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,6 +17,8 @@ import {
 import { cn } from '../../lib/utils';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { supabase } from '../../lib/supabase';
+import { TruthChainVisualizer } from '../../src/components/AtomicLibrary/organisms/TruthChainVisualizer';
+import type { MemoryGraph } from '../../lib/memory-graph-engine';
 
 interface OmniRecord {
   id: string;
@@ -93,6 +95,48 @@ const CAT_CFG: Record<string, { label: string; variant: any }> = {
   S:      { label: 'SOCIAL', variant: 'info' },
   G:      { label: 'GOVERNANCE', variant: 'warning' },
   System: { label: 'PLATFORM_OX', variant: 'gold' },
+};
+
+const generateMockGraph = (record: OmniRecord): MemoryGraph => {
+  return {
+    nodes: [
+      {
+        id: record.uuid,
+        type: 'EVIDENCE',
+        label: record.griReference,
+        status: record.status,
+        hash_lock: record.hashLock
+      },
+      {
+        id: `policy-${record.id}`,
+        type: 'POLICY',
+        label: record.isoStandard,
+        status: 'ACTIVE'
+      },
+      {
+        id: `mem-${record.id}`,
+        type: 'MEMORY',
+        label: '永恆記憶存檔',
+        status: 'CONSOLIDATED'
+      }
+    ],
+    edges: [
+      {
+        id: `e1-${record.id}`,
+        source: record.uuid,
+        target: `policy-${record.id}`,
+        label: 'verified_against',
+        strength: 0.95
+      },
+      {
+        id: `e2-${record.id}`,
+        source: record.uuid,
+        target: `mem-${record.id}`,
+        label: 'archived_to',
+        strength: 1.0
+      }
+    ]
+  };
 };
 
 export default function VaultOmniPage() {
@@ -264,6 +308,11 @@ export default function VaultOmniPage() {
                </div>
 
                <div className="space-y-4">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Truth Chain (資料血脈與真理鏈條)</p>
+                  <TruthChainVisualizer graph={generateMockGraph(selected)} />
+               </div>
+
+               <div className="space-y-4">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Evidence Payload (JSON)</p>
                   <pre className="p-6 bg-slate-900 rounded-[2rem] text-[11px] font-mono text-blue-300 overflow-auto border border-white/5">
                     {JSON.stringify(selected.evidence, null, 4)}
@@ -285,3 +334,4 @@ export default function VaultOmniPage() {
     </div>
   );
 }
+

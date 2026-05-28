@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { omniCore } from '@/lib/omni-core';
-import { ApiResponse } from '@/types/omni-core';
+import { ApiResponse } from '@/src/shared/types';
 
 export async function GET(req: Request) {
   try {

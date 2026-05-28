@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { SACRED_GATES, ProtocolGateCode } from '../../types/protocol';
+import { SACRED_GATES, ProtocolGateCode } from '@/src/shared/types';
 import { motion } from 'framer-motion';
 
 interface T5Item {

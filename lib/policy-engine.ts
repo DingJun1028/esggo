@@ -4,7 +4,7 @@
  * Integrated with Firebase Data Connect for persistent policies.
  */
 
-import { dcListRegulatoryPolicies } from './dataconnect-services.ts';
+import { dcListRegulatoryPolicies } from './dataconnect-services';
 
 export interface RegulatoryPolicy {
   id: string;

@@ -5,7 +5,7 @@
 
 import { z } from 'zod';
 import { buildComponent, engraveToSingleTable, computeHashLock } from './vault-omni';
-import { ApiResult } from '../types/api';
+import { ApiResult } from '@/src/shared/types';
 
 // ── Zod Schemas ────────────────────────────────────────────────────────────
 export const ESGAnalysisInputSchema = z.object({

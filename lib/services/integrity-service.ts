@@ -5,12 +5,12 @@
  */
 
 import { secureHash, logAudit } from '../db';
-import { IComponentCore } from '@/types/omni-core';
+import { IComponentCore } from '@/src/shared/types';
 import { 
   SACRED_GATES, 
   ProtocolGateCode, 
   GateValidationResult 
-} from '@/types/protocol';
+} from '@/src/shared/types';
 
 export class IntegrityService {
   private static instance: IntegrityService;

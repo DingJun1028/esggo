@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'vitest';
 import { NotionAdapter } from './notion.adapter';
-import { NotionPagePayload } from '../../types/omni-card';
+import { NotionPagePayload } from '@/src/shared/types';
 
 describe('NotionAdapter (JunAIKey 協同驗證)', () => {
   test('應能將合法的 Notion Payload 提純為 OmniCard', () => {

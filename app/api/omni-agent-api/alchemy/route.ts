@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { extractMetricsFromEvidence } from '@/lib/omni-gateway';
-import { ApiResponse } from '@/types/omni-core';
+import { ApiResponse } from '@/src/shared/types';
 
 export async function POST(req: Request) {
   try {
