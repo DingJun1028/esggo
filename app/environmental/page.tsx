@@ -17,11 +17,7 @@ export default function EnvironmentalPage() {
     category: 'emissions',
     metric_name: 'Scope 1 & 2',
     metric_value: 0,
-    unit: 'tCO2e',
-    scope1: 0,
-    scope2: 0,
-    energy: 0,
-    water: 0
+    unit: 'tCO2e'
   });
 
   const fetchMetrics = async () => {
@@ -99,7 +95,7 @@ export default function EnvironmentalPage() {
           year: formData.year,
           category: formData.category,
           metric_name: formData.metric_name,
-          metric_value: formData.scope1 + formData.scope2,
+          metric_value: formData.metric_value,
           unit: formData.unit,
           source_origin: 'environmental-module',
           verified: false
@@ -198,12 +194,16 @@ export default function EnvironmentalPage() {
                        <input type="text" required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
                      </div>
                      <div>
-                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Scope 1 (tCO2e)</label>
-                       <input type="number" required value={formData.scope1} onChange={e => setFormData({...formData, scope1: parseFloat(e.target.value)})} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
+                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">指標名稱</label>
+                       <input type="text" required value={formData.metric_name} onChange={e => setFormData({...formData, metric_name: e.target.value})} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
                      </div>
                      <div>
-                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Scope 2 (tCO2e)</label>
-                       <input type="number" required value={formData.scope2} onChange={e => setFormData({...formData, scope2: parseFloat(e.target.value)})} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
+                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">數值</label>
+                       <input type="number" required value={formData.metric_value} onChange={e => setFormData({...formData, metric_value: parseFloat(e.target.value)})} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">單位</label>
+                       <input type="text" required value={formData.unit} onChange={e => setFormData({...formData, unit: e.target.value})} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100" />
                      </div>
                    </div>
                    <div className="flex justify-end gap-3 pt-4">

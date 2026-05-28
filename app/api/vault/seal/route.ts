@@ -42,23 +42,33 @@ export async function POST(request: NextRequest) {
 
     const supabase = await getAdminClient();
 
-    const { data: secretId, error: vaultError } = await supabase.rpc('create_evidence_seal', {
-      p_secret: finalPayload,
-      p_name: uniqueName,
-      p_description: `5T Integrity Seal for evidence ${evidenceUuid}`,
+    const { error: vaultError } = await supabase.from('vault_omni_core').insert({
+      uuid: evidenceUuid,
+      dimension: sealType,
+      hash_lock: finalPayload
     });
 
     if (vaultError) {
-      console.warn('Vault RPC error (non-critical):', vaultError.message);
+      console.warn('Vault insert error:', vaultError.message);
+    }
+
+    let targetTable = 'evidence_vault';
+    let updatePayload: any = { hash_lock: hashLock, zkp_proof: true, status: 'verified' };
+
+    if (sourceOrigin === 'environmental-module') {
+      targetTable = 'environmental_data';
+      updatePayload = { hash_lock: hashLock, verified: true };
+    } else if (sourceOrigin === 'social-module') {
+      targetTable = 'social_metrics';
+      updatePayload = { hash_lock: hashLock, verified: true };
+    } else if (sourceOrigin === 'governance-module') {
+      targetTable = 'governance_metrics';
+      updatePayload = { hash_lock: hashLock, verified: true };
     }
 
     const { error: dbError } = await supabase
-      .from('evidence_vault')
-      .update({
-        hash_lock: hashLock,
-        zkp_proof: true,
-        status: 'verified',
-      })
+      .from(targetTable)
+      .update(updatePayload)
       .eq('id', evidenceUuid);
 
     if (dbError) {
@@ -78,7 +88,7 @@ export async function POST(request: NextRequest) {
       success: true,
       hashLock,
       uniqueName,
-      secretId: secretId || null,
+      secretId: uniqueName,
       sealedAt: rawSealData.timestamp,
     });
   } catch (error: any) {
@@ -100,13 +110,20 @@ export async function GET(request: NextRequest) {
 
   try {
     const supabase = await getAdminClient();
-    const { data, error } = await supabase.rpc('get_decrypted_seal', { p_name: uniqueName });
+    const { data, error } = await supabase
+       .from('vault_omni_core')
+       .select('hash_lock')
+       .eq('uuid', evidenceUuid)
+       .eq('dimension', sealType)
+       .order('created_at', { ascending: false })
+       .limit(1)
+       .single();
 
     if (error) {
       return NextResponse.json({ success: false, error: error.message }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, uniqueName, decrypted: data });
+    return NextResponse.json({ success: true, uniqueName, decrypted: data.hash_lock });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

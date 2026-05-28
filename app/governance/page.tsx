@@ -23,7 +23,7 @@ export default function GovernancePage() {
   const fetchMetrics = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/metrics/governance');
+      const res = await fetch('/api/metrics/gov');
       const data = await res.json();
       if (data.success) {
         setMetrics(data.data);
@@ -88,7 +88,7 @@ export default function GovernancePage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const res = await fetch('/api/metrics/governance', {
+      const res = await fetch('/api/metrics/gov', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
