@@ -23,11 +23,29 @@ export default function GovernancePage() {
 
   const handleSeal = async (id: string) => {
     setSealingId(id);
-    // Simulate API call to /api/vault/seal
-    await new Promise(r => setTimeout(r, 1200));
-    const randomHash = '0x' + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16)).join('');
-    setMetrics(prev => prev.map(m => m.id === id ? { ...m, hashLock: randomHash } : m));
-    setSealingId(null);
+    try {
+      const response = await fetch('/api/vault/seal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          evidenceUuid: id,
+          sealType: '5t-gov',
+          sourceOrigin: 'governance-module'
+        })
+      });
+      const data = await response.json();
+      if (data.success && data.hashLock) {
+        setMetrics(prev => prev.map(m => m.id === id ? { ...m, hashLock: data.hashLock } : m));
+      } else {
+        console.error('Seal failed:', data.error);
+        alert('封印失敗，請檢查系統日誌。');
+      }
+    } catch (error) {
+      console.error('Seal exception:', error);
+      alert('無法連線至封印金庫。');
+    } finally {
+      setSealingId(null);
+    }
   };
 
   const pageConfig = {
