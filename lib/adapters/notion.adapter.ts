@@ -1,4 +1,4 @@
-import { OmniCard, OmniCardSchema, NotionPagePayload } from '../../types/omni-card';
+import { OmniCard, OmniCardSchema, NotionPagePayload } from '@/src/shared/types';
 import { randomUUID } from 'crypto';
 
 /**

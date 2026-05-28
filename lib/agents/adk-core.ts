@@ -1,5 +1,5 @@
 import { z } from 'genkit';
-import { ai } from './genkit.ts';
+import { ai } from './genkit';
 
 /**
  * ADK Core: Agent Abstraction Layer

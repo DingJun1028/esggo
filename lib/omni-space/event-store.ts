@@ -1,4 +1,4 @@
-import { OmniCard, OmniEvent, OmniEventSchema } from '../../types/omni-card';
+import { OmniCard, OmniEvent, OmniEventSchema } from '@/src/shared/types';
 import { createHash, randomUUID } from 'crypto';
 import { EventEmitter } from 'events';
 

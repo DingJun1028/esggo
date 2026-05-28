@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UCCEngine } from '../../../../lib/ucc-engine';
 import { getAuthenticatedUser, createServerClient } from '../../../../lib/supabase/server';
-import { EvidenceInput, ApiResponse } from '../../../../types/evidence';
+import { EvidenceInput, ApiResponse } from '@/src/shared/types';
 import { randomUUID } from 'crypto';
 
 /**

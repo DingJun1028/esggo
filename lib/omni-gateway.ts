@@ -66,7 +66,7 @@ import type {
   OmniAgentVisionResult, 
   OmniAgentMetricExtraction, 
   OmniAgentMetric 
-} from '../types/omni-core';
+} from '../src/shared/types';
 
 /**
  * [Phase 13] 多模態視覺掃描 (Multi-Modal Vision) — 實體化

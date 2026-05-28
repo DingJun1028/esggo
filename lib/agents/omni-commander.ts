@@ -1,7 +1,7 @@
-import { ADKAgent, ADKSwarm } from './adk-core.ts';
-import { ai } from './genkit.ts';
+import { ADKAgent, ADKSwarm } from './adk-core';
+import { ai } from './genkit';
 import { createHash } from 'crypto';
-import { saveSustainWriteSection } from '../dataconnect-memory.ts';
+import { saveSustainWriteSection } from '../dataconnect-memory';
 
 const GRI_CHAPTERS = [
   { id: 'intro', title: '永續經營與策略願景', gri: 'GRI 2-22', order: 1 },
@@ -189,8 +189,8 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
   }
 
   private async runNCBDBMigration(context?: Record<string, unknown>): Promise<MissionResult> {
-    const { loadSustainWriteSections } = await import('../dataconnect-memory.ts');
-    const { ncbClient } = await import('../ncbdb.ts');
+    const { loadSustainWriteSections } = await import('../dataconnect-memory');
+    const { ncbClient } = await import('../ncbdb');
     const cid = (context?.companyId as string) || 'default';
 
     console.log(`[OmniCommander] 📦 Migrating content for ${cid} to NCBDB (Nocodebackend DataBase)...`);
@@ -234,7 +234,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     omniAgentBus.publish('MISSION_START', { mission: 'Swarm Evidence Audit' });
 
     const results = [];
-    const { getEvidenceFiles } = await import('../db.ts');
+    const { getEvidenceFiles } = await import('../db');
     const files = await getEvidenceFiles();
 
     for (const file of files) {

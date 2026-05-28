@@ -4,7 +4,7 @@
  */
 
 import { createHash } from 'crypto';
-import type { IComponentCore } from '../types/omni-core.ts';
+import type { IComponentCore } from '../src/shared/types';
 import { createClient } from '@supabase/supabase-js';
 
 // ── Dimension Types ────────────────────────────────────────────────────────

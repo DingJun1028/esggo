@@ -20,9 +20,10 @@ function getTableName(module: string) {
   return null;
 }
 
-export async function GET(request: NextRequest, { params }: { params: { module: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ module: string }> }) {
   try {
-    const tableName = getTableName(params.module);
+    const { module } = await params;
+    const tableName = getTableName(module);
     if (!tableName) return NextResponse.json({ error: 'Invalid module' }, { status: 400 });
 
     const supabase = await getAdminClient();
@@ -35,9 +36,10 @@ export async function GET(request: NextRequest, { params }: { params: { module: 
   }
 }
 
-export async function POST(request: NextRequest, { params }: { params: { module: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ module: string }> }) {
   try {
-    const tableName = getTableName(params.module);
+    const { module } = await params;
+    const tableName = getTableName(module);
     if (!tableName) return NextResponse.json({ error: 'Invalid module' }, { status: 400 });
 
     const body = await request.json();

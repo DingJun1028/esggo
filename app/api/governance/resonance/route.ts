@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { governanceEngine } from '@/lib/governance-engine';
 import { supabase } from '@/lib/supabase';
-import { ApiResponse } from '@/types/omni-core';
+import { ApiResponse } from '@/src/shared/types';
 
 export async function GET() {
   try {

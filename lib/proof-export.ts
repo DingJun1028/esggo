@@ -3,7 +3,7 @@
  * Generates and signs 5T-certified reports with embedded Hash Locks.
  */
 
-import { IComponentCore } from '../types/omni-core';
+import { IComponentCore } from '../src/shared/types';
 import { sha256 } from './crypto-proof';
 
 export interface ReportMetadata {

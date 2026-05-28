@@ -3,7 +3,7 @@ import { cn } from '../../../lib/utils';
 
 export interface UniversalCardProps extends React.HTMLAttributes<HTMLDivElement> {
   padding?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'glass' | 'outline';
+  variant?: 'default' | 'glass' | 'outline' | 'glow' | 'bordered';
 }
 
 export const UniversalCard = React.forwardRef<HTMLDivElement, UniversalCardProps>(
@@ -20,6 +20,8 @@ export const UniversalCard = React.forwardRef<HTMLDivElement, UniversalCardProps
       default: 'bg-[var(--theme-base)] border border-[var(--theme-border)] shadow-card',
       glass: 'bg-[var(--theme-base)]/80 backdrop-blur-xl border border-[var(--theme-border)] shadow-glass',
       outline: 'bg-transparent border-2 border-[var(--theme-border)]',
+      glow: 'bg-[var(--theme-base)] border border-[var(--theme-primary)]/30 shadow-[0_0_20px_rgba(var(--theme-primary-rgb),0.1)]',
+      bordered: 'bg-white border border-slate-100 shadow-sm',
     };
 
     return (

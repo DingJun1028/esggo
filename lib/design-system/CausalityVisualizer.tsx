@@ -10,7 +10,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, ArrowRight, Activity, CheckCircle } from 'lucide-react';
-import { IEvidence } from '@/shared/types';
+import { IEvidence } from '@/src/shared/types';
 
 interface CausalityVisualizerProps {
   evidence: IEvidence;

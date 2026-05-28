@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { OmniMemorySync } from './OmniMemorySync';
 import { OmniEventStore } from '../../../lib/omni-space/event-store';
-import { OmniEvent } from '../../../types/omni-card';
+import { OmniEvent } from '@/src/shared/types';
 
 describe('OmniMemorySync Retry Mechanism', () => {
   let sync: OmniMemorySync;

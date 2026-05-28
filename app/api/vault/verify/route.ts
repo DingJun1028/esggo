@@ -1,7 +1,7 @@
 // app/api/vault/verify/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '../../../../lib/supabase/server';
-import { ApiResponse } from '../../../../types/evidence';
+import { ApiResponse } from '@/src/shared/types';
 import { randomUUID, createHash } from 'crypto';
 
 /**

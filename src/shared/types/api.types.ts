@@ -11,6 +11,8 @@ export interface ApiResponse<T = unknown> {
   meta?: ResponseMetadata;
 }
 
+export type ApiResult<T> = Promise<ApiResponse<T>>;
+
 export interface ApiError {
   code: string;
   message: string;
@@ -30,6 +32,12 @@ export interface ResponseMetadata {
   request_id: string;
   version: string;
   rate_limit?: RateLimitInfo;
+  /** T1..T5 誠信標籤 (Integrity Tag) */
+  integrity_tag?: string; 
+  /** 數據真理哈希鎖 (Hash Lock) */
+  hash_lock?: string;
+  /** 全域追蹤識別碼 (Trace ID / Request ID) */
+  trace_id?: string;
 }
 
 export interface RateLimitInfo {

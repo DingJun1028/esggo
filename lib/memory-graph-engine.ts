@@ -3,7 +3,7 @@
  * Connects discrete 5T integrity points into a semantic knowledge web.
  */
 
-import { IComponentCore } from '../types/omni-core';
+import { IComponentCore } from '../src/shared/types';
 import { DocFragment } from './agent/rag-engine';
 import { RegulatoryPolicy } from './policy-engine';
 import { ResonanceResult } from './governance-engine';
@@ -16,6 +16,7 @@ export interface GraphNode {
   label: string;
   value?: any;
   status?: string;
+  hash_lock?: string;
 }
 
 export interface GraphEdge {
@@ -58,7 +59,8 @@ export class MemoryGraphEngine {
       id: evidenceId,
       type: 'EVIDENCE',
       label: component.evidence[0]?.finalEffect || 'Unknown',
-      status: component.status
+      status: component.status,
+      hash_lock: component.hash_lock
     });
 
     // 2. Policy Node

@@ -5,7 +5,5 @@
  * This file acts as a bridge to the Shared Sacred Types.
  * Meta-Protocol: Bidirectional TypeScript.
  */
-
-export * from '../shared/types';
-export * from '../types/omni-card';
-export * from '../types/omni-core';
+export * from '../src/shared/types';
+// export * from '../types/omni-core'; // Metabolized into core.types.ts

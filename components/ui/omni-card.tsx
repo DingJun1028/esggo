@@ -1,5 +1,5 @@
 import React from 'react';
-import { OmniCard } from '@/types/omni-card';
+import { OmniCard } from '@/src/shared/types';
 
 interface OmniCardProps {
   card: OmniCard;

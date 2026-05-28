@@ -6,7 +6,7 @@
  * 繁博為魂：真·善·美·通·信
  */
 
-import { I5TGovernance, T5Status } from '../shared/types';
+import { I5TGovernance } from './core.types';
 
 export type ProtocolGateCode = 'T1' | 'T2' | 'T3' | 'T4' | 'T5';
 

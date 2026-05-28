@@ -1,6 +1,6 @@
 import { expect, test, describe } from 'vitest';
 import { StateDiffEngine } from './diff-engine';
-import { OmniCard } from '../../types/omni-card';
+import { OmniCard } from '@/src/shared/types';
 
 describe('StateDiffEngine - 狀態對比引擎', () => {
   const baseCard: OmniCard = {

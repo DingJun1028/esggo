@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { omniCore } from '@/lib/omni-core';
-import { ApiResponse, SealRequestPayload } from '@/types/omni-core';
+import { ApiResponse, SealRequestPayload } from '@/src/shared/types';
 
 export async function POST(req: Request) {
   try {

@@ -1,5 +1,5 @@
 import { OmniEventStore } from '../../../lib/omni-space/event-store';
-import { OmniEvent } from '../../../types/omni-card';
+import { OmniEvent } from '@/src/shared/types';
 
 /**
  * OmniMemorySync: 萬能永憶同步器

@@ -1,4 +1,4 @@
-import { IComponentCore } from '@/shared/types';
+import { IComponentCore } from '@/src/shared/types';
 import { readFromVault, computeHashLock, verifyRecord, engraveToSingleTable } from './vault-omni';
 
 /**
