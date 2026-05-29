@@ -12,6 +12,11 @@ export interface DashboardStats {
   auditCount: number;
 }
 
+export interface CarbonTrendRecord {
+    month: string;
+    emissions: number;
+}
+
 export function useDashboardStats(refreshInterval = 60000) {
   const { loggerService } = useServices();
   const [stats, setStats] = useState<DashboardStats | null>(null);

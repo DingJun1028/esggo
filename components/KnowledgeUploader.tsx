@@ -5,7 +5,11 @@ import { motion } from 'framer-motion';
 import { Upload, Database, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useSustainWriteStore } from '../store/useSustainWriteStore';
 
-export function KnowledgeUploader() {
+interface KnowledgeUploaderProps {
+    onUploadSuccess?: () => void;
+}
+
+export function KnowledgeUploader({ onUploadSuccess }: KnowledgeUploaderProps) {
     const companyId = useSustainWriteStore(state => state.companyId);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState<{ type: 'success' | 'error' | 'idle', message: string }>({ type: 'idle', message: '' });
@@ -29,9 +33,9 @@ export function KnowledgeUploader() {
         formData.append('companyId', companyId);
 
         try {
-            const res = await fetch('/api/knowledge/upload', {
+            const res = await fetch('/api/ai/upload', {
                 method: 'POST',
-                body: formData, // 注意：使用 FormData 時，瀏覽器會自動處理 Content-Type 與 boundary
+                body: formData,
             });
 
             const result = await res.json();
@@ -41,6 +45,8 @@ export function KnowledgeUploader() {
                     type: 'success',
                     message: `上傳成功！檔案已被解析並切割為 ${result.chunksProcessed} 個知識記憶區塊，已同步至向量資料庫。`
                 });
+                // 觸發重新整列表
+                if (onUploadSuccess) onUploadSuccess();
             } else {
                 setUploadStatus({ type: 'error', message: result.error || '解析失敗' });
             }
@@ -50,7 +56,7 @@ export function KnowledgeUploader() {
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) {
-                fileInputRef.current.value = ''; // 清空 input 狀態，允許重複上傳相同檔案
+                fileInputRef.current.value = ''; // 清空 input 狀態
             }
         }
     };
@@ -81,8 +87,8 @@ export function KnowledgeUploader() {
                     <label
                         htmlFor="knowledge-upload"
                         className={`px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center gap-3 border shadow-sm ${isUploading
-                            ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
-                            : 'bg-white text-indigo-600 border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer active:scale-95'
+                                ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                                : 'bg-white text-indigo-600 border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer active:scale-95'
                             }`}
                     >
                         {isUploading ? (
@@ -100,13 +106,13 @@ export function KnowledgeUploader() {
                 </div>
 
                 {uploadStatus.type !== 'idle' && (
-                    <motion.div
+                    <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`p-4 rounded-xl text-xs font-bold leading-relaxed border ${uploadStatus.type === 'success'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
                             : 'bg-red-50 text-red-700 border-red-100'
-                            }`}
+                        }`}
                     >
                         <div className="flex gap-2">
                             {uploadStatus.type === 'success' ? <CheckCircle size={14} /> : <AlertTriangle size={14} />}

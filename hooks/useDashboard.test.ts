@@ -1,4 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { useDashboardStats } from './useDashboard';
 import { useServices } from '../contexts/ServiceContext';
 import { getDoc } from 'firebase/firestore';
@@ -9,23 +10,23 @@ vi.mock('../lib/firebase', () => ({
 }));
 
 vi.mock('firebase/firestore', () => ({
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-    setDoc: jest.fn(),
+    doc: vi.fn(),
+    getDoc: vi.fn(),
+    setDoc: vi.fn(),
 }));
 
 // 2. 模擬 ServiceContext，以注入 Mock Logger
 vi.mock('../contexts/ServiceContext', () => ({
-    useServices: jest.fn(),
+    useServices: vi.fn(),
 }));
 
 describe('useDashboardStats', () => {
-    const mockLoggerError = jest.fn();
+    const mockLoggerError = vi.fn();
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         // 設定 useServices 回傳包含我們監聽函數的 loggerService
-        (useServices as jest.Mock).mockReturnValue({
+        (useServices as Mock).mockReturnValue({
             loggerService: {
                 error: mockLoggerError,
             },
@@ -35,7 +36,7 @@ describe('useDashboardStats', () => {
     it('should call loggerService.error and set fallback stats when getDoc fails', async () => {
         // 準備測試資料：讓 Firebase getDoc 強制拋出一個錯誤
         const mockError = new Error('Firebase network connection failed');
-        (getDoc as jest.Mock).mockRejectedValueOnce(mockError);
+        (getDoc as Mock).mockRejectedValueOnce(mockError);
 
         // 渲染 (執行) Hook
         const { result } = renderHook(() => useDashboardStats());

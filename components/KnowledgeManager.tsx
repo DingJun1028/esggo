@@ -1,8 +1,7 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { FileText, Clock, Layers, RefreshCw } from 'lucide-react';
+import { FileText, Clock, Layers, RefreshCw, Trash2 } from 'lucide-react';
 import { useSustainWriteStore } from '../store/useSustainWriteStore';
 import { KnowledgeUploader } from './KnowledgeUploader';
 
@@ -16,6 +15,7 @@ export function KnowledgeManager() {
     const companyId = useSustainWriteStore(state => state.companyId);
     const [files, setFiles] = useState<KnowledgeFile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [deletingTitle, setDeletingTitle] = useState<string | null>(null);
 
     const fetchFiles = useCallback(async () => {
         if (!companyId) return;
@@ -32,6 +32,31 @@ export function KnowledgeManager() {
             setIsLoading(false);
         }
     }, [companyId]);
+
+    const handleDelete = async (title: string) => {
+        if (!confirm(`確定要刪除「${title}」嗎？這將會從向量資料庫中移除所有相關的知識區塊，且無法復原。`)) return;
+
+        setDeletingTitle(title);
+        try {
+            const res = await fetch('/api/knowledge/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ companyId, title })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                await fetchFiles(); // 刪除成功後重新拉取列表
+            } else {
+                alert(data.error || '刪除失敗');
+            }
+        } catch (error) {
+            console.error('Failed to delete knowledge file:', error);
+            alert('網路連線異常，請稍後再試');
+        } finally {
+            setDeletingTitle(null);
+        }
+    };
 
     useEffect(() => {
         fetchFiles();
@@ -84,8 +109,22 @@ export function KnowledgeManager() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black tracking-widest uppercase rounded-full border border-emerald-100">
-                                    ACTIVE
+                                <div className="flex items-center gap-3">
+                                    <div className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black tracking-widest uppercase rounded-full border border-emerald-100">
+                                        ACTIVE
+                                    </div>
+                                    <button
+                                        onClick={() => handleDelete(file.title)}
+                                        disabled={deletingTitle === file.title}
+                                        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                                        title="刪除此文件"
+                                    >
+                                        {deletingTitle === file.title ? (
+                                            <div className="w-4 h-4 border-2 border-red-200 border-t-red-500 rounded-full animate-spin" />
+                                        ) : (
+                                            <Trash2 size={16} />
+                                        )}
+                                    </button>
                                 </div>
                             </div>
                         ))}

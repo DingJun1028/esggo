@@ -77,7 +77,7 @@ describe('OmniLoggerService', () => {
     });
 
     it('debug 日誌應該只在開發環境輸出', () => {
-        process.env.NODE_ENV = 'development';
+        (process.env as any).NODE_ENV = 'development';
         logger.debug('這是除錯訊息');
         expect(console.debug).toHaveBeenCalledTimes(1);
         expect(global.fetch).not.toHaveBeenCalled();
@@ -85,7 +85,7 @@ describe('OmniLoggerService', () => {
         jest.clearAllMocks();
 
         // 切換到正式環境
-        process.env.NODE_ENV = 'production';
+        (process.env as any).NODE_ENV = 'production';
         logger.debug('不該出現的除錯訊息');
         expect(console.debug).not.toHaveBeenCalled();
     });

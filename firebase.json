@@ -1,12 +1,14 @@
 {
   "hosting": {
-    "site": "esggo-original",
-    "public": "public",
+    "site": "esggooriginal",
+    "public": "out",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
   },
   "emulators": {
     "dataconnect": {

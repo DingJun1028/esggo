@@ -7,7 +7,7 @@ import {
   XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye, Bot, Trophy
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { useSustainWriteMemory } from '../../hooks/useMemory';
+import { useSustainWriteStore } from '../../store/useSustainWriteStore';
 import { cn } from '../../lib/utils';
 import { fadeIn, scaleIn, staggerContainer } from '../../lib/animations';
 import { Button } from '../../components/ui/Button';
@@ -15,6 +15,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Ca
 import { Input } from '../../components/ui/Input';
 import { Badge } from '../../components/ui/Badge';
 import { BrandT5Strip, BrandStatusDot } from '../../components/brand';
+import { KnowledgeManager } from '../../components/KnowledgeManager';
 import { EXPERT_SACRED_TEMPLATES } from '../../lib/genkit-esg';
 import { supabase } from '../../lib/supabase';
 import { useExport } from '../../hooks/useExport';
@@ -59,10 +60,18 @@ const CATEGORY_META = {
 export default function EditorPage() {
   const { user, companyId } = useAuth();
   const { 
-    generatedContent, fieldValues, chapterStatuses, 
-    updateContent, updateFieldValue, updateChapterStatus, loading: memoryLoading 
-  } = useSustainWriteMemory();
+    generatedContent, fieldValues, chapterStatuses, loading: memoryLoading,
+    initData, updateContent, updateFieldValue, updateChapterStatus,
+    commitHistory, undoContent, redoContent, expandContentWithAI, isGeneratingAI,
+    contentHistory
+  } = useSustainWriteStore();
   const { exportDocx, exportPdf } = useExport();
+
+  useEffect(() => {
+    if (companyId) {
+      initData(companyId);
+    }
+  }, [companyId, initData]);
 
   const [selectedChapterId, setSelectedChapterId] = useState<string>('general');
   const [selectedPersona, setSelectedPersona] = useState<'compliance' | 'harmony' | 'innovation'>('compliance');
@@ -94,22 +103,22 @@ export default function EditorPage() {
     }, wordCount > 2000 ? 7000 : 1500);
 
     try {
-      const res = await fetch('/api/genkit/generate', {
+      const res = await fetch('/api/ai/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chapter: chapter.title, metrics: fieldValues[chapter.id] || {}, persona: selectedPersona, wordCount })
       });
       const json = await res.json();
       clearInterval(progressTimer);
-      if (json.success) {
-        const content = json.data.content;
+      if (json.text) {
+        const content = json.text;
         updateContent(chapter.id, content, chapter.title, chapter.order, [chapter.gri]);
         const gaps: any[] = [];
         Object.entries(fieldValues[chapter.id] || {}).forEach(([key, val]) => {
           if (val && !content.includes(val.toString())) gaps.push({ field: key, expected: val.toString() });
         });
         setDataGaps(gaps);
-        showToast(gaps.length > 0 ? `生成完成，但發現 ${gaps.length} 處數據不一致` : `已生成 ${wordCount} 字深度內容`, gaps.length > 0 ? 'info' : 'success');
+        showToast(gaps.length > 0 ? `生成完成，但發現 ${gaps.length} 處數據不一致` : `已生成深度內容`, gaps.length > 0 ? 'info' : 'success');
       }
     } catch (e) {
       clearInterval(progressTimer);
@@ -119,8 +128,6 @@ export default function EditorPage() {
       setGenProgress({ step: 0, total: 5, label: '' });
     }
   };
-
-  const handleRecursiveExpand = () => handleGenerate(20000);
 
   const handleAutoPopulate = async () => {
     setGenerating(true);
@@ -200,8 +207,6 @@ export default function EditorPage() {
   const handleSeal = async () => {
     setSealing(true);
     try {
-      // 全端雙向 TS 集成 (Full-Stack Integration)
-      // Call standard REST API instead of directly invoking backend node modules
       const sealResponse = await fetch('/api/omnicore/seal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -212,11 +217,7 @@ export default function EditorPage() {
         })
       });
 
-      if (!sealResponse.ok) {
-        throw new Error('5T 誠信封印失敗');
-      }
-
-      const { hash } = await sealResponse.json();
+      if (!sealResponse.ok) throw new Error('5T 誠信封印失敗');
 
       updateChapterStatus(chapter.id, 'sealed', chapter.title, chapter.order, [chapter.gri]);
       showToast('5T 誠信封印成功', 'success');
@@ -229,7 +230,6 @@ export default function EditorPage() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-slate-50 text-slate-900 font-sans selection:bg-cyan-100 relative">
-      {/* Background dynamic grid and glowing nodes for light theme */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-cyan-200/40 to-transparent blur-[120px] rounded-full" />
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-gradient-to-tr from-emerald-200/40 to-transparent blur-[150px] rounded-full" />
@@ -357,7 +357,7 @@ export default function EditorPage() {
             </div>
             <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-6">{chapter.title}</h2>
             <div className="flex gap-2">
-              {['write', 'data', 'preview'].map((t) => (
+              {['write', 'data', 'preview', 'ai-tools'].map((t) => (
                 <button 
                   key={t} 
                   onClick={() => setActivePanel(t as any)} 
@@ -402,6 +402,15 @@ export default function EditorPage() {
                       >
                         <Sparkles size={16} className="mr-2 text-orange-100 animate-pulse" /> 啟動 Depth 5 專家撰寫 (2萬字)
                       </Button>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full h-12 border-amber-500/30 text-amber-600 hover:bg-amber-50 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
+                        onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                        disabled={isGeneratingAI[chapter.id] || isSealed}
+                      >
+                        {isGeneratingAI[chapter.id] ? <RefreshCw size={14} className="mr-2 animate-spin" /> : <Bot size={14} className="mr-2" />}
+                        {isGeneratingAI[chapter.id] ? '正在擴寫中...' : '智能語義擴充'}
+                      </Button>
                     </div>
                   </div>
 
@@ -444,38 +453,6 @@ export default function EditorPage() {
                         <Bot size={12} className="mr-1.5" /> 標竿策略載入
                       </Button>
                   </div>
-                  <Button 
-                    variant="primary" 
-                    className="w-full h-12 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-500 text-[9px] font-black uppercase tracking-widest rounded-xl shadow-sm transition-all active:scale-[0.98] mt-2" 
-                    onClick={async () => { 
-                      showToast('正在呼叫 OmniAgent 蜂群...', 'info'); 
-                      try { 
-                        const res = await fetch('/api/agent/tasks', { 
-                          method: 'POST', 
-                          headers: { 'Content-Type': 'application/json' }, 
-                          body: JSON.stringify({ actorId: user?.email || 'user', taskType: 'compliance_review', title: `審查: ${chapter.title}`, skillKey: 'gri_compliance_checker' }) 
-                        }); 
-                        const data = await res.json();
-                        if (res.ok) {
-                          const sourceText = data.source === 'vps' ? 'VPS 叢集' : '本地備援';
-                          showToast(`OmniAgent 已完成任務 [${sourceText}]`, 'success'); 
-                        } else {
-                          showToast(`任務失敗: ${data.error}`, 'error');
-                        }
-                      } catch (e) { 
-                        showToast('連線失敗，無法呼叫 OmniAgent', 'error'); 
-                      } 
-                    }}
-                  >
-                    <Shield size={14} className="mr-2" /> 呼叫 OmniAgent 審查
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full h-12 border border-dashed border-[var(--at-border)] hover:border-[var(--at-accent)] text-[var(--at-text-sub)] hover:text-[var(--at-text-main)] text-[9px] font-black uppercase rounded-xl transition-all mt-2" 
-                    onClick={applyExpertTemplate}
-                  >
-                    <Database size={14} className="mr-2" /> 零算力專家模板
-                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
@@ -483,25 +460,73 @@ export default function EditorPage() {
             <motion.div variants={scaleIn} className="flex-1 flex flex-col min-w-0">
               <Card className="flex-1 border border-slate-200 bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden flex flex-col relative shadow-xl">
                 <div className="h-12 px-8 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                  <div className="flex items-center gap-2">
-                    <Type size={12} className="text-cyan-600" />
-                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">GRI Master Workspace</span>
-                  </div>
-                  {dataGaps.length > 0 && (
-                    <div className="flex items-center gap-1.5 bg-red-50 px-3 py-1 rounded-full border border-red-200 animate-pulse">
-                      <AlertTriangle size={10} className="text-red-600" />
-                      <span className="text-[8px] font-black text-red-600 uppercase">Data_Mismatch</span>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Type size={12} className="text-cyan-600" />
+                      <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">GRI Master Workspace</span>
                     </div>
-                  )}
+                    
+                    <div className="h-4 w-[1px] bg-slate-200 mx-2" />
+                    
+                    <div className="flex gap-1">
+                      <button 
+                        onClick={() => undoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                        disabled={!(contentHistory[chapter.id]?.past.length > 0) || isGeneratingAI[chapter.id]}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 disabled:opacity-20 transition-all"
+                        title="復原 (Undo)"
+                      >
+                        <RefreshCw size={12} className="-scale-x-100" />
+                      </button>
+                      <button 
+                        onClick={() => redoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                        disabled={!(contentHistory[chapter.id]?.future.length > 0) || isGeneratingAI[chapter.id]}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 disabled:opacity-20 transition-all"
+                        title="重做 (Redo)"
+                      >
+                        <RefreshCw size={12} />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    {isGeneratingAI[chapter.id] && (
+                      <div className="flex items-center gap-2 px-3 py-1 bg-indigo-50 rounded-full border border-indigo-100 animate-pulse">
+                        <Sparkles size={10} className="text-indigo-600" />
+                        <span className="text-[8px] font-black text-indigo-600 uppercase">OmniAgent_Syncing...</span>
+                      </div>
+                    )}
+                    {dataGaps.length > 0 && (
+                      <div className="flex items-center gap-1.5 bg-red-50 px-3 py-1 rounded-full border border-red-200 animate-pulse">
+                        <AlertTriangle size={10} className="text-red-600" />
+                        <span className="text-[8px] font-black text-red-600 uppercase">Data_Mismatch</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex-1 relative overflow-hidden min-h-[400px]">
                   {activePanel === 'write' && (
-                    <textarea 
-                      value={generatedContent[chapter.id] || ''} 
-                      onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
-                      className="w-full h-full p-8 md:p-10 text-sm font-medium leading-[2.2] text-slate-800 outline-none resize-none bg-transparent scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent focus:ring-1 focus:ring-cyan-500/20" 
-                      placeholder="ESG 治理主權由您執筆..." 
-                    />
+                    <div className="w-full h-full relative">
+                      <textarea 
+                        value={generatedContent[chapter.id] || ''} 
+                        onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
+                        onFocus={() => commitHistory(chapter.id)}
+                        onBlur={() => commitHistory(chapter.id)}
+                        disabled={isGeneratingAI[chapter.id]}
+                        className={cn(
+                          "w-full h-full p-8 md:p-10 text-sm font-medium leading-[2.2] text-slate-800 outline-none resize-none bg-transparent scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent transition-all duration-700",
+                          isGeneratingAI[chapter.id] ? "opacity-50 blur-[1px]" : "opacity-100"
+                        )} 
+                        placeholder="ESG 治理主權由您執筆..." 
+                      />
+                      {isGeneratingAI[chapter.id] && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="flex flex-col items-center gap-3 p-6 bg-white/40 backdrop-blur-sm rounded-3xl border border-indigo-200/50 shadow-2xl">
+                             <RefreshCw size={24} className="text-indigo-600 animate-spin" />
+                             <p className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">Generating Expert Content...</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   )}
                   {activePanel === 'data' && (
                     <div className="p-8 md:p-10 space-y-6 fade-in h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
@@ -558,22 +583,15 @@ export default function EditorPage() {
                         <Button 
                           variant="ghost" 
                           className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-cyan-400 hover:bg-cyan-500/5 group transition-all"
-                          onClick={() => {
-                            showToast('正在執行深度語義擴充...', 'info');
-                            setGenerating(true);
-                            setTimeout(() => {
-                              updateContent(chapter.id, (generatedContent[chapter.id] || '') + '\n\n### 深度語義擴充\n\n本集團透過前瞻性的戰略佈局與精細化的資源配置，將永續發展的理念深植於企業核心文化中。針對上述數據所呈現的趨勢，我們預計在未來三年內，進一步強化跨部門的協同機制，並導入更為先進的數位追蹤工具，以確保每一項承諾皆能如期、如質地兌現。', chapter.title, chapter.order, [chapter.gri]);
-                              setGenerating(false);
-                              showToast('文章增長已完成，內容已同步至混合資料庫', 'success');
-                            }, 2000);
-                          }}
+                          onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                          disabled={isGeneratingAI[chapter.id]}
                         >
                           <div className="p-3 rounded-full bg-cyan-500/10 text-cyan-500 group-hover:scale-110 transition-transform">
-                            <Type size={24} />
+                            {isGeneratingAI[chapter.id] ? <RefreshCw size={24} className="animate-spin" /> : <Type size={24} />}
                           </div>
                           <div className="text-center">
                             <span className="block text-sm font-black text-[var(--at-text-main)] mb-1">文章增長 (Lengthen)</span>
-                            <span className="block text-[10px] text-[var(--at-text-sub)]">根據數據脈絡，擴寫專業論述段落。</span>
+                            <span className="block text-[10px] text-[var(--at-text-sub)]">根據數據脈絡與企業智庫，擴寫專業論述。</span>
                           </div>
                         </Button>
 
@@ -597,28 +615,10 @@ export default function EditorPage() {
                             <span className="block text-[10px] text-[var(--at-text-sub)]">合成 Mermaid 趨勢圖表，提升可讀性。</span>
                           </div>
                         </Button>
-                        
-                        <Button 
-                          variant="ghost" 
-                          className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-purple-400 hover:bg-purple-500/5 group transition-all md:col-span-2"
-                          onClick={() => {
-                            showToast('正在進行表格資料彙整...', 'info');
-                            setGenerating(true);
-                            setTimeout(() => {
-                              updateContent(chapter.id, (generatedContent[chapter.id] || '') + '\n\n### 數據彙整總表\n\n| 年度 | 關鍵指標 | 達成率 | 負責單位 |\n|---|---|---|---|\n| 2024 | 基礎建置 | 100% | 永續委員會 |\n| 2025 | 深度執行 | 85% | 各事業群 |\n| 2026 | 全面達標 | 目標 | 董事會 |\n', chapter.title, chapter.order, [chapter.gri]);
-                              setGenerating(false);
-                              showToast('表格彙整已完成', 'success');
-                            }, 1500);
-                          }}
-                        >
-                          <div className="p-3 rounded-full bg-purple-500/10 text-purple-500 group-hover:scale-110 transition-transform">
-                            <Layout size={24} />
-                          </div>
-                          <div className="text-center">
-                            <span className="block text-sm font-black text-[var(--at-text-main)] mb-1">表格彙整 (Tabulate)</span>
-                            <span className="block text-[10px] text-[var(--at-text-sub)]">將散落數據結構化為 Markdown 表格。</span>
-                          </div>
-                        </Button>
+                      </div>
+
+                      <div className="pt-8 border-t border-[var(--at-border)]">
+                        <KnowledgeManager />
                       </div>
                     </div>
                   )}

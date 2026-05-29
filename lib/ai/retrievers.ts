@@ -1,5 +1,5 @@
 import { defineFirestoreRetriever } from '@genkit-ai/firebase';
-import { googleAI, textEmbedding004 } from '@genkit-ai/google-genai';
+import { textEmbedding004 } from '@genkit-ai/googleai';
 import { ai } from '../agents/genkit';
 import { getFirestore } from 'firebase-admin/firestore';
 
@@ -13,6 +13,7 @@ export const enterpriseRetriever = defineFirestoreRetriever(ai, {
   collection: 'enterprise_knowledge',
   embedder: textEmbedding004,
   vectorField: 'embedding',
+  contentField: 'text',
   metadataFields: ['companyId', 'docId', 'title'],
 });
 
