@@ -1,4 +1,7 @@
 import { NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
+
 import { getAuditLogs, getDashboardStats, logAudit } from '../../../../lib/db';
 import { callGemini } from '../../../../lib/ai-helper';
 
