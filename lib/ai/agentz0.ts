@@ -127,6 +127,37 @@ Please analyze the request, use any available tools to query the databases for n
       };
     }
   }
+
+  async *streamTask(taskDescription: string, dataContext?: any) {
+    console.log(`[AgentZ0 - ${this.name}] Starting streaming task: ${taskDescription}`);
+    
+    const prompt = `
+You are ${this.name}, an AI Agent acting in the role of: ${this.role}.
+You are powered by Genkit and AgentZ0 framework.
+Your current task is: ${taskDescription}
+
+Available context data: 
+${JSON.stringify(dataContext || {}, null, 2)}
+
+Please analyze the request, use any available tools to query the databases for necessary data, and provide a professional, structured response.
+需針對該專案內容深度撰寫，字數需儘可能豐富詳盡。
+      `;
+
+    const { gemini20Flash } = require('@genkit-ai/googleai');
+    const { stream } = await genkitInstance.generateStream({
+      model: gemini20Flash,
+      prompt: prompt,
+      tools: this.tools,
+      config: {
+        temperature: 0.3,
+        maxOutputTokens: 8192,
+      }
+    });
+
+    for await (const chunk of stream) {
+      yield chunk.text;
+    }
+  }
 }
 
 // ESG Go Specialized Agents using ADK concepts

@@ -2,10 +2,10 @@ import { Packer } from 'docx';
 
 // 1. 模擬 docx 套件，避免在測試環境中進行繁重的二進位運算
 const mockBlob = { size: 1024, type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' };
-jest.mock('docx', () => ({
-    Document: jest.fn(),
-    Paragraph: jest.fn(),
-    TextRun: jest.fn(),
+vi.mock('docx', () => ({
+    Document: vi.fn(),
+    Paragraph: vi.fn(),
+    TextRun: vi.fn(),
     HeadingLevel: {
         TITLE: 'Title',
         HEADING_1: 'Heading1',
@@ -13,12 +13,12 @@ jest.mock('docx', () => ({
         HEADING_3: 'Heading3',
     },
     Packer: {
-        toBlob: jest.fn().mockResolvedValue(mockBlob), // 預設回傳假 Blob
+        toBlob: vi.fn().mockResolvedValue(mockBlob), // 預設回傳假 Blob
     },
 }));
 
 // 2. 模擬 Web Worker 的全域執行環境 (self)
-const mockPostMessage = jest.fn();
+const mockPostMessage = vi.fn();
 (global as any).self = {
     onmessage: null,
     postMessage: mockPostMessage,
@@ -29,7 +29,7 @@ require('./exportDocx.worker.ts');
 
 describe('exportDocx.worker', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it('應該成功處理文章資料並回傳 Blob (status: success)', async () => {

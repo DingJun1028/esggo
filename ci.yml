@@ -53,6 +53,28 @@ jobs:
           NEXT_PUBLIC_SWARM_WS_URL: "wss://api.esggo.com/swarm"
           NEXT_PUBLIC_FCM_VAPID_KEY: "mock-vapid-key"
 
+      # 7. 安裝 Playwright 所需的瀏覽器與系統依賴
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 8. 執行 E2E 與視覺回歸測試
+      - name: Run Playwright E2E Tests
+        run: npx playwright test
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://mock.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "mock-anon-key"
+          NEXT_PUBLIC_TELEMETRY_LOG_URL: "/api/telemetry/logs"
+          NEXT_PUBLIC_SWARM_WS_URL: "wss://api.esggo.com/swarm"
+
+      # 9. 上傳測試報告 (極度重要：用來查看視覺回歸的截圖差異)
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always() # 確保無論測試成功或失敗都會上傳報表
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   deploy:
     name: Deploy to Vercel
     needs: test-and-build # 確保只有在測試與編譯都成功的情況下才進行部署

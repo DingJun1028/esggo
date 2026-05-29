@@ -91,5 +91,35 @@ export function useExport() {
     }
   };
 
-  return { exportDocx, exportPdf };
+  const exportMarkdown = async (
+    chapters: ExportChapter[],
+    generatedContent: Record<string, string>,
+    showToast: (msg: string, type: 'success' | 'error' | 'info') => void
+  ) => {
+    showToast('準備匯出 Markdown...', 'info');
+    try {
+      let mdContent = '# ESG 永續報告書 2026\n\n';
+      chapters.forEach(c => {
+        mdContent += `## ${c.title}\n\n`;
+        mdContent += `${generatedContent[c.id] || '【尚未生成內容】'}\n\n`;
+      });
+
+      const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ESG_Sustainability_Report_2026.md';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      showToast('匯出 Markdown 成功！', 'success');
+    } catch (e) {
+      console.error(e);
+      showToast('匯出 Markdown 失敗', 'error');
+    }
+  };
+
+  return { exportDocx, exportPdf, exportMarkdown };
 }
