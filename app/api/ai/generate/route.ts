@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { prompt, systemInstruction, messages, temperature = 0.7, maxTokens = 2048 } = body;
+    const { prompt, systemInstruction, messages, temperature = 0.7, wordCount, maxTokens = 2048 } = body;
+
+    // 將 wordCount 轉換為大概的 maxOutputTokens (1 token 延遲約 0.75 個字元)
+    const calculatedMaxTokens = wordCount ? Math.ceil(wordCount / 0.75) : maxTokens;
 
     const contents = messages || [{ role: 'user', parts: [{ text: prompt }] }];
 
@@ -25,7 +28,7 @@ export async function POST(request: NextRequest) {
         temperature,
         topK: 40,
         topP: 0.95,
-        maxOutputTokens: maxTokens,
+        maxOutputTokens: Math.min(calculatedMaxTokens, 8192), // Gemini 2.0 Flash 支援更高，但暫時限制在 8k 以免過長
       },
     };
 

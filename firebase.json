@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "esggooriginal",
-    "public": "out",
+    "public": ".next/standalone",
     "ignore": [
       "firebase.json",
       "**/.*",
