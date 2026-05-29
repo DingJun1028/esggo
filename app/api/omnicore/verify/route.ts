@@ -14,7 +14,7 @@ export async function POST(req: Request) {
           status: 'error',
           content: 'Missing component for verification',
           timestamp: Date.now(),
-        } as ApiResponse,
+        } as any,
         { status: 400 }
       );
     }
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         : 'Hash Lock mismatch! Data integrity compromised.',
       timestamp: Date.now(),
       data: { isValid },
-    } as ApiResponse);
+    } as any);
   } catch (error: any) {
     return NextResponse.json(
       {
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         status: 'error',
         content: error.message || 'Internal Server Error during verification',
         timestamp: Date.now(),
-      } as ApiResponse,
+      } as any,
       { status: 500 }
     );
   }

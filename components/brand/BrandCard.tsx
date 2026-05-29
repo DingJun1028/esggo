@@ -1,5 +1,6 @@
-﻿'use client';
+'use client';
 import React from 'react';
+import { cn } from '../../lib/utils';
 
 interface BrandCardProps {
   children: React.ReactNode;
@@ -8,7 +9,7 @@ interface BrandCardProps {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   border?: boolean;
   shadow?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'glass' | 'liquid';
+  variant?: 'default' | 'glass' | 'liquid' | 'hologram';
   onClick?: () => void;
   style?: React.CSSProperties;
 }
@@ -19,6 +20,7 @@ interface BrandCardHeaderProps {
   icon?: React.ReactNode;
   action?: React.ReactNode;
   badge?: React.ReactNode;
+  className?: string;
 }
 
 interface BrandCardSectionProps {
@@ -41,21 +43,21 @@ const shadowStyles = {
   lg: 'shadow-lg',
 };
 
-export function BrandCardHeader({ title, subtitle, icon, action, badge }: BrandCardHeaderProps) {
+export function BrandCardHeader({ title, subtitle, icon, action, badge, className = '' }: BrandCardHeaderProps) {
   return (
-    <div className="flex items-start justify-between gap-3 pb-4 border-b border-slate-100">
+    <div className={cn("flex items-start justify-between gap-3 pb-4 border-b border-slate-100/50", className)}>
       <div className="flex items-start gap-3 min-w-0">
         {icon && (
-          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 shadow-inner">
             {icon}
           </div>
         )}
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-berkeley-blue text-sm leading-tight">{title}</h3>
+            <h3 className="font-black text-[#003262] text-sm uppercase tracking-tight leading-tight">{title}</h3>
             {badge}
           </div>
-          {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+          {subtitle && <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{subtitle}</p>}
         </div>
       </div>
       {action && <div className="flex-shrink-0">{action}</div>}
@@ -65,7 +67,7 @@ export function BrandCardHeader({ title, subtitle, icon, action, badge }: BrandC
 
 export function BrandCardSection({ children, className = '', divider = false }: BrandCardSectionProps) {
   return (
-    <div className={`${divider ? 'border-t border-slate-100 pt-4 mt-4' : ''} ${className}`}>
+    <div className={cn(divider ? 'border-t border-slate-100/50 pt-4 mt-4' : '', className)}>
       {children}
     </div>
   );
@@ -82,21 +84,30 @@ export default function BrandCard({
   onClick,
   style,
 }: BrandCardProps) {
-  const baseBg = variant === 'glass' 
-    ? 'bg-white/40 backdrop-blur-xl shadow-glass' 
-    : 'bg-white/80 backdrop-blur-[12px] shadow-[0_2px_8px_rgba(0,0,0,0.03)]';
+  
+  const getVariantClasses = () => {
+    switch (variant) {
+      case 'glass':
+        return 'glass-panel shadow-glass';
+      case 'hologram':
+        return 'glass-cyber-hologram z-layer-2';
+      case 'liquid':
+        return 'glass-panel-refined shadow-xl';
+      default:
+        return 'bg-white/90 backdrop-blur-md shadow-sm border border-slate-100';
+    }
+  };
 
   return (
     <div
-      className={`
-        ${baseBg} rounded-xl
-        ${border && variant !== 'glass' ? 'border border-slate-100' : ''}
-        ${border && variant === 'glass' ? 'border border-white/60' : ''}
-        ${paddingStyles[padding]}
-        ${hover ? 'hover:shadow-glass-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer' : 'transition-all duration-300'}
-        ${onClick ? 'cursor-pointer' : ''}
-        ${className}
-      `}
+      className={cn(
+        'rounded-[2rem] transition-all duration-300',
+        getVariantClasses(),
+        paddingStyles[padding],
+        hover && 'hover:scale-[1.01] hover:shadow-extreme cursor-pointer',
+        onClick && 'cursor-pointer active:scale-95',
+        className
+      )}
       onClick={onClick}
       style={style}
     >

@@ -2,6 +2,7 @@
 import { Suspense } from 'react';
 import './globals.css';
 import ClientLayout from './ClientLayout';
+import { AuthProvider } from '../components/AuthProvider';
 
 export const metadata: Metadata = {
   title: {
@@ -49,7 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Suspense fallback={<LoadingFallback />}>
-          <ClientLayout>{children}</ClientLayout>
+          <AuthProvider>
+            <ClientLayout>{children}</ClientLayout>
+          </AuthProvider>
         </Suspense>
       </body>
     </html>

@@ -134,7 +134,7 @@ export class GlobalHealing implements IGlobalHealing {
         const diffResult = StateDiffEngine.compare(currentTruth, snapshot);
 
         if (diffResult.isAligned) {
-          logs.push(`[一致] 節點 ${node.platform} (${node.id}) 與 GPL 真理狀態完全契合，無需撫平。`);
+          logs.push(`[一致] 與 GPL 真理狀態完全契合，無需撫平。`);
         } else {
           logs.push(`[偏離] 檢測到數據偏差！嚴重程度: ${diffResult.severity}`);
           logs.push(`  - 差異詳情: ${JSON.stringify(diffResult.differences)}`);

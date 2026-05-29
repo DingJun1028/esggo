@@ -1,6 +1,6 @@
-import { sha256, generateNonce } from '../crypto-proof';
-import type { IComponentCore, IEvidence, IRestorationProtocol, RestorationInput } from '../../src/shared/types';
-import { engraveToSingleTable, verifyRecord } from '../vault-omni';
+import { sha256, generateNonce } from '../crypto-proof.ts';
+import type { IComponentCore, IEvidence, IRestorationProtocol, RestorationInput } from '../../src/shared/types/index';
+import { engraveToSingleTable, verifyRecord } from '../vault-omni.ts';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -17,7 +17,7 @@ export class IntegrityModule implements IRestorationProtocol {
    */
   public extractQuantumEssence(data: RestorationInput): Partial<IEvidence> {
     console.log(`[第一式：本質提純] 正在從數據源中提取 5T 維度...`);
-    const originCause = String(data.originCause || data.trigger || 'Manual Execution');
+    const originCause = String(data.originCause || data.trigger || data.source || 'Manual Execution');
     
     return {
       originCause,
@@ -252,7 +252,7 @@ export class IntegrityModule implements IRestorationProtocol {
     
     // 啟動深層校驗：比對聖碑資料 (T5)
     console.log(`[真理校驗] 啟動深層校驗：比對聖碑資料...`);
-    const isDbValid = await verifyRecord(crystal.uuid, crystal.hash_lock);
+    const isDbValid = await verifyRecord(crystal.uuid);
 
     const isValid = isMemoryValid && isDbValid;
 

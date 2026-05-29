@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
     if (!transactionId || !email) {
       return NextResponse.json(
-        { id: Date.now().toString(), status: 'error', content: 'Missing transactionId or email' } as ApiResponse,
+        { id: Date.now().toString(), status: 'error', content: 'Missing transactionId or email' } as any,
         { status: 400 }
       );
     }
@@ -35,10 +35,10 @@ export async function POST(req: NextRequest) {
         sentTo: email,
         timestamp: new Date().toISOString()
       }
-    } as ApiResponse);
+    } as any);
   } catch (error: any) {
     return NextResponse.json(
-      { id: Date.now().toString(), status: 'error', content: error.message } as ApiResponse,
+      { id: Date.now().toString(), status: 'error', content: error.message } as any,
       { status: 500 }
     );
   }

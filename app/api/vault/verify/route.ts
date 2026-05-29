@@ -1,7 +1,7 @@
 // app/api/vault/verify/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '../../../../lib/supabase/server';
-import { ApiResponse } from '@/src/shared/types';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 import { randomUUID, createHash } from 'crypto';
 
 /**
@@ -16,11 +16,10 @@ export async function POST(request: NextRequest) {
     const { uuid } = body;
 
     if (!uuid) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: { code: 'MISSING_PARAMETER', message: '缺少參數：uuid' },
-        meta: { timestamp: Date.now(), requestId },
-      }, { status: 400 });
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('MISSING_PARAMETER', '缺少參數：uuid'),
+        { status: 400 }
+      );
     }
 
     const supabase = await createServerClient();
@@ -32,11 +31,10 @@ export async function POST(request: NextRequest) {
 
     const data = rawData as any;
     if (error || !data) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: { code: 'NOT_FOUND', message: '證據不存在' },
-        meta: { timestamp: Date.now(), requestId },
-      }, { status: 404 });
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('NOT_FOUND', '證據不存在'),
+        { status: 404 }
+      );
     }
 
     const dataToHash = {
@@ -52,9 +50,8 @@ export async function POST(request: NextRequest) {
 
     const isValid = computedHash === data.hash_lock;
 
-    return NextResponse.json<ApiResponse>({
-      success: true,
-      data: {
+    return NextResponse.json<ApiResponse>(createSuccessResponse(
+      {
         uuid: data.uuid,
         isValid,
         storedHash: data.hash_lock,
@@ -62,14 +59,13 @@ export async function POST(request: NextRequest) {
         verifiedAt: new Date().toISOString(),
         message: isValid ? '驗證通過' : '數據已被篡改！',
       },
-      meta: { timestamp: Date.now(), requestId },
-    });
+      { request_id: requestId }
+    ));
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : '驗證過程中發生未知的伺服器內部錯誤';
-    return NextResponse.json<ApiResponse>({
-      success: false,
-      error: { code: 'VERIFICATION_FAILED', message: errorMessage },
-      meta: { timestamp: Date.now(), requestId },
-    }, { status: 500 });
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('VERIFICATION_FAILED', errorMessage),
+      { status: 500 }
+    );
   }
 }

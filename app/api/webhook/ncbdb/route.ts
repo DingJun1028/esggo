@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
     const expectedSignature = createHash('sha256').update(`${payloadString}${secret}`).digest('hex');
     
     const isVerified = timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedSignature)
+      new Uint8Array(Buffer.from(signature)),
+      new Uint8Array(Buffer.from(expectedSignature))
     );
 
     if (!isVerified) {

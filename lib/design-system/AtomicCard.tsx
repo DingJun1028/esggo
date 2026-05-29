@@ -8,20 +8,21 @@
 import React from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 
-export interface AtomicCardProps extends HTMLMotionProps<"div"> {
+export interface AtomicCardProps extends Omit<HTMLMotionProps<"div">, 'children'> {
+  children?: React.ReactNode;
   hoverEffect?: 'lift' | 'glow' | 'none';
   glassIntensity?: 'light' | 'medium' | 'heavy';
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-export const AtomicCard: React.FC<AtomicCardProps> = ({ 
+export const AtomicCard = React.forwardRef<HTMLDivElement, AtomicCardProps>(({ 
   children, 
   className = '', 
   hoverEffect = 'lift',
   glassIntensity = 'medium',
   padding = 'lg',
   ...props 
-}) => {
+}, ref) => {
   
   const baseStyles = "relative overflow-hidden border border-[var(--at-border)] shadow-[var(--at-shadow)] rounded-[2rem]";
   
@@ -51,6 +52,7 @@ export const AtomicCard: React.FC<AtomicCardProps> = ({
 
   return (
     <motion.div
+      ref={ref as any}
       whileHover={hoverEffect}
       variants={{
         lift: hoverVariants.lift,
@@ -65,4 +67,6 @@ export const AtomicCard: React.FC<AtomicCardProps> = ({
       {children}
     </motion.div>
   );
-};
+});
+
+AtomicCard.displayName = 'AtomicCard';

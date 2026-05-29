@@ -8,13 +8,21 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  serverExternalPackages: ['sharp', 'firebase-admin', '@genkit-ai/googleai', '@grpc/grpc-js', '@opentelemetry/sdk-node'],
+  serverExternalPackages: [
+    'sharp',
+    'firebase-admin',
+    '@genkit-ai/googleai',
+    '@grpc/grpc-js',
+    '@opentelemetry/sdk-node',
+    '@opentelemetry/otlp-grpc-exporter-base',
+    '@opentelemetry/exporter-trace-otlp-grpc',
+    '@opentelemetry/otlp-exporter-base',
+    '@opentelemetry/otlp-http-exporter'
+  ],
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
   webpack: (config) => {
-    // 萬能修復 (Universal Fix): Suppress CaseSensitivePathsPlugin warnings 
-    // caused by Windows drive letter casing mismatches (e.g., c:\ vs C:\)
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),
       { module: /node_modules\/@firebase/ },
@@ -22,6 +30,21 @@ const nextConfig: NextConfig = {
       { module: /node_modules\/idb/ },
       /There are multiple modules with names that only differ in casing/
     ];
+
+    if (!config.resolve) config.resolve = {};
+    if (!config.resolve.fallback) config.resolve.fallback = {};
+    Object.assign(config.resolve.fallback, {
+      net: false,
+      tls: false,
+      fs: false,
+      http2: false,
+      http: false,
+      https: false,
+      zlib: false,
+      stream: false,
+      crypto: false,
+    });
+
     return config;
   },
 };

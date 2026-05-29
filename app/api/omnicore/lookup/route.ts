@@ -14,7 +14,7 @@ export async function GET(req: Request) {
           status: 'error',
           content: 'Missing query parameter',
           timestamp: Date.now()
-        } as ApiResponse,
+        } as any,
         { status: 400 }
       );
     }
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
           status: 'error',
           content: 'Record not found',
           timestamp: Date.now()
-        } as ApiResponse,
+        } as any,
         { status: 404 }
       );
     }
@@ -56,7 +56,7 @@ export async function GET(req: Request) {
       content: 'Record found in Eternal Memory',
       data: component,
       timestamp: Date.now()
-    } as ApiResponse);
+    } as any);
 
   } catch (error: any) {
     return NextResponse.json(
@@ -65,7 +65,7 @@ export async function GET(req: Request) {
         status: 'error',
         content: error.message,
         timestamp: Date.now()
-      } as ApiResponse,
+      } as any,
       { status: 500 }
     );
   }

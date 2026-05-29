@@ -1,7 +1,7 @@
 // app/api/vault/read/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '../../../../lib/supabase/server';
-import { ApiResponse } from '@/src/shared/types';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 import { randomUUID } from 'crypto';
 
 /**
@@ -15,11 +15,10 @@ export async function GET(request: NextRequest) {
 
   try {
     if (!uuid) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: { code: 'MISSING_PARAMETER', message: '缺少參數：uuid' },
-        meta: { timestamp: Date.now(), requestId },
-      }, { status: 400 });
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('MISSING_PARAMETER', '缺少參數：uuid'),
+        { status: 400 }
+      );
     }
 
     const supabase = await createServerClient();
@@ -31,16 +30,14 @@ export async function GET(request: NextRequest) {
 
     const data = rawData as any;
     if (error || !data) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: { code: 'NOT_FOUND', message: '證據不存在' },
-        meta: { timestamp: Date.now(), requestId },
-      }, { status: 404 });
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('NOT_FOUND', '證據不存在'),
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json<ApiResponse>({
-      success: true,
-      data: {
+    return NextResponse.json<ApiResponse>(createSuccessResponse(
+      {
         uuid: data.uuid,
         timestamp: data.timestamp,
         formula: data.formula,
@@ -51,13 +48,12 @@ export async function GET(request: NextRequest) {
         metadata: data.metadata,
         createdAt: data.created_at,
       },
-      meta: { timestamp: Date.now(), requestId },
-    });
+      { request_id: requestId }
+    ));
   } catch (error: any) {
-    return NextResponse.json<ApiResponse>({
-      success: false,
-      error: { code: 'INTERNAL_ERROR', message: error.message || '讀取失敗' },
-      meta: { timestamp: Date.now(), requestId },
-    }, { status: 500 });
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('INTERNAL_ERROR', error.message || '讀取失敗'),
+      { status: 500 }
+    );
   }
 }

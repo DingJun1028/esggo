@@ -1,6 +1,7 @@
-import { ADKAgent, ADKSwarm } from './adk-core';
+import { ADKAgent, ADKSwarm, AgentConfig } from './adk-core';
 import { ai } from './genkit';
 import { createHash } from 'crypto';
+import { negotiationEngine } from '../negotiation/engine';
 import { saveSustainWriteSection } from '../dataconnect-memory';
 
 const GRI_CHAPTERS = [
@@ -66,9 +67,9 @@ export interface MissionResult {
  * OmniAgent: Supreme Commander
  */
 export class OmniCommander extends ADKAgent {
-  private swarm: ADKSwarm;
+  private swarm: any; // CollaborativeADKSwarm
 
-  constructor(swarm: ADKSwarm) {
+  constructor(swarm: any) {
     super({
       name: 'OmniAgent',
       role: 'Supreme Commander of the ESG GO Platform',
@@ -101,8 +102,36 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     try {
       const planResponse = await this.run(`Create an execution plan for: ${task}`, context);
       omniAgentBus.publish('COMMAND_ISSUED', { task, plan: planResponse.output });
-      const swarmResults = await this.swarm.broadcast(task, context);
+
+      // Use swarm collaboration with consensus
+      const swarmResults = await this.swarm.collaborate(task, context);
       
+      // High-stakes tasks require negotiation
+      if (task.includes('audit') || task.includes('SEAL') || task.includes('VERIFY')) {
+        const negotiation = await negotiationEngine.negotiate(task, [
+          { agent: 'ESG_Auditor', result: swarmResults.ESG_Auditor, success: true },
+          { agent: 'ESG_Researcher', result: swarmResults.ESG_Researcher, success: true },
+          { agent: 'ESG_Strategist', result: swarmResults.ESG_Strategist, success: true }
+        ]);
+
+        if (negotiation.consensus) {
+          return {
+            success: true,
+            message: 'Command executed with consensus',
+            commanderOutput: planResponse.output,
+            swarmResults,
+            negotiation
+          };
+        } else {
+          return {
+            success: false,
+            message: 'Command failed: no consensus reached',
+            swarmResults,
+            negotiation
+          };
+        }
+      }
+
       return {
         success: true,
         message: 'Command executed successfully',

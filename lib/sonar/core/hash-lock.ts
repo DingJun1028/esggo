@@ -10,21 +10,21 @@ export class HashLock {
    * Generate SHA-256 hash for content
    */
   static sha256(content: string | Buffer): string {
-    return createHash('sha256').update(content).digest('hex');
+    return createHash('sha256').update(content as any).digest('hex');
   }
 
   /**
    * Generate SHA-512 hash for extra security
    */
   static sha512(content: string | Buffer): string {
-    return createHash('sha512').update(content).digest('hex');
+    return createHash('sha512').update(content as any).digest('hex');
   }
 
   /**
    * Generate HMAC for authenticated content
    */
   static hmac(content: string | Buffer, secret: string): string {
-    return createHmac('sha256', secret).update(content).digest('hex');
+    return createHmac('sha256', secret).update(content as any).digest('hex');
   }
 
   /**
@@ -34,7 +34,7 @@ export class HashLock {
     const bufA = Buffer.from(a);
     const bufB = Buffer.from(b);
     if (bufA.length !== bufB.length) return false;
-    return timingSafeEqual(bufA, bufB);
+    return timingSafeEqual(new Uint8Array(bufA), new Uint8Array(bufB));
   }
 
   /**

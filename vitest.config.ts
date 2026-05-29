@@ -33,6 +33,17 @@ export default defineConfig({
             ".firebase",
             ".kilo",
           ],
+          coverage: {
+            provider: "v8",
+            // json-summary 格式是給 GitHub Actions 機器人讀取生成精美表格用的
+            reporter: ["text", "json-summary", "html"],
+            thresholds: {
+              lines: 80,
+              functions: 80,
+              branches: 80,
+              statements: 80,
+            },
+          },
         },
       },
       {

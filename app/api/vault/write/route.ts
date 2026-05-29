@@ -2,7 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { UCCEngine } from '../../../../lib/ucc-engine';
 import { getAuthenticatedUser, createServerClient } from '../../../../lib/supabase/server';
-import { EvidenceInput, ApiResponse } from '@/src/shared/types';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
+import { SealInput } from '@/src/shared/types/ucc.types';
 import { randomUUID } from 'crypto';
 
 /**
@@ -14,20 +15,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const user = await getAuthenticatedUser();
-    const body: EvidenceInput = await request.json();
+    const body: SealInput = await request.json();
 
     if (!body.formula || !body.impactMetric || !body.sourceOrigin) {
-      return NextResponse.json<ApiResponse>({
-        success: false,
-        error: {
-          code: 'INVALID_INPUT',
-          message: '缺少必要欄位：formula, impactMetric, sourceOrigin',
-        },
-        meta: {
-          timestamp: Date.now(),
-          requestId,
-        },
-      }, { status: 400 });
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('INVALID_INPUT', '缺少必要欄位：formula, impactMetric, sourceOrigin'),
+        { status: 400 }
+      );
     }
 
     const engine = new UCCEngine();
@@ -51,27 +45,16 @@ export async function POST(request: NextRequest) {
       newData: evidence,
     });
 
-    return NextResponse.json<ApiResponse>({
-      success: true,
-      data: evidence,
-      meta: {
-        timestamp: Date.now(),
-        requestId,
-      },
-    }, { status: 201 });
+    return NextResponse.json<ApiResponse>(
+      createSuccessResponse(evidence),
+      { status: 201 }
+    );
 
   } catch (error: any) {
-    return NextResponse.json<ApiResponse>({
-      success: false,
-      error: {
-        code: 'INTERNAL_ERROR',
-        message: error.message || '寫入失敗',
-      },
-      meta: {
-        timestamp: Date.now(),
-        requestId,
-      },
-    }, { status: 500 });
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('INTERNAL_ERROR', error.message || '寫入失敗'),
+      { status: 500 }
+    );
   }
 }
 

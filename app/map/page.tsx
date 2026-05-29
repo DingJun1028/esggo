@@ -21,6 +21,10 @@ import {
 } from 'lucide-react';
 import { AtomicLibraryProvider } from '@/lib/design-system/AtomicLibraryProvider';
 import { AtomicButton } from '@/lib/design-system/AtomicButton';
+import { AtomicCard } from '@/lib/design-system/AtomicCard';
+import { AtomicBadge } from '@/lib/design-system/AtomicBadge';
+import useSWR from 'swr';
+import { swrFetcher } from '@/lib/swr-fetcher';
 
 /** 
  * MECE 全端組成數據 (Exhaustive & Mutually Exclusive)
@@ -102,13 +106,15 @@ const CompositionNode = ({ layer, index }: { layer: typeof SYSTEM_COMPOSITION[0]
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <motion.div 
+    <AtomicCard
       layout
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1 }}
-      className={`relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br ${layer.color} backdrop-blur-[var(--at-glass-blur)] border border-[var(--at-border)] p-8 shadow-[var(--at-shadow)] group cursor-pointer`}
+      className={`group cursor-pointer bg-gradient-to-br ${layer.color}`}
       onClick={() => setIsOpen(!isOpen)}
+      hoverEffect="glow"
+      padding="lg"
     >
       <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 blur-3xl -mr-20 -mt-20 group-hover:bg-white/10 transition-all duration-500" />
       
@@ -153,22 +159,34 @@ const CompositionNode = ({ layer, index }: { layer: typeof SYSTEM_COMPOSITION[0]
       {!isOpen && (
         <div className="mt-6 flex gap-2 relative z-10">
            {layer.components.slice(0, 3).map((c, i) => (
-             <span key={i} className="text-[9px] font-black uppercase px-2 py-1 rounded-full bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] text-[var(--at-text-sub)]">
+             <AtomicBadge key={i} size="sm" tone="neutral">
                {c.name}
-             </span>
+             </AtomicBadge>
            ))}
            {layer.components.length > 3 && (
-             <span className="text-[9px] font-black px-2 py-1 rounded-full bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] text-[var(--at-text-sub)]">
+             <AtomicBadge size="sm" tone="accent">
                +{layer.components.length - 3}
-             </span>
+             </AtomicBadge>
            )}
         </div>
       )}
-    </motion.div>
+    </AtomicCard>
   );
 };
 
-export const OmniMapV2: React.FC = () => {
+const OmniMapV2: React.FC = () => {
+  const { data: telemetry } = useSWR<{
+    integrityScore: number;
+    activeAgents: number;
+    codexEntries: number;
+  }>('/api/system/health', swrFetcher, {
+    refreshInterval: 3000,
+  });
+
+  const integrityScore = telemetry?.integrityScore ?? 90;
+  const activeAgents = telemetry?.activeAgents ?? 1;
+  const codexEntries = telemetry?.codexEntries ?? 30;
+
   return (
     <div className="p-8 md:p-16 max-w-[1600px] mx-auto space-y-16">
       <header className="flex flex-col md:flex-row items-center justify-between gap-12">
@@ -192,18 +210,20 @@ export const OmniMapV2: React.FC = () => {
         {/* Quick Stats Bento Small */}
         <div className="grid grid-cols-2 gap-4 w-full md:w-[400px]">
            <div className="p-6 rounded-[2rem] bg-[var(--at-bg-glass)] border border-[var(--at-border)] text-center space-y-1">
-              <p className="text-3xl font-black text-[var(--at-text-main)]">30+</p>
+              <p className="text-3xl font-black text-[var(--at-text-main)]">{codexEntries}+</p>
               <p className="text-[10px] font-bold text-[var(--at-text-sub)] uppercase tracking-widest">法典條目</p>
            </div>
-           <div className="p-6 rounded-[2rem] bg-[var(--at-bg-glass)] border border-[var(--at-border)] text-center space-y-1">
-              <p className="text-3xl font-black text-emerald-500">90%</p>
+           <div className="p-6 rounded-[2rem] bg-[var(--at-bg-glass)] border border-[var(--at-border)] text-center space-y-1 transition-all duration-500 relative overflow-hidden">
+              <motion.div key={integrityScore} initial={{ scale: 1.2, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="absolute inset-0 bg-emerald-500/10" />
+              <p className="text-3xl font-black text-emerald-500">{integrityScore}%</p>
               <p className="text-[10px] font-bold text-[var(--at-text-sub)] uppercase tracking-widest">誠信得分</p>
            </div>
-           <div className="p-6 rounded-[2rem] bg-[var(--at-bg-glass)] border border-[var(--at-border)] text-center space-y-1 col-span-2 flex items-center justify-center gap-4">
+           <div className="p-6 rounded-[2rem] bg-[var(--at-bg-glass)] border border-[var(--at-border)] text-center space-y-1 col-span-2 flex items-center justify-center gap-4 relative overflow-hidden">
+              <motion.div key={activeAgents} initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="absolute inset-0 bg-amber-500/5" />
               <Cpu size={24} className="text-amber-400" />
               <div className="text-left">
                 <p className="text-lg font-black text-[var(--at-text-main)]">OmniAgent</p>
-                <p className="text-[9px] font-bold text-[var(--at-text-sub)] uppercase tracking-widest">Supreme Commander Live</p>
+                <p className="text-[9px] font-bold text-[var(--at-text-sub)] uppercase tracking-widest">Live Agents: {activeAgents}</p>
               </div>
            </div>
         </div>

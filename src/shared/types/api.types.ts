@@ -38,6 +38,13 @@ export interface ResponseMetadata {
   hash_lock?: string;
   /** 全域追蹤識別碼 (Trace ID / Request ID) */
   trace_id?: string;
+  /** 分頁資訊 */
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export interface RateLimitInfo {

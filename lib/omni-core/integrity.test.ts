@@ -20,7 +20,7 @@ describe('OmniCoreIntegrity Module - 5T State Machine Validation', () => {
 
     // 1. Traceable (可溯源)
     expect(crystal.uuid).toBeDefined();
-    expect(crystal.evidence[0].originCause).toBe('/Energy Bills 2025');
+    expect(crystal.evidence[0].originCause).toBe('Energy Bills 2025');
 
     // 2. Transparent (可透明)
     expect(crystal.formula).toBe('ISO-14064-1:2018');
@@ -40,8 +40,7 @@ describe('OmniCoreIntegrity Module - 5T State Machine Validation', () => {
     // Verify object is frozen
     expect(Object.isFrozen(crystal)).toBe(true);
     
-    // @ts-ignore
-    expect(() => { crystal.impact_metric = 'Modified'; }).toThrow();
+    expect(() => { (crystal as any).impact_metric = 'Modified'; }).toThrow();
   });
 
   it('should pass verification for an untampered crystal', async () => {

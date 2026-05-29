@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    # If you have a .env file, uncomment the next line
+    # env_file: .env

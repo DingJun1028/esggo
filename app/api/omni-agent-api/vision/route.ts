@@ -1,40 +1,26 @@
 import { NextResponse } from 'next/server';
 import { scanEvidenceWithVision } from '@/lib/omni-gateway';
-import { ApiResponse } from '@/src/shared/types';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 
 export async function POST(req: Request) {
   try {
     const { fileId, fileType } = await req.json();
 
     if (!fileId) {
-      return NextResponse.json(
-        {
-          id: Date.now().toString(),
-          status: 'error',
-          content: 'Missing fileId for vision scanning',
-          timestamp: Date.now(),
-        } as ApiResponse,
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('MISSING_FILE_ID', 'Missing fileId for vision scanning'),
         { status: 400 }
       );
     }
 
     const result = await scanEvidenceWithVision(fileId, fileType || 'image/jpeg');
 
-    return NextResponse.json({
-      id: Date.now().toString(),
-      status: 'success',
-      content: 'OmniAgent Vision analysis complete.',
-      data: result,
-      timestamp: Date.now(),
-    } as ApiResponse);
+    return NextResponse.json<ApiResponse>(
+      createSuccessResponse(result)
+    );
   } catch (error: any) {
-    return NextResponse.json(
-      {
-        id: Date.now().toString(),
-        status: 'error',
-        content: error.message || 'OmniAgent Vision scanning failed',
-        timestamp: Date.now(),
-      } as ApiResponse,
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('VISION_FAILED', error.message || 'OmniAgent Vision scanning failed'),
       { status: 500 }
     );
   }

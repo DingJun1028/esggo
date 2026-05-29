@@ -187,7 +187,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     
     // 如果是報告生成任務，啟動真正的「蜂群調度 (Swarm Delegation)」
     let artifactData;
-    if (task.taskType === 'report_generation') {
+    if (task.taskType === 'report_drafting') {
       console.log(`[Swarm Orchestrator] Breaking down task ${taskId} into sub-agents...`);
       
       // 模擬並行派遣三個 Agent

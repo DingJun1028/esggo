@@ -1,7 +1,7 @@
 // app/api/vault/stats/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '../../../../lib/supabase/server';
-import { ApiResponse } from '@/src/shared/types';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 import { randomUUID } from 'crypto';
 
 /**
@@ -50,21 +50,19 @@ export async function GET(request: NextRequest) {
 
     if (recentError) throw recentError;
 
-    return NextResponse.json<ApiResponse>({
-      success: true,
-      data: {
+    return NextResponse.json<ApiResponse>(createSuccessResponse(
+      {
         total: totalCount || 0,
         recentAdded: recentCount || 0,
         byLifecycleStage: lifecycleStats || {},
         bySourceOrigin: sourceStats || {},
       },
-      meta: { timestamp: Date.now(), requestId },
-    });
+      { request_id: requestId }
+    ));
   } catch (error: any) {
-    return NextResponse.json<ApiResponse>({
-      success: false,
-      error: { code: 'INTERNAL_ERROR', message: error.message || '統計失敗' },
-      meta: { timestamp: Date.now(), requestId },
-    }, { status: 500 });
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('INTERNAL_ERROR', error.message || '統計失敗'),
+      { status: 500 }
+    );
   }
 }

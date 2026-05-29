@@ -17,6 +17,7 @@ import { Badge } from '../../components/ui/Badge';
 import { BrandT5Strip, BrandStatusDot } from '../../components/brand';
 import { EXPERT_SACRED_TEMPLATES } from '../../lib/genkit-esg';
 import { supabase } from '../../lib/supabase';
+import { useExport } from '../../hooks/useExport';
 
 // ── GRI Master Schema (20+ Chapters) ───────────────────────────────────────
 interface Chapter {
@@ -61,6 +62,7 @@ export default function EditorPage() {
     generatedContent, fieldValues, chapterStatuses, 
     updateContent, updateFieldValue, updateChapterStatus, loading: memoryLoading 
   } = useSustainWriteMemory();
+  const { exportDocx, exportPdf } = useExport();
 
   const [selectedChapterId, setSelectedChapterId] = useState<string>('general');
   const [selectedPersona, setSelectedPersona] = useState<'compliance' | 'harmony' | 'innovation'>('compliance');
@@ -68,7 +70,7 @@ export default function EditorPage() {
   const [genProgress, setGenProgress] = useState<{ step: number; total: number; label: string }>({ step: 0, total: 5, label: '' });
   const [dataGaps, setDataGaps] = useState<{ field: string; expected: string }[]>([]);
   const [sealing, setSealing] = useState(false);
-  const [activePanel, setActivePanel] = useState<'write' | 'data' | 'preview'>('write');
+  const [activePanel, setActivePanel] = useState<'write' | 'data' | 'preview' | 'ai-tools'>('write');
   const [navCollapsed, setNavCollapsed] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' | 'info' } | null>(null);
 
@@ -80,7 +82,7 @@ export default function EditorPage() {
     setTimeout(() => setToast(null), 3500);
   }, []);
 
-  const handleGenerate = async (wordCount: number = 5000) => {
+  const handleGenerate = async (wordCount: number = 20000) => {
     setGenerating(true);
     setGenProgress({ step: 1, total: 5, label: '正在構思深度大綱...' });
     const progressTimer = setInterval(() => {
@@ -118,7 +120,7 @@ export default function EditorPage() {
     }
   };
 
-  const handleRecursiveExpand = () => handleGenerate(5000);
+  const handleRecursiveExpand = () => handleGenerate(20000);
 
   const handleAutoPopulate = async () => {
     setGenerating(true);
@@ -175,8 +177,16 @@ export default function EditorPage() {
   };
 
   const applyExpertTemplate = () => {
-    const templateId = chapter.id === 'general' ? 'general' : chapter.id === 'emissions' ? 'emissions' : chapter.id;
-    const template = EXPERT_SACRED_TEMPLATES[templateId] || `# ${chapter.title}\n\n[Zero-Compute Expert Framework]\n\n`;
+    let template = EXPERT_SACRED_TEMPLATES[chapter.id];
+    if (!template) {
+      template = `# ${chapter.title} (零算力專家模板 v2.0 - 2萬字深度架構)\n\n`;
+      for (let i = 1; i <= 5; i++) {
+        template += `## 第${i}節：${chapter.title}之深度管理方針與績效探討 (目標字數：4000字)\n`;
+        template += `[${chapter.gri}] 本章節致力於探討在 ${chapter.title} 領域的核心影響力與戰略方針。\n`;
+        template += `【OmniAgent 擴充區塊 ${String.fromCharCode(64+i)}：請極度深入解析政策實施背景、法規趨勢、利害關係人議合過程、實際量化指標、以及未來短中長期修正方案。需至少擴寫至 4000 字以達成本節深度目標。】\n\n`;
+      }
+      template += `---\n> 💡 專家提示：此零算力模板已內建 5 段論述架構。請點擊「文章增長」，OmniAgent 將自動將各區塊擴充至 4000 字級別之專業深度，達成單章 2 萬字目標。`;
+    }
     updateContent(chapter.id, template, chapter.title, chapter.order, [chapter.gri]);
     showToast('已載入零算力專家模板', 'info');
   };
@@ -247,6 +257,22 @@ export default function EditorPage() {
             </div>
             <BrandStatusDot status="active" pulse size="md" />
           </div>
+          <Button 
+            variant="ghost" 
+            size="md" 
+            onClick={() => exportDocx(CHAPTERS, generatedContent, showToast)} 
+            className="rounded-xl px-4 font-black text-xs tracking-wider transition-all duration-300 border backdrop-blur-md bg-white hover:bg-cyan-50 border-cyan-200 text-cyan-600 shadow-[0_0_15px_rgba(6,182,212,0.15)] active:scale-95"
+          >
+            <Download size={14} className="mr-2" /> Docx 匯出
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="md" 
+            onClick={() => exportPdf(CHAPTERS, generatedContent, showToast)} 
+            className="rounded-xl px-4 font-black text-xs tracking-wider transition-all duration-300 border backdrop-blur-md bg-white hover:bg-emerald-50 border-emerald-200 text-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.15)] active:scale-95"
+          >
+            <Download size={14} className="mr-2" /> PDF 匯出
+          </Button>
           <Button 
             variant="ghost" 
             size="md" 
@@ -364,17 +390,17 @@ export default function EditorPage() {
                 <CardContent className="p-6 space-y-6">
                   <div className="space-y-3">
                     <p className="text-xs text-[var(--at-text-sub)] font-medium leading-relaxed">
-                      啟動 OmniAgent 雙重遞迴展開，強制將單一章節擴充至 <span className="font-bold text-amber-500">5,000+ 字元</span> 之專家級洞察。
+                      啟動 OmniAgent 雙重遞迴展開，強制將單一章節擴充至 <span className="font-bold text-amber-500">20,000+ 字元</span> 之專家級洞察。
                     </p>
                     
                     <div className="pt-4 space-y-3">
                       <Button 
                         variant="primary" 
                         className="w-full h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white border-none rounded-2xl font-black text-xs tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.3)] active:scale-[0.98] transition-all" 
-                        onClick={() => handleGenerate(5000)} 
+                        onClick={() => handleGenerate(20000)} 
                         isLoading={generating}
                       >
-                        <Sparkles size={16} className="mr-2 text-orange-100 animate-pulse" /> 啟動 Depth 3 專家撰寫
+                        <Sparkles size={16} className="mr-2 text-orange-100 animate-pulse" /> 啟動 Depth 5 專家撰寫 (2萬字)
                       </Button>
                     </div>
                   </div>
@@ -622,7 +648,7 @@ export default function EditorPage() {
                           </div>
                           <div className="flex items-center gap-3 text-cyan-600/60">
                             <RefreshCw size={14} className="animate-spin" />
-                            <p className="text-[8px] font-bold uppercase tracking-wider">目標：5000 字專家級深度撰寫</p>
+                            <p className="text-[8px] font-bold uppercase tracking-wider">目標：至少 20,000 字專家級深度撰寫</p>
                           </div>
                         </div>
                         <Zap size={140} className="absolute -bottom-10 -right-10 text-slate-100 rotate-12" />
@@ -635,12 +661,20 @@ export default function EditorPage() {
                   <BrandT5Strip items={['T1','T2','T3','T4','T5'].map((t, i) => ({ code: t as any, active: isSealed || i < 3 }))} />
                   <div className="flex items-center gap-8">
                     <div className="text-right">
-                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Total Words</p>
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Chapter Words</p>
                       <p className="text-md font-black text-cyan-600 font-mono">{(generatedContent[chapter.id] || '').length.toLocaleString()}</p>
                     </div>
                     <div className="text-right border-l border-slate-200 pl-8">
-                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">A4 Pages (Est.)</p>
-                      <p className="text-md font-black text-cyan-600 font-mono">{Math.ceil((generatedContent[chapter.id] || '').length / 1200)} / 250</p>
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Global Words</p>
+                      <p className="text-md font-black text-cyan-600 font-mono">
+                        {Object.values(generatedContent).reduce((acc, text) => acc + (text?.length || 0), 0).toLocaleString()} / 300,000
+                      </p>
+                    </div>
+                    <div className="text-right border-l border-slate-200 pl-8">
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Total Pages</p>
+                      <p className="text-md font-black text-emerald-600 font-mono">
+                        {Math.ceil(Object.values(generatedContent).reduce((acc, text) => acc + (text?.length || 0), 0) / 1200)} / 250
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -1,92 +1,102 @@
-﻿'use client';
-import { useState, useMemo } from 'react';
+'use client';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   CheckCircle, Circle, AlertCircle, Search, Filter,
   ChevronDown, ChevronRight, Shield, Hash, FileText,
-  Download, BarChart3, Leaf, Users, Building2, Globe, Sparkles, RefreshCw, ArrowUpRight, CheckCircle2, Info, X, Clock
+  Download, BarChart3, Leaf, Users, Building2, Globe, Sparkles, RefreshCw, ArrowUpRight, CheckCircle2, Info, X, Clock, Zap, ShieldCheck
 } from 'lucide-react';
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface GRIItem {
-  code: string;
-  title: string;
-  titleZh: string;
-  category: 'universal' | 'environmental' | 'social' | 'governance';
-  required: boolean;
-  status: 'completed' | 'in_progress' | 'pending' | 'na';
-  completeness: number;
-  dataPoints: string[];
-  evidenceRequired: string[];
-  formula?: string;
-  unit?: string;
-  notes: string;
-}
-
-const GRI_ITEMS: GRIItem[] = [
-  // Universal Standards
-  { code: 'GRI 2-1', title: 'Organizational details', titleZh: '組織詳情', category: 'universal', required: true, status: 'completed', completeness: 100, dataPoints: ['法定名稱', '所有權性質', '法律型態', '總部所在地'], evidenceRequired: ['公司登記證明', '年報封面'], notes: '已完成' },
-  { code: 'GRI 2-2', title: 'Entities included in the organization\'s sustainability reporting', titleZh: '永續報告涵蓋實體', category: 'universal', required: true, status: 'completed', completeness: 100, dataPoints: ['合併報告範疇', '子公司清單', '排除說明'], evidenceRequired: ['組織架構圖', '子公司清單'], notes: '' },
-  { code: 'GRI 2-3', title: 'Reporting period, frequency and contact point', titleZh: '報告期間、頻率與聯絡點', category: 'universal', required: true, status: 'completed', completeness: 100, dataPoints: ['報告期間', '發布日期', '聯絡資訊'], evidenceRequired: ['報告書封面'], notes: '' },
-  { code: 'GRI 2-5', title: 'External assurance', titleZh: '外部確信', category: 'universal', required: true, status: 'in_progress', completeness: 60, dataPoints: ['確信機構名稱', '確信範圍', '確信聲明'], evidenceRequired: ['第三方查證報告'], notes: '等待查證機構回覆' },
-  { code: 'GRI 2-7', title: 'Employees', titleZh: '員工', category: 'universal', required: true, status: 'in_progress', completeness: 75, dataPoints: ['全職員工數', '兼職員工數', '男性員工數', '女性員工數'], evidenceRequired: ['人資系統報表', '薪資冊'], formula: '員工總數 = 全職人數 + 兼職人數', unit: '人', notes: '兼職數據待確認' },
-  { code: 'GRI 2-9', title: 'Governance structure and composition', titleZh: '治理結構與組成', category: 'universal', required: true, status: 'completed', completeness: 100, dataPoints: ['董事會人數', '獨立董事比例', '女性董事比例'], evidenceRequired: ['董事會名冊', '公司章程'], notes: '' },
-  // Environmental
-  { code: 'GRI 302-1', title: 'Energy consumption', titleZh: '組織內部能源消耗', category: 'environmental', required: true, status: 'in_progress', completeness: 80, dataPoints: ['非再生燃料(GJ)', '再生燃料(GJ)', '電力消耗(GJ)', '總能源(GJ)'], evidenceRequired: ['台電帳單', '燃料採購發票'], formula: '總能源消耗(GJ) = 燃料能源 + 外購電力(kWh × 0.0036)', unit: 'GJ', notes: '12月數據待補' },
-  { code: 'GRI 305-1', title: 'Direct (Scope 1) GHG emissions', titleZh: '直接（範疇一）溫室氣體排放', category: 'environmental', required: true, status: 'in_progress', completeness: 85, dataPoints: ['CO₂(tCO₂e)', 'CH₄(tCO₂e)', 'N₂O(tCO₂e)', '合計(tCO₂e)'], evidenceRequired: ['ISO 14064-1 盤查清冊', '冷媒填充紀錄'], formula: '範疇一 = Σ(活動數據 × 排放係數)', unit: 'tCO₂e', notes: '冷媒數據待補' },
-  { code: 'GRI 305-2', title: 'Energy indirect (Scope 2) GHG emissions', titleZh: '能源間接（範疇二）溫室氣體排放', category: 'environmental', required: true, status: 'completed', completeness: 100, dataPoints: ['外購電力排放(tCO₂e)', '電力排放係數'], evidenceRequired: ['台電帳單', '排放係數資料'], formula: '範疇二 = 用電度數(kWh) × 電力排放係數(tCO₂e/kWh)', unit: 'tCO₂e', notes: '' },
-  // Social
-  { code: 'GRI 403-9', title: 'Work-related injuries', titleZh: '職業傷害', category: 'social', required: true, status: 'completed', completeness: 100, dataPoints: ['傷害頻率(FR)', '嚴重率(SR)', '總工時'], evidenceRequired: ['勞保局職災申報單', '工安事件調查報告'], formula: 'FR = 事故件數 / 總工時 × 1,000,000', unit: '次/百萬工時', notes: '' },
-  { code: 'GRI 405-1', title: 'Diversity of governance bodies and employees', titleZh: '治理機構與員工多元化', category: 'social', required: true, status: 'in_progress', completeness: 65, dataPoints: ['董事會年齡分布', '員工性別比例', '少數族群比例'], evidenceRequired: ['董事會名冊', '人資系統'], notes: '年齡分組數據待確認' },
-  // Governance
-  { code: 'GRI 205-3', title: 'Confirmed incidents of corruption and actions taken', titleZh: '已確認之貪腐事件', category: 'governance', required: true, status: 'completed', completeness: 100, dataPoints: ['貪腐事件數', '涉案人員', '處置措施'], evidenceRequired: ['內稽報告', '法務裁罰通知書'], notes: '本年度無貪腐事件' },
-  { code: 'GRI 207-1', title: 'Approach to tax', titleZh: '稅務方針', category: 'governance', required: true, status: 'pending', completeness: 40, dataPoints: ['稅務策略', '稅務治理架構', '稅務合規承諾'], evidenceRequired: ['稅務政策文件', '財務長聲明'], notes: '財務部門撰寫中' },
-];
-
-const CATEGORY_META = {
-  universal:     { label: '通用準則', color: '#003262', bg: 'rgba(0, 50, 98, 0.05)', icon: <Globe size={14}/> },
-  environmental: { label: '環境面 E', color: '#10B981', bg: 'rgba(16, 185, 129, 0.05)', icon: <Leaf size={14}/> },
-  social:        { label: '社會面 S', color: '#8B5CF6', bg: 'rgba(139, 92, 246, 0.05)', icon: <Users size={14}/> },
-  governance:    { label: '治理面 G', color: '#FDB515', bg: 'rgba(253, 181, 21, 0.05)', icon: <Building2 size={14}/> },
-};
+import { ComplianceEngine, GRIComplianceNode } from '../../lib/omni-core/compliance-engine';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function GRITrackerPage() {
+  const { companyId } = useAuth();
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [selected, setSelected] = useState<GRIItem | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState<GRIComplianceNode | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [matrix, setMatrix] = useState<GRIComplianceNode[]>([]);
+  const [gapAdvice, setGapAdvice] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const fetchMatrix = useCallback(async () => {
+    if (!companyId) return;
+    setLoading(true);
+    try {
+      const data = await ComplianceEngine.calculateGRIMatrix(companyId);
+      setMatrix(data);
+    } catch (err) {
+      console.error('Failed to fetch GRI matrix:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [companyId]);
+
+  useEffect(() => {
+    fetchMatrix();
+  }, [fetchMatrix]);
+
+  const runGapAnalysis = async () => {
+    if (matrix.length === 0) return;
+    setAnalyzing(true);
+    try {
+      const res = await fetch('/api/compliance/gap-analysis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matrix })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setGapAdvice(data.advice);
+      }
+    } catch (err) {
+      console.error('Gap analysis failed:', err);
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const filtered = useMemo(() => {
-    return GRI_ITEMS.filter(item => {
+    return matrix.filter(item => {
       const matchCat = categoryFilter === 'all' || item.category === categoryFilter;
       const matchSearch = item.code.toLowerCase().includes(search.toLowerCase()) || item.titleZh.includes(search);
       return matchCat && matchSearch;
     });
-  }, [categoryFilter, search]);
+  }, [categoryFilter, search, matrix]);
 
   const stats = useMemo(() => {
-    const avg = Math.round(GRI_ITEMS.reduce((a, i) => a + i.completeness, 0) / GRI_ITEMS.length);
-    return { avg, completed: GRI_ITEMS.filter(i => i.status === 'completed').length };
-  }, []);
+    if (matrix.length === 0) return { avg: 0, completed: 0 };
+    const avg = Math.round(matrix.reduce((a, i) => a + i.completeness, 0) / matrix.length);
+    return { avg, completed: matrix.filter(i => i.status === 'completed').length };
+  }, [matrix]);
+
+  const CATEGORY_META = {
+    universal:     { label: '通用準則', color: '#003262', bg: 'rgba(0, 50, 98, 0.05)', icon: <Globe size={14}/> },
+    environmental: { label: '環境面 E', color: '#10B981', bg: 'rgba(16, 185, 129, 0.05)', icon: <Leaf size={14}/> },
+    social:        { label: '社會面 S', color: '#8B5CF6', bg: 'rgba(139, 92, 246, 0.05)', icon: <Users size={14}/> },
+    governance:    { label: '治理面 G', color: '#FDB515', bg: 'rgba(253, 181, 21, 0.05)', icon: <Building2 size={14}/> },
+  };
 
   const pageConfig: UniversalPageConfig = {
     id: 'gri-tracker',
     title: 'GRI 揭露追蹤器',
-    subtitle: 'GRI 2021 全域準則監控：即時追蹤環境、社會與治理揭露進度，確保符合 5T 確信標準。',
+    subtitle: 'GRI 2021 全域準則監控：結合 5T 協議門，即時動態追蹤數據封印進度與合規缺口。',
     icon: <BarChart3 size={32} />,
     griReference: 'GRI 2021 / ISSB',
-    activeT5Tags: ['T1', 'T2', 'T3', 'T4'],
+    activeT5Tags: ['T1', 'T2', 'T3', 'T4', 'T5'],
     primaryActions: [
+      { id: 'refresh', label: '同步數據', icon: <RefreshCw size={16} className={loading ? 'animate-spin' : ''}/>, onClick: fetchMatrix },
       { id: 'export', label: '匯出 GRI 索引', icon: <Download size={16}/>, onClick: () => alert('匯出中...') }
     ],
     kpis: [
       { key: 'progress', label: '整體合規率', value: stats.avg, unit: '%', icon: <Sparkles size={18}/>, color: '#003262', verified: true },
-      { key: 'done',     label: '已完成指標', value: stats.completed, icon: <CheckCircle2 size={18}/>, color: '#10B981', verified: true },
-      { key: 'pending',  label: '待處理項',   value: GRI_ITEMS.length - stats.completed, icon: <Clock size={18}/>, color: '#FDB515' },
-      { key: 'total',    label: '應揭露總數', value: GRI_ITEMS.length, icon: <FileText size={18}/>, color: '#3B7EA1' },
+      { key: 'done',     label: '已封印指標', value: matrix.filter(i => i.isSealed).length, icon: <ShieldCheck size={18}/>, color: '#10B981', verified: true },
+      { key: 'pending',  label: '待處理項',   value: matrix.length - stats.completed, icon: <Clock size={18}/>, color: '#FDB515' },
+      { key: 'total',    label: '應揭露總數', value: matrix.length, icon: <FileText size={18}/>, color: '#3B7EA1' },
     ],
     sections: [
       {
@@ -96,8 +106,8 @@ export default function GRITrackerPage() {
         component: (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
              {Object.entries(CATEGORY_META).map(([k, meta]) => {
-               const catItems = GRI_ITEMS.filter(i => i.category === k);
-               const catAvg = Math.round(catItems.reduce((a, i) => a + i.completeness, 0) / (catItems.length || 1));
+               const catItems = matrix.filter(i => i.category === k);
+               const catAvg = catItems.length > 0 ? Math.round(catItems.reduce((a, i) => a + i.completeness, 0) / catItems.length) : 0;
                return (
                  <BrandCard key={k} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-lg transition-all group">
                     <div className="flex items-center gap-3 mb-4">
@@ -118,8 +128,42 @@ export default function GRITrackerPage() {
         )
       },
       {
+        id: 'gap-guardian',
+        title: 'GRI Gap Guardian (AI 分析)',
+        columns: 12,
+        component: (
+          <BrandCard padding="lg" className="bg-slate-900 border-none text-white overflow-hidden relative">
+             <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-32 -mt-32" />
+             <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start">
+                <div className="flex-1 space-y-4">
+                   <div className="flex items-center gap-3">
+                      <Zap className="text-cyan-400" size={20} />
+                      <h3 className="text-lg font-black uppercase tracking-tight">AI 戰略缺口建議</h3>
+                   </div>
+                   {gapAdvice ? (
+                     <div className="p-6 bg-white/5 rounded-2xl border border-white/10 font-medium text-sm leading-relaxed text-cyan-50/80">
+                        {gapAdvice}
+                     </div>
+                   ) : (
+                     <p className="text-slate-400 text-sm italic">點擊右側按鈕，讓 OmniAgent 掃描當前合規矩陣並產出優化策略。</p>
+                   )}
+                </div>
+                <BrandButton 
+                  variant="primary" 
+                  className="bg-cyan-600 hover:bg-cyan-500 rounded-2xl h-14 px-8 font-black uppercase tracking-widest shadow-xl"
+                  onClick={runGapAnalysis}
+                  loading={analyzing}
+                  disabled={matrix.length === 0}
+                >
+                   <Sparkles size={18} className="mr-2" /> 啟動缺口掃描
+                </BrandButton>
+             </div>
+          </BrandCard>
+        )
+      },
+      {
         id: 'table',
-        title: '準則清單',
+        title: '準則矩陣',
         columns: 12,
         component: (
           <div className="space-y-8">
@@ -146,13 +190,15 @@ export default function GRITrackerPage() {
                 <BrandTable 
                   loading={loading}
                   columns={[
+                    { label: '狀態', key: 'status' },
                     { label: '代碼', key: 'code' },
                     { label: '指標名稱', key: 'name' },
-                    { label: '類別', key: 'cat' },
+                    { label: '封印', key: 'sealed' },
                     { label: '完成度', key: 'progress' },
                     { label: '操作', key: 'actions' }
                   ]}
                   data={filtered.map(i => ({
+                    status: <BrandStatusDot status={i.status === 'completed' ? 'active' : i.status === 'pending' ? 'pending' : 'warning'} pulse={i.status === 'in_progress'} />,
                     code: <span className="font-mono text-xs font-black text-[#003262]">{i.code}</span>,
                     name: (
                       <div className="flex flex-col">
@@ -160,7 +206,7 @@ export default function GRITrackerPage() {
                          <span className="text-[10px] font-bold text-slate-400 uppercase">{i.title}</span>
                       </div>
                     ),
-                    cat: <BrandBadge variant="outline" size="xs" className="opacity-60">{CATEGORY_META[i.category].label}</BrandBadge>,
+                    sealed: i.isSealed ? <div className="flex items-center gap-1.5 text-emerald-600 font-black text-[10px]"><ShieldCheck size={14}/> SEALED</div> : <span className="text-slate-300 text-[10px]">—</span>,
                     progress: (
                       <div className="flex items-center gap-3 w-40">
                          <BrandProgress value={i.completeness} size="xs" color={i.completeness === 100 ? 'green' : 'blue'} className="flex-1" />
@@ -214,14 +260,16 @@ export default function GRITrackerPage() {
               <div className="grid grid-cols-2 gap-8 mb-12 relative z-10">
                  <section className="space-y-6">
                     <div className="space-y-3">
-                       <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2"><Sparkles size={12}/> Required Data Points</h4>
+                       <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2"><Sparkles size={12}/> Governance Evidence</h4>
                        <div className="space-y-2">
-                          {selected.dataPoints.map((dp, i) => (
-                            <div key={i} className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-2xl border border-transparent hover:border-slate-100 transition-all">
-                               <div className="w-1.5 h-1.5 rounded-full bg-[#003262]" />
-                               <span className="text-xs font-bold text-slate-600">{dp}</span>
-                            </div>
-                          ))}
+                          <div className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-2xl border border-transparent hover:border-slate-100 transition-all">
+                             <div className={`w-1.5 h-1.5 rounded-full ${selected.hasEvidence ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                             <span className="text-xs font-bold text-slate-600">{selected.hasEvidence ? '已上傳實證文件' : '尚未提供佐證'}</span>
+                          </div>
+                          <div className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-2xl border border-transparent hover:border-slate-100 transition-all">
+                             <div className={`w-1.5 h-1.5 rounded-full ${selected.tasksCount > 0 ? 'bg-blue-500' : 'bg-slate-300'}`} />
+                             <span className="text-xs font-bold text-slate-600">{selected.tasksCount} 個關聯治理任務</span>
+                          </div>
                        </div>
                     </div>
                  </section>
@@ -229,13 +277,13 @@ export default function GRITrackerPage() {
                  <section className="space-y-8">
                     <div className="space-y-3">
                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Integrity Status</h4>
-                       <div className={`p-6 rounded-[28px] border transition-all ${selected.status === 'completed' ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
+                       <div className={`p-6 rounded-[28px] border transition-all ${selected.isSealed ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
                           <div className="flex items-center gap-3 mb-2">
-                             <BrandStatusDot status={selected.status === 'completed' ? 'active' : 'warning'} pulse size="sm" />
-                             <span className="text-[12px] font-black uppercase tracking-widest">{selected.status.replace('_', ' ')}</span>
+                             <BrandStatusDot status={selected.isSealed ? 'active' : 'warning'} pulse size="sm" />
+                             <span className="text-[12px] font-black uppercase tracking-widest">{selected.isSealed ? 'SEALED' : 'OPEN'}</span>
                           </div>
                           <p className="text-[10px] opacity-70 font-medium leading-relaxed">
-                             {selected.status === 'completed' ? '此指標已完成 T5 數位封印，具備最高治理主權。' : '目前正在收集中，待補齊佐證文件後啟動封印。'}
+                             {selected.isSealed ? '此指標已完成 T5 數位封印，具備最高治理主權與誠信驗證。' : '目前正在收集中，待啟動 Hash Lock 封印以確保數據不可篡改。'}
                           </p>
                        </div>
                     </div>
@@ -244,7 +292,7 @@ export default function GRITrackerPage() {
                        <p className="text-[10px] font-black text-blue-200/50 uppercase tracking-[0.3em] mb-3">T5 TAGS</p>
                        <div className="flex gap-2">
                           {['T1', 'T2', 'T3'].map(t => <BrandBadge key={t} variant="info" size="xs" className="bg-white/10 border-none text-blue-100 px-3">{t}</BrandBadge>)}
-                          {selected.status === 'completed' && <BrandBadge variant="gold" size="xs" className="px-3">T5</BrandBadge>}
+                          {selected.isSealed && <BrandBadge variant="gold" size="xs" className="px-3">T5</BrandBadge>}
                        </div>
                     </div>
                  </section>
