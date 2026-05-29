@@ -1,22 +1,34 @@
+import { useState } from 'react';
+
 export interface ExportChapter {
   id: string;
   title: string;
 }
 
 export function useExport() {
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportMessage, setExportMessage] = useState('');
+
   const exportDocx = async (
     chapters: ExportChapter[],
     generatedContent: Record<string, string>,
     showToast: (msg: string, type: 'success' | 'error' | 'info') => void
   ) => {
-    showToast('開始彙整 250 頁 (30萬字) 永續報告文檔...', 'info');
+    setIsExporting(true);
+    setExportProgress(0);
+    setExportMessage('開始彙整 250 頁 (30萬字) 永續報告文檔...');
     try {
       // 利用 modern bundler (如 Next.js/Webpack 5) 的原生 Worker 支援
       const worker = new Worker(new URL('../workers/exportDocx.worker.ts', import.meta.url));
 
       worker.onmessage = (event) => {
-        const { status, blob, error } = event.data;
-        if (status === 'success') {
+        const { status, blob, error, progress, message } = event.data;
+
+        if (status === 'progress') {
+          if (typeof progress === 'number') setExportProgress(progress);
+          if (message) setExportMessage(message);
+        } else if (status === 'success') {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
@@ -26,11 +38,14 @@ export function useExport() {
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
           showToast('匯出 Docx 成功！', 'success');
+          setIsExporting(false);
+          worker.terminate(); // 完成後立刻釋放記憶體
         } else {
           console.error('[Web Worker Error]:', error);
           showToast('匯出 Docx 失敗', 'error');
+          setIsExporting(false);
+          worker.terminate(); // 完成後立刻釋放記憶體
         }
-        worker.terminate(); // 完成後立刻釋放記憶體
       };
 
       // 傳遞資料給 Worker 開始運算，主執行緒完全不卡頓
@@ -38,6 +53,7 @@ export function useExport() {
     } catch (e) {
       console.error(e);
       showToast('匯出 Docx 失敗', 'error');
+      setIsExporting(false);
     }
   };
 
@@ -46,12 +62,17 @@ export function useExport() {
     generatedContent: Record<string, string>,
     showToast: (msg: string, type: 'success' | 'error' | 'info') => void
   ) => {
-    showToast('準備 PDF 匯出環境...', 'info');
+    setIsExporting(true);
+    setExportProgress(10);
+    setExportMessage('準備 PDF 匯出環境...');
     try {
       // 讓步給事件迴圈 (Yield to Event Loop)：
       // 強制主執行緒暫停 100 毫秒，讓瀏覽器有時間把上面的 showToast 畫面渲染出來。
       // 避免後續 html2pdf 高壓運算直接把畫面完全凍結在舊狀態。
       await new Promise(resolve => setTimeout(resolve, 100));
+
+      setExportProgress(40);
+      setExportMessage('渲染 PDF 畫面中...');
 
       const html2pdf = (await import('html2pdf.js' as any)).default;
       const element = document.createElement('div');
@@ -84,12 +105,15 @@ export function useExport() {
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }).save();
 
+      setExportProgress(100);
       showToast('匯出 PDF 成功！', 'success');
     } catch (e) {
       console.error(e);
       showToast('匯出 PDF 失敗，請確認內容是否過長', 'error');
+    } finally {
+      setIsExporting(false);
     }
   };
 
-  return { exportDocx, exportPdf };
+  return { exportDocx, exportPdf, isExporting, exportProgress, exportMessage };
 }

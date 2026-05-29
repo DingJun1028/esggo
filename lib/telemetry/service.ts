@@ -22,8 +22,18 @@ export interface AgentMetrics {
 }
 
 class TelemetryService {
+  private static instance: TelemetryService;
   private events: TelemetryEvent[] = [];
   private metrics: Map<string, AgentMetrics> = new Map();
+
+  private constructor() {}
+
+  static getInstance(): TelemetryService {
+    if (!TelemetryService.instance) {
+      TelemetryService.instance = new TelemetryService();
+    }
+    return TelemetryService.instance;
+  }
 
   recordEvent(event: Omit<TelemetryEvent, 'id'>) {
     const fullEvent: TelemetryEvent = {
@@ -31,11 +41,10 @@ class TelemetryService {
       id: `telemetry_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     };
     this.events.push(fullEvent);
-    
     this.updateMetrics(fullEvent);
   }
 
-  updateMetrics(event: TelemetryEvent) {
+  private updateMetrics(event: TelemetryEvent) {
     const existing = this.metrics.get(event.agent);
     const agentMetrics: AgentMetrics = {
       agent: event.agent,
@@ -70,4 +79,4 @@ class TelemetryService {
   }
 }
 
-export const telemetryService = new TelemetryService();
+export const telemetryService = TelemetryService.getInstance();

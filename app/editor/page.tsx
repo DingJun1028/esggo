@@ -7,7 +7,7 @@ import {
   XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye, Bot, Trophy
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import { useSustainWriteMemory } from '../../hooks/useMemory';
+import { useSustainWriteStore } from '../../store/useSustainWriteStore';
 import { cn } from '../../lib/utils';
 import { fadeIn, scaleIn, staggerContainer } from '../../lib/animations';
 import { Button } from '../../components/ui/Button';
@@ -58,11 +58,19 @@ const CATEGORY_META = {
 
 export default function EditorPage() {
   const { user, companyId } = useAuth();
-  const { 
-    generatedContent, fieldValues, chapterStatuses, 
-    updateContent, updateFieldValue, updateChapterStatus, loading: memoryLoading 
-  } = useSustainWriteMemory();
+  const {
+    generatedContent, fieldValues, chapterStatuses, loading: memoryLoading,
+    initData, updateContent, updateFieldValue, updateChapterStatus,
+    commitHistory, undoContent, redoContent, expandContentWithAI, isGeneratingAI,
+    contentHistory
+  } = useSustainWriteStore();
   const { exportDocx, exportPdf } = useExport();
+
+  useEffect(() => {
+    if (companyId) {
+      initData(companyId);
+    }
+  }, [companyId, initData]);
 
   const [selectedChapterId, setSelectedChapterId] = useState<string>('general');
   const [selectedPersona, setSelectedPersona] = useState<'compliance' | 'harmony' | 'innovation'>('compliance');
@@ -402,6 +410,15 @@ export default function EditorPage() {
                       >
                         <Sparkles size={16} className="mr-2 text-orange-100 animate-pulse" /> 啟動 Depth 5 專家撰寫 (2萬字)
                       </Button>
+                      <Button 
+                        variant="outline" 
+                        className="w-full h-12 border-amber-500/30 text-amber-600 hover:bg-amber-50 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
+                        onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                        disabled={isGeneratingAI[chapter.id] || isSealed}
+                      >
+                        {isGeneratingAI[chapter.id] ? <RefreshCw size={14} className="mr-2 animate-spin" /> : <Bot size={14} className="mr-2" />}
+                        {isGeneratingAI[chapter.id] ? '正在擴寫中...' : '智能語義擴充'}
+                      </Button>
                     </div>
                   </div>
 
@@ -483,25 +500,73 @@ export default function EditorPage() {
             <motion.div variants={scaleIn} className="flex-1 flex flex-col min-w-0">
               <Card className="flex-1 border border-slate-200 bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden flex flex-col relative shadow-xl">
                 <div className="h-12 px-8 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                  <div className="flex items-center gap-2">
-                    <Type size={12} className="text-cyan-600" />
-                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">GRI Master Workspace</span>
-                  </div>
-                  {dataGaps.length > 0 && (
-                    <div className="flex items-center gap-1.5 bg-red-50 px-3 py-1 rounded-full border border-red-200 animate-pulse">
-                      <AlertTriangle size={10} className="text-red-600" />
-                      <span className="text-[8px] font-black text-red-600 uppercase">Data_Mismatch</span>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Type size={12} className="text-cyan-600" />
+                      <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">GRI Master Workspace</span>
                     </div>
-                  )}
+                    
+                    <div className="h-4 w-[1px] bg-slate-200 mx-2" />
+                    
+                    <div className="flex gap-1">
+                      <button 
+                        onClick={() => undoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                        disabled={!(contentHistory[chapter.id]?.past.length > 0) || isGeneratingAI[chapter.id]}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 disabled:opacity-20 transition-all"
+                        title="復原 (Undo)"
+                      >
+                        <RefreshCw size={12} className="-scale-x-100" />
+                      </button>
+                      <button 
+                        onClick={() => redoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])}
+                        disabled={!(contentHistory[chapter.id]?.future.length > 0) || isGeneratingAI[chapter.id]}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 disabled:opacity-20 transition-all"
+                        title="重做 (Redo)"
+                      >
+                        <RefreshCw size={12} />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    {isGeneratingAI[chapter.id] && (
+                      <div className="flex items-center gap-2 px-3 py-1 bg-indigo-50 rounded-full border border-indigo-100 animate-pulse">
+                        <Sparkles size={10} className="text-indigo-600" />
+                        <span className="text-[8px] font-black text-indigo-600 uppercase">OmniAgent_Syncing...</span>
+                      </div>
+                    )}
+                    {dataGaps.length > 0 && (
+                      <div className="flex items-center gap-1.5 bg-red-50 px-3 py-1 rounded-full border border-red-200 animate-pulse">
+                        <AlertTriangle size={10} className="text-red-600" />
+                        <span className="text-[8px] font-black text-red-600 uppercase">Data_Mismatch</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex-1 relative overflow-hidden min-h-[400px]">
                   {activePanel === 'write' && (
-                    <textarea 
-                      value={generatedContent[chapter.id] || ''} 
-                      onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
-                      className="w-full h-full p-8 md:p-10 text-sm font-medium leading-[2.2] text-slate-800 outline-none resize-none bg-transparent scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent focus:ring-1 focus:ring-cyan-500/20" 
-                      placeholder="ESG 治理主權由您執筆..." 
-                    />
+                    <div className="w-full h-full relative">
+                      <textarea 
+                        value={generatedContent[chapter.id] || ''} 
+                        onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
+                        onFocus={() => commitHistory(chapter.id)}
+                        onBlur={() => commitHistory(chapter.id)}
+                        disabled={isGeneratingAI[chapter.id]}
+                        className={cn(
+                          "w-full h-full p-8 md:p-10 text-sm font-medium leading-[2.2] text-slate-800 outline-none resize-none bg-transparent scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent transition-all duration-700",
+                          isGeneratingAI[chapter.id] ? "opacity-50 blur-[1px]" : "opacity-100"
+                        )} 
+                        placeholder="ESG 治理主權由您執筆..." 
+                      />
+                      {isGeneratingAI[chapter.id] && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="flex flex-col items-center gap-3 p-6 bg-white/40 backdrop-blur-sm rounded-3xl border border-indigo-200/50 shadow-2xl">
+                             <RefreshCw size={24} className="text-indigo-600 animate-spin" />
+                             <p className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">Generating Expert Content...</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   )}
                   {activePanel === 'data' && (
                     <div className="p-8 md:p-10 space-y-6 fade-in h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
