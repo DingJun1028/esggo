@@ -1,4 +1,4 @@
-
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useSustainWriteStore } from './store/useSustainWriteStore';
 import { loadSustainWriteSections, saveSustainWriteSection } from './lib/dataconnect-memory';
 
@@ -11,7 +11,7 @@ describe('useSustainWriteStore - Undo & Redo', () => {
     const initialState = useSustainWriteStore.getState();
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         // 確保每個測試開始前，Zustand Store 都是最乾淨的初始狀態
         useSustainWriteStore.setState(initialState, true);
         Storage.prototype.setItem = vi.fn();

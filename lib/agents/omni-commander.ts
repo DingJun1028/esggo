@@ -61,6 +61,7 @@ export interface MissionResult {
   agent?: string;
   commanderOutput?: string;
   swarmResults?: unknown[];
+  negotiation?: any;
 }
 
 /**

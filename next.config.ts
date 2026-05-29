@@ -13,11 +13,7 @@ const nextConfig: NextConfig = {
     'firebase-admin',
     '@genkit-ai/googleai',
     '@grpc/grpc-js',
-    '@opentelemetry/sdk-node',
-    '@opentelemetry/otlp-grpc-exporter-base',
-    '@opentelemetry/exporter-trace-otlp-grpc',
-    '@opentelemetry/otlp-exporter-base',
-    '@opentelemetry/otlp-http-exporter'
+    '@opentelemetry/sdk-node'
   ],
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
@@ -28,7 +24,9 @@ const nextConfig: NextConfig = {
       { module: /node_modules\/@firebase/ },
       { module: /node_modules\/firebase/ },
       { module: /node_modules\/idb/ },
-      /There are multiple modules with names that only differ in casing/
+      /There are multiple modules with names that only differ in casing/,
+      /textEmbedding004/,
+      /pdf-parse/
     ];
 
     if (!config.resolve) config.resolve = {};

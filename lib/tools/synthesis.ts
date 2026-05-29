@@ -66,8 +66,7 @@ export class DynamicToolSynthesizer {
       context: { problem, agentName },
       result: executionResult.success ? 'Tool synthesized and executed' : executionResult.error,
       success: executionResult.success,
-      tags: ['tool_synthesis', 'dynamic'],
-      timestamp: new Date().toISOString()
+      tags: ['tool_synthesis', 'dynamic']
     });
 
     return {
