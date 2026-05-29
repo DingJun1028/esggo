@@ -1,6 +1,24 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { telemetryService } from '@/lib/telemetry/service';
 
-export async function POST(req: Request) {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const agent = searchParams.get('agent');
+  
+  if (agent) {
+    return NextResponse.json({
+      events: telemetryService.getEventsByAgent(agent),
+      metrics: telemetryService.getMetrics().find(m => m.agent === agent)
+    });
+  }
+
+  return NextResponse.json({
+    events: telemetryService.getEvents(),
+    metrics: telemetryService.getMetrics()
+  });
+}
+
+export async function POST(req: NextRequest) {
   try {
     const payload = await req.json();
     

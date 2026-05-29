@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { omniAgent, omniSwarm } from '@/lib/agents/adk-swarm';
+import { omniAgent, omniSwarm, esgResearcher, esgAuditor, esgStrategist, esgConsultant } from '@/lib/agents/adk-swarm';
+
+// Agent mapping for individual queries
+const AGENT_MAP: Record<string, any> = {
+  'ESG_Researcher': esgResearcher,
+  'ESG_Auditor': esgAuditor,
+  'ESG_Strategist': esgStrategist,
+  'ESG_Consultant': esgConsultant,
+};
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,8 +23,8 @@ export async function POST(req: NextRequest) {
       // Supreme Commander Level
       result = await omniAgent.command(task, dataContext);
     } else if (agentName) {
-      // Individual Agent Level
-      const agent = omniSwarm.getAgent(agentName);
+      // Individual Agent Level - use mapped agents
+      const agent = AGENT_MAP[agentName];
       if (!agent) {
         return NextResponse.json({ error: `Agent ${agentName} not found in ADK registry` }, { status: 404 });
       }

@@ -71,3 +71,52 @@ export function getBestPractices(category?: 'E' | 'S' | 'G', industry?: string):
     return catMatch && indMatch;
   }).sort((a, b) => b.impact_score - a.impact_score);
 }
+
+/**
+ * Auto-Evolution Best Practices - OmniAgent Enhancement Layer
+ * 新增自主進化相關策略
+ */
+export const AUTO_EVOLUTION_BEST_PRACTICES: BestPractice[] = [
+  {
+    id: 'bp-ae-001',
+    category: 'G',
+    industry: 'General Corporate',
+    title: '自主演化治理框架 (OmniAgent Evolution Protocol)',
+    strategy: '建立自我演化閉環：從資料採集→模型推理→結果驗證→知識沉澱→治理升級，實現 AI 系統持續自優化。',
+    benchmark_source: 'Google Agent Platform Autonomous Loop',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 98,
+    tags: ['Evolution', 'Governance', 'Agent', 'Self-Optimization'],
+    last_verified: '2026-05-29',
+  },
+  {
+    id: 'bp-ae-002',
+    category: 'E',
+    industry: 'High-Tech Manufacturing',
+    title: '量子進化能源優化 (Quantum Energy Evolution)',
+    strategy: '採用量子式迭代演算法，持續優化能源消耗模型，達成每年 15% 減耗目標。',
+    benchmark_source: 'Microsoft Quantum Sustainability Lab',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 89,
+    tags: ['Energy', 'Quantum', 'Optimization', 'AI-Evolution'],
+    last_verified: '2026-05-28',
+  },
+  {
+    id: 'bp-ae-003',
+    category: 'S',
+    industry: 'Software / Services',
+    title: 'ZKP 治癒循環 (ZKP Healing Loop)',
+    strategy: '被動天賦自動觸發：偵測數據偏差→觸發萬能修復→重新封印→治理升級，保持系統誠信穩定。',
+    benchmark_source: 'ENS Autonomous Recovery Protocol',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 94,
+    tags: ['ZKP', 'Healing', 'Recovery', 'Autonomous'],
+    last_verified: '2026-05-27',
+  }
+];
+
+export function getAutoEvolutionPractices(industry?: string): BestPractice[] {
+  return AUTO_EVOLUTION_BEST_PRACTICES.filter(bp => 
+    !industry || bp.industry.includes(industry) || bp.industry === 'General Corporate'
+  ).sort((a, b) => b.impact_score - a.impact_score);
+}

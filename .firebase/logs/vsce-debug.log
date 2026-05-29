@@ -8023,3 +8023,53 @@ I0528 21:05:37.392147   36000 dev.go:104] Listening on address (HTTP + gRPC): 12
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0528 21:05:37.377150   36000 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0528 21:05:37.377150   36000 load.go:109] Finished reloading\nI0528 21:05:37.392147   36000 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
 [debug] [2026-05-28T13:05:37.610Z] I0528 21:05:37.607066   36000 engine.go:209] [projects/emulator/locations/emulator/services/esggoalpha d1d5] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0528 21:05:37.607066   36000 engine.go:209] [projects/emulator/locations/emulator/services/esggoalpha d1d5] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-05-29T00:38:42.576Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-05-29T00:39:10.558Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-05-29T00:39:10.560Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-29T00:39:10.561Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-05-29T00:39:10.565Z] Checked if tokens are valid: true, expires at: 1780018694324
+[debug] [2026-05-29T00:39:10.566Z] Checked if tokens are valid: true, expires at: 1780018694324
+[debug] [2026-05-29T00:39:10.566Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-05-29T00:39:10.568Z] Checked if tokens are valid: true, expires at: 1780018694324
+[debug] [2026-05-29T00:39:10.569Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-05-29T00:39:10.578Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.8) on port 50001
+[debug] [2026-05-29T00:39:11.199Z] I0529 08:39:11.155713   29828 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 262b] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5564B] 
+Connector "example": sources: example\queries.gql [9152B] example\seed_data.gql [838B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.155713   29828 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 262b] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5564B] \nConnector \"example\": sources: example\\queries.gql [9152B] example\\seed_data.gql [838B] \n"}}
+[debug] [2026-05-29T00:39:11.200Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-05-29T00:39:11.200Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-05-29T00:39:11.200Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.8.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.8.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-05-29T00:39:11.299Z] I0529 08:39:11.252514   36276 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.252514   36276 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-05-29T00:39:11.369Z] I0529 08:39:11.363436   36276 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha a6a9] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5564B] 
+Connector "example": sources: example\queries.gql [9152B] example\seed_data.gql [838B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.363436   36276 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha a6a9] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5564B] \nConnector \"example\": sources: example\\queries.gql [9152B] example\\seed_data.gql [838B] \n"}}
+[debug] [2026-05-29T00:39:11.469Z] I0529 08:39:11.463549   36276 codegen.go:101] [connector "example" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.463549   36276 codegen.go:101] [connector \"example\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-05-29T00:39:11.499Z] I0529 08:39:11.488004   36276 codegen.go:101] [connector "example" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+I0529 08:39:11.494693   36276 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\relation.gql [116704B] main\query.gql [26502B] main\mutation.gql [72417B] main\implicit.gql [6925B] main\input.gql [238343B] prelude.gql [84989B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.488004   36276 codegen.go:101] [connector \"example\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0529 08:39:11.494693   36276 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\relation.gql [116704B] main\\query.gql [26502B] main\\mutation.gql [72417B] main\\implicit.gql [6925B] main\\input.gql [238343B] prelude.gql [84989B] \n"}}
+[debug] [2026-05-29T00:39:11.506Z] I0529 08:39:11.503538   36276 collector.go:107] connector "example" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [15074B] README.md [121068B] react\index.cjs.js [9798B] react\README.md [123152B] .guides/usage.md [4008B] index.d.ts [29167B] react\index.d.ts [12042B] react\package.json [460B] esm\package.json [17B] index.cjs.js [16944B] react\esm\index.esm.js [9170B] package.json [853B] react\esm\package.json [17B] .guides/setup.md [1682B] .guides/config.json [236B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.503538   36276 collector.go:107] connector \"example\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [15074B] README.md [121068B] react\\index.cjs.js [9798B] react\\README.md [123152B] .guides/usage.md [4008B] index.d.ts [29167B] react\\index.d.ts [12042B] react\\package.json [460B] esm\\package.json [17B] index.cjs.js [16944B] react\\esm\\index.esm.js [9170B] package.json [853B] react\\esm\\package.json [17B] .guides/setup.md [1682B] .guides/config.json [236B] \n"}}
+[debug] [2026-05-29T00:39:11.512Z] I0529 08:39:11.509925   36276 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.509925   36276 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-05-29T00:39:11.520Z] I0529 08:39:11.512824   36276 collector.go:107] connector "example" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: esm\package.json [17B] index.cjs.js [9340B] package.json [632B] index.d.ts [26023B] esm\index.esm.js [8259B] 
+I0529 08:39:11.515991   36276 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0529 08:39:11.515991   36276 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.512824   36276 collector.go:107] connector \"example\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: esm\\package.json [17B] index.cjs.js [9340B] package.json [632B] index.d.ts [26023B] esm\\index.esm.js [8259B] \nI0529 08:39:11.515991   36276 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0529 08:39:11.515991   36276 load.go:109] Finished reloading\n"}}
+[debug] [2026-05-29T00:39:11.567Z] I0529 08:39:11.567453   36276 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.567453   36276 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-05-29T00:39:11.738Z] I0529 08:39:11.731926   36276 engine.go:209] [projects/emulator/locations/emulator/services/esggoalpha a6a9] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0529 08:39:11.731926   36276 engine.go:209] [projects/emulator/locations/emulator/services/esggoalpha a6a9] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-05-29T00:39:11.921Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-05-29T00:39:11.921Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]

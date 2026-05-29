@@ -12,6 +12,8 @@ import {
   type MemoryType, type MemoryRecord, type AIMessage,
 } from '../lib/memory';
 import { type SustainWriteSection } from '../lib/dataconnect-memory';
+// useSustainWriteStore temporarily disabled - using direct Supabase fallback
+import { useCompanyProfileStore } from '../store/useCompanyProfileStore';
 
 // ─── Generic Memory Hook ─────────────────────────────────────────────────────
 
@@ -37,15 +39,18 @@ export function useMemory<T = Record<string, any>>(
     return () => { mounted = false; };
   }, [type, key]);
 
-  const save = useCallback(async (newValue: T) => {
+  const save = useCallback((newValue: T) => {
     setValue(newValue);
     setSaved(false);
     clearTimeout(saveTimeoutRef.current);
     // Debounce: 800ms after last change
-    saveTimeoutRef.current = setTimeout(async () => {
-      await writeMemory(type, key, newValue as Record<string, any>);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+    saveTimeoutRef.current = setTimeout(() => {
+      writeMemory(type, key, newValue as Record<string, any>)
+        .then(() => {
+          setSaved(true);
+          setTimeout(() => setSaved(false), 2000);
+        })
+        .catch(err => console.error('[useMemory] Failed to write memory:', err));
     }, 800);
   }, [type, key]);
 
@@ -62,6 +67,7 @@ export function useSustainWriteMemory(companyId = 'default') {
   const [chapterStatuses, setChapterStatuses] = useState<Record<string, string>>({});
   const [generatedContent, setGeneratedContent] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [syncError, setSyncError] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const autoSaveRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -111,23 +117,32 @@ export function useSustainWriteMemory(companyId = 'default') {
     ct: Record<string, string>
   ) => {
     clearTimeout(autoSaveRef.current);
-    autoSaveRef.current = setTimeout(async () => {
+
+    // 1. 離線備份：立即將編輯狀態存入 LocalStorage，防禦網路斷線
+    const localKey = `esggo_sw_draft_${companyId}_${chapterId}`;
+    const draftPayload = {
+      company_id: companyId, chapter_id: chapterId, chapter_name: chapterName,
+      content: ct[chapterId] || '', field_values: fv[chapterId] || {},
+      notes: nt[chapterId] || '', documents_state: ds,
+      status: (st[chapterId] || 'draft') as SustainWriteSection['status'],
+      chapter_order: chapterOrder, gri_references: griRefs
+    };
+    try { localStorage.setItem(localKey, JSON.stringify(draftPayload)); } catch (e) { }
+
+    autoSaveRef.current = setTimeout(() => {
       const chapDocs: Record<string, boolean> = {};
       Object.entries(ds).forEach(([k, v]) => { chapDocs[k] = v; });
 
-      await saveSustainWriteSection({
-        company_id: companyId,
-        chapter_id: chapterId,
-        chapter_name: chapterName,
-        content: ct[chapterId] || '',
-        field_values: fv[chapterId] || {},
-        notes: nt[chapterId] || '',
-        documents_state: chapDocs,
-        status: (st[chapterId] || 'draft') as SustainWriteSection['status'],
-        chapter_order: chapterOrder,
-        gri_references: griRefs,
-      });
-      setLastSaved(new Date());
+      saveSustainWriteSection({ ...draftPayload, documents_state: chapDocs })
+        .then(() => {
+          setLastSaved(new Date());
+          setSyncError(false);
+          localStorage.removeItem(localKey); // 同步成功後移除本地備份
+        })
+        .catch((err) => {
+          console.error('[SustainWrite] Auto-save failed, data kept in local storage:', err);
+          setSyncError(true);
+        });
     }, 1000);
   }, [companyId]);
 
@@ -191,20 +206,26 @@ export function useSustainWriteMemory(companyId = 'default') {
     chapterOrder: number, griRefs: string[]
   ) => {
     clearTimeout(autoSaveRef.current);
-    const result = await saveSustainWriteSection({
-      company_id: companyId,
-      chapter_id: chapterId,
-      chapter_name: chapterName,
-      content: generatedContent[chapterId] || '',
-      field_values: fieldValues[chapterId] || {},
-      notes: notes[chapterId] || '',
-      documents_state: docStates,
+
+    const payload = {
+      company_id: companyId, chapter_id: chapterId, chapter_name: chapterName,
+      content: generatedContent[chapterId] || '', field_values: fieldValues[chapterId] || {},
+      notes: notes[chapterId] || '', documents_state: docStates,
       status: (chapterStatuses[chapterId] || 'draft') as SustainWriteSection['status'],
-      chapter_order: chapterOrder,
-      gri_references: griRefs,
-    });
-    setLastSaved(new Date());
-    return result;
+      chapter_order: chapterOrder, gri_references: griRefs,
+    };
+
+    try {
+      const result = await saveSustainWriteSection(payload);
+      setLastSaved(new Date());
+      setSyncError(false);
+      localStorage.removeItem(`esggo_sw_draft_${companyId}_${chapterId}`);
+      return result;
+    } catch (err) {
+      console.error('[SustainWrite] Manual save failed:', err);
+      setSyncError(true);
+      throw err; // 保留錯誤以便 UI 層顯示提示（如 Toast）
+    }
   }, [companyId, fieldValues, notes, docStates, chapterStatuses, generatedContent]);
 
   return {
@@ -215,6 +236,7 @@ export function useSustainWriteMemory(companyId = 'default') {
     chapterStatuses,
     generatedContent,
     loading,
+    syncError,
     lastSaved,
     updateFieldValue,
     updateNote,
@@ -261,32 +283,11 @@ export function useAIMemory(persona: string) {
 // ─── Company Profile Hook ─────────────────────────────────────────────────────
 
 export function useCompanyProfile() {
-  const [profile, setProfile] = useState<Record<string, any>>({
-    company_name: '善向永續股份有限公司',
-    industry: '科技業',
-    employees: 250,
-    revenue: 15,
-    reporting_year: 2024,
-  });
-  const [loading, setLoading] = useState(true);
-  const [saved, setSaved] = useState(false);
+  const store = useCompanyProfileStore();
 
   useEffect(() => {
-    let mounted = true;
-    loadCompanyProfile().then(p => {
-      if (mounted && p) { setProfile(p); setLoading(false); }
-      else if (mounted) setLoading(false);
-    });
-    return () => { mounted = false; };
+    useCompanyProfileStore.getState().initData();
   }, []);
 
-  const save = useCallback(async (newProfile: Record<string, any>) => {
-    setProfile(newProfile);
-    setSaved(false);
-    await saveCompanyProfile(newProfile);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
-  }, []);
-
-  return { profile, loading, saved, save };
+  return store;
 }

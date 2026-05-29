@@ -32,7 +32,7 @@ export async function validateContent(
   const errors: string[] = [];
   const warnings: string[] = [];
   
-  const size = Buffer.byteLength(content);
+  const size = Buffer.isBuffer(content) ? content.length : Buffer.byteLength(content as string);
   const maxSize = options.maxSize || 10 * 1024 * 1024; // 預設 10MB
   
   // 檢查大小

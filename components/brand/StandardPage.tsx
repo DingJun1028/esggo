@@ -1,11 +1,8 @@
-﻿'use client';
+'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { UniversalPageConfig } from '../../lib/page-config';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { BrandT5Strip, BrandStatusDot } from './index';
+import { BrandButton, BrandCard, BrandBadge, BrandStatusDot } from './index';
 import { fadeIn, staggerContainer, slideIn } from '../../lib/animations';
 import { cn } from '../../lib/utils';
 
@@ -24,127 +21,123 @@ export default function StandardPage({ config, children }: StandardPageProps) {
       animate="animate"
       variants={staggerContainer}
     >
-      {/* ─── Compact Header Bar ───────────────────────────────────── */}
+      {/* ─── Sovereign Header Bar (Layer 1: Structure) ────────────────── */}
       <motion.header 
         variants={fadeIn}
-        className="flex items-center justify-between mb-6 bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/60 shadow-sm"
+        className="flex items-center justify-between mb-8 bg-white/40 backdrop-blur-xl p-4 rounded-[2rem] border border-white/80 shadow-premium"
       >
-        <div className="flex items-center gap-4 min-w-0">
-          {/* T5 micro indicator */}
-          <div className="flex gap-1.5 px-3 py-2 bg-[#003262]/5 rounded-xl border border-[#003262]/10">
+        <div className="flex items-center gap-6 min-w-0">
+          {/* 5T Protocol Micro Indicator */}
+          <div className="flex gap-2 px-4 py-2.5 bg-[#003262]/5 rounded-2xl border border-[#003262]/10 shadow-inner">
             {['T1','T2','T3','T4','T5'].map(code => (
               <div
                 key={code}
                 className={cn(
-                  "w-1.5 h-1.5 rounded-full transition-all duration-500",
-                  config.activeT5Tags.includes(code as any) ? "bg-[#003262] shadow-[0_0_8px_rgba(0,50,98,0.4)]" : "bg-slate-300"
+                  "w-2 h-2 rounded-full transition-all duration-700",
+                  config.activeT5Tags.includes(code as any) 
+                    ? "bg-[#003262] shadow-[0_0_10px_rgba(0,50,98,0.5)] scale-110" 
+                    : "bg-slate-200"
                 )}
                 title={code}
               />
             ))}
           </div>
           
-          {/* Icon + Title */}
-          <div className="flex items-center gap-3 min-w-0">
+          {/* Icon + Title Pair */}
+          <div className="flex items-center gap-4 min-w-0">
             {config.icon && (
-              <div className="w-10 h-10 rounded-xl bg-[#003262] text-white flex items-center justify-center shadow-lg shadow-[#003262]/20">
-                {React.cloneElement(config.icon as React.ReactElement, { size: 20 })}
+              <div className="w-12 h-12 rounded-2xl bg-[#003262] text-white flex items-center justify-center shadow-xl shadow-[#003262]/20 z-layer-2">
+                {React.cloneElement(config.icon as React.ReactElement, { size: 24 })}
               </div>
             )}
             <div className="min-w-0">
-              <h1 className="text-xl font-bold text-[#003262] tracking-tight truncate">{config.title}</h1>
+              <h1 className="text-2xl font-black text-[#003262] tracking-tighter truncate uppercase">{config.title}</h1>
               {config.subtitle && (
-                <p className="hidden lg:block text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate max-w-[300px]">
+                <p className="hidden lg:block text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] truncate max-w-[400px] mt-0.5">
                   {config.subtitle}
                 </p>
               )}
             </div>
           </div>
 
-          {/* Module badge */}
+          {/* Governance Context Badge */}
           <div className="flex items-center gap-2">
-            <Badge variant="draft" className="bg-[#FDB515]/10 text-[#003262] border-[#FDB515]/20 font-black tracking-widest text-[9px]">
-              {config.griReference || 'ESG-OS'}
-            </Badge>
-            {config.isOXModule && (
-              <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-[#003262] rounded-full border border-[#FDB515]/30">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#FDB515] animate-pulse" />
-                <span className="text-[8px] font-black text-[#FDB515] uppercase tracking-[0.2em]">oX_INTEGRATED</span>
-              </div>
-            )}
+            <BrandBadge variant="outline" size="sm" className="bg-[#FDB515]/5 text-[#003262] border-[#FDB515]/20 font-black tracking-widest px-3">
+              {config.griReference || 'ESG_OS_CORE'}
+            </BrandBadge>
           </div>
         </div>
 
-        {/* Status + Actions (right side) */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50/60 rounded-xl border border-emerald-100/60 backdrop-blur-sm">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-            <span className="text-[10px] font-black text-emerald-700 uppercase tracking-widest hidden sm:block">Engine Live</span>
+        {/* Global Action Terminal */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <div className="flex items-center gap-3 px-4 py-2 bg-emerald-50/40 rounded-2xl border border-emerald-100/60 backdrop-blur-md">
+            <BrandStatusDot status="active" pulse size="sm" />
+            <span className="text-[10px] font-black text-emerald-800 uppercase tracking-widest hidden sm:block">Protocol_Verified</span>
           </div>
           {config.primaryActions?.map(action => (
-            <Button
+            <BrandButton
               key={action.id}
-              variant={action.variant === 'primary' ? 'primary' : 'glass'}
+              variant={action.variant === 'primary' ? 'primary' : 'secondary'}
               onClick={action.onClick}
-              isLoading={action.loading}
+              loading={action.loading}
               disabled={action.disabled}
-              size="sm"
-              className="h-10 px-5 rounded-xl font-bold text-xs"
+              size="md"
+              className="rounded-2xl shadow-lg"
+              icon={action.icon}
             >
-              {action.icon && <span className="mr-2">{action.icon}</span>}
               {action.label}
-            </Button>
+            </BrandButton>
           ))}
         </div>
       </motion.header>
 
-      {/* ─── KPI Bar (inline horizontal strip) ─────────────────────── */}
+      {/* ─── Liquid KPI Matrix (Layer 2: Hologram) ────────────────────── */}
       {activeKpis.length > 0 && (
         <motion.div 
           variants={fadeIn}
-          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-10"
         >
           {activeKpis.map((k, idx) => (
             <motion.div key={k.key} variants={slideIn} custom={idx}>
-              <Card className="p-4 bg-white/60 backdrop-blur-md border-white/60 shadow-sm hover:shadow-md transition-all">
-                <div className="flex items-center justify-between mb-3">
+              <BrandCard variant="glass" hover padding="sm" className="group">
+                <div className="flex items-center justify-between mb-4">
                   <div className={cn(
-                    "w-8 h-8 rounded-lg flex items-center justify-center bg-slate-50",
-                    k.verified ? "text-[#009E9D]" : "text-slate-400"
+                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all group-hover:rotate-12 shadow-inner",
+                    k.verified ? "bg-emerald-50 text-emerald-600" : "bg-slate-50 text-slate-400"
                   )}>
-                    {k.icon && React.cloneElement(k.icon as React.ReactElement, { size: 16 })}
+                    {k.icon && React.cloneElement(k.icon as React.ReactElement, { size: 20 })}
                   </div>
                   {k.trend && (
                     <span className={cn(
-                      "text-[10px] font-bold px-2 py-0.5 rounded-full",
-                      k.trendUp ? "text-emerald-600 bg-emerald-50" : "text-red-500 bg-red-50"
+                      "text-[9px] font-black px-2 py-1 rounded-lg uppercase tracking-wider",
+                      k.trendUp ? "text-emerald-700 bg-emerald-50 border border-emerald-100" : "text-red-600 bg-red-50 border border-red-100"
                     )}>
                       {k.trend}
                     </span>
                   )}
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{k.label}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-[#003262]" style={{ color: k.color }}>{k.value}</span>
-                    {k.unit && <span className="text-[10px] text-slate-400 font-bold uppercase">{k.unit}</span>}
+                <div className="space-y-1">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{k.label}</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl font-black text-[#003262] font-mono tracking-tighter" style={{ color: k.color }}>{k.value}</span>
+                    {k.unit && <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{k.unit}</span>}
                   </div>
                 </div>
-              </Card>
+              </BrandCard>
             </motion.div>
           ))}
         </motion.div>
       )}
 
-      {/* ─── Custom Children ───────────────────────────────────────── */}
+      {/* ─── Dynamic Workspace Layer ─────────────────────────────────── */}
       {children && (
-        <motion.div variants={fadeIn} className="mb-8">
+        <motion.div variants={fadeIn} className="mb-10">
           {children}
         </motion.div>
       )}
 
-      {/* ─── Bento Grid Sections ─────────────────────────────────────── */}
-      <div className="grid grid-cols-12 gap-6">
+      {/* ─── Sovereign Bento Sections (Layer 1: Structure) ────────────── */}
+      <div className="grid grid-cols-12 gap-8">
         {config.sections.filter(s => !s.hidden).map((section, idx) => (
           <motion.div
             key={section.id}
@@ -155,37 +148,37 @@ export default function StandardPage({ config, children }: StandardPageProps) {
               section.columns ? `lg:col-span-${section.columns}` : ""
             )}
           >
-            <Card hoverEffect className="h-full flex flex-col bg-white/60 backdrop-blur-md border-white/60 shadow-sm overflow-hidden">
-              {/* Section header */}
-              <div className="flex items-center justify-between p-5 border-b border-slate-100/60">
-                <div className="flex items-center gap-3 min-w-0">
+            <BrandCard padding="none" variant="liquid" className="h-full flex flex-col overflow-hidden group">
+              {/* Refined Section Header */}
+              <div className="flex items-center justify-between p-6 border-b border-slate-100/40 bg-white/20">
+                <div className="flex items-center gap-4 min-w-0">
                   {section.icon && (
-                    <div className="w-8 h-8 rounded-lg bg-[#003262]/5 text-[#003262] flex items-center justify-center">
-                      {React.cloneElement(section.icon as React.ReactElement, { size: 16 })}
+                    <div className="w-10 h-10 rounded-xl bg-[#003262]/5 text-[#003262] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                      {React.cloneElement(section.icon as React.ReactElement, { size: 20 })}
                     </div>
                   )}
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-[#003262] leading-tight truncate uppercase tracking-tight">{section.title}</p>
+                    <p className="text-base font-black text-[#003262] tracking-tight uppercase">{section.title}</p>
                     {section.subtitle && (
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5 truncate">{section.subtitle}</p>
+                      <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em] mt-0.5 truncate">{section.subtitle}</p>
                     )}
                   </div>
                 </div>
-                {/* Section actions */}
+                {/* Micro Actions */}
                 <div className="flex items-center gap-2">
                   {section.actions?.map(a => (
-                    <Button key={a.id} variant="glass" size="sm" className="w-8 h-8 p-0 rounded-lg bg-white/40" onClick={a.onClick}>
-                      {a.icon && React.cloneElement(a.icon as React.ReactElement, { size: 14 })}
-                    </Button>
+                    <BrandButton key={a.id} variant="secondary" size="xs" className="w-9 h-9 p-0 rounded-xl bg-white/60 hover:bg-white/80" onClick={a.onClick}>
+                      {a.icon && React.cloneElement(a.icon as React.ReactElement, { size: 16 })}
+                    </BrandButton>
                   ))}
                 </div>
               </div>
 
-              {/* Section body */}
-              <div className="flex-1 p-5 overflow-auto">
+              {/* Dynamic Content Body */}
+              <div className="flex-1 p-8 overflow-auto no-scrollbar">
                 {section.component}
               </div>
-            </Card>
+            </BrandCard>
           </motion.div>
         ))}
       </div>

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { omniagentAdapter } from './omniagent-adapter.ts';
-import { adapterRegistry } from './adapter-registry.ts';
+import { omniagentAdapter } from './omniagent-adapter';
+import { adapterRegistry } from './adapter-registry';
 
 describe('OmniSpace OmniAgent Paperclip Adapter', () => {
   it('should detect the correct model and provider', async () => {

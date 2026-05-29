@@ -4,7 +4,7 @@
  */
 
 import { createHash } from 'crypto';
-import type { IComponentCore } from '../src/shared/types';
+import type { IComponentCore } from '../src/shared/types/index.ts';
 import { createClient } from '@supabase/supabase-js';
 
 // ── Dimension Types ────────────────────────────────────────────────────────

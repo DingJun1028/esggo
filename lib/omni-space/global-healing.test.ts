@@ -3,7 +3,8 @@ import { expect, test, describe, beforeEach } from 'vitest';
 import { EventStore } from './event-store';
 import { GlobalHealing, IAdapterNode } from './global-healing';
 import { OmniCard, NotionPagePayload } from '@/src/shared/types';
-import { AlTableRecordPayload } from '../adapters/altable.adapter';
+import { AlTableRecordPayload, AlTableAdapter } from '../adapters/altable.adapter';
+import { NotionAdapter } from '../adapters/notion.adapter';
 
 // Mock Notion 適配器節點
 class MockNotionAdapterNode implements IAdapterNode {
@@ -152,7 +153,7 @@ describe('全域痊癒與調和機制 (Global Healing & GPL Sourcing)', () => {
     // 4. 執行調和
     const result = await healer.applyHealing();
 
-    // 5. 斷言：完全契合，不進行任何修復
+    // 4. 斷言：完全契合，不進行任何修復
     expect(result.status).toBe('SUCCESS');
     expect(result.reconciledCount).toBe(0);
     expect(result.logs.some(log => log.includes('與 GPL 真理狀態完全契合'))).toBe(true);

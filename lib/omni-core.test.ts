@@ -199,7 +199,7 @@ describe('OmniCore Integrity Engine', () => {
 
   describe('Eternal Memory Integrity', () => {
     it('should store memory with a valid hash lock', async () => {
-      const memory = await omniCore.storeMemory('Project Alpha initialized', EternalMemoryType.SEMANTIC, ['init']);
+      const memory = await omniCore.storeMemory('Project Alpha initialized', EternalMemoryType.SEMANTIC);
 
       expect(memory.hash_lock).toBeDefined();
       expect(memory.consolidated).toBe(false);
@@ -210,8 +210,8 @@ describe('OmniCore Integrity Engine', () => {
     });
 
     it('should consolidate multiple memories into one summary', async () => {
-      await omniCore.storeMemory('Event 1', EternalMemoryType.EPISODIC, ['tag1']);
-      await omniCore.storeMemory('Event 2', EternalMemoryType.EPISODIC, ['tag2']);
+      await omniCore.storeMemory('Event 1', EternalMemoryType.EPISODIC);
+      await omniCore.storeMemory('Event 2', EternalMemoryType.EPISODIC);
 
       const consolidated = await omniCore.consolidateMemories(EternalMemoryType.EPISODIC);
 

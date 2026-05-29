@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { db } from '../lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useServices } from '../contexts/ServiceContext';
 
 export interface DashboardStats {
   complianceRate: number;
@@ -11,6 +13,7 @@ export interface DashboardStats {
 }
 
 export function useDashboardStats(refreshInterval = 60000) {
+  const { loggerService } = useServices();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,8 +21,6 @@ export function useDashboardStats(refreshInterval = 60000) {
   const fetchStats = useCallback(async () => {
     try {
       // Setup read from db.collection('dashboard_stats').doc('current')
-      // NOTE: Using dynamic import to avoid SSR issues if needed, but since it's 'use client', standard imports work.
-      const { doc, getDoc, setDoc } = await import('firebase/firestore');
       const docRef = doc(db, 'dashboard_stats', 'current');
       const docSnap = await getDoc(docRef);
 
@@ -38,7 +39,7 @@ export function useDashboardStats(refreshInterval = 60000) {
       }
       setError(null);
     } catch (err) {
-      console.error(err);
+      loggerService.error('Failed to sync dashboard intelligence', err);
       setError('Failed to sync dashboard intelligence.');
       // Keep old mock fallback just in case
       setStats({
@@ -50,7 +51,7 @@ export function useDashboardStats(refreshInterval = 60000) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loggerService]);
 
   useEffect(() => {
     fetchStats();

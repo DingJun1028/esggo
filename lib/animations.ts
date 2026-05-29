@@ -22,6 +22,15 @@ export const slideIn = {
   },
 };
 
+export const slideInRight = {
+  initial: { x: 100, opacity: 0 },
+  animate: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.5, ease: 'easeOut' }
+  },
+};
+
 export const scaleIn = {
   initial: { scale: 0.9, opacity: 0 },
   animate: {

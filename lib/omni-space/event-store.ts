@@ -1,4 +1,4 @@
-import { OmniCard, OmniEvent, OmniEventSchema } from '@/src/shared/types';
+import { OmniCard, OmniEvent, OmniEventSchema, OmniCardSchema } from '@/src/shared/types';
 import { createHash, randomUUID } from 'crypto';
 import { EventEmitter } from 'events';
 
@@ -10,14 +10,18 @@ export class OmniEventStore {
   public static readonly eventBus = new EventEmitter();
 
   public static createEvent(eventType: string, card: OmniCard, sourcePlatform: string, cryptographicSeal?: string): OmniEvent {
-    const payloadString = JSON.stringify(card);
+    // 1. 先透過 Zod 進行規範化 (Normalization)，確保物件結構與類型符合契約
+    const normalizedCard = OmniCardSchema.parse(card);
+    
+    // 2. 基於規範化後的物件計算 Hash Lock，避免屬性順序或額外欄位造成的驗證偏移
+    const payloadString = JSON.stringify(normalizedCard);
     const hashLock = createHash('sha256').update(payloadString).digest('hex');
 
     const rawEvent = {
       id: randomUUID(),
-      omni_card_uuid: card.uuid,
+      omni_card_uuid: normalizedCard.uuid,
       event_type: eventType,
-      payload: card,
+      payload: normalizedCard,
       source_platform: sourcePlatform,
       created_at: Date.now(),
       hash_lock: hashLock,
@@ -60,8 +64,23 @@ export class EventStore extends EventEmitter {
       return null;
     }
 
-    // 簡單的 Last-Write-Wins (LWW) 狀態重建，可根據 5T 協議擴充
-    return cardEvents[cardEvents.length - 1].payload;
+    // 強化異步事件流的回溯穩定性：過濾掉 Hash Lock 不符的損壞事件 (5T: Trustworthy)
+    const validEvents = cardEvents.filter(e => {
+      const payloadString = JSON.stringify(e.payload);
+      const expectedHash = createHash('sha256').update(payloadString).digest('hex');
+      if (e.hash_lock !== expectedHash) {
+        console.warn(`[EventStore] 檢測到損壞的事件 ${e.id}，Hash Lock 驗證失敗。`);
+        return false;
+      }
+      return true;
+    });
+
+    if (validEvents.length === 0) {
+      return null;
+    }
+
+    // Last-Write-Wins (LWW) 取最後一筆經過驗證的真理狀態
+    return validEvents[validEvents.length - 1].payload;
   }
 
   public getEvents(cardUuid: string): OmniEvent[] {

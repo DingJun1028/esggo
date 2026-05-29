@@ -23,7 +23,7 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    let alertData = {
+    const alertData = {
       company_id: record.company_id,
       severity: 'medium',
       title: 'AI 系統提示',

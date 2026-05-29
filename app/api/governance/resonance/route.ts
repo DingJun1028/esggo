@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { governanceEngine } from '@/lib/governance-engine';
 import { supabase } from '@/lib/supabase';
-import { ApiResponse } from '@/src/shared/types';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 
 export async function GET() {
   try {
@@ -39,25 +39,16 @@ export async function GET() {
 
     const overall = governanceEngine.getOverallResonanceIndex(results);
 
-    return NextResponse.json({
-      id: Date.now().toString(),
-      status: 'success',
-      content: 'Governance resonance calculation complete using live data.',
-      data: {
+    return NextResponse.json<ApiResponse>(
+      createSuccessResponse({
         overall,
         breakdown: results
-      },
-      timestamp: Date.now(),
-    } as ApiResponse);
+      })
+    );
   } catch (error: any) {
     console.error('[Resonance API] Failed to fetch live data:', error);
-    return NextResponse.json(
-      {
-        id: Date.now().toString(),
-        status: 'error',
-        content: error.message || 'Resonance calculation failed',
-        timestamp: Date.now(),
-      } as ApiResponse,
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('RESONANCE_FAILED', error.message || 'Resonance calculation failed'),
       { status: 500 }
     );
   }

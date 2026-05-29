@@ -44,7 +44,7 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    title: 'E-S-G MODULES',
+    title: 'E · S · G 模組',
     items: [
       { href: '/environmental', label: '環境指揮', sub: 'Environmental', icon: Leaf },
       { href: '/social', label: '社會影響', sub: 'Social', icon: HeartHandshake },
@@ -87,6 +87,7 @@ const NAV_GROUPS: NavGroup[] = [
     title: 'SYSTEM',
     items: [
       { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
+      { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen, badge: 'NEW' },
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
       { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'NEW' },
@@ -213,7 +214,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
   const t = getThemeStyles(sidebarTheme);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     CORE: true,
-    'E-S-G MODULES': true,
+    'E · S · G 模組': true,
     GOVERNANCE: true,
     INSIGHTS: false,
     ACADEMY: false,
@@ -250,8 +251,8 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
       </AnimatePresence>
 <aside
   className={cn(
-    `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-500 ease-in-out ${t.sidebar}`,
-    isCollapsed ? 'w-16' : 'w-64',
+    `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-300 ease-in-out ${t.sidebar}`,
+    isCollapsed ? 'w-[72px]' : 'w-[280px]',
     // Mobile visibility: fixed on mobile, static position on desktop
     mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
   )}

@@ -26,3 +26,4 @@ export { default as BrandGRITag } from './BrandGRITag';
 export { default as BrandScoreRing } from './BrandScoreRing';
 export { default as StandardPage } from './StandardPage';
 export { default as BrandFormula } from './BrandFormula';
+export { default as IntegritySeal } from './IntegritySeal';

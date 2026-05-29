@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getToken, onMessage } from 'firebase/messaging';
 import { initMessaging } from '../lib/firebase';
 
-const VAPID_KEY = 'BFgBqmnt_ZkLY15_w_XeAwdlKuC0vNXRARYV2RWZvgOMliwkwqio6B-ldpSIDVMxsmp4DJtiqeN-CS5e5Y-IEKA';
+const VAPID_KEY = process.env.NEXT_PUBLIC_FCM_VAPID_KEY || 'BFgBqmnt_ZkLY15_w_XeAwdlKuC0vNXRARYV2RWZvgOMliwkwqio6B-ldpSIDVMxsmp4DJtiqeN-CS5e5Y-IEKA';
 
 export const useFcmToken = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export const useFcmToken = () => {
 
   // Optional: setup foreground message listener here or let the app do it
   useEffect(() => {
-    let unsubscribe = () => {};
+    let unsubscribe = () => { };
     const setupListener = async () => {
       const messaging = await initMessaging();
       if (messaging) {
@@ -55,7 +55,7 @@ export const useFcmToken = () => {
         });
       }
     };
-    
+
     if (token) {
       setupListener();
     }

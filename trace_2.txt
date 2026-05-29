@@ -1,0 +1,14 @@
+### Execution Trace:
+- Viewed: 
+  - `lib/supabaseAdmin.ts`
+  - `lib/supabase.ts`
+  - `lib/vault-omni.ts`
+- Ran: 
+  - `dir c:\Project\esggo\esggo\lib` (Note: should have used `list_dir`)
+  - `list_dir c:\Project\esggo\esggo\lib`
+- Modified:
+  - `app/api/system/health/route.ts` (Optimized to perform an actual DB ping against `vault_omni_core` using `supabaseAdmin` to determine real connection health, latency, and derive the `integrityScore` dynamically)
+  - `app/api/webhooks/zkp/route.ts` (Optimized to integrate deeply with the 5T protocol by importing `readFromVault`, `computeHashLock`, and `engraveToSingleTable`. When a valid ZKP proof is received, it extracts the target component, updates its status to 'Verified_ZKP_Sealed', re-computes its hash lock, and commits the state securely into `vault_omni_core`.)
+
+### Outcome:
+Both API routes were successfully optimized. The System Health API is now tethered to real Supabase availability and latency instead of purely random data. The ZKP Webhook is now fully connected to the OmniCore Single Table engine, meaning external verifiable zero-knowledge proofs directly drive immutable state changes and audit logging via the `vault_omni_core` schema.

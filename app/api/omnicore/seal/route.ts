@@ -14,7 +14,7 @@ export async function POST(req: Request) {
           status: 'error',
           content: 'Missing required fields: metric, source, or formula',
           timestamp: Date.now(),
-        } as ApiResponse,
+        } as any,
         { status: 400 }
       );
     }
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       component: result,
       timestamp: Date.now(),
       hash: result.hash_lock,
-    } as ApiResponse);
+    } as any);
   } catch (error: any) {
     return NextResponse.json(
       {
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         status: 'error',
         content: error.message || 'Internal Server Error during sealing',
         timestamp: Date.now(),
-      } as ApiResponse,
+      } as any,
       { status: 500 }
     );
   }

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,7 +27,7 @@ const MOCK_AGENTS: SwarmAgent[] = [
 ];
 
 export function SwarmMonitor() {
-  const { tasks, agents, loading, error, refresh } = useSwarmSync(5000);
+  const { tasks, agents, loading, error, refresh } = useSwarmSync();
 
   return (
     <BrandCard padding="none" className="glass-panel border-none h-full overflow-hidden flex flex-col shadow-lg bg-gradient-to-br from-white/90 to-slate-50/50">
