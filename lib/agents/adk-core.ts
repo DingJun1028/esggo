@@ -1,14 +1,12 @@
 import { z } from 'genkit';
 import { ai } from './genkit';
 import { telemetryService, TelemetryEvent } from '../telemetry/service';
-import { memoryStore, MemoryRecord } from '../memory/memory-store';
+import { memoryStore } from '../memory/memory-store';
+import type { MemoryRecord } from '../memory/memory-store';
 import { toolSynthesizer } from '../tools/synthesis';
+import { CostEstimator } from '../routing/cost-estimator';
 
-/**
- * ADK Core: Agent Abstraction Layer
- * v1.0.0 | High-Performance Multi-Agent Orchestration
- */
-
+// ------------------- ADK Core Structures -------------------
 export interface AgentConfig {
   name: string;
   role: string;
@@ -17,58 +15,67 @@ export interface AgentConfig {
   model?: any;
 }
 
+/**
+ * Core agent abstraction with memory, telemetry, and dynamic tool synthesis.
+ */
 export class ADKAgent {
   readonly config: AgentConfig;
-  private _memoryStore = memoryStore; // Already an instance from module
+  public _memoryStore = memoryStore; // Direct reference to singleton
 
   constructor(config: AgentConfig) {
     this.config = config;
   }
 
-  async run(task: string, context?: any, retries = 3) {
+  /**
+   * Main execution method with retries, tool synthesis, and cost-aware model selection.
+   */
+  async run(task: string, context?: any, retries = 3): Promise<any> {
     console.log(`[ADK Agent - ${this.config.name}] Executing task: ${task} (attempts: ${retries})`);
 
     const startTime = Date.now();
     const finalSystemPrompt = this.config.systemPrompt || `
 You are ${this.config.name}, an expert ${this.config.role}.
 Maintain high technical integrity and follow the 5T protocol.
-Consider synthesizing a temporary tool if the existing tools are insufficient.
+Consider synthesizing a temporary tool if the existing tools are incomplete.
     `;
 
-    // Check if existing tools are sufficient
+    // Determine if existing tools can handle this task
     const existingTools = this.config.tools || [];
     const hasMatchingTool = existingTools.some((t: any) => 
       t.name && task.toLowerCase().includes(t.name.toLowerCase())
     );
 
-    // If no matching tool, try dynamic synthesis
+    // If no matching tool, attempt dynamic synthesis
     if (!hasMatchingTool) {
       console.log(`[ADK Agent - ${this.config.name}] No matching tool found, synthesizing...`);
       try {
         const synthResult = await toolSynthesizer.synthesizeTool(task, context, this.config.name);
         if (synthResult.success && synthResult.toolId) {
-          // Add the generated tool to the tool list
           const generatedTool = {
             name: synthResult.toolId,
             description: `Dynamically generated tool for: ${task}`,
             handler: () => synthResult.result
           };
           this.config.tools = [...existingTools, generatedTool];
-          // Re-run with the new tool available
-          return this.run(task, context, retries);
+          return this.run(task, context, retries); // Recursive retry with new tool
         }
       } catch (synthError) {
         console.warn(`[ADK Agent - ${this.config.name}] Tool synthesis failed:`, synthError);
-        // Continue without synthesis
+        // Continue without synthesized tool
       }
     }
+
+    // Cost estimation and model selection
+    const promptEstimate = `Task: ${task}\nContext: ${JSON.stringify(context || {})}`;
+    const { model: selectedModel, estimatedTokens, estimatedCostUSD } = CostEstimator.pickCheapestModel(promptEstimate, 0.01); // $0.01 budget
+    console.log(`[ADK Agent - ${this.config.name}] Selected model: ${selectedModel} (est. ${estimatedTokens} tokens, $${estimatedCostUSD.toFixed(6)} cost)`);
 
     const executeWithRetry = async (attempt: number): Promise<any> => {
       try {
         const response = await ai.generate({
-          model: this.config.model || 'googleai/gemini-2.0-flash',
+          model: selectedModel,
           system: finalSystemPrompt,
-          prompt: `Task: ${task}\nContext: ${JSON.stringify(context || {})}`,
+          prompt: promptEstimate,
           tools: this.config.tools,
           config: { temperature: 0.2 }
         });
@@ -77,7 +84,7 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
         const endTime = Date.now();
         const duration = endTime - startTime;
         
-        // Record to memory and telemetry
+        // Record execution in memory & telemetry
         const memoryRecord: Omit<MemoryRecord, 'id' | 'timestamp'> = {
           agentName: this.config.name,
           task,
@@ -108,7 +115,6 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
         const endTime = Date.now();
         const duration = endTime - startTime;
         
-        // Record to memory and telemetry
         const memoryRecord: Omit<MemoryRecord, 'id' | 'timestamp'> = {
           agentName: this.config.name,
           task,
@@ -132,7 +138,7 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
         
         console.error(`[ADK Agent - ${this.config.name}] Attempt ${attempt}: Error:`, error);
         
-        // MOCK FALLBACK for leaked API key or dev mode
+        // Resilient fallback for API key issues
         if (error.message.includes('403') || error.message.includes('API key')) {
           console.warn(`[ADK Agent - ${this.config.name}] ⚠️ API Key Error. Entering Resilient Simulation Mode...`);
           const mockOutput = `[SIMULATED RESPONSE for ${this.config.name}]\nThis is a high-fidelity mock response because the cloud intelligence layer is currently under 5T maintenance (API Key Issue). The mission continues with local heuristics.`;
@@ -169,11 +175,12 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
         };
       }
     };
-    
+
     return executeWithRetry(1);
   }
 
-  getHistory() {
+  /** Retrieve execution history for this agent */
+  public getHistory() {
     return this._memoryStore.getByAgent(this.config.name);
   }
 }
@@ -183,16 +190,16 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
  */
 export class ADKSwarm {
   private agents: Map<string, ADKAgent> = new Map();
-  
+
   register(agent: ADKAgent) {
     this.agents.set(agent.config.name, agent);
     return this;
   }
-  
+
   getAgent(name: string) {
     return this.agents.get(name);
   }
-  
+
   async broadcast(task: string, context?: any) {
     const results = await Promise.all(
       Array.from(this.agents.values()).map(agent => agent.run(task, context))
@@ -200,3 +207,5 @@ export class ADKSwarm {
     return results;
   }
 }
+
+/* Export the swarm class for external use */

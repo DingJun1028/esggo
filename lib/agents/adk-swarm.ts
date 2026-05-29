@@ -2,13 +2,10 @@ import { ADKAgent, AgentConfig } from './adk-core';
 import { ADK_STANDARD_TOOLS } from './adk-tools';
 import { agent0, OmniCommander, omniAgentBus } from './omni-commander';
 import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
+import { parsePdfTool, parseImageTool } from '../tools/evidence-genkit-tool';
 import { memoryStore } from '../memory/memory-store';
 
-const AGENT_TOOLS = [auditSealTool, auditSealValidationTool];
-
-/**
- * ADK Swarm Deployment: ESG GO Official Agents
- */
+const AGENT_TOOLS = [auditSealTool, auditSealValidationTool, parsePdfTool, parseImageTool];
 
 export const esgResearcher = new ADKAgent({
   name: 'ESG_Researcher',
@@ -55,9 +52,6 @@ You can map to GRI, SASB, TCFD, and emerging frameworks like TNFD.
   tools: [...ADK_STANDARD_TOOLS, ...AGENT_TOOLS]
 });
 
-/**
- * Collaborative Swarm Agent (with memory-augmented reasoning)
- */
 class CollaborativeSwarmAgent {
   private agent: ADKAgent;
   private memorySummary: string = 'Initial swarm memory summary';
@@ -66,22 +60,19 @@ class CollaborativeSwarmAgent {
     this.agent = new ADKAgent(agentConfig);
   }
 
-  public execute(task: string, context?: any): Promise<any> {
+  public async execute(task: string, context?: any): Promise<any> {
     const retrievedMemories = memoryStore.search(task, 3);
 
-    // If no similar memories found, proceed with standard execution
     if (retrievedMemories.length === 0) {
       return this.agent.run(task, context);
     }
 
-    // Generate enhanced context with retrieved memories
     const enhancedContext = {
       ...context || {},
       retrievedMemories,
       memorySummary: this.generateMemorySummary(retrievedMemories)
     };
 
-    // Execute with enhanced context
     return this.agent.run(task, enhancedContext);
   }
 
@@ -98,9 +89,6 @@ class CollaborativeSwarmAgent {
   }
 }
 
-/**
- * ADK Swarm: Collaborative Multi-Agent Execution
- */
 export class CollaborativeADKSwarm {
   private agents: Map<string, CollaborativeSwarmAgent> = new Map();
 
@@ -117,21 +105,17 @@ export class CollaborativeADKSwarm {
       agentResults[agent.name] = result;
     }
 
-    // Initiate swarm negotiation if needed
     const negotiationResult = await this.swarmNegotiate(agentResults);
-
     return negotiationResult ?? agentResults;
   }
 
   private swarmNegotiate(results: { [key: string]: any }): { [key: string]: any } | null {
-    // Basic consensus logic: if all agents produce identical non-error results, treat as consensus
     const values = Object.values(results);
     const allSame = values.every(v => v === values[0] && typeof v !== 'undefined');
     if (allSame) {
       return results;
     }
 
-    // Otherwise, fallback: prefer successful results over errors
     const successfulEntries = Object.fromEntries(
       Object.entries(results).filter(([_, val]) => val && typeof val !== 'undefined' && !(val.error || val.simulated))
     );
@@ -170,7 +154,4 @@ Your focus is precision, code integrity, and direct action.
 You respond to OmniAgent events and execute low-level operations.
   ` });
 
-/**
- * The OmniAgent: Orchestrated by Supreme Commander via OmniAgentBus
- */
 export const omniAgent = new OmniCommander(omniSwarm);
