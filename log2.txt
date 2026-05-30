@@ -1,0 +1,6 @@
+﻿### Execution Trace:
+- Viewed: supabase/migrations/20260523000000_create_remaining_tables.sql (1-177)
+- Modified: supabase/migrations/20260530000001_oauth_rls_sacred_law.sql (Replaced content with stricter RLS policies including WITH CHECK, TO authenticated, and removed service_role bypass)
+
+### Outcome:
+Confirmed that evidence_vault.company_id, udit_logs.company_id, and sustainwrite_sections.user_id are all of type TEXT. Replaced the RLS migration file 20260530000001_oauth_rls_sacred_law.sql with the newly provided strict security policies. Awaiting the final verification SQL from the commander.
