@@ -1,6 +1,6 @@
-# ESG GO v11.7 雲端部屬與驗收手冊 (Vercel)
+# ESGGO 善向永續 系統 v11.7 雲端部屬與驗收手冊 (Vercel)
 
-本手冊旨在引導技術團隊將 **ESG GO Sovereign Governance OS** 順利部屬至 Vercel 雲端環境，並進行交付前的最終驗收。
+本手冊旨在引導技術團隊將 **ESGGO 善向永續 系統 Sovereign Governance OS** 順利部屬至 Vercel 雲端環境，並進行交付前的最終驗收。
 
 ## 1. 前置準備
 *   **GitHub 倉庫存取權**：確保已連接 `DingJun1028/esggo_original`。
@@ -54,4 +54,4 @@
 *   **AI 無回應**：確認 `NEXT_PUBLIC_GEMINI_API_KEY` 已在 Vercel Environment Variables 中正確設置，且無配額限制。
 
 ---
-**ESG GO 研發團隊 · 2026/05/23**
+**ESGGO 善向永續 系統 研發團隊 · 2026/05/23**

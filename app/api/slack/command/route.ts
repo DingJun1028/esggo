@@ -2,13 +2,11 @@
  * ESGGO Slack Slash Command Handler
  * Route: POST /api/slack/command
  *
- * 接收 Slack 發出的 Slash Command，驗證簽名後路由至對應的 OmniAgent 行為。
- *
- * 支援的指令：
- *   /5t [公司名]       — 觸發 5T 協議即時評分報告
- *   /omni [指令]       — 傳遞至 OmniAgent 執行 (chat/task)
- *   /alert [訊息]      — 手動推播警報
- *   /status            — 回傳 OmniAgent 閘道狀態
+ * 支援的指令（與 slack-manifest.json 一致）：
+ *   /esg-five-t [公司名]  — 觸發 5T 協議即時評分報告
+ *   /esg-status           — 回傳 OmniAgent 閘道狀態
+ *   /esg-alert [訊息]     — 手動推播警報
+ *   /omni [指令]          — 傳遞至 OmniAgent 執行
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -45,8 +43,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // ── 3. 路由至對應指令處理器 ───────────────────────
   switch (cmd.command) {
-    // /5t <公司名> — 觸發 5T 評分報告 (示範用隨機分數，正式環境接 Supabase)
-    case '/5t': {
+
+    // /esg-five-t <公司名> — 觸發 5T 評分報告
+    case '/esg-five-t': {
       const companyName = cmd.text.trim() || '未指定企業';
       const scores = Array.from({ length: 5 }, () => Math.floor(70 + Math.random() * 30));
       const overall = Math.round(scores.reduce((a, b) => a + b, 0) / 5);
@@ -63,6 +62,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         t5Trackable: scores[4],
         overallScore: overall,
         triggeredBy: cmd.user_id,
+        reportUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? ''}/wiki`,
       });
 
       return NextResponse.json({
@@ -71,8 +71,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
     }
 
-    // /status — 查詢 OmniAgent 閘道狀態
-    case '/status': {
+    // /esg-status — 查詢 OmniAgent 閘道狀態
+    case '/esg-status': {
       const status = await fetchOmniAgentStatus();
       return NextResponse.json({
         response_type: 'ephemeral',
@@ -88,12 +88,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
     }
 
-    // /alert <訊息> — 手動推播警報
-    case '/alert': {
+    // /esg-alert <訊息> — 手動推播警報
+    case '/esg-alert': {
       if (!cmd.text.trim()) {
         return NextResponse.json({
           response_type: 'ephemeral',
-          text: '請提供警報訊息：`/alert <訊息內容>`',
+          text: '請提供警報訊息：`/esg-alert <訊息內容>`',
         });
       }
 
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     default:
       return NextResponse.json({
         response_type: 'ephemeral',
-        text: `❓ 未知指令：\`${cmd.command}\`\n可用指令：\`/5t\`、\`/status\`、\`/alert\`、\`/omni\``,
+        text: `❓ 未知指令：\`${cmd.command}\`\n可用指令：\`/esg-five-t\`、\`/esg-status\`、\`/esg-alert\`、\`/omni\``,
       });
   }
 }

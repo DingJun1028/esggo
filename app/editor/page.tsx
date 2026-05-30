@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileText, ChevronRight, ChevronLeft, Sparkles, Shield, Upload, BarChart3,
   RefreshCw, Save, Lock, FileCheck, Users, Zap, SearchCheck, Info, MessageSquare,
-  XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye, Bot, Trophy
+  XCircle, Database, CheckCircle, AlertTriangle, Plus, Layout, Download, Edit3, Type, Eye, Bot, Trophy, Layers
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useSustainWriteStore } from '../../store/useSustainWriteStore';
@@ -48,7 +48,7 @@ const CHAPTERS: Chapter[] = [
 
 const PERSONA_META = {
   compliance: { label: '合規守衛', color: 'var(--aqua-700)', icon: <Shield size={14} />, className: 'text-aqua-cyan-midtone bg-aqua-cyan/5 border-aqua-cyan/20 hover:border-aqua-cyan/40' },
-  harmony:    { label: '共榮引導', color: 'var(--t2-text)', icon: <Users size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
+  harmony: { label: '共榮引導', color: 'var(--t2-text)', icon: <Users size={14} />, className: 'text-t2-text bg-t2-bg border-verified/20 hover:border-verified/40' },
   innovation: { label: '創新先行', color: 'var(--t5-text)', icon: <Zap size={14} />, className: 'text-t5-text bg-t5-bg border-purple-200 hover:border-purple-300' },
 };
 
@@ -60,7 +60,7 @@ const CATEGORY_META = {
 
 export default function EditorPage() {
   const { user, companyId } = useAuth();
-  const { 
+  const {
     generatedContent, fieldValues, chapterStatuses, loading: memoryLoading,
     initData, updateContent, updateFieldValue, updateChapterStatus,
     commitHistory, undoContent, redoContent, expandContentWithAI, isGeneratingAI,
@@ -136,10 +136,10 @@ export default function EditorPage() {
     try {
       const { data: nexus } = await supabase.rpc('get_gri_nexus', { p_gri_tag: chapter.gri });
       const alchemyRecord = nexus?.find((n: any) => n.artifact_type === 'ALCHEMY_RESULT' || n.artifact_type === 'VAULT');
-      
-      if (!alchemyRecord) { 
-        showToast('金庫中尚未發現此章節的 5T 實證憑證', 'error'); 
-        return; 
+
+      if (!alchemyRecord) {
+        showToast('金庫中尚未發現此章節的 5T 實證憑證', 'error');
+        return;
       }
 
       const res = await fetch('/api/omni-agent-api/extract-metrics', {
@@ -149,11 +149,11 @@ export default function EditorPage() {
       });
       if (!res.ok) throw new Error('Extraction failed');
       const { metrics } = await res.json();
-      
+
       metrics.forEach((m: any) => {
         if (m.gri === chapter.gri || chapter.gri.includes(m.gri)) {
-           const targetField = chapter.fields?.find(f => f.gri === m.gri) || chapter.fields?.[0];
-           if (targetField) updateFieldValue(chapter.id, targetField.id, m.value.toString(), chapter.title, chapter.order, [chapter.gri]);
+          const targetField = chapter.fields?.find(f => f.gri === m.gri) || chapter.fields?.[0];
+          if (targetField) updateFieldValue(chapter.id, targetField.id, m.value.toString(), chapter.title, chapter.order, [chapter.gri]);
         }
       });
       showToast('OmniAgent 已完成 5T 數據自動填報', 'success');
@@ -170,14 +170,14 @@ export default function EditorPage() {
         body: JSON.stringify({ industry: '科技業', category: chapter.category })
       });
       const data = await res.json();
-      const strategyText = data.recommendations?.map((r: any) => 
+      const strategyText = data.recommendations?.map((r: any) =>
         `> 💡 **${r.title}** (${r.t5_gate})\n> ${r.description}\n> 影響: ${r.impact}`
       ).join('\n\n') || '尚無具體建議';
 
       const strategy = `\n\n### 🌍 產業標竿策略建議\n\n${strategyText}\n`;
       updateContent(chapter.id, (generatedContent[chapter.id] || '') + strategy, chapter.title, chapter.order, [chapter.gri]);
       showToast('已嵌入產業最佳實踐建議', 'success');
-    } catch(e) {
+    } catch (e) {
       showToast('無法取得標竿策略', 'error');
     } finally {
       setGenerating(false);
@@ -191,7 +191,7 @@ export default function EditorPage() {
       for (let i = 1; i <= 5; i++) {
         template += `## 第${i}節：${chapter.title}之深度管理方針與績效探討 (目標字數：4000字)\n`;
         template += `[${chapter.gri}] 本章節致力於探討在 ${chapter.title} 領域的核心影響力與戰略方針。\n`;
-        template += `【OmniAgent 擴充區塊 ${String.fromCharCode(64+i)}：請極度深入解析政策實施背景、法規趨勢、利害關係人議合過程、實際量化指標、以及未來短中長期修正方案。需至少擴寫至 4000 字以達成本節深度目標。】\n\n`;
+        template += `【OmniAgent 擴充區塊 ${String.fromCharCode(64 + i)}：請極度深入解析政策實施背景、法規趨勢、利害關係人議合過程、實際量化指標、以及未來短中長期修正方案。需至少擴寫至 4000 字以達成本節深度目標。】\n\n`;
       }
       template += `---\n> 💡 專家提示：此零算力模板已內建 5 段論述架構。請點擊「文章增長」，OmniAgent 將自動將各區塊擴充至 4000 字級別之專業深度，達成單章 2 萬字目標。`;
     }
@@ -203,6 +203,54 @@ export default function EditorPage() {
     const chart = `\n\n### 數據趨勢視覺化\n\n\`\`\`mermaid\ngraph LR\n  A[2024 基準] --> B(2025 實績)\n  B --> C{2026 目標}\n  C -->|減量 15%| D[SBTi 達標]\n\`\`\`\n`;
     updateContent(chapter.id, (generatedContent[chapter.id] || '') + chart, chapter.title, chapter.order, [chapter.gri]);
     showToast('AI 圖表結構已合成', 'success');
+  };
+
+  const handleSwarmFusion = async () => {
+    setGenerating(true);
+    setGenProgress({ step: 1, total: 5, label: '🌐 召集五大領域代理蜂群...' });
+
+    const progressTimer = setInterval(() => {
+      setGenProgress(p => {
+        if (p.step >= 4) return p;
+        const labels = [
+          '🌐 召集五大領域代理蜂群...',
+          '🌍 環境、👥 社會、⚖️ 治理獨立草擬中...',
+          '💰 財務與 🔗 供應鏈視角同步注入...',
+          '⚔️ 蜂群交叉辯論 (Swarm Debate) 偵測數據衝突...',
+          '🕊️ 終極融合確信中...'
+        ];
+        return { step: p.step + 1, total: 5, label: labels[p.step] };
+      });
+    }, 2000);
+
+    try {
+      const roleMap: Record<string, 'public' | 'auditor' | 'board' | 'legal'> = {
+        compliance: 'auditor',
+        harmony: 'public',
+        innovation: 'board'
+      };
+
+      const res = await fetch('/api/swarm/execute-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ audienceRole: roleMap[selectedPersona] || 'board' })
+      });
+      const data = await res.json();
+
+      clearInterval(progressTimer);
+      if (data.success && data.content) {
+        updateContent(chapter.id, data.content, chapter.title, chapter.order, [chapter.gri]);
+        showToast('已完成 OmniCore 全域融合', 'success');
+      } else {
+        showToast(data.error || '共作失敗', 'error');
+      }
+    } catch (e) {
+      clearInterval(progressTimer);
+      showToast('全域共作連線失敗', 'error');
+    } finally {
+      setGenerating(false);
+      setGenProgress({ step: 0, total: 5, label: '' });
+    }
   };
 
   const handleSeal = async () => {
@@ -249,7 +297,7 @@ export default function EditorPage() {
             <p className="text-[8px] font-bold text-slate-500 uppercase tracking-[0.25em] mt-0.5">250-Page Enterprise Document Engine</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <GlobalSearch />
           <div className="flex items-center gap-3 px-5 py-1.5 bg-white/90 backdrop-blur-md rounded-xl border border-slate-200">
@@ -259,31 +307,31 @@ export default function EditorPage() {
             </div>
             <BrandStatusDot status="active" pulse size="md" />
           </div>
-          <Button 
-            variant="ghost" 
-            size="md" 
-            onClick={() => exportDocx(CHAPTERS, generatedContent, showToast)} 
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={() => exportDocx(CHAPTERS, generatedContent, showToast)}
             className="rounded-xl px-4 font-black text-xs tracking-wider transition-all duration-300 border backdrop-blur-md bg-white hover:bg-cyan-50 border-cyan-200 text-cyan-600 shadow-[0_0_15px_rgba(6,182,212,0.15)] active:scale-95"
           >
             <Download size={14} className="mr-2" /> Docx 匯出
           </Button>
-          <Button 
-            variant="ghost" 
-            size="md" 
-            onClick={() => exportPdf(CHAPTERS, generatedContent, showToast)} 
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={() => exportPdf(CHAPTERS, generatedContent, showToast)}
             className="rounded-xl px-4 font-black text-xs tracking-wider transition-all duration-300 border backdrop-blur-md bg-white hover:bg-emerald-50 border-emerald-200 text-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.15)] active:scale-95"
           >
             <Download size={14} className="mr-2" /> PDF 匯出
           </Button>
-          <Button 
-            variant="ghost" 
-            size="md" 
-            onClick={handleSeal} 
-            isLoading={sealing} 
-            disabled={isSealed} 
+          <Button
+            variant="ghost"
+            size="md"
+            onClick={handleSeal}
+            isLoading={sealing}
+            disabled={isSealed}
             className={cn(
               "rounded-xl px-6 font-black text-xs tracking-wider transition-all duration-300 border backdrop-blur-md",
-              isSealed 
+              isSealed
                 ? "bg-emerald-50 border-emerald-200 text-emerald-600 cursor-not-allowed shadow-[0_0_15px_rgba(16,185,129,0.1)]"
                 : "bg-white hover:bg-cyan-50 border-cyan-200 text-cyan-600 shadow-[0_0_15px_rgba(6,182,212,0.15)] active:scale-95"
             )}
@@ -294,7 +342,7 @@ export default function EditorPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden z-10 relative">
-        <motion.aside 
+        <motion.aside
           variants={fadeIn}
           initial="initial"
           animate="animate"
@@ -308,20 +356,20 @@ export default function EditorPage() {
           </div>
           <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
             {CHAPTERS.map(c => (
-              <button 
-                key={c.id} 
-                onClick={() => setSelectedChapterId(c.id)} 
+              <button
+                key={c.id}
+                onClick={() => setSelectedChapterId(c.id)}
                 className={cn(
                   "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group border",
-                  selectedChapterId === c.id 
-                    ? 'bg-gradient-to-r from-cyan-50 to-white border-cyan-200 text-cyan-900 shadow-[0_0_20px_rgba(6,182,212,0.05)]' 
+                  selectedChapterId === c.id
+                    ? 'bg-gradient-to-r from-cyan-50 to-white border-cyan-200 text-cyan-900 shadow-[0_0_20px_rgba(6,182,212,0.05)]'
                     : 'border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100'
                 )}
               >
                 <div className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs transition-all border",
-                  selectedChapterId === c.id 
-                    ? 'bg-cyan-100 border-cyan-200 text-cyan-700' 
+                  selectedChapterId === c.id
+                    ? 'bg-cyan-100 border-cyan-200 text-cyan-700'
                     : 'bg-slate-100 border-slate-200 text-slate-500'
                 )}>
                   {c.num}
@@ -334,7 +382,7 @@ export default function EditorPage() {
                 )}
                 {chapterStatuses[c.id] === 'sealed' && (
                   <div className="p-1.5 bg-emerald-50 border border-emerald-200 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.1)] animate-pulse">
-                    <CheckCircle size={10} className="text-emerald-600"/>
+                    <CheckCircle size={10} className="text-emerald-600" />
                   </div>
                 )}
               </button>
@@ -343,7 +391,7 @@ export default function EditorPage() {
         </motion.aside>
 
         <main className="flex-1 flex flex-col overflow-hidden relative">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="px-10 py-6 border-b border-slate-200 bg-white/60 backdrop-blur-md"
@@ -360,13 +408,13 @@ export default function EditorPage() {
             <h2 className="text-2xl font-black text-slate-900 tracking-tight mb-6">{chapter.title}</h2>
             <div className="flex gap-2">
               {['write', 'data', 'preview', 'ai-tools'].map((t) => (
-                <button 
-                  key={t} 
-                  onClick={() => setActivePanel(t as any)} 
+                <button
+                  key={t}
+                  onClick={() => setActivePanel(t as any)}
                   className={cn(
                     "px-6 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all duration-300 border",
-                    activePanel === t 
-                      ? 'bg-cyan-50 border-cyan-200 text-cyan-700 shadow-[0_0_15px_rgba(6,182,212,0.1)]' 
+                    activePanel === t
+                      ? 'bg-cyan-50 border-cyan-200 text-cyan-700 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
                       : 'bg-transparent border-transparent text-slate-500 hover:text-slate-800'
                   )}
                 >
@@ -376,7 +424,7 @@ export default function EditorPage() {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={staggerContainer}
             initial="initial"
             animate="animate"
@@ -394,19 +442,19 @@ export default function EditorPage() {
                     <p className="text-xs text-[var(--at-text-sub)] font-medium leading-relaxed">
                       啟動 OmniAgent 雙重遞迴展開，強制將單一章節擴充至 <span className="font-bold text-amber-500">20,000+ 字元</span> 之專家級洞察。
                     </p>
-                    
+
                     <div className="pt-4 space-y-3">
-                      <Button 
-                        variant="primary" 
-                        className="w-full h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white border-none rounded-2xl font-black text-xs tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.3)] active:scale-[0.98] transition-all" 
-                        onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])} 
+                      <Button
+                        variant="primary"
+                        className="w-full h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white border-none rounded-2xl font-black text-xs tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.3)] active:scale-[0.98] transition-all"
+                        onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])}
                         disabled={isGeneratingAI[chapter.id] || isSealed}
                       >
                         {isGeneratingAI[chapter.id] ? <RefreshCw size={16} className="animate-spin" /> : <Sparkles size={16} />}
                         {isGeneratingAI[chapter.id] ? 'OmniAgent 遞迴撰寫中...' : '啟動 Depth 5 專家撰寫 (2萬字)'}
                       </Button>
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         className="w-full h-12 border-amber-500/30 text-amber-600 hover:bg-amber-50 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
                         onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])}
                         disabled={isGeneratingAI[chapter.id] || isSealed}
@@ -420,13 +468,13 @@ export default function EditorPage() {
                   <div className="pt-6 border-t border-[var(--at-border)] space-y-2">
                     <p className="text-[9px] font-black text-[var(--at-text-sub)] uppercase tracking-[0.3em] mb-4">AI Expert Persona</p>
                     {Object.entries(PERSONA_META).map(([p, meta]) => (
-                      <button 
-                        key={p} 
-                        onClick={() => setSelectedPersona(p as any)} 
+                      <button
+                        key={p}
+                        onClick={() => setSelectedPersona(p as any)}
                         className={cn(
                           "w-full p-4 rounded-2xl border transition-all duration-300 text-left flex items-center justify-between group",
-                          selectedPersona === p 
-                            ? 'bg-[var(--at-bg-card)]/80 border-cyan-400 text-[var(--at-text-main)] shadow-[0_0_15px_rgba(6,182,212,0.15)] translate-x-1' 
+                          selectedPersona === p
+                            ? 'bg-[var(--at-bg-card)]/80 border-cyan-400 text-[var(--at-text-main)] shadow-[0_0_15px_rgba(6,182,212,0.15)] translate-x-1'
                             : 'bg-transparent border-[var(--at-border)] text-[var(--at-text-sub)] hover:border-slate-300 hover:text-[var(--at-text-main)]'
                         )}
                       >
@@ -437,24 +485,24 @@ export default function EditorPage() {
                       </button>
                     ))}
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-3 pt-4">
-                      <Button 
-                        variant="ghost" 
-                        className="h-12 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-emerald-400/50 text-emerald-600 text-[9px] font-black uppercase tracking-wider shadow-sm" 
-                        onClick={handleAutoPopulate}
-                        isLoading={generating}
-                      >
-                        <Database size={12} className="mr-1.5" /> 5T 自動填報
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        className="h-12 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-purple-400/50 text-purple-600 text-[9px] font-black uppercase tracking-wider shadow-sm" 
-                        onClick={applyBestPractice}
-                        isLoading={generating}
-                      >
-                        <Bot size={12} className="mr-1.5" /> 標竿策略載入
-                      </Button>
+                    <Button
+                      variant="ghost"
+                      className="h-12 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-emerald-400/50 text-emerald-600 text-[9px] font-black uppercase tracking-wider shadow-sm"
+                      onClick={handleAutoPopulate}
+                      isLoading={generating}
+                    >
+                      <Database size={12} className="mr-1.5" /> 5T 自動填報
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="h-12 rounded-xl bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-purple-400/50 text-purple-600 text-[9px] font-black uppercase tracking-wider shadow-sm"
+                      onClick={applyBestPractice}
+                      isLoading={generating}
+                    >
+                      <Bot size={12} className="mr-1.5" /> 標竿策略載入
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -468,11 +516,11 @@ export default function EditorPage() {
                       <Type size={12} className="text-cyan-600" />
                       <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">GRI Master Workspace</span>
                     </div>
-                    
+
                     <div className="h-4 w-[1px] bg-slate-200 mx-2" />
-                    
+
                     <div className="flex gap-1">
-                      <button 
+                      <button
                         onClick={() => undoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])}
                         disabled={!(contentHistory[chapter.id]?.past.length > 0) || isGeneratingAI[chapter.id]}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 disabled:opacity-20 transition-all"
@@ -480,7 +528,7 @@ export default function EditorPage() {
                       >
                         <RefreshCw size={12} className="-scale-x-100" />
                       </button>
-                      <button 
+                      <button
                         onClick={() => redoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])}
                         disabled={!(contentHistory[chapter.id]?.future.length > 0) || isGeneratingAI[chapter.id]}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 disabled:opacity-20 transition-all"
@@ -490,7 +538,7 @@ export default function EditorPage() {
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     {isGeneratingAI[chapter.id] && (
                       <div className="flex items-center gap-2 px-3 py-1 bg-indigo-50 rounded-full border border-indigo-100 animate-pulse">
@@ -509,23 +557,23 @@ export default function EditorPage() {
                 <div className="flex-1 relative overflow-hidden min-h-[400px]">
                   {activePanel === 'write' && (
                     <div className="w-full h-full relative">
-                      <textarea 
-                        value={generatedContent[chapter.id] || ''} 
-                        onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
+                      <textarea
+                        value={generatedContent[chapter.id] || ''}
+                        onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])}
                         onFocus={() => commitHistory(chapter.id)}
                         onBlur={() => commitHistory(chapter.id)}
                         disabled={isGeneratingAI[chapter.id]}
                         className={cn(
                           "w-full h-full p-8 md:p-10 text-sm font-medium leading-[2.2] text-slate-800 outline-none resize-none bg-transparent scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent transition-all duration-700",
                           isGeneratingAI[chapter.id] ? "opacity-50 blur-[1px]" : "opacity-100"
-                        )} 
-                        placeholder="ESG 治理主權由您執筆..." 
+                        )}
+                        placeholder="ESG 治理主權由您執筆..."
                       />
                       {isGeneratingAI[chapter.id] && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <div className="flex flex-col items-center gap-3 p-6 bg-white/40 backdrop-blur-sm rounded-3xl border border-indigo-200/50 shadow-2xl">
-                             <RefreshCw size={24} className="text-indigo-600 animate-spin" />
-                             <p className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">Generating Expert Content...</p>
+                            <RefreshCw size={24} className="text-indigo-600 animate-spin" />
+                            <p className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">Generating Expert Content...</p>
                           </div>
                         </div>
                       )}
@@ -538,11 +586,11 @@ export default function EditorPage() {
                           <h3 className="text-lg font-black text-slate-800">數據指標填報</h3>
                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">GRI Metric Input Hub</p>
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={handleAutoPopulate} 
-                          isLoading={generating} 
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleAutoPopulate}
+                          isLoading={generating}
                           className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-xl h-10 px-5 shadow-sm active:scale-95 font-black text-[9px] uppercase"
                         >
                           <Bot size={12} className="mr-1.5" /> OmniAgent_Auto-Fill
@@ -556,20 +604,20 @@ export default function EditorPage() {
                               <p className="text-xs font-black text-slate-700">{f.label}</p>
                             </div>
                             <div className="flex items-center gap-3">
-                              <Input 
-                                className="w-28 h-10 bg-white border border-slate-200 group-hover:border-cyan-300 rounded-lg px-3 text-xs font-mono font-black text-cyan-700 outline-none focus:border-cyan-400 text-center shadow-sm" 
-                                value={fieldValues[chapter.id]?.[f.id] || ''} 
-                                onChange={e => updateFieldValue(chapter.id, f.id, e.target.value, chapter.title, chapter.order, [chapter.gri])} 
+                              <Input
+                                className="w-28 h-10 bg-white border border-slate-200 group-hover:border-cyan-300 rounded-lg px-3 text-xs font-mono font-black text-cyan-700 outline-none focus:border-cyan-400 text-center shadow-sm"
+                                value={fieldValues[chapter.id]?.[f.id] || ''}
+                                onChange={e => updateFieldValue(chapter.id, f.id, e.target.value, chapter.title, chapter.order, [chapter.gri])}
                               />
                               <span className="text-[9px] font-bold text-slate-500 uppercase w-10">{f.unit}</span>
                             </div>
                           </div>
                         )) || (
-                          <div className="py-20 text-center opacity-50">
-                            <Database size={40} className="mx-auto mb-3 text-slate-400" />
-                            <p className="text-xs font-bold text-slate-500">此章節無需量化指標數據</p>
-                          </div>
-                        )}
+                            <div className="py-20 text-center opacity-50">
+                              <Database size={40} className="mx-auto mb-3 text-slate-400" />
+                              <p className="text-xs font-bold text-slate-500">此章節無需量化指標數據</p>
+                            </div>
+                          )}
                       </div>
                     </div>
                   )}
@@ -581,10 +629,10 @@ export default function EditorPage() {
                         </h3>
                         <p className="text-xs text-[var(--at-text-sub)] mt-1">針對已填入真實數據的專家模板，進行語義增強與圖表生成。</p>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-cyan-400 hover:bg-cyan-500/5 group transition-all"
                           onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])}
                           disabled={isGeneratingAI[chapter.id]}
@@ -598,8 +646,8 @@ export default function EditorPage() {
                           </div>
                         </Button>
 
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           className="h-auto py-6 flex flex-col items-center justify-center gap-3 bg-[var(--at-bg-card)]/50 border border-[var(--at-border)] hover:border-emerald-400 hover:bg-emerald-500/5 group transition-all"
                           onClick={() => {
                             showToast('正在合成趨勢圖表...', 'info');
@@ -618,6 +666,21 @@ export default function EditorPage() {
                             <span className="block text-[10px] text-[var(--at-text-sub)]">合成 Mermaid 趨勢圖表，提升可讀性。</span>
                           </div>
                         </Button>
+
+                        <Button
+                          variant="ghost"
+                          className="md:col-span-2 h-auto py-6 flex flex-col items-center justify-center gap-3 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-cyan-500/10 border border-indigo-500/30 hover:border-indigo-400 group transition-all"
+                          onClick={handleSwarmFusion}
+                          disabled={generating}
+                        >
+                          <div className="p-3 rounded-full bg-indigo-500/20 text-indigo-400 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(99,102,241,0.3)]">
+                            {generating ? <RefreshCw size={24} className="animate-spin" /> : <Layers size={24} />}
+                          </div>
+                          <div className="text-center">
+                            <span className="block text-sm font-black text-[var(--at-text-main)] mb-1">OmniCore 全域融合 (Swarm Master Fusion)</span>
+                            <span className="block text-[10px] text-[var(--at-text-sub)]">召集五大領域代理共同編寫，並由萬能大腦進行終極融合。</span>
+                          </div>
+                        </Button>
                       </div>
 
                       <div className="pt-8 border-t border-[var(--at-border)]">
@@ -628,9 +691,9 @@ export default function EditorPage() {
 
                   {generating && activePanel === 'write' && (
                     <div className="absolute inset-0 bg-white/80 backdrop-blur-md flex items-center justify-center z-20">
-                      <motion.div 
-                        initial={{ scale: 0.95, opacity: 0 }} 
-                        animate={{ scale: 1, opacity: 1 }} 
+                      <motion.div
+                        initial={{ scale: 0.95, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
                         className="w-[380px] p-8 bg-white border border-cyan-200 rounded-2xl text-slate-900 shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden"
                       >
                         <div className="relative z-10 space-y-6">
@@ -642,11 +705,11 @@ export default function EditorPage() {
                             <span className="text-xl font-black font-mono text-cyan-600">{Math.round((genProgress.step / genProgress.total) * 100)}%</span>
                           </div>
                           <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <motion.div 
-                              className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500" 
-                              initial={{ width: 0 }} 
-                              animate={{ width: `${(genProgress.step / genProgress.total) * 100}%` }} 
-                              transition={{ duration: 1 }} 
+                            <motion.div
+                              className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${(genProgress.step / genProgress.total) * 100}%` }}
+                              transition={{ duration: 1 }}
                             />
                           </div>
                           <div className="flex items-center gap-3 text-cyan-600/60">
@@ -659,9 +722,9 @@ export default function EditorPage() {
                     </div>
                   )}
                 </div>
-                
+
                 <div className="h-20 px-8 bg-white/80 border-t border-slate-200 flex items-center justify-between">
-                  <BrandT5Strip items={['T1','T2','T3','T4','T5'].map((t, i) => ({ code: t as any, active: isSealed || i < 3 }))} />
+                  <BrandT5Strip items={['T1', 'T2', 'T3', 'T4', 'T5'].map((t, i) => ({ code: t as any, active: isSealed || i < 3 }))} />
                   <div className="flex items-center gap-8">
                     <div className="text-right">
                       <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Chapter Words</p>
@@ -689,16 +752,16 @@ export default function EditorPage() {
 
       <AnimatePresence>
         {toast && (
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: 30 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
             className="fixed bottom-8 right-8 z-[9999]"
           >
             <div className={cn(
               "px-6 py-4 rounded-xl shadow-2xl backdrop-blur-2xl text-slate-900 font-black text-xs flex items-center gap-3 border",
-              toast.type === 'error' 
-                ? 'bg-red-50 border-red-200 shadow-red-100 text-red-900' 
+              toast.type === 'error'
+                ? 'bg-red-50 border-red-200 shadow-red-100 text-red-900'
                 : 'bg-white border-cyan-200 shadow-cyan-100'
             )}>
               {toast.type === 'error' ? <XCircle size={16} className="text-red-500" /> : <CheckCircle size={16} className="text-cyan-500" />}
@@ -710,3 +773,6 @@ export default function EditorPage() {
     </div>
   );
 }
+
+
+

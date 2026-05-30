@@ -1,5 +1,5 @@
 # Generated TypeScript README
-This README will guide you through the process of using the generated JavaScript SDK package for the connector `example`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
+This README will guide you through the process of using the generated JavaScript SDK package for the connector `omnicore`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
 
 **If you're looking for the `React README`, you can find it at [`dataconnect-generated/react/README.md`](./react/README.md)**
 
@@ -25,6 +25,7 @@ This README will guide you through the process of using the generated JavaScript
   - [*ListEternalMemories*](#listeternalmemories)
   - [*ListSwarmAgentTasks*](#listswarmagenttasks)
   - [*ListRegulatoryPolicies*](#listregulatorypolicies)
+  - [*GetMyCompanyProfile*](#getmycompanyprofile)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
   - [*UpsertAuditRecord*](#upsertauditrecord)
@@ -39,7 +40,7 @@ This README will guide you through the process of using the generated JavaScript
   - [*CreateDemoData*](#createdemodata)
 
 # Accessing the connector
-A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `example`. You can find more information about connectors in the [Data Connect documentation](https://firebase.google.com/docs/data-connect#how-does).
+A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `omnicore`. You can find more information about connectors in the [Data Connect documentation](https://firebase.google.com/docs/data-connect#how-does).
 
 You can use this generated SDK by importing from the package `@dataconnect/generated` as shown below. Both CommonJS and ESM imports are supported.
 
@@ -81,7 +82,7 @@ The following is true for both the action shortcut function and the `QueryRef` f
 - If the Query accepts arguments, both the action shortcut function and the `QueryRef` function accept a single argument: an object that contains all the required variables (and the optional variables) for the Query
 - Both functions can be called with or without passing in a `DataConnect` instance as an argument. If no `DataConnect` argument is passed in, then the generated SDK will call `getDataConnect(connectorConfig)` behind the scenes for you.
 
-Below are examples of how to use the `example` connector's generated functions to execute each query. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#using-queries).
+Below are examples of how to use the `omnicore` connector's generated functions to execute each query. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#using-queries).
 
 ## ListAllTasks
 You can execute the `ListAllTasks` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
@@ -1732,6 +1733,107 @@ executeQuery(ref).then((response) => {
 });
 ```
 
+## GetMyCompanyProfile
+You can execute the `GetMyCompanyProfile` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+getMyCompanyProfile(options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
+
+interface GetMyCompanyProfileRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMyCompanyProfileData, undefined>;
+}
+export const getMyCompanyProfileRef: GetMyCompanyProfileRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+getMyCompanyProfile(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
+
+interface GetMyCompanyProfileRef {
+  ...
+  (dc: DataConnect): QueryRef<GetMyCompanyProfileData, undefined>;
+}
+export const getMyCompanyProfileRef: GetMyCompanyProfileRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the getMyCompanyProfileRef:
+```typescript
+const name = getMyCompanyProfileRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `GetMyCompanyProfile` query has no variables.
+### Return Type
+Recall that executing the `GetMyCompanyProfile` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `GetMyCompanyProfileData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface GetMyCompanyProfileData {
+  companyProfiles: ({
+    id: UUIDString;
+    name: string;
+    industry?: string | null;
+    headquarters?: string | null;
+    vision?: string | null;
+    mission?: string | null;
+    employeeCount?: number | null;
+    revenueTwd?: number | null;
+    capitalTwd?: number | null;
+  } & CompanyProfile_Key)[];
+}
+```
+### Using `GetMyCompanyProfile`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, getMyCompanyProfile } from '@dataconnect/generated';
+
+
+// Call the `getMyCompanyProfile()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await getMyCompanyProfile();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await getMyCompanyProfile(dataConnect);
+
+console.log(data.companyProfiles);
+
+// Or, you can use the `Promise` API.
+getMyCompanyProfile().then((response) => {
+  const data = response.data;
+  console.log(data.companyProfiles);
+});
+```
+
+### Using `GetMyCompanyProfile`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, getMyCompanyProfileRef } from '@dataconnect/generated';
+
+
+// Call the `getMyCompanyProfileRef()` function to get a reference to the query.
+const ref = getMyCompanyProfileRef();
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = getMyCompanyProfileRef(dataConnect);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.companyProfiles);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.companyProfiles);
+});
+```
+
 # Mutations
 
 There are two ways to execute a Data Connect Mutation using the generated Web SDK:
@@ -1745,7 +1847,7 @@ The following is true for both the action shortcut function and the `MutationRef
 - If the Mutation accepts arguments, both the action shortcut function and the `MutationRef` function accept a single argument: an object that contains all the required variables (and the optional variables) for the Mutation
 - Both functions can be called with or without passing in a `DataConnect` instance as an argument. If no `DataConnect` argument is passed in, then the generated SDK will call `getDataConnect(connectorConfig)` behind the scenes for you.
 
-Below are examples of how to use the `example` connector's generated functions to execute each mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#using-mutations).
+Below are examples of how to use the `omnicore` connector's generated functions to execute each mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#using-mutations).
 
 ## UpsertTask
 You can execute the `UpsertTask` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):

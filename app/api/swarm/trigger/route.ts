@@ -3,6 +3,13 @@ import { createTask, executeSwarmTask, CreateTaskInput } from '@/lib/agent/orche
 
 export async function POST(request: Request) {
     try {
+        let body;
+        try {
+            body = await request.json();
+        } catch (e) {
+            body = {};
+        }
+
         // 動態載入 store 確保任務可成功註冊
         const { addTask } = await import('@/lib/agent/store');
 
@@ -12,7 +19,8 @@ export async function POST(request: Request) {
             title: '[手動測試] 財報與碳排同態加總校驗',
             description: '測試 ZKP 與 Healing Guardian 的連動流轉',
             inputRefIds: [],
-            skillKey: 'omnicore_compliance_check'
+            skillKey: 'omnicore_compliance_check',
+            audienceRole: body.audienceRole || 'auditor'
         };
 
         const { task } = createTask(input);

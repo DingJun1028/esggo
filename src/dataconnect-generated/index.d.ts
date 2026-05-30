@@ -83,6 +83,20 @@ export interface GetCompanyProfileVariables {
   id: UUIDString;
 }
 
+export interface GetMyCompanyProfileData {
+  companyProfiles: ({
+    id: UUIDString;
+    name: string;
+    industry?: string | null;
+    headquarters?: string | null;
+    vision?: string | null;
+    mission?: string | null;
+    employeeCount?: number | null;
+    revenueTwd?: number | null;
+    capitalTwd?: number | null;
+  } & CompanyProfile_Key)[];
+}
+
 export interface GetReportByCompanyData {
   reports: ({
     id: UUIDString;
@@ -826,6 +840,18 @@ export const listRegulatoryPoliciesRef: ListRegulatoryPoliciesRef;
 
 export function listRegulatoryPolicies(options?: ExecuteQueryOptions): QueryPromise<ListRegulatoryPoliciesData, undefined>;
 export function listRegulatoryPolicies(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListRegulatoryPoliciesData, undefined>;
+
+interface GetMyCompanyProfileRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): QueryRef<GetMyCompanyProfileData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): QueryRef<GetMyCompanyProfileData, undefined>;
+  operationName: string;
+}
+export const getMyCompanyProfileRef: GetMyCompanyProfileRef;
+
+export function getMyCompanyProfile(options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
+export function getMyCompanyProfile(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
 
 interface CreateDemoDataRef {
   /* Allow users to create refs without passing in DataConnect */

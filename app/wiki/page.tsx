@@ -8,17 +8,23 @@ export const metadata = {
   description: 'ESGGO System Architecture and 5T Governance Protocol',
 };
 
-export default function WikiPage() {
-  // Read WIKI.md from project root
-  const wikiFilePath = path.join(process.cwd(), 'WIKI.md');
-  let wikiContent = '';
+export default async function WikiPage() {
+  const url = `https://app.nocodebackend.com/api/public-data/wiki_pages?Instance=${process.env.NCB_INSTANCE}wiki`;
+  
+  let pages = [];
   try {
-    wikiContent = fs.readFileSync(wikiFilePath, 'utf8');
+    const res = await fetch(url, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      pages = data.data || [];
+    } else {
+      console.error('Failed to fetch wiki pages', await res.text());
+    }
   } catch (err) {
-    wikiContent = '# Error\nCould not load WIKI.md content.';
+    console.error('Error fetching wiki pages:', err);
   }
 
   return (
-    <WikiClientPage content={wikiContent} />
+    <WikiClientPage pages={pages} />
   );
 }

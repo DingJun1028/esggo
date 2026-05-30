@@ -1,3 +1,6 @@
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { firebaseAdmin } from '@/lib/firebase-admin';

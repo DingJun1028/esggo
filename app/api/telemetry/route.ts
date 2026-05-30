@@ -26,10 +26,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
     }
 
-    const instance = "54686_esg_go_ncb";
+    const instance = process.env.NCB_INSTANCE || "54686_esggo";
+    const dataApiUrl = process.env.NCB_DATA_API_URL || "https://app.nocodebackend.com/api/data";
     
     // Write to NCB telemetry_events
-    const response = await fetch(`https://app.nocodebackend.com/api/data/create/telemetry_events?Instance=${instance}`, {
+    const response = await fetch(`${dataApiUrl}/create/telemetry_events?Instance=${instance}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     // If SEAL, also create esg_evidence
     if (payload.type === 'SEAL') {
-      const evidenceResponse = await fetch(`https://app.nocodebackend.com/api/data/create/esg_evidence?Instance=${instance}`, {
+      const evidenceResponse = await fetch(`${dataApiUrl}/create/esg_evidence?Instance=${instance}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

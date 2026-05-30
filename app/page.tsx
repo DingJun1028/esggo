@@ -44,7 +44,6 @@ function LandingContent() {
         body: JSON.stringify({ audienceRole: selectedRole })
       });
       if (!res.ok) console.error('[Dashboard] 手動觸發發生異常');
-
     } catch (e) {
       console.error('[Dashboard] 手動觸發連線失敗', e);
     }
@@ -179,7 +178,7 @@ function LandingContent() {
           </div>
 
           <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.9] uppercase">
-            ESG GO <br />
+            ESGGO <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 text-glow-cyan">
               善向永續
             </span>
@@ -207,7 +206,6 @@ function LandingContent() {
               className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-cyan-500/50 bg-cyan-500/10 text-cyan-400 text-sm font-bold tracking-widest hover:bg-cyan-500/20 hover:scale-105 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] animate-pulse"
             >
               <Activity size={16} />
-              [TEST] 手動觸發 OmniAgent 協作與 ZKP 驗算
               [TEST] 手動觸發 (動態角色多層次輸出)
             </button>
           </div>

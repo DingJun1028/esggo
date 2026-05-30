@@ -1,10 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  writeMemory, readMemory, readMemoryByType,
-  savePreference, loadPreference,
-  saveCompanyProfile, loadCompanyProfile,
-  saveFieldValues, loadFieldValues,
+  writeMemory, readMemory,
   saveAIConversation, loadAIConversation,
   type MemoryType, type MemoryRecord, type AIMessage,
 } from '../lib/memory';
@@ -13,10 +10,10 @@ import { useCompanyProfileStore } from '../store/useCompanyProfileStore';
 
 // ─── Generic Memory Hook ─────────────────────────────────────────────────────
 
-export function useMemory<T = Record<string, any>>(
-  type: MemoryType,
-  key: string,
-  defaultValue?: T
+export function useMemory<T = unknown>(
+   type: MemoryType,
+   key: string,
+   defaultValue?: T
 ) {
   const [value, setValue] = useState<T | null>(defaultValue ?? null);
   const [loading, setLoading] = useState(true);
@@ -24,16 +21,16 @@ export function useMemory<T = Record<string, any>>(
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    readMemory(type, key).then(mem => {
-      if (mounted) {
-        setValue(mem as T ?? defaultValue ?? null);
-        setLoading(false);
-      }
-    });
-    return () => { mounted = false; };
-  }, [type, key]);
+     let mounted = true;
+     // setLoading(true); // Removed - already initialized to true in useState
+     readMemory(type, key).then(mem => {
+       if (mounted) {
+         setValue((mem ?? defaultValue ?? null) as T | null);
+         setLoading(false);
+       }
+     });
+     return () => { mounted = false; };
+   }, [type, key, defaultValue]);
 
   const save = useCallback((newValue: T) => {
     setValue(newValue);
@@ -41,7 +38,7 @@ export function useMemory<T = Record<string, any>>(
     clearTimeout(saveTimeoutRef.current);
     // Debounce: 800ms after last change
     saveTimeoutRef.current = setTimeout(() => {
-      writeMemory(type, key, newValue as Record<string, any>)
+       writeMemory(type, key, newValue as Record<string, unknown>)
         .then(() => {
           setSaved(true);
           setTimeout(() => setSaved(false), 2000);
@@ -59,14 +56,14 @@ export function useAIMemory(persona: string) {
   const [messages, setMessages] = useState<AIMessage[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    loadAIConversation(persona).then(msgs => {
-      if (mounted) { setMessages(msgs); setLoading(false); }
-    });
-    return () => { mounted = false; };
-  }, [persona]);
+   useEffect(() => {
+     let mounted = true;
+     // setLoading(true); // Removed - already initialized to true in useState
+     loadAIConversation(persona).then(msgs => {
+       if (mounted) { setMessages(msgs); setLoading(false); }
+     });
+     return () => { mounted = false; };
+   }, [persona]);
 
   const addMessage = useCallback(async (role: 'user' | 'assistant', content: string) => {
     const msg: AIMessage = { role, content, timestamp: new Date().toISOString(), persona };

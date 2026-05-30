@@ -1,7 +1,7 @@
 # 🏛️ 萬能元件品牌原子庫 - 經典版 (Classic Edition)
-## ESG GO X OmniAgent | Official Component Standard v1.2
+## ESGGO 善向永續 系統 X OmniAgent | Official Component Standard v1.2
 
-本原子庫為 ESG GO 系統的預設視覺與交互標準，基於 Berkeley Haass 學術精準度與 5T 誠信協議開發。
+本原子庫為 ESGGO 善向永續 系統 系統的預設視覺與交互標準，基於 Berkeley Haass 學術精準度與 5T 誠信協議開發。
 
 ## 📜 核心設計原則：參照原則 (Reference Principle)
 「參照原則」是萬能原子庫的基石，確保每一 UI 組件不再是孤立的視覺元素，而是誠信協議中的一個活躍節點。
@@ -22,14 +22,20 @@
 *   **BrandSearchBar:** 具備 GRI 自動補全與智慧過濾功能的搜索欄。
 
 ### 3. 生物級元件 (Organisms)
+*   **AppShellV2:** 系統主架構外殼，整合 MECE 模塊化導航與雙軸收合功能。
 *   **VaultOmniTable:** 萬能聖碑記錄表格，整合即時 SHA-256 驗算與 ZKP 標識。
 *   **OmniAgentFloatingAgent:** 全域懸浮 AI 助手，支援語音與視覺掃描輸入。
 *   **StandardPage:** 預設的 12 欄 Bento Grid 佈局頁面框架。
 
-### 4. 品牌視覺 Token (Default)
+### 4. 系統級架構模式 (Patterns)
+*   **MECE Modular Navigation:** 基於 SaaS 使用者旅程的六大模組分類，確保導航邏輯不重疊、不遺漏。
+*   **Dual-Axis Collapse:** 桌面端側邊欄與上方欄的獨立收合開關，極大化數據展示空間。
+*   **Mobile Pulse Bar:** 行動端專用的橫向滑動頂部功能列與底部導航列。
+
+### 5. 品牌視覺 Token (v2.0)
 *   **Primary Color:** `#003262` (Berkeley Blue)
 *   **Accent Color:** `#FDB515` (California Gold)
-*   **Philosophy:** Liquid Glass (液態玻璃擬態)
+*   **Philosophy:** Liquid Glass v2.0 (液態玻璃 2.0 - 強化動態光影與雙主題適應)
 
 ---
 **小組負責:** ADK Group C (UI/UX Atomic)

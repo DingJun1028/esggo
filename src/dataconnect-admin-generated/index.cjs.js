@@ -1,11 +1,18 @@
 const { validateAdminArgs } = require('firebase-admin/data-connect');
 
 const connectorConfig = {
-  connector: 'example',
+  connector: 'omnicore',
   serviceId: 'esggoalpha',
   location: 'asia-east1'
 };
 exports.connectorConfig = connectorConfig;
+
+function createDemoData(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
+}
+exports.createDemoData = createDemoData;
 
 function listAllTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
@@ -182,10 +189,10 @@ function listRegulatoryPolicies(dcOrOptions, options) {
 }
 exports.listRegulatoryPolicies = listRegulatoryPolicies;
 
-function createDemoData(dcOrOptions, options) {
+function getMyCompanyProfile(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
-  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
+  return dcInstance.executeQuery('GetMyCompanyProfile', undefined, inputOpts);
 }
-exports.createDemoData = createDemoData;
+exports.getMyCompanyProfile = getMyCompanyProfile;
 

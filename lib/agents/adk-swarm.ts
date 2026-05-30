@@ -1,8 +1,17 @@
-import { ADKAgent, AgentConfig } from './adk-core';
+import { ADKAgent } from './adk-core.ts';
+import type { AgentConfig } from './adk-core.ts';
 import { ADK_STANDARD_TOOLS } from './adk-tools';
 import { agent0, OmniCommander, omniAgentBus } from './omni-commander';
 import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
 import { memoryStore } from '../memory/memory-store';
+
+// Define the result type from ADKAgent.run
+interface ADKAgentResult {
+  success: boolean;
+  agent: string;
+  output?: unknown;
+  error?: string;
+}
 
 const AGENT_TOOLS = [auditSealTool, auditSealValidationTool];
 
@@ -56,7 +65,7 @@ You can map to GRI, SASB, TCFD, and emerging frameworks like TNFD.
 });
 
 /**
- * Collaborative Swarm Agent (with memory-augmented reasoning)
+ * Collaborative Swarm Agent (with memory-augmented reasoning and Event Bus subscription)
  */
 class CollaborativeSwarmAgent {
   private agent: ADKAgent;
@@ -64,13 +73,49 @@ class CollaborativeSwarmAgent {
 
   constructor(private agentConfig: Omit<AgentConfig, 'tools'>) {
     this.agent = new ADKAgent(agentConfig);
+    this.initializeSubscriptions();
   }
 
-  public async run(task: string, context?: any): Promise<any> {
+  /**
+   * Subscribe to relevant OmniAgentBus events based on agent role
+   */
+  private initializeSubscriptions() {
+    console.log(`[Swarm Agent] ${this.agentConfig.name} connecting to OmniAgentBus...`);
+    
+    // All agents listen for global commands
+    omniAgentBus.subscribe('COMMAND_ISSUED', (payload) => this.handleEvent('COMMAND_ISSUED', payload));
+    
+    // Role-specific subscriptions
+    if (this.agentConfig.name === 'ESG_Auditor') {
+      omniAgentBus.subscribe('SIMULATION_COMPLETE', (payload) => this.handleEvent('SIMULATION_COMPLETE', payload));
+      omniAgentBus.subscribe('5T_SEAL', (payload) => this.handleEvent('5T_SEAL', payload));
+    }
+
+    if (this.agentConfig.name === 'ESG_Researcher') {
+      omniAgentBus.subscribe('DATA_SYNC_START', (payload) => this.handleEvent('DATA_SYNC_START', payload));
+    }
+
+    if (this.agentConfig.name === 'Agent0') {
+      omniAgentBus.subscribe('MISSION_START', (payload) => this.handleEvent('MISSION_START', payload));
+    }
+  }
+
+  private async handleEvent(event: string, payload: Record<string, unknown>) {
+    console.log(`[Swarm Agent] ${this.agentConfig.name} reacting to: ${event}`);
+    
+    // Simple reaction logic: If it's a simulation, Auditor might want to log a compliance insight
+    if (event === 'SIMULATION_COMPLETE' && this.agentConfig.name === 'ESG_Auditor') {
+      await this.execute(`Perform a rapid compliance audit for this simulation result: ${JSON.stringify(payload.results)}`, payload);
+    }
+    
+    // Add more reactive logic as needed for other roles
+  }
+
+   public async run(task: string, context?: unknown): Promise<unknown> {
     return this.execute(task, context);
   }
 
-  public async execute(task: string, context?: any): Promise<any> {
+   public async execute(task: string, context?: unknown): Promise<unknown> {
     const retrievedMemories = await memoryStore.search(task, 3);
 
     let result;
@@ -78,30 +123,30 @@ class CollaborativeSwarmAgent {
     if (retrievedMemories.length === 0) {
       result = await this.agent.run(task, context);
     } else {
-      // Generate enhanced context with retrieved memories
-      const enhancedContext = {
-        ...context || {},
-        retrievedMemories,
-        memorySummary: this.generateMemorySummary(retrievedMemories)
-      };
+       // Generate enhanced context with retrieved memories
+       const enhancedContext = {
+         ...(typeof context === 'object' && context !== null ? context : {}),
+         retrievedMemories,
+         memorySummary: this.generateMemorySummary(retrievedMemories)
+       };
       // Execute with enhanced context
       result = await this.agent.run(task, enhancedContext);
     }
 
-    // Save task execution result to memory
-    await memoryStore.add({
-      agentName: this.agentConfig.name,
-      task,
-      context,
-      result: typeof result === 'string' ? result : JSON.stringify(result),
-      success: result ? !(result as any).error : false,
-      tags: ['swarm', this.agentConfig.name]
-    });
+     // Save task execution result to memory
+     await memoryStore.add({
+       agentName: this.agentConfig.name,
+       task,
+       context,
+       result: typeof result === 'string' ? result : JSON.stringify(result),
+       success: result ? !(result as ADKAgentResult).error : false,
+       tags: ['swarm', this.agentConfig.name]
+     });
 
     return result;
   }
 
-  private generateMemorySummary(memories: any[]): string {
+   private generateMemorySummary(memories: MemoryRecord[]): string {
     return `Summarized insights from past similar tasks: ${memories.map(m => `${m.task} resulted in: ${m.result}`).join(', ')}`;
   }
 
@@ -129,38 +174,39 @@ export class CollaborativeADKSwarm {
     return this.agents.get(name);
   }
 
-  async collaborate(task: string, context?: any) {
-    const agentResults: { [key: string]: any } = {};
+   async collaborate(task: string, context?: unknown) {
+     const agentResults: { [key: string]: unknown } = {};
 
-    for (const agent of this.agents.values()) {
-      const result = await agent.execute(task, context);
-      agentResults[agent.name] = result;
-    }
+     for (const agent of this.agents.values()) {
+       const result = await agent.execute(task, context);
+       agentResults[agent.name] = result;
+     }
 
-    // Initiate swarm negotiation if needed
-    const negotiationResult = await this.swarmNegotiate(agentResults);
+     // Initiate swarm negotiation if needed
+     const negotiationResult = await this.swarmNegotiate(agentResults);
 
-    return negotiationResult ?? agentResults;
-  }
+     return negotiationResult ?? agentResults;
+   }
 
-  private swarmNegotiate(results: { [key: string]: any }): { [key: string]: any } | null {
-    // Basic consensus logic: if all agents produce identical non-error results, treat as consensus
-    const values = Object.values(results);
-    const allSame = values.every(v => v === values[0] && typeof v !== 'undefined');
-    if (allSame) {
-      return results;
-    }
+   private swarmNegotiate(results: { [key: string]: ADKAgentResult }): { [key: string]: ADKAgentResult } | null {
+     // Basic consensus logic: if all agents produce identical non-error results, treat as consensus
+     const values = Object.values(results);
+     const allSame = values.every(v => v.success && v.output && values[0].success && values[0].output && 
+                                 JSON.stringify(v.output) === JSON.stringify(values[0].output));
+     if (allSame && values.length > 0) {
+       return results;
+     }
 
-    // Otherwise, fallback: prefer successful results over errors
-    const successfulEntries = Object.fromEntries(
-      Object.entries(results).filter(([_, val]) => val && typeof val !== 'undefined' && !((val as any).error || (val as any).simulated))
-    );
-    if (Object.keys(successfulEntries).length > 0) {
-      return successfulEntries;
-    }
+     // Otherwise, fallback: prefer successful results over errors
+     const successfulEntries = Object.fromEntries(
+       Object.entries(results).filter(([_, val]) => val.success && !val.error)
+     );
+     if (Object.keys(successfulEntries).length > 0) {
+       return successfulEntries;
+     }
 
-    return null;
-  }
+     return null;
+   }
 }
 
 /**

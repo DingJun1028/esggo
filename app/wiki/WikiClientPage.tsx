@@ -12,42 +12,65 @@ interface Section {
   icon: React.ElementType;
 }
 
-export default function WikiClientPage({ content }: { content: string }) {
+export interface WikiPageRow {
+  id: number;
+  journey: string;
+  page_id: string;
+  title: string;
+  path: string;
+  permission: string;
+  core_purpose: string;
+  ux_experience: string;
+  ui_rwd: string;
+  data_api: string;
+  edge_cases: string;
+  acceptance_5t: string;
+}
+
+export default function WikiClientPage({ pages }: { pages: WikiPageRow[] }) {
   // 🌟 簡易的 Markdown 解析與動態分段邏輯
   const sections = useMemo<Section[]>(() => {
-    const lines = content.split('\n');
-    const parsed: Section[] = [];
-    let currentSection: Section | null = null;
-
-    lines.forEach((line, index) => {
-      if (line.startsWith('## ') || (index === 0 && line.startsWith('# '))) {
-        if (currentSection) parsed.push(currentSection);
-        const title = line.replace(/^#+ /, '').trim();
-
-        // 根據標題關鍵字分派圖示，賦予 UI 靈魂
-        let icon = BookOpen;
-        if (title.toLowerCase().includes('5t') || title.includes('協議')) icon = ShieldCheck;
-        if (title.toLowerCase().includes('agent') || title.includes('蜂群')) icon = Cpu;
-        if (title.toLowerCase().includes('zkp') || title.includes('密碼')) icon = Database;
-        if (title.includes('法典') || title.includes('codex') || title.includes('架構')) icon = Terminal;
-
-        currentSection = {
-          id: `sec-${index}`,
-          title,
-          content: '',
-          icon
-        };
-      } else if (currentSection) {
-        currentSection.content += line + '\n';
-      }
-    });
-    if (currentSection) parsed.push(currentSection);
-
-    if (parsed.length === 0) {
-      parsed.push({ id: 'sec-0', title: 'System Codex', content, icon: BookOpen });
+    if (!pages || pages.length === 0) {
+      return [{ id: 'sec-0', title: 'System Codex', content: '# Welcome\nNo wiki data found.', icon: BookOpen }];
     }
-    return parsed;
-  }, [content]);
+
+    return pages.map((page, index) => {
+      // 根據標題關鍵字分派圖示，賦予 UI 靈魂
+      let icon = BookOpen;
+      if (page.title.toLowerCase().includes('5t') || page.title.includes('協議')) icon = ShieldCheck;
+      if (page.title.toLowerCase().includes('agent') || page.title.includes('分身')) icon = Cpu;
+      if (page.title.toLowerCase().includes('金庫') || page.title.includes('vault')) icon = Database;
+      if (page.title.includes('環境') || page.title.includes('environmental')) icon = Activity;
+      if (page.title.includes('管理') || page.title.includes('profile')) icon = Terminal;
+
+      const content = `
+### 1. 模組定位 (Core Purpose)
+${page.core_purpose || ''}
+
+### 2. 客戶旅程與 UX 體驗 (Customer Journey & UX)
+${page.ux_experience || ''}
+
+### 3. UI/UX 視覺與 RWD 基準 (Visual & RWD)
+${page.ui_rwd || ''}
+
+### 4. 前後端資料流與 API (Data Flow & API)
+${page.data_api || ''}
+
+### 5. 邊界條件與防呆機制 (Edge Cases & Fallbacks)
+${page.edge_cases || ''}
+
+### 6. 驗收標準與 5T 協議 (Acceptance & 5T Protocol)
+${page.acceptance_5t || ''}
+      `.trim();
+
+      return {
+        id: `sec-${page.id}`,
+        title: page.title || `Chapter ${index + 1}`,
+        content,
+        icon
+      };
+    });
+  }, [pages]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');

@@ -23,6 +23,15 @@ const nextConfig: NextConfig = {
     '@grpc/proto-loader',
     // PDF / OCR
     'pdf-parse',
+    // Google API 客戶端 — 避免 uuid ESM race condition
+    'gaxios',
+    'google-auth-library',
+    'googleapis-common',
+    // Google Cloud Logging — uuid ESM chain
+    '@google-cloud/logging',
+    '@google-cloud/logging-winston',
+    '@genkit-ai/google-cloud',
+    '@genkit-ai/firebase',
   ],
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],

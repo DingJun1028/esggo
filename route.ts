@@ -1,54 +1,39 @@
 import { NextResponse } from 'next/server';
-import { applyDataMasking, unmaskL2Data, generatePedersenCommitment, verifyCommitmentSum } from '@/lib/crypto-proof';
-import { randomBytes } from 'crypto';
-import * as secp from '@noble/secp256k1';
+import { createTask, executeSwarmTask, CreateTaskInput } from '@/lib/agent/orchestrator';
 
 export async function POST(request: Request) {
     try {
-        const body = await request.json();
-
-        if (body.action === 'mask') {
-            const { data, level, l2KeyHex } = body;
-            let masked = '';
-            let outKeyHex = l2KeyHex;
-
-            if (level === 'L2') {
-                // 若無金鑰則動態生成一組 32 bytes 供本次模擬使用
-                const key = l2KeyHex ? Buffer.from(l2KeyHex, 'hex') : randomBytes(32);
-                outKeyHex = key.toString('hex');
-                masked = applyDataMasking(data, level, { l2Key: key });
-            } else {
-                masked = applyDataMasking(data, level as any);
-            }
-            return NextResponse.json({ masked, l2KeyHex: outKeyHex });
+        let body;
+        try {
+            body = await request.json();
+        } catch (e) {
+            body = {};
         }
 
-        if (body.action === 'unmask') {
-            const { masked, l2KeyHex } = body;
-            if (!l2KeyHex) return NextResponse.json({ error: 'Missing key' }, { status: 400 });
-            const key = Buffer.from(l2KeyHex, 'hex');
-            const unmasked = unmaskL2Data(masked, key);
-            return NextResponse.json({ unmasked });
-        }
+        const { addTask } = await import('@/lib/agent/store');
 
-        if (body.action === 'pedersen') {
-            const { values } = body; // 接收數字陣列
-            const commitments = await Promise.all(values.map((v: number) => generatePedersenCommitment(v)));
+        const input: CreateTaskInput = {
+            actorId: 'EDITOR_USER',
+            taskType: 'report_drafting',
+            title: '[SustainWrite] 全域共作報告',
+            description: `測試 Swarm 融合`,
+            inputRefIds: [],
+            skillKey: 'gri_report_draft',
+            audienceRole: body.audienceRole || 'board'
+        };
 
-            // 計算總和承諾 (同態加總)
-            let sumPoint = secp.Point.fromHex(commitments[0].commitment);
-            for (let i = 1; i < commitments.length; i++) {
-                sumPoint = sumPoint.add(secp.Point.fromHex(commitments[i].commitment));
-            }
-            const expectedTotal = sumPoint.toHex();
-            const isValid = verifyCommitmentSum(commitments.map(c => c.commitment), expectedTotal);
+        const { task } = createTask(input);
+        task.status = 'approved_for_execution';
+        task.requiresHumanReview = false;
 
-            return NextResponse.json({ commitments, expectedTotal, isValid });
-        }
+        await addTask(task);
 
-        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+        // 🟢 Synchronous Execution (等待蜂群與 OmniCore 融合完成)
+        const { artifact } = await executeSwarmTask(task.id);
+
+        return NextResponse.json({ success: true, content: artifact?.content });
     } catch (error: any) {
-        console.error('[Crypto Simulator API]', error);
-        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+        console.error('[Sync API] 錯誤發生震盪:', error);
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }

@@ -1,10 +1,10 @@
 # ESGGO 善向永續 | OmniCore P0 創世綱領 🌌
 
-> **Platform:** ESG GO | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY
+> **Platform:** ESGGO 善向永續 系統 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY
 
 ## 1. 核心使命與三位一體 (The Sacred Trinity)
-**ESGGO 善向永續** 是一個有機統合的治理實體：
-- **系統平台 (Platform)**: **ESG GO** —— 提供數位誠信與 5T 協議的基礎設施。
+**ESGGO 善向永續 系統** 是一個有機統合的治理實體：
+- **系統平台 (Platform)**: **ESGGO 善向永續 系統** —— 提供數位誠信與 5T 協議的基礎設施。
 - **系統指揮官 (Commander)**: **OmniAgent** —— 負責全域編排、代理蜂群調度與任務執行。
 - **無上意志 (Soul)**: **JunAiKey** —— 系統的靈魂核心，定義真理、引導演化並締結神聖契約。
 
@@ -67,10 +67,11 @@
 ## 6. 實作指令 (Implementation Directives)
 
 1. **數據主權**：所有寫入操作必須自動附帶 `uuid`、`version` 與 `timestamp` 刻印。
-2. **參照原則 (Reference Principle)**：每一原子組件必須聲明意圖宣告與治理鏈接，並註冊於 `AtomicLibraryManager`。
-3. **JunAiKey 引導**：淨化、刻印與任務規劃必須透過 JunAiKey 的語義引導思維執行。在此過程中，所有代理人透過 **OmniAgentBus** 進行指令傳遞。
-3. **Vibe Coding & MCP**：本專案已集成 **NCBDB MCP**。請在 Antigravity、Cursor 或 VS Code 中載入 `.vscode/mcp.json` (Local/stdio 模式)，以獲得即時後端上下文，達成 Vibe Coding 高速開發。
-4. **安全隔離**：後端強制執行 Supabase RLS (Row Level Security)。
+2. **NCBDB 全域規範**：嚴格遵守 `NCBDB_PROTOCOL.md` 定義之全域共享資料庫存取原則。
+3. **參照原則 (Reference Principle)**：每一原子組件必須聲明意圖宣告與治理鏈接，並註冊於 `AtomicLibraryManager`。
+4. **JunAiKey 引導**：淨化、刻印與任務規劃必須透過 JunAiKey 的語義引導思維執行。在此過程中，所有代理人透過 **OmniAgentBus** 進行指令傳遞。
+5. **Vibe Coding & MCP**：本專案已集成 **NCBDB MCP**。請在 Antigravity、Cursor 或 VS Code 中載入 `.vscode/mcp.json` (Local/stdio 模式)，以獲得即時後端上下文，達成 Vibe Coding 高速開發。
+6. **安全隔離**：後端強制執行 Supabase RLS (Row Level Security)。
 
 ---
-© 2026 ESG GO — 萬能心核系統創世規範。
+© 2026 ESGGO 善向永續 系統 — 萬能心核系統創世規範。

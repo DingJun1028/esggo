@@ -15,6 +15,7 @@ export interface CreateTaskInput {
   description?: string;
   inputRefIds: string[];
   skillKey: string;
+  audienceRole?: 'public' | 'auditor' | 'board' | 'legal';
 }
 
 export function policyGuard(input: CreateTaskInput): PolicyDecision {
@@ -52,7 +53,7 @@ export function createTask(input: CreateTaskInput): { task: AgentTask; policy: P
     actorId: input.actorId,
     taskType: input.taskType,
     title: input.title,
-    description: input.description,
+    description: input.audienceRole ? `[Target Audience: ${input.audienceRole}] ${input.description || ''}` : input.description,
     inputRefIds: input.inputRefIds,
     status: policy.allowed ? 'approved_for_execution' : 'denied',
     policyDecisionId: policy.id,
@@ -88,22 +89,26 @@ export function createExecution(task: AgentTask): AgentExecution {
 
 export function buildPromptPolicy(task: AgentTask, dataScope: string[]): string {
   const skill = getSkill(task.skillKey);
+  const targetRoleMatch = task.description?.match(/\[Target Audience: (.*?)\]/);
+  const targetRole = targetRoleMatch ? targetRoleMatch[1] : 'public';
   return `
 任務目的：${task.title}
 任務類型：${task.taskType}
+目標受眾：${targetRole} (請根據此角色動態調整數據可視細節與專業深度)
 可用資料範圍：${dataScope.join(', ')}
 禁止事項：
 - 不可直接建立正式發布狀態
 - 不可引用範圍外的資料
 - 不可略過審核流程
 - 不可直接寫入 Evidence Vault 最終區
+${targetRole === 'public' ? '- 必須強制套用 L1 模糊化遮罩隱藏真實數據' : ''}
 輸出格式：${skill?.outputArtifactType ?? 'draft'}
 審核需求：${skill?.requiresHumanReview ? '必須人工審核' : '低風險，可自動推進'}
 重要提示：所有產出均為草稿態，需審核後方可轉為正式態。
   `.trim();
 }
 
-import { createHashLock, create5TAttestation, generatePedersenCommitment, verifyCommitmentSum } from '../crypto-proof';
+import { createHashLock, create5TAttestation, generatePedersenCommitment, verifyCommitmentSum, applyDataMasking } from '../crypto-proof';
 import { updateArtifact, updateExecution, getArtifact } from './store';
 
 import { addToKnowledgeBase } from './rag-engine';
@@ -239,26 +244,66 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     // 如果是報告生成任務，啟動真正的「蜂群調度 (Swarm Delegation)」
     let artifactData;
     if (task.taskType === 'report_drafting') {
-      console.log(`[Swarm Orchestrator] Breaking down task ${taskId} into sub-agents...`);
+      console.log(`[Swarm Orchestrator] 🌐 召集全域代理蜂群，針對任務 ${taskId} 進行全維度共作...`);
+      broadcast('DRAFTING', 'Swarm (Env/Soc/Gov/Fin/SC)');
 
-      // 模擬並行派遣三個 Agent
-      const [envResult, socResult, govResult] = await Promise.all([
+      const targetRoleMatch = task.description?.match(/\[Target Audience: (.*?)\]/);
+      const targetRole = targetRoleMatch ? targetRoleMatch[1] : 'public';
+
+      // 並行派遣五大領域 Agent，每個都產出一套完整視角
+      const [envResult, socResult, govResult, finResult, scResult] = await Promise.all([
         new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Environmental] Data retrieved & analyzed.');
-          r('環境指標: 範疇一、二盤查無異常。');
-        }, 1200)),
+          console.log('[Agent: Environmental] 🌍 環境維度報告生成完畢.');
+          if (targetRole === 'board') {
+            r('🌍 環境指標: 範疇一 1200 噸、範疇二 3500 噸。碳費風險預估 150 萬元。建議導入再生能源憑證(T-REC)以對沖風險。');
+          } else if (targetRole === 'auditor') {
+            r('🌍 環境指標: 範疇一 1200 噸 (附憑證 ISO-14064)、範疇二 3500 噸 (附憑證 台電)。所有數據源皆已鎖定 5T 雜湊。');
+          } else {
+            const s1Masked = applyDataMasking(1200, 'L1');
+            const s2Masked = applyDataMasking(3500, 'L1');
+            r(`🌍 環境指標: 範疇一 ${s1Masked} 噸、範疇二 ${s2Masked} 噸。(已套用 L1 模糊化遮罩，符合公開揭露標準)`);
+          }
+        }, 1500)),
         new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Social] Workforce & Safety data compiled.');
-          r('社會指標: 零職災，女性主管比例達標。');
+          console.log('[Agent: Social] 👥 社會維度報告生成完畢.');
+          r(targetRole === 'board' || targetRole === 'auditor' ? '👥 社會指標: 員工流動率 5%，女性主管比例 32% (達標)。零職災。DEI 多元包容預算執行率 95%。' : '👥 社會指標: 員工健康與安全管理達標，落實 DEI 多元包容，並榮獲幸福企業認證。');
         }, 1800)),
         new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Governance] Compliance audit passed.');
-          r('治理指標: 董事會出席率 100%，無舞弊事件。');
-        }, 1000))
+          console.log('[Agent: Governance] ⚖️ 治理維度報告生成完畢.');
+          r('⚖️ 治理指標: 董事會出席率 100%，無舞弊事件。資訊安全與隱私保護政策已全面落實，符合 ISO 27001 標準。');
+        }, 1200)),
+        new Promise<string>(r => setTimeout(() => {
+          console.log('[Agent: Finance] 💰 永續金融維度報告生成完畢.');
+          r(targetRole === 'board' || targetRole === 'auditor' ? '💰 財務指標: 綠色融資佔比提升至 20%，ESG 專案總投資回報率 (ROI) 達 12%。' : '💰 財務指標: 積極推動綠色金融與永續投資，確保企業長期財務韌性。');
+        }, 2000)),
+        new Promise<string>(r => setTimeout(() => {
+          console.log('[Agent: Supply Chain] 🔗 供應鏈維度報告生成完畢.');
+          r(targetRole === 'board' || targetRole === 'auditor' ? '🔗 供應鏈指標: 高風險供應商稽核完成率 100%，在地採購比例達 65%。' : '🔗 供應鏈指標: 建立綠色供應鏈評鑑機制，與供應商共創永續生態系。');
+        }, 1700))
       ]);
 
-      console.log(`[Swarm Orchestrator] All sub-agents completed. Aggregating Master Draft...`);
-      const aggregatedContent = `## 整合性 ESG 報告草稿 (Swarm Generated)\n\n### 1. 環境 (Environmental)\n${envResult}\n\n### 2. 社會 (Social)\n${socResult}\n\n### 3. 治理 (Governance)\n${govResult}\n\n> ⚠️ 此報告由 OmniAgent 蜂群 (Env, Soc, Gov) 共同協作生成，並整合至主控台。`;
+      console.log(`[Swarm Orchestrator] 🧠 所有代理初稿產出完畢。啟動「交叉辯論與邏輯對齊 (Cross-Debate & Alignment)」機制...`);
+      broadcast('DEBATING', 'Swarm Consensus Board');
+      await new Promise(r => setTimeout(r, 1800)); // 模擬辯論推演時間
+
+      // 模擬：70% 機率觸發代理間的交叉辯論與衝突偵測
+      const hasConflict = Math.random() > 0.3;
+      let debateNotes = '';
+      if (hasConflict) {
+        console.warn(`[Swarm Debate] ⚠️ 衝突偵測：[Agent: Supply Chain] 對 [Agent: Environmental] 提出異議。環境指標宣告與供應商盤查總量不符。`);
+        await new Promise(r => setTimeout(r, 1500));
+        console.log(`[Swarm Debate] 🔄 啟動數據校準與重新共識...`);
+        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識 (Swarm Debate)\n- **[異議提出]** 供應鏈代理：偵測到環境代理之範疇三碳排數據與供應商盤查清冊有 15% 偏差。\n- **[邏輯校準]** 萬能大腦 (OmniCore) 介入，重新比對 Evidence Vault 原始憑證 (Hash: 0x8a9...)。\n- **[共識達成]** 數值已修正對齊，確保「環境」與「供應鏈」論述不衝突。`;
+      } else {
+        console.log(`[Swarm Debate] ✅ 交叉檢驗通過：五大維度數據邏輯一致，無衝突。`);
+        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識 (Swarm Debate)\n- **[狀態]** 五大領域代理已互相核對數據與邏輯。\n- **[共識達成]** 未發現衝突，各維度論述完美對齊。`;
+      }
+
+      console.log(`[Swarm Orchestrator] 🧠 所有代理產出完畢。啟動「萬能大腦 (OmniCore)」進行全域彙整與深度融合...`);
+      broadcast('DRAFTING', 'OmniCore Master Fusion');
+      await new Promise(r => setTimeout(r, 1500)); // 終極融合時間
+
+      const aggregatedContent = `## 🌌 全域彙整永續報告 (OmniCore Master Fusion)\n\n**目標受眾視角：${targetRole.toUpperCase()} View**\n\n本報告由 ESG GO 萬能代理蜂群平行產出後，由系統核心進行終極融合，確保各維度相互呼應、圓通無礙。${debateNotes}\n\n### 1. 環境保護 (Environmental)\n${envResult}\n\n### 2. 社會責任 (Social)\n${socResult}\n\n### 3. 公司治理 (Governance)\n${govResult}\n\n### 4. 永續金融 (Sustainable Finance)\n${finResult}\n\n### 5. 綠色供應鏈 (Green Supply Chain)\n${scResult}\n\n> 🕊️ **OmniCore 終極融合確信**：本文件已完成跨領域邏輯一致性檢驗與辯論共識。所有引用的數據皆已映射至 5T 誠信證據庫，確保「可溯源 (Traceable)」與「不可篡改 (Trustworthy)」。`;
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = aggregatedContent;
@@ -494,9 +539,12 @@ export function generateMockArtifact(task: AgentTask, execution: AgentExecution)
   const skill = getSkill(task.skillKey);
   const artifactType = (skill?.outputArtifactType ?? 'report_section_draft') as ArtifactType;
 
+  const targetRoleMatch = task.description?.match(/\[Target Audience: (.*?)\]/);
+  const targetRole = targetRoleMatch ? targetRoleMatch[1] : 'public';
+
   const contentMap: Record<string, string> = {
-    report_drafting: `## ${task.title}\n\n根據貴公司提供的 ESG 指標數據，本節依 GRI 2021 框架進行揭露。\n\n### 核心指標摘要\n- 範疇一排放量：待填入（來源：ISO 14064-1 盤查清冊）\n- 範疇二排放量：待填入（來源：台電帳單）\n- 可再生能源比例：待填入（來源：T-REC 憑證）\n\n> ⚠️ 此為 OmniAgent 草稿，需人工審核後方可轉為正式揭露內容。`,
-    compliance_review: `## 合規缺口分析報告\n\n**掃描框架：** GRI 2021 / TCFD / 金管會規範\n\n### 高風險缺口\n1. GRI 305-3 範疇三排放量 — **未揭露**（高優先）\n2. TCFD 氣候情境分析 — **資料不完整**（高優先）\n\n### 中風險缺口\n1. GRI 303-3 水資源回收率 — **數據缺漏**\n2. GRI 405 DEI 指標 — **僅部分填寫**\n\n> ⚠️ 此為 OmniAgent 合規分析草稿，結論需法務與永續長確認後方可採用。`,
+    report_drafting: `## ${task.title}\n\n根據貴公司提供的 ESG 指標數據，本節依 GRI 2021 框架進行揭露。\n\n### 核心指標摘要 (Target: ${targetRole.toUpperCase()})\n- 範疇一排放量：待填入（來源：ISO 14064-1 盤查清冊）\n- 範疇二排放量：待填入（來源：台電帳單）\n- 可再生能源比例：待填入（來源：T-REC 憑證）\n\n> ⚠️ 此為 OmniAgent 草稿，需人工審核後方可轉為正式揭露內容。`,
+    compliance_review: `## 合規缺口分析報告 (Target: ${targetRole.toUpperCase()})\n\n**掃描框架：** GRI 2021 / TCFD / 金管會規範\n\n### 高風險缺口\n1. GRI 305-3 範疇三排放量 — **未揭露**${targetRole === 'public' ? ' (細節已隱藏)' : '（短少 350 噸，罰鍰風險：NT$ 3M）'}\n2. TCFD 氣候情境分析 — **資料不完整**${targetRole === 'public' ? '' : '（缺少 2.0°C 情境模型）'}\n\n> ⚠️ 此為 OmniAgent 合規分析草稿，針對不同角色展示相應的細節。`,
     evidence_mapping: `## 證據映射草稿\n\n| 指標 | 段落 | 建議對應佐證 | 狀態 |\n|------|------|------------|------|\n| GRI 302-1 | 能源管理章節 | 台電帳單 PDF | 待確認 |\n| GRI 305-1 | 環境績效章節 | ISO 14064-1 清冊 | 待確認 |\n| GRI 2-7 | 員工結構章節 | 人資系統報表 | 待確認 |\n\n> ⚠️ 此為 OmniAgent 映射草稿，需與實際佐證文件核對後方可確認。`,
     course_assistant: `## 課程 FAQ 草稿\n\n**Q1: 什麼是 GRI 2021 框架？**\nGRI（全球報告倡議組織）是國際最廣泛採用的永續報告框架，2021 版本重構為三個系列標準...\n\n**Q2: ESG 與 CSR 有何不同？**\nCSR（企業社會責任）是較舊的概念；ESG 則是可量化、可驗算的投資評估框架...\n\n> ⚠️ 此為 OmniAgent 草稿，需課程設計師審核後方可納入正式教材。`,
     task_planning: `## 任務規劃草稿\n\n### 永續報告書撰寫專案\n\n**Phase 1（第1-4週）：** 資料盤點\n- [ ] 完成環境數據收集（負責：環安衛）\n- [ ] 完成社會指標填報（負責：人資）\n\n**Phase 2（第5-8週）：** 初稿撰寫\n- [ ] 完成各章節草稿（負責：永續委員會）\n- [ ] 完成合規比對（負責：法務）\n\n> ⚠️ 此為 OmniAgent 規劃草稿，需專案負責人確認後方可啟動。`,

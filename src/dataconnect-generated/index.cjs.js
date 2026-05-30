@@ -1,7 +1,7 @@
 const { queryRef, executeQuery, validateArgsWithOptions, mutationRef, executeMutation, validateArgs, makeMemoryCacheProvider } = require('firebase/data-connect');
 
 const connectorConfig = {
-  connector: 'example',
+  connector: 'omnicore',
   service: 'esggoalpha',
   location: 'asia-east1'
 };
@@ -24,7 +24,7 @@ exports.listAllTasksRef = listAllTasksRef;
 exports.listAllTasks = function listAllTasks(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listAllTasksRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listAllTasksRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -39,7 +39,7 @@ exports.getTaskByIdRef = getTaskByIdRef;
 exports.getTaskById = function getTaskById(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(getTaskByIdRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(getTaskByIdRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -68,7 +68,7 @@ exports.listAuditRecordsRef = listAuditRecordsRef;
 exports.listAuditRecords = function listAuditRecords(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listAuditRecordsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listAuditRecordsRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -97,7 +97,7 @@ exports.listScrapedArticlesRef = listScrapedArticlesRef;
 exports.listScrapedArticles = function listScrapedArticles(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listScrapedArticlesRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listScrapedArticlesRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -112,7 +112,7 @@ exports.listRoadmapMilestonesRef = listRoadmapMilestonesRef;
 exports.listRoadmapMilestones = function listRoadmapMilestones(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listRoadmapMilestonesRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listRoadmapMilestonesRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -141,7 +141,7 @@ exports.getCompanyProfileRef = getCompanyProfileRef;
 exports.getCompanyProfile = function getCompanyProfile(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(getCompanyProfileRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(getCompanyProfileRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -170,7 +170,7 @@ exports.getReportByIdRef = getReportByIdRef;
 exports.getReportById = function getReportById(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(getReportByIdRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(getReportByIdRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -213,7 +213,7 @@ exports.listReportSectionsByReportRef = listReportSectionsByReportRef;
 exports.listReportSectionsByReport = function listReportSectionsByReport(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(listReportSectionsByReportRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listReportSectionsByReportRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -242,7 +242,7 @@ exports.listCompanyMetricsRef = listCompanyMetricsRef;
 exports.listCompanyMetrics = function listCompanyMetrics(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(listCompanyMetricsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listCompanyMetricsRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -271,7 +271,7 @@ exports.listEternalMemoriesByCompanyRef = listEternalMemoriesByCompanyRef;
 exports.listEternalMemoriesByCompany = function listEternalMemoriesByCompany(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(listEternalMemoriesByCompanyRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listEternalMemoriesByCompanyRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -286,7 +286,7 @@ exports.getReportByCompanyRef = getReportByCompanyRef;
 exports.getReportByCompany = function getReportByCompany(dcOrVars, varsOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  return executeQuery(getReportByCompanyRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(getReportByCompanyRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -301,7 +301,7 @@ exports.listReportsRef = listReportsRef;
 exports.listReports = function listReports(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listReportsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listReportsRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -330,7 +330,7 @@ exports.listEternalMemoriesRef = listEternalMemoriesRef;
 exports.listEternalMemories = function listEternalMemories(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listEternalMemoriesRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listEternalMemoriesRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -345,7 +345,7 @@ exports.listSwarmAgentTasksRef = listSwarmAgentTasksRef;
 exports.listSwarmAgentTasks = function listSwarmAgentTasks(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listSwarmAgentTasksRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listSwarmAgentTasksRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
@@ -374,7 +374,22 @@ exports.listRegulatoryPoliciesRef = listRegulatoryPoliciesRef;
 exports.listRegulatoryPolicies = function listRegulatoryPolicies(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
-  return executeQuery(listRegulatoryPoliciesRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+  return executeQuery(listRegulatoryPoliciesRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
+}
+;
+
+const getMyCompanyProfileRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetMyCompanyProfile');
+}
+getMyCompanyProfileRef.operationName = 'GetMyCompanyProfile';
+exports.getMyCompanyProfileRef = getMyCompanyProfileRef;
+
+exports.getMyCompanyProfile = function getMyCompanyProfile(dcOrOptions, options) {
+  
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  return executeQuery(getMyCompanyProfileRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
 ;
 
