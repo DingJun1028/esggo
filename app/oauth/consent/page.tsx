@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
@@ -11,10 +11,10 @@ import { motion } from 'framer-motion';
 
 function ConsentContent() {
   const searchParams = useSearchParams();
-  const consentId = searchParams.get('consent');
+  const consentId = searchParams?.get('consent');
   const [status, setStatus] = useState<'pending' | 'approving' | 'success' | 'error'>('pending');
   const [errorMsg, setErrorMsg] = useState('');
-  const supabase = createClientComponentClient();
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
   useEffect(() => {
     if (!consentId) {
@@ -77,7 +77,7 @@ function ConsentContent() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         className="max-w-md w-full relative z-10"
       >
-        <UniversalCard variant="hologram" className="p-8 md:p-10 border-cyan-500/30">
+        <UniversalCard variant="glow" className="p-8 md:p-10 border-cyan-500/30">
           <div className="flex flex-col items-center text-center space-y-6">
             <div className="flex justify-center mb-4 relative">
               <div className="absolute inset-0 bg-cyan-core/20 blur-xl rounded-full" />

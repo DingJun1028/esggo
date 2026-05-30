@@ -74,7 +74,7 @@ export default function TasksPage() {
                     <UniversalCard variant="bordered" className="p-4 hover:border-cyan-500/30 transition-all cursor-grab active:cursor-grabbing">
                       <div className="flex justify-between items-start mb-3">
                         <UniversalBadge variant={
-                          task.priority === 'Extreme' ? 'danger' :
+                          task.priority === 'Extreme' ? 'error' :
                           task.priority === 'High' ? 'warning' :
                           'secondary'
                         } className="text-[9px]">

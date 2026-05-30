@@ -87,7 +87,7 @@ export default function SystemStatusPage() {
                                <p className="text-[10px] font-black text-white/20">Latency</p>
                                <p className={`text-sm font-mono font-bold ${s.latency.includes('ms') && parseInt(s.latency) < 100 ? 'text-emerald-400' : 'text-amber-400'}`}>{s.latency}</p>
                             </div>
-                            <UniversalBadge variant={s.status === 'Healthy' ? 'success' : 'danger'}>{s.status}</UniversalBadge>
+                            <UniversalBadge variant={s.status === 'Healthy' ? 'success' : 'error'}>{s.status}</UniversalBadge>
                          </div>
                       </div>
                     ))}

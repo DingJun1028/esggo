@@ -69,7 +69,7 @@ export default function SupplyChainPage() {
                                <p className="text-[10px] font-black uppercase text-white/20">ESG Rating</p>
                                <p className={`text-sm font-black ${s.rating.startsWith('A') ? 'text-emerald-400' : s.rating === 'B' ? 'text-cyan-400' : 'text-rose-400'}`}>{s.rating}</p>
                             </div>
-                            <UniversalBadge variant={s.status === 'Verified' ? 'success' : s.status === 'Pending' ? 'warning' : 'danger'} className="text-[8px]">
+                            <UniversalBadge variant={s.status === 'Verified' ? 'success' : s.status === 'Pending' ? 'warning' : 'error'} className="text-[8px]">
                                {s.status}
                             </UniversalBadge>
                             <button className="text-white/20 hover:text-white transition-colors"><ExternalLink size={16} /></button>

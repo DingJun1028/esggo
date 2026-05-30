@@ -124,7 +124,7 @@ export default function TerminalPage() {
                        <span className="text-white/40">Expires</span>
                        <span className="font-mono text-white/60">01:42:05</span>
                     </div>
-                    <UniversalButton variant="error" className="w-full text-xs py-2 h-auto">登出並銷毀 Session</UniversalButton>
+                    <UniversalButton variant="outline" className="w-full text-xs py-2 h-auto">登出並銷毀 Session</UniversalButton>
                  </div>
               </UniversalCard>
 
