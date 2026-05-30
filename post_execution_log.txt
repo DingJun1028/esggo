@@ -12,3 +12,10 @@
 
 ### Conclusion:
 Zero-pollution verified. Strict boundary isolation achieved via exact text match in WITH CHECK constraints.
+### Execution Trace:
+- Viewed: cli/omni.mjs, lib/omni-core/integrity.ts, crypto-proof.ts, README.md, soul.md, ROADMAP.md, ctl.sh
+- Ran: node cli/omni.mjs db check, agent status, agent tools, audit report, audit stress
+- Modified: cli/omni.mjs (added status command, updated hash logic and stress test to use Pedersen Commitment)
+
+### Outcome:
+CLI enhanced with 12-dimensional OMC status reporting and real cryptographic primitives, aligning it with the 5T protocol mandates.

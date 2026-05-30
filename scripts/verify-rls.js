@@ -4,9 +4,36 @@ dotenv.config({ path: '.env.local' });
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-// Parse a mock JWT for testing or use OMNI_MCP_ACCESS_TOKEN
-const tokenA = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFwcF9tZXRhZGF0YSI6eyJjb21wYW55X2lkIjoiQ29tcGFueV9BIn0sInN1YiI6InVzZXJfYSJ9.mock_signature';
-const tokenB = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFwcF9tZXRhZGF0YSI6eyJjb21wYW55X2lkIjoiQ29tcGFueV9CIn0sInN1YiI6InVzZXJfYiJ9.mock_signature';
+
+// Helper function to generate base64url encoded string
+function base64url(str) {
+  return Buffer.from(str).toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/g, '');
+}
+
+// Generate a test JWT token with mock signature (matching the format in .env.local)
+function generateMockToken(companyId, userId) {
+  // Header
+  const header = base64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+  
+  // Payload
+  const payload = base64url(JSON.stringify({
+    role: 'authenticated',
+    app_metadata: { company_id: companyId },
+    sub: userId
+  }));
+  
+  // Use the same mock signature pattern as in .env.local
+  const signature = 'mock_signature_rls_enabled';
+  
+  return `${header}.${payload}.${signature}`;
+}
+
+// Generate test tokens for different companies/users
+const tokenA = generateMockToken('Company_A', 'user_a');
+const tokenB = generateMockToken('Company_B', 'user_b');
 
 // Helper function to test RLS
 async function testRLS() {
