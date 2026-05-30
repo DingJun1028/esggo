@@ -16,7 +16,7 @@ import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { SwarmResonance } from '@/components/ui/SwarmResonance';
 import { CausalTopologyGraph, NodeStatus } from '@/components/ui/CausalTopologyGraph';
-import { omniAgentBus } from '@/lib/agents/omni-commander';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 import { useExport } from '../../hooks/useExport';
 
 // --- GRI Master Schema ---
