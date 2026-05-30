@@ -1,7 +1,8 @@
 import { ADKAgent } from './adk-core.ts';
 import type { AgentConfig } from './adk-core.ts';
 import { ADK_STANDARD_TOOLS } from './adk-tools';
-import { agent0, OmniCommander, omniAgentBus } from './omni-commander';
+import { agent0, OmniCommander } from './omni-commander';
+import { omniAgentBus } from './omni-agent-bus';
 import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
 import { memoryStore } from '../memory/memory-store';
 import type { MemoryRecord } from '../memory/memory-store';
