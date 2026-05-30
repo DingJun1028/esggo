@@ -6,16 +6,17 @@ import {
   Fingerprint, Activity, Zap, Sliders, Globe,
   RefreshCw, Play, Shield, Dna, BrainCircuit,
   Lock, CheckCircle2, AlertTriangle, Database,
-  ShieldCheck, Search, BookOpen, Sparkles
+  ShieldCheck, Search, BookOpen, Sparkles,
+  Layers, Maximize2, Cpu, ArrowRight
 } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandStatusDot } from '@/components/brand';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { ScenarioVisualizer } from '@/components/ui/ScenarioVisualizer';
 import { SwarmResonance } from '@/components/ui/SwarmResonance';
-import { ComparisonChart } from '@/components/ui/ComparisonChart';
+import { CausalTopologyGraph, NodeStatus } from '@/components/ui/CausalTopologyGraph';
 import { cn } from '@/lib/utils';
-import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-commander';
 
 interface IntegritySeal {
   id: string;
@@ -32,7 +33,13 @@ export default function DigitalTwinPage() {
   const [seals, setSeals] = useState<IntegritySeal[]>([]);
   const [lastInsight, setLastInsight] = useState<string | null>(null);
 
-  // 模擬環境參數 (DNA Parameters) - Scenario A
+  // Graph States
+  const [agentStatus, setAgentStatus] = useState<NodeStatus>('idle');
+  const [zkpStatus, setZkpStatus] = useState<NodeStatus>('idle');
+  const [vaultStatus, setVaultStatus] = useState<NodeStatus>('idle');
+  const [healingStatus, setHealingStatus] = useState<NodeStatus>('idle');
+
+  // DNA Parameters - Scenario A
   const [paramsA, setParamsA] = useState({ greenEnergy: 10, carbonTax: 300, supplyChainLocal: 40 });
   const [scenarioResultA, setScenarioResultA] = useState<any>({
     originalValues: { carbonEmissions: 12000, energyUsage: 350000 },
@@ -43,19 +50,8 @@ export default function DigitalTwinPage() {
     }
   });
 
-  // 模擬環境參數 (DNA Parameters) - Scenario B
-  const [paramsB, setParamsB] = useState({ greenEnergy: 50, carbonTax: 1000, supplyChainLocal: 80 });
-  const [scenarioResultB, setScenarioResultB] = useState<any>({
-    originalValues: { carbonEmissions: 12000, energyUsage: 350000 },
-    projectedValues: { carbonEmissions: 12000, energyUsage: 350000 },
-    complianceProjections: {
-      carbonEmissions: { isValid: true, score: 82, violations: [] },
-      'GRI 302-1': { isValid: false, score: 70, violations: ['尚未評估再生能源擴展衝擊'] },
-    }
-  });
-
   useEffect(() => {
-    // 1. Listen for 5T Seals from the Auditor
+    // 1. 5T Seals
     const unsubSeal = omniAgentBus.subscribe('5T_SEAL', (payload: any) => {
       const newSeal: IntegritySeal = {
         id: Math.random().toString(36).substring(7),
@@ -65,361 +61,303 @@ export default function DigitalTwinPage() {
         resource: payload.resource || 'Simulation_Result'
       };
       setSeals(prev => [newSeal, ...prev].slice(0, 5));
+      setVaultStatus('success');
     });
 
-    // 2. Listen for Healing Events
-    const unsubHealingStart = omniAgentBus.subscribe('HEALING_START', () => setIsHealing(true));
+    // 2. Healing
+    const unsubHealingStart = omniAgentBus.subscribe('HEALING_START', () => {
+      setIsHealing(true);
+      setHealingStatus('healing');
+      setZkpStatus('failed'); // Simulation of integrity drift
+    });
     const unsubHealingEnd = omniAgentBus.subscribe('HEALING_COMPLETE', () => {
-      setTimeout(() => setIsHealing(false), 3000); // Keep shield visible for 3s
+      setHealingStatus('success');
+      setZkpStatus('success');
+      setTimeout(() => setIsHealing(false), 3000); 
     });
 
-    // 3. Listen for RAG/Knowledge Events
-    const unsubRAGStart = omniAgentBus.subscribe('RAG_QUERY_START', () => setIsSearchingKB(true));
+    // 3. RAG/Knowledge
+    const unsubRAGStart = omniAgentBus.subscribe('RAG_QUERY_START', () => {
+      setIsSearchingKB(true);
+      setAgentStatus('processing');
+    });
     const unsubRAGEnd = omniAgentBus.subscribe('RAG_QUERY_COMPLETE', (payload: any) => {
       setIsSearchingKB(false);
+      setAgentStatus('success');
+      setZkpStatus('processing');
       if (payload.insight) setLastInsight(payload.insight);
     });
 
     return () => {
-      unsubSeal();
-      unsubHealingStart();
-      unsubHealingEnd();
-      unsubRAGStart();
-      unsubRAGEnd();
+      unsubSeal(); unsubHealingStart(); unsubHealingEnd(); unsubRAGStart(); unsubRAGEnd();
     };
   }, []);
 
-  const handleSimulate = async (scenario: 'A' | 'B') => {
+  const handleSimulate = async () => {
     setIsSimulating(true);
+    setVaultStatus('idle');
+    setZkpStatus('idle');
+    setHealingStatus('idle');
 
-    const targetParams = scenario === 'A' ? paramsA : paramsB;
+    omniAgentBus.publish('RAG_QUERY_START', { query: `ESG Strategy with ${paramsA.greenEnergy}% green energy` });
+    omniAgentBus.publish('SIMULATION_START', { type: 'DIGITAL_TWIN_PROJECTION', parameters: paramsA });
 
-    // Trigger Knowledge Retrieval
-    omniAgentBus.publish('RAG_QUERY_START', { query: `ESG Strategy with ${targetParams.greenEnergy}% green energy` });
-    
-    // Publish to OmniAgent Bus
-    omniAgentBus.publish('SIMULATION_START', {
-      type: 'DIGITAL_TWIN_PROJECTION',
-      scenario,
-      parameters: targetParams
-    });
-
-    // 模擬 OmniAgent 量子模擬推演延遲
-    setTimeout(() => {
-      const reduction = (targetParams.greenEnergy * 0.5) + (targetParams.supplyChainLocal * 0.2);
-      const newCarbon = 12000 * (1 - reduction / 100);
-      const newEnergy = 350000 * (1 - (targetParams.greenEnergy * 0.3) / 100);
-
-      const isGriValid = targetParams.greenEnergy >= 20;
-
-      const newResult = {
-        originalValues: { carbonEmissions: 12000, energyUsage: 350000 },
-        projectedValues: { carbonEmissions: newCarbon, energyUsage: newEnergy },
-        complianceProjections: {
-          carbonEmissions: {
-            isValid: true,
-            score: Math.min(99, 82 + reduction),
-            violations: []
-          },
-          'GRI 302-1': {
-            isValid: isGriValid,
-            score: Math.min(99, 50 + targetParams.greenEnergy * 2),
-            violations: isGriValid ? [] : ['再生能源佔比未達 20% 綠電門檻安全線']
-          },
-        }
-      };
-
-      if (scenario === 'A') setScenarioResultA(newResult);
-      else setScenarioResultB(newResult);
+    try {
+      const response = await fetch('/api/digital-twin/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scenarioId: 'A', parameters: paramsA })
+      });
       
-      // Complete RAG Insight simulation
+      if (!response.ok) throw new Error('Simulation API failed');
+      
+      const { success, result, error } = await response.json();
+      
+      if (!success) throw new Error(error || 'Unknown error');
+
+      setScenarioResultA(result);
+      
       omniAgentBus.publish('RAG_QUERY_COMPLETE', { 
-        insight: `基於歷史政策與 GRI 302 標準，情境 ${scenario} 的綠電佈署將顯著提升 TCFD 披露評級。` 
+        insight: `基於 NCBDB 串接之真實數據與 GRI 302 標準，此綠電佈署將顯著提升 TCFD 披露評級。` 
       });
-
-      // Publish completion to Bus
-      omniAgentBus.publish('SIMULATION_COMPLETE', {
-        type: 'DIGITAL_TWIN_PROJECTION',
-        scenario,
-        parameters: targetParams,
-        results: newResult
-      });
-
+      
+      // Simulate sealing process
+      setTimeout(() => {
+        omniAgentBus.publish('5T_SEAL', { gate: 'T4', hash: '0x' + Math.random().toString(16).substring(2, 10), resource: 'A_PROJECTION' });
+        setIsSimulating(false);
+      }, 1000);
+    } catch (err) {
+      console.error('Simulation error:', err);
       setIsSimulating(false);
-    }, 2000);
-  };
-
-  const handleSimulateBoth = () => {
-    handleSimulate('A');
-    handleSimulate('B');
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+    }
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-white p-8 animate-in fade-in duration-700 overflow-x-hidden">
+    <div className="min-h-screen bg-void-stark text-white font-sans selection:bg-cyan-500/30 overflow-hidden flex flex-col">
       {/* Healing Shield Overlay */}
       <AnimatePresence>
         {isHealing && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
             <div className="absolute inset-0 bg-cyan-500/10 backdrop-blur-[2px] animate-pulse" />
-            <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="relative bg-cyan-900/40 border-2 border-cyan-400/50 p-8 rounded-full shadow-[0_0_100px_rgba(34,211,238,0.3)]"
-            >
-              <ShieldCheck size={80} className="text-cyan-400 animate-bounce" />
-              <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap text-cyan-400 font-black tracking-[0.5em] uppercase text-xl">
-                Universal Healing Active
-              </div>
+            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative bg-cyan-900/40 border-2 border-cyan-400/50 p-12 rounded-full shadow-[0_0_100px_rgba(34,211,238,0.4)]">
+              <ShieldCheck size={100} className="text-cyan-400 animate-pulse" />
+              <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 text-cyan-400 font-black tracking-[0.8em] uppercase text-2xl drop-shadow-glow">Universal Healing</div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto space-y-8 relative">
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-6">
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <UniversalBadge variant="success" icon="✨">ESG GO 模組</UniversalBadge>
-              <UniversalBadge variant="glow" icon={<Shield size={12}/>}>Healing Active</UniversalBadge>
-              <UniversalBadge variant="glass" icon={<BookOpen size={12}/>}>RAG Ready</UniversalBadge>
-            </div>
-            <div className="flex items-center gap-3 mb-2">
-              <BrandStatusDot status={isHealing ? "warning" : "active"} pulse size="sm" />
-              <span className="text-xs font-mono font-black tracking-[0.3em] text-cyan-600 dark:text-cyan-400 uppercase">
-                Omni_Twin_Engine_v4.0
-              </span>
-            </div>
-            <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
-              <Fingerprint className="text-cyan-600 dark:text-cyan-400" size={32} />
-              數位孿生、智庫與自我修復 <span className="text-slate-400 font-light">| OmniCore</span>
-            </h1>
-            <p className="text-lg text-white/60 max-w-3xl">
-              結合萬能智庫 (Universal Knowledge Base) 與自動化修復 (HealingGuardian) 的終極治理中心。
-            </p>
+      {/* ── Sovereign Bento Header ── */}
+      <header className="h-[12vh] min-h-[100px] border-b border-white/5 bg-white/[0.02] backdrop-blur-md px-8 flex items-center justify-between shrink-0 relative z-20">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-3 mb-1">
+             <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 shadow-cyan-glow">
+                <Cpu size={20} className="text-cyan-400" />
+             </div>
+             <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono font-black tracking-[0.4em] text-cyan-400 uppercase">Omni_Twin_Engine_v5.0</span>
+                <BrandBadge variant="outline" className="bg-emerald-500/5 border-emerald-500/20 text-emerald-400 text-[8px] px-2 py-0">CIRCULAR_EVOLUTION</BrandBadge>
+             </div>
           </div>
-          <div className="flex gap-3">
-            <BrandBadge variant="outline" className="border-indigo-500/30 text-indigo-600 dark:text-indigo-300">
-              <Activity size={14} className="mr-1" /> 5T 誠信網絡已達標
-            </BrandBadge>
-            <BrandButton variant="primary" onClick={handleSimulateBoth} disabled={isSimulating}>
-              <RefreshCw size={14} className={cn("mr-2", isSimulating && "animate-spin")} /> 同時比對 A/B 情境
-            </BrandButton>
-          </div>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <UniversalCard title="萬能智庫 (RAG)" variant="glow">
-            <div className="flex items-center gap-2 mb-2">
-              <Database size={14} className="text-cyan-400" />
-              <span className="text-[10px] font-bold text-white/40 uppercase">Memory Density: 98%</span>
-            </div>
-            <p className="text-xs text-white/70">統整企業歷史報告與國際標準，為代理人提供主權上下文。</p>
-          </UniversalCard>
-          <UniversalCard title="萬能修復 (Healing)" variant="bordered">
-            <div className="flex items-center gap-2 mb-2">
-              <ShieldCheck size={14} className="text-emerald-400" />
-              <span className="text-[10px] font-bold text-white/40 uppercase">Immunity Level: MAX</span>
-            </div>
-            <p className="text-xs text-white/70">自動化熵減系統，即時攔截並修復非授權的數據偏移。</p>
-          </UniversalCard>
-          <UniversalCard title="量子模擬" variant="glass">
-            <p className="text-xs text-white/70">透過道德 DNA 滑桿，即時預演不同永續策略的未來影響。</p>
-          </UniversalCard>
-          <UniversalCard title="主權帳本" variant="default">
-            <p className="text-xs text-white/70">所有模擬意圖與修復紀錄皆寫入帳本，確保決策可追蹤性。</p>
-          </UniversalCard>
+          <h1 className="text-3xl font-black tracking-tighter flex items-center gap-3 text-white/90">
+            因果拓樸與數位孿生中心 <span className="text-white/20 font-light text-xl">| Causal Reality Hub</span>
+          </h1>
         </div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8"
-        >
-          {/* Scenario A */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-xl font-black text-cyan-400 border-b-2 border-cyan-400 pb-1">情境 A (保守推演)</h2>
-            </div>
-            <BrandCard padding="lg" className="border-slate-200 dark:border-white/10 bg-white/60 dark:bg-[#020617]/40 shadow-xl">
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-white/5">
-                <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                  <Dna size={20} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight">永續 DNA 參數 A</h3>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold uppercase text-slate-600 dark:text-slate-300">綠電比例 (%)</label>
-                    <span className="text-sm font-black text-indigo-400">{paramsA.greenEnergy}%</span>
-                  </div>
-                  <input type="range" min="0" max="100" step="5" value={paramsA.greenEnergy} onChange={(e) => setParamsA(p => ({ ...p, greenEnergy: parseInt(e.target.value) }))} className="w-full accent-indigo-600" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold uppercase text-slate-600 dark:text-slate-300">碳定價 (NTD)</label>
-                    <span className="text-sm font-black text-emerald-400">${paramsA.carbonTax}</span>
-                  </div>
-                  <input type="range" min="300" max="2000" step="100" value={paramsA.carbonTax} onChange={(e) => setParamsA(p => ({ ...p, carbonTax: parseInt(e.target.value) }))} className="w-full accent-emerald-600" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold uppercase text-slate-600 dark:text-slate-300">在地供應鏈 (%)</label>
-                    <span className="text-sm font-black text-cyan-400">{paramsA.supplyChainLocal}%</span>
-                  </div>
-                  <input type="range" min="10" max="100" step="5" value={paramsA.supplyChainLocal} onChange={(e) => setParamsA(p => ({ ...p, supplyChainLocal: parseInt(e.target.value) }))} className="w-full accent-cyan-600" />
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <BrandButton variant="primary" fullWidth className="h-12 rounded-xl text-xs" onClick={() => handleSimulate('A')} disabled={isSimulating}>
-                  {isSimulating ? <RefreshCw size={16} className="animate-spin mr-2" /> : <Play size={16} className="mr-2" />} 執行情境 A
-                </BrandButton>
-              </div>
-            </BrandCard>
-
-            <div className={cn("transition-all duration-700 relative", isSimulating ? "opacity-50 blur-sm scale-[0.98]" : "opacity-100 scale-100")}>
-              <ScenarioVisualizer result={scenarioResultA} />
-            </div>
-          </motion.div>
-
-          {/* Scenario B */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-xl font-black text-emerald-400 border-b-2 border-emerald-400 pb-1">情境 B (激進轉型)</h2>
-            </div>
-            <BrandCard padding="lg" className="border-slate-200 dark:border-white/10 bg-white/60 dark:bg-[#020617]/40 shadow-xl">
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-white/5">
-                <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                  <Dna size={20} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight">永續 DNA 參數 B</h3>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold uppercase text-slate-600 dark:text-slate-300">綠電比例 (%)</label>
-                    <span className="text-sm font-black text-indigo-400">{paramsB.greenEnergy}%</span>
-                  </div>
-                  <input type="range" min="0" max="100" step="5" value={paramsB.greenEnergy} onChange={(e) => setParamsB(p => ({ ...p, greenEnergy: parseInt(e.target.value) }))} className="w-full accent-indigo-600" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold uppercase text-slate-600 dark:text-slate-300">碳定價 (NTD)</label>
-                    <span className="text-sm font-black text-emerald-400">${paramsB.carbonTax}</span>
-                  </div>
-                  <input type="range" min="300" max="2000" step="100" value={paramsB.carbonTax} onChange={(e) => setParamsB(p => ({ ...p, carbonTax: parseInt(e.target.value) }))} className="w-full accent-emerald-600" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold uppercase text-slate-600 dark:text-slate-300">在地供應鏈 (%)</label>
-                    <span className="text-sm font-black text-cyan-400">{paramsB.supplyChainLocal}%</span>
-                  </div>
-                  <input type="range" min="10" max="100" step="5" value={paramsB.supplyChainLocal} onChange={(e) => setParamsB(p => ({ ...p, supplyChainLocal: parseInt(e.target.value) }))} className="w-full accent-cyan-600" />
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <BrandButton variant="secondary" fullWidth className="h-12 rounded-xl text-xs bg-emerald-500 hover:bg-emerald-600 text-white border-0" onClick={() => handleSimulate('B')} disabled={isSimulating}>
-                  {isSimulating ? <RefreshCw size={16} className="animate-spin mr-2" /> : <Play size={16} className="mr-2" />} 執行情境 B
-                </BrandButton>
-              </div>
-            </BrandCard>
-
-            <div className={cn("transition-all duration-700 relative", isSimulating ? "opacity-50 blur-sm scale-[0.98]" : "opacity-100 scale-100")}>
-              <ScenarioVisualizer result={scenarioResultB} />
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Sync Comparison Chart */}
-        <div className={cn("transition-all duration-700", isSimulating ? "opacity-50 blur-sm" : "opacity-100")}>
-          <ComparisonChart resultA={scenarioResultA} resultB={scenarioResultB} />
-        </div>
-
-        {/* Global Monitor Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-12">
-          <div className="lg:col-span-8 h-[400px]">
-            <SwarmResonance />
+        <div className="flex items-center gap-4">
+          <div className="hidden xl:flex items-center gap-6 px-6 border-x border-white/5 mx-4 h-full py-4">
+             <div className="flex flex-col items-end">
+                <span className="text-[8px] font-black text-white/30 uppercase tracking-widest">Network_Resonance</span>
+                <span className="text-xs font-mono text-emerald-400 font-bold">STABLE.99.9%</span>
+             </div>
+             <div className="flex flex-col items-end">
+                <span className="text-[8px] font-black text-white/30 uppercase tracking-widest">Hash_Locks_Active</span>
+                <span className="text-xs font-mono text-cyan-400 font-bold">1,024_SEALS</span>
+             </div>
           </div>
-          <div className="lg:col-span-4 flex flex-col gap-6">
-            <BrandCard padding="md" className="border-cyan-500/20 bg-cyan-500/5 h-full overflow-y-auto custom-scrollbar">
-              <div className="flex items-center gap-2 mb-4 sticky top-0 bg-[#06182c] py-2 z-10">
-                <Lock size={16} className="text-cyan-400" />
-                <h4 className="text-xs font-black uppercase tracking-widest text-white/80">主權實證帳本 (Sovereign Proofs)</h4>
+          <BrandButton variant="primary" onClick={handleSimulate} disabled={isSimulating} className="shadow-cyan-glow hover:shadow-cyan-500/40 transition-all h-12 px-6 rounded-2xl group">
+            <Zap size={16} className={cn("mr-2 group-hover:scale-125 transition-transform", isSimulating && "animate-pulse")} /> 
+            {isSimulating ? '量子推演中...' : '發起意圖模擬'}
+          </BrandButton>
+        </div>
+      </header>
+
+      {/* ── Main Layout ── */}
+      <main className="flex-1 p-6 grid grid-cols-12 grid-rows-12 gap-6 overflow-hidden">
+        
+        {/* Left Column: DNA & Ledger (3/12) */}
+        <div className="col-span-3 row-span-12 flex flex-col gap-6 overflow-hidden">
+           <BrandCard padding="lg" className="bg-white/[0.03] backdrop-blur-xl border-white/5 shadow-2xl relative overflow-hidden group flex-shrink-0">
+              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                <Dna size={120} className="text-indigo-400 rotate-12" />
               </div>
-              <div className="space-y-3">
+              <h3 className="text-xs font-black uppercase tracking-widest text-white/40 mb-10 flex items-center gap-2">
+                 <Sliders size={14} className="text-indigo-400" /> 永續 DNA 參數矩陣
+              </h3>
+              <div className="space-y-12">
+                {[
+                  { label: '綠電佈署比例', val: paramsA.greenEnergy, unit: '%', color: 'indigo', set: (v: number) => setParamsA(p => ({ ...p, greenEnergy: v })) },
+                  { label: '內部碳定價', val: paramsA.carbonTax, unit: '$', color: 'emerald', set: (v: number) => setParamsA(p => ({ ...p, carbonTax: v })), min: 300, max: 2000, step: 100 },
+                  { label: '在地供應鏈', val: paramsA.supplyChainLocal, unit: '%', color: 'cyan', set: (v: number) => setParamsA(p => ({ ...p, supplyChainLocal: v })) }
+                ].map((item) => (
+                  <div key={item.label} className="space-y-5">
+                    <div className="flex justify-between items-end">
+                      <label className="text-[10px] font-black uppercase text-white/40 tracking-wider">{item.label}</label>
+                      <span className={`text-xl font-black text-${item.color}-400 font-mono shadow-sm`}>{item.unit}{item.val}</span>
+                    </div>
+                    <div className="relative flex items-center">
+                       <input type="range" min={item.min || 0} max={item.max || 100} step={item.step || 5} value={item.val} onChange={(e) => item.set(parseInt(e.target.value))} className={`w-full h-1.5 bg-white/5 rounded-full appearance-none cursor-pointer accent-${item.color}-500 hover:opacity-100 transition-opacity`}/>
+                    </div>
+                  </div>
+                ))}
+              </div>
+           </BrandCard>
+
+           <BrandCard padding="md" className="bg-cyan-500/[0.02] border-cyan-500/10 flex-1 flex flex-col overflow-hidden">
+              <div className="p-2 flex items-center justify-between border-b border-white/5 mb-4 shrink-0">
+                 <h3 className="text-[10px] font-black uppercase tracking-widest text-cyan-400/60 flex items-center gap-2">
+                    <Lock size={12} /> 主權實證帳本
+                 </h3>
+                 <span className="text-[8px] text-white/20 font-mono">REALTIME_SYNC</span>
+              </div>
+              <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-3">
                 <AnimatePresence>
                   {seals.length === 0 ? (
-                    <p className="text-[10px] text-white/30 italic">等待 5T 協議自動刻印...</p>
+                    <div className="h-full flex flex-col items-center justify-center opacity-20 py-10">
+                       <Database size={32} className="mb-2" />
+                       <p className="text-[10px] text-white italic">等待 5T 協議自動刻印...</p>
+                    </div>
                   ) : (
                     seals.map(seal => (
-                      <motion.div key={seal.id} initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="p-2 rounded bg-black/40 border border-white/5 flex flex-col gap-1">
+                      <motion.div key={seal.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col gap-2 shadow-2xl group hover:bg-white/[0.04] transition-colors">
                         <div className="flex justify-between items-center">
-                          <span className="text-[9px] font-bold text-cyan-400">{seal.gate} SEALED</span>
-                          <span className="text-[8px] text-white/20">{seal.timestamp}</span>
+                           <div className="flex items-center gap-1.5">
+                              <ShieldCheck size={10} className="text-cyan-400" />
+                              <span className="text-[10px] font-black text-cyan-400 tracking-tighter">GATE {seal.gate}</span>
+                           </div>
+                           <span className="text-[8px] text-white/20 font-mono">{seal.timestamp}</span>
                         </div>
-                        <div className="text-[8px] font-mono text-white/40 truncate">HASH: {seal.hash}</div>
-                        <div className="flex items-center gap-1 mt-1">
-                          <CheckCircle2 size={10} className="text-emerald-500" />
-                          <span className="text-[8px] text-emerald-500/70 font-bold uppercase">Verified Truth</span>
+                        <div className="text-[9px] font-mono text-white/40 break-all border-l border-white/10 pl-2 leading-loose">HASH: {seal.hash}</div>
+                        <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                           <span className="text-[8px] text-emerald-400 font-bold uppercase">Truth Locked</span>
                         </div>
                       </motion.div>
                     ))
                   )}
                 </AnimatePresence>
               </div>
-            </BrandCard>
-          </div>
+           </BrandCard>
         </div>
 
-        {/* AI Insight Bar */}
-        <BrandCard padding="md" className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800/50 flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <BrainCircuit size={24} className="text-blue-600 dark:text-blue-400 shrink-0" />
-            <div className="flex-1">
-              <p className="text-sm text-blue-800 dark:text-blue-200 font-medium leading-relaxed">
-                <strong className="font-black mr-2">OmniAgent 雙模組戰略洞察：</strong>
-                透過 A/B 情境雙向推演，可即時比較不同綠電佈署與在地供應鏈策略對溫室氣體減量及 GRI 302-1 合規的影響。
-              </p>
-            </div>
-            {lastInsight && (
-              <div className="flex items-center gap-2 px-3 py-1 rounded bg-white/5 border border-white/10">
-                <Sparkles size={14} className="text-amber-400" />
-                <span className="text-[10px] font-bold text-white/60">智庫同步</span>
+        {/* Center/Right Column: Nerve Center & Swarm (9/12) */}
+        <div className="col-span-9 row-span-12 flex flex-col gap-6 overflow-hidden">
+           
+           {/* Top: Causal Topology Nerve Center */}
+           <div className="h-[40vh] min-h-[350px] shrink-0">
+              <CausalTopologyGraph 
+                taskId="sim_omega_77" 
+                agentStatus={agentStatus}
+                zkpStatus={zkpStatus}
+                vaultStatus={vaultStatus}
+                healingStatus={healingStatus}
+              />
+           </div>
+
+           {/* Bottom: Visualizer & Swarm Monitor */}
+           <div className="flex-1 grid grid-cols-12 gap-6 overflow-hidden">
+              {/* Main Visualizer */}
+              <div className="col-span-8 flex flex-col gap-6 overflow-hidden">
+                 <div className={cn("flex-1 bg-white/[0.01] border border-white/5 rounded-[32px] p-2 relative overflow-hidden transition-all duration-1000", isSimulating ? "opacity-40 blur-md scale-[0.98]" : "opacity-100 scale-100")}>
+                    <div className="absolute top-6 left-6 z-10 flex gap-3">
+                       <UniversalBadge variant="success" icon={<Globe size={12}/>}>Realtime Projection</UniversalBadge>
+                       <AnimatePresence>{isSearchingKB && (
+                         <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} className="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-400/30 backdrop-blur-xl text-[10px] font-black text-indigo-300 uppercase tracking-widest flex items-center gap-2 shadow-2xl">
+                            <Search size={12} className="animate-spin" /> RAG 知識深度檢索中
+                         </motion.div>
+                       )}</AnimatePresence>
+                    </div>
+                    <div className="h-full overflow-hidden">
+                       <ScenarioVisualizer result={scenarioResultA} />
+                    </div>
+                 </div>
+                 
+                 {/* Insight Bar */}
+                 <BrandCard padding="md" className="bg-gradient-to-r from-cyan-500/[0.08] to-indigo-500/[0.08] border-white/10 shrink-0 flex items-center gap-6 overflow-hidden relative group h-24">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(6,182,212,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 shadow-cyan-glow group-hover:rotate-12 transition-all">
+                       <BrainCircuit size={28} className="text-cyan-400" />
+                    </div>
+                    <div className="flex-1 space-y-1 relative z-10">
+                       <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em]">OmniCore Intelligence Synthesis</span>
+                          <div className="h-[1px] flex-1 bg-white/5" />
+                       </div>
+                       <p className="text-base text-white/80 font-medium leading-relaxed italic pr-12 line-clamp-2">
+                         {lastInsight || "初始化系統意圖中，準備執行多維度因果律對齊模擬。"}
+                       </p>
+                    </div>
+                    {lastInsight && (
+                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} className="absolute right-6 opacity-40">
+                         <Sparkles size={40} className="text-amber-400" />
+                      </motion.div>
+                    )}
+                 </BrandCard>
               </div>
-            )}
-          </div>
-          
-          {lastInsight && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="pl-10 border-l border-blue-400/20">
-              <p className="text-xs text-blue-700 dark:text-blue-300 italic leading-relaxed">「{lastInsight}」</p>
-            </motion.div>
-          )}
-        </BrandCard>
-      </div>
+
+              {/* Swarm Monitor */}
+              <div className="col-span-4 flex flex-col gap-6 overflow-hidden">
+                 <div className="flex-1 bg-slate-900/60 backdrop-blur-2xl rounded-[32px] border border-white/10 overflow-hidden flex flex-col shadow-inner">
+                    <div className="px-6 py-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between shrink-0">
+                       <div className="flex items-center gap-2">
+                          <Activity size={14} className="text-emerald-400" />
+                          <span className="text-[10px] font-black tracking-widest uppercase text-white/60">Swarm Resonance Monitor</span>
+                       </div>
+                       <div className="flex items-center gap-1">
+                          <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping" />
+                          <span className="text-[8px] font-mono text-emerald-400 uppercase">Streaming</span>
+                       </div>
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                       <SwarmResonance />
+                    </div>
+                 </div>
+                 
+                 <div className="grid grid-cols-1 gap-4 shrink-0">
+                    <BrandCard padding="md" className="border-white/5 bg-white/[0.01] flex items-center justify-between group hover:bg-white/[0.03] transition-all">
+                       <div className="flex flex-col gap-1">
+                          <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">Knowledge Density</span>
+                          <span className="text-2xl font-black font-mono text-cyan-400">98.2<span className="text-xs ml-1 opacity-40">%</span></span>
+                       </div>
+                       <div className="w-12 h-12 rounded-full border-2 border-cyan-500/20 flex items-center justify-center group-hover:border-cyan-500/50 transition-colors">
+                          <BookOpen size={20} className="text-cyan-400 opacity-50" />
+                       </div>
+                    </BrandCard>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </main>
+
+      {/* ── Fixed Footer Navigation ── */}
+      <footer className="h-[6vh] border-t border-white/5 bg-black/60 backdrop-blur-xl px-8 flex items-center justify-between text-[9px] font-mono text-white/30 uppercase tracking-[0.3em] shrink-0 relative z-30">
+         <div className="flex items-center gap-6">
+            <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> 5T_CORE_OK</span>
+            <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> INTENT_BUS_SYNC</span>
+         </div>
+         <div className="flex items-center gap-1.5">
+            <span className="text-white/10 italic pr-4">JunAiKey Original Identity Matrix</span>
+            <ArrowRight size={10} className="text-white/20" />
+            <span className="font-black text-white/50 bg-white/5 px-2 py-0.5 rounded">OMNICORE_P0_SEALED</span>
+         </div>
+      </footer>
+
+      {/* Global CSS for Custom Scrollbar in Liquid Glass Style */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.1); }
+      `}</style>
     </div>
   );
 }

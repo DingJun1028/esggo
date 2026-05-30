@@ -12,7 +12,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // --- Design Token System v10.0 | Primitive Layers ---
         blue: {
           50: '#F0F7FF', 100: '#E0EFFF', 200: '#B8D9FF', 300: '#8ABFFF', 
           400: '#579DFF', 500: '#007AFF', 600: '#0062E0', 700: '#004BB3', 
@@ -23,53 +22,40 @@ const config: Config = {
           400: '#FBBF24', 500: '#F59E0B', 600: '#D97706', 700: '#B45309',
           800: '#92400E', 900: '#78350F',
         },
-        // [Other primitive colors can be added here as needed]
-
-        // --- Semantic Tokens | Action & Status ---
+        // --- Ultimate Aesthetic | Cyber-Zen Palette ---
+        void: {
+          stark: '#020617', 
+          rich: '#0a0f1e',
+        },
+        cyan: {
+          core: '#06b6d4',
+          glow: 'rgba(6, 182, 212, 0.4)',
+        },
+        emerald: {
+          soul: '#10b981',
+          glow: 'rgba(16, 185, 129, 0.4)',
+        },
         surface: {
           primary: '#FFFFFF',
           secondary: '#F8FAFC',
           tertiary: '#F1F5F9',
-          brand: 'var(--aqua-cyan-midtone)',
+          brand: '#06b6d4',
         },
-        action: {
-          hover: 'rgba(0, 122, 255, 0.05)',
-          active: 'rgba(0, 122, 255, 0.1)',
-          disabled: '#CBD5E1',
-        },
-
-        // --- 5T Protocol v10.0 | BG + Text Mapping ---
         't1-traceable': { bg: '#E0F2FE', text: '#0369A1' },
         't2-transparent': { bg: '#DCFCE7', text: '#15803D' },
         't3-tangible': { bg: '#FEF3C7', text: '#B45309' },
         't4-trustworthy': { bg: '#FEE2E2', text: '#B91C1C' },
         't5-trackable': { bg: '#F3E8FF', text: '#7E22CE' },
-
-        // ── ESG SUNSHINE | Atomic Light Label Edition ────────────────
         'aqua-cyan': {
-          DEFAULT: '#00FFFF',
-          highlight: '#00FFFF',
-          midtone: '#00C4D9',
-          shadow: '#008BA3',
+          DEFAULT: '#00FFFF', highlight: '#00FFFF', midtone: '#00C4D9', shadow: '#008BA3',
         },
         'eternal-gold': {
-          DEFAULT: '#FFD700',
-          highlight: '#FFD700',
-          midtone: '#E6BE00',
-          shadow: '#C9A000',
+          DEFAULT: '#FFD700', highlight: '#FFD700', midtone: '#E6BE00', shadow: '#C9A000',
         },
-        
-        // Semantic Signals (Solid)
         'verified': '#10b981',
         'lethal': '#FF4D6D',
         'critical-signal': '#FFB703',
         'optimal': '#219EBC',
-
-        // Legacy Support
-        'berkeley-blue': '#003262',
-        'california-gold': '#FDB515',
-
-        // ── Universal Atomic Component Theme Variables ────────────────
         theme: {
           primary: 'var(--theme-primary)',
           'primary-hover': 'var(--theme-primary-hover)',
@@ -98,6 +84,23 @@ const config: Config = {
         'lg': '0 8px 16px rgba(0, 50, 98, 0.15)',
         'xl': '0 12px 24px rgba(0, 50, 98, 0.20)',
         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+        'cyan-glow': '0 0 20px rgba(6, 182, 212, 0.15)',
+        'emerald-glow': '0 0 20px rgba(16, 185, 129, 0.15)',
+      },
+      animation: {
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        'glow-pulse': {
+          '0%, 100%': { opacity: '0.8', filter: 'brightness(1)' },
+          '50%': { opacity: '1', filter: 'brightness(1.5)' },
+        }
       },
       zIndex: {
         'below': '-1',
@@ -115,10 +118,6 @@ const config: Config = {
         'slow': '500ms',
         'slower': '800ms',
       },
-      transitionTimingFunction: {
-        'ease-spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-        'ease-bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-      }
     },
   },
   plugins: [],
