@@ -11,6 +11,7 @@ export default function VaultPage() {
 
   const [vaultRecords, setVaultRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sealingId, setSealingId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchRecords() {
@@ -35,7 +36,7 @@ export default function VaultPage() {
             hash: item.hash_lock || 'Unsealed',
             sealed: !!item.hash_lock,
             timestamp: item.created_at,
-            gri: item.gri_reference || 'N/A',
+            gri: item.gri_mapping || item.gri_reference || 'N/A',
             verified: item.zkp_proof || false,
           }));
           setVaultRecords(records);
@@ -51,6 +52,36 @@ export default function VaultPage() {
     }
     fetchRecords();
   }, []);
+
+  const handleExecuteSeal = async (recordId: string) => {
+    try {
+      setSealingId(recordId);
+      const res = await fetch('/api/vault/seal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          evidenceUuid: recordId,
+          sealType: '5t',
+          sourceOrigin: 'evidence-vault',
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Update the local state
+        setVaultRecords(prev => prev.map(r => 
+          r.id === recordId 
+            ? { ...r, hash: data.hashLock, sealed: true, verified: true } 
+            : r
+        ));
+      } else {
+        console.error('Seal failed:', data.error);
+      }
+    } catch (err) {
+      console.error('Seal request error:', err);
+    } finally {
+      setSealingId(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-void-stark text-white p-6 lg:p-8 animate-in fade-in duration-700">
@@ -159,8 +190,11 @@ export default function VaultPage() {
                           <>
                             <FileText className="w-12 h-12 text-white/30 mb-2 relative z-10" />
                             <h4 className="text-white/70 font-bold text-lg relative z-10">Pending Seal</h4>
-                            <button className="mt-3 text-xs bg-emerald-soul/20 text-emerald-soul border border-emerald-soul/30 px-3 py-1.5 rounded hover:bg-emerald-soul/30 transition-colors">
-                              Execute 5T Seal
+                            <button 
+                              onClick={() => handleExecuteSeal(record.id)}
+                              disabled={sealingId === record.id}
+                              className="mt-3 text-xs bg-emerald-soul/20 text-emerald-soul border border-emerald-soul/30 px-3 py-1.5 rounded hover:bg-emerald-soul/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                              {sealingId === record.id ? 'Sealing...' : 'Execute 5T Seal'}
                             </button>
                           </>
                         )}

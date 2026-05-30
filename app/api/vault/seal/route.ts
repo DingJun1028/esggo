@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -83,6 +84,15 @@ export async function POST(request: NextRequest) {
       hash_lock: hashLock,
       details: `5T seal created for evidence ${evidenceUuid}, type: ${sealType}`,
     });
+
+    // Fire T5 Lifecycle Event via OmniAgentBus
+    omniAgentBus.publish('vault:seal:5t', {
+      evidenceUuid,
+      sealType,
+      hashLock,
+      sourceOrigin,
+      timestamp: rawSealData.timestamp
+    }).catch(console.warn);
 
     return NextResponse.json({
       success: true,

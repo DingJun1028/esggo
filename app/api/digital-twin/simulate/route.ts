@@ -89,8 +89,11 @@ export async function POST(request: Request) {
       const auditPayload = {
         company_id: companyId,
         action: 'DIGITAL_TWIN_SIMULATE',
-        performed_by: userId,
-        target_resource: `scenario_${scenarioId}`,
+        resource: `scenario_${scenarioId}`,
+        user_name: userId,
+        department: 'System',
+        t5_tag: 'Trustworthy',
+        details: JSON.stringify({ parameters }),
         created_at: new Date().toISOString()
       };
       
@@ -98,8 +101,7 @@ export async function POST(request: Request) {
       
       const { error: auditError } = await supabase.from('audit_logs').insert([{
         ...auditPayload,
-        // 如果 audit_logs 沒有 zkp_hash 欄位，可放在 details 中，假設有：
-        // details: JSON.stringify({ hash_lock: hash, parameters })
+        hash_lock: hash
       }]);
       
       if (auditError) {
