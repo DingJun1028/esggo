@@ -21,14 +21,22 @@ vi.mock('docx', () => ({
 // 2. 模擬 Web Worker 的全域執行環境 (self)
 const mockPostMessage = vi.fn();
 
-if (!(global as any).self) {
-    (global as any).self = {} as any;
+interface GlobalWithSelf extends NodeJS.Global {
+    self: {
+        onmessage: ((ev: { data: unknown }) => void) | null;
+        postMessage: typeof mockPostMessage;
+        addEventListener: ReturnType<typeof vi.fn>;
+    };
 }
 
-(global as any).self.onmessage = null;
-(global as any).self.postMessage = mockPostMessage;
-if (!(global as any).self.addEventListener) {
-    (global as any).self.addEventListener = vi.fn();
+const globalWithSelf = (global as unknown as GlobalWithSelf);
+
+if (!globalWithSelf.self) {
+    globalWithSelf.self = {
+        onmessage: null,
+        postMessage: mockPostMessage,
+        addEventListener: vi.fn(),
+    };
 }
 
 describe('exportDocx.worker', () => {
@@ -56,10 +64,12 @@ describe('exportDocx.worker', () => {
         };
 
         // 取得綁定在 self 上的處理函式並執行
-        const workerHandler = (global as any).self.onmessage;
+        const workerHandler = globalWithSelf.self.onmessage;
         expect(workerHandler).toBeDefined();
 
-        await workerHandler(mockEventData as MessageEvent);
+        if (workerHandler) {
+            await workerHandler(mockEventData as { data: unknown });
+        }
 
         // 斷言 1: 確保 Packer.toBlob 被呼叫 (代表有啟動文件打包)
         expect(Packer.toBlob).toHaveBeenCalledTimes(1);
@@ -81,7 +91,10 @@ describe('exportDocx.worker', () => {
             data: { chapters: [], generatedContent: {} }
         };
 
-        await (global as any).self.onmessage(mockEventData as MessageEvent);
+        const workerHandler = globalWithSelf.self.onmessage;
+        if (workerHandler) {
+            await workerHandler(mockEventData as { data: unknown });
+        }
 
         expect(mockPostMessage).toHaveBeenCalledWith({
             status: 'error',

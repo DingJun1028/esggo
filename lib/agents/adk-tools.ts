@@ -87,12 +87,12 @@ export const syncToNCBDB = ai.defineTool({
   description: 'Synchronize ESG records (reports, metrics, etc.) to an NCBDB table.',
   inputSchema: z.object({
     tableName: z.string().describe('Target NCBDB table name'),
-    data: z.any().describe('The record data to upsert')
+    data: z.record(z.string(), z.unknown()).describe('The record data to upsert')
   }),
 }, async (input) => {
-  const { ncbClient } = require('../ncbdb.ts');
+  const { ncbClient } = await import('../ncbdb.ts');
   console.log(`[NCBDB Tool] Syncing to table: ${input.tableName}`);
-  return await ncbClient.upsertRecord(input.tableName, input.data);
+  return await ncbClient.upsertRecord(input.tableName, input.data as any);
 });
 
 export const ADK_STANDARD_TOOLS = [

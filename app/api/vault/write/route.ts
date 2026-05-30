@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('INTERNAL_ERROR', error.message || '寫入失敗'),
       { status: 500 }
@@ -63,7 +63,7 @@ async function logAudit(params: {
   tableName: string;
   recordId: string;
   userId: string;
-  newData?: any;
+  newData?: unknown;
 }) {
   const supabase = await createServerClient();
   await supabase.from('audit_trail' as any).insert({

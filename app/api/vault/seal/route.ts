@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     let targetTable = 'evidence_vault';
-    let updatePayload: any = { hash_lock: hashLock, zkp_proof: true, status: 'verified' };
+    let updatePayload: unknown = { hash_lock: hashLock, zkp_proof: true, status: 'verified' };
 
     if (sourceOrigin === 'environmental-module') {
       targetTable = 'environmental_data';
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       secretId: uniqueName,
       sealedAt: rawSealData.timestamp,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Seal error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -134,7 +134,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true, uniqueName, decrypted: data.hash_lock });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

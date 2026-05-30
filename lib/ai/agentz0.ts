@@ -61,16 +61,16 @@ export const getReadingRoomTool = genkitInstance.defineTool({
 export interface AgentTool {
   name: string;
   description: string;
-  execute?: (input: any) => Promise<any>;
+  execute?: (input: unknown) => Promise<any>;
 }
 
 export class AgentZ0 {
   name: string;
   role: string;
-  memory: any[];
-  tools: any[];
+  memory: Array<{ task: string; result: string }>;
+  tools: unknown[];
 
-  constructor(config: { name: string; role: string; tools?: any[] }) {
+  constructor(config: { name: string; role: string; tools?: unknown[] }) {
     this.name = config.name;
     this.role = config.role;
     // Register default DB tools if none are provided
@@ -85,7 +85,7 @@ export class AgentZ0 {
     this.memory = [];
   }
 
-  async runTask(taskDescription: string, dataContext?: any) {
+  async runTask(taskDescription: string, dataContext?: Record<string, unknown>) {
     console.log(`[AgentZ0 - ${this.name}] Starting task: ${taskDescription}`);
     
     try {
@@ -101,7 +101,7 @@ Please analyze the request, use any available tools to query the databases for n
       `;
 
       // Utilize Genkit for core generation (Base LLM execution)
-      const { gemini20Flash } = require('@genkit-ai/googleai');
+      const { gemini20Flash } = await import('@genkit-ai/googleai');
       const response = await genkitInstance.generate({
         model: gemini20Flash,
         prompt: prompt,
@@ -128,7 +128,7 @@ Please analyze the request, use any available tools to query the databases for n
     }
   }
 
-  async *streamTask(taskDescription: string, dataContext?: any) {
+  async *streamTask(taskDescription: string, dataContext?: Record<string, unknown>) {
     console.log(`[AgentZ0 - ${this.name}] Starting streaming task: ${taskDescription}`);
     
     const prompt = `
@@ -143,7 +143,7 @@ Please analyze the request, use any available tools to query the databases for n
 需針對該專案內容深度撰寫，字數需儘可能豐富詳盡。
       `;
 
-    const { gemini20Flash } = require('@genkit-ai/googleai');
+    const { gemini20Flash } = await import('@genkit-ai/googleai');
     const { stream } = await genkitInstance.generateStream({
       model: gemini20Flash,
       prompt: prompt,

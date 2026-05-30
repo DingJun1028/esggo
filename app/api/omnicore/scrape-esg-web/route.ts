@@ -96,7 +96,7 @@ ${extractedText.substring(0, 3000)} // 截斷避免過長
       }
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Scrape ESG] 執行失敗:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

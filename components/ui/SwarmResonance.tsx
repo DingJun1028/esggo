@@ -10,7 +10,7 @@ interface EventLog {
   id: string;
   timestamp: string;
   event: string;
-  payload: any;
+  payload: unknown;
   agent?: string;
 }
 
@@ -19,7 +19,7 @@ export function SwarmResonance() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleEvent = (event: string, payload: any) => {
+    const handleEvent = (event: string, payload: unknown) => {
       const newLog: EventLog = {
         id: Math.random().toString(36).substring(7),
         timestamp: new Date().toLocaleTimeString(),

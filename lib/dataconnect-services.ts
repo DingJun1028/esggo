@@ -34,7 +34,7 @@ export const dcListEternalMemories = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertEternalMemory = async (input: any) => {
+export const dcUpsertEternalMemory = async (input: unknown) => {
   try {
     const response = await upsertEternalMemory(dataConnect, input);
     return response.data.eternalMemory_upsert;
@@ -55,7 +55,7 @@ export const dcListSwarmAgentTasks = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertSwarmAgentTask = async (input: any) => {
+export const dcUpsertSwarmAgentTask = async (input: unknown) => {
   try {
     const response = await upsertSwarmAgentTask(dataConnect, input);
     return response.data.swarmAgentTask_upsert;
@@ -119,7 +119,7 @@ export const dcListAuditRecords = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertAuditRecord = async (input: any) => {
+export const dcUpsertAuditRecord = async (input: unknown) => {
   try {
     const response = await upsertAuditRecord(dataConnect, input);
     return response.data.auditRecord_upsert;
@@ -151,7 +151,7 @@ export const dcGetRoadmapMilestones = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertMilestone = async (input: any) => {
+export const dcUpsertMilestone = async (input: unknown) => {
   try {
     const response = await upsertRoadmapMilestone(dataConnect, {
       id: input.id,
@@ -181,7 +181,7 @@ export const dcGetCompanyProfile = async (id: string): Promise<any | null> => {
   }
 };
 
-export const dcUpsertCompanyProfile = async (input: any) => {
+export const dcUpsertCompanyProfile = async (input: unknown) => {
   try {
     const response = await upsertCompanyProfile(dataConnect, input);
     return response.data.companyProfile_upsert;

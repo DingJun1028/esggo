@@ -1,7 +1,7 @@
 /**
- * AITable Fusion API v1 — TypeScript SDK Client
+ * OmniTable Fusion API v1 — TypeScript SDK Client
  * ═══════════════════════════════════════════════
- * ESG GO 平台 × AITable 集成層
+ * ESG GO 平台 × OmniTable 集成層
  * 
  * 5T Protocol Compliance:
  *   T1-Traceable:   每次 API 呼叫記錄 source_origin
@@ -13,22 +13,22 @@
 
 // ─── Types ────────────────────────────────────────────────────────────
 
-export interface AITableSpace {
+export interface OmniTableSpace {
   id: string;
   name: string;
   isAdmin: boolean;
 }
 
-export interface AITableNode {
+export interface OmniTableNode {
   id: string;
   name: string;
   type: 'Datasheet' | 'Folder' | 'Form' | 'Dashboard' | 'Mirror';
   icon: string;
   isFav: boolean;
-  children?: AITableNode[];
+  children?: OmniTableNode[];
 }
 
-export interface AITableField {
+export interface OmniTableField {
   id: string;
   name: string;
   type: string;
@@ -37,20 +37,20 @@ export interface AITableField {
   isPrimary?: boolean;
 }
 
-export interface AITableView {
+export interface OmniTableView {
   id: string;
   name: string;
   type: string;
 }
 
-export interface AITableRecord {
+export interface OmniTableRecord {
   recordId: string;
   createdAt?: number;
   updatedAt?: number;
   fields: Record<string, unknown>;
 }
 
-export interface AITableAttachment {
+export interface OmniTableAttachment {
   id: string;
   name: string;
   size: number;
@@ -61,24 +61,24 @@ export interface AITableAttachment {
   url: string;
 }
 
-export interface AITablePagination {
+export interface OmniTablePagination {
   pageNum: number;
   pageSize: number;
   total: number;
 }
 
-export interface AITableResponse<T> {
+export interface OmniTableResponse<T> {
   success: boolean;
   code: number;
   message: string;
   data: T;
 }
 
-export interface AITableRecordsResponse {
+export interface OmniTableRecordsResponse {
   total: number;
   pageNum: number;
   pageSize: number;
-  records: AITableRecord[];
+  records: OmniTableRecord[];
 }
 
 export interface GetRecordsParams {
@@ -104,22 +104,22 @@ export interface UpdateRecordPayload {
 
 // ─── Client Configuration ────────────────────────────────────────────
 
-interface AITableClientConfig {
+interface OmniTableClientConfig {
   /** API Token (Bearer) */
   token: string;
-  /** Base URL — defaults to https://aitable.ai */
+  /** Base URL — defaults to https://omni-table.ai */
   baseUrl?: string;
 }
 
 // ─── SDK Client ─────────────────────────────────────────────────────
 
-export class AITableClient {
+export class OmniTableClient {
   private readonly token: string;
   private readonly baseUrl: string;
 
-  constructor(config: AITableClientConfig) {
+  constructor(config: OmniTableClientConfig) {
     this.token = config.token;
-    this.baseUrl = (config.baseUrl || 'https://aitable.ai').replace(/\/$/, '');
+    this.baseUrl = (config.baseUrl || 'https://omni-table.ai').replace(/\/$/, '');
   }
 
   private get headers(): HeadersInit {
@@ -134,7 +134,7 @@ export class AITableClient {
     path: string,
     body?: unknown,
     params?: Record<string, string | number | boolean | undefined>
-  ): Promise<AITableResponse<T>> {
+  ): Promise<OmniTableResponse<T>> {
     const url = new URL(`/fusion/v1${path}`, this.baseUrl);
 
     if (params) {
@@ -153,8 +153,8 @@ export class AITableClient {
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => 'Unknown error');
-      throw new AITableError(
-        `AITable API Error [${response.status}]: ${errorText}`,
+      throw new OmniTableError(
+        `OmniTable API Error [${response.status}]: ${errorText}`,
         response.status
       );
     }
@@ -164,20 +164,20 @@ export class AITableClient {
 
   // ── Spaces ───────────────────────────────────────────────────────
 
-  async getSpaces(): Promise<AITableSpace[]> {
-    const res = await this.request<{ spaces: AITableSpace[] }>('GET', '/spaces');
+  async getSpaces(): Promise<OmniTableSpace[]> {
+    const res = await this.request<{ spaces: OmniTableSpace[] }>('GET', '/spaces');
     return res.data.spaces;
   }
 
   // ── Nodes ────────────────────────────────────────────────────────
 
-  async getNodes(spaceId: string): Promise<AITableNode[]> {
-    const res = await this.request<{ nodes: AITableNode[] }>('GET', `/spaces/${spaceId}/nodes`);
+  async getNodes(spaceId: string): Promise<OmniTableNode[]> {
+    const res = await this.request<{ nodes: OmniTableNode[] }>('GET', `/spaces/${spaceId}/nodes`);
     return res.data.nodes;
   }
 
-  async searchNodes(spaceId: string, keyword: string): Promise<AITableNode[]> {
-    const res = await this.request<{ nodes: AITableNode[] }>(
+  async searchNodes(spaceId: string, keyword: string): Promise<OmniTableNode[]> {
+    const res = await this.request<{ nodes: OmniTableNode[] }>(
       'GET',
       `/spaces/${spaceId}/nodes`,
       undefined,
@@ -188,8 +188,8 @@ export class AITableClient {
 
   // ── Fields ───────────────────────────────────────────────────────
 
-  async getFields(datasheetId: string): Promise<AITableField[]> {
-    const res = await this.request<{ fields: AITableField[] }>(
+  async getFields(datasheetId: string): Promise<OmniTableField[]> {
+    const res = await this.request<{ fields: OmniTableField[] }>(
       'GET',
       `/datasheets/${datasheetId}/fields`
     );
@@ -199,8 +199,8 @@ export class AITableClient {
   async createField(
     datasheetId: string,
     field: { name: string; type: string; property?: Record<string, unknown> }
-  ): Promise<AITableField> {
-    const res = await this.request<AITableField>(
+  ): Promise<OmniTableField> {
+    const res = await this.request<OmniTableField>(
       'POST',
       `/datasheets/${datasheetId}/fields`,
       field
@@ -214,8 +214,8 @@ export class AITableClient {
 
   // ── Views ────────────────────────────────────────────────────────
 
-  async getViews(datasheetId: string): Promise<AITableView[]> {
-    const res = await this.request<{ views: AITableView[] }>(
+  async getViews(datasheetId: string): Promise<OmniTableView[]> {
+    const res = await this.request<{ views: OmniTableView[] }>(
       'GET',
       `/datasheets/${datasheetId}/views`
     );
@@ -227,7 +227,7 @@ export class AITableClient {
   async getRecords(
     datasheetId: string,
     params?: GetRecordsParams
-  ): Promise<AITableRecordsResponse> {
+  ): Promise<OmniTableRecordsResponse> {
     const queryParams: Record<string, string | number | boolean | undefined> = {};
 
     if (params?.viewId) queryParams.viewId = params.viewId;
@@ -240,7 +240,7 @@ export class AITableClient {
     if (params?.recordIds) queryParams['recordIds[]'] = params.recordIds.join(',');
     if (params?.sort) queryParams.sort = JSON.stringify(params.sort);
 
-    const res = await this.request<AITableRecordsResponse>(
+    const res = await this.request<OmniTableRecordsResponse>(
       'GET',
       `/datasheets/${datasheetId}/records`,
       undefined,
@@ -253,8 +253,8 @@ export class AITableClient {
     datasheetId: string,
     records: CreateRecordPayload[],
     fieldKey: 'id' | 'name' = 'name'
-  ): Promise<AITableRecord[]> {
-    const res = await this.request<{ records: AITableRecord[] }>(
+  ): Promise<OmniTableRecord[]> {
+    const res = await this.request<{ records: OmniTableRecord[] }>(
       'POST',
       `/datasheets/${datasheetId}/records`,
       { records, fieldKey }
@@ -266,8 +266,8 @@ export class AITableClient {
     datasheetId: string,
     records: UpdateRecordPayload[],
     fieldKey: 'id' | 'name' = 'name'
-  ): Promise<AITableRecord[]> {
-    const res = await this.request<{ records: AITableRecord[] }>(
+  ): Promise<OmniTableRecord[]> {
+    const res = await this.request<{ records: OmniTableRecord[] }>(
       'PATCH',
       `/datasheets/${datasheetId}/records`,
       { records, fieldKey }
@@ -330,30 +330,30 @@ export class AITableClient {
 
 // ─── Error Class ──────────────────────────────────────────────────────
 
-export class AITableError extends Error {
+export class OmniTableError extends Error {
   public readonly statusCode: number;
 
   constructor(message: string, statusCode: number) {
     super(message);
-    this.name = 'AITableError';
+    this.name = 'OmniTableError';
     this.statusCode = statusCode;
   }
 }
 
 // ─── Server-side Singleton ────────────────────────────────────────────
 
-let _serverClient: AITableClient | null = null;
+let _serverClient: OmniTableClient | null = null;
 
-export function getAITableServerClient(): AITableClient {
+export function getOmniTableServerClient(): OmniTableClient {
   if (!_serverClient) {
-    const token = process.env.AITABLE_API_KEY;
+    const token = process.env.OMNITABLE_API_KEY;
     if (!token) {
       throw new Error(
-        '[AITable] Missing AITABLE_API_KEY environment variable. ' +
-          'Set it in .env to enable AITable integration.'
+        '[OmniTable] Missing OMNITABLE_API_KEY environment variable. ' +
+          'Set it in .env to enable OmniTable integration.'
       );
     }
-    _serverClient = new AITableClient({ token });
+    _serverClient = new OmniTableClient({ token });
   }
   return _serverClient;
 }

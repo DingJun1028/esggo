@@ -6,17 +6,17 @@ import { pushBusEvent } from '../stream/route';
 /**
  * Scheduled Auto-Sync Endpoint
  * ──────────────────────────────
- * Cron-compatible API for automated BlueCC ↔ AITable synchronization.
+ * Cron-compatible API for automated OmniBlue ↔ OmniTable synchronization.
  * Can be triggered by Vercel Cron, external schedulers, or manual invocation.
  *
  * POST /api/omni-agent-api/schedule
- * Body: { mission: 'SYNC_BLUECC_AITABLE' | 'EVIDENCE_AUDIT' | 'PILOT_REPORT', cronSecret?: string }
+ * Body: { mission: 'SYNC_OMNIBLUE_OMNITABLE' | 'EVIDENCE_AUDIT' | 'PILOT_REPORT', cronSecret?: string }
  *
  * Security: Validates CRON_SECRET header for automated triggers.
  */
 
 const VALID_MISSIONS = [
-  'SYNC_BLUECC_AITABLE',
+  'SYNC_OMNIBLUE_OMNITABLE',
   'EVIDENCE_AUDIT',
   'PILOT_REPORT',
   'TRANSFER_TO_NCBDB',
@@ -104,7 +104,7 @@ export async function GET() {
     documentation: {
       endpoint: 'POST /api/omni-agent-api/schedule',
       headers: { 'x-cron-secret': 'Your CRON_SECRET env variable' },
-      body: '{ "mission": "SYNC_BLUECC_AITABLE", "context": {} }',
+      body: '{ "mission": "SYNC_OMNIBLUE_OMNITABLE", "context": {} }',
     },
   });
 }

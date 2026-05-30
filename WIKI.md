@@ -13,6 +13,7 @@
 ### 核心概念與架構
 *   [[WIKI 新版全解析]](docs/wiki/Wiki-New-Version-Analysis.md)
 *   [[WIKI 撰寫規範]](docs/wiki/Wiki-Guidelines.md)
+*   [[功能開發與 WIKI 規範]](docs/wiki/Development-Workflow.md)
 *   [[平台總覽]](docs/wiki/Platform-Overview.md)
 *   [[系統核心架構]](docs/wiki/System-Core-Architecture.md)
 *   [[5T-誠信協議]](docs/wiki/5T-Protocol.md)

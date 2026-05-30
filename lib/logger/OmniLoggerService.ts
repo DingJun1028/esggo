@@ -14,7 +14,7 @@ export class OmniLoggerService implements ILoggerService {
         return `[${timestamp}] [${level.toUpperCase()}] ${message}${ctxString}`;
     }
 
-    private async sendToRemote(level: LogLevel, message: string, error?: any, context?: LogContext) {
+    private async sendToRemote(level: LogLevel, message: string, error?: unknown, context?: LogContext) {
         // 僅在生產環境或特定層級 (如 warn, error) 時發送至遠端，視業務需求調整
         // 採用 Fire-and-forget 模式，不阻擋主執行緒
         try {

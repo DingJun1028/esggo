@@ -5,7 +5,7 @@ import { OmniCard } from '@/src/shared/types';
  */
 export interface DiffResult {
   isAligned: boolean;
-  differences: Record<string, { truth: any; snapshot: any }>;
+  differences: Record<string, { truth: unknown; snapshot: unknown }>;
   severity: 'NONE' | 'LOW' | 'HIGH' | 'CRITICAL';
 }
 
@@ -22,7 +22,7 @@ export class StateDiffEngine {
    * 3. LOW: 名稱 (name) 等文案欄位不一致
    */
   public static compare(truth: OmniCard, snapshot: OmniCard): DiffResult {
-    const differences: Record<string, { truth: any; snapshot: any }> = {};
+    const differences: Record<string, { truth: unknown; snapshot: unknown }> = {};
     let severity: 'NONE' | 'LOW' | 'HIGH' | 'CRITICAL' = 'NONE';
 
     // 1. 比較狀態 (CRITICAL)

@@ -5,7 +5,7 @@ import { Leaf, Plus, BarChart3, Droplets, Zap, Trash2, ShieldCheck, Lock, Loader
 import { StandardPage, BrandCard, BrandTable, BrandButton } from '../../components/brand';
 
 export default function EnvironmentalPage() {
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [sealingId, setSealingId] = useState<string | null>(null);
   const [verifyingId, setVerifyingId] = useState<string | null>(null);

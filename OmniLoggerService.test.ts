@@ -15,7 +15,7 @@ describe('OmniLoggerService', () => {
 
         // 2. 攔截 fetch，模擬遠端 API 呼叫
         originalFetch = global.fetch;
-        global.fetch = vi.fn().mockResolvedValue({ ok: true }) as any;
+        global.fetch = vi.fn().mockResolvedValue({ ok: true } as Response);
 
         // 3. 備份環境變數
         originalEnv = process.env.NODE_ENV;
@@ -26,7 +26,7 @@ describe('OmniLoggerService', () => {
     afterEach(() => {
         vi.restoreAllMocks();
         global.fetch = originalFetch;
-        (process.env as any).NODE_ENV = originalEnv;
+        (process.env as Record<string, string | undefined>).NODE_ENV = originalEnv;
     });
 
     it('應該正確輸出 info 日誌，且不拋送到遠端', () => {
@@ -78,7 +78,7 @@ describe('OmniLoggerService', () => {
     });
 
     it('debug 日誌應該只在開發環境輸出', () => {
-        (process.env as any).NODE_ENV = 'development';
+        (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
         logger.debug('這是除錯訊息');
         expect(console.debug).toHaveBeenCalledTimes(1);
         expect(global.fetch).not.toHaveBeenCalled();
@@ -86,7 +86,7 @@ describe('OmniLoggerService', () => {
         vi.clearAllMocks();
 
         // 切換到正式環境
-        (process.env as any).NODE_ENV = 'production';
+        (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
         logger.debug('不該出現的除錯訊息');
         expect(console.debug).not.toHaveBeenCalled();
     });

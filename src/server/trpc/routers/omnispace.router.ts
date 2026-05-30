@@ -33,8 +33,8 @@ export const omnispaceRouter = router({
       try {
         const { stdout, stderr } = await execAsync(`node cli/omni.mjs vault seal ${input.documentId}`);
         return { success: true, stdout, stderr };
-      } catch (error: any) {
-        return { success: false, error: error.message };
+      } catch (error: unknown) {
+        return { success: false, error: (error as Error).message };
       }
     }),
 });

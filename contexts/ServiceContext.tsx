@@ -14,7 +14,7 @@ import { OmniLoggerService } from '../lib/logger/OmniLoggerService';
 const memoryIntegrityStore = new Map<string, any>();
 
 class MemoryIntegrityRepository {
-    async saveRecord(record: any): Promise<void> {
+    async saveRecord(record: unknown): Promise<void> {
         memoryIntegrityStore.set(record.id, record);
     }
     async getRecord(id: string): Promise<any | null> {

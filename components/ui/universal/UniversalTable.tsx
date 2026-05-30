@@ -4,7 +4,7 @@ import { cn } from '../../../lib/utils';
 export interface UniversalTableColumn<T> {
   key: string;
   label: React.ReactNode;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
 }
 
 export interface UniversalTableProps<T> extends React.HTMLAttributes<HTMLTableElement> {

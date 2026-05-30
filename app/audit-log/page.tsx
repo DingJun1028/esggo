@@ -6,7 +6,7 @@ import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export default function AuditLogPage() {
-  const [records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

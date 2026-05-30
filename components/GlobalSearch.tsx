@@ -9,7 +9,7 @@ import { cn } from '../lib/utils';
 export function GlobalSearch() {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState<any[]>([]);
+    const [results, setResults] = useState<unknown[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const companyId = useSustainWriteStore(state => state.companyId);
     const searchRef = useRef<HTMLDivElement>(null);

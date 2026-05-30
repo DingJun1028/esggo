@@ -5,7 +5,6 @@
  */
 
 import { secureHash, logAudit } from '../db';
-import { IComponentCore } from '@/src/shared/types';
 import { 
   SACRED_GATES, 
   ProtocolGateCode, 
@@ -31,7 +30,7 @@ export class IntegrityService {
    */
   public async validateGates(
     sourcePath: string, 
-    data: any, 
+    data: Record<string, unknown>, 
     actorId: string
   ): Promise<GateValidationResult[]> {
     const results: GateValidationResult[] = [];
@@ -75,7 +74,7 @@ export class IntegrityService {
    */
   public async sealData(
     resource: string, 
-    data: any, 
+    data: Record<string, unknown>, 
     meta: { user: string; dept: string; gri?: string }
   ): Promise<{ hash: string; timestamp: number }> {
     const timestamp = Date.now();
@@ -102,7 +101,7 @@ export class IntegrityService {
   /**
    * Validates a data object against a provided hash lock.
    */
-  public async verifyIntegrity(data: any, expectedHash: string): Promise<boolean> {
+  public async verifyIntegrity(data: Record<string, unknown>, expectedHash: string): Promise<boolean> {
     const actualHash = await secureHash(data);
     return actualHash === expectedHash;
   }

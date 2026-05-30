@@ -50,8 +50,8 @@ export function buildComponent(params: {
   version?: string;
   formula?: string;
   impactMetric?: string;
-  evidenceData?: any;
-  status?: any;
+  evidenceData?: unknown;
+  status?: unknown;
   griReference?: string;
 }): IComponentCore {
   const uuid = params.uuid ?? crypto.randomUUID();

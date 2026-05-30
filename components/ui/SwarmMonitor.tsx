@@ -126,7 +126,7 @@ export function SwarmMonitor() {
         <div className="p-4 bg-berkeley-blue rounded-2xl text-white relative overflow-hidden">
           <div className="relative z-10 space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase tracking-widest opacity-60">BlueCC 算力負載</span>
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-60">OmniBlue 算力負載</span>
               <Cpu size={14} className="text-primary-400" />
             </div>
             <div className="flex items-end gap-2">

@@ -11,7 +11,7 @@ export interface CrawlResult {
   url: string;
   timestamp: string;
   itemsFound: number;
-  data: any[];
+  data: unknown[];
   hashLock: string;
   error?: string;
 }
@@ -47,7 +47,7 @@ export abstract class BaseCrawler {
    * Exponential Backoff Retry
    */
   protected async withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
-    let lastError: any;
+    let lastError: unknown;
     for (let i = 0; i < retries; i++) {
       try {
         return await fn();

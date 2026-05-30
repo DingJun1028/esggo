@@ -21,10 +21,10 @@ import { SKILL_REGISTRY } from '../../lib/agent/registry';
 import { UniversalPageConfig } from '../../lib/page-config';
 
 interface ExecutionRecord {
-  task: any;
-  execution: any;
-  artifact: any;
-  policy: any;
+  task: unknown;
+  execution: unknown;
+  artifact: unknown;
+  policy: unknown;
 }
 
 const TASK_TYPE_META: Record<string, { label: string; color: string }> = {
@@ -41,7 +41,7 @@ const TASK_ICONS: Record<string, React.ReactNode> = {
   task_planning: <List size={16} />,
 };
 
-const REVIEW_STATUS_MAP: Record<string, { label: string; variant: any }> = {
+const REVIEW_STATUS_MAP: Record<string, { label: string; variant: unknown }> = {
   awaiting_review: { label: '待審核', variant: 'warning' },
   approved: { label: '已核准', variant: 'info' },
   rejected: { label: '已拒絕', variant: 'error' },
@@ -49,9 +49,9 @@ const REVIEW_STATUS_MAP: Record<string, { label: string; variant: any }> = {
 };
 
 export default function OrchestratorPage() {
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<unknown[]>([]);
   const [executions, setExecutions] = useState<ExecutionRecord[]>([]);
-  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [auditLogs, setAuditLogs] = useState<unknown[]>([]);
   const [activeTab, setActiveTab] = useState<'create' | 'executions' | 'swarm' | 'registry' | 'audit'>('executions');
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<ExecutionRecord | null>(null);
@@ -75,10 +75,10 @@ export default function OrchestratorPage() {
       const [tData, eData, aData, auData] = await Promise.all([tRes.json(), eRes.json(), aRes.json(), auRes.json()]);
       
       setTasks(tData.tasks || []);
-      const merged = (tData.tasks || []).map((t: any) => ({
+      const merged = (tData.tasks || []).map((t: unknown) => ({
         task: t,
-        execution: eData.executions?.find((e: any) => e.taskId === t.id) || null,
-        artifact: aData.artifacts?.find((a: any) => a.taskId === t.id) || null,
+        execution: eData.executions?.find((e: unknown) => e.taskId === t.id) || null,
+        artifact: aData.artifacts?.find((a: unknown) => a.taskId === t.id) || null,
         policy: null
       }));
       setExecutions(merged);
@@ -115,7 +115,7 @@ export default function OrchestratorPage() {
       setTitle(''); setDescription('');
       setActiveTab('executions');
       showToast('任務建立成功，政策守門已通過');
-    } catch (e: any) {
+    } catch (e: unknown) {
       showToast(e.message, 'error');
     } finally {
       setLoading(false);
@@ -137,7 +137,7 @@ export default function OrchestratorPage() {
       setExecutions(prev => prev.map(r => r.task.id === rec.task.id ? updated : r));
       setSelected(updated);
       showToast('OmniAgent 執行完成，草稿已生成');
-    } catch (e: any) {
+    } catch (e: unknown) {
       showToast(e.message, 'error');
     } finally {
       setLoading(false);
@@ -225,16 +225,16 @@ export default function OrchestratorPage() {
             {activeTab === 'executions' && (
               <DataTable 
                 columns={[
-                  { key: 'title', header: '任務標題', render: (_: any, rec: any) => <span className="font-bold text-slate-800">{rec.task.title}</span> },
-                  { key: 'status', header: '執行狀態', render: (_: any, rec: any) => (
+                  { key: 'title', header: '任務標題', render: (_: unknown, rec: unknown) => <span className="font-bold text-slate-800">{rec.task.title}</span> },
+                  { key: 'status', header: '執行狀態', render: (_: unknown, rec: unknown) => (
                     <Badge variant={rec.artifact ? (REVIEW_STATUS_MAP[rec.artifact.reviewStatus]?.variant || 'verified') : 'draft'}>
                       {rec.artifact ? REVIEW_STATUS_MAP[rec.artifact.reviewStatus]?.label : '待執行'}
                     </Badge>
                   ) },
-                  { key: 'time', header: '建立時間', render: (_: any, rec: any) => <span className="text-[11px] font-mono text-slate-400 font-bold">{new Date(rec.task.createdAt).toLocaleString()}</span> },
-                  { key: 'action', header: '', render: (_: any, rec: any) => <Button variant="glass" size="sm" className="h-9 px-5 rounded-xl text-[11px] font-bold" onClick={() => setSelected(rec)}>檢視詳情</Button> }
+                  { key: 'time', header: '建立時間', render: (_: unknown, rec: unknown) => <span className="text-[11px] font-mono text-slate-400 font-bold">{new Date(rec.task.createdAt).toLocaleString()}</span> },
+                  { key: 'action', header: '', render: (_: unknown, rec: unknown) => <Button variant="glass" size="sm" className="h-9 px-5 rounded-xl text-[11px] font-bold" onClick={() => setSelected(rec)}>檢視詳情</Button> }
                 ]}
-                data={executions as any[]}
+                data={executions as unknown[]}
                 searchable
                 searchPlaceholder="搜尋調度任務..."
               />

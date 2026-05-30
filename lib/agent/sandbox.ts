@@ -8,7 +8,7 @@ export interface SandboxResult {
   stdout: string;
   stderr: string;
   exitCode: number;
-  results?: any;
+  results?: unknown;
   error?: string;
   isSimulated: boolean;
 }

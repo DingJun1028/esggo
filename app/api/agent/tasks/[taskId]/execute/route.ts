@@ -32,7 +32,7 @@ export async function POST(
       addExecution(result.execution);
       addArtifact(result.artifact);
       return NextResponse.json({ ...result, ok: true });
-    } catch (e: any) {
+    } catch (e: unknown) {
       if (e.message === 'OMNIAGENT_GATEWAY_UNREACHABLE') {
         console.info(`Falling back to local Genkit execution for task: ${task.id}`);
         

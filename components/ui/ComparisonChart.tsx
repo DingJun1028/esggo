@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { BrandCard } from '@/components/brand';
 import { Activity } from 'lucide-react';
 
-export function ComparisonChart({ resultA, resultB }: { resultA: any, resultB: any }) {
+export function ComparisonChart({ resultA, resultB }: { resultA: unknown, resultB: unknown }) {
   const data = [
     {
       name: '碳排放 (噸)',

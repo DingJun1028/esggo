@@ -19,7 +19,7 @@ export async function POST(request: Request) {
             console.warn('[Feedback API] Omni Vault 寫入失敗', dbErr);
         }
 
-        // 2. 同步至外部系統 (AITable.ai & BlueCC) 觸發萬能進化環
+        // 2. 同步至外部系統 (OmniTable.ai & OmniBlue) 觸發萬能進化環
         const syncService = ExternalSyncService.getInstance();
         await syncService.triggerEvolutionSync({
             type: 'feedback',
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         });
 
         return NextResponse.json({ success: true });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('[Feedback API] 錯誤:', error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

@@ -8,13 +8,13 @@ export interface OmniEvent {
 }
 
 export interface RealtimeCallbacks {
-    onPresenceSync: (users: any[]) => void;
+    onPresenceSync: (users: Record<string, unknown>[]) => void;
     onEventReceived: (event: OmniEvent) => void;
     onStatusChange: (isStreaming: boolean) => void;
 }
 
 export interface IOmniRealtimeService {
-    connect(user: any | null, callbacks: RealtimeCallbacks): void;
+    connect(user: Record<string, unknown> | null, callbacks: RealtimeCallbacks): void;
     disconnect(): void;
-    emitEvent(event: Omit<OmniEvent, 'id' | 'timestamp'>, user: any | null): Promise<OmniEvent>;
+    emitEvent(event: Omit<OmniEvent, 'id' | 'timestamp'>, user: Record<string, unknown> | null): Promise<OmniEvent>;
 }

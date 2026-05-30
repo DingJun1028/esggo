@@ -15,6 +15,7 @@ import { BrowserUse } from 'browser-use-sdk/v3';
 // Import core logic for CLI use
 import { integrityModule } from '../lib/omni-core/integrity.ts';
 import { omniAgentBus } from '../lib/agents/omni-agent-bus.ts';
+import { omniAgent } from '../lib/agents/omni-commander.ts';
 
 dotenv.config({ override: true });
 
@@ -38,7 +39,7 @@ function computeHashLock(data) {
   return createHash('sha256').update(str).digest('hex');
 }
 
-// ── BlueCC Simulation ────────────────────────────────────────────────────────
+// ── OmniBlue Simulation ────────────────────────────────────────────────────────
 async function fetchBlueStatus() {
   try {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -275,33 +276,26 @@ agent.command('run <task>')
     if (options.isCommand) console.log(pc.magenta('⚡ Mode: SUPREME COMMANDER'));
     
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-      const res = await fetch(`${baseUrl}/api/agent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task, isCommand: !!options.isCommand })
-      });
+      // Use the OmniAgent directly instead of making HTTP request
+      const result = await omniAgent.command(task, { isCommand: !!options.isCommand });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Agent API failed');
-
-      if (!data.success) {
-        console.log(pc.red(`[x] Agent (${data.agent || 'Unknown'}) Execution Error: ${JSON.stringify(data.error || 'Unknown Error')}`));
+      if (!result.success) {
+        console.log(pc.red(`[x] Agent (${result.agent || 'Unknown'}) Execution Error: ${JSON.stringify(result.error || 'Unknown Error')}`));
       } else {
-        console.log(pc.green(`[v] Agent (${data.agent || 'Commander'}) execution successful!`));
+        console.log(pc.green(`[v] Agent (${result.agent || 'Commander'}) execution successful!`));
         console.log(pc.white('──────────────────────────────────────────────────'));
         
-        if (data.message) {
-          console.log(pc.white(`Message: ${data.message}`));
+        if (result.message) {
+          console.log(pc.white(`Message: ${result.message}`));
         }
-
-        if (data.commanderOutput) {
+        
+        if (result.commanderOutput) {
           console.log(pc.cyan('Commander Plan:'));
-          console.log(pc.yellow(data.commanderOutput));
-        } else if (data.output) {
-          console.log(pc.yellow(data.output));
-        } else if (data.results) {
-          console.log(pc.green(`Task Results: ${data.results.length} items processed.`));
+          console.log(pc.yellow(result.commanderOutput));
+        } else if (result.output) {
+          console.log(pc.yellow(result.output));
+        } else if (result.results) {
+          console.log(pc.green(`Task Results: ${result.results.length} items processed.`));
         }
         
         console.log(pc.white('──────────────────────────────────────────────────'));
@@ -794,13 +788,13 @@ audit.command('restore <json_data>')
     }
   });
 
-// ── BlueCC & Cloud Commands ──────────────────────────────────────────────────
-const blue = program.command('blue').description('BlueCC Cloud Control Plane management');
+// ── OmniBlue & Cloud Commands ──────────────────────────────────────────────────
+const blue = program.command('blue').description('OmniBlue Cloud Control Plane management');
 
 blue.command('status')
-  .description('Fetch global agent cluster status from BlueCC')
+  .description('Fetch global agent cluster status from OmniBlue')
   .action(async () => {
-    console.log(pc.blue('[~] Connecting to BlueCC Control Plane...'));
+    console.log(pc.blue('[~] Connecting to OmniBlue Control Plane...'));
     const status = await fetchBlueStatus();
 
     console.log(pc.green(`[v] Cluster: ${status.cluster_id} (STABLE)`));
@@ -811,7 +805,7 @@ blue.command('status')
 blue.command('deploy <agentName>')
   .description('Deploy a new agent instance to the cloud')
   .action(async (name) => {
-    console.log(pc.cyan(`🚀 Provisioning Agent [${name}] on BlueCC...`));
+    console.log(pc.cyan(`🚀 Provisioning Agent [${name}] on OmniBlue...`));
     await new Promise(r => setTimeout(r, 1500));
     console.log(pc.green(`[v] Deployment successful: https://${name}.agents.blue.cc`));
   });
@@ -838,7 +832,7 @@ daemon.command('status')
     console.log(pc.white('------------------------------------------'));
     console.log(`PID: 2841  | Next.js App     | ${pc.green('ONLINE')}`);
     console.log(`PID: 8642  | OmniAgent Gateway  | ${pc.green('ONLINE')}`);
-    console.log(`PID: 9119  | BlueCC Bridge   | ${pc.yellow('IDLE')}`);
+    console.log(`PID: 9119  | OmniBlue Bridge   | ${pc.yellow('IDLE')}`);
     console.log(pc.white('------------------------------------------'));
     console.log(`Uptime: 24h 12m | Memory: 1.2GB`);
   });
@@ -879,25 +873,26 @@ agent.command('audit-swarm')
     console.log(pc.white('──────────────────────────────────────────────────'));
 
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-      const res = await fetch(`${baseUrl}/api/agent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task: 'EVIDENCE_AUDIT', isCommand: true })
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Agent API failed');
-
-      if (data.results) {
-        data.results.forEach(r => {
-          console.log(`${pc.green('[v] VERIFIED')} | ${pc.white(r.fileName)} (${pc.cyan(r.gri)})`);
-          console.log(`    ${pc.gray('ZKP Seal:')} ${pc.yellow(r.zkp_hash.slice(0, 16) + '...')}`);
-        });
+      // Use the OmniAgent directly instead of making HTTP request
+      const result = await omniAgent.command('EVIDENCE_AUDIT', { isCommand: true });
+      
+      if (result.success) {
+        console.log(pc.green('[v] Swarm Evidence Audit executed successfully!'));
+        console.log(pc.white('──────────────────────────────────────────────────'));
+        console.log(`Message: ${result.message}`);
+        
+        if (result.results) {
+          result.results.forEach(r => {
+            console.log(`${pc.green('[v] VERIFIED')} | ${pc.white(r.fileName)} (${pc.cyan(r.gri)})`);
+            console.log(`    ${pc.gray('ZKP Seal:')} ${pc.yellow(r.zkp_hash.slice(0, 16) + '...')}`);
+          });
+        }
+        
+        console.log(pc.white('──────────────────────────────────────────────────'));
+        console.log(pc.magenta(`✨ MISSION COMPLETE: ${result.results?.length || 0} evidence files audited and sealed.`));
+      } else {
+        console.log(pc.red(`[x] Swarm Audit Error: ${result.error || 'Unknown error'}`));
       }
-
-      console.log(pc.white('──────────────────────────────────────────────────'));
-      console.log(pc.magenta(`✨ MISSION COMPLETE: ${data.results?.length || 0} evidence files audited and sealed.`));
     } catch (err) {
       console.log(pc.red(`[x] Swarm Audit Error: ${err.message}`));
     }
@@ -908,18 +903,13 @@ agent.command('transfer')
   .action(async () => {
     console.log(pc.cyan('[A] Initiating Bulk Transfer to NCBDB (Nocodebackend DataBase)...'));
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-      const res = await fetch(`${baseUrl}/api/agent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task: 'TRANSFER_TO_NCBDB', isCommand: true })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        console.log(pc.green(`[v] ${data.message}`));
+      // Use the OmniAgent directly instead of making HTTP request
+      const result = await omniAgent.command('TRANSFER_TO_NCBDB', { isCommand: true });
+      
+      if (result.success) {
+        console.log(pc.green(`[v] ${result.message}`));
       } else {
-        console.log(pc.red(`[x] Transfer failed: ${data.error}`));
+        console.log(pc.red(`[x] Transfer failed: ${result.error || 'Unknown error'}`));
       }
     } catch (e) {
       console.log(pc.red(`[x] Connection error: ${e.message}`));
@@ -1005,21 +995,21 @@ agent.command('learn')
     console.log(pc.magenta('🧠 RAG Knowledge Base Updated. New patterns indexed.'));
   });
 
-// ── Bridge Commands (AITable & BlueCC) ──────────────────────────────────────
+// ── Bridge Commands (OmniTable & OmniBlue) ──────────────────────────────────────
 const bridge = program.command('bridge').description('Deep Integration Bridge Management');
 
 bridge.command('sync <datasheetId>')
-  .description('Synchronize AITable metrics with BlueCC Cloud Control Plane')
+  .description('Synchronize OmniTable metrics with OmniBlue Cloud Control Plane')
   .action(async (datasheetId) => {
     console.log(pc.cyan(`[~] Initiating Deep Sync for Datasheet: ${datasheetId}...`));
     
     try {
-      const { aiTableBlueBridge } = await import('../lib/services/aitable-blue-bridge.ts');
+      const { aiTableBlueBridge } = await import('../lib/services/omni-table-blue-bridge.ts');
       const result = await aiTableBlueBridge.syncMetricsToCloud(datasheetId);
 
       if (result.success) {
         console.log(pc.green(`[v] Synchronization Successful. Processed ${result.processed} records.`));
-        console.log(pc.magenta('✨ BlueCC Agent Swarm updated via AITable triggers.'));
+        console.log(pc.magenta('✨ OmniBlue Agent Swarm updated via OmniTable triggers.'));
       } else {
         console.log(pc.red(`[x] Synchronization Failed: ${result.error}`));
       }

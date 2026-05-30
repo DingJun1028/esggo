@@ -93,7 +93,7 @@ export default function LoginPage() {
       }));
       
       router.push('/dashboard');
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || '連線錯誤 (Connection Error)');
     } finally {
       setLoading(false);
@@ -117,7 +117,7 @@ export default function LoginPage() {
       // For now, redirecting to a generic unimplemented endpoint until Google is fully set up in NCB.
       // window.location.href = '/api/auth/sign-in/google';
       setError('Google 登入尚未完全配置，請聯絡管理員 (Google Auth not fully configured)');
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError('Google 登入失敗');
     } finally {
       setLoading(false);

@@ -1,14 +1,15 @@
 import { IOmniRealtimeService, OmniEvent, RealtimeCallbacks } from './IOmniRealtimeService';
 import { supabase } from '../supabase';
+import type { RealtimeChannel } from '@supabase/supabase-js';
 
 // Fallback memory store for offline mode
 const memoryEvents: OmniEvent[] = [];
 
 export class SupabaseOmniRealtimeService implements IOmniRealtimeService {
-    private channel: any = null;
+    private channel: RealtimeChannel | null = null;
     private isConnected = false;
 
-    connect(user: any | null, callbacks: RealtimeCallbacks): void {
+    connect(user: Record<string, any> | null, callbacks: RealtimeCallbacks): void {
         // NCBDB/Simulation Fallback Mode
         if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
             console.log('[OmniRealtime] Supabase unavailable. Using NCBDB simulation mode.');
@@ -23,21 +24,22 @@ export class SupabaseOmniRealtimeService implements IOmniRealtimeService {
 
         this.channel
             .on('presence', { event: 'sync' }, () => {
+                if (!this.channel) return;
                 const newState = this.channel.presenceState();
-                const users = Object.values(newState).flatMap((arr: any) => arr || []);
+                const users = Object.values(newState).flatMap((arr) => arr || []) as Record<string, unknown>[];
                 callbacks.onPresenceSync(users);
             })
-            .on('presence', { event: 'join' }, ({ newPresences }: any) => {
+            .on('presence', { event: 'join' }, ({ newPresences }: { newPresences: Record<string, unknown>[] }) => {
                 console.log('[OmniRealtime] User joined:', newPresences);
             })
-            .on('presence', { event: 'leave' }, ({ leftPresences }: any) => {
+            .on('presence', { event: 'leave' }, ({ leftPresences }: { leftPresences: Record<string, unknown>[] }) => {
                 console.log('[OmniRealtime] User left:', leftPresences);
             })
-            .on('broadcast', { event: 'omni_event' }, ({ payload }: any) => {
-                callbacks.onEventReceived(payload as OmniEvent);
+            .on('broadcast', { event: 'omni_event' }, ({ payload }: { payload: OmniEvent }) => {
+                callbacks.onEventReceived(payload);
             })
             .subscribe(async (status: string) => {
-                if (status === 'SUBSCRIBED') {
+                if (status === 'SUBSCRIBED' && this.channel) {
                     this.isConnected = true;
                     callbacks.onStatusChange(true);
                     const trackPayload = user
@@ -59,7 +61,7 @@ export class SupabaseOmniRealtimeService implements IOmniRealtimeService {
         }
     }
 
-    async emitEvent(event: Omit<OmniEvent, 'id' | 'timestamp'>, user: any | null): Promise<OmniEvent> {
+    async emitEvent(event: Omit<OmniEvent, 'id' | 'timestamp'>, user: Record<string, any> | null): Promise<OmniEvent> {
         const newEvent: OmniEvent = {
             ...event,
             id: crypto.randomUUID(),

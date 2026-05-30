@@ -5,7 +5,7 @@
 
 import { getEnvironmentalData, getSocialMetrics } from '../db';
 import { fetchOmniAgentStatus } from '../omni-gateway';
-import { blueCC } from './blue-cc';
+import { blueCC } from './omni-blue';
 
 export async function gatherSystemContext() {
   const [env, soc, status, cloud] = await Promise.all([

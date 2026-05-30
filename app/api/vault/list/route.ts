@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     if (error) throw new Error(`查詢失敗：${error.message}`);
 
     return NextResponse.json<ApiResponse>(createSuccessResponse(
-      (data || []).map((item: any) => ({
+      (data || []).map((item: unknown) => ({
         uuid: item.uuid,
         timestamp: item.timestamp,
         formula: item.formula,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         },
       }
     ));
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('INTERNAL_ERROR', error.message || '查詢失敗'),
       { status: 500 }

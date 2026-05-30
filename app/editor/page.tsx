@@ -11,7 +11,10 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { useSustainWriteStore } from '../../store/useSustainWriteStore';
 import { cn } from '../../lib/utils';
-import { BrandCard, BrandBadge, BrandButton, BrandStatusDot } from '@/components/brand';
+import { BrandStatusDot } from '@/components/brand';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { Card } from '@/components/ui/Card';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { SwarmResonance } from '@/components/ui/SwarmResonance';
@@ -97,38 +100,38 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-white font-sans selection:bg-cyan-500/30 overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-cyan-100 overflow-hidden flex flex-col">
       {/* ── Ultimate Header ── */}
-      <header className="h-[10vh] min-h-[80px] border-b border-white/5 bg-white/[0.01] backdrop-blur-xl px-8 flex items-center justify-between shrink-0 z-30">
+      <header className="h-[10vh] min-h-[80px] border-b border-slate-200 bg-white/70 backdrop-blur-xl px-8 flex items-center justify-between shrink-0 z-30">
         <div className="flex items-center gap-6">
-          <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 shadow-cyan-glow">
-            <Edit3 size={20} className="text-cyan-400" />
+          <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100 shadow-sm">
+            <Edit3 size={20} className="text-cyan-600" />
           </div>
           <div>
-            <h1 className="text-xl font-black tracking-tight text-white/90 flex items-center gap-2">
-              SustainWrite <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-900/40 text-cyan-400 border border-cyan-500/30 font-mono">SOVEREIGN_MANUSCRIPT_v5.0</span>
+            <h1 className="text-xl font-black tracking-tight text-slate-800 flex items-center gap-2">
+              SustainWrite <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-50 text-cyan-700 border border-cyan-200 font-mono">SOVEREIGN_MANUSCRIPT_v5.0</span>
             </h1>
-            <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.3em]">Autonomous ESG Reporting Matrix</p>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em]">Autonomous ESG Reporting Matrix</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-           <div className="hidden xl:flex items-center gap-6 mr-6 px-6 border-r border-white/5 h-10">
+           <div className="hidden xl:flex items-center gap-6 mr-6 px-6 border-r border-slate-200 h-10">
               <div className="flex flex-col items-end">
-                 <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Global_Progress</span>
-                 <span className="text-xs font-mono text-cyan-400 font-bold">42.5%</span>
+                 <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Global_Progress</span>
+                 <span className="text-xs font-mono text-cyan-600 font-bold">42.5%</span>
               </div>
               <div className="flex flex-col items-end">
-                 <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Integrity_Score</span>
-                 <span className="text-xs font-mono text-emerald-400 font-bold">MAX_SEAL</span>
+                 <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Integrity_Score</span>
+                 <span className="text-xs font-mono text-emerald-600 font-bold">MAX_SEAL</span>
               </div>
            </div>
-           <BrandButton variant="outline" size="sm" onClick={() => exportPdf(CHAPTERS, generatedContent, () => {})} className="border-white/10 text-white/60 hover:text-white">
+           <Button variant="secondary" size="sm" onClick={() => exportPdf(CHAPTERS, generatedContent, () => {})} className="border-slate-200 text-slate-500 hover:text-slate-800 bg-white/50">
               <Download size={14} className="mr-2" /> PDF 導出
-           </BrandButton>
-           <BrandButton variant="primary" size="sm" onClick={handleSwarmDraft} disabled={isGeneratingAI[chapter.id]} className="shadow-cyan-glow">
+           </Button>
+           <Button variant="primary" size="sm" onClick={handleSwarmDraft} disabled={isGeneratingAI[chapter.id]} className="bg-cyan-600 hover:bg-cyan-700 text-white shadow-lg shadow-cyan-200">
               <Zap size={14} className="mr-2" /> 蜂群協作撰寫
-           </BrandButton>
+           </Button>
         </div>
       </header>
 
@@ -139,11 +142,11 @@ export default function EditorPage() {
         <motion.aside 
           initial={false}
           animate={{ width: navCollapsed ? 80 : 320 }}
-          className="border-r border-white/5 bg-white/[0.01] flex flex-col shrink-0 overflow-hidden relative z-20"
+          className="border-r border-slate-200 bg-white/40 flex flex-col shrink-0 overflow-hidden relative z-20"
         >
-          <div className="p-6 flex items-center justify-between border-b border-white/5">
-             {!navCollapsed && <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">GRI Module Index</span>}
-             <button onClick={() => setNavCollapsed(!navCollapsed)} className="p-2 hover:bg-white/5 rounded-lg transition-colors text-white/40 hover:text-white">
+          <div className="p-6 flex items-center justify-between border-b border-slate-200">
+             {!navCollapsed && <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">GRI Module Index</span>}
+             <button onClick={() => setNavCollapsed(!navCollapsed)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600">
                 {navCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
              </button>
           </div>
@@ -155,50 +158,54 @@ export default function EditorPage() {
                 className={cn(
                   "w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 group border",
                   selectedChapterId === c.id
-                    ? 'bg-cyan-500/10 border-cyan-500/30 text-white shadow-lg shadow-cyan-900/20'
-                    : 'border-transparent text-white/40 hover:bg-white/[0.02] hover:text-white/70'
+                    ? 'bg-white border-cyan-200 text-slate-900 shadow-sm'
+                    : 'border-transparent text-slate-400 hover:bg-white/50 hover:text-slate-600'
                 )}
               >
                 <div className={cn(
                   "w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs transition-all border",
                   selectedChapterId === c.id
-                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400'
-                    : 'bg-white/5 border-white/5 text-white/20'
+                    ? 'bg-cyan-50 border-cyan-200 text-cyan-600'
+                    : 'bg-slate-100 border-slate-200 text-slate-300'
                 )}>
                   {c.num}
                 </div>
                 {!navCollapsed && (
                   <div className="text-left flex-1 min-w-0">
                     <p className="text-[11px] font-black truncate tracking-wide uppercase">{c.title}</p>
-                    <p className={cn("text-[9px] font-mono mt-0.5", selectedChapterId === c.id ? 'text-cyan-400/60' : 'text-white/20')}>{c.gri}</p>
+                    <p className={cn("text-[9px] font-mono mt-0.5", selectedChapterId === c.id ? 'text-cyan-600/60' : 'text-slate-300')}>{c.gri}</p>
                   </div>
                 )}
-                {chapterStatuses[c.id] === 'sealed' && <CheckCircle size={12} className="text-emerald-500 animate-pulse shrink-0" />}
+                {chapterStatuses[c.id] === 'sealed' && <CheckCircle size={12} className="text-emerald-500 shrink-0" />}
               </button>
             ))}
           </div>
         </motion.aside>
 
         {/* Central Manuscript Area */}
-        <main className="flex-1 flex flex-col min-w-0 bg-[#020617]/50 relative">
+        <main className="flex-1 flex flex-col min-w-0 bg-slate-50/50 relative">
            
            {/* Top Info Bar */}
-           <div className="px-10 py-6 border-b border-white/5 flex items-end justify-between bg-white/[0.01]">
+           <div className="px-10 py-6 border-b border-slate-200 flex items-end justify-between bg-white/40">
               <div className="space-y-2">
                  <div className="flex items-center gap-3">
-                    <span className={cn("px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border", CATEGORY_STYLE[chapter.category])}>
+                    <span className={cn("px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border", 
+                      chapter.category === 'G' ? 'text-cyan-600 border-cyan-200 bg-cyan-50' : 
+                      chapter.category === 'E' ? 'text-emerald-600 border-emerald-200 bg-emerald-50' : 
+                      'text-indigo-600 border-indigo-200 bg-indigo-50'
+                    )}>
                         {chapter.gri}
                     </span>
                     <BrandStatusDot status={isGeneratingAI[chapter.id] ? 'active' : 'inactive'} pulse size="xs" />
-                    <span className="text-[10px] font-mono text-white/20">CHAR_COUNT: {(generatedContent[chapter.id] || '').length}</span>
+                    <span className="text-[10px] font-mono text-slate-300">CHAR_COUNT: {(generatedContent[chapter.id] || '').length}</span>
                  </div>
-                 <h2 className="text-3xl font-black text-white/90 tracking-tight">{chapter.title}</h2>
+                 <h2 className="text-3xl font-black text-slate-800 tracking-tight">{chapter.title}</h2>
               </div>
-              <div className="flex gap-1 p-1 bg-white/5 rounded-xl border border-white/5">
+              <div className="flex gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200">
                  {['write', 'preview', 'ai-tools'].map(t => (
                     <button 
                         key={t} onClick={() => setActivePanel(t as any)}
-                        className={cn("px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all", activePanel === t ? "bg-cyan-500 text-white shadow-cyan-glow" : "text-white/30 hover:text-white/60")}
+                        className={cn("px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all", activePanel === t ? "bg-white text-slate-900 shadow-sm" : "text-slate-400 hover:text-slate-600")}
                     >
                         {t}
                     </button>
@@ -209,15 +216,15 @@ export default function EditorPage() {
            {/* Editor / Workspace */}
            <div className="flex-1 flex overflow-hidden">
               <div className="flex-1 flex flex-col overflow-hidden p-8">
-                 <div className="flex-1 bg-white/[0.02] border border-white/5 rounded-[2rem] shadow-2xl relative flex flex-col overflow-hidden group">
-                    <div className="h-10 px-6 border-b border-white/5 bg-white/[0.01] flex items-center justify-between shrink-0">
+                 <div className="flex-1 bg-white border border-slate-200 rounded-[2rem] shadow-sm relative flex flex-col overflow-hidden group">
+                    <div className="h-10 px-6 border-b border-slate-100 bg-slate-50/30 flex items-center justify-between shrink-0">
                        <div className="flex items-center gap-3">
                           <Type size={12} className="text-cyan-500" />
-                          <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">Manuscript Layer</span>
+                          <span className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em]">Manuscript Layer</span>
                        </div>
                        <div className="flex gap-2">
-                          <button onClick={() => undoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])} className="p-1 hover:text-cyan-400 transition-colors opacity-40 hover:opacity-100"><RefreshCw size={12} className="-scale-x-100" /></button>
-                          <button onClick={() => redoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])} className="p-1 hover:text-cyan-400 transition-colors opacity-40 hover:opacity-100"><RefreshCw size={12} /></button>
+                          <button onClick={() => undoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])} className="p-1 hover:text-cyan-600 transition-colors opacity-40 hover:opacity-100 text-slate-400"><RefreshCw size={12} className="-scale-x-100" /></button>
+                          <button onClick={() => redoContent(chapter.id, chapter.title, chapter.order, [chapter.gri])} className="p-1 hover:text-cyan-600 transition-colors opacity-40 hover:opacity-100 text-slate-400"><RefreshCw size={12} /></button>
                        </div>
                     </div>
                     
@@ -225,15 +232,15 @@ export default function EditorPage() {
                        <textarea 
                           value={generatedContent[chapter.id] || ''}
                           onChange={(e) => updateContent(chapter.id, e.target.value, chapter.title, chapter.order, [chapter.gri])}
-                          className="w-full h-full p-12 bg-transparent outline-none text-lg font-medium leading-[2] text-white/80 resize-none scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent selection:bg-cyan-500/20"
+                          className="w-full h-full p-12 bg-transparent outline-none text-lg font-medium leading-[2] text-slate-700 resize-none scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent selection:bg-cyan-100"
                           placeholder="在此處執筆企業的永續主權..."
                        />
                        <AnimatePresence>
                          {isGeneratingAI[chapter.id] && (
-                           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-void-stark/40 backdrop-blur-sm flex items-center justify-center pointer-events-none">
-                              <div className="flex flex-col items-center gap-4 p-8 rounded-3xl bg-slate-900 border border-cyan-500/20 shadow-cyan-glow">
-                                 <Sparkles size={32} className="text-cyan-400 animate-pulse" />
-                                 <p className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.5em]">OmniAgent_Resonating...</p>
+                           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                              <div className="flex flex-col items-center gap-4 p-8 rounded-3xl bg-white border border-cyan-100 shadow-xl">
+                                 <Sparkles size={32} className="text-cyan-500 animate-pulse" />
+                                 <p className="text-[10px] font-black text-cyan-600 uppercase tracking-[0.5em]">OmniAgent_Resonating...</p>
                               </div>
                            </motion.div>
                          )}
@@ -244,7 +251,7 @@ export default function EditorPage() {
 
               {/* Sidebar Right: Causal Link & Swarm (Only visible in Write/AI-Tools) */}
               <div className="w-[400px] flex flex-col gap-6 p-8 pl-0 overflow-hidden shrink-0">
-                 <div className="h-[280px] shrink-0">
+                 <div className="h-[280px] shrink-0 border border-slate-200 rounded-[2rem] bg-white shadow-sm overflow-hidden">
                     <CausalTopologyGraph 
                         taskId={`draft_${chapter.id}`}
                         agentStatus={agentStatus}
@@ -252,13 +259,13 @@ export default function EditorPage() {
                         vaultStatus={vaultStatus}
                     />
                  </div>
-                 <div className="flex-1 bg-slate-900/40 border border-white/5 rounded-[2rem] overflow-hidden flex flex-col shadow-inner">
-                    <div className="p-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                 <div className="flex-1 bg-white border border-slate-200 rounded-[2rem] overflow-hidden flex flex-col shadow-sm">
+                    <div className="p-4 border-b border-slate-100 bg-slate-50/30 flex items-center justify-between">
                        <div className="flex items-center gap-2">
-                          <Maximize2 size={12} className="text-emerald-400" />
-                          <span className="text-[9px] font-black tracking-widest text-white/40 uppercase">Swarm Intent Resonance</span>
+                          <Maximize2 size={12} className="text-emerald-500" />
+                          <span className="text-[9px] font-black tracking-widest text-slate-400 uppercase">Swarm Intent Resonance</span>
                        </div>
-                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     </div>
                     <div className="flex-1 overflow-hidden">
                        <SwarmResonance />
@@ -268,26 +275,26 @@ export default function EditorPage() {
            </div>
 
            {/* Footer Action Bar */}
-           <div className="h-20 border-t border-white/5 bg-white/[0.01] px-10 flex items-center justify-between shrink-0">
+           <div className="h-20 border-t border-slate-200 bg-white/40 px-10 flex items-center justify-between shrink-0">
               <div className="flex gap-4">
-                 <BrandBadge variant="outline" className="border-white/10 text-white/40 text-[9px]">GRI_CERTIFIED_ENGINE</BrandBadge>
-                 <BrandBadge variant="outline" className="border-cyan-500/20 text-cyan-400 text-[9px]">RAG_KNOWLEDGE_ACTIVE</BrandBadge>
+                 <Badge variant="outline" className="border-slate-200 text-slate-400 text-[9px]">GRI_CERTIFIED_ENGINE</Badge>
+                 <Badge variant="primary" className="border-cyan-100 text-cyan-600 text-[9px]">RAG_KNOWLEDGE_ACTIVE</Badge>
               </div>
               <div className="flex items-center gap-4">
-                 <span className="text-[9px] font-mono text-white/20 uppercase tracking-widest pr-4 border-r border-white/5">Auto-Save Enabled</span>
-                 <BrandButton variant="outline" size="sm" className="border-white/5 text-white/40">
+                 <span className="text-[9px] font-mono text-slate-300 uppercase tracking-widest pr-4 border-r border-slate-200">Auto-Save Enabled</span>
+                 <Button variant="secondary" size="sm" className="border-slate-200 text-slate-400 bg-white/50">
                     <Save size={14} className="mr-2" /> 保存草稿
-                 </BrandButton>
-                 <BrandButton variant="primary" size="sm" onClick={() => updateChapterStatus(chapter.id, 'sealed', chapter.title, chapter.order, [chapter.gri])} disabled={isSealed} className="bg-emerald-500 hover:bg-emerald-600 text-white border-none shadow-emerald-500/20">
+                 </Button>
+                 <Button variant="primary" size="sm" onClick={() => updateChapterStatus(chapter.id, 'sealed', chapter.title, chapter.order, [chapter.gri])} disabled={isSealed} className="bg-emerald-600 hover:bg-emerald-700 text-white border-none shadow-lg shadow-emerald-100">
                     <Lock size={14} className="mr-2" /> {isSealed ? '5T 已封印' : '執行 5T 誠信封印'}
-                 </BrandButton>
+                 </Button>
               </div>
            </div>
         </main>
       </div>
 
       {/* Extreme Bottom Bar */}
-      <footer className="h-8 border-t border-white/5 bg-black/40 px-8 flex items-center justify-between text-[8px] font-mono text-white/10 uppercase tracking-[0.3em] shrink-0 relative z-30">
+      <footer className="h-8 border-t border-slate-200 bg-white/80 px-8 flex items-center justify-between text-[8px] font-mono text-slate-300 uppercase tracking-[0.3em] shrink-0 relative z-30">
          <div>Manuscript Status: SYNCED // IDENTITY: {user?.email || 'SYSTEM_ADMIN'}</div>
          <div>OmniCore Sovereign Manuscript Matrix // Genesis_P0</div>
       </footer>
@@ -296,8 +303,8 @@ export default function EditorPage() {
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.03); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.08); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.1); }
       `}</style>
     </div>
   );

@@ -8,7 +8,10 @@ import {
   TrendingUp, Database, Lock, AlertTriangle, Fingerprint,
   EyeOff, Key, Calculator, BookOpen
 } from 'lucide-react';
-import { BrandCard, BrandBadge, BrandStatusDot } from '@/components/brand';
+import { BrandStatusDot } from '@/components/brand';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
 import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
 import { SlackGatewayCard } from '@/components/slack/SlackGatewayCard';
@@ -52,7 +55,7 @@ export default function DashboardPage() {
     omniRealtime.connect(null, {
       onPresenceSync: () => {},
       onStatusChange: () => {},
-      onEventReceived: (event: any) => {
+      onEventReceived: (event: unknown) => {
         if (event.type === 'SEAL') {
           try {
              const payloadObj = JSON.parse(event.payload);
@@ -168,10 +171,10 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 p-6 md:p-10 font-sans selection:bg-cyan-500/30">
-      {/* 神經形態背景光暈 */}
-      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
+    <div className="min-h-screen bg-slate-50 text-slate-600 p-6 md:p-10 font-sans selection:bg-cyan-100 overflow-x-hidden">
+      {/* 柔和背景光暈 */}
+      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-100/40 blur-[150px] rounded-full pointer-events-none mix-blend-multiply" />
+      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-cyan-100/40 blur-[150px] rounded-full pointer-events-none mix-blend-multiply" />
 
       <motion.div
         variants={containerVariants}
@@ -180,26 +183,26 @@ export default function DashboardPage() {
         className="max-w-7xl mx-auto space-y-8 relative z-10"
       >
         {/* ─── Header 區塊 ────────────────────────────── */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <BrandStatusDot status="active" pulse size="sm" />
-              <span className="text-xs font-mono font-black tracking-[0.3em] text-cyan-400 uppercase">
+              <span className="text-xs font-mono font-black tracking-[0.3em] text-cyan-600 uppercase">
                 System_Resonance_Optimal
               </span>
             </div>
-            <h1 className="text-4xl font-black tracking-tight text-white flex items-center gap-3">
-              <LayoutDashboard className="text-cyan-400" size={32} />
-              主權治理終端 <span className="text-slate-500 font-light">| Dashboard</span>
+            <h1 className="text-4xl font-black tracking-tight text-slate-900 flex items-center gap-3">
+              <LayoutDashboard className="text-cyan-600" size={32} />
+              主權治理終端 <span className="text-slate-400 font-light">| Dashboard</span>
             </h1>
           </div>
           <div className="flex gap-3">
-            <BrandBadge variant="outline" className="border-indigo-500/30 text-indigo-300">
+            <Badge variant="outline" className="border-indigo-200 text-indigo-600 bg-white/50 backdrop-blur-md">
               <ShieldCheck size={14} className="mr-1" /> 5T 協議啟用
-            </BrandBadge>
-            <BrandBadge variant="outline" className="border-emerald-500/30 text-emerald-300">
+            </Badge>
+            <Badge variant="outline" className="border-emerald-200 text-emerald-600 bg-white/50 backdrop-blur-md">
               <Database size={14} className="mr-1" /> ZKP 加密運算中
-            </BrandBadge>
+            </Badge>
           </div>
         </header>
 
@@ -208,99 +211,103 @@ export default function DashboardPage() {
 
           {/* 1. 總合規健康度 (Hero Card) - 佔 2x2 */}
           <motion.div variants={itemVariants} className="md:col-span-2 md:row-span-2">
-            <BrandCard variant="hologram" padding="lg" className="h-full flex flex-col justify-between overflow-hidden relative group">
-              <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
-                <TrendingUp size={120} className="text-cyan-500" />
+            <Card className="h-full flex flex-col justify-between overflow-hidden relative group bg-white/80 backdrop-blur-xl border-white shadow-xl shadow-slate-200/50 p-8">
+              <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                <TrendingUp size={120} className="text-cyan-600" />
               </div>
               <div>
                 <h2 className="text-sm font-mono text-slate-400 tracking-widest uppercase mb-1">Overall ESG Health</h2>
-                <div className="text-6xl font-black text-white tracking-tighter">
-                  94<span className="text-3xl text-cyan-400">.2%</span>
+                <div className="text-7xl font-black text-slate-900 tracking-tighter">
+                  94<span className="text-4xl text-cyan-600">.2%</span>
                 </div>
-                <p className="text-sm text-cyan-400 mt-2 font-medium bg-cyan-500/10 w-fit px-3 py-1 rounded-full">
+                <p className="text-sm text-cyan-600 mt-3 font-bold bg-cyan-50 w-fit px-4 py-1.5 rounded-full border border-cyan-100">
                   +2.4% 自上次 OmniAgent 校準
                 </p>
               </div>
-              <div className="space-y-3 relative z-10">
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">GRI 2021 覆蓋率</span>
-                  <span className="text-emerald-400 font-bold">100%</span>
+              <div className="space-y-4 relative z-10 pt-6">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-black uppercase tracking-wider">
+                    <span className="text-slate-400">GRI 2021 覆蓋率</span>
+                    <span className="text-emerald-600">100%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200/50">
+                    <div className="bg-emerald-500 h-full w-full" />
+                  </div>
                 </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div className="bg-emerald-400 h-full w-full" />
-                </div>
-                <div className="flex justify-between text-sm mt-2">
-                  <span className="text-slate-400">TCFD 情境分析</span>
-                  <span className="text-amber-400 font-bold">85%</span>
-                </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div className="bg-amber-400 h-full w-[85%]" />
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs font-black uppercase tracking-wider">
+                    <span className="text-slate-400">TCFD 情境分析</span>
+                    <span className="text-amber-600">85%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200/50">
+                    <div className="bg-amber-500 h-full w-[85%]" />
+                  </div>
                 </div>
               </div>
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 2. 萬能蜂群狀態 (Swarm Activity) - 佔 2x1 */}
           <motion.div variants={itemVariants} className="md:col-span-2 md:row-span-1">
-            <BrandCard variant="glass" padding="md" className="h-full flex flex-col justify-center border-indigo-500/20">
+            <Card className="h-full flex flex-col justify-center border-white bg-white/70 backdrop-blur-xl shadow-sm p-6">
               <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center gap-2 text-indigo-400 font-bold tracking-widest text-sm uppercase">
+                <div className="flex items-center gap-2 text-indigo-600 font-black tracking-widest text-xs uppercase">
                   <Cpu size={18} /> OmniAgent Swarm
                 </div>
                 <BrandStatusDot status="active" pulse />
               </div>
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-[#0f172a] rounded-xl p-3 border border-white/5">
-                  <div className="text-xs text-slate-500 mb-1">活躍 Agent</div>
-                  <div className="text-2xl font-black text-white">12</div>
+                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-inner">
+                  <div className="text-[10px] font-black text-slate-400 uppercase mb-1">活躍 Agent</div>
+                  <div className="text-2xl font-black text-slate-900">12</div>
                 </div>
-                <div className="bg-[#0f172a] rounded-xl p-3 border border-white/5">
-                  <div className="text-xs text-slate-500 mb-1">共鳴修復 (今日)</div>
-                  <div className="text-2xl font-black text-indigo-400">3</div>
+                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-inner">
+                  <div className="text-[10px] font-black text-slate-400 uppercase mb-1">共鳴修復</div>
+                  <div className="text-2xl font-black text-indigo-600">3</div>
                 </div>
-                <div className="bg-[#0f172a] rounded-xl p-3 border border-white/5">
-                  <div className="text-xs text-slate-500 mb-1">系統熵值</div>
-                  <div className="text-2xl font-black text-emerald-400">0.08</div>
+                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 shadow-inner">
+                  <div className="text-[10px] font-black text-slate-400 uppercase mb-1">系統熵值</div>
+                  <div className="text-2xl font-black text-emerald-600">0.08</div>
                 </div>
               </div>
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 3. ZK-Privacy 加密引擎 - 佔 1x1 */}
           <motion.div variants={itemVariants} className="md:col-span-1 md:row-span-1">
-            <BrandCard variant="glass" padding="md" className="h-full flex flex-col justify-between border-emerald-500/20 relative overflow-hidden">
-              <div className="absolute -right-4 -bottom-4 opacity-10">
-                <Fingerprint size={100} className="text-emerald-500" />
+            <Card className="h-full flex flex-col justify-between border-white bg-white/70 backdrop-blur-xl shadow-sm p-6 relative overflow-hidden">
+              <div className="absolute -right-4 -bottom-4 opacity-5">
+                <Fingerprint size={100} className="text-emerald-600" />
               </div>
-              <div className="flex items-center gap-2 text-emerald-400 font-bold tracking-widest text-xs uppercase mb-2">
+              <div className="flex items-center gap-2 text-emerald-600 font-black tracking-widest text-[10px] uppercase mb-2">
                 <Lock size={16} /> ZK-Privacy Engine
               </div>
               <div>
-                <div className="text-3xl font-black text-white mb-1">42<span className="text-sm font-normal text-slate-400 ml-1">項</span></div>
-                <div className="text-xs text-slate-400">受 Pedersen 承諾保護之機密數據</div>
+                <div className="text-4xl font-black text-slate-900 mb-1">42<span className="text-sm font-normal text-slate-400 ml-1">項</span></div>
+                <div className="text-[10px] font-medium text-slate-400 leading-tight">受 Pedersen 承諾保護之機密數據</div>
               </div>
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 4. 警報與風險雷達 - 佔 1x1 */}
           <motion.div variants={itemVariants} className="md:col-span-1 md:row-span-1">
-            <BrandCard variant="glass" padding="md" className="h-full flex flex-col justify-between border-rose-500/20">
-              <div className="flex items-center gap-2 text-rose-400 font-bold tracking-widest text-xs uppercase mb-2">
+            <Card className="h-full flex flex-col justify-between border-white bg-white/70 backdrop-blur-xl shadow-sm p-6">
+              <div className="flex items-center gap-2 text-rose-600 font-black tracking-widest text-[10px] uppercase mb-2">
                 <AlertTriangle size={16} /> Risk Radar
               </div>
               <div>
-                <div className="text-3xl font-black text-white mb-1">1<span className="text-sm font-normal text-slate-400 ml-1">起</span></div>
-                <div className="text-xs text-rose-300 bg-rose-500/10 px-2 py-1 rounded inline-block mt-1">
+                <div className="text-4xl font-black text-slate-900 mb-1">1<span className="text-sm font-normal text-slate-400 ml-1">起</span></div>
+                <div className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded inline-block mt-1 border border-rose-100">
                   需法務簽署合規缺口
                 </div>
               </div>
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 5. 5T Evidence Vault 實證封印日誌 - 佔全寬 (4x1) */}
           <motion.div variants={itemVariants} className="md:col-span-4 md:row-span-1">
-            <BrandCard variant="glass" padding="md" className="h-full border-cyan-500/20 flex flex-col">
-              <div className="flex items-center gap-2 text-cyan-400 font-bold tracking-widest text-xs uppercase mb-4">
+            <Card className="h-full border-white bg-white/60 backdrop-blur-xl shadow-sm p-6 flex flex-col">
+              <div className="flex items-center gap-2 text-cyan-700 font-black tracking-widest text-[10px] uppercase mb-4">
                 <Database size={16} /> Evidence Vault (最近封印日誌)
               </div>
               <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
@@ -310,26 +317,26 @@ export default function DashboardPage() {
                     initial={{ opacity: 0, x: -10 }} 
                     animate={{ opacity: 1, x: 0 }} 
                     key={log.id + i} 
-                    className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-xl bg-slate-50/50 border border-slate-100 hover:bg-white transition-all hover:shadow-sm"
                   >
                     <div className="flex items-center gap-4">
-                      <span className="text-xs font-mono text-slate-500">{log.id}</span>
-                      <span className="text-sm font-medium text-slate-200">{log.title}</span>
+                      <span className="text-[10px] font-mono text-slate-400 font-bold">{log.id}</span>
+                      <span className="text-sm font-bold text-slate-700">{log.title}</span>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-xs font-mono text-cyan-500/50 bg-cyan-500/10 px-2 py-0.5 rounded">{log.hash}</span>
-                      <span className="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded">{log.status}</span>
-                      <span className="text-xs text-slate-500 min-w-[80px] text-right">{log.time}</span>
+                      <span className="text-[10px] font-mono text-cyan-600/60 bg-cyan-50 px-2 py-1 rounded border border-cyan-100">{log.hash}</span>
+                      <Badge variant="verified" className="text-[10px] px-2 py-1">{log.status}</Badge>
+                      <span className="text-[10px] font-bold text-slate-400 min-w-[80px] text-right uppercase">{log.time}</span>
                     </div>
                   </motion.div>
                 ))}
               </div>
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 6. 高維密碼學互動模擬器 (Crypto Simulator) - 佔全寬 (4x1) */}
           <motion.div variants={itemVariants} className="md:col-span-4">
-            <div className="mb-6">
+            <div className="mb-6 border border-slate-200 rounded-[2rem] bg-white shadow-sm overflow-hidden h-[240px]">
               <CausalTopologyGraph
                 taskId="SIM-CRYPTO-ZKP"
                 agentStatus={graphState.agentStatus}
@@ -337,39 +344,39 @@ export default function DashboardPage() {
                 vaultStatus={graphState.vaultStatus}
               />
             </div>
-            <BrandCard variant="glass" padding="md" className="h-full border-indigo-500/20 flex flex-col md:flex-row gap-6">
+            <Card className="h-full border-white bg-white/70 backdrop-blur-xl shadow-sm p-8 flex flex-col md:flex-row gap-8">
               {/* L1/L2/L3 去敏模擬 */}
-              <div className="flex-1 space-y-4 border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-6">
-                <div className="flex items-center gap-2 text-indigo-400 font-bold tracking-widest text-xs uppercase">
+              <div className="flex-1 space-y-4 border-b md:border-b-0 md:border-r border-slate-100 pb-6 md:pb-0 md:pr-8">
+                <div className="flex items-center gap-2 text-indigo-600 font-black tracking-widest text-[10px] uppercase">
                   <EyeOff size={16} /> Data Masking (L1/L2/L3)
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={maskInput}
                       onChange={e => setMaskInput(e.target.value)}
-                      className="flex-1 bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500/50"
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-indigo-300 transition-colors"
                     />
                     <select
                       value={maskLevel}
                       onChange={e => setMaskLevel(e.target.value as any)}
-                      className="bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500/50"
+                      className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 font-bold focus:outline-none"
                     >
                       <option value="L1">L1 模糊化</option>
                       <option value="L2">L2 假名化</option>
                       <option value="L3">L3 不可逆</option>
                     </select>
-                    <button onClick={handleMask} className="bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 px-4 py-2 rounded-lg text-sm transition-colors border border-indigo-500/30">
+                    <Button variant="primary" onClick={handleMask} className="bg-indigo-600 hover:bg-indigo-700 shadow-indigo-100">
                       遮罩
-                    </button>
+                    </Button>
                   </div>
                   {maskedOutput && (
-                    <div className="p-3 bg-black/40 rounded-lg border border-indigo-500/20 font-mono text-xs text-indigo-300 break-all relative mt-2">
-                      <span className="text-slate-500 absolute -top-2 left-2 bg-[#0f172a] px-1 text-[10px]">Output</span>
+                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 font-mono text-[11px] text-indigo-600 break-all relative mt-2 shadow-inner">
+                      <span className="text-slate-400 absolute -top-2 left-4 bg-white px-2 text-[9px] font-black uppercase tracking-widest">Output</span>
                       {maskedOutput}
                       {maskLevel === 'L2' && maskedOutput.startsWith('L2::') && (
-                        <button onClick={handleUnmask} className="mt-3 block w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 py-1.5 rounded border border-emerald-500/20 transition-colors flex items-center justify-center gap-1">
+                        <button onClick={handleUnmask} className="mt-4 block w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-600 py-2 rounded-xl border border-emerald-200 transition-all font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2">
                           <Key size={14} /> 授權解密還原
                         </button>
                       )}
@@ -380,57 +387,67 @@ export default function DashboardPage() {
 
               {/* Pedersen 承諾同態加法模擬 */}
               <div className="flex-1 space-y-4">
-                <div className="flex items-center gap-2 text-emerald-400 font-bold tracking-widest text-xs uppercase">
+                <div className="flex items-center gap-2 text-emerald-600 font-black tracking-widest text-[10px] uppercase">
                   <Calculator size={16} /> Pedersen Homomorphic Sum
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={pedersenValues}
-                    onChange={e => setPedersenValues(e.target.value)}
-                    placeholder="輸入數值 (以逗號分隔, 例: 500,700,300)"
-                    className="flex-1 bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500/50"
-                  />
-                  <button onClick={handlePedersen} className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-4 py-2 rounded-lg text-sm transition-colors border border-emerald-500/30 whitespace-nowrap">
-                    同態加總
-                  </button>
-                </div>
-                {pedersenResult && (
-                  <div className="p-3 bg-black/40 rounded-lg border border-emerald-500/20 font-mono text-xs text-emerald-300 space-y-2 mt-2">
-                    <div className="max-h-24 overflow-y-auto custom-scrollbar space-y-1 pr-2">
-                      {pedersenResult.commitments.map((c: any, i: number) => (
-                        <div key={i} className="truncate"><span className="text-slate-500">C{i + 1} ({c.value}):</span> {c.commitment.substring(0, 20)}...</div>
-                      ))}
-                    </div>
-                    <div className="pt-2 border-t border-emerald-500/20 truncate">
-                      <span className="text-slate-500">Total expected:</span> {pedersenResult.expectedTotal.substring(0, 20)}...
-                    </div>
-                    <div className="font-bold text-emerald-400 mt-2 bg-emerald-500/10 px-2 py-1 rounded inline-block">
-                      {pedersenResult.isValid ? '✅ 同態加法驗證通過 (ZKP Valid)' : '❌ 驗證失敗'}
-                    </div>
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={pedersenValues}
+                      onChange={e => setPedersenValues(e.target.value)}
+                      placeholder="輸入數值 (以逗號分隔, 例: 500,700,300)"
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-300 transition-colors"
+                    />
+                    <Button variant="primary" onClick={handlePedersen} className="bg-emerald-600 hover:bg-emerald-700 shadow-emerald-100 whitespace-nowrap">
+                      同態加總
+                    </Button>
                   </div>
-                )}
+                  {pedersenResult && (
+                    <div className="p-4 bg-slate-50 rounded-2xl border border-emerald-100 font-mono text-[11px] text-emerald-700 space-y-3 mt-2 shadow-inner">
+                      <div className="max-h-24 overflow-y-auto custom-scrollbar space-y-1.5 pr-2">
+                        {pedersenResult.commitments.map((c: unknown, i: number) => (
+                          <div key={i} className="truncate"><span className="text-slate-400">C{i + 1} ({c.value}):</span> {c.commitment.substring(0, 32)}...</div>
+                        ))}
+                      </div>
+                      <div className="pt-3 border-t border-emerald-200/50 truncate">
+                        <span className="text-slate-400">Total expected:</span> {pedersenResult.expectedTotal.substring(0, 32)}...
+                      </div>
+                      <div className="font-black text-[10px] uppercase tracking-widest text-emerald-600 bg-emerald-100 px-3 py-1.5 rounded-full inline-block border border-emerald-200">
+                        {pedersenResult.isValid ? '✅ 同態加法驗證通過 (ZKP Valid)' : '❌ 驗證失敗'}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 7. ESG 法規智能問答 (RAG) - 佔全寬 (4x1) */}
           <motion.div variants={itemVariants} className="md:col-span-4">
-            <BrandCard variant="glass" padding="md" className="h-full border-blue-500/20">
-              <div className="flex items-center gap-2 text-blue-400 font-bold tracking-widest text-xs uppercase mb-4">
+            <Card className="h-full border-white bg-white/70 backdrop-blur-xl shadow-sm p-8">
+              <div className="flex items-center gap-2 text-cyan-700 font-black tracking-widest text-[10px] uppercase mb-6">
                 <BookOpen size={16} /> ESG 法規智能問答 (RAG Knowledge Base)
               </div>
               <ESGSmartQA />
-            </BrandCard>
+            </Card>
           </motion.div>
 
           {/* 8. Slack OmniAgent Gateway - 佔全寬 (4x1) */}
-          <motion.div variants={itemVariants} className="md:col-span-4">
+          <motion.div variants={itemVariants} className="md:col-span-4 pb-12">
             <SlackGatewayCard />
           </motion.div>
 
         </div>
       </motion.div>
+
+      {/* Global Style Injector */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.1); }
+      `}</style>
     </div>
   );
 }

@@ -23,7 +23,7 @@ interface EvidenceState {
   verifyEvidence: (id: EvidenceID) => Promise<VerificationResult | null>;
 }
 
-export const useEvidenceStore = create<EvidenceState>((set, get) => ({
+export const useEvidenceStore = create<EvidenceState>((set, _get) => ({
   evidences: [],
   isLoading: false,
   error: null,
@@ -41,8 +41,8 @@ export const useEvidenceStore = create<EvidenceState>((set, get) => ({
       if (json.success) {
         set({ evidences: json.data.data, isLoading: false });
       }
-    } catch (e: any) {
-      set({ error: e.message, isLoading: false });
+    } catch (e: unknown) {
+      set({ error: (e as Error).message, isLoading: false });
     }
   },
 
@@ -63,8 +63,8 @@ export const useEvidenceStore = create<EvidenceState>((set, get) => ({
         }));
         return newEv;
       }
-    } catch (e: any) {
-      set({ error: e.message, isLoading: false });
+    } catch (e: unknown) {
+      set({ error: (e as Error).message, isLoading: false });
     }
     return null;
   },

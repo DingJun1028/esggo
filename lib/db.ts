@@ -47,8 +47,8 @@ export interface Report {
   title: string;
   status: 'draft' | 'verified' | 'error' | 'warning';
   ownerId: string;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: unknown;
+  updatedAt: unknown;
 }
 
 export interface VaultEvidence {
@@ -57,7 +57,7 @@ export interface VaultEvidence {
   fileName: string;
   fileUrl: string;
   hashLock: string; // ZKP hash_lock from Omni-Core
-  uploadedAt: any;
+  uploadedAt: unknown;
 }
 
 export interface Signature {
@@ -65,17 +65,17 @@ export interface Signature {
   evidenceId: string;
   signerId: string;
   signature: string; // 5T signature
-  timestamp: any;
+  timestamp: unknown;
 }
 
-export interface GovernanceMetric { id?: string; [key: string]: any; }
-export interface Task { id?: string; [key: string]: any; }
-export interface EvidenceFile { id?: string; [key: string]: any; }
-export interface AuditRecord { id?: string; [key: string]: any; }
-export interface AdvisoryMessage { id?: string; [key: string]: any; }
-export interface EnvironmentalMetric { id?: string; [key: string]: any; }
-export interface RoadmapMilestone { id?: string; [key: string]: any; }
-export interface SocialMetric { id?: string; [key: string]: any; }
+export interface GovernanceMetric { id?: string; [key: string]: unknown; }
+export interface Task { id?: string; [key: string]: unknown; }
+export interface EvidenceFile { id?: string; [key: string]: unknown; }
+export interface AuditRecord { id?: string; [key: string]: unknown; }
+export interface AdvisoryMessage { id?: string; [key: string]: unknown; }
+export interface EnvironmentalMetric { id?: string; [key: string]: unknown; }
+export interface RoadmapMilestone { id?: string; [key: string]: unknown; }
+export interface SocialMetric { id?: string; [key: string]: unknown; }
 
 const DEFAULT_COMPANY_ID = '00000000-0000-0000-0000-000000000000';
 
@@ -83,19 +83,19 @@ const DEFAULT_COMPANY_ID = '00000000-0000-0000-0000-000000000000';
 // ESG Metrics (Migrated to Data Connect)
 // ==========================================
 
-export const getGovernanceMetrics = async (ownerId?: any): Promise<any> => {
+export const getGovernanceMetrics = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return getDemoData('gov', []);
   const { data } = await listCompanyMetrics({ companyId: DEFAULT_COMPANY_ID });
   return (data?.companyMetrics || []).filter(m => m.category === 'G' || m.category === 'Governance');
 };
 
-export const getSocialMetrics = async (ownerId?: any): Promise<any> => {
+export const getSocialMetrics = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return getDemoData('soc', []);
   const { data } = await listCompanyMetrics({ companyId: DEFAULT_COMPANY_ID });
   return (data?.companyMetrics || []).filter(m => m.category === 'S' || m.category === 'Social');
 };
 
-export const getEnvironmentalData = async (activeCategory?: any): Promise<any> => {
+export const getEnvironmentalData = async (activeCategory?: unknown): Promise<any> => {
   if (isDemoMode) {
     const all = await getDemoData('env', MOCK_ENVIRONMENTAL);
     return activeCategory ? all.filter(m => m.category === activeCategory) : all;
@@ -105,20 +105,20 @@ export const getEnvironmentalData = async (activeCategory?: any): Promise<any> =
   return metrics;
 };
 
-export const upsertEnvironmentalData = async (data: any): Promise<any> => true;
-export const deleteEnvironmentalData = async (id: any): Promise<any> => true;
+export const upsertEnvironmentalData = async (data: unknown): Promise<any> => true;
+export const deleteEnvironmentalData = async (id: unknown): Promise<any> => true;
 
 // ==========================================
 // Tasks & Logs (Migrated to Data Connect)
 // ==========================================
 
-export const getTasks = async (ownerId?: any): Promise<any> => {
+export const getTasks = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return getDemoData('tasks', MOCK_TASKS);
   const { data } = await listAllTasks();
   return data?.tasks || [];
 };
 
-export const getAuditLogs = async (ownerId?: any): Promise<any> => {
+export const getAuditLogs = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return getDemoData('audit', MOCK_AUDIT);
   const { data } = await listAuditRecords();
   return data?.auditRecords || [];
@@ -130,12 +130,12 @@ export const getRoadmapMilestones = async (): Promise<any> => {
   return data?.roadmapMilestones || [];
 };
 
-export const logAudit = async (record: any): Promise<any> => {
+export const logAudit = async (record: unknown): Promise<any> => {
   // Logic for logging audit is handled via specific mutations if needed
   return true;
 };
 
-export const getDashboardStats = async (ownerId?: any): Promise<any> => {
+export const getDashboardStats = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return { complianceRate: 78, griCoverage: 67, totalEvidence: 42, carbonEmissions: 1247 };
   return { complianceRate: 0, griCoverage: 0, totalEvidence: 0 };
 };
@@ -172,7 +172,7 @@ export const simpleHash = (data: string): string => {
 
 export const simplehash = simpleHash;
 
-export const secureHash = async (data: any): Promise<string> => {
+export const secureHash = async (data: unknown): Promise<string> => {
   const str = typeof data === 'string' ? data : JSON.stringify(data);
   const msgBuffer = new TextEncoder().encode(str);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -180,12 +180,12 @@ export const secureHash = async (data: any): Promise<string> => {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
-export const saveAdvisorySession = async (session: any, p2?: any): Promise<any> => true;
-export const getAdvisorySession = async (ownerId: any): Promise<any> => null;
+export const saveAdvisorySession = async (session: unknown, p2?: unknown): Promise<any> => true;
+export const getAdvisorySession = async (ownerId: unknown): Promise<any> => null;
 
-export const upsertRoadmapMilestone = async (data: any): Promise<any> => data as any;
-export const updateMilestoneStatus = async (id: any, status: any): Promise<any> => true;
-export const globalSearch = async (query: any): Promise<any> => [];
+export const upsertRoadmapMilestone = async (data: unknown): Promise<any> => data as any;
+export const updateMilestoneStatus = async (id: unknown, status: unknown): Promise<any> => true;
+export const globalSearch = async (query: unknown): Promise<any> => [];
 
 // ==========================================
 // Legacy Reports Ref (for remaining components)
@@ -202,13 +202,13 @@ export const getReport = async (id: string) => {
   return null; 
 };
 
-export const createReport = async (data: any) => 'dummy_id';
-export const updateReportStatus = async (id: string, status: any) => true;
+export const createReport = async (data: unknown) => 'dummy_id';
+export const updateReportStatus = async (id: string, status: unknown) => true;
 
 export const evidenceRef = collection(db, 'vault_evidence');
 export const getEvidenceForReport = async (reportId: string) => [];
-export const addEvidence = async (data: any) => 'dummy_id';
+export const addEvidence = async (data: unknown) => 'dummy_id';
 
 export const signaturesRef = collection(db, 'signatures');
 export const getSignaturesForEvidence = async (evidenceId: string) => [];
-export const addSignature = async (data: any) => 'dummy_id';
+export const addSignature = async (data: unknown) => 'dummy_id';

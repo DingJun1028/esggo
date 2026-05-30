@@ -4,7 +4,7 @@ import { telemetryService, TelemetryEvent } from '@/lib/telemetry/service';
 
 export default function TelemetryDashboard() {
   const [events, setEvents] = useState<TelemetryEvent[]>([]);
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<unknown[]>([]);
   const [selectedAgent, setSelectedAgent] = useState<string>('');
 
   useEffect(() => {

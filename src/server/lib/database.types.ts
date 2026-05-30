@@ -35,8 +35,8 @@ export type Database = {
           metadata: Record<string, unknown> | null;
           created_at: string;
         };
-        Insert: any;
-        Update: any;
+        Insert: Omit<Database['public']['Tables']['ucc_tags']['Row'], 'id' | 'created_at'>;
+        Update: Partial<Omit<Database['public']['Tables']['ucc_tags']['Row'], 'id' | 'created_at'>>;
       };
       ucc_think_tanks: {
         Row: {
@@ -51,8 +51,8 @@ export type Database = {
           extracted_at: string;
           updated_at: string;
         };
-        Insert: any;
-        Update: any;
+        Insert: Omit<Database['public']['Tables']['ucc_think_tanks']['Row'], 'id' | 'extracted_at' | 'updated_at'>;
+        Update: Partial<Omit<Database['public']['Tables']['ucc_think_tanks']['Row'], 'id' | 'extracted_at' | 'updated_at'>>;
       };
       ucc_elements: {
         Row: {
@@ -67,8 +67,8 @@ export type Database = {
           analysis: Record<string, unknown> | null;
           created_at: string;
         };
-        Insert: any;
-        Update: any;
+        Insert: Omit<Database['public']['Tables']['ucc_elements']['Row'], 'id' | 'created_at'>;
+        Update: Partial<Omit<Database['public']['Tables']['ucc_elements']['Row'], 'id' | 'created_at'>>;
       };
       audit_logs: {
         Row: {
@@ -84,8 +84,8 @@ export type Database = {
           timestamp: string;
           session_id: string | null;
         };
-        Insert: any;
-        Update: any;
+        Insert: Omit<Database['public']['Tables']['audit_logs']['Row'], 'id' | 'timestamp'>;
+        Update: Partial<Omit<Database['public']['Tables']['audit_logs']['Row'], 'id' | 'timestamp'>>;
       };
       integrity_alerts: {
         Row: {
@@ -101,8 +101,36 @@ export type Database = {
           resolved_by: string | null;
           resolution_notes: string | null;
         };
-        Insert: any;
-        Update: any;
+        Insert: Omit<Database['public']['Tables']['integrity_alerts']['Row'], 'id' | 'detected_at'>;
+        Update: Partial<Omit<Database['public']['Tables']['integrity_alerts']['Row'], 'id' | 'detected_at'>>;
+      };
+      evidence_vault: {
+        Row: {
+          id: string;
+          uuid: string;
+          timestamp: number;
+          formula: string;
+          impact_metric: Record<string, unknown>;
+          hash_lock: string;
+          source_origin: string;
+          lifecycle_stage: string;
+          metadata: Record<string, unknown>;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['evidence_vault']['Row'], 'id' | 'created_at'>;
+        Update: Partial<Omit<Database['public']['Tables']['evidence_vault']['Row'], 'id' | 'created_at'>>;
+      };
+      audit_trail: {
+        Row: {
+          id: string;
+          record_id: string;
+          action: string;
+          actor: string;
+          details: Record<string, unknown>;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['audit_trail']['Row'], 'id' | 'created_at'>;
+        Update: Partial<Omit<Database['public']['Tables']['audit_trail']['Row'], 'id' | 'created_at'>>;
       };
     };
     Views: Record<string, never>;

@@ -9,7 +9,7 @@ export interface TaskInput {
 
 export class ESGDataService {
    private supabase!: SupabaseClient;
-   private aitableClient!: any; // AITable client will be injected
+   private omniTableClient!: unknown; // OmniTable client will be injected
 
    // Contract Operations
    async createContract(input: ContractInput): Promise<ContractInput & { id: string; created_at: string }> {
@@ -28,8 +28,10 @@ export class ESGDataService {
 
     if (error) throw error;
 
-    // Sync to AITable
-    await this.aitableClient.createRecords('esg_contracts', [contract]);
+    // Sync to OmniTable
+    if (this.omniTableClient && typeof (this.omniTableClient as any).createRecords === 'function') {
+      await (this.omniTableClient as any).createRecords('esg_contracts', [contract]);
+    }
 
     return data;
   }
@@ -99,19 +101,21 @@ export class ESGDataService {
       steps: [...(await this.getAgentTask(taskId))?.steps || [], step]
     });
 
-    // Log to AITable
-    await this.aitableClient.createRecords('esg_agent_logs', [{
-      taskId,
-      agentName: step.agentName,
-      status: step.status,
-      message: step.message,
-      payload: step.payload,
-      timestamp: step.timestamp,
-      evidenceBundleId: step.payload?.evidenceBundleId,
-      formula: step.payload?.formula,
-      impactMetric: step.payload?.impactMetric,
-      complianceScore: step.payload?.complianceScore,
-    }]);
+    // Log to OmniTable
+    if (this.omniTableClient && typeof (this.omniTableClient as any).createRecords === 'function') {
+      await (this.omniTableClient as any).createRecords('esg_agent_logs', [{
+        taskId,
+        agentName: step.agentName,
+        status: step.status,
+        message: step.message,
+        payload: step.payload,
+        timestamp: step.timestamp,
+        evidenceBundleId: step.payload?.evidenceBundleId,
+        formula: step.payload?.formula,
+        impactMetric: step.payload?.impactMetric,
+        complianceScore: step.payload?.complianceScore,
+      }]);
+    }
   }
 
    // Evidence Operations
@@ -130,8 +134,10 @@ export class ESGDataService {
 
      if (error) throw error;
 
-     // Sync to AITable
-     await this.aitableClient.createRecords('esg_evidence', [evidence]);
+     // Sync to OmniTable
+     if (this.omniTableClient && typeof (this.omniTableClient as any).createRecords === 'function') {
+       await (this.omniTableClient as any).createRecords('esg_evidence', [evidence]);
+     }
 
      return data;
    }
@@ -149,7 +155,7 @@ export class ESGDataService {
     );
   }
 
-   // Get latest agent tasks with AITable integration
+   // Get latest agent tasks with OmniTable integration
    async getLatestAgentTasks(limit: number = 10): Promise<AgentTask[]> {
      const { data, error } = await this.supabase
        .from('agent_tasks')

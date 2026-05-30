@@ -1,20 +1,18 @@
 'use client';
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
   ChevronRight, ChevronLeft, LayoutDashboard, FileText, Fingerprint, 
   HeartPulse, MessageSquare, BarChart3, Leaf, Users, ShieldCheck, 
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
-  Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
-  Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield, Landmark,
-  Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity,
-  Settings, Key, Database, Server, Terminal as TerminalIcon
+  Library, Wallet, Handshake, GraduationCap, 
+  CheckSquare, Building2, Cable, Bot,
+  Search, Command, Settings2, Layout, Rocket, Activity,
+  Database, Server, Terminal as TerminalIcon
 } from 'lucide-react';
 import OmniAgentFloatingAgent from '../components/brand/OmniAgentFloating';
 import { BrandLogo } from '../components/brand/BrandLogo';
-import WorkspacePanel from '../components/brand/WorkspacePanel';
-import ComposerFooter from '../components/brand/ComposerFooter';
 import OmniAgentControlCenter from '../components/brand/OmniAgentControlCenter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -90,18 +88,17 @@ const navGroups = [
 
 function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
+  // 使用 useMemo 處理衍生狀態，避免 setState in Effect
+  const results = useMemo(() => {
     if (!query) {
-      setResults(navGroups.flatMap(g => g.items).slice(0, 6));
-      return;
+      return navGroups.flatMap(g => g.items).slice(0, 6);
     }
-    const filtered = navGroups.flatMap(g => g.items).filter(item => 
-      item.label.includes(query) || item.sub.toLowerCase().includes(query.toLowerCase())
-    );
-    setResults(filtered);
+    return navGroups.flatMap(g => g.items).filter(item => 
+      item.label.toLowerCase().includes(query.toLowerCase()) || 
+      item.sub.toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 6);
   }, [query]);
 
   if (!isOpen) return null;

@@ -37,7 +37,7 @@ export class DiffEngine {
   /**
    * Structured JSON comparison
    */
-  static compareJSON(oldObj: any, newObj: any): boolean {
+  static compareJSON(oldObj: unknown, newObj: unknown): boolean {
     return JSON.stringify(oldObj) !== JSON.stringify(newObj);
   }
 

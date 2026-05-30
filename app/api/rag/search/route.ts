@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     if (error) throw error;
 
     return NextResponse.json({ success: true, documents: data });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Omni RAG Search API] Error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

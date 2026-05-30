@@ -208,7 +208,7 @@ export async function getBrandStats() {
         supabase.from('brand_tokens').select('*', { count: 'exact', head: true }).eq('company_id', 'default'),
       ]);
 
-    const catCounts = (cats || []).reduce((acc: any, r: any) => {
+    const catCounts = (cats || []).reduce((acc: unknown, r: unknown) => {
       acc[r.category] = (acc[r.category] || 0) + 1;
       return acc;
     }, {});

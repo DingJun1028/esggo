@@ -54,7 +54,7 @@ Guidelines:
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '無法生成洞察報告。';
 
     return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Social Insights API Error:', error);
     return NextResponse.json(
       { error: error.message || 'Internal server error' },

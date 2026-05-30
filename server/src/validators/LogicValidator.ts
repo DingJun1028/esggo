@@ -1,10 +1,10 @@
 export interface LogicValidator {
-  validate(data: any): Promise<boolean>;
+  validate(data: unknown): Promise<boolean>;
   getComplianceScore(entityId: string): Promise<number>;
 }
 
 export class SustainaLogicValidator implements LogicValidator {
-  async validate(data: any): Promise<boolean> {
+  async validate(data: unknown): Promise<boolean> {
     return data?.logic_type && data?.compliance_score !== undefined;
   }
 

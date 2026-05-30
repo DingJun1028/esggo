@@ -27,24 +27,31 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 // Data Connect (Optional based on generated code)
-let dataConnect: any = null;
-try {
-  const { getDataConnect, connectDataConnectEmulator } = require("firebase/data-connect");
-  const { connectorConfig } = require("@dataconnect/generated");
-  if (connectorConfig) {
-    dataConnect = getDataConnect(connectorConfig);
+let dataConnect: unknown = null;
+
+// 使用非阻塞方式異步初始化 Data Connect
+(async () => {
+  try {
+    const { getDataConnect, connectDataConnectEmulator } = await import("firebase/data-connect");
+    // @ts-ignore - may not be generated yet
+    const { connectorConfig } = await import("@dataconnect/generated");
     
-    // Connect to emulator if host is provided
-    if (process.env.NEXT_PUBLIC_FIREBASE_DATACONNECT_EMULATOR_HOST) {
-      const [host, port] = process.env.NEXT_PUBLIC_FIREBASE_DATACONNECT_EMULATOR_HOST.split(':');
-      connectDataConnectEmulator(dataConnect, host, parseInt(port));
-      console.log(`Firebase Data Connect: Connected to emulator at ${host}:${port}`);
+    if (connectorConfig) {
+      dataConnect = getDataConnect(connectorConfig);
+      
+      // Connect to emulator if host is provided
+      if (process.env.NEXT_PUBLIC_FIREBASE_DATACONNECT_EMULATOR_HOST) {
+        const [host, port] = process.env.NEXT_PUBLIC_FIREBASE_DATACONNECT_EMULATOR_HOST.split(':');
+        // @ts-ignore
+        connectDataConnectEmulator(dataConnect, host, parseInt(port));
+        console.log(`Firebase Data Connect: Connected to emulator at ${host}:${port}`);
+      }
     }
+  } catch (_e) {
+    // Data Connect not yet generated or supported
+    console.log("Firebase Data Connect not initialized: Code not yet generated.");
   }
-} catch (e) {
-  // Data Connect not yet generated or supported
-  console.log("Firebase Data Connect not initialized: Code not yet generated.");
-}
+})();
 
 export const initAnalytics = async () => {
   if (typeof window !== "undefined") {

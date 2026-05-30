@@ -1,4 +1,3 @@
-import { createHash } from 'crypto';
 import {
   IComponentCore,
   IEvidence,
@@ -6,19 +5,15 @@ import {
   EternalMemory,
   RestorationInput,
   ConsolidationResult,
-  ApiResponse,
   EternalMemoryType,
 } from '../src/shared/types/index.ts';
-import { supabase } from './supabase.ts';
 import { integrityModule } from './omni-core/integrity.ts';
 import {
   sha256,
-  create5TAttestation,
-  verifyHashLock,
   generatePedersenCommitment,
   verifyCommitmentSum,
 } from './crypto-proof.ts';
-import type { HashLockResult, PedersenCommitment, T5Attestation, ZKPRangeProof } from './crypto-proof.ts';
+import type { ZKPRangeProof } from './crypto-proof.ts';
 import { policyEngine } from './policy-engine.ts';
 import type { PolicyValidationResult } from './policy-engine.ts';
 import { dcUpsertEternalMemory, dcListEternalMemories } from './dataconnect-services.ts';
@@ -209,7 +204,7 @@ export class OmniCore {
        id: string;
        type: string;
        content: string;
-       tags: any;
+       tags: unknown;
        hashLock: string;
        consolidated: boolean;
        createdAt: string;

@@ -84,8 +84,9 @@ export class GlobalHealing implements IGlobalHealing {
       try {
         const snapshot = await node.getSnapshot();
         snapshots.set(node.cardUuid, snapshot);
-      } catch (err: any) {
-        throw new Error(`[全域掃描失敗] 無法從 ${node.platform} 節點 (${node.id}) 提取快照: ${err?.message || err}`);
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        throw new Error(`[全域掃描失敗] 無法從 ${node.platform} 節點 (${node.id}) 提取快照: ${errorMsg}`);
       }
     }
     return snapshots;
@@ -164,9 +165,10 @@ export class GlobalHealing implements IGlobalHealing {
             
             // 痊癒日誌系統：將「痊癒」過程記錄在 GPL 中
             await this.eventStore.appendEvent(cardUuid, 'HEALING_APPLIED', currentTruth, 'Omni-Avatar');
-          } catch (error: any) {
+          } catch (error: unknown) {
             failedCount++;
-            logs.push(`[錯誤] 撫平節點 ${node.platform} (${node.id}) 失敗: ${error?.message || error}`);
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            logs.push(`[錯誤] 撫平節點 ${node.platform} (${node.id}) 失敗: ${errorMsg}`);
             await this.eventStore.appendEvent(cardUuid, 'HEALING_FAILED', snapshot, 'Omni-Avatar');
           }
         }
@@ -184,7 +186,7 @@ export class GlobalHealing implements IGlobalHealing {
         reconciledCount,
         logs,
       };
-    } catch (e: any) {
+    } catch (e: unknown) {
       logs.push(`[災難性失敗] 全局調和過程中發生未預期錯誤: ${e?.message || e}`);
       return {
         status: 'FAILED',

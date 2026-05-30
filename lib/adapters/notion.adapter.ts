@@ -18,8 +18,8 @@ export class NotionAdapter {
     
     const validStatus = ['todo', 'doing', 'done'].includes(statusVal) ? statusVal : 'todo';
 
-    const attributes = payload.properties['Attributes']?.multi_select?.map((s: any) => s.name) || [];
-    const abilities = payload.properties['Abilities']?.multi_select?.map((s: any) => s.name) || [];
+    const attributes = payload.properties['Attributes']?.multi_select?.map((s: unknown) => s.name) || [];
+    const abilities = payload.properties['Abilities']?.multi_select?.map((s: unknown) => s.name) || [];
 
     const rawCard = {
       uuid: randomUUID(), // 若需溯源，可將 Notion ID 經 Hash Lock 轉為 UUID (Traceable)

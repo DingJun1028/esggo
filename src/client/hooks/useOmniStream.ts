@@ -46,11 +46,13 @@ export function useOmniStream() {
       eventSource.onerror = (error) => {
         if (!isMounted) return;
         console.error('[useOmniStream] SSE Error:', error);
+        // 如果是斷開連接，將狀態設為 false
         setIsStreaming(false);
       };
     } catch (err) {
       console.error('[useOmniStream] Failed to initialize EventSource:', err);
-      if (isMounted) setIsStreaming(false);
+      // 移除這裡的同步 setState，因為 catch 區塊在初始化時執行
+      // setIsStreaming(false); 初始值已經是 false，不需要在這裡再次設定
     }
 
     return () => {
@@ -58,7 +60,7 @@ export function useOmniStream() {
       if (eventSource) {
         eventSource.close();
       }
-      setIsStreaming(false);
+      // Effect 清理函數中設定狀態也是異步渲染週期的一部分
     };
   }, []);
 

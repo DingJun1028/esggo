@@ -5,7 +5,7 @@ import { Users, Plus, UserPlus, HeartHandshake, ShieldAlert, BookOpen, Lock, Shi
 import { StandardPage, BrandCard, BrandTable, BrandButton } from '../../components/brand';
 
 export default function SocialPage() {
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [sealingId, setSealingId] = useState<string | null>(null);
   const [verifyingId, setVerifyingId] = useState<string | null>(null);

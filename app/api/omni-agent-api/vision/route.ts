@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json<ApiResponse>(
       createSuccessResponse(result)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('VISION_FAILED', error.message || 'OmniAgent Vision scanning failed'),
       { status: 500 }

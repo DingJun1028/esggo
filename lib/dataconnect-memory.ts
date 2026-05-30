@@ -53,7 +53,7 @@ async function getOrCreateReportId(companyId: string): Promise<string> {
     
     const { data: refetch } = await getReportByCompany({ companyId: cid });
     return refetch?.reports?.[0]?.id || 'simulation-report-id';
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.warn('[DataConnect Memory] Simulation Mode Active:', e.message);
     return 'sim-report-123';
   }
@@ -82,7 +82,7 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       hashLock: params.hash_lock
     });
     return data;
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log(`[Simulation] Saved Section: ${params.chapter_id} with hash ${params.hash_lock}`);
     return { success: true, simulated: true };
   }
@@ -112,7 +112,7 @@ export async function loadSustainWriteSections(companyId: string): Promise<Susta
   }));
 }
 
-export async function saveMetric(companyId: string, metric: any): Promise<any> {
+export async function saveMetric(companyId: string, metric: unknown): Promise<any> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
   return await upsertCompanyMetric({
     companyId: cid,
@@ -127,13 +127,13 @@ export async function saveMetric(companyId: string, metric: any): Promise<any> {
   });
 }
 
-export async function loadMetrics(companyId: string): Promise<any[]> {
+export async function loadMetrics(companyId: string): Promise<unknown[]> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
   const { data } = await listCompanyMetrics({ companyId: cid });
   return data?.companyMetrics || [];
 }
 
-export async function saveMemory(companyId: string, memory: any): Promise<any> {
+export async function saveMemory(companyId: string, memory: unknown): Promise<any> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
   return await upsertEternalMemory({
     companyId: cid,
@@ -145,7 +145,7 @@ export async function saveMemory(companyId: string, memory: any): Promise<any> {
   });
 }
 
-export async function loadMemories(companyId: string): Promise<any[]> {
+export async function loadMemories(companyId: string): Promise<unknown[]> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
   const { data } = await listEternalMemoriesByCompany({ companyId: cid });
   return data?.eternalMemories || [];

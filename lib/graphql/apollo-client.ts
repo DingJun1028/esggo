@@ -4,7 +4,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 
-let apolloClient: any | null = null;
+let apolloClient: unknown | null = null;
 
 function getBaseUrl() {
   if (typeof window !== 'undefined') return window.location.origin;

@@ -11,8 +11,8 @@ vi.mock('../supabase', () => ({
 
 describe('SupabaseOmniRealtimeService', () => {
     let service: SupabaseOmniRealtimeService;
-    let mockCallbacks: any;
-    let mockChannel: any;
+    let mockCallbacks: unknown;
+    let mockChannel: unknown;
     let originalFetch: typeof global.fetch;
 
     // 用來捕捉在 .on() 中註冊的回呼函式，以便在測試中手動觸發

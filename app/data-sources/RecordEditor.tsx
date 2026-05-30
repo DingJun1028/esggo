@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import { Save, Loader2, Trash2 } from 'lucide-react';
 import { Modal } from './Modal';
-import type { AITableField, AITableRecord } from '@/lib/aitable/client';
+import type { OmniTableField, OmniTableRecord } from '@/lib/omni-table/client';
 
 export function RecordEditorModal({ open, onClose, fields, record, onSave, onDelete, saving }: {
   open: boolean; onClose: () => void;
-  fields: AITableField[]; record: AITableRecord | null;
+  fields: OmniTableField[]; record: OmniTableRecord | null;
   onSave: (fields: Record<string, unknown>, recordId?: string) => Promise<void>;
   onDelete?: (recordId: string) => Promise<void>;
   saving: boolean;

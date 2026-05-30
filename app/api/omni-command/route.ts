@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     const result = await omniAgent.command(task, context);
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Leaf, Users, ShieldCheck, Plus, Loader2, Check } from 'lucide-react';
-import { ESG_TEMPLATES, type ESGTemplate } from '@/lib/aitable/templates';
+import { ESG_TEMPLATES, type ESGTemplate } from '@/lib/omni-table/templates';
 import { Modal } from './Modal';
 
 const CAT_META: Record<string, { icon: React.ReactNode; color: string; label: string }> = {

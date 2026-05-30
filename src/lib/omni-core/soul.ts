@@ -2,6 +2,28 @@
 import type { IComponentCore, IEvidence } from '../../../src/shared/types';
 import { sha256 } from '../../../lib/crypto-proof';
 
+interface IOmniMatrix {
+  traditional: string;
+  english: string;
+  code: string;
+  timestamp: number;
+}
+
+interface IOmniWisdom {
+  knowledge: Record<string, unknown>;
+  insights: Record<string, unknown>;
+  recommendations: Record<string, unknown>;
+}
+
+interface IOmniManifestation {
+  result?: string;
+  source?: string;
+  trace?: string[];
+  formula?: string;
+  impact?: string;
+  [key: string]: unknown;
+}
+
 // 萬能法典 (OmniGuide) - JunAIKey 核心實現
 export class OmniSoul {
   async sacredCommand(input: string): Promise<IComponentCore> {
@@ -13,7 +35,7 @@ export class OmniSoul {
     return await this.engrave(purified);
   }
 
-  private async activateAgents(resonated: any) {
+  private async activateAgents(resonated: IOmniWisdom): Promise<IOmniManifestation> {
     const M = new UniversalThinkTank();
     const R = new RuneAPI();
     const A = new AgentNetwork();
@@ -24,10 +46,10 @@ export class OmniSoul {
     const tasks = await A.execute(capabilities);
     const optimized = await E.optimize(tasks);
 
-    return optimized;
+    return optimized as IOmniManifestation;
   }
 
-  private async purify(manifestation: any) {
+  private async purify(manifestation: IOmniManifestation) {
     const entropyReduction = 0.03;
     const technicalDebt = await this.assessTechnicalDebt();
     
@@ -42,7 +64,7 @@ export class OmniSoul {
     };
   }
 
-  private async engrave(data: any): Promise<IComponentCore> {
+  private async engrave(data: IOmniManifestation & { purity?: number; timestamp?: number }): Promise<IComponentCore> {
     const hash = await sha256(JSON.stringify(data));
     const evidence: IEvidence = {
       originCause: data.source || 'user_input',
@@ -53,7 +75,7 @@ export class OmniSoul {
     return {
       uuid: this.generateUUID(),
       version: '8.5.1-omniguide',
-      timestamp: Date.now(),
+      timestamp: data.timestamp || Date.now(),
       formula: data.formula || 'ESG_SACRED_FORMULA',
       impact_metric: data.impact || 'INFINITE',
       status: 'Trustworthy',
@@ -63,7 +85,7 @@ export class OmniSoul {
   }
 
   private async extractQuantumEssence(input: string): Promise<string> {
-    const matrix = {
+    const matrix: IOmniMatrix = {
       traditional: input,
       english: this.translateToEnglish(input),
       code: this.generateCode(input),
@@ -72,7 +94,7 @@ export class OmniSoul {
     return this.extractEssenceFromMatrix(matrix);
   }
 
-  private async resonate(essence: string): Promise<any> {
+  private async resonate(essence: string): Promise<IOmniWisdom> {
     const knowledge = await this.queryKnowledgeBase(essence);
     const wisdom = await this.applyWisdom(knowledge);
     return wisdom;
@@ -86,21 +108,27 @@ export class OmniSoul {
   }
 
   private async assessTechnicalDebt(): Promise<number> { return 0; }
-  private async sacrificeTechnicalDebt(amount: number): Promise<void> { }
+  private async sacrificeTechnicalDebt(_amount: number): Promise<void> { }
   private generateUUID(): string { return 'uuid-' + Date.now(); }
   private translateToEnglish(input: string): string { return input; }
   private generateCode(input: string): string { return input; }
-  private extractEssenceFromMatrix(matrix: any): string { return JSON.stringify(matrix); }
-  private async queryKnowledgeBase(essence: string): Promise<any> { return {}; }
-  private async applyWisdom(knowledge: any): Promise<any> { return knowledge; }
-  private createConcept(): any { return {}; }
-  private async implementConcept(concept: any): Promise<any> { return concept; }
-  private async expandToInfinity(implementation: any): Promise<any> { return implementation; }
-  public async manifest(agents: any): Promise<any> { return agents; }
+  private extractEssenceFromMatrix(matrix: IOmniMatrix): string { return JSON.stringify(matrix); }
+  private async queryKnowledgeBase(_essence: string): Promise<Record<string, unknown>> { return {}; }
+  private async applyWisdom(knowledge: Record<string, unknown>): Promise<IOmniWisdom> { 
+    return {
+      knowledge,
+      insights: {},
+      recommendations: {}
+    };
+  }
+  private createConcept(): Record<string, unknown> { return {}; }
+  private async implementConcept(concept: Record<string, unknown>): Promise<IOmniManifestation> { return concept; }
+  private async expandToInfinity(implementation: IOmniManifestation): Promise<IOmniManifestation> { return implementation; }
+  public async manifest(agents: IOmniManifestation): Promise<IOmniManifestation> { return agents; }
 }
 
 class GravityProtocol {
-  async execute(center: any, modules: any[]): Promise<any> {
+  async execute(center: Record<string, unknown>, modules: Array<{ process: (c: Record<string, unknown>) => Promise<Record<string, unknown>> }>): Promise<Record<string, unknown>[]> {
     const results = [];
     for (const module of modules) {
       const result = await module.process(center);
@@ -111,21 +139,22 @@ class GravityProtocol {
 }
 
 class UniversalThinkTank {
-  async query(input: string): Promise<any> {
+  async query(input: IOmniWisdom | string): Promise<IOmniWisdom> {
+    const inputStr = typeof input === 'string' ? input : JSON.stringify(input);
     return {
-      knowledge: this.retrieveKnowledge(input),
-      insights: this.generateInsights(input),
-      recommendations: this.generateRecommendations(input)
+      knowledge: this.retrieveKnowledge(inputStr),
+      insights: this.generateInsights(inputStr),
+      recommendations: this.generateRecommendations(inputStr)
     };
   }
 
-  private retrieveKnowledge(input: string): any { return {}; }
-  private generateInsights(input: string): any { return {}; }
-  private generateRecommendations(input: string): any { return {}; }
+  private retrieveKnowledge(_input: string): Record<string, unknown> { return {}; }
+  private generateInsights(_input: string): Record<string, unknown> { return {}; }
+  private generateRecommendations(_input: string): Record<string, unknown> { return {}; }
 }
 
 class RuneAPI {
-  async dispatch(wisdom: any): Promise<any> {
+  async dispatch(wisdom: IOmniWisdom): Promise<Record<string, unknown>> {
     return {
       capabilities: this.identifyCapabilities(wisdom),
       integrations: this.setupIntegrations(wisdom),
@@ -133,33 +162,35 @@ class RuneAPI {
     };
   }
 
-  private identifyCapabilities(wisdom: any): any { return {}; }
-  private setupIntegrations(wisdom: any): any { return {}; }
-  private createAutomations(wisdom: any): any { return {}; }
+  private identifyCapabilities(_wisdom: IOmniWisdom): Record<string, unknown> { return {}; }
+  private setupIntegrations(_wisdom: IOmniWisdom): Record<string, unknown> { return {}; }
+  private createAutomations(_wisdom: IOmniWisdom): Record<string, unknown> { return {}; }
 }
 
 class AgentNetwork {
-  async execute(capabilities: any): Promise<any> {
+  async execute(capabilities: Record<string, unknown>): Promise<Record<string, unknown>> {
     const tasks = this.distributeTasks(capabilities);
     const results = await this.executeTasks(tasks);
     return this.aggregateResults(results);
   }
 
-  private distributeTasks(capabilities: any): any { return {}; }
-  private async executeTasks(tasks: any): Promise<any> { return {}; }
-  private aggregateResults(results: any): any { return {}; }
+  private distributeTasks(_capabilities: Record<string, unknown>): Record<string, unknown> { return {}; }
+  private async executeTasks(tasks: Record<string, unknown>): Promise<Record<string, unknown>> { return tasks; }
+  private aggregateResults(results: Record<string, unknown>): Record<string, unknown> { return results; }
 }
 
 class EvolutionEngine {
-  async optimize(tasks: any): Promise<any> {
+  async optimize(tasks: Record<string, unknown>): Promise<Record<string, unknown>> {
     const optimized = this.applyOptimization(tasks);
     const purified = this.reduceEntropy(optimized);
     return this.enhancePerformance(purified);
   }
 
-  private applyOptimization(tasks: any): any { return {}; }
-  private reduceEntropy(optimized: any): any { return {}; }
-  private enhancePerformance(purified: any): any { return {}; }
+  private applyOptimization(tasks: Record<string, unknown>): Record<string, unknown> { return tasks; }
+  private reduceEntropy(optimized: Record<string, unknown>): Record<string, unknown> { return optimized; }
+  private enhancePerformance(purified: Record<string, unknown>): Record<string, unknown> { return purified; }
 }
+
+export default OmniSoul;
 
 export default OmniSoul;

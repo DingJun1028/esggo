@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json<ApiResponse>(
       createSuccessResponse(result)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('ALCHEMY_FAILED', error.message || 'OmniAgent Alchemy extraction failed'),
       { status: 500 }

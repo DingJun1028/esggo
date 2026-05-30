@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 export default function ReportPage() {
   const { user } = useAuth();
-  const [evidence, setEvidence] = useState<any[]>([]);
+  const [evidence, setEvidence] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [generating, setGenerating] = useState(false);

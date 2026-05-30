@@ -1,5 +1,85 @@
 import { getSupabaseClient } from '@/lib/supabase';
 
+interface ESGMetricRow {
+  id: string;
+  company_id: string;
+  category: string;
+  metric_name: string;
+  metric_value: number;
+  unit: string;
+  year: number;
+  gri_standard: string;
+  source_origin: string;
+  hash_lock: string;
+  verified: boolean;
+  created_at: string;
+}
+
+interface EvidenceRow {
+  id: string;
+  file_name: string;
+  file_type: string;
+  category: string;
+  gri_reference: string;
+  uploader: string;
+  status: string;
+  zkp_proof: boolean;
+  hash_lock: string;
+  seal_type: string;
+  created_at: string;
+}
+
+interface AuditLogRow {
+  id: string;
+  action: string;
+  resource: string;
+  user_name: string;
+  department: string;
+  gri_reference: string;
+  t5_tag: string;
+  hash_lock: string;
+  details: string;
+  created_at: string;
+}
+
+interface TaskRow {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+  assignee: string;
+  department: string;
+  gri_reference: string;
+  due_date: string;
+  hash_lock: string;
+  created_at: string;
+}
+
+interface RoadmapMilestoneRow {
+  id: string;
+  title: string;
+  description: string;
+  target_year: number;
+  category: string;
+  target_value: number;
+  current_value: number;
+  unit: string;
+  status: string;
+  sbti_aligned: boolean;
+  gri_reference: string;
+  created_at: string;
+}
+
+interface AdvisorySessionRow {
+  id: string;
+  user_id: string;
+  persona: string;
+  title: string;
+  messages: unknown;
+  created_at: string;
+}
+
 function simpleHash(data: string): string {
   let hash = 0;
   for (let i = 0; i < data.length; i++) {
@@ -34,13 +114,13 @@ export const resolvers = {
           supabase.from('tasks').select('*', { count: 'exact', head: false }),
         ]);
 
-        const esgData = esgRes.status === 'fulfilled' ? esgRes.value.data || [] : [];
-        const auditData = auditRes.status === 'fulfilled' ? auditRes.value.data || [] : [];
-        const vaultData = vaultRes.status === 'fulfilled' ? vaultRes.value.data || [] : [];
-        const taskData = taskRes.status === 'fulfilled' ? taskRes.value.data || [] : [];
+        const esgData = (esgRes.status === 'fulfilled' ? esgRes.value.data || [] : []) as ESGMetricRow[];
+        const auditData = (auditRes.status === 'fulfilled' ? auditRes.value.data || [] : []) as AuditLogRow[];
+        const vaultData = (vaultRes.status === 'fulfilled' ? vaultRes.value.data || [] : []) as EvidenceRow[];
+        const taskData = (taskRes.status === 'fulfilled' ? taskRes.value.data || [] : []) as TaskRow[];
 
-        const verifiedCount = (vaultData as any[]).filter((v) => v.status === 'verified').length;
-        const carbonMetrics = (esgData as any[]).filter((d) => d.gri_standard?.includes('305'));
+        const verifiedCount = vaultData.filter((v) => v.status === 'verified').length;
+        const carbonMetrics = esgData.filter((d) => d.gri_standard?.includes('305'));
         const totalCarbon = carbonMetrics.reduce((sum, m) => sum + (m.metric_value || 0), 0);
 
         return {
@@ -67,7 +147,7 @@ export const resolvers = {
       }
     },
 
-    esgMetrics: async (_: any, { category, year }: { category?: string; year?: number }) => {
+    esgMetrics: async (_: unknown, { category, year }: { category?: string; year?: number }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
@@ -75,7 +155,7 @@ export const resolvers = {
         if (category) query = query.eq('category', category);
         if (year) query = query.eq('year', year);
         const { data } = await query.order('created_at', { ascending: false });
-        return (data || []).map((d: any) => ({
+        return ((data as ESGMetricRow[]) || []).map((d) => ({
           id: d.id,
           companyId: d.company_id || 'default',
           category: d.category,
@@ -94,7 +174,7 @@ export const resolvers = {
       }
     },
 
-    evidenceFiles: async (_: any, { status, category }: { status?: string; category?: string }) => {
+    evidenceFiles: async (_: unknown, { status, category }: { status?: string; category?: string }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
@@ -102,7 +182,7 @@ export const resolvers = {
         if (status) query = query.eq('status', status);
         if (category) query = query.eq('category', category);
         const { data } = await query.order('created_at', { ascending: false });
-        return (data || []).map((d: any) => ({
+        return ((data as EvidenceRow[]) || []).map((d) => ({
           id: d.id,
           fileName: d.file_name,
           fileType: d.file_type,
@@ -120,7 +200,7 @@ export const resolvers = {
       }
     },
 
-    auditLogs: async (_: any, { limit = 50, offset = 0 }: { limit?: number; offset?: number }) => {
+    auditLogs: async (_: unknown, { limit = 50, offset = 0 }: { limit?: number; offset?: number }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
@@ -129,7 +209,7 @@ export const resolvers = {
           .select('*')
           .order('created_at', { ascending: false })
           .range(offset, offset + limit - 1);
-        return (data || []).map((d: any) => ({
+        return ((data as AuditLogRow[]) || []).map((d) => ({
           id: d.id,
           action: d.action,
           resource: d.resource,
@@ -146,7 +226,7 @@ export const resolvers = {
       }
     },
 
-    tasks: async (_: any, { status, priority }: { status?: string; priority?: string }) => {
+    tasks: async (_: unknown, { status, priority }: { status?: string; priority?: string }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
@@ -154,7 +234,7 @@ export const resolvers = {
         if (status) query = query.eq('status', status);
         if (priority) query = query.eq('priority', priority);
         const { data } = await query.order('created_at', { ascending: false });
-        return (data || []).map((d: any) => ({
+        return ((data as TaskRow[]) || []).map((d) => ({
           id: d.id,
           title: d.title,
           description: d.description,
@@ -194,7 +274,7 @@ export const resolvers = {
       }
     },
 
-    griDisclosures: async (_: any, { status }: { status?: string }) => {
+    griDisclosures: async (_: unknown, { status }: { status?: string }) => {
       const disclosures = [
         { id: 'D-001', code: 'GRI 2-1', title: '公司組織章程', category: 'D', status: 'pending', department: '法務部', priority: 'normal', isNew: false },
         { id: 'D-002', code: 'GRI 2-9', title: '董事會組成與職能', category: 'D', status: 'completed', department: '董事會', priority: 'normal', isNew: false },
@@ -208,7 +288,7 @@ export const resolvers = {
       return disclosures;
     },
 
-    advisorySessions: async (_: any, { userId = 'default' }: { userId?: string }) => {
+    advisorySessions: async (_: unknown, { userId = 'default' }: { userId?: string }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
@@ -217,7 +297,7 @@ export const resolvers = {
           .select('*')
           .eq('user_id', userId)
           .order('created_at', { ascending: false });
-        return (data || []).map((d: any) => ({
+        return ((data as AdvisorySessionRow[]) || []).map((d) => ({
           id: d.id,
           userId: d.user_id,
           persona: d.persona,
@@ -230,7 +310,7 @@ export const resolvers = {
       }
     },
 
-    environmentalData: async (_: any, { category, year }: { category?: string; year?: number }) => {
+    environmentalData: async (_: unknown, { category, year }: { category?: string; year?: number }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
@@ -238,7 +318,7 @@ export const resolvers = {
         if (category) query = query.eq('category', category);
         if (year) query = query.eq('year', year);
         const { data } = await query;
-        return (data || []).map((d: any) => ({
+        return ((data as ESGMetricRow[]) || []).map((d) => ({
           id: d.id,
           companyId: d.company_id || 'default',
           category: d.category,
@@ -254,14 +334,14 @@ export const resolvers = {
       }
     },
 
-    roadmapMilestones: async (_: any, { status }: { status?: string }) => {
+    roadmapMilestones: async (_: unknown, { status }: { status?: string }) => {
       try {
         const supabase = getSupabaseClient();
         if (!supabase) return [];
         let query = supabase.from('roadmap_milestones').select('*');
         if (status) query = query.eq('status', status);
         const { data } = await query.order('target_year');
-        return (data || []).map((d: any) => ({
+        return ((data as RoadmapMilestoneRow[]) || []).map((d) => ({
           id: d.id,
           title: d.title,
           description: d.description,
@@ -282,7 +362,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    upsertESGMetric: async (_: any, { input }: { input: any }) => {
+    upsertESGMetric: async (_: unknown, { input }: { input: Record<string, any> }) => {
       const supabase = getSupabaseClient();
       const hashLock = simpleHash(`${input.metricName}-${input.metricValue}-${Date.now()}`);
       const payload = {
@@ -304,10 +384,10 @@ export const resolvers = {
         .select()
         .single();
       if (error) throw new Error(error.message);
-      return { id: data.id, ...payload, createdAt: data.created_at };
+      return { id: (data as ESGMetricRow).id, ...payload, createdAt: (data as ESGMetricRow).created_at };
     },
 
-    createTask: async (_: any, { input }: { input: any }) => {
+    createTask: async (_: unknown, { input }: { input: Record<string, any> }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const hashLock = simpleHash(`${input.title}-${Date.now()}`);
@@ -317,22 +397,23 @@ export const resolvers = {
         .select()
         .single();
       if (error) throw new Error(error.message);
+      const result = data as TaskRow;
       return {
-        id: data.id,
-        title: data.title,
-        description: data.description,
-        status: data.status,
-        priority: data.priority,
-        assignee: data.assignee,
-        department: data.department,
-        griReference: data.gri_reference,
-        dueDate: data.due_date,
-        hashLock: data.hash_lock,
-        createdAt: data.created_at,
+        id: result.id,
+        title: result.title,
+        description: result.description,
+        status: result.status,
+        priority: result.priority,
+        assignee: result.assignee,
+        department: result.department,
+        griReference: result.gri_reference,
+        dueDate: result.due_date,
+        hashLock: result.hash_lock,
+        createdAt: result.created_at,
       };
     },
 
-    updateTaskStatus: async (_: any, { id, status }: { id: string; status: string }) => {
+    updateTaskStatus: async (_: unknown, { id, status }: { id: string; status: string }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { data, error } = await supabase
@@ -342,32 +423,33 @@ export const resolvers = {
         .select()
         .single();
       if (error) throw new Error(error.message);
+      const result = data as TaskRow;
       return {
-        id: data.id,
-        title: data.title,
-        description: data.description,
-        status: data.status,
-        priority: data.priority,
-        assignee: data.assignee,
-        department: data.department,
-        griReference: data.gri_reference,
-        dueDate: data.due_date,
-        hashLock: data.hash_lock,
-        createdAt: data.created_at,
+        id: result.id,
+        title: result.title,
+        description: result.description,
+        status: result.status,
+        priority: result.priority,
+        assignee: result.assignee,
+        department: result.department,
+        griReference: result.gri_reference,
+        dueDate: result.due_date,
+        hashLock: result.hash_lock,
+        createdAt: result.created_at,
       };
     },
 
-    createAuditLog: async (_: any, { input }: { input: any }) => {
+    createAuditLog: async (_: unknown, { input }: { input: Record<string, any> }) => {
       const supabase = getSupabaseClient();
       const hashLock = simpleHash(`${input.action}-${input.userName}-${Date.now()}`);
       const payload = { ...input, hash_lock: hashLock, user_name: input.userName, gri_reference: input.griReference, t5_tag: input.t5Tag };
       if (!supabase) throw new Error('Database not available');
       const { data, error } = await supabase.from('audit_logs').insert(payload).select().single();
       if (error) throw new Error(error.message);
-      return { id: data.id, ...payload, createdAt: data.created_at };
+      return { id: (data as AuditLogRow).id, ...payload, createdAt: (data as AuditLogRow).created_at };
     },
 
-    createEvidence: async (_: any, { input }: { input: any }) => {
+    createEvidence: async (_: unknown, { input }: { input: Record<string, any> }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const hashLock = simpleHash(`${input.fileName}-${Date.now()}`);
@@ -386,21 +468,22 @@ export const resolvers = {
         .select()
         .single();
       if (error) throw new Error(error.message);
+      const result = data as EvidenceRow;
       return {
-        id: data.id,
-        fileName: data.file_name,
-        fileType: data.file_type,
-        category: data.category,
-        griReference: data.gri_reference,
-        uploader: data.uploader,
-        status: data.status,
-        zkpProof: data.zkp_proof,
-        hashLock: data.hash_lock,
-        createdAt: data.created_at,
+        id: result.id,
+        fileName: result.file_name,
+        fileType: result.file_type,
+        category: result.category,
+        griReference: result.gri_reference,
+        uploader: result.uploader,
+        status: result.status,
+        zkpProof: result.zkp_proof,
+        hashLock: result.hash_lock,
+        createdAt: result.created_at,
       };
     },
 
-    sealEvidence: async (_: any, { id, sealType }: { id: string; sealType: string }) => {
+    sealEvidence: async (_: unknown, { id, sealType }: { id: string; sealType: string }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { data: existing } = await supabase.from('evidence_vault').select('*').eq('id', id).single();
@@ -427,7 +510,7 @@ export const resolvers = {
       };
     },
 
-    verifyEvidence: async (_: any, { id, hashLock }: { id: string; hashLock: string }) => {
+    verifyEvidence: async (_: unknown, { id, hashLock }: { id: string; hashLock: string }) => {
       const supabase = getSupabaseClient();
       if (!supabase) {
         return { valid: false, message: 'Database not available', hashMatch: false, timestamp: new Date().toISOString() };
@@ -445,7 +528,7 @@ export const resolvers = {
       };
     },
 
-    upsertMilestone: async (_: any, { input }: { input: any }) => {
+    upsertMilestone: async (_: unknown, { input }: { input: unknown }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { data, error } = await supabase
@@ -485,7 +568,7 @@ export const resolvers = {
       };
     },
 
-    updateMilestoneStatus: async (_: any, { id, status }: { id: string; status: string }) => {
+    updateMilestoneStatus: async (_: unknown, { id, status }: { id: string; status: string }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { data, error } = await supabase.from('roadmap_milestones').update({ status }).eq('id', id).select().single();
@@ -506,7 +589,7 @@ export const resolvers = {
       };
     },
 
-    updateCompanyProfile: async (_: any, { input }: { input: any }) => {
+    updateCompanyProfile: async (_: unknown, { input }: { input: unknown }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const payload = {
@@ -543,7 +626,7 @@ export const resolvers = {
       };
     },
 
-    deleteTask: async (_: any, { id }: { id: string }) => {
+    deleteTask: async (_: unknown, { id }: { id: string }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { error } = await supabase.from('tasks').delete().eq('id', id);
@@ -551,7 +634,7 @@ export const resolvers = {
       return true;
     },
 
-    deleteESGMetric: async (_: any, { id }: { id: string }) => {
+    deleteESGMetric: async (_: unknown, { id }: { id: string }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { error } = await supabase.from('esg_data').delete().eq('id', id);

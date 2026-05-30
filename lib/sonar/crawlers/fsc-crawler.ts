@@ -8,7 +8,7 @@ export class FSCCrawler extends BaseCrawler {
   async crawl(config: { url: string }): Promise<CrawlResult> {
     return this.withRetry(async () => {
       const $ = await this.fetchStatic(config.url);
-      const items: any[] = [];
+      const items: unknown[] = [];
 
       // Simulated parsing logic for FSC Law website
       $('.news-list li').each((_, el) => {

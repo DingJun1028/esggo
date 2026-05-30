@@ -8,7 +8,7 @@ import { NotionAdapter } from '../adapters/notion.adapter';
 
 // Mock Notion 適配器節點
 class MockNotionAdapterNode implements IAdapterNode {
-  public platform: 'Notion' = 'Notion';
+  public platform = 'Notion' as const;
   public id: string;
   public cardUuid: string;
   public payload: NotionPagePayload;
@@ -51,7 +51,7 @@ class MockNotionAdapterNode implements IAdapterNode {
 
 // Mock AlTable 適配器節點
 class MockAlTableAdapterNode implements IAdapterNode {
-  public platform: 'AlTable' = 'AlTable';
+  public platform = 'AlTable' as const;
   public id: string;
   public cardUuid: string;
   public payload: AlTableRecordPayload;
@@ -92,7 +92,7 @@ class MockAlTableAdapterNode implements IAdapterNode {
 
 // 模擬一個會發生故障的異常適配器節點
 class FaultyAdapterNode implements IAdapterNode {
-  public platform: 'AlTable' = 'AlTable';
+  public platform = 'AlTable' as const;
   public id: string = 'faulty-record';
   public cardUuid: string;
   

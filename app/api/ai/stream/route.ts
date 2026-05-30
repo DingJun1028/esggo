@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         'Connection': 'keep-alive',
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[AI Stream API] Fatal Error:', err);
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }

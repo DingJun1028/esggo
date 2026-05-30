@@ -63,7 +63,7 @@ export default function BestPracticeHubPage() {
   const [searchQuery, setSearchSearchQuery] = useState('');
   const [selectedPractice, setSelectedPractice] = useState<any>(null);
   const [loadingAi, setLoadingAi] = useState(false);
-  const [aiRecommendations, setAiRecommendations] = useState<any[]>([]);
+  const [aiRecommendations, setAiRecommendations] = useState<unknown[]>([]);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'info' | 'error' } | null>(null);
 
   const showToast = useCallback((msg: string, type: 'success' | 'info' | 'error' = 'success') => {
@@ -91,7 +91,7 @@ export default function BestPracticeHubPage() {
     }
   };
 
-  const applyPractice = async (practice: any) => {
+  const applyPractice = async (practice: unknown) => {
     showToast(`正在套用：${practice.title}...`, 'info');
     try {
       // 1. Seal the decision with IntegrityService (Best Practice!)

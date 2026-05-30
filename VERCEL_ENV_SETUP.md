@@ -35,7 +35,7 @@
 | `NOTION_API_KEY` / `SPACE_ID` | Notion 整合 |
 | `FIRECRAW_API_KEY` | 網路爬蟲代理 |
 | `RESEND_API_KEY` | 電子郵件自動化 |
-| `AITABLE_API_KEY` | 知識聖殿數據基石 |
+| `OMNITABLE_API_KEY` | 知識聖殿數據基石 |
 | `STRAICO_API_KEY` | 代理協調與多模態 |
 | `BOOSTSPACE_TOKEN` | 全域同步與 MCP 集成 |
 

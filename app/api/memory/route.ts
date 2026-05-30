@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get('search');
   
   try {
-    let data: any[];
+    let data: unknown[];
     
     if (search) {
       data = await memoryStore.search(search);
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       count: data.length,
       data
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -31,7 +31,7 @@ export async function DELETE(req: NextRequest) {
   try {
     memoryStore.clear();
     return NextResponse.json({ success: true, message: 'Memory cleared' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
