@@ -18,7 +18,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
 }) => {
   const { themes } = ThemeContext;
-  const theme = themes[ThemeContext.current];
+  const theme = themes[ThemeContext.current as keyof typeof themes];
 
   const baseClasses = `
     px-4 py-2 rounded-md font-medium transition-colors duration-200

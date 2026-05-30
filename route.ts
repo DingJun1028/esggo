@@ -1,43 +1,54 @@
-import { NextRequest } from 'next/server';
-import { getFirestore } from 'firebase-admin/firestore';
+import { NextResponse } from 'next/server';
+import { applyDataMasking, unmaskL2Data, generatePedersenCommitment, verifyCommitmentSum } from '@/lib/crypto-proof';
+import { randomBytes } from 'crypto';
+import * as secp from '@noble/secp256k1';
 
-export const dynamic = 'force-dynamic';
-
-export async function GET(req: NextRequest) {
+export async function POST(request: Request) {
     try {
-        const companyId = req.nextUrl.searchParams.get('companyId');
+        const body = await request.json();
 
-        if (!companyId) {
-            return new Response(JSON.stringify({ error: 'Missing companyId parameter' }), { status: 400 });
+        if (body.action === 'mask') {
+            const { data, level, l2KeyHex } = body;
+            let masked = '';
+            let outKeyHex = l2KeyHex;
+
+            if (level === 'L2') {
+                // 若無金鑰則動態生成一組 32 bytes 供本次模擬使用
+                const key = l2KeyHex ? Buffer.from(l2KeyHex, 'hex') : randomBytes(32);
+                outKeyHex = key.toString('hex');
+                masked = applyDataMasking(data, level, { l2Key: key });
+            } else {
+                masked = applyDataMasking(data, level as any);
+            }
+            return NextResponse.json({ masked, l2KeyHex: outKeyHex });
         }
 
-        const db = getFirestore();
-        // 為了節省頻寬與記憶體，我們用 select() 只抓取需要的欄位，不抓龐大的 text 與 embedding
-        const snapshot = await db.collection('enterprise_knowledge')
-            .where('companyId', '==', companyId)
-            .select('title', 'createdAt')
-            .get();
+        if (body.action === 'unmask') {
+            const { masked, l2KeyHex } = body;
+            if (!l2KeyHex) return NextResponse.json({ error: 'Missing key' }, { status: 400 });
+            const key = Buffer.from(l2KeyHex, 'hex');
+            const unmasked = unmaskL2Data(masked, key);
+            return NextResponse.json({ unmasked });
+        }
 
-        // 將散落的 Chunk 重新聚合為單一「檔案」視圖
-        const fileMap = new Map<string, { title: string, chunks: number, createdAt: string }>();
+        if (body.action === 'pedersen') {
+            const { values } = body; // 接收數字陣列
+            const commitments = await Promise.all(values.map((v: number) => generatePedersenCommitment(v)));
 
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            // 我們的 title 儲存格式為 "檔名.pdf (Part X)"，透過 Regex 把後綴拿掉還原檔名
-            const baseTitle = data.title.replace(/ \(Part \d+\)$/, '');
-
-            if (fileMap.has(baseTitle)) {
-                fileMap.get(baseTitle)!.chunks += 1;
-            } else {
-                fileMap.set(baseTitle, { title: baseTitle, chunks: 1, createdAt: data.createdAt?.toDate().toISOString() || new Date().toISOString() });
+            // 計算總和承諾 (同態加總)
+            let sumPoint = secp.Point.fromHex(commitments[0].commitment);
+            for (let i = 1; i < commitments.length; i++) {
+                sumPoint = sumPoint.add(secp.Point.fromHex(commitments[i].commitment));
             }
-        });
+            const expectedTotal = sumPoint.toHex();
+            const isValid = verifyCommitmentSum(commitments.map(c => c.commitment), expectedTotal);
 
-        // 轉為陣列並依照上傳時間排序 (最新在上)
-        const files = Array.from(fileMap.values()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        return new Response(JSON.stringify({ success: true, files }), { status: 200 });
-    } catch (error) {
-        console.error('[Knowledge API] List error:', error);
-        return new Response(JSON.stringify({ error: '獲取知識庫列表失敗' }), { status: 500 });
+            return NextResponse.json({ commitments, expectedTotal, isValid });
+        }
+
+        return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    } catch (error: any) {
+        console.error('[Crypto Simulator API]', error);
+        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
     }
 }

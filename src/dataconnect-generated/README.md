@@ -27,6 +27,7 @@ This README will guide you through the process of using the generated JavaScript
   - [*ListRegulatoryPolicies*](#listregulatorypolicies)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
+  - [*UpsertAuditRecord*](#upsertauditrecord)
   - [*UpsertRoadmapMilestone*](#upsertroadmapmilestone)
   - [*UpsertCompanyProfile*](#upsertcompanyprofile)
   - [*UpsertReport*](#upsertreport)
@@ -1879,6 +1880,154 @@ console.log(data.task_upsert);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.task_upsert);
+});
+```
+
+## UpsertAuditRecord
+You can execute the `UpsertAuditRecord` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+upsertAuditRecord(vars: UpsertAuditRecordVariables): MutationPromise<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+
+interface UpsertAuditRecordRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpsertAuditRecordVariables): MutationRef<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+}
+export const upsertAuditRecordRef: UpsertAuditRecordRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+upsertAuditRecord(dc: DataConnect, vars: UpsertAuditRecordVariables): MutationPromise<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+
+interface UpsertAuditRecordRef {
+  ...
+  (dc: DataConnect, vars: UpsertAuditRecordVariables): MutationRef<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+}
+export const upsertAuditRecordRef: UpsertAuditRecordRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the upsertAuditRecordRef:
+```typescript
+const name = upsertAuditRecordRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpsertAuditRecord` mutation requires an argument of type `UpsertAuditRecordVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpsertAuditRecordVariables {
+  id?: UUIDString | null;
+  title: string;
+  dataType: string;
+  source: string;
+  standard?: string | null;
+  description?: string | null;
+  contentHash: string;
+  zkpStatus: string;
+  metadata?: string | null;
+  proofSignature?: string | null;
+  verifierKey?: string | null;
+  algorithm?: string | null;
+  salt?: string | null;
+  proofJson?: string | null;
+}
+```
+### Return Type
+Recall that executing the `UpsertAuditRecord` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpsertAuditRecordData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpsertAuditRecordData {
+  auditRecord_upsert: AuditRecord_Key;
+}
+```
+### Using `UpsertAuditRecord`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, upsertAuditRecord, UpsertAuditRecordVariables } from '@dataconnect/generated';
+
+// The `UpsertAuditRecord` mutation requires an argument of type `UpsertAuditRecordVariables`:
+const upsertAuditRecordVars: UpsertAuditRecordVariables = {
+  id: ..., // optional
+  title: ..., 
+  dataType: ..., 
+  source: ..., 
+  standard: ..., // optional
+  description: ..., // optional
+  contentHash: ..., 
+  zkpStatus: ..., 
+  metadata: ..., // optional
+  proofSignature: ..., // optional
+  verifierKey: ..., // optional
+  algorithm: ..., // optional
+  salt: ..., // optional
+  proofJson: ..., // optional
+};
+
+// Call the `upsertAuditRecord()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await upsertAuditRecord(upsertAuditRecordVars);
+// Variables can be defined inline as well.
+const { data } = await upsertAuditRecord({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await upsertAuditRecord(dataConnect, upsertAuditRecordVars);
+
+console.log(data.auditRecord_upsert);
+
+// Or, you can use the `Promise` API.
+upsertAuditRecord(upsertAuditRecordVars).then((response) => {
+  const data = response.data;
+  console.log(data.auditRecord_upsert);
+});
+```
+
+### Using `UpsertAuditRecord`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, upsertAuditRecordRef, UpsertAuditRecordVariables } from '@dataconnect/generated';
+
+// The `UpsertAuditRecord` mutation requires an argument of type `UpsertAuditRecordVariables`:
+const upsertAuditRecordVars: UpsertAuditRecordVariables = {
+  id: ..., // optional
+  title: ..., 
+  dataType: ..., 
+  source: ..., 
+  standard: ..., // optional
+  description: ..., // optional
+  contentHash: ..., 
+  zkpStatus: ..., 
+  metadata: ..., // optional
+  proofSignature: ..., // optional
+  verifierKey: ..., // optional
+  algorithm: ..., // optional
+  salt: ..., // optional
+  proofJson: ..., // optional
+};
+
+// Call the `upsertAuditRecordRef()` function to get a reference to the mutation.
+const ref = upsertAuditRecordRef(upsertAuditRecordVars);
+// Variables can be defined inline as well.
+const ref = upsertAuditRecordRef({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = upsertAuditRecordRef(dataConnect, upsertAuditRecordVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.auditRecord_upsert);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.auditRecord_upsert);
 });
 ```
 

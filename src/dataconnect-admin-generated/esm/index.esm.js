@@ -30,6 +30,12 @@ export function listAuditRecords(dcOrOptions, options) {
   return dcInstance.executeQuery('ListAuditRecords', undefined, inputOpts);
 }
 
+export function upsertAuditRecord(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('UpsertAuditRecord', inputVars, inputOpts);
+}
+
 export function listScrapedArticles(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);

@@ -1,24 +1,23 @@
-import { z } from 'genkit';
-import { ai } from '../agents/genkit';
-import { memoryStore } from '../memory/memory-store';
+import { ai } from '../agents/genkit.ts';
+import { memoryStore } from '../memory/memory-store.ts';
 
 export interface NegotiationRound {
-  round: number;
-  proposals: { agent: string; proposal: any }[];
-  consensus?: any;
-  timestamp: string;
-}
+   round: number;
+   proposals: { agent: string; proposal: unknown }[];
+   consensus?: unknown;
+   timestamp: string;
+ }
 
 export class NegotiationEngine {
-  async negotiate(
-    task: string,
-    agentResults: { agent: string; result: any; success: boolean }[],
-    maxRounds = 3
-  ): Promise<{
-    consensus: any;
-    rounds: NegotiationRound[];
-    finalDecision: string;
-  }> {
+   async negotiate(
+     task: string,
+     agentResults: { agent: string; result: unknown; success: boolean }[],
+     maxRounds = 3
+   ): Promise<{
+     consensus: unknown;
+     rounds: NegotiationRound[];
+     finalDecision: string;
+   }> {
     const rounds: NegotiationRound[] = [];
     let consensus = null;
 
@@ -56,8 +55,8 @@ export class NegotiationEngine {
       rounds.push(roundData);
     }
 
-    const finalDecision = consensus !== null 
-      ? 'CONSENSUS_REACHED' 
+    const finalDecision = consensus !== null
+      ? 'CONSENSUS_REACHED'
       : 'NO_CONSENSUS';
 
     // Record negotiation in memory
@@ -73,65 +72,65 @@ export class NegotiationEngine {
     return { consensus, rounds, finalDecision };
   }
 
-  private calculateProposalScores(
-    results: { agent: string; result: any; success: boolean }[]
-  ): Map<any, number> {
-    const scores = new Map<any, number>();
-    
-    results.forEach(r => {
-      if (r.success) {
-        const key = JSON.stringify(r.result);
-        scores.set(key, (scores.get(key) || 0) + 1);
-      }
-    });
+   private calculateProposalScores(
+     results: { agent: string; result: unknown; success: boolean }[]
+   ): Map<string, number> {
+     const scores = new Map<string, number>();
+     
+     results.forEach(r => {
+       if (r.success) {
+         const key = JSON.stringify(r.result);
+         scores.set(key, (scores.get(key) || 0) + 1);
+       }
+     });
 
-    return scores;
-  }
+     return scores;
+   }
 
-  private getWinningProposal(scores: Map<any, number>) {
-    let bestKey: string | null = null;
-    let bestScore = 0;
+   private getWinningProposal(scores: Map<string, number>) {
+     let bestKey: string | null = null;
+     let bestScore = 0;
 
-    scores.forEach((score, key) => {
-      if (score > bestScore) {
-        bestScore = score;
-        bestKey = key;
-      }
-    });
+     scores.forEach((score, key) => {
+       if (score > bestScore) {
+         bestScore = score;
+         bestKey = key;
+       }
+     });
 
-    const total = scores.size || 1;
-    const confidence = bestScore / total;
-    const value = bestKey ? JSON.parse(bestKey) : null;
+     const total = scores.size || 1;
+     const confidence = bestScore / total;
+     const value = bestKey ? JSON.parse(bestKey) : null;
 
-    return { value, confidence };
-  }
+     return { value, confidence };
+   }
 
-  private async refineProposals(
-    task: string,
-    proposals: { agent: string; proposal: any }[],
-    round: number
-  ): Promise<any[]> {
-    const prompt = `
-Task: ${task}
-Round: ${round}
-Proposals:
-${proposals.map((p, i) => `Agent ${p.agent}: ${JSON.stringify(p.proposal)}`).join('\n')}
+   private async refineProposals(
+     task: string,
+     proposals: { agent: string; proposal: unknown }[],
+     round: number
+   ): Promise<unknown[]> {
+     const prompt = `
+ Task: ${task}
+ Round: ${round}
+ Proposals:
+  ${proposals.map((p) => `Agent ${p.agent}: ${JSON.stringify(p.proposal)}`).join('\n')}
 
-Please refine your proposal based on the above. Return only the refined proposal as JSON.
-`;
+ Please refine your proposal based on the above. Return only the refined proposal as JSON.
+ `;
 
-    const response = await ai.generate({
-      model: 'googleai/gemini-2.0-flash',
-      prompt,
-      config: { temperature: 0.3 }
-    });
+     const response = await ai.generate({
+       model: 'googleai/gemini-2.0-flash',
+       prompt,
+       config: { temperature: 0.3 }
+     });
 
-    try {
-      return [JSON.parse(response.text || '{}')];
-    } catch {
-      return proposals.map(p => p.proposal);
-    }
-  }
+     try {
+       return [JSON.parse(response.text || '{}')];
+     } catch {
+       return proposals.map(p => p.proposal);
+     }
+   }
 }
 
 export const negotiationEngine = new NegotiationEngine();

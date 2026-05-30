@@ -25,7 +25,7 @@ export default function MemoryDashboard() {
       setMemories(data.data || []);
       setLoading(false);
       setError(null);
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       setError(error.message);
     }

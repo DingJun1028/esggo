@@ -6,15 +6,16 @@
  */
 
 import { omniagentAdapter } from './omniagent-adapter';
+import type { TranscriptEntry, InferenceProvider, OmniAgentSkill } from './omniagent-adapter';
 
 export interface AdapterManifest {
-  adapterId: string;
-  name: string;
-  version: string;
-  capabilities: string[];
-  execute: Function;
-  detectModel: Function;
-  listSkills: Function;
+   adapterId: string;
+   name: string;
+   version: string;
+   capabilities: string[];
+   execute: (sessionId: string, prompt: string, context?: unknown) => Promise<TranscriptEntry[]>;
+   detectModel: () => Promise<{ model: string; provider: InferenceProvider }>;
+   listSkills: () => Promise<OmniAgentSkill[]>;
 }
 
 export class AdapterRegistry {

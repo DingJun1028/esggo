@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     };
 
     // 5. Build the Audit Trail with soulful descriptions (繁博)
-    const auditTrail = logs.slice(0, 10).map(l => ({
+    const auditTrail = logs.slice(0, 10).map((l: any) => ({
       stage: 'EXTRACTION' as MatrixLifecycleStage,
       gate: 'Traceable' as T5Status,
       action: l.action,

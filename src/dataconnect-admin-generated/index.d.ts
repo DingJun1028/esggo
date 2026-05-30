@@ -356,6 +356,27 @@ export interface Task_Key {
   __typename?: 'Task_Key';
 }
 
+export interface UpsertAuditRecordData {
+  auditRecord_upsert: AuditRecord_Key;
+}
+
+export interface UpsertAuditRecordVariables {
+  id?: UUIDString | null;
+  title: string;
+  dataType: string;
+  source: string;
+  standard?: string | null;
+  description?: string | null;
+  contentHash: string;
+  zkpStatus: string;
+  metadata?: string | null;
+  proofSignature?: string | null;
+  verifierKey?: string | null;
+  algorithm?: string | null;
+  salt?: string | null;
+  proofJson?: string | null;
+}
+
 export interface UpsertCompanyMetricData {
   companyMetric_upsert: CompanyMetric_Key;
 }
@@ -522,6 +543,11 @@ export function upsertTask(vars: UpsertTaskVariables, options?: OperationOptions
 export function listAuditRecords(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListAuditRecordsData>>;
 /** Generated Node Admin SDK operation action function for the 'ListAuditRecords' Query. Allow users to pass in custom DataConnect instances. */
 export function listAuditRecords(options?: OperationOptions): Promise<ExecuteOperationResponse<ListAuditRecordsData>>;
+
+/** Generated Node Admin SDK operation action function for the 'UpsertAuditRecord' Mutation. Allow users to execute without passing in DataConnect. */
+export function upsertAuditRecord(dc: DataConnect, vars: UpsertAuditRecordVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertAuditRecordData>>;
+/** Generated Node Admin SDK operation action function for the 'UpsertAuditRecord' Mutation. Allow users to pass in custom DataConnect instances. */
+export function upsertAuditRecord(vars: UpsertAuditRecordVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertAuditRecordData>>;
 
 /** Generated Node Admin SDK operation action function for the 'ListScrapedArticles' Query. Allow users to execute without passing in DataConnect. */
 export function listScrapedArticles(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListScrapedArticlesData>>;

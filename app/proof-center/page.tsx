@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { omniCore } from '../../lib/omni-core';
@@ -24,8 +24,11 @@ export default function ProofCenterPage() {
 
   const generateProof = async () => {
     setIsGenerating(true);
-    // Fixed blinding factor for the demo to show the user
-    const factor = 'demo-blinding-factor-' + Math.random().toString(36).substring(7);
+    // For a production system, this blinding factor is generated and stored in a secure client-side 
+    // enclave (e.g., a hardware wallet or secure element) and NEVER transmitted to the server.
+    const array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    const factor = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
     setBlindingFactor(factor);
     
     // Simulate generation time
@@ -109,9 +112,9 @@ export default function ProofCenterPage() {
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 border-2 border-dashed border-verified/30 rounded-lg bg-verified/5"
+                className="p-4 border-2 border-dashed border-verified/30 rounded-lg bg-verified/5 space-y-4"
               >
-                <div className="flex items-center gap-2 text-verified mb-3">
+                <div className="flex items-center gap-2 text-verified">
                   <CheckCircle size={18} />
                   <span className="font-bold text-sm">證明已生成！</span>
                 </div>
@@ -123,8 +126,35 @@ export default function ProofCenterPage() {
                     </div>
                   </div>
                   <p className="text-[10px] text-slate-400 italic mt-2">
-                    * 在現實場景中，您只需將此「盲化因子」提供給授權的審核員。
+                    * 實務場景中，您的「盲化因子」將安全存放於您的硬體錢包或加密飛地 (Secure Enclave)，無需手動傳輸。
                   </p>
+                </div>
+                
+                <div className="pt-2">
+                  <Button 
+                    variant="ghost"
+                    className="w-full h-10 text-sm font-semibold shadow-sm border-verified/50 text-verified hover:bg-verified/10"
+                    onClick={async () => {
+                      try {
+                        const res = await fetch('/api/zkp/store', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ proof, metricName: sensitiveData.metric })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                          alert('✅ ZKP 證明已成功保存至 Audit Trail，確保 5T 不可篡改性。即將跳轉至審計日誌。');
+                          window.location.href = '/audit-log';
+                        } else {
+                          alert('❌ 保存失敗：' + data.error);
+                        }
+                      } catch (e: any) {
+                        alert('❌ 保存失敗：' + e.message);
+                      }
+                    }}
+                  >
+                    存入不可篡改稽核軌跡 (Save to Audit Trail)
+                  </Button>
                 </div>
               </motion.div>
             )}

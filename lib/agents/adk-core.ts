@@ -1,8 +1,8 @@
-import { z } from 'genkit';
-import { ai } from './genkit';
-import { telemetryService, TelemetryEvent } from '../telemetry/service';
-import { memoryStore, MemoryRecord } from '../memory/memory-store';
-import { toolSynthesizer } from '../tools/synthesis';
+import { ai } from './genkit.ts';
+import { telemetryService } from '../telemetry/service.ts';
+import { memoryStore } from '../memory/memory-store.ts';
+import { toolSynthesizer } from '../tools/synthesis.ts';
+import type { MemoryRecord } from '../memory/memory-store.ts';
 
 /**
  * ADK Core: Agent Abstraction Layer
@@ -10,12 +10,13 @@ import { toolSynthesizer } from '../tools/synthesis';
  */
 
 export interface AgentConfig {
-  name: string;
-  role: string;
-  systemPrompt?: string;
-  tools?: any[];
-  model?: any;
-}
+   name: string;
+   role: string;
+   systemPrompt?: string;
+   tools?: any[];
+   model?: string | undefined;
+ }
+
 
 export class ADKAgent {
   readonly config: AgentConfig;
@@ -25,7 +26,7 @@ export class ADKAgent {
     this.config = config;
   }
 
-  async run(task: string, context?: any, retries = 3) {
+    async run(task: string, context?: unknown, retries = 3): Promise<any> {
     console.log(`[ADK Agent - ${this.config.name}] Executing task: ${task} (attempts: ${retries})`);
 
     const startTime = Date.now();
@@ -37,9 +38,9 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
 
     // Check if existing tools are sufficient
     const existingTools = this.config.tools || [];
-    const hasMatchingTool = existingTools.some((t: any) => 
-      t.name && task.toLowerCase().includes(t.name.toLowerCase())
-    );
+     const hasMatchingTool = existingTools.some((t: unknown) =>
+       (t as { name: string })?.name && task.toLowerCase().includes((t as { name: string })?.name.toLowerCase())
+     );
 
     // If no matching tool, try dynamic synthesis
     if (!hasMatchingTool) {
@@ -63,15 +64,15 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
       }
     }
 
-    const executeWithRetry = async (attempt: number): Promise<any> => {
-      try {
-        const response = await ai.generate({
-          model: this.config.model || 'googleai/gemini-2.0-flash',
-          system: finalSystemPrompt,
-          prompt: `Task: ${task}\nContext: ${JSON.stringify(context || {})}`,
-          tools: this.config.tools,
-          config: { temperature: 0.2 }
-        });
+     const executeWithRetry = async (attempt: number): Promise<any> => {
+       try {
+         const response = await ai.generate({
+           model: this.config.model || 'googleai/gemini-2.0-flash',
+           system: finalSystemPrompt,
+           prompt: `Task: ${task}\nContext: ${JSON.stringify(context || {})}`,
+           tools: this.config.tools,
+           config: { temperature: 0.2 }
+         });
 
         const result = response.text || 'No response generated.';
         const endTime = Date.now();
@@ -87,7 +88,7 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
           tags: [`${this.config.role}`, `task:${task.slice(0, 20)}`]
         };
         this._memoryStore.add(memoryRecord);
-        
+
         telemetryService.recordEvent({
           agent: this.config.name,
           task,
@@ -104,72 +105,72 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
           agent: this.config.name,
           output: result
         };
-      } catch (error: any) {
-        const endTime = Date.now();
-        const duration = endTime - startTime;
-        
-        // Record to memory and telemetry
-        const memoryRecord: Omit<MemoryRecord, 'id' | 'timestamp'> = {
-          agentName: this.config.name,
-          task,
-          context,
-          result: error.message,
-          success: false,
-          tags: [`${this.config.role}`, `task:${task.slice(0, 20)}`, `error:${error.message.slice(0, 20)}`]
-        };
-        this._memoryStore.add(memoryRecord);
-        
-        telemetryService.recordEvent({
-          agent: this.config.name,
-          task,
-          timestamp: new Date().toISOString(),
-          duration,
-          success: false,
-          context,
-          error: error.message,
-          simulated: error.message.includes('403') || error.message.includes('API key')
-        });
-        
-        console.error(`[ADK Agent - ${this.config.name}] Attempt ${attempt}: Error:`, error);
-        
-        // MOCK FALLBACK for leaked API key or dev mode
-        if (error.message.includes('403') || error.message.includes('API key')) {
-          console.warn(`[ADK Agent - ${this.config.name}] ⚠️ API Key Error. Entering Resilient Simulation Mode...`);
-          const mockOutput = `[SIMULATED RESPONSE for ${this.config.name}]\nThis is a high-fidelity mock response because the cloud intelligence layer is currently under 5T maintenance (API Key Issue). The mission continues with local heuristics.`;
-          
-          const memoryRecord: Omit<MemoryRecord, 'id' | 'timestamp'> = {
-            agentName: this.config.name,
-            task,
-            context,
-            result: mockOutput,
-            success: true,
-            tags: [`${this.config.role}`, `task:${task.slice(0, 20)}`, `simulated`]
-          };
-          this._memoryStore.add(memoryRecord);
-          
-          return {
-            success: true,
-            agent: this.config.name,
-            output: mockOutput,
-            simulated: true
-          };
-        }
-        
-        // Retry logic
-        if (attempt < retries) {
-          console.log(`[ADK Agent - ${this.config.name}] Retrying... (${attempt + 1}/${retries})`);
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
-          return executeWithRetry(attempt + 1);
-        }
-        
-        return {
-          success: false,
-          agent: this.config.name,
-          error: error.message
-        };
-      }
+       } catch (error: unknown) {
+         const endTime = Date.now();
+         const duration = endTime - startTime;
+
+         // Record to memory and telemetry
+         const memoryRecord: Omit<MemoryRecord, 'id' | 'timestamp'> = {
+           agentName: this.config.name,
+           task,
+           context,
+           result: error instanceof Error ? error.message : 'Unknown error',
+           success: false,
+           tags: [`${this.config.role}`, `task:${task.slice(0, 20)}`, `error:${(error instanceof Error ? error.message : 'Unknown error').slice(0, 20)}`]
+         };
+         this._memoryStore.add(memoryRecord);
+
+         telemetryService.recordEvent({
+           agent: this.config.name,
+           task,
+           timestamp: new Date().toISOString(),
+           duration,
+           success: false,
+           context,
+           error: error instanceof Error ? error.message : 'Unknown error',
+           simulated: (error instanceof Error && error.message.includes('403')) || (error instanceof Error && error.message.includes('API key'))       
+         });
+
+         console.error(`[ADK Agent - ${this.config.name}] Attempt ${attempt}: Error:`, error);
+
+         // MOCK FALLBACK for leaked API key or dev mode
+         if (error instanceof Error && (error.message.includes('403') || error.message.includes('API key'))) {
+           console.warn(`[ADK Agent - ${this.config.name}] ⚠️ API Key Error. Entering Resilient Simulation Mode...`);
+           const mockOutput = `[SIMULATED RESPONSE for ${this.config.name}]\nThis is a high-fidelity mock response because the cloud intelligence layer is currently under 5T maintenance (API Key Issue). The mission continues with local heuristics.`;
+
+           const memoryRecord: Omit<MemoryRecord, 'id' | 'timestamp'> = {
+             agentName: this.config.name,
+             task,
+             context,
+             result: mockOutput,
+             success: true,
+             tags: [`${this.config.role}`, `task:${task.slice(0, 20)}`, `simulated`]
+           };
+           this._memoryStore.add(memoryRecord);
+
+           return {
+             success: true,
+             agent: this.config.name,
+             output: mockOutput,
+             simulated: true
+           };
+         }
+
+         // Retry logic
+         if (attempt < retries) {
+           console.log(`[ADK Agent - ${this.config.name}] Retrying... (${attempt + 1}/${retries})`);
+           await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+           return executeWithRetry(attempt + 1);
+         }
+
+         return {
+           success: false,
+           agent: this.config.name,
+           error: error instanceof Error ? error.message : 'Unknown error'
+         };
+       }
     };
-    
+
     return executeWithRetry(1);
   }
 
@@ -183,17 +184,17 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
  */
 export class ADKSwarm {
   private agents: Map<string, ADKAgent> = new Map();
-  
+
   register(agent: ADKAgent) {
     this.agents.set(agent.config.name, agent);
     return this;
   }
-  
+
   getAgent(name: string) {
     return this.agents.get(name);
   }
-  
-  async broadcast(task: string, context?: any) {
+
+   async broadcast(task: string, context?: unknown) {
     const results = await Promise.all(
       Array.from(this.agents.values()).map(agent => agent.run(task, context))
     );

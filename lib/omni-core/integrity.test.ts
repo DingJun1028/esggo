@@ -31,7 +31,7 @@ describe('OmniCoreIntegrity Module - 5T State Machine Validation', () => {
     // 4. Trackable (可追蹤)
     expect(crystal.timestamp).toBeGreaterThan(0);
     expect(crystal.evidence[0].processTrace).toContain('initial_entry');
-    expect(crystal.evidence[0].processTrace.some((h: string) => h.startsWith('purified_at_'))).toBe(true);
+    expect(crystal.evidence[0].processTrace.some((h: string) => h.startsWith('purified_and_normalized_'))).toBe(true);
 
     // 5. Trustworthy (不可篡改)
     expect(crystal.status).toBe('Trustworthy');

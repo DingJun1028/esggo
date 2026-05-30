@@ -51,7 +51,7 @@ export type GRIContentInput = z.infer<typeof GRIContentInputSchema>;
 export type GRIContentOutput = z.infer<typeof GRIContentOutputSchema>;
 
 // ── Direct Gemini REST API caller ──────────────────────────────────────────
-async function callGemini(prompt: string, systemPrompt?: string): Promise<string> {
+export async function callGemini(prompt: string, systemPrompt?: string): Promise<string> {
   const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
   if (!apiKey || apiKey === 'your_gemini_api_key_here') return "";
 

@@ -18,18 +18,19 @@ export class IntegrityModule implements IRestorationProtocol {
   public extractQuantumEssence(data: RestorationInput): Partial<IEvidence> {
     console.log(`[第一式：本質提純] 正在從數據源中提取 5T 維度...`);
     const originCause = String(data.originCause || data.trigger || data.source || 'Manual Execution');
+    const inputHooks = Array.isArray(data.hooks || data.lifecycle_hooks) ? (data.hooks || data.lifecycle_hooks) as string[] : [];
     
     return {
       originCause,
-      processTrace: [`extracted_at_${Date.now()}`],
+      processTrace: [...inputHooks, `extracted_at_${Date.now()}`],
       finalEffect: 'PENDING',
       tangible_metric: String(data.metric || data.impact_metric || 'Unknown'),
       source_origin: String(data.source || data.source_origin || '/unknown'),
       formula_ref: String(data.formula || data.formula_ref || 'Direct measurement'),
-      lifecycle_hooks: Array.isArray(data.hooks || data.lifecycle_hooks) ? (data.hooks || data.lifecycle_hooks) as string[] : [],
+      lifecycle_hooks: inputHooks,
       causality: {
         originCause,
-        processTrace: [`extracted_at_${Date.now()}`],
+        processTrace: [...inputHooks, `extracted_at_${Date.now()}`],
         finalEffect: 'PENDING'
       }
     };

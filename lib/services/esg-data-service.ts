@@ -1,17 +1,18 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { AgentTask, AgentStep, ContractInput, ESGProposal } from '../agent/esg-schemas';
 
+export interface TaskInput {
+  prompt: string;
+  targetFramework?: string;
+  sessionId?: string;
+}
+
 export class ESGDataService {
-  private supabase: SupabaseClient;
-  private aitableClient: any; // AITable client will be injected
+   private supabase!: SupabaseClient;
+   private aitableClient!: any; // AITable client will be injected
 
-  constructor(supabaseUrl: string, supabaseKey: string, aitableClient: any) {
-    this.supabase = createClient(supabaseUrl, supabaseKey);
-    this.aitableClient = aitableClient;
-  }
-
-  // Contract Operations
-  async createContract(input: ContractInput): Promise<any> {
+   // Contract Operations
+   async createContract(input: ContractInput): Promise<ContractInput & { id: string; created_at: string }> {
     const contract = {
       id: this.generateUUID(),
       ...input,
@@ -33,14 +34,14 @@ export class ESGDataService {
     return data;
   }
 
-  async getContracts(): Promise<any[]> {
+   async getContracts(): Promise<(ContractInput & { id: string; created_at: string })[]> {
     const { data, error } = await this.supabase.from('contracts').select('*');
     if (error) throw error;
     return data ?? [];
   }
 
-  // Agent Task Operations
-  async createAgentTask(input: any): Promise<AgentTask> {
+   // Agent Task Operations
+   async createAgentTask(input: TaskInput): Promise<AgentTask> {
     const task: AgentTask = {
       id: this.generateUUID(),
       prompt: input.prompt,
@@ -113,33 +114,33 @@ export class ESGDataService {
     }]);
   }
 
-  // Evidence Operations
-  async createEvidenceRecord(input: any): Promise<any> {
-    const evidence = {
-      id: this.generateUUID(),
-      ...input,
-      created_at: new Date().toISOString(),
-    };
+   // Evidence Operations
+   async createEvidenceRecord(input: Record<string, unknown>): Promise<Record<string, unknown>> {
+     const evidence = {
+       id: this.generateUUID(),
+       ...input,
+       created_at: new Date().toISOString(),
+     };
 
-    const { data, error } = await this.supabase
-      .from('evidence_records')
-      .insert([evidence])
-      .select()
-      .single();
+     const { data, error } = await this.supabase
+       .from('evidence_records')
+       .insert([evidence])
+       .select()
+       .single();
 
-    if (error) throw error;
+     if (error) throw error;
 
-    // Sync to AITable
-    await this.aitableClient.createRecords('esg_evidence', [evidence]);
+     // Sync to AITable
+     await this.aitableClient.createRecords('esg_evidence', [evidence]);
 
-    return data;
-  }
+     return data;
+   }
 
-  async getEvidenceRecords(): Promise<any[]> {
-    const { data, error } = await this.supabase.from('evidence_records').select('*');
-    if (error) throw error;
-    return data ?? [];
-  }
+   async getEvidenceRecords(): Promise<Record<string, unknown>[]> {
+     const { data, error } = await this.supabase.from('evidence_records').select('*');
+     if (error) throw error;
+     return data ?? [];
+   }
 
   // Helper Methods
   private generateUUID(): string {
@@ -148,26 +149,26 @@ export class ESGDataService {
     );
   }
 
-  // Get latest agent tasks with AITable integration
-  async getLatestAgentTasks(limit: number = 10): Promise<any[]> {
-    const { data, error } = await this.supabase
-      .from('agent_tasks')
-      .select('*')
-      .order('createdAt', { ascending: false })
-      .limit(limit);
+   // Get latest agent tasks with AITable integration
+   async getLatestAgentTasks(limit: number = 10): Promise<AgentTask[]> {
+     const { data, error } = await this.supabase
+       .from('agent_tasks')
+       .select('*')
+       .order('createdAt', { ascending: false })
+       .limit(limit);
 
-    if (error) throw error;
-    return data ?? [];
-  }
+     if (error) throw error;
+     return data ?? [];
+   }
 
-  // Search by compliance framework
-  async searchByCompliance(framework: string): Promise<any[]> {
-    const { data, error } = await this.supabase
-      .from('agent_tasks')
-      .select('*')
-      .ilike('targetFramework', `%${framework}%`);
+   // Search by compliance framework
+   async searchByCompliance(framework: string): Promise<AgentTask[]> {
+     const { data, error } = await this.supabase
+       .from('agent_tasks')
+       .select('*')
+       .ilike('targetFramework', `%${framework}%`);
 
-    if (error) throw error;
-    return data ?? [];
-  }
+     if (error) throw error;
+     return data ?? [];
+   }
 }

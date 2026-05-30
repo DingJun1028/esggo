@@ -10,11 +10,11 @@ export async function GET(req: NextRequest) {
     let data: any[];
     
     if (search) {
-      data = memoryStore.search(search);
+      data = await memoryStore.search(search);
     } else if (agent) {
-      data = memoryStore.getByAgent(agent);
+      data = await memoryStore.getByAgent(agent);
     } else {
-      data = memoryStore.getAll();
+      data = await memoryStore.getAll();
     }
     
     return NextResponse.json({

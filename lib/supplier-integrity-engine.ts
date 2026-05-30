@@ -4,7 +4,14 @@
  * Aligned with Chicony AI Audit & RBA v8.0 Requirements.
  */
 
-import { T5Attestation, sha256 } from './crypto-proof';
+import { sha256 } from './crypto-proof';
+
+export interface SupplierT5Attestation {
+  masterSeal: string;
+  t1_traceable: { hash: string };
+  t4_trustworthy: { hash: string };
+  t5_trackable: { chainBlock: { hash: string } };
+}
 
 export type RBAClause = 'LABOR' | 'HEALTH_SAFETY' | 'ENVIRONMENT' | 'ETHICS' | 'MANAGEMENT';
 
@@ -46,7 +53,7 @@ export class SupplierIntegrityEngine {
    */
   async verifySupplierAttestation(
     supplierId: string, 
-    attestation: T5Attestation,
+    attestation: SupplierT5Attestation,
     mockAIResult?: Partial<AIAuditMetadata>
   ): Promise<SupplierVerificationResult> {
     // 1. Cryptographic Hash Lock Verification

@@ -1,4 +1,5 @@
 import { OmniLoggerService } from './lib/logger/OmniLoggerService';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('OmniLoggerService', () => {
     let logger: OmniLoggerService;
@@ -7,14 +8,14 @@ describe('OmniLoggerService', () => {
 
     beforeEach(() => {
         // 1. 攔截 console，避免測試過程中在終端機印出一大堆日誌
-        jest.spyOn(console, 'debug').mockImplementation(() => { });
-        jest.spyOn(console, 'info').mockImplementation(() => { });
-        jest.spyOn(console, 'warn').mockImplementation(() => { });
-        jest.spyOn(console, 'error').mockImplementation(() => { });
+        vi.spyOn(console, 'debug').mockImplementation(() => { });
+        vi.spyOn(console, 'info').mockImplementation(() => { });
+        vi.spyOn(console, 'warn').mockImplementation(() => { });
+        vi.spyOn(console, 'error').mockImplementation(() => { });
 
         // 2. 攔截 fetch，模擬遠端 API 呼叫
         originalFetch = global.fetch;
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        global.fetch = vi.fn().mockResolvedValue({ ok: true }) as any;
 
         // 3. 備份環境變數
         originalEnv = process.env.NODE_ENV;
@@ -23,7 +24,7 @@ describe('OmniLoggerService', () => {
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         global.fetch = originalFetch;
         (process.env as any).NODE_ENV = originalEnv;
     });
@@ -82,7 +83,7 @@ describe('OmniLoggerService', () => {
         expect(console.debug).toHaveBeenCalledTimes(1);
         expect(global.fetch).not.toHaveBeenCalled();
 
-        jest.clearAllMocks();
+        vi.clearAllMocks();
 
         // 切換到正式環境
         (process.env as any).NODE_ENV = 'production';

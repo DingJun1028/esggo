@@ -879,4 +879,27 @@ agent.command('learn')
     console.log(pc.magenta('🧠 RAG Knowledge Base Updated. New patterns indexed.'));
   });
 
+// ── Bridge Commands (AITable & BlueCC) ──────────────────────────────────────
+const bridge = program.command('bridge').description('Deep Integration Bridge Management');
+
+bridge.command('sync <datasheetId>')
+  .description('Synchronize AITable metrics with BlueCC Cloud Control Plane')
+  .action(async (datasheetId) => {
+    console.log(pc.cyan(`[~] Initiating Deep Sync for Datasheet: ${datasheetId}...`));
+    
+    try {
+      const { aiTableBlueBridge } = await import('../lib/services/aitable-blue-bridge.ts');
+      const result = await aiTableBlueBridge.syncMetricsToCloud(datasheetId);
+
+      if (result.success) {
+        console.log(pc.green(`[v] Synchronization Successful. Processed ${result.processed} records.`));
+        console.log(pc.magenta('✨ BlueCC Agent Swarm updated via AITable triggers.'));
+      } else {
+        console.log(pc.red(`[x] Synchronization Failed: ${result.error}`));
+      }
+    } catch (err) {
+      console.log(pc.red(`[x] Bridge Error: ${err.message}`));
+    }
+  });
+
 program.parse();

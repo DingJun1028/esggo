@@ -359,6 +359,27 @@ export interface Task_Key {
   __typename?: 'Task_Key';
 }
 
+export interface UpsertAuditRecordData {
+  auditRecord_upsert: AuditRecord_Key;
+}
+
+export interface UpsertAuditRecordVariables {
+  id?: UUIDString | null;
+  title: string;
+  dataType: string;
+  source: string;
+  standard?: string | null;
+  description?: string | null;
+  contentHash: string;
+  zkpStatus: string;
+  metadata?: string | null;
+  proofSignature?: string | null;
+  verifierKey?: string | null;
+  algorithm?: string | null;
+  salt?: string | null;
+  proofJson?: string | null;
+}
+
 export interface UpsertCompanyMetricData {
   companyMetric_upsert: CompanyMetric_Key;
 }
@@ -553,6 +574,18 @@ export const listAuditRecordsRef: ListAuditRecordsRef;
 
 export function listAuditRecords(options?: ExecuteQueryOptions): QueryPromise<ListAuditRecordsData, undefined>;
 export function listAuditRecords(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListAuditRecordsData, undefined>;
+
+interface UpsertAuditRecordRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpsertAuditRecordVariables): MutationRef<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpsertAuditRecordVariables): MutationRef<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+  operationName: string;
+}
+export const upsertAuditRecordRef: UpsertAuditRecordRef;
+
+export function upsertAuditRecord(vars: UpsertAuditRecordVariables): MutationPromise<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+export function upsertAuditRecord(dc: DataConnect, vars: UpsertAuditRecordVariables): MutationPromise<UpsertAuditRecordData, UpsertAuditRecordVariables>;
 
 interface ListScrapedArticlesRef {
   /* Allow users to create refs without passing in DataConnect */

@@ -1,13 +1,14 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Bot, Network, Globe, Activity, Database, CheckCircle, RefreshCcw } from 'lucide-react';
 import { BrandBadge, BrandButton, BrandCard, BrandCardHeader } from '../../components/brand';
 import ScraperControl from '../../components/omni/ScraperControl';
 import DataVisualizer from '../../components/omni/DataVisualizer';
+import HermesIntegrations from '../../components/omni/HermesIntegrations';
 
 export default function OmniSkillsPage() {
-  const [activeView, setActiveView] = useState<'scraper' | 'visualizer'>('scraper');
+  const [activeView, setActiveView] = useState<'scraper' | 'visualizer' | 'hermes'>('scraper');
 
   return (
     <div className="page-container space-y-8 pb-24 fade-in">
@@ -57,12 +58,22 @@ export default function OmniSkillsPage() {
           <Activity size={18} />
           <span>資料視覺化分析 (Visualizer)</span>
         </button>
+        <button 
+          onClick={() => setActiveView('hermes')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${
+            activeView === 'hermes' ? 'bg-[#003262] text-white shadow-lg' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+          }`}
+        >
+          <Globe size={18} />
+          <span>Hermes 代理與整合 (Integrations)</span>
+        </button>
       </div>
 
       {/* Main Content Area */}
       <div className="mt-6">
         {activeView === 'scraper' && <ScraperControl />}
         {activeView === 'visualizer' && <DataVisualizer />}
+        {activeView === 'hermes' && <HermesIntegrations />}
       </div>
     </div>
   );

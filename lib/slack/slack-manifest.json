@@ -1,0 +1,94 @@
+{
+  "_comment": "ESGGO 善向永續 | Slack App Manifest — 按照 Hermes Socket Mode 規格生成",
+  "_generated": "2026-05-30",
+  "_instructions": [
+    "1. 前往 https://api.slack.com/apps → Create New App → From an app manifest",
+    "2. 選擇您的 Workspace，貼上此 JSON 內容，點擊 Next → Create",
+    "3. 前往 Settings > Socket Mode，開啟後生成 App-Level Token (xapp-)，加入 SLACK_APP_TOKEN",
+    "4. 前往 Settings > Install App，安裝後取得 Bot Token (xoxb-)，加入 SLACK_BOT_TOKEN",
+    "5. 前往 Settings > Basic Information > Signing Secret，加入 SLACK_SIGNING_SECRET",
+    "6. 將 Slash Command URL 設為: https://your-domain.com/api/slack/command"
+  ],
+  "display_information": {
+    "name": "ESGGO OmniAgent",
+    "description": "ESG GO 善向永續 — 5T 協議驅動的 ESG 治理 AI 閘道",
+    "background_color": "#020617",
+    "long_description": "ESGGO OmniAgent 是您的企業永續治理 AI 助理。支援 5T 協議評分報告、代理蜂群任務摘要、合規警報推播，以及 OmniAgent 自然語言指令。由 ESG GO 善向永續平台驅動。"
+  },
+  "features": {
+    "app_home": {
+      "home_tab_enabled": false,
+      "messages_tab_enabled": true,
+      "messages_tab_read_only_enabled": false
+    },
+    "bot_user": {
+      "display_name": "ESGGO OmniAgent",
+      "always_online": true
+    },
+    "slash_commands": [
+      {
+        "command": "/5t",
+        "url": "https://your-domain.com/api/slack/command",
+        "description": "觸發 5T 協議評分報告",
+        "usage_hint": "[公司名稱]",
+        "should_escape": false
+      },
+      {
+        "command": "/omni",
+        "url": "https://your-domain.com/api/slack/command",
+        "description": "傳遞自然語言指令至 OmniAgent",
+        "usage_hint": "[指令或問題]",
+        "should_escape": false
+      },
+      {
+        "command": "/status",
+        "url": "https://your-domain.com/api/slack/command",
+        "description": "查詢 OmniAgent 閘道運行狀態",
+        "usage_hint": "",
+        "should_escape": false
+      },
+      {
+        "command": "/alert",
+        "url": "https://your-domain.com/api/slack/command",
+        "description": "手動推播合規警報至頻道",
+        "usage_hint": "[警報訊息內容]",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "chat:write",
+        "app_mentions:read",
+        "channels:history",
+        "channels:read",
+        "groups:history",
+        "groups:read",
+        "im:history",
+        "im:read",
+        "im:write",
+        "users:read",
+        "files:read",
+        "files:write",
+        "commands"
+      ]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "bot_events": [
+        "app_mention",
+        "message.im",
+        "message.channels",
+        "message.groups"
+      ]
+    },
+    "interactivity": {
+      "is_enabled": false
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": true,
+    "token_rotation_enabled": false
+  }
+}

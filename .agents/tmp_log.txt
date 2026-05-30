@@ -1,20 +1,19 @@
 ### Execution Trace:
 - Viewed: 
-  - `src/shared/utils/hash.utils.ts`
-  - `src/shared/utils/validation.utils.ts`
-  - `lib/sonar/core/hash-lock.ts`
-  - `app/api/webhook/ncbdb/route.ts`
-  - `lib/omni-core/integrity.ts`
-  - `app/editor/page.tsx`
-- Ran: 
-  - `npx tsc --noEmit` (multiple times to clear TS errors)
+  - `lib/memory.ts`
+  - `lib/memory-graph-engine.ts`
+  - `lib/memory/memory-store.ts`
+  - `lib/agents/adk-swarm.ts`
+  - `lib/agent/store.ts`
+  - `lib/agents/omni-commander.ts`
+- Ran:
+  - Checked available memory files.
+  - Ran `next build` check.
 - Modified:
-  - `src/shared/utils/hash.utils.ts` (Fixed `Buffer` parameter typing issues)
-  - `src/shared/utils/validation.utils.ts` (Fixed `Buffer.byteLength` signature mismatch)
-  - `app/api/omnicore/audit-pdf/route.ts` (Fixed `pdfParse` function call typing)
-  - `lib/sonar/core/hash-lock.ts` (Fixed `BinaryLike` vs `Buffer` mismatch and `timingSafeEqual` signature)
-  - `app/api/webhook/ncbdb/route.ts` (Fixed `timingSafeEqual` Buffer wrapping issues)
-  - `lib/omni-core/integrity.ts` (Fixed `.ts` import extensions)
+  - `lib/memory.ts`: Added `'agent_memory'` to `MemoryType`.
+  - `lib/memory/memory-store.ts`: Refactored to asynchronously persist to Supabase `user_memory` via `writeMemory` / `readMemoryByType` (using type `agent_memory`).
+  - `lib/agents/adk-swarm.ts`: Updated `CollaborativeSwarmAgent.execute` to be asynchronous, retrieve memories from `memoryStore`, and persist execution results to the store via `memoryStore.add`.
+  - `lib/agents/omni-commander.ts`: Added `passiveTalent` ("無作妙德圓通無礙") and updated the system prompt + `COMMAND_ISSUED` payload to reflect this state as requested.
 
 ### Outcome:
-All TypeScript strict mode compilation errors (`npx tsc --noEmit`) have been resolved. The ESG GO project is now 100% type-safe. The `SustainWrite GRI Master` editor is fully configured to generate up to 20,000 words per chapter via the OmniAgent integration, enabling the generation of a 250-page (300,000 words) final report as requested.
+Agent memory is now deeply integrated. The `MemoryStore` synchronizes the `CollaborativeSwarmAgent` operations with Supabase persistent storage, allowing agents to search past memories and augment future reasoning based on those stored contexts. OmniAgent's passive talent is fully configured and published through the bus.

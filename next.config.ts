@@ -13,7 +13,16 @@ const nextConfig: NextConfig = {
     'firebase-admin',
     '@genkit-ai/googleai',
     '@grpc/grpc-js',
-    '@opentelemetry/sdk-node'
+    '@opentelemetry/sdk-node',
+    // ZKP / SnarkJS — Node-only，不應打包進 browser bundle
+    'snarkjs',
+    'ffjavascript',
+    'web-worker',
+    // Protobuf / gRPC — 動態 require 相容性
+    'protobufjs',
+    '@grpc/proto-loader',
+    // PDF / OCR
+    'pdf-parse',
   ],
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
@@ -24,9 +33,18 @@ const nextConfig: NextConfig = {
       { module: /node_modules\/@firebase/ },
       { module: /node_modules\/firebase/ },
       { module: /node_modules\/idb/ },
+      // ZKP / SnarkJS — Node-only 動態 require 語法
+      { module: /node_modules\/snarkjs/ },
+      { module: /node_modules\/ffjavascript/ },
+      { module: /node_modules\/web-worker/ },
+      // Protobuf 動態 require
+      { module: /node_modules\/@protobufjs\/inquire/ },
+      // OpenTelemetry winston transport 缺失警告
+      { module: /node_modules\/@opentelemetry\/instrumentation-winston/ },
       /There are multiple modules with names that only differ in casing/,
       /textEmbedding004/,
-      /pdf-parse/
+      /pdf-parse/,
+      /Critical dependency: the request of a dependency is an expression/,
     ];
 
     if (!config.resolve) config.resolve = {};

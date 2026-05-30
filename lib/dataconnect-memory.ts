@@ -53,7 +53,7 @@ async function getOrCreateReportId(companyId: string): Promise<string> {
     
     const { data: refetch } = await getReportByCompany({ companyId: cid });
     return refetch?.reports?.[0]?.id || 'simulation-report-id';
-  } catch (e) {
+  } catch (e: any) {
     console.warn('[DataConnect Memory] Simulation Mode Active:', e.message);
     return 'sim-report-123';
   }
@@ -82,7 +82,7 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       hashLock: params.hash_lock
     });
     return data;
-  } catch (e) {
+  } catch (e: any) {
     console.log(`[Simulation] Saved Section: ${params.chapter_id} with hash ${params.hash_lock}`);
     return { success: true, simulated: true };
   }

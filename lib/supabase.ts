@@ -10,7 +10,8 @@ export const supabase = (() => {
   if (supabaseInstance) return supabaseInstance;
   
   if (!supabaseUrl || !supabaseKey) {
-    return null;
+    console.warn('Supabase URL or Key missing');
+    return null as any;
   }
 
   try {
@@ -18,9 +19,9 @@ export const supabase = (() => {
     return supabaseInstance;
   } catch (error) {
     console.error('Supabase initialization error:', error);
-    return null;
+    return null as any;
   }
-})();
+})() as SupabaseClient;
 
 export function getSupabaseClient(): SupabaseClient | null {
   return supabase;

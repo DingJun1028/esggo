@@ -14,8 +14,8 @@ export const codeSynthesisTool = ai.defineTool({
     agentName: z.string().describe('Name of the agent requesting the solution'),
   }),
 }, async ({ problem, agentName }) => {
-  const memories = memoryStore.search(problem, 5);
-  const context = `Problem: ${problem}\nSimilar Past Solutions: ${memories.map(m => m.result).join('; ')}`;
+  const memories = await memoryStore.search(problem, 5);
+  const context = `Problem: ${problem}\nSimilar Past Solutions: ${memories.map((m: any) => m.result).join('; ')}`;
   
   const response = await ai.generate({
     model: 'googleai/gemini-2.0-flash',
@@ -42,7 +42,7 @@ export const codeSynthesisTool = ai.defineTool({
   } catch (error) {
     return { 
       success: false, 
-      error: 'Code execution failed: ' + error.message,
+      error: 'Code execution failed: ' + (error as Error).message,
       generatedCode 
     };
   }

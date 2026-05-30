@@ -12,6 +12,7 @@ import {
   upsertCompanyProfile,
   listEternalMemories,
   upsertEternalMemory,
+  upsertAuditRecord,
   listSwarmAgentTasks,
   upsertSwarmAgentTask,
   listRegulatoryPolicies,
@@ -115,6 +116,16 @@ export const dcListAuditRecords = async (): Promise<any> => {
   } catch (error) {
     console.error('Data Connect: Failed to list audit records', error);
     return [];
+  }
+};
+
+export const dcUpsertAuditRecord = async (input: any) => {
+  try {
+    const response = await upsertAuditRecord(dataConnect, input);
+    return response.data.auditRecord_upsert;
+  } catch (error) {
+    console.error('Data Connect: Failed to upsert audit record', error);
+    throw error;
   }
 };
 

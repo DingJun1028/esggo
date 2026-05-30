@@ -35,6 +35,13 @@ function listAuditRecords(dcOrOptions, options) {
 }
 exports.listAuditRecords = listAuditRecords;
 
+function upsertAuditRecord(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('UpsertAuditRecord', inputVars, inputOpts);
+}
+exports.upsertAuditRecord = upsertAuditRecord;
+
 function listScrapedArticles(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);

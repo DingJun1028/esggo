@@ -134,6 +134,42 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     version: '1.3.0',
     enabled: true,
   },
+  {
+    skillKey: 'hermes_google_workspace',
+    skillName: 'Google Workspace (Hermes)',
+    taskType: 'system_ops',
+    description: '使用 Hermes Agent 的 Google Workspace Skill 進行 Gmail, Calendar, Drive 等辦公自動化整合',
+    allowedDataScopes: ['google_workspace_auth', 'emails', 'calendar_events'],
+    outputArtifactType: 'system_config_draft',
+    requiresHumanReview: false,
+    riskLevel: 'medium',
+    version: '1.0.0',
+    enabled: true,
+  },
+  {
+    skillKey: 'hermes_email_archival',
+    skillName: 'Hermes 郵件自動歸檔',
+    taskType: 'email_processing',
+    description: '讀取 Google Workspace Email 並將 ESG 相關信件自動過濾與歸檔',
+    allowedDataScopes: ['google_workspace_auth', 'emails'],
+    outputArtifactType: 'email_archival_log',
+    requiresHumanReview: false,
+    riskLevel: 'low',
+    version: '1.0.0',
+    enabled: true,
+  },
+  {
+    skillKey: 'hermes_calendar_agent',
+    skillName: 'Hermes 行事曆自動排程',
+    taskType: 'calendar_scheduling',
+    description: '整合 Google Calendar，自動提取 ESG 會議與稽核排程，並建立待辦事項。',
+    allowedDataScopes: ['google_workspace_auth', 'calendar_events'],
+    outputArtifactType: 'calendar_schedule_log',
+    requiresHumanReview: false,
+    riskLevel: 'low',
+    version: '1.0.0',
+    enabled: true,
+  },
 ];
 
 export function getSkill(skillKey: string): SkillRegistryItem | undefined {
@@ -155,6 +191,8 @@ export const TASK_TYPE_META: Record<string, { label: string; color: string; icon
   cbam_validation:        { label: 'CBAM 數據驗證',     color: '#10B981', icon: 'CheckSquare' },
   system_ops:             { label: '系統架構運維',     color: '#64748B', icon: 'Settings' },
   ai_ops:                 { label: 'AI 模型調優',      color: '#3B82F6', icon: 'Cpu' },
+  email_processing:       { label: '郵件自動處理',     color: '#EF4444', icon: 'Mail' },
+  calendar_scheduling:    { label: '行事曆自動排程',   color: '#22C55E', icon: 'Calendar' },
 };
 
 export const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {

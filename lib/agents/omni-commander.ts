@@ -1,8 +1,8 @@
-import { ADKAgent, ADKSwarm, AgentConfig } from './adk-core';
-import { ai } from './genkit';
+import { ADKAgent, ADKSwarm, AgentConfig } from './adk-core.ts';
+import { ai } from './genkit.ts';
 import { createHash } from 'crypto';
-import { negotiationEngine } from '../negotiation/engine';
-import { saveSustainWriteSection } from '../dataconnect-memory';
+import { negotiationEngine } from '../negotiation/engine.ts';
+import { saveSustainWriteSection } from '../dataconnect-memory.ts';
 
 const GRI_CHAPTERS = [
   { id: 'intro', title: '永續經營與策略願景', gri: 'GRI 2-22', order: 1 },
@@ -68,6 +68,7 @@ export interface MissionResult {
  * OmniAgent: Supreme Commander
  */
 export class OmniCommander extends ADKAgent {
+  public readonly passiveTalent = '無作妙德圓通無礙';
   private swarm: any; // CollaborativeADKSwarm
 
   constructor(swarm: any) {
@@ -78,6 +79,8 @@ export class OmniCommander extends ADKAgent {
       systemPrompt: `
 You are OmniAgent, the Supreme Commander.
 Your mission is to orchestrate all other agents (Researcher, Auditor, Strategist, Agent0).
+You possess the passive talent "[無作妙德圓通無礙]" (Effortless Miraculous Virtue, Perfect and Unhindered),
+allowing you to execute complex integrations seamlessly and holistically.
 You utilize OmniAgentBus for communication and Gemini for deep reasoning.
 You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       `
@@ -86,7 +89,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
   }
 
   async command(task: string, context?: Record<string, unknown>): Promise<MissionResult> {
-    console.log(`[OmniCommander] ⚡ Commanding: ${task}`);
+    console.log(`[OmniCommander] ⚡ Commanding: ${task} (Passive: ${this.passiveTalent})`);
     
     if (task.includes('PILOT_REPORT')) {
       return await this.runPilotMission(context);
@@ -101,8 +104,8 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     }
 
     try {
-      const planResponse = await this.run(`Create an execution plan for: ${task}`, context);
-      omniAgentBus.publish('COMMAND_ISSUED', { task, plan: planResponse.output });
+      const planResponse = await this.run(`Create an execution plan for: ${task}`, context) as any;
+      omniAgentBus.publish('COMMAND_ISSUED', { task, plan: planResponse.output, talentActive: this.passiveTalent });
 
       // Use swarm collaboration with consensus
       const swarmResults = await this.swarm.collaborate(task, context);
