@@ -80,7 +80,7 @@ export default function IntelligencePage() {
                   <div key={item.id} className="py-4 flex items-center justify-between group hover:bg-white/5 transition-all px-2 rounded-xl">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <UniversalBadge variant={item.impact === 'Extreme' ? 'danger' : item.impact === 'High' ? 'warning' : 'secondary'} className="text-[8px]">
+                        <UniversalBadge variant={item.impact === 'Extreme' ? 'error' : item.impact === 'High' ? 'warning' : 'secondary'} className="text-[8px]">
                           {item.impact} Impact
                         </UniversalBadge>
                         <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{item.source} • {item.time}</span>

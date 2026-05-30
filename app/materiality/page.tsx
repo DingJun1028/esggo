@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { Hexagon, Plus, Settings2, Info, ArrowUp, ArrowRight, MousePointer2 } from 'lucide-react';
+import { CheckCircle2, Hexagon, Plus, Settings2, Info, ArrowUp, ArrowRight, MousePointer2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const TOPICS = [

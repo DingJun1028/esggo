@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { Palette, Layers, Box, Grid, Type, Droplets, Image, Zap, Copy, Check, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Palette, Layers, Box, Grid, Type, Droplets, Image, Zap, Copy, Check, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const TOKENS = [
@@ -78,7 +78,7 @@ export default function DesignLibraryPage() {
                        <div className="flex flex-wrap gap-4">
                           <UniversalButton variant="primary">Primary Action</UniversalButton>
                           <UniversalButton variant="secondary">Secondary</UniversalButton>
-                          <UniversalButton variant="error">Destructive</UniversalButton>
+                          <UniversalButton variant="outline">Destructive</UniversalButton>
                        </div>
                     </UniversalCard>
                     <UniversalCard title="Badges" variant="bordered" className="p-8">

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { Bot, Cpu, Zap, Settings, Shield, Terminal, Play, Power, Plus, Search, MoreVertical } from 'lucide-react';
+import { Activity, Bot, Cpu, Zap, Settings, Shield, Terminal, Play, Power, Plus, Search, MoreVertical } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AGENTS = [
