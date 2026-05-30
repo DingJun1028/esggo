@@ -36,6 +36,7 @@ export function Badge({ status, variant, children, className, style }: BadgeProp
           'bg-rose-600/10 text-rose-600 border border-rose-600/20': v === 'canceled',
           'bg-berkeley-blue/10 text-berkeley-blue border border-berkeley-blue/20': v === 'secondary' || v === 'info',
           'bg-california-gold/10 text-california-gold border border-california-gold/20': v === 'gold',
+          'bg-transparent border border-white/20': v === 'outline',
         },
         className
       )}
@@ -60,6 +61,7 @@ export function Badge({ status, variant, children, className, style }: BadgeProp
             'bg-archived-500': v === 'archived',
           'bg-berkeley-blue': v === 'secondary' || v === 'info',
             'bg-california-gold': v === 'gold',
+            'bg-transparent': v === 'outline',
         }
       )} />
       {children}

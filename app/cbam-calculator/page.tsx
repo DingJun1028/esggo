@@ -1,178 +1,168 @@
-﻿'use client';
-import { useState, useMemo } from 'react';
-import { Globe, Calculator, AlertTriangle, CheckCircle, TrendingUp, Download, Plus, Trash2, Bot, RefreshCw, Landmark, ArrowUpRight, Sparkles, X, History, CheckCircle2, ShieldCheck, Gauge } from 'lucide-react';
-import { 
-  BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
-} from '../../components/brand';
-import { UniversalPageConfig } from '../../lib/page-config';
+'use client';
+
+import React, { useState, useMemo } from 'react';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { Calculator, Globe, AlertTriangle, TrendingUp, Download, Plus, Trash2, Landmark, Gauge, ArrowRight, Info, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface CBAmProduct {
-  id: string;
-  productName: string;
-  cnCode: string;
-  sector: string;
-  annualExportTons: number;
-  directEmissions: number;
-  indirectEmissions: number;
-  paidCarbonPrice: number;
-  euEtsPrice: number;
-}
-
 const SECTORS = [
-  { id: 'steel', name: '鋼鐵', cn: '7208-7229', factor: 1.89 },
-  { id: 'aluminum', name: '鋁', cn: '7601-7616', factor: 6.72 },
-  { id: 'cement', name: '水泥', cn: '2523', factor: 0.83 },
-  { id: 'fertilizer', name: '化學肥料', cn: '3102-3105', factor: 2.40 },
+  { id: 'steel', name: '鋼鐵 Steel', factor: 1.89 },
+  { id: 'aluminum', name: '鋁 Aluminum', factor: 6.72 },
+  { id: 'cement', name: '水泥 Cement', factor: 0.83 },
+  { id: 'fertilizer', name: '化學肥料 Fertilizer', factor: 2.40 },
 ];
 
-const DEFAULT_ETS_PRICE = 65;
-
 export default function CBAMCalculatorPage() {
-  const [products, setProducts] = useState<CBAmProduct[]>([
-    { id: '1', productName: '熱軋鋼板', cnCode: '7208.37', sector: 'steel', annualExportTons: 5000, directEmissions: 1.89, indirectEmissions: 0.32, paidCarbonPrice: 0, euEtsPrice: DEFAULT_ETS_PRICE },
+  const [products, setProducts] = useState([
+    { id: '1', name: '熱軋鋼板', sector: 'steel', volume: 5000, price: 0 },
   ]);
-  const [showAdd, setShowAdd] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const calculations = useMemo(() => {
+    const etsPrice = 65; // EUR/ton
     return products.map(p => {
-      const totalEmissions = (p.directEmissions + p.indirectEmissions) * p.annualExportTons;
-      const adjustedCost = Math.max(0, totalEmissions * p.euEtsPrice - p.paidCarbonPrice * p.annualExportTons);
-      return {
-        ...p,
-        totalEmissions: Math.round(totalEmissions),
-        estimatedCost: Math.round(adjustedCost),
-        riskLevel: adjustedCost > 500000 ? 'high' : adjustedCost > 100000 ? 'medium' : 'low',
-      };
+      const sector = SECTORS.find(s => s.id === p.sector);
+      const emissions = p.volume * (sector?.factor || 0);
+      const cost = Math.max(0, emissions * etsPrice - p.price * p.volume);
+      return { ...p, emissions, cost };
     });
   }, [products]);
 
-  const totalCost = calculations.reduce((a, c) => a + c.estimatedCost, 0);
-
-  const pageConfig: UniversalPageConfig = {
-    id: 'cbam-calculator',
-    title: 'CBAM 碳稅試算器',
-    subtitle: 'EU Carbon Border Adjustment Mechanism：歐盟碳邊境調整機制精確模擬，評估 2026 正式課徵之財務衝擊。',
-    icon: <Calculator size={32} />,
-    griReference: 'EU Regulation 2023/956',
-    activeT5Tags: ['T1', 'T2', 'T3'],
-    primaryActions: [
-      { id: 'export', label: '匯出試算書', icon: <Download size={16}/>, onClick: () => alert('正在生成試算書...') },
-      { id: 'add', label: '新增出口商品', icon: <Plus size={16}/>, onClick: () => setShowAdd(true) }
-    ],
-    kpis: [
-      { key: 'cost',   label: '預估年度碳稅', value: `€${totalCost.toLocaleString()}`, icon: <TrendingUp size={18}/>, color: '#EF4444' },
-      { key: 'ton',    label: '出口總碳排',   value: calculations.reduce((a,c)=>a+c.totalEmissions,0).toLocaleString(), unit: 'tCO2e', icon: <Globe size={18}/>, color: '#003262' },
-      { key: 'tw',     label: '台幣等值',     value: `NT$${Math.round(totalCost * 35).toLocaleString()}`, icon: <Landmark size={18}/>, color: '#3B7EA1', verified: true },
-      { key: 'status', label: '申報合規度',   value: '100', unit: '%', icon: <ShieldCheck size={18}/>, color: '#10B981', verified: true },
-    ],
-    sections: [
-      {
-        id: 'alert',
-        title: '時程預警',
-        columns: 12,
-        component: (
-          <div className="p-6 bg-amber-50 rounded-[28px] border border-amber-100 flex items-center gap-6">
-             <div className="w-12 h-12 rounded-2xl bg-amber-500 flex items-center justify-center text-white shadow-lg"><AlertTriangle size={24}/></div>
-             <div>
-                <h4 className="text-sm font-black text-amber-900 uppercase tracking-tight">CBAM 2026 正式課徵階段倒數</h4>
-                <p className="text-xs text-amber-800/70 font-medium">當前為過渡申報期（2023-2025），請確保 T1 溯源數據完整性以應對未來財務實質課稅。</p>
-             </div>
-          </div>
-        )
-      },
-      {
-        id: 'table',
-        title: '出口商品清單',
-        columns: 12,
-        component: (
-          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
-             <BrandTable 
-               columns={[
-                 { label: '商品名稱', key: 'name' },
-                 { label: '產業別', key: 'sector' },
-                 { label: '出口量', key: 'volume' },
-                 { label: '總排放量', key: 'emissions' },
-                 { label: '預估費用', key: 'cost' },
-                 { label: '風險分級', key: 'risk' },
-                 { label: '操作', key: 'actions' },
-               ]}
-               data={calculations.map(c => ({
-                 name: (
-                   <div className="flex flex-col">
-                      <span className="font-bold text-[#003262]">{c.productName}</span>
-                      <span className="text-[10px] font-mono text-slate-400 font-black">CN_{c.cnCode}</span>
-                   </div>
-                 ),
-                 sector: <BrandBadge variant="outline" size="xs" className="opacity-60">{SECTORS.find(s=>s.id===c.sector)?.name}</BrandBadge>,
-                 volume: <span className="font-mono text-xs font-bold">{c.annualExportTons.toLocaleString()} 噸</span>,
-                 emissions: <span className="font-mono text-xs font-black text-[#003262]">{c.totalEmissions.toLocaleString()} tCO2e</span>,
-                 cost: <span className="font-mono text-sm font-black text-rose-600">€{c.estimatedCost.toLocaleString()}</span>,
-                 risk: <BrandBadge variant={c.riskLevel === 'high' ? 'error' : c.riskLevel === 'medium' ? 'warning' : 'success'} size="xs" className="font-black">{c.riskLevel.toUpperCase()}</BrandBadge>,
-                 actions: (
-                   <BrandButton variant="ghost" size="xs" className="w-8 h-8 p-0 text-slate-300 hover:text-rose-500" onClick={() => setProducts(p => p.filter(x=>x.id!==c.id))}>
-                      <Trash2 size={14}/>
-                   </BrandButton>
-                 )
-               }))}
-             />
-          </BrandCard>
-        )
-      },
-      {
-        id: 'tips',
-        title: '減項優化建議',
-        columns: 12,
-        component: (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-             {[
-               { title: '再生能源電力', save: '20-40%', icon: <Sparkles size={20}/>, desc: '採購綠電降低間接排放係數，直接縮減 CBAM 計費基礎。' },
-               { title: '製程低碳化', save: '30-60%', icon: <Gauge size={20}/>, desc: '導入電弧爐等低碳設備，從源頭降低直接排放係數。' },
-               { title: '碳抵消額度', save: '10-25%', icon: <Landmark size={20}/>, desc: '善用國內碳交所額度抵減申報量，緩解歐盟財務衝擊。' },
-             ].map((t, i) => (
-               <BrandCard key={i} padding="lg" className="glass-panel border-none shadow-sm hover:shadow-xl transition-all group">
-                  <div className="flex items-center justify-between mb-4">
-                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#003262] group-hover:scale-110 transition-transform">{t.icon}</div>
-                     <BrandBadge variant="success" size="xs" className="font-black">SAVE {t.save}</BrandBadge>
-                  </div>
-                  <h4 className="text-sm font-black text-[#003262] uppercase tracking-widest mb-3">{t.title}</h4>
-                  <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{t.desc}</p>
-               </BrandCard>
-             ))}
-          </div>
-        )
-      }
-    ],
-    features: { useAuditLog: true }
-  };
+  const totalCost = calculations.reduce((a, b) => a + b.cost, 0);
 
   return (
-    <>
-      <StandardPage config={pageConfig} />
-      
-      {/* Refined Add Modal */}
-      <AnimatePresence>
-        {showAdd && (
-          <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setShowAdd(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme p-10 lg:p-14 max-w-xl w-full overflow-hidden text-center">
-              <header className="flex justify-between items-center mb-10 relative z-10">
-                <div className="flex items-center gap-4"><div className="w-12 h-12 rounded-2xl bg-[#003262] flex items-center justify-center text-white shadow-lg"><Plus size={20} /></div><h3 className="text-2xl font-black text-[#003262] uppercase tracking-tight">新增出口試算商品</h3></div>
-                <button onClick={() => setShowAdd(false)} className="w-10 h-10 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-400 transition-all"><X size={20} /></button>
-              </header>
-              <div className="space-y-6 mb-10 relative z-10 text-left">
-                <div className="grid grid-cols-2 gap-6">
-                   <div className="space-y-2"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Product Name</label><input className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white outline-none transition-all" placeholder="例：熱軋鋼板" /></div>
-                   <div className="space-y-2"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sector</label><select className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white transition-all outline-none">{SECTORS.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
-                </div>
-                <div className="space-y-2"><label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Annual Export (Tons)</label><input type="number" className="w-full h-14 bg-slate-50 rounded-2xl border border-slate-100 px-6 text-sm font-bold focus:bg-white outline-none transition-all" placeholder="5000" /></div>
-              </div>
-              <div className="flex gap-4"><BrandButton variant="ghost" className="flex-1 rounded-2xl h-14" onClick={() => setShowAdd(false)}>取消</BrandButton><BrandButton variant="primary" className="flex-[2] rounded-2xl h-14 font-black shadow-xl" onClick={() => setShowAdd(false)}>加入試算表</BrandButton></div>
-            </motion.div>
+    <div className="min-h-screen bg-void-stark text-white p-4 md:p-8 animate-in fade-in duration-700">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-4">
+            <UniversalBadge variant="success" icon="🇪🇺">
+              旅程 III. 數據採集與填報
+            </UniversalBadge>
+            <h1 className="text-4xl font-bold tracking-tight text-white/90 flex items-center gap-3">
+              <Calculator className="text-cyan-core" /> CBAM 計算機
+            </h1>
+            <p className="text-lg text-white/60 max-w-2xl">
+              歐盟碳邊境調整機制精確模擬。評估出口商品的碳排量與潛在財務衝擊，提早佈局減碳策略。
+            </p>
           </div>
-        )}
-      </AnimatePresence>
-    </>
+          <div className="flex gap-3">
+             <UniversalButton variant="secondary" className="flex items-center gap-2">
+                <Download size={16} /> 匯出試算書
+             </UniversalButton>
+             <UniversalButton variant="primary" className="flex items-center gap-2">
+                <Plus size={16} /> 新增商品
+             </UniversalButton>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+           <div className="lg:col-span-3 space-y-8">
+              <UniversalCard variant="glow" title="出口商品試算清單" className="p-0 overflow-hidden">
+                 <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                       <thead>
+                          <tr className="border-b border-white/5 bg-white/5">
+                             <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-white/30">商品名稱</th>
+                             <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-white/30">產業別</th>
+                             <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-white/30">出口量 (Tons)</th>
+                             <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-white/30">預估碳排 (tCO2e)</th>
+                             <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-white/30">預計碳稅 (EUR)</th>
+                             <th className="px-6 py-4"></th>
+                          </tr>
+                       </thead>
+                       <tbody className="divide-y divide-white/5">
+                          {calculations.map((c) => (
+                            <tr key={c.id} className="group hover:bg-white/5 transition-all">
+                               <td className="px-6 py-4 font-bold text-white/90">{c.name}</td>
+                               <td className="px-6 py-4 text-xs">
+                                  <UniversalBadge variant="secondary">{SECTORS.find(s=>s.id===c.sector)?.name}</UniversalBadge>
+                               </td>
+                               <td className="px-6 py-4 font-mono text-sm">{c.volume.toLocaleString()}</td>
+                               <td className="px-6 py-4 font-mono text-sm text-cyan-400">{c.emissions.toLocaleString()}</td>
+                               <td className="px-6 py-4 font-mono text-sm text-rose-400 font-bold">€{c.cost.toLocaleString()}</td>
+                               <td className="px-6 py-4 text-right">
+                                  <button className="p-2 text-white/10 hover:text-rose-500 transition-colors">
+                                     <Trash2 size={14} />
+                                  </button>
+                               </td>
+                            </tr>
+                          ))}
+                       </tbody>
+                    </table>
+                 </div>
+              </UniversalCard>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <UniversalCard title="減項優化建議" variant="bordered">
+                    <div className="space-y-4">
+                       {[
+                         { title: '採購再生能源電力', save: '20-40%', icon: <Gauge size={16} /> },
+                         { title: '導入低碳製程設備', save: '30-60%', icon: <TrendingUp size={16} /> },
+                       ].map((t, i) => (
+                         <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+                            <div className="flex items-center gap-3">
+                               <div className="p-2 bg-cyan-core/10 rounded-lg text-cyan-core">{t.icon}</div>
+                               <span className="text-sm font-bold">{t.title}</span>
+                            </div>
+                            <UniversalBadge variant="success">Save {t.save}</UniversalBadge>
+                         </div>
+                       ))}
+                    </div>
+                 </UniversalCard>
+                 <div className="p-8 bg-gradient-to-br from-amber-500/20 to-orange-600/20 rounded-[2rem] border border-amber-500/30 flex flex-col justify-center">
+                    <AlertTriangle size={32} className="text-amber-400 mb-4" />
+                    <h3 className="font-bold text-lg mb-2">2026 正式課徵提醒</h3>
+                    <p className="text-xs text-white/60 leading-relaxed">
+                      目前處於過渡申報期。2026 年起將依據本試算結果執行財務實質課稅。建議立即啟動 T1 數據追蹤。
+                    </p>
+                 </div>
+              </div>
+           </div>
+
+           <div className="space-y-8">
+              <UniversalCard title="財務衝擊總覽" variant="glass">
+                 <div className="space-y-6 text-center py-4">
+                    <div>
+                       <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.3em] mb-1">Total Estimated Cost</p>
+                       <p className="text-4xl font-black text-white">€{totalCost.toLocaleString()}</p>
+                    </div>
+                    <div className="pt-4 border-t border-white/5">
+                       <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.3em] mb-1">TWD Equivalent</p>
+                       <p className="text-2xl font-black text-cyan-core">NT${(totalCost * 35).toLocaleString()}</p>
+                    </div>
+                    <UniversalButton variant="primary" className="w-full mt-4">啟動避稅分析</UniversalButton>
+                 </div>
+              </UniversalCard>
+
+              <div className="p-6 bg-white/5 rounded-[2rem] border border-white/10 space-y-4">
+                 <div className="flex items-center gap-2 text-xs font-black uppercase text-white/30">
+                    <ShieldCheck size={14} /> 5T 確信狀態
+                 </div>
+                 <p className="text-[10px] text-white/40 leading-relaxed italic">
+                   所有計算依據之排放係數均已通過 GRI 準則核對。試算結果已同步至 Audit Log。
+                 </p>
+              </div>
+
+              <UniversalCard title="法規參數" variant="bordered">
+                 <div className="space-y-4">
+                    <div className="flex justify-between text-xs">
+                       <span className="text-white/40">EU ETS Price</span>
+                       <span className="font-mono text-cyan-400">€65.00</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                       <span className="text-white/40">CBAM Factor</span>
+                       <span className="font-mono text-white/60">v1.2.4</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                       <span className="text-white/40">Last Update</span>
+                       <span className="font-mono text-white/60">2026-05-30</span>
+                    </div>
+                 </div>
+              </UniversalCard>
+           </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -20,21 +20,16 @@ export interface NavGroup {
 // 📌 Core Navigation Settings (SaaS User Journey)
 export const SaaS_NAVIGATION: NavGroup[] = [
   {
-    groupId: 'favorites',
-    groupTitle: '⭐ 我的最愛',
-    items: [], // Dynamically populated from Supabase user.pinned_modules
+    groupId: 'foundation',
+    groupTitle: '0. 系統核心與靈魂',
+    items: [
+      { id: 'dashboard', title: '全域控制台', path: '/', icon: 'LayoutDashboard', sub: 'Overview' },
+      { id: 'soul', title: '系統靈魂', path: '/soul', icon: 'Flame', sub: 'Supreme Will' },
+      { id: 'omnispace', title: '共振空間', path: '/omnispace', icon: 'Globe', sub: 'Resonance' },
+    ],
   },
   {
     groupId: 'onboarding',
-    groupTitle: 'I. 初始導入與配置',
-    items: [
-      { id: 'profile', title: '企業管理', path: '/profile', icon: 'Building2', sub: 'Profile' },
-      { id: 'api-setup', title: '整合中心', path: '/api-setup', icon: 'Link', sub: 'Integrations' },
-      { id: 'data-sources', title: '資料來源', path: '/data-sources', icon: 'Database', sub: 'Data Hub' },
-      { id: 'templates', title: '專家模板', path: '/templates', icon: 'LayoutTemplate', sub: 'Templates' },
-      { id: 'health-check', title: '企業健檢', path: '/health-check', icon: 'Stethoscope', sub: 'Health' },
-    ],
-  },
   {
     groupId: 'strategy',
     groupTitle: 'II. 策略盤點與分派',
@@ -72,9 +67,8 @@ export const SaaS_NAVIGATION: NavGroup[] = [
     groupId: 'audit-publish',
     groupTitle: 'V. 確信審計與發佈',
     items: [
-      { id: 'dashboard', title: '控制台', path: '/', icon: 'LayoutDashboard', sub: 'Main Hub' },
-      { id: 'audit-log', title: '審計日誌', path: '/audit-log', icon: 'History', sub: 'Audit Log' },
       { id: 'vault', title: '證據金庫', path: '/vault', icon: 'Vault', sub: 'Evidence Vault' },
+      { id: 'audit-log', title: '審計日誌', path: '/audit-log', icon: 'History', sub: 'Audit Log' },
       { id: 'proof-center', title: '誠信證明', path: '/proof-center', icon: 'BadgeCheck', sub: 'Trust Proof' },
       { id: 'audit-verify', title: 'VerifyLink™', path: '/audit-verify', icon: 'Link2', sub: 'Verification' },
       { id: 'publish', title: '報告發佈', path: '/publish', icon: 'Send', sub: 'Publish' },
@@ -89,7 +83,6 @@ export const SaaS_NAVIGATION: NavGroup[] = [
       { id: 'finance', title: '永續財務', path: '/finance', icon: 'PieChart', sub: 'Finance' },
       { id: 'academy', title: '永續學院', path: '/academy', icon: 'GraduationCap', sub: 'Academy' },
       { id: 'advisors', title: '顧問專區', path: '/advisors', icon: 'Briefcase', sub: 'Advisors' },
-      { id: 'consulting', title: '顧問服務', path: '/consulting', icon: 'Headset', sub: 'Consulting' },
       { id: 'agents', title: '代理專區', path: '/agents', icon: 'Network', sub: 'Agents' },
     ],
   },
@@ -101,25 +94,26 @@ export const IT_OPS_NAVIGATION: NavGroup[] = [
     groupId: 'orchestration',
     groupTitle: 'VII. 算力與 AI 中控',
     items: [
-      { id: 'ai-platform', title: 'AI 整合平台', path: '/ai-platform', icon: 'Cpu', sub: 'AI OS', requiredRoles: ['IT_OPS', 'ADMIN'] },
-      { id: 'hermes-orchestrator', title: 'Hermes 調度器', path: '/hermes-orchestrator', icon: 'Command', sub: 'Hermes', requiredRoles: ['IT_OPS', 'ADMIN'] },
-      { id: 'swarm', title: '代理蜂群', path: '/swarm', icon: 'Share2', sub: 'Swarm', requiredRoles: ['IT_OPS', 'ADMIN'] },
+      { id: 'ai-platform', title: 'AI 整合平台', path: '/ai-platform', icon: 'Cpu', sub: 'AI OS' },
+      { id: 'omnispace', title: '共振空間', path: '/omnispace', icon: 'Globe', sub: 'Resonance' },
+      { id: 'swarm', title: '代理蜂群', path: '/swarm', icon: 'Share2', sub: 'Swarm' },
     ],
   },
   {
     groupId: 'maintenance',
     groupTitle: 'VIII. 系統維護與品質',
     items: [
-      { id: 'system-status', title: '系統狀態', path: '/system-status', icon: 'Activity', sub: 'Status', requiredRoles: ['IT_OPS', 'ADMIN'] },
-      { id: 'system-test', title: '系統測試', path: '/system-test', icon: 'TestTube', sub: 'Test', requiredRoles: ['IT_OPS', 'ADMIN'] },
-      { id: 'terminal', title: '終端主控', path: '/terminal', icon: 'TerminalSquare', sub: 'CLI', requiredRoles: ['IT_OPS', 'ADMIN'] },
+      { id: 'system-status', title: '系統狀態', path: '/system-status', icon: 'Activity', sub: 'Status' },
+      { id: 'system-test', title: '系統測試', path: '/system-test', icon: 'TestTube', sub: 'Test' },
+      { id: 'terminal', title: '終端主控', path: '/terminal', icon: 'TerminalSquare', sub: 'CLI' },
     ],
   },
   {
     groupId: 'design-system',
     groupTitle: 'IX. 品牌資源',
     items: [
-      { id: 'design-library', title: '設計圖書館', path: '/design-library', icon: 'Palette', sub: 'Design', requiredRoles: ['IT_OPS', 'ADMIN'] },
+      { id: 'design-library', title: '設計圖書館', path: '/design-library', icon: 'Palette', sub: 'Design' },
+      { id: 'walkthrough', title: '系統導覽', path: '/walkthrough', icon: 'Rocket', sub: 'Guide' },
     ],
   },
 ];

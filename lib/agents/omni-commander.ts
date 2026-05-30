@@ -81,6 +81,10 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       return await this.runEvidenceAuditMission(context);
     }
 
+    if (task.includes('SYNC_BLUECC_AITABLE')) {
+      return await this.runBlueCCToAITableIntegration(context);
+    }
+
     try {
       const planResponse = await this.run(`Create an execution plan for: ${task}`, context) as any;
       omniAgentBus.publish('COMMAND_ISSUED', { task, plan: planResponse.output, talentActive: this.passiveTalent });
@@ -281,5 +285,63 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       message: `Swarm Evidence Audit Complete. Processed ${results.length} evidence files.`,
       results
     };
+  }
+
+  /**
+   * 藍碳/企業通訊樞紐 (BlueCC) 與 AITable 無縫整合
+   * 從 Supabase bluecc_nodes 擷取節點，並同步至 AITable 作為 Logic Nodes。
+   */
+  private async runBlueCCToAITableIntegration(context?: Record<string, unknown>): Promise<MissionResult> {
+    console.log(`[OmniCommander] 🔄 Starting BlueCC to AITable Integration Mission...`);
+    omniAgentBus.publish('MISSION_START', { mission: 'BlueCC to AITable Sync' });
+
+    try {
+      const { supabase } = await import('../db/supabase');
+      const { syncLogicNodesToAITable } = await import('../../server/src/integrations/aitable-client');
+      
+      // 1. Fetch from BlueCC nodes
+      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching BlueCC Nodes from Supabase' });
+      const { data: blueccNodes, error } = await supabase.from('bluecc_nodes').select('*');
+      
+      if (error) {
+        throw new Error(`Failed to fetch from BlueCC: ${error.message}`);
+      }
+
+      const nodes = blueccNodes || [];
+      console.log(`[OmniCommander] Fetched ${nodes.length} BlueCC nodes.`);
+
+      // 2. Transform to Logic Nodes
+      const logicNodes = nodes.map((n: any) => ({
+        name: n.name || n.id || 'Unknown BlueCC Node',
+        compliance_score: n.score || 100,
+        logic_type: n.type || 'BlueCC Sync',
+        timestamp: n.created_at || new Date().toISOString(),
+        targetSystem: n.target || 'ESG GO Hub'
+      }));
+
+      // 3. Sync to AITable
+      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing ${logicNodes.length} nodes to AITable` });
+      const syncSuccess = await syncLogicNodesToAITable(logicNodes);
+
+      if (!syncSuccess) {
+        throw new Error('AITable Sync operation returned false.');
+      }
+
+      omniAgentBus.publish('MISSION_COMPLETE', { mission: 'BlueCC to AITable Sync', totalSynced: logicNodes.length });
+      return {
+        success: true,
+        message: `Successfully synced ${logicNodes.length} BlueCC nodes to AITable.`,
+        results: logicNodes
+      };
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error('[OmniCommander] BlueCC Integration Error:', errorMessage);
+      omniAgentBus.publish('AGENT_ERROR', { agent: 'OmniAgent', error: errorMessage });
+      return {
+        success: false,
+        message: 'BlueCC to AITable Integration failed',
+        error: errorMessage
+      };
+    }
   }
 }
