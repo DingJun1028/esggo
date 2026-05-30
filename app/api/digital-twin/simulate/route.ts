@@ -49,15 +49,15 @@ export async function POST(request: Request) {
       isValid: isGriValid,
       score: Math.min(99, 50 + parameters.greenEnergy * 2),
       violations: isGriValid ? [] : ['再生能源佔比未達 20% 綠電門檻安全線'],
-      ruleId: 'gri_302_1_check',
-      message: isGriValid ? '符合標準' : '再生能源不足'
+      recommendations: isGriValid ? [] : ['增加綠電採購比例至 20% 以上']
     };
     
     // 更新碳排的得分，讓它跟前端原本的邏輯一致 (測試用途)
     result.complianceProjections['carbonEmissions'] = {
       ...result.complianceProjections['carbonEmissions'],
       score: Math.min(99, 82 + reduction),
-      violations: []
+      violations: [],
+      recommendations: []
     };
 
     return NextResponse.json({ success: true, result });

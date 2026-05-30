@@ -35,7 +35,7 @@ export default function ProfilePage() {
   });
 
   const { data, isLoading, error } = useGetMyCompanyProfile(dataConnect);
-  const [upsertProfile, { isLoading: isSaving }] = useUpsertCompanyProfile(dataConnect);
+  const { mutateAsync: upsertProfile, isPending: isSaving } = useUpsertCompanyProfile(dataConnect);
   const { toast } = useToast();
 
   useEffect(() => {

@@ -538,11 +538,6 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
-/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to execute without passing in DataConnect. */
-export function createDemoData(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
-/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to pass in custom DataConnect instances. */
-export function createDemoData(options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
-
 /** Generated Node Admin SDK operation action function for the 'ListAllTasks' Query. Allow users to execute without passing in DataConnect. */
 export function listAllTasks(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListAllTasksData>>;
 /** Generated Node Admin SDK operation action function for the 'ListAllTasks' Query. Allow users to pass in custom DataConnect instances. */
@@ -672,4 +667,9 @@ export function listRegulatoryPolicies(options?: OperationOptions): Promise<Exec
 export function getMyCompanyProfile(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<GetMyCompanyProfileData>>;
 /** Generated Node Admin SDK operation action function for the 'GetMyCompanyProfile' Query. Allow users to pass in custom DataConnect instances. */
 export function getMyCompanyProfile(options?: OperationOptions): Promise<ExecuteOperationResponse<GetMyCompanyProfileData>>;
+
+/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to execute without passing in DataConnect. */
+export function createDemoData(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
+/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to pass in custom DataConnect instances. */
+export function createDemoData(options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
 

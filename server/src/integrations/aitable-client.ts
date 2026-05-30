@@ -1,3 +1,4 @@
+// @ts-ignore
 import AITable from '@aitable/client';
 
 const aitable = new AITable({

@@ -23,6 +23,7 @@ export interface ProjectionResult {
   projectedValues: Record<string, number>;
   complianceProjections: Record<string, PolicyValidationResult>;
   overallImpactScore: number; // 0-100
+  agentInsights: string[];
 }
 
 export class DigitalTwinEngine {
@@ -43,16 +44,18 @@ export class DigitalTwinEngine {
   async simulate(scenario: Scenario, baseline: Record<string, number>): Promise<ProjectionResult> {
     const projectedValues = { ...baseline };
     const complianceProjections: Record<string, PolicyValidationResult> = {};
+    const agentInsights: string[] = [];
 
     // 1. Apply Modifiers
+    let hasReduction = false;
     for (const mod of scenario.modifiers) {
       if (baseline[mod.targetField] !== undefined) {
         projectedValues[mod.targetField] = baseline[mod.targetField] * (1 + mod.valueChange);
+        if (mod.valueChange < 0) hasReduction = true;
       }
     }
 
     // 2. Validate Projections against Regulatory Policies
-    // Note: We use policy_gri_305_1 for CO2/Energy for this demo
     const co2Policy = 'policy_gri_305_1';
     complianceProjections['carbonEmissions'] = policyEngine.validate(co2Policy, {
       value: projectedValues.carbonEmissions,
@@ -61,9 +64,24 @@ export class DigitalTwinEngine {
     });
 
     // 3. Calculate Overall Impact Score
-    // (Weighted average of compliance and reduction success)
-    const reductionSuccess = scenario.modifiers.length > 0 ? 80 : 50; 
+    const reductionSuccess = scenario.modifiers.length > 0 ? (hasReduction ? 85 : 40) : 50; 
     const overallImpactScore = Math.round((reductionSuccess + (complianceProjections['carbonEmissions'].score || 0)) / 2);
+
+    // 4. Generate Agent Strategic Insights
+    if (projectedValues.carbonEmissions < baseline.carbonEmissions) {
+      const reductionPercent = Math.round(((baseline.carbonEmissions - projectedValues.carbonEmissions) / baseline.carbonEmissions) * 100);
+      agentInsights.push(`碳排減少 ${reductionPercent}%，建議申請相應綠色融資補貼。`);
+    } else {
+      agentInsights.push(`未顯著減少碳排，建議提高綠電佔比或內部碳定價。`);
+    }
+
+    if (overallImpactScore >= 80) {
+      agentInsights.push(`合規分數卓越 (${overallImpactScore})，已達到 GRI 領先標準，建議準備發布永續報告書。`);
+    } else if (overallImpactScore >= 60) {
+      agentInsights.push(`合規分數達標 (${overallImpactScore})，但仍有改善空間，建議優先處理高耗能節點。`);
+    } else {
+      agentInsights.push(`面臨嚴峻合規風險，強烈建議啟動緊急減碳預案。`);
+    }
 
     return {
       scenarioId: scenario.id,
@@ -71,7 +89,8 @@ export class DigitalTwinEngine {
       originalValues: baseline,
       projectedValues,
       complianceProjections,
-      overallImpactScore
+      overallImpactScore,
+      agentInsights
     };
   }
 }
