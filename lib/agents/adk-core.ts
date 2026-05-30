@@ -5,7 +5,7 @@ import { toolSynthesizer } from '../tools/synthesis.ts';
 import type { MemoryRecord } from '../memory/memory-store.ts';
 
 // Define the result type from ADKAgent.run
-interface ADKAgentResult {
+type ADKAgentResult = {
   success: true;
   agent: string;
   output: string;
@@ -14,7 +14,7 @@ interface ADKAgentResult {
   success: false;
   agent: string;
   error: string;
-}
+};
 
 /**
  * ADK Core: Agent Abstraction Layer
@@ -29,11 +29,7 @@ export interface AgentConfig {
    model?: string | undefined;
 }
 
-interface Tool {
-   name: string;
-   description: string;
-   handler: () => unknown;
-}
+type Tool = any;
 
 
 export class ADKAgent {

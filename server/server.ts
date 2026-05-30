@@ -49,7 +49,7 @@ app.post('/logic/export', validateExportRequest, async (req, res) => {
   try {
     const parsed = JSON.parse(node.config);
     if (targetSystem.toUpperCase() === "SAP") {
-      const sapPayload = formatForSAP(parsed);
+      const sapPayload = formatForSAP(parsed, targetSystem);
       const success = await exportToSAP(sapPayload);
       if (success) {
         LogicRepo.logAction('export', nodeName, 'Exported to SAP');
