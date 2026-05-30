@@ -189,7 +189,7 @@ export default function EditorPage() {
                     <span className={cn("px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border", CATEGORY_STYLE[chapter.category])}>
                         {chapter.gri}
                     </span>
-                    <BrandStatusDot status={isGeneratingAI[chapter.id] ? 'active' : 'idle'} pulse size="xs" />
+                    <BrandStatusDot status={isGeneratingAI[chapter.id] ? 'active' : 'inactive'} pulse size="xs" />
                     <span className="text-[10px] font-mono text-white/20">CHAR_COUNT: {(generatedContent[chapter.id] || '').length}</span>
                  </div>
                  <h2 className="text-3xl font-black text-white/90 tracking-tight">{chapter.title}</h2>

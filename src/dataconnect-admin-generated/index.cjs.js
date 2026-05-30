@@ -7,13 +7,6 @@ const connectorConfig = {
 };
 exports.connectorConfig = connectorConfig;
 
-function createDemoData(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
-}
-exports.createDemoData = createDemoData;
-
 function listAllTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
@@ -195,4 +188,11 @@ function getMyCompanyProfile(dcOrOptions, options) {
   return dcInstance.executeQuery('GetMyCompanyProfile', undefined, inputOpts);
 }
 exports.getMyCompanyProfile = getMyCompanyProfile;
+
+function createDemoData(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
+  dcInstance.useGen(true);
+  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
+}
+exports.createDemoData = createDemoData;
 

@@ -15,6 +15,7 @@ const GRI_CHAPTERS = [
 ];
 
 import { OmniAgentBus, omniAgentBus } from './omni-agent-bus';
+export { omniAgentBus };
 
 /**
  * Agent0: Specialized Low-Level Executor
@@ -144,7 +145,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       }
 
       try {
-        const genResponse = await researcherAgent.run(`Write a detailed professional draft for the ESG report chapter: ${chapter.title} (${chapter.gri}).`, ctx);
+        const genResponse = (await researcherAgent.run(`Write a detailed professional draft for the ESG report chapter: ${chapter.title} (${chapter.gri}).`, ctx)) as any;
 
         if (!genResponse.success || !genResponse.output) {
           const errorMsg = genResponse.error || 'No output generated';
