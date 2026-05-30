@@ -14,7 +14,7 @@ import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { ScenarioVisualizer } from '@/components/ui/ScenarioVisualizer';
 import { SwarmResonance } from '@/components/ui/SwarmResonance';
 import { cn } from '@/lib/utils';
-import { omniAgentBus } from '@/lib/agents/omni-commander';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 interface IntegritySeal {
   id: string;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Cpu, Shield, Zap, Activity, Info } from 'lucide-react';
-import { omniAgentBus } from '@/lib/agents/omni-commander';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 import { cn } from '@/lib/utils';
 
 interface EventLog {
