@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { OmniCommander } from '@/lib/agents/omni-commander';
 import { omniSwarm } from '@/lib/agents/adk-swarm';
 import { pushBusEvent } from '../stream/route';
+import { pushAlert } from '@/lib/slack/slack-gateway';
+import { pushTelegramAlert } from '@/lib/slack/telegram-gateway';
+
 
 /**
  * Scheduled Auto-Sync Endpoint
@@ -20,18 +23,33 @@ const VALID_MISSIONS = [
   'EVIDENCE_AUDIT',
   'PILOT_REPORT',
   'TRANSFER_TO_NCBDB',
+  'SECURITY_SCAN',
+  'DEPENDENCY_UPDATE',
+  'PERFORMANCE_REPORT',
+  'CLEANUP_RESOURCES',
+  'CODE_QUALITY_REPORT',
 ] as const;
 
 type MissionType = typeof VALID_MISSIONS[number];
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { mission, context, cronSecret } = body as {
-      mission?: string;
-      context?: Record<string, unknown>;
-      cronSecret?: string;
-    };
+
+    let body = {};
+    try {
+      body = await req.json();
+    } catch (e) {
+      // Body might be empty
+    }
+
+    const bodyMission = body ? (body as any).mission : undefined;
+
+    const searchParams = req.nextUrl.searchParams;
+    const missionParam = searchParams.get('mission');
+    const mission = bodyMission || missionParam;
+    const context = body ? (body as any).context : {};
+    const cronSecret = body ? (body as any).cronSecret : undefined;
+
 
     // Security: Validate cron secret for automated triggers
     const expectedSecret = process.env.CRON_SECRET;
@@ -64,12 +82,124 @@ export async function POST(req: NextRequest) {
     const commander = new OmniCommander(omniSwarm);
     const result = await commander.command(mission, context);
 
+
     // Broadcast completion
     pushBusEvent('SCHEDULE_COMPLETE', {
       mission,
       success: result.success,
       completedAt: new Date().toISOString(),
     });
+
+    const successMessage = `Mission ${mission} completed successfully.
+${result.message || ''}`;
+    await pushAlert({
+      severity: 'info',
+      title: 'Cron Job Completed',
+      message: successMessage,
+      sourceModule: 'OmniAgent-Schedule'
+    }).catch(e => console.error('Slack notification failed:', e));
+
+    await pushTelegramAlert({
+      severity: 'info',
+      title: 'Cron Job Completed',
+      message: successMessage,
+    }).catch(e => console.error('Telegram notification failed:', e));
+
+
+    return NextResponse.json({
+      scheduled: true,
+      mission,
+      ...result,
+    });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('[Schedule API Error]', errorMessage);
+
+
+    pushBusEvent('SCHEDULE_ERROR', {
+      error: errorMessage,
+      timestamp: new Date().toISOString(),
+    });
+
+    await pushAlert({
+      severity: 'critical',
+      title: 'Cron Job Failed',
+      message: `Mission failed: ${errorMessage}`,
+      sourceModule: 'OmniAgent-Schedule'
+    }).catch(e => console.error('Slack error notification failed:', e));
+
+    await pushTelegramAlert({
+      severity: 'critical',
+      title: 'Cron Job Failed',
+      message: `Mission failed: ${errorMessage}`,
+    }).catch(e => console.error('Telegram error notification failed:', e));
+
+
+    return NextResponse.json(
+      { error: errorMessage, scheduled: false },
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function GET(req: NextRequest) {
+  try {
+    const searchParams = req.nextUrl.searchParams;
+    const mission = searchParams.get('mission');
+    const authHeader = req.headers.get('Authorization');
+    const cronSecret = authHeader ? authHeader.replace('Bearer ', '') : undefined;
+
+    // Security: Validate cron secret for automated triggers
+    const expectedSecret = process.env.CRON_SECRET;
+    if (expectedSecret && cronSecret !== expectedSecret) {
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json({ error: 'Unauthorized: Invalid cron secret' }, { status: 401 });
+      }
+    }
+
+    if (!mission || !VALID_MISSIONS.includes(mission as MissionType)) {
+      return NextResponse.json(
+        {
+          error: `Invalid mission. Valid missions: ${VALID_MISSIONS.join(', ')}`,
+          validMissions: VALID_MISSIONS,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Broadcast schedule event
+    pushBusEvent('SCHEDULE_TRIGGERED', {
+      mission,
+      triggeredAt: new Date().toISOString(),
+      source: cronSecret ? 'cron' : 'manual',
+    });
+
+    // Execute via OmniCommander
+    const commander = new OmniCommander(omniSwarm);
+    const result = await commander.command(mission, {});
+
+    // Broadcast completion
+    pushBusEvent('SCHEDULE_COMPLETE', {
+      mission,
+      success: result.success,
+      completedAt: new Date().toISOString(),
+    });
+
+    const successMessage = `Mission ${mission} completed successfully. \n${result.message || ''}`;
+    await pushAlert({
+      severity: 'info',
+      title: 'Cron Job Completed',
+      message: successMessage,
+      sourceModule: 'OmniAgent-Schedule'
+    }).catch(e => console.error('Slack notification failed:', e));
+
+    await pushTelegramAlert({
+      severity: 'info',
+      title: 'Cron Job Completed',
+      message: successMessage,
+    }).catch(e => console.error('Telegram notification failed:', e));
+
 
     return NextResponse.json({
       scheduled: true,
@@ -85,26 +215,23 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
+    await pushAlert({
+      severity: 'critical',
+      title: 'Cron Job Failed',
+      message: `Mission failed: ${errorMessage}`,
+      sourceModule: 'OmniAgent-Schedule'
+    }).catch(e => console.error('Slack error notification failed:', e));
+
+    await pushTelegramAlert({
+      severity: 'critical',
+      title: 'Cron Job Failed',
+      message: `Mission failed: ${errorMessage}`,
+    }).catch(e => console.error('Telegram error notification failed:', e));
+
+
     return NextResponse.json(
       { error: errorMessage, scheduled: false },
       { status: 500 }
     );
   }
-}
-
-/**
- * GET /api/omni-agent-api/schedule
- * Returns available missions and schedule status.
- */
-export async function GET() {
-  return NextResponse.json({
-    availableMissions: VALID_MISSIONS,
-    cronConfigured: !!process.env.CRON_SECRET,
-    status: 'ready',
-    documentation: {
-      endpoint: 'POST /api/omni-agent-api/schedule',
-      headers: { 'x-cron-secret': 'Your CRON_SECRET env variable' },
-      body: '{ "mission": "SYNC_OMNIBLUE_OMNITABLE", "context": {} }',
-    },
-  });
 }

@@ -2,16 +2,59 @@
   "$schema": "https://vercel.com/docs/build-output-api/v3/primitives",
   "version": 2,
   "builds": [
-    { "src": "package.json", "use": "@vercel/next" }
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/$1",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
       "headers": {
         "Access-Control-Allow-Origin": "*"
       }
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/omni-agent-api/schedule?mission=SYNC_OMNIBLUE_OMNITABLE",
+      "schedule": "0 */3 * * *"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=EVIDENCE_AUDIT",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=PILOT_REPORT",
+      "schedule": "0 3 * * 0"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=SECURITY_SCAN",
+      "schedule": "0 4 * * 1"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=DEPENDENCY_UPDATE",
+      "schedule": "0 5 1 * *"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=PERFORMANCE_REPORT",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=CLEANUP_RESOURCES",
+      "schedule": "0 1 * * 0"
+    },
+    {
+      "path": "/api/omni-agent-api/schedule?mission=CODE_QUALITY_REPORT",
+      "schedule": "0 7 * * 1"
     }
   ]
 }
