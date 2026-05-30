@@ -65,7 +65,7 @@ export default function ProfilePage() {
     // Zod Validation
     const validationResult = profileSchema.safeParse(formData);
     if (!validationResult.success) {
-      toast(validationResult.error.errors[0].message, 'error');
+      toast(validationResult.error.issues[0].message, 'error');
       return;
     }
 

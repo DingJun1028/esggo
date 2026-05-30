@@ -124,3 +124,29 @@ Question: ${query}
     sources: contextDocs.map((d: any) => ({ id: d.document_id, score: d.similarity }))
   };
 }
+
+/**
+ * Compatibility: Query with history
+ */
+export async function queryKnowledgeBase(query: string, history: any[] = []) {
+  // In a real implementation, history would be passed to the model
+  return queryWithIntelligence(query);
+}
+
+/**
+ * Compatibility: Process PDF
+ */
+export async function processPDFAndIngest(buffer: Buffer, fileName: string): Promise<number> {
+  const content = buffer.toString('utf-8').slice(0, 5000); // Simple mock for PDF text extraction
+  await ingestDocument(fileName, content, 'DOCUMENT', { fileName });
+  return chunkText(content).length;
+}
+
+/**
+ * Compatibility: Add direct items
+ */
+export async function addToKnowledgeBase(documents: any[]) {
+  for (const doc of documents) {
+    await ingestDocument(doc.source || doc.id, doc.text, doc.metadata?.type || 'DOCUMENT', doc.metadata);
+  }
+}

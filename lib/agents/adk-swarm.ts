@@ -4,6 +4,7 @@ import { ADK_STANDARD_TOOLS } from './adk-tools';
 import { agent0, OmniCommander, omniAgentBus } from './omni-commander';
 import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
 import { memoryStore } from '../memory/memory-store';
+import type { MemoryRecord } from '../memory/memory-store';
 
 // Define the result type from ADKAgent.run
 interface ADKAgentResult {
@@ -89,6 +90,7 @@ class CollaborativeSwarmAgent {
     if (this.agentConfig.name === 'ESG_Auditor') {
       omniAgentBus.subscribe('SIMULATION_COMPLETE', (payload) => this.handleEvent('SIMULATION_COMPLETE', payload));
       omniAgentBus.subscribe('5T_SEAL', (payload) => this.handleEvent('5T_SEAL', payload));
+      omniAgentBus.subscribe('WEBHOOK_RECEIVED', (payload) => this.handleEvent('WEBHOOK_RECEIVED', payload));
     }
 
     if (this.agentConfig.name === 'ESG_Researcher') {
@@ -97,13 +99,37 @@ class CollaborativeSwarmAgent {
 
     if (this.agentConfig.name === 'Agent0') {
       omniAgentBus.subscribe('MISSION_START', (payload) => this.handleEvent('MISSION_START', payload));
+      omniAgentBus.subscribe('HEALING_PROTOCOL', (payload) => this.handleEvent('HEALING_PROTOCOL', payload));
     }
   }
 
   private async handleEvent(event: string, payload: Record<string, unknown>) {
     console.log(`[Swarm Agent] ${this.agentConfig.name} reacting to: ${event}`);
     
-    // Simple reaction logic: If it's a simulation, Auditor might want to log a compliance insight
+    // 1. Auditor reacts to Webhook (NCBDB Modification)
+    if (event === 'WEBHOOK_RECEIVED' && this.agentConfig.name === 'ESG_Auditor') {
+      console.log(`[ESG_Auditor] 🧐 Inspecting external modification...`);
+      const { table, recordId, data } = payload;
+      
+      // Perform Drift Detection (Simulation)
+      const isAuthorized = false; // Mocking unauthorized manual edit
+      if (!isAuthorized) {
+        omniAgentBus.publish('HEALING_PROTOCOL', { 
+          targetId: recordId, 
+          table, 
+          reason: 'Unauthorized manual data drift detected' 
+        });
+      }
+    }
+
+    // 2. Agent0 reacts to Healing Protocol
+    if (event === 'HEALING_PROTOCOL' && this.agentConfig.name === 'Agent0') {
+      console.log(`[Agent0] 🛡️ Received Healing Order. Initiating Universal Restoration...`);
+      const { HealingGuardian } = await import('../healing-guardian');
+      await HealingGuardian.executeUniversalHealing(payload.targetId as string, payload.table as string);
+    }
+
+    // 3. Auditor reacts to Simulation
     if (event === 'SIMULATION_COMPLETE' && this.agentConfig.name === 'ESG_Auditor') {
       await this.execute(`Perform a rapid compliance audit for this simulation result: ${JSON.stringify(payload.results)}`, payload);
     }
@@ -183,7 +209,7 @@ export class CollaborativeADKSwarm {
      }
 
      // Initiate swarm negotiation if needed
-     const negotiationResult = await this.swarmNegotiate(agentResults);
+     const negotiationResult = await this.swarmNegotiate(agentResults as { [key: string]: ADKAgentResult });
 
      return negotiationResult ?? agentResults;
    }
