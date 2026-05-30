@@ -3,10 +3,25 @@ import { AI_TOOLS, executeTool } from './ai-tools';
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
+interface GeminiMessage {
+  role: 'user' | 'model' | 'function' | 'system';
+  parts: {
+    text?: string;
+    functionCall?: {
+      name: string;
+      args: Record<string, unknown>;
+    };
+    functionResponse?: {
+      name: string;
+      response: Record<string, unknown>;
+    };
+  }[];
+}
+
 export async function callGeminiWithTools(prompt: string, systemInstruction?: string) {
   if (!GEMINI_API_KEY) throw new Error('Gemini API Key missing');
 
-  const messages: any[] = [{ role: 'user', parts: [{ text: prompt }] }];
+  const messages: GeminiMessage[] = [{ role: 'user', parts: [{ text: prompt }] }];
   const tools = [{ function_declarations: AI_TOOLS }];
 
   try {
@@ -37,7 +52,7 @@ export async function callGeminiWithTools(prompt: string, systemInstruction?: st
         parts: [{
           functionResponse: {
             name,
-            response: { content: toolResult }
+            response: { content: toolResult } as any
           }
         }]
       });
@@ -58,7 +73,7 @@ export async function callGeminiWithTools(prompt: string, systemInstruction?: st
     }
 
     return part?.text || 'No response';
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[AI Server Service] Tool call error:', error);
     throw error;
   }

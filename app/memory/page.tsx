@@ -5,7 +5,7 @@ import { memoryStore } from '@/lib/memory/memory-store';
 export default function MemoryDashboard() {
   const [search, setSearch] = useState('');
   const [agent, setAgent] = useState('');
-  const [memories, setMemories] = useState<any[]>([]);
+  const [memories, setMemories] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,7 +25,7 @@ export default function MemoryDashboard() {
       setMemories(data.data || []);
       setLoading(false);
       setError(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setLoading(false);
       setError(error.message);
     }

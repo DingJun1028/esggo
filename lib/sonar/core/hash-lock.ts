@@ -10,21 +10,21 @@ export class HashLock {
    * Generate SHA-256 hash for content
    */
   static sha256(content: string | Buffer): string {
-    return createHash('sha256').update(content as any).digest('hex');
+    return createHash('sha256').update(content as string | Buffer).digest('hex');
   }
 
   /**
    * Generate SHA-512 hash for extra security
    */
   static sha512(content: string | Buffer): string {
-    return createHash('sha512').update(content as any).digest('hex');
+    return createHash('sha512').update(content as string | Buffer).digest('hex');
   }
 
   /**
    * Generate HMAC for authenticated content
    */
   static hmac(content: string | Buffer, secret: string): string {
-    return createHmac('sha256', secret).update(content as any).digest('hex');
+    return createHmac('sha256', secret).update(content as string | Buffer).digest('hex');
   }
 
   /**
@@ -48,7 +48,7 @@ export class HashLock {
   /**
    * Generate a batch hash lock for multiple items
    */
-  static batchHash(items: any[]): string {
+  static batchHash(items: unknown[]): string {
     const payload = JSON.stringify(items.sort());
     return this.sha256(payload);
   }

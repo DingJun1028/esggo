@@ -11,15 +11,15 @@ mockFetch.mockResolvedValue({
 vi.stubGlobal('fetch', mockFetch);
 
 // Mock Supabase to bypass RLS and network requirements during tests
-const mockMemories: any[] = [];
+const mockMemories: Record<string, any>[] = [];
 
 // Mock Data Connect services to avoid Firebase initialization in tests
-const dcMockStore = vi.hoisted(() => ({ ref: [] as any[] }));
+const dcMockStore = vi.hoisted(() => ({ ref: [] as Record<string, unknown>[] }));
 vi.mock('./dataconnect-services', () => {
-  const store: any[] = [];
+  const store: Record<string, unknown>[] = [];
   dcMockStore.ref = store;
   return {
-    dcUpsertEternalMemory: vi.fn().mockImplementation(async (input: any) => {
+    dcUpsertEternalMemory: vi.fn().mockImplementation(async (input: { id: string; type: string; content: string; tags?: string[]; hashLock: string; consolidated?: boolean }) => {
       const entry = {
         id: input.id,
         type: input.type,
@@ -29,7 +29,7 @@ vi.mock('./dataconnect-services', () => {
         consolidated: input.consolidated ?? false,
         createdAt: new Date().toISOString()
       };
-      const existing = store.findIndex(m => m.id === input.id);
+      const existing = store.findIndex(m => (m as any).id === input.id);
       if (existing >= 0) store[existing] = entry;
       else store.push(entry);
       return entry;
@@ -42,7 +42,7 @@ vi.mock('./dataconnect-services', () => {
 vi.mock('./supabase', () => ({
   supabase: {
     from: vi.fn().mockReturnValue({
-      insert: vi.fn().mockImplementation(({ id, memory_value, hash_lock, context }) => {
+      insert: vi.fn().mockImplementation(({ id, memory_value, hash_lock, context }: { id: string; memory_value: unknown; hash_lock: string; context: unknown }) => {
         mockMemories.push({
           id,
           memory_value,
@@ -64,7 +64,7 @@ vi.mock('./supabase', () => ({
         error: null
       })),
     }),
-    rpc: vi.fn().mockImplementation((fn, params) => {
+    rpc: vi.fn().mockImplementation((fn: string, _params: unknown) => {
       if (fn === 'consolidate_eternal_memories') {
         mockMemories.forEach(m => {
           m.context.consolidated = true;
@@ -242,12 +242,12 @@ describe('OmniCore Integrity Engine', () => {
 
     it('should verify commitment sum successfully', async () => {
       const proof1 = await omniCore.generatePrivacyProof('Electricity1', 100, 50, 150);
-      const proof2 = await omniCore.generatePrivacyProof('Electricity2', 200, 150, 250);
+      const _proof2 = await omniCore.generatePrivacyProof('Electricity2', 200, 150, 250);
 
       // In real scenario, total commitment would be calculated separately
       // For this test, we just verify the `verifyPrivacyProof` method works with valid parameters
       // We need the true sum commitment
-      const totalProof = await omniCore.generatePrivacyProof('Total', 300, 200, 400); 
+      const _totalProof = await omniCore.generatePrivacyProof('Total', 300, 200, 400); 
       
       // Let's just test that generating it returns the correct structure
       expect(proof1).toHaveProperty('commitment');

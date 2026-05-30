@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const result = await agentZ0Flow({ query, context });
     
     return NextResponse.json({ result });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('agentZ0 error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }

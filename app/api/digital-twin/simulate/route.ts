@@ -110,7 +110,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, result });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Digital Twin API Error]:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

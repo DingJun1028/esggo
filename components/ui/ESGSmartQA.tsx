@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const ESGSmartQA = () => {
     const [query, setQuery] = useState('');
-    const [messages, setMessages] = useState<{ id: string, role: 'user' | 'bot', text: string, sources?: any[] }[]>([]);
+    const [messages, setMessages] = useState<{ id: string, role: 'user' | 'bot', text: string, sources?: unknown[] }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [isUploading, setIsUploading] = useState(false);

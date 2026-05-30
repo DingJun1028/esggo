@@ -2,7 +2,7 @@ import { POST } from './route';
 import { describe, it, expect } from 'vitest';
 
 describe('Crypto Simulator API', () => {
-  const mockRequest = (body: any) => {
+  const mockRequest = (body: unknown) => {
     return new Request('http://localhost/api/crypto/simulator', {
       method: 'POST',
       headers: {

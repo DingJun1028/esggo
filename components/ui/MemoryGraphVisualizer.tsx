@@ -15,7 +15,7 @@ interface Props {
   title?: string;
 }
 
-const NODE_CONFIG: Record<NodeType, { icon: any, color: string, bg: string }> = {
+const NODE_CONFIG: Record<NodeType, { icon: unknown, color: string, bg: string }> = {
   EVIDENCE: { icon: FileText, color: '#003262', bg: '#f1f5f9' },
   POLICY: { icon: Shield, color: '#3b7ea1', bg: '#eff6ff' },
   MEMORY: { icon: Database, color: '#10b981', bg: '#f0fdf4' },

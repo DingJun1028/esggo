@@ -10,7 +10,7 @@ import {
   VerifyRequestPayload, 
 } from '@/src/shared/types';
 
-async function fetcher<T>(url: string, body: any): Promise<ApiResponse<T>> {
+async function fetcher<T>(url: string, body: unknown): Promise<ApiResponse<T>> {
   // Bridge: If the old URL is called, we can internally redirect to the new vault/trpc logic if needed
   // For now, we maintain the same fetch structure but ensure it points to the standard endpoints
   const res = await fetch(url, {

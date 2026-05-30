@@ -16,7 +16,7 @@ export const queryDatabaseTool = {
         return { success: false, error: error.message };
       }
       return { success: true, data };
-    } catch (err: any) {
+    } catch (err: unknown) {
       return { success: false, error: err.message };
     }
   }
@@ -25,7 +25,7 @@ export const queryDatabaseTool = {
 export const insertDatabaseTool = {
   name: 'insert_supabase_data',
   description: '新增一筆紀錄到 Supabase 資料庫中。適用於需要儲存生成的結果或報表。',
-  execute: async (input: { table: string; payload: any }) => {
+  execute: async (input: { table: string; payload: unknown }) => {
     console.log(`[insertDatabaseTool] Executing for table: ${input.table}`);
     try {
       const { data, error } = await supabase
@@ -37,7 +37,7 @@ export const insertDatabaseTool = {
         return { success: false, error: error.message };
       }
       return { success: true, data };
-    } catch (err: any) {
+    } catch (err: unknown) {
       return { success: false, error: err.message };
     }
   }

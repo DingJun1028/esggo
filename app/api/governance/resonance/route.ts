@@ -45,7 +45,7 @@ export async function GET() {
         breakdown: results
       })
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Resonance API] Failed to fetch live data:', error);
     return NextResponse.json<ApiResponse>(
       createErrorResponse('RESONANCE_FAILED', error.message || 'Resonance calculation failed'),

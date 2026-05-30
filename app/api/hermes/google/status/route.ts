@@ -39,7 +39,7 @@ export async function GET() {
       return NextResponse.json({ connected: true, verified: false });
     }
     
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json({ connected: false, error: err.message }, { status: 500 });
   }
 }

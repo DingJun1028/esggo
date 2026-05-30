@@ -21,7 +21,7 @@ app.use('/logic/*', authMiddleware);
 app.post('/logic/initialize', async (req, res) => {
   const config: LogicNodeConfig = req.body;
   const stored = LogicRepo.findById(config.name);
-  let node: any;
+  let node: unknown;
   if (stored) {
     const parsedConfig = JSON.parse(stored.config);
     node = createLogicNode({ ...config, ...parsedConfig });
@@ -59,7 +59,7 @@ app.post('/logic/export', validateExportRequest, async (req, res) => {
           payload: sapPayload 
         });
       }
-    } else if (targetSystem.toUpperCase() === "AITABLE") {
+    } else if (targetSystem.toUpperCase() === "OMNITABLE") {
       const success = await exportToAItable(parsed);
       if (success) {
         LogicRepo.logAction('export', nodeName, 'Synced to AItable');
@@ -71,7 +71,7 @@ app.post('/logic/export', validateExportRequest, async (req, res) => {
     } else {
       res.status(400).json({ error: "Unsupported system" });
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     res.status(500).json({ error: err.message });
   }
 });
@@ -81,7 +81,7 @@ app.post('/logic/process-docs', async (req, res) => {
   try {
     await DocParser.processDocsFolder('C:\\Project\\esggo\\esggo\\docs');
     res.json({ success: true, message: 'All docs processed' });
-  } catch (err: any) {
+  } catch (err: unknown) {
     res.status(500).json({ error: err.message });
   }
 });

@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       const maskLevel = level as MaskingLevel;
       
       let l2KeyHex: string | undefined;
-      const options: any = {};
+      const options: unknown = {};
       
       if (maskLevel === 'L2') {
         const l2Key = randomBytes(32);
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         const secretKey = Buffer.from(l2KeyHex, 'hex');
         const unmasked = unmaskL2Data(masked, secretKey);
         return NextResponse.json({ unmasked });
-      } catch (error: any) {
+      } catch (error: unknown) {
         return NextResponse.json({ error: error.message || '解密失敗' }, { status: 400 });
       }
     }
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[Crypto API Error]', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

@@ -68,14 +68,14 @@ export async function GET() {
   return NextResponse.json({
     status: 'operational',
     availableMissions: [
-      'SYNC_BLUECC_AITABLE',
+      'SYNC_OMNIBLUE_OMNITABLE',
       'EVIDENCE_AUDIT',
       'PILOT_REPORT',
       'TRANSFER_TO_NCBDB',
     ],
     documentation: {
       method: 'POST',
-      body: '{ "task": "SYNC_BLUECC_AITABLE", "context": {} }',
+      body: '{ "task": "SYNC_OMNIBLUE_OMNITABLE", "context": {} }',
     },
   });
 }

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     if (lifecycleError) throw lifecycleError;
 
-    const lifecycleStats = (lifecycleData as any[])?.reduce((acc, item: any) => {
+    const lifecycleStats = (lifecycleData as unknown[])?.reduce((acc, item: unknown) => {
       acc[item.lifecycle_stage] = (acc[item.lifecycle_stage] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     if (sourceError) throw sourceError;
 
-    const sourceStats = (sourceData as any[])?.reduce((acc, item: any) => {
+    const sourceStats = (sourceData as unknown[])?.reduce((acc, item: unknown) => {
       acc[item.source_origin] = (acc[item.source_origin] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
       },
       { request_id: requestId }
     ));
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('INTERNAL_ERROR', error.message || '統計失敗'),
       { status: 500 }

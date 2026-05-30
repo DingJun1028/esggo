@@ -60,7 +60,7 @@ export async function exportToAItable(nodeConfig: LogicNodeConfig): Promise<bool
   console.log(`📤 AItable Payload: ${JSON.stringify(payload, null, 2)}`);
   
   // Simulate AItable REST API call
-  // await fetch('https://api.aitable.co/v1/records', { method: 'POST', body: JSON.stringify(payload) });
+  // await fetch('https://api.omni-table.co/v1/records', { method: 'POST', body: JSON.stringify(payload) });
   
   return true;
 }

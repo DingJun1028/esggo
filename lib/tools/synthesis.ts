@@ -5,7 +5,7 @@ import { createHash } from 'crypto';
 
 export interface ToolExecutionResult {
   success: boolean;
-  result?: any;
+  result?: unknown;
   error?: string;
   executionTime?: number;
   generatedCode?: string;
@@ -30,7 +30,7 @@ export class DynamicToolSynthesizer {
    */
   async synthesizeTool(
     problem: string,
-    context?: any,
+    context?: unknown,
     agentName: string = 'Unknown'
   ): Promise<ToolExecutionResult> {
     const startTime = Date.now();
@@ -38,7 +38,7 @@ export class DynamicToolSynthesizer {
     // Retrieve relevant memories for context
     const relevantMemories = await memoryStore.search(problem, 5);
     const memoryContext = relevantMemories
-      .map((m: any) => `Past: ${m.task} -> ${m.result}`)
+      .map((m: unknown) => `Past: ${m.task} -> ${m.result}`)
       .join('\n');
 
     // Generate the tool code
@@ -82,7 +82,7 @@ export class DynamicToolSynthesizer {
    */
   private async generateToolCode(
     problem: string,
-    context?: any,
+    context?: unknown,
     memoryContext?: string
   ): Promise<string> {
     const prompt = `
@@ -134,7 +134,7 @@ Return ONLY the function code, no explanations or markdown formatting.
    */
   private async executeSandboxedTool(
     code: string,
-    context: any
+    context: unknown
   ): Promise<ToolExecutionResult> {
     try {
       // Wrap the code in a function that we can execute
@@ -155,7 +155,7 @@ Return ONLY the function code, no explanations or markdown formatting.
         result,
         executionTime: 0 // Will be filled by caller
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
         error: error.message,

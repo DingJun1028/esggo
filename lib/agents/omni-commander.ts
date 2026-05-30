@@ -39,7 +39,7 @@ export interface MissionResult {
    agent?: string;
    commanderOutput?: string;
    swarmResults?: Record<string, any>;
-   negotiation?: any;
+   negotiation?: unknown;
 }
 
 /**
@@ -81,8 +81,8 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       return await this.runEvidenceAuditMission(context);
     }
 
-    if (task.includes('SYNC_BLUECC_AITABLE')) {
-      return await this.runBlueCCToAITableIntegration(context);
+    if (task.includes('SYNC_OMNIBLUE_OMNITABLE')) {
+      return await this.runOmniBlueToOmniTableIntegration(context);
     }
 
     try {
@@ -288,58 +288,58 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
   }
 
   /**
-   * 藍碳/企業通訊樞紐 (BlueCC) 與 AITable 無縫整合
-   * 從 Supabase bluecc_nodes 擷取節點，並同步至 AITable 作為 Logic Nodes。
+   * 藍碳/企業通訊樞紐 (OmniBlue) 與 OmniTable 無縫整合
+   * 從 Supabase omniblue_nodes 擷取節點，並同步至 OmniTable 作為 Logic Nodes。
    */
-  private async runBlueCCToAITableIntegration(context?: Record<string, unknown>): Promise<MissionResult> {
-    console.log(`[OmniCommander] 🔄 Starting BlueCC to AITable Integration Mission...`);
-    omniAgentBus.publish('MISSION_START', { mission: 'BlueCC to AITable Sync' });
+  private async runOmniBlueToOmniTableIntegration(context?: Record<string, unknown>): Promise<MissionResult> {
+    console.log(`[OmniCommander] 🔄 Starting OmniBlue to OmniTable Integration Mission...`);
+    omniAgentBus.publish('MISSION_START', { mission: 'OmniBlue to OmniTable Sync' });
 
     try {
       const { supabase } = await import('../db/supabase');
-      const { syncLogicNodesToAITable } = await import('../../server/src/integrations/aitable-client');
+      const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/omni-table-client');
       
-      // 1. Fetch from BlueCC nodes
-      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching BlueCC Nodes from Supabase' });
-      const { data: blueccNodes, error } = await supabase.from('bluecc_nodes').select('*');
+      // 1. Fetch from OmniBlue nodes
+      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching OmniBlue Nodes from Supabase' });
+      const { data: omniblueNodes, error } = await supabase.from('omniblue_nodes').select('*');
       
       if (error) {
-        throw new Error(`Failed to fetch from BlueCC: ${error.message}`);
+        throw new Error(`Failed to fetch from OmniBlue: ${error.message}`);
       }
 
-      const nodes = blueccNodes || [];
-      console.log(`[OmniCommander] Fetched ${nodes.length} BlueCC nodes.`);
+      const nodes = omniblueNodes || [];
+      console.log(`[OmniCommander] Fetched ${nodes.length} OmniBlue nodes.`);
 
       // 2. Transform to Logic Nodes
-      const logicNodes = nodes.map((n: any) => ({
-        name: n.name || n.id || 'Unknown BlueCC Node',
+      const logicNodes = nodes.map((n: unknown) => ({
+        name: n.name || n.id || 'Unknown OmniBlue Node',
         compliance_score: n.score || 100,
-        logic_type: n.type || 'BlueCC Sync',
+        logic_type: n.type || 'OmniBlue Sync',
         timestamp: n.created_at || new Date().toISOString(),
         targetSystem: n.target || 'ESG GO Hub'
       }));
 
-      // 3. Sync to AITable
-      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing ${logicNodes.length} nodes to AITable` });
-      const syncSuccess = await syncLogicNodesToAITable(logicNodes);
+      // 3. Sync to OmniTable
+      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing ${logicNodes.length} nodes to OmniTable` });
+      const syncSuccess = await syncLogicNodesToOmniTable(logicNodes);
 
       if (!syncSuccess) {
-        throw new Error('AITable Sync operation returned false.');
+        throw new Error('OmniTable Sync operation returned false.');
       }
 
-      omniAgentBus.publish('MISSION_COMPLETE', { mission: 'BlueCC to AITable Sync', totalSynced: logicNodes.length });
+      omniAgentBus.publish('MISSION_COMPLETE', { mission: 'OmniBlue to OmniTable Sync', totalSynced: logicNodes.length });
       return {
         success: true,
-        message: `Successfully synced ${logicNodes.length} BlueCC nodes to AITable.`,
+        message: `Successfully synced ${logicNodes.length} OmniBlue nodes to OmniTable.`,
         results: logicNodes
       };
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      console.error('[OmniCommander] BlueCC Integration Error:', errorMessage);
+      console.error('[OmniCommander] OmniBlue Integration Error:', errorMessage);
       omniAgentBus.publish('AGENT_ERROR', { agent: 'OmniAgent', error: errorMessage });
       return {
         success: false,
-        message: 'BlueCC to AITable Integration failed',
+        message: 'OmniBlue to OmniTable Integration failed',
         error: errorMessage
       };
     }

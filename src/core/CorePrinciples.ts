@@ -56,7 +56,10 @@ export function clampFactor(value: number): number | null {
  * 檢查是否所有必備部件已實作
  */
 export function validateCorePresence(core: unknown): core is { uuid: string; hash_lock: string } {
-  return (core as any)?.uuid !== undefined && (core as any)?.hash_lock !== undefined;
+  if (typeof core !== 'object' || core === null) return false;
+  const c = core as Record<string, unknown>;
+  return typeof c.uuid === 'string' && typeof c.hash_lock === 'string';
 }
 
-export default { Principle, Principles, getPrincipleDescription, clampFactor, validateCorePresence };
+const CorePrinciples = { Principle, Principles, getPrincipleDescription, clampFactor, validateCorePresence };
+export default CorePrinciples;

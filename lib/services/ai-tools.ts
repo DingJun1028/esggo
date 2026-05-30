@@ -46,7 +46,7 @@ export const AI_TOOLS = [
   }
 ];
 
-export async function executeTool(name: string, args: any) {
+export async function executeTool(name: string, args: unknown) {
   console.log(`[AI Tool Engine] Executing tool: ${name} with args:`, args);
   
   switch (name) {

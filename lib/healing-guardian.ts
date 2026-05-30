@@ -20,7 +20,7 @@ export class HealingGuardian {
   /**
    * Evaluates incoming webhook payloads for manual tampering and triggers healing if necessary.
    */
-  static async evaluateSensorPayload(payload: any): Promise<void> {
+  static async evaluateSensorPayload(payload: unknown): Promise<void> {
     const { action, table, record, oldRecord } = payload;
     console.log(`[HealingGuardian] 📡 Intercepted ${action} on ${table}. Evaluating drift...`);
 
@@ -67,7 +67,7 @@ export class HealingGuardian {
 
       return healingReport;
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       const failReport: HealingReport = {
         id: `HG-FAIL`,
         status: 'critical',

@@ -9,7 +9,7 @@ import { UniversalStatusDot } from '../../../components/ui/universal/UniversalSt
 import { UniversalBadge } from '../../../components/ui/universal/UniversalBadge';
 
 export default function MetricsPage() {
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -31,7 +31,7 @@ export default function MetricsPage() {
     setLoading(false);
   };
 
-  const handleAddMetric = async (data: any) => {
+  const handleAddMetric = async (data: unknown) => {
     try {
       // Basic transformations
       const payload = {

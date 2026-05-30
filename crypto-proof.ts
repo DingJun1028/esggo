@@ -105,7 +105,7 @@ export interface HashLockResult {
     timestamp: string;
 }
 
-export async function createHashLock(data: any): Promise<HashLockResult> {
+export async function createHashLock(data: unknown): Promise<HashLockResult> {
     const timestamp = new Date().toISOString();
     // 序列化資料與時間戳以防止重放
     const content = JSON.stringify(data) + timestamp;
@@ -114,7 +114,7 @@ export async function createHashLock(data: any): Promise<HashLockResult> {
     return { hash, timestamp };
 }
 
-export async function verifyHashLock(data: any, originalHash: string, originalTimestamp: string): Promise<boolean> {
+export async function verifyHashLock(data: unknown, originalHash: string, originalTimestamp: string): Promise<boolean> {
     const content = JSON.stringify(data) + originalTimestamp;
     const newHash = createHash('sha256').update(content).digest('hex');
     return newHash === originalHash;
@@ -216,7 +216,7 @@ import * as snarkjs from 'snarkjs';
  * The verifier ONLY knows the public signals and the proof, NOT the value or blinding factor.
  */
 export async function verifySnarkJSProof(
-    vKey: any,
+    vKey: unknown,
     publicSignals: string[],
     proof: SnarkJSProof
 ): Promise<boolean> {

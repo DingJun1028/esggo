@@ -16,10 +16,10 @@ export class AuditRepository {
   /**
    * 記錄審計日誌
    */
-  async log(entry: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog> {
+  async log(entry: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog | undefined> {
     try {
       const { data, error } = await supabase
-        .from('audit_logs' as any)
+        .from('audit_logs')
         .insert({
           user_id: entry.user_id,
           action: entry.action,
@@ -30,14 +30,15 @@ export class AuditRepository {
           ip_address: entry.ip_address,
           user_agent: entry.user_agent,
           session_id: entry.session_id,
-        } as any)
+        })
         .select()
         .single();
 
       if (error) handleSupabaseError(error);
-      return this.mapToAuditLog(data);
+      return data ? this.mapToAuditLog(data) : undefined;
     } catch (error) {
       handleSupabaseError(error);
+      return undefined;
     }
   }
 
@@ -46,7 +47,7 @@ export class AuditRepository {
    */
   async findMany(params: AuditQueryParams) {
     try {
-      let query = supabase.from('audit_logs' as any).select('*', { count: 'exact' });
+      let query = supabase.from('audit_logs').select('*', { count: 'exact' });
 
       if (params.user_id) query = query.eq('user_id', params.user_id);
       if (params.resource_id) query = query.eq('resource_id', params.resource_id);
@@ -63,27 +64,28 @@ export class AuditRepository {
       if (error) handleSupabaseError(error);
 
       return {
-        data: (data || []).map(this.mapToAuditLog),
+        data: (data || []).map(row => this.mapToAuditLog(row)),
         total: count || 0
       };
     } catch (error) {
       handleSupabaseError(error);
+      return { data: [], total: 0 };
     }
   }
 
-  private mapToAuditLog(row: any): AuditLog {
+  private mapToAuditLog(row: Record<string, unknown>): AuditLog {
     return {
-      id: row.id,
+      id: row.id as string,
       user_id: row.user_id as UserID,
       action: row.action as AuditAction,
       severity: row.severity as AuditSeverity,
-      resource_type: row.resource_type as any,
-      resource_id: row.resource_id,
-      details: row.details,
-      ip_address: row.ip_address,
-      user_agent: row.user_agent,
-      timestamp: new Date(row.timestamp),
-      session_id: row.session_id,
+      resource_type: row.resource_type as 'evidence' | 'ucc' | 'user' | 'system',
+      resource_id: row.resource_id as string,
+      details: row.details as any, // details is complex JSON
+      ip_address: row.ip_address as string | undefined,
+      user_agent: row.user_agent as string | undefined,
+      timestamp: new Date(row.timestamp as string),
+      session_id: row.session_id as string | undefined,
     };
   }
 }

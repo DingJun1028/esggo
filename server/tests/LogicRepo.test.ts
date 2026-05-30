@@ -3,9 +3,9 @@ import Database from 'better-sqlite3';
 import { join } from 'path';
 
 describe('LogicRepo', () => {
-  let db: any;
-  let repo: any;
-  let originalCreateTable: any;
+  let db: unknown;
+  let repo: unknown;
+  let originalCreateTable: unknown;
   let testDbPath: string = join(process.cwd(), 'logic_registry.test.db');
 
   beforeEach(() => {

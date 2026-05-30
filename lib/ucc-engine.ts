@@ -66,7 +66,7 @@ export class UCCEngine {
     // 4. 寫入聖碑 (Vault Omni)
     const supabase = await createServerClient();
     const { error } = await supabase
-      .from('evidence_vault' as any)
+      .from('evidence_vault')
       .insert({
         uuid: crystal.core.uuid,
         timestamp: crystal.core.timestamp,
@@ -80,7 +80,7 @@ export class UCCEngine {
           rs: crystal.rs,
           aura: crystal.aura.visual_state
         },
-      } as any);
+      });
 
     if (error) throw new Error(`結晶寫入失敗：${error.message}`);
 
@@ -105,7 +105,7 @@ export class UCCEngine {
     uuid: string;
     timestamp: number;
     formula: string;
-    impactMetric: Record<string, any>;
+    impactMetric: Record<string, unknown>;
   }): string {
     const sortedData = JSON.stringify(data, Object.keys(data).sort());
     return createHash('sha256').update(sortedData).digest('hex');
@@ -131,21 +131,20 @@ export class UCCEngine {
   ): Promise<OmniInfoCrystal> {
     const supabase = await createServerClient();
     const { data: rawData, error } = await supabase
-      .from('evidence_vault' as any)
+      .from('evidence_vault')
       .select('*')
       .eq('uuid', uuid)
       .single();
 
-    const evidence = rawData as any;
-    if (error || !evidence) throw new Error('證據不存在');
+    if (error || !rawData) throw new Error('證據不存在');
 
     return this.sealEvidence({
-      formula: evidence.formula,
-      impactMetric: evidence.impact_metric,
-      sourceOrigin: evidence.source_origin,
+      formula: rawData.formula,
+      impactMetric: rawData.impact_metric,
+      sourceOrigin: rawData.source_origin,
       lifecycleStage: newStage,
       metadata: {
-        ...evidence.metadata,
+        ...rawData.metadata,
         previousVersion: uuid,
         transitionedAt: Date.now(),
       },
@@ -157,13 +156,12 @@ export class UCCEngine {
    */
   async verifyEvidence(uuid: string): Promise<boolean> {
     const supabase = await createServerClient();
-    const { data: rawData, error } = await supabase
-      .from('evidence_vault' as any)
+    const { data, error } = await supabase
+      .from('evidence_vault')
       .select('*')
       .eq('uuid', uuid)
       .single();
 
-    const data = rawData as any;
     if (error || !data) return false;
 
     const computedHash = this.computeHashLock({
@@ -181,19 +179,18 @@ export class UCCEngine {
    */
   async traceEvidence(uuid: string) {
     const supabase = await createServerClient();
-    const { data: rawData, error } = await supabase
-      .from('evidence_vault' as any)
+    const { data: evidence, error } = await supabase
+      .from('evidence_vault')
       .select('*')
       .eq('uuid', uuid)
       .single();
 
-    const evidence = rawData as any;
     if (error || !evidence) throw new Error('Crystal not found');
 
     const isValid = await this.verifyEvidence(uuid);
 
     const { data: auditTrail } = await supabase
-      .from('audit_trail' as any)
+      .from('audit_trail')
       .select('*')
       .eq('record_id', uuid)
       .order('created_at', { ascending: false });

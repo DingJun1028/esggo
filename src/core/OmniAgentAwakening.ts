@@ -9,29 +9,36 @@ export interface UserIntent {
 }
 
 /** Simplified stubs for the meta-libraries */
-namespace QuantumEye {
-  export async function analyze(intent: UserIntent) { return `Essence extracted from: ${intent.description}`; }
-}
-namespace OmniGuide {
-  export async function match(essence: string) { return { architecture: essence, aligned: true }; }
-}
-namespace WingsOfLight {
-  export async function distribute(arch: { architecture: string }) { return [arch]; }
-}
-namespace IComponentCore {
-  export async function generate(results: unknown[]) { return { results, uuid: 'XXXX-XXXX', version: '1.0.0' }; }
-}
-namespace EntropyForge {
-  export async function purify(manifest: { results: unknown[]; uuid: string }) {
-    return { ...manifest, purified: true, hashLock: `LOCK-${manifest.uuid}` };
-  }
-}
-namespace OmnipotentRepository {
-  export async function save(asset: { uuid: string; purified: boolean; hashLock: string }) {
+const QuantumEye = {
+  analyze: async (intent: UserIntent) => `Essence extracted from: ${intent.description}`
+};
+
+const OmniGuide = {
+  match: async (essence: string) => ({ architecture: essence, aligned: true })
+};
+
+const WingsOfLight = {
+  distribute: async (arch: { architecture: string }) => [arch]
+};
+
+const IComponentCoreGen = {
+  generate: async (results: unknown[]) => ({ results, uuid: 'XXXX-XXXX', version: '1.0.0' })
+};
+
+const EntropyForge = {
+  purify: async (manifest: { results: unknown[]; uuid: string }) => ({
+    ...manifest,
+    purified: true,
+    hashLock: `LOCK-${manifest.uuid}`
+  })
+};
+
+const OmnipotentRepository = {
+  save: async (asset: { uuid: string; purified: boolean; hashLock: string }) => {
     console.log(`[Eternal Engraving] Saved: ${asset.uuid}, purified=${asset.purified}, hashLock=${asset.hashLock}`);
     return asset;
   }
-}
+};
 
 /**
  * Execute the awakened sovereignty cycle
@@ -40,7 +47,7 @@ export const executeAwakenedSovereignty = async (intent: UserIntent) => {
   const coreEssence = await QuantumEye.analyze(intent);
   const architecture = await OmniGuide.match(coreEssence);
   const results = await WingsOfLight.distribute(architecture);
-  const manifest = await IComponentCore.generate(results);
+  const manifest = await IComponentCoreGen.generate(results);
   const purifiedAsset = await EntropyForge.purify(manifest);
   return await OmnipotentRepository.save(purifiedAsset);
 };

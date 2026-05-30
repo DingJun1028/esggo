@@ -18,7 +18,7 @@ async function runFullProcess() {
   const healingResult = await healingService.healCard(card);
   console.log('HealingResult:', healingResult);
 
-  const coreCard: any = {
+  const coreCard: unknown = {
     uuid: card.uuid,
     version: '1.0.0',
     timestamp: card.lastUpdated,

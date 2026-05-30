@@ -1,19 +1,19 @@
 /**
- * AITable API Proxy Route
+ * OmniTable API Proxy Route
  * ═══════════════════════
- * Server-side API proxy that isolates the AITABLE_API_KEY
- * from the client bundle. All AITable operations flow through here.
+ * Server-side API proxy that isolates the OMNITABLE_API_KEY
+ * from the client bundle. All OmniTable operations flow through here.
  *
- * GET  /api/aitable?action=spaces
- * GET  /api/aitable?action=nodes&spaceId=xxx
- * GET  /api/aitable?action=records&datasheetId=xxx&pageSize=20&pageNum=1
- * GET  /api/aitable?action=fields&datasheetId=xxx
- * GET  /api/aitable?action=views&datasheetId=xxx
- * POST /api/aitable  { action, ...payload }
+ * GET  /api/omni-table?action=spaces
+ * GET  /api/omni-table?action=nodes&spaceId=xxx
+ * GET  /api/omni-table?action=records&datasheetId=xxx&pageSize=20&pageNum=1
+ * GET  /api/omni-table?action=fields&datasheetId=xxx
+ * GET  /api/omni-table?action=views&datasheetId=xxx
+ * POST /api/omni-table  { action, ...payload }
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAITableServerClient } from '@/lib/aitable/client';
+import { getOmniTableServerClient } from '@/lib/omni-table/client';
 
 function errorResponse(message: string, status = 400) {
   return NextResponse.json(
@@ -26,7 +26,7 @@ function errorResponse(message: string, status = 400) {
 
 export async function GET(req: NextRequest) {
   try {
-    const client = getAITableServerClient();
+    const client = getOmniTableServerClient();
     const { searchParams } = req.nextUrl;
     const action = searchParams.get('action');
 
@@ -76,8 +76,8 @@ export async function GET(req: NextRequest) {
       default:
         return errorResponse(`Unknown action: ${action}. Valid: spaces, nodes, records, fields, views`);
     }
-  } catch (err: any) {
-    console.error('[AITable API Proxy] GET error:', err);
+  } catch (err: unknown) {
+    console.error('[OmniTable API Proxy] GET error:', err);
     return errorResponse(err.message || 'Internal Server Error', err.statusCode || 500);
   }
 }
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const client = getAITableServerClient();
+    const client = getOmniTableServerClient();
     const body = await req.json();
     const { action, ...payload } = body;
 
@@ -145,8 +145,8 @@ export async function POST(req: NextRequest) {
           `Unknown action: ${action}. Valid: createRecords, updateRecords, deleteRecords, createDatasheet, createField, deleteField, createEmbedLink`
         );
     }
-  } catch (err: any) {
-    console.error('[AITable API Proxy] POST error:', err);
+  } catch (err: unknown) {
+    console.error('[OmniTable API Proxy] POST error:', err);
     return errorResponse(err.message || 'Internal Server Error', err.statusCode || 500);
   }
 }

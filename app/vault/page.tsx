@@ -9,7 +9,7 @@ import { getSupabaseClient } from '@/lib/supabase';
 export default function VaultPage() {
   const [selectedRecord, setSelectedRecord] = useState<string | null>(null);
 
-  const [vaultRecords, setVaultRecords] = useState<any[]>([]);
+  const [vaultRecords, setVaultRecords] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [sealingId, setSealingId] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ export default function VaultPage() {
         }
 
         if (data) {
-          const records = data.map((item: any) => ({
+          const records = data.map((item: unknown) => ({
             id: item.id,
             uuid: item.id,
             name: item.file_name || 'Unknown Source',

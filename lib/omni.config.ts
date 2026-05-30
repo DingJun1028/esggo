@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-let _omniagentAI: any = null;
+let _omniagentAI: unknown = null;
 export async function getOmniAgentAI() {
   if (!_omniagentAI) {
     const { genkit } = await import('genkit');

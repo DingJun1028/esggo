@@ -28,7 +28,7 @@ export default function OmniAgentOrchestrator() {
       });
       const data = await res.json();
       setResults(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setResults({ success: false, error: err.message });
     } finally {
       setIsRunning(false);
@@ -78,7 +78,7 @@ export default function OmniAgentOrchestrator() {
                        });
                        const data = await res.json();
                        setResults(data);
-                     } catch (err: any) {
+                     } catch (err: unknown) {
                        setResults({ success: false, error: err.message });
                      } finally {
                        setIsRunning(false);
@@ -102,7 +102,7 @@ export default function OmniAgentOrchestrator() {
                        });
                        const data = await res.json();
                        setResults(data);
-                     } catch (err: any) {
+                     } catch (err: unknown) {
                        setResults({ success: false, error: err.message });
                      } finally {
                        setIsRunning(false);

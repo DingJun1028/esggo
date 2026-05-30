@@ -18,7 +18,7 @@ import {
 import { cn } from '../../../lib/utils';
 
 export interface UniversalChartProps {
-  data: any[];
+  data: unknown[];
   type: 'line' | 'bar' | 'pie';
   dataKey: string;     // The main data value for Pie
   xAxisKey?: string;   // For Line/Bar

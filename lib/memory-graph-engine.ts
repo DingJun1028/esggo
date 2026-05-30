@@ -13,7 +13,7 @@ export interface GraphNode {
   id: string;
   type: NodeType;
   label: string;
-  value?: any;
+  value?: unknown;
   status?: string;
   hash_lock?: string;
 }

@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     console.log('[5T Audit] Log saved:', JSON.stringify(body));
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[5T Audit] Error:', err.message);
     return NextResponse.json({ success: false, error: err.message }, { status: 400 });
   }
@@ -36,7 +36,7 @@ export async function GET() {
 
     if (error) throw error;
     return NextResponse.json({ ok: true, logs: data || [] });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json({ ok: false, error: err.message, logs: [] });
   }
 }

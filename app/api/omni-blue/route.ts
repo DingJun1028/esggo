@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { blueCC } from '../../../lib/services/blue-cc';
+import { blueCC } from '../../../lib/services/omni-blue';
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       status,
       resources
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
       { ok: false, error: error.message },
       { status: 500 }
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       { ok: false, error: 'Invalid action' },
       { status: 400 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json(
       { ok: false, error: error.message },
       { status: 500 }

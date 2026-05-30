@@ -3,34 +3,57 @@
  * 計算全域系統共鳴算力 Rs 並管理任督二脈流轉狀態
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useEvidenceStore } from '../stores/evidence.store';
-import { OmniInfoCrystal } from '../../shared/types/ucc.types';
 
 export function useOmniResonance() {
   const { evidences } = useEvidenceStore();
-  const [rs, setRs] = useState(0.92); // 預設基礎共鳴值
-  const [streamStatus, setStreamStatus] = useState<{ ren: number; du: number }>({ ren: 100, du: 100 });
   const [isCrystallizing, setIsCrystallizing] = useState(false);
+  const [noise, setNoise] = useState(0);
 
+  // 1. 使用 useMemo 計算基礎共鳴值（純函數計算）
+  const baseResonanceData = useMemo(() => {
+    if (evidences.length === 0) {
+      return { baseRs: 0.92 };
+    }
+
+    const verifiedCount = evidences.filter(e => e.integrity_status === 'valid').length;
+    const totalCount = evidences.length;
+    const baseRs = (verifiedCount / totalCount) * 0.95 + 0.05;
+
+    return { baseRs };
+  }, [evidences]);
+
+  // 2. 使用 State 儲存含有隨機性的數據，並在 Effect 中更新（副作用處理）
+  const [streamStatus, setStreamStatus] = useState({ ren: 100, du: 100 });
+
+  // 2. 設定週期性更新（模擬生命感）
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setNoise((prev) => {
+        const next = (Math.random() - 0.5) * 0.02;
+        return Math.abs(prev - next) < 0.001 ? prev : next;
+      });
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // 3. 證據變化時初始化壓力狀態
   useEffect(() => {
     if (evidences.length > 0) {
-      // 模擬 Rs 計算邏輯：基於證據的誠信狀態與數量
-      const verifiedCount = evidences.filter(e => e.integrity_status === 'valid').length;
-      const totalCount = evidences.length;
-      const baseRs = (verifiedCount / totalCount) * 0.95 + 0.05;
-      
-      // 加入隨機微擾模擬「生命感」
-      const noise = (Math.random() - 0.5) * 0.02;
-      setRs(Math.min(Math.max(baseRs + noise, 0), 1.0));
-      
-      // 更新任督二脈壓力值
-      setStreamStatus({
-        ren: 80 + Math.random() * 20, // 任脈：記憶穩固度
-        du: 70 + Math.random() * 30   // 督脈：執行活躍度
-      });
+      // 使用 setTimeout 確保不在渲染週期內同步更新
+      const t = setTimeout(() => {
+        setStreamStatus({
+          ren: 80 + Math.random() * 20,
+          du: 70 + Math.random() * 30
+        });
+      }, 0);
+      return () => clearTimeout(t);
     }
-  }, [evidences]);
+  }, [evidences.length]);
+
+  const rs = Math.min(Math.max(baseResonanceData.baseRs + noise, 0), 1.0);
 
   const triggerCrystallization = async () => {
     setIsCrystallizing(true);

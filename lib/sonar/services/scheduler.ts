@@ -60,7 +60,7 @@ export class CrawlerScheduler {
       const result = await crawler.crawl({ url: source.baseUrl });
       console.log(`[Crawler] Success: Found ${result.itemsFound} items from ${source.name}`);
       // In production, results would be stored via Prisma here
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(`[Crawler] Failed: ${source.name} - ${err.message}`);
     } finally {
       await crawler.close();

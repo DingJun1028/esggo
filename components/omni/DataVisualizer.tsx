@@ -9,8 +9,8 @@ import { dataConnect } from '@/lib/firebase';
 import { format, subDays, parseISO, isSameDay } from 'date-fns';
 
 export default function DataVisualizer() {
-  const [distributionData, setDistributionData] = useState<any[]>([]);
-  const [trendData, setTrendData] = useState<any[]>([]);
+  const [distributionData, setDistributionData] = useState<unknown[]>([]);
+  const [trendData, setTrendData] = useState<unknown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalArticles, setTotalArticles] = useState(0);
@@ -27,11 +27,11 @@ export default function DataVisualizer() {
         const articles = response.data.scrapedArticles;
         
         setTotalArticles(articles.length);
-        setHighRisk(articles.filter((a: any) => a.impactLevel === 'high').length);
+        setHighRisk(articles.filter((a: unknown) => a.impactLevel === 'high').length);
 
         // Process Distribution
         const categoryCounts: Record<string, number> = {};
-        articles.forEach((a: any) => {
+        articles.forEach((a: unknown) => {
           const cat = a.category || '其它';
           categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
         });
@@ -49,7 +49,7 @@ export default function DataVisualizer() {
         const dates = Array.from({ length: 7 }).map((_, i) => subDays(today, 6 - i));
         
         const trend = dates.map(date => {
-          const matching = articles.filter((a: any) => {
+          const matching = articles.filter((a: unknown) => {
             if (!a.publishedAt) return false;
             try {
               return isSameDay(parseISO(a.publishedAt), date);
@@ -60,12 +60,12 @@ export default function DataVisualizer() {
           return {
             date: format(date, 'MM/dd'),
             articles: matching.length,
-            alerts: matching.filter((a: any) => a.impactLevel === 'high').length
+            alerts: matching.filter((a: unknown) => a.impactLevel === 'high').length
           };
         });
         
         setTrendData(trend);
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("Failed to load articles", e);
         setError(e.message || "未能載入資料。請檢查資料庫連線或網路狀態。");
       } finally {

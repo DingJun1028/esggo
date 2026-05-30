@@ -32,7 +32,7 @@ export async function POST(request: Request) {
         const { artifact } = await executeSwarmTask(task.id);
 
         return NextResponse.json({ success: true, content: artifact?.content });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('[Sync API] 錯誤發生震盪:', error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }

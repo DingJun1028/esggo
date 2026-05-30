@@ -73,7 +73,8 @@ class CollaborativeSwarmAgent {
   private agent: ADKAgent;
   private memorySummary: string = 'Initial swarm memory summary';
 
-  constructor(private agentConfig: Omit<AgentConfig, 'tools'>) {
+  constructor(agentConfig: Omit<AgentConfig, 'tools'>) {
+    this.agentConfig = agentConfig;
     this.agent = new ADKAgent(agentConfig);
     this.initializeSubscriptions();
   }

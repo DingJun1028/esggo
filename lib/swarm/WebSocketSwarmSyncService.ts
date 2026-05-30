@@ -72,7 +72,7 @@ export class WebSocketSwarmSyncService implements ISwarmSyncService {
         }
     }
 
-    private mapTasks(remoteTasks: any[]): AgentTask[] {
+    private mapTasks(remoteTasks: unknown[]): AgentTask[] {
         return remoteTasks.map(t => ({
             id: t.id, title: t.title, taskType: t.taskType as any, status: t.status as any,
             skillKey: t.skillKey || undefined, createdAt: t.createdAt, updatedAt: t.updatedAt,

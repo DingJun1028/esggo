@@ -20,7 +20,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         wss.on('connection', (ws: WebSocket, request: IncomingMessage) => {
             console.log(`[Swarm WS Server] 🟢 客戶端已連線 (當前共 ${wss.clients.size} 個觀測節點)`);
 
-            ws.on('message', (message: any) => {
+            ws.on('message', (message: unknown) => {
                 try {
                     const data = JSON.parse(message.toString());
 
@@ -47,7 +47,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         });
 
         // 綁定 HTTP Upgrade 事件，攔截 Upgrade: websocket
-        (res.socket as any).server.on('upgrade', (request: any, socket: any, head: any) => {
+        (res.socket as any).server.on('upgrade', (request: unknown, socket: unknown, head: unknown) => {
             if (request.url?.includes('/api/swarm/ws')) {
                 wss.handleUpgrade(request, socket, head, (ws: WebSocket) => {
                     wss.emit('connection', ws, request);

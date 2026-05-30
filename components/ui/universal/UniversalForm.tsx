@@ -14,9 +14,9 @@ export interface FormField {
 
 export interface UniversalFormProps {
   fields: FormField[];
-  onSubmit: (data: any) => void;
+  onSubmit: (data: unknown) => void;
   onCancel?: () => void;
-  initialValues?: any;
+  initialValues?: unknown;
   submitLabel?: string;
   className?: string;
 }
@@ -31,7 +31,7 @@ export function UniversalForm({
 }: UniversalFormProps) {
   const [formData, setFormData] = useState<Record<string, any>>(initialValues);
 
-  const handleChange = (name: string, value: any) => {
+  const handleChange = (name: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 

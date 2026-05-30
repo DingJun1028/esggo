@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const sendStep = (status: AgentStatus, message: string, payload?: any) => {
+      const sendStep = (status: AgentStatus, message: string, payload?: unknown) => {
         const step: AgentStep = {
           id: uuidv4(),
           agentName: 'Aurora-Orchestrator',
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
 
         sendStep('SUCCESS', '所有 Swarm 任務已成功派發並啟動監控。');
 
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('[V3 Agent] Error:', err);
         sendStep('ERROR', '系統調度異常', { error: err.message });
       } finally {

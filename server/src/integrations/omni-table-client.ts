@@ -1,7 +1,7 @@
-// Using internal AITable bridge instead of missing @aitable/client
-import { aitable as internalAitClient } from '../../../lib/aitable';
+// Using internal OmniTable bridge instead of missing @omni-table/client
+import { getOmniTableServerClient } from '../../../lib/omni-table';
 
-const aitable = internalAitClient;
+const omniTable = getOmniTableServerClient();
 
 export interface LogicNode {
   name: string;
@@ -19,7 +19,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, backoff = 1000): 
       return await fn();
     } catch (error) {
       if (i === retries - 1) throw error;
-      console.warn(`[AITable] Retrying... (${i + 1}/${retries}) after ${backoff}ms`);
+      console.warn(`[OmniTable] Retrying... (${i + 1}/${retries}) after ${backoff}ms`);
       await delay(backoff);
       backoff *= 2; // exponential backoff
     }
@@ -27,9 +27,9 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, backoff = 1000): 
   throw new Error('Unreachable');
 }
 
-export async function syncLogicNodesToAITable(nodes: LogicNode[]) {
+export async function syncLogicNodesToOmniTable(nodes: LogicNode[]) {
   try {
-    const space = await withRetry<any>(() => aitable.spaces.getById(process.env.AITABLE_SPACE_ID!));
+    const space = await withRetry<any>(() => omniTable.spaces.getById(process.env.OMNITABLE_SPACE_ID!));
     let datasheet = await withRetry<any>(() => space.getDatasheetByName('Logic Nodes'));
     
     // If datasheet doesn't exist, create it
@@ -60,7 +60,7 @@ export async function syncLogicNodesToAITable(nodes: LogicNode[]) {
     // Upsert records (delete existing and reinsert for simplicity)
     await withRetry<any>(() => datasheet.deleteAllRecords());
     
-    // Chunk array to avoid API limits (e.g., AITable batch limit is usually 10)
+    // Chunk array to avoid API limits (e.g., OmniTable batch limit is usually 10)
     const chunkSize = 10;
     for (let i = 0; i < records.length; i += chunkSize) {
       const chunk = records.slice(i, i + chunkSize);
@@ -69,7 +69,7 @@ export async function syncLogicNodesToAITable(nodes: LogicNode[]) {
     
     return true;
   } catch (error) {
-    console.error('Failed to sync to AITable:', error);
+    console.error('Failed to sync to OmniTable:', error);
     return false;
   }
 }

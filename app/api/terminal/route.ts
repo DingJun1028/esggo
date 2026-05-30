@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
 
       case 'blue':
         if (args[0] === 'status') {
-          lines.push({ type: 'info', content: '☁️ Connecting to BlueCC Control Plane...' });
+          lines.push({ type: 'info', content: '☁️ Connecting to OmniBlue Control Plane...' });
           lines.push({ type: 'success', content: '✅ Cluster: blue-cluster-01 (STABLE) - Server API' });
           lines.push({ type: 'out', content: `Region: asia-east1 | Uptime: ${process.uptime().toFixed(0)}s` });
         } else {
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ lines });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json({ lines: [{ type: 'err', content: `Internal Error: ${err.message}` }] });
   }
 }

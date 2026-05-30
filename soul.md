@@ -202,7 +202,7 @@
 
 ## 🔗 第五章：集成與應用 (Integration & Operations)
 
-### 第十四條: AITable.ai (知識聖殿數據基石)
+### 第十四條: OmniTable.ai (知識聖殿數據基石)
 充當語義索引引擎，提供堅實非 SQL 數據基礎。
 
 ### 第十五條: Straico AI (代理協調與多模態)

@@ -50,7 +50,7 @@ export async function saveHermesCredentials(
     
     console.log(`[HermesStore] Successfully secured Hermes credentials for ${userId} in Vault.`);
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[HermesStore] Failed to save credentials:', err);
     return { success: false, error: err.message };
   }

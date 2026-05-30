@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 
   const customReadable = new ReadableStream({
     start(controller) {
-      const onEventSaved = (event: any) => {
+      const onEventSaved = (event: unknown) => {
         const data = `data: ${JSON.stringify(event)}\n\n`;
         controller.enqueue(encoder.encode(data));
       };

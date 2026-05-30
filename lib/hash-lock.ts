@@ -6,7 +6,7 @@ import crypto from 'crypto';
  * @param salt 亂數鹽值，確保相同的資料能產生不同的 Hash
  * @returns 包含 Hash 值與驗證鹽值的封印物件
  */
-export function generateHashLock(data: any): { hash: string; salt: string } {
+export function generateHashLock(data: unknown): { hash: string; salt: string } {
   const salt = crypto.randomBytes(16).toString('hex');
   const payload = JSON.stringify(data) + salt;
   
@@ -25,7 +25,7 @@ export function generateHashLock(data: any): { hash: string; salt: string } {
  * @param originalHash 當初產生的 Hash 值
  * @returns boolean
  */
-export function verifyHashLock(data: any, salt: string, originalHash: string): boolean {
+export function verifyHashLock(data: unknown, salt: string, originalHash: string): boolean {
   const payload = JSON.stringify(data) + salt;
   const hash = crypto
     .createHash('sha256')

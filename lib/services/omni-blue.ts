@@ -1,9 +1,9 @@
 /**
- * OmniAgent | BlueCC Integration Client
+ * OmniAgent | OmniBlue Integration Client
  * Multi-cloud Agent Control & Operational Hardening
  */
 
-export interface BlueCCConfig {
+export interface OmniBlueConfig {
   apiKey: string;
   token: string;
   baseUrl: string;
@@ -11,10 +11,10 @@ export interface BlueCCConfig {
 
 const DEFAULT_BLUE_CC_URL = 'https://api.blue.cc/v1';
 
-export class BlueCCClient {
-  private config: BlueCCConfig;
+export class OmniBlueClient {
+  private config: OmniBlueConfig;
 
-  constructor(config?: Partial<BlueCCConfig>) {
+  constructor(config?: Partial<OmniBlueConfig>) {
     this.config = {
       apiKey: config?.apiKey || process.env.BLUE_CC_API_KEY || '',
       token: config?.token || process.env.BLUE_CC_TOKEN || '',
@@ -23,7 +23,7 @@ export class BlueCCClient {
   }
 
   async getSystemStatus() {
-    console.log('[BlueCC] Fetching global agent cluster status...');
+    console.log('[OmniBlue] Fetching global agent cluster status...');
     // Simulated cloud control plane response with enhanced telemetry
     return {
       cluster_id: 'blue-cluster-omni-production',
@@ -43,8 +43,8 @@ export class BlueCCClient {
     };
   }
 
-  async deployAgent(agentName: string, specs: any) {
-    console.log(`[BlueCC] Deploying agent ${agentName} to cluster...`);
+  async deployAgent(agentName: string, specs: unknown) {
+    console.log(`[OmniBlue] Deploying agent ${agentName} to cluster...`);
     return {
       deployment_id: `dep_${Math.random().toString(36).substr(2, 9)}`,
       status: 'provisioning',
@@ -60,4 +60,4 @@ export class BlueCCClient {
   }
 }
 
-export const blueCC = new BlueCCClient();
+export const blueCC = new OmniBlueClient();

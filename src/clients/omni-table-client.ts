@@ -1,7 +1,7 @@
-// AITable API Client - ESG GO v9.0.0 (Extended)
-// 实现 AITable API 客户端，支持所有主要功能
+// OmniTable API Client - ESG GO v9.0.0 (Extended)
+// 实现 OmniTable API 客户端，支持所有主要功能
 
-export class AITableClient {
+export class OmniTableClient {
   private baseURL: string;
   private apiToken: string;
   private spaceId: string;
@@ -33,7 +33,7 @@ export class AITableClient {
     fieldKey?: 'name' | 'id';
   }): Promise<{
     pageNum: number;
-    records: any[];
+    records: Record<string, unknown>[];
     pageSize: number;
     total: number;
   }> {
@@ -57,7 +57,7 @@ export class AITableClient {
   }
 
   // 创建记录
-  async createRecords(datasheetId: string, records: any[], fieldKey: 'name' | 'id' = 'name') {
+  async createRecords(datasheetId: string, records: Record<string, unknown>[], fieldKey: 'name' | 'id' = 'name'): Promise<unknown> {
     const url = `${this.baseURL}/datasheets/${datasheetId}/records`;
     const headers = {
       'Authorization': `Bearer ${this.apiToken}`,
@@ -72,11 +72,11 @@ export class AITableClient {
       headers,
       body,
     });
-    return response.json();
+    return response.json() as Promise<unknown>;
   }
 
   // 更新记录
-  async updateRecords(datasheetId: string, records: any[], fieldKey: 'name' | 'id' = 'name') {
+  async updateRecords(datasheetId: string, records: Record<string, unknown>[], fieldKey: 'name' | 'id' = 'name'): Promise<unknown> {
     const url = `${this.baseURL}/datasheets/${datasheetId}/records`;
     const headers = {
       'Authorization': `Bearer ${this.apiToken}`,
@@ -91,7 +91,7 @@ export class AITableClient {
       headers,
       body,
     });
-    return response.json();
+    return response.json() as Promise<unknown>;
   }
 
   // 删除记录
@@ -123,7 +123,7 @@ export class AITableClient {
   }
 
   // 创建字段
-  async createField(datasheetId: string, field: any) {
+  async createField(datasheetId: string, field: Record<string, unknown>) {
     const url = `${this.baseURL}/spaces/${this.spaceId}/datasheets/${datasheetId}/fields`;
     const headers = {
       'Authorization': `Bearer ${this.apiToken}`,
@@ -167,7 +167,7 @@ export class AITableClient {
     description?: string;
     folderId?: string;
     preNodeId?: string;
-    fields?: any[];
+    fields?: Record<string, unknown>[];
   }) {
     const url = `${this.baseURL}/spaces/${this.spaceId}/datasheets`;
     const headers = {
@@ -243,7 +243,7 @@ export class AITableClient {
   }
 
   // 创建嵌入链接
-  async createEmbedLink(nodeId: string, payload: any, theme: 'light' | 'dark' = 'light') {
+  async createEmbedLink(nodeId: string, payload: Record<string, unknown>, theme: 'light' | 'dark' = 'light') {
     const url = `${this.baseURL}/spaces/${this.spaceId}/nodes/${nodeId}/embedlinks`;
     const headers = {
       'Authorization': `Bearer ${this.apiToken}`,
@@ -463,9 +463,9 @@ export class AITableClient {
   }
 
   // 创建聊天补全
-  async createChatCompletion(aiId: string, messages: any[], options?: {
+  async createChatCompletion(aiId: string, messages: Record<string, unknown>[], options?: {
     model?: string;
-    functions?: any[];
+    functions?: Record<string, unknown>[];
     functionCall?: { name: string };
     temperature?: number;
     topP?: number;

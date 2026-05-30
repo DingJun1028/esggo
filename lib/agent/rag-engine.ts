@@ -6,7 +6,7 @@ export interface KnowledgeDocument {
   id: string;
   source: string;
   text: string;
-  metadata?: any;
+  metadata?: unknown;
   embedding?: number[];
 }
 
@@ -44,7 +44,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 /**
  * 3. 核心：文獻寫入與向量化
  */
-export async function ingestDocument(title: string, content: string, type: string = 'POLICY', metadata: any = {}) {
+export async function ingestDocument(title: string, content: string, type: string = 'POLICY', metadata: unknown = {}) {
   console.log(`[RAG Engine] 📥 Ingesting document: ${title}`);
   
   if (!supabaseAdmin) throw new Error('Supabase Admin not initialized');
@@ -104,7 +104,7 @@ export async function searchKnowledgeBase(query: string, limit: number = 3) {
  */
 export async function queryWithIntelligence(query: string) {
   const contextDocs = await searchKnowledgeBase(query);
-  const contextText = contextDocs.map((d: any) => d.content).join('\n---\n');
+  const contextText = contextDocs.map((d: unknown) => d.content).join('\n---\n');
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const prompt = `
@@ -121,14 +121,14 @@ Question: ${query}
   const result = await model.generateContent(prompt);
   return {
     answer: result.response.text(),
-    sources: contextDocs.map((d: any) => ({ id: d.document_id, score: d.similarity }))
+    sources: contextDocs.map((d: unknown) => ({ id: d.document_id, score: d.similarity }))
   };
 }
 
 /**
  * Compatibility: Query with history
  */
-export async function queryKnowledgeBase(query: string, history: any[] = []) {
+export async function queryKnowledgeBase(query: string, history: unknown[] = []) {
   // In a real implementation, history would be passed to the model
   return queryWithIntelligence(query);
 }
@@ -145,7 +145,7 @@ export async function processPDFAndIngest(buffer: Buffer, fileName: string): Pro
 /**
  * Compatibility: Add direct items
  */
-export async function addToKnowledgeBase(documents: any[]) {
+export async function addToKnowledgeBase(documents: unknown[]) {
   for (const doc of documents) {
     await ingestDocument(doc.source || doc.id, doc.text, doc.metadata?.type || 'DOCUMENT', doc.metadata);
   }

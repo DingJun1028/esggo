@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       },
       { request_id: requestId }
     ));
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('INTERNAL_ERROR', error.message || '讀取失敗'),
       { status: 500 }

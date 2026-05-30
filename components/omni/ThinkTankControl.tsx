@@ -15,7 +15,7 @@ import { useOmniAgentStream, type StreamEvent, type MissionProgress } from '@/li
 
 /* ─── Mission Definitions ─── */
 const MISSIONS = [
-  { id: 'SYNC_BLUECC_AITABLE', label: 'BlueCC → AITable', labelZh: '藍碳同步', icon: Database, color: '#06b6d4' },
+  { id: 'SYNC_OMNIBLUE_OMNITABLE', label: 'OmniBlue → OmniTable', labelZh: '藍碳同步', icon: Database, color: '#06b6d4' },
   { id: 'EVIDENCE_AUDIT', label: 'Evidence Audit', labelZh: '實證驗證', icon: Shield, color: '#10b981' },
   { id: 'PILOT_REPORT', label: 'SustainWrite Pilot', labelZh: '自主撰寫', icon: Brain, color: '#8b5cf6' },
   { id: 'TRANSFER_TO_NCBDB', label: 'NCBDB Migration', labelZh: '資料遷移', icon: ArrowRight, color: '#f59e0b' },
@@ -317,7 +317,7 @@ export default function ThinkTankControl() {
               <MissionCard
                 key={m.id}
                 mission={m}
-                progress={activeMissions.find(p => p.mission === m.label || p.mission === m.id.replace(/_/g, ' ').replace('SYNC BLUECC AITABLE', 'BlueCC to AITable Sync'))}
+                progress={activeMissions.find(p => p.mission === m.label || p.mission === m.id.replace(/_/g, ' ').replace('SYNC OMNIBLUE OMNITABLE', 'OmniBlue to OmniTable Sync'))}
                 onLaunch={() => launchMission(m.id)}
                 isLoading={loadingMission === m.id}
               />

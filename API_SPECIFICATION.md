@@ -1,7 +1,7 @@
 # 🏛️ OmniAgent X ESG GO | 全域 API 規格說明書 v1.2
 ## 數位治理主權與 5T 誠信協議標準
 
-> **版本:** 1.2-Alpha | **核心協議:** 5T Integrity v1.1 | **基礎設施:** BlueCC Hybrid Control
+> **版本:** 1.2-Alpha | **核心協議:** 5T Integrity v1.1 | **基礎設施:** OmniBlue Hybrid Control
 
 ---
 
@@ -68,7 +68,7 @@
 *   **GET `/ai/growth`**
     *   功能：獲取系統自我成長建議 (Self-Evolution Insight)。
 *   **GET `/blue/status`**
-    *   功能：監控 BlueCC 算力節點與 H100 負載狀態。
+    *   功能：監控 OmniBlue 算力節點與 H100 負載狀態。
 
 ### 📋 D. 治理操作模組 (Operations)
 *   **GET/POST `/tasks`**

@@ -5,7 +5,7 @@ interface Column<T> {
   key: string;
   label: string;
   width?: string;
-  render?: (value: any, row: T, index: number) => React.ReactNode;
+  render?: (value: unknown, row: T, index: number) => React.ReactNode;
   align?: 'left' | 'center' | 'right';
 }
 

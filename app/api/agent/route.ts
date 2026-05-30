@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true, ...result });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[OmniAgent Edge API] Error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

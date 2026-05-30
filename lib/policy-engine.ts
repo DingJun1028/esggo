@@ -18,7 +18,7 @@ export interface RegulatoryPolicy {
 export interface PolicyRule {
   type: 'UNIT_CHECK' | 'RANGE_CHECK' | 'SOURCE_REQUIRED' | 'VARIANCE_LIMIT';
   targetField: string;
-  expectedValue?: any;
+  expectedValue?: unknown;
   minValue?: number;
   maxValue?: number;
   varianceThreshold?: number; // e.g., 0.2 for 20%
@@ -76,7 +76,7 @@ export class PolicyEngine {
     try {
       const remote = await dcListRegulatoryPolicies();
       if (remote.length > 0) {
-        this.policies = remote.map((p: any) => ({
+        this.policies = remote.map((p: unknown) => ({
           id: p.id,
           standard: p.standard,
           code: p.code,
@@ -101,7 +101,7 @@ export class PolicyEngine {
   /**
    * Evaluates data against a specific policy.
    */
-  validate(policyId: string, data: any, history: any[] = []): PolicyValidationResult {
+  validate(policyId: string, data: unknown, history: unknown[] = []): PolicyValidationResult {
     const policy = this.getPolicy(policyId);
     if (!policy) {
       return { isValid: false, score: 0, violations: ['Policy not found'], recommendations: [] };

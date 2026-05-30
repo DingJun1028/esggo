@@ -5,7 +5,7 @@ export interface TelemetryEvent {
   timestamp: string;
   duration: number;
   success: boolean;
-  context?: any;
+  context?: unknown;
   error?: string;
   tokensUsed?: number;
   cost?: number;

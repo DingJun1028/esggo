@@ -1,42 +1,42 @@
 'use client';
 
 /**
- * useAITable — React Hook for AITable Integration
+ * useOmniTable — React Hook for OmniTable Integration
  * ═══════════════════════════════════════════════
- * Client-side hook that communicates with /api/aitable proxy
+ * Client-side hook that communicates with /api/omni-table proxy
  */
 
 import { useState, useCallback } from 'react';
 import type {
-  AITableSpace,
-  AITableNode,
-  AITableField,
-  AITableView,
-  AITableRecord,
-  AITableRecordsResponse,
-} from '@/lib/aitable/client';
+  OmniTableSpace,
+  OmniTableNode,
+  OmniTableField,
+  OmniTableView,
+  OmniTableRecord,
+  OmniTableRecordsResponse,
+} from '@/lib/omni-table/client';
 
-interface UseAITableReturn {
+interface UseOmniTableReturn {
   // State
   loading: boolean;
   error: string | null;
 
   // Read operations
-  fetchSpaces: () => Promise<AITableSpace[]>;
-  fetchNodes: (spaceId: string) => Promise<AITableNode[]>;
-  fetchRecords: (datasheetId: string, opts?: { pageSize?: number; pageNum?: number; viewId?: string }) => Promise<AITableRecordsResponse>;
-  fetchFields: (datasheetId: string) => Promise<AITableField[]>;
-  fetchViews: (datasheetId: string) => Promise<AITableView[]>;
+  fetchSpaces: () => Promise<OmniTableSpace[]>;
+  fetchNodes: (spaceId: string) => Promise<OmniTableNode[]>;
+  fetchRecords: (datasheetId: string, opts?: { pageSize?: number; pageNum?: number; viewId?: string }) => Promise<OmniTableRecordsResponse>;
+  fetchFields: (datasheetId: string) => Promise<OmniTableField[]>;
+  fetchViews: (datasheetId: string) => Promise<OmniTableView[]>;
 
   // Write operations
-  createRecords: (datasheetId: string, records: Array<{ fields: Record<string, unknown> }>) => Promise<AITableRecord[]>;
-  updateRecords: (datasheetId: string, records: Array<{ recordId: string; fields: Record<string, unknown> }>) => Promise<AITableRecord[]>;
+  createRecords: (datasheetId: string, records: Array<{ fields: Record<string, unknown> }>) => Promise<OmniTableRecord[]>;
+  updateRecords: (datasheetId: string, records: Array<{ recordId: string; fields: Record<string, unknown> }>) => Promise<OmniTableRecord[]>;
   deleteRecords: (datasheetId: string, recordIds: string[]) => Promise<void>;
   createDatasheet: (spaceId: string, name: string, fields: Array<{ name: string; type: string }>) => Promise<{ id: string }>;
 }
 
 async function apiGet<T>(action: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL('/api/aitable', window.location.origin);
+  const url = new URL('/api/omni-table', window.location.origin);
   url.searchParams.set('action', action);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
 
@@ -47,7 +47,7 @@ async function apiGet<T>(action: string, params: Record<string, string> = {}): P
 }
 
 async function apiPost<T>(action: string, payload: Record<string, unknown>): Promise<T> {
-  const res = await fetch('/api/aitable', {
+  const res = await fetch('/api/omni-table', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, ...payload }),
@@ -57,7 +57,7 @@ async function apiPost<T>(action: string, payload: Record<string, unknown>): Pro
   return json.data;
 }
 
-export function useAITable(): UseAITableReturn {
+export function useOmniTable(): UseOmniTableReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,7 +67,7 @@ export function useAITable(): UseAITableReturn {
     try {
       const result = await fn();
       return result;
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message);
       throw err;
     } finally {
@@ -76,19 +76,19 @@ export function useAITable(): UseAITableReturn {
   }, []);
 
   const fetchSpaces = useCallback(
-    () => wrap(() => apiGet<AITableSpace[]>('spaces')),
+    () => wrap(() => apiGet<OmniTableSpace[]>('spaces')),
     [wrap]
   );
 
   const fetchNodes = useCallback(
-    (spaceId: string) => wrap(() => apiGet<AITableNode[]>('nodes', { spaceId })),
+    (spaceId: string) => wrap(() => apiGet<OmniTableNode[]>('nodes', { spaceId })),
     [wrap]
   );
 
   const fetchRecords = useCallback(
     (datasheetId: string, opts?: { pageSize?: number; pageNum?: number; viewId?: string }) =>
       wrap(() =>
-        apiGet<AITableRecordsResponse>('records', {
+        apiGet<OmniTableRecordsResponse>('records', {
           datasheetId,
           ...(opts?.pageSize ? { pageSize: String(opts.pageSize) } : {}),
           ...(opts?.pageNum ? { pageNum: String(opts.pageNum) } : {}),
@@ -99,24 +99,24 @@ export function useAITable(): UseAITableReturn {
   );
 
   const fetchFields = useCallback(
-    (datasheetId: string) => wrap(() => apiGet<AITableField[]>('fields', { datasheetId })),
+    (datasheetId: string) => wrap(() => apiGet<OmniTableField[]>('fields', { datasheetId })),
     [wrap]
   );
 
   const fetchViews = useCallback(
-    (datasheetId: string) => wrap(() => apiGet<AITableView[]>('views', { datasheetId })),
+    (datasheetId: string) => wrap(() => apiGet<OmniTableView[]>('views', { datasheetId })),
     [wrap]
   );
 
   const createRecords = useCallback(
     (datasheetId: string, records: Array<{ fields: Record<string, unknown> }>) =>
-      wrap(() => apiPost<AITableRecord[]>('createRecords', { datasheetId, records })),
+      wrap(() => apiPost<OmniTableRecord[]>('createRecords', { datasheetId, records })),
     [wrap]
   );
 
   const updateRecords = useCallback(
     (datasheetId: string, records: Array<{ recordId: string; fields: Record<string, unknown> }>) =>
-      wrap(() => apiPost<AITableRecord[]>('updateRecords', { datasheetId, records })),
+      wrap(() => apiPost<OmniTableRecord[]>('updateRecords', { datasheetId, records })),
     [wrap]
   );
 

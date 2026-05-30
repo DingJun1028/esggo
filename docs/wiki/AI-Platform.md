@@ -37,8 +37,8 @@ AI 模型集成與配置： 提供統一介面管理多個 AI 模型（如 Gemin
 *   技術： 前端使用 `React Hook Form` 搭配 `Zod` 進行表單驗證與狀態管理；後端使用 `OpenAPI Generator` 生成各 AI 服務的 SDK 客戶端，並透過 `Supabase Edge Functions` 處理敏感 API Key 的安全調用。
 AI 服務監控與成本分析： 實時顯示各 AI 服務的調用次數、token 消耗、錯誤率及預估成本，並提供歷史數據趨勢圖與預算告警功能。
 *   技術： 前端使用 `Recharts` 或 `D3.js` 渲染互動式圖表；後端使用 `Prometheus` 收集 AI 服務的運行指標，並透過 `Grafana` 進行可視化，或直接由 `Supabase Realtime` 訂閱 `ai_usage_logs` 的變更。
-Blue.cc 合規服務管理： 允許企業接入 Blue.cc 等第三方合規服務，對 AI 生成內容進行自動審核與風險評估。
-*   技術： 使用 `OAuth2` 協議進行安全授權與連接；後端透過 `Webhooks` 接收 Blue.cc 的實時審核結果，並更新相關內容的合規狀態。
+OmniBlue 合規服務管理： 允許企業接入 OmniBlue 等第三方合規服務，對 AI 生成內容進行自動審核與風險評估。
+*   技術： 使用 `OAuth2` 協議進行安全授權與連接；後端透過 `Webhooks` 接收 OmniBlue 的實時審核結果，並更新相關內容的合規狀態。
 權限與安全管理： 實施基於角色的訪問控制 (RBAC)，確保只有具備相應權限的用戶才能查看或修改 AI 配置。所有敏感數據（如 API Key）均加密儲存。
 *   技術： 後端使用 `Supabase Row Level Security (RLS)` 實現精細化權限控制；敏感配置數據使用 `PostgreSQL pgcrypto` 擴展進行加密。
 

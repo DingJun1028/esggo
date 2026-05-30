@@ -7,7 +7,7 @@ export function useOmniRealtime(injectedService?: IOmniRealtimeService) {
   const user = useAuthStore((state) => state.user);
   const [events, setEvents] = useState<OmniEvent[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<unknown[]>([]);
   const { omniRealtimeService } = useServices();
 
   // 優先使用外部參數注入 (方便針對此 Hook 單元測試)，其次使用全域 Context 提供的 Service

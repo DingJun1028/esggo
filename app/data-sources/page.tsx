@@ -7,14 +7,14 @@ import {
   Database, Table2, RefreshCw, Plus, Search, Loader2, AlertCircle,
   Rows3, Columns3, ExternalLink, FileSpreadsheet, FolderOpen, Edit3, Trash2, LayoutTemplate
 } from 'lucide-react';
-import type { AITableSpace, AITableNode, AITableField, AITableRecord } from '@/lib/aitable/client';
+import type { OmniTableSpace, OmniTableNode, OmniTableField, OmniTableRecord } from '@/lib/omni-table/client';
 import { RecordEditorModal } from './RecordEditor';
 import { TemplatePickerModal } from './TemplatePicker';
-import type { ESGTemplate } from '@/lib/aitable/templates';
+import type { ESGTemplate } from '@/lib/omni-table/templates';
 
 /* ── API helpers ─────────────────────────────────────────── */
 async function apiGet<T>(action: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL('/api/aitable', window.location.origin);
+  const url = new URL('/api/omni-table', window.location.origin);
   url.searchParams.set('action', action);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
   const res = await fetch(url.toString());
@@ -23,7 +23,7 @@ async function apiGet<T>(action: string, params: Record<string, string> = {}): P
   return json.data;
 }
 async function apiPost<T>(action: string, payload: Record<string, unknown>): Promise<T> {
-  const res = await fetch('/api/aitable', {
+  const res = await fetch('/api/omni-table', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, ...payload }),
   });
@@ -52,17 +52,17 @@ export default function DataSourcesPage() {
   const [tab, setTab] = useState<'records' | 'fields'>('records');
   // Modals
   const [editorOpen, setEditorOpen] = useState(false);
-  const [editRecord, setEditRecord] = useState<AITableRecord | null>(null);
+  const [editRecord, setEditRecord] = useState<OmniTableRecord | null>(null);
   const [templateOpen, setTemplateOpen] = useState(false);
   const [opError, setOpError] = useState<string | null>(null);
 
   // ─ Queries ─
-  const spacesQ = useQuery({ queryKey: ['aitable', 'spaces'], queryFn: () => apiGet<AITableSpace[]>('spaces') });
-  const nodesQ = useQuery({ queryKey: ['aitable', 'nodes', selectedSpace], queryFn: () => apiGet<AITableNode[]>('nodes', { spaceId: selectedSpace! }), enabled: !!selectedSpace });
-  const fieldsQ = useQuery({ queryKey: ['aitable', 'fields', selectedDs], queryFn: () => apiGet<AITableField[]>('fields', { datasheetId: selectedDs! }), enabled: !!selectedDs });
+  const spacesQ = useQuery({ queryKey: ['omni-table', 'spaces'], queryFn: () => apiGet<OmniTableSpace[]>('spaces') });
+  const nodesQ = useQuery({ queryKey: ['omni-table', 'nodes', selectedSpace], queryFn: () => apiGet<OmniTableNode[]>('nodes', { spaceId: selectedSpace! }), enabled: !!selectedSpace });
+  const fieldsQ = useQuery({ queryKey: ['omni-table', 'fields', selectedDs], queryFn: () => apiGet<OmniTableField[]>('fields', { datasheetId: selectedDs! }), enabled: !!selectedDs });
   const recordsQ = useQuery({
-    queryKey: ['aitable', 'records', selectedDs, page],
-    queryFn: () => apiGet<{ records: AITableRecord[]; total: number; pageNum: number }>('records', { datasheetId: selectedDs!, pageSize: '50', pageNum: String(page) }),
+    queryKey: ['omni-table', 'records', selectedDs, page],
+    queryFn: () => apiGet<{ records: OmniTableRecord[]; total: number; pageNum: number }>('records', { datasheetId: selectedDs!, pageSize: '50', pageNum: String(page) }),
     enabled: !!selectedDs,
   });
 
@@ -80,23 +80,23 @@ export default function DataSourcesPage() {
       }
       return apiPost('createRecords', { datasheetId: selectedDs, records: [{ fields: fieldValues }] });
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['aitable', 'records', selectedDs] }); setOpError(null); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['omni-table', 'records', selectedDs] }); setOpError(null); },
     onError: (e: Error) => setOpError(e.message),
   });
 
   const deleteMut = useMutation({
     mutationFn: (recordId: string) => apiPost('deleteRecords', { datasheetId: selectedDs, recordIds: [recordId] }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['aitable', 'records', selectedDs] }); setOpError(null); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['omni-table', 'records', selectedDs] }); setOpError(null); },
     onError: (e: Error) => setOpError(e.message),
   });
 
   const templateMut = useMutation({
     mutationFn: (t: ESGTemplate) => apiPost<{ id: string }>('createDatasheet', { spaceId: selectedSpace, name: `[ESG] ${t.nameZh}`, fields: t.fields }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['aitable', 'nodes', selectedSpace] }); setTemplateOpen(false); setOpError(null); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['omni-table', 'nodes', selectedSpace] }); setTemplateOpen(false); setOpError(null); },
     onError: (e: Error) => setOpError(e.message),
   });
 
-  const filteredNodes = nodes.filter((n: AITableNode) => n.type === 'Datasheet' && (!search || n.name.toLowerCase().includes(search.toLowerCase())));
+  const filteredNodes = nodes.filter((n: OmniTableNode) => n.type === 'Datasheet' && (!search || n.name.toLowerCase().includes(search.toLowerCase())));
   const isLoading = spacesQ.isLoading || nodesQ.isLoading || fieldsQ.isLoading || recordsQ.isLoading;
 
   return (
@@ -105,7 +105,7 @@ export default function DataSourcesPage() {
       <div className="page-header-bar">
         <div>
           <h1 className="page-header-title flex items-center gap-3"><Database size={24} className="text-california-gold" />ESG Data Hub</h1>
-          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">AITable Integration · Fusion API v1</p>
+          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">OmniTable Integration · Fusion API v1</p>
         </div>
         <div className="flex items-center gap-3">
           {selectedSpace && (
@@ -113,8 +113,8 @@ export default function DataSourcesPage() {
               <LayoutTemplate size={13} /> ESG Template
             </button>
           )}
-          <a href="https://aitable.ai" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[11px] font-bold text-slate-500 hover:text-berkeley-blue hover:border-berkeley-blue transition-all">
-            <ExternalLink size={12} /> Open AITable
+          <a href="https://omni-table.ai" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[11px] font-bold text-slate-500 hover:text-berkeley-blue hover:border-berkeley-blue transition-all">
+            <ExternalLink size={12} /> Open OmniTable
           </a>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function DataSourcesPage() {
         <div className="w-72 flex-shrink-0 section-card flex flex-col">
           <div className="section-card-header">
             <span className="section-label">Workspace Navigator</span>
-            <button onClick={() => qc.invalidateQueries({ queryKey: ['aitable', 'spaces'] })} className="p-1 hover:bg-slate-100 rounded-lg transition-colors">
+            <button onClick={() => qc.invalidateQueries({ queryKey: ['omni-table', 'spaces'] })} className="p-1 hover:bg-slate-100 rounded-lg transition-colors">
               <RefreshCw size={12} className={spacesQ.isFetching ? 'animate-spin text-berkeley-blue' : 'text-slate-400'} />
             </button>
           </div>
@@ -147,7 +147,7 @@ export default function DataSourcesPage() {
               <>
                 <div className="space-y-1">
                   <p className="section-label px-1 mb-2">Spaces</p>
-                  {spaces.map((s: AITableSpace) => (
+                  {spaces.map((s: OmniTableSpace) => (
                     <button key={s.id} onClick={() => { setSelectedSpace(s.id); setSelectedDs(null); }}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all text-[12px] font-bold ${selectedSpace === s.id ? 'bg-berkeley-blue text-white' : 'text-slate-600 hover:bg-slate-50'}`}>
                       <FolderOpen size={14} className={selectedSpace === s.id ? 'text-california-gold' : ''} />
@@ -168,7 +168,7 @@ export default function DataSourcesPage() {
                         className="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-100 rounded-lg text-[11px] outline-none focus:border-berkeley-blue/30" />
                     </div>
                     <div className="space-y-0.5 max-h-[50vh] overflow-y-auto">
-                      {filteredNodes.map((n: AITableNode) => (
+                      {filteredNodes.map((n: OmniTableNode) => (
                         <button key={n.id} onClick={() => { setSelectedName(n.name); setSelectedDs(n.id); setPage(1); }}
                           className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all text-[11px] ${selectedDs === n.id ? 'bg-blue-50 text-berkeley-blue font-bold border border-blue-100' : 'text-slate-500 hover:bg-slate-50'}`}>
                           <FileSpreadsheet size={13} className={selectedDs === n.id ? 'text-california-gold' : 'text-slate-300'} />
@@ -211,7 +211,7 @@ export default function DataSourcesPage() {
                       <Plus size={11} /> Add
                     </button>
                   )}
-                  <button onClick={() => qc.invalidateQueries({ queryKey: ['aitable', 'records', selectedDs] })} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                  <button onClick={() => qc.invalidateQueries({ queryKey: ['omni-table', 'records', selectedDs] })} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
                     <RefreshCw size={13} className={recordsQ.isFetching ? 'animate-spin text-berkeley-blue' : 'text-slate-400'} />
                   </button>
                 </div>
@@ -228,16 +228,16 @@ export default function DataSourcesPage() {
                         <table className="w-full text-left border-collapse">
                           <thead><tr className="border-b border-slate-100">
                             <th className="px-3 py-2.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] w-8">#</th>
-                            {fields.slice(0, 7).map((f: AITableField) => (
+                            {fields.slice(0, 7).map((f: OmniTableField) => (
                               <th key={f.id} className="px-3 py-2.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] max-w-[180px]">{f.name}</th>
                             ))}
                             <th className="px-3 py-2.5 text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] w-20">Actions</th>
                           </tr></thead>
                           <tbody>
-                            {records.map((r: AITableRecord, i: number) => (
+                            {records.map((r: OmniTableRecord, i: number) => (
                               <tr key={r.recordId} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group">
                                 <td className="px-3 py-2 text-[10px] text-slate-300 font-mono">{(page - 1) * 50 + i + 1}</td>
-                                {fields.slice(0, 7).map((f: AITableField) => (
+                                {fields.slice(0, 7).map((f: OmniTableField) => (
                                   <td key={f.id} className="px-3 py-2 text-[11px] text-slate-600 max-w-[180px] truncate">{renderCell(r.fields[f.name])}</td>
                                 ))}
                                 <td className="px-3 py-2">
@@ -264,7 +264,7 @@ export default function DataSourcesPage() {
                   </>
                 ) : (
                   <div className="space-y-2">
-                    {fields.map((f: AITableField, i: number) => (
+                    {fields.map((f: OmniTableField, i: number) => (
                       <div key={f.id} className="flex items-center gap-4 px-4 py-3 bg-slate-50/50 rounded-xl border border-slate-100">
                         <span className="text-[10px] font-mono text-slate-300 w-6">{i + 1}</span>
                         <div className="flex-1 min-w-0"><p className="text-[12px] font-bold text-slate-700 truncate">{f.name}</p><p className="text-[10px] text-slate-400 font-mono">{f.id}</p></div>

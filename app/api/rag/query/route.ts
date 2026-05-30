@@ -17,7 +17,7 @@ export async function POST(request: Request) {
             answer: result.answer, 
             sources: result.sources 
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('[RAG Query API] 錯誤發生震盪:', error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

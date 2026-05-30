@@ -5,7 +5,7 @@ import { join } from 'path';
 import { resolvers } from '@/lib/graphql/resolvers';
 import { NextRequest } from 'next/server';
 
-let schema: any;
+let schema: unknown;
 
 function getSchema() {
   if (schema) return schema;

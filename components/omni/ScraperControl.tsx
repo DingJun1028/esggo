@@ -60,7 +60,7 @@ export default function ScraperControl() {
       }
       
       if (target === 'all') {
-        const newResults: ScraperResult[] = data.results.map((r: any, index: number) => ({
+        const newResults: ScraperResult[] = data.results.map((r: unknown, index: number) => ({
           id: `task-${Date.now()}-${index}`,
           target: r.source || 'Unknown Source',
           status: r.success ? 'success' : 'failed',

@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const stats = await getDashboardStats();
     return NextResponse.json(stats);
-  } catch (error: any) {
+  } catch (error: unknown) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

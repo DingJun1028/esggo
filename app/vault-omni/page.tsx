@@ -84,13 +84,13 @@ const MOCK_RECORDS: OmniRecord[] = [
   },
 ];
 
-const STATUS_CFG: Record<string, { label: string; variant: any; icon: any }> = {
+const STATUS_CFG: Record<string, { label: string; variant: unknown; icon: unknown }> = {
   verified: { label: '5T 實證', variant: 'success', icon: <ShieldCheck size={12}/> },
   sealed:   { label: '5T 封印', variant: 'gold', icon: <Lock size={12}/> },
   pending:  { label: '待核驗', variant: 'warning', icon: <Clock size={12}/> },
 };
 
-const CAT_CFG: Record<string, { label: string; variant: any }> = {
+const CAT_CFG: Record<string, { label: string; variant: unknown }> = {
   E:      { label: 'ENVIRONMENT', variant: 'success' },
   S:      { label: 'SOCIAL', variant: 'info' },
   G:      { label: 'GOVERNANCE', variant: 'warning' },

@@ -371,7 +371,7 @@ ${articles.map((a, i) => `[文章 #${i}]
           ? rawImpact as 'high' | 'medium' | 'low'
           : article.impactLevel;
         const tags = Array.isArray(item.tags) && item.tags.length > 0 
-          ? item.tags.map((t: any) => String(t).trim()).filter(Boolean)
+          ? item.tags.map((t: unknown) => String(t).trim()).filter(Boolean)
           : article.tags;
         return { ...article, impactLevel, tags };
       });

@@ -9,7 +9,7 @@ export async function POST(request: Request) {
         const { answer, sources } = await queryKnowledgeBase(query, history || []);
 
         return NextResponse.json({ answer, sources });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('[RAG API] 錯誤發生震盪:', error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
