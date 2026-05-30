@@ -5,11 +5,21 @@ import { join } from 'path';
 describe('LogicRepo', () => {
   let db: any;
   let repo: any;
+  let originalCreateTable: any;
+  let testDbPath: string = join(process.cwd(), 'logic_registry.test.db');
 
-  beforeAll(() => {
-    // Use a temporary DB file for testing
-    const testDbPath = join(process.cwd(), 'logic_registry.test.db');
+  beforeEach(() => {
+    // Create fresh database for each test
     db = new Database(testDbPath);
+    originalCreateTable = db.exec(`
+      CREATE TABLE IF NOT EXISTS logic_nodes (
+        name TEXT PRIMARY KEY,
+        config TEXT NOT NULL,
+        compliance_score REAL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    
     repo = {
       save: (node: { name: string; config: string; compliance_score: number }) => {
         const stmt = db.prepare(`
@@ -28,10 +38,12 @@ describe('LogicRepo', () => {
     };
   });
 
-  afterAll(() => {
+  afterEach(() => {
+    // Clean up after each test
     db.close();
   });
 
+  // Keep existing tests
   test('should save and retrieve a node', () => {
     repo.save({
       name: 'TestNode',
