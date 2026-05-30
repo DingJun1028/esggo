@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { Lock, FileText, UploadCloud, Link as LinkIcon, Activity, ChevronRight, Hash, ShieldCheck, Search } from 'lucide-react';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export default function VaultPage() {
-  const [selectedRecord, setSelectedRecord] = useState<number | null>(1);
+  const [selectedRecord, setSelectedRecord] = useState<string | null>(null);
 
   const [vaultRecords, setVaultRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,19 +15,28 @@ export default function VaultPage() {
   useEffect(() => {
     async function fetchRecords() {
       try {
-        const res = await fetch('/api/vault');
-        const data = await res.json();
-        if (data.success) {
-          const records = data.data.map((item: any, index: number) => ({
-            id: index + 1,
-            uuid: item.uuid,
-            name: item.source_origin || 'Unknown Source',
-            type: 'Metric', // fallback
+        const supabase = getSupabaseClient();
+        if (!supabase) throw new Error("Supabase client not initialized");
+        const { data, error } = await supabase
+          .from('evidence_vault')
+          .select('*')
+          .order('created_at', { ascending: false });
+          
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          const records = data.map((item: any) => ({
+            id: item.id,
+            uuid: item.id,
+            name: item.file_name || 'Unknown Source',
+            type: item.file_type || 'Document',
             hash: item.hash_lock || 'Unsealed',
             sealed: !!item.hash_lock,
-            timestamp: item.timestamp,
-            gri: item.impact_metric || 'N/A',
-            verified: true,
+            timestamp: item.created_at,
+            gri: item.gri_reference || 'N/A',
+            verified: item.zkp_proof || false,
           }));
           setVaultRecords(records);
           if (records.length > 0) {

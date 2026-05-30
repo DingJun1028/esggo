@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { dcListAuditRecords } from '@/lib/dataconnect-services';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export default function AuditLogPage() {
   const [records, setRecords] = useState<any[]>([]);
@@ -12,7 +12,16 @@ export default function AuditLogPage() {
   useEffect(() => {
     async function fetchRecords() {
       try {
-        const data = await dcListAuditRecords();
+        const supabase = getSupabaseClient();
+        if (!supabase) throw new Error("Supabase client not initialized");
+        const { data, error } = await supabase
+          .from('audit_logs')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          throw error;
+        }
         setRecords(data || []);
       } catch (err) {
         console.error("Failed to fetch audit records:", err);
@@ -57,7 +66,7 @@ export default function AuditLogPage() {
                 <thead>
                   <tr className="border-b border-white/10 text-white/60">
                     <th className="py-3 px-4 font-medium">時間</th>
-                    <th className="py-3 px-4 font-medium">資料來源</th>
+                    <th className="py-3 px-4 font-medium">操作事件</th>
                     <th className="py-3 px-4 font-medium">證明狀態</th>
                     <th className="py-3 px-4 font-medium">資料 Hash 鎖定 (Content Hash)</th>
                   </tr>
@@ -66,25 +75,27 @@ export default function AuditLogPage() {
                   {records.map((record) => (
                     <tr key={record.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                       <td className="py-3 px-4 text-white/80 whitespace-nowrap">
-                        {new Date(record.createdAt).toLocaleString()}
+                        {new Date(record.created_at).toLocaleString()}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex flex-col">
-                          <span className="text-white/90 font-medium">{record.title}</span>
-                          <span className="text-white/50 text-xs">{record.dataType} | {record.source}</span>
+                          <span className="text-white/90 font-medium">{record.action}</span>
+                          <span className="text-white/50 text-xs">
+                            {record.resource} | {record.user_name || 'System'}
+                          </span>
                         </div>
                       </td>
                       <td className="py-3 px-4">
                         <UniversalBadge 
-                          variant={record.zkpStatus === 'Verified' ? 'success' : record.zkpStatus === 'Pending' ? 'warning' : 'info'} 
-                          icon={record.zkpStatus === 'Verified' ? '✓' : '⟳'}
+                          variant={record.hash_lock ? 'success' : 'warning'} 
+                          icon={record.hash_lock ? '✓' : '⟳'}
                         >
-                          {record.zkpStatus}
+                          {record.hash_lock ? 'Verified' : 'Pending'}
                         </UniversalBadge>
                       </td>
                       <td className="py-3 px-4">
                         <div className="font-mono text-xs text-cyan-core/80 break-all bg-black/20 p-2 rounded">
-                          {record.contentHash}
+                          {record.hash_lock || 'N/A'}
                         </div>
                       </td>
                     </tr>
