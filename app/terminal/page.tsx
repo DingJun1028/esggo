@@ -118,13 +118,13 @@ export default function TerminalPage() {
                     </div>
                     <div className="flex justify-between items-center text-xs">
                        <span className="text-white/40">Access</span>
-                       <UniversalBadge variant="danger" className="text-[8px]">LEVEL_0</UniversalBadge>
+                       <UniversalBadge variant="error" className="text-[8px]">LEVEL_0</UniversalBadge>
                     </div>
                     <div className="flex justify-between items-center text-xs">
                        <span className="text-white/40">Expires</span>
                        <span className="font-mono text-white/60">01:42:05</span>
                     </div>
-                    <UniversalButton variant="danger" className="w-full text-xs py-2 h-auto">登出並銷毀 Session</UniversalButton>
+                    <UniversalButton variant="error" className="w-full text-xs py-2 h-auto">登出並銷毀 Session</UniversalButton>
                  </div>
               </UniversalCard>
 

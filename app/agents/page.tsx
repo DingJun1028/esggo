@@ -8,7 +8,7 @@ import { Bot, Cpu, Zap, Settings, Shield, Terminal, Play, Power, Plus, Search, M
 import { motion } from 'framer-motion';
 
 const AGENTS = [
-  { id: 'omni-core', name: 'OmniAgent Core', role: 'System Orchestrator', status: 'Active', load: '12%', memory: '2.4GB', icon: <Bot className="text-cyan-core" /> },
+  { id: 'omni-core', name: 'OmniAgent Core', role: 'System Orchestrator', status: 'Active', load: '12%', memory: '2.4GB', icon: <Activity className="text-cyan-core" /> },
   { id: 'carbon-bot', name: 'CarbonBot', role: 'Environmental Analysis', status: 'Active', load: '45%', memory: '1.8GB', icon: <Cpu className="text-emerald-400" /> },
   { id: 'legal-guard', name: 'LegalGuard', role: 'Compliance Checking', status: 'Standby', load: '0%', memory: '512MB', icon: <Shield className="text-amber-400" /> },
   { id: 'writer-pro', name: 'WriterPro', role: 'Report Generation', status: 'Busy', load: '88%', memory: '4.2GB', icon: <Terminal className="text-rose-400" /> },
@@ -24,7 +24,7 @@ export default function AgentsPage() {
               旅程 VI. 知識沉澱與加值
             </UniversalBadge>
             <h1 className="text-4xl font-bold tracking-tight text-white/90 flex items-center gap-3">
-              <Bot className="text-cyan-core" /> 代理專區 Agents
+              <Activity className="text-cyan-core" /> 代理專區 Agents
             </h1>
             <p className="text-lg text-white/60 max-w-2xl">
               調度您的 AI 蜂群。管理專屬代理人的部署狀態、技能組合與算力分配。
@@ -53,7 +53,7 @@ export default function AgentsPage() {
            </div>
            <div className="p-6 bg-white/5 rounded-[2rem] border border-white/10 flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                 <Bot size={32} />
+                 <Activity size={32} />
               </div>
               <div>
                  <p className="text-[10px] font-black uppercase text-white/30 tracking-widest">Active Agents</p>
@@ -75,7 +75,7 @@ export default function AgentsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            {AGENTS.map((agent) => (
              <motion.div key={agent.id} whileHover={{ scale: 1.02 }}>
-                <UniversalCard variant="hologram" className="p-6 space-y-6 hover:border-cyan-500/40 transition-all border-white/10">
+                <UniversalCard variant="glow" className="p-6 space-y-6 hover:border-cyan-500/40 transition-all border-white/10">
                    <div className="flex justify-between items-start">
                       <div className="p-4 bg-white/5 rounded-2xl border border-white/10 text-cyan-core">
                          {agent.icon}

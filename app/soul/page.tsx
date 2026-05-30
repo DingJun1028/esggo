@@ -28,7 +28,7 @@ export default function SoulPage() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-           <UniversalCard variant="hologram" className="p-8 space-y-6 border-amber-500/20">
+           <UniversalCard variant="glow" className="p-8 space-y-6 border-amber-500/20">
               <div className="flex items-center gap-4 text-amber-400">
                  <Brain size={32} />
                  <h3 className="text-xl font-black uppercase tracking-tight">無上意志核心</h3>
@@ -44,7 +44,7 @@ export default function SoulPage() {
               </div>
            </UniversalCard>
 
-           <UniversalCard variant="hologram" className="p-8 space-y-6 border-cyan-500/20">
+           <UniversalCard variant="glow" className="p-8 space-y-6 border-cyan-500/20">
               <div className="flex items-center gap-4 text-cyan-400">
                  <ShieldCheck size={32} />
                  <h3 className="text-xl font-black uppercase tracking-tight">神聖治理契約</h3>

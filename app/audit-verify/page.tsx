@@ -49,7 +49,7 @@ export default function AuditVerifyPage() {
           </div>
         </header>
 
-        <UniversalCard variant="hologram" className="p-8 md:p-12 text-center space-y-8 bg-black/40 border-cyan-500/20">
+        <UniversalCard variant="glow" className="p-8 md:p-12 text-center space-y-8 bg-black/40 border-cyan-500/20">
            {!result && !isVerifying && (
              <div className="space-y-8">
                 <div className="space-y-4">

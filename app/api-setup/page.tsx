@@ -130,7 +130,7 @@ export default function APISetupPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-white/60">RESEND_API_KEY</span>
-                  <UniversalBadge variant="danger">Missing</UniversalBadge>
+                  <UniversalBadge variant="error">Missing</UniversalBadge>
                 </div>
                 <hr className="border-white/5" />
                 <UniversalButton variant="secondary" className="w-full text-xs">

@@ -102,7 +102,7 @@ export default function HealthCheckPage() {
                   {QUESTIONS[activeQuestion].category}
                 </p>
               </div>
-              <UniversalProgress value={((activeQuestion) / QUESTIONS.length) * 100} size="sm" />
+              <UniversalProgress value={((activeQuestion) / QUESTIONS.length) * 100}  />
               
               <UniversalCard variant="bordered" className="p-8 md:p-16 min-h-[300px] flex flex-col justify-center items-center text-center space-y-12">
                 <h3 className="text-2xl md:text-3xl font-bold leading-snug max-w-2xl">

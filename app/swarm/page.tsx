@@ -43,10 +43,10 @@ export default function SwarmPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {WORKERS.map((w) => (
                    <motion.div key={w.id} whileHover={{ y: -5 }}>
-                      <UniversalCard variant="hologram" className="p-6 space-y-4 border-white/10 hover:border-cyan-500/40 transition-all">
+                      <UniversalCard variant="glow" className="p-6 space-y-4 border-white/10 hover:border-cyan-500/40 transition-all">
                          <div className="flex justify-between items-start">
                             <div className="p-3 bg-white/5 rounded-xl text-cyan-core">
-                               <Bot size={20} />
+                               <Activity size={20} />
                             </div>
                             <UniversalBadge variant={w.status === 'Active' ? 'success' : 'secondary'}>{w.status}</UniversalBadge>
                          </div>

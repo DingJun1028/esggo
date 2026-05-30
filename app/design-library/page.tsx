@@ -59,7 +59,7 @@ export default function DesignLibraryPage() {
                          <p className="text-[10px] font-mono text-cyan-core/60 mt-1 uppercase">{t.hex}</p>
                       </div>
                       <button onClick={() => copyToClipboard(t.hex)} className="p-2 text-white/20 hover:text-white transition-colors">
-                         {copied === t.hex ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                         {copied === t.hex ? <CheckCircle2 size={14} className="text-emerald-400" /> : <Copy size={14} />}
                       </button>
                    </div>
                  ))}
@@ -78,14 +78,14 @@ export default function DesignLibraryPage() {
                        <div className="flex flex-wrap gap-4">
                           <UniversalButton variant="primary">Primary Action</UniversalButton>
                           <UniversalButton variant="secondary">Secondary</UniversalButton>
-                          <UniversalButton variant="danger">Destructive</UniversalButton>
+                          <UniversalButton variant="error">Destructive</UniversalButton>
                        </div>
                     </UniversalCard>
                     <UniversalCard title="Badges" variant="bordered" className="p-8">
                        <div className="flex flex-wrap gap-3">
                           <UniversalBadge variant="success">Verified</UniversalBadge>
                           <UniversalBadge variant="warning">Pending</UniversalBadge>
-                          <UniversalBadge variant="danger">Rejected</UniversalBadge>
+                          <UniversalBadge variant="error">Rejected</UniversalBadge>
                           <UniversalBadge variant="info">Context</UniversalBadge>
                        </div>
                     </UniversalCard>
@@ -104,7 +104,7 @@ export default function DesignLibraryPage() {
                     <UniversalCard title="Glass Variant" variant="glass" className="h-32 flex items-center justify-center text-xs text-white/40">
                        Backdrop Blur 12px
                     </UniversalCard>
-                    <UniversalCard title="Hologram Variant" variant="hologram" className="h-32 flex items-center justify-center text-xs text-white/40">
+                    <UniversalCard title="Hologram Variant" variant="glow" className="h-32 flex items-center justify-center text-xs text-white/40">
                        Cyber Grid Overlay
                     </UniversalCard>
                  </div>

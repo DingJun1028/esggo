@@ -90,7 +90,7 @@ export default function DigitalTwinPage() {
 
           {/* 3D Visualization Area (Simulated) */}
           <div className="lg:col-span-3 space-y-6">
-            <UniversalCard variant="hologram" className="aspect-video relative overflow-hidden bg-black/40 border-cyan-500/20 p-0 flex items-center justify-center group">
+            <UniversalCard variant="glow" className="aspect-video relative overflow-hidden bg-black/40 border-cyan-500/20 p-0 flex items-center justify-center group">
               <div className="absolute inset-0 cyber-grid opacity-20 group-hover:opacity-30 transition-opacity" />
               
               {/* Simulated 3D Entity */}
