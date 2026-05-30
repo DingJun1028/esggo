@@ -17,32 +17,98 @@ ALTER TABLE public.sustainwrite_sections ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "evidence_vault_isolation_policy" ON public.evidence_vault;
 DROP POLICY IF EXISTS "audit_logs_isolation_policy" ON public.audit_logs;
 DROP POLICY IF EXISTS "sustainwrite_sections_isolation_policy" ON public.sustainwrite_sections;
+DROP POLICY IF EXISTS "evidence_vault_company_isolation" ON public.evidence_vault;
+DROP POLICY IF EXISTS "evidence_vault_company_insert" ON public.evidence_vault;
+DROP POLICY IF EXISTS "evidence_vault_company_update" ON public.evidence_vault;
+DROP POLICY IF EXISTS "audit_logs_company_isolation" ON public.audit_logs;
+DROP POLICY IF EXISTS "audit_logs_company_insert" ON public.audit_logs;
+DROP POLICY IF EXISTS "audit_logs_company_update" ON public.audit_logs;
+DROP POLICY IF EXISTS "sustainwrite_sections_user_select" ON public.sustainwrite_sections;
+DROP POLICY IF EXISTS "sustainwrite_sections_user_insert" ON public.sustainwrite_sections;
+DROP POLICY IF EXISTS "sustainwrite_sections_user_update" ON public.sustainwrite_sections;
 
 -- 1. evidence_vault: 根據 JWT 內的 company_id 隔離
-CREATE POLICY "evidence_vault_isolation_policy" 
+CREATE POLICY "evidence_vault_company_isolation"
 ON public.evidence_vault
-FOR ALL 
+FOR SELECT
+TO authenticated
 USING (
-  -- 允許 Service Role (Bypass RLS)
-  (auth.role() = 'service_role') OR
-  -- 根據 JWT app_metadata.company_id，或者允許公司預設值 'default' 如果 JWT 沒帶
-  (company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default'))
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
+);
+
+CREATE POLICY "evidence_vault_company_insert"
+ON public.evidence_vault
+FOR INSERT
+TO authenticated
+WITH CHECK (
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
+);
+
+CREATE POLICY "evidence_vault_company_update"
+ON public.evidence_vault
+FOR UPDATE
+TO authenticated
+USING (
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
+)
+WITH CHECK (
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
 );
 
 -- 2. audit_logs: 根據 JWT 內的 company_id 隔離
-CREATE POLICY "audit_logs_isolation_policy" 
+CREATE POLICY "audit_logs_company_isolation"
 ON public.audit_logs
-FOR ALL 
+FOR SELECT
+TO authenticated
 USING (
-  (auth.role() = 'service_role') OR
-  (company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default'))
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
 );
 
--- 3. sustainwrite_sections: 根據 user_id 隔離
-CREATE POLICY "sustainwrite_sections_isolation_policy" 
-ON public.sustainwrite_sections
-FOR ALL 
+CREATE POLICY "audit_logs_company_insert"
+ON public.audit_logs
+FOR INSERT
+TO authenticated
+WITH CHECK (
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
+);
+
+CREATE POLICY "audit_logs_company_update"
+ON public.audit_logs
+FOR UPDATE
+TO authenticated
 USING (
-  (auth.role() = 'service_role') OR
-  (user_id = auth.uid()::text)
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
+)
+WITH CHECK (
+  company_id = coalesce((auth.jwt() -> 'app_metadata' ->> 'company_id'), 'default')
+);
+-- 若你不允許 agent 刪除 audit，這行應保留「不建立 DELETE policy」
+-- 不建 DELETE policy = DELETE 會被 RLS 擋掉
+
+-- 3. sustainwrite_sections: 根據 user_id 隔離
+CREATE POLICY "sustainwrite_sections_user_select"
+ON public.sustainwrite_sections
+FOR SELECT
+TO authenticated
+USING (
+  user_id = auth.uid()::text
+);
+
+CREATE POLICY "sustainwrite_sections_user_insert"
+ON public.sustainwrite_sections
+FOR INSERT
+TO authenticated
+WITH CHECK (
+  user_id = auth.uid()::text
+);
+
+CREATE POLICY "sustainwrite_sections_user_update"
+ON public.sustainwrite_sections
+FOR UPDATE
+TO authenticated
+USING (
+  user_id = auth.uid()::text
+)
+WITH CHECK (
+  user_id = auth.uid()::text
 );
