@@ -193,13 +193,14 @@ SLACK_HOME_CHANNEL=C...`}</pre>
 
       {/* ── Footer 快捷指令提示 ───────────────── */}
       <div className="border-t border-white/5 pt-4 flex flex-wrap gap-2">
-        {['/5t', '/status', '/alert', '/omni'].map(cmd => (
+        {['/esg-five-t', '/esg-status', '/esg-alert', '/omni'].map(cmd => (
           <span key={cmd} className="text-xs font-mono text-slate-500 bg-black/20 px-2 py-1 rounded border border-white/5">
             {cmd}
           </span>
         ))}
         <span className="text-xs text-slate-600 ml-auto self-center">Slash Commands</span>
       </div>
+
     </BrandCard>
   );
 }

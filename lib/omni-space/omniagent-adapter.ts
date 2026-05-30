@@ -48,7 +48,7 @@ export class OmniSpacePaperclipAdapter {
   /**
    * Execute a task using OmniAgent
    */
-  async execute(sessionId: string, prompt: string, context?: any): Promise<TranscriptEntry[]> {
+   async execute(sessionId: string, prompt: string, context?: unknown): Promise<TranscriptEntry[]> {
     console.log(`[OmniAgentAdapter] ⚡ Executing task for session: ${sessionId}`);
     
     // 1. Model Detection & Environment Check

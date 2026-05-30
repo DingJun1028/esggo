@@ -1,5 +1,5 @@
 # Generated React README
-This README will guide you through the process of using the generated React SDK package for the connector `example`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
+This README will guide you through the process of using the generated React SDK package for the connector `omnicore`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
 
 **If you're looking for the `JavaScript README`, you can find it at [`dataconnect-generated/README.md`](../README.md)**
 
@@ -32,6 +32,7 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*ListEternalMemories*](#listeternalmemories)
   - [*ListSwarmAgentTasks*](#listswarmagenttasks)
   - [*ListRegulatoryPolicies*](#listregulatorypolicies)
+  - [*GetMyCompanyProfile*](#getmycompanyprofile)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
   - [*UpsertAuditRecord*](#upsertauditrecord)
@@ -46,7 +47,7 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*CreateDemoData*](#createdemodata)
 
 # TanStack Query Firebase & TanStack React Query
-This SDK provides [React](https://react.dev/) hooks generated specific to your application, for the operations found in the connector `example`. These hooks are generated using [TanStack Query Firebase](https://react-query-firebase.invertase.dev/) by our partners at Invertase, a library built on top of [TanStack React Query v5](https://tanstack.com/query/v5/docs/framework/react/overview).
+This SDK provides [React](https://react.dev/) hooks generated specific to your application, for the operations found in the connector `omnicore`. These hooks are generated using [TanStack Query Firebase](https://react-query-firebase.invertase.dev/) by our partners at Invertase, a library built on top of [TanStack React Query v5](https://tanstack.com/query/v5/docs/framework/react/overview).
 
 ***You do not need to be familiar with Tanstack Query or Tanstack Query Firebase to use this SDK.*** However, you may find it useful to learn more about them, as they will empower you as a user of this Generated React SDK.
 
@@ -83,7 +84,7 @@ function App() {
 To learn more about `QueryClientProvider`, see the [TanStack React Query documentation](https://tanstack.com/query/latest/docs/framework/react/quick-start) and the [TanStack Query Firebase documentation](https://invertase.docs.page/tanstack-query-firebase/react#usage).
 
 # Accessing the connector
-A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `example`.
+A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `omnicore`.
 
 You can find more information about connectors in the [Data Connect documentation](https://firebase.google.com/docs/data-connect#how-does).
 
@@ -133,7 +134,7 @@ Here's a general overview of how to use the generated Query hooks in your code:
 - Query hooks functions can be called with or without passing in an `options` argument of type `useDataConnectQueryOptions`. To learn more about the `options` argument, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/guides/query-options).
   - ***Special case:***  If the Query has all optional variables and you would like to provide an `options` argument to the Query hook function without providing any variables, you must pass `undefined` where you would normally pass the Query's variables, and then may provide the `options` argument.
 
-Below are examples of how to use the `example` connector's generated Query hook functions to execute each Query. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#operations-react-angular).
+Below are examples of how to use the `omnicore` connector's generated Query hook functions to execute each Query. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#operations-react-angular).
 
 ## ListAllTasks
 You can execute the `ListAllTasks` Query using the following Query hook function, which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts):
@@ -1419,6 +1420,85 @@ export default function ListRegulatoryPoliciesComponent() {
 }
 ```
 
+## GetMyCompanyProfile
+You can execute the `GetMyCompanyProfile` Query using the following Query hook function, which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts):
+
+```javascript
+useGetMyCompanyProfile(dc: DataConnect, options?: useDataConnectQueryOptions<GetMyCompanyProfileData>): UseDataConnectQueryResult<GetMyCompanyProfileData, undefined>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useGetMyCompanyProfile(options?: useDataConnectQueryOptions<GetMyCompanyProfileData>): UseDataConnectQueryResult<GetMyCompanyProfileData, undefined>;
+```
+
+### Variables
+The `GetMyCompanyProfile` Query has no variables.
+### Return Type
+Recall that calling the `GetMyCompanyProfile` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetMyCompanyProfile` Query is of type `GetMyCompanyProfileData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface GetMyCompanyProfileData {
+  companyProfiles: ({
+    id: UUIDString;
+    name: string;
+    industry?: string | null;
+    headquarters?: string | null;
+    vision?: string | null;
+    mission?: string | null;
+    employeeCount?: number | null;
+    revenueTwd?: number | null;
+    capitalTwd?: number | null;
+  } & CompanyProfile_Key)[];
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `GetMyCompanyProfile`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig } from '@dataconnect/generated';
+import { useGetMyCompanyProfile } from '@dataconnect/generated/react'
+
+export default function GetMyCompanyProfileComponent() {
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useGetMyCompanyProfile();
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useGetMyCompanyProfile(dataConnect);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetMyCompanyProfile(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetMyCompanyProfile(dataConnect, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.companyProfiles);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
 # Mutations
 
 The React generated SDK provides Mutations hook functions that call and return [`useDataConnectMutation`](https://react-query-firebase.invertase.dev/react/data-connect/mutations) hooks from TanStack Query Firebase.
@@ -1442,7 +1522,7 @@ Here's a general overview of how to use the generated Mutation hooks in your cod
   - `UseMutationResult.mutate()` also accepts an `options` argument of type `useDataConnectMutationOptions`.
   - ***Special case:*** If the Mutation has no arguments (or all optional arguments and you wish to provide none), and you want to pass `options` to `UseMutationResult.mutate()`, you must pass `undefined` where you would normally pass the Mutation's arguments, and then may provide the options argument.
 
-Below are examples of how to use the `example` connector's generated Mutation hook functions to execute each Mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#operations-react-angular).
+Below are examples of how to use the `omnicore` connector's generated Mutation hook functions to execute each Mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#operations-react-angular).
 
 ## UpsertTask
 You can execute the `UpsertTask` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):

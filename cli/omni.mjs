@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * OmniAgent + ESG Go Native CLI Tool
- * v1.1.0 | Antigravity-Style Terminal Interface
+ * OmniAgent + ESGGO 善向永續 系統 Native CLI Tool
+ * v8.5.1 | #OmniCore #Governance #5TIntegrity
  */
 
 import { Command } from 'commander';
@@ -86,8 +86,8 @@ async function fetchOmniAgentStatusLocal() {
 
 program
   .name('omni')
-  .description('OmniAgent + ESG Go Terminal Interface')
-  .version('1.0.0');
+  .version('8.5.1')
+  .description('OmniAgent + ESGGO 善向永續 系統 Terminal Interface');
 
 // ── Database & System Commands ───────────────────────────────────────────────
 const db = program.command('db').description('Database and system administration');

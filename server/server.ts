@@ -6,7 +6,7 @@ import { LogicRepo } from './src/storage/LogicRepo.js';
 import { DocParser } from './src/parsers/DocParser.js';
 import { authMiddleware } from './src/middleware/auth.js';
 import { validateExportRequest } from './src/middleware/validator.js';
-import { formatForSAP, exportToSAP } from './src/adapters/sapAdapter.js';
+import { formatForSAP, exportToSAP, exportToAItable } from './src/adapters/sapAdapter.js';
 import { watch } from 'fs';
 
 dotenv.config();
@@ -48,18 +48,28 @@ app.post('/logic/export', validateExportRequest, async (req, res) => {
   if (!node) return res.status(404).json({ error: 'Logic node not found' });
   try {
     const parsed = JSON.parse(node.config);
-    if (targetSystem.toUpperCase() === 'SAP') {
-      const sapPayload = formatForSAP(parsed, targetSystem);
+    if (targetSystem.toUpperCase() === "SAP") {
+      const sapPayload = formatForSAP(parsed);
       const success = await exportToSAP(sapPayload);
       if (success) {
+        LogicRepo.logAction('export', nodeName, 'Exported to SAP');
         res.json({ 
           success: true, 
           message: `Successfully exported ${nodeName} to SAP`, 
           payload: sapPayload 
         });
       }
+    } else if (targetSystem.toUpperCase() === "AITABLE") {
+      const success = await exportToAItable(parsed);
+      if (success) {
+        LogicRepo.logAction('export', nodeName, 'Synced to AItable');
+        res.json({ 
+          success: true, 
+          message: `Successfully synced ${nodeName} to AItable` 
+        });
+      }
     } else {
-      res.status(400).json({ error: 'Unsupported system' });
+      res.status(400).json({ error: "Unsupported system" });
     }
   } catch (err: any) {
     res.status(500).json({ error: err.message });

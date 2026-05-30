@@ -126,14 +126,14 @@ export class SustainWriteScribe {
   /**
    * 呼叫 AI 進行單一子維度的專家級長文生成 (目標：每小節 400-600 字)
    */
-  private async generateExpertParagraph(
-    mainTitle: string, 
-    sectionTitle: string, 
-    subTitle: string, 
-    focus: string, 
-    context: any, 
-    depth: number
-  ): Promise<string> {
+   private async generateExpertParagraph(
+     mainTitle: string, 
+     sectionTitle: string, 
+     subTitle: string, 
+     focus: string, 
+     context: Record<string, unknown>, 
+     depth: number
+   ): Promise<string> {
     
     // 若無配置真實 API Key，則使用模擬的高品質長文生成邏輯
     if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY && !process.env.OPENAI_API_KEY) {

@@ -9,4 +9,4 @@ schemas:
         database: "fdcdb-1"
         cloudSql:
           instanceId: "esggo-original-db"
-connectorDirs: ["./example"]
+connectorDirs: ["./omnicore"]

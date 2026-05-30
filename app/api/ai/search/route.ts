@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { enterpriseRetriever } from '@/lib/ai/retrievers';
 import { ai } from '@/lib/agents/genkit';
 
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+
 
 /**
  * 🚀 全域知識檢索 API (Global Search)

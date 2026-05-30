@@ -4,6 +4,18 @@ import { memoryStore } from '../memory/memory-store.ts';
 import { toolSynthesizer } from '../tools/synthesis.ts';
 import type { MemoryRecord } from '../memory/memory-store.ts';
 
+// Define the result type from ADKAgent.run
+interface ADKAgentResult {
+  success: true;
+  agent: string;
+  output: string;
+  simulated?: boolean;
+} | {
+  success: false;
+  agent: string;
+  error: string;
+}
+
 /**
  * ADK Core: Agent Abstraction Layer
  * v1.0.0 | High-Performance Multi-Agent Orchestration
@@ -13,9 +25,15 @@ export interface AgentConfig {
    name: string;
    role: string;
    systemPrompt?: string;
-   tools?: any[];
+   tools?: Tool[];
    model?: string | undefined;
- }
+}
+
+interface Tool {
+   name: string;
+   description: string;
+   handler: () => unknown;
+}
 
 
 export class ADKAgent {
@@ -26,7 +44,7 @@ export class ADKAgent {
     this.config = config;
   }
 
-    async run(task: string, context?: unknown, retries = 3): Promise<any> {
+    async run(task: string, context?: unknown, retries = 3): Promise<ADKAgentResult> {
     console.log(`[ADK Agent - ${this.config.name}] Executing task: ${task} (attempts: ${retries})`);
 
     const startTime = Date.now();
@@ -64,7 +82,7 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
       }
     }
 
-     const executeWithRetry = async (attempt: number): Promise<any> => {
+      const executeWithRetry = async (attempt: number): Promise<ADKAgentResult> => {
        try {
          const response = await ai.generate({
            model: this.config.model || 'googleai/gemini-2.0-flash',

@@ -3,11 +3,13 @@ import { textEmbedding004 } from '@genkit-ai/googleai';
 import { ai } from '../agents/genkit';
 import { getFirestore } from 'firebase-admin/firestore';
 
+import { firebaseAdmin } from '../firebase-admin';
+
 /**
  * 🚀 企業專屬檢索器 (Enterprise Retriever)
  * 負責從 Firestore 向量資料庫中檢索與查詢最相關的 ESG 知識
  */
-export const enterpriseRetriever = defineFirestoreRetriever(ai, {
+export const enterpriseRetriever = firebaseAdmin ? defineFirestoreRetriever(ai, {
   name: 'enterpriseRetriever',
   firestore: getFirestore(),
   collection: 'enterprise_knowledge',
@@ -15,7 +17,7 @@ export const enterpriseRetriever = defineFirestoreRetriever(ai, {
   vectorField: 'embedding',
   contentField: 'text',
   metadataFields: ['companyId', 'docId', 'title'],
-});
+}) : null as any;
 
 /**
  * 🛠️ 知識索引器 (Knowledge Indexer)

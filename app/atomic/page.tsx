@@ -1,11 +1,19 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Layers, Box, Cpu, Fingerprint, ShieldCheck, Activity, Eye, Compass, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Layers, Box, Cpu, Fingerprint, ShieldCheck, Activity, Eye, Compass, Zap, 
+  Layout, Menu, ChevronLeft, ChevronRight, Sun, Moon, Smartphone, Monitor,
+  LayoutDashboard, FileText, Lock, BarChart3, Bot, Settings
+} from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
+import { cn } from '@/lib/utils';
+import { ComponentRenderer } from '@/components/ComponentRenderer';
 
 export default function AtomicRegistryPage() {
+  const [activeTheme, setActiveTheme] = useState<'light' | 'dark'>('dark');
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -20,8 +28,11 @@ export default function AtomicRegistryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 p-6 md:p-10 font-sans selection:bg-cyan-500/30 overflow-x-hidden">
-      {/* 神經形態背景光暈 */}
+    <div className={cn(
+      "min-h-screen transition-colors duration-700 p-6 md:p-10 font-sans selection:bg-cyan-500/30 overflow-x-hidden",
+      activeTheme === 'dark' ? "bg-[#020617] text-slate-200" : "bg-slate-50 text-[#003262]"
+    )}>
+      {/* ─── Layer 0: Ambient Lighting ─── */}
       <div className="fixed top-[10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
       <div className="fixed bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
 
@@ -29,29 +40,126 @@ export default function AtomicRegistryPage() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="max-w-7xl mx-auto space-y-12 relative z-10"
+        className="max-w-7xl mx-auto space-y-16 relative z-10"
       >
         {/* ─── Header ────────────────────────────── */}
-        <header className="border-b border-white/10 pb-6 mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <BrandStatusDot status="active" pulse size="sm" />
-            <span className="text-xs font-mono font-black tracking-[0.3em] text-cyan-400 uppercase">
-              SSOT_Component_Registry
-            </span>
+        <header className="border-b border-current/10 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <BrandStatusDot status="active" pulse size="sm" />
+              <span className={cn("text-xs font-mono font-black tracking-[0.3em] uppercase", activeTheme === 'dark' ? "text-cyan-400" : "text-blue-600")}>
+                SSOT_Component_Registry_v2.0
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter flex items-center gap-4 uppercase">
+              <Layers className={activeTheme === 'dark' ? "text-cyan-400" : "text-blue-600"} size={40} />
+              萬能元件原子庫 <span className="opacity-30 font-light">| Atomic</span>
+            </h1>
           </div>
-          <h1 className="text-4xl font-black tracking-tight text-white flex items-center gap-3">
-            <Layers className="text-cyan-400" size={32} />
-            萬能元件原子庫 <span className="text-slate-500 font-light">| Atomic</span>
-          </h1>
-          <p className="mt-4 text-slate-400 max-w-2xl text-sm leading-relaxed">
-            此為 ESG GO 系統的視覺與交互基準 (Single Source of Truth)。所有 UI 元件皆承載 5T 協議中「Tangible (可感知)」的神聖使命，運用液態玻璃與神經脈動，將冷硬的治理數據昇華為具備生命體徵的操作體驗。
-          </p>
+          
+          <div className="flex gap-4">
+            <button 
+              onClick={() => setActiveTheme(activeTheme === 'dark' ? 'light' : 'dark')}
+              className={cn(
+                "px-6 py-3 rounded-2xl border flex items-center gap-3 font-black text-xs tracking-widest uppercase transition-all shadow-lg",
+                activeTheme === 'dark' ? "bg-white/5 border-white/10 hover:bg-white/10" : "bg-white border-slate-200 hover:bg-slate-50"
+              )}
+            >
+              {activeTheme === 'dark' ? <Sun size={16} className="text-[#FDB515]" /> : <Moon size={16} className="text-blue-600" />}
+              Toggle Theme Engine
+            </button>
+          </div>
         </header>
 
+        {/* ─── NEW: 系統架構外殼 (System Organisms) ────────────────── */}
+        <section className="space-y-8">
+          <h2 className="text-2xl font-black flex items-center gap-3 uppercase tracking-tight">
+            <Monitor className="text-indigo-400" /> 系統主架構 (System Organisms)
+          </h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* AppShellV2 Preview Card */}
+            <motion.div variants={itemVariants}>
+              <BrandCard variant="hologram" padding="lg" className="h-full border-indigo-500/20 overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-4">
+                   <BrandBadge variant="outline">Organism: AppShellV2</BrandBadge>
+                </div>
+                <div className="space-y-6">
+                  <h3 className="text-xl font-black uppercase tracking-tight">MECE 模塊化導航架構</h3>
+                  <p className="text-sm opacity-60 leading-relaxed max-w-md">
+                    整合雙軸收合系統與 SaaS 使用者旅程。側邊欄根據業務邏輯分為六大核心模組，確保治理路徑「不重疊、不遺漏」。
+                  </p>
+                  
+                  {/* Visual Representation of the Shell */}
+                  <div className={cn(
+                    "mt-8 rounded-xl border p-2 aspect-video relative shadow-2xl",
+                    activeTheme === 'dark' ? "bg-slate-900 border-white/10" : "bg-white border-slate-200"
+                  )}>
+                    <div className="flex h-full gap-2">
+                       <div className="w-1/4 h-full bg-current/5 rounded-lg border border-current/10 flex flex-col p-2 gap-2">
+                          {[1,2,3,4].map(i => <div key={i} className="h-4 w-full bg-current/5 rounded-md" />)}
+                       </div>
+                       <div className="flex-1 flex flex-col gap-2">
+                          <div className="h-6 w-full bg-current/5 rounded-lg border border-current/10" />
+                          <div className="flex-1 bg-current/5 rounded-lg border border-current/10 grid grid-cols-3 gap-2 p-4">
+                             {[1,2,3].map(i => <div key={i} className="aspect-square bg-current/5 rounded-xl border border-current/10" />)}
+                          </div>
+                       </div>
+                    </div>
+                    {/* Floating Pulse Indicator Mock */}
+                    <div className="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center">
+                       <Bot size={10} className="text-emerald-500" />
+                    </div>
+                  </div>
+                </div>
+              </BrandCard>
+            </motion.div>
+
+            {/* Mobile Optimization Preview */}
+            <motion.div variants={itemVariants}>
+              <BrandCard variant="glass" padding="lg" className="h-full border-emerald-500/20">
+                <div className="absolute top-0 right-0 p-4">
+                   <BrandBadge variant="outline">Pattern: Mobile Pulse</BrandBadge>
+                </div>
+                <div className="space-y-6">
+                  <h3 className="text-xl font-black uppercase tracking-tight">行動端全感官優化</h3>
+                  <p className="text-sm opacity-60 leading-relaxed max-w-md">
+                    在行動維度下自動轉化為雙重 Pill Bar：頂部用於系統功能快捷鍵，底部為 SaaS 核心旅程導航。
+                  </p>
+                  
+                  <div className="flex justify-center mt-6">
+                    <div className={cn(
+                      "w-48 aspect-[9/19] rounded-[2.5rem] border-4 p-2 relative shadow-2xl overflow-hidden",
+                      activeTheme === 'dark' ? "bg-slate-950 border-slate-800" : "bg-white border-slate-200"
+                    )}>
+                       <div className="h-8 w-full border-b border-current/10 flex items-center px-4 gap-2">
+                          <div className="w-12 h-2 bg-current/10 rounded-full" />
+                          <div className="w-4 h-2 bg-current/10 rounded-full ml-auto" />
+                       </div>
+                       <div className="p-4 space-y-4">
+                          <div className="h-20 w-full bg-current/5 rounded-2xl border border-current/10" />
+                          <div className="h-32 w-full bg-current/5 rounded-2xl border border-current/10" />
+                       </div>
+                       {/* Bottom Bar Mock */}
+                       <div className="absolute bottom-0 left-0 right-0 h-14 bg-current/5 backdrop-blur-md border-t border-current/10 flex justify-around items-center px-4">
+                          {[LayoutDashboard, FileText, Lock, Bot].map((Icon, i) => (
+                            <Icon key={i} size={14} className="opacity-40" />
+                          ))}
+                       </div>
+                    </div>
+                  </div>
+                </div>
+              </BrandCard>
+            </motion.div>
+          </div>
+        </section>
+
         {/* ─── 5T 協議視覺化映射 ────────────────────────────── */}
-        <section className="space-y-6">
-          <h2 className="text-xl font-bold flex items-center gap-2 text-white"><Compass className="text-indigo-400" /> 5T Integrity Mapping</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <section className="space-y-8">
+          <h2 className="text-2xl font-black flex items-center gap-3 uppercase tracking-tight">
+            <Compass className="text-indigo-400" /> 5T Integrity Protocol Mapping
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             {[
               { t: 'Traceable', desc: '可溯源鏈路', icon: Compass, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
               { t: 'Transparent', desc: '算法全公開', icon: Eye, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
@@ -59,127 +167,108 @@ export default function AtomicRegistryPage() {
               { t: 'Trustworthy', desc: '不可篡改封印', icon: ShieldCheck, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
               { t: 'Transferful', desc: '全生命週期追蹤', icon: Activity, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
             ].map((item, i) => (
-              <motion.div key={i} variants={itemVariants} className={`p-4 rounded-xl border ${item.border} ${item.bg} flex flex-col items-center text-center gap-3 backdrop-blur-sm`}>
-                <item.icon size={24} className={item.color} />
+              <motion.div key={i} variants={itemVariants} className={`p-6 rounded-[2rem] border ${item.border} ${item.bg} flex flex-col items-center text-center gap-4 backdrop-blur-xl shadow-xl hover:scale-105 transition-transform cursor-pointer group`}>
+                <div className="p-4 rounded-2xl bg-current/5 group-hover:bg-current/10 transition-colors">
+                  <item.icon size={32} className={item.color} />
+                </div>
                 <div>
-                  <div className={`font-black text-sm uppercase tracking-wider ${item.color}`}>{item.t}</div>
-                  <div className="text-xs text-slate-400 mt-1">{item.desc}</div>
+                  <div className={`font-black text-sm uppercase tracking-[0.2em] ${item.color}`}>{item.t}</div>
+                  <div className="text-[10px] opacity-50 mt-2 font-bold uppercase tracking-widest">{item.desc}</div>
                 </div>
               </motion.div>
             ))}
           </div>
         </section>
 
-        {/* ─── BrandCard 展示 ────────────────────────────── */}
-        <section className="space-y-6">
-          <h2 className="text-xl font-bold flex items-center gap-2 text-white"><Box className="text-cyan-400" /> 空間容器 (BrandCard)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div variants={itemVariants}>
-              <BrandCard variant="default" padding="md" className="h-full">
-                <BrandBadge variant="outline" className="mb-4">variant="solid"</BrandBadge>
-                <h3 className="text-lg font-bold text-white mb-2">基礎實體層</h3>
-                <p className="text-sm text-slate-400">最穩定的底層容器，提供高對比度的基礎閱讀區域，無額外光學處理。</p>
-              </BrandCard>
-            </motion.div>
+        {/* ─── 容器與組件展示 (Atoms & Molecules) ─────────────────── */}
+        <section className="space-y-12">
+          <h2 className="text-2xl font-black flex items-center gap-3 uppercase tracking-tight">
+            <Box className="text-cyan-400" /> 空間容器與原子 (Atoms & Space)
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+             {/* Buttons Section */}
+             <div className="space-y-6">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] opacity-40 border-l-2 border-cyan-500 pl-4">BrandButton / 意圖驅動器</h3>
+                <div className="flex flex-wrap gap-4 p-8 rounded-[2.5rem] bg-current/5 border border-current/5">
+                   <BrandButton variant="primary">主權執行 (Primary)</BrandButton>
+                   <BrandButton variant="secondary">次要策略 (Secondary)</BrandButton>
+                   <BrandButton variant="glass">液態共鳴 (Glass)</BrandButton>
+                   <BrandButton variant="outline">邊界校準 (Outline)</BrandButton>
+                </div>
+             </div>
 
-            <motion.div variants={itemVariants}>
-              <BrandCard variant="glass" padding="md" className="h-full border-cyan-500/30">
-                <BrandBadge variant="blue" className="mb-4">variant="glass"</BrandBadge>
-                <h3 className="text-lg font-bold text-cyan-400 mb-2">液態玻璃擬態</h3>
-                <p className="text-sm text-slate-400">利用 backdrop-blur 與半透明背景，創造輕盈且具備深度感的神經鏈路層。</p>
-              </BrandCard>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <BrandCard variant="hologram" padding="md" hover className="h-full border-indigo-500/30">
-                <BrandBadge variant="outline" className="mb-4 text-indigo-300">variant="hologram"</BrandBadge>
-                <h3 className="text-lg font-bold text-indigo-400 mb-2 flex items-center gap-2"><Zap size={16} /> 賽博全息投影</h3>
-                <p className="text-sm text-slate-400">最高維度的容器，具備 hover 動態光暈與漸層邊框，用於強調整體指標與高亮事件。</p>
-              </BrandCard>
-            </motion.div>
+             {/* Badges Section */}
+             <div className="space-y-6">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] opacity-40 border-l-2 border-emerald-500 pl-4">BrandBadge / 狀態刻印</h3>
+                <div className="flex flex-wrap gap-4 p-8 rounded-[2.5rem] bg-current/5 border border-current/5 items-center">
+                   <BrandBadge variant="success">VERIFIED_T4</BrandBadge>
+                   <BrandBadge variant="blue">GRI_305_ALIGNED</BrandBadge>
+                   <BrandBadge variant="outline" className="tracking-widest">v8.5.5_STABLE</BrandBadge>
+                   <div className="flex items-center gap-4 bg-slate-950 px-6 py-2 rounded-full border border-white/5">
+                      <BrandStatusDot status="active" pulse /> <span className="text-[10px] font-black uppercase">Resonating</span>
+                   </div>
+                </div>
+             </div>
           </div>
         </section>
 
-        {/* ─── 互動元件展示 ────────────────────────────── */}
-        <section className="space-y-6">
-          <h2 className="text-xl font-bold flex items-center gap-2 text-white"><Fingerprint className="text-emerald-400" /> 互動觸媒 (Interactive)</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div variants={itemVariants} className="space-y-6">
-              <BrandCard variant="glass" padding="md" className="space-y-6">
-                <div>
-                  <h3 className="text-sm font-mono text-slate-400 mb-4">BrandButton (意圖驅動器)</h3>
-                  <div className="flex flex-wrap gap-4">
-                    <BrandButton variant="primary">主權執行</BrandButton>
-                    <BrandButton variant="secondary">次要策略</BrandButton>
-                    <BrandButton variant="outline">邊界校準</BrandButton>
-                    <BrandButton variant="ghost">隱形感知</BrandButton>
-                    <BrandButton variant="glass">液態共鳴</BrandButton>
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-white/10">
-                  <h3 className="text-sm font-mono text-slate-400 mb-4">Sizes (維度縮放)</h3>
-                  <div className="flex items-center flex-wrap gap-4">
-                    <BrandButton variant="primary" size="sm">小型 (SM)</BrandButton>
-                    <BrandButton variant="primary" size="md">標準 (MD)</BrandButton>
-                    <BrandButton variant="primary" size="lg">大型展開 (LG)</BrandButton>
-                  </div>
-                </div>
-              </BrandCard>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-6">
-              <BrandCard variant="glass" padding="md" className="space-y-6">
-                <div>
-                  <h3 className="text-sm font-mono text-slate-400 mb-4">BrandBadge (狀態刻印)</h3>
-                  <div className="flex flex-wrap gap-3">
-                    <BrandBadge variant="default">標準標籤</BrandBadge>
-                    <BrandBadge variant="neutral">次要屬性</BrandBadge>
-                    <BrandBadge variant="outline">輕量框線</BrandBadge>
-                    <BrandBadge variant="blue">液態刻印</BrandBadge>
-                    <BrandBadge variant="error" className="border-rose-500/50 text-rose-300 bg-rose-500/10">異常警告</BrandBadge>
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-white/10">
-                  <h3 className="text-sm font-mono text-slate-400 mb-4">BrandStatusDot (生命體徵)</h3>
-                  <div className="flex flex-wrap items-center gap-6 p-4 bg-[#0f172a] rounded-xl border border-white/5">
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                      <BrandStatusDot status="active" pulse /> 共鳴運作中
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                      <BrandStatusDot status="warning" /> 局部震盪
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                      <BrandStatusDot status="error" pulse /> 熵增過載
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-300">
-                      <BrandStatusDot status="inactive" /> 沉睡休眠
-                    </div>
-                  </div>
-                </div>
-              </BrandCard>
-            </motion.div>
+        {/* ─── 動態專家工具庫 (Dynamic Tool Injection) ───────────────── */}
+        <section className="space-y-8 pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h2 className="text-2xl font-black flex items-center gap-3 uppercase tracking-tight">
+              <Zap className="text-emerald-400" /> 動態專家工具庫 (Tools & Experts)
+            </h2>
+            <BrandBadge variant="outline" className="border-emerald-500/30 text-emerald-400">
+              NCB DB Connected
+            </BrandBadge>
           </div>
+          <p className="text-sm opacity-60 max-w-3xl leading-relaxed">
+            此區塊為完全資料驅動（Data-Driven），透過 <code className="text-cyan-400 font-mono text-xs bg-current/10 px-2 py-1 rounded">ComponentRenderer</code> 從 NoCodeBackend 即時撈取 `tools_specs` 與 `atomic_components`，實現無需修改程式碼的專家模組熱更新。
+          </p>
+          
+          <ComponentRenderer zone="BentoGrid" className="md:grid-cols-2 lg:grid-cols-3" />
         </section>
 
         {/* ─── 終極整合 ────────────────────────────── */}
-        <motion.div variants={itemVariants} className="pt-6">
-          <BrandCard variant="hologram" padding="lg" className="border-cyan-500/20 text-center relative overflow-hidden">
+        <motion.div variants={itemVariants} className="pt-12">
+          <BrandCard variant="hologram" padding="lg" className="border-cyan-500/20 text-center relative overflow-hidden rounded-[3rem]">
             <div className="absolute inset-0 cyber-grid opacity-10 pointer-events-none" />
-            <Cpu size={48} className="text-cyan-400 mx-auto mb-4 animate-pulse" />
-            <h2 className="text-2xl font-black text-white tracking-widest uppercase mb-2">
-              Assemble the OmniCore
-            </h2>
-            <p className="text-slate-400 max-w-xl mx-auto mb-6">
-              當以上原子被正確編排，即能喚醒如 Dashboard 或 OmniMap 般的終極治理視角。所有元件皆遵循無障礙與液態適應性，完美應對各種裝置維度。
-            </p>
-            <BrandButton variant="glass" onClick={() => window.location.href = '/dashboard'}>
-              返回主權治理終端
-            </BrandButton>
+            <div className="relative z-10 space-y-8 py-10">
+              <div className="p-6 w-fit mx-auto rounded-[2rem] bg-[#003262] text-[#FDB515] shadow-2xl border-2 border-white/10">
+                <Bot size={64} className="animate-pulse" />
+              </div>
+              <div className="space-y-4">
+                <h2 className="text-4xl font-black tracking-widest uppercase">
+                  Assemble the OmniCore
+                </h2>
+                <p className="max-w-2xl mx-auto opacity-60 font-medium leading-relaxed">
+                  ESG GO 萬能元件原子庫不僅是視覺的堆砌，更是誠信協議的實體延伸。當原子編排為 Organisms，系統即具備了自主演化的生命特徵。
+                </p>
+              </div>
+              <div className="flex justify-center gap-6">
+                <BrandButton variant="primary" size="lg" className="px-12 rounded-2xl" onClick={() => window.location.href = '/dashboard'}>
+                  進入主權治理終端
+                </BrandButton>
+                <BrandButton variant="glass" size="lg" className="px-12 rounded-2xl">
+                  獲取架構源碼
+                </BrandButton>
+              </div>
+            </div>
           </BrandCard>
         </motion.div>
 
       </motion.div>
+
+      {/* Global CSS for Atomic Page */}
+      <style jsx global>{`
+        .cyber-grid {
+          background-image: 
+            linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+      `}</style>
     </div>
   );
 }

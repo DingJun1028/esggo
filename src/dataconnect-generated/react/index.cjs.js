@@ -1,4 +1,4 @@
-const { listAllTasksRef, getTaskByIdRef, upsertTaskRef, listAuditRecordsRef, upsertAuditRecordRef, listScrapedArticlesRef, listRoadmapMilestonesRef, upsertRoadmapMilestoneRef, getCompanyProfileRef, upsertCompanyProfileRef, getReportByIdRef, upsertReportRef, upsertReportSectionRef, listReportSectionsByReportRef, upsertCompanyMetricRef, listCompanyMetricsRef, upsertEternalMemoryRef, listEternalMemoriesByCompanyRef, getReportByCompanyRef, listReportsRef, upsertScrapedArticleRef, listEternalMemoriesRef, listSwarmAgentTasksRef, upsertSwarmAgentTaskRef, listRegulatoryPoliciesRef, createDemoDataRef, connectorConfig } = require('../index.cjs.js');
+const { listAllTasksRef, getTaskByIdRef, upsertTaskRef, listAuditRecordsRef, upsertAuditRecordRef, listScrapedArticlesRef, listRoadmapMilestonesRef, upsertRoadmapMilestoneRef, getCompanyProfileRef, upsertCompanyProfileRef, getReportByIdRef, upsertReportRef, upsertReportSectionRef, listReportSectionsByReportRef, upsertCompanyMetricRef, listCompanyMetricsRef, upsertEternalMemoryRef, listEternalMemoriesByCompanyRef, getReportByCompanyRef, listReportsRef, upsertScrapedArticleRef, listEternalMemoriesRef, listSwarmAgentTasksRef, upsertSwarmAgentTaskRef, listRegulatoryPoliciesRef, getMyCompanyProfileRef, createDemoDataRef, connectorConfig } = require('../index.cjs.js');
 const { validateArgs, CallerSdkTypeEnum } = require('firebase/data-connect');
 const { useDataConnectQuery, useDataConnectMutation, validateReactArgs } = require('@tanstack-query-firebase/react/data-connect');
 
@@ -170,6 +170,12 @@ exports.useUpsertSwarmAgentTask = function useUpsertSwarmAgentTask(dcOrOptions, 
 exports.useListRegulatoryPolicies = function useListRegulatoryPolicies(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
   const ref = listRegulatoryPoliciesRef(dcInstance);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useGetMyCompanyProfile = function useGetMyCompanyProfile(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
+  const ref = getMyCompanyProfileRef(dcInstance);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 exports.useCreateDemoData = function useCreateDemoData(dcOrOptions, options) {
