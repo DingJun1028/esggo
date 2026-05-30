@@ -1,11 +1,7 @@
-// @ts-ignore
-import AITable from '@aitable/client';
+// Using internal AITable bridge instead of missing @aitable/client
+import { aitable as internalAitClient } from '../../../lib/aitable';
 
-const aitable = new AITable({
-  token: process.env.AITABLE_TOKEN || '',
-  spaceId: process.env.AITABLE_SPACE_ID || '',
-  apiBase: 'https://aitable.ai'
-});
+const aitable = internalAitClient;
 
 export interface LogicNode {
   name: string;
