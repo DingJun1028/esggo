@@ -42,7 +42,7 @@ export default function ProofCenterPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {PROOFS.map((p) => (
                    <motion.div key={p.id} whileHover={{ scale: 1.02 }}>
-                      <UniversalCard variant="hologram" className="p-6 space-y-6 border-white/10 hover:border-cyan-500/40 transition-all">
+                      <UniversalCard variant="glow" className="p-6 space-y-6 border-white/10 hover:border-cyan-500/40 transition-all">
                          <div className="flex justify-between items-start">
                             <div className="p-3 bg-cyan-core/10 rounded-xl text-cyan-core">
                                <ShieldCheck size={24} />

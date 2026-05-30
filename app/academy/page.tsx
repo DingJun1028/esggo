@@ -84,7 +84,7 @@ export default function AcademyPage() {
                  <Star size={24} className="text-indigo-400 mb-2" />
                  <h4 className="font-bold text-white/90">推薦學習路徑</h4>
                  <p className="text-[11px] text-white/50 mt-1 mb-4">根據您的企業規模與產業，建議優先完成 ISO 14064 課程。</p>
-                 <UniversalButton variant="primary" size="sm" className="w-full text-xs">開始路徑</UniversalButton>
+                 <UniversalButton variant="primary"  className="w-full text-xs">開始路徑</UniversalButton>
               </div>
            </div>
 
@@ -94,7 +94,7 @@ export default function AcademyPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {COURSES.map((course) => (
                    <motion.div key={course.id} whileHover={{ y: -5 }}>
-                      <UniversalCard variant="hologram" className="p-0 overflow-hidden flex flex-col h-full hover:border-cyan-500/40 transition-all">
+                      <UniversalCard variant="glow" className="p-0 overflow-hidden flex flex-col h-full hover:border-cyan-500/40 transition-all">
                          <div className="h-40 bg-black/40 flex items-center justify-center text-6xl">
                             {course.image}
                          </div>
@@ -116,7 +116,7 @@ export default function AcademyPage() {
                                   <span>Progress</span>
                                   <span>{course.progress}%</span>
                                </div>
-                               <UniversalProgress value={course.progress} size="sm" color={course.progress === 100 ? 'success' : 'primary'} />
+                               <UniversalProgress value={course.progress}  color={course.progress === 100 ? 'success' : 'primary'} />
                             </div>
                          </div>
                          <div className="p-4 bg-white/5 border-t border-white/5 mt-auto">

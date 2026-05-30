@@ -78,7 +78,7 @@ export default function ComplianceCheckPage() {
                 <span>正在分析報告草稿與 GRI 知識庫...</span>
                 <span>{scanProgress}%</span>
              </div>
-             <UniversalProgress value={scanProgress} size="md" />
+             <UniversalProgress value={scanProgress}  />
           </motion.div>
         )}
 
@@ -120,7 +120,7 @@ export default function ComplianceCheckPage() {
                          </div>
                          <div className="flex items-center gap-3">
                             {check.status !== 'pass' && (
-                              <UniversalButton variant="secondary" size="sm" className="text-[10px] py-1 h-auto flex items-center gap-2">
+                              <UniversalButton variant="secondary"  className="text-[10px] py-1 h-auto flex items-center gap-2">
                                 <Sparkles size={12} /> AI 修正建議
                               </UniversalButton>
                             )}

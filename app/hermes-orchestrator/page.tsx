@@ -33,7 +33,7 @@ export default function HermesOrchestratorPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
            {/* Visual Topology Map placeholder */}
            <div className="lg:col-span-3 space-y-8">
-              <UniversalCard variant="hologram" className="aspect-video relative overflow-hidden bg-black/40 border-cyan-500/20 p-0 flex items-center justify-center group">
+              <UniversalCard variant="glow" className="aspect-video relative overflow-hidden bg-black/40 border-cyan-500/20 p-0 flex items-center justify-center group">
                  <div className="absolute inset-0 cyber-grid opacity-20" />
                  
                  {/* Simulated Nodes */}
@@ -52,7 +52,7 @@ export default function HermesOrchestratorPage() {
                         style={{ transform: `rotate(${deg}deg)` }}
                       >
                          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 backdrop-blur-xl">
-                            <Bot size={24} />
+                            <Activity size={24} />
                          </div>
                       </motion.div>
                     ))}

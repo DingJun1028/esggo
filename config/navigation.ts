@@ -30,6 +30,15 @@ export const SaaS_NAVIGATION: NavGroup[] = [
   },
   {
     groupId: 'onboarding',
+    groupTitle: 'I. 初始導入與配置',
+    items: [
+      { id: 'profile', title: '企業管理', path: '/profile', icon: 'Building2', sub: 'Profile' },
+      { id: 'api-setup', title: '整合中心', path: '/api-setup', icon: 'Link', sub: 'Integrations' },
+      { id: 'data-sources', title: '資料來源', path: '/data-sources', icon: 'Database', sub: 'Data Hub' },
+      { id: 'templates', title: '專家模板', path: '/templates', icon: 'LayoutTemplate', sub: 'Templates' },
+      { id: 'health-check', title: '企業健檢', path: '/health-check', icon: 'Stethoscope', sub: 'Health' },
+    ],
+  },
   {
     groupId: 'strategy',
     groupTitle: 'II. 策略盤點與分派',

@@ -130,7 +130,7 @@ export default function TemplatesPage() {
               className="group h-full"
             >
               <UniversalCard 
-                variant="hologram" 
+                variant="glow" 
                 className="h-full flex flex-col p-0 overflow-hidden hover:border-cyan-500/40 transition-all border-white/10"
               >
                 <div className="p-6 space-y-4 flex-1">

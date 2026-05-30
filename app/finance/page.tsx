@@ -83,7 +83,7 @@ export default function FinancePage() {
                           <p className="text-[10px] font-black uppercase text-white/30 tracking-widest">預估年利率 (Interest Rate)</p>
                           <p className="text-4xl font-black text-white">{calculateInterestRate()}%</p>
                           <p className="text-xs text-emerald-400 font-bold flex items-center gap-1">
-                             <TrendingDown size={14} /> 低於市場平均 0.45%
+                             <TrendingUp size={14} /> 低於市場平均 0.45%
                           </p>
                        </div>
                        <div className="space-y-1">

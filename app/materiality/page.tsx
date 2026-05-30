@@ -158,9 +158,9 @@ export default function MaterialityPage() {
                     <UniversalBadge variant="success">TOP 3</UniversalBadge>
                   </div>
                   <ul className="text-sm text-white/70 space-y-2">
-                    <li className="flex items-center gap-2"><Check size={14} className="text-cyan-core" /> 商業道德</li>
-                    <li className="flex items-center gap-2"><Check size={14} className="text-cyan-core" /> 氣候變遷</li>
-                    <li className="flex items-center gap-2"><Check size={14} className="text-cyan-core" /> 供應鏈管理</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 size={14} className="text-cyan-core" /> 商業道德</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 size={14} className="text-cyan-core" /> 氣候變遷</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 size={14} className="text-cyan-core" /> 供應鏈管理</li>
                   </ul>
                 </div>
               </UniversalCard>
