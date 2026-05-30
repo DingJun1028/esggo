@@ -28,7 +28,7 @@ interface SustainWriteState {
     updateContent: (chapterId: string, content: string, chapterName: string, chapterOrder: number, griRefs: string[]) => void;
     updateChapterStatus: (chapterId: string, status: string, chapterName: string, chapterOrder: number, griRefs: string[]) => void;
     setGeneratedContent: (contentMap: Record<string, string>) => void;
-    manualSave: (chapterId: string, chapterName: string, chapterOrder: number, griRefs: string[]) => Promise<any>;
+     manualSave: (chapterId: string, chapterName: string, chapterOrder: number, griRefs: string[]) => Promise<void>;
     commitHistory: (chapterId: string) => void;
     undoContent: (chapterId: string, chapterName: string, chapterOrder: number, griRefs: string[]) => void;
     redoContent: (chapterId: string, chapterName: string, chapterOrder: number, griRefs: string[]) => void;
@@ -63,7 +63,7 @@ export const idbStorage: StateStorage = {
     setItem: async (name, value) => {
         try {
             const db = await getIDB();
-            return new Promise((resolve) => {
+            return new Promise<void>((resolve) => {
                 const request = db.transaction('zustand-store', 'readwrite').objectStore('zustand-store').put(value, name);
                 request.onsuccess = () => resolve();
                 request.onerror = () => resolve();
@@ -73,7 +73,7 @@ export const idbStorage: StateStorage = {
     removeItem: async (name) => {
         try {
             const db = await getIDB();
-            return new Promise((resolve) => {
+            return new Promise<void>((resolve) => {
                 const request = db.transaction('zustand-store', 'readwrite').objectStore('zustand-store').delete(name);
                 request.onsuccess = () => resolve();
                 request.onerror = () => resolve();

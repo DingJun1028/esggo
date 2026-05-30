@@ -87,3 +87,5 @@ export class SupabaseOmniRealtimeService implements IOmniRealtimeService {
         return newEvent;
     }
 }
+
+export const omniRealtime = new SupabaseOmniRealtimeService();

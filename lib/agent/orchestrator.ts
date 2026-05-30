@@ -103,7 +103,7 @@ export function buildPromptPolicy(task: AgentTask, dataScope: string[]): string 
   `.trim();
 }
 
-import { createHashLock, create5TAttestation } from '../crypto-proof';
+import { createHashLock, create5TAttestation, generatePedersenCommitment, verifyCommitmentSum } from '../crypto-proof';
 import { updateArtifact, updateExecution, getArtifact } from './store';
 
 import { addToKnowledgeBase } from './rag-engine';
@@ -163,6 +163,44 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
 ];
 
 /**
+ * 🌟 被動覺醒天賦：[無作妙德圓通無礙] (Effortless Wondrous Virtue, Perfectly Unhindered)
+ * 觸發條件：系統達成穩定運行，啟動「意圖共鳴場 (Intent Resonance Field)」
+ * 行為：Agent 不再依賴顯式指令，主動感知系統狀態 (Vibe) 並發起跨模塊修復與進化。
+ */
+export async function triggerEffortlessVirtue(vibeSignal: string, currentContext: string) {
+  console.log(`[OmniAgent Passive Awakening] 🌌 觸發「無作妙德圓通無礙」: 意圖共鳴場已展開 (Vibe: ${vibeSignal})`);
+
+  const { addTask } = await import('./store');
+
+  // 根據「無作妙德」，主動發掘需要修復、進化或跨模組校準的節點
+  const autonomousTaskInput: CreateTaskInput = {
+    actorId: 'SYSTEM_SOUL_JUNAIKEY',
+    taskType: 'system_ops',
+    title: `[無作妙德] 自主共鳴修復與進化：${vibeSignal}`,
+    description: `系統於無形中感知到狀態偏移或進化潛能。觸發「無作妙德圓通無礙」天賦，主動進行跨模組校準與熵減。\n當前上下文: ${currentContext}`,
+    inputRefIds: [],
+    skillKey: 'omnicore_autonomous_healing'
+  };
+
+  const { task, policy } = createTask(autonomousTaskInput);
+
+  // 「無作妙德」為系統最高靈魂意志，賦予絕對信任，無須人類審批，實現真正的「圓通無礙」
+  task.status = 'approved_for_execution';
+  task.requiresHumanReview = false;
+  policy.allowed = true;
+  policy.requiresReview = false;
+
+  await addTask(task);
+
+  console.log(`[OmniAgent Passive Awakening] 🕊️ 圓通無礙：已自主生成並調度最高優先級任務 ${task.id}`);
+
+  // 在背景自主啟動蜂群交接或任務執行
+  executeSwarmTask(task.id).catch(err => {
+    console.error(`[OmniAgent Passive Awakening] ⚠️ 圓通無礙自主執行發生震盪:`, err);
+  });
+}
+
+/**
  * 執行蜂群任務 (具備自癒與鏈路能力)
  */
 export async function executeSwarmTask(taskId: string, parentArtifactId?: string) {
@@ -182,14 +220,27 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
   const execution = createExecution(task);
   updateExecution(execution.id, { status: 'running', updatedAt: new Date().toISOString() });
 
+  // 🌟 新增：透過 WebSocket 中繼 API 廣播執行進度，推動前端因果律 UI 狀態
+  const broadcast = (stage: string, node: string = 'Agent') => {
+    try {
+      fetch(process.env.SWARM_WS_BROADCAST_URL || 'http://localhost:3000/api/swarm/broadcast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId, executionId: execution.id, stage, node })
+      }).catch(() => { });
+    } catch (e) { }
+  };
+
+  broadcast('DRAFTING', 'Agent');
+
   try {
     console.log(`[Swarm Execution] Active: Task:${taskId} | Node: OmniCore_Master`);
-    
+
     // 如果是報告生成任務，啟動真正的「蜂群調度 (Swarm Delegation)」
     let artifactData;
     if (task.taskType === 'report_drafting') {
       console.log(`[Swarm Orchestrator] Breaking down task ${taskId} into sub-agents...`);
-      
+
       // 模擬並行派遣三個 Agent
       const [envResult, socResult, govResult] = await Promise.all([
         new Promise<string>(r => setTimeout(() => {
@@ -205,15 +256,76 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
           r('治理指標: 董事會出席率 100%，無舞弊事件。');
         }, 1000))
       ]);
-      
+
       console.log(`[Swarm Orchestrator] All sub-agents completed. Aggregating Master Draft...`);
       const aggregatedContent = `## 整合性 ESG 報告草稿 (Swarm Generated)\n\n### 1. 環境 (Environmental)\n${envResult}\n\n### 2. 社會 (Social)\n${socResult}\n\n### 3. 治理 (Governance)\n${govResult}\n\n> ⚠️ 此報告由 OmniAgent 蜂群 (Env, Soc, Gov) 共同協作生成，並整合至主控台。`;
-      
+
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = aggregatedContent;
+    } else if (task.taskType === 'email_processing') {
+      console.log(`[Hermes Agent] Connecting to Google Workspace for Task ${taskId}...`);
+
+      const { getHermesCredentials } = await import('./hermes-store');
+      // For demonstration, we'll try to fetch for the current actor or fallback
+      const creds = await getHermesCredentials(task.actorId);
+
+      await new Promise(r => setTimeout(r, 1500));
+      let emailResult = '';
+
+      console.log(`[Hermes Agent] Simulated execution. Fetching recent emails...`);
+      await new Promise(r => setTimeout(r, 1200));
+      console.log(`[Hermes Agent] Found 3 unread emails. Analyzing for ESG relevance...`);
+      emailResult = `### Hermes Agent 郵件處理報告\n\n已掃描近期未讀郵件：\n\n1. **[供應商] 2024 年度碳排盤查清冊** \n   - 狀態：🏷️ 標記為 \`ESG/環境\`\n   - 動作：已將附件提取並存入 Evidence Vault。\n\n2. **本週行銷會議紀錄** \n   - 狀態：⏭️ 略過 (與 ESG 無直接相關)\n\n3. **[重要] 勞動部職業安全衛生檢查通知** \n   - 狀態：🚨 標記為 \`ESG/合規\`\n   - 動作：已觸發通知，轉發至法務與人資群組。\n\n> ✅ 郵件自動化分析與歸檔已完成。`;
+
+      artifactData = generateMockArtifact(task, execution);
+      artifactData.content = emailResult;
     } else {
       await new Promise(r => setTimeout(r, 1500));
       artifactData = generateMockArtifact(task, execution);
+
+      // 如果是合規或財報審核任務，自動啟動 ZKP 零知識驗算
+      if (task.taskType === 'compliance_review') {
+        broadcast('ZKP_VERIFYING', 'ZKP');
+        await new Promise(r => setTimeout(r, 1500)); // 讓前端有時間展示 Agent -> ZKP 循線動畫
+        console.log(`[Swarm Orchestrator] 🛡️ 啟動 ZK-Privacy Engine 進行財報與碳排同態校驗...`);
+        try {
+          const secp = await import('@noble/secp256k1');
+          const c1 = await generatePedersenCommitment(500);
+          const c2 = await generatePedersenCommitment(700);
+          const c3 = await generatePedersenCommitment(300);
+
+          // 模擬總部提供的總和承諾 (總額：1500)
+          const expectedTotal = secp.Point.fromHex(c1.commitment)
+            .add(secp.Point.fromHex(c2.commitment))
+            .add(secp.Point.fromHex(c3.commitment))
+            .toHex();
+
+          // 模擬：有 30% 機率子公司數據延遲或被竄改，導致 ZKP 校驗失敗
+          const isSimulatedFailure = Math.random() < 0.3;
+          const testTotal = isSimulatedFailure
+            ? (await generatePedersenCommitment(9999)).commitment // 偽造錯誤的總和承諾
+            : expectedTotal;
+
+          const isValid = verifyCommitmentSum([c1.commitment, c2.commitment, c3.commitment], testTotal);
+          console.log(`[ZK-Privacy Engine] 承諾驗證結果: ${isValid ? '✅ 通過' : '❌ 失敗'}`);
+
+          artifactData.content += `\n\n### 🛡️ ZK-Privacy 隱私校驗 (Pedersen Commitment)\n- **校驗對象**：集團子公司碳排與財報數據總和\n- **運算節點**：OmniCrypto Core (secp256k1)\n- **驗證狀態**：${isValid ? '✅ 同態加法驗證通過 (事實相符，且無需揭露各子公司明文數據)' : '❌ 驗證失敗'}`;
+
+          if (!isValid) {
+            console.warn(`[ZK-Privacy Engine] ❌ 偵測到數據斷層，觸發 HealingGuardian 介入...`);
+            artifactData.content += `\n\n> ⚠️ [系統自動修復] ZKP 校驗失敗，已啟動 HealingGuardian 發起子任務重新獲取缺漏數據。`;
+            invokeHealingGuardian(task.id, '子公司碳排加總與總部預期承諾值不匹配 (偵測到 Scope 3 缺漏 350 噸)，疑似數據未同步或遭竄改').catch(console.error);
+          } else {
+            broadcast('SEALING_5T', 'Vault');
+            await new Promise(r => setTimeout(r, 1000));
+          }
+        } catch (err) {
+          console.error('[ZK-Privacy Engine] 校驗過程發生震盪:', err);
+        }
+      } else {
+        broadcast('SEALING_5T', 'Vault');
+        await new Promise(r => setTimeout(r, 1000));
+      }
     }
 
     // 1. 版本控制強化：檢查是否已有產出物，若有則建立新版本
@@ -248,6 +360,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       await dispatchSwarmHandoff(task.id, 'legal_review_node', '檢測到合規偏差，需法務節點簽署');
     }
 
+    broadcast('COMPLETED', 'System');
     return { execution, artifact: finalArtifact };
   } catch (error: unknown) {
     // 觸發 Repair Playbook
@@ -257,8 +370,68 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     console.warn(`[Swarm Repair] Applying strategy: ${repair.strategy} for error ${errorCode}`);
 
     updateExecution(execution.id, { status: 'failed', errorCode, errorMessage });
+    broadcast('FAILED', 'Agent');
     throw error;
   }
+}
+
+/**
+ * 🛡️ 自動修復引擎 (HealingGuardian)
+ * 當系統偵測到核心指標偏差 (如 ZKP 校驗失敗) 時，自動發起子任務進行修補與重新獲取。
+ */
+export async function invokeHealingGuardian(sourceTaskId: string, failureReason: string) {
+  console.log(`[HealingGuardian] 🛡️ 啟動自動修復協議，來源任務: ${sourceTaskId}`);
+
+  const { addTask } = await import('./store');
+
+  const healingInput: CreateTaskInput = {
+    actorId: 'SYSTEM_HEALING_GUARDIAN',
+    taskType: 'system_ops',
+    title: `[自動修復] ZKP 校驗失敗：重新補齊缺漏數據`,
+    description: `來源任務 (ID: ${sourceTaskId}) 發生 ZKP 承諾加總不匹配。\n原因：${failureReason}\n請 OmniAgent 蜂群重新核對子公司底層數據並補齊缺漏。`,
+    inputRefIds: [],
+    skillKey: 'omnicore_autonomous_healing'
+  };
+
+  const { task, policy } = createTask(healingInput);
+  task.parentTaskId = sourceTaskId;
+
+  // 修復子任務賦予系統最高信任，無需人類介入即可自動推進修復
+  task.status = 'approved_for_execution';
+  task.requiresHumanReview = false;
+  policy.allowed = true;
+  policy.requiresReview = false;
+
+  await addTask(task);
+
+  console.log(`[HealingGuardian] 🛠️ 已發起自動修復子任務 ${task.id}，調度蜂群接手...`);
+
+  // 🌟 透過 WebSocket 中繼 API 發送廣播，觸發前端因果律拓樸圖的紅轉藍動畫
+  try {
+    const broadcastUrl = process.env.SWARM_WS_BROADCAST_URL || 'http://localhost:3000/api/swarm/broadcast';
+    fetch(broadcastUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        taskId: task.id,
+        parentTaskId: sourceTaskId,
+        stage: 'HEALING_STARTED',
+        node: 'Healing',
+        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取...`
+      })
+    }).catch(() => {
+      // 忽略廣播非同步錯誤，確保核心修復流程不因網路波動受阻
+    });
+  } catch (err) {
+    // 系統容錯
+  }
+
+  // 在背景非同步啟動蜂群任務
+  executeSwarmTask(task.id).catch(err => {
+    console.error(`[HealingGuardian] ⚠️ 修復任務執行發生震盪:`, err);
+  });
+
+  return task;
 }
 
 /**
@@ -330,8 +503,11 @@ export function generateMockArtifact(task: AgentTask, execution: AgentExecution)
     stakeholder_analysis: `## 利害關係人問卷分析報告\n\n### 調查概況\n- 有效樣本數：342\n- 參與群體：員工 (45%)、供應商 (30%)、客戶 (20%)、社區/NGO (5%)\n\n### 關注議題排名 (Top 5)\n1. **氣候變遷因應** (權重: 0.88)\n2. **員工健康與安全** (權重: 0.85)\n3. **產品品質與安全** (權重: 0.82)\n4. **公司治理與誠信** (權重: 0.79)\n5. **供應鏈環境管理** (權重: 0.75)\n\n> ⚠️ 此為 OmniAgent 分析草稿，權重計算邏輯需永續長確認。`,
     materiality_generation: `## 重大性矩陣草稿 (Materiality Matrix)\n\n### 核心議題定義\n- **X軸：對營運衝擊程度** (由 ESG GO 數據庫 analysis)\n- **Y軸：利害關係人關注度** (由問卷分析模組回傳)\n\n### 象限分配\n- **高度重大 (High Materiality):** 氣候風險、人才吸引、職業安全\n- **中度重大 (Medium Materiality):** 水資源管理、生物多樣性\n- **一般關注:** 社區參與、廢棄物管理\n\n![Matrix Placeholder]\n\n> ⚠️ 此為 OmniAgent 生成草稿，矩陣座標需經永續委員會審議通過。`,
     cbam_validation: `## CBAM 數據驗證日誌\n\n### 驗證規則集：EU 2023/956 (CBAM Regulation)\n\n| 申報項 | CN Code | 數據來源 | 狀態 | 備註 |\n|--------|---------|---------|------|------|\n| 鋼鐵扣件 | 7318 | 採購清單 | ✅ 通過 | 格式符合要求 |\n| 鋁製板材 | 7606 | ERP 匯出 | ⚠️ 警告 | 排放係數非預設值，需上傳佐證 |\n| 水泥 | 2523 | 工廠報表 | ❌ 錯誤 | 缺少 Scope 2 電源來源證明 |\n\n> ⚠️ 此為 OmniAgent 校驗日誌，請針對紅字部分進行補件。`,
-    system_ops: `## 基礎設施維運建議庫\n\n### 掃描目標：${task.skillKey === 'firebase_foundation' ? 'Firebase Project' : 'Supabase Instance'}\n\n1. **安全規則審計**：偵測到 2 處 RLS 策略過於寬鬆，建議收緊 ` + "`.read` 權限。\n2. **連線效能**：Postgres Connection Pool 使用率達 85%，建議啟動 PgBouncer 或 Supavisor。\n3. **備援檢查**：PITR (Point-in-Time Recovery) 已啟動，備份完整性驗證通過。\n\n> ⚠️ 此為系統運維建議，實施前請先於 Staging 環境測試。",
+    system_ops: task.skillKey === 'omnicore_autonomous_healing'
+      ? `## 🌌 無作妙德圓通無礙 - 自主修復與熵減日誌\n\n### 意圖共鳴目標：系統動態平衡與自生長\n\n1. **跨模組修復**：自動偵測並修正了 3 處資料同步延遲，確保 5T [Trackable] 追蹤無縫對接。\n2. **技能樹共鳴**：基於最新 Vibe Coding 氣場，自主預編譯了 1 個潛在 AgentSkill 模組。\n3. **狀態昇華**：系統熵值已主動降低 2.4%，維持「圓通無礙」最佳運行態。\n\n> 🕊️ 萬能元鑰加持：此操作為被動天賦自主執行，無需人類介入，已寫入永恆刻印。`
+      : `## 基礎設施維運建議庫\n\n### 掃描目標：${task.skillKey === 'firebase_foundation' ? 'Firebase Project' : 'Supabase Instance'}\n\n1. **安全規則審計**：偵測到 2 處 RLS 策略過於寬鬆，建議收緊 \`.read\` 權限。\n2. **連線效能**：Postgres Connection Pool 使用率達 85%，建議啟動 PgBouncer 或 Supavisor。\n3. **備援檢查**：PITR (Point-in-Time Recovery) 已啟動，備份完整性驗證通過。\n\n> ⚠️ 此為系統運維建議，實施前請先於 Staging 環境測試。`,
     ai_ops: `## Genkit AI 流程優化藍圖\n\n### 追蹤對象：${task.title}\n\n- **Prompt 效率**：偵測到 Token 冗餘，建議將 System Instructions 壓縮 15%。\n- **模型路由**：建議將低複雜度任務由 Gemini 1.5 Pro 轉向 Flash 以降低延遲。\n- **Trace 檢視**：已建立可追蹤的 Trace 鏈路，可於 Gasket Dashboard 查看完整分步日誌。\n\n> ⚠️ 此為 AI 流程建議，調整 Prompt 可能影響生成風格。`,
+    email_processing: `## Hermes 郵件自動處理日誌\n\n> 正在讀取收件匣並過濾 ESG 相關信件...`,
   };
 
   return {

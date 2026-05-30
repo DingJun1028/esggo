@@ -16,6 +16,7 @@ import { Input } from '../../components/ui/Input';
 import { Badge } from '../../components/ui/Badge';
 import { BrandT5Strip, BrandStatusDot } from '../../components/brand';
 import { KnowledgeManager } from '../../components/KnowledgeManager';
+import { GlobalSearch } from '../../components/GlobalSearch';
 import { EXPERT_SACRED_TEMPLATES } from '../../lib/genkit-esg';
 import { supabase } from '../../lib/supabase';
 import { useExport } from '../../hooks/useExport';
@@ -149,7 +150,7 @@ export default function EditorPage() {
       if (!res.ok) throw new Error('Extraction failed');
       const { metrics } = await res.json();
       
-      metrics.forEach(m => {
+      metrics.forEach((m: any) => {
         if (m.gri === chapter.gri || chapter.gri.includes(m.gri)) {
            const targetField = chapter.fields?.find(f => f.gri === m.gri) || chapter.fields?.[0];
            if (targetField) updateFieldValue(chapter.id, targetField.id, m.value.toString(), chapter.title, chapter.order, [chapter.gri]);
@@ -250,6 +251,7 @@ export default function EditorPage() {
         </div>
         
         <div className="flex items-center gap-4">
+          <GlobalSearch />
           <div className="flex items-center gap-3 px-5 py-1.5 bg-white/90 backdrop-blur-md rounded-xl border border-slate-200">
             <div className="text-right">
               <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Global Integrity</p>
@@ -397,10 +399,11 @@ export default function EditorPage() {
                       <Button 
                         variant="primary" 
                         className="w-full h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white border-none rounded-2xl font-black text-xs tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.3)] active:scale-[0.98] transition-all" 
-                        onClick={() => handleGenerate(20000)} 
-                        isLoading={generating}
+                        onClick={() => expandContentWithAI(chapter.id, chapter.title, chapter.order, [chapter.gri])} 
+                        disabled={isGeneratingAI[chapter.id] || isSealed}
                       >
-                        <Sparkles size={16} className="mr-2 text-orange-100 animate-pulse" /> 啟動 Depth 5 專家撰寫 (2萬字)
+                        {isGeneratingAI[chapter.id] ? <RefreshCw size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                        {isGeneratingAI[chapter.id] ? 'OmniAgent 遞迴撰寫中...' : '啟動 Depth 5 專家撰寫 (2萬字)'}
                       </Button>
                       <Button 
                         variant="ghost" 

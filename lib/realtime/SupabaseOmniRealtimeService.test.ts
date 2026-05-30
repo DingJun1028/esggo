@@ -1,10 +1,11 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SupabaseOmniRealtimeService } from './SupabaseOmniRealtimeService';
 import { supabase } from '../supabase';
 
 // 1. 模擬外部依賴：Supabase Client
-jest.mock('../supabase', () => ({
+vi.mock('../supabase', () => ({
     supabase: {
-        channel: jest.fn(),
+        channel: vi.fn(),
     },
 }));
 
@@ -17,23 +18,30 @@ describe('SupabaseOmniRealtimeService', () => {
     // 用來捕捉在 .on() 中註冊的回呼函式，以便在測試中手動觸發
     let capturedBroadcastCb: Function | null = null;
     let capturedPresenceSyncCb: Function | null = null;
+    let originalSupabaseUrl: string | undefined;
+    let originalSupabaseKey: string | undefined;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         capturedBroadcastCb = null;
         capturedPresenceSyncCb = null;
 
+        originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        originalSupabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        process.env.NEXT_PUBLIC_SUPABASE_URL = 'http://localhost:54321';
+        process.env.SUPABASE_SERVICE_ROLE_KEY = 'mock-key';
+
         // 模擬 global.fetch
         originalFetch = global.fetch;
-        global.fetch = jest.fn().mockResolvedValue({ ok: true });
+        global.fetch = vi.fn().mockResolvedValue({ ok: true }) as any;
 
         // 模擬 global.crypto.randomUUID
         if (!global.crypto) (global as any).crypto = {};
-        global.crypto.randomUUID = jest.fn().mockReturnValue('mock-uuid-1234');
+        global.crypto.randomUUID = vi.fn().mockReturnValue('mock-uuid-1234') as any;
 
         // 建立可以支援鏈式呼叫 (Chaining) 的 Mock Channel
         mockChannel = {
-            on: jest.fn().mockImplementation((event_type, filter, cb) => {
+            on: vi.fn().mockImplementation((event_type, filter, cb) => {
                 if (event_type === 'broadcast' && filter.event === 'omni_event') {
                     capturedBroadcastCb = cb;
                 }
@@ -42,22 +50,22 @@ describe('SupabaseOmniRealtimeService', () => {
                 }
                 return mockChannel; // 支援 .on().on() 鏈式呼叫
             }),
-            subscribe: jest.fn(),
-            unsubscribe: jest.fn(),
-            track: jest.fn().mockResolvedValue(true),
-            send: jest.fn().mockResolvedValue(true),
-            presenceState: jest.fn().mockReturnValue({
+            subscribe: vi.fn().mockImplementation((cb: Function) => cb('SUBSCRIBED')),
+            unsubscribe: vi.fn(),
+            track: vi.fn().mockResolvedValue(true),
+            send: vi.fn().mockResolvedValue(true),
+            presenceState: vi.fn().mockReturnValue({
                 someKey: [{ user_id: 'user_123' }]
             }),
         };
 
-        (supabase.channel as jest.Mock).mockReturnValue(mockChannel);
+        (supabase.channel as any).mockReturnValue(mockChannel);
 
         // 模擬 UI 傳進來的 Callbacks
         mockCallbacks = {
-            onPresenceSync: jest.fn(),
-            onEventReceived: jest.fn(),
-            onStatusChange: jest.fn(),
+            onPresenceSync: vi.fn(),
+            onEventReceived: vi.fn(),
+            onStatusChange: vi.fn(),
         };
 
         service = new SupabaseOmniRealtimeService();
@@ -65,12 +73,11 @@ describe('SupabaseOmniRealtimeService', () => {
 
     afterEach(() => {
         global.fetch = originalFetch;
+        process.env.NEXT_PUBLIC_SUPABASE_URL = originalSupabaseUrl;
+        process.env.SUPABASE_SERVICE_ROLE_KEY = originalSupabaseKey;
     });
 
     it('應該能正確連線至頻道，並在 SUBSCRIBED 狀態下觸發狀態更新與追蹤', async () => {
-        // 讓 subscribe 函式被呼叫時，立刻觸發回傳 'SUBSCRIBED' 狀態
-        mockChannel.subscribe.mockImplementation((cb: Function) => cb('SUBSCRIBED'));
-
         const mockUser = { uid: 'u1', email: 'test@esggo.com' };
         service.connect(mockUser, mockCallbacks);
 

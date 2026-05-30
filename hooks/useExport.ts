@@ -35,7 +35,7 @@ export function useExport() {
 
       // 傳遞資料給 Worker 開始運算，主執行緒完全不卡頓
       worker.postMessage({ chapters, generatedContent });
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
       showToast('匯出 Docx 失敗', 'error');
     }
@@ -51,9 +51,10 @@ export function useExport() {
       // 讓步給事件迴圈 (Yield to Event Loop)：
       // 強制主執行緒暫停 100 毫秒，讓瀏覽器有時間把上面的 showToast 畫面渲染出來。
       // 避免後續 html2pdf 高壓運算直接把畫面完全凍結在舊狀態。
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const html2pdf = (await import('html2pdf.js' as any)).default;
+      const html2pdfModule = await import('html2pdf.js');
+      const html2pdf = html2pdfModule.default;
       const element = document.createElement('div');
 
       element.className = 'print-container';
@@ -67,25 +68,32 @@ export function useExport() {
           .print-heading { font-weight: 800; color: #0f172a; margin-top: 20px; margin-bottom: 10px; font-size: 18px; }
         </style>
         <h1 class="print-title">ESG 永續報告書 2026</h1>
-        ${chapters.map(c => `
+        ${chapters
+          .map(
+            (c) => `
           <div class="print-chapter">
             <h2 class="print-chapter-title">${c.title}</h2>
             <div class="print-content">
               ${(generatedContent[c.id] || '【尚未生成內容】').replace(/### /g, '<strong>').replace(/## /g, '<strong>').replace(/\n/g, '<br/>')}
             </div>
           </div>
-        `).join('')}
+        `
+          )
+          .join('')}
       `;
 
-      await html2pdf().from(element).set({
-        margin: 15,
-        filename: 'ESG_Sustainability_Report_2026.pdf',
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).save();
+      await html2pdf()
+        .from(element)
+        .set({
+          margin: 15,
+          filename: 'ESG_Sustainability_Report_2026.pdf',
+          html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        })
+        .save();
 
       showToast('匯出 PDF 成功！', 'success');
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
       showToast('匯出 PDF 失敗，請確認內容是否過長', 'error');
     }
@@ -99,7 +107,7 @@ export function useExport() {
     showToast('準備匯出 Markdown...', 'info');
     try {
       let mdContent = '# ESG 永續報告書 2026\n\n';
-      chapters.forEach(c => {
+      chapters.forEach((c) => {
         mdContent += `## ${c.title}\n\n`;
         mdContent += `${generatedContent[c.id] || '【尚未生成內容】'}\n\n`;
       });
@@ -115,7 +123,7 @@ export function useExport() {
       document.body.removeChild(a);
 
       showToast('匯出 Markdown 成功！', 'success');
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
       showToast('匯出 Markdown 失敗', 'error');
     }

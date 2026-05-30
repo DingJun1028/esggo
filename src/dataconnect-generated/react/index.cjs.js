@@ -1,4 +1,4 @@
-const { listAllTasksRef, getTaskByIdRef, upsertTaskRef, listAuditRecordsRef, listScrapedArticlesRef, listRoadmapMilestonesRef, upsertRoadmapMilestoneRef, getCompanyProfileRef, upsertCompanyProfileRef, getReportByIdRef, upsertReportRef, upsertReportSectionRef, listReportSectionsByReportRef, upsertCompanyMetricRef, listCompanyMetricsRef, upsertEternalMemoryRef, listEternalMemoriesByCompanyRef, getReportByCompanyRef, listReportsRef, upsertScrapedArticleRef, listEternalMemoriesRef, listSwarmAgentTasksRef, upsertSwarmAgentTaskRef, listRegulatoryPoliciesRef, createDemoDataRef, connectorConfig } = require('../index.cjs.js');
+const { listAllTasksRef, getTaskByIdRef, upsertTaskRef, listAuditRecordsRef, upsertAuditRecordRef, listScrapedArticlesRef, listRoadmapMilestonesRef, upsertRoadmapMilestoneRef, getCompanyProfileRef, upsertCompanyProfileRef, getReportByIdRef, upsertReportRef, upsertReportSectionRef, listReportSectionsByReportRef, upsertCompanyMetricRef, listCompanyMetricsRef, upsertEternalMemoryRef, listEternalMemoriesByCompanyRef, getReportByCompanyRef, listReportsRef, upsertScrapedArticleRef, listEternalMemoriesRef, listSwarmAgentTasksRef, upsertSwarmAgentTaskRef, listRegulatoryPoliciesRef, createDemoDataRef, connectorConfig } = require('../index.cjs.js');
 const { validateArgs, CallerSdkTypeEnum } = require('firebase/data-connect');
 const { useDataConnectQuery, useDataConnectMutation, validateReactArgs } = require('@tanstack-query-firebase/react/data-connect');
 
@@ -28,6 +28,14 @@ exports.useListAuditRecords = function useListAuditRecords(dcOrOptions, options)
   const ref = listAuditRecordsRef(dcInstance);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
+exports.useUpsertAuditRecord = function useUpsertAuditRecord(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return upsertAuditRecordRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
 
 exports.useListScrapedArticles = function useListScrapedArticles(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);

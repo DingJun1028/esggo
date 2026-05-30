@@ -76,7 +76,7 @@ export class PolicyEngine {
     try {
       const remote = await dcListRegulatoryPolicies();
       if (remote.length > 0) {
-        this.policies = remote.map(p => ({
+        this.policies = remote.map((p: any) => ({
           id: p.id,
           standard: p.standard,
           code: p.code,

@@ -35,7 +35,7 @@ export function checkRateLimit(
 /**
  * 高階函數：為 Handler 加上速率限制
  */
-export function withRateLimit(handler: Function, limit = 100) {
+export function withRateLimit(handler: (request: NextRequest) => Promise<NextResponse>, limit = 100) {
   return async (request: NextRequest) => {
     const { allowed, remaining, resetAt } = checkRateLimit(request, limit);
 

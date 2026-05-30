@@ -15,13 +15,15 @@ export async function run5TStressTest(iterations = 100, concurrencyLimit = 10) {
     for (let i = 0; i < iterations; i += concurrencyLimit) {
       const chunk = Array.from({ length: Math.min(concurrencyLimit, iterations - i) }).map((_, j) => {
         const index = i + j;
-        return create5TAttestation({
-          metric: `TEST_METRIC_${index}`,
-          value: Math.random() * 1000,
-          unit: 'tCO2e',
-          source: `SOURCE_DOC_ID_${index}`,
-          formula: 'Emission = Activity * Factor'
-        });
+        return create5TAttestation(
+          JSON.stringify({
+            metric: `TEST_METRIC_${index}`,
+            value: Math.random() * 1000,
+            unit: 'tCO2e',
+            source: `SOURCE_DOC_ID_${index}`,
+            formula: 'Emission = Activity * Factor'
+          })
+        );
       });
       const chunkResults = await Promise.all(chunk);
       results.push(...chunkResults);
@@ -35,8 +37,8 @@ export async function run5TStressTest(iterations = 100, concurrencyLimit = 10) {
     console.log(`[StressTest] Throughput: ${(iterations / (duration / 1000)).toFixed(2)} seals/sec`);
 
     // Verify first and last result integrity
-    const firstSeal = results[0].masterSeal;
-    const lastSeal = results[results.length - 1].masterSeal;
+    const firstSeal = results[0];
+    const lastSeal = results[results.length - 1];
 
     console.log(`[StressTest] First Seal: ${firstSeal.slice(0, 16)}...`);
     console.log(`[StressTest] Last Seal: ${lastSeal.slice(0, 16)}...`);

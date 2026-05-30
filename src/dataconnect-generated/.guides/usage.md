@@ -12,7 +12,7 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile, useUpsertCompanyProfile, useGetReportById } from '@dataconnect/generated/react';
+import { useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useUpsertAuditRecord, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile, useUpsertCompanyProfile } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
 
 const { data, isPending, isSuccess, isError, error } = useListAllTasks();
@@ -23,6 +23,8 @@ const { data, isPending, isSuccess, isError, error } = useUpsertTask(upsertTaskV
 
 const { data, isPending, isSuccess, isError, error } = useListAuditRecords();
 
+const { data, isPending, isSuccess, isError, error } = useUpsertAuditRecord(upsertAuditRecordVars);
+
 const { data, isPending, isSuccess, isError, error } = useListScrapedArticles();
 
 const { data, isPending, isSuccess, isError, error } = useListRoadmapMilestones();
@@ -32,8 +34,6 @@ const { data, isPending, isSuccess, isError, error } = useUpsertRoadmapMilestone
 const { data, isPending, isSuccess, isError, error } = useGetCompanyProfile(getCompanyProfileVars);
 
 const { data, isPending, isSuccess, isError, error } = useUpsertCompanyProfile(upsertCompanyProfileVars);
-
-const { data, isPending, isSuccess, isError, error } = useGetReportById(getReportByIdVars);
 
 ```
 
@@ -72,7 +72,7 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { listAllTasks, getTaskById, upsertTask, listAuditRecords, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile, upsertCompanyProfile, getReportById } from '@dataconnect/generated';
+import { listAllTasks, getTaskById, upsertTask, listAuditRecords, upsertAuditRecord, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile, upsertCompanyProfile } from '@dataconnect/generated';
 
 
 // Operation ListAllTasks: 
@@ -86,6 +86,9 @@ const { data } = await UpsertTask(dataConnect, upsertTaskVars);
 
 // Operation ListAuditRecords: 
 const { data } = await ListAuditRecords(dataConnect);
+
+// Operation UpsertAuditRecord:  For variables, look at type UpsertAuditRecordVars in ../index.d.ts
+const { data } = await UpsertAuditRecord(dataConnect, upsertAuditRecordVars);
 
 // Operation ListScrapedArticles: 
 const { data } = await ListScrapedArticles(dataConnect);
@@ -101,9 +104,6 @@ const { data } = await GetCompanyProfile(dataConnect, getCompanyProfileVars);
 
 // Operation UpsertCompanyProfile:  For variables, look at type UpsertCompanyProfileVars in ../index.d.ts
 const { data } = await UpsertCompanyProfile(dataConnect, upsertCompanyProfileVars);
-
-// Operation GetReportById:  For variables, look at type GetReportByIdVars in ../index.d.ts
-const { data } = await GetReportById(dataConnect, getReportByIdVars);
 
 
 ```

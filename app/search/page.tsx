@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -36,7 +36,7 @@ const ALL_ITEMS: SearchResult[] = [
 
 function SearchContent() {
   const searchParams = useSearchParams();
-  const initialQ = searchParams.get('q') ?? '';
+  const initialQ = searchParams?.get('q') ?? '';
   const [query, setQuery] = useState(initialQ);
 
   const results = useMemo(() => {

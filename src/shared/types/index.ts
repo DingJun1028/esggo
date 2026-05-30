@@ -1,13 +1,8 @@
-/**
- * ESG GO | Shared Types Registry 🌌
- * Centralized entry point for all OmniCore types.
- */
-
-export * from './core.types';
-export * from './api.types';
-export * from './evidence.types';
-export * from './audit.types';
-export * from './ucc.types';
-export * from './matrix.types';
-export * from './omni-card.types';
-export * from './protocol.types';
+export * from './core.types.ts';
+export * from './evidence.types.ts';
+export * from './api.types.ts';
+export * from './ucc.types.ts';
+export * from './audit.types.ts';
+export * from './matrix.types.ts';
+export * from './omni-card.types.ts';
+export * from './protocol.types.ts';

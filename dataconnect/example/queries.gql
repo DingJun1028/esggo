@@ -62,6 +62,41 @@ query ListAuditRecords @auth(level: USER) {
   }
 }
 
+mutation UpsertAuditRecord(
+  $id: UUID,
+  $title: String!,
+  $dataType: String!,
+  $source: String!,
+  $standard: String,
+  $description: String,
+  $contentHash: String!,
+  $zkpStatus: String!,
+  $metadata: String,
+  $proofSignature: String,
+  $verifierKey: String,
+  $algorithm: String,
+  $salt: String,
+  $proofJson: String
+) @auth(level: USER) {
+  auditRecord_upsert(data: {
+    id: $id,
+    user: { uid_expr: "auth.uid" },
+    title: $title,
+    dataType: $dataType,
+    source: $source,
+    standard: $standard,
+    description: $description,
+    contentHash: $contentHash,
+    zkpStatus: $zkpStatus,
+    metadata: $metadata,
+    proofSignature: $proofSignature,
+    verifierKey: $verifierKey,
+    algorithm: $algorithm,
+    salt: $salt,
+    proofJson: $proofJson
+  })
+}
+
 query ListScrapedArticles @auth(level: USER, insecureReason: "Global news articles are accessible to all registered users") {
   scrapedArticles(where: { 
     _or: [

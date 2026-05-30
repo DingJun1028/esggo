@@ -8,7 +8,9 @@ export type AgentTaskType =
   | 'materiality_generation'
   | 'cbam_validation'
   | 'system_ops'
-  | 'ai_ops';
+  | 'ai_ops'
+  | 'email_processing'
+  | 'calendar_scheduling';
 
 export type AgentExecutionStatus =
   | 'queued'
@@ -34,7 +36,9 @@ export type ArtifactType =
   | 'cbam_validation_log'
   | 'system_config_draft'
   | 'db_optimization_plan'
-  | 'ai_flow_blueprint';
+  | 'ai_flow_blueprint'
+  | 'email_archival_log'
+  | 'calendar_schedule_log';
 
 export type ReviewStatus =
   | 'draft'

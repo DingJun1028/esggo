@@ -34,6 +34,7 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*ListRegulatoryPolicies*](#listregulatorypolicies)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
+  - [*UpsertAuditRecord*](#upsertauditrecord)
   - [*UpsertRoadmapMilestone*](#upsertroadmapmilestone)
   - [*UpsertCompanyProfile*](#upsertcompanyprofile)
   - [*UpsertReport*](#upsertreport)
@@ -1550,6 +1551,126 @@ export default function UpsertTaskComponent() {
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
     console.log(mutation.data.task_upsert);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## UpsertAuditRecord
+You can execute the `UpsertAuditRecord` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
+```javascript
+useUpsertAuditRecord(options?: useDataConnectMutationOptions<UpsertAuditRecordData, FirebaseError, UpsertAuditRecordVariables>): UseDataConnectMutationResult<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useUpsertAuditRecord(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertAuditRecordData, FirebaseError, UpsertAuditRecordVariables>): UseDataConnectMutationResult<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+```
+
+### Variables
+The `UpsertAuditRecord` Mutation requires an argument of type `UpsertAuditRecordVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface UpsertAuditRecordVariables {
+  id?: UUIDString | null;
+  title: string;
+  dataType: string;
+  source: string;
+  standard?: string | null;
+  description?: string | null;
+  contentHash: string;
+  zkpStatus: string;
+  metadata?: string | null;
+  proofSignature?: string | null;
+  verifierKey?: string | null;
+  algorithm?: string | null;
+  salt?: string | null;
+  proofJson?: string | null;
+}
+```
+### Return Type
+Recall that calling the `UpsertAuditRecord` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpsertAuditRecord` Mutation is of type `UpsertAuditRecordData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface UpsertAuditRecordData {
+  auditRecord_upsert: AuditRecord_Key;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `UpsertAuditRecord`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, UpsertAuditRecordVariables } from '@dataconnect/generated';
+import { useUpsertAuditRecord } from '@dataconnect/generated/react'
+
+export default function UpsertAuditRecordComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useUpsertAuditRecord();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useUpsertAuditRecord(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpsertAuditRecord(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpsertAuditRecord(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useUpsertAuditRecord` Mutation requires an argument of type `UpsertAuditRecordVariables`:
+  const upsertAuditRecordVars: UpsertAuditRecordVariables = {
+    id: ..., // optional
+    title: ..., 
+    dataType: ..., 
+    source: ..., 
+    standard: ..., // optional
+    description: ..., // optional
+    contentHash: ..., 
+    zkpStatus: ..., 
+    metadata: ..., // optional
+    proofSignature: ..., // optional
+    verifierKey: ..., // optional
+    algorithm: ..., // optional
+    salt: ..., // optional
+    proofJson: ..., // optional
+  };
+  mutation.mutate(upsertAuditRecordVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(upsertAuditRecordVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.auditRecord_upsert);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }

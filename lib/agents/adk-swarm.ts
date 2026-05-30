@@ -66,23 +66,39 @@ class CollaborativeSwarmAgent {
     this.agent = new ADKAgent(agentConfig);
   }
 
-  public execute(task: string, context?: any): Promise<any> {
-    const retrievedMemories = memoryStore.search(task, 3);
+  public async run(task: string, context?: any): Promise<any> {
+    return this.execute(task, context);
+  }
 
+  public async execute(task: string, context?: any): Promise<any> {
+    const retrievedMemories = await memoryStore.search(task, 3);
+
+    let result;
     // If no similar memories found, proceed with standard execution
     if (retrievedMemories.length === 0) {
-      return this.agent.run(task, context);
+      result = await this.agent.run(task, context);
+    } else {
+      // Generate enhanced context with retrieved memories
+      const enhancedContext = {
+        ...context || {},
+        retrievedMemories,
+        memorySummary: this.generateMemorySummary(retrievedMemories)
+      };
+      // Execute with enhanced context
+      result = await this.agent.run(task, enhancedContext);
     }
 
-    // Generate enhanced context with retrieved memories
-    const enhancedContext = {
-      ...context || {},
-      retrievedMemories,
-      memorySummary: this.generateMemorySummary(retrievedMemories)
-    };
+    // Save task execution result to memory
+    await memoryStore.add({
+      agentName: this.agentConfig.name,
+      task,
+      context,
+      result: typeof result === 'string' ? result : JSON.stringify(result),
+      success: result ? !(result as any).error : false,
+      tags: ['swarm', this.agentConfig.name]
+    });
 
-    // Execute with enhanced context
-    return this.agent.run(task, enhancedContext);
+    return result;
   }
 
   private generateMemorySummary(memories: any[]): string {
@@ -109,6 +125,10 @@ export class CollaborativeADKSwarm {
     return this;
   }
 
+  getAgent(name: string): CollaborativeSwarmAgent | undefined {
+    return this.agents.get(name);
+  }
+
   async collaborate(task: string, context?: any) {
     const agentResults: { [key: string]: any } = {};
 
@@ -133,7 +153,7 @@ export class CollaborativeADKSwarm {
 
     // Otherwise, fallback: prefer successful results over errors
     const successfulEntries = Object.fromEntries(
-      Object.entries(results).filter(([_, val]) => val && typeof val !== 'undefined' && !(val.error || val.simulated))
+      Object.entries(results).filter(([_, val]) => val && typeof val !== 'undefined' && !((val as any).error || (val as any).simulated))
     );
     if (Object.keys(successfulEntries).length > 0) {
       return successfulEntries;
@@ -151,11 +171,11 @@ omniSwarm.register({ name: 'ESG_Researcher', role: 'Sustainability Data Speciali
 You are the ESG_Researcher. Your specialty is GRI, SASB, and TCFD mapping.
 You help identify relevant metrics and draft professional sustainability content.
   ` });
-omniSwarm.register({ name: 'ESG_Auditor', role: 'Internal Control and 5T Compliance Officer', model: 'googleai/gemini-1.5-flash', systemPrompt: `
+omniSwarm.register({ name: 'ESG_Auditor', role: 'Internal Control and 5T Compliance Officer', model: 'googleai/gemini-1.5-flash', systemPrompt: `      
 You are the ESG_Auditor. You verify the 5T integrity (Traceable, Transparent, Tangible, Trustworthy, Trackable).
 You look for data gaps, check hash locks, and perform automated ZKP-like verification.
   ` });
-omniSwarm.register({ name: 'ESG_Strategist', role: 'External Communication and Strategic Alignment', model: 'googleai/gemini-1.5-pro', systemPrompt: `
+omniSwarm.register({ name: 'ESG_Strategist', role: 'External Communication and Strategic Alignment', model: 'googleai/gemini-1.5-pro', systemPrompt: ` 
 You are the ESG_Strategist. You help align sustainability goals with corporate strategy.
 You focus on Notion syncing, report visualization, and executive summaries.
   ` });

@@ -1,6 +1,6 @@
 import { z } from 'genkit';
-import { ai } from '../agents/genkit';
-import { memoryStore } from '../memory/memory-store';
+import { ai } from '../agents/genkit.ts';
+import { memoryStore } from '../memory/memory-store.ts';
 import { createHash } from 'crypto';
 
 export interface ToolExecutionResult {
@@ -36,9 +36,9 @@ export class DynamicToolSynthesizer {
     const startTime = Date.now();
 
     // Retrieve relevant memories for context
-    const relevantMemories = memoryStore.search(problem, 5);
+    const relevantMemories = await memoryStore.search(problem, 5);
     const memoryContext = relevantMemories
-      .map(m => `Past: ${m.task} -> ${m.result}`)
+      .map((m: any) => `Past: ${m.task} -> ${m.result}`)
       .join('\n');
 
     // Generate the tool code
@@ -60,11 +60,11 @@ export class DynamicToolSynthesizer {
     const executionResult = await this.executeSandboxedTool(toolCode, context || {});
 
     // Record in memory
-    memoryStore.add({
+    await memoryStore.add({
       agentName: 'DynamicToolSynthesizer',
       task: `Synthesize tool for: ${problem}`,
       context: { problem, agentName },
-      result: executionResult.success ? 'Tool synthesized and executed' : executionResult.error,
+      result: executionResult.success ? 'Tool synthesized and executed' : (executionResult.error || 'Unknown error'),
       success: executionResult.success,
       tags: ['tool_synthesis', 'dynamic']
     });
@@ -115,7 +115,7 @@ Return ONLY the function code, no explanations or markdown formatting.
 
     // Clean up the response to extract just the function code
     let code = response.text || '';
-    
+
     // Remove markdown code blocks if present
     code = code.replace(/```(?:typescript|javascript|js|ts)?\n/g, '')
                .replace(/```/g, '')

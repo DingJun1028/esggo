@@ -1,7 +1,8 @@
+import { vi, describe, it, expect, beforeEach, beforeAll } from 'vitest';
 import { Packer } from 'docx';
 
 // 1. 模擬 docx 套件，避免在測試環境中進行繁重的二進位運算
-const mockBlob = { size: 1024, type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' };
+const mockBlob = vi.hoisted(() => ({ size: 1024, type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }));
 vi.mock('docx', () => ({
     Document: vi.fn(),
     Paragraph: vi.fn(),
@@ -19,15 +20,22 @@ vi.mock('docx', () => ({
 
 // 2. 模擬 Web Worker 的全域執行環境 (self)
 const mockPostMessage = vi.fn();
-(global as any).self = {
-    onmessage: null,
-    postMessage: mockPostMessage,
-};
 
-// 載入 Worker 腳本 (這會自動將處理函式綁定到 global.self.onmessage)
-require('./exportDocx.worker.ts');
+if (!(global as any).self) {
+    (global as any).self = {} as any;
+}
+
+(global as any).self.onmessage = null;
+(global as any).self.postMessage = mockPostMessage;
+if (!(global as any).self.addEventListener) {
+    (global as any).self.addEventListener = vi.fn();
+}
 
 describe('exportDocx.worker', () => {
+    beforeAll(async () => {
+        await import('./exportDocx.worker');
+    });
+
     beforeEach(() => {
         vi.clearAllMocks();
     });
@@ -67,7 +75,7 @@ describe('exportDocx.worker', () => {
     it('當打包過程發生錯誤時，應該回傳錯誤訊息 (status: error)', async () => {
         // 模擬 Packer.toBlob 拋出錯誤
         const mockError = new Error('記憶體不足，打包失敗');
-        (Packer.toBlob as jest.Mock).mockRejectedValueOnce(mockError);
+        (Packer.toBlob as any).mockRejectedValueOnce(mockError);
 
         const mockEventData = {
             data: { chapters: [], generatedContent: {} }

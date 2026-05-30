@@ -5,7 +5,7 @@ import { firebaseAdmin } from '@/lib/firebase-admin';
 // Generate UUID using Firebase Admin Firestore (or we can use crypto)
 // Using Firebase Admin Firestore doc id as UUID
 function generateUUID(): string {
-  return firebaseAdmin.firestore().collection('_').doc().id;
+  return firebaseAdmin!.firestore().collection('_').doc().id;
 }
 
 export async function POST(request: Request) {

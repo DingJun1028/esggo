@@ -4,7 +4,6 @@
  */
 
 import { IComponentCore } from '../src/shared/types';
-import { DocFragment } from './agent/rag-engine';
 import { RegulatoryPolicy } from './policy-engine';
 import { ResonanceResult } from './governance-engine';
 

@@ -6,11 +6,11 @@
  * 透過多維度展開（政策、風險、量化目標、利害關係人等）確保字數與深度。
  */
 
-import { ai } from './genkit';
+import { ai } from './genkit.ts';
 import { z } from 'genkit';
 import { createHash } from 'crypto';
-import { saveSustainWriteSection } from '../dataconnect-memory';
-import { omniCore } from '../omni-core';
+import { saveSustainWriteSection } from '../dataconnect-memory.ts';
+import { omniCore } from '../omni-core.ts';
 import { omniAgentBus } from './omni-commander';
 
 export interface ExpansionTask {
