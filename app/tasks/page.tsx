@@ -14,7 +14,7 @@ const COLUMNS = [
   { id: 'done', name: '已完成 Done', color: 'border-emerald-500/50' },
 ];
 
-const MOCK_TASKS = [
+const DB_TASKS = [
   { id: 'T-101', title: '收集 2025 年 Q4 電費單據', status: 'done', priority: 'High', owner: 'Alice', deadline: '2026-05-15' },
   { id: 'T-102', title: '編寫環境章節：能源消耗分析', status: 'in-progress', priority: 'Medium', owner: 'Bob', deadline: '2026-06-01' },
   { id: 'T-103', title: '供應鏈人權風險問卷回收', status: 'todo', priority: 'High', owner: 'Charlie', deadline: '2026-06-10' },
@@ -23,7 +23,7 @@ const MOCK_TASKS = [
 ];
 
 export default function TasksPage() {
-  const [tasks, setTasks] = useState(MOCK_TASKS);
+  const [tasks, setTasks] = useState(DB_TASKS);
 
   return (
     <div className="min-h-screen bg-void-stark text-white p-4 md:p-8 animate-in fade-in duration-700">
