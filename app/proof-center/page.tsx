@@ -1,198 +1,103 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { omniCore } from '../../lib/omni-core';
-import { ZKPRangeProof } from '../../lib/crypto-proof';
-import { ZKPRangeProofVisualizer } from '../../components/ui/ZKPRangeProofVisualizer';
-import { Button } from '../../components/ui/Button';
-import { Badge } from '../../components/ui/Badge';
-import { Shield, Zap, Lock, EyeOff, CheckCircle, Info, Cpu } from 'lucide-react';
+import React, { useState } from 'react';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { BadgeCheck, ShieldCheck, Hash, Lock, Globe, Share2, Download, ExternalLink, Zap, CheckCircle2, QrCode } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+const PROOFS = [
+  { id: 'PF-2026-001', type: 'Emissions Seal', scope: 'Scope 1 & 2', status: 'Active', hash: '0x8f2e...c4d1', date: '2026-05-12' },
+  { id: 'PF-2026-002', type: 'HR Integrity', scope: 'DEI Metrics', status: 'Active', hash: '0x7a1b...e9f2', date: '2026-05-15' },
+  { id: 'PF-2026-003', type: 'Supply Chain Proof', scope: 'Tier 1 Suppliers', status: 'Pending', hash: 'Pending', date: '2026-05-30' },
+];
+
 export default function ProofCenterPage() {
-  const [proof, setProof] = useState<ZKPRangeProof | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [blindingFactor, setBlindingFactor] = useState('');
-
-  // Example data
-  const sensitiveData = {
-    metric: '年度溫室氣體排放量 (Scope 2)',
-    value: 1250,
-    unit: 'tCO2e',
-    range: { min: 1000, max: 1500 }
-  };
-
-  const generateProof = async () => {
-    setIsGenerating(true);
-    // For a production system, this blinding factor is generated and stored in a secure client-side 
-    // enclave (e.g., a hardware wallet or secure element) and NEVER transmitted to the server.
-    const array = new Uint8Array(16);
-    window.crypto.getRandomValues(array);
-    const factor = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-    setBlindingFactor(factor);
-    
-    // Simulate generation time
-    await new Promise(r => setTimeout(r, 1200));
-    
-    const p = await omniCore.generatePrivacyProof(
-      sensitiveData.metric,
-      sensitiveData.value,
-      sensitiveData.range.min,
-      sensitiveData.range.max,
-      factor
-    );
-    
-    setProof(p);
-    setIsGenerating(false);
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50/50 p-8 space-y-8">
-      {/* Header */}
-      <header className="flex justify-between items-start">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Shield className="text-berkeley-blue" size={24} />
-            <h1 className="text-2xl font-bold text-berkeley-blue tracking-tight">ZKP 隱私證明中心</h1>
+    <div className="min-h-screen bg-void-stark text-white p-4 md:p-8 animate-in fade-in duration-700">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-4">
+            <UniversalBadge variant="success" icon="🛡️">
+              旅程 V. 確信審計與發佈
+            </UniversalBadge>
+            <h1 className="text-4xl font-bold tracking-tight text-white/90 flex items-center gap-3">
+              <BadgeCheck className="text-cyan-core" /> 誠信證明 Proof Center
+            </h1>
+            <p className="text-lg text-white/60 max-w-2xl">
+              企業誠信的數位獎章。管理所有已封印的 5T 證明，並生成可供外部嵌入的「誠信標章」與驗證連結。
+            </p>
           </div>
-          <p className="text-slate-500 text-sm">基於 Zero-Knowledge Proof 協議的敏感 ESG 數據驗證系統</p>
-        </div>
-        <Badge variant="primary" className="py-1 px-3">Protocol v1.1.0 Active</Badge>
-      </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Step 1: Data Owner Side */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-berkeley-blue text-white flex items-center justify-center font-bold text-sm">1</div>
-            <h2 className="text-lg font-semibold text-berkeley-blue">數據持有者 (Prover)</h2>
+          <div className="flex gap-3">
+             <UniversalButton variant="primary" className="flex items-center gap-2">
+                <QrCode size={16} /> 生成驗證碼
+             </UniversalButton>
           </div>
-          
-          <div className="bg-white rounded-card border border-slate-100 shadow-sm p-6 space-y-6">
-            <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                  <EyeOff size={14} /> 敏感原始數據
-                </span>
-                <Badge variant="warning">Confidential</Badge>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase">指標名稱</p>
-                  <p className="text-sm font-semibold text-berkeley-blue">{sensitiveData.metric}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase">原始數值</p>
-                  <p className="text-sm font-bold text-berkeley-blue">{sensitiveData.value} {sensitiveData.unit}</p>
-                </div>
-              </div>
-            </div>
+        </header>
 
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-slate-600 bg-blue-50/50 p-3 rounded-md border border-blue-100/50">
-                <Info size={16} className="text-blue-500 shrink-0" />
-                <p>點擊生成 ZKP，系統將對原始數值進行加密承諾 (Commitment)，並產出區間證明。</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           {/* Active Proofs */}
+           <div className="lg:col-span-2 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 {PROOFS.map((p) => (
+                   <motion.div key={p.id} whileHover={{ scale: 1.02 }}>
+                      <UniversalCard variant="hologram" className="p-6 space-y-6 border-white/10 hover:border-cyan-500/40 transition-all">
+                         <div className="flex justify-between items-start">
+                            <div className="p-3 bg-cyan-core/10 rounded-xl text-cyan-core">
+                               <ShieldCheck size={24} />
+                            </div>
+                            <UniversalBadge variant={p.status === 'Active' ? 'success' : 'warning'}>{p.status}</UniversalBadge>
+                         </div>
+                         <div>
+                            <h4 className="font-bold text-lg">{p.type}</h4>
+                            <p className="text-[10px] font-black uppercase text-white/30 tracking-widest">{p.scope}</p>
+                         </div>
+                         <div className="p-3 bg-black/40 rounded-xl border border-white/5 font-mono text-[10px] text-cyan-core/70 break-all">
+                            Hash: {p.hash}
+                         </div>
+                         <div className="flex items-center justify-between pt-2">
+                            <span className="text-[10px] text-white/20 font-bold uppercase">{p.date}</span>
+                            <div className="flex gap-2">
+                               <button className="p-2 text-white/20 hover:text-white transition-colors"><Download size={14} /></button>
+                               <button className="p-2 text-white/20 hover:text-white transition-colors"><Share2 size={14} /></button>
+                            </div>
+                         </div>
+                      </UniversalCard>
+                   </motion.div>
+                 ))}
               </div>
+           </div>
 
-              <Button 
-                onClick={generateProof} 
-                disabled={isGenerating}
-                className="w-full h-12 text-base shadow-lg"
-              >
-                {isGenerating ? (
-                  <Zap size={18} className="animate-spin mr-2" />
-                ) : (
-                  <Lock size={18} className="mr-2" />
-                )}
-                {isGenerating ? '正在計算 ZKP 證明...' : '生成隱私證明 (Generate Proof)'}
-              </Button>
-            </div>
-
-            {proof && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-4 border-2 border-dashed border-verified/30 rounded-lg bg-verified/5 space-y-4"
-              >
-                <div className="flex items-center gap-2 text-verified">
-                  <CheckCircle size={18} />
-                  <span className="font-bold text-sm">證明已生成！</span>
-                </div>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">您的盲化因子 (私鑰 - 請妥善保存)</p>
-                    <div className="mt-1 p-2 bg-white border border-verified/20 rounded font-mono text-[11px] text-berkeley-blue break-all">
-                      {blindingFactor}
+           {/* Badge Preview */}
+           <div className="space-y-8">
+              <UniversalCard title="數位誠信標章 Preview" variant="glow" className="flex flex-col items-center py-10 text-center">
+                 <div className="w-32 h-32 relative mb-6">
+                    <div className="absolute inset-0 bg-cyan-core/20 rounded-full blur-2xl animate-pulse" />
+                    <div className="relative w-full h-full rounded-full border-4 border-cyan-500/30 flex items-center justify-center bg-black/60 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                       <BadgeCheck size={64} className="text-cyan-core" />
                     </div>
-                  </div>
-                  <p className="text-[10px] text-slate-400 italic mt-2">
-                    * 實務場景中，您的「盲化因子」將安全存放於您的硬體錢包或加密飛地 (Secure Enclave)，無需手動傳輸。
-                  </p>
-                </div>
-                
-                <div className="pt-2">
-                  <Button 
-                    variant="ghost"
-                    className="w-full h-10 text-sm font-semibold shadow-sm border-verified/50 text-verified hover:bg-verified/10"
-                    onClick={async () => {
-                      try {
-                        const res = await fetch('/api/zkp/store', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ proof, metricName: sensitiveData.metric })
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                          alert('✅ ZKP 證明已成功保存至 Audit Trail，確保 5T 不可篡改性。即將跳轉至審計日誌。');
-                          window.location.href = '/audit-log';
-                        } else {
-                          alert('❌ 保存失敗：' + data.error);
-                        }
-                      } catch (e: any) {
-                        alert('❌ 保存失敗：' + e.message);
-                      }
-                    }}
-                  >
-                    存入不可篡改稽核軌跡 (Save to Audit Trail)
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </div>
-        </section>
+                 </div>
+                 <h3 className="text-xl font-black tracking-tighter uppercase italic">Verified by ESGGO</h3>
+                 <p className="text-[10px] font-black text-white/30 mt-2 tracking-[0.2em]">100% 5T COMPLIANT</p>
+                 <div className="mt-8 w-full space-y-3 px-4">
+                    <UniversalButton variant="primary" className="w-full text-xs">嵌入此標章到官網</UniversalButton>
+                    <p className="text-[9px] text-white/20 italic">支援 iframe 與動態 React 組件嵌入</p>
+                 </div>
+              </UniversalCard>
 
-        {/* Step 2: Auditor Side */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold text-sm">2</div>
-            <h2 className="text-lg font-semibold text-berkeley-blue">審核驗證端 (Verifier)</h2>
-          </div>
-
-          {!proof ? (
-            <div className="h-64 border-2 border-dashed border-slate-200 rounded-card flex flex-center items-center justify-center bg-slate-50/30">
-              <p className="text-slate-400 text-sm font-medium">等待 Prover 提供證明數據...</p>
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <ZKPRangeProofVisualizer proof={proof} />
-              
-              <div className="mt-6 p-4 bg-white rounded-card border border-slate-100 shadow-sm space-y-3">
-                <h3 className="text-sm font-bold text-berkeley-blue flex items-center gap-2">
-                  <Cpu size={16} /> 驗證邏輯摘要
-                </h3>
-                <ul className="text-xs text-slate-600 space-y-2 list-disc pl-4">
-                  <li>驗證器不需要知道原始數值 {sensitiveData.value}。</li>
-                  <li>透過 HMAC-SHA256 驗證承諾的一致性。</li>
-                  <li>確保証據在發布後未被篡改 (T4 Integrity)。</li>
-                  <li>一旦驗證密鑰正確，即可 100% 確認數值落於指定區間。</li>
-                </ul>
+              <div className="p-8 bg-white/5 rounded-[2rem] border border-white/10">
+                 <div className="flex items-center gap-3 mb-4">
+                    <Globe size={20} className="text-cyan-core" />
+                    <h4 className="font-bold text-sm">公開驗證網址</h4>
+                 </div>
+                 <code className="block p-3 bg-black/40 rounded-xl text-[10px] font-mono text-white/40 mb-4 truncate">
+                    https://v.esggo.com/proof/0x8f2e...
+                 </code>
+                 <UniversalButton variant="secondary" className="w-full text-[10px] h-9 py-0">複製連結</UniversalButton>
               </div>
-            </motion.div>
-          )}
-        </section>
+           </div>
+        </div>
       </div>
     </div>
   );

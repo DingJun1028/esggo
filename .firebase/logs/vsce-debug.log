@@ -8225,3 +8225,50 @@ I0530 13:59:11.968484   42808 dev.go:104] Listening on address (HTTP + gRPC): 12
 [error] [Firebase Plugin] error:  {}
 [debug] [2026-05-30T05:59:12.541Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
 [debug] [2026-05-30T05:59:12.542Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-05-30T09:22:56.328Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-05-30T09:23:05.671Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-05-30T09:23:05.676Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-30T09:23:05.677Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-05-30T09:23:05.682Z] Checked if tokens are valid: false, expires at: 1780123777597
+[debug] [2026-05-30T09:23:05.682Z] Checked if tokens are valid: false, expires at: 1780123777597
+[debug] [2026-05-30T09:23:05.683Z] > refreshing access token with scopes: []
+[debug] [2026-05-30T09:23:05.685Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-05-30T09:23:05.686Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-30T09:23:05.701Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.9) on port 50001
+[debug] [2026-05-30T09:23:06.728Z] I0530 17:23:06.670401   36844 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 9d1b] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5564B] 
+Connector "omnicore": sources: omnicore\queries.gql [10173B] omnicore\seed_data.gql [838B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0530 17:23:06.670401   36844 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 9d1b] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5564B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10173B] omnicore\\seed_data.gql [838B] \n"}}
+[debug] [2026-05-30T09:23:06.729Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-05-30T09:23:06.729Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-05-30T09:23:06.729Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.9.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.9.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-05-30T09:23:07.063Z] I0530 17:23:06.759921   47012 load.go:31] Reloading schema and connectors...
+I0530 17:23:06.829394   47012 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 912c] UpdateResources(): done
+Main schema: sources: schema\schema.gql [5564B] 
+Connector "omnicore": sources: omnicore\queries.gql [10173B] omnicore\seed_data.gql [838B] 
+I0530 17:23:06.902112   47012 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+I0530 17:23:06.929354   47012 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+I0530 17:23:06.938473   47012 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [26502B] main\mutation.gql [72417B] prelude.gql [84995B] main\implicit.gql [6925B] main\input.gql [238343B] main\relation.gql [116704B] 
+I0530 17:23:06.948005   47012 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: .guides/config.json [236B] .guides/setup.md [1682B] index.d.ts [31393B] esm\index.esm.js [16488B] react\index.d.ts [12938B] react\README.md [132511B] .guides/usage.md [4040B] index.cjs.js [18502B] package.json [854B] README.md [130825B] react\package.json [461B] react\esm\package.json [17B] esm\package.json [17B] react\index.cjs.js [10535B] react\esm\index.esm.js [9857B] 
+I0530 17:23:06.952345   47012 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+I0530 17:23:06.954996   47012 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [28063B] esm\index.esm.js [8891B] esm\package.json [17B] index.cjs.js [10056B] package.json [633B] 
+I0530 17:23:06.961127   47012 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0530 17:23:06.961127   47012 load.go:109] Finished reloading
+I0530 17:23:06.979418   47012 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0530 17:23:06.759921   47012 load.go:31] Reloading schema and connectors...\nI0530 17:23:06.829394   47012 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 912c] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5564B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10173B] omnicore\\seed_data.gql [838B] \nI0530 17:23:06.902112   47012 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nI0530 17:23:06.929354   47012 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0530 17:23:06.938473   47012 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [26502B] main\\mutation.gql [72417B] prelude.gql [84995B] main\\implicit.gql [6925B] main\\input.gql [238343B] main\\relation.gql [116704B] \nI0530 17:23:06.948005   47012 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: .guides/config.json [236B] .guides/setup.md [1682B] index.d.ts [31393B] esm\\index.esm.js [16488B] react\\index.d.ts [12938B] react\\README.md [132511B] .guides/usage.md [4040B] index.cjs.js [18502B] package.json [854B] README.md [130825B] react\\package.json [461B] react\\esm\\package.json [17B] esm\\package.json [17B] react\\index.cjs.js [10535B] react\\esm\\index.esm.js [9857B] \nI0530 17:23:06.952345   47012 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0530 17:23:06.954996   47012 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [28063B] esm\\index.esm.js [8891B] esm\\package.json [17B] index.cjs.js [10056B] package.json [633B] \nI0530 17:23:06.961127   47012 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0530 17:23:06.961127   47012 load.go:109] Finished reloading\nI0530 17:23:06.979418   47012 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[error] [Firebase Plugin] error:  {}
+[debug] [2026-05-30T09:23:11.965Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-05-30T09:23:11.966Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-05-30T09:23:12.016Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-05-30T09:23:12.018Z] Checked if tokens are valid: true, expires at: 1780136590966
+[debug] [2026-05-30T09:23:12.019Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-05-30T09:23:16.314Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-05-30T09:23:16.315Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]

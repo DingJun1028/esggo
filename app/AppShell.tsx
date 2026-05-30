@@ -8,7 +8,8 @@ import {
   Hexagon, ListChecks, Lock, ClipboardList, Map, BookOpen, 
   Library, Wallet, Link2, Handshake, CheckCircle2, GraduationCap, 
   Globe, CheckSquare, Building2, Cable, Radio, Bot, Shield, Landmark,
-  Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity
+  Search, Command, X, ArrowUpRight, Settings2, Layout, Zap, Sparkles, Trophy, Brain, Layers, Rocket, Grid3X3, Activity,
+  Settings, Key, Database, Server, Terminal as TerminalIcon
 } from 'lucide-react';
 import OmniAgentFloatingAgent from '../components/brand/OmniAgentFloating';
 import { BrandLogo } from '../components/brand/BrandLogo';
@@ -21,31 +22,27 @@ import { useOmniResonance } from '../src/client/hooks/useOmniResonance';
 
 const navGroups = [
   {
-    label: 'CORE',
+    label: '旅程 I. 初始導入與配置',
     items: [
       { href: '/', label: '控制台', sub: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-      { href: '/editor', label: '永續撰寫', sub: 'SustainWrite', icon: <FileText size={18} /> },
-      { href: '/digital-twin', label: '數位分身', sub: 'Digital Twin', icon: <Fingerprint size={18} /> },
+      { href: '/profile', label: '企業管理', sub: 'Profile', icon: <Building2 size={18} /> },
+      { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: <Cable size={18} /> },
+      { href: '/data-sources', label: '資料來源', sub: 'Data Sources', icon: <Database size={18} /> },
+      { href: '/templates', label: '專家模板', sub: 'Templates', icon: <Layout size={18} /> },
       { href: '/health-check', label: '企業健檢', sub: 'Health Check', icon: <HeartPulse size={18} /> },
-      { href: '/advisory', label: '專家諮詢', sub: 'Advisory', icon: <MessageSquare size={18} /> },
-      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <BarChart3 size={18} /> },
-      { href: '/data-sources', label: '數據中樞', sub: 'Data Hub', icon: <Cable size={18} /> },
     ],
   },
   {
-    label: 'OMNIAGENT oX',
+    label: '旅程 II. 策略盤點與分派',
     items: [
-      { href: '/walkthrough', label: '新手教學', sub: 'Onboarding', icon: <Rocket size={18} /> },
-      { href: '/omniagent-orchestrator', label: '調度中心', sub: 'Orchestrator', icon: <Bot size={18} /> },
-      { href: '/omniagent-alchemy', label: '煉金術', sub: 'Alchemy Scan', icon: <Sparkles size={18} /> },
-      { href: '/best-practice', label: '最佳實踐', sub: 'Best Practice', icon: <Trophy size={18} /> },
-      { href: '/strategy-lab', label: '策略實驗室', sub: 'Strategy Lab', icon: <Brain size={18} /> },
-      { href: '/omniagent-architecture', label: '架構治理', sub: 'Living Arch', icon: <Layers size={18} /> },
-      { href: '/terminal', label: '終端系統', sub: 'Agent OS', icon: <Command size={18} /> },
+      { href: '/materiality', label: '重大性矩陣', sub: 'Materiality', icon: <Hexagon size={18} /> },
+      { href: '/roadmap', label: '淨零路徑', sub: 'Roadmap', icon: <Map size={18} /> },
+      { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: <ListChecks size={18} /> },
+      { href: '/document-checklist', label: '文件清單', sub: 'Checklist', icon: <ClipboardList size={18} /> },
     ],
   },
   {
-    label: 'E-S-G 模組',
+    label: '旅程 III. 數據採集與填報',
     items: [
       { href: '/environmental', label: '環境指揮', sub: 'Environmental', icon: <Leaf size={18} /> },
       { href: '/social', label: '社會影響', sub: 'Social', icon: <Users size={18} /> },
@@ -53,21 +50,40 @@ const navGroups = [
     ],
   },
   {
-    label: 'GOVERNANCE',
+    label: '旅程 IV. AI 賦能與撰寫',
     items: [
-      { href: '/matrix', label: '終始矩陣', sub: 'E2E Matrix', icon: <Grid3X3 size={18} /> },
-      { href: '/materiality', label: '重大性矩陣', sub: 'Materiality', icon: <Hexagon size={18} /> },
-      { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: <ListChecks size={18} /> },
-      { href: '/vault', label: '證據金庫', sub: 'Evidence Vault', icon: <Lock size={18} /> },
-      { href: '/document-checklist', label: '文件清單', sub: 'Doc Checklist', icon: <ClipboardList size={18} /> },
-      { href: '/auditor', label: '審計助手', sub: 'Auditor', icon: <Shield size={18} /> },
+      { href: '/editor', label: '永續撰寫', sub: 'SustainWrite', icon: <FileText size={18} /> },
+      { href: '/advisory', label: '專家諮詢', sub: 'Advisory', icon: <MessageSquare size={18} /> },
+      { href: '/digital-twin', label: '數位分身', sub: 'Digital Twin', icon: <Fingerprint size={18} /> },
+      { href: '/intelligence', label: '商情中心', sub: 'Intelligence', icon: <BarChart3 size={18} /> },
+      { href: '/compliance-check', label: '合規檢查', sub: 'Compliance', icon: <CheckSquare size={18} /> },
     ],
   },
   {
-    label: 'ENTERPRISE',
+    label: '旅程 V. 確信審計與發佈',
     items: [
-      { href: '/contracts', label: '合約管理', sub: 'Contracts', icon: <FileText size={18} /> },
-      { href: '/grants', label: '補助案管理', sub: 'Grants', icon: <Landmark size={18} /> },
+      { href: '/vault', label: '證據金庫', sub: 'Vault', icon: <Lock size={18} /> },
+      { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: <Activity size={18} /> },
+      { href: '/audit-verify', label: '確信中心', sub: 'VerifyLink', icon: <ShieldCheck size={18} /> },
+      { href: '/publish', label: '報告發佈', sub: 'Publish', icon: <Rocket size={18} /> },
+    ],
+  },
+  {
+    label: '旅程 VI. 知識沉澱與加值',
+    items: [
+      { href: '/library', label: '永續智庫', sub: 'Library', icon: <Library size={18} /> },
+      { href: '/reading-room', label: '閱覽室', sub: 'Reading Room', icon: <BookOpen size={18} /> },
+      { href: '/finance', label: '永續財務', sub: 'Finance', icon: <Wallet size={18} /> },
+      { href: '/academy', label: '永續學院', sub: 'Academy', icon: <GraduationCap size={18} /> },
+      { href: '/advisors', label: '顧問專區', sub: 'Advisors', icon: <Handshake size={18} /> },
+      { href: '/agents', label: '代理專區', sub: 'Agents', icon: <Bot size={18} /> },
+    ],
+  },
+  {
+    label: 'ADMIN CONSOLE',
+    items: [
+      { href: '/ai-platform', label: 'AI 整合平台', sub: 'AI Platform', icon: <Server size={18} /> },
+      { href: '/system-test', label: '系統測試', sub: 'System Test', icon: <TerminalIcon size={18} /> },
     ],
   },
 ];
