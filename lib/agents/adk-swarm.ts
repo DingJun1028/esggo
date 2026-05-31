@@ -1,7 +1,7 @@
 import { ADKAgent } from './adk-core.ts';
 import type { AgentConfig } from './adk-core.ts';
 import { ADK_STANDARD_TOOLS } from './adk-tools.ts';
-import { agent0, OmniCommander } from './omni-commander.ts';
+import { OmniCommander } from './omni-commander.ts';
 import { omniAgentBus } from './omni-agent-bus.ts';
 import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal.ts';
 import { memoryStore } from '../memory/memory-store.ts';
@@ -72,6 +72,7 @@ You can map to GRI, SASB, TCFD, and emerging frameworks like TNFD.
 class CollaborativeSwarmAgent {
   private agent: ADKAgent;
   private memorySummary: string = 'Initial swarm memory summary';
+  private agentConfig: Omit<AgentConfig, 'tools'>;
 
   constructor(agentConfig: Omit<AgentConfig, 'tools'>) {
     this.agentConfig = agentConfig;

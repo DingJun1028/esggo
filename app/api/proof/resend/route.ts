@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         timestamp: new Date().toISOString()
       }
     } as any);
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json(
       { id: Date.now().toString(), status: 'error', content: error.message } as any,
       { status: 500 }

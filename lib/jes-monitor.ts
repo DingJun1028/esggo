@@ -27,7 +27,7 @@ export class JESMonitor {
     this.carbonHistory.push({
       service: d.service,
       timestamp: d.timestamp,
-      emission: d.carbonEmission,
+      emission: d.emission || d.carbonEmission || 0,
       operation: 'measurement'
     });
   }
@@ -58,6 +58,7 @@ export class JESMonitor {
           timestamp: new Date(d.timestamp),
           service: d.service,
           energyConsumption: Number(d.energy_consumption),
+          emission: Number(d.carbon_emission),
           carbonEmission: Number(d.carbon_emission)
         }));
       } catch (err) {
@@ -73,17 +74,23 @@ export class JESMonitor {
     const conflicts: Conflict[] = [];
     for (const d of this.data) {
       const target = this.targetEmissions.get(d.service);
-      if (target && d.carbonEmission > target) {
-        const conflict = {
+      const currentEmission = d.emission || d.carbonEmission || 0;
+      if (target && currentEmission > target) {
+        const diff = currentEmission - target;
+        const conflict: Conflict = {
+          id: `conf_${Date.now()}_${Math.random().toString(36).slice(2, 5)}`,
+          source: 'JESMonitor',
+          description: `Emissions for ${d.service} exceeded target by ${diff.toFixed(2)}`,
+          severity: diff > 15 ? 'high' : 'medium',
           service: d.service,
           expectedEmission: target,
-          actualEmission: d.carbonEmission,
-          difference: d.carbonEmission - target
+          actualEmission: currentEmission,
+          difference: diff
         };
         conflicts.push(conflict);
 
-        if (conflict.difference > 15) {
-          this.alerts.set(d.service, `⚠️ 緊急：超過目標 ${conflict.difference.toFixed(2)}kgCO2e`);
+        if (diff > 15) {
+          this.alerts.set(d.service, `⚠️ 緊急：超過目標 ${diff.toFixed(2)}kgCO2e`);
         }
       }
     }
@@ -96,8 +103,10 @@ export class JESMonitor {
     const priorityMap = new Map<string, number>();
 
     for (const conflict of conflicts) {
-      if (!priorityMap.has(conflict.service) || priorityMap.get(conflict.service)! < conflict.difference) {
-        priorityMap.set(conflict.service, conflict.difference);
+      const diff = conflict.difference || 0;
+      const service = conflict.service || 'unknown';
+      if (!priorityMap.has(service) || priorityMap.get(service)! < diff) {
+        priorityMap.set(service, diff);
       }
     }
 
@@ -108,8 +117,10 @@ export class JESMonitor {
     }
 
     for (const c of conflicts) {
-      if (!sortedServices.find(([s]) => s === c.service)) {
-        suggestions.push(`服務: ${c.service} | 優化建議: 減少 ${c.difference.toFixed(2)}kgCO2e`);
+      const service = c.service || 'unknown';
+      const diff = c.difference || 0;
+      if (!sortedServices.find(([s]) => s === service)) {
+        suggestions.push(`服務: ${service} | 優化建議: 減少 ${diff.toFixed(2)}kgCO2e`);
       }
     }
 

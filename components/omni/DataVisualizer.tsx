@@ -27,11 +27,11 @@ export default function DataVisualizer() {
         const articles = response.data.scrapedArticles;
         
         setTotalArticles(articles.length);
-        setHighRisk(articles.filter((a: unknown) => a.impactLevel === 'high').length);
+        setHighRisk(articles.filter((a: any) => a.impactLevel === 'high').length);
 
         // Process Distribution
         const categoryCounts: Record<string, number> = {};
-        articles.forEach((a: unknown) => {
+        articles.forEach((a: any) => {
           const cat = a.category || '其它';
           categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
         });
@@ -49,7 +49,7 @@ export default function DataVisualizer() {
         const dates = Array.from({ length: 7 }).map((_, i) => subDays(today, 6 - i));
         
         const trend = dates.map(date => {
-          const matching = articles.filter((a: unknown) => {
+          const matching = articles.filter((a: any) => {
             if (!a.publishedAt) return false;
             try {
               return isSameDay(parseISO(a.publishedAt), date);
@@ -60,12 +60,12 @@ export default function DataVisualizer() {
           return {
             date: format(date, 'MM/dd'),
             articles: matching.length,
-            alerts: matching.filter((a: unknown) => a.impactLevel === 'high').length
+            alerts: matching.filter((a: any) => a.impactLevel === 'high').length
           };
         });
         
         setTrendData(trend);
-      } catch (e: unknown) {
+      } catch (e: any) {
         console.error("Failed to load articles", e);
         setError(e.message || "未能載入資料。請檢查資料庫連線或網路狀態。");
       } finally {
@@ -110,7 +110,7 @@ export default function DataVisualizer() {
                     dataKey="value"
                     stroke="none"
                   >
-                    {distributionData.map((entry, index) => (
+                    {distributionData.map((entry: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -128,7 +128,7 @@ export default function DataVisualizer() {
               </ResponsiveContainer>
               {/* Center Label for Pie Chart */}
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-                <span className="text-3xl font-black text-[#003262]">{distributionData.length > 0 && distributionData[0].name !== '無資料' ? '100%' : '0%'}</span>
+                <span className="text-3xl font-black text-[#003262]">{distributionData.length > 0 && (distributionData[0] as any).name !== '無資料' ? '100%' : '0%'}</span>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">涵蓋率</span>
               </div>
             </>

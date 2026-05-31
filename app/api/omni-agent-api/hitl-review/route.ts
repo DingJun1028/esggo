@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
       success: true,
       review: reviewRecord,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('[HITL API Error]', errorMessage);
     return NextResponse.json({ error: errorMessage }, { status: 500 });
@@ -138,7 +138,7 @@ export async function GET() {
       reviews: data || [],
       total: data?.length || 0,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }

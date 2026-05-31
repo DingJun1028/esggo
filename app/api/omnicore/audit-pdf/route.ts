@@ -98,7 +98,7 @@ ${extractedText.substring(0, 2000)} // 截斷避免過長
       }
     });
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[Audit PDF] 執行失敗:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

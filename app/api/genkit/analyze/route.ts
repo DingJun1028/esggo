@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const result = await runESGAnalysisFlow(parsed.data);
 
     return NextResponse.json({ success: true, data: result });
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json(
       { success: false, error: (error as Error).message },
       { status: 500 }

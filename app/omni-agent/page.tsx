@@ -365,18 +365,18 @@ export default function OmniAgentAgentPage() {
               <div className="space-y-8 animate-in fade-in">
                 <DataTable 
                   columns={[
-                    { key: 'path', header: '模組路徑', render: (v: unknown) => <code className="font-black text-berkeley-blue">{v}</code> },
+                    { key: 'path', header: '模組路徑', render: (v: unknown) => <code className="font-black text-berkeley-blue">{v as any}</code> },
                     { key: 'desc', header: '功能定義' },
                     { key: 'status', header: '當前狀態', render: (v: unknown) => (
                       <Badge 
-                        variant={v === 'Hot' ? 'error' : v === 'New' ? 'warning' : v === 'Research' ? 'primary' : 'verified'} 
+                        variant={(v as any) === 'Hot' ? 'error' : (v as any) === 'New' ? 'warning' : (v as any) === 'Research' ? 'primary' : 'verified'} 
                         className="px-3 py-1 font-black tracking-widest uppercase text-[9px]"
                       >
-                        {v}
+                        {v as any}
                       </Badge>
                     )}
                   ]}
-                  data={REPO_MODULES as unknown[]}
+                  data={REPO_MODULES as any[]}
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -444,11 +444,11 @@ export default function OmniAgentAgentPage() {
               <div className="animate-in fade-in">
                 <DataTable 
                   columns={[
-                    { key: 'v', header: '版本', render: (v: unknown) => <span className="font-black text-berkeley-blue">{v}</span> },
-                    { key: 'date', header: '更新時間', render: (v: unknown) => <span className="text-slate-400 font-bold text-xs uppercase">{v}</span> },
-                    { key: 'note', header: '主要變動', render: (v: unknown) => <Badge variant="verified" className="px-3 py-1 font-medium">{v}</Badge> }
+                    { key: 'v', header: '版本', render: (v: unknown) => <span className="font-black text-berkeley-blue">{v as any}</span> },
+                    { key: 'date', header: '更新時間', render: (v: unknown) => <span className="text-slate-400 font-bold text-xs uppercase">{v as any}</span> },
+                    { key: 'note', header: '主要變動', render: (v: unknown) => <Badge variant="verified" className="px-3 py-1 font-medium">{v as any}</Badge> }
                   ]}
-                  data={RELEASE_HISTORY}
+                  data={RELEASE_HISTORY as any[]}
                 />
               </div>
             )}

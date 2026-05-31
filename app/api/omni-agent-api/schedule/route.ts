@@ -111,7 +111,7 @@ ${result.message || ''}`;
       mission,
       ...result,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('[Schedule API Error]', errorMessage);
 
@@ -206,7 +206,7 @@ export async function GET(req: NextRequest) {
       mission,
       ...result,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('[Schedule API Error]', errorMessage);
 

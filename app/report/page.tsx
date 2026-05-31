@@ -35,8 +35,8 @@ export default function ReportPage() {
     if (selectedIds.size === 0) return;
     setGenerating(true);
     try {
-      const selectedEvidence = evidence.filter(e => selectedIds.has(e.id));
-      const description = `基於以下憑證產生報告：\n` + selectedEvidence.map(e => `- ${e.file_name} (${e.gri_reference})`).join('\n');
+      const selectedEvidence = evidence.filter((e: any) => selectedIds.has(e.id));
+      const description = `基於以下憑證產生報告：\n` + selectedEvidence.map((e: any) => `- ${e.file_name} (${e.gri_reference})`).join('\n');
       
       await fetch('/api/agent/tasks', {
         method: 'POST',
@@ -81,7 +81,7 @@ export default function ReportPage() {
                  { label: '檔案名稱', key: 'name' }, 
                  { label: 'GRI 指標', key: 'gri' }
                ]}
-               data={evidence.map(f => ({
+               data={evidence.map((f: any) => ({
                  select: <input type="checkbox" checked={selectedIds.has(f.id)} onChange={() => toggleSelection(f.id)} className="w-4 h-4 accent-[#003262]" />,
                  name: <span className="font-bold text-[#003262]">{f.file_name}</span>,
                  gri: <span className="font-mono text-sm bg-slate-100 px-2 py-1 rounded">{f.gri_reference || '-'}</span>

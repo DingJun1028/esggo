@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { SwapDeFiClient } from '../../../../lib/services/swap-defi-adapter';
 import type { SwapDefiTransaction } from '../../../../src/shared/types/swap-defi.types';
 import { createTask, executeSwarmTask } from '../../../../lib/agent/orchestrator';
@@ -16,17 +17,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, result });
     }
 
-    // Standard task creation
     const { task: agentTask, policy } = createTask({
       actorId: body.actorId ?? 'system',
-      taskType: body.taskType as AgentTaskType,
-      title: body.title,
-      description: body.description,
+      taskType: (body.taskType as AgentTaskType) || 'analysis',
+      title: body.title || 'New Task',
+      description: body.description || '',
       inputRefIds: body.inputRefIds ?? [],
       skillKey: body.skillKey,
     });
 
     await addTask(agentTask);
+
+    // Standard task creation
+    if (body.taskType === 'swap_defi') {
+      const transaction = body.transaction as SwapDefiTransaction;
+      const swapClient = new SwapDeFiClient();
+      const swapResult = await swapClient.executeSwap(transaction);
+      return NextResponse.json({ task: agentTask, result: swapResult, ok: true });
+    }
 
     // Call OmniAgent VPS Server
     let execution, artifact;
@@ -35,7 +43,7 @@ export async function POST(req: NextRequest) {
       const vpsRes = await fetch('http://127.0.0.1:8642/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task }),
+        body: JSON.stringify({ task: agentTask }),
       });
       if (vpsRes.ok) {
         const vpsData = await vpsRes.json();
@@ -54,9 +62,9 @@ export async function POST(req: NextRequest) {
       artifact = localResult.artifact;
     }
 
-    return NextResponse.json({ task, policy, execution, artifact, source: executionSource, ok: true });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : '未知錯誤';
+    return NextResponse.json({ task: agentTask, execution, artifact, source: executionSource, ok: true });
+  } catch (err: any) {
+    const message = err.message || '未知錯誤';
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }

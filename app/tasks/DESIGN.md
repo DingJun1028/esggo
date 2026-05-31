@@ -57,3 +57,8 @@
 4. **API Endpoints**
    - GET /pools/{id}/status (real-time data)
    - POST /swap (transaction execution)
+
+5. **Environment Variables**
+   - `SWAP_DEFI_API_KEY` - Test API key for Swap-DeFi-TEST-UMES-ONLINE
+   - `SWAP_DEFI_TOKEN` - Authentication token for DeFi service
+   - `SWAP_DEFI_ENDPOINT` - API endpoint (default: https://test-umes.online/api/v1)

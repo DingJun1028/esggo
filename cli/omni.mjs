@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 // Pre-flight encoding fix for Windows
-if (process.platform === 'win32') {
-  import('child_process').then(({ execSync }) => {
-    try { execSync('chcp 65001', { stdio: 'ignore' }); } catch (e) {}
-  }).catch(() => {});
+process.env.FORCE_COLOR = '1';
+
+// Force stdout encoding to UTF-8 on Windows
+if (process.platform === 'win32' && process.stdout) {
+  process.stdout.setEncoding('utf8');
+  if (process.stdout._handle && process.stdout._handle.setBlocking) {
+    process.stdout._handle.setBlocking(true);
+  }
 }
+
+try {
+  require('child_process').execSync('chcp 65001', { stdio: 'ignore' });
+} catch (e) {}
 
 /**
  * OmniAgent + ESGGO 善向永續 系統 Native CLI Tool
@@ -27,16 +35,6 @@ import { JESMonitor } from '../lib/jes-monitor.ts';
 dotenv.config({ override: true });
 
 const program = new Command();
-
-// -- Root Cause Fix: Force UTF-8 for Windows Terminal --------------------------
-if (process.platform === 'win32') {
-  try {
-    const { execSync } = await import('child_process');
-    execSync('chcp 65001', { stdio: 'ignore' });
-  } catch (e) {
-    // Fallback if chcp fails
-  }
-}
 
 // ── Jules Integration Commands ──────────────────────────────────────────────────────
 const jules = program.command('jules').description('Jules AI coding agent integration');

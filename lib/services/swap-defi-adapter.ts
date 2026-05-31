@@ -1,4 +1,4 @@
-import type { SwapDefiConfig, SwapDefiTransaction } from '../shared/types/swap-defi.types';
+import type { SwapDefiConfig, SwapDefiTransaction } from '../../src/shared/types/swap-defi.types';
 
 export class SwapDeFiClient {
   private config: SwapDefiConfig;

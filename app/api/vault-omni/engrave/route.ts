@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
         vault_result: result,
       },
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ success: false, error: message }, { status: 500 });
   }

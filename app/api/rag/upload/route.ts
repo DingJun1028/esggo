@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       chunksCount: chunksCount
     });
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[Upload API] Error:', error);
     return NextResponse.json({ success: false, error: error.message || 'Internal Server Error' }, { status: 500 });
   }

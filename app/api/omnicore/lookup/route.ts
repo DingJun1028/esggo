@@ -58,7 +58,7 @@ export async function GET(req: Request) {
       timestamp: Date.now()
     } as any);
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json(
       { 
         id: Date.now().toString(),

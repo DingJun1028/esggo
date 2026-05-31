@@ -55,7 +55,7 @@ export default function DashboardPage() {
     omniRealtime.connect(null, {
       onPresenceSync: () => {},
       onStatusChange: () => {},
-      onEventReceived: (event: unknown) => {
+      onEventReceived: (event: any) => {
         if (event.type === 'SEAL') {
           try {
              const payloadObj = JSON.parse(event.payload);
@@ -69,7 +69,7 @@ export default function DashboardPage() {
                 },
                 ...prev
              ].slice(0, 10)); // 僅保留最新的 10 筆
-          } catch (e) {}
+          } catch (e: any) {}
         }
       }
     });
@@ -103,7 +103,7 @@ export default function DashboardPage() {
       }, null);
 
       setTimeout(() => setGraphState({ agentStatus: 'success', zkpStatus: 'success', vaultStatus: 'idle' }), 500);
-    } catch (e) {
+    } catch (e: any) {
       setGraphState({ agentStatus: 'failed', zkpStatus: 'idle', vaultStatus: 'idle' });
     }
   };
@@ -133,7 +133,7 @@ export default function DashboardPage() {
         alert(data.error);
         setGraphState({ agentStatus: 'failed', zkpStatus: 'idle', vaultStatus: 'idle' });
       }
-    } catch (e) {
+    } catch (e: any) {
       setGraphState({ agentStatus: 'failed', zkpStatus: 'idle', vaultStatus: 'idle' });
     }
   };
@@ -165,7 +165,7 @@ export default function DashboardPage() {
       } else {
         setGraphState({ agentStatus: 'success', zkpStatus: 'failed', vaultStatus: 'idle' });
       }
-    } catch (e) {
+    } catch (e: any) {
       setGraphState({ agentStatus: 'success', zkpStatus: 'failed', vaultStatus: 'idle' });
     }
   };
@@ -406,8 +406,8 @@ export default function DashboardPage() {
                   {pedersenResult && (
                     <div className="p-4 bg-slate-50 rounded-2xl border border-emerald-100 font-mono text-[11px] text-emerald-700 space-y-3 mt-2 shadow-inner">
                       <div className="max-h-24 overflow-y-auto custom-scrollbar space-y-1.5 pr-2">
-                        {pedersenResult.commitments.map((c: unknown, i: number) => (
-                          <div key={i} className="truncate"><span className="text-slate-400">C{i + 1} ({c.value}):</span> {c.commitment.substring(0, 32)}...</div>
+                        {pedersenResult.commitments.map((c: any, i: number) => (
+                          <div key={i} className="truncate"><span className="text-slate-400">C{i + 1} ({(c as any).value}):</span> {(c as any).commitment.substring(0, 32)}...</div>
                         ))}
                       </div>
                       <div className="pt-3 border-t border-emerald-200/50 truncate">

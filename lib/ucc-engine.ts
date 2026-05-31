@@ -65,8 +65,8 @@ export class UCCEngine {
 
     // 4. 寫入聖碑 (Vault Omni)
     const supabase = await createServerClient();
-    const { error } = await supabase
-      .from('evidence_vault')
+    const { error } = await (supabase
+      .from('evidence_vault' as any) as any)
       .insert({
         uuid: crystal.core.uuid,
         timestamp: crystal.core.timestamp,
@@ -139,12 +139,12 @@ export class UCCEngine {
     if (error || !rawData) throw new Error('證據不存在');
 
     return this.sealEvidence({
-      formula: rawData.formula,
-      impactMetric: rawData.impact_metric,
-      sourceOrigin: rawData.source_origin,
+      formula: (rawData as any).formula,
+      impactMetric: (rawData as any).impact_metric,
+      sourceOrigin: (rawData as any).source_origin,
       lifecycleStage: newStage,
       metadata: {
-        ...rawData.metadata,
+        ...(rawData as any).metadata,
         previousVersion: uuid,
         transitionedAt: Date.now(),
       },
@@ -165,13 +165,13 @@ export class UCCEngine {
     if (error || !data) return false;
 
     const computedHash = this.computeHashLock({
-      uuid: data.uuid,
-      timestamp: data.timestamp,
-      formula: data.formula,
-      impactMetric: data.impact_metric,
+      uuid: (data as any).uuid,
+      timestamp: (data as any).timestamp,
+      formula: (data as any).formula,
+      impactMetric: (data as any).impact_metric,
     });
 
-    return computedHash === data.hash_lock;
+    return computedHash === (data as any).hash_lock;
   }
 
   /**

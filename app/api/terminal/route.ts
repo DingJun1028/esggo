@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ lines });
-  } catch (err: unknown) {
+  } catch (err: any) {
     return NextResponse.json({ lines: [{ type: 'err', content: `Internal Error: ${err.message}` }] });
   }
 }
