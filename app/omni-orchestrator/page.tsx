@@ -75,15 +75,15 @@ export default function OrchestratorPage() {
       const [tData, eData, aData, auData] = await Promise.all([tRes.json(), eRes.json(), aRes.json(), auRes.json()]);
       
       setTasks(tData.tasks || []);
-      const merged = (tData.tasks || []).map((t: unknown) => ({
+      const merged = (tData.tasks || []).map((t: any) => ({
         task: t,
-        execution: eData.executions?.find((e: unknown) => e.taskId === t.id) || null,
-        artifact: aData.artifacts?.find((a: unknown) => a.taskId === t.id) || null,
+        execution: eData.executions?.find((e: any) => e.taskId === t.id) || null,
+        artifact: aData.artifacts?.find((a: any) => a.taskId === t.id) || null,
         policy: null
       }));
       setExecutions(merged);
       setAuditLogs(auData.logs || []);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
     } finally {
       setLoading(false);
@@ -115,7 +115,7 @@ export default function OrchestratorPage() {
       setTitle(''); setDescription('');
       setActiveTab('executions');
       showToast('任務建立成功，政策守門已通過');
-    } catch (e: unknown) {
+    } catch (e: any) {
       showToast(e.message, 'error');
     } finally {
       setLoading(false);
@@ -125,7 +125,7 @@ export default function OrchestratorPage() {
   async function handleExecute(rec: ExecutionRecord) {
     setLoading(true);
     try {
-      const res = await fetch(`/api/agent/tasks/${rec.task.id}/execute`, {
+      const res = await fetch(`/api/agent/tasks/${(rec.task as any).id}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ task: rec.task }),
@@ -134,10 +134,10 @@ export default function OrchestratorPage() {
       if (!data.ok) throw new Error(data.error);
 
       const updated: ExecutionRecord = { ...rec, execution: data.execution, artifact: data.artifact };
-      setExecutions(prev => prev.map(r => r.task.id === rec.task.id ? updated : r));
+      setExecutions(prev => prev.map(r => (r.task as any).id === (rec.task as any).id ? updated : r));
       setSelected(updated);
       showToast('OmniAgent 執行完成，草稿已生成');
-    } catch (e: unknown) {
+    } catch (e: any) {
       showToast(e.message, 'error');
     } finally {
       setLoading(false);
@@ -225,16 +225,16 @@ export default function OrchestratorPage() {
             {activeTab === 'executions' && (
               <DataTable 
                 columns={[
-                  { key: 'title', header: '任務標題', render: (_: unknown, rec: unknown) => <span className="font-bold text-slate-800">{rec.task.title}</span> },
+                  { key: 'title', header: '任務標題', render: (_: unknown, rec: unknown) => <span className="font-bold text-slate-800">{(rec as any).task.title}</span> },
                   { key: 'status', header: '執行狀態', render: (_: unknown, rec: unknown) => (
-                    <Badge variant={rec.artifact ? (REVIEW_STATUS_MAP[rec.artifact.reviewStatus]?.variant || 'verified') : 'draft'}>
-                      {rec.artifact ? REVIEW_STATUS_MAP[rec.artifact.reviewStatus]?.label : '待執行'}
+                    <Badge variant={(rec as any).artifact ? (REVIEW_STATUS_MAP[(rec as any).artifact.reviewStatus]?.variant as any || 'verified') : 'draft'}>
+                      {(rec as any).artifact ? REVIEW_STATUS_MAP[(rec as any).artifact.reviewStatus]?.label : '待執行'}
                     </Badge>
                   ) },
-                  { key: 'time', header: '建立時間', render: (_: unknown, rec: unknown) => <span className="text-[11px] font-mono text-slate-400 font-bold">{new Date(rec.task.createdAt).toLocaleString()}</span> },
-                  { key: 'action', header: '', render: (_: unknown, rec: unknown) => <Button variant="glass" size="sm" className="h-9 px-5 rounded-xl text-[11px] font-bold" onClick={() => setSelected(rec)}>檢視詳情</Button> }
+                  { key: 'time', header: '建立時間', render: (_: unknown, rec: unknown) => <span className="text-[11px] font-mono text-slate-400 font-bold">{new Date((rec as any).task.createdAt).toLocaleString()}</span> },
+                  { key: 'action', header: '', render: (_: unknown, rec: unknown) => <Button variant="glass" size="sm" className="h-9 px-5 rounded-xl text-[11px] font-bold" onClick={() => setSelected(rec as any)}>檢視詳情</Button> }
                 ]}
-                data={executions as unknown[]}
+                data={executions as any[]}
                 searchable
                 searchPlaceholder="搜尋調度任務..."
               />
@@ -248,28 +248,28 @@ export default function OrchestratorPage() {
                           <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em]">{lane}</p>
                           <Badge variant="primary" className="h-5 w-5 p-0 flex items-center justify-center rounded-full text-[10px]">
                             {executions.filter(r => {
-                                if (lane === 'backlog') return !r.execution;
-                                if (lane === 'running') return r.execution?.status === 'running';
-                                if (lane === 'review') return r.artifact?.reviewStatus === 'awaiting_review';
-                                return r.artifact?.reviewStatus === 'promoted';
+                                if (lane === 'backlog') return !(r as any).execution;
+                                if (lane === 'running') return (r as any).execution?.status === 'running';
+                                if (lane === 'review') return (r as any).artifact?.reviewStatus === 'awaiting_review';
+                                return (r as any).artifact?.reviewStatus === 'promoted';
                             }).length}
                           </Badge>
                        </div>
                        <div className="space-y-5 flex-1">
                           {executions.filter(r => {
-                            if (lane === 'backlog') return !r.execution;
-                            if (lane === 'running') return r.execution?.status === 'running';
-                            if (lane === 'review') return r.artifact?.reviewStatus === 'awaiting_review';
-                            return r.artifact?.reviewStatus === 'promoted';
+                            if (lane === 'backlog') return !(r as any).execution;
+                            if (lane === 'running') return (r as any).execution?.status === 'running';
+                            if (lane === 'review') return (r as any).artifact?.reviewStatus === 'awaiting_review';
+                            return (r as any).artifact?.reviewStatus === 'promoted';
                           }).map(r => (
-                            <motion.div layoutId={r.task.id} key={r.task.id} onClick={() => setSelected(r)} className="bg-white/60 backdrop-blur-md p-6 rounded-[2rem] shadow-glass border border-white/80 cursor-pointer hover:border-berkeley-blue/40 hover:shadow-lg transition-all group">
+                            <motion.div layoutId={(r as any).task.id} key={(r as any).task.id} onClick={() => setSelected(r as any)} className="bg-white/60 backdrop-blur-md p-6 rounded-[2rem] shadow-glass border border-white/80 cursor-pointer hover:border-berkeley-blue/40 hover:shadow-lg transition-all group">
                                <div className="flex items-center justify-between mb-5">
-                                  <div style={{ color: TASK_TYPE_META[r.task.taskType]?.color }}>{TASK_ICONS[r.task.taskType]}</div>
-                                   <BrandStatusDot status={r.execution?.status === 'running' ? 'active' : 'inactive'} pulse={r.execution?.status === 'running'} />
+                                  <div style={{ color: (TASK_TYPE_META as any)[(r as any).task.taskType]?.color }}>{TASK_ICONS[(r as any).task.taskType as any]}</div>
+                                   <BrandStatusDot status={(r as any).execution?.status === 'running' ? 'active' : 'inactive'} pulse={(r as any).execution?.status === 'running'} />
                                </div>
-                               <p className="text-[13px] font-bold text-slate-800 line-clamp-2 leading-snug mb-5">{r.task.title}</p>
+                               <p className="text-[13px] font-bold text-slate-800 line-clamp-2 leading-snug mb-5">{(r as any).task.title}</p>
                                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity pt-4 border-t border-slate-100/50">
-                                  <span className="text-[10px] font-mono text-slate-300 font-bold uppercase">#{r.task.id.slice(-6)}</span>
+                                  <span className="text-[10px] font-mono text-slate-300 font-bold uppercase">#{(r as any).task.id.slice(-6)}</span>
                                   <ChevronRight size={14} className="text-berkeley-blue" />
                                </div>
                             </motion.div>
@@ -296,27 +296,27 @@ export default function OrchestratorPage() {
             onClose={() => setSelected(null)} 
             title="任務執行詳情" 
             size="xl"
-            subtitle={`Task ID: ${selected.task.id}`}
+            subtitle={`Task ID: ${(selected.task as any).id}`}
           >
             <div className="space-y-10 py-2">
                <div className="p-10 bg-slate-50/50 rounded-[3rem] border border-slate-100 shadow-inner">
                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">任務背景 (Task Context)</p>
-                  <h3 className="text-2xl font-black text-berkeley-blue mb-4 tracking-tight">{selected.task.title}</h3>
-                  <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{selected.task.description || '無詳細說明'}</p>
+                  <h3 className="text-2xl font-black text-berkeley-blue mb-4 tracking-tight">{(selected.task as any).title}</h3>
+                  <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{(selected.task as any).description || '無詳細說明'}</p>
                </div>
                
-               {selected.artifact ? (
+               {(selected as any).artifact ? (
                  <div className="space-y-8">
                     <div className="flex items-center justify-between px-4">
                        <div className="flex items-center gap-3">
-                          <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">產出草稿 (v{selected.artifact.version})</p>
+                          <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">產出草稿 (v{(selected.artifact as any).version})</p>
                           <div className="h-1 w-1 rounded-full bg-slate-300" />
-                          <p className="text-[10px] font-bold text-berkeley-blue/60 uppercase font-mono">{selected.artifact.id}</p>
+                          <p className="text-[10px] font-bold text-berkeley-blue/60 uppercase font-mono">{(selected.artifact as any).id}</p>
                        </div>
-                       <Badge variant="verified" className="px-4 py-1.5 text-[11px]">AI CONFIDENCE: {Math.round((selected.artifact.confidence || 0.92) * 100)}%</Badge>
+                       <Badge variant="verified" className="px-4 py-1.5 text-[11px]">AI CONFIDENCE: {Math.round(((selected.artifact as any).confidence || 0.92) * 100)}%</Badge>
                     </div>
                     <div className="p-10 bg-white border border-slate-200 rounded-[3rem] text-[15px] text-slate-700 leading-relaxed font-medium font-mono max-h-[400px] overflow-y-auto shadow-inner scrollbar-hide">
-                       {selected.artifact.content}
+                       {(selected.artifact as any).content}
                     </div>
                     <div className="flex gap-4 pt-4">
                        <Button variant="primary" className="flex-1 h-14 rounded-2xl shadow-glass text-base tracking-widest">核准並執行 5T 封印</Button>

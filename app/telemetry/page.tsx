@@ -128,7 +128,7 @@ export default function TelemetryDashboard() {
         <div className="bg-white rounded shadow p-4">
           <h3 className="text-lg font-semibold mb-4">Agent Metrics</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {metrics.map(metric => (
+            {metrics.map((metric: any) => (
               <div key={metric.agent} className="border rounded p-4">
                 <h4 className="font-semibold">{metric.agent}</h4>
                 <div className="mt-2 space-y-1 text-sm">

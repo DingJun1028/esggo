@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
 
         sendStep('SUCCESS', '所有 Swarm 任務已成功派發並啟動監控。');
 
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error('[V3 Agent] Error:', err);
         sendStep('ERROR', '系統調度異常', { error: (err as any).message });
       } finally {

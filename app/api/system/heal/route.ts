@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     if (error) throw error;
 
     return NextResponse.json({ success: true, result: data });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[Omni Healing API] Error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       data: auditRecord,
       message: 'ZKP Proof securely anchored to Data Connect Audit Log.'
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[ZKP API] Failed to store proof:', error);
     return NextResponse.json(
       { error: error.message || 'Internal Server Error' },

@@ -45,8 +45,8 @@ export class OmniAgentBus {
           await this.publish('skill:executed', { skillId: skill.id, result });
           // Apply cooldown
           if (skill.cooldown) this.skillCooldowns.set(skill.id, now + skill.cooldown);
-        } catch (e) {
-          await this.publish('skill:error', { skillId: skill.id, error: e });
+        } catch (e: any) {
+          await this.publish('skill:error', { skillId: skill.id, error: e.message || e });
         }
       });
     }
@@ -93,7 +93,7 @@ export class OmniAgentBus {
         this.updateCommandStatus(cmd, 'completed');
         await this.publish('supabase:status', { command: cmd, status: 'completed', result });
         return result;
-      } catch (e) {
+      } catch (e: any) {
         this.updateCommandStatus(cmd, 'error');
         await this.publish('supabase:status', { command: cmd, status: 'error', error: e });
         throw e;
@@ -177,9 +177,9 @@ export class OmniAgentBus {
     // 2. SSE Bridge Propagation (Push to all registered broadcast hooks)
     for (const hook of this.broadcastHooks) {
       try {
-        hook(event, { ...payload, _busEventId: eventId, _busTimestamp: timestamp });
-      } catch (e) {
-        console.warn('[OmniAgent Bus] Broadcast hook error:', e);
+        hook(event, { ...(payload as any), _busEventId: eventId, _busTimestamp: timestamp });
+      } catch (e: any) {
+        console.warn('[OmniAgent Bus] Broadcast hook error:', e.message || e);
       }
     }
 
@@ -281,9 +281,9 @@ export class OmniAgentBus {
       const compressedPayload = {
           original_size: originalSize,
           compressed_data: {
-             intent: result?.essence?.essence || 'unknown',
-             nodes_activated: result?.manifestation?.manifestation_results?.length || 0,
-             resonance_status: result?.resonance?.status || 'unknown'
+             intent: (result as any)?.essence?.essence || 'unknown',
+             nodes_activated: (result as any)?.manifestation?.manifestation_results?.length || 0,
+             resonance_status: (result as any)?.resonance?.status || 'unknown'
           },
           compression_ratio: 'High'
       };
@@ -301,7 +301,7 @@ export class OmniAgentBus {
       const artifactUuid = Math.random().toString(36).substring(7);
       const timestamp = new Date().toISOString();
       
-      await this.publish('auth:persona:interact', { actorId: 'OmniCommander', action: `Celestial Execution: ${finalResult?.data?.compressed_data?.intent || 'Unknown'}` });
+      await this.publish('auth:persona:interact', { actorId: 'OmniCommander', action: `Celestial Execution: ${(finalResult as any)?.data?.compressed_data?.intent || 'Unknown'}` });
       await this.publish('knowledge:memory:consolidate', { data: finalResult, artifactUuid, timestamp });
       
       return { artifactUuid, timestamp };
@@ -327,7 +327,7 @@ export class OmniAgentBus {
         const essence = this.extractQuantumEssence(intent, context);
 
         // 2. 聖典共鳴
-        const resonance = await this.SacredLibrary.resonate(essence.essence);
+        const resonance = await this.SacredLibrary.resonate((essence as any).essence);
 
         // 3. 代理織網
         // 動態推斷需要的技能
@@ -359,7 +359,7 @@ export class OmniAgentBus {
           timestamp,
           message: '鏡像樞紐已校準。法則已編纂完畢。這場名為「效率」的永恆編纂已完成。'
         };
-    } catch (error: unknown) {
+    } catch (error: any) {
         clearTimeout(timeoutId);
         console.error(`\n[OmniCore] 🚨 奧義執行中斷：${error.message}`);
         
@@ -504,19 +504,19 @@ export class OmniAgentBus {
           if (error) throw error;
           
           if (data && data.length > 0) {
-             const evidenceNames = data.map((d: unknown) => d.file_name).join(', ');
+             const evidenceNames = data.map((d: any) => d.file_name).join(', ');
              console.log(`[OmniAgent] ⚠️ Risk Alert: Found ${data.length} unsealed evidence! (${evidenceNames})`);
              // Publish a notification event
              await this.publish('notification:alert', {
                 title: 'High Risk Evidence Unsealed',
                 message: `Found ${data.length} unsealed evidence documents requiring 5T Cryptographic Seal.`,
-                evidenceIds: data.map((d: unknown) => d.id),
+                evidenceIds: data.map((d: any) => d.id),
                 severity: 'high'
              });
              return { status: 'alert_sent', count: data.length };
           }
           return { status: 'clean', count: 0 };
-        } catch (e: unknown) {
+        } catch (e: any) {
           console.warn(`[OmniAgent] ⚠️ Risk Assessor Error: ${e.message}`);
           return { status: 'error', error: e.message };
         }
@@ -577,7 +577,7 @@ export class OmniAgentBus {
              return { status: 'zkp_generated', count: data.length };
           }
           return { status: 'clean', count: 0 };
-        } catch (e: unknown) {
+        } catch (e: any) {
           console.warn(`[OmniAgent] ⚠️ ZKP Generator Error: ${e.message}`);
           return { status: 'error', error: e.message };
         }

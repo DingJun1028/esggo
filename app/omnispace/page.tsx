@@ -59,13 +59,13 @@ export default function OmniSpacePage() {
                 payload: `[JunAiKey] ${data.status}: ${data.message}`,
                 integrity_hash: data.id || '0xAI'
               });
-            } catch (e) {
+            } catch (e: any) {
               // ignore parse errors for partial chunks
             }
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
        emitEvent({ type, payload: `[Omni Restoration] Error executing ${protocol}`, integrity_hash: '0xERR' });
     }
   };
@@ -261,7 +261,7 @@ export default function OmniSpacePage() {
                 {onlineUsers.length === 0 ? (
                   <div className="text-xs text-slate-500">Scanning for presences...</div>
                 ) : (
-                  onlineUsers.map((u, i) => (
+                  onlineUsers.map((u: any, i: number) => (
                     <div key={i} className="flex items-center gap-3 p-2 bg-white/5 rounded-lg border border-white/5">
                       <div className="relative w-8 h-8 rounded-full bg-cyan-900 border border-cyan-500/50 flex justify-center items-center font-bold text-xs">
                         {u.email ? u.email[0].toUpperCase() : 'A'}

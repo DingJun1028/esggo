@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     const gates: T5Status[] = ['Tangible', 'Traceable', 'Trackable', 'Transparent', 'Trustworthy'];
 
     // 3. Initialize the Matrix Grid (Mapping Structure)
-    const grid: unknown = {};
+    const grid: any = {};
 
     stages.forEach((stage, sIndex) => {
       grid[stage] = {};
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     };
 
     // 5. Build the Audit Trail with soulful descriptions (繁博)
-    const auditTrail = logs.slice(0, 10).map((l: unknown) => ({
+    const auditTrail = logs.slice(0, 10).map((l: any) => ({
       stage: 'EXTRACTION' as MatrixLifecycleStage,
       gate: 'Traceable' as T5Status,
       action: l.action,

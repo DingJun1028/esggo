@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         verified_at: new Date().toISOString()
       },
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ success: false, error: message }, { status: 500 });
   }

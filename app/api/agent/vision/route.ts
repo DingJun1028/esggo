@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       ok: true
     });
 
-  } catch (err: unknown) {
+  } catch (err: any) {
     const message = err instanceof Error ? err.message : '未知錯誤';
     return NextResponse.json({ error: message }, { status: 500 });
   }

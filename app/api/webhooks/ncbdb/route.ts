@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString()
     });
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[NCBDB Webhook] Error processing payload:', error);
     return NextResponse.json({
       status: 'error',

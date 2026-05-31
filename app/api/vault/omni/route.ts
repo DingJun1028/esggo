@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     if (error) throw error;
 
     return NextResponse.json({ success: true, records: data });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[Omni Vault List API] Error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

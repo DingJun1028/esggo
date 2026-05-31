@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[Crypto API Error]', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

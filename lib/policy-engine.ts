@@ -76,7 +76,7 @@ export class PolicyEngine {
     try {
       const remote = await dcListRegulatoryPolicies();
       if (remote.length > 0) {
-        this.policies = remote.map((p: unknown) => ({
+        this.policies = remote.map((p: any) => ({
           id: p.id,
           standard: p.standard,
           code: p.code,
@@ -85,7 +85,7 @@ export class PolicyEngine {
           rules: JSON.parse(p.rulesJson)
         }));
       }
-    } catch (e) {
+    } catch (e: any) {
       console.warn('PolicyEngine: Failed to sync from DB, using fallbacks.', e);
     }
   }
@@ -116,14 +116,14 @@ export class PolicyEngine {
 
       switch (rule.type) {
         case 'UNIT_CHECK':
-          if (data[rule.targetField] !== rule.expectedValue) {
-            violations.push(`單位錯誤：預期為 ${rule.expectedValue}，但收到 ${data[rule.targetField]}`);
+          if ((data as any)[rule.targetField] !== rule.expectedValue) {
+            violations.push(`單位錯誤：預期為 ${rule.expectedValue}，但收到 ${(data as any)[rule.targetField]}`);
             rulePassed = false;
           }
           break;
 
         case 'RANGE_CHECK':
-          const val = Number(data[rule.targetField]);
+          const val = Number((data as any)[rule.targetField]);
           if (rule.minValue !== undefined && val < rule.minValue) {
             violations.push(`數值過低：${val} 低於最低閾值 ${rule.minValue}`);
             rulePassed = false;
@@ -135,7 +135,7 @@ export class PolicyEngine {
           break;
 
         case 'SOURCE_REQUIRED':
-          if (!data[rule.targetField] || !data[rule.targetField].startsWith('/')) {
+          if (!(data as any)[rule.targetField] || !(data as any)[rule.targetField].startsWith('/')) {
             violations.push(`缺少合法溯源：${rule.targetField} 必須包含有效的系統路徑`);
             rulePassed = false;
           }
@@ -143,8 +143,8 @@ export class PolicyEngine {
 
         case 'VARIANCE_LIMIT':
           if (history.length > 0 && rule.varianceThreshold) {
-            const lastVal = Number(history[0][rule.targetField]);
-            const currentVal = Number(data[rule.targetField]);
+            const lastVal = Number((history[0] as any)[rule.targetField]);
+            const currentVal = Number((data as any)[rule.targetField]);
             const variance = Math.abs(currentVal - lastVal) / (lastVal || 1);
             if (variance > rule.varianceThreshold) {
               violations.push(`異動幅度過大：本次數值偏離前次記錄 ${Math.round(variance * 100)}%，超過門檻 ${rule.varianceThreshold * 100}%`);

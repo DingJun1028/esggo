@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         executeSwarmTask(task.id).catch(console.error);
 
         return NextResponse.json({ success: true, taskId: task.id });
-    } catch (error: unknown) {
+    } catch (error: any) {
         console.error('[Trigger API] 錯誤發生震盪:', error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }

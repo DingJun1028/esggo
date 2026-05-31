@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       timestamp: Date.now(),
       hash: result.hash_lock,
     } as any);
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json(
       {
         id: Date.now().toString(),

@@ -25,7 +25,7 @@ export default function MemoryDashboard() {
       setMemories(data.data || []);
       setLoading(false);
       setError(null);
-    } catch (error: unknown) {
+    } catch (error: any) {
       setLoading(false);
       setError(error.message);
     }
@@ -77,7 +77,7 @@ export default function MemoryDashboard() {
 
         {memories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {memories.map(mem => (
+            {memories.map((mem: any) => (
               <div key={mem.id} className="bg-gray-50 p-4 rounded shadow">
                 <h3 className="text-xl font-medium">{mem.task}</h3>
                 <p className="text-sm text-gray-600">{mem.timestamp}</p>

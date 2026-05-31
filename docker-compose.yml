@@ -1,11 +1,23 @@
-version: "3.9"
+version: "3.8"
+
 services:
-  app:
+  esggo-app:
     build: .
+    container_name: esggo-app
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
-      - NODE_ENV=production
+      # Override or confirm these values in your .env file
+      - NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL=http://127.0.0.1:8642
+      - SWAP_DEFI_API_KEY=${SWAP_DEFI_API_KEY}
+      - SWAP_DEFI_TOKEN=${SWAP_DEFI_TOKEN}
+      - SWAP_DEFI_ENDPOINT=${SWAP_DEFI_ENDPOINT}
     restart: unless-stopped
-    # If you have a .env file, uncomment the next line
-    # env_file: .env
+    # Health check to ensure the app is responsive
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

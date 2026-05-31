@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       secretId: data,
       error: error?.message || null,
     });
-  } catch (e: unknown) {
+  } catch (e: any) {
     results.steps.push({ step: 1, name: 'create_evidence_seal', success: false, error: e.message });
   }
 
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
       roundTripMatch: matches,
       error: error?.message || null,
     });
-  } catch (e: unknown) {
+  } catch (e: any) {
     results.steps.push({ step: 2, name: 'get_decrypted_seal', success: false, error: e.message });
   }
 

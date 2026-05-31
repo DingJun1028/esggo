@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       message: 'Global Healing executed.',
       data: result,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('[OmniAvatar API] Healing failed:', error);
     return NextResponse.json(
       {

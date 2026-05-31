@@ -28,7 +28,7 @@ export default function VaultPage() {
         }
 
         if (data) {
-          const records = data.map((item: unknown) => ({
+          const records = data.map((item: any) => ({
             id: item.id,
             uuid: item.id,
             name: item.file_name || 'Unknown Source',
@@ -44,7 +44,7 @@ export default function VaultPage() {
             setSelectedRecord(records[0].id);
           }
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Failed to fetch records', err);
       } finally {
         setLoading(false);
@@ -68,15 +68,15 @@ export default function VaultPage() {
       const data = await res.json();
       if (data.success) {
         // Update the local state
-        setVaultRecords(prev => prev.map(r => 
-          r.id === recordId 
-            ? { ...r, hash: data.hashLock, sealed: true, verified: true } 
+        setVaultRecords(prev => prev.map((r: any) => 
+          (r as any).id === recordId 
+            ? { ...r as any, hash: data.hashLock, sealed: true, verified: true } 
             : r
         ));
       } else {
         console.error('Seal failed:', data.error);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Seal request error:', err);
     } finally {
       setSealingId(null);
@@ -131,7 +131,7 @@ export default function VaultPage() {
             </div>
 
             <div className="space-y-3">
-              {vaultRecords.map((record) => (
+              {vaultRecords.map((record: any) => (
                 <div 
                   key={record.id}
                   onClick={() => setSelectedRecord(record.id)}
@@ -174,7 +174,7 @@ export default function VaultPage() {
             {selectedRecord ? (
               <>
                 <UniversalCard variant="glow" title="Record Hash Lock">
-                  {vaultRecords.filter(r => r.id === selectedRecord).map(record => (
+                  {vaultRecords.filter((r: any) => r.id === selectedRecord).map((record: any) => (
                     <div key={record.id} className="space-y-6">
                       
                       {/* Seal Status */}

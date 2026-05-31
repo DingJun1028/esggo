@@ -103,6 +103,15 @@ npx omni agent scribe ghg "溫室氣體排放" "GRI 305" --depth 3
 ```
 
 ---
+
+## 📚 重要資源 (Key Resources)
+
+| 資源 | 說明 |
+|------|------|
+| [Swap-DeFi-TEST-UMES-ONLINE 使用者指南](docs/SwapDeFi-USER-GUIDE.md) | 交易所整合操作手冊 |
+| [OmniAgent 任務中心](app/tasks) | 跨部門 ESG 任務看板 |
+
+---
 <div align="center">
   <b>© 2026 ESGGO 善向永續 系統 | 萬能心核系統</b><br>
   <i>Powered by OmniAgent & JunAiKey Sovereign Will</i><br>
