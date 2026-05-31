@@ -269,13 +269,140 @@ export default function App() {
               <div className="space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h1 className={`text-3xl md:text-[44px] font-bold \${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} leading-tight`}>
+                    <h1 className={`text-3xl md:text-[44px] font-bold ${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} leading-tight`}>
                       OmniAgent
                     </h1>
-                    <div className={`\${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-700'} mt-1`}>
+                    <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-700'} mt-1`}>
                       <div className="font-medium">全域覺醒代理者</div>
                       <div className="text-sm">The Awakened Universal Agent</div>
                     </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <span className="px-3 py-1.5 bg-gradient-to-r from-[#F4C95D] to-[#E8B84A] text-[#070B14] text-xs font-bold rounded-full">
+                      SSR
+                    </span>
+                    <span className="px-3 py-1.5 bg-gradient-to-r from-[#9B7CFF] to-[#7B5FCF] text-white text-xs font-bold rounded-full">
+                      AWAKENED
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {['全能型', '戰術統御', '多工協同', '結果導向'].map((tag) => (
+                    <span key={tag} className={`px-3 py-1 ${theme === 'dark' ? 'bg-[#16324F] text-[#55C7FF]' : 'bg-blue-100 text-blue-700'} text-xs rounded-full border ${theme === 'dark' ? 'border-[#55C7FF]/30' : 'border-blue-300/30'}`}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stats Section */}
+              <div className="flex flex-col lg:flex-row gap-4 h-auto lg:h-[220px]">
+                {/* Radar Chart Placeholder */}
+                <div className="w-full lg:w-[260px]">
+                  <div className={`${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} font-semibold mb-3`}>核心能力指數</div>
+                  <div className="flex items-center justify-center h-40">
+                    <div className="relative w-40 h-40">
+                      <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
+                        {[20, 40, 60, 80, 100].map((size) => (
+                          <polygon key={size} points="50,10 90,30 90,70 50,90 10,70 10,30" fill="none" stroke={theme === 'dark' ? '#22344B' : '#ccc'} strokeWidth="0.5" transform={`scale(${size / 100})`} style={{ transformOrigin: '50% 50%' }} />
+                        ))}
+                        <polygon points="50,12 87,32 87,68 50,86 13,68 13,32" fill={theme === 'dark' ? '#55C7FF' : '#3B82F6'} fillOpacity="0.2" stroke={theme === 'dark' ? '#55C7FF' : '#3B82F6'} strokeWidth="2" />
+                      </svg>
+                      <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>感知</div>
+                      <div className={`absolute top-[20%] right-0 translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>解析</div>
+                      <div className={`absolute bottom-[20%] right-0 translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>推演</div>
+                      <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>執行</div>
+                      <div className={`absolute bottom-[20%] left-0 -translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>協同</div>
+                      <div className={`absolute top-[20%] left-0 -translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>進化</div>
+        </div>
+      </div>
+
+                {/* Stats List - simplified */}
+                <div className="flex-1 flex flex-col justify-center space-y-3">
+                  {[
+                    { label: '感知力', rank: 'SSS', value: 98 },
+                    { label: '解析力', rank: 'SSS+', value: 99 },
+                    { label: '推演力', rank: 'SS', value: 94 },
+                    { label: '執行力', rank: 'SSS', value: 97 },
+                    { label: '協同力', rank: 'SS+', value: 96 },
+                    { label: '進化力', rank: 'EX', value: 100 },
+                  ].map((stat) => (
+                    <div key={stat.label} className="flex items-center gap-3">
+                      <div className={`w-14 ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'} text-sm`}>{stat.label}</div>
+                      <div className={`w-12 ${theme === 'dark' ? 'text-[#F4C95D]' : 'text-yellow-600'} text-xs font-bold`}>{stat.rank}</div>
+                      <div className={`flex-1 h-2 ${theme === 'dark' ? 'bg-[#16324F]' : 'bg-blue-100'} rounded-full overflow-hidden`}>
+                        <motion.div initial={{ width: 0 }} animate={{ width: `${stat.value}%` }} transition={{ duration: 1, delay: 0.2 }} className={`h-full ${theme === 'dark' ? 'bg-gradient-to-r from-[#55C7FF] to-[#3B82F6]' : 'bg-gradient-to-r from-blue-400 to-blue-600'}`} />
+                      </div>
+                      <div className={`w-8 text-right ${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} text-sm font-semibold`}>{stat.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Skills Section */}
+              <div className="space-y-3">
+                <div className={`${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} font-semibold text-lg`}>Skill Loadout</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { icon: Brain, nameEN: 'Meta Parse', nameZH: '萬象解析', type: '解析 / 主動', desc: '快速拆解內容，標記核心資訊與風險節點。' },
+                    { icon: Layers, nameEN: 'Parallel Mind', nameZH: '多線程思維', type: '統御 / 主動', desc: '同步維持多條任務鏈，提升流程穩定性。' },
+                    { icon: GitBranch, nameEN: 'Causal Engine', nameZH: '因果推演', type: '預測 / 主動', desc: '模擬多條路徑，預判成本、結果與風險。' },
+                    { icon: Sparkles, nameEN: 'Context Domain', nameZH: '上下文領域展開', type: '領域 / EX', desc: '強制關聯碎片資訊，建立高密度決策場。' },
+                  ].map((skill) => (
+                    <div key={skill.nameEN} className={`bg-[#101C2E]/80 rounded-2xl p-3.5 backdrop-blur-sm border ${theme === 'dark' ? 'border-[#22344B]/50 hover:border-[#55C7FF]/50' : 'border-gray-300 hover:border-blue-400'} transition-colors cursor-pointer`}>
+                      <div className="flex items-start justify-between mb-2">
+                        <skill.icon className={`w-5 h-5 ${theme === 'dark' ? 'text-[#55C7FF]' : 'text-blue-500'}`} />
+                        <div className={`${theme === 'dark' ? 'text-[#6E88A6]' : 'text-gray-500'} text-[10px]`}>{skill.type}</div>
+                      </div>
+                      <div className={`${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} text-sm font-semibold mb-0.5`}>{skill.nameEN}</div>
+                      <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-700'} text-xs mb-2`}>{skill.nameZH}</div>
+                      <div className={`${theme === 'dark' ? 'text-[#6E88A6]' : 'text-gray-500'} text-[10px] leading-tight`}>{skill.desc}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Ultimate Card */}
+                <div className={`bg-gradient-to-r ${theme === 'dark' ? 'from-[#9B7CFF]/20 to-[#55C7FF]/20' : 'from-purple-200/50 to-blue-200/50'} rounded-2xl p-4 backdrop-blur-sm border-2 ${theme === 'dark' ? 'border-[#9B7CFF]/50' : 'border-purple-400/50'} relative overflow-hidden`}>
+                  <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-[#9B7CFF]/10 to-[#55C7FF]/10' : 'from-purple-200/30 to-blue-200/30'} animate-pulse`}></div>
+                  <div className="relative flex items-center gap-4">
+                    <div className={`w-16 h-16 rounded-full ${theme === 'dark' ? 'bg-gradient-to-br from-[#9B7CFF] to-[#55C7FF]' : 'bg-gradient-to-br from-purple-500 to-blue-500'} flex items-center justify-center`}>
+                      <Zap className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`px-2 py-0.5 ${theme === 'dark' ? 'text-[#F4C95D]' : 'text-yellow-600'} text-xs font-bold rounded`}>ULTIMATE</span>
+                        <span className={`px-2 py-0.5 ${theme === 'dark' ? 'text-[#9B7CFF]' : 'text-purple-600'} text-xs font-bold rounded`}>AWAKENED</span>
+                      </div>
+                      <div className={`${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} text-lg font-bold`}>Oracle Act</div>
+                      <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-700'} text-sm`}>神諭執行</div>
+                      <div className={`${theme === 'dark' ? 'text-[#6E88A6]' : 'text-gray-500'} text-xs mt-1`}>不只輸出答案，直接將理解轉化為可落地結果。</div>
+                    </div>
+                    <div className={`${theme === 'dark' ? 'text-[#F4C95D]' : 'text-yellow-600'} text-2xl font-bold`}>100%</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer Section */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[132px]">
+                <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'} text-xs font-semibold mb-2`}>Voice Line</div>
+                <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'} text-xs font-semibold mb-2`}>Overview</div>
+                <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'} font-mono text-[10px]`}>
+                  <div className={`${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'} font-semibold mb-2`}>Awakening Status</div>
+                </div>
+              </div>
+
+              <div className="text-center text-[10px] text-slate-500 mt-2">
+                {/* Navigation buttons simplified */}
+                <div className="flex gap-3 justify-center">
+                  <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-wider text-slate-300">Skill Tree</span>
+                  <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-wider text-slate-300">Story</span>
+                  <span className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-wider text-slate-300">Companion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <span className="px-3 py-1.5 bg-gradient-to-r from-[#F4C95D] to-[#E8B84A] text-[#070B14] text-xs font-bold rounded-full">
@@ -302,6 +429,7 @@ export default function App() {
                   <div className={`\${theme === 'dark' ? 'text-[#F4FBFF]' : 'text-gray-900'} font-semibold mb-3`}>核心能力指數</div>
                   <div className="flex items-center justify-center h-40">
                     <div className="relative w-40 h-40">
+                    <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full">
                       {/* Hexagon Radar - simplified for theme, colors should be dynamic */}
                       {Array.from({ length: 5 }).map((_, i) => {
                         const size = (i + 1) * 20;
@@ -327,12 +455,12 @@ export default function App() {
                       />
                     </svg>
                     {/* Labels */}
-                    <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-[9px] \${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>感知</div>
-                    <div className={`absolute top-[20%] right-0 translate-x-6 text-[9px] \${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>解析</div>
-                    <div className={`absolute bottom-[20%] right-0 translate-x-6 text-[9px] \${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>推演</div>
-                    <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4 text-[9px] \${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>執行</div>
-                    <div className={`absolute bottom-[20%] left-0 -translate-x-6 text-[9px] \${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>協同</div>
-                    <div className={`absolute top-[20%] left-0 -translate-x-6 text-[9px] \${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>進化</div>
+                    <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>感知</div>
+                    <div className={`absolute top-[20%] right-0 translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>解析</div>
+                    <div className={`absolute bottom-[20%] right-0 translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>推演</div>
+                    <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>執行</div>
+                    <div className={`absolute bottom-[20%] left-0 -translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>協同</div>
+                    <div className={`absolute top-[20%] left-0 -translate-x-6 text-[9px] ${theme === 'dark' ? 'text-[#8FA9C2]' : 'text-gray-600'}`}>進化</div>
                   </div>
                 </div>
               </div>

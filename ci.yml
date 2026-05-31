@@ -74,6 +74,15 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+          
+      # 10. 上傳獨立的 API 錯誤日誌 (若測試失敗且有產生該日誌)
+      - name: Upload Failed API Logs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: failed-api-logs
+          path: failed-apis.log
+          retention-days: 7
 
   deploy:
     name: Deploy to Vercel

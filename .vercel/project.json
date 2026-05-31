@@ -1,16 +1,1 @@
-{
-  "projectId": "prj_33ezqfeBV8xdVI8jYSjT7v6gn4nF",
-  "orgId": "team_ftbNvUrnTqZ13QWbUwNaIr7W",
-  "projectName": "esggo-original",
-  "settings": {
-    "createdAt": 1778684937298,
-    "framework": "nextjs",
-    "devCommand": null,
-    "installCommand": null,
-    "buildCommand": null,
-    "outputDirectory": null,
-    "rootDirectory": null,
-    "directoryListing": false,
-    "nodeVersion": "24.x"
-  }
-}
+{"projectId":"prj_chfQRaoQnAYiegt5PVjz9QfkwwBC","orgId":"team_ftbNvUrnTqZ13QWbUwNaIr7W","projectName":"esggo"}

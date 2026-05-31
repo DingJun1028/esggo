@@ -57,3 +57,5 @@ storybook-static
 
 # TypeScript build info
 tsconfig.tsbuildinfo
+
+.vercel
