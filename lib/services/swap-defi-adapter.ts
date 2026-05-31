@@ -55,8 +55,9 @@ export class SwapDeFiClient {
 
   async executeSwap(transaction: SwapDefiTransaction) {
     console.log(`[SwapDeFi] Executing swap ${transaction.id}...`);
+    // Validate first; let errors propagate to caller
+    this.validateTransactionParams(transaction);
     try {
-      this.validateTransactionParams(transaction);
       const response = await fetch(`${this.config.endpoint}/swap`, {
         method: 'POST',
         headers: {

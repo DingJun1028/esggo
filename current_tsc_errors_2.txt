@@ -1,0 +1,2 @@
+lib/omni-gateway.ts(23,110): error TS1005: ',' expected.
+lib/omni-gateway.ts(24,1): error TS1128: Declaration or statement expected.

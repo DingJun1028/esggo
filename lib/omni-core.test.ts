@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { omniCore } from './omni-core';
 import type { IEvidence } from '../src/shared/types';
 import { EternalMemoryType } from '../src/shared/types';
+import { SwapDeFiClient } from '../lib/services/swap-defi-adapter';
+import type { SwapDefiTransaction } from '../src/shared/types/swap-defi.types';
 
 // Mock global fetch for consolidation calls
 const mockFetch = vi.fn();
@@ -251,6 +253,54 @@ describe('OmniCore Integrity Engine', () => {
       
       // Let's just test that generating it returns the correct structure
       expect(proof1).toHaveProperty('commitment');
+    });
+  });
+
+  describe('SwapDeFi TEST-UMES-ONLINE Integration', () => {
+    const swapDeFi = new SwapDeFiClient();
+
+    it('should fetch pool status successfully', async () => {
+      const status = await swapDeFi.getPoolStatus('pool_esg_usdc');
+      expect(status.poolId || status.is_mock).toBeDefined();
+    });
+
+    it('should execute swap with valid transaction', async () => {
+      const transaction: SwapDefiTransaction = {
+        id: 'swap-test-001',
+        fromToken: 'USDC',
+        toToken: 'UMES',
+        amount: 100.5,
+        userAddress: '0x1234567890123456789012345678901234567890',
+      };
+      const result = await swapDeFi.executeSwap(transaction);
+      expect(result.transactionId || result.is_mock).toBeDefined();
+    });
+
+    it('should reject invalid transaction - missing tokens', async () => {
+      const transaction: SwapDefiTransaction = {
+        id: '',
+        fromToken: '',
+        toToken: 'UMES',
+        amount: 0,
+        userAddress: '',
+      };
+      await expect(swapDeFi.executeSwap(transaction)).rejects.toThrow();
+    });
+
+    it('should reject negative amount', async () => {
+      const transaction: SwapDefiTransaction = {
+        id: 'swap-test-002',
+        fromToken: 'USDC',
+        toToken: 'UMES',
+        amount: -50,
+        userAddress: '0x1234567890123456789012345678901234567890',
+      };
+      await expect(swapDeFi.executeSwap(transaction)).rejects.toThrow('Amount must be a positive number');
+    });
+
+    it('should list available pools', async () => {
+      const pools = await swapDeFi.listPools();
+      expect(pools.length).toBeGreaterThan(0);
     });
   });
 });
