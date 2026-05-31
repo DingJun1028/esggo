@@ -1,4 +1,4 @@
-ESG Knowledge Hub ESG Knowledge Hub
+# ESG Knowledge Hub ESG Knowledge Hub [Library]
 路徑： /library | 權限： ALL_USERS | 所屬旅程： I. 基礎知識與合規準備
 
 1. 模組定位 (Core Purpose)

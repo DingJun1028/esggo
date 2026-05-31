@@ -1,4 +1,4 @@
-證據金庫 Vault
+# 證據金庫 Vault [Vault]
 路徑： /vault | 權限： ALL_USERS | 所屬旅程： V. 確信審計與發佈
 
 1. 模組定位 (Core Purpose)

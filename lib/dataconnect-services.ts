@@ -16,6 +16,10 @@ import {
   listSwarmAgentTasks,
   upsertSwarmAgentTask,
   listRegulatoryPolicies,
+  UpsertEternalMemoryVariables,
+  UpsertSwarmAgentTaskVariables,
+  UpsertAuditRecordVariables,
+  UpsertCompanyProfileVariables,
 } from '@dataconnect/generated';
 
 /**
@@ -34,9 +38,9 @@ export const dcListEternalMemories = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertEternalMemory = async (input: unknown) => {
+export const dcUpsertEternalMemory = async (input: any) => {
   try {
-    const response = await upsertEternalMemory(dataConnect, input);
+    const response = await upsertEternalMemory(dataConnect, input as UpsertEternalMemoryVariables);
     return response.data.eternalMemory_upsert;
   } catch (error) {
     console.error('Data Connect: Failed to upsert eternal memory', error);
@@ -55,9 +59,9 @@ export const dcListSwarmAgentTasks = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertSwarmAgentTask = async (input: unknown) => {
+export const dcUpsertSwarmAgentTask = async (input: any) => {
   try {
-    const response = await upsertSwarmAgentTask(dataConnect, input);
+    const response = await upsertSwarmAgentTask(dataConnect, input as UpsertSwarmAgentTaskVariables);
     return response.data.swarmAgentTask_upsert;
   } catch (error) {
     console.error('Data Connect: Failed to upsert swarm agent task', error);
@@ -119,9 +123,9 @@ export const dcListAuditRecords = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertAuditRecord = async (input: unknown) => {
+export const dcUpsertAuditRecord = async (input: any) => {
   try {
-    const response = await upsertAuditRecord(dataConnect, input);
+    const response = await upsertAuditRecord(dataConnect, input as UpsertAuditRecordVariables);
     return response.data.auditRecord_upsert;
   } catch (error) {
     console.error('Data Connect: Failed to upsert audit record', error);
@@ -151,7 +155,7 @@ export const dcGetRoadmapMilestones = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertMilestone = async (input: unknown) => {
+export const dcUpsertMilestone = async (input: any) => {
   try {
     const response = await upsertRoadmapMilestone(dataConnect, {
       id: input.id,
@@ -181,9 +185,9 @@ export const dcGetCompanyProfile = async (id: string): Promise<any | null> => {
   }
 };
 
-export const dcUpsertCompanyProfile = async (input: unknown) => {
+export const dcUpsertCompanyProfile = async (input: any) => {
   try {
-    const response = await upsertCompanyProfile(dataConnect, input);
+    const response = await upsertCompanyProfile(dataConnect, input as UpsertCompanyProfileVariables);
     return response.data.companyProfile_upsert;
   } catch (error) {
     console.error('Data Connect: Failed to upsert company profile', error);

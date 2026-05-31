@@ -1,4 +1,4 @@
-AI 智能平台 AI Platform
+# AI 智能平台 AI Platform [AI Platform]
 路徑： /ai-platform | 權限： ADMIN, PM, DEVELOPER | 所屬旅程： VI. 系統配置與 AI 治理
 
 1. 模組定位 (Core Purpose)

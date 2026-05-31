@@ -1,4 +1,4 @@
-利害關係人 Stakeholders
+# 利害關係人 Stakeholders [Stakeholders]
 路徑： /stakeholders | 權限： PM, CSO | 所屬旅程： II. 策略盤點與分派
 
 1. 模組定位 (Core Purpose)

@@ -1,4 +1,4 @@
-ESG Intelligence Center (ESG Insights Dashboard)
+# ESG Intelligence Center (ESG Insights Dashboard) [Intelligence]
 路徑： /intelligence | 權限： ADMIN, CSO, PM | 所屬旅程： VI. 績效監控與決策
 
 1. 模組定位 (Core Purpose)

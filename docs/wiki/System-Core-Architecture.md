@@ -1,4 +1,4 @@
-系統核心架構 System Core Architecture
+# 系統核心架構 System Core Architecture [System Core Architecture]
 路徑： /system-overview | 權限： ADMIN, PM, DEV, CSO | 所屬旅程： I. 系統概覽與設定
 
 1. 模組定位 (Core Purpose)

@@ -26,8 +26,9 @@ export async function GET(request: NextRequest) {
 
     if (lifecycleError) throw lifecycleError;
 
-    const lifecycleStats = (lifecycleData as unknown[])?.reduce((acc, item: unknown) => {
-      acc[item.lifecycle_stage] = (acc[item.lifecycle_stage] || 0) + 1;
+    const lifecycleStats = (lifecycleData as any[])?.reduce((acc: Record<string, number>, item: any) => {
+      const stage = item.lifecycle_stage || 'unknown';
+      acc[stage] = (acc[stage] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
@@ -37,8 +38,9 @@ export async function GET(request: NextRequest) {
 
     if (sourceError) throw sourceError;
 
-    const sourceStats = (sourceData as unknown[])?.reduce((acc, item: unknown) => {
-      acc[item.source_origin] = (acc[item.source_origin] || 0) + 1;
+    const sourceStats = (sourceData as any[])?.reduce((acc: Record<string, number>, item: any) => {
+      const origin = item.source_origin || 'unknown';
+      acc[origin] = (acc[origin] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
