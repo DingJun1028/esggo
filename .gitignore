@@ -1,5 +1,6 @@
 # Firebase
 .firebase/
+.firebase/logs/*
 firebase-debug.log*
 .firebaserc
 dataconnect/.dataconnect/
@@ -53,3 +54,6 @@ node_modules
 
 *storybook.log
 storybook-static
+
+# TypeScript build info
+tsconfig.tsbuildinfo
