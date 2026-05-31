@@ -1,4 +1,4 @@
-5T 信任儀表板 (5T Trust Dashboard)
+# 5T 信任儀表板 (5T Trust Dashboard) [5T Protocol]
 路徑： /5t-dashboard | 權限： ADMIN, CSO, PM | 所屬旅程： V. 確信審計與發佈
 
 1. 模組定位 (Core Purpose)

@@ -6,6 +6,8 @@
 
 本 Wiki 的目錄結構嚴格遵循 **SaaS 使用者旅程 (User Journey)** 編排，點擊下方連結可檢閱各模組詳細規範。
 
+> 💡 **第一次使用？** 請先閱讀 [[新手完全指南]](USER-GUIDE.md) 🌟
+
 ---
 
 ## 📖 Wiki 目錄導覽
@@ -20,49 +22,86 @@
 *   [[系統核心架構]](docs/wiki/System-Core-Architecture.md)
 *   [[5T-誠信協議]](docs/wiki/5T-Protocol.md)
 
-### 旅程 I. 初始導入與配置 (Onboarding)
-*   [[Profile-企業管理]](docs/wiki/Profile.md) -> `/profile`
-*   [[API-Setup-整合中心]](docs/wiki/API-Setup.md) -> `/api-setup`
-*   [[Data-Sources-資料來源]](docs/wiki/Data-Sources.md) -> `/data-sources`
-*   [[Templates-專家模板]](docs/wiki/Templates.md) -> `/templates`
-*   [[Health-Check-企業健檢]](docs/wiki/Health-Check.md) -> `/health-check`
+### I. 初始導入與配置
+*   [[API Setup-整合中心]](docs/wiki/API-Setup.md) -> `/api-setup`
+*   [[Company Profile-企業管理]](docs/wiki/Profile.md) -> `/profile`
+*   [[Data Sources-數據來源]](docs/wiki/Data-Sources.md) -> `/data-sources`
 
-### 旅程 II. 策略盤點與分派 (Strategy & Task)
-*   [[Materiality-重大性矩陣]](docs/wiki/Materiality.md) -> `/materiality`
-*   [[Roadmap-淨零路徑]](docs/wiki/Roadmap.md) -> `/roadmap`
-*   [[Tasks-任務中心]](docs/wiki/Tasks.md) -> `/tasks`
-*   [[Document-Checklist-文件清單]](docs/wiki/Document-Checklist.md) -> `/document-checklist`
+### I. 基礎知識與合規準備
+*   [[Library-ESG Knowledge Hub ESG Knowledge Hub]](docs/wiki/Library.md) -> `/library`
 
-### 旅程 III. 數據採集與填報 (Data Operations)
-*   [[Environmental-環境指揮]](docs/wiki/Environmental.md) -> `/environmental`
-*   [[Social-社會影響]](docs/wiki/Social.md) -> `/social`
-*   [[Governance-公司治理]](docs/wiki/Governance.md) -> `/governance`
+### I. 學習與能力建構
+*   [[Academy-ESG Academy ESG Academy]](docs/wiki/Academy.md) -> `/academy`
 
-### 旅程 IV. AI 賦能與撰寫 (AI Copilot)
-*   [[Editor-SustainWrite編輯器]](docs/wiki/SustainWrite.md) -> `/editor`
-*   [[Advisory-專家諮詢]](docs/wiki/Advisory.md) -> `/advisory`
-*   [[Digital-Twin-數位分身]](docs/wiki/Digital-Twin.md) -> `/digital-twin`
-*   [[Intelligence-商情中心]](docs/wiki/Intelligence.md) -> `/intelligence`
-*   [[Compliance-Check-合規檢查]](docs/wiki/Compliance-Check.md) -> `/compliance-check`
+### I. 平台總覽與決策
+*   [[Sovereign Governance Dashboard-主權治理控制台]](docs/wiki/Dashboard.md) -> `/`
 
-### 旅程 V. 確信審計與發佈 (Audit & Publish)
-*   [[Dashboard-控制台]](docs/wiki/Dashboard.md) -> `/dashboard`
-*   [[Audit-Log-審計日誌]](docs/wiki/Audit-Log.md) -> `/audit-log`
-*   [[Vault-證據金庫]](docs/wiki/Vault.md) -> `/vault`
-*   [[Audit-Verify-VerifyLink]](docs/wiki/Audit-Verify.md) -> `/audit-verify`
-*   [[Publish-報告發佈]](docs/wiki/Publish.md) -> `/publish`
+### I. 知識探索與學習
+*   [[Reading Room-閱讀室 Reading Room]](docs/wiki/Reading-Room.md) -> `/reading-room`
 
-### 旅程 VI. 知識沉澱與加值 (Grow & Upgrade)
-*   [[Library-永續智庫]](docs/wiki/Library.md) -> `/library`
-*   [[Reading-Room-永續閱覽室]](docs/wiki/Reading-Room.md) -> `/reading-room`
-*   [[Finance-永續財務]](docs/wiki/Finance.md) -> `/finance`
-*   [[Academy-永續學院]](docs/wiki/Academy.md) -> `/academy`
-*   [[Advisors-顧問專區]](docs/wiki/Advisors.md) -> `/advisors`
-*   [[Agents-代理專區]](docs/wiki/Agents.md) -> `/agents`
+### II. 策略盤點與分派
+*   [[Advisory-ESG 策略顧問 (Advisory) ESG Strategy Advisory]](docs/wiki/Advisory.md) -> `/advisory`
+*   [[Document Checklist-文件清單 Document Checklist]](docs/wiki/Document-Checklist.md) -> `/document-checklist`
+*   [[Materiality-重大性矩陣 Materiality]](docs/wiki/Materiality.md) -> `/materiality`
+*   [[Stakeholders-利害關係人 Stakeholders]](docs/wiki/Stakeholders.md) -> `/stakeholders`
+*   [[Templates-專家模板 Expert Templates]](docs/wiki/Templates.md) -> `/templates`
 
-### 隱藏專區：超級管理員與 IT 後台 (Admin Console)
-*   [[AI-Platform-AI整合平台]](docs/wiki/AI-Platform.md) -> `/ai-platform`
-*   [[System-Test-系統測試]](docs/wiki/System-Test.md) -> `/system-test`
+### III. 供應鏈治理與風險
+*   [[Supply Chain-**供應鏈透明 Supply Chain Transparency**]](docs/wiki/Supply-Chain.md) -> `/supply-chain`
+
+### III. 執行與協作
+*   [[Tasks-任務中心 Tasks]](docs/wiki/Tasks.md) -> `/tasks`
+
+### III. 數據採集與分析
+*   [[Health Check-ESG 健檢儀表板 ESG Health Check Dashboard]](docs/wiki/Health-Check.md) -> `/health-check`
+
+### III. 數據採集與管理
+*   [[Social-社會影響 Social]](docs/wiki/Social.md) -> `/social`
+
+### III. 數據採集與績效監控
+*   [[Environmental Data Management-Environmental 環境數據管理]](docs/wiki/Environmental.md) -> `/environmental`
+
+### III. 目標設定與管理
+*   [[Roadmap-淨零路徑 Roadmap]](docs/wiki/Roadmap.md) -> `/roadmap`
+
+### IV. AI 賦能與撰寫
+*   [[Agents-ESG AI Agents ESG AI Agents]](docs/wiki/Agents.md) -> `/agents`
+*   [[SustainWrite Editor-SustainWrite 編輯器]](docs/wiki/SustainWrite.md) -> `/editor`
+
+### V. 確信審計與發佈
+*   [[Audit Verify-VerifyLinkT / Audit Verification]](docs/wiki/Audit-Verify.md) -> `/audit-verify`
+*   [[Publish-SustainPublish 報告發佈中心 SustainPublish]](docs/wiki/Publish.md) -> `/publish`
+*   [[Vault-證據金庫 Vault]](docs/wiki/Vault.md) -> `/vault`
+
+### VI. 外部協作與服務
+*   [[Consulting-ESG 顧問服務模組 ESG Consulting Hub]](docs/wiki/Consulting.md) -> `/consulting`
+
+### VI. 系統管理與協作
+*   [[Advisors-外部顧問管理 External Advisors Management]](docs/wiki/Advisors.md) -> `/advisors`
+
+### VI. 系統管理與合規
+*   [[Audit Log-Audit Log Audit Log]](docs/wiki/Audit-Log.md) -> `/audit-log`
+
+### VI. 系統維運與品質保證
+*   [[System Test-系統測試 System Test]](docs/wiki/System-Test.md) -> `/system-test`
+
+### VI. 系統配置與 AI 治理
+*   [[AI Platform-AI 智能平台 AI Platform]](docs/wiki/AI-Platform.md) -> `/ai-platform`
+
+### VI. 績效監控與優化
+*   [[Digital Twin-Digital Twin Digital Twin]](docs/wiki/Digital-Twin.md) -> `/digital-twin`
+
+### VI. 績效監控與持續改進
+*   [[Governance-ESG 治理中心 ESG Governance Hub]](docs/wiki/Governance.md) -> `/governance`
+
+### VI. 績效監控與決策
+*   [[Intelligence-ESG Intelligence Center (ESG Insights Dashboard)]](docs/wiki/Intelligence.md) -> `/intelligence`
+
+### VI. 績效評估與報告
+*   [[Finance-ESG 財務績效分析 ESG Financial Performance Analysis]](docs/wiki/Finance.md) -> `/finance`
+
+### `IV. AI 賦能與撰寫`
+*   [[Compliance Check-合規檢查]](docs/wiki/Compliance-Check.md) -> `/compliance-check`
 
 ---
 © 2026 ESGGO 善向永續 系統 | **Version:** v8.5.1 | **Last Updated:** 2026-05-31

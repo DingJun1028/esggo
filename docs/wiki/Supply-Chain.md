@@ -1,4 +1,4 @@
-**供應鏈透明 Supply Chain Transparency**
+# **供應鏈透明 Supply Chain Transparency** [Supply Chain]
 路徑： /supply-chain | 權限： Procurement Manager, Sustainability Manager, CSO | 所屬旅程： III. 供應鏈治理與風險
 
 1. 模組定位 (Core Purpose)

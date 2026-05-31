@@ -1,4 +1,4 @@
-ESG 財務績效分析 ESG Financial Performance Analysis
+# ESG 財務績效分析 ESG Financial Performance Analysis [Finance]
 路徑： /finance | 權限： CFO, Finance_Manager, CSO | 所屬旅程： VI. 績效評估與報告
 
 1. 模組定位 (Core Purpose)

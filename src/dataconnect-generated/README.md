@@ -27,6 +27,7 @@ This README will guide you through the process of using the generated JavaScript
   - [*ListRegulatoryPolicies*](#listregulatorypolicies)
   - [*GetMyCompanyProfile*](#getmycompanyprofile)
 - [**Mutations**](#mutations)
+  - [*CreateDemoData*](#createdemodata)
   - [*UpsertTask*](#upserttask)
   - [*UpsertAuditRecord*](#upsertauditrecord)
   - [*UpsertRoadmapMilestone*](#upsertroadmapmilestone)
@@ -37,7 +38,6 @@ This README will guide you through the process of using the generated JavaScript
   - [*UpsertEternalMemory*](#upserteternalmemory)
   - [*UpsertScrapedArticle*](#upsertscrapedarticle)
   - [*UpsertSwarmAgentTask*](#upsertswarmagenttask)
-  - [*CreateDemoData*](#createdemodata)
 
 # Accessing the connector
 A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `omnicore`. You can find more information about connectors in the [Data Connect documentation](https://firebase.google.com/docs/data-connect#how-does).
@@ -1849,6 +1849,102 @@ The following is true for both the action shortcut function and the `MutationRef
 
 Below are examples of how to use the `omnicore` connector's generated functions to execute each mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#using-mutations).
 
+## CreateDemoData
+You can execute the `CreateDemoData` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+createDemoData(): MutationPromise<CreateDemoDataData, undefined>;
+
+interface CreateDemoDataRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (): MutationRef<CreateDemoDataData, undefined>;
+}
+export const createDemoDataRef: CreateDemoDataRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+createDemoData(dc: DataConnect): MutationPromise<CreateDemoDataData, undefined>;
+
+interface CreateDemoDataRef {
+  ...
+  (dc: DataConnect): MutationRef<CreateDemoDataData, undefined>;
+}
+export const createDemoDataRef: CreateDemoDataRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createDemoDataRef:
+```typescript
+const name = createDemoDataRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `CreateDemoData` mutation has no variables.
+### Return Type
+Recall that executing the `CreateDemoData` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `CreateDemoDataData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface CreateDemoDataData {
+  user_insertMany: User_Key[];
+  comment_insertMany: Comment_Key[];
+}
+```
+### Using `CreateDemoData`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, createDemoData } from '@dataconnect/generated';
+
+
+// Call the `createDemoData()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await createDemoData();
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await createDemoData(dataConnect);
+
+console.log(data.user_insertMany);
+console.log(data.comment_insertMany);
+
+// Or, you can use the `Promise` API.
+createDemoData().then((response) => {
+  const data = response.data;
+  console.log(data.user_insertMany);
+  console.log(data.comment_insertMany);
+});
+```
+
+### Using `CreateDemoData`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, createDemoDataRef } from '@dataconnect/generated';
+
+
+// Call the `createDemoDataRef()` function to get a reference to the mutation.
+const ref = createDemoDataRef();
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = createDemoDataRef(dataConnect);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.user_insertMany);
+console.log(data.comment_insertMany);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.user_insertMany);
+  console.log(data.comment_insertMany);
+});
+```
+
 ## UpsertTask
 You can execute the `UpsertTask` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
 ```typescript
@@ -3185,102 +3281,6 @@ console.log(data.swarmAgentTask_upsert);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.swarmAgentTask_upsert);
-});
-```
-
-## CreateDemoData
-You can execute the `CreateDemoData` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
-```typescript
-createDemoData(): MutationPromise<CreateDemoDataData, undefined>;
-
-interface CreateDemoDataRef {
-  ...
-  /* Allow users to create refs without passing in DataConnect */
-  (): MutationRef<CreateDemoDataData, undefined>;
-}
-export const createDemoDataRef: CreateDemoDataRef;
-```
-You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
-```typescript
-createDemoData(dc: DataConnect): MutationPromise<CreateDemoDataData, undefined>;
-
-interface CreateDemoDataRef {
-  ...
-  (dc: DataConnect): MutationRef<CreateDemoDataData, undefined>;
-}
-export const createDemoDataRef: CreateDemoDataRef;
-```
-
-If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createDemoDataRef:
-```typescript
-const name = createDemoDataRef.operationName;
-console.log(name);
-```
-
-### Variables
-The `CreateDemoData` mutation has no variables.
-### Return Type
-Recall that executing the `CreateDemoData` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
-
-The `data` property is an object of type `CreateDemoDataData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
-```typescript
-export interface CreateDemoDataData {
-  user_insertMany: User_Key[];
-  comment_insertMany: Comment_Key[];
-}
-```
-### Using `CreateDemoData`'s action shortcut function
-
-```typescript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, createDemoData } from '@dataconnect/generated';
-
-
-// Call the `createDemoData()` function to execute the mutation.
-// You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await createDemoData();
-
-// You can also pass in a `DataConnect` instance to the action shortcut function.
-const dataConnect = getDataConnect(connectorConfig);
-const { data } = await createDemoData(dataConnect);
-
-console.log(data.user_insertMany);
-console.log(data.comment_insertMany);
-
-// Or, you can use the `Promise` API.
-createDemoData().then((response) => {
-  const data = response.data;
-  console.log(data.user_insertMany);
-  console.log(data.comment_insertMany);
-});
-```
-
-### Using `CreateDemoData`'s `MutationRef` function
-
-```typescript
-import { getDataConnect, executeMutation } from 'firebase/data-connect';
-import { connectorConfig, createDemoDataRef } from '@dataconnect/generated';
-
-
-// Call the `createDemoDataRef()` function to get a reference to the mutation.
-const ref = createDemoDataRef();
-
-// You can also pass in a `DataConnect` instance to the `MutationRef` function.
-const dataConnect = getDataConnect(connectorConfig);
-const ref = createDemoDataRef(dataConnect);
-
-// Call `executeMutation()` on the reference to execute the mutation.
-// You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await executeMutation(ref);
-
-console.log(data.user_insertMany);
-console.log(data.comment_insertMany);
-
-// Or, you can use the `Promise` API.
-executeMutation(ref).then((response) => {
-  const data = response.data;
-  console.log(data.user_insertMany);
-  console.log(data.comment_insertMany);
 });
 ```
 

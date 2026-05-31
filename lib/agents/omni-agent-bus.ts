@@ -255,7 +255,7 @@ export class OmniAgentBus {
                     console.log(`[OmniCore] ⚡ 執行代理技能: ${skill.name}`);
                     const res = await Promise.resolve(skill.handler({ task, ...context }));
                     results.push({ skillId: skill.id, result: res });
-                } catch (e: unknown) {
+                } catch (e: any) {
                     console.error(`[OmniCore] ⚠️ 代理技能 ${skill.name} 執行失敗: ${e.message}`);
                     results.push({ skillId: skill.id, error: e.message });
                 }
