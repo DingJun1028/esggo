@@ -12,10 +12,8 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useCreateDemoData, useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useUpsertAuditRecord, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile } from '@dataconnect/generated/react';
+import { useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useUpsertAuditRecord, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile, useUpsertCompanyProfile } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
-
-const { data, isPending, isSuccess, isError, error } = useCreateDemoData();
 
 const { data, isPending, isSuccess, isError, error } = useListAllTasks();
 
@@ -34,6 +32,8 @@ const { data, isPending, isSuccess, isError, error } = useListRoadmapMilestones(
 const { data, isPending, isSuccess, isError, error } = useUpsertRoadmapMilestone(upsertRoadmapMilestoneVars);
 
 const { data, isPending, isSuccess, isError, error } = useGetCompanyProfile(getCompanyProfileVars);
+
+const { data, isPending, isSuccess, isError, error } = useUpsertCompanyProfile(upsertCompanyProfileVars);
 
 ```
 
@@ -72,11 +72,8 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { createDemoData, listAllTasks, getTaskById, upsertTask, listAuditRecords, upsertAuditRecord, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile } from '@dataconnect/generated';
+import { listAllTasks, getTaskById, upsertTask, listAuditRecords, upsertAuditRecord, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile, upsertCompanyProfile } from '@dataconnect/generated';
 
-
-// Operation CreateDemoData: 
-const { data } = await CreateDemoData(dataConnect);
 
 // Operation ListAllTasks: 
 const { data } = await ListAllTasks(dataConnect);
@@ -104,6 +101,9 @@ const { data } = await UpsertRoadmapMilestone(dataConnect, upsertRoadmapMileston
 
 // Operation GetCompanyProfile:  For variables, look at type GetCompanyProfileVars in ../index.d.ts
 const { data } = await GetCompanyProfile(dataConnect, getCompanyProfileVars);
+
+// Operation UpsertCompanyProfile:  For variables, look at type UpsertCompanyProfileVars in ../index.d.ts
+const { data } = await UpsertCompanyProfile(dataConnect, upsertCompanyProfileVars);
 
 
 ```

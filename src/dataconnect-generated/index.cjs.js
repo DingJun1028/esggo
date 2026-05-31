@@ -13,20 +13,6 @@ const dataConnectSettings = {
 };
 exports.dataConnectSettings = dataConnectSettings;
 
-const createDemoDataRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateDemoData');
-}
-createDemoDataRef.operationName = 'CreateDemoData';
-exports.createDemoDataRef = createDemoDataRef;
-
-exports.createDemoData = function createDemoData(dc) {
-  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dc, undefined);
-  return executeMutation(createDemoDataRef(dcInstance, inputVars));
-}
-;
-
 const listAllTasksRef = (dc) => {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();
@@ -404,5 +390,19 @@ exports.getMyCompanyProfile = function getMyCompanyProfile(dcOrOptions, options)
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
   return executeQuery(getMyCompanyProfileRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
+}
+;
+
+const createDemoDataRef = (dc) => {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateDemoData');
+}
+createDemoDataRef.operationName = 'CreateDemoData';
+exports.createDemoDataRef = createDemoDataRef;
+
+exports.createDemoData = function createDemoData(dc) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dc, undefined);
+  return executeMutation(createDemoDataRef(dcInstance, inputVars));
 }
 ;
