@@ -37,3 +37,8 @@
 6. 品質達標與驗收紅線 (QA Red Lines)
 🚨 UI 跑版紅線： 當利害關係人群體名稱過長時，矩陣氣泡上的文字必須觸發 `text-overflow: ellipsis` 並在 Tooltip 中顯示完整名稱，絕對不可撐破氣泡或導致圖表佈局混亂。
 🚨 邏輯/體驗紅線： 當使用者嘗試刪除一個已與「重大性矩陣」或「永續報告」模組深度關聯的利害關係人群體時，系統必須彈出二次確認對話框，並明確提示刪除可能帶來的影響，而非直接執行刪除。
+
+7. 矩陣關聯 (Matrix Connection)
+上游數據： 來自企業溝通部門、投資人關係 (IR) 管道。
+下游影響： 直接提供加權數據給 `/materiality` 進行議題評估。
+依賴組件： StakeholderMatrixChart, SentimentBadge, InteractionLogCard.

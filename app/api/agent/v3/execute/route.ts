@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const sendStep = (status: AgentStatus, message: string, payload?: unknown) => {
+      const sendStep = (status: AgentStatus, message: string, payload?: any) => {
         const step: AgentStep = {
           id: uuidv4(),
           agentName: 'Aurora-Orchestrator',
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
 
       } catch (err: unknown) {
         console.error('[V3 Agent] Error:', err);
-        sendStep('ERROR', '系統調度異常', { error: err.message });
+        sendStep('ERROR', '系統調度異常', { error: (err as any).message });
       } finally {
         controller.enqueue(encoder.encode('data: [DONE]\n\n'));
         controller.close();

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     const contents = messages || [{ role: 'user', parts: [{ text: prompt }] }];
 
-    const requestBody: unknown = {
+    const requestBody: any = {
       contents,
       generationConfig: {
         temperature,
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error('AI Generate API Error:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
+      { error: (error as any).message || 'Internal server error' },
       { status: 500 }
     );
   }

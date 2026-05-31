@@ -1,0 +1,657 @@
+.next/types/app/api/aitable/route.ts(2,24): error TS2307: Cannot find module '../../../../../app/api/aitable/route.js' or its corresponding type declarations.
+.next/types/app/api/aitable/route.ts(5,29): error TS2307: Cannot find module '../../../../../app/api/aitable/route.js' or its corresponding type declarations.
+.next/types/app/api/blue/route.ts(2,24): error TS2307: Cannot find module '../../../../../app/api/blue/route.js' or its corresponding type declarations.
+.next/types/app/api/blue/route.ts(5,29): error TS2307: Cannot find module '../../../../../app/api/blue/route.js' or its corresponding type declarations.
+.next/types/app/api/omni-agent-api/stream/route.ts(12,13): error TS2344: Type 'OmitWithTag<typeof import("C:/Project/esggo/esggo/app/api/omni-agent-api/stream/route"), "POST" | "runtime" | "GET" | "config" | "HEAD" | "PATCH" | "DELETE" | "dynamic" | "OPTIONS" | "PUT" | ... 5 more ... | "maxDuration", "">' does not satisfy the constraint '{ [x: string]: never; }'.
+  Property 'pushBusEvent' is incompatible with index signature.
+    Type '(event: string, payload: Record<string, unknown>) => void' is not assignable to type 'never'.
+.next/types/validator.ts(984,39): error TS2307: Cannot find module '../../app/api/aitable/route.js' or its corresponding type declarations.
+.next/types/validator.ts(1020,39): error TS2307: Cannot find module '../../app/api/blue/route.js' or its corresponding type declarations.
+app/api/agent/hermes/route.ts(27,32): error TS2571: Object is of type 'unknown'.
+app/api/agent/route.ts(40,55): error TS18046: 'error' is of type 'unknown'.
+app/api/agent/tasks/[taskId]/execute/route.ts(36,11): error TS18046: 'e' is of type 'unknown'.
+app/api/agent/tasks/[taskId]/execute/route.ts(48,34): error TS2571: Object is of type 'unknown'.
+app/api/agent/v3/execute/route.ts(29,11): error TS2322: Type 'unknown' is not assignable to type 'Record<string, unknown> | undefined'.
+app/api/agent/v3/execute/route.ts(92,46): error TS18046: 'err' is of type 'unknown'.
+app/api/agent/vision/route.ts(39,30): error TS2571: Object is of type 'unknown'.
+app/api/agents/agentz0/route.ts(22,39): error TS18046: 'error' is of type 'unknown'.
+app/api/ai/generate/route.ts(38,7): error TS18046: 'requestBody' is of type 'unknown'.
+app/api/ai/generate/route.ts(66,16): error TS18046: 'error' is of type 'unknown'.
+app/api/ai/stream/route.ts(51,49): error TS18046: 'err' is of type 'unknown'.
+app/api/audit/route.ts(23,40): error TS18046: 'err' is of type 'unknown'.
+app/api/audit/route.ts(24,55): error TS18046: 'err' is of type 'unknown'.
+app/api/audit/route.ts(40,50): error TS18046: 'err' is of type 'unknown'.
+app/api/compliance/gap-analysis/route.ts(10,59): error TS18046: 'n' is of type 'unknown'.
+app/api/compliance/gap-analysis/route.ts(11,55): error TS18046: 'n' is of type 'unknown'.
+app/api/compliance/gap-analysis/route.ts(17,52): error TS18046: 'n' is of type 'unknown'.
+app/api/compliance/gap-analysis/route.ts(17,63): error TS18046: 'n' is of type 'unknown'.
+app/api/compliance/gap-analysis/route.ts(29,55): error TS18046: 'err' is of type 'unknown'.
+app/api/crypto/simulator/route.ts(26,9): error TS18046: 'options' is of type 'unknown'.
+app/api/crypto/simulator/route.ts(28,9): error TS18046: 'options' is of type 'unknown'.
+app/api/crypto/simulator/route.ts(31,56): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ l2Key?: Buffer | undefined; l3Salt?: string | undefined; } | undefined'.
+app/api/crypto/simulator/route.ts(43,43): error TS18046: 'error' is of type 'unknown'.
+app/api/dashboard/stats/route.ts(11,39): error TS18046: 'error' is of type 'unknown'.
+app/api/digital-twin/simulate/route.ts(115,55): error TS18046: 'error' is of type 'unknown'.
+app/api/environmental/insights/route.ts(58,16): error TS18046: 'error' is of type 'unknown'.
+app/api/governance/insights/route.ts(58,16): error TS18046: 'error' is of type 'unknown'.
+app/api/governance/resonance/route.ts(51,47): error TS18046: 'error' is of type 'unknown'.
+app/api/graphql/route.ts(30,3): error TS2322: Type 'unknown' is not assignable to type 'YogaSchemaDefinition<{}, {}> | undefined'.
+app/api/hermes/google/status/route.ts(43,57): error TS18046: 'err' is of type 'unknown'.
+app/api/internal/consolidate-memories/route.ts(15,164): error TS18046: 'm' is of type 'unknown'.
+app/api/internal/consolidate-memories/route.ts(17,28): error TS2571: Object is of type 'unknown'.
+app/api/matrix/route.ts(40,7): error TS18046: 'grid' is of type 'unknown'.
+app/api/matrix/route.ts(51,9): error TS18046: 'grid' is of type 'unknown'.
+app/api/matrix/route.ts(74,15): error TS18046: 'l' is of type 'unknown'.
+app/api/matrix/route.ts(75,38): error TS18046: 'l' is of type 'unknown'.
+app/api/matrix/route.ts(75,73): error TS18046: 'l' is of type 'unknown'.
+app/api/matrix/route.ts(75,97): error TS18046: 'l' is of type 'unknown'.
+app/api/memory/route.ts(26,39): error TS18046: 'error' is of type 'unknown'.
+app/api/memory/route.ts(35,39): error TS18046: 'error' is of type 'unknown'.
+app/api/metrics/[module]/route.ts(35,55): error TS18046: 'error' is of type 'unknown'.
+app/api/metrics/[module]/route.ts(52,55): error TS18046: 'error' is of type 'unknown'.
+app/api/oauth/consent/approve/route.ts(35,39): error TS18046: 'err' is of type 'unknown'.
+app/api/omni-agent-api/alchemy/route.ts(23,45): error TS18046: 'error' is of type 'unknown'.
+app/api/omni-agent-api/vision/route.ts(23,44): error TS18046: 'error' is of type 'unknown'.
+app/api/omni-avatar/heal/route.ts(37,16): error TS18046: 'error' is of type 'unknown'.
+app/api/omni-blue/route.ts(16,27): error TS18046: 'error' is of type 'unknown'.
+app/api/omni-blue/route.ts(38,27): error TS18046: 'error' is of type 'unknown'.
+app/api/omni-command/route.ts(16,39): error TS18046: 'error' is of type 'unknown'.
+app/api/omni-table/route.ts(81,26): error TS18046: 'err' is of type 'unknown'.
+app/api/omni-table/route.ts(81,66): error TS18046: 'err' is of type 'unknown'.
+app/api/omni-table/route.ts(150,26): error TS18046: 'err' is of type 'unknown'.
+app/api/omni-table/route.ts(150,66): error TS18046: 'err' is of type 'unknown'.
+app/api/omnicore/audit-pdf/route.ts(52,28): error TS18046: 'ai' is of type 'unknown'.
+app/api/omnicore/audit-pdf/route.ts(103,55): error TS18046: 'error' is of type 'unknown'.
+app/api/omnicore/lookup/route.ts(66,18): error TS18046: 'error' is of type 'unknown'.
+app/api/omnicore/scrape-esg-web/route.ts(50,28): error TS18046: 'ai' is of type 'unknown'.
+app/api/omnicore/scrape-esg-web/route.ts(101,55): error TS18046: 'error' is of type 'unknown'.
+app/api/omnicore/seal/route.ts(37,18): error TS18046: 'error' is of type 'unknown'.
+app/api/omnicore/verify/route.ts(38,18): error TS18046: 'error' is of type 'unknown'.
+app/api/proof/resend/route.ts(41,62): error TS18046: 'error' is of type 'unknown'.
+app/api/rag/feedback/route.ts(32,43): error TS18046: 'error' is of type 'unknown'.
+app/api/rag/query/route.ts(22,43): error TS18046: 'error' is of type 'unknown'.
+app/api/rag/search/route.ts(36,55): error TS18046: 'error' is of type 'unknown'.
+app/api/rag/upload/route.ts(40,55): error TS18046: 'error' is of type 'unknown'.
+app/api/scraper/route.ts(58,46): error TS2345: Argument of type '{}' is not assignable to parameter of type 'DataConnect'.
+  Type '{}' is missing the following properties from type 'DataConnect': app, dataConnectOptions, isEmulator, getSettings, and 2 more.
+app/api/scraper/route.ts(118,42): error TS2345: Argument of type '{}' is not assignable to parameter of type 'DataConnect'.
+app/api/social/insights/route.ts(60,16): error TS18046: 'error' is of type 'unknown'.
+app/api/swarm/trigger/route.ts(38,59): error TS18046: 'error' is of type 'unknown'.
+app/api/system/heal/route.ts(29,55): error TS18046: 'error' is of type 'unknown'.
+app/api/terminal/route.ts(105,83): error TS18046: 'err' is of type 'unknown'.
+app/api/test/route.ts(9,55): error TS18046: 'error' is of type 'unknown'.
+app/api/test/route.ts(9,77): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/list/route.ts(37,15): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(38,20): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(39,18): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(40,23): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(41,23): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(42,25): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(43,20): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/list/route.ts(57,45): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/omni/route.ts(30,55): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/read/route.ts(55,45): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/roundtrip-test/route.ts(49,88): error TS18046: 'e' is of type 'unknown'.
+app/api/vault/roundtrip-test/route.ts(67,86): error TS18046: 'e' is of type 'unknown'.
+app/api/vault/roundtrip-test/route.ts(70,57): error TS18046: 's' is of type 'unknown'.
+app/api/vault/route.ts(20,55): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/seal/route.ts(72,15): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{}'.
+app/api/vault/seal/route.ts(106,55): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/seal/route.ts(138,55): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/stats/route.ts(30,7): error TS18046: 'acc' is of type 'unknown'.
+app/api/vault/stats/route.ts(30,11): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/stats/route.ts(30,36): error TS18046: 'acc' is of type 'unknown'.
+app/api/vault/stats/route.ts(30,40): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/stats/route.ts(41,7): error TS18046: 'acc' is of type 'unknown'.
+app/api/vault/stats/route.ts(41,11): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/stats/route.ts(41,34): error TS18046: 'acc' is of type 'unknown'.
+app/api/vault/stats/route.ts(41,38): error TS18046: 'item' is of type 'unknown'.
+app/api/vault/stats/route.ts(64,45): error TS18046: 'error' is of type 'unknown'.
+app/api/vault/write/route.ts(55,45): error TS18046: 'error' is of type 'unknown'.
+app/api/webhooks/ncbdb/route.ts(48,16): error TS18046: 'error' is of type 'unknown'.
+app/api/zkp/store/route.ts(24,16): error TS18046: 'error' is of type 'unknown'.
+app/apollo-studio/page.tsx(241,41): error TS18046: 'e' is of type 'unknown'.
+app/AppShell.tsx(94,19): error TS2304: Cannot find name 'useMemo'.
+app/AppShell.tsx(116,25): error TS7006: Parameter 'item' implicitly has an 'any' type.
+app/AppShell.tsx(116,31): error TS7006: Parameter 'i' implicitly has an 'any' type.
+app/audit-log/page.tsx(76,30): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(78,35): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(82,72): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(84,30): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(84,50): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(90,36): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(91,33): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(93,28): error TS18046: 'record' is of type 'unknown'.
+app/audit-log/page.tsx(98,28): error TS18046: 'record' is of type 'unknown'.
+app/auth/login/page.tsx(97,16): error TS18046: 'err' is of type 'unknown'.
+app/best-practice/page.tsx(95,23): error TS18046: 'practice' is of type 'unknown'.
+app/best-practice/page.tsx(98,68): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, unknown>'.
+app/best-practice/page.tsx(101,14): error TS18046: 'practice' is of type 'unknown'.
+app/best-practice/page.tsx(188,78): error TS18046: 'rec' is of type 'unknown'.
+app/best-practice/page.tsx(189,88): error TS18046: 'rec' is of type 'unknown'.
+app/best-practice/page.tsx(191,72): error TS18046: 'rec' is of type 'unknown'.
+app/dashboard/metrics/page.tsx(38,9): error TS2698: Spread types may only be created from object types.
+app/dashboard/metrics/page.tsx(39,23): error TS18046: 'data' is of type 'unknown'.
+app/dashboard/metrics/page.tsx(40,30): error TS18046: 'data' is of type 'unknown'.
+app/dashboard/metrics/page.tsx(41,32): error TS18046: 'data' is of type 'unknown'.
+app/dashboard/metrics/page.tsx(69,11): error TS2322: Type '{}' is not assignable to type 'ReactNode'.
+app/dashboard/metrics/page.tsx(79,83): error TS2339: Property 'substring' does not exist on type '{}'.
+app/dashboard/metrics/page.tsx(99,11): error TS18046: 'm' is of type 'unknown'.
+app/dashboard/metrics/page.tsx(100,19): error TS18046: 'm' is of type 'unknown'.
+app/dashboard/metrics/page.tsx(101,20): error TS18046: 'm' is of type 'unknown'.
+app/dashboard/page.tsx(59,13): error TS18046: 'event' is of type 'unknown'.
+app/dashboard/page.tsx(61,44): error TS18046: 'event' is of type 'unknown'.
+app/dashboard/page.tsx(410,105): error TS18046: 'c' is of type 'unknown'.
+app/dashboard/page.tsx(410,124): error TS18046: 'c' is of type 'unknown'.
+app/data-connect/page.tsx(28,46): error TS18046: 'err' is of type 'unknown'.
+app/environmental/page.tsx(56,42): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(56,58): error TS2698: Spread types may only be created from object types.
+app/environmental/page.tsx(230,86): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(231,83): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(232,84): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(233,76): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(234,85): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(235,24): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(237,49): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(246,24): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(248,52): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(249,50): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(252,41): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(257,39): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(257,66): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(258,50): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(261,41): error TS18046: 'm' is of type 'unknown'.
+app/environmental/page.tsx(262,25): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(56,42): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(56,58): error TS2698: Spread types may only be created from object types.
+app/governance/page.tsx(230,86): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(231,83): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(232,84): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(233,76): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(234,85): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(235,24): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(237,49): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(246,24): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(248,52): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(249,50): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(252,41): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(257,39): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(257,66): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(258,50): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(261,41): error TS18046: 'm' is of type 'unknown'.
+app/governance/page.tsx(262,25): error TS18046: 'm' is of type 'unknown'.
+app/memory/page.tsx(30,16): error TS18046: 'error' is of type 'unknown'.
+app/memory/page.tsx(81,25): error TS18046: 'mem' is of type 'unknown'.
+app/memory/page.tsx(82,54): error TS18046: 'mem' is of type 'unknown'.
+app/memory/page.tsx(83,55): error TS18046: 'mem' is of type 'unknown'.
+app/memory/page.tsx(86,22): error TS18046: 'mem' is of type 'unknown'.
+app/memory/page.tsx(88,22): error TS18046: 'mem' is of type 'unknown'.
+app/oauth/consent/page.tsx(59,19): error TS18046: 'err' is of type 'unknown'.
+app/omni-agent/page.tsx(368,124): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+app/omni-agent/page.tsx(375,25): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+app/omni-agent/page.tsx(379,19): error TS2322: Type 'unknown[]' is not assignable to type 'object[]'.
+  Type 'unknown' is not assignable to type 'object'.
+app/omni-agent/page.tsx(447,119): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+app/omni-agent/page.tsx(448,137): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+app/omni-agent/page.tsx(449,136): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+app/omni-orchestrator/page.tsx(80,59): error TS18046: 'e' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(80,72): error TS18046: 't' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(81,57): error TS18046: 'a' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(81,70): error TS18046: 't' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(119,17): error TS18046: 'e' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(128,51): error TS18046: 'rec.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(137,43): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(137,57): error TS18046: 'rec.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(141,17): error TS18046: 'e' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(228,133): error TS18046: 'rec' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(230,28): error TS2322: Type '{}' is not assignable to type 'BadgeVariant | undefined'.
+app/omni-orchestrator/page.tsx(230,37): error TS18046: 'rec' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(230,71): error TS18046: 'rec' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(231,24): error TS18046: 'rec' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(231,57): error TS18046: 'rec' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(234,163): error TS18046: 'rec' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(235,201): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<ExecutionRecord | null>'.
+app/omni-orchestrator/page.tsx(237,17): error TS2322: Type 'unknown[]' is not assignable to type 'object[]'.
+app/omni-orchestrator/page.tsx(252,77): error TS2339: Property 'status' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(253,75): error TS2339: Property 'reviewStatus' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(254,52): error TS2339: Property 'reviewStatus' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(261,73): error TS2339: Property 'status' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(262,71): error TS2339: Property 'reviewStatus' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(263,48): error TS2339: Property 'reviewStatus' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(265,51): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(265,67): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(267,71): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(267,110): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(268,73): error TS2339: Property 'status' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(268,139): error TS2339: Property 'status' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(270,116): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(272,112): error TS18046: 'r.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(299,35): error TS18046: 'selected.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(304,95): error TS18046: 'selected.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(305,90): error TS18046: 'selected.task' is of type 'unknown'.
+app/omni-orchestrator/page.tsx(312,132): error TS2339: Property 'version' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(314,125): error TS2339: Property 'id' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(316,132): error TS2339: Property 'confidence' does not exist on type '{}'.
+app/omni-orchestrator/page.tsx(319,43): error TS2339: Property 'content' does not exist on type '{}'.
+app/omniagent-orchestrator/page.tsx(32,43): error TS18046: 'err' is of type 'unknown'.
+app/omniagent-orchestrator/page.tsx(82,60): error TS18046: 'err' is of type 'unknown'.
+app/omniagent-orchestrator/page.tsx(106,60): error TS18046: 'err' is of type 'unknown'.
+app/omnispace/page.tsx(267,26): error TS18046: 'u' is of type 'unknown'.
+app/omnispace/page.tsx(267,36): error TS18046: 'u' is of type 'unknown'.
+app/omnispace/page.tsx(271,81): error TS18046: 'u' is of type 'unknown'.
+app/omnispace/page.tsx(272,84): error TS18046: 'u' is of type 'unknown'.
+app/profile/page.tsx(39,61): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: useDataConnectQueryOptions<GetMyCompanyProfileData> | undefined): UseDataConnectQueryResult<GetMyCompanyProfileData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'useDataConnectQueryOptions<GetMyCompanyProfileData> | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: useDataConnectQueryOptions<GetMyCompanyProfileData> | undefined): UseDataConnectQueryResult<GetMyCompanyProfileData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+app/profile/page.tsx(40,87): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: useDataConnectMutationOptions<UpsertCompanyProfileData, FirebaseError, UpsertCompanyProfileVariables> | undefined): UseDataConnectMutationResult<...>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'useDataConnectMutationOptions<UpsertCompanyProfileData, FirebaseError, UpsertCompanyProfileVariables> | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertCompanyProfileData, FirebaseError, UpsertCompanyProfileVariables> | undefined): UseDataConnectMutationResult<...>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+app/profile/page.tsx(109,13): error TS18046: 'err' is of type 'unknown'.
+app/report/page.tsx(38,69): error TS18046: 'e' is of type 'unknown'.
+app/report/page.tsx(39,76): error TS18046: 'e' is of type 'unknown'.
+app/report/page.tsx(39,92): error TS18046: 'e' is of type 'unknown'.
+app/report/page.tsx(85,74): error TS18046: 'f' is of type 'unknown'.
+app/report/page.tsx(85,113): error TS18046: 'f' is of type 'unknown'.
+app/report/page.tsx(86,68): error TS18046: 'f' is of type 'unknown'.
+app/report/page.tsx(87,91): error TS18046: 'f' is of type 'unknown'.
+app/social/page.tsx(56,42): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(56,58): error TS2698: Spread types may only be created from object types.
+app/social/page.tsx(230,86): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(231,83): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(232,84): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(233,76): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(234,85): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(235,24): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(237,49): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(246,24): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(248,52): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(249,50): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(252,41): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(257,39): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(257,66): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(258,50): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(261,41): error TS18046: 'm' is of type 'unknown'.
+app/social/page.tsx(262,25): error TS18046: 'm' is of type 'unknown'.
+app/telemetry/page.tsx(132,25): error TS18046: 'metric' is of type 'unknown'.
+app/telemetry/page.tsx(133,48): error TS18046: 'metric' is of type 'unknown'.
+app/telemetry/page.tsx(135,32): error TS18046: 'metric' is of type 'unknown'.
+app/telemetry/page.tsx(136,39): error TS18046: 'metric' is of type 'unknown'.
+app/telemetry/page.tsx(137,40): error TS18046: 'metric' is of type 'unknown'.
+app/telemetry/page.tsx(138,38): error TS18046: 'metric' is of type 'unknown'.
+app/vault-omni/page.tsx(236,33): error TS2322: Type 'unknown' is not assignable to type 'BadgeVariant | undefined'.
+app/vault/page.tsx(32,17): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(33,19): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(34,19): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(35,19): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(36,19): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(37,23): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(38,24): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(39,18): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(39,38): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(40,23): error TS18046: 'item' is of type 'unknown'.
+app/vault/page.tsx(72,11): error TS18046: 'r' is of type 'unknown'.
+app/vault/page.tsx(73,17): error TS2698: Spread types may only be created from object types.
+app/vault/page.tsx(136,24): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(137,52): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(140,42): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(147,55): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(148,24): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(151,72): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(152,26): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(155,96): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(157,41): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(163,24): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(165,97): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(177,45): error TS18046: 'r' is of type 'unknown'.
+app/vault/page.tsx(178,31): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(182,26): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(194,64): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(195,55): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(197,46): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(207,71): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(211,78): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(215,89): error TS18046: 'record' is of type 'unknown'.
+app/vault/page.tsx(233,90): error TS18046: 'record' is of type 'unknown'.
+components/GlobalSearch.tsx(124,99): error TS18046: 'res' is of type 'unknown'.
+components/GlobalSearch.tsx(131,54): error TS18046: 'res' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(26,52): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListScrapedArticlesData, undefined>', gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'ExecuteQueryOptions'.
+      Property 'fetchPolicy' is missing in type '{}' but required in type 'ExecuteQueryOptions'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListScrapedArticlesData, undefined>', gave the following error.
+    Argument of type '{}' is not assignable to parameter of type 'DataConnect'.
+      Type '{}' is missing the following properties from type 'DataConnect': app, dataConnectOptions, isEmulator, getSettings, and 2 more.
+components/omni/DataVisualizer.tsx(30,53): error TS18046: 'a' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(35,23): error TS18046: 'a' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(53,18): error TS18046: 'a' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(55,41): error TS18046: 'a' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(63,53): error TS18046: 'a' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(70,18): error TS18046: 'e' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(114,57): error TS18046: 'entry' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(131,102): error TS2571: Object is of type 'unknown'.
+components/omni/ScraperControl.tsx(65,19): error TS18046: 'r' is of type 'unknown'.
+components/omni/ScraperControl.tsx(66,19): error TS18046: 'r' is of type 'unknown'.
+components/omni/ScraperControl.tsx(67,25): error TS18046: 'r' is of type 'unknown'.
+components/omni/ScraperControl.tsx(69,22): error TS18046: 'r' is of type 'unknown'.
+components/ui/ComparisonChart.tsx(10,11): error TS18046: 'resultA' is of type 'unknown'.
+components/ui/ComparisonChart.tsx(11,12): error TS18046: 'resultA' is of type 'unknown'.
+components/ui/ComparisonChart.tsx(12,12): error TS18046: 'resultB' is of type 'unknown'.
+components/ui/ComparisonChart.tsx(16,11): error TS18046: 'resultA' is of type 'unknown'.
+components/ui/ComparisonChart.tsx(17,12): error TS18046: 'resultA' is of type 'unknown'.
+components/ui/ComparisonChart.tsx(18,12): error TS18046: 'resultB' is of type 'unknown'.
+components/ui/ESGSmartQA.tsx(142,123): error TS18046: 's' is of type 'unknown'.
+components/ui/ESGSmartQA.tsx(142,136): error TS18046: 's' is of type 'unknown'.
+components/ui/ESGSmartQA.tsx(206,46): error TS18046: 'src' is of type 'unknown'.
+components/ui/ESGSmartQA.tsx(206,89): error TS18046: 'src' is of type 'unknown'.
+components/ui/MemoryGraphVisualizer.tsx(56,22): error TS2604: JSX element type 'Config.icon' does not have any construct or call signatures.
+components/ui/MemoryGraphVisualizer.tsx(56,22): error TS2786: 'Config.icon' cannot be used as a JSX component.
+  Its type 'unknown' is not a valid JSX element type.
+components/ui/route.ts(14,43): error TS18046: 'error' is of type 'unknown'.
+components/ui/universal/UniversalForm.tsx(32,65): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, any> | (() => Record<string, any>)'.
+contexts/ServiceContext.tsx(18,34): error TS18046: 'record' is of type 'unknown'.
+hooks/useOmniRealtime.ts(17,21): error TS2345: Argument of type 'User | null' is not assignable to parameter of type 'Record<string, unknown> | null'.
+hooks/useOmniRealtime.ts(30,53): error TS2345: Argument of type 'User | null' is not assignable to parameter of type 'Record<string, unknown> | null'.
+  Type 'User' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'User'.
+lib/adapters/notion.adapter.ts(21,92): error TS18046: 's' is of type 'unknown'.
+lib/adapters/notion.adapter.ts(22,90): error TS18046: 's' is of type 'unknown'.
+lib/agent/hermes-store.ts(55,37): error TS18046: 'err' is of type 'unknown'.
+lib/agent/rag-engine.ts(72,19): error TS2698: Spread types may only be created from object types.
+lib/agent/rag-engine.ts(107,55): error TS18046: 'd' is of type 'unknown'.
+lib/agent/rag-engine.ts(124,53): error TS18046: 'd' is of type 'unknown'.
+lib/agent/rag-engine.ts(124,75): error TS18046: 'd' is of type 'unknown'.
+lib/agent/rag-engine.ts(150,26): error TS18046: 'doc' is of type 'unknown'.
+lib/agent/rag-engine.ts(150,40): error TS18046: 'doc' is of type 'unknown'.
+lib/agent/rag-engine.ts(150,48): error TS18046: 'doc' is of type 'unknown'.
+lib/agent/rag-engine.ts(150,58): error TS18046: 'doc' is of type 'unknown'.
+lib/agent/rag-engine.ts(150,92): error TS18046: 'doc' is of type 'unknown'.
+lib/agent/store.ts(62,9): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(63,12): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(64,15): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(65,13): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(66,15): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(67,16): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(68,16): error TS18046: 't' is of type 'unknown'.
+lib/agents/adk-swarm.ts(77,10): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(86,39): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(92,14): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(98,14): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(102,14): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(109,39): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(112,46): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(128,46): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(135,49): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(166,24): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(171,29): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(182,17): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/adk-swarm.ts(186,17): error TS2339: Property 'agentConfig' does not exist on type 'CollaborativeSwarmAgent'.
+lib/agents/omni-agent-bus.ts(256,77): error TS2698: Spread types may only be created from object types.
+lib/agents/omni-agent-bus.ts(259,77): error TS18046: 'e' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(260,62): error TS18046: 'e' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(284,30): error TS2339: Property 'essence' does not exist on type '{}'.
+lib/agents/omni-agent-bus.ts(285,39): error TS2339: Property 'manifestation' does not exist on type '{}'.
+lib/agents/omni-agent-bus.ts(286,40): error TS2339: Property 'resonance' does not exist on type '{}'.
+lib/agents/omni-agent-bus.ts(304,124): error TS2339: Property 'data' does not exist on type '{}'.
+lib/agents/omni-agent-bus.ts(364,49): error TS18046: 'error' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(367,88): error TS18046: 'error' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(373,20): error TS18046: 'error' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(425,47): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+lib/agents/omni-agent-bus.ts(507,61): error TS18046: 'd' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(513,55): error TS18046: 'd' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(520,63): error TS18046: 'e' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(521,44): error TS18046: 'e' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(581,63): error TS18046: 'e' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(582,44): error TS18046: 'e' is of type 'unknown'.
+lib/agents/omni-agent-bus.ts(800,59): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+lib/agents/omni-commander.ts(315,15): error TS18046: 'n' is of type 'unknown'.
+lib/agents/omni-commander.ts(315,25): error TS18046: 'n' is of type 'unknown'.
+lib/agents/omni-commander.ts(316,27): error TS18046: 'n' is of type 'unknown'.
+lib/agents/omni-commander.ts(317,21): error TS18046: 'n' is of type 'unknown'.
+lib/agents/omni-commander.ts(318,20): error TS18046: 'n' is of type 'unknown'.
+lib/agents/omni-commander.ts(319,23): error TS18046: 'n' is of type 'unknown'.
+lib/ai/agentz0.ts(105,45): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(strPrompt: string): Promise<GenerateResponse<any>>', gave the following error.
+    Argument of type '{ model: ModelReference<z.ZodObject<{ version: z.ZodOptional<z.ZodString>; maxOutputTokens: z.ZodOptional<z.ZodNumber>; topK: z.ZodOptional<z.ZodNumber>; stopSequences: z.ZodOptional<z.ZodArray<z.ZodString, "many">>; } & { ...; }, "passthrough", z.ZodTypeAny, z.objectOutputType<...>, z.objectInputType<...>>>; prompt...' is not assignable to parameter of type 'string'.
+  Overload 2 of 3, '(parts: ({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]): Promise<...>', gave the following error.
+    Object literal may only specify known properties, and 'model' does not exist in type '({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]'.
+  Overload 3 of 3, '(opts: GenerateOptions<ZodTypeAny, ZodObject<{ version: ZodOptional<ZodString>; maxOutputTokens: ZodOptional<ZodNumber>; topK: ZodOptional<ZodNumber>; stopSequences: ZodOptional<...>; } & { ...; }, "passthrough", ZodTypeAny, objectOutputType<...>, objectInputType<...>>> | PromiseLike<...>): Promise<...>', gave the following error.
+    Type 'unknown[]' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>[]'.
+      Type 'unknown' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>'.
+lib/ai/agentz0.ts(147,45): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(strPrompt: string): GenerateStreamResponse<any>', gave the following error.
+    Argument of type '{ model: ModelReference<z.ZodObject<{ version: z.ZodOptional<z.ZodString>; maxOutputTokens: z.ZodOptional<z.ZodNumber>; topK: z.ZodOptional<z.ZodNumber>; stopSequences: z.ZodOptional<z.ZodArray<z.ZodString, "many">>; } & { ...; }, "passthrough", z.ZodTypeAny, z.objectOutputType<...>, z.objectInputType<...>>>; prompt...' is not assignable to parameter of type 'string'.
+  Overload 2 of 3, '(parts: ({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]): GenerateStreamResponse<...>', gave the following error.
+    Object literal may only specify known properties, and 'model' does not exist in type '({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]'.
+  Overload 3 of 3, '(opts: GenerateStreamOptions<ZodTypeAny, ZodObject<{ version: ZodOptional<ZodString>; maxOutputTokens: ZodOptional<ZodNumber>; topK: ZodOptional<ZodNumber>; stopSequences: ZodOptional<...>; } & { ...; }, "passthrough", ZodTypeAny, objectOutputType<...>, objectInputType<...>>> | PromiseLike<...>): GenerateStreamResponse<...>', gave the following error.
+    Type 'unknown[]' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>[]'.
+lib/ai/tools/db-tools.ts(20,39): error TS18046: 'err' is of type 'unknown'.
+lib/ai/tools/db-tools.ts(41,39): error TS18046: 'err' is of type 'unknown'.
+lib/brand-db.ts(212,7): error TS18046: 'acc' is of type 'unknown'.
+lib/brand-db.ts(212,11): error TS18046: 'r' is of type 'unknown'.
+lib/brand-db.ts(212,26): error TS18046: 'acc' is of type 'unknown'.
+lib/brand-db.ts(212,30): error TS18046: 'r' is of type 'unknown'.
+lib/brand-db.ts(218,15): error TS18046: 'catCounts' is of type 'unknown'.
+lib/brand-db.ts(219,18): error TS18046: 'catCounts' is of type 'unknown'.
+lib/brand-db.ts(220,17): error TS18046: 'catCounts' is of type 'unknown'.
+lib/dataconnect-memory.ts(57,66): error TS18046: 'e' is of type 'unknown'.
+lib/dataconnect-memory.ts(119,17): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(120,18): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(121,11): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(122,15): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(123,15): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(124,18): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(125,19): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(126,15): error TS18046: 'metric' is of type 'unknown'.
+lib/dataconnect-memory.ts(140,11): error TS18046: 'memory' is of type 'unknown'.
+lib/dataconnect-memory.ts(141,14): error TS18046: 'memory' is of type 'unknown'.
+lib/dataconnect-memory.ts(142,11): error TS18046: 'memory' is of type 'unknown'.
+lib/dataconnect-memory.ts(143,15): error TS18046: 'memory' is of type 'unknown'.
+lib/dataconnect-memory.ts(144,19): error TS18046: 'memory' is of type 'unknown'.
+lib/dataconnect-services.ts(29,48): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListEternalMemoriesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListEternalMemoriesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(39,48): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(50,48): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListSwarmAgentTasksData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListSwarmAgentTasksData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(60,49): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(71,51): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListRegulatoryPoliciesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListRegulatoryPoliciesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(82,40): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListReportsData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListReportsData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(92,42): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(vars: GetReportByIdVariables, options?: ExecuteQueryOptions | undefined): QueryPromise<GetReportByIdData, GetReportByIdVariables>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'GetReportByIdVariables'.
+  Overload 2 of 2, '(dc: DataConnect, vars: GetReportByIdVariables, options?: ExecuteQueryOptions | undefined): QueryPromise<GetReportByIdData, GetReportByIdVariables>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(103,48): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListScrapedArticlesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListScrapedArticlesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(114,45): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListAuditRecordsData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListAuditRecordsData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(124,46): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(135,41): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListAllTasksData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListAllTasksData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(146,50): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: ExecuteQueryOptions | undefined): QueryPromise<ListRoadmapMilestonesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'ExecuteQueryOptions | undefined'.
+  Overload 2 of 2, '(dc: DataConnect, options?: ExecuteQueryOptions | undefined): QueryPromise<ListRoadmapMilestonesData, undefined>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(156,51): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(157,11): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(158,14): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(159,19): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(160,17): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(161,15): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(162,20): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(163,13): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(164,20): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(164,54): error TS18046: 'input' is of type 'unknown'.
+lib/dataconnect-services.ts(176,46): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(vars: GetCompanyProfileVariables, options?: ExecuteQueryOptions | undefined): QueryPromise<GetCompanyProfileData, GetCompanyProfileVariables>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'GetCompanyProfileVariables'.
+  Overload 2 of 2, '(dc: DataConnect, vars: GetCompanyProfileVariables, options?: ExecuteQueryOptions | undefined): QueryPromise<GetCompanyProfileData, GetCompanyProfileVariables>', gave the following error.
+    Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(186,49): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/dataconnect-services.ts(202,41): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'DataConnect'.
+lib/graphql/resolvers.ts(538,17): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(539,20): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(540,26): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(541,26): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(542,23): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(543,27): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(544,28): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(545,19): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(546,21): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(547,27): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(548,28): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(596,23): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(597,19): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(598,25): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(599,22): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(600,22): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(601,20): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(602,20): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(602,48): error TS18046: 'input' is of type 'unknown'.
+lib/graphql/resolvers.ts(603,25): error TS18046: 'input' is of type 'unknown'.
+lib/healing-guardian.ts(24,13): error TS2339: Property 'action' does not exist on type 'unknown'.
+lib/healing-guardian.ts(24,21): error TS2339: Property 'table' does not exist on type 'unknown'.
+lib/healing-guardian.ts(24,28): error TS2339: Property 'record' does not exist on type 'unknown'.
+lib/healing-guardian.ts(24,36): error TS2339: Property 'oldRecord' does not exist on type 'unknown'.
+lib/healing-guardian.ts(75,46): error TS18046: 'error' is of type 'unknown'.
+lib/healing-guardian.ts(79,78): error TS18046: 'error' is of type 'unknown'.
+lib/jes-monitor.ts(1,43): error TS2307: Cannot find module './jes-monitor.types' or its corresponding type declarations.
+lib/omni-gateway.ts(80,28): error TS18046: 'ai' is of type 'unknown'.
+lib/omni-gateway.ts(107,28): error TS18046: 'ai' is of type 'unknown'.
+lib/omni-space/global-healing.ts(190,47): error TS2339: Property 'message' does not exist on type '{}'.
+lib/omni-table/useOmniTable.ts(71,16): error TS18046: 'err' is of type 'unknown'.
+lib/policy-engine.ts(80,15): error TS18046: 'p' is of type 'unknown'.
+lib/policy-engine.ts(81,21): error TS18046: 'p' is of type 'unknown'.
+lib/policy-engine.ts(82,17): error TS18046: 'p' is of type 'unknown'.
+lib/policy-engine.ts(83,17): error TS18046: 'p' is of type 'unknown'.
+lib/policy-engine.ts(84,24): error TS18046: 'p' is of type 'unknown'.
+lib/policy-engine.ts(85,29): error TS18046: 'p' is of type 'unknown'.
+lib/policy-engine.ts(119,15): error TS18046: 'data' is of type 'unknown'.
+lib/policy-engine.ts(120,67): error TS18046: 'data' is of type 'unknown'.
+lib/policy-engine.ts(126,30): error TS18046: 'data' is of type 'unknown'.
+lib/policy-engine.ts(138,16): error TS18046: 'data' is of type 'unknown'.
+lib/policy-engine.ts(138,43): error TS18046: 'data' is of type 'unknown'.
+lib/policy-engine.ts(146,36): error TS2571: Object is of type 'unknown'.
+lib/policy-engine.ts(147,39): error TS18046: 'data' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(82,35): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'RealtimeCallbacks'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(88,16): error TS18046: 'mockChannel' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(89,16): error TS18046: 'mockChannel' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(92,16): error TS18046: 'mockCallbacks' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(95,16): error TS18046: 'mockChannel' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(102,31): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'RealtimeCallbacks'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(111,16): error TS18046: 'mockCallbacks' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(115,31): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'RealtimeCallbacks'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(118,16): error TS18046: 'mockChannel' is of type 'unknown'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(122,31): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'RealtimeCallbacks'.
+lib/realtime/SupabaseOmniRealtimeService.test.ts(135,16): error TS18046: 'mockChannel' is of type 'unknown'.
+lib/services/ai-service.ts(37,7): error TS18046: 'body' is of type 'unknown'.
+lib/services/ai-service.ts(55,27): error TS18046: 'error' is of type 'unknown'.
+lib/services/ai-service.ts(174,27): error TS18046: 'error' is of type 'unknown'.
+lib/services/ai-service.ts(182,23): error TS18046: 'reportData' is of type 'unknown'.
+lib/services/ai-service.ts(183,23): error TS18046: 'reportData' is of type 'unknown'.
+lib/services/ai-service.ts(184,23): error TS18046: 'reportData' is of type 'unknown'.
+lib/services/ai-service.ts(185,7): error TS18046: 'reportData' is of type 'unknown'.
+lib/services/ai-tools.ts(54,41): error TS18046: 'args' is of type 'unknown'.
+lib/services/external-sync-service.ts(80,23): error TS18046: 'payload' is of type 'unknown'.
+lib/sonar/services/scheduler.ts(64,59): error TS18046: 'err' is of type 'unknown'.
+lib/supabase/server.ts(23,44): error TS2698: Spread types may only be created from object types.
+lib/supabase/server.ts(32,48): error TS2698: Spread types may only be created from object types.
+lib/swarm/WebSocketSwarmSyncService.ts(77,17): error TS18046: 't' is of type 'unknown'.
+lib/swarm/WebSocketSwarmSyncService.ts(77,30): error TS18046: 't' is of type 'unknown'.
+lib/swarm/WebSocketSwarmSyncService.ts(77,49): error TS18046: 't' is of type 'unknown'.
+lib/swarm/WebSocketSwarmSyncService.ts(77,76): error TS18046: 't' is of type 'unknown'.
+lib/swarm/WebSocketSwarmSyncService.ts(78,23): error TS18046: 't' is of type 'unknown'.
+lib/swarm/WebSocketSwarmSyncService.ts(78,59): error TS18046: 't' is of type 'unknown'.
+lib/swarm/WebSocketSwarmSyncService.ts(78,83): error TS18046: 't' is of type 'unknown'.
+lib/tools/audit-seal.ts(13,68): error TS18046: 'e' is of type 'unknown'.
+lib/tools/audit-seal.ts(48,68): error TS18046: 'e' is of type 'unknown'.
+lib/tools/collaboration.ts(18,96): error TS18046: 'm' is of type 'unknown'.
+lib/tools/synthesis.ts(41,37): error TS18046: 'm' is of type 'unknown'.
+lib/tools/synthesis.ts(41,50): error TS18046: 'm' is of type 'unknown'.
+lib/tools/synthesis.ts(161,16): error TS18046: 'error' is of type 'unknown'.
+lib/ucc-engine.ts(71,9): error TS2353: Object literal may only specify known properties, and 'uuid' does not exist in type 'never[]'.
+lib/ucc-engine.ts(142,24): error TS2339: Property 'formula' does not exist on type 'never'.
+lib/ucc-engine.ts(143,29): error TS2339: Property 'impact_metric' does not exist on type 'never'.
+lib/ucc-engine.ts(144,29): error TS2339: Property 'source_origin' does not exist on type 'never'.
+lib/ucc-engine.ts(147,20): error TS2339: Property 'metadata' does not exist on type 'never'.
+lib/ucc-engine.ts(168,18): error TS2339: Property 'uuid' does not exist on type 'never'.
+lib/ucc-engine.ts(169,23): error TS2339: Property 'timestamp' does not exist on type 'never'.
+lib/ucc-engine.ts(170,21): error TS2339: Property 'formula' does not exist on type 'never'.
+lib/ucc-engine.ts(171,26): error TS2339: Property 'impact_metric' does not exist on type 'never'.
+lib/ucc-engine.ts(174,34): error TS2339: Property 'hash_lock' does not exist on type 'never'.
+pages/api/swarm/ws.ts(25,45): error TS18046: 'message' is of type 'unknown'.
+pages/api/swarm/ws.ts(51,17): error TS18046: 'request' is of type 'unknown'.
+pages/api/swarm/ws.ts(52,35): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'IncomingMessage'.
+route.ts(37,59): error TS18046: 'error' is of type 'unknown'.
+server/server.ts(28,11): error TS18046: 'node' is of type 'unknown'.
+server/server.ts(31,11): error TS18046: 'node' is of type 'unknown'.
+server/server.ts(35,25): error TS18046: 'node' is of type 'unknown'.
+server/server.ts(40,12): error TS18046: 'node' is of type 'unknown'.
+server/server.ts(75,35): error TS18046: 'err' is of type 'unknown'.
+server/server.ts(85,35): error TS18046: 'err' is of type 'unknown'.
+server/src/integrations/omni-table-client.ts(32,56): error TS2339: Property 'spaces' does not exist on type 'OmniTableClient'.
+server/src/validators/LogicValidator.ts(8,18): error TS2339: Property 'logic_type' does not exist on type '{}'.
+server/src/validators/LogicValidator.ts(8,38): error TS2339: Property 'compliance_score' does not exist on type '{}'.
+server/tests/LogicRepo.test.ts(14,27): error TS18046: 'db' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(25,22): error TS18046: 'db' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(32,22): error TS18046: 'db' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(36,16): error TS18046: 'db' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(43,5): error TS18046: 'db' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(48,5): error TS18046: 'repo' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(54,23): error TS18046: 'repo' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(62,5): error TS18046: 'repo' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(68,27): error TS18046: 'repo' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(71,5): error TS18046: 'repo' is of type 'unknown'.
+server/tests/LogicRepo.test.ts(77,21): error TS18046: 'repo' is of type 'unknown'.
+src/core/full-process-test.ts(34,69): error TS2322: Type 'unknown' is not assignable to type '{ uuid: string; version: string; timestamp: number; formula: string; impact_metric: string; status: "Trustworthy"; hash_lock: string; evidence: { originCause: string; processTrace: string[]; finalEffect: string; ... 4 more ...; causality?: { ...; } | undefined; }[]; }'.
+src/core/resonanceEngine.ts(19,26): error TS2352: Conversion of type '{ uuid: string; timestamp: number; version: string; evidence: never[]; }' to type '{ uuid: string; version: string; timestamp: number; formula: string; impact_metric: string; status: "Trustworthy"; hash_lock: string; evidence: { originCause: string; processTrace: string[]; finalEffect: string; ... 4 more ...; causality?: { ...; } | undefined; }[]; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ uuid: string; timestamp: number; version: string; evidence: never[]; }' is missing the following properties from type '{ uuid: string; version: string; timestamp: number; formula: string; impact_metric: string; status: "Trustworthy"; hash_lock: string; evidence: { originCause: string; processTrace: string[]; finalEffect: string; ... 4 more ...; causality?: { ...; } | undefined; }[]; }': formula, impact_metric, status, hash_lock
+src/lib/omni-core/soul.ts(194,16): error TS2528: A module cannot have multiple default exports.
+src/lib/omni-core/soul.ts(196,16): error TS2528: A module cannot have multiple default exports.
+src/server/repositories/audit.repository.ts(24,11): error TS2353: Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+src/server/repositories/evidence.repository.ts(44,11): error TS2353: Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+src/server/repositories/evidence.repository.ts(166,17): error TS2345: Argument of type '{ tag: string | undefined; metadata: Record<string, unknown>; status: EvidenceStatus | undefined; updated_at: string; }' is not assignable to parameter of type 'never'.
+src/server/repositories/evidence.repository.ts(194,7): error TS2322: Type 'string' is not assignable to type 'ContentHash'.
+  Type 'string' is not assignable to type '{ readonly __brand: "ContentHash"; }'.
+src/server/repositories/evidence.repository.ts(195,7): error TS2322: Type 'Record<string, unknown> | null' is not assignable to type 'EvidenceMetadata | undefined'.
+  Type 'null' is not assignable to type 'EvidenceMetadata | undefined'.
+src/server/repositories/evidence.repository.ts(198,7): error TS2322: Type 'string | undefined' is not assignable to type 'BlockchainTxHash | undefined'.
+  Type 'string' is not assignable to type 'BlockchainTxHash'.
+    Type 'string' is not assignable to type '{ readonly __brand: "BlockchainTxHash"; }'.
+src/server/services/evidence.service.ts(33,5): error TS2322: Type 'Evidence | undefined' is not assignable to type 'Evidence'.
+  Type 'undefined' is not assignable to type 'Evidence'.
+utils/supabase/middleware.ts(18,44): error TS2698: Spread types may only be created from object types.
+utils/supabase/middleware.ts(20,53): error TS2698: Spread types may only be created from object types.
+utils/supabase/middleware.ts(23,48): error TS2698: Spread types may only be created from object types.
+utils/supabase/middleware.ts(25,57): error TS2698: Spread types may only be created from object types.
+utils/supabase/server.ts(18,42): error TS2698: Spread types may only be created from object types.
+utils/supabase/server.ts(27,46): error TS2698: Spread types may only be created from object types.
+workers/exportDocx.worker.test.ts(24,41): error TS2694: Namespace 'NodeJS' has no exported member 'Global'.

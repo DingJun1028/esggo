@@ -21,7 +21,7 @@ export {
   listAllTasks,
   upsertTask
 };
-import { db } from './firebase';
+import { db } from './firebase.ts';
 import { 
   collection, 
   doc, 
@@ -35,8 +35,8 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
-import { isDemoMode } from './firebase';
-import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data';
+import { isDemoMode } from './firebase.ts';
+import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data.ts';
 
 // ==========================================
 // Types

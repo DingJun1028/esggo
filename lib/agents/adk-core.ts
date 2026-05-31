@@ -1,4 +1,5 @@
 import { ai } from './genkit.ts';
+import { z } from 'genkit';
 import { telemetryService } from '../telemetry/service.ts';
 import { memoryStore } from '../memory/memory-store.ts';
 import { toolSynthesizer } from '../tools/synthesis.ts';
@@ -56,29 +57,42 @@ Consider synthesizing a temporary tool if the existing tools are insufficient.
        (t as { name: string })?.name && task.toLowerCase().includes((t as { name: string })?.name.toLowerCase())
      );
 
-    // If no matching tool, try dynamic synthesis
-    if (!hasMatchingTool) {
-      console.log(`[ADK Agent - ${this.config.name}] No matching tool found, synthesizing...`);
-      try {
-        const synthResult = await toolSynthesizer.synthesizeTool(task, context, this.config.name);
-        if (synthResult.success && synthResult.toolId) {
-          // Add the generated tool to the tool list
-          const generatedTool = {
-            name: synthResult.toolId,
-            description: `Dynamically generated tool for: ${task}`,
-            handler: () => synthResult.result
-          };
-          this.config.tools = [...existingTools, generatedTool];
-          // Re-run with the new tool available
-          return this.run(task, context, retries);
-        }
-      } catch (synthError) {
-        console.warn(`[ADK Agent - ${this.config.name}] Tool synthesis failed:`, synthError);
-        // Continue without synthesis
-      }
-    }
+     // If no matching tool, try dynamic synthesis
+     if (!hasMatchingTool) {
+       console.log(`[ADK Agent - ${this.config.name}] No matching tool found, synthesizing...`);
+       try {
+         const synthResult = await toolSynthesizer.synthesizeTool(task, context, this.config.name);
+         if (synthResult.success && synthResult.toolId) {
+           // Add the generated tool to the tool list using ai.defineTool for compatibility
+           const generatedTool = ai.defineTool({
+             name: synthResult.toolId,
+             description: `Dynamically generated tool for: ${task}`,
+             inputSchema: z.object({
+               context: z.any().optional().describe('Context for the synthesized tool')
+             }),
+           }, async (input) => {
+             // The synthesized tool's solveProblem function expects the context directly
+             // But our tool receives it wrapped in an input object
+             const fn = new Function('context', `
+               ${synthResult.generatedCode}
+               return solveProblem(context);
+             `);
+             const result = fn(input.context);
+             return result;
+           });
+           
+           this.config.tools = [...existingTools, generatedTool];
+           // Re-run with the new tool available
+           return this.run(task, context, retries);
+         }
+       } catch (synthError) {
+         console.warn(`[ADK Agent - ${this.config.name}] Tool synthesis failed:`, synthError);
+         // Continue without synthesis
+       }
+     }
 
-      const executeWithRetry = async (attempt: number): Promise<ADKAgentResult> => {
+     // Execute the AI model with available tools
+     const executeWithRetry = async (attempt: number): Promise<ADKAgentResult> => {
        try {
          const response = await ai.generate({
            model: this.config.model || 'googleai/gemini-2.0-flash',

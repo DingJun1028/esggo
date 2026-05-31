@@ -1,5 +1,5 @@
 import { ADKAgent, ADKSwarm } from './adk-core.ts';
-import { CollaborativeADKSwarm } from './adk-swarm.ts';
+import { CollaborativeADKSwarm, omniSwarm } from './adk-swarm.ts';
 import type { AgentConfig } from './adk-core.ts';
 import { ai } from './genkit.ts';
 import { createHash } from 'crypto';
@@ -14,7 +14,7 @@ const GRI_CHAPTERS = [
   { id: 'board', title: '公司治理與董事會效能', gri: 'GRI 2-9', order: 4 }
 ];
 
-import { OmniAgentBus, omniAgentBus } from './omni-agent-bus';
+import { OmniAgentBus, omniAgentBus } from './omni-agent-bus.ts';
 export { omniAgentBus };
 
 /**
@@ -248,9 +248,9 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     console.log(`[OmniCommander] 🛡️ Starting Swarm Evidence Audit Mission...`);
     omniAgentBus.publish('MISSION_START', { mission: 'Swarm Evidence Audit' });
 
-    const results = [];
-    const { getEvidenceFiles } = await import('../db');
-    const files = await getEvidenceFiles();
+     const results = [];
+     const { getEvidenceFiles } = await import('../db.ts');
+     const files = await getEvidenceFiles();
 
     for (const file of files) {
       // 1. Researcher: 識別 GRI 映射
@@ -295,9 +295,9 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     console.log(`[OmniCommander] 🔄 Starting OmniBlue to OmniTable Integration Mission...`);
     omniAgentBus.publish('MISSION_START', { mission: 'OmniBlue to OmniTable Sync' });
 
-    try {
-      const { supabase } = await import('../db/supabase');
-      const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/omni-table-client');
+     try {
+       const { supabase } = await import('../db/supabase.ts');
+       const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/omni-table-client.ts');
       
       // 1. Fetch from OmniBlue nodes
       omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching OmniBlue Nodes from Supabase' });

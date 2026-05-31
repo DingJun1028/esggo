@@ -48,6 +48,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: unknown) {
     console.error('[AI Stream API] Fatal Error:', err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: (err as any).message }), { status: 500 });
   }
 }

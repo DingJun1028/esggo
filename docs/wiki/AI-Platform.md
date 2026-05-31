@@ -52,3 +52,8 @@ OmniBlue 合規服務管理： 允許企業接入 OmniBlue 等第三方合規服
 *   若與外部 AI 服務（如 Gemini）的 API 連接失敗，系統必須在 3 秒內顯示明確的錯誤提示，並提供重試或聯繫客服的選項，不可導致頁面卡死或白屏。
 *   任何未經授權的用戶嘗試修改 AI 配置時，必須被系統嚴格攔截，並在後台生成安全事件日誌。
 *   AI 模型配置的 API Key 儲存必須經過加密，且在前端介面顯示時必須遮蔽（如顯示 `********`），不可明文顯示。
+
+7. 矩陣關聯 (Matrix Connection)
+上游數據： 來自 `JunAiKey` 的能力定義與外部 LLM 供應商的 API 狀態。
+下游影響： 決定全系統所有 AI 賦能頁面（如 `/editor`, `/advisory`）的生成品質與穩定性。
+依賴組件： ModelConfigCard, CostMonitorGauge, ServiceStatusBadge.

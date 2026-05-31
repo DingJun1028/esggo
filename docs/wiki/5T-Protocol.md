@@ -37,3 +37,8 @@
 6. 品質達標與驗收紅線 (QA Red Lines)
 🚨 UI 跑版紅線： 當「合規事件時間軸」包含超過 1000 條紀錄時，其虛擬化滾動 (Virtual Scrolling) 必須正常運作，不可出現卡頓或頁面渲染錯誤，且任何時間軸上的元素（如時間戳、事件描述）不可溢出容器。
 🚨 邏輯/體驗紅線： 當系統檢測到 `evidence_vault` 中任一文件的 SHA-256 Hash 與原始記錄不符時，T5 Trustworthy 指標必須在 5 秒內從綠燈轉為紅燈警示，並在儀表板上顯示具體的異常文件列表，不可出現延遲或誤報。
+
+7. 矩陣關聯 (Matrix Connection)
+上游數據： 來自全系統所有模組的合規事件。
+下游影響： 全系統可信度的核心衡量標準，直接影響 `/dashboard`。
+依賴組件： BrandStatusCard, BrandGaugeChart, AuditLogTable, BrandAlertBadge.

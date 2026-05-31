@@ -4,9 +4,10 @@
  */
 
 export interface OmniBlueConfig {
-  apiKey: string;
-  token: string;
-  baseUrl: string;
+    apiKeySwap: string;
+    tokenSwap: string;
+    swapEndpoint: string;
+
 }
 
 const DEFAULT_BLUE_CC_URL = 'https://api.blue.cc/v1';

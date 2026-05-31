@@ -52,13 +52,13 @@ self.onmessage = async (event: MessageEvent) => {
 
     const blob = await Packer.toBlob(doc);
 
-    // 成功後將打包好的 Blob 拋回給主執行緒
-    self.postMessage({ status: 'success', blob });
-  } catch (error) {
-    // 發生錯誤時將錯誤訊息拋回
-    self.postMessage({
-      status: 'error',
-      error: error instanceof Error ? error.message : String(error),
-    });
-  }
+     // 成功後將打包好的 Blob 拋回給主執行緒
+     self.postMessage({ status: 'success', blob }, '*');
+   } catch (error) {
+     // 發生錯誤時將錯誤訊息拋回
+     self.postMessage({
+       status: 'error',
+       error: error instanceof Error ? error.message : String(error)
+     }, '*');
+   }
 };

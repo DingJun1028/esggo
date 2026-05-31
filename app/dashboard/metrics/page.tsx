@@ -31,7 +31,7 @@ export default function MetricsPage() {
     setLoading(false);
   };
 
-  const handleAddMetric = async (data: unknown) => {
+  const handleAddMetric = async (data: any) => {
     try {
       // Basic transformations
       const payload = {
@@ -95,7 +95,7 @@ export default function MetricsPage() {
     { name: 'scope', label: 'Scope', type: 'enum', options: ['SCOPE_1', 'SCOPE_2', 'SCOPE_3', 'N/A'] }
   ];
 
-  const chartData = metrics.map(m => ({
+  const chartData = metrics.map((m: any) => ({
     name: m.metric_name,
     value: Number(m.value) || 0,
     target: Number(m.target_value) || 0
