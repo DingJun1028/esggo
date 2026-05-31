@@ -192,5 +192,3 @@ class EvolutionEngine {
 }
 
 export default OmniSoul;
-
-export default OmniSoul;
