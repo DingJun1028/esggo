@@ -42,7 +42,7 @@ export default function MemoryDashboard() {
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">Memory Management</h1>
       
-      {error && <div className="bg-red-100 p-4 rounded shadow" dangerouslySetInnerHTML={{__html: error}} />}
+      {error && <div className="bg-red-100 p-4 rounded shadow">{error}</div>}
       
       <div className="flex flex-col gap-4">
         <div className="bg-white p-4 rounded shadow overflow-hidden">
