@@ -22,7 +22,7 @@ export function Tag({ label, color = '#003262', onRemove, size = 'sm', className
     >
       {label}
       {onRemove && (
-        <button onClick={onRemove} className="hover:opacity-60 transition-opacity ml-0.5">
+        <button aria-label="Remove tag" onClick={onRemove} className="hover:opacity-60 transition-opacity ml-0.5">
           <X size={10} />
         </button>
       )}
