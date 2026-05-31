@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(result);
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('[OmniAgent API Error]', errorMessage);
 

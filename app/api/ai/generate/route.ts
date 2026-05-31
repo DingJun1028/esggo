@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       usage: data.usageMetadata,
       model: 'gemini-2.0-flash',
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('AI Generate API Error:', error);
     return NextResponse.json(
       { error: (error as any).message || 'Internal server error' },

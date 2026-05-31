@@ -1,13 +1,17 @@
+import { describe, expect, test, vi, beforeEach } from 'vitest';
+
 describe('SwapDeFi Integration', () => {
-  let swapDeFi: unknown;
+  let swapDeFi: any;
 
   beforeEach(() => {
     // Setup Swap-DeFi-TEST-UMES-ONLINE mock environment
-    global.fetch = vi.fn();
-    vi.stubGlobal('fetch', global.fetch);
+    vi.stubGlobal('fetch', vi.fn());
     swapDeFi = {
       getPoolStatus: vi.fn().mockResolvedValue({ poolId: 'test', liquidity: '1000', is_mock: true }),
-      executeSwap: vi.fn(),
+      executeSwap: vi.fn().mockImplementation(async (tx) => {
+        if (tx.amount <= 0) throw new Error('Amount must be a positive number');
+        return { transactionId: tx.id, status: 'success' };
+      }),
     };
   });
 

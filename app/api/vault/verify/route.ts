@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       },
       { request_id: requestId }
     ));
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : '驗證過程中發生未知的伺服器內部錯誤';
     return NextResponse.json<ApiResponse>(
       createErrorResponse('VERIFICATION_FAILED', errorMessage),

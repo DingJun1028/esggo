@@ -27,7 +27,7 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 // Data Connect (Optional based on generated code)
-let dataConnect: unknown = null;
+let dataConnect: any = null;
 
 // 使用非阻塞方式異步初始化 Data Connect
 (async () => {

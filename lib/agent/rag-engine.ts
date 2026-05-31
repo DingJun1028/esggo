@@ -33,7 +33,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
     const result = await model.embedContent(text);
     return result.embedding.values;
-  } catch (e) {
+  } catch (e: any) {
     console.error('[RAG Engine] Embedding Generation Failed:', e);
     // Fallback to pseudo-random for simulation if API fails in dev
     const pseudoRandom = text.length % 100;
@@ -69,7 +69,7 @@ export async function ingestDocument(title: string, content: string, type: strin
       chunk_index: i,
       content: chunk,
       embedding: JSON.stringify(embedding),
-      metadata: { ...metadata, chunk_index: i }
+      metadata: { ...(metadata as any), chunk_index: i }
     });
   }
 
@@ -104,7 +104,7 @@ export async function searchKnowledgeBase(query: string, limit: number = 3) {
  */
 export async function queryWithIntelligence(query: string) {
   const contextDocs = await searchKnowledgeBase(query);
-  const contextText = contextDocs.map((d: unknown) => d.content).join('\n---\n');
+  const contextText = contextDocs.map((d: any) => d.content).join('\n---\n');
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const prompt = `
@@ -121,7 +121,7 @@ Question: ${query}
   const result = await model.generateContent(prompt);
   return {
     answer: result.response.text(),
-    sources: contextDocs.map((d: unknown) => ({ id: d.document_id, score: d.similarity }))
+    sources: contextDocs.map((d: any) => ({ id: d.document_id, score: d.similarity }))
   };
 }
 
@@ -146,7 +146,7 @@ export async function processPDFAndIngest(buffer: Buffer, fileName: string): Pro
  * Compatibility: Add direct items
  */
 export async function addToKnowledgeBase(documents: unknown[]) {
-  for (const doc of documents) {
+  for (const doc of documents as any[]) {
     await ingestDocument(doc.source || doc.id, doc.text, doc.metadata?.type || 'DOCUMENT', doc.metadata);
   }
 }

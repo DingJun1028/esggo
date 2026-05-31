@@ -25,7 +25,7 @@ vi.mock('@/lib/slack/telegram-gateway', () => ({
 describe('Schedule API GET (Cron)', () => {
   it('should reject without cron secret', async () => {
     process.env.CRON_SECRET = 'secret';
-    process.env.NODE_ENV = 'production';
+    (process.env as any).NODE_ENV = 'production';
 
     const req = new NextRequest('http://localhost/api/omni-agent-api/schedule?mission=SECURITY_SCAN');
     const res = await GET(req);
@@ -35,7 +35,7 @@ describe('Schedule API GET (Cron)', () => {
 
   it('should succeed with correct mission and cron secret', async () => {
     process.env.CRON_SECRET = 'secret';
-    process.env.NODE_ENV = 'production';
+    (process.env as any).NODE_ENV = 'production';
 
     const req = new NextRequest('http://localhost/api/omni-agent-api/schedule?mission=CODE_QUALITY_REPORT', {
         headers: {
@@ -52,7 +52,7 @@ describe('Schedule API GET (Cron)', () => {
 
   it('should reject invalid mission', async () => {
     process.env.CRON_SECRET = 'secret';
-    process.env.NODE_ENV = 'production';
+    (process.env as any).NODE_ENV = 'production';
 
     const req = new NextRequest('http://localhost/api/omni-agent-api/schedule?mission=INVALID_MISSION', {
         headers: {

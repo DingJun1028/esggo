@@ -27,7 +27,7 @@ export async function POST(
       reviewedAt: new Date().toISOString(),
       ok: true,
     });
-  } catch (err: unknown) {
+  } catch (err: any) {
     const message = err instanceof Error ? err.message : '未知錯誤';
     return NextResponse.json({ error: message }, { status: 500 });
   }

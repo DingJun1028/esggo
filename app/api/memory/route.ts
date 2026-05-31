@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       count: data.length,
       data
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -31,7 +31,7 @@ export async function DELETE(req: NextRequest) {
   try {
     memoryStore.clear();
     return NextResponse.json({ success: true, message: 'Memory cleared' });
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

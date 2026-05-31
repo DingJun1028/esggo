@@ -23,7 +23,7 @@ export default function AuditLogPage() {
           throw error;
         }
         setRecords(data || []);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Failed to fetch audit records:", err);
       } finally {
         setLoading(false);
@@ -72,7 +72,7 @@ export default function AuditLogPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {records.map((record) => (
+                  {records.map((record: any) => (
                     <tr key={record.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                       <td className="py-3 px-4 text-white/80 whitespace-nowrap">
                         {new Date(record.created_at).toLocaleString()}

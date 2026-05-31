@@ -28,7 +28,7 @@ export async function POST(request: Request) {
           prompt: prompt,
         });
         generatedContent = response.text;
-    } catch (e: unknown) {
+    } catch (e: any) {
         console.warn('Genkit generation failed, falling back to mock response.', e);
         generatedContent = `[Mock Generated Content via OmniAgent ADK]\n\nTask: ${task.title}\n\nThis is a generated response based on the ${task.taskType} template.`;
     }
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     };
 
     return NextResponse.json({ ok: true, execution, artifact });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('OmniAgent Execution Error:', error);
     return NextResponse.json({ ok: false, error: (error as Error).message }, { status: 500 });
   }

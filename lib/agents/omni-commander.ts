@@ -1,11 +1,16 @@
-import { ADKAgent, ADKSwarm } from './adk-core.ts';
-import { CollaborativeADKSwarm, omniSwarm } from './adk-swarm.ts';
+import { ADKAgent } from './adk-core.ts';
 import type { AgentConfig } from './adk-core.ts';
 import { ai } from './genkit.ts';
 import { createHash } from 'crypto';
 import { NegotiationEngine } from '../negotiation/engine.ts';
 import { negotiationEngine } from '../negotiation/engine.ts';
 import { saveSustainWriteSection } from '../dataconnect-memory.ts';
+
+export type { AgentConfig };
+export type CollaborativeADKSwarm = {
+  collaborate(task: string, context?: unknown): Promise<Record<string, unknown>>;
+  getAgent(name: string): { run(task: string, context?: unknown): Promise<unknown> } | undefined;
+};
 
 const GRI_CHAPTERS = [
   { id: 'intro', title: '永續經營與策略願景', gri: 'GRI 2-22', order: 1 },
@@ -124,7 +129,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         commanderOutput: planResponse.output,
         swarmResults
       };
-    } catch (e: unknown) {
+    } catch (e: any) {
       const errorMessage = e instanceof Error ? e.message : String(e);
       console.error('[OmniCommander] Execution Error:', errorMessage);
       return { success: false, error: errorMessage, agent: 'OmniAgent', message: 'Command failed' };
@@ -187,7 +192,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
             content: content 
           });
         }
-      } catch (err: unknown) {
+      } catch (err: any) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         console.error(`[OmniCommander] Error in chapter ${chapter.id}:`, errorMessage);
       }
@@ -311,7 +316,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       console.log(`[OmniCommander] Fetched ${nodes.length} OmniBlue nodes.`);
 
       // 2. Transform to Logic Nodes
-      const logicNodes = nodes.map((n: unknown) => ({
+      const logicNodes = nodes.map((n: any) => ({
         name: n.name || n.id || 'Unknown OmniBlue Node',
         compliance_score: n.score || 100,
         logic_type: n.type || 'OmniBlue Sync',
@@ -333,7 +338,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         message: `Successfully synced ${logicNodes.length} OmniBlue nodes to OmniTable.`,
         results: logicNodes
       };
-    } catch (err: unknown) {
+    } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       console.error('[OmniCommander] OmniBlue Integration Error:', errorMessage);
       omniAgentBus.publish('AGENT_ERROR', { agent: 'OmniAgent', error: errorMessage });

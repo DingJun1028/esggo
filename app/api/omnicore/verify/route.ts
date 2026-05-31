@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       timestamp: Date.now(),
       data: { isValid },
     } as any);
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json(
       {
         id: Date.now().toString(),

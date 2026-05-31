@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ ok: true, message: 'Authorization granted successfully.' });
-  } catch (err: unknown) {
+  } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

@@ -23,7 +23,7 @@ async function callGeminiAPI(prompt: string, systemInstruction?: string): Promis
   }
 
   try {
-    const body: unknown = {
+    const body: any = {
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       generationConfig: {
         temperature: 0.7,
@@ -50,7 +50,7 @@ async function callGeminiAPI(prompt: string, systemInstruction?: string): Promis
 
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '無回應內容';
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error('Gemini API Error:', error);
     return `AI 服務暫時無法使用：${error.message}`;
   }
@@ -81,7 +81,7 @@ ${text}
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);
     }
-  } catch (e) {
+  } catch (e: any) {
     console.error('Parse error:', e);
   }
 
@@ -170,12 +170,12 @@ ${companyContext ? `企業背景：${companyContext}` : ''}
 
     const data = await response.json();
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '無法獲取回應';
-  } catch (error: unknown) {
-    return `AI 顧問暫時無法連線：${error.message}`;
+  } catch (error: any) {
+    return `AI 顧問暫時無法連線：${error.message || error}`;
   }
 }
 
-export async function generateESGSummary(reportData: unknown): Promise<string> {
+export async function generateESGSummary(reportData: any): Promise<string> {
   const prompt = `
 請根據以下 ESG 數據，撰寫一份精簡的執行摘要（約 500 字，繁體中文）：
 

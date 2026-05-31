@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
       default:
         return errorResponse(`Unknown action: ${action}. Valid: spaces, nodes, records, fields, views`);
     }
-  } catch (err: unknown) {
+  } catch (err: any) {
     console.error('[OmniTable API Proxy] GET error:', err);
     return errorResponse(err.message || 'Internal Server Error', err.statusCode || 500);
   }
@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
           `Unknown action: ${action}. Valid: createRecords, updateRecords, deleteRecords, createDatasheet, createField, deleteField, createEmbedLink`
         );
     }
-  } catch (err: unknown) {
+  } catch (err: any) {
     console.error('[OmniTable API Proxy] POST error:', err);
     return errorResponse(err.message || 'Internal Server Error', err.statusCode || 500);
   }
