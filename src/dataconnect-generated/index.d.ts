@@ -541,18 +541,6 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
-interface CreateDemoDataRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (): MutationRef<CreateDemoDataData, undefined>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): MutationRef<CreateDemoDataData, undefined>;
-  operationName: string;
-}
-export const createDemoDataRef: CreateDemoDataRef;
-
-export function createDemoData(): MutationPromise<CreateDemoDataData, undefined>;
-export function createDemoData(dc: DataConnect): MutationPromise<CreateDemoDataData, undefined>;
-
 interface ListAllTasksRef {
   /* Allow users to create refs without passing in DataConnect */
   (): QueryRef<ListAllTasksData, undefined>;
@@ -864,4 +852,16 @@ export const getMyCompanyProfileRef: GetMyCompanyProfileRef;
 
 export function getMyCompanyProfile(options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
 export function getMyCompanyProfile(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetMyCompanyProfileData, undefined>;
+
+interface CreateDemoDataRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (): MutationRef<CreateDemoDataData, undefined>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect): MutationRef<CreateDemoDataData, undefined>;
+  operationName: string;
+}
+export const createDemoDataRef: CreateDemoDataRef;
+
+export function createDemoData(): MutationPromise<CreateDemoDataData, undefined>;
+export function createDemoData(dc: DataConnect): MutationPromise<CreateDemoDataData, undefined>;
 
