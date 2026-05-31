@@ -528,7 +528,7 @@ export const resolvers = {
       };
     },
 
-    upsertMilestone: async (_: unknown, { input }: { input: unknown }) => {
+    upsertMilestone: async (_: unknown, { input }: { input: any }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const { data, error } = await supabase
@@ -589,7 +589,7 @@ export const resolvers = {
       };
     },
 
-    updateCompanyProfile: async (_: unknown, { input }: { input: unknown }) => {
+    updateCompanyProfile: async (_: unknown, { input }: { input: any }) => {
       const supabase = getSupabaseClient();
       if (!supabase) throw new Error('Database not available');
       const payload = {

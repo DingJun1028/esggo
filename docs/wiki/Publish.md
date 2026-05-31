@@ -1,4 +1,4 @@
-SustainPublish 報告發佈中心 SustainPublish
+# SustainPublish 報告發佈中心 SustainPublish [Publish]
 路徑： /publish | 權限： PM, ADMIN, CSO | 所屬旅程： V. 確信審計與發佈
 
 1. 模組定位 (Core Purpose)

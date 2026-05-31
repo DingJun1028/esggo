@@ -1,4 +1,4 @@
-外部顧問管理 External Advisors Management
+# 外部顧問管理 External Advisors Management [Advisors]
 路徑： /advisors | 權限： ADMIN, PM | 所屬旅程： VI. 系統管理與協作
 
 1. 模組定位 (Core Purpose)

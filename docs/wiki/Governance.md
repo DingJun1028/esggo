@@ -1,4 +1,4 @@
-ESG 治理中心 ESG Governance Hub
+# ESG 治理中心 ESG Governance Hub [Governance]
 路徑： /governance | 權限： CSO, ADMIN, PM | 所屬旅程： VI. 績效監控與持續改進
 
 1.  **模組定位 (Core Purpose)**

@@ -1,4 +1,4 @@
-# Jun.AI.Key 萬能元鑰系統 JunAiKey Core
+# Jun.AI.Key 萬能元鑰系統 JunAiKey Core [JunAiKey]
 路徑： /soul | 權限： SYSTEM_ADMIN, OMNI_AGENT | 所屬旅程： 核心概念與架構
 
 1. 模組定位 (Core Purpose)

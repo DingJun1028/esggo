@@ -1,4 +1,4 @@
-社會影響 Social
+# 社會影響 Social [Social]
 路徑： /social | 權限： HR, PM, ADMIN | 所屬旅程： III. 數據採集與管理
 
 1. 模組定位 (Core Purpose)

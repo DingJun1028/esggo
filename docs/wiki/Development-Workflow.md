@@ -1,4 +1,4 @@
-# ESGGO 功能需求實現流程與 WIKI 建造規範 🌌
+# ESGGO 功能需求實現流程與 WIKI 建造規範 🌌 [Development Workflow]
 
 > **版本：** v1.0.0 | **核心原則：** 文檔即憲法，代碼即執行 | **狀態：** SACRED OPERATIONAL
 

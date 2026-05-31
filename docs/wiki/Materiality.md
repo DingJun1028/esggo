@@ -1,4 +1,4 @@
-重大性矩陣 Materiality
+# 重大性矩陣 Materiality [Materiality]
 路徑： /materiality | 權限： CSO, PM | 所屬旅程： II. 策略盤點與分派
 
 1. 模組定位 (Core Purpose)

@@ -1,4 +1,4 @@
-ESG AI Agents ESG AI Agents
+# ESG AI Agents ESG AI Agents [Agents]
 路徑： /agents | 權限： PM, ADMIN, USER | 所屬旅程： IV. AI 賦能與撰寫
 
 1. 模組定位 (Core Purpose)

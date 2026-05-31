@@ -1,4 +1,4 @@
-# 代理人蜂群 Agent Swarm
+# 代理人蜂群 Agent Swarm [Swarm]
 路徑： /swarm | 權限： SYSTEM_ADMIN, DEV | 所屬旅程： 核心概念與架構
 
 1. 模組定位 (Core Purpose)

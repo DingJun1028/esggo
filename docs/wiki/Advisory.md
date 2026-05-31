@@ -1,4 +1,4 @@
-ESG 策略顧問 (Advisory) ESG Strategy Advisory
+# ESG 策略顧問 (Advisory) ESG Strategy Advisory [Advisory]
 路徑： /advisory | 權限： PM, CSO, ADMIN | 所屬旅程： II. 策略盤點與分派
 
 1. 模組定位 (Core Purpose)

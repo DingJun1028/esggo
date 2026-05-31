@@ -1,4 +1,4 @@
-# 平台總覽 Platform Overview
+# 平台總覽 Platform Overview [Platform Overview]
 路徑： / | 權限： ALL_USERS | 所屬旅程： 核心概念
 
 1. 模組定位 (Core Purpose)

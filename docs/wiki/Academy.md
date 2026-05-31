@@ -1,4 +1,4 @@
-ESG Academy ESG Academy
+# ESG Academy ESG Academy [Academy]
 路徑： /academy | 權限： ALL_USERS | 所屬旅程： I. 學習與能力建構
 
 1. 模組定位 (Core Purpose)

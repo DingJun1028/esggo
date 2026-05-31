@@ -1,4 +1,4 @@
-Digital Twin Digital Twin
+# Digital Twin Digital Twin [Digital Twin]
 路徑： /digital-twin | 權限： ADMIN, CSO, PM | 所屬旅程： VI. 績效監控與優化
 
 1. 模組定位 (Core Purpose)

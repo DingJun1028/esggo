@@ -1,4 +1,4 @@
-ESG 顧問服務模組 ESG Consulting Hub
+# ESG 顧問服務模組 ESG Consulting Hub [Consulting]
 路徑： /consulting | 權限： ADMIN, PM, CSO | 所屬旅程： VI. 外部協作與服務
 
 1. 模組定位 (Core Purpose)

@@ -1,4 +1,4 @@
-閱讀室 Reading Room
+# 閱讀室 Reading Room [Reading Room]
 路徑： /reading-room | 權限： PM, ANALYST, AUDITOR | 所屬旅程： I. 知識探索與學習
 
 1. 模組定位 (Core Purpose)

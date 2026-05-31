@@ -1,4 +1,4 @@
-# ESGGO WIKI 新版全解析 (v8.5.1 Synthesis)
+# ESGGO WIKI 新版全解析 (v8.5.1 Synthesis) [Wiki New Version Analysis]
 
 > **"Wiki 不僅是文檔，更是系統運行的數位孿生。"** —— OmniAgent 指揮官
 
