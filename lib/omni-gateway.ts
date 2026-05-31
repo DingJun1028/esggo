@@ -20,7 +20,7 @@ export const omniagentTools = [
   { id: 'terminal', category: 'Execution', description: 'Safe sandboxed shell execution' },
   { id: 'video_generate', category: 'Creative', description: 'New v0.14: Unified video generation' },
   { id: 'trajectory_export', category: 'Research', description: 'Export compressed training data' },
-    { id: 'swap_defi_tester', category: 'Financial', description: 'Swap-DeFi-TEST-UMES-ONLINE integration' } }
+  { id: 'swap_defi_tester', category: 'Financial', description: 'Swap-DeFi-TEST-UMES-ONLINE integration' }
 ];
 
 const BASE_URL = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || DEFAULT_OMNIAGENT_GATEWAY_URL;

@@ -37,3 +37,23 @@
 ## 目前成果
 - 已建立 Tasks 邏輯資料結構
 - 已形成任務看板頁面定位
+
+## Swap-DeFi-TEST-UMES-ONLINE Integration
+
+1. **Transaction Validation**
+   - All swaps require valid token pairs (ESG/USDC, UMES/WBTC)
+   - Minimum amount of 0.1 tokens
+   - Verified wallet addresses (0x+40 hex format)
+
+2. **Pool Management**
+   - Real-time liquidity tracking for:
+     - ESG/USDC pool (id: pool_esg_usdc)
+     - UMES/WBTC pool (id: pool_ume_btc)
+
+3. **Flow Automation**
+   - Automatic validation before execution
+   - Error handling with fallback statuses
+
+4. **API Endpoints**
+   - GET /pools/{id}/status (real-time data)
+   - POST /swap (transaction execution)
