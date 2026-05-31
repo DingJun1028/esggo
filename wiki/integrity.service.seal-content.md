@@ -4,6 +4,35 @@
 
 ---
 
+## 邏輯上下文 (Logical Context)
+
+本服務方法是 **5T 協議門 `信 (Trust)` 層** 的基礎原語：
+
+```
+evidence.create (auto_seal=true)
+        ↓
+IntegrityService.sealContent()          ← 本方法
+        ↓
+computeSHA256(content) → hash_lock
+        ↓
+[write to DB: content_hash]
+        ↓
+omni vault seal (ZKP enhancement)       ← 下游強化
+```
+
+| 上下文物件 | 角色定位 | 關聯文件 |
+| :--- | :--- | :--- |
+| `computeSHA256` | 同模組：底層雜湊工具 | `src/shared/utils/hash.utils.ts` |
+| `evidence.create` | 上游：觸發 auto_seal | [evidence.create.md](./evidence.create.md) |
+| `omni vault seal` | 下游：ZKP + SHA-256 雙重封印 | [cli.vault.seal.md](./cli.vault.seal.md) |
+| `OmniEventStore.createEvent` | 延伸：事件層 Hash Lock | `lib/omni-space/event-store.ts` |
+
+> **原則重join**: 2026-05-31 最佳實踐重構 — `computeSHA256` 為全域共享工具，本服務是其業務層封裝，確保 T4 Tangible + T5 Trustworthy 雙重約束。
+
+> **2026-05-31 最新原則**: 融合 DataConnect 記憶體系 — 封印產出的 hash_lock 同時可透過 `upsertEternalMemory` 寫入萬能永憶層，實現 `hash_lock` 跨層級一致性。
+
+---
+
 ## 概述 (Overview)
 This core service method is a fundamental building block for ensuring data integrity within the ESGGO system. It takes any string content, computes its SHA256 hash, and returns this hash along with a timestamp. This function is a direct implementation of the "Hash Lock" mechanism, central to the `信 (Trust)` protocol, marking data as cryptographically secured and effectively immutable at a specific point in time.
 

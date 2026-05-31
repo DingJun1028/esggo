@@ -4,6 +4,26 @@
 
 ---
 
+## 邏輯上下文 (Logical Context)
+
+本指令處於 **ESGGO 5T 協議門** 的最後一道關卡 — **`信 (Trust)`**：
+
+```
+evidence.create → integrity.sealContent → omni vault seal → 5T 封印完成
+     (T1 溯源)      (T4 哈希鎖定)      (T5 ZKP 封印)     (全鏈結)
+```
+
+| 上下文物件 | 角色定位 | 關聯文件 |
+| :--- | :--- | :--- |
+| `evidence.create` | 上游：建立證據並預計算 hash | [evidence.create.md](./evidence.create.md) |
+| `IntegrityService.sealContent` | 同層：SHA-256 哈希計算服務 | [integrity.service.seal-content.md](./integrity.service.seal-content.md) |
+| `omnispace.sealDocument` |  Souls tRPC 入口 | `src/server/trpc/routers/omnispace.router.ts` |
+| `OmniSpaceService.sealDocument` | 服務層封裝 (spawn + validation) | `src/server/services/omnispace.service.ts` |
+
+> **原則重join**: 2026-05-31 最佳實踐重構 — CLI 呼叫已由 service layer 統一封裝，杜絕 shell injection，並納入 TRPCError 錯誤處理體系。
+
+---
+
 ## 概述 (Overview)
 This CLI command triggers the Zero-Knowledge Proof (ZKP) sealing process for a specified evidence ID. It computes a SHA-256 hash of the evidence, simulating a ZKP generation, and updates its status to 'verified' in the vault. This directly enforces the `信 (Trust)` aspect of the 5T Protocol by ensuring cryptographic immutability. It supports a Supabase-backed vault and includes a fallback simulation mode for NCBDB.
 

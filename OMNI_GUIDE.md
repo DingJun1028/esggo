@@ -20,6 +20,65 @@
 
 此條目是 Jun.Ai.Key 系統的最高指導原則，它確保了系統在追求卓越的道路上，始終保持清醒、真實與純粹，為所有後續的技術實現與哲學闡述奠定最堅實的基礎。
 
+### 第零點五條：工程安全與架構原則 (Engineering Safety & Architecture Principles)
+本條是第零條「最佳實踐」在工程實現層面的技術固化，確保系統從概念到代碼的每一步都符合安全、可維護與可審計的標準。
+
+#### 0.5.1 命令行注入防護 (CLI Injection Prevention)
+任何對外部程式（CLI、subprocess）的呼叫，必須遵守以下規則：
+- **禁止**使用 `exec()`、`execAsync()` 或字符串拼接傳遞命令參數
+- **必須**使用 `spawn(process.execPath, argsArray)` 傳遞分離的參數陣列
+- 所有 CLI 參數必須在 service layer 進行 `trim()` 與型別驗證後再傳遞
+- 相關實作：`src/server/services/omnispace.service.ts:sealDocument()`
+
+#### 0.5.2 統一錯誤處理體系 (Unified Error Handling)
+- 所有後端錯誤必須使用 `TRPCError`（來自 `@trpc/server`）拋出
+- 根據語義選擇正確的 error code：`BAD_REQUEST`、`UNAUTHORIZED`、`FORBIDDEN`、`INTERNAL_SERVER_ERROR`
+- 搭配 `ErrorCode` 枚舉（`src/shared/types/api.types.ts`）標註錯誤性質
+- 禁止使用裸 `throw new Error()` 作為業務錯誤（僅用於程式異常）
+
+#### 0.5.3 分層架構契約 (Layered Architecture Contract)
+```
+Router (tRPC Procedure)
+    ↓ 僅定義 input Zod schema + procedure type
+    ↓ 不包含任何業務邏輯
+Service (Business Logic Layer)
+    ↓ 處理領域驗證、流程協調、外部呼叫
+    ↓ 拋出 TRPCError 或返回 DTO
+Repository / Adapter (Data Access Layer)
+    ↓ 僅處理 I/O 操作
+    ↓ 不包含業務決策邏輯
+```
+
+- 各層職責單一，不可跨越
+- Router → Service → Repository 為標準流向
+- Service 層為唯一可呼叫外部 API / CLI / SDK 的層級
+
+#### 0.5.4 5T 協議門技術固化 (5T Protocol Technical Enforcement)
+| 協議 | 技術強制措施 | 實作位置 |
+| :--- | :--- | :--- |
+| `真 (Truth)` | 所有写入操作自動附帶 `uuid` + `source_origin` | Entity base class |
+| `善 (Goodness)` | Zod schema 全鏈路驗證，禁止 `as any` 跳過型別 | tRPC input / shared types |
+| `美 (Beauty)` | Liquid Glass Cyan 設計語言全域套用 | components/brand/ |
+| `信 (Trust)` | Hash Lock (SHA-256) + ZKP 雙重封印 | IntegrityService + omnispace |
+| `通 (Transferful)` | EventStore 全生命週期事件紀錄 | lib/omni-space/event-store.ts |
+
+#### 0.5.5 OmniBlueTable 數據主權橋接 (Data Sovereignty Bridge)
+```
+OmniBlue Control Plane (多雲/混合)
+    ↓ syncLogicNodesToOmniTable()
+OmniTable (ESG 企業資料表)
+    ↓ createRecords / updateRecords
+ESG Governance Actions (封印、UCC、最佳實踐)
+```
+- **OmniBlueClient**: 多雲 Agent 控制平面 (部署、監控、資源調度)
+- **OmniTableBlueBridge**: OmniBlue ↔ OmniTable 雙向同步橋接層
+- **API Proxy**: `/api/omni-table` Server-side 代理隔離 (OMNITABLE_API_KEY 不暴露 Client)
+- **EventBus**: 所有同步經由 `omniAgentBus` 廣播 → Think Tank Dashboard 即時顯示
+- **Think Tank Mission**: `SYNC_OMNIBLUE_OMNITABLE` 觸發自動化同步任務
+- 相參：[wiki/omniblue-table.md](./wiki/omniblue-table.md)
+
+---
+
 ### 第一條: 繁中英碼, 終始矩陣
 「繁中英碼，終始矩陣」是 Jun.Ai.Key 跨越語言與文化鴻溝的基石，更是其理解、協作並創造價值的核心 。它定義了 Jun.Ai.Key 具備以下能力：
 *   **多元語境融匯:** 無縫處理繁體中文與英文兩種核心語種的資訊流，包含自然語言、商業語義、技術術語。這不僅是翻譯，更是深度理解兩種語言背後蘊含的文化邏輯與使用者意圖，確保溝通無礙 。

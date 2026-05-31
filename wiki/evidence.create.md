@@ -4,6 +4,26 @@
 
 ---
 
+## 邏輯上下文 (Logical Context)
+
+本 mutation 處於 **ESGGO 5T 協議門** 的起點 — **`真 (Truth)` + `信 (Trust)`**：
+
+```
+evidence.create → [storage] → integrity.sealContent (optional) → 5T 驗算完成
+     (T1 溯源)          (T2 透明)         (T4 哈希鎖定)              (T5 可信)
+```
+
+| 上下文物件 | 角色定位 | 關聯文件 |
+| :--- | :--- | :--- |
+| `IntegrityService.sealContent` | 同層：計算 SHA-256 hash lock | [integrity.service.seal-content.md](./integrity.service.seal-content.md) |
+| `omni vault seal` | 下游：ZKP 深度封印 | [cli.vault.seal.md](./cli.vault.seal.md) |
+| `EvidenceService.createEvidence` | 服務層：業務協調 | `src/server/services/evidence.service.ts` |
+| `UCCService.packageEvidence` | 延伸：封裝為 UCC 智庫包 | `src/server/services/ucc.service.ts` |
+
+> **原則重join**: 2026-05-31 最佳實踐重構 — `auto_seal` 路徑已對齊 `computeSHA256` 共享工具，確保全域雜湊算法一致性。
+
+---
+
 ## 概述 (Overview)
 This tRPC mutation is responsible for creating a new evidence entry in the system. It leverages the `EvidenceService` to handle the core logic, including base validation and the option to automatically compute a hash-lock for the evidence content, aligning with the `真 (Truth)` and `信 (Trust)` aspects of the 5T Protocol.
 
