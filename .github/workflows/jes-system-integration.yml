@@ -1,0 +1,66 @@
+# JES 監控系統 CI/CD 工作流
+
+name: JES-System-Integration
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run linter
+        run: npm run lint
+      - name: Run tests
+        run: npm test
+      - name: Build TypeScript
+        run: npm run build
+
+  jes-integration-test:
+    runs-on: ubuntu-latest
+    needs: test-and-lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm ci
+      - name: Test jes-monitor
+        run: node -e "
+          const { JESMonitor } = require('./lib/jes-monitor.ts');
+          const monitor = new JESMonitor();
+          monitor.addData({
+            timestamp: new Date(),
+            service: 'test',
+            energyConsumption: 100,
+            carbonEmission: 50
+          });
+          console.log('JESMonitor test passed');
+        "
+      - name: Test CLI commands
+        run: |
+          node cli/omni.mjes status
+          node cli/omni.mjes optimize test-service
+
+  # 可選：部署到生產環境（如 Vercel、Cloud Run）
+  deploy:
+    runs-on: ubuntu-latest
+    needs: jes-integration-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to production
+        run: echo "Deploying JES system to production..."
+        # 實際部署邏輯依賴您的平台

@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
 
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json<ApiResponse>(
       createErrorResponse('INTERNAL_ERROR', error.message || '寫入失敗'),
       { status: 500 }

@@ -19,6 +19,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ result });
   } catch (error: unknown) {
     console.error('agentZ0 error:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: (error as any).message || 'Internal Server Error' }, { status: 500 });
   }
 }

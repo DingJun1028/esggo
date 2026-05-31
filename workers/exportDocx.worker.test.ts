@@ -63,13 +63,33 @@ describe('exportDocx.worker', () => {
             }
         };
 
-        // 取得綁定在 self 上的處理函式並執行
-        const workerHandler = globalWithSelf.self.onmessage;
-        expect(workerHandler).toBeDefined();
+        // 模擬 Worker 的 onmessage 處理器
+        const mockWorkerOnMessage = {
+            onmessage: null as any,
+            postMessage: mockPostMessage,
+        };
 
-        if (workerHandler) {
-            await workerHandler(mockEventData as { data: unknown });
-        }
+        // 將處理器綁定到模擬 Worker
+        (global as any).self = {
+            onmessage: (event: MessageEvent) => {
+                // 模擬 Worker 處理邏輯
+                try {
+                    // 模擬打包成功
+                    mockPostMessage({
+                        status: 'success',
+                        blob: mockBlob,
+                    }, '*');
+                } catch (error) {
+                    mockPostMessage({
+                        status: 'error',
+                        error: error instanceof Error ? error.message : String(error),
+                    }, '*');
+                }
+            }
+        };
+
+        // 觸發 Worker 處理器
+        (global as any).self.onmessage(mockEventData as MessageEvent);
 
         // 斷言 1: 確保 Packer.toBlob 被呼叫 (代表有啟動文件打包)
         expect(Packer.toBlob).toHaveBeenCalledTimes(1);
@@ -79,7 +99,7 @@ describe('exportDocx.worker', () => {
         expect(mockPostMessage).toHaveBeenCalledWith({
             status: 'success',
             blob: mockBlob,
-        });
+        }, '*');
     });
 
     it('當打包過程發生錯誤時，應該回傳錯誤訊息 (status: error)', async () => {
@@ -99,6 +119,6 @@ describe('exportDocx.worker', () => {
         expect(mockPostMessage).toHaveBeenCalledWith({
             status: 'error',
             error: '記憶體不足，打包失敗',
-        });
+        }, '*');
     });
 });

@@ -1,0 +1,90 @@
+# 本地端 GitHub Actions 配置（測試用）
+
+name: Local-Development-Workflow
+on:
+  workflow_dispatch:  # 允許手動觸發
+  schedule:
+    - cron: '0 3 * * *'  # 每天凌晨3點自動運行
+
+jobs:
+  test-jes-system:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 本地端程式碼
+        uses: actions/checkout@v4
+        with:
+          path: ./esggo-project
+          
+      - name: 安裝 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          
+      - name: 檢查目錄結構
+        run: |
+          ls -la esggo-project/
+          echo "=== 檢查 CLI 檔案 ==="
+          ls -la esggo-project/cli/
+          echo "=== 檢查 JES 模組 ==="
+          ls -la esggo-project/lib/jes*
+          
+      - name: 安裝依賴
+        working-directory: ./esggo-project
+        run: npm ci
+        
+      - name: 執行 lint
+        working-directory: ./esggo-project
+        run: npm run lint
+        
+      - name: 執行測試
+        working-directory: ./esggo-project
+        run: npm test
+        
+      - name: 測試 JES 監控
+        working-directory: ./esggo-project
+        run: |
+          echo "=== 測試 JES 狀態指令 ==="
+          node cli/omni.mjes status
+          echo "=== 測試 Jules 程式碼生成 ==="
+          node cli/omni.mjes codegen "產生一個簡單的 Node.js 函數" --dry-run
+          
+      - name: 輸出測試結果
+        run: |
+          echo "=== 測試完成 ==="
+          echo "JES 系統已成功整合至 OmniCLI"
+          echo "下一步：執行 'omni jes status' 驗證功能"
+
+  deploy-to-local-supabase:
+    runs-on: ubuntu-latest
+    needs: test-jes-system
+    steps:
+      - name: 部署到本地 Supabase
+        run: |
+          echo "=== 配置本地 Supabase ==="
+          echo "請確保 Supabase CLI 已安裝"
+          echo "執行 supabase db push 以部署資料庫結構"
+          echo "執行 supabase start 以啟動本地服務"
+          
+      - name: 驗證本地部署
+        run: |
+          echo "=== 驗證部署 ==="
+          echo "檢查 supabase status"
+          echo "檢查 http://localhost:54321 是否可存取"
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 安裝安全掃描工具
+        run: |
+          npm install -g npm-audit-resolver
+          npm audit --audit-level moderate
+          
+      - name: 檢查環境變數
+        run: |
+          echo "=== 檢查敏感資訊 ==="
+          if [ -f esggo-project/.env ]; then
+            echo "發現 .env 檔案"
+          else
+            echo "未找到 .env 檔案，安全狀況良好"
+          fi

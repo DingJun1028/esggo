@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+// Pre-flight encoding fix for Windows
+if (process.platform === 'win32') {
+  import('child_process').then(({ execSync }) => {
+    try { execSync('chcp 65001', { stdio: 'ignore' }); } catch (e) {}
+  }).catch(() => {});
+}
 
 /**
  * OmniAgent + ESGGO 善向永續 系統 Native CLI Tool
@@ -15,9 +21,12 @@ import { BrowserUse } from 'browser-use-sdk/v3';
 // Import core logic for CLI use
 import { integrityModule } from '../lib/omni-core/integrity.ts';
 import { omniAgentBus } from '../lib/agents/omni-agent-bus.ts';
-import { omniAgent } from '../lib/agents/omni-commander.ts';
+import { omniAgent } from '../lib/agents/adk-swarm.ts';
+import { JESMonitor } from '../lib/jes-monitor.ts';
 
 dotenv.config({ override: true });
+
+const program = new Command();
 
 // -- Root Cause Fix: Force UTF-8 for Windows Terminal --------------------------
 if (process.platform === 'win32') {
@@ -29,7 +38,119 @@ if (process.platform === 'win32') {
   }
 }
 
-const program = new Command();
+// ── Jules Integration Commands ──────────────────────────────────────────────────────
+const jules = program.command('jules').description('Jules AI coding agent integration');
+
+jules.command('codegen')
+  .description('Generate code or documentation using Jules')
+  .argument('<prompt>', 'Prompt describing the code to generate')
+  .action(async (prompt) => {
+    console.log(pc.blue('[J] Generating code via Jules...'));
+    // Simulate Jules call via omniAgent (replace with real API when available)
+    try {
+      const result = await omniAgent.command('CODEGEN', { prompt });
+      if (result.success) {
+        console.log(pc.green('[v] Jules generation successful'));
+        console.log(pc.white('--- Output ---'));
+        console.log(pc.yellow(result.output || result.message || 'No output'));
+      } else {
+        console.log(pc.red('[x] Jules generation failed'));
+        console.log(pc.red(result.error?.toString() || 'Unknown error'));
+      }
+    } catch (e) {
+      console.log(pc.red('[x] Exception during Jules call'));
+      console.log(pc.red(e.message));
+    }
+  });
+
+jules.command('run')
+  .description('Run a Jules session command')
+  .argument('<task>', 'Task description for Jules')
+  .option('-c, --command', 'Treat task as a direct command')
+  .action(async (task, options) => {
+    console.log(pc.blue('[J] Running Jules task...'));
+    try {
+      const result = await omniAgent.command(task, { isCommand: !!options.command });
+      console.log(pc.green('[v] Jules task completed'));
+      console.log(pc.white(result.output || result.message || 'No output'));
+    } catch (e) {
+      console.log(pc.red('[x] Jules task error'));
+      console.log(pc.red(e.message));
+    }
+  });
+
+jules.command('browse')
+  .description('Perform web browsing via Jules (BrowserUse)')
+  .argument('<prompt>', 'Search or browse prompt')
+  .option('-m, --model <model>', 'LLM model for browsing', 'claude-opus-4.7')
+  .action(async (prompt, options) => {
+    console.log(pc.blue('[J] Initiating browser task...'));
+    const apiKey = process.env.BROWSER_USE_API_KEY || 'bu_placeholder';
+    const client = new BrowserUse({ apiKey });
+    try {
+      const res = await client.run(prompt, { model: options.model, proxyCountryCode: 'us' });
+      console.log(pc.green('[v] Browser task completed'));
+      console.log(pc.yellow(res.output));
+    } catch (e) {
+      console.log(pc.red('[x] Browser task failed'));
+      console.log(pc.red(e.message));
+    }
+  });
+
+// ── JES (Energy Flow Conflict) Monitor Commands ──────────────────────────────────────────────────────
+const jes = program.command('jes').description('Energy Flow Conflict (JES) 監控系統');
+
+jes.command('status')
+  .description('顯示目前的能源流與碳排放狀態')
+  .action(async () => {
+    console.log(pc.blue('[JES] 正在分析能源流衝突狀態...'));
+    // 目標碳排設定 (kgCO2e)
+    const targets = new Map([
+      ['frontend-app', 40],
+      ['backend-api', 100],
+      ['database-cluster', 150],
+      ['ai-agent-node', 200]
+    ]);
+    const monitor = new JESMonitor({ targetEmissions: targets });
+    // 模擬即時資料（實際應從 Supabase/API 取得）
+    monitor.addData({ timestamp: new Date(), service: 'frontend-app', energyConsumption: 120.5, carbonEmission: 50.2 });
+    monitor.addData({ timestamp: new Date(), service: 'backend-api', energyConsumption: 300.1, carbonEmission: 110.5 });
+    monitor.addData({ timestamp: new Date(), service: 'ai-agent-node', energyConsumption: 500.2, carbonEmission: 180.4 });
+    const conflicts = monitor.detectConflicts();
+    if (conflicts.length > 0) {
+      console.log(pc.red('\n⚠️ 發現能源流衝突 (Energy Flow Conflicts):'));
+      conflicts.forEach(c => {
+        console.log(pc.yellow(`- 服務: ${c.service} | 目標: ${c.expectedEmission} | 實際: ${c.actualEmission.toFixed(2)} | 差距: ${c.difference.toFixed(2)} kgCO2e`));
+      });
+      const suggestions = monitor.suggestOptimizations(conflicts);
+      console.log(pc.cyan('\n💡 優化建議:'));
+      suggestions.forEach(s => console.log(pc.white(s)));
+      // 觸發 OmniAgent 進行自動優化（示範）
+      const critical = conflicts[0];
+      console.log(pc.magenta(`\n[OmniAgent] 正在觸發自動優化: ${critical.service} (減少 ${critical.difference.toFixed(2)} kgCO2e)`));
+      try {
+        const result = await omniAgent.command('OPTIMIZE_ENERGY', { service: critical.service, reductionTarget: critical.difference });
+        console.log(pc.green(`[v] OmniAgent 回應: ${result.message || '優化請求已發送'}`));
+      } catch (e) {
+        console.log(pc.red(`[x] OmniAgent 觸發失敗: ${e.message}`));
+      }
+    } else {
+      console.log(pc.green('\n✅ 目前所有能源流均在目標範圍內，無衝突。'));
+    }
+  });
+
+jes.command('optimize')
+  .description('手動觸發能源流優化')
+  .argument('<service>', '欲優化的服務名稱')
+  .action(async (service) => {
+    console.log(pc.blue(`[JES] 正在對 ${service} 執行手動能源優化...`));
+    try {
+      const result = await omniAgent.command('OPTIMIZE_ENERGY', { service });
+      console.log(pc.green(`[v] ${result.message || '優化成功'}`));
+    } catch (e) {
+      console.log(pc.red(`[x] 手動優化失敗: ${e.message}`));
+    }
+  });
 
 const DEFAULT_OMNIAGENT_GATEWAY_URL = 'http://161.118.248.180:8642';
 

@@ -9,7 +9,7 @@ import {
 import { Card, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { cn } from '../../lib/utils';
-import { fadeIn, scaleIn, staggerContainer, slideInRight } from '../../lib/animations';
+import { fadeIn, scaleIn, staggerContainer, slideInRight } from '@/lib/animations';
 
 export default function DashboardContent() {
   const [healthScore, setHealthScore] = useState(92);

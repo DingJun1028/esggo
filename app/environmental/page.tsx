@@ -28,7 +28,7 @@ export default function EnvironmentalPage() {
       if (data.success) {
         setMetrics(data.data);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error('Failed to fetch metrics:', e);
     } finally {
       setLoading(false);
@@ -53,12 +53,12 @@ export default function EnvironmentalPage() {
       });
       const data = await response.json();
       if (data.success && data.hashLock) {
-        setMetrics(prev => prev.map(m => m.id === id ? { ...m, hash_lock: data.hashLock } : m));
+        setMetrics(prev => prev.map((m: any) => m.id === id ? { ...m, hash_lock: data.hashLock } : m));
       } else {
         console.error('Seal failed:', data.error);
         alert('封印失敗，請檢查系統日誌。');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Seal exception:', error);
       alert('無法連線至封印金庫。');
     } finally {
@@ -76,7 +76,7 @@ export default function EnvironmentalPage() {
       } else {
         alert('❌ 驗證失敗：在金庫中找不到匹配的封印紀錄，資料可能已受損。');
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       alert('連線金庫時發生錯誤');
     } finally {
@@ -108,7 +108,7 @@ export default function EnvironmentalPage() {
       } else {
         alert('新增失敗: ' + data.error);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       alert('新增紀錄時發生錯誤');
     } finally {
@@ -226,7 +226,7 @@ export default function EnvironmentalPage() {
                  { label: 'T5 Hash Lock', key: 'hash' },
                  { label: '操作', key: 'action' }
                ]}
-               data={metrics.map(m => ({
+               data={metrics.map((m: any) => ({
                  year: <span className="font-bold text-gray-900 dark:text-gray-100">{m.year}</span>,
                  metric_name: <span className="text-gray-700 dark:text-gray-300">{m.metric_name}</span>,
                  metric_value: <span className="text-gray-700 dark:text-gray-300">{m.metric_value?.toLocaleString()}</span>,

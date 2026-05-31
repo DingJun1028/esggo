@@ -1,4 +1,4 @@
-import { isDemoMode } from './firebase';
+import { isDemoMode } from './firebase.ts';
 
 export interface DemoMetric {
   id: string;

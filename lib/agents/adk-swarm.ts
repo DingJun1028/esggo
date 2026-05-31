@@ -1,11 +1,11 @@
 import { ADKAgent } from './adk-core.ts';
 import type { AgentConfig } from './adk-core.ts';
-import { ADK_STANDARD_TOOLS } from './adk-tools';
-import { agent0, OmniCommander } from './omni-commander';
-import { omniAgentBus } from './omni-agent-bus';
-import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
-import { memoryStore } from '../memory/memory-store';
-import type { MemoryRecord } from '../memory/memory-store';
+import { ADK_STANDARD_TOOLS } from './adk-tools.ts';
+import { agent0, OmniCommander } from './omni-commander.ts';
+import { omniAgentBus } from './omni-agent-bus.ts';
+import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal.ts';
+import { memoryStore } from '../memory/memory-store.ts';
+import type { MemoryRecord } from '../memory/memory-store.ts';
 
 // Define the result type from ADKAgent.run
 interface ADKAgentResult {
@@ -103,7 +103,7 @@ class CollaborativeSwarmAgent {
       omniAgentBus.subscribe('MISSION_START', (payload) => this.handleEvent('MISSION_START', payload));
       omniAgentBus.subscribe('HEALING_PROTOCOL', (payload) => this.handleEvent('HEALING_PROTOCOL', payload));
     }
-  }
+}
 
   private async handleEvent(event: string, payload: Record<string, unknown>) {
     console.log(`[Swarm Agent] ${this.agentConfig.name} reacting to: ${event}`);

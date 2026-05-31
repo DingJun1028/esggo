@@ -1,0 +1,58 @@
+name: Scheduled Omni CI/CD
+
+on:
+  schedule:
+    # 每日重複任務：每 3 小時執行一次 (UTC 時間)
+    - cron: '0 */3 * * *'
+  # 允許手動觸發
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build, Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # ESGGO 專案目前支援 Node.js 20+
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Linter (ESLint)
+        run: npm run lint
+        continue-on-error: true # 避免因警告中斷排程任務，可依需求調整
+
+      - name: Run Formatter Check (Prettier)
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Run Unit Tests (Vitest)
+        run: npm run test
+
+      - name: Send Slack Notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: "Omni CI/CD Execution Status: ${{ job.status }}"
+          SLACK_TITLE: "Scheduled CI/CD Report"
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || 'danger' }}
+
+      - name: Send Telegram Notification
+        if: always()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: "Omni CI/CD Execution Status: ${{ job.status }}\nRepository: ${{ github.repository }}\nWorkflow: ${{ github.workflow }}"
+
+      # (可選) 如果需要自動部署到 Vercel 或其他平台，可以將腳本加在後方
+      # - name: Build Project
+      #   run: npm run build

@@ -43,3 +43,8 @@ Environmental 環境數據管理 [Environmental Data Management]
         *   GHG 排放量計算結果與原始數據的單位轉換必須 100% 正確，若因排放因子缺失或數據格式錯誤導致計算失敗，必須明確提示錯誤原因而非顯示為零。
         *   當使用者上傳的數據量過大（例如超過 100MB 的 Excel），系統必須提供進度條與預估等待時間，避免頁面長時間無響應導致使用者誤以為系統崩潰。
         *   任何關鍵數據（如排放因子）的修改，必須觸發相關 GHG 數據的重新計算，並在儀表板上即時反映，確保數據一致性。
+
+7. 矩陣關聯 (Matrix Connection)
+上游數據： 來自 `/api-setup` 與 `/data-sources` 的原始能耗數據。
+下游影響： 直接提供數據給 `/finance` 計算 ROI 與 `/dashboard` 的環境績效 KPI。
+依賴組件： BrandKPIWidget, BrandDataTable, BrandLineChart, BrandFileUploadZone.

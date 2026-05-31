@@ -6,9 +6,10 @@
  * 尋找合適實證進行鏈路修復與「信」的重塑。
  */
 
-import { supabase } from '../supabase';
-import { integrityModule } from './integrity';
-import { omniCore } from '../omni-core';
+import { supabaseAdmin } from '../supabaseAdmin.ts';
+import { integrityModule } from './integrity.ts';
+import { omniAgentBus } from '../agents/omni-agent-bus.ts';
+import { createClient } from '@supabase/supabase-js';
 
 export interface HealingLogEntry {
   id: string;
@@ -34,12 +35,12 @@ export class HealingGuardian {
     console.log(`[HealingGuardian] 🩺 啟動全域自主修復循環 (Company: ${companyId})`);
     
     try {
-      if (!supabase) {
+      if (!supabaseAdmin) {
         throw new Error('Supabase client offline');
       }
 
       // 呼叫預先定義之 SQL RPC
-      const { data, error } = await supabase.rpc('execute_autonomous_healing', { 
+      const { data, error } = await supabaseAdmin.rpc('execute_autonomous_healing', { 
         p_company_id: companyId 
       });
 
@@ -49,7 +50,7 @@ export class HealingGuardian {
       console.log(`[HealingGuardian] ✨ 修復完成。成功修復 ${healedCount} 個誠信缺角。`);
 
       // 獲取最新的修復日誌
-      const { data: logs } = await supabase
+      const { data: logs } = await supabaseAdmin
         .from('healing_log')
         .select('*')
         .order('created_at', { ascending: false })
@@ -75,7 +76,7 @@ export class HealingGuardian {
     console.log(`[HealingGuardian] 🎯 執行精準修復: ${griTag} <-> ${evidenceId}`);
     
     // 1. 校驗實證是否存在且已驗證
-    const { data: evidence, error: evError } = await supabase
+    const { data: evidence, error: evError } = await supabaseAdmin
       .from('evidence_vault')
       .select('*')
       .eq('id', evidenceId)
@@ -95,7 +96,7 @@ export class HealingGuardian {
     });
 
     // 3. 寫入環境數據庫
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseAdmin
       .from('environmental_data')
       .insert([{
         company_id: companyId,
@@ -114,7 +115,7 @@ export class HealingGuardian {
     }
 
     // 4. 記錄修復日誌
-    await supabase.from('healing_log').insert([{
+    await supabaseAdmin.from('healing_log').insert([{
       target_gri: griTag,
       action_taken: 'TARGETED_HEALING',
       status: 'success',

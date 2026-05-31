@@ -20,7 +20,7 @@ export const omniagentTools = [
   { id: 'terminal', category: 'Execution', description: 'Safe sandboxed shell execution' },
   { id: 'video_generate', category: 'Creative', description: 'New v0.14: Unified video generation' },
   { id: 'trajectory_export', category: 'Research', description: 'Export compressed training data' },
-  { id: 'mcp_bridge', category: 'System', description: 'Connect to external MCP servers' }
+    { id: 'swap_defi_tester', category: 'Financial', description: 'Swap-DeFi-TEST-UMES-ONLINE integration' } }
 ];
 
 const BASE_URL = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || DEFAULT_OMNIAGENT_GATEWAY_URL;
@@ -73,6 +73,9 @@ import type {
  * 調用 Genkit AI 進行真實憑證分析
  */
 export async function scanEvidenceWithVision(fileId: string, fileType: string): Promise<OmniAgentVisionResult> {
+
+  // TODO: integrate Swap-DeFi-TEST-UMES-ONLINE here if needed
+
   console.log(`[OmniAgent Vision] Calling Genkit for file ${fileId}...`);
 
   try {
