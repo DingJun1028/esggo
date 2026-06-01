@@ -2,7 +2,7 @@ import { validateAdminArgs } from 'firebase-admin/data-connect';
 
 export const connectorConfig = {
   connector: 'omnicore',
-  serviceId: 'esggoalpha',
+  serviceId: 'esggo',
   location: 'asia-east1'
 };
 
@@ -30,10 +30,10 @@ export function listAuditRecords(dcOrOptions, options) {
   return dcInstance.executeQuery('ListAuditRecords', undefined, inputOpts);
 }
 
-export function upsertAuditRecord(dcOrVarsOrOptions, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+export function insertAuditRecord(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, false);
   dcInstance.useGen(true);
-  return dcInstance.executeMutation('UpsertAuditRecord', inputVars, inputOpts);
+  return dcInstance.executeMutation('InsertAuditRecord', inputVars, inputOpts);
 }
 
 export function listScrapedArticles(dcOrOptions, options) {
@@ -102,10 +102,10 @@ export function listCompanyMetrics(dcOrVarsOrOptions, varsOrOptions, options) {
   return dcInstance.executeQuery('ListCompanyMetrics', inputVars, inputOpts);
 }
 
-export function upsertEternalMemory(dcOrVarsOrOptions, varsOrOptions, options) {
+export function insertEternalMemory(dcOrVarsOrOptions, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
   dcInstance.useGen(true);
-  return dcInstance.executeMutation('UpsertEternalMemory', inputVars, inputOpts);
+  return dcInstance.executeMutation('InsertEternalMemory', inputVars, inputOpts);
 }
 
 export function listEternalMemoriesByCompany(dcOrVarsOrOptions, varsOrOptions, options) {
@@ -160,11 +160,5 @@ export function getMyCompanyProfile(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
   return dcInstance.executeQuery('GetMyCompanyProfile', undefined, inputOpts);
-}
-
-export function createDemoData(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
 }
 

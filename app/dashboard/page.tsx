@@ -28,6 +28,17 @@ export default function SovereignDashboard() {
     }
   }, [isRegistryModalOpen]);
 
+  // 自動同步觸發 (Automated Sync Trigger): 每當應用加載，將最新的本地註冊庫同步至雲端
+  useEffect(() => {
+    const syncComponents = async () => {
+      console.log('[OmniCore] Automated Sync Trigger initiated...');
+      await atomicManager.syncToCloud();
+    };
+    // 稍微延遲以確保所有元件都已經註冊
+    const timer = setTimeout(syncComponents, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   // 確認 NCBDB 資料庫中資料
   useEffect(() => {
     const verifyNCBDBData = async () => {
@@ -47,7 +58,7 @@ export default function SovereignDashboard() {
   }, []);
 
   return (
-    <div className="h-screen w-full bg-[#020617] text-slate-200 overflow-hidden flex font-sans selection:bg-[#06b6d4]/30">
+    <div className="h-screen w-full bg-[#020617] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#06b6d4]/10 via-[#020617] to-[#020617] text-slate-200 overflow-hidden flex font-sans selection:bg-[#06b6d4]/30">
       {/* Layer 0: Void (Background) is handled by the wrapper bg-[#020617] */}
 
       {/* --- 左側：導航與 OmniAgent 狀態 (Layer 1) --- */}

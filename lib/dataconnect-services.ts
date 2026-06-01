@@ -11,14 +11,14 @@ import {
   getCompanyProfile,
   upsertCompanyProfile,
   listEternalMemories,
-  upsertEternalMemory,
-  upsertAuditRecord,
+  insertEternalMemory,
+  insertAuditRecord,
   listSwarmAgentTasks,
   upsertSwarmAgentTask,
   listRegulatoryPolicies,
-  UpsertEternalMemoryVariables,
+  InsertEternalMemoryVariables,
   UpsertSwarmAgentTaskVariables,
-  UpsertAuditRecordVariables,
+  InsertAuditRecordVariables,
   UpsertCompanyProfileVariables,
 } from '@dataconnect/generated';
 
@@ -38,12 +38,12 @@ export const dcListEternalMemories = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertEternalMemory = async (input: any) => {
+export const dcInsertEternalMemory = async (input: any) => {
   try {
-    const response = await upsertEternalMemory(dataConnect, input as UpsertEternalMemoryVariables);
-    return response.data.eternalMemory_upsert;
+    const response = await insertEternalMemory(dataConnect, input as InsertEternalMemoryVariables);
+    return response.data.eternalMemory_insert;
   } catch (error) {
-    console.error('Data Connect: Failed to upsert eternal memory', error);
+    console.error('Data Connect: Failed to insert eternal memory', error);
     throw error;
   }
 };
@@ -123,12 +123,12 @@ export const dcListAuditRecords = async (): Promise<any> => {
   }
 };
 
-export const dcUpsertAuditRecord = async (input: any) => {
+export const dcInsertAuditRecord = async (input: any) => {
   try {
-    const response = await upsertAuditRecord(dataConnect, input as UpsertAuditRecordVariables);
-    return response.data.auditRecord_upsert;
+    const response = await insertAuditRecord(dataConnect, input as InsertAuditRecordVariables);
+    return response.data.auditRecord_insert;
   } catch (error) {
-    console.error('Data Connect: Failed to upsert audit record', error);
+    console.error('Data Connect: Failed to insert audit record', error);
     throw error;
   }
 };

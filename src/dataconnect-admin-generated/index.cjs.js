@@ -2,7 +2,7 @@ const { validateAdminArgs } = require('firebase-admin/data-connect');
 
 const connectorConfig = {
   connector: 'omnicore',
-  serviceId: 'esggoalpha',
+  serviceId: 'esggo',
   location: 'asia-east1'
 };
 exports.connectorConfig = connectorConfig;
@@ -35,12 +35,12 @@ function listAuditRecords(dcOrOptions, options) {
 }
 exports.listAuditRecords = listAuditRecords;
 
-function upsertAuditRecord(dcOrVarsOrOptions, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
+function insertAuditRecord(dcOrVarsOrOptions, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, false);
   dcInstance.useGen(true);
-  return dcInstance.executeMutation('UpsertAuditRecord', inputVars, inputOpts);
+  return dcInstance.executeMutation('InsertAuditRecord', inputVars, inputOpts);
 }
-exports.upsertAuditRecord = upsertAuditRecord;
+exports.insertAuditRecord = insertAuditRecord;
 
 function listScrapedArticles(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
@@ -119,12 +119,12 @@ function listCompanyMetrics(dcOrVarsOrOptions, varsOrOptions, options) {
 }
 exports.listCompanyMetrics = listCompanyMetrics;
 
-function upsertEternalMemory(dcOrVarsOrOptions, varsOrOptions, options) {
+function insertEternalMemory(dcOrVarsOrOptions, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
   dcInstance.useGen(true);
-  return dcInstance.executeMutation('UpsertEternalMemory', inputVars, inputOpts);
+  return dcInstance.executeMutation('InsertEternalMemory', inputVars, inputOpts);
 }
-exports.upsertEternalMemory = upsertEternalMemory;
+exports.insertEternalMemory = insertEternalMemory;
 
 function listEternalMemoriesByCompany(dcOrVarsOrOptions, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
@@ -188,11 +188,4 @@ function getMyCompanyProfile(dcOrOptions, options) {
   return dcInstance.executeQuery('GetMyCompanyProfile', undefined, inputOpts);
 }
 exports.getMyCompanyProfile = getMyCompanyProfile;
-
-function createDemoData(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('CreateDemoData', undefined, inputOpts);
-}
-exports.createDemoData = createDemoData;
 

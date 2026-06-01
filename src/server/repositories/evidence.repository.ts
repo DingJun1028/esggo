@@ -8,6 +8,9 @@ import type {
   Evidence,
   EvidenceID,
   UserID,
+  ContentHash,
+  BlockchainTxHash,
+  EvidenceMetadata,
   EvidenceStatus,
   IntegrityStatus,
   EvidenceQueryParams,
@@ -38,7 +41,7 @@ export class EvidenceRepository {
         ? new Date(Date.now() + data.expires_in_days * 24 * 60 * 60 * 1000)
         : null;
       
-      const { data: evidence, error } = await supabase
+      const { data: evidence, error } = await (supabase as any)
         .from('evidences')
         .insert({
           user_id: userId,
@@ -71,7 +74,7 @@ export class EvidenceRepository {
    */
   async findById(id: EvidenceID): Promise<Evidence | null> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('evidences')
         .select('*')
         .eq('id', id)
@@ -96,7 +99,7 @@ export class EvidenceRepository {
     params: EvidenceQueryParams
   ): Promise<PaginatedResult<Evidence>> {
     try {
-      let query = supabase.from('evidences').select('*', { count: 'exact' });
+      let query = (supabase as any).from('evidences').select('*', { count: 'exact' });
       
       // 應用篩選條件
       if (params.user_id) {
@@ -161,7 +164,7 @@ export class EvidenceRepository {
    */
   async update(id: EvidenceID, data: UpdateEvidenceDTO): Promise<Evidence | undefined> {
     try {
-      const { data: updated, error } = await supabase
+      const { data: updated, error } = await (supabase as any)
         .from('evidences')
         .update({
           tag: data.tag,
@@ -191,11 +194,11 @@ export class EvidenceRepository {
       tag: row.tag as string,
       content: row.content as string,
       content_type: row.content_type as string,
-      content_hash: row.content_hash as string,
-      metadata: row.metadata as Record<string, unknown> | null,
+      content_hash: row.content_hash as ContentHash,
+      metadata: row.metadata as EvidenceMetadata | undefined,
       status: row.status as EvidenceStatus,
       integrity_status: row.integrity_status as IntegrityStatus,
-      blockchain_tx: row.blockchain_tx as string | undefined,
+      blockchain_tx: row.blockchain_tx as BlockchainTxHash | undefined,
       created_at: new Date(row.created_at as string),
       updated_at: new Date(row.updated_at as string),
       sealed_at: row.sealed_at ? new Date(row.sealed_at as string) : undefined,

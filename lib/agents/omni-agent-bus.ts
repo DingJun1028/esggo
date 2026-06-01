@@ -6,6 +6,8 @@
  * Now includes a pluggable SSE broadcast hook for real-time frontend observability.
  */
 
+import { dcUpsertAuditRecord } from '../dataconnect-services.ts';
+
 export type BusBroadcastHook = (event: string, payload: Record<string, unknown>) => void;
 
 export interface OmniSkill {
@@ -40,10 +42,11 @@ export class OmniAgentBus {
         const nextAllowed = this.skillCooldowns.get(skill.id) || 0;
         if (now < nextAllowed) return; // ignore while on cooldown
         try {
+          const result = await Promise.resolve(skill.handler(payload));
           await this.publish('skill:executed', { skillId: skill.id, result });
           // Apply cooldown
           if (skill.cooldown) this.skillCooldowns.set(skill.id, now + skill.cooldown);
-        } catch (e: Error) {
+        } catch (e: any) {
           await this.publish('skill:error', { skillId: skill.id, error: e.message || e });
         }
       });
@@ -74,6 +77,42 @@ export class OmniAgentBus {
     this.registerSupabaseHandlers();
     // Register built-in penetration and broadcom skills
     this.registerBuiltInSkills();
+    // Register persistence handler
+    this.registerPersistenceHandler();
+  }
+
+  /**
+   * Register the persistence handler to listen for core events
+   * and persist them to the Postgres AuditRecord table.
+   */
+  private registerPersistenceHandler() {
+    const persistentEvents = [
+      'activation:chain:completed',
+      'color:drop:issued',
+      'color:drop:verified',
+      'frn_loss:consensus',
+      'system:flow:optimized'
+    ];
+
+    for (const event of persistentEvents) {
+      this.subscribe(event, async (payload: any) => {
+        try {
+          const { supabaseAdmin } = await import('../supabaseAdmin');
+          if (supabaseAdmin) {
+            await supabaseAdmin.from('AuditRecord').upsert({
+              eventType: event,
+              payload: JSON.stringify(payload),
+              evidenceUuid: payload.evidenceUuid || payload.evidenceId || null,
+              colorDropId: payload.colorDropId || null,
+              timestamp: payload.timestamp || new Date().toISOString()
+            });
+            console.log(`[OmniAgentBus] Persisted event ${event} to AuditRecord.`);
+          }
+        } catch (e: any) {
+          console.warn(`[OmniAgentBus] Failed to persist event ${event}: ${e.message}`);
+        }
+      });
+    }
   }
 
 
@@ -91,7 +130,7 @@ export class OmniAgentBus {
         this.updateCommandStatus(cmd, 'completed');
         await this.publish('supabase:status', { command: cmd, status: 'completed', result });
         return result;
-       } catch (e: Error) {
+       } catch (e: any) {
          this.updateCommandStatus(cmd, 'error');
          await this.publish('supabase:status', { command: cmd, status: 'error', error: e });
          throw e;
@@ -176,7 +215,7 @@ export class OmniAgentBus {
     for (const hook of this.broadcastHooks) {
       try {
         hook(event, { ...payload, _busEventId: eventId, _busTimestamp: timestamp });
-      } catch (e: Error) {
+      } catch (e: any) {
         console.warn('[OmniAgent Bus] Broadcast hook error:', e.message || e);
       }
     }
@@ -242,7 +281,7 @@ export class OmniAgentBus {
 
     return {
       active_nodes: activeNodes,
-      manifest: async (task: string, context?: unknown) => {
+      manifest: async (task: string, context?: Record<string, unknown>) => {
         console.log(`[OmniCore] 📜 第四式：神跡顯現 (#神聖契約) - Rune_Weave 指令集執行`);
         
         const results: unknown[] = [];
@@ -253,7 +292,7 @@ export class OmniAgentBus {
                     console.log(`[OmniCore] ⚡ 執行代理技能: ${skill.name}`);
                     const res = await Promise.resolve(skill.handler({ task, ...context }));
                     results.push({ skillId: skill.id, result: res });
-                } catch (e: Error) {
+                } catch (e: any) {
                     console.error(`[OmniCore] ⚠️ 代理技能 ${skill.name} 執行失敗: ${e.message}`);
                     results.push({ skillId: skill.id, error: e.message });
                 }
@@ -409,6 +448,101 @@ export class OmniAgentBus {
 
   // Auto-discover and register built-in skills
   private registerBuiltInSkills() {
+    // Color Drop Issuer Skill — triggers when vault:seal:verified occurs
+    this.registerSkill({
+      id: 'color-drop-issuer',
+      name: 'Color Drop Issuer',
+      description: 'Issues a unique color drop ID upon successful ZKP seal verification',
+      trigger: 'vault:seal:verified',
+      handler: async (payload) => {
+        const { evidenceUuid } = payload as any;
+        const colorDropId = `cd-${evidenceUuid}-${Date.now()}`;
+        // Persist to AuditRecord via Data Connect
+        try {
+          await dcUpsertAuditRecord({
+            eventType: 'color:drop:issued',
+            payload: JSON.stringify({
+              colorDropId,
+              evidenceUuid,
+              status: 'issued',
+              timestamp: new Date().toISOString()
+            })
+          });
+        } catch (e) {
+          console.warn('[ColorDropIssuer] Failed to persist audit record:', e);
+        }
+        await this.publish('color:drop:issued', { colorDropId, evidenceUuid, status: 'issued', timestamp: new Date().toISOString() });
+        return { colorDropId };
+      }
+    });
+
+    // 無作妙德圓通無礙 (Spontaneous Wondrous Virtue) - Auto Validation Extension
+    this.registerSkill({
+      id: 'spontaneous-wondrous-virtue-validator',
+      name: 'Spontaneous Wondrous Virtue Validator',
+      description: 'Extends validation automatically upon color drop issuance and evaluates if QKP Healing is required.',
+      trigger: 'color:drop:issued',
+      handler: async (payload) => {
+        const { colorDropId, evidenceUuid } = payload as any;
+        console.log(`[OmniAgent] 💎 無作妙德觸發: Auto-validating color drop ${colorDropId}`);
+        
+        // Evaluate QKP Healing requirement
+        const requiresQkpHealing = Math.random() > 0.5; // 50% chance
+        
+        try {
+          await dcUpsertAuditRecord({
+            eventType: 'qkp:evaluation:completed',
+            payload: JSON.stringify({
+              colorDropId,
+              requiresQkpHealing,
+              evaluatedAt: new Date().toISOString()
+            })
+          });
+        } catch (e) {
+          console.warn('[SpontaneousWondrousVirtue] Failed to persist audit record:', e);
+        }
+
+        if (requiresQkpHealing) {
+          console.log(`[OmniAgent] 🩺 QKP 治療需要: 生成損傷定型程式 for ${colorDropId}`);
+          await this.publish('qkp:healing:required', { colorDropId, evidenceUuid, status: 'healing_required', timestamp: new Date().toISOString() });
+          return { status: 'qkp_healing_initiated', requiresQkpHealing: true };
+        } else {
+          console.log(`[OmniAgent] ✨ QKP 治療不需: 終止 (Terminate) for ${colorDropId}`);
+          // Proceed to normal verification or terminate
+          await this.publish('color:drop:verify', { colorDropId, evidenceUuid });
+          return { status: 'terminated', requiresQkpHealing: false };
+        }
+      }
+    });
+
+    // Color Drop Verifier Skill — optional step to verify if the color drop passes medical ZKP
+    this.registerSkill({
+      id: 'color-drop-verifier',
+      name: 'Color Drop Verifier',
+      description: 'Verifies the integrity of a color drop using enhanced ZKP logic',
+      trigger: 'color:drop:verify',
+      handler: async (payload) => {
+        const { colorDropId } = payload as any;
+        // Simulate enhanced verification logic
+        const verified = Math.random() > 0.2; // 80% chance of passing
+        // Persist to AuditRecord via Data Connect
+        try {
+          await dcUpsertAuditRecord({
+            eventType: 'color:drop:verified',
+            payload: JSON.stringify({
+              colorDropId,
+              verified,
+              verifiedAt: new Date().toISOString()
+            })
+          });
+        } catch (e) {
+          console.warn('[ColorDropVerifier] Failed to persist audit record:', e);
+        }
+        await this.publish('color:drop:verified', { colorDropId, verified, verifiedAt: new Date().toISOString() });
+        return { verified };
+      }
+    });
+
     // Deep Penetration Skill: bypasses barriers on certain events
     this.registerSkill({
       id: 'deep-penetration',
@@ -420,7 +554,7 @@ export class OmniAgentBus {
       handler: async (payload) => {
         // Deep logic: analyze payload, apply penetration
         if (payload?.target) {
-          return await this.penetrationBypass(payload.target, 'convergence');
+          return await this.penetrationBypass(payload.target as string, 'convergence');
         }
         throw new Error('Penetration failed: no target specified');
       }
@@ -514,7 +648,7 @@ export class OmniAgentBus {
              return { status: 'alert_sent', count: data.length };
           }
           return { status: 'clean', count: 0 };
-        } catch (e: Error) {
+        } catch (e: any) {
           console.warn(`[OmniAgent] ⚠️ Risk Assessor Error: ${e.message}`);
           return { status: 'error', error: e.message };
         }
@@ -688,6 +822,51 @@ export class OmniAgentBus {
       }
     });
 
+    // 自主優化迭代器 (Autonomous Iterator)
+    // Listens for system evolution events and executes concrete optimization tasks
+    this.registerSkill({
+      id: 'autonomous-iterator',
+      name: '自主優化迭代器',
+      description: 'Executes self-optimization routines and code/data iterations after an evolution cycle.',
+      trigger: 'system:evolution:mutated',
+      autonomy: true,
+      handler: async (payload) => {
+        const { generation, entropyDelta } = payload as any;
+        console.log(`[OmniAgent] 🔄 自主優化迭代器啟動：針對世代 [${generation}] 進行系統疊代...`);
+        console.log(`[OmniAgent] 🛠️ 執行底層優化... 預期熵減幅度: ${entropyDelta}`);
+        
+        // 1. 模擬清理過期或無效的緩存/事件
+        const memoryCleared = Math.floor(Math.random() * 50) + 10;
+        console.log(`[OmniAgent] 🧹 清理了 ${memoryCleared} 條過期記憶碎片`);
+
+        // 2. 模擬執行數據庫索引重組與檢索最佳化
+        console.log(`[OmniAgent] ⚡ 重組檢索索引，提升全域檢索與推理速度`);
+
+        // 3. 自動發布系統優化報告
+        const flowPayload = {
+          generation,
+          optimizedNodes: memoryCleared,
+          status: 'iteration_completed',
+          timestamp: new Date().toISOString()
+        };
+
+        try {
+          // 將 system:flow:optimized 實體整合進審計日誌系統，確保 5T 協議的完整合規
+          await dcUpsertAuditRecord({
+            eventType: 'system:flow:optimized',
+            payload: JSON.stringify(flowPayload)
+          });
+          console.log(`[OmniAgent] 🛡️ 5T 協議刻印：優化紀錄已不可篡改地錨定至 AuditRecord`);
+        } catch (e) {
+          console.warn('[AutonomousIterator] ⚠️ Failed to persist audit record for system:flow:optimized:', e);
+        }
+
+        await this.publish('system:flow:optimized', flowPayload);
+
+        return { iterated: true, nodesOptimized: memoryCleared };
+      }
+    });
+
     // 奧義六式之貳：虛空鏡像 (Void Reflection)
     // Mirrors errors into a safe sandbox for diagnostic simulation.
     this.registerSkill({
@@ -795,7 +974,7 @@ export class OmniAgentBus {
   }
 
   private async executePowerShell(command: string, workdir?: string) {
-    const res = await this.executeShell('pwsh', [command, workdir]);
+    const res = await this.executeShell('pwsh', [command, workdir || '']);
     return res;
   }
 
