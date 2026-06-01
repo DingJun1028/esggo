@@ -13,6 +13,13 @@ interface ScraperResult {
   sourceUrl: string;
 }
 
+interface ScraperResultItem {
+  source: string;
+  success: boolean;
+  articles: unknown[];
+  url: string;
+}
+
 export default function ScraperControl() {
   const [loadingTarget, setLoadingTarget] = useState<string | null>(null);
   const [results, setResults] = useState<ScraperResult[]>([
@@ -60,14 +67,17 @@ export default function ScraperControl() {
       }
       
       if (target === 'all') {
-        const newResults: ScraperResult[] = data.results.map((r: unknown, index: number) => ({
-          id: `task-${Date.now()}-${index}`,
-          target: r.source || 'Unknown Source',
-          status: r.success ? 'success' : 'failed',
-          itemsScraped: r.articles?.length || 0,
-          timestamp: new Date().toLocaleString(),
-          sourceUrl: r.url || 'Multiple Sources'
-        }));
+        const newResults: ScraperResult[] = data.results.map((r: unknown, index: number) => {
+          const item = r as ScraperResultItem;
+          return {
+            id: `task-${Date.now()}-${index}`,
+            target: item.source || 'Unknown Source',
+            status: item.success ? 'success' : 'failed',
+            itemsScraped: item.articles?.length || 0,
+            timestamp: new Date().toLocaleString(),
+            sourceUrl: item.url || 'Multiple Sources'
+          };
+        });
         setResults(prev => [...newResults, ...prev]);
       } else {
         const newResult: ScraperResult = {

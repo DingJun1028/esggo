@@ -10,6 +10,8 @@ import {
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import { cn } from '@/lib/utils';
 import { ComponentRenderer } from '@/components/ComponentRenderer';
+import { AtomicLibraryProvider } from '@/lib/design-system/AtomicLibraryProvider';
+import { AtomicLibraryShowcase } from '@/lib/design-system/AtomicLibraryShowcase';
 
 export default function AtomicRegistryPage() {
   const [activeTheme, setActiveTheme] = useState<'light' | 'dark'>('dark');
@@ -180,37 +182,18 @@ export default function AtomicRegistryPage() {
           </div>
         </section>
 
-        {/* ─── 容器與組件展示 (Atoms & Molecules) ─────────────────── */}
+        {/* ─── 容器與組件展示 (Atoms & Space) ─────────────────── */}
         <section className="space-y-12">
           <h2 className="text-2xl font-black flex items-center gap-3 uppercase tracking-tight">
-            <Box className="text-cyan-400" /> 空間容器與原子 (Atoms & Space)
+            <Box className="text-cyan-400" /> 萬能元件互動沙盒 (Interactive Atomic Playground)
           </h2>
+          <p className="text-sm opacity-60 leading-relaxed max-w-3xl">
+            此沙盒完全基於 <code className="text-cyan-400 font-mono text-xs bg-current/10 px-2 py-1 rounded">lib/design-system</code> 的全新原子級元件。使用者可在此調整全域主題與渲染分層，即時觀察元件微光呼吸、液態玻璃效果與微動畫。
+          </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-             {/* Buttons Section */}
-             <div className="space-y-6">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] opacity-40 border-l-2 border-cyan-500 pl-4">BrandButton / 意圖驅動器</h3>
-                <div className="flex flex-wrap gap-4 p-8 rounded-[2.5rem] bg-current/5 border border-current/5">
-                   <BrandButton variant="primary">主權執行 (Primary)</BrandButton>
-                   <BrandButton variant="secondary">次要策略 (Secondary)</BrandButton>
-                   <BrandButton variant="glass">液態共鳴 (Glass)</BrandButton>
-                   <BrandButton variant="outline">邊界校準 (Outline)</BrandButton>
-                </div>
-             </div>
-
-             {/* Badges Section */}
-             <div className="space-y-6">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] opacity-40 border-l-2 border-emerald-500 pl-4">BrandBadge / 狀態刻印</h3>
-                <div className="flex flex-wrap gap-4 p-8 rounded-[2.5rem] bg-current/5 border border-current/5 items-center">
-                   <BrandBadge variant="success">VERIFIED_T4</BrandBadge>
-                   <BrandBadge variant="blue">GRI_305_ALIGNED</BrandBadge>
-                   <BrandBadge variant="outline" className="tracking-widest">v8.5.5_STABLE</BrandBadge>
-                   <div className="flex items-center gap-4 bg-slate-950 px-6 py-2 rounded-full border border-white/5">
-                      <BrandStatusDot status="active" pulse /> <span className="text-[10px] font-black uppercase">Resonating</span>
-                   </div>
-                </div>
-             </div>
-          </div>
+          <AtomicLibraryProvider>
+            <AtomicLibraryShowcase />
+          </AtomicLibraryProvider>
         </section>
 
         {/* ─── 動態專家工具庫 (Dynamic Tool Injection) ───────────────── */}

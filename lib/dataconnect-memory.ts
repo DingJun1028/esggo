@@ -18,7 +18,7 @@ export interface SustainWriteSection {
   chapter_name: string;
   content?: string;
   content_md?: string;
-  field_values?: Record<string, any>;
+  field_values?: Record<string, unknown>;
   notes?: string;
   documents_state?: Record<string, boolean>;
   status?: 'empty' | 'draft' | 'reviewing' | 'completed';
@@ -53,8 +53,9 @@ async function getOrCreateReportId(companyId: string): Promise<string> {
     
     const { data: refetch } = await getReportByCompany({ companyId: cid });
     return refetch?.reports?.[0]?.id || 'simulation-report-id';
-  } catch (e: any) {
-    console.warn('[DataConnect Memory] Simulation Mode Active:', e.message);
+  } catch (e) {
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.warn('[DataConnect Memory] Simulation Mode Active:', errorMessage);
     return 'sim-report-123';
   }
 }
@@ -82,7 +83,8 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       hashLock: params.hash_lock
     });
     return data;
-  } catch (e: any) {
+  } catch (e) {
+    const errorMessage = e instanceof Error ? e.message : String(e);
     console.log(`[Simulation] Saved Section: ${params.chapter_id} with hash ${params.hash_lock}`);
     return { success: true, simulated: true };
   }
@@ -112,18 +114,18 @@ export async function loadSustainWriteSections(companyId: string): Promise<Susta
   }));
 }
 
-export async function saveMetric(companyId: string, metric: any): Promise<any> {
+export async function saveMetric(companyId: string, metric: Record<string, unknown>): Promise<unknown> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
   return await upsertCompanyMetric({
     companyId: cid,
-    metricName: metric.name,
-    metricValue: metric.value,
-    unit: metric.unit,
-    category: metric.category,
+    metricName: metric.name as string,
+    metricValue: metric.value as number,
+    unit: metric.unit as string,
+    category: metric.category as string,
     verified: metric.verified || false,
-    griStandard: metric.gri,
-    sourceOrigin: metric.sourceOrigin,
-    hashLock: metric.hashLock
+    griStandard: metric.gri as string,
+    sourceOrigin: metric.sourceOrigin as string,
+    hashLock: metric.hashLock as string
   });
 }
 
@@ -133,14 +135,14 @@ export async function loadMetrics(companyId: string): Promise<unknown[]> {
   return data?.companyMetrics || [];
 }
 
-export async function saveMemory(companyId: string, memory: any): Promise<any> {
+export async function saveMemory(companyId: string, memory: Record<string, unknown>): Promise<unknown> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
   return await upsertEternalMemory({
     companyId: cid,
-    type: memory.type,
-    content: memory.content,
-    tags: memory.tags,
-    hashLock: memory.hashLock,
+    type: memory.type as string,
+    content: memory.content as string,
+    tags: memory.tags as string[],
+    hashLock: memory.hashLock as string,
     consolidated: memory.consolidated || false
   });
 }

@@ -1,6 +1,0 @@
-### Execution Trace:  
-- Viewed: queries.gql, schema.gql  
-- Modified: queries.gql  
-  
-### Outcome:  
-Fixed INSECURE IDE warnings in Data Connect queries.  

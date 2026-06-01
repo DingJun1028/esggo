@@ -54,12 +54,12 @@ export class JESMonitor {
 
         if (error) throw error;
 
-        return data.map((d: any) => ({
-          timestamp: new Date(d.timestamp),
-          service: d.service,
-          energyConsumption: Number(d.energy_consumption),
-          emission: Number(d.carbon_emission),
-          carbonEmission: Number(d.carbon_emission)
+        return data.map((d) => ({
+          timestamp: new Date((d as Record<string, unknown>).timestamp as string),
+          service: (d as Record<string, unknown>).service as string,
+          energyConsumption: Number((d as Record<string, unknown>).energy_consumption as number),
+          emission: Number((d as Record<string, unknown>).carbon_emission as number),
+          carbonEmission: Number((d as Record<string, unknown>).carbon_emission as number)
         }));
       } catch (err) {
         if (attempt === maxRetries) throw err;

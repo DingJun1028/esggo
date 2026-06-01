@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     let targetTable = 'evidence_vault';
-    let updatePayload: unknown = { hash_lock: hashLock, zkp_proof: true, status: 'verified' };
+    let updatePayload: Record<string, unknown> = { hash_lock: hashLock, zkp_proof: true, status: 'verified' };
 
     if (sourceOrigin === 'environmental-module') {
       targetTable = 'environmental_data';

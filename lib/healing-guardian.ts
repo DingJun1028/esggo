@@ -1,4 +1,3 @@
-import { createHashLock, sha256 } from './crypto-proof';
 import { omniCore } from './omni-core';
 import { omniAgentBus } from './agents/omni-commander';
 
@@ -21,15 +20,17 @@ export class HealingGuardian {
    * Evaluates incoming webhook payloads for manual tampering and triggers healing if necessary.
    */
   static async evaluateSensorPayload(payload: unknown): Promise<void> {
-    const { action, table, record, oldRecord } = payload;
-    console.log(`[HealingGuardian] 📡 Intercepted ${action} on ${table}. Evaluating drift...`);
+    const sensorPayload = payload as Record<string, unknown>;
+    const action = sensorPayload.action as string | undefined;
+    const table = sensorPayload.table as string | undefined;
+    const record = sensorPayload.record as Record<string, unknown> | undefined;
+    console.log(`[HealingGuardian] 📡 Intercepted ${action ?? 'unknown'} on ${table ?? 'unknown'}. Evaluating drift...`);
 
-    // Publish to Swarm for collaborative evaluation
-    omniAgentBus.publish('WEBHOOK_RECEIVED', { 
-      source: 'NCBDB_Sensor', 
-      action, 
-      table, 
-      recordId: record?.id,
+    omniAgentBus.publish('WEBHOOK_RECEIVED', {
+      source: 'NCBDB_Sensor',
+      action,
+      table,
+      recordId: record?.id as string | undefined,
       data: record
     });
   }
@@ -67,16 +68,17 @@ export class HealingGuardian {
 
       return healingReport;
 
-    } catch (error: unknown) {
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       const failReport: HealingReport = {
         id: `HG-FAIL`,
         status: 'critical',
         targetId,
-        details: `Healing Protocol Failed: ${error.message}`,
+        details: `Healing Protocol Failed: ${errorMessage}`,
         timestamp: new Date().toISOString()
       };
-      
-      omniAgentBus.publish('AGENT_ERROR', { agent: 'HealingGuardian', error: error.message });
+
+      omniAgentBus.publish('AGENT_ERROR', { agent: 'HealingGuardian', error: errorMessage });
       return failReport;
     }
   }

@@ -24,8 +24,9 @@ export default function DataConnectDashboard() {
       });
       const data = await res.json();
       setSyncResult(data);
-    } catch (err: unknown) {
-      setSyncResult({ success: false, error: err.message });
+    } catch (err) {
+      const syncError = err instanceof Error ? err.message : 'Sync failed';
+      setSyncResult({ success: false, error: syncError });
     } finally {
       setIsSyncing(false);
     }

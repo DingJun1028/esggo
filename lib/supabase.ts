@@ -6,12 +6,12 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.
 // Singleton instance
 let supabaseInstance: SupabaseClient | null = null;
 
-export const supabase = (() => {
+export const supabase: SupabaseClient | null = (() => {
   if (supabaseInstance) return supabaseInstance;
   
   if (!supabaseUrl || !supabaseKey) {
     console.warn('Supabase URL or Key missing');
-    return null as any;
+    return null;
   }
 
   try {
@@ -19,9 +19,9 @@ export const supabase = (() => {
     return supabaseInstance;
   } catch (error) {
     console.error('Supabase initialization error:', error);
-    return null as any;
+    return null;
   }
-})() as SupabaseClient;
+})();
 
 export function getSupabaseClient(): SupabaseClient | null {
   return supabase;

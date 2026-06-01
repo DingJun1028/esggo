@@ -4,10 +4,30 @@ import { createHash } from 'crypto';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
+interface RoundTripStep {
+  step: number;
+  name: string;
+  success: boolean;
+  error: string | null;
+  roundTripMatch?: boolean;
+  secretId?: unknown;
+}
+
+interface RoundTripResponse {
+  timestamp: string;
+  steps: RoundTripStep[];
+  overallSuccess: boolean;
+  clientRole: string;
+  message: string;
+}
+
 export async function GET(request: NextRequest) {
-  const results: Record<string, any> = {
+  const results: RoundTripResponse = {
     timestamp: new Date().toISOString(),
     steps: [],
+    overallSuccess: false,
+    clientRole: 'service_role',
+    message: '',
   };
 
   if (!supabaseUrl || !serviceRoleKey) {
@@ -67,7 +87,7 @@ export async function GET(request: NextRequest) {
     results.steps.push({ step: 2, name: 'get_decrypted_seal', success: false, error: e.message });
   }
 
-  const allPassed = results.steps.every((s: unknown) => s.success);
+  const allPassed = results.steps.every((s) => s.success);
 
   return NextResponse.json({
     ...results,

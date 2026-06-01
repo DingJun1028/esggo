@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 
 const MODELS = [
   { id: 'gemini-2-pro', name: 'Gemini 2.0 Pro', provider: 'Google', status: 'Active', latency: '120ms', tokens: '1.2M / day' },
-  { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash', provider: 'Google', status: 'Active', latency: '45ms', tokens: '8.4M / day' },
+  { id: 'gemini-2.5-flash', name: 'Gemini 1.5 Flash', provider: 'Google', status: 'Active', latency: '45ms', tokens: '8.4M / day' },
   { id: 'gpt-4o', name: 'GPT-4o', provider: 'OpenAI', status: 'Standby', latency: '350ms', tokens: '0' },
 ];
 

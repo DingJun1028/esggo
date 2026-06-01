@@ -79,8 +79,8 @@ export async function getHermesCredentials(
     if (error || !data) return null;
 
     return JSON.parse(data.secret) as HermesCredentials;
-  } catch (err) {
-    console.error('[HermesStore] Failed to retrieve credentials:', err);
+  } catch {
+    console.error('[HermesStore] Failed to retrieve credentials');
     return null;
   }
 }

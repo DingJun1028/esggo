@@ -40,12 +40,10 @@ export class OmniAgentBus {
         const nextAllowed = this.skillCooldowns.get(skill.id) || 0;
         if (now < nextAllowed) return; // ignore while on cooldown
         try {
-          const result = await Promise.resolve(skill.handler(payload));
-          // Publish skill result event
           await this.publish('skill:executed', { skillId: skill.id, result });
           // Apply cooldown
           if (skill.cooldown) this.skillCooldowns.set(skill.id, now + skill.cooldown);
-        } catch (e: any) {
+        } catch (e: Error) {
           await this.publish('skill:error', { skillId: skill.id, error: e.message || e });
         }
       });
@@ -93,10 +91,10 @@ export class OmniAgentBus {
         this.updateCommandStatus(cmd, 'completed');
         await this.publish('supabase:status', { command: cmd, status: 'completed', result });
         return result;
-      } catch (e: any) {
-        this.updateCommandStatus(cmd, 'error');
-        await this.publish('supabase:status', { command: cmd, status: 'error', error: e });
-        throw e;
+       } catch (e: Error) {
+         this.updateCommandStatus(cmd, 'error');
+         await this.publish('supabase:status', { command: cmd, status: 'error', error: e });
+         throw e;
       }
     });
   }
@@ -177,8 +175,8 @@ export class OmniAgentBus {
     // 2. SSE Bridge Propagation (Push to all registered broadcast hooks)
     for (const hook of this.broadcastHooks) {
       try {
-        hook(event, { ...(payload as any), _busEventId: eventId, _busTimestamp: timestamp });
-      } catch (e: any) {
+        hook(event, { ...payload, _busEventId: eventId, _busTimestamp: timestamp });
+      } catch (e: Error) {
         console.warn('[OmniAgent Bus] Broadcast hook error:', e.message || e);
       }
     }
@@ -202,7 +200,7 @@ export class OmniAgentBus {
 
   // --- JunAiKey-BindAi Core Protocol Implementations ---
   
-  private extractQuantumEssence(intent: string, context: Record<string, any>) {
+  private extractQuantumEssence(intent: string, context: Record<string, unknown>) {
     console.log(`[OmniCore] 🧬 第一式：本質提純 (#熵減煉金) - 絕對數據驅動決策`);
     return { ...context, _entropy: 'refined', essence: intent };
   }
@@ -247,7 +245,7 @@ export class OmniAgentBus {
       manifest: async (task: string, context?: unknown) => {
         console.log(`[OmniCore] 📜 第四式：神跡顯現 (#神聖契約) - Rune_Weave 指令集執行`);
         
-        let results: unknown[] = [];
+        const results: unknown[] = [];
         if (matchedSkills.length > 0) {
             // 執行已匹配的具體技能
             for (const skill of matchedSkills) {
@@ -255,7 +253,7 @@ export class OmniAgentBus {
                     console.log(`[OmniCore] ⚡ 執行代理技能: ${skill.name}`);
                     const res = await Promise.resolve(skill.handler({ task, ...context }));
                     results.push({ skillId: skill.id, result: res });
-                } catch (e: any) {
+                } catch (e: Error) {
                     console.error(`[OmniCore] ⚠️ 代理技能 ${skill.name} 執行失敗: ${e.message}`);
                     results.push({ skillId: skill.id, error: e.message });
                 }
@@ -458,7 +456,7 @@ export class OmniAgentBus {
       description: 'Hooks into 5T Cryptographic Seals to execute downstream verification',
       trigger: 'vault:seal:5t',
       handler: async (payload) => {
-        const { evidenceUuid, hashLock, sealType } = payload as any;
+        const { evidenceUuid, hashLock, sealType } = payload as { evidenceUuid: string; hashLock?: string; sealType?: string };
         console.log(`[OmniAgent] 🛡️ Validating cryptographic seal for ${evidenceUuid}...`);
         
         // Publish downstream combo event: Verified
@@ -504,19 +502,19 @@ export class OmniAgentBus {
           if (error) throw error;
           
           if (data && data.length > 0) {
-             const evidenceNames = data.map((d: any) => d.file_name).join(', ');
+             const evidenceNames = data.map((d: { file_name: string }) => d.file_name).join(', ');
              console.log(`[OmniAgent] ⚠️ Risk Alert: Found ${data.length} unsealed evidence! (${evidenceNames})`);
              // Publish a notification event
              await this.publish('notification:alert', {
                 title: 'High Risk Evidence Unsealed',
                 message: `Found ${data.length} unsealed evidence documents requiring 5T Cryptographic Seal.`,
-                evidenceIds: data.map((d: any) => d.id),
+                evidenceIds: data.map((d: { id: string }) => d.id),
                 severity: 'high'
              });
              return { status: 'alert_sent', count: data.length };
           }
           return { status: 'clean', count: 0 };
-        } catch (e: any) {
+        } catch (e: Error) {
           console.warn(`[OmniAgent] ⚠️ Risk Assessor Error: ${e.message}`);
           return { status: 'error', error: e.message };
         }
@@ -616,7 +614,7 @@ export class OmniAgentBus {
       description: 'Listens for ZKP-ready evidence and automatically syncs it to the appropriate ESG report sections',
       trigger: 'vault:seal:zkp_ready',
       handler: async (payload) => {
-        const { evidenceId, fileName } = payload as any;
+        const { evidenceId, fileName } = payload as { evidenceId: string; fileName: string };
         console.log(`[OmniAgent] 📝 Syncing ZKP-Ready Evidence (${fileName}) to SustainWrite Sections...`);
         
         // Simulate linking evidence to a report section
@@ -638,7 +636,7 @@ export class OmniAgentBus {
       description: 'Recalculates simulation metrics when new evidence is synced to reports',
       trigger: 'sustainwrite:section:synced',
       handler: async (payload) => {
-        const { sectionKey, evidenceId } = payload as any;
+        const { sectionKey, evidenceId } = payload as { sectionKey: string; evidenceId: string };
         console.log(`[OmniAgent] 🌐 Digital Twin: Recalculating impact metrics for section [${sectionKey}] due to new evidence [${evidenceId}]`);
         
         // Emit final metric update
@@ -663,7 +661,7 @@ export class OmniAgentBus {
       autonomy: true,
       cooldown: 0, // Unbound by cooldown, triggered by the completion of a major cycle
       handler: async (payload) => {
-        const { sectionKey, variance } = payload as any;
+        const { sectionKey, variance } = payload as { sectionKey: string; variance: string };
         console.log(`[OmniCore] 🌀 奧義展開：無限進化輪 (Infinite Evolution Wheel) 被喚醒...`);
         console.log(`[OmniCore] 🧬 攝取進化資糧：章節 [${sectionKey}] 的環境變數 (${variance})`);
         
@@ -699,7 +697,7 @@ export class OmniAgentBus {
       trigger: 'skill:error',
       autonomy: true,
       handler: async (payload) => {
-        const { skillId, error } = payload as any;
+        const { skillId, error } = payload as { skillId: string; error: string };
         console.log(`[OmniCore] 🪞 奧義展開：虛空鏡像 (Void Reflection) 捕捉到異常...`);
         console.log(`[OmniCore] 🌌 將異常 (${skillId}) 投影至沙盒進行維度分析`);
         

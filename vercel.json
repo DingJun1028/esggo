@@ -26,7 +26,7 @@
   "crons": [
     {
       "path": "/api/omni-agent-api/schedule?mission=SYNC_OMNIBLUE_OMNITABLE",
-      "schedule": "0 */3 * * *"
+      "schedule": "0 0 * * *"
     },
     {
       "path": "/api/omni-agent-api/schedule?mission=EVIDENCE_AUDIT",
