@@ -93,8 +93,9 @@ export default function LoginPage() {
       }));
       
       router.push('/dashboard');
-    } catch (err: unknown) {
-      setError(err.message || '連線錯誤 (Connection Error)');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '連線錯誤 (Connection Error)';
+      setError(message);
     } finally {
       setLoading(false);
     }

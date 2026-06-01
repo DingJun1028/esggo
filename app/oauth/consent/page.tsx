@@ -54,9 +54,9 @@ function ConsentContent() {
         window.close();
       }, 3000);
 
-    } catch (err: unknown) {
+    } catch (err) {
       setStatus('error');
-      setErrorMsg(err.message || '發生未知錯誤');
+      setErrorMsg(err instanceof Error ? err.message : '發生未知錯誤');
     }
   };
 

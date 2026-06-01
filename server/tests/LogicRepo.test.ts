@@ -6,7 +6,7 @@ describe('LogicRepo', () => {
   let db: unknown;
   let repo: unknown;
   let originalCreateTable: unknown;
-  let testDbPath: string = join(process.cwd(), 'logic_registry.test.db');
+  const testDbPath: string = join(process.cwd(), 'logic_registry.test.db');
 
   beforeEach(() => {
     // Create fresh database for each test

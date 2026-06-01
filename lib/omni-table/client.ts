@@ -181,7 +181,7 @@ export class OmniTableClient {
       'GET',
       `/spaces/${spaceId}/nodes`,
       undefined,
-      { type: 'Datasheet', keyword } as any
+      { type: 'Datasheet', keyword }
     );
     return res.data.nodes;
   }

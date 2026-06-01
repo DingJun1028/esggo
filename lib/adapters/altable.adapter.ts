@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto';
  */
 export interface AlTableRecordPayload {
   recordId: string;
-  fields: Record<string, any>;
+  fields: Record<string, unknown>;
   updatedTime: number;
 }
 

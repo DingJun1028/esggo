@@ -1,62 +1,46 @@
-/**
- * ⚛️ AtomicButton - Universal Atomic Component
- * v1.1 | #ReferencePrinciple #T3Tangible
- */
-
 import React, { useEffect } from 'react';
 import { IAtomicComponent, atomicManager } from './atomic-core';
-import { omniCore } from '../omni-core';
 
-interface AtomicButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 's' | 'm' | 'l';
+export interface AtomicButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'default' | 'primary' | 'ghost' | 'outline';
 }
 
-/**
- * 參照原則實作：組件在掛載時向原子庫註冊。
- */
-export const AtomicButton: React.FC<AtomicButtonProps> = ({ 
-  variant = 'primary', 
-  size = 'm',
+export const AtomicButton: React.FC<AtomicButtonProps> = ({
+  variant = 'default',
+  className = '',
   children,
-  className,
-  ...props 
+  ...props
 }) => {
   useEffect(() => {
-    // 參照原則：組件自我宣告與誠信鏈接
     const atom: IAtomicComponent = {
       atomId: 'ATOM_BTN_001',
       type: 'atom',
-      version: '1.1.0',
-      core: { status: 'Trustworthy' } as any, // 簡化展示
+      version: '1.0.0',
+      core: { status: 'Trustworthy' } as any,
       reference: {
-        specification: 'InfoOne Atomic Spec v8.5',
-        intent: 'Primary Action Trigger',
-        governanceNode: 'UI_INTERACTION_CORE'
+        specification: 'Interaction Spec v2.0',
+        intent: 'Action Trigger',
+        governanceNode: 'UI_ACTION_CORE'
       }
     };
-    atomicManager.registerAtom(atom);
+    atomicManager?.registerAtom?.(atom);
   }, []);
 
-  const baseStyles = "inline-flex items-center justify-center rounded-md font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2";
-  
-  const variants = {
-    primary: "bg-[var(--at-accent)] text-[var(--at-bg-card)] hover:opacity-90 shadow-[var(--at-shadow)]",
-    secondary: "bg-transparent border border-[var(--at-border)] text-[var(--at-text-main)] hover:bg-[var(--at-bg-primary)]",
-    ghost: "bg-transparent text-[var(--at-text-sub)] hover:text-[var(--at-text-main)] hover:bg-[var(--at-bg-primary)]"
-  };
+  const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer';
 
-  const sizes = {
-    s: "px-3 py-1.5 text-xs",
-    m: "px-4 py-2 text-sm",
-    l: "px-6 py-3 text-base"
-  };
+  const variantClasses = {
+    default: 'bg-slate-800 text-slate-100 hover:bg-slate-700',
+    primary: 'bg-[#06b6d4] text-[#020617] hover:bg-[#06b6d4]/90 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)]',
+    ghost: 'bg-transparent text-slate-300 hover:text-white hover:bg-white/10',
+    outline: 'border border-white/10 bg-transparent text-slate-300 hover:text-white hover:bg-white/10',
+  }[variant];
+
+  // 如果 className 中有自訂的 padding/size (如 !p-0, !w-10)，則不套用預設的 padding
+  const hasCustomSize = className.includes('!p-') || className.includes('!w-');
+  const defaultPadding = hasCustomSize ? '' : 'px-4 py-2 text-sm';
 
   return (
-    <button 
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className || ''}`}
-      {...props}
-    >
+    <button className={`${baseClasses} ${variantClasses} ${defaultPadding} ${className}`} {...props}>
       {children}
     </button>
   );
