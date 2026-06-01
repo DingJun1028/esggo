@@ -1,14 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Bot, Network, Globe, Activity, Database, CheckCircle, RefreshCcw } from 'lucide-react';
+import { Bot, Network, Globe, Activity, Database, CheckCircle, RefreshCcw, Sparkles } from 'lucide-react';
 import { BrandBadge, BrandButton, BrandCard, BrandCardHeader } from '../../components/brand';
 import ScraperControl from '../../components/omni/ScraperControl';
 import DataVisualizer from '../../components/omni/DataVisualizer';
 import HermesIntegrations from '../../components/omni/HermesIntegrations';
+import SkillBookUI from '../../components/omni/SkillBookUI';
 
 export default function OmniSkillsPage() {
-  const [activeView, setActiveView] = useState<'scraper' | 'visualizer' | 'hermes'>('scraper');
+  const [activeView, setActiveView] = useState<'scraper' | 'visualizer' | 'hermes' | 'memory-shards'>('scraper');
 
   return (
     <div className="page-container space-y-8 pb-24 fade-in">
@@ -32,14 +33,14 @@ export default function OmniSkillsPage() {
               自主代理技能中心
             </h1>
             <p className="text-slate-400 text-base max-w-2xl font-medium leading-relaxed mt-2">
-              透過自動數據收集 (Web Scraping) 與動態資料視覺化 (Data Visualization)，實時掌握全球 ESG 動態與合規法規。
+              透過自動數據收集 (Web Scraping) 與動態資料視覺化 (Data Visualization)，實時掌握全球 ESG 動態與合規法規。收集記憶碎片，自動合成高階奧義。
             </p>
           </div>
         </div>
       </header>
 
       {/* Navigation Tabs */}
-      <div className="flex gap-4 border-b border-slate-200 pb-2">
+      <div className="flex flex-wrap gap-4 border-b border-slate-200 pb-2">
         <button 
           onClick={() => setActiveView('scraper')}
           className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${
@@ -67,6 +68,15 @@ export default function OmniSkillsPage() {
           <Globe size={18} />
           <span>Hermes 代理與整合 (Integrations)</span>
         </button>
+        <button 
+          onClick={() => setActiveView('memory-shards')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${
+            activeView === 'memory-shards' ? 'bg-[#003262] text-white shadow-lg' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+          }`}
+        >
+          <Sparkles size={18} />
+          <span>無有技藝 · 記憶碎片 (Memory Shards)</span>
+        </button>
       </div>
 
       {/* Main Content Area */}
@@ -74,6 +84,7 @@ export default function OmniSkillsPage() {
         {activeView === 'scraper' && <ScraperControl />}
         {activeView === 'visualizer' && <DataVisualizer />}
         {activeView === 'hermes' && <HermesIntegrations />}
+        {activeView === 'memory-shards' && <SkillBookUI />}
       </div>
     </div>
   );

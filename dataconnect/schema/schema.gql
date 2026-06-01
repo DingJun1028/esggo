@@ -8,22 +8,169 @@ type User @table {
   createdAt: Date! @default(expr: "request.time")
 }
 
-type EsgRecord @table {
+type CompanyProfile @table {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  industry: String
+  headquarters: String
+  vision: String
+  mission: String
+  employeeCount: Int
+  revenueTwd: Float
+  capitalTwd: Float
+  user: User! @index
+}
+
+type Task @table {
   id: UUID! @default(expr: "uuidV4()")
   title: String!
   description: String
-  category: String! # E, S, or G
+  completed: Boolean!
   status: String!
-  integrityHash: String # 5T Protocol: Hash Lock
-  sourceOrigin: String # 5T Protocol: Traceable Origin
+  priority: String!
+  assignee: String
+  department: String
+  griReference: String
+  dueDate: Date
   createdAt: Date! @default(expr: "request.time")
-  user: User!
+  user: User! @index
 }
 
-type AuditLog @table {
+type AuditRecord @table {
   id: UUID! @default(expr: "uuidV4()")
-  action: String!
-  details: String
-  timestamp: Date! @default(expr: "request.time")
-  user: User!
+  title: String
+  dataType: String
+  source: String
+  standard: String
+  description: String
+  contentHash: String
+  zkpStatus: String
+  metadata: String
+  proofSignature: String
+  verifierKey: String
+  algorithm: String
+  salt: String
+  proofJson: String
+  createdAt: Date! @default(expr: "request.time")
+  updatedAt: Date! @default(expr: "request.time")
+  version: Int! @default(expr: "1")
+  sourceOrigin: String
+  user: User @index
+  eventType: String
+  payload: String
+  evidenceUuid: String @index
+  colorDropId: String @index
+  timestamp: Date
+}
+
+type ScrapedArticle @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  summary: String
+  url: String!
+  source: String!
+  publishedAt: Date
+  category: String!
+  tags: String
+  impactLevel: String!
+  scrapedAt: Date! @default(expr: "request.time")
+  user: User @index
+}
+
+type RoadmapMilestone @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  targetYear: Int!
+  category: String!
+  status: String!
+  targetValue: Float
+  unit: String
+  sbtiAligned: Boolean!
+  user: User! @index
+}
+
+type Report @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  progress: Int!
+  status: String!
+  language: String!
+  templateId: String!
+  createdAt: Date! @default(expr: "request.time")
+  company: CompanyProfile! @index
+  user: User! @index
+}
+
+type ReportSection @table {
+  id: UUID! @default(expr: "uuidV4()")
+  report: Report! @index
+  sectionId: String!
+  title: String!
+  content: String
+  contentMd: String
+  fieldValuesJson: String
+  notes: String
+  documentsStateJson: String
+  isDone: Boolean!
+  chapterOrder: Int
+  griReferences: [String!]
+  hashLock: String
+  updatedAt: Date! @default(expr: "request.time") # Renamed from lastUpdated
+  version: Int! @default(expr: "1")
+  sourceOrigin: String!
+}
+
+type CompanyMetric @table {
+  id: UUID! @default(expr: "uuidV4()")
+  metricName: String!
+  metricValue: Float
+  unit: String
+  category: String!
+  verified: Boolean!
+  griStandard: String
+  sourceOrigin: String
+  hashLock: String
+  updatedAt: Date! @default(expr: "request.time")
+  version: Int! @default(expr: "1")
+  company: CompanyProfile! @index
+  user: User! @index
+}
+
+type EternalMemory @table {
+  id: UUID! @default(expr: "uuidV4()")
+  type: String!
+  content: String!
+  tags: String
+  hashLock: String!
+  consolidated: Boolean!
+  createdAt: Date! @default(expr: "request.time")
+  updatedAt: Date! @default(expr: "request.time")
+  version: Int! @default(expr: "1")
+  sourceOrigin: String!
+  company: CompanyProfile @index
+  user: User! @index
+}
+
+type SwarmAgentTask @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  taskType: String!
+  status: String!
+  agentId: String
+  progress: Int!
+  skillKey: String
+  createdAt: Date! @default(expr: "request.time")
+  updatedAt: Date! @default(expr: "request.time")
+  user: User! @index
+}
+
+type RegulatoryPolicy @table {
+  id: UUID! @default(expr: "uuidV4()")
+  standard: String
+  code: String
+  name: String
+  description: String
+  rulesJson: String
+  isGlobal: Boolean
+  user: User @index
 }

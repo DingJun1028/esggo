@@ -63,6 +63,30 @@ class AtomicManager {
   public getAllRegisteredAtoms(): IAtomicComponent[] {
     return Array.from(this.registry.values());
   }
+
+  /**
+   * (NEW) 執行 5T 協議：將本地元件清單單向寫入 Supabase 雲端登錄表
+   */
+  public async syncToCloud(): Promise<void> {
+    const atoms = this.getAllRegisteredAtoms();
+    if (atoms.length === 0) return;
+
+    try {
+      const response = await fetch('/api/atomic/registry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'sync', atoms })
+      });
+      const data = await response.json();
+      if (data.success) {
+        console.log(`[OmniCore] Sync to Cloud complete: ${data.count} atoms synced.`);
+      } else {
+        console.warn(`[OmniCore] Sync to Cloud failed: ${data.error}`);
+      }
+    } catch (e) {
+      console.error(`[OmniCore] Sync to Cloud encountered error:`, e);
+    }
+  }
 }
 
 // 導出 Singleton 實例供全域使用

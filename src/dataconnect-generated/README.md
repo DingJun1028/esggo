@@ -28,16 +28,15 @@ This README will guide you through the process of using the generated JavaScript
   - [*GetMyCompanyProfile*](#getmycompanyprofile)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
-  - [*UpsertAuditRecord*](#upsertauditrecord)
+  - [*InsertAuditRecord*](#insertauditrecord)
   - [*UpsertRoadmapMilestone*](#upsertroadmapmilestone)
   - [*UpsertCompanyProfile*](#upsertcompanyprofile)
   - [*UpsertReport*](#upsertreport)
   - [*UpsertReportSection*](#upsertreportsection)
   - [*UpsertCompanyMetric*](#upsertcompanymetric)
-  - [*UpsertEternalMemory*](#upserteternalmemory)
+  - [*InsertEternalMemory*](#inserteternalmemory)
   - [*UpsertScrapedArticle*](#upsertscrapedarticle)
   - [*UpsertSwarmAgentTask*](#upsertswarmagenttask)
-  - [*CreateDemoData*](#createdemodata)
 
 # Accessing the connector
 A connector is a collection of Queries and Mutations. One SDK is generated for each connector - this SDK is generated for the connector `omnicore`. You can find more information about connectors in the [Data Connect documentation](https://firebase.google.com/docs/data-connect#how-does).
@@ -132,7 +131,7 @@ export interface ListAllTasksData {
     department?: string | null;
     griReference?: string | null;
     dueDate?: DateString | null;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & Task_Key)[];
 }
 ```
@@ -233,7 +232,7 @@ export interface GetTaskByIdData {
   task?: {
     id: UUIDString;
     user: {
-      uid: string;
+      id: string;
     } & User_Key;
       title: string;
       description?: string | null;
@@ -349,14 +348,19 @@ The `data` property is an object of type `ListAuditRecordsData`, which is define
 export interface ListAuditRecordsData {
   auditRecords: ({
     id: UUIDString;
-    title: string;
-    dataType: string;
-    source: string;
+    title?: string | null;
+    dataType?: string | null;
+    source?: string | null;
     standard?: string | null;
     description?: string | null;
-    contentHash: string;
-    zkpStatus: string;
-    createdAt: TimestampString;
+    contentHash?: string | null;
+    zkpStatus?: string | null;
+    createdAt: DateString;
+    eventType?: string | null;
+    payload?: string | null;
+    evidenceUuid?: string | null;
+    colorDropId?: string | null;
+    timestamp?: DateString | null;
   } & AuditRecord_Key)[];
 }
 ```
@@ -458,7 +462,7 @@ export interface ListScrapedArticlesData {
     category: string;
     tags?: string | null;
     impactLevel: string;
-    scrapedAt: TimestampString;
+    scrapedAt: DateString;
   } & ScrapedArticle_Key)[];
 }
 ```
@@ -666,8 +670,8 @@ export interface GetCompanyProfileData {
     employeeCount?: number | null;
     revenueTwd?: number | null;
     capitalTwd?: number | null;
-    user?: {
-      uid: string;
+    user: {
+      id: string;
     } & User_Key;
   } & CompanyProfile_Key;
 }
@@ -785,12 +789,12 @@ export interface GetReportByIdData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
-      user?: {
-        uid: string;
+      user: {
+        id: string;
       } & User_Key;
     } & CompanyProfile_Key;
   } & Report_Key;
@@ -915,7 +919,7 @@ export interface ListReportSectionsByReportData {
     chapterOrder?: number | null;
     griReferences?: string[] | null;
     hashLock?: string | null;
-    lastUpdated: TimestampString;
+    updatedAt: DateString;
   } & ReportSection_Key)[];
 }
 ```
@@ -1035,7 +1039,7 @@ export interface ListCompanyMetricsData {
     griStandard?: string | null;
     sourceOrigin?: string | null;
     hashLock?: string | null;
-    updatedAt: TimestampString;
+    updatedAt: DateString;
   } & CompanyMetric_Key)[];
 }
 ```
@@ -1152,7 +1156,7 @@ export interface ListEternalMemoriesByCompanyData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 ```
@@ -1376,7 +1380,7 @@ export interface ListReportsData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
@@ -1479,7 +1483,7 @@ export interface ListEternalMemoriesData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 ```
@@ -1579,8 +1583,8 @@ export interface ListSwarmAgentTasksData {
     agentId?: string | null;
     progress: number;
     skillKey?: string | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
+    createdAt: DateString;
+    updatedAt: DateString;
   } & SwarmAgentTask_Key)[];
 }
 ```
@@ -1673,12 +1677,12 @@ The `data` property is an object of type `ListRegulatoryPoliciesData`, which is 
 ```typescript
 export interface ListRegulatoryPoliciesData {
   regulatoryPolicies: ({
-    id: string;
-    standard: string;
-    code: string;
-    name: string;
+    id: UUIDString;
+    standard?: string | null;
+    code?: string | null;
+    name?: string | null;
     description?: string | null;
-    rulesJson: string;
+    rulesJson?: string | null;
   } & RegulatoryPolicy_Key)[];
 }
 ```
@@ -1985,151 +1989,170 @@ executeMutation(ref).then((response) => {
 });
 ```
 
-## UpsertAuditRecord
-You can execute the `UpsertAuditRecord` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+## InsertAuditRecord
+You can execute the `InsertAuditRecord` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
 ```typescript
-upsertAuditRecord(vars: UpsertAuditRecordVariables): MutationPromise<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+insertAuditRecord(vars?: InsertAuditRecordVariables): MutationPromise<InsertAuditRecordData, InsertAuditRecordVariables>;
 
-interface UpsertAuditRecordRef {
+interface InsertAuditRecordRef {
   ...
   /* Allow users to create refs without passing in DataConnect */
-  (vars: UpsertAuditRecordVariables): MutationRef<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+  (vars?: InsertAuditRecordVariables): MutationRef<InsertAuditRecordData, InsertAuditRecordVariables>;
 }
-export const upsertAuditRecordRef: UpsertAuditRecordRef;
+export const insertAuditRecordRef: InsertAuditRecordRef;
 ```
 You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
 ```typescript
-upsertAuditRecord(dc: DataConnect, vars: UpsertAuditRecordVariables): MutationPromise<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+insertAuditRecord(dc: DataConnect, vars?: InsertAuditRecordVariables): MutationPromise<InsertAuditRecordData, InsertAuditRecordVariables>;
 
-interface UpsertAuditRecordRef {
+interface InsertAuditRecordRef {
   ...
-  (dc: DataConnect, vars: UpsertAuditRecordVariables): MutationRef<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+  (dc: DataConnect, vars?: InsertAuditRecordVariables): MutationRef<InsertAuditRecordData, InsertAuditRecordVariables>;
 }
-export const upsertAuditRecordRef: UpsertAuditRecordRef;
+export const insertAuditRecordRef: InsertAuditRecordRef;
 ```
 
-If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the upsertAuditRecordRef:
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the insertAuditRecordRef:
 ```typescript
-const name = upsertAuditRecordRef.operationName;
+const name = insertAuditRecordRef.operationName;
 console.log(name);
 ```
 
 ### Variables
-The `UpsertAuditRecord` mutation requires an argument of type `UpsertAuditRecordVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+The `InsertAuditRecord` mutation has an optional argument of type `InsertAuditRecordVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
 
 ```typescript
-export interface UpsertAuditRecordVariables {
+export interface InsertAuditRecordVariables {
   id?: UUIDString | null;
-  title: string;
-  dataType: string;
-  source: string;
+  title?: string | null;
+  dataType?: string | null;
+  source?: string | null;
   standard?: string | null;
   description?: string | null;
-  contentHash: string;
-  zkpStatus: string;
+  contentHash?: string | null;
+  zkpStatus?: string | null;
   metadata?: string | null;
   proofSignature?: string | null;
   verifierKey?: string | null;
   algorithm?: string | null;
   salt?: string | null;
   proofJson?: string | null;
+  eventType?: string | null;
+  payload?: string | null;
+  evidenceUuid?: string | null;
+  colorDropId?: string | null;
+  timestamp?: DateString | null;
 }
 ```
 ### Return Type
-Recall that executing the `UpsertAuditRecord` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+Recall that executing the `InsertAuditRecord` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
 
-The `data` property is an object of type `UpsertAuditRecordData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+The `data` property is an object of type `InsertAuditRecordData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
 ```typescript
-export interface UpsertAuditRecordData {
-  auditRecord_upsert: AuditRecord_Key;
+export interface InsertAuditRecordData {
+  auditRecord_insert: AuditRecord_Key;
 }
 ```
-### Using `UpsertAuditRecord`'s action shortcut function
+### Using `InsertAuditRecord`'s action shortcut function
 
 ```typescript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, upsertAuditRecord, UpsertAuditRecordVariables } from '@dataconnect/generated';
+import { connectorConfig, insertAuditRecord, InsertAuditRecordVariables } from '@dataconnect/generated';
 
-// The `UpsertAuditRecord` mutation requires an argument of type `UpsertAuditRecordVariables`:
-const upsertAuditRecordVars: UpsertAuditRecordVariables = {
+// The `InsertAuditRecord` mutation has an optional argument of type `InsertAuditRecordVariables`:
+const insertAuditRecordVars: InsertAuditRecordVariables = {
   id: ..., // optional
-  title: ..., 
-  dataType: ..., 
-  source: ..., 
+  title: ..., // optional
+  dataType: ..., // optional
+  source: ..., // optional
   standard: ..., // optional
   description: ..., // optional
-  contentHash: ..., 
-  zkpStatus: ..., 
+  contentHash: ..., // optional
+  zkpStatus: ..., // optional
   metadata: ..., // optional
   proofSignature: ..., // optional
   verifierKey: ..., // optional
   algorithm: ..., // optional
   salt: ..., // optional
   proofJson: ..., // optional
+  eventType: ..., // optional
+  payload: ..., // optional
+  evidenceUuid: ..., // optional
+  colorDropId: ..., // optional
+  timestamp: ..., // optional
 };
 
-// Call the `upsertAuditRecord()` function to execute the mutation.
+// Call the `insertAuditRecord()` function to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await upsertAuditRecord(upsertAuditRecordVars);
+const { data } = await insertAuditRecord(insertAuditRecordVars);
 // Variables can be defined inline as well.
-const { data } = await upsertAuditRecord({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., });
+const { data } = await insertAuditRecord({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., eventType: ..., payload: ..., evidenceUuid: ..., colorDropId: ..., timestamp: ..., });
+// Since all variables are optional for this mutation, you can omit the `InsertAuditRecordVariables` argument.
+const { data } = await insertAuditRecord();
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
-const { data } = await upsertAuditRecord(dataConnect, upsertAuditRecordVars);
+const { data } = await insertAuditRecord(dataConnect, insertAuditRecordVars);
 
-console.log(data.auditRecord_upsert);
+console.log(data.auditRecord_insert);
 
 // Or, you can use the `Promise` API.
-upsertAuditRecord(upsertAuditRecordVars).then((response) => {
+insertAuditRecord(insertAuditRecordVars).then((response) => {
   const data = response.data;
-  console.log(data.auditRecord_upsert);
+  console.log(data.auditRecord_insert);
 });
 ```
 
-### Using `UpsertAuditRecord`'s `MutationRef` function
+### Using `InsertAuditRecord`'s `MutationRef` function
 
 ```typescript
 import { getDataConnect, executeMutation } from 'firebase/data-connect';
-import { connectorConfig, upsertAuditRecordRef, UpsertAuditRecordVariables } from '@dataconnect/generated';
+import { connectorConfig, insertAuditRecordRef, InsertAuditRecordVariables } from '@dataconnect/generated';
 
-// The `UpsertAuditRecord` mutation requires an argument of type `UpsertAuditRecordVariables`:
-const upsertAuditRecordVars: UpsertAuditRecordVariables = {
+// The `InsertAuditRecord` mutation has an optional argument of type `InsertAuditRecordVariables`:
+const insertAuditRecordVars: InsertAuditRecordVariables = {
   id: ..., // optional
-  title: ..., 
-  dataType: ..., 
-  source: ..., 
+  title: ..., // optional
+  dataType: ..., // optional
+  source: ..., // optional
   standard: ..., // optional
   description: ..., // optional
-  contentHash: ..., 
-  zkpStatus: ..., 
+  contentHash: ..., // optional
+  zkpStatus: ..., // optional
   metadata: ..., // optional
   proofSignature: ..., // optional
   verifierKey: ..., // optional
   algorithm: ..., // optional
   salt: ..., // optional
   proofJson: ..., // optional
+  eventType: ..., // optional
+  payload: ..., // optional
+  evidenceUuid: ..., // optional
+  colorDropId: ..., // optional
+  timestamp: ..., // optional
 };
 
-// Call the `upsertAuditRecordRef()` function to get a reference to the mutation.
-const ref = upsertAuditRecordRef(upsertAuditRecordVars);
+// Call the `insertAuditRecordRef()` function to get a reference to the mutation.
+const ref = insertAuditRecordRef(insertAuditRecordVars);
 // Variables can be defined inline as well.
-const ref = upsertAuditRecordRef({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., });
+const ref = insertAuditRecordRef({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., eventType: ..., payload: ..., evidenceUuid: ..., colorDropId: ..., timestamp: ..., });
+// Since all variables are optional for this mutation, you can omit the `InsertAuditRecordVariables` argument.
+const ref = insertAuditRecordRef();
 
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
-const ref = upsertAuditRecordRef(dataConnect, upsertAuditRecordVars);
+const ref = insertAuditRecordRef(dataConnect, insertAuditRecordVars);
 
 // Call `executeMutation()` on the reference to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await executeMutation(ref);
 
-console.log(data.auditRecord_upsert);
+console.log(data.auditRecord_insert);
 
 // Or, you can use the `Promise` API.
 executeMutation(ref).then((response) => {
   const data = response.data;
-  console.log(data.auditRecord_upsert);
+  console.log(data.auditRecord_insert);
 });
 ```
 
@@ -2567,6 +2590,7 @@ export interface UpsertReportSectionVariables {
   chapterOrder?: number | null;
   griReferences?: string[] | null;
   hashLock?: string | null;
+  sourceOrigin: string;
 }
 ```
 ### Return Type
@@ -2599,13 +2623,14 @@ const upsertReportSectionVars: UpsertReportSectionVariables = {
   chapterOrder: ..., // optional
   griReferences: ..., // optional
   hashLock: ..., // optional
+  sourceOrigin: ..., 
 };
 
 // Call the `upsertReportSection()` function to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await upsertReportSection(upsertReportSectionVars);
 // Variables can be defined inline as well.
-const { data } = await upsertReportSection({ id: ..., reportId: ..., sectionId: ..., title: ..., content: ..., contentMd: ..., fieldValuesJson: ..., notes: ..., documentsStateJson: ..., isDone: ..., chapterOrder: ..., griReferences: ..., hashLock: ..., });
+const { data } = await upsertReportSection({ id: ..., reportId: ..., sectionId: ..., title: ..., content: ..., contentMd: ..., fieldValuesJson: ..., notes: ..., documentsStateJson: ..., isDone: ..., chapterOrder: ..., griReferences: ..., hashLock: ..., sourceOrigin: ..., });
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
@@ -2641,12 +2666,13 @@ const upsertReportSectionVars: UpsertReportSectionVariables = {
   chapterOrder: ..., // optional
   griReferences: ..., // optional
   hashLock: ..., // optional
+  sourceOrigin: ..., 
 };
 
 // Call the `upsertReportSectionRef()` function to get a reference to the mutation.
 const ref = upsertReportSectionRef(upsertReportSectionVars);
 // Variables can be defined inline as well.
-const ref = upsertReportSectionRef({ id: ..., reportId: ..., sectionId: ..., title: ..., content: ..., contentMd: ..., fieldValuesJson: ..., notes: ..., documentsStateJson: ..., isDone: ..., chapterOrder: ..., griReferences: ..., hashLock: ..., });
+const ref = upsertReportSectionRef({ id: ..., reportId: ..., sectionId: ..., title: ..., content: ..., contentMd: ..., fieldValuesJson: ..., notes: ..., documentsStateJson: ..., isDone: ..., chapterOrder: ..., griReferences: ..., hashLock: ..., sourceOrigin: ..., });
 
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
@@ -2801,40 +2827,40 @@ executeMutation(ref).then((response) => {
 });
 ```
 
-## UpsertEternalMemory
-You can execute the `UpsertEternalMemory` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+## InsertEternalMemory
+You can execute the `InsertEternalMemory` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
 ```typescript
-upsertEternalMemory(vars: UpsertEternalMemoryVariables): MutationPromise<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+insertEternalMemory(vars: InsertEternalMemoryVariables): MutationPromise<InsertEternalMemoryData, InsertEternalMemoryVariables>;
 
-interface UpsertEternalMemoryRef {
+interface InsertEternalMemoryRef {
   ...
   /* Allow users to create refs without passing in DataConnect */
-  (vars: UpsertEternalMemoryVariables): MutationRef<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+  (vars: InsertEternalMemoryVariables): MutationRef<InsertEternalMemoryData, InsertEternalMemoryVariables>;
 }
-export const upsertEternalMemoryRef: UpsertEternalMemoryRef;
+export const insertEternalMemoryRef: InsertEternalMemoryRef;
 ```
 You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
 ```typescript
-upsertEternalMemory(dc: DataConnect, vars: UpsertEternalMemoryVariables): MutationPromise<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+insertEternalMemory(dc: DataConnect, vars: InsertEternalMemoryVariables): MutationPromise<InsertEternalMemoryData, InsertEternalMemoryVariables>;
 
-interface UpsertEternalMemoryRef {
+interface InsertEternalMemoryRef {
   ...
-  (dc: DataConnect, vars: UpsertEternalMemoryVariables): MutationRef<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+  (dc: DataConnect, vars: InsertEternalMemoryVariables): MutationRef<InsertEternalMemoryData, InsertEternalMemoryVariables>;
 }
-export const upsertEternalMemoryRef: UpsertEternalMemoryRef;
+export const insertEternalMemoryRef: InsertEternalMemoryRef;
 ```
 
-If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the upsertEternalMemoryRef:
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the insertEternalMemoryRef:
 ```typescript
-const name = upsertEternalMemoryRef.operationName;
+const name = insertEternalMemoryRef.operationName;
 console.log(name);
 ```
 
 ### Variables
-The `UpsertEternalMemory` mutation requires an argument of type `UpsertEternalMemoryVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+The `InsertEternalMemory` mutation requires an argument of type `InsertEternalMemoryVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
 
 ```typescript
-export interface UpsertEternalMemoryVariables {
+export interface InsertEternalMemoryVariables {
   id?: UUIDString | null;
   companyId?: UUIDString | null;
   type: string;
@@ -2842,25 +2868,26 @@ export interface UpsertEternalMemoryVariables {
   tags?: string | null;
   hashLock: string;
   consolidated: boolean;
+  sourceOrigin: string;
 }
 ```
 ### Return Type
-Recall that executing the `UpsertEternalMemory` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+Recall that executing the `InsertEternalMemory` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
 
-The `data` property is an object of type `UpsertEternalMemoryData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+The `data` property is an object of type `InsertEternalMemoryData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
 ```typescript
-export interface UpsertEternalMemoryData {
-  eternalMemory_upsert: EternalMemory_Key;
+export interface InsertEternalMemoryData {
+  eternalMemory_insert: EternalMemory_Key;
 }
 ```
-### Using `UpsertEternalMemory`'s action shortcut function
+### Using `InsertEternalMemory`'s action shortcut function
 
 ```typescript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, upsertEternalMemory, UpsertEternalMemoryVariables } from '@dataconnect/generated';
+import { connectorConfig, insertEternalMemory, InsertEternalMemoryVariables } from '@dataconnect/generated';
 
-// The `UpsertEternalMemory` mutation requires an argument of type `UpsertEternalMemoryVariables`:
-const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
+// The `InsertEternalMemory` mutation requires an argument of type `InsertEternalMemoryVariables`:
+const insertEternalMemoryVars: InsertEternalMemoryVariables = {
   id: ..., // optional
   companyId: ..., // optional
   type: ..., 
@@ -2868,35 +2895,36 @@ const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
   tags: ..., // optional
   hashLock: ..., 
   consolidated: ..., 
+  sourceOrigin: ..., 
 };
 
-// Call the `upsertEternalMemory()` function to execute the mutation.
+// Call the `insertEternalMemory()` function to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await upsertEternalMemory(upsertEternalMemoryVars);
+const { data } = await insertEternalMemory(insertEternalMemoryVars);
 // Variables can be defined inline as well.
-const { data } = await upsertEternalMemory({ id: ..., companyId: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., });
+const { data } = await insertEternalMemory({ id: ..., companyId: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., sourceOrigin: ..., });
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
-const { data } = await upsertEternalMemory(dataConnect, upsertEternalMemoryVars);
+const { data } = await insertEternalMemory(dataConnect, insertEternalMemoryVars);
 
-console.log(data.eternalMemory_upsert);
+console.log(data.eternalMemory_insert);
 
 // Or, you can use the `Promise` API.
-upsertEternalMemory(upsertEternalMemoryVars).then((response) => {
+insertEternalMemory(insertEternalMemoryVars).then((response) => {
   const data = response.data;
-  console.log(data.eternalMemory_upsert);
+  console.log(data.eternalMemory_insert);
 });
 ```
 
-### Using `UpsertEternalMemory`'s `MutationRef` function
+### Using `InsertEternalMemory`'s `MutationRef` function
 
 ```typescript
 import { getDataConnect, executeMutation } from 'firebase/data-connect';
-import { connectorConfig, upsertEternalMemoryRef, UpsertEternalMemoryVariables } from '@dataconnect/generated';
+import { connectorConfig, insertEternalMemoryRef, InsertEternalMemoryVariables } from '@dataconnect/generated';
 
-// The `UpsertEternalMemory` mutation requires an argument of type `UpsertEternalMemoryVariables`:
-const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
+// The `InsertEternalMemory` mutation requires an argument of type `InsertEternalMemoryVariables`:
+const insertEternalMemoryVars: InsertEternalMemoryVariables = {
   id: ..., // optional
   companyId: ..., // optional
   type: ..., 
@@ -2904,27 +2932,28 @@ const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
   tags: ..., // optional
   hashLock: ..., 
   consolidated: ..., 
+  sourceOrigin: ..., 
 };
 
-// Call the `upsertEternalMemoryRef()` function to get a reference to the mutation.
-const ref = upsertEternalMemoryRef(upsertEternalMemoryVars);
+// Call the `insertEternalMemoryRef()` function to get a reference to the mutation.
+const ref = insertEternalMemoryRef(insertEternalMemoryVars);
 // Variables can be defined inline as well.
-const ref = upsertEternalMemoryRef({ id: ..., companyId: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., });
+const ref = insertEternalMemoryRef({ id: ..., companyId: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., sourceOrigin: ..., });
 
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
-const ref = upsertEternalMemoryRef(dataConnect, upsertEternalMemoryVars);
+const ref = insertEternalMemoryRef(dataConnect, insertEternalMemoryVars);
 
 // Call `executeMutation()` on the reference to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await executeMutation(ref);
 
-console.log(data.eternalMemory_upsert);
+console.log(data.eternalMemory_insert);
 
 // Or, you can use the `Promise` API.
 executeMutation(ref).then((response) => {
   const data = response.data;
-  console.log(data.eternalMemory_upsert);
+  console.log(data.eternalMemory_insert);
 });
 ```
 
@@ -3185,102 +3214,6 @@ console.log(data.swarmAgentTask_upsert);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.swarmAgentTask_upsert);
-});
-```
-
-## CreateDemoData
-You can execute the `CreateDemoData` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
-```typescript
-createDemoData(): MutationPromise<CreateDemoDataData, undefined>;
-
-interface CreateDemoDataRef {
-  ...
-  /* Allow users to create refs without passing in DataConnect */
-  (): MutationRef<CreateDemoDataData, undefined>;
-}
-export const createDemoDataRef: CreateDemoDataRef;
-```
-You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
-```typescript
-createDemoData(dc: DataConnect): MutationPromise<CreateDemoDataData, undefined>;
-
-interface CreateDemoDataRef {
-  ...
-  (dc: DataConnect): MutationRef<CreateDemoDataData, undefined>;
-}
-export const createDemoDataRef: CreateDemoDataRef;
-```
-
-If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createDemoDataRef:
-```typescript
-const name = createDemoDataRef.operationName;
-console.log(name);
-```
-
-### Variables
-The `CreateDemoData` mutation has no variables.
-### Return Type
-Recall that executing the `CreateDemoData` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
-
-The `data` property is an object of type `CreateDemoDataData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
-```typescript
-export interface CreateDemoDataData {
-  user_insertMany: User_Key[];
-  comment_insertMany: Comment_Key[];
-}
-```
-### Using `CreateDemoData`'s action shortcut function
-
-```typescript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, createDemoData } from '@dataconnect/generated';
-
-
-// Call the `createDemoData()` function to execute the mutation.
-// You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await createDemoData();
-
-// You can also pass in a `DataConnect` instance to the action shortcut function.
-const dataConnect = getDataConnect(connectorConfig);
-const { data } = await createDemoData(dataConnect);
-
-console.log(data.user_insertMany);
-console.log(data.comment_insertMany);
-
-// Or, you can use the `Promise` API.
-createDemoData().then((response) => {
-  const data = response.data;
-  console.log(data.user_insertMany);
-  console.log(data.comment_insertMany);
-});
-```
-
-### Using `CreateDemoData`'s `MutationRef` function
-
-```typescript
-import { getDataConnect, executeMutation } from 'firebase/data-connect';
-import { connectorConfig, createDemoDataRef } from '@dataconnect/generated';
-
-
-// Call the `createDemoDataRef()` function to get a reference to the mutation.
-const ref = createDemoDataRef();
-
-// You can also pass in a `DataConnect` instance to the `MutationRef` function.
-const dataConnect = getDataConnect(connectorConfig);
-const ref = createDemoDataRef(dataConnect);
-
-// Call `executeMutation()` on the reference to execute the mutation.
-// You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await executeMutation(ref);
-
-console.log(data.user_insertMany);
-console.log(data.comment_insertMany);
-
-// Or, you can use the `Promise` API.
-executeMutation(ref).then((response) => {
-  const data = response.data;
-  console.log(data.user_insertMany);
-  console.log(data.comment_insertMany);
 });
 ```
 

@@ -9554,3 +9554,683 @@ Generated sources: main\mutation.gql [10420B] prelude.gql [84995B] main\implicit
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:09:16.297095    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [10420B] prelude.gql [84995B] main\\implicit.gql [521B] main\\input.gql [25793B] main\\relation.gql [11191B] main\\query.gql [3907B] \n"}}
 [debug] [2026-06-01T10:09:16.300Z] I0601 18:09:16.298612    1704 load.go:74] Finished reloading
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:09:16.298612    1704 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T10:22:16.187Z] I0601 18:22:16.159252    1704 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:16.159252    1704 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:22:16.291Z] W0601 18:22:16.291453    1704 control.go:74] [projects/emulator/locations/emulator/services/esggo f710] connector "example" has errors: example\mutations.gql:6:3: Cannot query field "movie_insert" on type "Mutation". Did you mean "task_insert" or "user_insert"?
+example\mutations.gql:12:44: Field "username" is not defined by type "User_Data".
+example\mutations.gql:18:3: Cannot query field "review_upsert" on type "Mutation". Did you mean "report_upsert", "user_upsert", "report_insert", or "task_upsert"?
+example\mutations.gql:32:3: Cannot query field "review_delete" on type "Mutation". Did you mean "report_delete", "user_delete", or "task_delete"?
+example\queries.gql:6:3: Cannot query field "movies" on type "Query".
+example\queries.gql:18:5: Cannot query field "username" on type "User".
+example\queries.gql:27:5: Cannot query field "username" on type "User".
+example\queries.gql:30:5: Cannot query field "reviews_on_user" on type "User". Did you mean "reports_on_user" or "tasks_on_user"?
+example\queries.gql:44:3: Cannot query field "movie" on type "Query".
+example\queries.gql:68:3: Cannot query field "movies" on type "Query".
+
+sources: example\mutations.gql [1243B] example\queries.gql [1801B] 
+I0601 18:22:16.291453    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo f710] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "example": sources: example\mutations.gql [1243B] example\queries.gql [1801B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 18:22:16.291453    1704 control.go:74] [projects/emulator/locations/emulator/services/esggo f710] connector \"example\" has errors: example\\mutations.gql:6:3: Cannot query field \"movie_insert\" on type \"Mutation\". Did you mean \"task_insert\" or \"user_insert\"?\nexample\\mutations.gql:12:44: Field \"username\" is not defined by type \"User_Data\".\nexample\\mutations.gql:18:3: Cannot query field \"review_upsert\" on type \"Mutation\". Did you mean \"report_upsert\", \"user_upsert\", \"report_insert\", or \"task_upsert\"?\nexample\\mutations.gql:32:3: Cannot query field \"review_delete\" on type \"Mutation\". Did you mean \"report_delete\", \"user_delete\", or \"task_delete\"?\nexample\\queries.gql:6:3: Cannot query field \"movies\" on type \"Query\".\nexample\\queries.gql:18:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:27:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:30:5: Cannot query field \"reviews_on_user\" on type \"User\". Did you mean \"reports_on_user\" or \"tasks_on_user\"?\nexample\\queries.gql:44:3: Cannot query field \"movie\" on type \"Query\".\nexample\\queries.gql:68:3: Cannot query field \"movies\" on type \"Query\".\n\nsources: example\\mutations.gql [1243B] example\\queries.gql [1801B] \nI0601 18:22:16.291453    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo f710] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"example\": sources: example\\mutations.gql [1243B] example\\queries.gql [1801B] \n"}}
+[debug] [2026-06-01T10:22:16.296Z] E0601 18:22:16.297011    1704 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:6:3: Cannot query field "movie_insert" on type "Mutation". Did you mean "task_insert" or "user_insert"?
+example\mutations.gql:12:44: Field "username" is not defined by type "User_Data".
+example\mutations.gql:18:3: Cannot query field "review_upsert" on type "Mutation". Did you mean "report_upsert", "user_upsert", "report_insert", or "task_upsert"?
+example\mutations.gql:32:3: Cannot query field "review_delete" on type "Mutation". Did you mean "report_delete", "user_delete", or "task_delete"?
+example\queries.gql:6:3: Cannot query field "movies" on type "Query".
+example\queries.gql:18:5: Cannot query field "username" on type "User".
+example\queries.gql:27:5: Cannot query field "username" on type "User".
+example\queries.gql:30:5: Cannot query field "reviews_on_user" on type "User". Did you mean "reports_on_user" or "tasks_on_user"?
+example\queries.gql:44:3: Cannot query field "movie" on type "Query".
+example\queries.gql:68:3: Cannot query field "movies" on type "Query".
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 18:22:16.297011    1704 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:6:3: Cannot query field \"movie_insert\" on type \"Mutation\". Did you mean \"task_insert\" or \"user_insert\"?\nexample\\mutations.gql:12:44: Field \"username\" is not defined by type \"User_Data\".\nexample\\mutations.gql:18:3: Cannot query field \"review_upsert\" on type \"Mutation\". Did you mean \"report_upsert\", \"user_upsert\", \"report_insert\", or \"task_upsert\"?\nexample\\mutations.gql:32:3: Cannot query field \"review_delete\" on type \"Mutation\". Did you mean \"report_delete\", \"user_delete\", or \"task_delete\"?\nexample\\queries.gql:6:3: Cannot query field \"movies\" on type \"Query\".\nexample\\queries.gql:18:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:27:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:30:5: Cannot query field \"reviews_on_user\" on type \"User\". Did you mean \"reports_on_user\" or \"tasks_on_user\"?\nexample\\queries.gql:44:3: Cannot query field \"movie\" on type \"Query\".\nexample\\queries.gql:68:3: Cannot query field \"movies\" on type \"Query\".\n"}}
+[debug] [2026-06-01T10:22:16.302Z] I0601 18:22:16.300857    1704 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\input.gql [157503B] main\relation.gql [77724B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3759B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:16.300857    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [157503B] main\\relation.gql [77724B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3759B] \n"}}
+[debug] [2026-06-01T10:22:16.303Z] I0601 18:22:16.302364    1704 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:16.302364    1704 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T10:22:26.158Z] I0601 18:22:26.159083    1704 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:26.159083    1704 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:22:26.212Z] W0601 18:22:26.211859    1704 control.go:74] [projects/emulator/locations/emulator/services/esggo 5b92] connector "omnicore" has errors: omnicore\queries.gql:2:26: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:18:51: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:21:7: Cannot query field "uid" on type "User". Did you mean "id" or "_id"?
+omnicore\queries.gql:38:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:52:33: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:83:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:103:17: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:104:17: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:121:38: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:136:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:148:61: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:159:7: Cannot query field "uid" on type "User". Did you mean "id" or "_id"?
+omnicore\queries.gql:167:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:179:53: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:191:9: Cannot query field "uid" on type "User". Did you mean "id" or "_id"?
+omnicore\queries.gql:200:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:232:15: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:254:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:270:13: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:288:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:299:73: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:313:13: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:324:28: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:342:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:357:36: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:369:36: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:385:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:398:17: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:412:36: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\seed_data.gql:4:7: Field "uid" is not defined by type "User_Data". Did you mean "id"?
+omnicore\seed_data.gql:5:7: Field "username" is not defined by type "User_Data".
+omnicore\seed_data.gql:8:7: Field "passwordHash" is not defined by type "User_Data".
+omnicore\seed_data.gql:11:7: Field "uid" is not defined by type "User_Data". Did you mean "id"?
+omnicore\seed_data.gql:12:7: Field "username" is not defined by type "User_Data".
+omnicore\seed_data.gql:15:7: Field "passwordHash" is not defined by type "User_Data".
+omnicore\seed_data.gql:18:3: Cannot query field "comment_insertMany" on type "Mutation". Did you mean "report_insertMany", "user_insertMany", "task_insertMany", "companyMetric_insertMany", or "report_upsertMany"?
+
+sources: omnicore\queries.gql [10173B] omnicore\seed_data.gql [838B] 
+I0601 18:22:26.211859    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo 5b92] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\queries.gql [10173B] omnicore\seed_data.gql [838B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 18:22:26.211859    1704 control.go:74] [projects/emulator/locations/emulator/services/esggo 5b92] connector \"omnicore\" has errors: omnicore\\queries.gql:2:26: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:18:51: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:21:7: Cannot query field \"uid\" on type \"User\". Did you mean \"id\" or \"_id\"?\nomnicore\\queries.gql:38:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:52:33: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:83:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:103:17: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:104:17: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:121:38: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:136:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:148:61: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:159:7: Cannot query field \"uid\" on type \"User\". Did you mean \"id\" or \"_id\"?\nomnicore\\queries.gql:167:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:179:53: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:191:9: Cannot query field \"uid\" on type \"User\". Did you mean \"id\" or \"_id\"?\nomnicore\\queries.gql:200:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:232:15: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:254:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:270:13: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:288:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:299:73: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:313:13: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:324:28: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:342:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:357:36: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:369:36: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:385:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:398:17: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:412:36: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\seed_data.gql:4:7: Field \"uid\" is not defined by type \"User_Data\". Did you mean \"id\"?\nomnicore\\seed_data.gql:5:7: Field \"username\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:8:7: Field \"passwordHash\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:11:7: Field \"uid\" is not defined by type \"User_Data\". Did you mean \"id\"?\nomnicore\\seed_data.gql:12:7: Field \"username\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:15:7: Field \"passwordHash\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:18:3: Cannot query field \"comment_insertMany\" on type \"Mutation\". Did you mean \"report_insertMany\", \"user_insertMany\", \"task_insertMany\", \"companyMetric_insertMany\", or \"report_upsertMany\"?\n\nsources: omnicore\\queries.gql [10173B] omnicore\\seed_data.gql [838B] \nI0601 18:22:26.211859    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo 5b92] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10173B] omnicore\\seed_data.gql [838B] \n"}}
+[debug] [2026-06-01T10:22:26.214Z] E0601 18:22:26.214869    1704 load.go:73] Could not load sources: 
+Errors: omnicore\queries.gql:2:26: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:18:51: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:21:7: Cannot query field "uid" on type "User". Did you mean "id" or "_id"?
+omnicore\queries.gql:38:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:52:33: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:83:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:103:17: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:104:17: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:121:38: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:136:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:148:61: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:159:7: Cannot query field "uid" on type "User". Did you mean "id" or "_id"?
+omnicore\queries.gql:167:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:179:53: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:191:9: Cannot query field "uid" on type "User". Did you mean "id" or "_id"?
+omnicore\queries.gql:200:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:232:15: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:254:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:270:13: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:288:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:299:73: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:313:13: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:324:28: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:342:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:357:36: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:369:36: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:385:13: Field "uid_expr" is not defined by type "User_Key". Did you mean "id_expr"?
+omnicore\queries.gql:398:17: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\queries.gql:412:36: Field "uid" is not defined by type "User_Filter". Did you mean "id"?
+omnicore\seed_data.gql:4:7: Field "uid" is not defined by type "User_Data". Did you mean "id"?
+omnicore\seed_data.gql:5:7: Field "username" is not defined by type "User_Data".
+omnicore\seed_data.gql:8:7: Field "passwordHash" is not defined by type "User_Data".
+omnicore\seed_data.gql:11:7: Field "uid" is not defined by type "User_Data". Did you mean "id"?
+omnicore\seed_data.gql:12:7: Field "username" is not defined by type "User_Data".
+omnicore\seed_data.gql:15:7: Field "passwordHash" is not defined by type "User_Data".
+omnicore\seed_data.gql:18:3: Cannot query field "comment_insertMany" on type "Mutation". Did you mean "report_insertMany", "user_insertMany", "task_insertMany", "companyMetric_insertMany", or "report_upsertMany"?
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 18:22:26.214869    1704 load.go:73] Could not load sources: \nErrors: omnicore\\queries.gql:2:26: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:18:51: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:21:7: Cannot query field \"uid\" on type \"User\". Did you mean \"id\" or \"_id\"?\nomnicore\\queries.gql:38:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:52:33: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:83:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:103:17: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:104:17: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:121:38: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:136:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:148:61: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:159:7: Cannot query field \"uid\" on type \"User\". Did you mean \"id\" or \"_id\"?\nomnicore\\queries.gql:167:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:179:53: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:191:9: Cannot query field \"uid\" on type \"User\". Did you mean \"id\" or \"_id\"?\nomnicore\\queries.gql:200:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:232:15: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:254:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:270:13: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:288:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:299:73: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:313:13: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:324:28: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:342:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:357:36: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:369:36: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:385:13: Field \"uid_expr\" is not defined by type \"User_Key\". Did you mean \"id_expr\"?\nomnicore\\queries.gql:398:17: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\queries.gql:412:36: Field \"uid\" is not defined by type \"User_Filter\". Did you mean \"id\"?\nomnicore\\seed_data.gql:4:7: Field \"uid\" is not defined by type \"User_Data\". Did you mean \"id\"?\nomnicore\\seed_data.gql:5:7: Field \"username\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:8:7: Field \"passwordHash\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:11:7: Field \"uid\" is not defined by type \"User_Data\". Did you mean \"id\"?\nomnicore\\seed_data.gql:12:7: Field \"username\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:15:7: Field \"passwordHash\" is not defined by type \"User_Data\".\nomnicore\\seed_data.gql:18:3: Cannot query field \"comment_insertMany\" on type \"Mutation\". Did you mean \"report_insertMany\", \"user_insertMany\", \"task_insertMany\", \"companyMetric_insertMany\", or \"report_upsertMany\"?\n"}}
+[debug] [2026-06-01T10:22:26.218Z] I0601 18:22:26.218458    1704 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [15906B] prelude.gql [84995B] main\mutation.gql [43315B] main\implicit.gql [3759B] main\input.gql [157503B] main\relation.gql [77724B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:26.218458    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [15906B] prelude.gql [84995B] main\\mutation.gql [43315B] main\\implicit.gql [3759B] main\\input.gql [157503B] main\\relation.gql [77724B] \n"}}
+[debug] [2026-06-01T10:22:26.219Z] I0601 18:22:26.218458    1704 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:26.218458    1704 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T10:22:46.303Z] I0601 18:22:46.303981    1704 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.303981    1704 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:22:46.344Z] I0601 18:22:46.344844    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo c8fb] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [140B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.344844    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo c8fb] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [140B] \n"}}
+[debug] [2026-06-01T10:22:46.397Z] I0601 18:22:46.396770    1704 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.396770    1704 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-06-01T10:22:46.422Z] I0601 18:22:46.422398    1704 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.422398    1704 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-06-01T10:22:46.427Z] I0601 18:22:46.427909    1704 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3759B] main\input.gql [157503B] prelude.gql [84995B] main\relation.gql [77724B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.427909    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3759B] main\\input.gql [157503B] prelude.gql [84995B] main\\relation.gql [77724B] \n"}}
+[debug] [2026-06-01T10:22:46.434Z] I0601 18:22:46.433844    1704 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: index.d.ts [30471B] esm\index.esm.js [16447B] react\esm\package.json [17B] .guides/setup.md [1682B] index.cjs.js [18443B] react\package.json [461B] react\index.cjs.js [10511B] react\esm\index.esm.js [9839B] esm\package.json [17B] .guides/config.json [236B] .guides/usage.md [4040B] package.json [854B] README.md [130410B] react\index.d.ts [12896B] react\README.md [132267B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.433844    1704 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: index.d.ts [30471B] esm\\index.esm.js [16447B] react\\esm\\package.json [17B] .guides/setup.md [1682B] index.cjs.js [18443B] react\\package.json [461B] react\\index.cjs.js [10511B] react\\esm\\index.esm.js [9839B] esm\\package.json [17B] .guides/config.json [236B] .guides/usage.md [4040B] package.json [854B] README.md [130410B] react\\index.d.ts [12896B] react\\README.md [132267B] \n"}}
+[debug] [2026-06-01T10:22:46.453Z] I0601 18:22:46.453103    1704 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.453103    1704 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-06-01T10:22:46.455Z] I0601 18:22:46.455110    1704 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [27159B] esm\index.esm.js [8874B] esm\package.json [17B] index.cjs.js [10027B] package.json [633B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.455110    1704 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [27159B] esm\\index.esm.js [8874B] esm\\package.json [17B] index.cjs.js [10027B] package.json [633B] \n"}}
+[debug] [2026-06-01T10:22:46.461Z] I0601 18:22:46.461670    1704 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0601 18:22:46.461670    1704 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:22:46.461670    1704 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 18:22:46.461670    1704 load.go:109] Finished reloading\n"}}
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-01T10:25:40.954Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Checked firebase-tools, is up to date!
+[debug] [2026-06-01T10:26:27.784Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-01T10:26:27.795Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-01T10:26:27.796Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-01T10:26:27.819Z] Checked if tokens are valid: true, expires at: 1780310595870
+[debug] [2026-06-01T10:26:27.825Z] Checked if tokens are valid: true, expires at: 1780310595870
+[debug] [2026-06-01T10:26:27.826Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-01T10:26:27.840Z] Checked if tokens are valid: true, expires at: 1780310595870
+[debug] [2026-06-01T10:26:27.846Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-01T10:26:27.909Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.9) on port 50001
+[debug] [2026-06-01T10:26:29.181Z] I0601 18:26:29.114793   22176 control.go:100] [projects/emulator/locations/emulator/services/esggo 2ab0] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\seed_data.gql [140B] omnicore\queries.gql [10566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:26:29.114793   22176 control.go:100] [projects/emulator/locations/emulator/services/esggo 2ab0] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\seed_data.gql [140B] omnicore\\queries.gql [10566B] \n"}}
+[debug] [2026-06-01T10:26:29.182Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-01T10:26:29.182Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-01T10:26:29.183Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.9.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.9.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-01T10:26:29.358Z] I0601 18:26:29.244127   62380 load.go:31] Reloading schema and connectors...
+I0601 18:26:29.319468   62380 control.go:100] [projects/emulator/locations/emulator/services/esggo 8445] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [140B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:26:29.244127   62380 load.go:31] Reloading schema and connectors...\nI0601 18:26:29.319468   62380 control.go:100] [projects/emulator/locations/emulator/services/esggo 8445] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [140B] \n"}}
+[debug] [2026-06-01T10:26:29.550Z] I0601 18:26:29.402136   62380 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+I0601 18:26:29.428803   62380 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+I0601 18:26:29.436768   62380 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3759B] main\input.gql [157503B] main\relation.gql [77724B] main\query.gql [15906B] 
+I0601 18:26:29.442348   62380 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [16447B] index.cjs.js [18443B] react\README.md [132267B] .guides/setup.md [1682B] index.d.ts [30471B] esm\package.json [17B] package.json [854B] README.md [130410B] react\package.json [461B] react\esm\package.json [17B] react\esm\index.esm.js [9839B] .guides/usage.md [4040B] react\index.d.ts [12896B] react\index.cjs.js [10511B] .guides/config.json [236B] 
+I0601 18:26:29.449061   62380 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+I0601 18:26:29.451220   62380 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: package.json [633B] index.d.ts [27159B] esm\index.esm.js [8874B] esm\package.json [17B] index.cjs.js [10027B] 
+I0601 18:26:29.454005   62380 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0601 18:26:29.454005   62380 load.go:109] Finished reloading
+I0601 18:26:29.500176   62380 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:26:29.402136   62380 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nI0601 18:26:29.428803   62380 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0601 18:26:29.436768   62380 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3759B] main\\input.gql [157503B] main\\relation.gql [77724B] main\\query.gql [15906B] \nI0601 18:26:29.442348   62380 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [16447B] index.cjs.js [18443B] react\\README.md [132267B] .guides/setup.md [1682B] index.d.ts [30471B] esm\\package.json [17B] package.json [854B] README.md [130410B] react\\package.json [461B] react\\esm\\package.json [17B] react\\esm\\index.esm.js [9839B] .guides/usage.md [4040B] react\\index.d.ts [12896B] react\\index.cjs.js [10511B] .guides/config.json [236B] \nI0601 18:26:29.449061   62380 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0601 18:26:29.451220   62380 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: package.json [633B] index.d.ts [27159B] esm\\index.esm.js [8874B] esm\\package.json [17B] index.cjs.js [10027B] \nI0601 18:26:29.454005   62380 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 18:26:29.454005   62380 load.go:109] Finished reloading\nI0601 18:26:29.500176   62380 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-01T10:26:30.013Z] I0601 18:26:30.012522   62380 engine.go:209] [projects/emulator/locations/emulator/services/esggo 8445] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:26:30.012522   62380 engine.go:209] [projects/emulator/locations/emulator/services/esggo 8445] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-06-01T10:26:30.216Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-01T10:26:30.216Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-01T10:29:35.074Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Checked firebase-tools, is up to date!
+[debug] [2026-06-01T10:29:58.288Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-01T10:29:58.291Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-01T10:29:58.292Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-01T10:29:58.295Z] Checked if tokens are valid: true, expires at: 1780313366944
+[debug] [2026-06-01T10:29:58.295Z] Checked if tokens are valid: true, expires at: 1780313366944
+[debug] [2026-06-01T10:29:58.295Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-01T10:29:58.296Z] Checked if tokens are valid: true, expires at: 1780313366944
+[debug] [2026-06-01T10:29:58.297Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-01T10:29:58.307Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.9) on port 50001
+[debug] [2026-06-01T10:29:59.480Z] I0601 18:29:59.428187   63800 control.go:100] [projects/emulator/locations/emulator/services/esggo 4a4e] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [140B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:29:59.428187   63800 control.go:100] [projects/emulator/locations/emulator/services/esggo 4a4e] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [140B] \n"}}
+[debug] [2026-06-01T10:29:59.481Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-01T10:29:59.481Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-01T10:29:59.481Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.9.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.9.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-01T10:30:00.059Z] I0601 18:29:59.518668   51328 load.go:31] Reloading schema and connectors...
+I0601 18:29:59.593286   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo b619] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [140B] 
+I0601 18:29:59.666317   51328 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+I0601 18:29:59.699520   51328 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+I0601 18:29:59.709525   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\implicit.gql [3759B] main\input.gql [157503B] main\relation.gql [77724B] main\query.gql [15906B] prelude.gql [84995B] main\mutation.gql [43315B] 
+I0601 18:29:59.721341   51328 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [16447B] esm\package.json [17B] react\index.d.ts [12896B] react\package.json [461B] react\README.md [132267B] react\esm\index.esm.js [9839B] .guides/config.json [236B] index.d.ts [30471B] react\index.cjs.js [10511B] .guides/usage.md [3860B] index.cjs.js [18443B] package.json [854B] README.md [130410B] react\esm\package.json [17B] .guides/setup.md [1682B] 
+I0601 18:29:59.733741   51328 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+I0601 18:29:59.737139   51328 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [27159B] esm\index.esm.js [8874B] esm\package.json [17B] index.cjs.js [10027B] package.json [633B] 
+I0601 18:29:59.748459   51328 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0601 18:29:59.748459   51328 load.go:109] Finished reloading
+I0601 18:29:59.789471   51328 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:29:59.518668   51328 load.go:31] Reloading schema and connectors...\nI0601 18:29:59.593286   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo b619] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [140B] \nI0601 18:29:59.666317   51328 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nI0601 18:29:59.699520   51328 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0601 18:29:59.709525   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\implicit.gql [3759B] main\\input.gql [157503B] main\\relation.gql [77724B] main\\query.gql [15906B] prelude.gql [84995B] main\\mutation.gql [43315B] \nI0601 18:29:59.721341   51328 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [16447B] esm\\package.json [17B] react\\index.d.ts [12896B] react\\package.json [461B] react\\README.md [132267B] react\\esm\\index.esm.js [9839B] .guides/config.json [236B] index.d.ts [30471B] react\\index.cjs.js [10511B] .guides/usage.md [3860B] index.cjs.js [18443B] package.json [854B] README.md [130410B] react\\esm\\package.json [17B] .guides/setup.md [1682B] \nI0601 18:29:59.733741   51328 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0601 18:29:59.737139   51328 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [27159B] esm\\index.esm.js [8874B] esm\\package.json [17B] index.cjs.js [10027B] package.json [633B] \nI0601 18:29:59.748459   51328 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 18:29:59.748459   51328 load.go:109] Finished reloading\nI0601 18:29:59.789471   51328 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-01T10:30:01.195Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-01T10:30:01.195Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-06-01T10:30:01.706Z] I0601 18:30:01.238428   51328 engine.go:209] [projects/emulator/locations/emulator/services/esggo b619] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:30:01.238428   51328 engine.go:209] [projects/emulator/locations/emulator/services/esggo b619] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-06-01T10:49:29.800Z] I0601 18:49:29.799262   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:49:29.799262   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:49:29.947Z] W0601 18:49:29.949048   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo c4ea] connector "omnicore" has errors: omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [1692B] 
+I0601 18:49:29.949048   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo c4ea] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3338B] 
+Connector "omnicore": sources: omnicore\seed_data.gql [1692B] omnicore\queries.gql [10566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 18:49:29.949048   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo c4ea] connector \"omnicore\" has errors: omnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [1692B] \nI0601 18:49:29.949048   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo c4ea] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3338B] \nConnector \"omnicore\": sources: omnicore\\seed_data.gql [1692B] omnicore\\queries.gql [10566B] \n"}}
+[debug] [2026-06-01T10:49:29.955Z] E0601 18:49:29.956155   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 18:49:29.956155   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'\n"}}
+[debug] [2026-06-01T10:49:29.961Z] I0601 18:49:29.963555   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\input.gql [157503B] prelude.gql [84995B] main\relation.gql [77724B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3759B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:49:29.963555   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [157503B] prelude.gql [84995B] main\\relation.gql [77724B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3759B] \n"}}
+[debug] [2026-06-01T10:49:29.962Z] I0601 18:49:29.964061   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:49:29.964061   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T10:55:59.828Z] I0601 18:55:59.825618   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:55:59.825618   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:55:59.985Z] W0601 18:55:59.986421   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 8968] connector "omnicore" has errors: omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [1692B] 
+I0601 18:55:59.987005   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 8968] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3435B] 
+Connector "omnicore": sources: omnicore\seed_data.gql [1692B] omnicore\queries.gql [10566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 18:55:59.986421   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 8968] connector \"omnicore\" has errors: omnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [1692B] \nI0601 18:55:59.987005   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 8968] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3435B] \nConnector \"omnicore\": sources: omnicore\\seed_data.gql [1692B] omnicore\\queries.gql [10566B] \n"}}
+[debug] [2026-06-01T10:55:59.993Z] E0601 18:55:59.992226   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'
+omnicore\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 18:55:59.992226   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'\nomnicore\\seed_data.gql:6:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'\n"}}
+[debug] [2026-06-01T10:56:00.002Z] I0601 18:56:00.001828   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\input.gql [157503B] main\relation.gql [77724B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3759B] 
+I0601 18:56:00.002826   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:56:00.001828   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\input.gql [157503B] main\\relation.gql [77724B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3759B] \nI0601 18:56:00.002826   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T10:58:59.810Z] I0601 18:58:59.809173   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:58:59.809173   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:58:59.943Z] W0601 18:58:59.945069   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 7ea7] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+I0601 18:58:59.946076   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 7ea7] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3435B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 18:58:59.945069   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 7ea7] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \nI0601 18:58:59.946076   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 7ea7] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3435B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T10:58:59.962Z] E0601 18:58:59.964233   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 18:58:59.964233   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T10:58:59.968Z] I0601 18:58:59.970636   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\input.gql [157503B] main\relation.gql [77724B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3759B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:58:59.970636   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [157503B] main\\relation.gql [77724B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3759B] \n"}}
+[debug] [2026-06-01T10:58:59.969Z] I0601 18:58:59.970636   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:58:59.970636   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:33:19.826Z] I0601 19:33:19.822628   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:19.822628   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:33:20.063Z] W0601 19:33:20.061244   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 18f4] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+I0601 19:33:20.061244   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 18f4] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3545B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:33:20.061244   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 18f4] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \nI0601 19:33:20.061244   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 18f4] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3545B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:33:20.073Z] E0601 19:33:20.072330   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:33:20.072330   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:33:20.078Z] I0601 19:33:20.078376   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\implicit.gql [3759B] main\input.gql [161633B] main\relation.gql [80048B] main\query.gql [15906B] main\mutation.gql [43315B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:20.078376   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\implicit.gql [3759B] main\\input.gql [161633B] main\\relation.gql [80048B] main\\query.gql [15906B] main\\mutation.gql [43315B] \n"}}
+[debug] [2026-06-01T11:33:20.080Z] I0601 19:33:20.078908   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:20.078908   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:33:39.817Z] I0601 19:33:39.817479   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:39.817479   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:33:39.838Z] W0601 19:33:39.838684   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 8e3c] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+I0601 19:33:39.838684   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 8e3c] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3581B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:33:39.838684   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 8e3c] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \nI0601 19:33:39.838684   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 8e3c] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3581B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:33:39.840Z] E0601 19:33:39.840850   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:33:39.840850   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:33:39.843Z] I0601 19:33:39.843569   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\relation.gql [81275B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3759B] main\input.gql [163429B] 
+I0601 19:33:39.843569   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:39.843569   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\relation.gql [81275B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3759B] main\\input.gql [163429B] \nI0601 19:33:39.843569   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:33:59.819Z] I0601 19:33:59.817573   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:59.817573   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:33:59.850Z] W0601 19:33:59.850950   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 47bf] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+I0601 19:33:59.850950   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 47bf] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3666B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:33:59.850950   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 47bf] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \nI0601 19:33:59.850950   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 47bf] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3666B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:33:59.856Z] E0601 19:33:59.856232   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:33:59.856232   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:33:59.861Z] I0601 19:33:59.861606   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\implicit.gql [3759B] main\input.gql [165971B] main\relation.gql [82884B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:59.861606   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\implicit.gql [3759B] main\\input.gql [165971B] main\\relation.gql [82884B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] \n"}}
+[debug] [2026-06-01T11:33:59.862Z] I0601 19:33:59.861606   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:33:59.861606   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:34:09.816Z] E0601 19:34:09.816882   51328 watch.go:40] Failed to load config from "c:\\Project\\esggo\\esggo\\dataconnect": location is required in dataconnect.yaml at `c:\Project\esggo\esggo\dataconnect\dataconnect.yaml`
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:34:09.816882   51328 watch.go:40] Failed to load config from \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\": location is required in dataconnect.yaml at `c:\\Project\\esggo\\esggo\\dataconnect\\dataconnect.yaml`\n"}}
+[debug] [2026-06-01T11:34:19.816Z] E0601 19:34:19.816429   51328 watch.go:40] Failed to load config from "c:\\Project\\esggo\\esggo\\dataconnect": location is required in dataconnect.yaml at `c:\Project\esggo\esggo\dataconnect\dataconnect.yaml`
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:34:19.816429   51328 watch.go:40] Failed to load config from \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\": location is required in dataconnect.yaml at `c:\\Project\\esggo\\esggo\\dataconnect\\dataconnect.yaml`\n"}}
+[debug] [2026-06-01T11:34:59.817Z] I0601 19:34:59.817236   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:34:59.817236   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:34:59.850Z] W0601 19:34:59.850454   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 8959] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\seed_data.gql [10836B] omnicore\queries.gql [10566B] 
+I0601 19:34:59.850454   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 8959] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3776B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:34:59.850454   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 8959] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\seed_data.gql [10836B] omnicore\\queries.gql [10566B] \nI0601 19:34:59.850454   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 8959] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3776B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:34:59.855Z] E0601 19:34:59.856276   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:34:59.856276   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:34:59.858Z] I0601 19:34:59.858417   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\relation.gql [85244B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3759B] main\input.gql [170167B] 
+I0601 19:34:59.858417   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:34:59.858417   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\relation.gql [85244B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3759B] main\\input.gql [170167B] \nI0601 19:34:59.858417   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:37:59.825Z] I0601 19:37:59.820253   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:37:59.820253   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:37:59.965Z] W0601 19:37:59.964360   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 3768] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+I0601 19:37:59.964997   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 3768] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [10566B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:37:59.964360   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 3768] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \nI0601 19:37:59.964997   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 3768] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10566B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:37:59.972Z] E0601 19:37:59.971702   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:37:59.971702   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:37:59.979Z] I0601 19:37:59.977698   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\implicit.gql [3758B] prelude.gql [84995B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:37:59.977698   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\implicit.gql [3758B] prelude.gql [84995B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] \n"}}
+[debug] [2026-06-01T11:37:59.980Z] I0601 19:37:59.979720   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:37:59.979720   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:38:09.819Z] I0601 19:38:09.819905   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:38:09.819905   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:38:09.870Z] W0601 19:38:09.870110   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo d861] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10823B] omnicore\seed_data.gql [10836B] 
+I0601 19:38:09.870620   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo d861] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [10823B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:38:09.870110   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo d861] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10823B] omnicore\\seed_data.gql [10836B] \nI0601 19:38:09.870620   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo d861] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10823B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:38:09.878Z] E0601 19:38:09.878295   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:38:09.878295   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:38:09.883Z] I0601 19:38:09.883255   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3758B] main\input.gql [174725B] 
+I0601 19:38:09.883255   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:38:09.883255   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] main\\input.gql [174725B] \nI0601 19:38:09.883255   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:47:19.858Z] I0601 19:47:19.836655   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:47:19.836655   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:47:20.642Z] W0601 19:47:20.637531   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 2088] connector "omnicore" has errors: omnicore\seed_data.gql:339:16: Expected :, found String
+
+sources: omnicore\queries.gql [10901B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:47:20.637531   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 2088] connector \"omnicore\" has errors: omnicore\\seed_data.gql:339:16: Expected :, found String\n\nsources: omnicore\\queries.gql [10901B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:47:20.644Z] I0601 19:47:20.642840   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 2088] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [10901B] omnicore\seed_data.gql [10836B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:47:20.642840   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 2088] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10901B] omnicore\\seed_data.gql [10836B] \n"}}
+[debug] [2026-06-01T11:47:20.683Z] E0601 19:47:20.682966   51328 load.go:73] Could not load sources: 
+Errors: omnicore\seed_data.gql:339:16: Expected :, found String
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:47:20.682966   51328 load.go:73] Could not load sources: \nErrors: omnicore\\seed_data.gql:339:16: Expected :, found String\n"}}
+[debug] [2026-06-01T11:47:20.702Z] I0601 19:47:20.700734   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3758B] main\input.gql [174725B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:47:20.700734   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3758B] main\\input.gql [174725B] \n"}}
+[debug] [2026-06-01T11:47:20.703Z] I0601 19:47:20.702397   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:47:20.702397   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:47:59.825Z] I0601 19:47:59.820960   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:47:59.820960   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:48:00.001Z] W0601 19:48:00.001208   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo a665] connector "omnicore" has errors: omnicore\queries.gql:262:6: Cannot query field "lastUpdated" on type "ReportSection".
+
+sources: omnicore\queries.gql [10901B] omnicore\seed_data.gql [10832B] 
+I0601 19:48:00.001744   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo a665] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\seed_data.gql [10832B] omnicore\queries.gql [10901B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:48:00.001208   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo a665] connector \"omnicore\" has errors: omnicore\\queries.gql:262:6: Cannot query field \"lastUpdated\" on type \"ReportSection\".\n\nsources: omnicore\\queries.gql [10901B] omnicore\\seed_data.gql [10832B] \nI0601 19:48:00.001744   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo a665] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\seed_data.gql [10832B] omnicore\\queries.gql [10901B] \n"}}
+[debug] [2026-06-01T11:48:00.009Z] E0601 19:48:00.009799   51328 load.go:73] Could not load sources: 
+Errors: omnicore\queries.gql:262:6: Cannot query field "lastUpdated" on type "ReportSection".
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:48:00.009799   51328 load.go:73] Could not load sources: \nErrors: omnicore\\queries.gql:262:6: Cannot query field \"lastUpdated\" on type \"ReportSection\".\n"}}
+[debug] [2026-06-01T11:48:00.013Z] I0601 19:48:00.012258   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3758B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:48:00.012258   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3758B] \n"}}
+[debug] [2026-06-01T11:48:00.014Z] I0601 19:48:00.012258   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:48:00.012258   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:48:39.824Z] I0601 19:48:39.823924   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:48:39.823924   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:48:39.984Z] W0601 19:48:39.984105   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 9b8c] connector "omnicore" has errors: omnicore\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data
+omnicore\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data
+omnicore\seed_data.gql:8:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'
+omnicore\seed_data.gql:8:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'
+omnicore\seed_data.gql:8:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'
+omnicore\seed_data.gql:55:3: companyProfile_insertMany (data[0].id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:55:3: companyProfile_insertMany (data[1].id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:82:3: task_insertMany (data[0].id: UUID): invalid uuid: 'task-admin-1'
+omnicore\seed_data.gql:82:3: task_insertMany (data[1].id: UUID): invalid uuid: 'task-admin-2'
+omnicore\seed_data.gql:82:3: task_insertMany (data[2].id: UUID): invalid uuid: 'task-user1-1'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[0].id: UUID): invalid uuid: 'metric-admin-1'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[1].id: UUID): invalid uuid: 'metric-admin-2'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[1].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[2].id: UUID): invalid uuid: 'metric-user1-1'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[2].company.id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:166:3: report_insertMany (data[0].id: UUID): invalid uuid: 'report-admin-1'
+omnicore\seed_data.gql:166:3: report_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:166:3: report_insertMany (data[1].id: UUID): invalid uuid: 'report-user1-1'
+omnicore\seed_data.gql:166:3: report_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[0].id: UUID): invalid uuid: 'section-admin-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[0].reportId: UUID): invalid uuid: 'report-admin-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[1].id: UUID): invalid uuid: 'section-admin-2'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[1].reportId: UUID): invalid uuid: 'report-admin-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[2].id: UUID): invalid uuid: 'section-user1-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[2].reportId: UUID): invalid uuid: 'report-user1-1'
+omnicore\seed_data.gql:237:3: scrapedArticle_insertMany (data[0].id: UUID): invalid uuid: 'article-sys-1'
+omnicore\seed_data.gql:237:3: scrapedArticle_insertMany (data[1].id: UUID): invalid uuid: 'article-user1-1'
+omnicore\seed_data.gql:266:3: roadmapMilestone_insertMany (data[0].id: UUID): invalid uuid: 'milestone-admin-1'
+omnicore\seed_data.gql:266:3: roadmapMilestone_insertMany (data[1].id: UUID): invalid uuid: 'milestone-admin-2'
+omnicore\seed_data.gql:266:3: roadmapMilestone_insertMany (data[2].id: UUID): invalid uuid: 'milestone-user1-1'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[0].id: UUID): invalid uuid: 'memory-admin-1'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[1].id: UUID): invalid uuid: 'memory-user1-1'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:325:3: swarmAgentTask_insertMany (data[0].id: UUID): invalid uuid: 'swarm-task-admin-1'
+omnicore\seed_data.gql:325:3: swarmAgentTask_insertMany (data[1].id: UUID): invalid uuid: 'swarm-task-admin-2'
+omnicore\seed_data.gql:325:3: swarmAgentTask_insertMany (data[2].id: UUID): invalid uuid: 'swarm-task-user1-1'
+omnicore\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[0].id: UUID): invalid uuid: 'policy-global-1'
+omnicore\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[1].id: UUID): invalid uuid: 'policy-user1-1'
+
+sources: omnicore\queries.gql [10899B] omnicore\seed_data.gql [10832B] 
+I0601 19:48:39.984105   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 9b8c] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [10899B] omnicore\seed_data.gql [10832B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:48:39.984105   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 9b8c] connector \"omnicore\" has errors: omnicore\\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data\nomnicore\\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data\nomnicore\\seed_data.gql:8:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'\nomnicore\\seed_data.gql:8:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'\nomnicore\\seed_data.gql:8:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'\nomnicore\\seed_data.gql:55:3: companyProfile_insertMany (data[0].id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:55:3: companyProfile_insertMany (data[1].id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:82:3: task_insertMany (data[0].id: UUID): invalid uuid: 'task-admin-1'\nomnicore\\seed_data.gql:82:3: task_insertMany (data[1].id: UUID): invalid uuid: 'task-admin-2'\nomnicore\\seed_data.gql:82:3: task_insertMany (data[2].id: UUID): invalid uuid: 'task-user1-1'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[0].id: UUID): invalid uuid: 'metric-admin-1'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[1].id: UUID): invalid uuid: 'metric-admin-2'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[1].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[2].id: UUID): invalid uuid: 'metric-user1-1'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[2].company.id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[0].id: UUID): invalid uuid: 'report-admin-1'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[1].id: UUID): invalid uuid: 'report-user1-1'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[0].id: UUID): invalid uuid: 'section-admin-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[0].reportId: UUID): invalid uuid: 'report-admin-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[1].id: UUID): invalid uuid: 'section-admin-2'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[1].reportId: UUID): invalid uuid: 'report-admin-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[2].id: UUID): invalid uuid: 'section-user1-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[2].reportId: UUID): invalid uuid: 'report-user1-1'\nomnicore\\seed_data.gql:237:3: scrapedArticle_insertMany (data[0].id: UUID): invalid uuid: 'article-sys-1'\nomnicore\\seed_data.gql:237:3: scrapedArticle_insertMany (data[1].id: UUID): invalid uuid: 'article-user1-1'\nomnicore\\seed_data.gql:266:3: roadmapMilestone_insertMany (data[0].id: UUID): invalid uuid: 'milestone-admin-1'\nomnicore\\seed_data.gql:266:3: roadmapMilestone_insertMany (data[1].id: UUID): invalid uuid: 'milestone-admin-2'\nomnicore\\seed_data.gql:266:3: roadmapMilestone_insertMany (data[2].id: UUID): invalid uuid: 'milestone-user1-1'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[0].id: UUID): invalid uuid: 'memory-admin-1'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[1].id: UUID): invalid uuid: 'memory-user1-1'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:325:3: swarmAgentTask_insertMany (data[0].id: UUID): invalid uuid: 'swarm-task-admin-1'\nomnicore\\seed_data.gql:325:3: swarmAgentTask_insertMany (data[1].id: UUID): invalid uuid: 'swarm-task-admin-2'\nomnicore\\seed_data.gql:325:3: swarmAgentTask_insertMany (data[2].id: UUID): invalid uuid: 'swarm-task-user1-1'\nomnicore\\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[0].id: UUID): invalid uuid: 'policy-global-1'\nomnicore\\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[1].id: UUID): invalid uuid: 'policy-user1-1'\n\nsources: omnicore\\queries.gql [10899B] omnicore\\seed_data.gql [10832B] \nI0601 19:48:39.984105   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 9b8c] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10899B] omnicore\\seed_data.gql [10832B] \n"}}
+[debug] [2026-06-01T11:48:39.994Z] E0601 19:48:39.994031   51328 load.go:73] Could not load sources: 
+Errors: omnicore\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data
+omnicore\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data
+omnicore\seed_data.gql:8:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'
+omnicore\seed_data.gql:8:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'
+omnicore\seed_data.gql:8:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'
+omnicore\seed_data.gql:55:3: companyProfile_insertMany (data[0].id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:55:3: companyProfile_insertMany (data[1].id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:82:3: task_insertMany (data[0].id: UUID): invalid uuid: 'task-admin-1'
+omnicore\seed_data.gql:82:3: task_insertMany (data[1].id: UUID): invalid uuid: 'task-admin-2'
+omnicore\seed_data.gql:82:3: task_insertMany (data[2].id: UUID): invalid uuid: 'task-user1-1'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[0].id: UUID): invalid uuid: 'metric-admin-1'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[1].id: UUID): invalid uuid: 'metric-admin-2'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[1].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[2].id: UUID): invalid uuid: 'metric-user1-1'
+omnicore\seed_data.gql:124:3: companyMetric_insertMany (data[2].company.id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:166:3: report_insertMany (data[0].id: UUID): invalid uuid: 'report-admin-1'
+omnicore\seed_data.gql:166:3: report_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:166:3: report_insertMany (data[1].id: UUID): invalid uuid: 'report-user1-1'
+omnicore\seed_data.gql:166:3: report_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[0].id: UUID): invalid uuid: 'section-admin-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[0].reportId: UUID): invalid uuid: 'report-admin-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[1].id: UUID): invalid uuid: 'section-admin-2'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[1].reportId: UUID): invalid uuid: 'report-admin-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[2].id: UUID): invalid uuid: 'section-user1-1'
+omnicore\seed_data.gql:189:3: reportSection_insertMany (data[2].reportId: UUID): invalid uuid: 'report-user1-1'
+omnicore\seed_data.gql:237:3: scrapedArticle_insertMany (data[0].id: UUID): invalid uuid: 'article-sys-1'
+omnicore\seed_data.gql:237:3: scrapedArticle_insertMany (data[1].id: UUID): invalid uuid: 'article-user1-1'
+omnicore\seed_data.gql:266:3: roadmapMilestone_insertMany (data[0].id: UUID): invalid uuid: 'milestone-admin-1'
+omnicore\seed_data.gql:266:3: roadmapMilestone_insertMany (data[1].id: UUID): invalid uuid: 'milestone-admin-2'
+omnicore\seed_data.gql:266:3: roadmapMilestone_insertMany (data[2].id: UUID): invalid uuid: 'milestone-user1-1'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[0].id: UUID): invalid uuid: 'memory-admin-1'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[1].id: UUID): invalid uuid: 'memory-user1-1'
+omnicore\seed_data.gql:302:3: eternalMemory_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'
+omnicore\seed_data.gql:325:3: swarmAgentTask_insertMany (data[0].id: UUID): invalid uuid: 'swarm-task-admin-1'
+omnicore\seed_data.gql:325:3: swarmAgentTask_insertMany (data[1].id: UUID): invalid uuid: 'swarm-task-admin-2'
+omnicore\seed_data.gql:325:3: swarmAgentTask_insertMany (data[2].id: UUID): invalid uuid: 'swarm-task-user1-1'
+omnicore\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[0].id: UUID): invalid uuid: 'policy-global-1'
+omnicore\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[1].id: UUID): invalid uuid: 'policy-user1-1'
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:48:39.994031   51328 load.go:73] Could not load sources: \nErrors: omnicore\\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data\nomnicore\\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data\nomnicore\\seed_data.gql:8:3: auditRecord_insertMany (data[1].id: UUID): invalid uuid: 'c4b9d2a2-5678-4c3d-9f56-e982c3d4b5g6'\nomnicore\\seed_data.gql:8:3: auditRecord_insertMany (data[2].id: UUID): invalid uuid: 'd5c0e3b3-9012-4d4e-9g67-f093d4e5c6h7'\nomnicore\\seed_data.gql:8:3: auditRecord_insertMany (data[3].id: UUID): invalid uuid: 'e6d1f4c4-0123-4e5f-ah78-g104e5f6d7i8'\nomnicore\\seed_data.gql:55:3: companyProfile_insertMany (data[0].id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:55:3: companyProfile_insertMany (data[1].id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:82:3: task_insertMany (data[0].id: UUID): invalid uuid: 'task-admin-1'\nomnicore\\seed_data.gql:82:3: task_insertMany (data[1].id: UUID): invalid uuid: 'task-admin-2'\nomnicore\\seed_data.gql:82:3: task_insertMany (data[2].id: UUID): invalid uuid: 'task-user1-1'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[0].id: UUID): invalid uuid: 'metric-admin-1'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[1].id: UUID): invalid uuid: 'metric-admin-2'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[1].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[2].id: UUID): invalid uuid: 'metric-user1-1'\nomnicore\\seed_data.gql:124:3: companyMetric_insertMany (data[2].company.id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[0].id: UUID): invalid uuid: 'report-admin-1'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[1].id: UUID): invalid uuid: 'report-user1-1'\nomnicore\\seed_data.gql:166:3: report_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[0].id: UUID): invalid uuid: 'section-admin-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[0].reportId: UUID): invalid uuid: 'report-admin-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[1].id: UUID): invalid uuid: 'section-admin-2'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[1].reportId: UUID): invalid uuid: 'report-admin-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[2].id: UUID): invalid uuid: 'section-user1-1'\nomnicore\\seed_data.gql:189:3: reportSection_insertMany (data[2].reportId: UUID): invalid uuid: 'report-user1-1'\nomnicore\\seed_data.gql:237:3: scrapedArticle_insertMany (data[0].id: UUID): invalid uuid: 'article-sys-1'\nomnicore\\seed_data.gql:237:3: scrapedArticle_insertMany (data[1].id: UUID): invalid uuid: 'article-user1-1'\nomnicore\\seed_data.gql:266:3: roadmapMilestone_insertMany (data[0].id: UUID): invalid uuid: 'milestone-admin-1'\nomnicore\\seed_data.gql:266:3: roadmapMilestone_insertMany (data[1].id: UUID): invalid uuid: 'milestone-admin-2'\nomnicore\\seed_data.gql:266:3: roadmapMilestone_insertMany (data[2].id: UUID): invalid uuid: 'milestone-user1-1'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[0].id: UUID): invalid uuid: 'memory-admin-1'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[0].company.id: UUID): invalid uuid: 'company-admin-uuid'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[1].id: UUID): invalid uuid: 'memory-user1-1'\nomnicore\\seed_data.gql:302:3: eternalMemory_insertMany (data[1].company.id: UUID): invalid uuid: 'company-user1-uuid'\nomnicore\\seed_data.gql:325:3: swarmAgentTask_insertMany (data[0].id: UUID): invalid uuid: 'swarm-task-admin-1'\nomnicore\\seed_data.gql:325:3: swarmAgentTask_insertMany (data[1].id: UUID): invalid uuid: 'swarm-task-admin-2'\nomnicore\\seed_data.gql:325:3: swarmAgentTask_insertMany (data[2].id: UUID): invalid uuid: 'swarm-task-user1-1'\nomnicore\\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[0].id: UUID): invalid uuid: 'policy-global-1'\nomnicore\\seed_data.gql:358:3: regulatoryPolicy_insertMany (data[1].id: UUID): invalid uuid: 'policy-user1-1'\n"}}
+[debug] [2026-06-01T11:48:39.998Z] I0601 19:48:39.997761   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3758B] 
+I0601 19:48:39.997761   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:48:39.997761   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3758B] \nI0601 19:48:39.997761   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:49:09.839Z] I0601 19:49:09.830191   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:09.830191   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:49:10.503Z] W0601 19:49:10.501526   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 12a2] connector "omnicore" has errors: omnicore\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data
+omnicore\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data
+
+sources: omnicore\queries.gql [10899B] 
+I0601 19:49:10.502650   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 12a2] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [10899B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 19:49:10.501526   51328 control.go:74] [projects/emulator/locations/emulator/services/esggo 12a2] connector \"omnicore\" has errors: omnicore\\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data\nomnicore\\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data\n\nsources: omnicore\\queries.gql [10899B] \nI0601 19:49:10.502650   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo 12a2] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [10899B] \n"}}
+[debug] [2026-06-01T11:49:10.528Z] E0601 19:49:10.525371   51328 load.go:73] Could not load sources: 
+Errors: omnicore\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data
+omnicore\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 19:49:10.525371   51328 load.go:73] Could not load sources: \nErrors: omnicore\\queries.gql:226:4: reportSection_upsert (data: ReportSection_Data): column sourceOrigin is required but is missing in data\nomnicore\\queries.gql:301:4: eternalMemory_upsert (data: EternalMemory_Data): column sourceOrigin is required but is missing in data\n"}}
+[debug] [2026-06-01T11:49:10.534Z] I0601 19:49:10.533632   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\mutation.gql [43315B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] 
+I0601 19:49:10.534149   51328 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:10.533632   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] \nI0601 19:49:10.534149   51328 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-01T11:49:49.821Z] I0601 19:49:49.821683   51328 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:49.821683   51328 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T11:49:49.872Z] I0601 19:49:49.872994   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo d725] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [11015B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:49.872994   51328 control.go:100] [projects/emulator/locations/emulator/services/esggo d725] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [11015B] \n"}}
+[debug] [2026-06-01T11:49:49.948Z] I0601 19:49:49.947524   51328 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:49.947524   51328 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-06-01T11:49:49.986Z] I0601 19:49:49.986403   51328 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:49.986403   51328 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-06-01T11:49:49.997Z] I0601 19:49:49.997076   51328 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:49.997076   51328 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] \n"}}
+[debug] [2026-06-01T11:49:50.040Z] I0601 19:49:50.040742   51328 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [16014B] react\index.d.ts [12558B] .guides/usage.md [4040B] .guides/config.json [236B] react\package.json [461B] react\index.cjs.js [10173B] react\esm\index.esm.js [9516B] esm\package.json [17B] index.cjs.js [17968B] package.json [854B] README.md [128794B] .guides/setup.md [1682B] index.d.ts [30373B] react\esm\package.json [17B] react\README.md [129450B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:50.040742   51328 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [16014B] react\\index.d.ts [12558B] .guides/usage.md [4040B] .guides/config.json [236B] react\\package.json [461B] react\\index.cjs.js [10173B] react\\esm\\index.esm.js [9516B] esm\\package.json [17B] index.cjs.js [17968B] package.json [854B] README.md [128794B] .guides/setup.md [1682B] index.d.ts [30373B] react\\esm\\package.json [17B] react\\README.md [129450B] \n"}}
+[debug] [2026-06-01T11:49:50.050Z] I0601 19:49:50.050777   51328 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:50.050777   51328 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-06-01T11:49:50.058Z] I0601 19:49:50.058314   51328 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [27029B] esm\index.esm.js [8608B] esm\package.json [17B] index.cjs.js [9739B] package.json [633B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:50.058314   51328 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [27029B] esm\\index.esm.js [8608B] esm\\package.json [17B] index.cjs.js [9739B] package.json [633B] \n"}}
+[debug] [2026-06-01T11:49:50.062Z] I0601 19:49:50.062978   51328 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0601 19:49:50.062978   51328 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:49:50.062978   51328 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 19:49:50.062978   51328 load.go:109] Finished reloading\n"}}
+[debug] [2026-06-01T11:54:47.691Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Checked firebase-tools, is up to date!
+[debug] [2026-06-01T11:54:57.425Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-01T11:54:57.428Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-01T11:54:57.429Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-01T11:54:57.431Z] Checked if tokens are valid: false, expires at: 1780313366944
+[debug] [2026-06-01T11:54:57.432Z] Checked if tokens are valid: false, expires at: 1780313366944
+[debug] [2026-06-01T11:54:57.432Z] > refreshing access token with scopes: []
+[debug] [2026-06-01T11:54:57.433Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-01T11:54:57.433Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-01T11:54:57.443Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.9) on port 50002
+[debug] [2026-06-01T11:54:58.105Z] I0601 19:54:58.044982   39916 control.go:100] [projects/emulator/locations/emulator/services/esggo 9078] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [11015B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:54:58.044982   39916 control.go:100] [projects/emulator/locations/emulator/services/esggo 9078] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [11015B] \n"}}
+[debug] [2026-06-01T11:54:58.106Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-01T11:54:58.106Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-01T11:54:58.106Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.9.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50002","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.9.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50002\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-01T11:55:03.834Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-01T11:55:03.835Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-01T11:55:03.913Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-01T11:55:03.914Z] Checked if tokens are valid: true, expires at: 1780318502868
+[debug] [2026-06-01T11:55:03.915Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-01T11:55:03.930Z] I0601 19:54:58.184130   23504 load.go:31] Reloading schema and connectors...
+I0601 19:54:58.279254   23504 control.go:100] [projects/emulator/locations/emulator/services/esggo 11e5] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [11015B] 
+I0601 19:54:58.346939   23504 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+I0601 19:54:58.376902   23504 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+I0601 19:54:58.385969   23504 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] prelude.gql [84995B] 
+I0601 19:54:58.392810   23504 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: index.d.ts [30373B] esm\index.esm.js [16014B] index.cjs.js [17968B] react\package.json [461B] .guides/setup.md [1682B] README.md [128794B] react\esm\package.json [17B] react\esm\index.esm.js [9516B] .guides/usage.md [4040B] .guides/config.json [236B] esm\package.json [17B] package.json [854B] react\index.cjs.js [10173B] react\index.d.ts [12558B] react\README.md [129450B] 
+I0601 19:54:58.399627   23504 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+I0601 19:54:58.402629   23504 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [27029B] esm\index.esm.js [8608B] esm\package.json [17B] index.cjs.js [9739B] package.json [633B] 
+I0601 19:54:58.402629   23504 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0601 19:54:58.402629   23504 load.go:109] Finished reloading
+I0601 19:54:58.464008   23504 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50002
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 19:54:58.184130   23504 load.go:31] Reloading schema and connectors...\nI0601 19:54:58.279254   23504 control.go:100] [projects/emulator/locations/emulator/services/esggo 11e5] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [11015B] \nI0601 19:54:58.346939   23504 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nI0601 19:54:58.376902   23504 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0601 19:54:58.385969   23504 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] prelude.gql [84995B] \nI0601 19:54:58.392810   23504 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: index.d.ts [30373B] esm\\index.esm.js [16014B] index.cjs.js [17968B] react\\package.json [461B] .guides/setup.md [1682B] README.md [128794B] react\\esm\\package.json [17B] react\\esm\\index.esm.js [9516B] .guides/usage.md [4040B] .guides/config.json [236B] esm\\package.json [17B] package.json [854B] react\\index.cjs.js [10173B] react\\index.d.ts [12558B] react\\README.md [129450B] \nI0601 19:54:58.399627   23504 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0601 19:54:58.402629   23504 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [27029B] esm\\index.esm.js [8608B] esm\\package.json [17B] index.cjs.js [9739B] package.json [633B] \nI0601 19:54:58.402629   23504 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 19:54:58.402629   23504 load.go:109] Finished reloading\nI0601 19:54:58.464008   23504 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50002\n"}}
+[debug] [2026-06-01T11:55:24.641Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-01T11:55:24.642Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-06-01T12:42:48.489Z] I0601 20:42:48.466766   23504 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:48.466766   23504 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T12:42:49.056Z] I0601 20:42:49.055472   23504 control.go:100] [projects/emulator/locations/emulator/services/esggo 74fe] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [11015B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:49.055472   23504 control.go:100] [projects/emulator/locations/emulator/services/esggo 74fe] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [11015B] \n"}}
+[debug] [2026-06-01T12:42:49.345Z] I0601 20:42:49.344096   23504 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:49.344096   23504 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-06-01T12:42:49.424Z] I0601 20:42:49.423799   23504 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:49.423799   23504 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\n"}}
+[debug] [2026-06-01T12:42:49.538Z] I0601 20:42:49.524722   23504 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:49.524722   23504 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] \n"}}
+[debug] [2026-06-01T12:42:50.074Z] I0601 20:42:50.074350   23504 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: package.json [854B] react\README.md [129450B] esm\index.esm.js [16014B] esm\package.json [17B] index.cjs.js [17968B] README.md [128794B] react\index.d.ts [12558B] react\esm\package.json [17B] .guides/setup.md [1682B] .guides/config.json [236B] index.d.ts [30373B] react\index.cjs.js [10173B] react\esm\index.esm.js [9516B] .guides/usage.md [4040B] react\package.json [461B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:50.074350   23504 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: package.json [854B] react\\README.md [129450B] esm\\index.esm.js [16014B] esm\\package.json [17B] index.cjs.js [17968B] README.md [128794B] react\\index.d.ts [12558B] react\\esm\\package.json [17B] .guides/setup.md [1682B] .guides/config.json [236B] index.d.ts [30373B] react\\index.cjs.js [10173B] react\\esm\\index.esm.js [9516B] .guides/usage.md [4040B] react\\package.json [461B] \n"}}
+[debug] [2026-06-01T12:42:50.304Z] I0601 20:42:50.303259   23504 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:50.303259   23504 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\n"}}
+[debug] [2026-06-01T12:42:50.332Z] I0601 20:42:50.332068   23504 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: index.d.ts [27029B] esm\index.esm.js [8608B] esm\package.json [17B] index.cjs.js [9739B] package.json [633B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:50.332068   23504 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [27029B] esm\\index.esm.js [8608B] esm\\package.json [17B] index.cjs.js [9739B] package.json [633B] \n"}}
+[debug] [2026-06-01T12:42:50.465Z] I0601 20:42:50.464294   23504 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:50.464294   23504 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\n"}}
+[debug] [2026-06-01T12:42:50.466Z] I0601 20:42:50.464294   23504 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 20:42:50.464294   23504 load.go:109] Finished reloading\n"}}
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[debug] [2026-06-01T13:42:02.051Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Checked firebase-tools, is up to date!
+[debug] [2026-06-01T13:42:43.545Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-01T13:42:43.549Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-01T13:42:43.550Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-01T13:42:43.557Z] Checked if tokens are valid: true, expires at: 1780324901061
+[debug] [2026-06-01T13:42:43.558Z] Checked if tokens are valid: true, expires at: 1780324901061
+[debug] [2026-06-01T13:42:43.558Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-01T13:42:43.560Z] Checked if tokens are valid: true, expires at: 1780324901061
+[debug] [2026-06-01T13:42:43.562Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-01T13:42:43.581Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.9) on port 50001
+[debug] [2026-06-01T13:42:44.771Z] I0601 21:42:44.724726   53472 control.go:100] [projects/emulator/locations/emulator/services/esggo e88b] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [11015B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 21:42:44.724726   53472 control.go:100] [projects/emulator/locations/emulator/services/esggo e88b] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [11015B] \n"}}
+[debug] [2026-06-01T13:42:44.772Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-01T13:42:44.773Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-01T13:42:44.773Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.9.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.9.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-01T13:42:45.315Z] I0601 21:42:44.833096    1268 load.go:31] Reloading schema and connectors...
+I0601 21:42:44.896540    1268 control.go:100] [projects/emulator/locations/emulator/services/esggo e2e9] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "omnicore": sources: omnicore\queries.gql [11015B] 
+I0601 21:42:44.955726    1268 codegen.go:101] [connector "omnicore" javascriptSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+I0601 21:42:44.974559    1268 codegen.go:101] [connector "omnicore" adminSdk] Generating sources into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+I0601 21:42:44.979622    1268 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\mutation.gql [43315B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] 
+I0601 21:42:44.982733    1268 collector.go:107] connector "omnicore" javascriptSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [16014B] index.cjs.js [17968B] react\index.d.ts [12558B] react\index.cjs.js [10173B] react\esm\index.esm.js [9516B] react\README.md [129450B] .guides/setup.md [1682B] README.md [128794B] react\package.json [461B] react\esm\package.json [17B] esm\package.json [17B] package.json [854B] .guides/usage.md [4040B] .guides/config.json [236B] index.d.ts [30373B] 
+I0601 21:42:44.989290    1268 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation
+I0601 21:42:44.990302    1268 collector.go:107] connector "omnicore" adminSdk wrote into "c:\\Project\\esggo\\esggo\\src\\dataconnect-admin-generated"
+Generated sources: package.json [633B] index.d.ts [27029B] esm\index.esm.js [8608B] esm\package.json [17B] index.cjs.js [9739B] 
+I0601 21:42:44.993819    1268 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation
+I0601 21:42:44.993819    1268 load.go:109] Finished reloading
+I0601 21:42:45.029051    1268 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 21:42:44.833096    1268 load.go:31] Reloading schema and connectors...\nI0601 21:42:44.896540    1268 control.go:100] [projects/emulator/locations/emulator/services/esggo e2e9] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"omnicore\": sources: omnicore\\queries.gql [11015B] \nI0601 21:42:44.955726    1268 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nI0601 21:42:44.974559    1268 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0601 21:42:44.979622    1268 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] \nI0601 21:42:44.982733    1268 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [16014B] index.cjs.js [17968B] react\\index.d.ts [12558B] react\\index.cjs.js [10173B] react\\esm\\index.esm.js [9516B] react\\README.md [129450B] .guides/setup.md [1682B] README.md [128794B] react\\package.json [461B] react\\esm\\package.json [17B] esm\\package.json [17B] package.json [854B] .guides/usage.md [4040B] .guides/config.json [236B] index.d.ts [30373B] \nI0601 21:42:44.989290    1268 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0601 21:42:44.990302    1268 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: package.json [633B] index.d.ts [27029B] esm\\index.esm.js [8608B] esm\\package.json [17B] index.cjs.js [9739B] \nI0601 21:42:44.993819    1268 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 21:42:44.993819    1268 load.go:109] Finished reloading\nI0601 21:42:45.029051    1268 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-01T13:42:46.307Z] I0601 21:42:45.906654    1268 engine.go:209] [projects/emulator/locations/emulator/services/esggo e2e9] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 21:42:45.906654    1268 engine.go:209] [projects/emulator/locations/emulator/services/esggo e2e9] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-06-01T13:42:46.390Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-01T13:42:46.390Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]

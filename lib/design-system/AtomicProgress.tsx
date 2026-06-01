@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useId } from 'react';
 import { IAtomicComponent, atomicManager } from './atomic-core';
+import { cn } from '../utils';
 
 export interface AtomicProgressProps extends React.HTMLAttributes<HTMLDivElement> {
     value: number;
@@ -15,17 +16,19 @@ export const AtomicProgress: React.FC<AtomicProgressProps> = ({
     variant = 'default',
     showLabel = false,
     label = 'Progress',
-    className = '',
+    className,
     ...props
 }) => {
+    const labelId = useId();
+
     useEffect(() => {
         const atom: IAtomicComponent = {
             atomId: 'ATOM_PRG_001',
             type: 'atom',
-            version: '1.0.0',
+            version: '1.1.0',
             core: { status: 'Trustworthy' } as any,
             reference: {
-                specification: 'Data Viz Spec v1.0',
+                specification: 'Data Viz Spec v1.1',
                 intent: 'Metric Indicator',
                 governanceNode: 'UI_METRICS_CORE'
             }
@@ -36,26 +39,44 @@ export const AtomicProgress: React.FC<AtomicProgressProps> = ({
     const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
     const variantColors = {
-        default: 'bg-[#06b6d4] shadow-[0_0_10px_rgba(6,182,212,0.5)]',
-        success: 'bg-[#10b981] shadow-[0_0_10px_rgba(16,185,129,0.5)]',
-        warning: 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]',
-        error: 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]',
+        default: 'bg-gradient-to-r from-[#06b6d4] to-[#0891b2] shadow-[0_0_15px_rgba(6,182,212,0.6)]',
+        success: 'bg-gradient-to-r from-[#10b981] to-[#059669] shadow-[0_0_15px_rgba(16,185,129,0.6)]',
+        warning: 'bg-gradient-to-r from-amber-400 to-amber-600 shadow-[0_0_15px_rgba(251,191,36,0.6)]',
+        error: 'bg-gradient-to-r from-rose-500 to-rose-700 shadow-[0_0_15px_rgba(244,63,94,0.6)]',
     }[variant];
 
     return (
-        <div className={`w-full flex flex-col gap-1.5 ${className}`} {...props}>
+        <div 
+            className={cn('w-full flex flex-col gap-2', className)}
+            role="progressbar"
+            aria-valuenow={Math.round(percentage)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-labelledby={showLabel ? labelId : undefined}
+            aria-label={!showLabel ? label : undefined}
+            {...props}
+        >
             {showLabel && (
-                <div className="flex justify-between items-center text-xs font-mono text-slate-400">
-                    <span>{label}</span>
-                    <span className="text-white">{Math.round(percentage)}%</span>
+                <div className="flex justify-between items-center text-[11px] font-black font-mono text-slate-400 uppercase tracking-widest">
+                    <span id={labelId}>{label}</span>
+                    <span className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">{Math.round(percentage)}%</span>
                 </div>
             )}
-            <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-sm border border-white/5">
+            <div className="h-2.5 w-full bg-[#020617]/50 rounded-full overflow-hidden backdrop-blur-md border border-white/10 shadow-inner relative">
+                {/* 軌道內裝飾反光 */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
+                
                 <div
-                    className={`h-full rounded-full transition-all duration-500 ease-out ${variantColors}`}
+                    className={cn(
+                        'h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden',
+                        variantColors
+                    )}
                     style={{ width: `${percentage}%` }}
-                />
+                >
+                    {/* 動態光澤掃描效果 (Shimmer effect) */}
+                    <div className="absolute top-0 bottom-0 left-0 right-0 w-[200%] bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_2s_infinite]" />
+                </div>
             </div>
         </div>
     );
-};
+};

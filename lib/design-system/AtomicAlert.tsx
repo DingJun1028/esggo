@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { IAtomicComponent, atomicManager } from './atomic-core';
 import { Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { cn } from '../utils';
 
 export interface AtomicAlertProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'info' | 'success' | 'warning' | 'error';
@@ -12,17 +13,18 @@ export const AtomicAlert: React.FC<AtomicAlertProps> = ({
   variant = 'info',
   title,
   children,
-  className = '',
+  className,
   ...props
 }) => {
+  const alertId = React.useId();
   useEffect(() => {
     const atom: IAtomicComponent = {
       atomId: 'ATOM_ALT_001',
       type: 'atom',
-      version: '1.0.0',
+      version: '1.1.0',
       core: { status: 'Trustworthy' } as any,
       reference: {
-        specification: 'Notifications Spec v1.0',
+        specification: 'Notifications Spec v1.1',
         intent: 'Semantic Info Alert',
         governanceNode: 'UI_INTERACTION_CORE'
       }
@@ -32,43 +34,53 @@ export const AtomicAlert: React.FC<AtomicAlertProps> = ({
 
   const variantStyles = {
     info: {
-      border: 'border-[#06b6d4]/30',
-      bg: 'bg-[#06b6d4]/5',
+      base: 'border-[#06b6d4]/40 border-l-[#06b6d4] bg-[#06b6d4]/10 shadow-[0_0_15px_rgba(6,182,212,0.15)]',
       text: 'text-[#06b6d4]',
-      icon: <Info size={16} className="text-[#06b6d4]" />,
+      icon: <Info size={18} className="text-[#06b6d4] drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]" />,
     },
     success: {
-      border: 'border-[#10b981]/30',
-      bg: 'bg-[#10b981]/5',
+      base: 'border-[#10b981]/40 border-l-[#10b981] bg-[#10b981]/10 shadow-[0_0_15px_rgba(16,185,129,0.15)]',
       text: 'text-[#10b981]',
-      icon: <CheckCircle size={16} className="text-[#10b981]" />,
+      icon: <CheckCircle size={18} className="text-[#10b981] drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]" />,
     },
     warning: {
-      border: 'border-amber-500/30',
-      bg: 'bg-amber-500/5',
+      base: 'border-amber-500/40 border-l-amber-500 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.15)]',
       text: 'text-amber-400',
-      icon: <AlertTriangle size={16} className="text-amber-400" />,
+      icon: <AlertTriangle size={18} className="text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.8)]" />,
     },
     error: {
-      border: 'border-rose-500/30',
-      bg: 'bg-rose-500/5',
+      base: 'border-rose-500/40 border-l-rose-500 bg-rose-500/10 shadow-[0_0_15px_rgba(225,29,72,0.15)]',
       text: 'text-rose-400',
-      icon: <XCircle size={16} className="text-rose-400" />,
+      icon: <XCircle size={18} className="text-rose-400 drop-shadow-[0_0_5px_rgba(251,113,133,0.8)]" />,
     },
   }[variant];
 
   return (
-    <div className={`flex items-start gap-3.5 p-4 rounded-xl border backdrop-blur-md ${variantStyles.border} ${variantStyles.bg} ${className}`} {...props}>
-      <div className="flex-shrink-0 mt-0.5">
+    <div 
+      role="alert"
+      aria-live="polite"
+      aria-labelledby={title ? `${alertId}-title` : undefined}
+      aria-describedby={children ? `${alertId}-desc` : undefined}
+      className={cn(
+        'relative overflow-hidden flex items-start gap-3.5 p-4 rounded-xl border border-l-4 backdrop-blur-xl',
+        variantStyles.base,
+        className
+      )}
+      {...props}
+    >
+      {/* 玻璃反光特效 (Glass reflection) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+      
+      <div className="flex-shrink-0 mt-0.5 relative z-10" aria-hidden="true">
         {variantStyles.icon}
       </div>
-      <div className="space-y-1 flex-1">
+      <div className="space-y-1 flex-1 relative z-10">
         {title && (
-          <h4 className={`text-xs font-black uppercase tracking-wider ${variantStyles.text}`}>
+          <h4 id={`${alertId}-title`} className={cn('text-[13px] font-black uppercase tracking-wider', variantStyles.text)}>
             {title}
           </h4>
         )}
-        <div className="text-[11px] font-medium text-slate-300 leading-relaxed">
+        <div id={`${alertId}-desc`} className="text-[12px] font-medium text-slate-200 leading-relaxed drop-shadow-sm">
           {children}
         </div>
       </div>

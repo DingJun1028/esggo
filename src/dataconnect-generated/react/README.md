@@ -35,16 +35,15 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*GetMyCompanyProfile*](#getmycompanyprofile)
 - [**Mutations**](#mutations)
   - [*UpsertTask*](#upserttask)
-  - [*UpsertAuditRecord*](#upsertauditrecord)
+  - [*InsertAuditRecord*](#insertauditrecord)
   - [*UpsertRoadmapMilestone*](#upsertroadmapmilestone)
   - [*UpsertCompanyProfile*](#upsertcompanyprofile)
   - [*UpsertReport*](#upsertreport)
   - [*UpsertReportSection*](#upsertreportsection)
   - [*UpsertCompanyMetric*](#upsertcompanymetric)
-  - [*UpsertEternalMemory*](#upserteternalmemory)
+  - [*InsertEternalMemory*](#inserteternalmemory)
   - [*UpsertScrapedArticle*](#upsertscrapedarticle)
   - [*UpsertSwarmAgentTask*](#upsertswarmagenttask)
-  - [*CreateDemoData*](#createdemodata)
 
 # TanStack Query Firebase & TanStack React Query
 This SDK provides [React](https://react.dev/) hooks generated specific to your application, for the operations found in the connector `omnicore`. These hooks are generated using [TanStack Query Firebase](https://react-query-firebase.invertase.dev/) by our partners at Invertase, a library built on top of [TanStack React Query v5](https://tanstack.com/query/v5/docs/framework/react/overview).
@@ -168,7 +167,7 @@ export interface ListAllTasksData {
     department?: string | null;
     griReference?: string | null;
     dueDate?: DateString | null;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & Task_Key)[];
 }
 ```
@@ -247,7 +246,7 @@ export interface GetTaskByIdData {
   task?: {
     id: UUIDString;
     user: {
-      uid: string;
+      id: string;
     } & User_Key;
       title: string;
       description?: string | null;
@@ -336,14 +335,19 @@ To access the data returned by a Query, use the `UseQueryResult.data` field. The
 export interface ListAuditRecordsData {
   auditRecords: ({
     id: UUIDString;
-    title: string;
-    dataType: string;
-    source: string;
+    title?: string | null;
+    dataType?: string | null;
+    source?: string | null;
     standard?: string | null;
     description?: string | null;
-    contentHash: string;
-    zkpStatus: string;
-    createdAt: TimestampString;
+    contentHash?: string | null;
+    zkpStatus?: string | null;
+    createdAt: DateString;
+    eventType?: string | null;
+    payload?: string | null;
+    evidenceUuid?: string | null;
+    colorDropId?: string | null;
+    timestamp?: DateString | null;
   } & AuditRecord_Key)[];
 }
 ```
@@ -423,7 +427,7 @@ export interface ListScrapedArticlesData {
     category: string;
     tags?: string | null;
     impactLevel: string;
-    scrapedAt: TimestampString;
+    scrapedAt: DateString;
   } & ScrapedArticle_Key)[];
 }
 ```
@@ -587,8 +591,8 @@ export interface GetCompanyProfileData {
     employeeCount?: number | null;
     revenueTwd?: number | null;
     capitalTwd?: number | null;
-    user?: {
-      uid: string;
+    user: {
+      id: string;
     } & User_Key;
   } & CompanyProfile_Key;
 }
@@ -679,12 +683,12 @@ export interface GetReportByIdData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
-      user?: {
-        uid: string;
+      user: {
+        id: string;
       } & User_Key;
     } & CompanyProfile_Key;
   } & Report_Key;
@@ -782,7 +786,7 @@ export interface ListReportSectionsByReportData {
     chapterOrder?: number | null;
     griReferences?: string[] | null;
     hashLock?: string | null;
-    lastUpdated: TimestampString;
+    updatedAt: DateString;
   } & ReportSection_Key)[];
 }
 ```
@@ -875,7 +879,7 @@ export interface ListCompanyMetricsData {
     griStandard?: string | null;
     sourceOrigin?: string | null;
     hashLock?: string | null;
-    updatedAt: TimestampString;
+    updatedAt: DateString;
   } & CompanyMetric_Key)[];
 }
 ```
@@ -965,7 +969,7 @@ export interface ListEternalMemoriesByCompanyData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 ```
@@ -1135,7 +1139,7 @@ export interface ListReportsData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
@@ -1216,7 +1220,7 @@ export interface ListEternalMemoriesData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 ```
@@ -1294,8 +1298,8 @@ export interface ListSwarmAgentTasksData {
     agentId?: string | null;
     progress: number;
     skillKey?: string | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
+    createdAt: DateString;
+    updatedAt: DateString;
   } & SwarmAgentTask_Key)[];
 }
 ```
@@ -1366,12 +1370,12 @@ To access the data returned by a Query, use the `UseQueryResult.data` field. The
 ```javascript
 export interface ListRegulatoryPoliciesData {
   regulatoryPolicies: ({
-    id: string;
-    standard: string;
-    code: string;
-    name: string;
+    id: UUIDString;
+    standard?: string | null;
+    code?: string | null;
+    name?: string | null;
     description?: string | null;
-    rulesJson: string;
+    rulesJson?: string | null;
   } & RegulatoryPolicy_Key)[];
 }
 ```
@@ -1636,108 +1640,122 @@ export default function UpsertTaskComponent() {
 }
 ```
 
-## UpsertAuditRecord
-You can execute the `UpsertAuditRecord` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
+## InsertAuditRecord
+You can execute the `InsertAuditRecord` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
 ```javascript
-useUpsertAuditRecord(options?: useDataConnectMutationOptions<UpsertAuditRecordData, FirebaseError, UpsertAuditRecordVariables>): UseDataConnectMutationResult<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+useInsertAuditRecord(options?: useDataConnectMutationOptions<InsertAuditRecordData, FirebaseError, InsertAuditRecordVariables | void>): UseDataConnectMutationResult<InsertAuditRecordData, InsertAuditRecordVariables>;
 ```
 You can also pass in a `DataConnect` instance to the Mutation hook function.
 ```javascript
-useUpsertAuditRecord(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertAuditRecordData, FirebaseError, UpsertAuditRecordVariables>): UseDataConnectMutationResult<UpsertAuditRecordData, UpsertAuditRecordVariables>;
+useInsertAuditRecord(dc: DataConnect, options?: useDataConnectMutationOptions<InsertAuditRecordData, FirebaseError, InsertAuditRecordVariables | void>): UseDataConnectMutationResult<InsertAuditRecordData, InsertAuditRecordVariables>;
 ```
 
 ### Variables
-The `UpsertAuditRecord` Mutation requires an argument of type `UpsertAuditRecordVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+The `InsertAuditRecord` Mutation has an optional argument of type `InsertAuditRecordVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
 
 ```javascript
-export interface UpsertAuditRecordVariables {
+export interface InsertAuditRecordVariables {
   id?: UUIDString | null;
-  title: string;
-  dataType: string;
-  source: string;
+  title?: string | null;
+  dataType?: string | null;
+  source?: string | null;
   standard?: string | null;
   description?: string | null;
-  contentHash: string;
-  zkpStatus: string;
+  contentHash?: string | null;
+  zkpStatus?: string | null;
   metadata?: string | null;
   proofSignature?: string | null;
   verifierKey?: string | null;
   algorithm?: string | null;
   salt?: string | null;
   proofJson?: string | null;
+  eventType?: string | null;
+  payload?: string | null;
+  evidenceUuid?: string | null;
+  colorDropId?: string | null;
+  timestamp?: DateString | null;
 }
 ```
 ### Return Type
-Recall that calling the `UpsertAuditRecord` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+Recall that calling the `InsertAuditRecord` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
 
 To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
 
 To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
 
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpsertAuditRecord` Mutation is of type `UpsertAuditRecordData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `InsertAuditRecord` Mutation is of type `InsertAuditRecordData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
 ```javascript
-export interface UpsertAuditRecordData {
-  auditRecord_upsert: AuditRecord_Key;
+export interface InsertAuditRecordData {
+  auditRecord_insert: AuditRecord_Key;
 }
 ```
 
 To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
 
-### Using `UpsertAuditRecord`'s Mutation hook function
+### Using `InsertAuditRecord`'s Mutation hook function
 
 ```javascript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, UpsertAuditRecordVariables } from '@dataconnect/generated';
-import { useUpsertAuditRecord } from '@dataconnect/generated/react'
+import { connectorConfig, InsertAuditRecordVariables } from '@dataconnect/generated';
+import { useInsertAuditRecord } from '@dataconnect/generated/react'
 
-export default function UpsertAuditRecordComponent() {
+export default function InsertAuditRecordComponent() {
   // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useUpsertAuditRecord();
+  const mutation = useInsertAuditRecord();
 
   // You can also pass in a `DataConnect` instance to the Mutation hook function.
   const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useUpsertAuditRecord(dataConnect);
+  const mutation = useInsertAuditRecord(dataConnect);
 
   // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
-  const mutation = useUpsertAuditRecord(options);
+  const mutation = useInsertAuditRecord(options);
 
   // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
   const dataConnect = getDataConnect(connectorConfig);
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
-  const mutation = useUpsertAuditRecord(dataConnect, options);
+  const mutation = useInsertAuditRecord(dataConnect, options);
 
   // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useUpsertAuditRecord` Mutation requires an argument of type `UpsertAuditRecordVariables`:
-  const upsertAuditRecordVars: UpsertAuditRecordVariables = {
+  // The `useInsertAuditRecord` Mutation has an optional argument of type `InsertAuditRecordVariables`:
+  const insertAuditRecordVars: InsertAuditRecordVariables = {
     id: ..., // optional
-    title: ..., 
-    dataType: ..., 
-    source: ..., 
+    title: ..., // optional
+    dataType: ..., // optional
+    source: ..., // optional
     standard: ..., // optional
     description: ..., // optional
-    contentHash: ..., 
-    zkpStatus: ..., 
+    contentHash: ..., // optional
+    zkpStatus: ..., // optional
     metadata: ..., // optional
     proofSignature: ..., // optional
     verifierKey: ..., // optional
     algorithm: ..., // optional
     salt: ..., // optional
     proofJson: ..., // optional
+    eventType: ..., // optional
+    payload: ..., // optional
+    evidenceUuid: ..., // optional
+    colorDropId: ..., // optional
+    timestamp: ..., // optional
   };
-  mutation.mutate(upsertAuditRecordVars);
+  mutation.mutate(insertAuditRecordVars);
   // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., });
+  mutation.mutate({ id: ..., title: ..., dataType: ..., source: ..., standard: ..., description: ..., contentHash: ..., zkpStatus: ..., metadata: ..., proofSignature: ..., verifierKey: ..., algorithm: ..., salt: ..., proofJson: ..., eventType: ..., payload: ..., evidenceUuid: ..., colorDropId: ..., timestamp: ..., });
+  // Since all variables are optional for this Mutation, you can omit the `InsertAuditRecordVariables` argument.
+  mutation.mutate();
 
   // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  // Since all variables are optional for this Mutation, you can provide options without providing any variables.
+  // To do so, you must pass `undefined` where you would normally pass the variables.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
-  mutation.mutate(upsertAuditRecordVars, options);
+  mutation.mutate(insertAuditRecordVars /** or undefined */, options);
 
   // Then, you can render your component dynamically based on the status of the Mutation.
   if (mutation.isPending) {
@@ -1750,7 +1768,7 @@ export default function UpsertAuditRecordComponent() {
 
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
-    console.log(mutation.data.auditRecord_upsert);
+    console.log(mutation.data.auditRecord_insert);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }
@@ -2106,6 +2124,7 @@ export interface UpsertReportSectionVariables {
   chapterOrder?: number | null;
   griReferences?: string[] | null;
   hashLock?: string | null;
+  sourceOrigin: string;
 }
 ```
 ### Return Type
@@ -2168,10 +2187,11 @@ export default function UpsertReportSectionComponent() {
     chapterOrder: ..., // optional
     griReferences: ..., // optional
     hashLock: ..., // optional
+    sourceOrigin: ..., 
   };
   mutation.mutate(upsertReportSectionVars);
   // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., reportId: ..., sectionId: ..., title: ..., content: ..., contentMd: ..., fieldValuesJson: ..., notes: ..., documentsStateJson: ..., isDone: ..., chapterOrder: ..., griReferences: ..., hashLock: ..., });
+  mutation.mutate({ id: ..., reportId: ..., sectionId: ..., title: ..., content: ..., contentMd: ..., fieldValuesJson: ..., notes: ..., documentsStateJson: ..., isDone: ..., chapterOrder: ..., griReferences: ..., hashLock: ..., sourceOrigin: ..., });
 
   // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
   const options = {
@@ -2308,21 +2328,21 @@ export default function UpsertCompanyMetricComponent() {
 }
 ```
 
-## UpsertEternalMemory
-You can execute the `UpsertEternalMemory` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
+## InsertEternalMemory
+You can execute the `InsertEternalMemory` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
 ```javascript
-useUpsertEternalMemory(options?: useDataConnectMutationOptions<UpsertEternalMemoryData, FirebaseError, UpsertEternalMemoryVariables>): UseDataConnectMutationResult<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+useInsertEternalMemory(options?: useDataConnectMutationOptions<InsertEternalMemoryData, FirebaseError, InsertEternalMemoryVariables>): UseDataConnectMutationResult<InsertEternalMemoryData, InsertEternalMemoryVariables>;
 ```
 You can also pass in a `DataConnect` instance to the Mutation hook function.
 ```javascript
-useUpsertEternalMemory(dc: DataConnect, options?: useDataConnectMutationOptions<UpsertEternalMemoryData, FirebaseError, UpsertEternalMemoryVariables>): UseDataConnectMutationResult<UpsertEternalMemoryData, UpsertEternalMemoryVariables>;
+useInsertEternalMemory(dc: DataConnect, options?: useDataConnectMutationOptions<InsertEternalMemoryData, FirebaseError, InsertEternalMemoryVariables>): UseDataConnectMutationResult<InsertEternalMemoryData, InsertEternalMemoryVariables>;
 ```
 
 ### Variables
-The `UpsertEternalMemory` Mutation requires an argument of type `UpsertEternalMemoryVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+The `InsertEternalMemory` Mutation requires an argument of type `InsertEternalMemoryVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
 
 ```javascript
-export interface UpsertEternalMemoryVariables {
+export interface InsertEternalMemoryVariables {
   id?: UUIDString | null;
   companyId?: UUIDString | null;
   type: string;
@@ -2330,55 +2350,56 @@ export interface UpsertEternalMemoryVariables {
   tags?: string | null;
   hashLock: string;
   consolidated: boolean;
+  sourceOrigin: string;
 }
 ```
 ### Return Type
-Recall that calling the `UpsertEternalMemory` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+Recall that calling the `InsertEternalMemory` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
 
 To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
 
 To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
 
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpsertEternalMemory` Mutation is of type `UpsertEternalMemoryData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `InsertEternalMemory` Mutation is of type `InsertEternalMemoryData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
 ```javascript
-export interface UpsertEternalMemoryData {
-  eternalMemory_upsert: EternalMemory_Key;
+export interface InsertEternalMemoryData {
+  eternalMemory_insert: EternalMemory_Key;
 }
 ```
 
 To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
 
-### Using `UpsertEternalMemory`'s Mutation hook function
+### Using `InsertEternalMemory`'s Mutation hook function
 
 ```javascript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, UpsertEternalMemoryVariables } from '@dataconnect/generated';
-import { useUpsertEternalMemory } from '@dataconnect/generated/react'
+import { connectorConfig, InsertEternalMemoryVariables } from '@dataconnect/generated';
+import { useInsertEternalMemory } from '@dataconnect/generated/react'
 
-export default function UpsertEternalMemoryComponent() {
+export default function InsertEternalMemoryComponent() {
   // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useUpsertEternalMemory();
+  const mutation = useInsertEternalMemory();
 
   // You can also pass in a `DataConnect` instance to the Mutation hook function.
   const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useUpsertEternalMemory(dataConnect);
+  const mutation = useInsertEternalMemory(dataConnect);
 
   // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
-  const mutation = useUpsertEternalMemory(options);
+  const mutation = useInsertEternalMemory(options);
 
   // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
   const dataConnect = getDataConnect(connectorConfig);
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
-  const mutation = useUpsertEternalMemory(dataConnect, options);
+  const mutation = useInsertEternalMemory(dataConnect, options);
 
   // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useUpsertEternalMemory` Mutation requires an argument of type `UpsertEternalMemoryVariables`:
-  const upsertEternalMemoryVars: UpsertEternalMemoryVariables = {
+  // The `useInsertEternalMemory` Mutation requires an argument of type `InsertEternalMemoryVariables`:
+  const insertEternalMemoryVars: InsertEternalMemoryVariables = {
     id: ..., // optional
     companyId: ..., // optional
     type: ..., 
@@ -2386,16 +2407,17 @@ export default function UpsertEternalMemoryComponent() {
     tags: ..., // optional
     hashLock: ..., 
     consolidated: ..., 
+    sourceOrigin: ..., 
   };
-  mutation.mutate(upsertEternalMemoryVars);
+  mutation.mutate(insertEternalMemoryVars);
   // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., companyId: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., });
+  mutation.mutate({ id: ..., companyId: ..., type: ..., content: ..., tags: ..., hashLock: ..., consolidated: ..., sourceOrigin: ..., });
 
   // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
-  mutation.mutate(upsertEternalMemoryVars, options);
+  mutation.mutate(insertEternalMemoryVars, options);
 
   // Then, you can render your component dynamically based on the status of the Mutation.
   if (mutation.isPending) {
@@ -2408,7 +2430,7 @@ export default function UpsertEternalMemoryComponent() {
 
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
-    console.log(mutation.data.eternalMemory_upsert);
+    console.log(mutation.data.eternalMemory_insert);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }
@@ -2625,91 +2647,6 @@ export default function UpsertSwarmAgentTaskComponent() {
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
     console.log(mutation.data.swarmAgentTask_upsert);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## CreateDemoData
-You can execute the `CreateDemoData` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
-```javascript
-useCreateDemoData(options?: useDataConnectMutationOptions<CreateDemoDataData, FirebaseError, void>): UseDataConnectMutationResult<CreateDemoDataData, undefined>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useCreateDemoData(dc: DataConnect, options?: useDataConnectMutationOptions<CreateDemoDataData, FirebaseError, void>): UseDataConnectMutationResult<CreateDemoDataData, undefined>;
-```
-
-### Variables
-The `CreateDemoData` Mutation has no variables.
-### Return Type
-Recall that calling the `CreateDemoData` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateDemoData` Mutation is of type `CreateDemoDataData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface CreateDemoDataData {
-  user_insertMany: User_Key[];
-  comment_insertMany: Comment_Key[];
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `CreateDemoData`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig } from '@dataconnect/generated';
-import { useCreateDemoData } from '@dataconnect/generated/react'
-
-export default function CreateDemoDataComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useCreateDemoData();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useCreateDemoData(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateDemoData(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateDemoData(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  mutation.mutate();
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  // Since this Mutation accepts no variables, you must pass `undefined` where you would normally pass the variables.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(undefined, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.user_insertMany);
-    console.log(mutation.data.comment_insertMany);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }

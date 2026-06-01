@@ -2,7 +2,7 @@ import { queryRef, executeQuery, validateArgsWithOptions, mutationRef, executeMu
 
 export const connectorConfig = {
   connector: 'omnicore',
-  service: 'esggoalpha',
+  service: 'esggo',
   location: 'asia-east1'
 };
 export const dataConnectSettings = {
@@ -61,16 +61,16 @@ export function listAuditRecords(dcOrOptions, options) {
   return executeQuery(listAuditRecordsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
 }
 
-export const upsertAuditRecordRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+export const insertAuditRecordRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpsertAuditRecord', inputVars);
+  return mutationRef(dcInstance, 'InsertAuditRecord', inputVars);
 }
-upsertAuditRecordRef.operationName = 'UpsertAuditRecord';
+insertAuditRecordRef.operationName = 'InsertAuditRecord';
 
-export function upsertAuditRecord(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
-  return executeMutation(upsertAuditRecordRef(dcInstance, inputVars));
+export function insertAuditRecord(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars);
+  return executeMutation(insertAuditRecordRef(dcInstance, inputVars));
 }
 
 export const listScrapedArticlesRef = (dc) => {
@@ -211,16 +211,16 @@ export function listCompanyMetrics(dcOrVars, varsOrOptions, options) {
   return executeQuery(listCompanyMetricsRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
 }
 
-export const upsertEternalMemoryRef = (dcOrVars, vars) => {
+export const insertEternalMemoryRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpsertEternalMemory', inputVars);
+  return mutationRef(dcInstance, 'InsertEternalMemory', inputVars);
 }
-upsertEternalMemoryRef.operationName = 'UpsertEternalMemory';
+insertEternalMemoryRef.operationName = 'InsertEternalMemory';
 
-export function upsertEternalMemory(dcOrVars, vars) {
+export function insertEternalMemory(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
-  return executeMutation(upsertEternalMemoryRef(dcInstance, inputVars));
+  return executeMutation(insertEternalMemoryRef(dcInstance, inputVars));
 }
 
 export const listEternalMemoriesByCompanyRef = (dcOrVars, vars) => {
@@ -336,17 +336,5 @@ export function getMyCompanyProfile(dcOrOptions, options) {
   
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
   return executeQuery(getMyCompanyProfileRef(dcInstance, inputVars), inputOpts && { fetchPolicy: inputOpts.fetchPolicy });
-}
-
-export const createDemoDataRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateDemoData');
-}
-createDemoDataRef.operationName = 'CreateDemoData';
-
-export function createDemoData(dc) {
-  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dc, undefined);
-  return executeMutation(createDemoDataRef(dcInstance, inputVars));
 }
 

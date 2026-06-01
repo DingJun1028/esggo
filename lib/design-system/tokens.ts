@@ -123,6 +123,11 @@ export const semanticTokens = {
       info:    { bg: colorPrimitive.blue[50],    text: colorPrimitive.blue[700],  border: colorPrimitive.blue[100] },
       neutral: { bg: colorPrimitive.neutral[100],text: colorPrimitive.neutral[600],border: colorPrimitive.neutral[200] },
     },
+    colorDrop: {
+      issued:   { bg: colorPrimitive.gold[100],   text: colorPrimitive.gold[700],  border: colorPrimitive.gold[200] },
+      verified: { bg: colorPrimitive.green[100],  text: colorPrimitive.green[700], border: colorPrimitive.green[200] },
+      pending:  { bg: colorPrimitive.neutral[100],text: colorPrimitive.neutral[600],border: colorPrimitive.neutral[200] },
+    },
   },
   typography: {
     pageTitle:    { fontSize: '1.875rem', fontWeight: '700', lineHeight: '1.25' },
