@@ -23,6 +23,9 @@
     "ui": {
       "enabled": true,
       "port": 4000
+    },
+    "dataconnect": {
+      "dataDir": "dataconnect/.dataconnect/pgliteData"
     }
   },
   "auth": {
@@ -46,5 +49,8 @@
     "predeploy": [
       "npm run build"
     ]
+  },
+  "dataconnect": {
+    "source": "dataconnect"
   }
 }

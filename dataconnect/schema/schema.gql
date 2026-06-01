@@ -1,236 +1,29 @@
-type User @table(key: ["uid"]) {
-  uid: String! # Firebase Auth UID
-  username: String!
-  email: String!
-  passwordHash: String!
-  createdAt: Timestamp! @default(expr: "request.time")
+# ESGGO Core Schema for Firebase Data Connect
+
+type User @table {
+  id: String! @default(expr: "auth.uid")
+  email: String
   displayName: String
-  bio: String
-  profilePictureUrl: String
-  publicProfile: Boolean
+  role: String
+  createdAt: Date! @default(expr: "request.time")
 }
 
-type Action @table {
-  title: String!
-  category: Category!
-  loggedAt: Timestamp! @default(expr: "request.time")
-  isPublic: Boolean!
-  description: String
-  impactMetric: String
-  location: String
-  imageUrl: String
-  user: User
-}
-
-type Category @table {
-  name: String!
-  description: String
-  iconUrl: String
-}
-
-type Challenge @table {
-  name: String!
-  description: String!
-  startDate: Date!
-  endDate: Date!
-  isPublic: Boolean!
-  targetMetric: String
-  rules: String
-  creator: User
-}
-
-type ChallengeParticipation @table(key: ["user", "challenge"]) {
-  user: User!
-  challenge: Challenge!
-  joinedAt: Timestamp! @default(expr: "request.time")
-  progressMetric: String
-}
-
-type SocialConnection @table(key: ["follower", "followed"]) {
-  follower: User!
-  followed: User!
-  connectedAt: Timestamp! @default(expr: "request.time")
-}
-
-type Task @table {
+type EsgRecord @table {
   id: UUID! @default(expr: "uuidV4()")
-  user: User! # Added for security
   title: String!
   description: String
-  completed: Boolean!
-  status: String! @default(value: "todo")
-  priority: String! @default(value: "medium")
-  assignee: String
-  department: String
-  griReference: String
-  dueDate: Date
-  createdAt: Timestamp! @default(expr: "request.time")
-  updatedAt: Timestamp! @default(expr: "request.time")
-}
-
-type RoadmapMilestone @table {
-  id: UUID! @default(expr: "uuidV4()")
-  user: User! # Added for security
-  title: String!
-  targetYear: Int!
-  category: String!
-  status: String! @default(value: "planned")
-  targetValue: Float
-  unit: String
-  sbtiAligned: Boolean! @default(value: true)
-  createdAt: Timestamp! @default(expr: "request.time")
-}
-
-type Comment @table {
-  user: User!
-  content: String!
-}
-
-type AuditRecord @table {
-  id: UUID! @default(expr: "uuidV4()")
-  user: User! # Added for security
-  title: String!
-  dataType: String!
-  source: String!
-  standard: String
-  description: String
-  contentHash: String!
-  zkpStatus: String!
-  createdAt: Timestamp! @default(expr: "request.time")
-  metadata: String
-  proofSignature: String
-  verifierKey: String
-  algorithm: String
-  salt: String
-  proofJson: String
-}
-
-type IntelligenceModule @table {
-  id: String!
-  titleZh: String!
-  titleEn: String!
-  descriptionZh: String!
-  descriptionEn: String!
-  iconName: String!
-  color: String!
-  details: String # JSON array
-}
-
-type IntelligenceSource @table {
-  id: UUID! @default(expr: "uuidV4()")
-  category: String!
-  name: String!
-  type: String!
+  category: String! # E, S, or G
   status: String!
-}
-
-type CompanyProfile @table {
-  id: UUID! @default(expr: "uuidV4()")
-  name: String!
-  industry: String
-  headquarters: String
-  vision: String
-  mission: String
-  employeeCount: Int
-  revenueTwd: Float
-  capitalTwd: Float
-  createdAt: Timestamp! @default(expr: "request.time")
-  user: User
-}
-
-type Report @table {
-  id: UUID! @default(expr: "uuidV4()")
-  user: User! # Added for security
-  company: CompanyProfile!
-  templateId: String!
-  title: String!
-  language: String!
-  progress: Int!
-  status: String!
-  createdAt: Timestamp! @default(expr: "request.time")
-  lastSavedAt: Timestamp
-}
-
-type ReportSection @table {
-  id: UUID! @default(expr: "uuidV4()")
-  report: Report!
-  sectionId: String!
-  title: String!
-  content: String
-  contentMd: String
-  fieldValuesJson: String # Serialized JSON
-  notes: String
-  documentsStateJson: String # Serialized JSON
-  isDone: Boolean!
-  chapterOrder: Int @default(value: 0)
-  griReferences: [String!]
-  hashLock: String
-  lastUpdated: Timestamp! @default(expr: "request.time")
-}
-
-type CompanyMetric @table {
-  id: UUID! @default(expr: "uuidV4()")
-  user: User! # Added for security
-  company: CompanyProfile!
-  metricName: String!
-  metricValue: Float
-  unit: String
-  category: String!
-  verified: Boolean! @default(value: false)
-  griStandard: String
-  sourceOrigin: String # [T1 Traceable]
-  hashLock: String # [T4 Trustworthy]
-  updatedAt: Timestamp! @default(expr: "request.time")
-}
-
-type ScrapedArticle @table {
-  id: UUID! @default(expr: "uuidV4()")
-  user: User # Added for security
-  title: String!
-  summary: String
-  url: String!
-  source: String!
-  publishedAt: Date
-  category: String!
-  tags: String
-  impactLevel: String!
-  scrapedAt: Timestamp! @default(expr: "request.time")
-}
-
-# --- Phase 13: Universal Data Layers ---
-
-type EternalMemory @table {
-  id: UUID! @default(expr: "uuidV4()")
+  integrityHash: String # 5T Protocol: Hash Lock
+  sourceOrigin: String # 5T Protocol: Traceable Origin
+  createdAt: Date! @default(expr: "request.time")
   user: User!
-  company: CompanyProfile # Link to company for isolation
-  type: String! # EPISODIC, SEMANTIC, etc.
-  content: String!
-  tags: String # Comma separated or JSON string
-  hashLock: String!
-  consolidated: Boolean! @default(value: false)
-  createdAt: Timestamp! @default(expr: "request.time")
 }
 
-type SwarmAgentTask @table {
+type AuditLog @table {
   id: UUID! @default(expr: "uuidV4()")
+  action: String!
+  details: String
+  timestamp: Date! @default(expr: "request.time")
   user: User!
-  title: String!
-  taskType: String!
-  status: String! # pending, approved, executing, completed, failed
-  agentId: String # agt-z0, etc.
-  progress: Int! @default(value: 0)
-  skillKey: String
-  createdAt: Timestamp! @default(expr: "request.time")
-  updatedAt: Timestamp! @default(expr: "request.time")
-}
-
-type RegulatoryPolicy @table {
-  id: String! @default(expr: "uuidV4()")
-  user: User # Added for security
-  standard: String! # CSRD, GRI, etc.
-  code: String! # ESRS E1-1
-  name: String!
-  description: String
-  rulesJson: String! # JSON array of rules
-  isGlobal: Boolean! @default(value: true)
 }
