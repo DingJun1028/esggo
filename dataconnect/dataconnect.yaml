@@ -1,12 +1,13 @@
 specVersion: "v1"
-schemaValidation: "COMPATIBLE"
-serviceId: "esggoalpha"
+serviceId: "esggo"
 location: "asia-east1"
 schemas:
   - source: "./schema"
     datasource:
       postgresql:
-        database: "fdcdb-1"
+        database: "fdcdb"
         cloudSql:
-          instanceId: "esggo-original-db"
-connectorDirs: ["./omnicore"]
+          instanceId: "esggo-fdc"
+          # schemaValidation: "STRICT"     # STRICT mode makes Postgres schema match Data Connect exactly.
+          # schemaValidation: "COMPATIBLE" # COMPATIBLE mode makes Postgres schema compatible with Data Connect.
+connectorDirs: ["./example"]
