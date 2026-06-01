@@ -1,5 +1,5 @@
 ﻿'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown, Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -37,17 +37,27 @@ export function DataTable<T extends object>({
     else { setSortKey(key); setSortDir('asc'); }
   };
 
-  let filtered = search
-    ? data.filter(row => Object.values(row).some(v => String(v ?? '').toLowerCase().includes(search.toLowerCase())))
-    : data;
+  const filtered = useMemo(() => {
+    let result = data;
 
-  if (sortKey) {
-    filtered = [...filtered].sort((a, b) => {
-      const av = String((a as any)[sortKey] ?? '');
-      const bv = String((b as any)[sortKey] ?? '');
-      return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
-    });
-  }
+    // ⚡ Bolt Optimization: Hoist toLowerCase() and useMemo to prevent unnecessary recalculations
+    if (search) {
+      const searchLower = search.toLowerCase();
+      result = result.filter(row =>
+        Object.values(row).some(v => String(v ?? '').toLowerCase().includes(searchLower))
+      );
+    }
+
+    if (sortKey) {
+      result = [...result].sort((a, b) => {
+        const av = String((a as any)[sortKey] ?? '');
+        const bv = String((b as any)[sortKey] ?? '');
+        return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+    }
+
+    return result;
+  }, [data, search, sortKey, sortDir]);
 
   return (
     <div className={cn('bg-white rounded-[16px] border border-[#e5e7eb] overflow-hidden', className)}>
