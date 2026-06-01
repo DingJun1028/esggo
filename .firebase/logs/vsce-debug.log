@@ -9460,3 +9460,97 @@ I0601 14:36:26.121779    1704 load.go:109] Finished reloading
 I0601 14:36:26.187922    1704 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50002
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 14:36:25.730002    1704 load.go:31] Reloading schema and connectors...\nI0601 14:36:25.893936    1704 control.go:100] [projects/emulator/locations/emulator/services/esggoalpha 439e] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [5564B] \nConnector \"omnicore\": sources: omnicore\\seed_data.gql [838B] omnicore\\queries.gql [10173B] \nI0601 14:36:26.043811    1704 codegen.go:101] [connector \"omnicore\" javascriptSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nI0601 14:36:26.087661    1704 codegen.go:101] [connector \"omnicore\" adminSdk] Generating sources into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nI0601 14:36:26.099029    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [238343B] main\\relation.gql [116704B] main\\query.gql [26502B] main\\mutation.gql [72417B] prelude.gql [84995B] main\\implicit.gql [6925B] \nI0601 14:36:26.105051    1704 collector.go:107] connector \"omnicore\" javascriptSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\package.json [17B] package.json [854B] README.md [130825B] react\\README.md [132511B] .guides/setup.md [1682B] esm\\index.esm.js [16488B] react\\package.json [461B] react\\esm\\package.json [17B] .guides/config.json [236B] index.d.ts [31393B] index.cjs.js [18502B] react\\index.d.ts [12938B] react\\index.cjs.js [10535B] react\\esm\\index.esm.js [9857B] .guides/usage.md [4040B] \nI0601 14:36:26.115069    1704 installsdk.go:55] Package @dataconnect/generated is already installed. Skipping installation\nI0601 14:36:26.117283    1704 collector.go:107] connector \"omnicore\" adminSdk wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\src\\\\dataconnect-admin-generated\"\nGenerated sources: index.d.ts [28063B] esm\\index.esm.js [8891B] esm\\package.json [17B] index.cjs.js [10056B] package.json [633B] \nI0601 14:36:26.121779    1704 installsdk.go:55] Package @dataconnect/admin-generated is already installed. Skipping installation\nI0601 14:36:26.121779    1704 load.go:109] Finished reloading\nI0601 14:36:26.187922    1704 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50002\n"}}
 [error] [Firebase Plugin] error:  {}
+[debug] [2026-06-01T07:00:10.597Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: undefined
+[debug] [2026-06-01T07:00:10.599Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-01T07:00:10.621Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-01T07:00:10.622Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-01T07:00:10.623Z] Checked if tokens are valid: false, expires at: 1780296932772
+[debug] [2026-06-01T07:00:10.623Z] Checked if tokens are valid: false, expires at: 1780296932772
+[debug] [2026-06-01T07:00:10.623Z] > refreshing access token with scopes: []
+[debug] [2026-06-01T07:00:10.630Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-01T07:00:10.630Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-01T07:00:10.638Z] [Firebase Plugin] Value of process.env.MONOSPACE_ENV: undefined
+[debug] [2026-06-01T07:00:10.638Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-01T07:00:10.639Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-01T07:00:10.639Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-01T07:00:10.639Z] Checked if tokens are valid: false, expires at: 1780296932772
+[debug] [2026-06-01T07:00:10.639Z] Checked if tokens are valid: false, expires at: 1780296932772
+[debug] [2026-06-01T07:00:10.639Z] > refreshing access token with scopes: []
+[debug] [2026-06-01T07:00:10.640Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-01T07:00:10.640Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-01T07:00:10.657Z] Found emulator hub locator: {"version":"15.18.0","origins":["http://127.0.0.1:4400","http://[::1]:4400"],"pid":25360}
+[debug] [2026-06-01T07:00:10.658Z] >>> [apiv2][query] GET http://127.0.0.1:4400/emulators [none]
+[debug] [2026-06-01T07:00:10.665Z] *** [apiv2] error from fetch(http://127.0.0.1:4400/emulators, {"headers":{},"method":"GET"}): FetchError: request to http://127.0.0.1:4400/emulators failed, reason: connect ECONNREFUSED 127.0.0.1:4400
+[debug] [2026-06-01T07:00:10.666Z] >>> [apiv2][query] GET http://[::1]:4400/emulators [none]
+[debug] [2026-06-01T07:00:10.687Z] *** [apiv2] error from fetch(http://[::1]:4400/emulators, {"headers":{},"method":"GET"}): FetchError: request to http://[::1]:4400/emulators failed, reason: connect ECONNREFUSED ::1:4400
+[debug] [2026-06-01T07:00:11.558Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-01T07:00:11.558Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-01T07:00:11.613Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-01T07:00:11.615Z] Checked if tokens are valid: true, expires at: 1780300810558
+[debug] [2026-06-01T07:00:11.618Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-01T07:00:11.632Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-01T07:00:11.632Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-01T07:00:11.662Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-01T07:00:11.663Z] Checked if tokens are valid: true, expires at: 1780300810632
+[debug] [2026-06-01T07:00:11.663Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-01T07:00:12.211Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-01T07:00:12.211Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-06-01T07:00:12.223Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-01T07:00:12.223Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-06-01T09:43:46.200Z] I0601 17:43:46.182279    1704 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:43:46.182279    1704 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T09:43:46.446Z] I0601 17:43:46.445841    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo 2353] UpdateResources(): done
+Main schema: sources: schema\schema.gql [1992B] 
+Connector "example": sources: example\mutations.gql [1243B] example\queries.gql [1801B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:43:46.445841    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo 2353] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [1992B] \nConnector \"example\": sources: example\\mutations.gql [1243B] example\\queries.gql [1801B] \n"}}
+[debug] [2026-06-01T09:43:46.529Z] I0601 17:43:46.529088    1704 codegen.go:101] [connector "example" javascriptSdk] Generating sources into "c:\\Users\\Administrator\\AppData\\Local\\Programs\\Antigravity\\resources\\app\\src\\dataconnect-generated"
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:43:46.529088    1704 codegen.go:101] [connector \"example\" javascriptSdk] Generating sources into \"c:\\\\Users\\\\Administrator\\\\AppData\\\\Local\\\\Programs\\\\Antigravity\\\\resources\\\\app\\\\src\\\\dataconnect-generated\"\n"}}
+[debug] [2026-06-01T09:43:46.617Z] I0601 17:43:46.584462    1704 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\implicit.gql [1261B] main\input.gql [29168B] main\relation.gql [14318B] main\query.gql [5099B] main\mutation.gql [13679B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:43:46.584462    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\implicit.gql [1261B] main\\input.gql [29168B] main\\relation.gql [14318B] main\\query.gql [5099B] main\\mutation.gql [13679B] \n"}}
+[debug] [2026-06-01T09:43:46.650Z] I0601 17:43:46.649385    1704 collector.go:107] connector "example" javascriptSdk wrote into "c:\\Users\\Administrator\\AppData\\Local\\Programs\\Antigravity\\resources\\app\\src\\dataconnect-generated"
+Generated sources: esm\index.esm.js [5350B] package.json [853B] react\index.d.ts [3961B] react\package.json [460B] react\esm\package.json [17B] .guides/config.json [236B] index.cjs.js [5894B] README.md [41235B] .guides/setup.md [1682B] index.d.ts [8426B] esm\package.json [17B] react\index.cjs.js [3439B] react\esm\index.esm.js [3269B] react\README.md [48299B] .guides/usage.md [3489B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:43:46.649385    1704 collector.go:107] connector \"example\" javascriptSdk wrote into \"c:\\\\Users\\\\Administrator\\\\AppData\\\\Local\\\\Programs\\\\Antigravity\\\\resources\\\\app\\\\src\\\\dataconnect-generated\"\nGenerated sources: esm\\index.esm.js [5350B] package.json [853B] react\\index.d.ts [3961B] react\\package.json [460B] react\\esm\\package.json [17B] .guides/config.json [236B] index.cjs.js [5894B] README.md [41235B] .guides/setup.md [1682B] index.d.ts [8426B] esm\\package.json [17B] react\\index.cjs.js [3439B] react\\esm\\index.esm.js [3269B] react\\README.md [48299B] .guides/usage.md [3489B] \n"}}
+[debug] [2026-06-01T09:43:46.681Z] I0601 17:43:46.680289    1704 installsdk.go:86] Running command: C:\Program Files\nodejs\npm.cmd install file:src\dataconnect-generated
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:43:46.680289    1704 installsdk.go:86] Running command: C:\\Program Files\\nodejs\\npm.cmd install file:src\\dataconnect-generated\n"}}
+[debug] [2026-06-01T09:44:33.864Z] E0601 17:44:33.862842    1704 installsdk.go:88] Failed to install package: exit status 1
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 17:44:33.862842    1704 installsdk.go:88] Failed to install package: exit status 1\n"}}
+[debug] [2026-06-01T09:44:33.870Z] I0601 17:44:33.865024    1704 load.go:109] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 17:44:33.865024    1704 load.go:109] Finished reloading\n"}}
+[debug] [2026-06-01T10:09:16.181Z] I0601 18:09:16.157766    1704 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:09:16.157766    1704 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-01T10:09:16.283Z] W0601 18:09:16.281560    1704 control.go:74] [projects/emulator/locations/emulator/services/esggo 8991] connector "example" has errors: example\mutations.gql:6:3: Cannot query field "movie_insert" on type "Mutation". Did you mean "user_insert"?
+example\mutations.gql:12:44: Field "username" is not defined by type "User_Data".
+example\mutations.gql:18:3: Cannot query field "review_upsert" on type "Mutation". Did you mean "user_upsert"?
+example\mutations.gql:32:3: Cannot query field "review_delete" on type "Mutation". Did you mean "user_delete"?
+example\queries.gql:6:3: Cannot query field "movies" on type "Query".
+example\queries.gql:18:5: Cannot query field "username" on type "User".
+example\queries.gql:27:5: Cannot query field "username" on type "User".
+example\queries.gql:30:5: Cannot query field "reviews_on_user" on type "User". Did you mean "auditLogs_on_user" or "esgRecords_on_user"?
+example\queries.gql:44:3: Cannot query field "movie" on type "Query".
+example\queries.gql:68:3: Cannot query field "movies" on type "Query".
+
+sources: example\mutations.gql [1243B] example\queries.gql [1801B] 
+I0601 18:09:16.282747    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo 8991] UpdateResources(): done
+Main schema: sources: schema\schema.gql [701B] 
+Connector "example": sources: example\mutations.gql [1243B] example\queries.gql [1801B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0601 18:09:16.281560    1704 control.go:74] [projects/emulator/locations/emulator/services/esggo 8991] connector \"example\" has errors: example\\mutations.gql:6:3: Cannot query field \"movie_insert\" on type \"Mutation\". Did you mean \"user_insert\"?\nexample\\mutations.gql:12:44: Field \"username\" is not defined by type \"User_Data\".\nexample\\mutations.gql:18:3: Cannot query field \"review_upsert\" on type \"Mutation\". Did you mean \"user_upsert\"?\nexample\\mutations.gql:32:3: Cannot query field \"review_delete\" on type \"Mutation\". Did you mean \"user_delete\"?\nexample\\queries.gql:6:3: Cannot query field \"movies\" on type \"Query\".\nexample\\queries.gql:18:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:27:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:30:5: Cannot query field \"reviews_on_user\" on type \"User\". Did you mean \"auditLogs_on_user\" or \"esgRecords_on_user\"?\nexample\\queries.gql:44:3: Cannot query field \"movie\" on type \"Query\".\nexample\\queries.gql:68:3: Cannot query field \"movies\" on type \"Query\".\n\nsources: example\\mutations.gql [1243B] example\\queries.gql [1801B] \nI0601 18:09:16.282747    1704 control.go:100] [projects/emulator/locations/emulator/services/esggo 8991] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [701B] \nConnector \"example\": sources: example\\mutations.gql [1243B] example\\queries.gql [1801B] \n"}}
+[debug] [2026-06-01T10:09:16.289Z] E0601 18:09:16.288482    1704 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:6:3: Cannot query field "movie_insert" on type "Mutation". Did you mean "user_insert"?
+example\mutations.gql:12:44: Field "username" is not defined by type "User_Data".
+example\mutations.gql:18:3: Cannot query field "review_upsert" on type "Mutation". Did you mean "user_upsert"?
+example\mutations.gql:32:3: Cannot query field "review_delete" on type "Mutation". Did you mean "user_delete"?
+example\queries.gql:6:3: Cannot query field "movies" on type "Query".
+example\queries.gql:18:5: Cannot query field "username" on type "User".
+example\queries.gql:27:5: Cannot query field "username" on type "User".
+example\queries.gql:30:5: Cannot query field "reviews_on_user" on type "User". Did you mean "auditLogs_on_user" or "esgRecords_on_user"?
+example\queries.gql:44:3: Cannot query field "movie" on type "Query".
+example\queries.gql:68:3: Cannot query field "movies" on type "Query".
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0601 18:09:16.288482    1704 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:6:3: Cannot query field \"movie_insert\" on type \"Mutation\". Did you mean \"user_insert\"?\nexample\\mutations.gql:12:44: Field \"username\" is not defined by type \"User_Data\".\nexample\\mutations.gql:18:3: Cannot query field \"review_upsert\" on type \"Mutation\". Did you mean \"user_upsert\"?\nexample\\mutations.gql:32:3: Cannot query field \"review_delete\" on type \"Mutation\". Did you mean \"user_delete\"?\nexample\\queries.gql:6:3: Cannot query field \"movies\" on type \"Query\".\nexample\\queries.gql:18:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:27:5: Cannot query field \"username\" on type \"User\".\nexample\\queries.gql:30:5: Cannot query field \"reviews_on_user\" on type \"User\". Did you mean \"auditLogs_on_user\" or \"esgRecords_on_user\"?\nexample\\queries.gql:44:3: Cannot query field \"movie\" on type \"Query\".\nexample\\queries.gql:68:3: Cannot query field \"movies\" on type \"Query\".\n"}}
+[debug] [2026-06-01T10:09:16.298Z] I0601 18:09:16.297095    1704 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\mutation.gql [10420B] prelude.gql [84995B] main\implicit.gql [521B] main\input.gql [25793B] main\relation.gql [11191B] main\query.gql [3907B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:09:16.297095    1704 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [10420B] prelude.gql [84995B] main\\implicit.gql [521B] main\\input.gql [25793B] main\\relation.gql [11191B] main\\query.gql [3907B] \n"}}
+[debug] [2026-06-01T10:09:16.300Z] I0601 18:09:16.298612    1704 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0601 18:09:16.298612    1704 load.go:74] Finished reloading\n"}}
