@@ -1,72 +1,57 @@
-/**
- * ⚛️ AtomicCard - Universal Bento Container
- * v1.0 | #BentoGrid #LiquidGlass #T3Tangible
- */
+import React, { useEffect } from 'react';
+import { IAtomicComponent, atomicManager } from './atomic-core';
 
-'use client';
-
-import React from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
-
-export interface AtomicCardProps extends Omit<HTMLMotionProps<"div">, 'children'> {
-  children?: React.ReactNode;
-  hoverEffect?: 'lift' | 'glow' | 'none';
-  glassIntensity?: 'light' | 'medium' | 'heavy';
+export interface AtomicCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  glassIntensity?: 'low' | 'medium' | 'high';
+  hoverEffect?: 'none' | 'glow' | 'lift';
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-export const AtomicCard = React.forwardRef<HTMLDivElement, AtomicCardProps>(({ 
-  children, 
-  className = '', 
-  hoverEffect = 'lift',
+export const AtomicCard: React.FC<AtomicCardProps> = ({
   glassIntensity = 'medium',
-  padding = 'lg',
-  ...props 
-}, ref) => {
-  
-  const baseStyles = "relative overflow-hidden border border-[var(--at-border)] shadow-[var(--at-shadow)] rounded-[2rem]";
-  
-  const glassStyles = {
-    light: "bg-[var(--at-bg-glass)] backdrop-blur-sm",
-    medium: "bg-[var(--at-bg-glass)] backdrop-blur-[var(--at-glass-blur)]",
-    heavy: "bg-[var(--at-bg-card)]/90 backdrop-blur-2xl"
-  };
+  hoverEffect = 'none',
+  padding = 'md',
+  className = '',
+  children,
+  ...props
+}) => {
+  useEffect(() => {
+    const atom: IAtomicComponent = {
+      atomId: 'ATOM_CRD_001',
+      type: 'atom',
+      version: '1.0.0',
+      core: { status: 'Trustworthy' } as any,
+      reference: {
+        specification: 'Layout Core Spec v1.0',
+        intent: 'Bento Grid Container',
+        governanceNode: 'UI_LAYOUT_ENGINE'
+      }
+    };
+    atomicManager?.registerAtom?.(atom);
+  }, []);
 
-  const paddingStyles = {
-    none: "p-0",
-    sm: "p-4",
-    md: "p-6",
-    lg: "p-8 md:p-10"
-  };
+  const glassClasses = {
+    low: 'bg-white/5 backdrop-blur-sm border border-white/5',
+    medium: 'bg-white/5 backdrop-blur-[12px] border border-white/10',
+    high: 'bg-white/10 backdrop-blur-[16px] border border-white/20',
+  }[glassIntensity];
 
-  const hoverVariants = {
-    lift: { y: -4, transition: { duration: 0.3, ease: "easeOut" } },
-    glow: { 
-      y: -2, 
-      boxShadow: "0 10px 40px var(--at-accent-glow)", 
-      borderColor: "var(--at-accent)",
-      transition: { duration: 0.3 } 
-    },
-    none: {}
-  };
+  const hoverClasses = {
+    none: '',
+    glow: 'hover:border-white/20 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all duration-300',
+    lift: 'hover:-translate-y-1 hover:shadow-lg transition-all duration-300',
+  }[hoverEffect];
+
+  const paddingClasses = {
+    none: 'p-0',
+    sm: 'p-3',
+    md: 'p-6',
+    lg: 'p-8',
+  }[padding];
 
   return (
-    <motion.div
-      ref={ref as any}
-      whileHover={hoverEffect}
-      variants={{
-        lift: hoverVariants.lift,
-        glow: hoverVariants.glow,
-        none: hoverVariants.none
-      }}
-      className={`${baseStyles} ${glassStyles[glassIntensity]} ${paddingStyles[padding]} ${className}`}
-      {...props}
-    >
-      {/* Subtle top inner glow for glass realism */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+    <div className={`rounded-xl relative overflow-hidden ${glassClasses} ${hoverClasses} ${paddingClasses} ${className}`} {...props}>
       {children}
-    </motion.div>
+    </div>
   );
-});
-
-AtomicCard.displayName = 'AtomicCard';
+};

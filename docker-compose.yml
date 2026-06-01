@@ -1,23 +1,11 @@
-version: "3.8"
-
+version: '3.8'
 services:
-  esggo-app:
-    build: .
-    container_name: esggo-app
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    environment:
-      # Override or confirm these values in your .env file
-      - NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL=http://127.0.0.1:8642
-      - SWAP_DEFI_API_KEY=${SWAP_DEFI_API_KEY}
-      - SWAP_DEFI_TOKEN=${SWAP_DEFI_TOKEN}
-      - SWAP_DEFI_ENDPOINT=${SWAP_DEFI_ENDPOINT}
-    restart: unless-stopped
-    # Health check to ensure the app is responsive
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+ mongodb:
+  image: 'mongo:latest'
+  container_name: 'esggo_DB'
+  restart: 'unless-stopped'
+  environment:
+   MONGO_INITDB_ROOT_USERNAME: Dingjunhong1028
+   MONGO_INITDB_ROOT_PASSWORD: "S1421680s"
+  ports:
+   - 27017:27017

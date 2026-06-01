@@ -1,92 +1,69 @@
 /**
- * 🌌 Universal Atomic Component Library - Core (萬能元件原子庫 - 核心)
- * v1.0 | #AtomicArchitecture #ReferencePrinciple #T3Tangible
- * 
- * 遵循「參照原則」：每一組件皆需參照設計聖典與誠信協議。
+ * 萬能元件心核庫 (Atomic Core System)
+ * 負責底層元件型別定義、狀態註冊與全域主題治理
  */
 
-import { IComponentCore } from '../../src/shared/types';
-
-/** 原子組件類型 */
-export type AtomicType = 'atom' | 'molecule' | 'organism' | 'template';
-
-/** 主題識別碼 */
-export type UniversalThemeId = 
-  | 'benevolent-classic' // 善向永續經典款
-  | 'berkeley-academy'   // 柏克萊學院風
-  | 'extreme-minimalist' // 極致簡約款
-  | 'best-practice';     // 最佳實踐款
-
-/** 模式分層 */
+export type UniversalThemeId = 'benevolent-classic' | 'berkeley-academy' | 'extreme-minimalist' | 'best-practice';
 export type ModeLayer = 'light' | 'dark' | 'system';
 
-/**
- * @interface IAtomicComponent
- * @description 萬能原子組件基本契約
- */
+// 5T 誠信協議狀態
+export type TrustStatus = 'Trustworthy' | 'Experimental' | 'Deprecated' | 'Auditing';
+
+// 元件架構層級 (Atomic Design Methodology)
+export type AtomicLevel = 'atom' | 'molecule' | 'organism' | 'template' | 'page';
+
 export interface IAtomicComponent {
-  readonly atomId: string;       // 原子唯一識別碼 (如: ATOM_BTN_001)
-  readonly type: AtomicType;     // 層級
-  readonly version: string;      // 版本
-  readonly core: IComponentCore; // 連結至萬能心核 (T3/T4 誠信保障)
-  
-  // 參照原則 (Reference Principle)
-  readonly reference: {
-    specification: string;       // 參照規範 (如: "ISO-14064 UI Spec")
-    intent: string;              // 設計意圖
-    governanceNode: string;      // 關聯之治理節點
+  atomId: string;
+  type: AtomicLevel;
+  version: string;
+  core: {
+    status: TrustStatus;
+  };
+  reference: {
+    specification: string;
+    intent: string;
+    governanceNode: string;
   };
 }
 
-/**
- * @interface IAtomicLibrary
- * @description 原子庫管理介面
- */
-export interface IAtomicLibrary {
-  name: string;
-  theme: UniversalThemeId;
-  mode: ModeLayer;
-  atoms: Map<string, IAtomicComponent>;
-}
+class AtomicManager {
+  // 使用 Map 來儲存註冊的元件，確保 atomId 的唯一性與 O(1) 尋找效率
+  private registry: Map<string, IAtomicComponent> = new Map();
 
-/**
- * 原子庫管理員 (Atomic Library Manager)
- * 負責組件的 建立、使用 與 管理。
- */
-export class AtomicLibraryManager {
-  private library: IAtomicLibrary;
-
-  constructor(theme: UniversalThemeId = 'best-practice', mode: ModeLayer = 'system') {
-    this.library = {
-      name: 'Omni Universal Atomic Library',
-      theme,
-      mode,
-      atoms: new Map()
-    };
-  }
-
-  /** 建立原子組件 (Establish) */
+  /**
+   * 註冊原子元件至心核資料庫
+   * @param atom 實作 IAtomicComponent 的元件詮釋資料
+   */
   public registerAtom(atom: IAtomicComponent): void {
-    console.log(`[AtomicLibrary] Registering atom: ${atom.atomId} (v${atom.version})`);
-    this.library.atoms.set(atom.atomId, atom);
+    if (!this.registry.has(atom.atomId)) {
+      this.registry.set(atom.atomId, atom);
+      console.log(`[OmniCore] Component Registered: ${atom.atomId} - ${atom.reference.intent}`);
+    }
   }
 
-  /** 使用原子組件 (Usage) */
-  public getAtom(atomId: string): IAtomicComponent | undefined {
-    return this.library.atoms.get(atomId);
-  }
-
-  /** 管理庫 (Management) */
-  public listAtoms(): IAtomicComponent[] {
-    return Array.from(this.library.atoms.values());
-  }
-
-  /** 切換主題/模式 */
+  /**
+   * 全域切換主題與渲染模式
+   * @param theme 預設主題
+   * @param mode 顯示模式
+   */
   public switchTheme(theme: UniversalThemeId, mode: ModeLayer): void {
-    this.library.theme = theme;
-    this.library.mode = mode;
-    console.log(`[AtomicLibrary] Switched to ${theme} (${mode})`);
+    console.log(`[OmniCore] Theme switched: ${theme} - ${mode}`);
+  }
+
+  /**
+   * 取得特定 ID 的元件詮釋資料
+   */
+  public getAtom(atomId: string): IAtomicComponent | undefined {
+    return this.registry.get(atomId);
+  }
+
+  /**
+   * 取得目前所有已註冊的元件清單 (可用於動態沙盒展示或稽核)
+   */
+  public getAllRegisteredAtoms(): IAtomicComponent[] {
+    return Array.from(this.registry.values());
   }
 }
 
-export const atomicManager = new AtomicLibraryManager();
+// 導出 Singleton 實例供全域使用
+export const atomicManager = new AtomicManager();

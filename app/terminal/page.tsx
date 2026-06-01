@@ -30,7 +30,7 @@ export default function TerminalPage() {
 
     // Simulate response
     setTimeout(() => {
-      let response = { id: Date.now() + 1, type: 'info', time: new Date().toLocaleTimeString().split(' ')[0], msg: `Executing: ${input}...` };
+      const response = { id: Date.now() + 1, type: 'info', time: new Date().toLocaleTimeString().split(' ')[0], msg: `Executing: ${input}...` };
       if (input === 'omni check') {
         response.msg = 'System Health: 100%. All logic gates operational.';
         response.type = 'success';

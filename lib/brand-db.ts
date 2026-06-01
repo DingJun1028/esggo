@@ -6,7 +6,7 @@ export interface BrandComponent {
   name: string;
   category: string;
   variant?: string;
-  props?: Record<string, any>;
+  props?: Record<string, unknown>;
   description?: string;
   usage_example?: string;
   tags?: string[];
@@ -34,7 +34,7 @@ export interface ComponentUsageLog {
   company_id?: string;
   page_path?: string;
   action?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at?: string;
 }
 
@@ -208,10 +208,11 @@ export async function getBrandStats() {
         supabase.from('brand_tokens').select('*', { count: 'exact', head: true }).eq('company_id', 'default'),
       ]);
 
-    const catCounts = (cats || []).reduce((acc: unknown, r: unknown) => {
-      acc[r.category] = (acc[r.category] || 0) + 1;
+    const catCounts = (cats || []).reduce((acc: Record<string, number>, r: Record<string, unknown>) => {
+      const category = r.category as string;
+      acc[category] = (acc[category] || 0) + 1;
       return acc;
-    }, {});
+    }, {} as Record<string, number>);
 
     return {
       total: total || 0,

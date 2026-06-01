@@ -28,8 +28,8 @@ export default function OmniAgentOrchestrator() {
       });
       const data = await res.json();
       setResults(data);
-    } catch (err: unknown) {
-      setResults({ success: false, error: err.message });
+    } catch (err: any) {
+      setResults({ success: false, error: err instanceof Error ? err.message : String(err) });
     } finally {
       setIsRunning(false);
     }
@@ -78,8 +78,8 @@ export default function OmniAgentOrchestrator() {
                        });
                        const data = await res.json();
                        setResults(data);
-                     } catch (err: unknown) {
-                       setResults({ success: false, error: err.message });
+                     } catch (err: any) {
+                       setResults({ success: false, error: err instanceof Error ? err.message : String(err) });
                      } finally {
                        setIsRunning(false);
                      }
@@ -102,8 +102,8 @@ export default function OmniAgentOrchestrator() {
                        });
                        const data = await res.json();
                        setResults(data);
-                     } catch (err: unknown) {
-                       setResults({ success: false, error: err.message });
+                     } catch (err: any) {
+                       setResults({ success: false, error: err instanceof Error ? err.message : String(err) });
                      } finally {
                        setIsRunning(false);
                      }
@@ -154,3 +154,4 @@ export default function OmniAgentOrchestrator() {
 
   return <StandardPage config={pageConfig} />;
 }
+

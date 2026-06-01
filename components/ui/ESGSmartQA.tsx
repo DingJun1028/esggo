@@ -2,9 +2,14 @@ import React, { useState, useRef } from 'react';
 import { Send, Bot, User, BookOpen, Loader2, UploadCloud, ThumbsUp, ThumbsDown, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+interface RagSource {
+  title: string;
+  score: number;
+}
+
 export const ESGSmartQA = () => {
     const [query, setQuery] = useState('');
-    const [messages, setMessages] = useState<{ id: string, role: 'user' | 'bot', text: string, sources?: unknown[] }[]>([]);
+    const [messages, setMessages] = useState<{ id: string, role: 'user' | 'bot', text: string, sources?: RagSource[] }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [isUploading, setIsUploading] = useState(false);

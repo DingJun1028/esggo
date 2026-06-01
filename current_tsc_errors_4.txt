@@ -1,9 +1,0 @@
-app/api/agent/tasks/route.ts(27,15): error TS1005: ';' expected.
-app/api/agent/tasks/route.ts(28,12): error TS1005: ';' expected.
-app/api/agent/tasks/route.ts(29,18): error TS1005: ';' expected.
-app/api/agent/tasks/route.ts(30,18): error TS1005: ';' expected.
-app/api/agent/tasks/route.ts(31,15): error TS1005: ';' expected.
-app/api/agent/tasks/route.ts(32,5): error TS1109: Expression expected.
-app/api/agent/tasks/route.ts(32,6): error TS1472: 'catch' or 'finally' expected.
-app/api/agent/tasks/route.ts(63,5): error TS1005: 'try' expected.
-app/api/agent/tasks/route.ts(67,1): error TS1128: Declaration or statement expected.

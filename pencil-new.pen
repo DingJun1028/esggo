@@ -1,0 +1,3432 @@
+{
+  "version": "2.13",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none"
+    },
+    {
+      "type": "frame",
+      "id": "fcBzF",
+      "x": 0,
+      "y": 0,
+      "name": "ESG Dashboard",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "$bg-primary",
+      "children": [
+        {
+          "type": "frame",
+          "id": "vK9uo",
+          "name": "Sidebar",
+          "width": 280,
+          "height": "fill_container",
+          "fill": "$bg-tertiary",
+          "cornerRadius": "$radius-2xl",
+          "stroke": "$glass-border",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "background_blur",
+            "radius": 12
+          },
+          "layout": "vertical",
+          "padding": "$spacing-6",
+          "children": [
+            {
+              "type": "text",
+              "id": "Y5L4g",
+              "name": "Sidebar Title",
+              "fill": "$accent-cyan",
+              "content": "ESGGO",
+              "fontFamily": "$font-inter",
+              "fontSize": 24,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "BywUg",
+              "name": "CORE Group",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": "$spacing-2",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "N5YIy",
+                  "name": "Dashboard Nav Item",
+                  "fill": "$text-secondary",
+                  "content": "控制台",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "W3EYVy",
+                  "name": "Sustainability Write Nav Item",
+                  "fill": "$text-secondary",
+                  "content": "永續撰寫",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ADRYv",
+                  "name": "Digital Twin Nav Item",
+                  "fill": "$text-secondary",
+                  "content": "數位分身",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "QfLHu",
+                  "name": "Enterprise Health Check Nav Item",
+                  "fill": "$text-secondary",
+                  "content": "企業健檢",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ojVcd",
+                  "name": "Business Intelligence Center Nav Item",
+                  "fill": "$text-secondary",
+                  "content": "商情中心",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ddCIw",
+          "name": "Main Content Area",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "$bg-primary",
+          "layout": "vertical",
+          "gap": "$spacing-6",
+          "padding": "$spacing-6"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "quuHi",
+      "x": 1504,
+      "y": 80,
+      "name": "MECE Navigation Map",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 60,
+      "children": [
+        {
+          "type": "frame",
+          "id": "Z1pVr",
+          "name": "Header",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "W4Og0",
+              "name": "Title",
+              "fill": "$text-primary",
+              "content": "ESG GO Sustainability Navigation Map",
+              "fontFamily": "Inter",
+              "fontSize": 32,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "vzRj3",
+              "name": "Subtitle",
+              "fill": "$text-secondary",
+              "content": "Platform Blueprint & MECE Structural Mapping",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Z9EFIn",
+          "name": "Main Content",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "KmcAx",
+              "name": "Category Grid",
+              "width": "fill_container",
+              "gap": 30,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "tAMQn",
+                  "name": "Environmental (E)",
+                  "width": "fill_container",
+                  "fill": "$bg-surface",
+                  "cornerRadius": 16,
+                  "stroke": "$glass-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "IzZhf",
+                      "name": "CatTitle",
+                      "fill": "$text-primary",
+                      "content": "Environmental (E)",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "R8gKv",
+                      "name": "ItemList",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "KGFtm",
+                          "name": "Climate Change",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "neyIX",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Climate Change",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mlFkm",
+                          "name": "Biodiversity",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "KedDO",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Biodiversity",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bLfpW",
+                          "name": "Waste Management",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "QsgAZ",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Waste Management",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "l15x9f",
+                          "name": "Water Stewardship",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "N03TWy",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Water Stewardship",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sdqDd",
+                  "name": "Social (S)",
+                  "width": "fill_container",
+                  "fill": "$bg-surface",
+                  "cornerRadius": 16,
+                  "stroke": "$glass-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "OPYBq",
+                      "name": "CatTitle",
+                      "fill": "$text-primary",
+                      "content": "Social (S)",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QNZ1W",
+                      "name": "ItemList",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g2tW4",
+                          "name": "Labor Practices",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "O4qsJ1",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Labor Practices",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PUDJn",
+                          "name": "Human Rights",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "RJ5Pb",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Human Rights",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ud77G",
+                          "name": "Community Impact",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "i4mWbh",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Community Impact",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "AuLuh",
+                          "name": "Health & Safety",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "KMKXt",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Health & Safety",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KR5z1",
+                  "name": "Governance (G)",
+                  "width": "fill_container",
+                  "fill": "$bg-surface",
+                  "cornerRadius": 16,
+                  "stroke": "$glass-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "HV2Lf",
+                      "name": "CatTitle",
+                      "fill": "$text-primary",
+                      "content": "Governance (G)",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "I2GlvR",
+                      "name": "ItemList",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Rzsdf",
+                          "name": "Board Diversity",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tBsGg",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Board Diversity",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "uGGWU",
+                          "name": "Executive Pay",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "dMCRd",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Executive Pay",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ld8sJ",
+                          "name": "Ethics & Compliance",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "t4nWfg",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Ethics & Compliance",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "w0NbsB",
+                          "name": "Risk Management",
+                          "fill": "$bg-elevated",
+                          "cornerRadius": 8,
+                          "gap": 10,
+                          "padding": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Ps39a",
+                              "name": "ItemText",
+                              "fill": "$text-secondary",
+                              "content": "Risk Management",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "yNby0",
+      "x": 3504,
+      "y": 0,
+      "name": "ESG GO Platform Blueprint",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$bg-surface",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 40,
+      "children": [
+        {
+          "type": "frame",
+          "id": "DuH2S",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 64,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "LVbcf",
+              "name": "Logo",
+              "fill": "#1E293B",
+              "content": "ESG GO",
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "wSHqu",
+              "name": "UserControls",
+              "width": "fit_content(0)",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "y6UFJ9",
+                  "name": "ProfileMenu",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 6,
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qwDDm",
+                      "name": "UserName",
+                      "fill": "#1E293B",
+                      "content": "Admin",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "f2C5sC",
+                      "name": "UserRole",
+                      "fill": "#64748B",
+                      "content": "System Administrator",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "gNDNe",
+              "name": "Dashboard",
+              "fill": "#64748B",
+              "content": "Dashboard",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "IuUKA",
+              "name": "Reports",
+              "fill": "#64748B",
+              "content": "Reports",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "Dwt7h",
+              "name": "Knowledge",
+              "fill": "#64748B",
+              "content": "Knowledge",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "D7zEX",
+              "name": "Admin",
+              "fill": "#64748B",
+              "content": "Admin",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bAKuW",
+          "name": "MainContainer",
+          "width": "fill_container",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Qcino",
+              "name": "Sidebar",
+              "width": 280,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "xqmFi",
+                  "name": "FavoritesHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "t8LwB",
+                      "name": "FavoritesIcon",
+                      "fill": "#F59E0B",
+                      "content": "★",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "m1y4X",
+                      "name": "FavoritesTitle",
+                      "fill": "#0F172A",
+                      "content": "我的最愛專區",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sswZ6",
+                  "name": "FavoritesList",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "s1F4J",
+                      "name": "控制台",
+                      "width": "fill_container",
+                      "fill": "#EEF2FF",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "padding": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "WZZro",
+                          "name": "FavItemText",
+                          "fill": "#4338CA",
+                          "content": "控制台",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "JW0U2",
+                      "name": "SustainWrite",
+                      "width": "fill_container",
+                      "fill": "#EEF2FF",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "padding": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "V2wXfV",
+                          "name": "FavItemText",
+                          "fill": "#4338CA",
+                          "content": "SustainWrite",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "awJ5q",
+                      "name": "環境指揮",
+                      "width": "fill_container",
+                      "fill": "#EEF2FF",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "padding": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZRf4X",
+                          "name": "FavItemText",
+                          "fill": "#4338CA",
+                          "content": "環境指揮",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "URFTM",
+                  "name": "onboardingHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "l0hdE1",
+                      "name": "SecTitle",
+                      "fill": "#334155",
+                      "content": "初始導入與配置",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "p8uOR",
+                  "name": "onboardingItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ws8eu",
+                      "name": "企業管理",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "v1m59",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "企業管理",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ENccS",
+                      "name": "整合中心",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JSqnM",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "整合中心",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "FIiVs",
+                      "name": "資料來源",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Z6Vb0y",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "資料來源",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "k5vx2v",
+                      "name": "專家模板",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "B60GX",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "專家模板",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VZ87F",
+                      "name": "企業健檢",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dKMAi",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "企業健檢",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wkD0z",
+                  "name": "strategyHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "SQKic",
+                      "name": "SecTitle",
+                      "fill": "#334155",
+                      "content": "策略盤點與分派",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "SQKNt",
+                  "name": "strategyItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "LIsAS",
+                      "name": "重大性矩陣",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Vuel9",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "重大性矩陣",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "o8TWP1",
+                      "name": "淨零路徑",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fUUtz",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "淨零路徑",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rcIKO",
+                      "name": "任務中心",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yYEwe",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "任務中心",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KI6J0",
+                      "name": "文件清單",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "CVK7H",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "文件清單",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "gmr4Q",
+                  "name": "data-opsHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "A41l2e",
+                      "name": "SecTitle",
+                      "fill": "#334155",
+                      "content": "數據採集與填報",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "YYt7W",
+                  "name": "data-opsItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DiJY4",
+                      "name": "環境指揮",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ci8LY",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "環境指揮",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LVe3Y",
+                      "name": "社會影響",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "zqA3M",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "社會影響",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "B3ARgV",
+                      "name": "公司治理",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Jp1Rh",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "公司治理",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "B6Pa0",
+                      "name": "供應鏈透明",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "R5Xayp",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "供應鏈透明",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t71tU",
+                      "name": "利害關係人",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "C6Hj8",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "利害關係人",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UWpOf",
+                      "name": "CBAM 計算機",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "pNEaJ",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "CBAM 計算機",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "uE7fq",
+                  "name": "ai-copilotHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hKE0P",
+                      "name": "SecTitle",
+                      "fill": "#334155",
+                      "content": "AI 賦能與撰寫",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UcVke",
+                  "name": "ai-copilotItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Cnp5V",
+                      "name": "SustainWrite 編輯器",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "DP5A8",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "SustainWrite 編輯器",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bPpGd",
+                      "name": "專家諮詢",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "IMP7b",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "專家諮詢",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "I1Roo",
+                      "name": "數位分身",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "T5mJcv",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "數位分身",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yjFbI",
+                      "name": "商情中心",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "nomKW",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "商情中心",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "s9hrw",
+                      "name": "合規檢查",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JK4lA",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "合規檢查",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bQvtw",
+                  "name": "auditHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "YKWyI",
+                      "name": "SecTitle",
+                      "fill": "#334155",
+                      "content": "確信審計與發佈",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "DZG0S",
+                  "name": "auditItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KBQiK",
+                      "name": "控制台",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZEJse",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "控制台",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "sNi29",
+                      "name": "審計日誌",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Q523p",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "審計日誌",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "L5lWO",
+                      "name": "證據金庫",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Y01cV",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "證據金庫",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "trOM1",
+                      "name": "誠信證明",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yWhWB",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "誠信證明",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vhYO0",
+                      "name": "VerifyLink™",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tOdjM",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "VerifyLink™",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "IU6YZ",
+                      "name": "報告發佈",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "EBiMh",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "報告發佈",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GfK3s",
+                  "name": "growHeader",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "F2IzDE",
+                      "name": "SecTitle",
+                      "fill": "#334155",
+                      "content": "知識沉澱與加值",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eTDfg",
+                  "name": "growItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "sELJL",
+                      "name": "永續智庫",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "MI862",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "永續智庫",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "l42GM",
+                      "name": "永續閱覽室",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Ainhp",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "永續閱覽室",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "C3khM",
+                      "name": "永續財務",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vvCsI",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "永續財務",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EVI6w",
+                      "name": "永續學院",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wiEfH",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "永續學院",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "eEN5F",
+                      "name": "顧問專區",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ZnvQy",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "顧問專區",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "sIdnS",
+                      "name": "顧問服務",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vWpPF",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "顧問服務",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "wwKWI",
+                      "name": "代理專區",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "padding": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "xFaJI",
+                          "name": "SecItemText",
+                          "fill": "#64748B",
+                          "content": "代理專區",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "w5KKx",
+              "name": "ContentArea",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "stroke": "#E2E8F0",
+              "strokeWidth": 1,
+              "layout": "vertical",
+              "gap": 24,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rw7tV",
+                  "name": "PageTitle",
+                  "fill": "#0F172A",
+                  "content": "ESG GO 平台藍圖",
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "kVZ57",
+                  "name": "PageDesc",
+                  "fill": "#64748B",
+                  "content": "客戶為中心 SAAS 軟體 平台設計與 Wiki 功能實現",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "PNvcd",
+                  "name": "WikiSection",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Hl0iW",
+                      "name": "WikiTitle",
+                      "fill": "#1E293B",
+                      "content": "Wiki 功能需求",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KbA7M",
+                      "name": "WikiGrid",
+                      "width": "fill_container",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "s3i9Qj",
+                          "name": "搜尋Card",
+                          "width": "fill_container",
+                          "fill": "#F1F5F9",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 16,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "DISQ7",
+                              "name": "WikiFeatureTitle",
+                              "fill": "#0F172A",
+                              "content": "搜尋",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "C6InxA",
+                              "name": "WikiFeatureDesc",
+                              "fill": "#64748B",
+                              "content": "支援 搜尋 功能",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "XGZMN",
+                          "name": "分類/目錄Card",
+                          "width": "fill_container",
+                          "fill": "#F1F5F9",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 16,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "X3TXEm",
+                              "name": "WikiFeatureTitle",
+                              "fill": "#0F172A",
+                              "content": "分類/目錄",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "nNABC",
+                              "name": "WikiFeatureDesc",
+                              "fill": "#64748B",
+                              "content": "支援 分類/目錄 功能",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k2tQam",
+                          "name": "編輯器Card",
+                          "width": "fill_container",
+                          "fill": "#F1F5F9",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 16,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "b5RsQh",
+                              "name": "WikiFeatureTitle",
+                              "fill": "#0F172A",
+                              "content": "編輯器",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "RnfVI",
+                              "name": "WikiFeatureDesc",
+                              "fill": "#64748B",
+                              "content": "支援 編輯器 功能",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k12F67",
+                          "name": "版本控制Card",
+                          "width": "fill_container",
+                          "fill": "#F1F5F9",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "padding": 16,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "hXIVo",
+                              "name": "WikiFeatureTitle",
+                              "fill": "#0F172A",
+                              "content": "版本控制",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "dRZW4",
+                              "name": "WikiFeatureDesc",
+                              "fill": "#64748B",
+                              "content": "支援 版本控制 功能",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "elIjA",
+      "x": 5464,
+      "y": 0,
+      "name": "MetricCard",
+      "reusable": true,
+      "width": 280,
+      "height": 112,
+      "fill": "#FFFFFF",
+      "cornerRadius": 8,
+      "stroke": "#E2E8F0",
+      "strokeWidth": 1,
+      "layout": "vertical",
+      "gap": 8,
+      "padding": 16,
+      "children": [
+        {
+          "type": "text",
+          "id": "YMK66",
+          "name": "MetricLabel",
+          "fill": "#64748B",
+          "content": "Metric",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "c8XsEs",
+          "name": "MetricValue",
+          "fill": "#1E293B",
+          "content": "0",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "nwPCb",
+          "name": "MetricTrend",
+          "fill": "#10B981",
+          "content": "↑ 12% from last month",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "p9Lpv0",
+      "x": 5784,
+      "y": 0,
+      "name": "WikiArticleCard",
+      "reusable": true,
+      "clip": true,
+      "width": 380,
+      "fill": "#F8FAFC",
+      "cornerRadius": 8,
+      "layout": "vertical",
+      "gap": 12,
+      "padding": 16,
+      "children": [
+        {
+          "type": "text",
+          "id": "GzIpR",
+          "name": "ArticleTitle",
+          "fill": "#0F172A",
+          "textGrowth": "fixed-width",
+          "width": 0,
+          "content": "Article Title",
+          "fontFamily": "Inter",
+          "fontSize": 16,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "wDv8J",
+          "name": "ArticlePreview",
+          "fill": "#64748B",
+          "textGrowth": "fixed-width",
+          "width": 0,
+          "content": "Brief description of the article content. This is a preview of the full article.",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "Mo3Py",
+          "name": "ArticleMeta",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "mQ8T3",
+              "name": "ArticleDate",
+              "fill": "#94A3B8",
+              "content": "Updated 2 days ago",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "cxOzL",
+              "name": "ArticleTag",
+              "fill": "#EEF2FF",
+              "cornerRadius": 4,
+              "gap": 4,
+              "padding": [
+                2,
+                6
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "psFmO",
+                  "name": "TagLabel",
+                  "fill": "#2563EB",
+                  "content": "ESG",
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "wNleb",
+          "name": "ArticleDate",
+          "fill": "#94A3B8",
+          "content": "Updated 2 days ago",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "m4H8G",
+      "x": 6204,
+      "y": 0,
+      "name": "DesignSystemLibrary",
+      "clip": true,
+      "width": 1920,
+      "fill": "$bg-surface",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 40,
+      "children": [
+        {
+          "type": "text",
+          "id": "WCmdk",
+          "name": "LibraryHeader",
+          "fill": "$text-primary",
+          "content": "Component Library - Atomic Design System",
+          "fontFamily": "Inter",
+          "fontSize": 28,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "D9mbCL",
+          "name": "AtomsSection",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "NeT7i",
+              "name": "AtomsTitle",
+              "fill": "$text-primary",
+              "content": "Atoms",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "t6qrd",
+              "name": "AtomsGrid",
+              "width": "fill_container",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "I0AVNO",
+                  "name": "PrimaryButton",
+                  "fill": "$color-berkeley-blue",
+                  "cornerRadius": 6,
+                  "padding": [
+                    10,
+                    20
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "m7bX4",
+                      "name": "BtnText",
+                      "fill": "$bg-surface",
+                      "content": "Primary",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "clF0V",
+                  "name": "SecondaryButton",
+                  "fill": "$bg-elevated",
+                  "cornerRadius": 6,
+                  "stroke": "$glass-border",
+                  "strokeWidth": 1,
+                  "padding": [
+                    10,
+                    20
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "iklID",
+                      "name": "BtnText",
+                      "fill": "$text-primary",
+                      "content": "Secondary",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Pm547",
+                  "name": "TertiaryButton",
+                  "fill": "$bg-surface",
+                  "cornerRadius": 6,
+                  "padding": [
+                    10,
+                    20
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "WM1l1",
+                      "name": "BtnText",
+                      "fill": "$color-berkeley-blue",
+                      "content": "Tertiary",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Iw8kH",
+                  "name": "DangerButton",
+                  "fill": "$error",
+                  "cornerRadius": 6,
+                  "padding": [
+                    10,
+                    20
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MaaDY",
+                      "name": "BtnText",
+                      "fill": "$bg-surface",
+                      "content": "Danger",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "tu6U0",
+          "name": "MoleculesSection",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "CH097",
+              "name": "MoleculesTitle",
+              "fill": "$text-primary",
+              "content": "Molecules",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "Jp7J0",
+              "name": "CardExamples",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "id": "VTcoM",
+                  "type": "ref",
+                  "ref": "elIjA",
+                  "name": "MetricCard1",
+                  "width": 280,
+                  "descendants": {
+                    "YMK66": {
+                      "content": "Carbon Footprint"
+                    },
+                    "c8XsEs": {
+                      "content": "1,247 tCO2"
+                    },
+                    "nwPCb": {
+                      "content": "↓ 8% from last year"
+                    }
+                  }
+                },
+                {
+                  "id": "p6Swvw",
+                  "type": "ref",
+                  "ref": "elIjA",
+                  "name": "MetricCard2",
+                  "width": 280,
+                  "descendants": {
+                    "YMK66": {
+                      "content": "Water Usage"
+                    },
+                    "c8XsEs": {
+                      "content": "24,500 m³"
+                    },
+                    "nwPCb": {
+                      "content": "↑ 12% this quarter"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZGty2",
+          "name": "OrganismsSection",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "WIBYQ",
+              "name": "OrganismsTitle",
+              "fill": "$text-primary",
+              "content": "Organisms",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "id": "nf1vx",
+              "type": "ref",
+              "ref": "p9Lpv0",
+              "name": "WikiCardExample",
+              "width": "fill_container",
+              "descendants": {
+                "GzIpR": {
+                  "content": "Understanding ESG Reporting Standards"
+                },
+                "wDv8J": {
+                  "content": "A comprehensive guide to navigating the complex landscape of ESG reporting requirements across different jurisdictions and industries."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "kNySs",
+      "x": 8204,
+      "y": 0,
+      "name": "ESG GO Platform Blueprint",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$bg-surface",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 40,
+      "children": [
+        {
+          "type": "text",
+          "id": "iw2YX",
+          "name": "Title",
+          "fill": "$text-primary",
+          "content": "ESG GO Platform Blueprint",
+          "fontFamily": "Inter",
+          "fontSize": 28,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "AuC4F",
+          "name": "Desc",
+          "fill": "$text-secondary",
+          "content": "Platform layout with sidebar and content area.",
+          "fontFamily": "Inter",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Ut5Ff",
+      "x": 10204,
+      "y": 0,
+      "name": "New Platform Screen",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 40,
+      "children": [
+        {
+          "type": "frame",
+          "id": "aNoTd",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "$bg-surface",
+          "padding": 24,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "j4Vvh",
+              "name": "Logo",
+              "fill": "$text-primary",
+              "content": "ESG GO",
+              "fontFamily": "$font-inter",
+              "fontSize": 28,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "XVlqi",
+              "name": "NavLinks",
+              "width": "fill_container",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "HHTp5",
+                  "name": "Home",
+                  "fill": "$text-secondary",
+                  "content": "Home",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "roanS",
+                  "name": "Reports",
+                  "fill": "$text-secondary",
+                  "content": "Reports",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "x4AmV",
+                  "name": "Analytics",
+                  "fill": "$text-secondary",
+                  "content": "Analytics",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ABSlf",
+          "name": "MainContent",
+          "width": "fill_container",
+          "fill": "$bg-void",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "O5qDG",
+              "name": "ScreenTitle",
+              "fill": "$text-primary",
+              "content": "Next-Generation ESG Platform",
+              "fontFamily": "$font-inter",
+              "fontSize": 24,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "XhPsc",
+              "name": "ScreenDesc",
+              "fill": "$text-secondary",
+              "content": "An intelligent, user-centric platform for sustainability insights and actions.",
+              "fontFamily": "$font-inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "PYT4s",
+              "name": "CardGrid",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "children": [
+                {
+                  "id": "If7qw",
+                  "type": "ref",
+                  "ref": "elIjA",
+                  "name": "MetricCard1",
+                  "width": "fill_container",
+                  "descendants": {
+                    "YMK66": {
+                      "content": "Carbon Footprint"
+                    },
+                    "c8XsEs": {
+                      "content": "1,247 tCO2"
+                    },
+                    "nwPCb": {
+                      "content": "↓ 8% from last year"
+                    }
+                  }
+                },
+                {
+                  "id": "gVJmC",
+                  "type": "ref",
+                  "ref": "p9Lpv0",
+                  "name": "WikiCard1",
+                  "width": "fill_container",
+                  "descendants": {
+                    "GzIpR": {
+                      "content": "Sustainability Reporting"
+                    },
+                    "wDv8J": {
+                      "content": "Comprehensive guide to global ESG standards"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "K22ou",
+      "x": 12204,
+      "y": 0,
+      "name": "OmniAgent Screen",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$bg-primary",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 40,
+      "children": [
+        {
+          "type": "frame",
+          "id": "F653A",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 64,
+          "fill": "$bg-tertiary",
+          "cornerRadius": 12,
+          "padding": 16,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "MOTzy",
+              "name": "TitleArea",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CPz05",
+                  "name": "Logo",
+                  "fill": "$accent-cyan",
+                  "content": "ESG GO",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 24,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "y62z6U",
+                  "name": "StatusDot",
+                  "fill": "$accent-cyan",
+                  "content": "●",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "X0obF",
+              "name": "Status",
+              "fill": "$accent-cyan",
+              "content": "AWAKENED",
+              "fontFamily": "$font-inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "uHHjL",
+          "name": "MainContent",
+          "width": "fill_container",
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "vutJG",
+              "name": "SkillsSection",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Rncz8",
+                  "name": "SkillsTitle",
+                  "fill": "$text-primary",
+                  "content": "Skill Loadout",
+                  "fontFamily": "$font-inter",
+                  "fontSize": 20,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "frame",
+                  "id": "CuUAB",
+                  "name": "SkillGrid",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ETJdx",
+                      "name": "Meta ParseCard",
+                      "width": 280,
+                      "fill": "$bg-tertiary",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "P2Iu4",
+                          "name": "SkillName",
+                          "fill": "$accent-cyan",
+                          "content": "Meta Parse",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 14,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "VgWPl",
+                          "name": "SkillDesc",
+                          "fill": "$text-tertiary",
+                          "content": "快速拆解內容，標記核心資訊",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "U33JHo",
+                      "name": "Parallel MindCard",
+                      "width": 280,
+                      "fill": "$bg-tertiary",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Sk9aM",
+                          "name": "SkillName",
+                          "fill": "$accent-cyan",
+                          "content": "Parallel Mind",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 14,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ObtDy",
+                          "name": "SkillDesc",
+                          "fill": "$text-tertiary",
+                          "content": "同步維持多條任務鏈",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DNP2S",
+                      "name": "Causal EngineCard",
+                      "width": 280,
+                      "fill": "$bg-tertiary",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c8bcl",
+                          "name": "SkillName",
+                          "fill": "$accent-cyan",
+                          "content": "Causal Engine",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 14,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "goETb",
+                          "name": "SkillDesc",
+                          "fill": "$text-tertiary",
+                          "content": "模擬多條路徑預判風險",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g43V75",
+                      "name": "Context DomainCard",
+                      "width": 280,
+                      "fill": "$bg-tertiary",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "gndXj",
+                          "name": "SkillName",
+                          "fill": "$accent-cyan",
+                          "content": "Context Domain",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 14,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "nyqir",
+                          "name": "SkillDesc",
+                          "fill": "$text-tertiary",
+                          "content": "建立高密度決策場",
+                          "fontFamily": "$font-inter",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "T90aju",
+              "name": "StatsSection",
+              "width": "fill_container",
+              "fill": "$bg-tertiary",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ybb6Q",
+                  "name": "StatItem0",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ph3jG",
+                      "name": "StatLabel0",
+                      "fill": "$text-secondary",
+                      "content": "感知力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "X5tkC",
+                      "name": "StatValue0",
+                      "fill": "$accent-cyan",
+                      "content": "95%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "EbjSd",
+                  "name": "StatItem1",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "kC2pY",
+                      "name": "StatLabel1",
+                      "fill": "$text-secondary",
+                      "content": "解析力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "wW5PE",
+                      "name": "StatValue1",
+                      "fill": "$accent-cyan",
+                      "content": "95%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zG5fe",
+                  "name": "StatItem2",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pHmZZ",
+                      "name": "StatLabel2",
+                      "fill": "$text-secondary",
+                      "content": "推演力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "OV5Mi",
+                      "name": "StatValue2",
+                      "fill": "$accent-cyan",
+                      "content": "95%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VuMQn",
+                  "name": "StatItem3",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Lk6J9",
+                      "name": "StatLabel3",
+                      "fill": "$text-secondary",
+                      "content": "執行力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "xE022",
+                      "name": "StatValue3",
+                      "fill": "$accent-cyan",
+                      "content": "95%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "u9bZVx",
+                  "name": "StatItem4",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "C85HYO",
+                      "name": "StatLabel4",
+                      "fill": "$text-secondary",
+                      "content": "協同力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "A09VBu",
+                      "name": "StatValue4",
+                      "fill": "$accent-cyan",
+                      "content": "95%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rmyL6",
+                  "name": "StatItem5",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "XK3nx",
+                      "name": "StatLabel5",
+                      "fill": "$text-secondary",
+                      "content": "進化力",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "z06XN",
+                      "name": "StatValue5",
+                      "fill": "$accent-cyan",
+                      "content": "95%",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "FDIP6",
+          "name": "NavBottom",
+          "width": "fill_container",
+          "fill": "$bg-primary",
+          "padding": 16,
+          "justifyContent": "space_between",
+          "children": [
+            {
+              "type": "text",
+              "id": "hEsDX",
+              "name": "SkillTreeBtn",
+              "fill": "$accent-cyan",
+              "content": "Skill Tree",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "S7MJhG",
+              "name": "StoryBtn",
+              "fill": "$accent-purple",
+              "content": "Story",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
+  "variables": {
+    "bg-elevated": {
+      "type": "color",
+      "value": [
+        {
+          "value": "rgba(255,255,255,0.85)",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "rgba(31,41,55,0.85)",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-overlay": {
+      "type": "color",
+      "value": [
+        {
+          "value": "rgba(0,50,98,0.08)",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "rgba(0,0,0,0.2)",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-surface": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#1F2937",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-void": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F8F9FA",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#111827",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "color-berkeley-blue": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#003262",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#60A5FA",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "color-berkeley-dark": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#1A3A5C",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#374151",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "color-california-gold": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FDB515",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FCD34D",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "color-founders-rock": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#3B7EA1",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#93C5FD",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "color-sather-gate": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#B9D9EB",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#3730A3",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "error": {
+      "type": "color",
+      "value": "#EF4444"
+    },
+    "font-inter": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "font-inter-black": {
+      "type": "string",
+      "value": "Inter Black"
+    },
+    "font-jetbrains-mono": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "font-noto-sans-tc": {
+      "type": "string",
+      "value": "Noto Sans TC"
+    },
+    "glass-border": {
+      "type": "color",
+      "value": [
+        {
+          "value": "rgba(0,50,98,0.12)",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "rgba(255,255,255,0.1)",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "glass-surface": {
+      "type": "color",
+      "value": [
+        {
+          "value": "rgba(255,255,255,0.7)",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "rgba(31,41,55,0.7)",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "info": {
+      "type": "color",
+      "value": "#06B6D4"
+    },
+    "neutral": {
+      "type": "color",
+      "value": "#6B7280"
+    },
+    "radius-2xl": {
+      "type": "number",
+      "value": 20
+    },
+    "radius-full": {
+      "type": "number",
+      "value": 9999
+    },
+    "radius-lg": {
+      "type": "number",
+      "value": 12
+    },
+    "radius-md": {
+      "type": "number",
+      "value": 8
+    },
+    "radius-sm": {
+      "type": "number",
+      "value": 4
+    },
+    "radius-xl": {
+      "type": "number",
+      "value": 16
+    },
+    "spacing-1": {
+      "type": "number",
+      "value": 4
+    },
+    "spacing-12": {
+      "type": "number",
+      "value": 48
+    },
+    "spacing-16": {
+      "type": "number",
+      "value": 64
+    },
+    "spacing-2": {
+      "type": "number",
+      "value": 8
+    },
+    "spacing-3": {
+      "type": "number",
+      "value": 12
+    },
+    "spacing-4": {
+      "type": "number",
+      "value": 16
+    },
+    "spacing-6": {
+      "type": "number",
+      "value": 24
+    },
+    "spacing-8": {
+      "type": "number",
+      "value": 32
+    },
+    "success": {
+      "type": "color",
+      "value": "#22C55E"
+    },
+    "t1-tangible": {
+      "type": "color",
+      "value": "#10B981"
+    },
+    "t2-traceable": {
+      "type": "color",
+      "value": "#3B7EA1"
+    },
+    "t3-trackable": {
+      "type": "color",
+      "value": "#8B5CF6"
+    },
+    "t4-transparent": {
+      "type": "color",
+      "value": "#F59E0B"
+    },
+    "t5-trustworthy": {
+      "type": "color",
+      "value": "#003262"
+    },
+    "text-accent": {
+      "type": "color",
+      "value": "#FDB515"
+    },
+    "text-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#0F172A",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#F4FBFF",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-secondary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#6B7280",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#8FA9C2",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "warning": {
+      "type": "color",
+      "value": "#F59E0B"
+    },
+    "accent-cyan": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#55C7FF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#55C7FF",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "accent-gold": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F4C95D",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#F4C95D",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "accent-purple": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#9B7CFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#9B7CFF",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F8FAFC",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#070B14",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-quaternary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#E2E8F0",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#16324F",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-secondary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F1F5F9",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#0D1524",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "bg-tertiary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#101C2E",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "border-primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#E2E8F0",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#22344B",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "text-tertiary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#94A3B8",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#6E88A6",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    }
+  }
+}
