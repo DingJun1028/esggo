@@ -12,7 +12,7 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useUpsertAuditRecord, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile, useUpsertCompanyProfile } from '@dataconnect/generated/react';
+import { useListAllTasks, useGetTaskById, useUpsertTask, useListAuditRecords, useInsertAuditRecord, useListScrapedArticles, useListRoadmapMilestones, useUpsertRoadmapMilestone, useGetCompanyProfile, useUpsertCompanyProfile } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
 
 const { data, isPending, isSuccess, isError, error } = useListAllTasks();
@@ -23,7 +23,7 @@ const { data, isPending, isSuccess, isError, error } = useUpsertTask(upsertTaskV
 
 const { data, isPending, isSuccess, isError, error } = useListAuditRecords();
 
-const { data, isPending, isSuccess, isError, error } = useUpsertAuditRecord(upsertAuditRecordVars);
+const { data, isPending, isSuccess, isError, error } = useInsertAuditRecord(insertAuditRecordVars);
 
 const { data, isPending, isSuccess, isError, error } = useListScrapedArticles();
 
@@ -72,7 +72,7 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { listAllTasks, getTaskById, upsertTask, listAuditRecords, upsertAuditRecord, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile, upsertCompanyProfile } from '@dataconnect/generated';
+import { listAllTasks, getTaskById, upsertTask, listAuditRecords, insertAuditRecord, listScrapedArticles, listRoadmapMilestones, upsertRoadmapMilestone, getCompanyProfile, upsertCompanyProfile } from '@dataconnect/generated';
 
 
 // Operation ListAllTasks: 
@@ -87,8 +87,8 @@ const { data } = await UpsertTask(dataConnect, upsertTaskVars);
 // Operation ListAuditRecords: 
 const { data } = await ListAuditRecords(dataConnect);
 
-// Operation UpsertAuditRecord:  For variables, look at type UpsertAuditRecordVars in ../index.d.ts
-const { data } = await UpsertAuditRecord(dataConnect, upsertAuditRecordVars);
+// Operation InsertAuditRecord:  For variables, look at type InsertAuditRecordVars in ../index.d.ts
+const { data } = await InsertAuditRecord(dataConnect, insertAuditRecordVars);
 
 // Operation ListScrapedArticles: 
 const { data } = await ListScrapedArticles(dataConnect);

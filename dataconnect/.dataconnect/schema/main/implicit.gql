@@ -1,12 +1,78 @@
-extend type AuditLog {
+extend type AuditRecord {
   """
-  ✨ Implicit foreign key field based on `AuditLog`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `AuditRecord`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
   """
-  userId: String! @fdc_generated(from: "AuditLog.user", purpose: IMPLICIT_REF_FIELD)
+  userId: String @fdc_generated(from: "AuditRecord.user", purpose: IMPLICIT_REF_FIELD)
 }
-extend type EsgRecord {
+extend type CompanyMetric {
   """
-  ✨ Implicit foreign key field based on `EsgRecord`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `CompanyMetric`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
   """
-  userId: String! @fdc_generated(from: "EsgRecord.user", purpose: IMPLICIT_REF_FIELD)
+  companyId: UUID! @fdc_generated(from: "CompanyMetric.company", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `CompanyMetric`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "CompanyMetric.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type CompanyProfile {
+  """
+  ✨ Implicit foreign key field based on `CompanyProfile`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "CompanyProfile.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type EternalMemory {
+  """
+  ✨ Implicit foreign key field based on `EternalMemory`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
+  """
+  companyId: UUID @fdc_generated(from: "EternalMemory.company", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `EternalMemory`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "EternalMemory.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RegulatoryPolicy {
+  """
+  ✨ Implicit foreign key field based on `RegulatoryPolicy`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String @fdc_generated(from: "RegulatoryPolicy.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Report {
+  """
+  ✨ Implicit foreign key field based on `Report`.`company`. It must match the value of `CompanyProfile`.`id`. See `@ref` for how to customize it.
+  """
+  companyId: UUID! @fdc_generated(from: "Report.company", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Report`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "Report.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ReportSection {
+  """
+  ✨ Implicit foreign key field based on `ReportSection`.`report`. It must match the value of `Report`.`id`. See `@ref` for how to customize it.
+  """
+  reportId: UUID! @fdc_generated(from: "ReportSection.report", purpose: IMPLICIT_REF_FIELD)
+}
+extend type RoadmapMilestone {
+  """
+  ✨ Implicit foreign key field based on `RoadmapMilestone`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "RoadmapMilestone.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type ScrapedArticle {
+  """
+  ✨ Implicit foreign key field based on `ScrapedArticle`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String @fdc_generated(from: "ScrapedArticle.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type SwarmAgentTask {
+  """
+  ✨ Implicit foreign key field based on `SwarmAgentTask`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "SwarmAgentTask.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Task {
+  """
+  ✨ Implicit foreign key field based on `Task`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "Task.user", purpose: IMPLICIT_REF_FIELD)
 }

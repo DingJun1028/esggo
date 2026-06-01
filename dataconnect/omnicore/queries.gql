@@ -1,5 +1,5 @@
 query ListAllTasks @auth(level: USER) {
-  tasks(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
+  tasks(where: { user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
     id
     title
     description
@@ -15,10 +15,10 @@ query ListAllTasks @auth(level: USER) {
 }
 
 query GetTaskById($id: UUID!) @auth(level: USER) {
-  task(first: { where: { id: { eq: $id }, user: { uid: { eq_expr: "auth.uid" } } } }) {
+  task(first: { where: { id: { eq: $id }, user: { id: { eq_expr: "auth.uid" } } } }) {
     id
     user {
-      uid
+      id
     }
     title
     description
@@ -35,7 +35,7 @@ query GetTaskById($id: UUID!) @auth(level: USER) {
 mutation UpsertTask($id: UUID, $title: String!, $description: String, $completed: Boolean!, $status: String!, $priority: String!, $assignee: String, $department: String, $griReference: String, $dueDate: Date) @auth(level: USER) {
   task_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     title: $title,
     description: $description,
     completed: $completed,
@@ -49,7 +49,7 @@ mutation UpsertTask($id: UUID, $title: String!, $description: String, $completed
 }
 
 query ListAuditRecords @auth(level: USER) {
-  auditRecords(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}], limit: 50) {
+  auditRecords(where: { user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}], limit: 50) {
     id
     title
     dataType
@@ -59,28 +59,38 @@ query ListAuditRecords @auth(level: USER) {
     contentHash
     zkpStatus
     createdAt
+    eventType
+    payload
+    evidenceUuid
+    colorDropId
+    timestamp
   }
 }
 
-mutation UpsertAuditRecord(
+mutation InsertAuditRecord(
   $id: UUID,
-  $title: String!,
-  $dataType: String!,
-  $source: String!,
+  $title: String,
+  $dataType: String,
+  $source: String,
   $standard: String,
   $description: String,
-  $contentHash: String!,
-  $zkpStatus: String!,
+  $contentHash: String,
+  $zkpStatus: String,
   $metadata: String,
   $proofSignature: String,
   $verifierKey: String,
   $algorithm: String,
   $salt: String,
-  $proofJson: String
+  $proofJson: String,
+  $eventType: String,
+  $payload: String,
+  $evidenceUuid: String,
+  $colorDropId: String,
+  $timestamp: Date
 ) @auth(level: USER) {
-  auditRecord_upsert(data: {
+  auditRecord_insert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     title: $title,
     dataType: $dataType,
     source: $source,
@@ -93,15 +103,20 @@ mutation UpsertAuditRecord(
     verifierKey: $verifierKey,
     algorithm: $algorithm,
     salt: $salt,
-    proofJson: $proofJson
+    proofJson: $proofJson,
+    eventType: $eventType,
+    payload: $payload,
+    evidenceUuid: $evidenceUuid,
+    colorDropId: $colorDropId,
+    timestamp: $timestamp
   })
 }
 
 query ListScrapedArticles @auth(level: USER, insecureReason: "Global news articles are accessible to all registered users") {
   scrapedArticles(where: { 
     _or: [
-      { user: { uid: { eq_expr: "auth.uid" } } },
-      { user: { uid: { eq: null } } } # Allow system-scraped data
+      { user: { id: { eq_expr: "auth.uid" } } },
+      { user: { id: { eq: null } } } # Allow system-scraped data
     ]
   }, orderBy: [{scrapedAt: DESC}], limit: 50) {
     id
@@ -118,7 +133,7 @@ query ListScrapedArticles @auth(level: USER, insecureReason: "Global news articl
 }
 
 query ListRoadmapMilestones @auth(level: USER) {
-  roadmapMilestones(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{targetYear: ASC}]) {
+  roadmapMilestones(where: { user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{targetYear: ASC}]) {
     id
     title
     targetYear
@@ -133,7 +148,7 @@ query ListRoadmapMilestones @auth(level: USER) {
 mutation UpsertRoadmapMilestone($id: UUID, $title: String!, $targetYear: Int!, $category: String!, $status: String!, $targetValue: Float, $unit: String, $sbtiAligned: Boolean!) @auth(level: USER) {
   roadmapMilestone_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     title: $title,
     targetYear: $targetYear,
     category: $category,
@@ -145,7 +160,7 @@ mutation UpsertRoadmapMilestone($id: UUID, $title: String!, $targetYear: Int!, $
 }
 
 query GetCompanyProfile($id: UUID!) @auth(level: USER) {
-  companyProfile(first: { where: { id: { eq: $id }, user: { uid: { eq_expr: "auth.uid" } } } }) {
+  companyProfile(first: { where: { id: { eq: $id }, user: { id: { eq_expr: "auth.uid" } } } }) {
     id
     name
     industry
@@ -156,7 +171,7 @@ query GetCompanyProfile($id: UUID!) @auth(level: USER) {
     revenueTwd
     capitalTwd
     user {
-      uid
+      id
     }
   }
 }
@@ -164,7 +179,7 @@ query GetCompanyProfile($id: UUID!) @auth(level: USER) {
 mutation UpsertCompanyProfile($id: UUID, $name: String!, $industry: String, $vision: String, $mission: String, $employeeCount: Int, $revenueTwd: Float, $capitalTwd: Float) @auth(level: USER) {
   companyProfile_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     name: $name,
     industry: $industry,
     vision: $vision,
@@ -176,7 +191,7 @@ mutation UpsertCompanyProfile($id: UUID, $name: String!, $industry: String, $vis
 }
 
 query GetReportById($id: UUID!) @auth(level: USER) {
-  report(first: { where: { id: { eq: $id }, user: { uid: { eq_expr: "auth.uid" } } } }) {
+  report(first: { where: { id: { eq: $id }, user: { id: { eq_expr: "auth.uid" } } } }) {
     id
     title
     progress
@@ -188,7 +203,7 @@ query GetReportById($id: UUID!) @auth(level: USER) {
       id
       name
       user {
-        uid
+        id
       }
     }
   }
@@ -197,7 +212,7 @@ query GetReportById($id: UUID!) @auth(level: USER) {
 mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title: String!, $language: String!, $progress: Int!, $status: String!) @auth(level: USER) {
   report_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     company: { id: $companyId },
     templateId: $templateId,
     title: $title,
@@ -207,7 +222,7 @@ mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title
   })
 }
 
-mutation UpsertReportSection($id: UUID, $reportId: UUID!, $sectionId: String!, $title: String!, $content: String, $contentMd: String, $fieldValuesJson: String, $notes: String, $documentsStateJson: String, $isDone: Boolean!, $chapterOrder: Int, $griReferences: [String!], $hashLock: String) @auth(level: USER, insecureReason: "Report ownership validated at the Report level") {
+mutation UpsertReportSection($id: UUID, $reportId: UUID!, $sectionId: String!, $title: String!, $content: String, $contentMd: String, $fieldValuesJson: String, $notes: String, $documentsStateJson: String, $isDone: Boolean!, $chapterOrder: Int, $griReferences: [String!], $hashLock: String, $sourceOrigin: String!) @auth(level: USER, insecureReason: "Report ownership validated at the Report level") {
   reportSection_upsert(data: {
     id: $id,
     report: { id: $reportId },
@@ -221,7 +236,8 @@ mutation UpsertReportSection($id: UUID, $reportId: UUID!, $sectionId: String!, $
     isDone: $isDone,
     chapterOrder: $chapterOrder,
     griReferences: $griReferences,
-    hashLock: $hashLock
+    hashLock: $hashLock,
+    sourceOrigin: $sourceOrigin
   })
 }
 
@@ -229,7 +245,7 @@ query ListReportSectionsByReport($reportId: UUID!) @auth(level: USER) {
   reportSections(where: { 
     report: { 
       id: { eq: $reportId },
-      user: { uid: { eq_expr: "auth.uid" } }
+      user: { id: { eq_expr: "auth.uid" } }
     } 
   }, orderBy: [{chapterOrder: ASC}]) {
     id
@@ -244,14 +260,14 @@ query ListReportSectionsByReport($reportId: UUID!) @auth(level: USER) {
     chapterOrder
     griReferences
     hashLock
-    lastUpdated
+    updatedAt
   }
 }
 
 mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!, $metricValue: Float, $unit: String, $category: String!, $verified: Boolean!, $griStandard: String, $sourceOrigin: String, $hashLock: String) @auth(level: USER) {
   companyMetric_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     company: { id: $companyId },
     metricName: $metricName,
     metricValue: $metricValue,
@@ -267,7 +283,7 @@ mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $metricName: String!,
 query ListCompanyMetrics($companyId: UUID!) @auth(level: USER) {
   companyMetrics(where: { 
     company: { id: { eq: $companyId } },
-    user: { uid: { eq_expr: "auth.uid" } }
+    user: { id: { eq_expr: "auth.uid" } }
   }) {
     id
     metricName
@@ -282,21 +298,22 @@ query ListCompanyMetrics($companyId: UUID!) @auth(level: USER) {
   }
 }
 
-mutation UpsertEternalMemory($id: UUID, $companyId: UUID, $type: String!, $content: String!, $tags: String, $hashLock: String!, $consolidated: Boolean!) @auth(level: USER) {
-  eternalMemory_upsert(data: {
+mutation InsertEternalMemory($id: UUID, $companyId: UUID, $type: String!, $content: String!, $tags: String, $hashLock: String!, $consolidated: Boolean!, $sourceOrigin: String!) @auth(level: USER) {
+  eternalMemory_insert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     company: { id: $companyId },
     type: $type,
     content: $content,
     tags: $tags,
     hashLock: $hashLock,
-    consolidated: $consolidated
+    consolidated: $consolidated,
+    sourceOrigin: $sourceOrigin
   })
 }
 
 query ListEternalMemoriesByCompany($companyId: UUID!) @auth(level: USER) {
-  eternalMemories(where: { company: { id: { eq: $companyId } }, user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
+  eternalMemories(where: { company: { id: { eq: $companyId } }, user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
     id
     type
     content
@@ -310,7 +327,7 @@ query ListEternalMemoriesByCompany($companyId: UUID!) @auth(level: USER) {
 query GetReportByCompany($companyId: UUID!) @auth(level: USER) {
   reports(where: { 
     company: { id: { eq: $companyId } },
-    user: { uid: { eq_expr: "auth.uid" } }
+    user: { id: { eq_expr: "auth.uid" } }
   }, limit: 1) {
     id
     title
@@ -321,7 +338,7 @@ query GetReportByCompany($companyId: UUID!) @auth(level: USER) {
 }
 
 query ListReports @auth(level: USER) {
-  reports(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
+  reports(where: { user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
     id
     title
     progress
@@ -339,7 +356,7 @@ query ListReports @auth(level: USER) {
 mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url: String!, $source: String!, $publishedAt: Date, $category: String!, $tags: String, $impactLevel: String!) @auth(level: USER, insecureReason: "Users can contribute to the shared article pool") {
   scrapedArticle_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     title: $title,
     summary: $summary,
     url: $url,
@@ -354,7 +371,7 @@ mutation UpsertScrapedArticle($id: UUID, $title: String!, $summary: String, $url
 # --- Phase 13 Operations ---
 
 query ListEternalMemories @auth(level: USER) {
-  eternalMemories(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
+  eternalMemories(where: { user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{createdAt: DESC}]) {
     id
     type
     content
@@ -366,7 +383,7 @@ query ListEternalMemories @auth(level: USER) {
 }
 
 query ListSwarmAgentTasks @auth(level: USER) {
-  swarmAgentTasks(where: { user: { uid: { eq_expr: "auth.uid" } } }, orderBy: [{updatedAt: DESC}]) {
+  swarmAgentTasks(where: { user: { id: { eq_expr: "auth.uid" } } }, orderBy: [{updatedAt: DESC}]) {
     id
     title
     taskType
@@ -382,7 +399,7 @@ query ListSwarmAgentTasks @auth(level: USER) {
 mutation UpsertSwarmAgentTask($id: UUID, $title: String!, $taskType: String!, $status: String!, $agentId: String, $progress: Int!, $skillKey: String) @auth(level: USER) {
   swarmAgentTask_upsert(data: {
     id: $id,
-    user: { uid_expr: "auth.uid" },
+    user: { id_expr: "auth.uid" },
     title: $title,
     taskType: $taskType,
     status: $status,
@@ -395,7 +412,7 @@ mutation UpsertSwarmAgentTask($id: UUID, $title: String!, $taskType: String!, $s
 query ListRegulatoryPolicies @auth(level: USER, insecureReason: "Global ESG policies are accessible to all registered users") {
   regulatoryPolicies(where: { 
     _or: [
-      { user: { uid: { eq_expr: "auth.uid" } } },
+      { user: { id: { eq_expr: "auth.uid" } } },
       { isGlobal: { eq: true } }
     ]
   }) {
@@ -409,7 +426,7 @@ query ListRegulatoryPolicies @auth(level: USER, insecureReason: "Global ESG poli
 }
 
 query GetMyCompanyProfile @auth(level: USER) {
-  companyProfiles(where: { user: { uid: { eq_expr: "auth.uid" } } }) {
+  companyProfiles(where: { user: { id: { eq_expr: "auth.uid" } } }) {
     id
     name
     industry

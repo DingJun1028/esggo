@@ -8,35 +8,9 @@ export type Int64String = string;
 export type DateString = string;
 
 
-export interface Action_Key {
-  id: UUIDString;
-  __typename?: 'Action_Key';
-}
-
 export interface AuditRecord_Key {
   id: UUIDString;
   __typename?: 'AuditRecord_Key';
-}
-
-export interface Category_Key {
-  id: UUIDString;
-  __typename?: 'Category_Key';
-}
-
-export interface ChallengeParticipation_Key {
-  userUid: string;
-  challengeId: UUIDString;
-  __typename?: 'ChallengeParticipation_Key';
-}
-
-export interface Challenge_Key {
-  id: UUIDString;
-  __typename?: 'Challenge_Key';
-}
-
-export interface Comment_Key {
-  id: UUIDString;
-  __typename?: 'Comment_Key';
 }
 
 export interface CompanyMetric_Key {
@@ -47,11 +21,6 @@ export interface CompanyMetric_Key {
 export interface CompanyProfile_Key {
   id: UUIDString;
   __typename?: 'CompanyProfile_Key';
-}
-
-export interface CreateDemoDataData {
-  user_insertMany: User_Key[];
-  comment_insertMany: Comment_Key[];
 }
 
 export interface EternalMemory_Key {
@@ -70,8 +39,8 @@ export interface GetCompanyProfileData {
     employeeCount?: number | null;
     revenueTwd?: number | null;
     capitalTwd?: number | null;
-    user?: {
-      uid: string;
+    user: {
+      id: string;
     } & User_Key;
   } & CompanyProfile_Key;
 }
@@ -114,12 +83,12 @@ export interface GetReportByIdData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
-      user?: {
-        uid: string;
+      user: {
+        id: string;
       } & User_Key;
     } & CompanyProfile_Key;
   } & Report_Key;
@@ -133,7 +102,7 @@ export interface GetTaskByIdData {
   task?: {
     id: UUIDString;
     user: {
-      uid: string;
+      id: string;
     } & User_Key;
       title: string;
       description?: string | null;
@@ -151,14 +120,45 @@ export interface GetTaskByIdVariables {
   id: UUIDString;
 }
 
-export interface IntelligenceModule_Key {
-  id: string;
-  __typename?: 'IntelligenceModule_Key';
+export interface InsertAuditRecordData {
+  auditRecord_insert: AuditRecord_Key;
 }
 
-export interface IntelligenceSource_Key {
-  id: UUIDString;
-  __typename?: 'IntelligenceSource_Key';
+export interface InsertAuditRecordVariables {
+  id?: UUIDString | null;
+  title?: string | null;
+  dataType?: string | null;
+  source?: string | null;
+  standard?: string | null;
+  description?: string | null;
+  contentHash?: string | null;
+  zkpStatus?: string | null;
+  metadata?: string | null;
+  proofSignature?: string | null;
+  verifierKey?: string | null;
+  algorithm?: string | null;
+  salt?: string | null;
+  proofJson?: string | null;
+  eventType?: string | null;
+  payload?: string | null;
+  evidenceUuid?: string | null;
+  colorDropId?: string | null;
+  timestamp?: DateString | null;
+}
+
+export interface InsertEternalMemoryData {
+  eternalMemory_insert: EternalMemory_Key;
+}
+
+export interface InsertEternalMemoryVariables {
+  id?: UUIDString | null;
+  companyId?: UUIDString | null;
+  type: string;
+  content: string;
+  tags?: string | null;
+  hashLock: string;
+  consolidated: boolean;
+  sourceOrigin: string;
 }
 
 export interface ListAllTasksData {
@@ -173,21 +173,26 @@ export interface ListAllTasksData {
     department?: string | null;
     griReference?: string | null;
     dueDate?: DateString | null;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & Task_Key)[];
 }
 
 export interface ListAuditRecordsData {
   auditRecords: ({
     id: UUIDString;
-    title: string;
-    dataType: string;
-    source: string;
+    title?: string | null;
+    dataType?: string | null;
+    source?: string | null;
     standard?: string | null;
     description?: string | null;
-    contentHash: string;
-    zkpStatus: string;
-    createdAt: TimestampString;
+    contentHash?: string | null;
+    zkpStatus?: string | null;
+    createdAt: DateString;
+    eventType?: string | null;
+    payload?: string | null;
+    evidenceUuid?: string | null;
+    colorDropId?: string | null;
+    timestamp?: DateString | null;
   } & AuditRecord_Key)[];
 }
 
@@ -202,7 +207,7 @@ export interface ListCompanyMetricsData {
     griStandard?: string | null;
     sourceOrigin?: string | null;
     hashLock?: string | null;
-    updatedAt: TimestampString;
+    updatedAt: DateString;
   } & CompanyMetric_Key)[];
 }
 
@@ -218,7 +223,7 @@ export interface ListEternalMemoriesByCompanyData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 
@@ -234,18 +239,18 @@ export interface ListEternalMemoriesData {
     tags?: string | null;
     hashLock: string;
     consolidated: boolean;
-    createdAt: TimestampString;
+    createdAt: DateString;
   } & EternalMemory_Key)[];
 }
 
 export interface ListRegulatoryPoliciesData {
   regulatoryPolicies: ({
-    id: string;
-    standard: string;
-    code: string;
-    name: string;
+    id: UUIDString;
+    standard?: string | null;
+    code?: string | null;
+    name?: string | null;
     description?: string | null;
-    rulesJson: string;
+    rulesJson?: string | null;
   } & RegulatoryPolicy_Key)[];
 }
 
@@ -263,7 +268,7 @@ export interface ListReportSectionsByReportData {
     chapterOrder?: number | null;
     griReferences?: string[] | null;
     hashLock?: string | null;
-    lastUpdated: TimestampString;
+    updatedAt: DateString;
   } & ReportSection_Key)[];
 }
 
@@ -279,7 +284,7 @@ export interface ListReportsData {
     status: string;
     language: string;
     templateId: string;
-    createdAt: TimestampString;
+    createdAt: DateString;
     company: {
       id: UUIDString;
       name: string;
@@ -311,7 +316,7 @@ export interface ListScrapedArticlesData {
     category: string;
     tags?: string | null;
     impactLevel: string;
-    scrapedAt: TimestampString;
+    scrapedAt: DateString;
   } & ScrapedArticle_Key)[];
 }
 
@@ -324,13 +329,13 @@ export interface ListSwarmAgentTasksData {
     agentId?: string | null;
     progress: number;
     skillKey?: string | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
+    createdAt: DateString;
+    updatedAt: DateString;
   } & SwarmAgentTask_Key)[];
 }
 
 export interface RegulatoryPolicy_Key {
-  id: string;
+  id: UUIDString;
   __typename?: 'RegulatoryPolicy_Key';
 }
 
@@ -354,12 +359,6 @@ export interface ScrapedArticle_Key {
   __typename?: 'ScrapedArticle_Key';
 }
 
-export interface SocialConnection_Key {
-  followerUid: string;
-  followedUid: string;
-  __typename?: 'SocialConnection_Key';
-}
-
 export interface SwarmAgentTask_Key {
   id: UUIDString;
   __typename?: 'SwarmAgentTask_Key';
@@ -368,27 +367,6 @@ export interface SwarmAgentTask_Key {
 export interface Task_Key {
   id: UUIDString;
   __typename?: 'Task_Key';
-}
-
-export interface UpsertAuditRecordData {
-  auditRecord_upsert: AuditRecord_Key;
-}
-
-export interface UpsertAuditRecordVariables {
-  id?: UUIDString | null;
-  title: string;
-  dataType: string;
-  source: string;
-  standard?: string | null;
-  description?: string | null;
-  contentHash: string;
-  zkpStatus: string;
-  metadata?: string | null;
-  proofSignature?: string | null;
-  verifierKey?: string | null;
-  algorithm?: string | null;
-  salt?: string | null;
-  proofJson?: string | null;
 }
 
 export interface UpsertCompanyMetricData {
@@ -423,20 +401,6 @@ export interface UpsertCompanyProfileVariables {
   capitalTwd?: number | null;
 }
 
-export interface UpsertEternalMemoryData {
-  eternalMemory_upsert: EternalMemory_Key;
-}
-
-export interface UpsertEternalMemoryVariables {
-  id?: UUIDString | null;
-  companyId?: UUIDString | null;
-  type: string;
-  content: string;
-  tags?: string | null;
-  hashLock: string;
-  consolidated: boolean;
-}
-
 export interface UpsertReportData {
   report_upsert: Report_Key;
 }
@@ -459,6 +423,7 @@ export interface UpsertReportSectionVariables {
   chapterOrder?: number | null;
   griReferences?: string[] | null;
   hashLock?: string | null;
+  sourceOrigin: string;
 }
 
 export interface UpsertReportVariables {
@@ -534,7 +499,7 @@ export interface UpsertTaskVariables {
 }
 
 export interface User_Key {
-  uid: string;
+  id: string;
   __typename?: 'User_Key';
 }
 
@@ -558,10 +523,10 @@ export function listAuditRecords(dc: DataConnect, options?: OperationOptions): P
 /** Generated Node Admin SDK operation action function for the 'ListAuditRecords' Query. Allow users to pass in custom DataConnect instances. */
 export function listAuditRecords(options?: OperationOptions): Promise<ExecuteOperationResponse<ListAuditRecordsData>>;
 
-/** Generated Node Admin SDK operation action function for the 'UpsertAuditRecord' Mutation. Allow users to execute without passing in DataConnect. */
-export function upsertAuditRecord(dc: DataConnect, vars: UpsertAuditRecordVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertAuditRecordData>>;
-/** Generated Node Admin SDK operation action function for the 'UpsertAuditRecord' Mutation. Allow users to pass in custom DataConnect instances. */
-export function upsertAuditRecord(vars: UpsertAuditRecordVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertAuditRecordData>>;
+/** Generated Node Admin SDK operation action function for the 'InsertAuditRecord' Mutation. Allow users to execute without passing in DataConnect. */
+export function insertAuditRecord(dc: DataConnect, vars?: InsertAuditRecordVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<InsertAuditRecordData>>;
+/** Generated Node Admin SDK operation action function for the 'InsertAuditRecord' Mutation. Allow users to pass in custom DataConnect instances. */
+export function insertAuditRecord(vars?: InsertAuditRecordVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<InsertAuditRecordData>>;
 
 /** Generated Node Admin SDK operation action function for the 'ListScrapedArticles' Query. Allow users to execute without passing in DataConnect. */
 export function listScrapedArticles(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<ListScrapedArticlesData>>;
@@ -618,10 +583,10 @@ export function listCompanyMetrics(dc: DataConnect, vars: ListCompanyMetricsVari
 /** Generated Node Admin SDK operation action function for the 'ListCompanyMetrics' Query. Allow users to pass in custom DataConnect instances. */
 export function listCompanyMetrics(vars: ListCompanyMetricsVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListCompanyMetricsData>>;
 
-/** Generated Node Admin SDK operation action function for the 'UpsertEternalMemory' Mutation. Allow users to execute without passing in DataConnect. */
-export function upsertEternalMemory(dc: DataConnect, vars: UpsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertEternalMemoryData>>;
-/** Generated Node Admin SDK operation action function for the 'UpsertEternalMemory' Mutation. Allow users to pass in custom DataConnect instances. */
-export function upsertEternalMemory(vars: UpsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<UpsertEternalMemoryData>>;
+/** Generated Node Admin SDK operation action function for the 'InsertEternalMemory' Mutation. Allow users to execute without passing in DataConnect. */
+export function insertEternalMemory(dc: DataConnect, vars: InsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<InsertEternalMemoryData>>;
+/** Generated Node Admin SDK operation action function for the 'InsertEternalMemory' Mutation. Allow users to pass in custom DataConnect instances. */
+export function insertEternalMemory(vars: InsertEternalMemoryVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<InsertEternalMemoryData>>;
 
 /** Generated Node Admin SDK operation action function for the 'ListEternalMemoriesByCompany' Query. Allow users to execute without passing in DataConnect. */
 export function listEternalMemoriesByCompany(dc: DataConnect, vars: ListEternalMemoriesByCompanyVariables, options?: OperationOptions): Promise<ExecuteOperationResponse<ListEternalMemoriesByCompanyData>>;
@@ -667,9 +632,4 @@ export function listRegulatoryPolicies(options?: OperationOptions): Promise<Exec
 export function getMyCompanyProfile(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<GetMyCompanyProfileData>>;
 /** Generated Node Admin SDK operation action function for the 'GetMyCompanyProfile' Query. Allow users to pass in custom DataConnect instances. */
 export function getMyCompanyProfile(options?: OperationOptions): Promise<ExecuteOperationResponse<GetMyCompanyProfileData>>;
-
-/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to execute without passing in DataConnect. */
-export function createDemoData(dc: DataConnect, options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
-/** Generated Node Admin SDK operation action function for the 'CreateDemoData' Mutation. Allow users to pass in custom DataConnect instances. */
-export function createDemoData(options?: OperationOptions): Promise<ExecuteOperationResponse<CreateDemoDataData>>;
 

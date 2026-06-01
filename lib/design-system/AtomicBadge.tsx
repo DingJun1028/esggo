@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../utils';
 
 export interface AtomicBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: 'default' | 'outline' | 'verified' | 'error' | 'warning';
@@ -6,11 +7,10 @@ export interface AtomicBadgeProps extends React.HTMLAttributes<HTMLSpanElement> 
 
 export const AtomicBadge: React.FC<AtomicBadgeProps> = ({
   variant = 'default',
-  className = '',
+  className,
   children,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase font-mono';
   const variantClasses = {
     default: 'bg-white/10 text-slate-300',
     outline: 'border border-white/20 text-slate-400 bg-transparent',
@@ -20,7 +20,14 @@ export const AtomicBadge: React.FC<AtomicBadgeProps> = ({
   }[variant];
 
   return (
-    <span className={`${baseClasses} ${variantClasses} ${className}`} {...props}>
+    <span 
+      className={cn(
+        'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase font-mono',
+        variantClasses,
+        className
+      )} 
+      {...props}
+    >
       {children}
     </span>
   );
