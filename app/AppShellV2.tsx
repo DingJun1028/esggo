@@ -19,6 +19,9 @@ import {
   Network, Cpu, Share2, TestTube, TerminalSquare, Palette, UploadCloud
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import BrandButton from '../components/brand/BrandButton';
+import BrandStatusDot from '../../components/brand/BrandStatusDot';
+import OmniAgentPulseFloating from '../../components/core/OmniAgentPulseFloating';
 import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
 import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
@@ -202,8 +205,16 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                       {isActive && (
                         <motion.div 
                           layoutId="activeDot"
-                          className="absolute right-3 w-1.5 h-1.5 rounded-full bg-[#FDB515] shadow-[0_0_8px_#FDB515]" 
-                        />
+                          className="absolute right-3" 
+                        >
+                          <BrandStatusDot 
+                            status="active" // Could still be 'active' for semantic meaning
+                            size="xs" // w-1.5 h-1.5
+                            colorClassName="bg-[#FDB515]" // Restore gold color
+                            shadowClassName="shadow-[0_0_8px_#FDB515]" // Restore shadow
+                            dotOnly={true} // Render only the dot, no label container
+                          />
+                        </motion.div>
                       )}
                     </Link>
                   );
@@ -218,15 +229,17 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           "p-4 border-t transition-colors",
           isDark ? "border-white/5" : "border-slate-100"
         )}>
-          <button 
+          <BrandButton
             onClick={handleSidebarToggle}
+            variant="ghost"
+            size="md"
+            icon={sidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+            fullWidth
             className={cn(
-              "w-full h-12 rounded-2xl flex items-center justify-center transition-all",
-              isDark ? "hover:bg-white/5 text-slate-500 hover:text-slate-300" : "hover:bg-slate-100 text-slate-400 hover:text-[#003262]"
+              "h-12",
+              isDark ? "text-slate-500 hover:text-slate-300" : "text-slate-400 hover:text-[#003262]"
             )}
-          >
-            {sidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-          </button>
+          />
         </div>
       </motion.aside>
 
@@ -248,7 +261,13 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             >
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-3 px-4 py-2 bg-slate-900/5 rounded-full border border-slate-900/5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_#10b981]" />
+                  <BrandStatusDot 
+                    status="active" 
+                    pulse={true} 
+                    size="md" 
+                    shadowClassName="shadow-[0_0_12px_#10b981]" 
+                    dotOnly={true} 
+                  />
                   <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">OmniSync_Operational</span>
                 </div>
               </div>
@@ -258,24 +277,28 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                 <GlobalSearch />
 
                 {/* Theme Switcher */}
-                <button 
+                <BrandButton
                   onClick={toggleTheme}
+                  variant="ghost"
+                  icon={isDark ? <Moon size={18} /> : <Sun size={18} />}
                   className={cn(
-                    "p-2.5 rounded-xl border transition-all flex items-center gap-2",
+                    "p-2.5 rounded-xl border transition-all flex items-center justify-center",
                     isDark ? "bg-[#FDB515]/10 border-[#FDB515]/20 text-[#FDB515]" : "bg-blue-50 border-blue-200 text-[#003262]"
                   )}
-                >
-                  {isDark ? <Moon size={18} /> : <Sun size={18} />}
-                </button>
+                />
 
                 {/* Notifications */}
-                <button className={cn(
-                  "p-2.5 rounded-xl border transition-all relative",
-                  isDark ? "bg-white/5 border-white/10 text-slate-400" : "bg-slate-50 border-slate-200 text-slate-500"
-                )}>
-                  <Bell size={18} />
+                <div className="relative">
+                  <BrandButton
+                    variant="ghost"
+                    icon={<Bell size={18} />}
+                    className={cn(
+                      "p-2.5 rounded-xl border transition-all flex items-center justify-center",
+                      isDark ? "bg-white/5 border-white/10 text-slate-400" : "bg-slate-50 border-slate-200 text-slate-500"
+                    )}
+                  />
                   <div className="absolute top-2 right-2 w-2 h-2 bg-[#FDB515] rounded-full border-2 border-white shadow-sm" />
-                </button>
+                </div>
 
                 {/* User Profile */}
                 <div className={cn(
@@ -317,35 +340,45 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         )}>
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2 w-full">
             {/* Theme Toggle Mobile */}
-            <button 
+            <BrandButton 
               onClick={toggleTheme}
+              icon={isDark ? <Moon size={14} /> : <Sun size={14} />}
               className={cn(
-                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black flex items-center gap-2 border transition-all shadow-sm",
+                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
                 isDark ? "bg-[#FDB515]/20 border-[#FDB515]/30 text-[#FDB515]" : "bg-blue-50 border-blue-100 text-[#003262]"
               )}
             >
-              {isDark ? <Moon size={14} /> : <Sun size={14} />} THEME
-            </button>
+              THEME
+            </BrandButton>
             
             {/* Quick Actions Pills */}
-            <button className={cn(
-              "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black flex items-center gap-2 border transition-all shadow-sm",
-              isDark ? "bg-white/5 border-white/10 text-slate-300" : "bg-slate-50 border-slate-100 text-slate-500"
-            )}>
-              <Star size={14} /> FAVORITE
-            </button>
-            <button className={cn(
-              "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black flex items-center gap-2 border transition-all shadow-sm",
-              isDark ? "bg-cyan-500/10 border-cyan-500/20 text-cyan-400" : "bg-cyan-50 border-cyan-100 text-cyan-700"
-            )}>
-              <Bot size={14} /> AI_CORE
-            </button>
-            <button className={cn(
-              "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black flex items-center gap-2 border transition-all shadow-sm",
-              isDark ? "bg-amber-500/10 border-amber-500/20 text-amber-400" : "bg-amber-50 border-amber-100 text-amber-700"
-            )}>
-              <Settings size={14} /> SYSTEM
-            </button>
+            <BrandButton 
+              icon={<Star size={14} />}
+              className={cn(
+                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
+                isDark ? "bg-white/5 border-white/10 text-slate-300" : "bg-slate-50 border-slate-100 text-slate-500"
+              )}
+            >
+              FAVORITE
+            </BrandButton>
+            <BrandButton 
+              icon={<Bot size={14} />}
+              className={cn(
+                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
+                isDark ? "bg-cyan-500/10 border-cyan-500/20 text-cyan-400" : "bg-cyan-50 border-cyan-100 text-cyan-700"
+              )}
+            >
+              AI_CORE
+            </BrandButton>
+            <BrandButton 
+              icon={<Settings size={14} />}
+              className={cn(
+                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
+                isDark ? "bg-amber-500/10 border-amber-500/20 text-amber-400" : "bg-amber-50 border-amber-100 text-amber-700"
+              )}
+            >
+              SYSTEM
+            </BrandButton>
           </div>
         </div>
 
@@ -411,43 +444,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         </div>
 
         {/* ─── FLOATING RESONANCE INDICATOR (Desktop Only) ─── */}
-        <div className="hidden md:flex fixed bottom-12 right-12 z-[60] group">
-          <motion.div 
-            whileHover={{ scale: 1.05, y: -5 }}
-            className={cn(
-              "px-8 py-4 rounded-[2.5rem] border backdrop-blur-3xl shadow-2xl flex items-center gap-5 transition-all duration-500 cursor-pointer",
-              isDark 
-                ? "bg-[#003262]/60 border-[#FDB515]/30 shadow-[#FDB515]/5" 
-                : "bg-white/80 border-[#003262]/20 shadow-xl"
-            )}
-          >
-            <div className="relative">
-               <div className={cn(
-                 "p-3 rounded-2xl transition-colors",
-                 isDark ? "bg-[#FDB515]/10 text-[#FDB515]" : "bg-[#003262] text-white shadow-lg"
-               )}>
-                 <Bot size={24} className="group-hover:rotate-12 transition-transform" />
-               </div>
-               <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white animate-pulse shadow-[0_0_10px_#10b981]" />
-            </div>
-            <div className="flex flex-col">
-              <span className={cn(
-                "text-[11px] font-black uppercase tracking-[0.25em]", 
-                isDark ? "text-[#FDB515]" : "text-[#003262]"
-              )}>OmniAgent Pulse</span>
-              <div className="flex items-center gap-3 mt-1.5">
-                 <div className="h-1.5 w-32 bg-slate-200/20 rounded-full overflow-hidden">
-                    <motion.div 
-                      animate={{ width: '92.4%' }} 
-                      className="h-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" 
-                    />
-                 </div>
-                 <span className="text-[10px] font-mono font-black opacity-60">92.4%</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
+        <OmniAgentPulseFloating />
       </div>
 
       {/* Global Style Adjustments */}
