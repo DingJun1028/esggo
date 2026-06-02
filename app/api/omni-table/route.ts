@@ -52,7 +52,7 @@ type OmniTableSyncPayload = z.infer<typeof OmniTableSyncPayloadSchema>;
 // 3. 雙向防迴圈簽章、環境變數與資料庫底層對接配置
 // =========================================================================
 const BOT_SIGNATURE = 'BLUE_Automation_Bot';
-const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN || 'pat_3eeb4039ad864d2c96569dbbc94cfb0a';
+const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;
 
 // Supabase 直接連線配置 (零依賴 REST 連線)
 const SUPABASE_URL = process.env.EXT_PUBLIC_SUPABASE_URL || 'https://yhwfmavnhaivvgzeuklx.supabase.co';
@@ -181,6 +181,10 @@ function generateZkpSeal(
   const serializedData = JSON.stringify(data);
   const rawPayload = `${previousHash}||${serializedData}||${source}||${timestamp}`;
   
+  if (!MOCK_JWT_SECRET) {
+    throw new Error('Server misconfiguration: missing JWT secret');
+  }
+
   return crypto
     .createHmac('sha256', MOCK_JWT_SECRET)
     .update(rawPayload)
@@ -366,7 +370,7 @@ export async function POST(req: NextRequest) {
     }
     
     const token = authHeader.split(' ')[1];
-    const isMockAuthorized = token.startsWith('pat_') || token === 'valid-jwt-token' || token === 'taiwan-jwt-token';
+    const isMockAuthorized = !!MOCK_JWT_SECRET && token === MOCK_JWT_SECRET;
     const tenantIdFromToken = "tenant-esg-taiwan";
 
     if (!isMockAuthorized) {
