@@ -22,7 +22,7 @@ export function useEvidence() {
     if (evidences.length === 0 && !isLoading) {
       fetchEvidences();
     }
-  }, []);
+  }, [evidences.length, isLoading, fetchEvidences]);
 
   const handleCreate = async (dto: CreateEvidenceDTO) => {
     return addEvidence(dto);

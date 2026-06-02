@@ -38,11 +38,7 @@ export interface VisualDropState {
 export function useColorDropStream(token: string = 'taiwan-jwt-token') {
   const [events, setEvents] = useState<AuditRecord[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
-  const [metrics, setMetrics] = useState({
-    totalCount: 0,
-    zkpSuccessRate: '100.0',
-    entropyReduction: '0.0'
-  });
+  // metrics state removed, now calculated with useMemo
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
@@ -113,7 +109,7 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
     console.log(`📡 [SSE Client] 正在與 AgentBus 建立安全實時串流連線...`);
 
     // 注意：因瀏覽器 EventSource 原生不支持自訂 Header，實務上可透過 cookie、URL 參數，
-    // 或在 Proxy 路由中依據 Session 憑證進行租戶身分與 RLS 物理隔離對齊
+    // 或在 Proxy 路由中依據 Sessi 憑證進行租戶身分與 RLS 物理隔離對齊
     const eventSource = new EventSource(url);
     eventSourceRef.current = eventSource;
 
@@ -155,7 +151,7 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
   }, [token]);
 
   // 6. 實時計算降熵指標與 ZKP 合規係數 (Transparent)
-  useEffect(() => {
+  const metrics = useMemo(() => {
     const totalCount = events.length;
     const verifiedCount = events.filter(e => 
       e.event_type === 'color:drop:verified' || 
@@ -171,12 +167,14 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
       ? -(totalCount * 3.4).toFixed(1) 
       : '0.0';
 
-    setMetrics({
+    return {
       totalCount,
       zkpSuccessRate,
       entropyReduction
-    });
+    };
   }, [events]);
+
+  const coreValue = coreRef.current; // Capture ref's value outside the return object creation
 
   return {
     events,
@@ -184,6 +182,6 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
     metrics,
     getVisualState,
     triggerForensicReplay,
-    core: coreRef.current
+    core: coreValue
   };
 }
