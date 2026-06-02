@@ -8,7 +8,7 @@ const SUPABASE_URL = process.env.EXT_PUBLIC_SUPABASE_URL || 'https://yhwfmavnhai
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // 模擬內存狀態（Fallback 沙盒）
-let mockRegistry: any[] = [];
+const mockRegistry: any[] = [];
 
 /**
  * 透過 REST 寫入 Supabase (使用 Upsert) 或降級至內存沙盒
