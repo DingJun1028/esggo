@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { ShieldCheck, Scale, FileText, AlertCircle, TrendingUp, Loader2, BrainCircuit, Sparkles, Database } from 'lucide-react';
+import { ShieldCheck, Scale, FileText, AlertCircle, TrendingUp, Loader2, BrainCircuit, Sparkles, Database, Lock, Activity } from 'lucide-react';
 import { supabase } from '@/lib/db/supabase';
+import { useOmniTable } from '@/hooks/useOmniTable';
 
 // Mock data for UI demonstration of the Memory Shards system
 const MOCK_SHARDS = [
@@ -23,6 +24,9 @@ export default function GovernanceMetricsPage() {
   const [loading, setLoading] = useState(true);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [ultimate, setUltimate] = useState<{name: string, level: string} | null>(null);
+
+  // 5T Protocol: OmniTable ZKP Logic Nodes Integration
+  const { records: omniTableRecords, connectionStatus } = useOmniTable('valid-jwt-token');
 
   useEffect(() => {
     let isMounted = true;
@@ -213,6 +217,53 @@ export default function GovernanceMetricsPage() {
                 )}
               </div>
             </UniversalCard>
+          </div>
+        </div>
+
+        {/* 5T Protocol: OmniTable Logic Nodes (Hash Lock Visualization) */}
+        <div className="mt-12 space-y-6 animate-in slide-in-from-bottom-6 duration-700 delay-300">
+          <div className="flex items-center justify-between pb-2 border-b border-white/5">
+            <div className="flex items-center gap-3">
+              <Lock className="text-cyan-400" size={24} />
+              <h2 className="text-2xl font-bold text-white tracking-tight">OmniTable 邏輯節點封印 (5T Protocol)</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <Activity className={`w-4 h-4 ${connectionStatus === 'CONNECTED' ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
+              <span className="text-xs font-mono text-slate-400">SSE: {connectionStatus}</span>
+            </div>
+          </div>
+          <p className="text-slate-400 text-sm">
+            本區塊即時呈現自 OmniBlueTable 網關回傳之「不可篡改 (Trustworthy)」邏輯節點記錄。每一筆資料皆具備 ZKP Hash Lock，符合 ESGGO 5T 數位誠信標準。
+          </p>
+
+          <div className="space-y-4">
+            {omniTableRecords.slice(0, 5).map((record) => (
+              <UniversalCard key={record.id} variant="glass" className="p-4 border-l-2 border-l-cyan-500 hover:bg-white/5 transition-all">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <UniversalBadge variant="primary" size="sm">{record.event_type}</UniversalBadge>
+                      <span className="text-sm font-bold text-white tracking-wide">{record.source_origin}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mt-2">
+                      <Lock size={12} className="text-emerald-500" />
+                      <span className="text-slate-400 bg-black/30 px-2 py-0.5 rounded border border-white/5 truncate max-w-[200px] md:max-w-md">
+                        {record.payload?.zkp_hash || 'No Hash Lock'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1 text-xs font-mono text-slate-500">
+                    <div>{new Date(record.timestamp).toLocaleString()}</div>
+                    <div>By: {record.last_modified_by}</div>
+                  </div>
+                </div>
+              </UniversalCard>
+            ))}
+            {omniTableRecords.length === 0 && connectionStatus === 'CONNECTED' && (
+              <div className="text-center py-8 text-slate-500 font-mono text-sm border border-dashed border-white/10 rounded-xl">
+                Waiting for OmniBlue SSE Stream...
+              </div>
+            )}
           </div>
         </div>
 

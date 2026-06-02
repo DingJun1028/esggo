@@ -6,7 +6,7 @@ import { BrandBadge, BrandButton, BrandCard, BrandCardHeader } from '../../compo
 import ScraperControl from '../../components/omni/ScraperControl';
 import DataVisualizer from '../../components/omni/DataVisualizer';
 import HermesIntegrations from '../../components/omni/HermesIntegrations';
-import SkillBookUI from '../../components/omni/SkillBookUI';
+import { SkillBookUI } from '../../components/omni/SkillBookUI';
 import OmniCardsDemo from '../../components/omni/OmniCardsDemo';
 
 export default function OmniSkillsPage() {

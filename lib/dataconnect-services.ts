@@ -12,6 +12,7 @@ import {
   upsertCompanyProfile,
   listEternalMemories,
   insertEternalMemory,
+  upsertEternalMemory,
   insertAuditRecord,
   listSwarmAgentTasks,
   upsertSwarmAgentTask,

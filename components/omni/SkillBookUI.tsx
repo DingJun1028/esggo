@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, BookOpen, Layers, Zap } from 'lucide-react';
 import { MemoryShard, SkillUltimate } from '@/lib/agent/memory-shards';
 
-export function SkillBookUI() {
+export default function SkillBookUI() {
   const [shards, setShards] = useState<MemoryShard[]>([]);
   const [ultimate, setUltimate] = useState<SkillUltimate | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);

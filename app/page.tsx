@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Activity } from 'lucide-react';
+import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Activity, Brain } from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
 
