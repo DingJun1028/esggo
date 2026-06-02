@@ -62,7 +62,7 @@ const BROWSERBASE_CONFIG = {
 };
 
 // 模擬多租戶 Postgres 資料庫內存 AuditRecord 表狀態（已補齊 QKP 治療與醫學 ZKP 紀錄）
-let mockDatabase: Array<{
+const mockDatabase: Array<{
   id: string;
   tenant_id: string;
   event_type: string;
