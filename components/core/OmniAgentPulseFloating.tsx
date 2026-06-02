@@ -89,9 +89,32 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
 
   if (!isVisible && !isMinimized) return null; // Only fully disappear if both not visible and not minimized
 
-  // Target position for minimized state (roughly top-left of sidebar, relative to viewport)
-  // These values might need fine-tuning based on actual layout
-  const minimizedTarget = { x: -window.innerWidth / 2 + 50, y: -window.innerHeight / 2 + 50, scale: 0.3 };
+  // Calculate minimizedTarget dynamically using logoPosition and initialPulseRect
+  const calculatedMinimizedTarget = useMemo(() => {
+    if (!logoPosition || !initialPulseRect) {
+        // Fallback or wait if positions are not available yet
+        return { x: 0, y: 0, scale: 0.3 }; // Default to no movement, just scale
+    }
+
+    // Calculate center of logo
+    const logoCenterX = logoPosition.x + logoPosition.width / 2;
+    const logoCenterY = logoPosition.y + logoPosition.height / 2;
+
+    // Calculate center of initial (non-minimized) OmniAgent Pulse in viewport coordinates
+    // The initialPulseRect provides the rect of the component when it first renders at bottom-12 right-12 with x:0, y:0
+    const initialPulseCenterX = initialPulseRect.x + initialPulseRect.width / 2;
+    const initialPulseCenterY = initialPulseRect.y + initialPulseRect.height / 2;
+
+    // Calculate the required translation (delta) to move current center to logo center
+    const translateX = logoCenterX - initialPulseCenterX;
+    const translateY = logoCenterY - initialPulseCenterY;
+
+    return {
+      x: translateX,
+      y: translateY,
+      scale: 0.3, // Scale down to 30%
+    };
+  }, [logoPosition, initialPulseRect]); // Recalculate if these change
 
 
   const sizeClasses = {
@@ -108,10 +131,11 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
 
   return (
     <motion.div
-      drag={!isMinimized} // Disable drag when minimized
+      ref={pulseRef} // Attach ref here
+      drag={!isMinimized}
       dragMomentum={false}
       onDragEnd={handleDragEnd}
-      animate={isMinimized ? minimizedTarget : { x: position.x, y: position.y, scale: 1 }}
+      animate={isMinimized ? calculatedMinimizedTarget : { x: position.x, y: position.y, scale: 1 }} // Apply drag offsets here when not minimized
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={cn(
         "hidden md:flex fixed z-[60] group",
