@@ -51,6 +51,60 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const processEvent = useCallback((evt: StreamEvent) => {
+    setEvents(prev => [evt, ...prev].slice(0, MAX_EVENTS));
+
+    switch (evt.event) {
+      case 'MISSION_START':
+        setActiveMissions(prev => [
+          ...prev.filter(m => m.mission !== String(evt.payload.mission)),
+          {
+            mission: String(evt.payload.mission),
+            status: 'running',
+            startedAt: evt.timestamp,
+          },
+        ]);
+        break;
+
+      case 'MISSION_COMPLETE':
+        setActiveMissions(prev =>
+          prev.map(m =>
+            m.mission === String(evt.payload.mission)
+              ? {
+                  ...m,
+                  status: 'complete' as const,
+                  completedAt: evt.timestamp,
+                  totalProcessed: Number(evt.payload.totalSealed || evt.payload.totalMigrated || evt.payload.totalSynced || evt.payload.totalProcessed || 0),
+                }
+              : m
+          )
+        );
+        break;
+
+      case 'AGENT_ERROR':
+        setActiveMissions(prev =>
+          prev.map(m =>
+            m.status === 'running'
+              ? { ...m, status: 'error' as const, error: String(evt.payload.error) }
+              : m
+          )
+        );
+        break;
+
+      case '5T_SEAL':
+        setLastSeal(evt);
+        break;
+
+      case 'AGENT_TASK':
+        setAgentActivity(prev => {
+          const next = new Map(prev);
+          next.set(String(evt.payload.agent), evt);
+          return next;
+        });
+        break;
+    }
+  }, []); // <--- Dependency array is empty, uses state setters
+
   const connect = useCallback(() => {
     // Close existing connection
     if (eventSourceRef.current) {
@@ -106,61 +160,7 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
       setConnectionError(err instanceof Error ? err.message : 'Failed to connect');
       setIsConnected(false);
     }
-  }, [processEvent]);
-
-  const processEvent = useCallback((evt: StreamEvent) => {
-    setEvents(prev => [evt, ...prev].slice(0, MAX_EVENTS));
-
-    switch (evt.event) {
-      case 'MISSION_START':
-        setActiveMissions(prev => [
-          ...prev.filter(m => m.mission !== String(evt.payload.mission)),
-          {
-            mission: String(evt.payload.mission),
-            status: 'running',
-            startedAt: evt.timestamp,
-          },
-        ]);
-        break;
-
-      case 'MISSION_COMPLETE':
-        setActiveMissions(prev =>
-          prev.map(m =>
-            m.mission === String(evt.payload.mission)
-              ? {
-                  ...m,
-                  status: 'complete' as const,
-                  completedAt: evt.timestamp,
-                  totalProcessed: Number(evt.payload.totalSealed || evt.payload.totalMigrated || evt.payload.totalSynced || evt.payload.totalProcessed || 0),
-                }
-              : m
-          )
-        );
-        break;
-
-      case 'AGENT_ERROR':
-        setActiveMissions(prev =>
-          prev.map(m =>
-            m.status === 'running'
-              ? { ...m, status: 'error' as const, error: String(evt.payload.error) }
-              : m
-          )
-        );
-        break;
-
-      case '5T_SEAL':
-        setLastSeal(evt);
-        break;
-
-      case 'AGENT_TASK':
-        setAgentActivity(prev => {
-          const next = new Map(prev);
-          next.set(String(evt.payload.agent), evt);
-          return next;
-        });
-        break;
-    }
-  }, []);
+  }, [processEvent]); // <--- Dependency array now has processEvent
 
   const reconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
