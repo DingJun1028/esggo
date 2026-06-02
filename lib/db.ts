@@ -160,24 +160,27 @@ export const getReadingRoomReports = async (): Promise<any> => {
   return data?.scrapedArticles || [];
 };
 
-export const simpleHash = (data: string): string => {
-  let hash = 0;
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return Math.abs(hash).toString(16);
-};
-
-export const simplehash = simpleHash;
-
 export const secureHash = async (data: unknown): Promise<string> => {
   const str = typeof data === 'string' ? data : JSON.stringify(data);
   const msgBuffer = new TextEncoder().encode(str);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
+export const simpleHash = secureHash;
+export const simplehash = secureHash;
+
+export const sealRecord = async (data: any, ownerId: string): Promise<string> => {
+  const hash = await secureHash(data);
+  await logAudit({
+    action: 'SEAL_RECORD',
+    hash_lock: hash,
+    ownerId,
+    timestamp: new Date().toISOString(),
+    details: '5T Integrity Seal applied',
+  });
+  return hash;
 };
 
 export const saveAdvisorySession = async (session: unknown, p2?: unknown): Promise<any> => true;

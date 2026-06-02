@@ -22,6 +22,7 @@ import { cn } from '../lib/utils';
 import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
 import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
+import { GlobalSearch } from '../components/GlobalSearch';
 
 // Icon Mapper for Dynamic Navigation
 const IconMapper: Record<string, React.ReactNode> = {
@@ -253,13 +254,8 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               </div>
 
               <div className="flex items-center gap-4">
-                {/* Search Trigger */}
-                <button className={cn(
-                  "p-2.5 rounded-xl border transition-all",
-                  isDark ? "bg-white/5 border-white/10 text-slate-400 hover:text-white" : "bg-slate-50 border-slate-200 text-slate-500 hover:text-[#003262]"
-                )}>
-                  <Search size={18} />
-                </button>
+                {/* Search Trigger (Global Search CMD+K) */}
+                <GlobalSearch />
 
                 {/* Theme Switcher */}
                 <button 
