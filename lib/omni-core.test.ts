@@ -21,7 +21,7 @@ vi.mock('./dataconnect-services', () => {
   const store: Record<string, unknown>[] = [];
   dcMockStore.ref = store;
   return {
-    dcUpsertEternalMemory: vi.fn().mockImplementation(async (input: { id: string; type: string; content: string; tags?: string[]; hashLock: string; consolidated?: boolean }) => {
+    dcInsertEternalMemory: vi.fn().mockImplementation(async (input: { id: string; type: string; content: string; tags?: string[]; hashLock: string; consolidated?: boolean }) => {
       const entry = {
         id: input.id,
         type: input.type,
