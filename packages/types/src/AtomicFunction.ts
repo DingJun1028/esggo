@@ -41,8 +41,8 @@ export const AtomicFunctionSchema = z.function(
       }),
       payload: z.unknown()
     })
-  ])
-).returns(z.object({
+  ]),
+  z.object({
     success: z.boolean(),
     data: z.unknown().optional(),
     error: z.instanceof(Error).optional(),
@@ -50,4 +50,5 @@ export const AtomicFunctionSchema = z.function(
       executionTime: z.number(),
       version: z.string()
     }).optional()
-  }));
+  })
+);

@@ -14,12 +14,12 @@ export const createClient = (request: NextRequest) => {
       get(name: string) {
         return request.cookies.get(name)?.value;
       },
-      set(name: string, value: string, options: unknown) {
+      set(name: string, value: string, options: any) {
         request.cookies.set({ name, value, ...options });
         supabaseResponse = NextResponse.next({ request: { headers: request.headers } });
         supabaseResponse.cookies.set({ name, value, ...options });
       },
-      remove(name: string, options: unknown) {
+      remove(name: string, options: any) {
         request.cookies.set({ name, value: '', ...options });
         supabaseResponse = NextResponse.next({ request: { headers: request.headers } });
         supabaseResponse.cookies.set({ name, value: '', ...options });

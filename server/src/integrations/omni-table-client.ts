@@ -47,12 +47,14 @@ function generateHashLock(node: any): string {
 
 export async function syncLogicNodesToOmniTable(nodes: LogicNode[]) {
   try {
-    const space = await withRetry<any>(() => omniTable.spaces.getById(process.env.OMNITABLE_SPACE_ID!));
-    let datasheet = await withRetry<any>(() => space.getDatasheetByName('Logic Nodes'));
+    const spaceId = process.env.OMNITABLE_SPACE_ID!;
+    // In OmniTable Fusion API, we can search for nodes by name
+    const existingNodes = await withRetry<any>(() => omniTable.searchNodes(spaceId, 'Logic Nodes'));
+    let datasheetId = existingNodes.length > 0 ? existingNodes[0].id : null;
     
     // If datasheet doesn't exist, create it with 5T Protocol Fields
-    if (!datasheet) {
-      datasheet = await withRetry<any>(() => space.createDatasheet({
+    if (!datasheetId) {
+      const created = await withRetry<any>(() => omniTable.createDatasheet(spaceId, {
         name: 'Logic Nodes',
         fields: [
           { name: '節點名稱', type: 'text' },
@@ -64,6 +66,7 @@ export async function syncLogicNodesToOmniTable(nodes: LogicNode[]) {
           { name: 'hash_lock', type: 'text' }      // 信 (Trustworthy)
         ]
       }));
+      datasheetId = created.id;
     }
 
     // Prepare records for insertion
@@ -84,14 +87,18 @@ export async function syncLogicNodesToOmniTable(nodes: LogicNode[]) {
       };
     });
 
-    // Upsert records (delete existing and reinsert for simplicity)
-    await withRetry<any>(() => datasheet.deleteAllRecords());
+    // We can't delete all records directly without IDs in OmniTableClient, 
+    // so we get them first
+    const existingRecords = await withRetry<any>(() => omniTable.getRecords(datasheetId));
+    if (existingRecords.records && existingRecords.records.length > 0) {
+       await withRetry<any>(() => omniTable.deleteRecords(datasheetId, existingRecords.records.map((r: any) => r.recordId)));
+    }
     
     // Chunk array to avoid API limits (e.g., OmniTable batch limit is usually 10)
     const chunkSize = 10;
     for (let i = 0; i < records.length; i += chunkSize) {
       const chunk = records.slice(i, i + chunkSize);
-      await withRetry<any>(() => datasheet.createRecords(chunk));
+      await withRetry<any>(() => omniTable.createRecords(datasheetId, chunk));
     }
     
     return true;
