@@ -75,6 +75,11 @@ export class HealingGuardian {
   public async targetHealing(griTag: string, evidenceId: string, companyId: string = 'default'): Promise<boolean> {
     console.log(`[HealingGuardian] 🎯 執行精準修復: ${griTag} <-> ${evidenceId}`);
     
+    if (!supabaseAdmin) {
+      console.error(`[HealingGuardian] Supabase client offline`);
+      return false;
+    }
+
     // 1. 校驗實證是否存在且已驗證
     const { data: evidence, error: evError } = await supabaseAdmin
       .from('evidence_vault')
