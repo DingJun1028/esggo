@@ -22,7 +22,7 @@ export const AtomicAlert: React.FC<AtomicAlertProps> = ({
       atomId: 'ATOM_ALT_001',
       type: 'atom',
       version: '1.1.0',
-      core: { status: 'Trustworthy' } as any,
+      core: { status: 'Trustworthy' },
       reference: {
         specification: 'Notifications Spec v1.1',
         intent: 'Semantic Info Alert',
