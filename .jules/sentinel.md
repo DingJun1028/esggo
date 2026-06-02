@@ -11,3 +11,7 @@
 **Vulnerability:** Several API routes and testing suites were lacking fallback or error handling for offline or incorrectly configured databases (like Supabase). Also, the test environment relied on undocumented or incorrectly mocked dependencies (like `better-sqlite3` and `MockSupabaseAdmin`).
 **Learning:** Hard-failing applications during component isolation and unit testing due to unmocked external data sources reduces system resiliency. `SupabaseClient` requires explicit configuration or must be mocked safely.
 **Prevention:** Make use of delayed configuration and check configuration bounds proactively, falling back gracefully where possible (or throwing clear initialization errors) to increase resilience against offline dependencies.
+## 2024-05-18 - [Fix GitHub Actions using npm instead of pnpm]
+**Vulnerability:** GitHub action workflows (`.github/workflows/ci.yml` and `.github/workflows/governance.yml`) were executing `npm` commands, violating the strict requirement to use `pnpm` as the sole package manager for the repository. This caused CI failures and inconsistency between environments.
+**Learning:** Mixing package managers (like relying on `npm ci` or `npm install` when the lockfile is `pnpm-lock.yaml`) leads to unreliable CI, build failures, missing dependencies, or downgraded packages.
+**Prevention:** CI workflows must be explicitly configured with `pnpm/action-setup` to ensure the correct package manager and version are used across all pipeline stages. All script execution must use `pnpm`.
