@@ -262,6 +262,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               "h-12",
               isDark ? "text-slate-500 hover:text-slate-300" : "text-slate-400 hover:text-[#003262]"
             )}
+            hoverBgClassName={isDark ? "hover:bg-white/5" : "hover:bg-slate-100"}
           />
         </div>
       </motion.aside>

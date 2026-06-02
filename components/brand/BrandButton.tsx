@@ -13,12 +13,13 @@ interface BrandButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   icon?: React.ReactNode;
   iconRight?: React.ReactNode;
   fullWidth?: boolean;
+  hoverBgClassName?: string; // New prop
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-[#003262] text-white hover:bg-[#002244] shadow-xl hover:shadow-cyan-500/20 glow-on-hover',
   secondary: 'bg-white/60 text-[#003262] hover:bg-white/80 border border-[#003262]/10 backdrop-blur-md',
-  ghost: 'bg-transparent text-[#003262] hover:bg-[#003262]/5',
+  ghost: 'bg-transparent text-[#003262]', // Removed default hoverBg, will be applied via prop or fallback
   danger: 'bg-red-600 text-white hover:bg-red-700 shadow-lg',
   gold: 'bg-[#FDB515] text-[#003262] hover:bg-[#E6A612] shadow-xl font-black',
   outline: 'bg-transparent text-[#003262] border-2 border-[#003262] hover:bg-[#003262] hover:text-white',
@@ -43,8 +44,11 @@ export default function BrandButton({
   fullWidth = false,
   className = '',
   disabled,
+  hoverBgClassName, // Destructure new prop
   ...props
 }: BrandButtonProps) {
+  const finalHoverBgClass = hoverBgClassName || (variant === 'ghost' ? 'hover:bg-[#003262]/5' : ''); // Fallback for ghost if not provided
+
   return (
     <button
       className={cn(
@@ -53,6 +57,7 @@ export default function BrandButton({
         'disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer active:scale-95',
         variantStyles[variant],
         sizeStyles[size],
+        finalHoverBgClass, // Apply custom hoverBgClass or fallback
         fullWidth && 'w-full',
         className
       )}
