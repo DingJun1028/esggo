@@ -1,10 +1,9 @@
 import { z } from 'zod';
 import { getOmniAgentAI } from '../omni.config';
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '../../src/server/lib/database.types';
 
 // 初始化 Service Role Client 以寫入資料庫
-const supabaseAdmin = createClient<Database>(
+const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
