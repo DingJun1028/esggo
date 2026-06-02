@@ -1,5 +1,5 @@
-﻿'use client';
-import React, { useState } from 'react';
+'use client';
+import React, { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown, Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -37,11 +37,16 @@ export function DataTable<T extends object>({
     else { setSortKey(key); setSortDir('asc'); }
   };
 
-  const filtered = React.useMemo(() => {
-    let result = search
-      ? data.filter(row => Object.values(row).some(v => String(v ?? '').toLowerCase().includes(search.toLowerCase())))
-      : data;
+  const filtered = useMemo(() => {
+    let result = data;
 
+    // ⚡ Bolt Optimization: Hoist toLowerCase() and useMemo to prevent unnecessary recalculations
+    if (search) {
+      const searchLower = search.toLowerCase();
+      result = result.filter(row =>
+        Object.values(row).some(v => String(v ?? '').toLowerCase().includes(searchLower))
+      );
+    }
     if (sortKey) {
       result = [...result].sort((a, b) => {
         const av = String((a as any)[sortKey] ?? '');
@@ -49,6 +54,7 @@ export function DataTable<T extends object>({
         return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
       });
     }
+
     return result;
   }, [data, search, sortKey, sortDir]);
 

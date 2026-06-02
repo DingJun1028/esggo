@@ -27,6 +27,9 @@ jobs:
       - name: Run npm audit
         run: npm audit || true
 
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
       - name: Run lint
         run: npm run lint || true
 
