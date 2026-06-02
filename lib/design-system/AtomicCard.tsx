@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import { IAtomicComponent, atomicManager } from './atomic-core';
 import { cn } from '../utils';
