@@ -96,7 +96,7 @@ OmniAgent: Received query - "${userQuery}"`);
 
   await simulateOmniAgentTask(
     "Please analyze ESG data for our latest report.",
-    "{\\"emissions\\": 500, \\"water_usage\\": 1200, \\"diversity_score\\": 0.75}"
+    '{"emissions": 500, "water_usage": 1200, "diversity_score": 0.75}'
   );
 
   await simulateOmniAgentTask(
