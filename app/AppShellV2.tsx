@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,8 +20,8 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import BrandButton from '../components/brand/BrandButton';
-import BrandStatusDot from '../../components/brand/BrandStatusDot';
-import OmniAgentPulseFloating from '../../components/core/OmniAgentPulseFloating';
+import BrandStatusDot from '../components/brand/BrandStatusDot';
+import OmniAgentPulseFloating from '../components/core/OmniAgentPulseFloating';
 import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
 import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
@@ -91,6 +91,8 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [topbarCollapsed, setTopbarCollapsed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const [logoPosition, setLogoPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -99,6 +101,27 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
     const savedTopbar = localStorage.getItem('topbar_collapsed');
     if (savedTopbar === 'true') setTopbarCollapsed(true);
   }, []);
+
+  useEffect(() => {
+    const measureLogoPosition = () => {
+      if (logoRef.current) {
+        const rect = logoRef.current.getBoundingClientRect();
+        setLogoPosition({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
+    };
+
+    // Measure on mount
+    measureLogoPosition();
+
+    // Re-measure on window resize
+    window.addEventListener('resize', measureLogoPosition);
+    return () => window.removeEventListener('resize', measureLogoPosition);
+  }, [sidebarCollapsed]); // Re-measure when sidebar collapses/expands
 
   const handleSidebarToggle = () => {
     const newState = !sidebarCollapsed;
@@ -144,7 +167,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           "p-6 h-20 flex items-center gap-4 overflow-hidden border-b transition-colors",
           isDark ? "border-white/5" : "border-slate-100"
         )}>
-          <div className="min-w-[40px] flex justify-center">
+          <div className="min-w-[40px] flex justify-center" ref={logoRef}>
             <BrandLogo size="sm" />
           </div>
           {!sidebarCollapsed && (
@@ -444,7 +467,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         </div>
 
         {/* ─── FLOATING RESONANCE INDICATOR (Desktop Only) ─── */}
-        <OmniAgentPulseFloating />
+        <OmniAgentPulseFloating logoPosition={logoPosition} />
       </div>
 
       {/* Global Style Adjustments */}

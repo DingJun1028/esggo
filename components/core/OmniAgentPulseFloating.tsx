@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, X, Maximize2, Minimize2 } from 'lucide-react'; 
 import { cn } from '../../lib/utils';
@@ -9,14 +9,21 @@ import BrandStatusDot from '../brand/BrandStatusDot';
 
 type PulseSize = 'sm' | 'md' | 'lg';
 
-export default function OmniAgentPulseFloating() {
+interface OmniAgentPulseFloatingProps {
+  logoPosition: { x: number; y: number; width: number; height: number } | null;
+}
+
+export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseFloatingProps) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
 
   const [isVisible, setIsVisible] = useState(true);
   const [currentSize, setCurrentSize] = useState<PulseSize>('md');
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isMinimized, setIsMinimized] = useState(false); // New state for minimized mode
+  const [isMinimized, setIsMinimized] = useState(false);
+
+  const pulseRef = useRef<HTMLDivElement>(null);
+  const [initialPulseRect, setInitialPulseRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
     // Load state from localStorage on mount
@@ -48,6 +55,18 @@ export default function OmniAgentPulseFloating() {
   useEffect(() => {
     localStorage.setItem('omniagent_pulse_minimized', JSON.stringify(isMinimized));
   }, [isMinimized]);
+
+  // Measure initial position of the pulse component for delta calculation
+  useEffect(() => {
+    const measureInitialPulsePosition = () => {
+      if (pulseRef.current) {
+        setInitialPulseRect(pulseRef.current.getBoundingClientRect());
+      }
+    };
+    measureInitialPulsePosition(); // Measure on mount
+    window.addEventListener('resize', measureInitialPulsePosition); // Re-measure on resize
+    return () => window.removeEventListener('resize', measureInitialPulsePosition);
+  }, []);
 
   const handleDragEnd = (_: any, info: any) => {
     // Only update position if not minimized
