@@ -7,9 +7,9 @@ class OmniAgentBus {
   public async invokeSkillAction(
     skillId: string,
     actionName: string,
-    input: any, // Raw input from the agent's reasoning
+    input: Record<string, unknown>, // Raw input from the agent's reasoning
     currentContext: Partial<OmniCoreContext> // Partial context to be completed
-  ): Promise<any> {
+  ): Promise<unknown> {
     const skillDefinition = omniAgentSkillManager.getSkillById(skillId);
     if (!skillDefinition) {
       throw new Error(`Skill ${skillId} not registered.`);

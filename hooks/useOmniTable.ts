@@ -21,7 +21,7 @@ export function useOmniTable(token: string = 'valid-jwt-token') {
   const [connectionStatus, setConnectionStatus] = useState<'DISCONNECTED' | 'CONNECTING' | 'CONNECTED'>('DISCONNECTED');
 
   useEffect(() => {
-    let eventSource: EventSource | null = null;
+    const eventSource: EventSource | null = null;
     let isMounted = true;
 
     const connectSSE = () => {
