@@ -3,10 +3,15 @@ import { OmniAgentBus } from '@/lib/agents/omni-agent-bus';
 import { synthesizeSkillUltimate, MemoryShard } from '@/lib/agent/memory-shards';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const getSupabaseAdmin = () => {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('Supabase configuration missing.');
+  }
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+};
 
 export async function POST(req: Request) {
   try {
@@ -23,7 +28,7 @@ export async function POST(req: Request) {
     } else if (action === 'entropy_reduction') {
       // 熵減煉金工作流 (Entropy Alchemy Workflow)
       // 1. 抓取近期累積的 Memory Shards
-      const { data: shards, error } = await supabaseAdmin
+      const { data: shards, error } = await getSupabaseAdmin()
         .from('omni_memory_shards')
         .select('*')
         .order('timestamp', { ascending: false })

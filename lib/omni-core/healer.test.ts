@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { healingGuardian } from './healer';
-import { supabase } from '../supabase';
 
-// Mock Supabase
-vi.mock('../supabase', () => ({
-  supabase: {
+// Mock Supabase Admin
+vi.mock('../supabaseAdmin.ts', () => ({
+  supabaseAdmin: {
     rpc: vi.fn(),
     from: vi.fn().mockReturnThis(),
     select: vi.fn().mockReturnThis(),
@@ -15,6 +14,9 @@ vi.mock('../supabase', () => ({
     insert: vi.fn().mockReturnThis(),
   },
 }));
+
+import { supabaseAdmin } from '../supabaseAdmin';
+const mockSupabaseAdmin = supabaseAdmin as any;
 
 describe('HealingGuardian', () => {
   beforeEach(() => {
@@ -30,19 +32,19 @@ describe('HealingGuardian', () => {
         { id: '3', target_gri: 'GRI 401-1', action_taken: 'AUTO_LINK', status: 'success' },
       ];
 
-      (supabase!.rpc as any).mockResolvedValue({ data: { healed_count: mockHealedCount }, error: null });
-      (supabase!.from as any)().select().order().limit.mockResolvedValue({ data: mockLogs, error: null });
+      mockSupabaseAdmin.rpc.mockResolvedValue({ data: { healed_count: mockHealedCount }, error: null });
+      mockSupabaseAdmin.from().select().order().limit.mockResolvedValue({ data: mockLogs, error: null });
 
       const result = await healingGuardian.triggerGlobalHealing('test-company');
 
-      expect(supabase!.rpc).toHaveBeenCalledWith('execute_autonomous_healing', { p_company_id: 'test-company' });
+      expect(mockSupabaseAdmin.rpc).toHaveBeenCalledWith('execute_autonomous_healing', { p_company_id: 'test-company' });
       expect(result.healedCount).toBe(mockHealedCount);
       expect(result.logs).toHaveLength(mockHealedCount);
       expect(result.logs[0].target_gri).toBe('GRI 305-1');
     });
 
     it('should throw an error if the RPC fails', async () => {
-      (supabase!.rpc as any).mockResolvedValue({ data: null, error: { message: 'Database error' } });
+      mockSupabaseAdmin.rpc.mockResolvedValue({ data: null, error: { message: 'Database error' } });
 
       await expect(healingGuardian.triggerGlobalHealing()).rejects.toThrow('Database error');
     });
@@ -52,18 +54,18 @@ describe('HealingGuardian', () => {
     it('should perform a targeted heal and return true', async () => {
       const mockEvidence = { id: 'ev_123', file_name: 'test.pdf' };
       
-      (supabase!.from as any)().select().eq().single.mockResolvedValue({ data: mockEvidence, error: null });
-      (supabase!.from as any)().insert.mockResolvedValue({ error: null });
+      mockSupabaseAdmin.from().select().eq().single.mockResolvedValue({ data: mockEvidence, error: null });
+      mockSupabaseAdmin.from().insert.mockResolvedValue({ error: null });
 
       const result = await healingGuardian.targetHealing('GRI 305-1', 'ev_123', 'test-company');
 
       expect(result).toBe(true);
-      expect(supabase!.from).toHaveBeenCalledWith('environmental_data');
-      expect(supabase!.from).toHaveBeenCalledWith('healing_log');
+      expect(mockSupabaseAdmin.from).toHaveBeenCalledWith('environmental_data');
+      expect(mockSupabaseAdmin.from).toHaveBeenCalledWith('healing_log');
     });
 
     it('should return false if the evidence is not found', async () => {
-      (supabase!.from as any)().select().eq().single.mockResolvedValue({ data: null, error: { message: 'Not found' } });
+      mockSupabaseAdmin.from().select().eq().single.mockResolvedValue({ data: null, error: { message: 'Not found' } });
 
       const result = await healingGuardian.targetHealing('GRI 305-1', 'invalid_ev');
 
