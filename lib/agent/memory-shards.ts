@@ -2,11 +2,16 @@ import { z } from 'zod';
 import { getOmniAgentAI } from '../omni.config';
 import { createClient } from '@supabase/supabase-js';
 
-// 初始化 Service Role Client 以寫入資料庫
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// 延遲初始化 Service Role Client 以寫入資料庫
+const getSupabaseAdmin = () => {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('Supabase configuration missing (NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is required).');
+  }
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+};
 
 // 定義記憶碎片 Schema
 export const MemoryShardSchema = z.object({
@@ -76,7 +81,7 @@ ${conversationLog}
     };
 
     // 持久化至 Supabase
-    const { error: dbError } = await supabaseAdmin
+    const { error: dbError } = await getSupabaseAdmin()
       .from('omni_memory_shards')
       .insert({
         id: shard.id,
@@ -147,7 +152,7 @@ ${shardsContext}
     };
 
     // 持久化至 Supabase
-    const { error: dbError } = await supabaseAdmin
+    const { error: dbError } = await getSupabaseAdmin()
       .from('omni_skill_ultimates')
       .insert({
         id: ultimate.id,
@@ -172,7 +177,7 @@ ${shardsContext}
 
 // 核心機制：將記憶碎片存入資料庫
 export async function storeMemoryShard(shard: MemoryShard): Promise<void> {
-  const { error } = await supabaseAdmin
+  const { error } = await getSupabaseAdmin()
     .from('omni_memory_shards')
     .insert({
       id: shard.id,
@@ -197,7 +202,7 @@ export async function retrieveMemoryShards(options?: {
   startTime?: number;
   endTime?: number;
 }): Promise<MemoryShard[]> {
-  let query = supabaseAdmin.from('omni_memory_shards').select('*');
+  let query = getSupabaseAdmin().from('omni_memory_shards').select('*');
   
   if (options?.tags && options.tags.length > 0) {
     // 使用 Postgres 的 JSONB 包含查詢
@@ -239,7 +244,7 @@ export async function retrieveMemoryShards(options?: {
 
 // 核心機制：將技能奧義存入資料庫
 export async function storeSkillUltimate(ultimate: SkillUltimate): Promise<void> {
-  const { error } = await supabaseAdmin
+  const { error } = await getSupabaseAdmin()
     .from('omni_skill_ultimates')
     .insert({
       skill_name: ultimate.skillName,
@@ -265,7 +270,7 @@ export async function retrieveSkillUltimates(options?: {
   startTime?: number;
   endTime?: number;
 }): Promise<SkillUltimate[]> {
-  let query = supabaseAdmin.from('omni_skill_ultimates').select('*');
+  let query = getSupabaseAdmin().from('omni_skill_ultimates').select('*');
   
   if (options?.skillName) {
     query = query.ilike('skill_name', `%${options.skillName}%`);
