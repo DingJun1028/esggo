@@ -110,6 +110,5 @@ OmniAgent: Received query - "${userQuery}"`);
 
   await simulateOmniAgentTask("What is the weather today?"); // No matching skill
 
-  console.log("
---- OmniAgent Simulation Finished ---");
+  console.log("--- OmniAgent Simulation Finished ---");
 })();
