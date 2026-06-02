@@ -6,6 +6,7 @@
 import { supabase } from '../lib/supabase';
 import { THINK_TANK_REGISTRY, getThinkTankRegistrations, type ThinkTankRegistration } from '@/lib/agent/best-practice-registry';
 import { getOmniBlueTablePractices } from '@/lib/agent/best-practice-registry';
+import { aiTableBlueBridge } from '@/lib/services/omni-table-blue-bridge';
 
 export class OmniBlueTableService {
 
@@ -88,7 +89,6 @@ export class OmniBlueTableService {
    * 觸發 OmniBlue × OmniTable 同步 (委派給 OmniTableBlueBridge)
    */
   triggerSyncMission(datasheetId: string) {
-    const { aiTableBlueBridge } = require('@/lib/services/omni-table-blue-bridge');
     return aiTableBlueBridge.syncMetricsToCloud(datasheetId);
   }
 }
