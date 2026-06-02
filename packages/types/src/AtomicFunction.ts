@@ -32,6 +32,13 @@ export interface OmniComponentHeart {
     trustTrustworthy: boolean;
     transferfulTrackable: boolean;
   };
+  
+  // 零知識證明 (Zero-Knowledge Proof) 封印矩陣
+  zkpSeal?: {
+    commitment: string;      // 佩德森承諾 (Pedersen Commitment) 值: C = (g^m) * (h^r)
+    blindingFactor?: string; // 盲化因子 (Blinding Factor)，僅在需要開啟驗證時提供
+    sealedAt: number;        // 封印的時間戳記
+  };
 }
 
 export interface AtomicFunctionInput<TContext extends OmniCoreContext = OmniCoreContext> {
@@ -100,5 +107,10 @@ export const OmniComponentHeartSchema = z.object({
     beautyTangible: z.boolean(),
     trustTrustworthy: z.boolean(),
     transferfulTrackable: z.boolean()
+  }).optional(),
+  zkpSeal: z.object({
+    commitment: z.string(),
+    blindingFactor: z.string().optional(),
+    sealedAt: z.number()
   }).optional()
 });
