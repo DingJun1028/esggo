@@ -7,7 +7,7 @@
 
     class OmniAgentSkillManager {
       private skills: Map<string, SkillDefinition>;
-      private skillModules: Map<string, Record<string, (...args: any[]) => unknown>>; // Cache for loaded skill modules
+      private skillModules: Map<string, Record<string, (...args: unknown[]) => unknown>>; // Cache for loaded skill modules
 
       constructor() {
         this.skills = new Map();
@@ -49,7 +49,7 @@
         );
       }
 
-      public async loadSkillModule(skillId: string): Promise<Record<string, (...args: any[]) => unknown>> {
+      public async loadSkillModule(skillId: string): Promise<Record<string, (...args: unknown[]) => unknown>> {
         if (this.skillModules.has(skillId)) {
           return this.skillModules.get(skillId);
         }
@@ -62,7 +62,7 @@
         // Dynamically import the skill module
         // This assumes skills are local Node.js modules
         const modulePath = path.join(process.cwd(), skill.entryPoint);
-        const skillModule = (await import(modulePath)) as Record<string, (...args: any[]) => unknown>;
+        const skillModule = (await import(modulePath)) as Record<string, (...args: unknown[]) => unknown>;
         this.skillModules.set(skillId, skillModule);
         return skillModule;
       }
