@@ -10,8 +10,8 @@ const SUPABASE_URL = process.env.EXT_PUBLIC_SUPABASE_URL || 'https://yhwfmavnhai
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // 模擬內存狀態（Fallback 沙盒）
-let mockShards: MemoryShard[] = [];
-let mockUltimates: SkillUltimate[] = [];
+const mockShards: MemoryShard[] = [];
+const mockUltimates: SkillUltimate[] = [];
 
 /**
  * 內部函數：透過 REST 寫入 Supabase (或降級至內存沙盒)
