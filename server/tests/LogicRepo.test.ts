@@ -1,6 +1,28 @@
+import { describe, it, expect, beforeEach, afterEach, vi, test } from 'vitest';
 import { LogicRepo } from '../src/storage/LogicRepo';
 import Database from 'better-sqlite3';
 import { join } from 'path';
+
+// Mock better-sqlite3 completely to avoid native dependency issues
+vi.mock('better-sqlite3', () => {
+  const DatabaseMock = function() {
+    const store: Record<string, any> = {};
+    return {
+      exec: vi.fn(),
+      prepare: vi.fn().mockImplementation((query: string) => {
+        return {
+          run: vi.fn().mockImplementation((name, config, score) => {
+            store[name] = { name, config, compliance_score: score };
+          }),
+          get: vi.fn().mockImplementation((name) => store[name]),
+          all: vi.fn().mockImplementation(() => Object.values(store))
+        };
+      }),
+      close: vi.fn(),
+    };
+  };
+  return { default: DatabaseMock, __esModule: true };
+});
 
 describe('LogicRepo', () => {
   let db: unknown;
