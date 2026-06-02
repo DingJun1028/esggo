@@ -32,14 +32,11 @@ jobs:
 
       - name: ADR Requirement Check
         id: adr_check
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
           ADR_CHANGED=false
-          PR_BODY=$(cat << 'EOF_PR_BODY'
-${{ github.event.pull_request.body }}
-EOF_PR_BODY
-)
-          PR_TITLE="${{ github.event.pull_request.title }}"
-
           # Check if any .md file in the adr/ directory was added/modified
           if git diff --name-only origin/${{ github.base_ref }} HEAD | grep -q "adr/adr-.*.md"; then
             ADR_CHANGED=true
@@ -56,7 +53,7 @@ EOF_PR_BODY
         shell: bash
 
       - name: Fail if no ADR changes and no ADR reference in PR
-        if: ${{ github.event_name == 'pull_request' && steps.adr_check.outputs.ADR_CHANGED == 'false' && steps.adr_check.outputs.PR_REFERENCES_ADR == 'false' }}
+        if: github.event_name == 'pull_request' && steps.adr_check.outputs.ADR_CHANGED == 'false' && steps.adr_check.outputs.PR_REFERENCES_ADR == 'false'
         run: |
           echo "::error::Pull Request must either modify an ADR file or reference an ADR (e.g., 'ADR-XXX') in its title or description."
           exit 1

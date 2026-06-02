@@ -32,7 +32,7 @@ export interface OmniComponentHeart {
     trustTrustworthy: boolean;
     transferfulTrackable: boolean;
   };
-  
+
   // 零知識證明 (Zero-Knowledge Proof) 封印矩陣
   zkpSeal?: {
     commitment: string;      // 佩德森承諾 (Pedersen Commitment) 值: C = (g^m) * (h^r)
@@ -53,7 +53,7 @@ export interface AtomicFunctionResult<TData = unknown, TError = Error> {
   error?: TError;
   metadata?: {
     executionTime: number;
-    version: string;
+    locaversion: string;
   };
 }
 

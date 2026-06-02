@@ -78,10 +78,10 @@ interface TableRowData {
 
   const tableData = auditData?.auditRecords && auditData.auditRecords.length > 0 
     ? auditData.auditRecords.map(record => ({
-        nodeId: record.source,
-        action: record.title,
-        category: record.dataType,
-        status: record.zkpStatus
+        nodeId: record.source || '',
+        action: record.title || '',
+        category: record.dataType || '',
+        status: (record.zkpStatus as any) || 'Auditing'
       }))
     : [
         { nodeId: 'GOV_NODE_001', action: '溫室氣體範疇一直接排放量盤查', category: 'Environment', status: 'Verified' },

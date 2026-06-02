@@ -206,6 +206,7 @@ export default function OmniCommandPalette() {
                 </div>
               </div>
             </div>
+            </div>
           </motion.div>
         </>
       )}
