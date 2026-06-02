@@ -27,5 +27,5 @@ export interface OmniCoreContext {
     permissions: string[];
     environment: "development" | "staging" | "production" | "test";
     // Add other relevant context information as needed by the OmniAgent system
-    [key: string]: any; // Allow for arbitrary additional context
+    [key: string]: unknown; // Allow for arbitrary additional context
 }

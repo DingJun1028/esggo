@@ -1,13 +1,13 @@
 // In a new file, e.g., src/services/OmniAgentSkillManager.ts
 
     import * as fs from 'fs';
-    import * as path from 'path';
+    import * * as path from 'path';
     import { validateSkillDefinition } from './skillValidation';
     import { OmniAgentSkillRegistry, SkillDefinition, ActionDefinition } from '../types/omniagent';
 
     class OmniAgentSkillManager {
       private skills: Map<string, SkillDefinition>;
-      private skillModules: Map<string, Record<string, Function>>; // Cache for loaded skill modules
+      private skillModules: Map<string, Record<string, (...args: any[]) => unknown>>; // Cache for loaded skill modules
 
       constructor() {
         this.skills = new Map();
@@ -49,7 +49,7 @@
         );
       }
 
-      public async loadSkillModule(skillId: string): Promise<Record<string, Function>> {
+      public async loadSkillModule(skillId: string): Promise<Record<string, (...args: any[]) => unknown>> {
         if (this.skillModules.has(skillId)) {
           return this.skillModules.get(skillId);
         }
@@ -62,10 +62,7 @@
         // Dynamically import the skill module
         // This assumes skills are local Node.js modules
         const modulePath = path.join(process.cwd(), skill.entryPoint);
-        // Using 'as any' temporarily for the dynamic import because TypeScript's
-        // static analysis struggles with dynamic imports for unknown module shapes.
-        // The return type 'Record<string, Function>' enforces type safety post-import.
-        const skillModule = (await import(modulePath)) as Record<string, Function>;
+        const skillModule = (await import(modulePath)) as Record<string, (...args: any[]) => unknown>;
         this.skillModules.set(skillId, skillModule);
         return skillModule;
       }
