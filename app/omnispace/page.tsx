@@ -324,30 +324,37 @@ export default function OmniSpacePage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                OMNI RESTORATION (萬能修復)
+                OMNI RESTORATION (四大聖柱與記憶聖所)
               </h3>
               
               <div className="space-y-3">
                 <button 
-                  onClick={() => handleRestoration('Chain Validation (鏈式校驗)', 'SEAL', '0xCV01')}
+                  onClick={() => handleRestoration('Truth Validation (真理聖柱)', 'SEAL', '0xTRUTH01')}
                   className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-emerald-500/20 hover:border-emerald-500/60 hover:bg-emerald-950/30 transition-all group flex justify-between items-center"
                 >
-                  <span>1. Chain Validation (鏈式校驗)</span>
-                  <span className="opacity-0 group-hover:opacity-100 text-emerald-400 transition-opacity">EXECUTE</span>
+                  <span>I. Pillar of Truth (真理聖柱：鏈式校驗)</span>
+                  <span className="opacity-0 group-hover:opacity-100 text-emerald-400 transition-opacity">AWAKEN</span>
                 </button>
                 <button 
-                  onClick={() => handleRestoration('Ghost Recomposition (殘影重組)', 'MEMORY', '0xGR02')}
+                  onClick={() => window.location.href = '/dashboard/audit'}
                   className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-purple-500/20 hover:border-purple-500/60 hover:bg-purple-950/30 transition-all group flex justify-between items-center"
                 >
-                  <span>2. Ghost Recomposition (殘影重組)</span>
-                  <span className="opacity-0 group-hover:opacity-100 text-purple-400 transition-opacity">EXECUTE</span>
+                  <span>II. Sanctuary of Memory (記憶聖所：永恆審計)</span>
+                  <span className="opacity-0 group-hover:opacity-100 text-purple-400 transition-opacity">ENTER</span>
                 </button>
                 <button 
-                  onClick={() => handleRestoration('Semantic Alignment (語義修正)', 'COMPUTE', '0xSA03')}
+                  onClick={() => handleRestoration('Semantic Alignment (語義聖柱)', 'COMPUTE', '0xSEMANTIC03')}
                   className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-cyan-500/20 hover:border-cyan-500/60 hover:bg-cyan-950/30 transition-all group flex justify-between items-center"
                 >
-                  <span>3. Semantic Alignment (語義修正)</span>
-                  <span className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-opacity">EXECUTE</span>
+                  <span>III. Pillar of Semantics (語義聖柱：邏輯對齊)</span>
+                  <span className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-opacity">AWAKEN</span>
+                </button>
+                <button 
+                  onClick={() => handleRestoration('Aegis Enforcement (守護聖柱)', 'SEAL', '0xAEGIS04')}
+                  className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-amber-500/20 hover:border-amber-500/60 hover:bg-amber-950/30 transition-all group flex justify-between items-center"
+                >
+                  <span>IV. Pillar of Aegis (守護聖柱：5T 防禦協議)</span>
+                  <span className="opacity-0 group-hover:opacity-100 text-amber-400 transition-opacity">AWAKEN</span>
                 </button>
               </div>
             </div>

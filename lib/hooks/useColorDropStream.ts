@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 // =========================================================================
 // 1. 萬能元件心核 (IComponentCore) 前端對應
@@ -176,14 +176,12 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
     };
   }, [events]);
 
-  const coreValue = coreRef.current; // Capture ref's value outside the return object creation
-
   return {
     events,
     isLive,
     metrics,
     getVisualState,
     triggerForensicReplay,
-    core: coreValue
+    core
   };
 }
