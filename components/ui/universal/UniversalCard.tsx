@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '../../../lib/utils';
 
-export interface UniversalCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface UniversalCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   variant?: 'default' | 'glass' | 'outline' | 'glow' | 'bordered';
   title?: React.ReactNode;
