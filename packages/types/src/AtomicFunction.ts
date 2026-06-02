@@ -29,18 +29,20 @@ export type AtomicFunction<
   TError = Error
 > = (input: TInput) => Promise<AtomicFunctionResult<TOutput, TError>>;
 
-export const AtomicFunctionSchema = z.function()
-  .args(z.object({
-    context: z.object({
-      requestId: z.string(),
-      timestamp: z.number(),
-      actor: z.string(),
-      environment: z.enum(['development', 'staging', 'production']),
-      traceId: z.string().optional()
-    }),
-    payload: z.unknown()
-  }))
-  .returns(z.object({
+export const AtomicFunctionSchema = z.function(
+  z.tuple([
+    z.object({
+      context: z.object({
+        requestId: z.string(),
+        timestamp: z.number(),
+        actor: z.string(),
+        environment: z.enum(['development', 'staging', 'production']),
+        traceId: z.string().optional()
+      }),
+      payload: z.unknown()
+    })
+  ])
+).returns(z.object({
     success: z.boolean(),
     data: z.unknown().optional(),
     error: z.instanceof(Error).optional(),
