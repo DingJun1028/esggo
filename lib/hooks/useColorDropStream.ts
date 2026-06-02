@@ -17,7 +17,7 @@ export interface AuditRecord {
   payload: {
     zkp_hash: string;
     nodes_involved: string[];
-    metrics: Record<string, any>;
+    metrics: Record<string, unknown>;
   };
   source_origin: string;
   timestamp: number;
@@ -42,12 +42,12 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
-  const coreRef = useRef<IComponentCore>({
+  const core = useRef<IComponentCore>({
     uuid: "ee4af378-b9d7-412d-91d2-d50b98fa0715",
     version: "2.6.0-stable.5T",
     timestamp: 1772421600000,
     evidence: "FRONTEND_SSE_HYDRATION_ACTIVE"
-  });
+  }).current;
 
   // 3. 實時將後端事件類型映射為液態玻璃設計語彙 (Tangible 視覺共鳴)
   const getVisualState = useCallback((eventType: string): VisualDropState => {
