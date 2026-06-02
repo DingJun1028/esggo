@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { healingGuardian } from './healer';
-import { supabase } from '../supabase';
+import { supabaseAdmin as supabase } from '../supabaseAdmin';
 
 // Mock Supabase
-vi.mock('../supabase', () => ({
-  supabase: {
+vi.mock('../supabaseAdmin', () => ({
+  supabaseAdmin: {
     rpc: vi.fn(),
     from: vi.fn().mockReturnThis(),
     select: vi.fn().mockReturnThis(),
