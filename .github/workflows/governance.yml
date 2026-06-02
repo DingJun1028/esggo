@@ -20,8 +20,13 @@ jobs:
         with:
           node-version: '20' # Specify Node.js version consistent with project
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - name: Install Dependencies (root)
-        run: npm install # Assumes root package.json for installing dependencies
+        run: pnpm install # Assumes root package.json for installing dependencies
 
       - name: ADR Requirement Check
         id: adr_check
@@ -53,19 +58,19 @@ jobs:
 
       - name: Install Dependencies (packages/types)
         # Assumes npm workspaces or installs inside the package
-        run: npm install --prefix packages/types
+        run: pnpm install --prefix packages/types
 
       - name: Build Shared Types
-        run: npm run build --prefix packages/types
+        run: pnpm run build --prefix packages/types
 
       - name: Run Contract Tests
-        run: npm test -- tests/contract/esg-report.test.ts
+        run: pnpm test -- tests/contract/esg-report.test.ts
 
       - name: Run Root Build
-        run: npm run build
+        run: pnpm run build
 
       - name: Run Root Lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Run Root Tests
-        run: npm run test
+        run: pnpm run test
