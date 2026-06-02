@@ -300,6 +300,13 @@ export default function BestPracticeHubPage() {
     ]
   };
 
+  
+  const p = {
+    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    title: 'Best Practice',
+    sub: 'Best Practice Management'
+  };
+
   return (
     <div className="relative">
       <StandardPage config={pageConfig} />

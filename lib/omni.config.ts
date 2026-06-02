@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-let _omniagentAI: unknown = null;
-export async function getOmniAgentAI() {
+let _omniagentAI: any = null;
+export async function getOmniAgentAI(): Promise<any> {
   if (!_omniagentAI) {
     const { genkit } = await import('genkit');
     const { googleAI } = await import('@genkit-ai/googleai');
