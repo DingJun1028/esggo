@@ -31,3 +31,9 @@ vi.mock('docx', () => ({
 vi.mock('../lib/supabase', () => ({
   supabase: { channel: vi.fn() },
 }));
+
+// Mock better-sqlite3
+vi.mock('better-sqlite3');
+
+// Mock LogicRepo to prevent better-sqlite3 resolution issues
+vi.mock('../esggo/server/src/storage/LogicRepo');

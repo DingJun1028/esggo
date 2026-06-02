@@ -41,14 +41,16 @@ export const AtomicFunctionSchema = z.function(
       }),
       payload: z.unknown()
     })
-  ]),
-  z.object({
-    success: z.boolean(),
-    data: z.unknown().optional(),
-    error: z.instanceof(Error).optional(),
-    metadata: z.object({
-      executionTime: z.number(),
-      version: z.string()
-    }).optional()
-  })
-);
+  ])
+)
+  .returns(
+    z.object({
+      success: z.boolean(),
+      data: z.unknown().optional(),
+      error: z.instanceof(Error).optional(),
+      metadata: z.object({
+        executionTime: z.number(),
+        version: z.string()
+      }).optional()
+    })
+  );
