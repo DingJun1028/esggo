@@ -30,7 +30,7 @@ export async function fetchOmniAgentStatus() {
     const res = await fetch(`${BASE_URL}/status`, { signal: AbortSignal.timeout(2000) });
     if (!res.ok) throw new Error('Gateway offline');
     return await res.json();
-  } catch (e) {
+  } catch (e: unknown) {
     console.warn('OmniAgent Gateway unreachable, falling back to mock status.');
     return {
       status: 'online',
@@ -54,7 +54,7 @@ export async function executeOmniAgentTask(task: AgentTask): Promise<{ execution
 
     if (!res.ok) throw new Error(`Gateway returned ${res.status}`);
     return await res.json();
-  } catch (e) {
+  } catch (e: unknown) {
     console.warn(`OmniAgent live execution failed for task ${task.id}:`, e);
     throw new Error('OMNIAGENT_GATEWAY_UNREACHABLE');
   }
@@ -89,7 +89,7 @@ export async function scanEvidenceWithVision(fileId: string, fileType: string): 
     // Handle potential formatting issues in LLM output
     const text = response.text().replace(/```json|```/g, '').trim();
     return JSON.parse(text) as OmniAgentVisionResult;
-  } catch (e) {
+  } catch (e: unknown) {
     console.warn('[OmniAgent Vision] AI call failed, using high-fidelity fallback.', e);
     return {
       extraction: `[AI 備援輸出] 從 ID 為 ${fileId} 的憑證中識別出 2024 年度的能源消耗數據。`,
@@ -115,7 +115,7 @@ export async function extractMetricsFromEvidence(fileId: string): Promise<OmniAg
 
     const text = response.text().replace(/```json|```/g, '').trim();
     return JSON.parse(text) as OmniAgentMetricExtraction;
-  } catch (e) {
+  } catch (e: unknown) {
     console.warn('[OmniAgent Alchemy] AI call failed, using high-fidelity fallback.', e);
     return {
       metrics: [

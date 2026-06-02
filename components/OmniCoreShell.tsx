@@ -9,12 +9,13 @@ import {
   GraduationCap, Bot, ChevronLeft, ChevronRight, Zap, Globe,
   BarChart2, CheckCircle2, Lock, Bell, Menu, X, Fingerprint,
   Database, Layers, ScrollText, FileBarChart, HeartHandshake,
-  Cpu, Gauge, ClipboardCheck, Wallet, Radio, Link2, Network,
-  Shield,
+  Cpu, Gauge, ClipboardCheck, Wallet, Radio, Link2, Network, Shield
 } from 'lucide-react';
 import ThemeSelector from './ThemeSelector';
 import OmniAgentFloatingAgent from './brand/OmniAgentFloating';
+import OmniCommandPalette from './omni/OmniCommandPalette';
 import { THEMES, type ThemeId, applyTheme, getSavedTheme } from '../lib/theme-config';
+import OmniSearchBar from './omni/OmniSearchBar';
 
 interface NavItem {
   href: string;
@@ -208,26 +209,7 @@ function SidebarNav({
         {/* Search */}
         {(!collapsed || mobileOpen) && (
           <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--sidebar-border)' }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              background: 'var(--glass-frosted)',
-              borderRadius: 7, padding: '6px 10px',
-              border: '1px solid var(--sidebar-border)',
-            }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2.5">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input
-                type="text"
-                placeholder="搜尋功能..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                style={{
-                  background: 'transparent', border: 'none', outline: 'none',
-                  fontSize: 11, color: 'var(--text-primary)', width: '100%', fontFamily: 'inherit',
-                }}
-              />
-            </div>
+            <OmniSearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
         )}
 
@@ -512,6 +494,10 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
         </div>
       </main>
 
+      {/* 萬能指揮面板 (全域快捷鍵 Ctrl+K) */}
+      <OmniCommandPalette />
+
+      {/* 懸浮 Agent */}
       <OmniAgentFloatingAgent />
 
       <style>{`
