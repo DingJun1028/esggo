@@ -15,3 +15,7 @@
 **Vulnerability:** GitHub action workflows (`.github/workflows/ci.yml` and `.github/workflows/governance.yml`) were executing `npm` commands, violating the strict requirement to use `pnpm` as the sole package manager for the repository. This caused CI failures and inconsistency between environments.
 **Learning:** Mixing package managers (like relying on `npm ci` or `npm install` when the lockfile is `pnpm-lock.yaml`) leads to unreliable CI, build failures, missing dependencies, or downgraded packages.
 **Prevention:** CI workflows must be explicitly configured with `pnpm/action-setup` to ensure the correct package manager and version are used across all pipeline stages. All script execution must use `pnpm`.
+## 2024-05-18 - [Fix GitHub Actions git diff missing base ref]
+**Vulnerability:** The governance check action relied on `git diff` to identify if an ADR was added, but the default checkout (`actions/checkout@v4`) only fetches a shallow clone with `fetch-depth: 1`. This caused the git command to exit with `128` because the base commit was unavailable. Furthermore, the `github.event.before` ref was used, which is frequently broken or unavailable in pull request contexts.
+**Learning:** For git history operations in GitHub Actions (like checking for added files using `git diff`), a full clone or fetching the target branch is required.
+**Prevention:** Explicitly use `fetch-depth: 0` in `actions/checkout` when performing history comparison, and use `origin/${{ github.base_ref }}` rather than `github.event.before` to ensure reliability.
