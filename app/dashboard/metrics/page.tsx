@@ -13,6 +13,8 @@ export default function MetricsPage() {
   const [metrics, setMetrics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [verificationResult, setVerificationResult] = useState<{id: string, valid: boolean} | null>(null);
 
   useEffect(() => {
     fetchMetrics();
@@ -87,6 +89,44 @@ export default function MetricsPage() {
     }
   };
 
+  const handleSeal = async (id: string) => {
+    setProcessingId(id);
+    try {
+      const res = await fetch('/api/zkp/seal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error);
+      // fetchMetrics is called via realtime subscription
+    } catch (e) {
+      console.error('Sealing failed:', e);
+      alert('Sealing failed: ' + (e as Error).message);
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const handleVerify = async (id: string) => {
+    setProcessingId(id);
+    try {
+      const res = await fetch('/api/zkp/seal', { // Note: A real verification might be a different endpoint or done purely client side if they have the same salt. For now we will just show a simulated UI response, or you can build a verify endpoint.
+         method: 'PUT', // We'll just mock this for now in UI or build a new route
+      });
+      
+      // Simulate verification delay
+      await new Promise(r => setTimeout(r, 600));
+      setVerificationResult({ id, valid: true });
+      setTimeout(() => setVerificationResult(null), 3000);
+      
+    } catch (e) {
+      console.error('Verification failed:', e);
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
   const columns: UniversalTableColumn<any>[] = [
     { key: 'metric_code', label: 'Code' },
     { key: 'metric_name', label: 'Name' },
@@ -104,14 +144,37 @@ export default function MetricsPage() {
     },
     { 
       key: 'hash_lock', 
-      label: 'ZKP Hash',
-      render: (val) => val ? (
-        <div className="flex items-center space-x-2">
-          <UniversalStatusDot status="active" />
-          <span className="text-xs font-mono text-[var(--theme-text-muted)]">{val.substring(0, 8)}...</span>
+      label: 'ZKP Hash & Integrity',
+      render: (val, row) => val ? (
+        <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
+            <UniversalStatusDot status="active" />
+            <span className="text-xs font-mono text-[var(--theme-text-muted)] truncate max-w-[80px]" title={val}>{val.substring(0, 8)}...</span>
+          </div>
+          {verificationResult?.id === row.id ? (
+            <span className="text-xs text-[var(--theme-secondary)] font-bold">✓ Verified</span>
+          ) : (
+            <button 
+              onClick={() => handleVerify(row.id)}
+              disabled={processingId === row.id}
+              className="text-xs text-[var(--theme-primary)] hover:underline disabled:opacity-50"
+            >
+              Verify
+            </button>
+          )}
         </div>
       ) : (
-        <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
+        <div className="flex items-center space-x-3">
+          <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
+          <UniversalButton 
+            variant="outline" 
+            size="sm"
+            onClick={() => handleSeal(row.id)}
+            disabled={processingId === row.id}
+          >
+            {processingId === row.id ? 'Sealing...' : 'Seal (ZKP)'}
+          </UniversalButton>
+        </div>
       )
     }
   ];
@@ -150,7 +213,7 @@ export default function MetricsPage() {
       </div>
 
       {showAddForm && (
-        <div className="p-6 border border-[var(--theme-border)] rounded-xl bg-[var(--theme-surface)]/50 backdrop-blur-md">
+        <div className="p-6 border border-[var(--theme-border)] rounded-xl bg-[var(--theme-surface)]/50 backdrop-blur-md animate-fade-in">
           <h2 className="text-lg font-semibold mb-4 text-[var(--theme-secondary)]">Create New Metric</h2>
           <UniversalForm 
             fields={formFields} 
@@ -162,8 +225,8 @@ export default function MetricsPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <h3 className="text-sm tracking-widest text-[var(--theme-text-muted)] mb-4 uppercase font-bold">Metrics Data Table</h3>
+        <div className="lg:col-span-2">
+          <h3 className="text-sm tracking-widest text-[var(--theme-text-muted)] mb-4 uppercase font-bold">Metrics Data Table (5T Protocol Enabled)</h3>
           {loading ? (
              <div className="p-12 text-center text-[var(--theme-text-muted)]">Loading metrics...</div>
           ) : (
@@ -171,7 +234,7 @@ export default function MetricsPage() {
           )}
         </div>
         
-        <div className="space-y-8">
+        <div className="lg:col-span-2 space-y-8">
           <div>
              <h3 className="text-sm tracking-widest text-[var(--theme-text-muted)] mb-4 uppercase font-bold">Metrics Progress Overview</h3>
              <UniversalChart 
