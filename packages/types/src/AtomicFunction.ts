@@ -8,9 +8,22 @@ export interface OmniCoreContext {
   traceId?: string;
 }
 
+/**
+ * 萬能元件心核 (Omni-Component Heart)
+ * 所有以「萬能(Omni)」為首的模組/元件，皆共享此核心狀態，確保全系統維度一致、語義共鳴。
+ * 這裡，即是「永恆宮殿 (Eternal Palace)」所在的根基位置。
+ */
+export interface OmniComponentHeart {
+  omniSignature: string;          // 證明其為萬能體系的原生防偽簽章 (ZKP Hash)
+  resonanceState: number;         // 0.0 - 1.0 的共鳴指數
+  omniClass: 'OmniMemory' | 'OmniRune' | 'OmniAgent' | 'OmniTag' | 'OmniLibrary' | 'OmniGeneral';
+  coreContext: OmniCoreContext;
+}
+
 export interface AtomicFunctionInput<TContext extends OmniCoreContext = OmniCoreContext> {
   context: TContext;
   payload: unknown;
+  omniHeart?: OmniComponentHeart; // 可選的萬能心核掛載
 }
 
 export interface AtomicFunctionResult<TData = unknown, TError = Error> {
@@ -54,3 +67,17 @@ export const AtomicFunctionSchema = z.function(
       }).optional()
     })
   );
+
+// Zod Schema 驗證：萬能元件心核
+export const OmniComponentHeartSchema = z.object({
+  omniSignature: z.string().regex(/^0x[a-fA-F0-9]+$/, "Must be a valid hex signature"),
+  resonanceState: z.number().min(0).max(1),
+  omniClass: z.enum(['OmniMemory', 'OmniRune', 'OmniAgent', 'OmniTag', 'OmniLibrary', 'OmniGeneral']),
+  coreContext: z.object({
+    requestId: z.string(),
+    timestamp: z.number(),
+    actor: z.string(),
+    environment: z.enum(['development', 'staging', 'production']),
+    traceId: z.string().optional()
+  })
+});
