@@ -16,7 +16,7 @@ import {
 import type { ZKPRangeProof } from './crypto-proof.ts';
 import { policyEngine } from './policy-engine.ts';
 import type { PolicyValidationResult } from './policy-engine.ts';
-import { dcUpsertEternalMemory, dcListEternalMemories } from './dataconnect-services.ts';
+import { dcInsertEternalMemory, dcListEternalMemories } from './dataconnect-services.ts';
 
 // ============================================================
 // 萬能心核引擎 - 5T Logic Gate Implementation (Persistent)
@@ -183,7 +183,7 @@ export class OmniCore {
      };
 
      // Persist to Data Connect
-     await dcUpsertEternalMemory({
+     await dcInsertEternalMemory({
        id: memory.id,
        type: memory.type,
        content: memory.content,
@@ -296,7 +296,7 @@ export class OmniCore {
     };
 
     // Store consolidated record
-    await dcUpsertEternalMemory({
+    await dcInsertEternalMemory({
       ...consolidated,
       hashLock,
       companyId: 'default'
@@ -305,7 +305,7 @@ export class OmniCore {
     // Update original memories to mark them as consolidated
     for (const mem of toConsolidate) {
       mem.consolidated = true;
-      await dcUpsertEternalMemory({
+      await dcInsertEternalMemory({
         ...mem,
         hashLock: mem.hash_lock,
         companyId: 'default'
