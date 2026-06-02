@@ -7,24 +7,53 @@ import { UniversalForm, FormField } from '../../../components/ui/universal/Unive
 import { UniversalChart } from '../../../components/ui/universal/UniversalChart';
 import { UniversalStatusDot } from '../../../components/ui/universal/UniversalStatusDot';
 import { UniversalBadge } from '../../../components/ui/universal/UniversalBadge';
+import { supabase } from '@/lib/db/supabase';
 
 export default function MetricsPage() {
-  const [metrics, setMetrics] = useState<unknown[]>([]);
+  const [metrics, setMetrics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
     fetchMetrics();
+    
+    // Realtime subscription
+    const channel = supabase
+      .channel('schema-db-changes-metrics')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'esg_records' }, payload => {
+        fetchMetrics();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchMetrics = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/data/list/esg_metrics');
-      if (res.ok) {
-        const data = await res.json();
-        setMetrics(data || []);
-      }
+      const { data, error } = await supabase
+        .from('esg_records')
+        .select('*')
+        .order('timestamp', { ascending: false });
+        
+      if (error) throw error;
+      
+      const formattedData = (data || []).map(record => ({
+        id: record.id,
+        category: record.category === 'E' ? 'ENVIRONMENTAL' : record.category === 'S' ? 'SOCIAL' : record.category === 'G' ? 'GOVERNANCE' : record.category,
+        metric_code: (record.metric_value as any)?.metric_code || 'N/A',
+        metric_name: (record.metric_value as any)?.metric_name || 'N/A',
+        value: (record.metric_value as any)?.value || 0,
+        target_value: (record.metric_value as any)?.target_value || 0,
+        unit: (record.metric_value as any)?.unit || '',
+        lifecycle_stage: (record.metric_value as any)?.lifecycle_stage || 'DRAFT',
+        hash_lock: record.zkp_hash,
+        reporting_year: (record.metric_value as any)?.reporting_year,
+        scope: (record.metric_value as any)?.scope
+      }));
+      setMetrics(formattedData);
     } catch (e) {
       console.error(e);
     }
@@ -33,23 +62,26 @@ export default function MetricsPage() {
 
   const handleAddMetric = async (data: any) => {
     try {
-      // Basic transformations
-      const payload = {
-        ...data,
+      const { category, ...rest } = data;
+      const mappedCategory = category === 'ENVIRONMENTAL' ? 'E' : category === 'SOCIAL' ? 'S' : category === 'GOVERNANCE' ? 'G' : category;
+      
+      const metric_value = {
+        ...rest,
         value: Number(data.value),
         target_value: Number(data.target_value),
         reporting_year: Number(data.reporting_year)
       };
       
-      const res = await fetch('/api/data/create/esg_metrics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        setShowAddForm(false);
-        fetchMetrics();
-      }
+      const { error } = await supabase.from('esg_records').insert([
+        { 
+          category: mappedCategory, 
+          metric_value 
+        }
+      ]);
+      
+      if (error) throw error;
+      
+      setShowAddForm(false);
     } catch (e) {
       console.error(e);
     }
@@ -159,3 +191,4 @@ export default function MetricsPage() {
     </div>
   );
 }
+

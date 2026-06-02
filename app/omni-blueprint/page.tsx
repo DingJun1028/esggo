@@ -150,11 +150,11 @@ const BLUEPRINT_DATA: BlueprintSection[] = [
     id: 'audit-conclusion',
     title: '12. 技術完整性',
     icon: <ShieldCheck size={18} />,
-    status: 'Planned',
-    description: '系統安全性掃描、5T 協議防篡改測試報告與 RLS 滲透測試結論。',
+    status: 'Completed',
+    description: '系統安全性掃描、5T 協議防篡改測試報告與 RLS 滲透測試結論 (見 /omni-audit)。',
     tasks: [
-      { name: 'ZKP Vulnerability Scan', completed: false },
-      { name: 'Penetration Testing', completed: false },
+      { name: 'ZKP Vulnerability Scan', completed: true },
+      { name: 'Penetration Testing', completed: true },
     ]
   }
 ];
