@@ -1,0 +1,71 @@
+name: Project Governance Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  adr-and-contract-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify Node.js version consistent with project
+
+      - name: Install Dependencies (root)
+        run: npm install # Assumes root package.json for installing dependencies
+
+      - name: ADR Requirement Check
+        id: adr_check
+        run: |
+          ADR_CHANGED=false
+          PR_BODY="${{ github.event.pull_request.body }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          # Check if any .md file in the adr/ directory was added/modified
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "adr/adr-.*\.md"; then
+            ADR_CHANGED=true
+          fi
+
+          # Check if PR body or title mentions an ADR
+          if echo "$PR_BODY" | grep -iqE "ADR-[0-9]+" || echo "$PR_TITLE" | grep -iqE "ADR-[0-9]+"; then
+            echo "PR_REFERENCES_ADR=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "PR_REFERENCES_ADR=false" >> "$GITHUB_OUTPUT"
+          fi
+          
+          echo "ADR_CHANGED=$ADR_CHANGED" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Fail if no ADR changes and no ADR reference in PR
+        if: ${{ github.event_name == 'pull_request' && steps.adr_check.outputs.ADR_CHANGED == 'false' && steps.adr_check.outputs.PR_REFERENCES_ADR == 'false' }}
+        run: |
+          echo "::error::Pull Request must either modify an ADR file or reference an ADR (e.g., 'ADR-XXX') in its title or description."
+          exit 1
+
+      - name: Install Dependencies (packages/types)
+        # Assumes npm workspaces or installs inside the package
+        run: npm install --prefix packages/types
+
+      - name: Build Shared Types
+        run: npm run build --prefix packages/types
+
+      - name: Run Contract Tests
+        run: npm test -- tests/contract/esg-report.test.ts
+
+      - name: Run Root Build
+        run: npm run build
+
+      - name: Run Root Lint
+        run: npm run lint
+
+      - name: Run Root Tests
+        run: npm run test
