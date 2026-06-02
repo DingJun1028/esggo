@@ -59,7 +59,7 @@ const SUPABASE_URL = process.env.EXT_PUBLIC_SUPABASE_URL || 'https://yhwfmavnhai
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // 模擬多租戶 Postgres 資料庫內存 AuditRecord 表狀態（作為本地沙盒 Fallback）
-let mockDatabase: Array<{
+const mockDatabase: Array<{
   id: string;
   tenant_id: string;
   event_type: string;
