@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: [
+    'genkit',
     'sharp',
     'firebase-admin',
     '@genkit-ai/googleai',
