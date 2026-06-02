@@ -1,7 +1,7 @@
 // In a new file, e.g., src/services/OmniAgentSkillManager.ts
 
     import * as fs from 'fs';
-    import * * as path from 'path';
+    import * as path from 'path';
     import { validateSkillDefinition } from './skillValidation';
     import { OmniAgentSkillRegistry, SkillDefinition, ActionDefinition } from '../types/omniagent';
 
