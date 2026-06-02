@@ -27,7 +27,10 @@ jobs:
         id: adr_check
         run: |
           ADR_CHANGED=false
-          PR_BODY="${{ github.event.pull_request.body }}"
+          PR_BODY=$(cat << 'EOF_PR_BODY'
+${{ github.event.pull_request.body }}
+EOF_PR_BODY
+)
           PR_TITLE="${{ github.event.pull_request.title }}"
 
           # Check if any .md file in the adr/ directory was added/modified
