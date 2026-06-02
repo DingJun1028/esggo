@@ -66,6 +66,14 @@ export const AtomicLibraryShowcase: React.FC = () => {
     }
   ];
 
+// Define a local interface for table row data within AtomicLibraryShowcase
+interface TableRowData {
+  nodeId: string;
+  action: string;
+  category: string;
+  status: 'Verified' | 'Auditing' | 'Failed';
+}
+
   const { data: auditData, isLoading: auditLoading } = useListAuditRecords();
 
   const tableData = auditData?.auditRecords && auditData.auditRecords.length > 0 
