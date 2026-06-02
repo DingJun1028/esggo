@@ -12,11 +12,15 @@
     "ses_179db4574ffex6DjoxlEqfqNr3": {
       "worktreeId": "wt-1780367006984-1",
       "createdAt": "2026-06-02T02:23:44.467Z"
+    },
+    "ses_17768c3b7ffe6pz2F9Gl7MXFak": {
+      "worktreeId": null,
+      "createdAt": "2026-06-02T13:47:53.470Z"
     }
   },
   "tabOrder": {
     "local": [
-      "pending:1"
+      "ses_17768c3b7ffe6pz2F9Gl7MXFak"
     ]
   },
   "worktreeOrder": [
