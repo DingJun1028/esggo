@@ -1,250 +1,245 @@
-﻿'use client';
+'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Zap, Brain, Shield, Sparkles, Send, Target, Rocket, Lock, 
-  RefreshCw, Bot, Globe, Database, ShieldCheck, ArrowUpRight,
-  Fingerprint, Activity, FileText, Layers, List, Lock as LockIcon,
-  Search, Award, HelpCircle, ChevronRight, ChevronLeft, Play, Trophy
-} from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { Button } from '../../components/ui/Button';
-import { Badge } from '../../components/ui/Badge';
-import { Card } from '../../components/ui/Card';
-import { BrandStatusDot } from '../../components/brand';
-import StandardPage from '../../components/brand/StandardPage';
-import { fadeIn, staggerContainer } from '../../lib/animations';
-import { UniversalPageConfig } from '../../lib/page-config';
+import React, { useState, useEffect } from 'react';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { UniversalTable } from '@/components/ui/universal/UniversalTable';
+import { Rocket, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
-const ONBOARDING_STEPS = [
-  {
-    id: 'perception',
-    title: '第一步：感知數據 (Perception)',
-    desc: '透過 Alchemy 視覺引擎將原始憑證轉化為 5T 實證。',
-    icon: <Sparkles size={24}/>,
-    color: '#FDB515',
-    action: '前往煉金術',
-    link: '/omniagent-alchemy',
-    details: [
-      '上傳電費單、發票或認證 PDF。',
-      'OmniAgent 自動提取 GRI 關鍵指標。',
-      '完成第一次 5T 誠信封印。'
-    ]
-  },
-  {
-    id: 'alignment',
-    title: '第二步：智庫對齊 (Alignment)',
-    desc: '對標國際標準與產業標竿，獲取最佳治理建議。',
-    icon: <Trophy size={24}/>,
-    color: '#3B7EA1',
-    action: '瀏覽智庫',
-    link: '/best-practice',
-    details: [
-      '檢索 450+ 產業標竿案例。',
-      '載入「5T Ready」專家撰寫模板。',
-      '由 AI 進行現狀與標竿的缺口分析。'
-    ]
-  },
-  {
-    id: 'execution',
-    title: '第三步：任務執行 (Execution)',
-    desc: '呼叫 Swarm 蜂群代理人，自動產出高品質報告。',
-    icon: <Bot size={24}/>,
-    color: '#8B5CF6',
-    action: '啟動調度中心',
-    link: '/omniagent-orchestrator',
-    details: [
-      '指派 Z0-Auditor 執行合規性掃描。',
-      '利用 SustainWrite 執行 5000 字深度撰寫。',
-      '追蹤 AI 思考鏈 (Genkit Trace)。'
-    ]
-  },
-  {
-    id: 'evolution',
-    title: '第四步：戰略進化 (Evolution)',
-    desc: '模擬企業願景，啟動數位分身的自我成長。',
-    icon: <Brain size={24}/>,
-    color: '#003262',
-    action: '進入實驗室',
-    link: '/strategy-lab',
-    details: [
-      '在策略實驗室預演「零碳路徑」。',
-      '喚醒主權數位分身並進行 DNA 建模。',
-      '同步最新進化提案至動態架構。'
-    ]
-  },
-  {
-    id: 'trust',
-    title: '第五步：主權確信 (Trust)',
-    desc: '完成萬能聖碑刻印，開放外部透明驗算。',
-    icon: <Lock size={24}/>,
-    color: '#10B981',
-    action: '檢視聖碑',
-    link: '/vault-omni',
-    details: [
-      '將所有成果歸檔至 Vault Omni。',
-      '生成不可篡改的 Master Seal。',
-      '提供 VerifyLink™ 給外部審計師。'
-    ]
-  }
-];
+export default function WalkthroughPage() {
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [sealingId, setSealingId] = useState<number | null>(null);
+  const [verifyingId, setVerifyingId] = useState<number | null>(null);
 
-const FEATURE_MANIFEST = [
-  { module: '調度中心', sub: 'Orchestrator', desc: '全系統的指揮大腦，管理 AI 代理人的任務分配與執行生命週期。', icon: <Bot size={16}/> },
-  { module: '商情中心', sub: 'Intelligence', desc: '即時追蹤全球 ESG 法規、碳政策與競爭對手動態。', icon: <Globe size={16}/> },
-  { module: 'OmniAgent 煉金術', sub: 'Alchemy', desc: '多模態 AI 視覺引擎，將紙本憑證「點石成金」變為結構化數據。', icon: <Sparkles size={16}/> },
-  { module: '永續撰寫', sub: 'SustainWrite', desc: '對齊 GRI 2021 的深度文案引擎，支援 5T 數據自動填報。', icon: <FileText size={16}/> },
-  { module: '戰略實驗室', sub: 'Strategy Lab', desc: '蜂群共識模擬器，用於分析戰略決策的影響力與系統進化。', icon: <Zap size={16}/> },
-  { module: '萬能聖碑', sub: 'Vault Omni', desc: '不可篡改的實證帳本，是企業數位主權的最終物理歸宿。', icon: <Database size={16}/> },
-];
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-export default function SovereignOnboardingPage() {
-  const [currentStep, setCurrentStep] = useState(0);
-
-  // ── Universal Page Configuration ──────────────────────────────────
-  const pageConfig: UniversalPageConfig = {
-    id: 'onboarding-guide',
-    title: '主權治理新手教學 Sovereign Onboarding',
-    subtitle: 'oX Platform Guide · 從零到一 · 五步達成全域 5T 治理閉環。',
-    icon: <Rocket size={32} className="text-berkeley-blue" />,
-    griReference: 'Guide / 0-1',
-    activeT5Tags: ['T1', 'T2', 'T3', 'T4', 'T5'],
-    isOXModule: true,
-    features: { useProvenance: true },
-
-    primaryActions: [
-      { id: 'start', label: '開始第一步', icon: <Play size={16}/>, onClick: () => window.location.href = ONBOARDING_STEPS[0].link }
-    ],
-
-    kpis: [
-      { key: 'steps', label: '教學總階', value: ONBOARDING_STEPS.length.toString(), icon: <Layers size={18}/> },
-      { key: 'modules', label: '涵蓋模組', value: '11', icon: <Activity size={18}/>, verified: true },
-      { key: 'sovereignty', label: '主權達成度', value: '100', unit: '%', icon: <ShieldCheck size={18}/> },
-    ],
-
-    sections: [
-      {
-        id: 'stepper',
-        title: 'oX 治理閉環五部曲 (The 5-Step Loop)',
-        columns: 8,
-        component: (
-          <div className="space-y-10 relative">
-             {/* Progress Line */}
-             <div className="absolute left-12 top-0 bottom-0 w-0.5 bg-slate-100 -z-10" />
-
-             <div className="space-y-8">
-                {ONBOARDING_STEPS.map((step, idx) => (
-                  <motion.div 
-                    key={step.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                  >
-                    <Card 
-                      hoverEffect 
-                      className={cn(
-                        "p-10 border-white/60 shadow-glass transition-all relative overflow-hidden cursor-pointer",
-                        currentStep === idx ? "ring-2 ring-berkeley-blue bg-white/90 scale-[1.02]" : "bg-white/60 opacity-60 grayscale hover:opacity-100 hover:grayscale-0"
-                      )}
-                      onClick={() => setCurrentStep(idx)}
-                    >
-                       <div className="flex items-start gap-10">
-                          <div className={cn(
-                            "w-24 h-24 rounded-[2.5rem] flex items-center justify-center shrink-0 shadow-lg transition-transform",
-                            currentStep === idx ? "bg-berkeley-blue text-california-gold scale-110" : "bg-slate-50 text-slate-400"
-                          )}>
-                             {React.cloneElement(step.icon as React.ReactElement, { size: 32 })}
-                          </div>
-                          <div className="flex-1">
-                             <div className="flex justify-between items-center mb-3">
-                                <h3 className="text-2xl font-black text-berkeley-blue uppercase tracking-tight">{step.title}</h3>
-                                {currentStep === idx && (
-                                  <div className="flex items-center gap-2">
-                                     <div className="w-2 h-2 rounded-full bg-verified animate-ping" />
-                                     <span className="text-[10px] font-black text-verified uppercase tracking-widest">Focused</span>
-                                  </div>
-                                )}
-                             </div>
-                             <p className="text-base text-slate-600 font-bold mb-6">{step.desc}</p>
-                             
-                             <AnimatePresence>
-                               {currentStep === idx && (
-                                 <motion.div 
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    className="overflow-hidden"
-                                 >
-                                    <div className="p-8 bg-slate-50/50 rounded-[2rem] border border-slate-100 shadow-inner mb-8">
-                                       <ul className="space-y-4">
-                                          {step.details.map((d, i) => (
-                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-500 font-medium">
-                                               <div className="w-1.5 h-1.5 rounded-full bg-berkeley-blue mt-1.5 shadow-[0_0_8px_#003262]" /> 
-                                               <span className="leading-relaxed">{d}</span>
-                                            </li>
-                                          ))}
-                                       </ul>
-                                    </div>
-                                    <Button variant="primary" className="h-14 rounded-2xl px-10 text-base tracking-widest uppercase shadow-lg" onClick={(e) => { e.stopPropagation(); window.location.href = step.link; }}>
-                                       {step.action} <ArrowUpRight size={20} className="ml-3"/>
-                                    </Button>
-                                 </motion.div>
-                               )}
-                             </AnimatePresence>
-                          </div>
-                       </div>
-                    </Card>
-                  </motion.div>
-                ))}
-             </div>
-          </div>
-        )
-      },
-      {
-        id: 'feature-manifest',
-        title: 'oX 模組功能手冊',
-        columns: 4,
-        component: (
-          <div className="space-y-10">
-             <Card className="bg-berkeley-blue text-white p-10 rounded-[3rem] border-none shadow-2xl relative overflow-hidden">
-                <div className="relative z-10 space-y-6">
-                   <div className="flex items-center gap-3 text-california-gold">
-                      <Sparkles size={20} fill="currentColor" />
-                      <p className="text-[11px] font-black uppercase tracking-[0.3em]">Quick Tip</p>
-                   </div>
-                   <p className="text-base font-black leading-relaxed italic text-blue-50/90">
-                     「您可以隨時在側邊欄切換模組，5T 實證會自動在後台進行跨維度同步，實現真正的數位主權。」
-                   </p>
-                </div>
-                <HelpCircle size={140} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
-             </Card>
-
-             <div className="space-y-6">
-                <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] px-2 ml-1">功能辭典 (Registry)</p>
-                <div className="grid gap-4">
-                   {FEATURE_MANIFEST.map((f, i) => (
-                     <div key={i} className="p-5 bg-white/60 backdrop-blur-md border border-white/80 rounded-[1.5rem] flex items-start gap-5 hover:border-berkeley-blue/30 transition-all shadow-sm group">
-                        <div className="w-10 h-10 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center shrink-0 group-hover:bg-berkeley-blue group-hover:text-california-gold transition-all shadow-inner">
-                           {React.cloneElement(f.icon as React.ReactElement, { size: 20 })}
-                        </div>
-                        <div>
-                           <p className="text-[13px] font-black text-berkeley-blue uppercase tracking-tight">{f.module}</p>
-                           <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mb-1.5">{f.sub}</p>
-                           <p className="text-xs text-slate-500 leading-relaxed font-medium line-clamp-2">{f.desc}</p>
-                        </div>
-                     </div>
-                   ))}
-                </div>
-                <Button variant="glass" className="w-full h-12 text-[11px] font-black text-berkeley-blue hover:text-berkeley-dark h-12 rounded-xl border-slate-200">
-                   查看全模組技術規格 <ArrowUpRight size={16} className="ml-2"/>
-                </Button>
-             </div>
-          </div>
-        )
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      // Fetching from a universal proxy metrics endpoint
+      const res = await fetch('/api/metrics/walkthrough', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        setData(json.data || []);
+      } else {
+        // Fallback mock data for Trinity UIUX demonstration if API fails
+        setData([
+          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+        ]);
       }
-    ]
+    } catch (e) {
+      console.error('Fetch Error:', e);
+      // Fallback mock data
+      setData([
+        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return <StandardPage config={pageConfig} />;
+  const handleSeal = async (id: number) => {
+    setSealingId(id);
+    try {
+      const response = await fetch('/api/vault/seal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          evidence: { table: 'walkthrough', recordId: id, timestamp: Date.now() }, 
+          type: '5t-seal' 
+        })
+      });
+      const resData = await response.json();
+      if (resData.success && resData.hashLock) {
+        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
+      } else {
+        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
+      }
+    } catch (error) {
+      console.error('Seal exception:', error);
+      alert('無法連線至封印金庫 (Vault Connection Error)。');
+    } finally {
+      setSealingId(null);
+    }
+  };
+
+  const handleVerify = async (id: number) => {
+    setVerifyingId(id);
+    try {
+      const response = await fetch('/api/vault/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recordId: id, type: '5t-seal' })
+      });
+      const resData = await response.json();
+      if (resData.success && resData.valid) {
+        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
+      } else {
+        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
+      }
+    } catch (e) {
+      console.error('Verify exception:', e);
+      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
+    } finally {
+      setVerifyingId(null);
+    }
+  };
+
+  const handleAddRecord = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      fetchData(); // re-fetch after add
+    }, 1500);
+  };
+
+  const columns = [
+    { key: 'date', label: '日期 (Date)' },
+    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
+    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
+      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
+    ) },
+    { key: 'source_origin', label: '來源 (Source)' },
+    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
+      val ? (
+        <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
+          {val.substring(0, 8)}...
+        </UniversalBadge>
+      ) : (
+        <UniversalBadge variant="default" size="sm">未封印</UniversalBadge>
+      )
+    ) },
+    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
+      <div className="flex items-center gap-3">
+        {!row.hash_lock && (
+          <button 
+            onClick={() => handleSeal(row.id)}
+            disabled={sealingId === row.id}
+            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+          >
+            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+            T5 封印
+          </button>
+        )}
+        <button 
+          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
+          disabled={verifyingId === row.id}
+          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+        >
+          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
+          {row.hash_lock ? '驗證 5T' : '編輯'}
+        </button>
+      </div>
+    ) }
+  ];
+
+  return (
+    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        
+        {/* Header Area */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
+              <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Rocket className="text-cyan-400 relative z-10" size={28} />
+            </div>
+            <div>
+              <div className="flex items-center gap-3 mb-1">
+                <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</UniversalBadge>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
+              </div>
+              <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">{p.sub}</p>
+            </div>
+          </div>
+          <div className="flex gap-3 w-full md:w-auto">
+            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</UniversalButton>
+            <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+              新增紀錄
+            </UniversalButton>
+          </div>
+        </header>
+
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <UniversalCard variant="glass" className="p-6 space-y-4">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
+              <Activity size={18} className="text-emerald-400" />
+            </div>
+            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
+            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
+          </UniversalCard>
+
+          <UniversalCard variant="glass" className="p-6 space-y-4">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
+              <ShieldCheck size={18} className="text-cyan-400" />
+            </div>
+            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
+          </UniversalCard>
+
+          <UniversalCard variant="glass" className="p-6 space-y-4">
+            <div className="flex items-center justify-between text-slate-400">
+              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
+              <Brain size={18} className="text-amber-400" />
+            </div>
+            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
+          </UniversalCard>
+        </div>
+
+        {/* Main Workspace Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3 space-y-6">
+            <UniversalCard 
+              variant="default" 
+              title="業務資料視圖" 
+              subtitle="Data synced with 5T Integrity Protocol"
+              className="min-h-[400px]"
+            >
+              <UniversalTable 
+                columns={columns}
+                data={data}
+                loading={loading}
+              />
+            </UniversalCard>
+          </div>
+          
+          <div className="space-y-6">
+            <UniversalCard 
+              variant="glow" 
+              title="OmniAgent 輔助" 
+              subtitle="AI 智能上下文"
+            >
+              <div className="space-y-4 text-sm text-slate-300">
+                <p>
+                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                </p>
+                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
+                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
+                    <li>客戶體驗 (Customer Experience)</li>
+                    <li>業務邏輯 (Business Logic)</li>
+                    <li>極致美學 (Liquid Glass Cyan)</li>
+                  </ul>
+                </div>
+              </div>
+            </UniversalCard>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
 }

@@ -1,129 +1,133 @@
-'use client';
 import React from 'react';
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell
+  BarChart,
+  Bar,
+  Legend
 } from 'recharts';
-import { cn } from '../../../lib/utils';
 
-export interface UniversalChartProps {
-  data: unknown[];
-  type: 'line' | 'bar' | 'pie';
-  dataKey: string;     // The main data value for Pie
-  xAxisKey?: string;   // For Line/Bar
-  series?: { key: string; color: string; name?: string }[]; // For Line/Bar
-  title?: string;
-  className?: string;
+interface UniversalChartProps {
+  data: any[];
+  type?: 'area' | 'bar';
+  xAxisKey: string;
+  series: {
+    key: string;
+    name: string;
+    color: string;
+    gradient?: boolean;
+  }[];
   height?: number;
 }
 
-const COLORS = ['#06b6d4', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b'];
-
 export function UniversalChart({
   data,
-  type,
-  dataKey,
-  xAxisKey = 'name',
-  series = [],
-  title,
-  className,
+  type = 'area',
+  xAxisKey,
+  series,
   height = 300
 }: UniversalChartProps) {
-  
-  const renderChart = () => {
-    switch (type) {
-      case 'line':
-        return (
-          <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-border)" vertical={false} />
-            <XAxis dataKey={xAxisKey} stroke="var(--theme-text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="var(--theme-text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-            <Tooltip 
-              contentStyle={{ backgroundColor: 'var(--theme-surface)', borderColor: 'var(--theme-border)', color: 'var(--theme-text)' }}
-              itemStyle={{ color: 'var(--theme-text)' }}
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-void-stark/90 border border-cyan-500/30 p-3 rounded-lg backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+          <p className="text-sm font-bold text-slate-200 mb-2">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center gap-2 text-xs">
+              <div 
+                className="w-2 h-2 rounded-full" 
+                style={{ backgroundColor: entry.color }} 
+              />
+              <span className="text-slate-400">{entry.name}:</span>
+              <span className="text-white font-mono">{entry.value}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div style={{ width: '100%', height }} className="relative">
+      <ResponsiveContainer width="100%" height="100%">
+        {type === 'area' ? (
+          <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <defs>
+              {series.map((s, idx) => (
+                s.gradient && (
+                  <linearGradient key={idx} id={`color${s.key}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={s.color} stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor={s.color} stopOpacity={0}/>
+                  </linearGradient>
+                )
+              ))}
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+            <XAxis 
+              dataKey={xAxisKey} 
+              stroke="rgba(255,255,255,0.2)" 
+              tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }} 
+              tickLine={false}
+              axisLine={false}
             />
-            <Legend wrapperStyle={{ fontSize: '12px', color: 'var(--theme-text-muted)' }} />
-            {series.map((s, i) => (
-              <Line 
-                key={s.key} 
+            <YAxis 
+              stroke="rgba(255,255,255,0.2)" 
+              tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(6,182,212,0.2)', strokeWidth: 2, strokeDasharray: '4 4' }} />
+            <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+            {series.map((s, idx) => (
+              <Area 
+                key={idx}
                 type="monotone" 
                 dataKey={s.key} 
-                name={s.name || s.key} 
-                stroke={s.color || COLORS[i % COLORS.length]} 
+                name={s.name}
+                stroke={s.color} 
                 strokeWidth={2}
-                dot={{ r: 4, strokeWidth: 2 }}
-                activeDot={{ r: 6 }}
+                fillOpacity={1} 
+                fill={s.gradient ? `url(#color${s.key})` : s.color} 
+                activeDot={{ r: 6, strokeWidth: 0, fill: s.color, className: 'animate-pulse' }}
               />
             ))}
-          </LineChart>
-        );
-      case 'bar':
-        return (
+          </AreaChart>
+        ) : (
           <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--theme-border)" vertical={false} />
-            <XAxis dataKey={xAxisKey} stroke="var(--theme-text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="var(--theme-text-muted)" fontSize={12} tickLine={false} axisLine={false} />
-            <Tooltip 
-              contentStyle={{ backgroundColor: 'var(--theme-surface)', borderColor: 'var(--theme-border)', color: 'var(--theme-text)' }}
-              cursor={{ fill: 'var(--theme-surface)' }}
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+            <XAxis 
+              dataKey={xAxisKey} 
+              stroke="rgba(255,255,255,0.2)" 
+              tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }} 
+              tickLine={false}
+              axisLine={false}
             />
-            <Legend wrapperStyle={{ fontSize: '12px', color: 'var(--theme-text-muted)' }} />
-            {series.map((s, i) => (
+            <YAxis 
+              stroke="rgba(255,255,255,0.2)" 
+              tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(6,182,212,0.05)' }} />
+            <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
+            {series.map((s, idx) => (
               <Bar 
-                key={s.key} 
+                key={idx}
                 dataKey={s.key} 
-                name={s.name || s.key} 
-                fill={s.color || COLORS[i % COLORS.length]} 
+                name={s.name}
+                fill={s.color} 
                 radius={[4, 4, 0, 0]}
               />
             ))}
           </BarChart>
-        );
-      case 'pie':
-        return (
-          <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-            <Tooltip 
-              contentStyle={{ backgroundColor: 'var(--theme-surface)', borderColor: 'var(--theme-border)', color: 'var(--theme-text)' }}
-            />
-            <Legend wrapperStyle={{ fontSize: '12px', color: 'var(--theme-text-muted)' }} />
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={5}
-              dataKey={dataKey}
-              nameKey={xAxisKey}
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-          </PieChart>
-        );
-    }
-  };
-
-  return (
-    <div className={cn("p-4 rounded-xl border border-[var(--theme-border)] bg-[var(--theme-base)]", className)}>
-      {title && <h3 className="mb-4 text-sm font-semibold tracking-wide text-[var(--theme-text)]">{title}</h3>}
-      <div style={{ width: '100%', height }}>
-        <ResponsiveContainer>
-          {renderChart()}
-        </ResponsiveContainer>
-      </div>
+        )}
+      </ResponsiveContainer>
     </div>
   );
 }

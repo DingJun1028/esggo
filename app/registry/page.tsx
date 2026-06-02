@@ -159,9 +159,27 @@ export default function RegistryDashboard() {
 
                 {/* Shards */}
                 <div className="space-y-6">
-                  <h2 className="text-lg text-amber-500 font-mono tracking-widest flex items-center gap-2 border-b border-white/10 pb-4">
-                    <Database className="w-5 h-5" /> Memory Shards ({shards.length})
-                  </h2>
+                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                    <h2 className="text-lg text-amber-500 font-mono tracking-widest flex items-center gap-2">
+                      <Database className="w-5 h-5" /> Memory Shards ({shards.length})
+                    </h2>
+                    <AtomicButton 
+                      variant="outline" 
+                      onClick={async () => {
+                        setLoading(true);
+                        try {
+                          await fetch('/api/agent/memory-shards/extract-logs', { method: 'POST' });
+                          await fetchMemory();
+                        } catch(e) {
+                          console.error(e);
+                        }
+                        setLoading(false);
+                      }} 
+                      className="border-amber-500/30 text-amber-500 hover:bg-amber-500/10 text-xs"
+                    >
+                      Extract from Logs
+                    </AtomicButton>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {shards.length === 0 ? (
                       <div className="col-span-full text-center py-6 text-slate-500 font-mono">No memory shards extracted yet.</div>

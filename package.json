@@ -68,7 +68,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-markdown": "^10.1.0",
-    "recharts": "2.13.3",
+    "recharts": "^2.13.3",
     "remark-gfm": "^4.0.1",
     "snarkjs": "^0.7.6",
     "swr": "^2.4.1",

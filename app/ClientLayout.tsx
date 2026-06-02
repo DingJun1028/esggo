@@ -20,6 +20,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { ToastProvider, ToastContainer } from '../components/ui';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
+import { OmniAgentPulse } from '../components/ui/universal/OmniAgentPulse';
 
 function SystemHealthBanner() {
   const { systemStatus } = useAuth();
@@ -77,7 +78,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   // 1. Public Routes
   if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
-    return <><ToastContainer />{children}</>;
+    return <><ToastContainer /><OmniAgentPulse />{children}</>;
   }
 
   // 2. Loading State
@@ -98,6 +99,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
       <AppShellV2>
         {children}
         <ToastContainer />
+        <OmniAgentPulse />
       </AppShellV2>
     );
   }

@@ -7,9 +7,10 @@ import ScraperControl from '../../components/omni/ScraperControl';
 import DataVisualizer from '../../components/omni/DataVisualizer';
 import HermesIntegrations from '../../components/omni/HermesIntegrations';
 import SkillBookUI from '../../components/omni/SkillBookUI';
+import OmniCardsDemo from '../../components/omni/OmniCardsDemo';
 
 export default function OmniSkillsPage() {
-  const [activeView, setActiveView] = useState<'scraper' | 'visualizer' | 'hermes' | 'memory-shards'>('scraper');
+  const [activeView, setActiveView] = useState<'scraper' | 'visualizer' | 'hermes' | 'memory-shards' | 'omni-cards'>('omni-cards');
 
   return (
     <div className="page-container space-y-8 pb-24 fade-in">
@@ -77,6 +78,15 @@ export default function OmniSkillsPage() {
           <Sparkles size={18} />
           <span>無有技藝 · 記憶碎片 (Memory Shards)</span>
         </button>
+        <button 
+          onClick={() => setActiveView('omni-cards')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold transition-all ${
+            activeView === 'omni-cards' ? 'bg-[#003262] text-white shadow-lg' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+          }`}
+        >
+          <Bot size={18} />
+          <span>萬能卡牌 (Omni Cards)</span>
+        </button>
       </div>
 
       {/* Main Content Area */}
@@ -85,6 +95,7 @@ export default function OmniSkillsPage() {
         {activeView === 'visualizer' && <DataVisualizer />}
         {activeView === 'hermes' && <HermesIntegrations />}
         {activeView === 'memory-shards' && <SkillBookUI />}
+        {activeView === 'omni-cards' && <OmniCardsDemo />}
       </div>
     </div>
   );

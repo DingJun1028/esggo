@@ -256,7 +256,7 @@ function LandingContent() {
         )}
 
         {/* ─── Layer 2: Hologram Interactions (Bento Grid) ────────────── */}
-        <motion.div variants={item} className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+        <motion.div variants={item} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 w-full">
 
           <Link href="/dashboard" className="group h-full">
             <BrandCard variant="hologram" hover padding="lg" className="h-full flex flex-col justify-between text-left group-hover:border-cyan-500/40 transition-colors">
@@ -305,6 +305,23 @@ function LandingContent() {
               </div>
               <div className="mt-12 flex items-center text-emerald-400 text-xs font-black tracking-widest uppercase">
                 瀏覽原子庫 <Sparkles size={14} className="ml-2" />
+              </div>
+            </BrandCard>
+          </Link>
+
+          <Link href="/omni-shards" className="group h-full">
+            <BrandCard variant="hologram" hover padding="lg" className="h-full flex flex-col justify-between text-left group-hover:border-purple-500/40 transition-colors">
+              <div className="space-y-6">
+                <div className="p-4 w-fit rounded-[1.5rem] bg-purple-500/10 text-purple-400 shadow-inner group-hover:scale-110 transition-transform">
+                  <Brain size={32} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-black tracking-tight uppercase">無有技藝進化</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">進入 OmniAgent 記憶中樞，將對話殘影淬鍊為具備心法的高階技能奧義。</p>
+                </div>
+              </div>
+              <div className="mt-12 flex items-center text-purple-400 text-xs font-black tracking-widest uppercase">
+                提取記憶碎片 <Activity size={14} className="ml-2 animate-pulse" />
               </div>
             </BrandCard>
           </Link>
