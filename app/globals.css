@@ -4,6 +4,8 @@
    Light > Glass > Premium — Zero dark dominance
    ============================================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+TC:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -340,7 +342,7 @@
   }
 
   .data-label { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.22em; color: #94a3b8; }
-  .data-value { font-family: ui-monospace, monospace; font-weight: 900; color: #003262; line-height: 1; }
+  .data-value { @apply font-mono; font-weight: 900; color: #003262; line-height: 1; }
 
   /* Chip / micro tag */
   .chip {

@@ -4,7 +4,7 @@ import {
   getReportByCompany, 
   upsertCompanyMetric,
   listCompanyMetrics,
-  upsertEternalMemory,
+  insertEternalMemory,
   listEternalMemoriesByCompany,
   upsertReport
 } from '@dataconnect/generated';
@@ -80,7 +80,8 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       isDone: params.status === 'completed',
       chapterOrder: params.chapter_order,
       griReferences: params.gri_references,
-      hashLock: params.hash_lock
+      hashLock: params.hash_lock,
+      sourceOrigin: 'Client'
     });
     return data;
   } catch (e) {
@@ -137,13 +138,14 @@ export async function loadMetrics(companyId: string): Promise<unknown[]> {
 
 export async function saveMemory(companyId: string, memory: Record<string, unknown>): Promise<unknown> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  return await upsertEternalMemory({
+  return await insertEternalMemory({
     companyId: cid,
     type: memory.type as string,
     content: memory.content as string,
-    tags: memory.tags as string[],
+    tags: Array.isArray(memory.tags) ? memory.tags.join(',') : (memory.tags as string || ''),
     hashLock: memory.hashLock as string,
-    consolidated: memory.consolidated || false
+    consolidated: memory.consolidated || false,
+    sourceOrigin: (memory.sourceOrigin as string) || 'Client'
   });
 }
 
