@@ -11,6 +11,7 @@ import { cn } from '../../lib/utils';
 export default function OmniAgentFloatingAgent() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const { rs, status: rsStatus } = useOmniResonance();
   const [input, setInput] = useState('');
 
@@ -26,7 +27,15 @@ export default function OmniAgentFloatingAgent() {
 
 
   return (
-    <div className="fixed bottom-10 right-10 z-[10000] flex flex-col items-end">
+    <motion.div 
+      drag
+      dragMomentum={false}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={(e, info) => {
+        setTimeout(() => setIsDragging(false), 150);
+      }}
+      className="fixed bottom-10 right-10 z-[10000] flex flex-col items-end"
+    >
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -41,7 +50,7 @@ className={cn(
           >
             <Card className="w-full h-full flex flex-col shadow-glass border-white/60 bg-white/80 backdrop-blur-3xl rounded-[3rem] p-0 overflow-hidden">
                {/* Agent Header */}
-               <header className="p-8 bg-berkeley-blue text-white flex items-center justify-between relative overflow-hidden">
+               <header className="p-8 bg-berkeley-blue text-white flex items-center justify-between relative overflow-hidden cursor-grab active:cursor-grabbing">
                   <div className="absolute top-0 right-0 w-64 h-full bg-white/5 blur-3xl -z-0" />
                   <div className="flex items-center gap-5 relative z-10">
                      <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center shadow-inner border border-white/10">
@@ -123,7 +132,9 @@ className={cn(
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (!isDragging) setIsOpen(!isOpen);
+        }}
         className={cn(
           "w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-glass transition-all duration-500",
           isOpen ? "bg-white text-berkeley-blue rotate-90 border border-white" : "bg-berkeley-blue text-california-gold"
@@ -142,6 +153,6 @@ className={cn(
            </motion.span>
         )}
       </motion.button>
-    </div>
+    </motion.div>
   );
 }
