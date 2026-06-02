@@ -50,6 +50,7 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
 
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const connectFunctionRef = useRef<(() => void) | null>(null); // NEW: Ref to hold the connect function
 
   const processEvent = useCallback((evt: StreamEvent) => {
     setEvents(prev => [evt, ...prev].slice(0, MAX_EVENTS));
@@ -154,13 +155,19 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
 
         // Auto-reconnect with backoff
         if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-        reconnectTimeoutRef.current = setTimeout(() => connect(), 5000);
+        // NEW: Call the function via connectFunctionRef.current
+        reconnectTimeoutRef.current = setTimeout(() => connectFunctionRef.current?.(), 5000);
       };
     } catch (err) {
       setConnectionError(err instanceof Error ? err.message : 'Failed to connect');
       setIsConnected(false);
     }
   }, [processEvent]); // <--- Dependency array now has processEvent
+
+  // NEW: Update the ref whenever the connect function instance changes
+  useEffect(() => {
+    connectFunctionRef.current = connect;
+  }, [connect]);
 
   const reconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
