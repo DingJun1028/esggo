@@ -182,8 +182,9 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
   }, []);
 
   useEffect(() => {
-    connect();
+    const timeoutId = setTimeout(() => connect(), 0); // Call connect asynchronously
     return () => {
+      clearTimeout(timeoutId); // Clear the timeout if component unmounts
       if (eventSourceRef.current) eventSourceRef.current.close();
       if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
     };
