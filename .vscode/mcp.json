@@ -14,7 +14,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@google/mcp-stitch"
+        "stitch-mcp"
       ],
       "env": {
         "GOOGLE_CLOUD_PROJECT": "esg-sunshine"
