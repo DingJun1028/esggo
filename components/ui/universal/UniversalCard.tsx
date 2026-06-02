@@ -4,10 +4,12 @@ import { cn } from '../../../lib/utils';
 export interface UniversalCardProps extends React.HTMLAttributes<HTMLDivElement> {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   variant?: 'default' | 'glass' | 'outline' | 'glow' | 'bordered';
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
 }
 
 export const UniversalCard = React.forwardRef<HTMLDivElement, UniversalCardProps>(
-  ({ className, padding = 'md', variant = 'default', children, ...props }, ref) => {
+  ({ className, padding = 'md', variant = 'default', title, subtitle, children, ...props }, ref) => {
     
     const paddings = {
       none: 'p-0',
@@ -35,6 +37,9 @@ export const UniversalCard = React.forwardRef<HTMLDivElement, UniversalCardProps
         )}
         {...props}
       >
+        {(title || subtitle) && (
+          <UniversalCardHeader title={title} subtitle={subtitle} />
+        )}
         {children}
       </div>
     );

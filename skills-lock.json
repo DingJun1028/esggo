@@ -85,6 +85,12 @@
       "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
       "computedHash": "42e793406ca8980c47fcdbd309f02838316849bcbf8475001b4ecaa6a67606b8"
     },
+    "gemma-dev": {
+      "source": "DingJun1028/gemma-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gemma-dev/SKILL.md",
+      "computedHash": "ea571cfb8b7134efb2ad9b1713883482ae62f9d93ded18996ee634899dca652b"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",

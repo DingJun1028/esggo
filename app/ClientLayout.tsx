@@ -20,7 +20,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { ToastProvider, ToastContainer } from '../components/ui';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
-import { OmniAgentPulse } from '../components/ui/universal/OmniAgentPulse';
+import { OmniAgentPulse } from '../components/omni/OmniAgentPulse';
 
 function SystemHealthBanner() {
   const { systemStatus } = useAuth();

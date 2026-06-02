@@ -130,6 +130,10 @@ const config: Config = {
         'slow': '500ms',
         'slower': '800ms',
       },
+      fontFamily: {
+        sans: ['Inter', 'Noto Sans TC', 'sans-serif'], // Primary font with Noto Sans TC as Chinese fallback
+        mono: ['JetBrains Mono', 'monospace'], // For Data/Code
+      },
     },
   },
   plugins: [],
