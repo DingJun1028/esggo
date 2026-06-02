@@ -82,6 +82,6 @@ describe('OmniMemorySync Retry Mechanism', () => {
     await vi.advanceTimersByTimeAsync(2000);
     expect(syncSpy).toHaveBeenCalledTimes(2);
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Successfully synchronized event test-id-2 to Cognitive Memory on attempt 2.'));
+    expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('Successfully synchronized event test-id-2 to VectorDB on attempt 2.'));
   });
 });

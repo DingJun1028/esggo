@@ -63,33 +63,10 @@ describe('exportDocx.worker', () => {
             }
         };
 
-        // 模擬 Worker 的 onmessage 處理器
-        const mockWorkerOnMessage = {
-            onmessage: null as any,
-            postMessage: mockPostMessage,
-        };
-
-        // 將處理器綁定到模擬 Worker
-        (global as any).self = {
-            onmessage: (event: MessageEvent) => {
-                // 模擬 Worker 處理邏輯
-                try {
-                    // 模擬打包成功
-                    mockPostMessage({
-                        status: 'success',
-                        blob: mockBlob,
-                    }, '*');
-                } catch (error) {
-                    mockPostMessage({
-                        status: 'error',
-                        error: error instanceof Error ? error.message : String(error),
-                    }, '*');
-                }
-            }
-        };
+        // 不覆寫 self.onmessage，直接使用 worker 內註冊的真實處理器
 
         // 觸發 Worker 處理器
-        (global as any).self.onmessage(mockEventData as MessageEvent);
+        await (global as any).self.onmessage(mockEventData as MessageEvent);
 
         // 斷言 1: 確保 Packer.toBlob 被呼叫 (代表有啟動文件打包)
         expect(Packer.toBlob).toHaveBeenCalledTimes(1);

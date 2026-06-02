@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalTable } from '@/components/ui/universal/UniversalTable';
-import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2 } from 'lucide-react';
+import VaultOmniTable from '@/components/omni/VaultOmniTable';
+import OmniKpiCard from '@/components/omni/OmniKpiCard';
 
 export default function EditorPage() {
   const [data, setData] = useState<any[]>([]);
@@ -21,13 +22,37 @@ export default function EditorPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetching from a universal proxy metrics endpoint
+      // ── 1. 優先嘗試從 Blue.cc 拉取真實資料 ──
+      const blueRes = await fetch('/api/bluecc/records', { cache: 'no-store' });
+      if (blueRes.ok) {
+        const blueJson = await blueRes.json();
+        if (blueJson.ok && blueJson.records?.length > 0) {
+          // 將 Blue.cc records 轉換為 editor 需要的格式
+          const mapped = blueJson.records.map((rec: any, idx: number) => ({
+            id: rec.id || idx + 1,
+            date: rec.updatedAt ? rec.updatedAt.split('T')[0] : new Date().toISOString().split('T')[0],
+            metric_name: rec.title || `Record ${idx + 1}`,
+            metric_value: rec.customFields?.value ?? rec.customFields?.metric_value ?? '-',
+            unit: rec.customFields?.unit ?? '',
+            hash_lock: rec.customFields?.zkp_hash || rec.customFields?.hash_lock || null,
+            source_origin: rec.status || 'Blue.cc',
+          }));
+          setData(mapped);
+          setLoading(false);
+          return;
+        }
+      }
+    } catch (blueErr) {
+      console.warn('[Editor] Blue.cc fetch failed, falling back:', blueErr);
+    }
+
+    // ── 2. Fallback: 嘗試本地 metrics API ──
+    try {
       const res = await fetch('/api/metrics/editor', { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
         setData(json.data || []);
       } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
           { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
           { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
@@ -36,7 +61,6 @@ export default function EditorPage() {
       }
     } catch (e) {
       console.error('Fetch Error:', e);
-      // Fallback mock data
       setData([
         { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
         { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
@@ -53,8 +77,9 @@ export default function EditorPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          evidence: { table: 'editor', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
+          evidenceUuid: id,
+          sealType: '5t',
+          sourceOrigin: 'blue-cc-sync'
         })
       });
       const resData = await response.json();
@@ -77,10 +102,11 @@ export default function EditorPage() {
       const response = await fetch('/api/vault/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
+        body: JSON.stringify({ uuid: id })
       });
       const resData = await response.json();
-      if (resData.success && resData.valid) {
+      // Adjust according to the API's actual response structure (resData.data.isValid)
+      if (resData.success && resData.data?.isValid) {
         alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
       } else {
         alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
@@ -93,57 +119,74 @@ export default function EditorPage() {
     }
   };
 
-  const handleAddRecord = () => {
+  const handleAddRecord = async () => {
     setIsProcessing(true);
-    setTimeout(() => {
+    try {
+      // 同步建立 Blue.cc 紀錄
+      await fetch('/api/bluecc/records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: `New ESG Record ${new Date().toISOString().split('T')[0]}`,
+          customFields: { source: 'esggo-editor', created_at: new Date().toISOString() },
+        }),
+      });
+    } catch (e) {
+      console.warn('[Editor] Blue.cc create failed:', e);
+    } finally {
       setIsProcessing(false);
-      fetchData(); // re-fetch after add
-    }, 1500);
+      fetchData();
+    }
   };
 
-  const columns = [
-    { key: 'date', label: '日期 (Date)' },
+  const vaultColumns = [
     { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
-    { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </UniversalBadge>
-      ) : (
-        <UniversalBadge variant="default" size="sm">未封印</UniversalBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
-          </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
+    { key: 'metric_value', label: '數值 (Value)' },
+    { key: 'action', label: '操作 (Actions)' }
   ];
 
-  
+  const vaultRecords = data.map(row => ({
+    id: row.id.toString(),
+    timestamp: row.date,
+    author: row.source_origin,
+    zkpHash: row.hash_lock || 'UNSEALED_PENDING_ZKP',
+    fiveTStatus: row.hash_lock 
+      ? [true, true, true, true, true] as [boolean, boolean, boolean, boolean, boolean]
+      : [true, true, false, false, false] as [boolean, boolean, boolean, boolean, boolean],
+    data: {
+      metric_name: row.metric_name,
+      metric_value: (
+        <span className="font-bold text-slate-200">
+          {row.metric_value} <span className="text-xs text-slate-500 font-normal ml-1">{row.unit}</span>
+        </span>
+      ),
+      action: (
+        <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+          {!row.hash_lock && (
+            <button 
+              onClick={() => handleSeal(row.id)}
+              disabled={sealingId === row.id}
+              className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+            >
+              {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+              T5 封印
+            </button>
+          )}
+          <button 
+            onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
+            disabled={verifyingId === row.id}
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+          >
+            {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
+            {row.hash_lock ? '驗證 5T' : '編輯'}
+          </button>
+        </div>
+      )
+    }
+  }));
+
   const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    id: `ESG-EDI`,
     title: 'Editor',
     sub: 'Editor Management'
   };
@@ -176,51 +219,46 @@ export default function EditorPage() {
           </div>
         </header>
 
-        {/* Dashboard Grid */}
+        {/* Dashboard Grid using OmniKpiCard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <UniversalCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
-            </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </UniversalCard>
+          <OmniKpiCard
+            title="活躍代理"
+            value="3"
+            unit="Nodes"
+            trend={12.5}
+            trendLabel="Optimal Status"
+            fiveTStatus={[true, true, true, true, true]}
+            icon={<Activity size={20} />}
+          />
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
-              <ShieldCheck size={18} className="text-cyan-400" />
-            </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </UniversalCard>
+          <OmniKpiCard
+            title="5T 驗證率"
+            value="98.5"
+            unit="%"
+            trend={5.2}
+            trendLabel="Secured by Vault"
+            fiveTStatus={[true, true, true, true, true]}
+            icon={<ShieldCheck size={20} />}
+          />
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
-            </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </UniversalCard>
+          <OmniKpiCard
+            title="業務邏輯覆蓋"
+            value="100"
+            unit="%"
+            fiveTStatus={[true, true, true, false, false]}
+            trendLabel="Trinity UIUX Compliant"
+            icon={<Brain size={20} />}
+          />
         </div>
 
-        {/* Main Workspace Area */}
+        {/* Main Workspace Area using VaultOmniTable */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <UniversalCard 
-              variant="default" 
-              title="業務資料視圖" 
-              subtitle="Data synced with 5T Integrity Protocol"
-              className="min-h-[400px]"
-            >
-              <UniversalTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
-            </UniversalCard>
+             <VaultOmniTable 
+                columns={vaultColumns}
+                records={vaultRecords}
+                className="min-h-[400px]"
+             />
           </div>
           
           <div className="space-y-6">

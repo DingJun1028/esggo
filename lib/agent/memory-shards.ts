@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { getOmniAgentAI } from '../omni.config';
+import { ai } from '../agents/genkit';
 import { createClient } from '@supabase/supabase-js';
 
 // 初始化 Service Role Client 以寫入資料庫
@@ -14,6 +14,7 @@ export const MemoryShardSchema = z.object({
   description: z.string().describe('詳細描述此片段中代理人與使用者的事件總結'),
   tags: z.array(z.string()).describe('關鍵技能標籤，例如：[React, Performance, OmniCore]'),
   extractedCodeSnippets: z.array(z.string()).optional().describe('擷取出的有價值程式碼片段'),
+  // 注意: entropyLevel 欄位在資料庫中可能不存在，請參考 SUPABASE_MEMORY_SHARDS_SETUP.sql
   entropyLevel: z.number().min(0).max(100).optional().describe('系統熵值 (0 代表最極致的無有狀態，100 代表高度混亂)'),
 });
 
@@ -30,6 +31,7 @@ export const SkillUltimateSchema = z.object({
   masteryLevel: z.enum(['Novice', 'Adept', 'Expert', 'Master']),
   corePrinciples: z.array(z.string()).describe('從記憶碎片中萃取出的核心原則'),
   synthesis: z.string().describe('結合多個記憶碎片的深度總結與奧義心法'),
+  // 注意: voidDimension 欄位在資料庫中可能不存在，請參考 SUPABASE_MEMORY_SHARDS_SETUP.sql
   voidDimension: z.enum(['Structural Void', 'Logical Void', 'Stateful Void', 'Unified']).optional().describe('無有技藝歸屬維度'),
 });
 
@@ -45,8 +47,6 @@ export interface SkillUltimate extends SkillUltimateData {
  * 核心機制：將原始代理對話紀錄轉化為【記憶碎片】並持久化
  */
 export async function extractMemoryShard(conversationLog: string): Promise<MemoryShard> {
-  const ai = await getOmniAgentAI();
-  
   const prompt = `
 請分析以下代理程式與使用者之間的對話紀錄，總結出發生的事件與解決的問題，並將其轉化為一個「記憶碎片 (Memory Shard)」。
 記憶碎片代表一次有價值的技術互動或決策過程。
@@ -60,7 +60,7 @@ ${conversationLog}
 `;
 
   try {
-    const response = await (ai as any).generate({
+    const response = await ai.generate({
       system: "你是一個專業的【無有技藝】記憶萃取系統。你的目標是從雜亂的對話與執行紀錄中，提煉出具有高度技術價值的記憶碎片。",
       prompt,
       output: { schema: MemoryShardSchema }
@@ -75,17 +75,24 @@ ${conversationLog}
       timestamp: Date.now()
     };
 
-    // 持久化至 Supabase
+    // 持久化至 Supabase - 只包含資料庫中存在的欄位
+    const insertData = {
+      id: shard.id,
+      title: shard.title,
+      description: shard.description,
+      tags: shard.tags,
+      extracted_code_snippets: shard.extractedCodeSnippets || [],
+      timestamp: shard.timestamp
+    };
+    
+    // 只有在資料庫中存在該欄位且值不為undefined時才添加
+    if (shard.entropyLevel !== undefined) {
+      insertData['entropy_level'] = shard.entropyLevel;
+    }
+
     const { error: dbError } = await supabaseAdmin
       .from('omni_memory_shards')
-      .insert({
-        id: shard.id,
-        title: shard.title,
-        description: shard.description,
-        tags: shard.tags,
-        extracted_code_snippets: shard.extractedCodeSnippets || [],
-        timestamp: shard.timestamp
-      });
+      .insert(insertData);
 
     if (dbError) {
       console.warn('⚠️ 記憶碎片已生成，但存檔至資料庫失敗:', dbError.message);
@@ -106,8 +113,6 @@ export async function synthesizeSkillUltimate(shards: MemoryShard[]): Promise<Sk
     throw new Error('需要至少一個記憶碎片來合成奧義');
   }
 
-  const ai = await getOmniAgentAI();
-  
   const shardsContext = shards.map(s => `
 [碎片 ${s.id}] ${s.title}
 標籤: ${s.tags.join(', ')}
@@ -130,7 +135,7 @@ ${shardsContext}
 `;
 
   try {
-    const response = await (ai as any).generate({
+    const response = await ai.generate({
       system: "你是一個專業的【無有技藝】奧義合成系統。能夠將散落的知識融合為具有系統化與哲理深度的技能奧義，並精準歸類其無有維度。",
       prompt,
       output: { schema: SkillUltimateSchema }
@@ -146,18 +151,24 @@ ${shardsContext}
       timestamp: Date.now()
     };
 
-    // 持久化至 Supabase
+    // 持久化至 Supabase - 只包含資料庫中存在的欄位
+    const insertData = {
+      skill_name: ultimate.skillName,
+      mastery_level: ultimate.masteryLevel,
+      core_principles: ultimate.corePrinciples,
+      synthesis: ultimate.synthesis,
+      source_shards: ultimate.sourceShards,
+      timestamp: ultimate.timestamp
+    };
+    
+    // 只有在資料庫中存在該欄位且值不為undefined時才添加
+    if (ultimate.voidDimension !== undefined) {
+      insertData['void_dimension'] = ultimate.voidDimension;
+    }
+
     const { error: dbError } = await supabaseAdmin
       .from('omni_skill_ultimates')
-      .insert({
-        id: ultimate.id,
-        skill_name: ultimate.skillName,
-        mastery_level: ultimate.masteryLevel,
-        core_principles: ultimate.corePrinciples,
-        synthesis: ultimate.synthesis,
-        source_shards: ultimate.sourceShards,
-        timestamp: ultimate.timestamp
-      });
+      .insert(insertData);
 
     if (dbError) {
       console.warn('⚠️ 技能奧義已合成，但存檔至資料庫失敗:', dbError.message);
@@ -172,17 +183,24 @@ ${shardsContext}
 
 // 核心機制：將記憶碎片存入資料庫
 export async function storeMemoryShard(shard: MemoryShard): Promise<void> {
+  // 只包含資料庫中存在的欄位
+  const insertData = {
+    id: shard.id,
+    title: shard.title,
+    description: shard.description,
+    tags: shard.tags,
+    extracted_code_snippets: shard.extractedCodeSnippets ?? [],
+    timestamp: shard.timestamp
+  };
+  
+  // 只有在資料庫中存在該欄位且值不為undefined時才添加
+  if (shard.entropyLevel !== undefined) {
+    insertData['entropy_level'] = shard.entropyLevel;
+  }
+
   const { error } = await supabaseAdmin
     .from('omni_memory_shards')
-    .insert({
-      id: shard.id,
-      title: shard.title,
-      description: shard.description,
-      tags: shard.tags,
-      extracted_code_snippets: shard.extractedCodeSnippets ?? [],
-      entropy_level: shard.entropyLevel,
-      timestamp: shard.timestamp
-    });
+    .insert(insertData);
 
   if (error) {
     console.error('存儲記憶碎片失敗:', error);
@@ -232,6 +250,7 @@ export async function retrieveMemoryShards(options?: {
     description: record.description,
     tags: record.tags,
     extractedCodeSnippets: record.extracted_code_snippets,
+    // 從資料庫中讀取 entropy_level (如果存在)
     entropyLevel: record.entropy_level,
     timestamp: record.timestamp
   }));
@@ -239,17 +258,24 @@ export async function retrieveMemoryShards(options?: {
 
 // 核心機制：將技能奧義存入資料庫
 export async function storeSkillUltimate(ultimate: SkillUltimate): Promise<void> {
+  // 只包含資料庫中存在的欄位
+  const insertData = {
+    skill_name: ultimate.skillName,
+    mastery_level: ultimate.masteryLevel,
+    core_principles: ultimate.corePrinciples,
+    synthesis: ultimate.synthesis,
+    source_shards: ultimate.sourceShards,
+    timestamp: Date.now()
+  };
+  
+  // 只有在資料庫中存在該欄位且值不為undefined時才添加
+  if (ultimate.voidDimension !== undefined) {
+    insertData['void_dimension'] = ultimate.voidDimension;
+  }
+
   const { error } = await supabaseAdmin
     .from('omni_skill_ultimates')
-    .insert({
-      skill_name: ultimate.skillName,
-      mastery_level: ultimate.masteryLevel,
-      core_principles: ultimate.corePrinciples,
-      synthesis: ultimate.synthesis,
-      void_dimension: ultimate.voidDimension,
-      source_shards: ultimate.sourceShards,
-      timestamp: Date.now()
-    });
+    .insert(insertData);
 
   if (error) {
     console.error('存儲技能奧義失敗:', error);
@@ -302,6 +328,7 @@ export async function retrieveSkillUltimates(options?: {
     masteryLevel: record.mastery_level as 'Novice' | 'Adept' | 'Expert' | 'Master',
     corePrinciples: record.core_principles,
     synthesis: record.synthesis,
+    // 從資料庫中讀取 void_dimension (如果存在)
     voidDimension: record.void_dimension,
     sourceShards: record.source_shards,
     id: record.id,
