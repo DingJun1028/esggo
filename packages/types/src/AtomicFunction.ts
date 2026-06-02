@@ -12,12 +12,26 @@ export interface OmniCoreContext {
  * 萬能元件心核 (Omni-Component Heart)
  * 所有以「萬能(Omni)」為首的模組/元件，皆共享此核心狀態，確保全系統維度一致、語義共鳴。
  * 這裡，即是「永恆宮殿 (Eternal Palace)」與「記憶聖所 (Sanctuary of Memory)」所在的共同根基位置。
+ * 
+ * 元件必須嚴格遵守 5T 協議 (The 5T Protocol)：
+ * - Truth (真): Traceable (來源驗證)
+ * - Goodness (善): Transparent (算法透明)
+ * - Beauty (美): Tangible (UI/UX 可感知)
+ * - Trust (信): Trustworthy (密碼學綁定)
+ * - Transferful (傳): Trackable (全生命週期追蹤)
  */
 export interface OmniComponentHeart {
   omniSignature: string;          // 證明其為萬能體系的原生防偽簽章 (ZKP Hash)
   resonanceState: number;         // 0.0 - 1.0 的共鳴指數
   omniClass: 'OmniMemory' | 'OmniRune' | 'OmniAgent' | 'OmniTag' | 'OmniLibrary' | 'OmniGeneral';
   coreContext: OmniCoreContext;
+  fiveTState?: {
+    truthTraceable: boolean;
+    goodnessTransparent: boolean;
+    beautyTangible: boolean;
+    trustTrustworthy: boolean;
+    transferfulTrackable: boolean;
+  };
 }
 
 export interface AtomicFunctionInput<TContext extends OmniCoreContext = OmniCoreContext> {
@@ -79,5 +93,12 @@ export const OmniComponentHeartSchema = z.object({
     actor: z.string(),
     environment: z.enum(['development', 'staging', 'production']),
     traceId: z.string().optional()
-  })
+  }),
+  fiveTState: z.object({
+    truthTraceable: z.boolean(),
+    goodnessTransparent: z.boolean(),
+    beautyTangible: z.boolean(),
+    trustTrustworthy: z.boolean(),
+    transferfulTrackable: z.boolean()
+  }).optional()
 });
