@@ -58,7 +58,7 @@ export const AtomicLibraryShowcase: React.FC = () => {
     { 
       key: 'status', 
       header: '5T 誠信狀態', 
-      render: (row: any) => (
+      render: (row: TableRowData) => ( // Use the specific interface here
         <AtomicBadge variant={row.status === 'Verified' ? 'verified' : row.status === 'Auditing' ? 'warning' : 'error'}>
           {row.status}
         </AtomicBadge>
