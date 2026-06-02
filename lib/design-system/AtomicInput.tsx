@@ -1,9 +1,7 @@
 import React, { forwardRef } from 'react';
 import { cn } from '../utils';
 
-export interface AtomicInputProps extends React.InputHTMLAttributes<HTMLInputElement> { }
-
-export const AtomicInput = forwardRef<HTMLInputElement, AtomicInputProps>(
+export const AtomicInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => {
     return (
       <input
