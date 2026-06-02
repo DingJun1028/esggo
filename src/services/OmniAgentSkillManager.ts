@@ -2,12 +2,12 @@
 
     import * as fs from 'fs';
     import * as path from 'path';
-    import { validateSkillDefinition } from './skillValidation'; // Assuming a validation utility
-    import { OmniAgentSkillRegistry, SkillDefinition, ActionDefinition } from '../types/omniagent'; // New types
+    import { validateSkillDefinition } from './skillValidation';
+    import { OmniAgentSkillRegistry, SkillDefinition, ActionDefinition } from '../types/omniagent';
 
     class OmniAgentSkillManager {
       private skills: Map<string, SkillDefinition>;
-      private skillModules: Map<string, any>; // Cache for loaded skill modules
+      private skillModules: Map<string, Record<string, Function>>; // Cache for loaded skill modules
 
       constructor() {
         this.skills = new Map();
@@ -27,7 +27,7 @@
         const registry: OmniAgentSkillRegistry = JSON.parse(registryContent);
 
         for (const skill of registry.skills) {
-          if (validateSkillDefinition(skill)) { // Validate skill definition
+          if (validateSkillDefinition(skill)) {
             this.skills.set(skill.skillId, skill);
             console.log(`Registered skill: ${skill.skillId}`);
           } else {
@@ -49,7 +49,7 @@
         );
       }
 
-      public async loadSkillModule(skillId: string): Promise<any> {
+      public async loadSkillModule(skillId: string): Promise<Record<string, Function>> {
         if (this.skillModules.has(skillId)) {
           return this.skillModules.get(skillId);
         }
@@ -62,11 +62,13 @@
         // Dynamically import the skill module
         // This assumes skills are local Node.js modules
         const modulePath = path.join(process.cwd(), skill.entryPoint);
-        const skillModule = await import(modulePath);
+        // Using 'as any' temporarily for the dynamic import because TypeScript's
+        // static analysis struggles with dynamic imports for unknown module shapes.
+        // The return type 'Record<string, Function>' enforces type safety post-import.
+        const skillModule = (await import(modulePath)) as Record<string, Function>;
         this.skillModules.set(skillId, skillModule);
         return skillModule;
       }
     }
 
     export const omniAgentSkillManager = new OmniAgentSkillManager();
-    

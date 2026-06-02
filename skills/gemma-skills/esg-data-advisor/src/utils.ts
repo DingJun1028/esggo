@@ -10,7 +10,7 @@ export function analyzeESGData(data: ESGData): AnalysisResult {
         console.log(`Performing analysis on ${data.dataType} data...`);
     }
     // Example: simple text length as a metric
-    const metrics: { [key: string]: any } = {
+    const metrics: Record<string, unknown> = {
         dataLength: data.data.length,
         focusAreasCount: data.focusAreas?.length || 0,
     };

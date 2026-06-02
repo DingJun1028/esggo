@@ -16,7 +16,7 @@ export interface ESGData {
 }
 
 export interface AnalysisResult {
-    metrics: { [key: string]: any }; // Key-value pairs of extracted metrics
+    metrics: Record<string, unknown>; // Key-value pairs of extracted metrics
     summary: string; // A brief summary of the analysis
 }
 
