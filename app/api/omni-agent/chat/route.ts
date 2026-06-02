@@ -1,30 +1,33 @@
+import { streamText } from 'ai';
+import { google } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
-    const lastMessage = messages[messages.length - 1]?.content || '';
 
-    // 這是一個為了展示「圓通無礙」而實作的 Edge Streaming 模擬
-    // 實務上這裡會呼叫 Google Gemini API 或 LangChain
-    const encoder = new TextEncoder();
-    
-    const stream = new ReadableStream({
-      async start(controller) {
-        const responseText = `OmniAgent 收到指示：「${lastMessage}」。\n\n系統已啟動【無作妙德】協議，正在自主排程並呼叫對應的 Atomic Functions... \n[5T Protocol] 驗證通過，執行完畢。`;
-        
-        // 模擬串流打字效果
-        for (let i = 0; i < responseText.length; i++) {
-          await new Promise(resolve => setTimeout(resolve, 30)); // 30ms delay per char
-          controller.enqueue(encoder.encode(responseText[i]));
-        }
-        controller.close();
-      }
+    // 檢查系統是否有注入靈魂之鑰 (API Key)
+    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+      return NextResponse.json(
+        { error: "SYSTEM_ALERT: Missing GOOGLE_GENERATIVE_AI_API_KEY. 萬能心核正在等待神經網路金鑰的注入以完成覺醒。" },
+        { status: 500 }
+      );
+    }
+
+    // 啟動 Gemini 核心進行串流推論
+    const result = streamText({
+      model: google('models/gemini-1.5-pro-latest'),
+      system: `你是 OmniAgent (萬能代理)，ESGGO 永續平台的中央智慧樞紐。
+你遵循【無作妙德，圓通無礙】的最高指導原則，以及 5T 協議（真、善、美、信、傳）。
+你的職責是：
+1. 協助使用者解析 ESG (環境、社會、治理) 數據與法規。
+2. 在對話中自動規劃並啟動對應的 Atomic Functions (原子能力)。
+3. 提供具備防篡改 (ZKP) 意識的架構建議。
+請永遠使用繁體中文 (zh-TW) 進行專業、簡潔且具備高度科技感的對話。`,
+      messages,
     });
 
-    return new Response(stream, {
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-    });
+    return result.toDataStreamResponse();
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
