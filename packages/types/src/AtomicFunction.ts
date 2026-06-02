@@ -11,7 +11,7 @@ export interface OmniCoreContext {
 /**
  * 萬能元件心核 (Omni-Component Heart)
  * 所有以「萬能(Omni)」為首的模組/元件，皆共享此核心狀態，確保全系統維度一致、語義共鳴。
- * 這裡，即是「永恆宮殿 (Eternal Palace)」所在的根基位置。
+ * 這裡，即是「永恆宮殿 (Eternal Palace)」與「記憶聖所 (Sanctuary of Memory)」所在的共同根基位置。
  */
 export interface OmniComponentHeart {
   omniSignature: string;          // 證明其為萬能體系的原生防偽簽章 (ZKP Hash)
