@@ -1,10 +1,15 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const pdfParse = require('pdf-parse');
-console.log('pdfParse type:', typeof pdfParse, 'keys:', Object.keys(pdfParse));
-const pdf = typeof pdfParse === 'function' ? pdfParse : pdfParse.default || pdfParse;
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
+
+export interface PDFMetadata {
+  pages: number;
+  author: string;
+  title: string;
+  created: string;
+}
 
 export class PDFParser {
+  private lastMetadata: PDFMetadata | null = null;
+
   async download(url: string): Promise<Buffer> {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to download PDF: ${response.statusText}`);
@@ -14,23 +19,44 @@ export class PDFParser {
 
   async extractText(buffer: Buffer): Promise<string> {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
-    const data = await pdf(buffer);
-    return data.text;
+
+    const uint8 = new Uint8Array(buffer);
+    const pdf = await getDocument({ data: uint8 }).promise;
+    const numPages = pdf.numPages;
+
+    const textParts: string[] = [];
+    for (let i = 1; i <= numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items.map((item: any) => item.str).join(' ');
+      textParts.push(pageText);
+    }
+
+    return textParts.join('\n\n');
   }
 
-  async getMetadata(buffer: Buffer): Promise<any> {
+  async getMetadata(buffer: Buffer): Promise<PDFMetadata> {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
-    const data = await pdf(buffer);
-    return {
-      pages: data.numpages,
-      author: data.info?.Author || 'Unknown',
-      title: data.info?.Title || 'Untitled',
-      created: data.info?.CreationDate || new Date().toISOString()
+
+    const uint8 = new Uint8Array(buffer);
+    const pdf = await getDocument({ data: uint8 }).promise;
+    const metadata = await pdf.getMetadata();
+
+    const info = metadata.info as any;
+    const result: PDFMetadata = {
+      pages: pdf.numPages,
+      author: info?.Author || 'Unknown',
+      title: info?.Title || 'Untitled',
+      created: info?.CreationDate || new Date().toISOString()
     };
+
+    this.lastMetadata = result;
+    return result;
   }
 
   verify(buffer: Buffer): boolean {
-    const header = buffer.slice(0, 4).toString();
+    if (buffer.length < 4) return false;
+    const header = buffer.slice(0, 4).toString('ascii');
     return header === '%PDF';
   }
 }
