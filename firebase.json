@@ -62,7 +62,6 @@
       "source": "esggo"
     },
     {
-      "source": "esggo-funtions",
       "codebase": "esggo-funtions",
       "disallowLegacyRuntimeConfig": true,
       "ignore": [
@@ -75,7 +74,17 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint",
         "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
+      ],
+      "source": "esggo-funtions"
+    },
+    {
+      "codebase": "esggo-dashboard",
+      "disallowLegacyRuntimeConfig": true,
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ],
+      "source": "esggo-dashboard"
     }
   ],
   "dataconnect": {
@@ -102,6 +111,17 @@
     {
       "backendId": "esggo-db",
       "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    },
+    {
+      "backendId": "esggo-db",
+      "rootDir": "YY",
       "ignore": [
         "node_modules",
         ".git",
