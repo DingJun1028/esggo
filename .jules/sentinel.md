@@ -19,3 +19,7 @@
 **Vulnerability:** The governance check action relied on `git diff` to identify if an ADR was added, but the default checkout (`actions/checkout@v4`) only fetches a shallow clone with `fetch-depth: 1`. This caused the git command to exit with `128` because the base commit was unavailable. Furthermore, the `github.event.before` ref was used, which is frequently broken or unavailable in pull request contexts.
 **Learning:** For git history operations in GitHub Actions (like checking for added files using `git diff`), a full clone or fetching the target branch is required.
 **Prevention:** Explicitly use `fetch-depth: 0` in `actions/checkout` when performing history comparison, and use `origin/${{ github.base_ref }}` rather than `github.event.before` to ensure reliability.
+## 2024-05-25 - [Fix Hardcoded Secret in QKP Healing Agent]
+**Vulnerability:** Found a hardcoded fallback secret (`pat_3eeb4039ad864d2c96569dbbc94cfb0a`) for the `BLUE_CC_TOKEN` in `lib/agents/qkp-healing-agent.ts`, which was used to generate a medical-grade ZKP seal.
+**Learning:** Development test secrets are sometimes left as fallbacks when initializing cryptographic operations, bypassing intended environment configurations. This mirrors the exact vulnerability previously found in API gateway endpoints.
+**Prevention:** Always enforce strict environment variable presence for cryptographic keys. Throw an explicit error during runtime execution or agent initialization if secrets are missing, rather than defaulting to hardcoded development strings.
