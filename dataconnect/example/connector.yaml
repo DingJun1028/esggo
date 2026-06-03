@@ -11,27 +11,3 @@ generate:
       react: true
       angular: false
       clientCache: {}
-    - outputDir: ..\..\server\src\dataconnect-generated
-      package: "@dataconnect/generated"
-      packageJsonDir: ..\..\server
-      react: false
-      angular: false
-      clientCache: {}
-    - outputDir: ..\..\cli\src\dataconnect-generated
-      package: "@dataconnect/generated"
-      packageJsonDir: ..\..\cli
-      react: false
-      angular: false
-      clientCache: {}
-    - outputDir: ..\..\packages\types\src\dataconnect-generated
-      package: "@dataconnect/generated"
-      packageJsonDir: ..\..\packages\types
-      react: false
-      angular: false
-      clientCache: {}
-    - outputDir: ..\..\skills\gemma-skills\esg-data-advisor\src\dataconnect-generated
-      package: "@dataconnect/generated"
-      packageJsonDir: ..\..\skills\gemma-skills\esg-data-advisor
-      react: false
-      angular: false
-      clientCache: {}
