@@ -1,4 +1,8 @@
-import { getDocument } from 'pdf-parse';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
+console.log('pdfParse type:', typeof pdfParse, 'keys:', Object.keys(pdfParse));
+const pdf = typeof pdfParse === 'function' ? pdfParse : pdfParse.default || pdfParse;
 
 export class PDFParser {
   async download(url: string): Promise<Buffer> {
@@ -10,23 +14,17 @@ export class PDFParser {
 
   async extractText(buffer: Buffer): Promise<string> {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
-    const data = await getDocument(buffer).promise;
-    const texts: string[] = [];
-    for (let i = 1; i <= data.numPages; i++) {
-      const page = await data.getPage(i);
-      const content = await page.getTextContent();
-      texts.push(content.items.map((item: any) => item.str).join(' '));
-    }
-    return texts.join('\n');
+    const data = await pdf(buffer);
+    return data.text;
   }
 
   async getMetadata(buffer: Buffer): Promise<any> {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
-    const data = await getDocument(buffer).promise;
+    const data = await pdf(buffer);
     return {
-      pages: data.numPages,
-      author: data.info?.author || 'Unknown',
-      title: data.info?.title || 'Untitled',
+      pages: data.numpages,
+      author: data.info?.Author || 'Unknown',
+      title: data.info?.Title || 'Untitled',
       created: data.info?.CreationDate || new Date().toISOString()
     };
   }
