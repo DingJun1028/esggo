@@ -1,6 +1,7 @@
 import { ai } from './genkit.ts';
 import { z } from 'genkit';
 import { telemetryService } from '../telemetry/service.ts';
+import { omniAgentBus } from '../omni-agent-bus.ts';
 import { memoryStore } from '../memory/memory-store.ts';
 import { toolSynthesizer } from '../tools/synthesis.ts';
 import type { MemoryRecord } from '../memory/memory-store.ts';
