@@ -1,11 +1,23 @@
-const { listAllTasksRef, getTaskByIdRef, upsertTaskRef, listAuditRecordsRef, insertAuditRecordRef, listScrapedArticlesRef, listRoadmapMilestonesRef, upsertRoadmapMilestoneRef, getCompanyProfileRef, upsertCompanyProfileRef, getReportByIdRef, upsertReportRef, upsertReportSectionRef, listReportSectionsByReportRef, upsertCompanyMetricRef, listCompanyMetricsRef, insertEternalMemoryRef, listEternalMemoriesByCompanyRef, getReportByCompanyRef, listReportsRef, upsertScrapedArticleRef, listEternalMemoriesRef, listSwarmAgentTasksRef, upsertSwarmAgentTaskRef, listRegulatoryPoliciesRef, getMyCompanyProfileRef, connectorConfig } = require('../index.cjs.js');
+const { listTasksRef, listUsersRef, listUserTasksRef, getTaskByIdRef, searchTaskRef, upsertUserRef, createTaskRef, updateTaskRef, deleteTaskRef, connectorConfig } = require('../index.cjs.js');
 const { validateArgs, CallerSdkTypeEnum } = require('firebase/data-connect');
 const { useDataConnectQuery, useDataConnectMutation, validateReactArgs } = require('@tanstack-query-firebase/react/data-connect');
 
 
-exports.useListAllTasks = function useListAllTasks(dcOrOptions, options) {
+exports.useListTasks = function useListTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listAllTasksRef(dcInstance);
+  const ref = listTasksRef(dcInstance);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useListUsers = function useListUsers(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
+  const ref = listUsersRef(dcInstance);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useListUserTasks = function useListUserTasks(dcOrOptions, options) {
+  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
+  const ref = listUserTasksRef(dcInstance);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
@@ -14,167 +26,40 @@ exports.useGetTaskById = function useGetTaskById(dcOrVars, varsOrOptions, option
   const ref = getTaskByIdRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
-exports.useUpsertTask = function useUpsertTask(dcOrOptions, options) {
+
+exports.useSearchTask = function useSearchTask(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, false);
+  const ref = searchTaskRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+exports.useUpsertUser = function useUpsertUser(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return upsertTaskRef(dcInstance, vars);
+    return upsertUserRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-
-exports.useListAuditRecords = function useListAuditRecords(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listAuditRecordsRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useInsertAuditRecord = function useInsertAuditRecord(dcOrOptions, options) {
+exports.useCreateTask = function useCreateTask(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return insertAuditRecordRef(dcInstance, vars);
+    return createTaskRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-
-exports.useListScrapedArticles = function useListScrapedArticles(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listScrapedArticlesRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useListRoadmapMilestones = function useListRoadmapMilestones(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listRoadmapMilestonesRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useUpsertRoadmapMilestone = function useUpsertRoadmapMilestone(dcOrOptions, options) {
+exports.useUpdateTask = function useUpdateTask(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return upsertRoadmapMilestoneRef(dcInstance, vars);
+    return updateTaskRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-
-exports.useGetCompanyProfile = function useGetCompanyProfile(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getCompanyProfileRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useUpsertCompanyProfile = function useUpsertCompanyProfile(dcOrOptions, options) {
+exports.useDeleteTask = function useDeleteTask(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return upsertCompanyProfileRef(dcInstance, vars);
+    return deleteTaskRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useGetReportById = function useGetReportById(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getReportByIdRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useUpsertReport = function useUpsertReport(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return upsertReportRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useUpsertReportSection = function useUpsertReportSection(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return upsertReportSectionRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListReportSectionsByReport = function useListReportSectionsByReport(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listReportSectionsByReportRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useUpsertCompanyMetric = function useUpsertCompanyMetric(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return upsertCompanyMetricRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListCompanyMetrics = function useListCompanyMetrics(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listCompanyMetricsRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useInsertEternalMemory = function useInsertEternalMemory(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return insertEternalMemoryRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListEternalMemoriesByCompany = function useListEternalMemoriesByCompany(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listEternalMemoriesByCompanyRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useGetReportByCompany = function useGetReportByCompany(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getReportByCompanyRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useListReports = function useListReports(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listReportsRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useUpsertScrapedArticle = function useUpsertScrapedArticle(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return upsertScrapedArticleRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListEternalMemories = function useListEternalMemories(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listEternalMemoriesRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useListSwarmAgentTasks = function useListSwarmAgentTasks(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listSwarmAgentTasksRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useUpsertSwarmAgentTask = function useUpsertSwarmAgentTask(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return upsertSwarmAgentTaskRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListRegulatoryPolicies = function useListRegulatoryPolicies(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = listRegulatoryPoliciesRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useGetMyCompanyProfile = function useGetMyCompanyProfile(dcOrOptions, options) {
-  const { dc: dcInstance, options: inputOpts } = validateReactArgs(connectorConfig, dcOrOptions, options);
-  const ref = getMyCompanyProfileRef(dcInstance);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }

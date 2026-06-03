@@ -1,12 +1,6 @@
-/**
- * ESGSonar | PDF Parser Module
- * Handles PDF downloading and content extraction.
- */
+import { getDocument } from 'pdf-parse';
 
 export class PDFParser {
-  /**
-   * Download PDF from URL
-   */
   async download(url: string): Promise<Buffer> {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to download PDF: ${response.statusText}`);
@@ -14,30 +8,29 @@ export class PDFParser {
     return Buffer.from(arrayBuffer);
   }
 
-  /**
-   * Extract text from PDF buffer
-   * Note: In a real implementation, this would use pdf-parse or similar
-   */
   async extractText(buffer: Buffer): Promise<string> {
-    // Placeholder for actual PDF text extraction logic
-    // For now, we simulate extraction
-    return "[Extracted Text Placeholder from PDF]";
+    if (!this.verify(buffer)) throw new Error('Invalid PDF file');
+    const data = await getDocument(buffer).promise;
+    const texts: string[] = [];
+    for (let i = 1; i <= data.numPages; i++) {
+      const page = await data.getPage(i);
+      const content = await page.getTextContent();
+      texts.push(content.items.map((item: any) => item.str).join(' '));
+    }
+    return texts.join('\n');
   }
 
-  /**
-   * Read PDF metadata
-   */
   async getMetadata(buffer: Buffer): Promise<any> {
+    if (!this.verify(buffer)) throw new Error('Invalid PDF file');
+    const data = await getDocument(buffer).promise;
     return {
-      pages: 10,
-      author: "ESG GO System",
-      created: new Date().toISOString()
+      pages: data.numPages,
+      author: data.info?.author || 'Unknown',
+      title: data.info?.title || 'Untitled',
+      created: data.info?.CreationDate || new Date().toISOString()
     };
   }
 
-  /**
-   * Verify PDF file (Magic Number check)
-   */
   verify(buffer: Buffer): boolean {
     const header = buffer.slice(0, 4).toString();
     return header === '%PDF';
