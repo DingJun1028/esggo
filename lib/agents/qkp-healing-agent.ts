@@ -58,7 +58,11 @@ export class QkpHealingAgent {
     // 治療成功後，產生醫學級別 (Medical-Grade) 的 ZKP Seal 加密雜湊
     const prevHash = "0x76ac3039ee3039ad864d2c81d8d0715e";
     const timestamp = Date.now();
-    const mockSecret = process.env.BLUE_CC_TOKEN || 'pat_3eeb4039ad864d2c96569dbbc94cfb0a';
+    const mockSecret = process.env.BLUE_CC_TOKEN;
+
+    if (!mockSecret) {
+      throw new Error('Server misconfiguration: missing BLUE_CC_TOKEN');
+    }
     
     const rawPayload = `${prevHash}||${JSON.stringify({ healed: true, severity })}||${evidenceUuid}||${timestamp}`;
     const medicalZkpHash = crypto
