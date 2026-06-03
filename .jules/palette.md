@@ -1,2 +1,6 @@
 ## ESGGO UX Learnings
 ## 2024-05-24 - Added Unique IDs & ARIA Error Handling to Input Components\n**Learning:** In highly customized, styled `Input` components acting as wrappers, screen readers fail to associate validation errors and labels securely unless dynamically generated IDs link the elements together (such as `aria-invalid` or `htmlFor`). Furthermore, generic `alert` or `aria-describedby` wrappers prevent issues where error messages are read completely unassociated with input elements.\n**Action:** Use `React.useId()` when creating customizable UI wrappers to guarantee uniquely linked `id` to `label` mappings and error outputs to ensure optimal screen reader behaviors.\n\n
+
+## 2024-05-17 - [Accessible Custom Toggles]
+**Learning:** Custom interactive elements (like custom Toggles/Switches created from `div`s) inherently lack native keyboard interaction (`Tab` focus, `Space` to toggle) and screen reader support (checked state, switch role).
+**Action:** Always wrap custom toggles with a visually hidden (`sr-only`), native `<input type="checkbox" role="switch" />` and use `peer-focus-visible` classes on the visual track. This guarantees proper keyboard focus rings and correct a11y announcements without writing complex custom keydown handlers.
