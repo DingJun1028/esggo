@@ -37,20 +37,78 @@
       }
     }
   },
-  "functions": {
-    "source": ".",
-    "runtime": "nodejs20",
-    "ignore": [
-      "**/node_modules/**",
-      "**/.git/**",
-      "**/.next/**",
-      "**/build/**"
-    ],
-    "predeploy": [
-      "npm run build"
-    ]
-  },
+  "functions": [
+    {
+      "codebase": "default",
+      "ignore": [
+        "**/node_modules/**",
+        "**/.git/**",
+        "**/.next/**",
+        "**/build/**"
+      ],
+      "predeploy": [
+        "npm run build"
+      ],
+      "source": ".",
+      "runtime": "nodejs20"
+    },
+    {
+      "codebase": "esggo",
+      "disallowLegacyRuntimeConfig": true,
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ],
+      "source": "esggo"
+    },
+    {
+      "source": "esggo-funtions",
+      "codebase": "esggo-funtions",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
   "dataconnect": {
     "source": "dataconnect"
-  }
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "apphosting": [
+    {
+      "backendId": "esggo-backend",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    },
+    {
+      "backendId": "esggo-db",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
+    }
+  ]
 }
