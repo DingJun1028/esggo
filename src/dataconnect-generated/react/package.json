@@ -2,7 +2,7 @@
   "name": "@dataconnect/generated-react",
   "version": "1.0.0",
   "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
-  "description": "Generated SDK For omnicore",
+  "description": "Generated SDK For example",
   "license": "Apache-2.0",
   "engines": {
     "node": " >=18.0"
