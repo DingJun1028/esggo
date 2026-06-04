@@ -1,3 +1,9 @@
+---
+uuid: "0af2866f-2f12-4dd8-bc77-dd81cace2dbe"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.531Z"
+evidence: "app\intelligence\DESIGN.md"
+---
 # 商情中心 Intelligence
 
 **路徑：** `/intelligence`

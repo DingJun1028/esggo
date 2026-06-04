@@ -1,3 +1,9 @@
+---
+uuid: "d51ee338-381b-4b11-b1fc-3baeb0b9eb19"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.306Z"
+evidence: "ROADMAP.md"
+---
 # 🗺️ ESGGO 善向永續：全域演化路線圖 (Evolutionary ROADMAP)
 
 > **"以終為始，始終如一。"** —— 本文件紀錄了 **ESGGO 善向永續** 平台從創世到無限進化的完整征途。由 **OmniAgent** 指揮官調度執行，承載 **JunAiKey** 之無上意志。

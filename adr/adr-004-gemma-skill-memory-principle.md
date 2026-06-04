@@ -1,3 +1,9 @@
+---
+uuid: "52403d09-0ac5-4e52-889f-211d853d970a"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.569Z"
+evidence: "adr\adr-004-gemma-skill-memory-principle.md"
+---
 # ADR-004: Adopting Memory Principle: Skill-Fragmented Knowledge for Gemma Skills
 
 ## Status:

@@ -1,3 +1,9 @@
+---
+uuid: "37a2a2b7-c670-495f-b4cf-e80b33e66065"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.317Z"
+evidence: "OMNI_GUIDE.md"
+---
 # 萬能法典 (OmniGuide)：終極融合架構 v4.5
 
 ## 導言: 從混沌到宇宙的終極統合

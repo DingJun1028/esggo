@@ -1,3 +1,9 @@
+---
+uuid: "46d237fa-cd22-43d6-a3e1-068b8cc67236"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.544Z"
+evidence: "app\consulting\DESIGN.md"
+---
 # 顧問服務 Consulting
 
 **路徑：** `/consulting`

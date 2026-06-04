@@ -1,3 +1,9 @@
+---
+uuid: "8dd49bc8-335a-45d3-9102-4d682f45f216"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.327Z"
+evidence: "implementation_plan.md"
+---
 # InfoOne v8.1.0 淺色系 UI 元件庫與編輯器完整設計實作計畫
 
 本計畫旨在將您提供的「InfoOne v8.1.0 - UI 元件庫設計規範」完整實作至目前的系統中，並著重於「淺色系」與「液態玻璃 (Liquid Glass)」的視覺效果，最後將其應用於 Editor 頁面以達成完整設計。

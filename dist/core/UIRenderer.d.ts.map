@@ -1,0 +1,1 @@
+{"version":3,"file":"UIRenderer.d.ts","sourceRoot":"","sources":["../../src/core/UIRenderer.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,YAAY;IAC3B,cAAc,EAAE,MAAM,CAAC;IACvB,KAAK,EAAE,MAAM,CAAC;IACd,MAAM,EAAE,MAAM,CAAC;CAChB;AAED;;GAEG;AACH,qBAAa,UAAU;IACrB,MAAM,CAAC,MAAM,EAAE,YAAY,GAAG,MAAM;CAKrC"}

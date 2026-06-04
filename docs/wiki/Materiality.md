@@ -1,3 +1,9 @@
+---
+uuid: "b0226d95-3f3a-4465-8cbb-2f66bc352a4e"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.447Z"
+evidence: "docs\wiki\Materiality.md"
+---
 # 重大性矩陣 Materiality [Materiality]
 路徑： /materiality | 權限： CSO, PM | 所屬旅程： II. 策略盤點與分派
 

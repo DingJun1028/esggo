@@ -1,3 +1,9 @@
+---
+uuid: "3170a41f-a4d6-4687-84ad-a5d51e206a97"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.519Z"
+evidence: "app\supply-chain\DESIGN.md"
+---
 # 供應鏈透明 Supply Chain
 
 **路徑：** `/supply-chain`

@@ -1,3 +1,9 @@
+---
+uuid: "099afd4c-5366-4d46-9c44-48d115da04fe"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.441Z"
+evidence: "docs\wiki\Profile.md"
+---
 # 企業管理 [Company Profile]
 路徑： /profile | 權限： ADMIN, PM | 所屬旅程： I. 初始導入與配置
 

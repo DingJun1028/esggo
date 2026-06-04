@@ -174,6 +174,67 @@ export const OMNIBLUETABLE_BEST_PRACTICES: BestPractice[] = [
     tags: ['Resilience', 'Retry', 'BatchProcessing', 'RateLimit', 'DataPipeline'],
     last_verified: '2026-05-31',
   },
+  // Render Workflows Examples
+  {
+    id: 'bp-rw-hw', // Render Workflow - Hello World
+    category: 'G', // Governance, as it demonstrates core workflow concepts
+    industry: 'General Corporate',
+    title: 'Render Workflow: Hello World Task Definitions',
+    strategy: '定義並註冊基礎 Render 工作流程任務 (如計算平方、鏈接任務、錯誤重試)，用於驗證平台連通性與基本功能。',
+    benchmark_source: 'Render Workflows SDK Examples',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true }, // Assuming basic compliance
+    impact_score: 50, // Low impact as it's a demo
+    tags: ['RenderWorkflow', 'TaskDefinition', 'HelloWorld', 'SDK'],
+    last_verified: '2026-06-04',
+  },
+  {
+    id: 'bp-rw-etl', // Render Workflow - ETL Job
+    category: 'G', // Data Processing Governance
+    industry: 'General Corporate',
+    title: 'Render Workflow: ETL Data Pipeline',
+    strategy: '實作 Render 工作流程驅動的 ETL 數據處理管道，自動執行數據提取、轉換與載入任務，確保數據準確性與及時性。',
+    benchmark_source: 'Render Workflows SDK Examples',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 75,
+    tags: ['RenderWorkflow', 'ETL', 'DataPipeline', 'Automation'],
+    last_verified: '2026-06-04',
+  },
+  {
+    id: 'bp-rw-dp', // Render Workflow - Data Pipeline
+    category: 'G', // Data Processing Governance
+    industry: 'General Corporate',
+    title: 'Render Workflow: Multi-Source Data Pipeline',
+    strategy: '建立多源數據整合與分析的 Render 工作流程，實現數據清洗、富化及分段，支持複雜的數據治理與決策。',
+    benchmark_source: 'Render Workflows SDK Examples',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 80,
+    tags: ['RenderWorkflow', 'DataPipeline', 'MultiSource', 'Analytics'],
+    last_verified: '2026-06-04',
+  },
+  {
+    id: 'bp-rw-fp', // Render Workflow - File Processing
+    category: 'G', // File Processing Governance
+    industry: 'General Corporate',
+    title: 'Render Workflow: File Processing & Analysis',
+    strategy: '設計 Render 工作流程用於文件上傳、解析與批次處理，包含文件驗證、數據提取與轉換，適用於大規模數據文件管理。',
+    benchmark_source: 'Render Workflows SDK Examples',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 70,
+    tags: ['RenderWorkflow', 'FileProcessing', 'BatchProcessing', 'DataManagement'],
+    last_verified: '2026-06-04',
+  },
+  {
+    id: 'bp-rw-oai', // Render Workflow - OpenAI Agent
+    category: 'S', // Social (AI for customer support, DEI) or G (AI Governance)
+    industry: 'General Corporate',
+    title: 'Render Workflow: OpenAI Agent for Text Analysis',
+    strategy: '整合 OpenAI 代理於 Render 工作流程，實現 AI 驅動的文本分析、語義理解與自動響應，提升客戶服務或數據洞察能力。',
+    benchmark_source: 'Render Workflows SDK Examples / OpenAI API',
+    t5_compliance: { traceable: true, transparent: true, tangible: true, trackable: true, trustworthy: true },
+    impact_score: 85,
+    tags: ['RenderWorkflow', 'OpenAI', 'AI', 'TextAnalysis', 'Agent'],
+    last_verified: '2026-06-04',
+  },
 ];
 
 export function getOmniBlueTablePractices(industry?: string): BestPractice[] {

@@ -1,3 +1,9 @@
+---
+uuid: "130b3e6a-269c-4284-9e52-ecc4702e2ae3"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.339Z"
+evidence: "ESG_GO_Brand_Style_Specification.md"
+---
 # 🏛️ OmniAgent 系統 + ESG Go 系統 — 平台品牌風格元素規格書 v1.1
 
 > **Platform:** OmniAgent + ESG Go | **Version:** 8.5.1-Alpha | **Framework:** Berkeley Haas × TSISDA × 5T Protocol

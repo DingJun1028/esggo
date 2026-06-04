@@ -1,3 +1,9 @@
+---
+uuid: "ae4b9d71-78b8-41a9-b679-37565569fa05"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.470Z"
+evidence: "docs\wiki\Document-Checklist.md"
+---
 # 文件清單 Document Checklist [Document Checklist]
 路徑： /document-checklist | 權限： PM, ALL_USERS | 所屬旅程： II. 策略盤點與分派
 

@@ -1,3 +1,9 @@
+---
+uuid: "1b4176b7-00e8-43d9-886b-7f4cc6cb4982"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.922Z"
+evidence: "inventory-tracker\README.md"
+---
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

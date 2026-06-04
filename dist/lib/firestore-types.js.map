@@ -1,0 +1,1 @@
+{"version":3,"file":"firestore-types.js","sourceRoot":"","sources":["../../src/lib/firestore-types.ts"],"names":[],"mappings":";;;AAAA,6BAA6B;AAChB,QAAA,WAAW,GAAG;IACzB,SAAS,EAAE,WAAW;IACtB,UAAU,EAAE,YAAY;IACxB,gBAAgB,EAAE,kBAAkB;IACpC,SAAS,EAAE,WAAW;CACd,CAAC"}

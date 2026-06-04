@@ -1,3 +1,9 @@
+---
+uuid: "8f366152-a4c1-40c6-8816-a480711b74dd"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.575Z"
+evidence: "adr\adr-001-initial-project-setup.md"
+---
 # ADR-001: Initial Project Setup and Core Technologies
 
 ## Status:

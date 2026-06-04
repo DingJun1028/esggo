@@ -1,3 +1,9 @@
+---
+uuid: "8bfc5b50-cc89-45c7-98bf-4050d70b497f"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.343Z"
+evidence: "DESIGN.md"
+---
 # ESGGO 系統設計規範 DESIGN.md 💎
 ## 核心理念：Liquid Glass & 5T Protocol
 
