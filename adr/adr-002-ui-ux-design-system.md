@@ -1,3 +1,9 @@
+---
+uuid: "1bcfe793-37ed-49a1-a15a-06a9e90bd4eb"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.573Z"
+evidence: "adr\adr-002-ui-ux-design-system.md"
+---
 # ADR-002: Establishing UI/UX Design System with Atomic Components
 
 ## Status:

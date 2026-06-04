@@ -2,14 +2,14 @@ import {
   listAllTasks,
   upsertTask
 } from '@dataconnect/generated';
-import { dcGetReportById } from './dataconnect-services.ts';
+import { dcGetReportById } from './dataconnect-services';
 
 export { 
   listAllTasks,
   upsertTask,
   dcGetReportById
 };
-import { db } from './firebase.ts';
+import { db } from './firebase';
 import { 
   collection, 
   doc, 
@@ -23,8 +23,8 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
-import { isDemoMode } from './firebase.ts';
-import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data.ts';
+import { isDemoMode } from './firebase';
+import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data';
 
 // ==========================================
 // Types
@@ -66,6 +66,25 @@ export interface RoadmapMilestone { id?: string; [key: string]: unknown; }
 export interface SocialMetric { id?: string; [key: string]: unknown; }
 
 const DEFAULT_COMPANY_ID = '00000000-0000-0000-0000-000000000000';
+
+// ==========================================
+// Stub Functions (for missing DataConnect operations)
+// ==========================================
+
+const listAuditRecords = async () =>
+  ({ data: { auditRecords: [] as any[] } });
+
+const listScrapedArticles = async () =>
+  ({ data: { scrapedArticles: [] as any[] } });
+
+const listRoadmapMilestones = async () =>
+  ({ data: { roadmapMilestones: [] as any[] } });
+
+const listReports = async () =>
+  ({ data: { reports: [] as any[] } });
+
+const listCompanyMetrics = async (_args: { companyId: string }) =>
+  ({ data: { companyMetrics: [] as any[] } });
 
 // ==========================================
 // ESG Metrics (Migrated to Data Connect)

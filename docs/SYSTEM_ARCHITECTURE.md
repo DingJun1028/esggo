@@ -1,3 +1,9 @@
+---
+uuid: "f0aef4f1-6218-4d8d-876a-1b8f17b1219b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.403Z"
+evidence: "docs\SYSTEM_ARCHITECTURE.md"
+---
 # ESG GO System Architecture
 
 ## 1. 系統總覽 (System Overview)

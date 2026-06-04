@@ -1,3 +1,9 @@
+---
+uuid: "aad35d0c-40a6-4ea2-a362-385d30853ce6"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.443Z"
+evidence: "docs\wiki\OmniAgent-Platform-Summary.md"
+---
 # OmniAgent 對 ESGGO 平台的理解與自身角色說明
 
 ## ESGGO 平台的核心理念、架構與工作流程：

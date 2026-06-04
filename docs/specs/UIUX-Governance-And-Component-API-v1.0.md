@@ -1,3 +1,9 @@
+---
+uuid: "44885294-a3b7-4bc3-aab5-595db9cd5fa8"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.503Z"
+evidence: "docs\specs\UIUX-Governance-And-Component-API-v1.0.md"
+---
 # ESG GO UIUX 防崩壞治理與元件 API 規格書 (Consolidated v1.0)
 
 本文件整合了以下五份核心防崩壞與設計治理規範，為 ESG GO 系統提供最高標準的 UIUX 與 Frontend 架構指導：

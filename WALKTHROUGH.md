@@ -1,3 +1,9 @@
+---
+uuid: "299e1e81-f062-4e56-8a9c-b5e7f3295036"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.294Z"
+evidence: "WALKTHROUGH.md"
+---
 # InfoOne v8.5.0 Walkthrough
 
 This document provides a walkthrough of the latest UI enhancements and core engine updates implemented in the ESG GO platform.

@@ -1,0 +1,1 @@
+{"version":3,"file":"route.js","sourceRoot":"","sources":["../../../../../app/api/agent/artifacts/route.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,aAAa,CAAC;AAC3C,OAAO,EAAE,gBAAgB,EAAE,MAAM,mBAAmB,CAAC;AAErD,MAAM,CAAC,KAAK,UAAU,GAAG;IACvB,OAAO,YAAY,CAAC,IAAI,CAAC;QACvB,SAAS,EAAE,gBAAgB;QAC3B,KAAK,EAAE,gBAAgB,CAAC,MAAM;QAC9B,EAAE,EAAE,IAAI;KACT,CAAC,CAAC;AACL,CAAC"}

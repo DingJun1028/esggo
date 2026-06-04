@@ -1,3 +1,9 @@
+---
+uuid: "037ef45c-42fa-4347-b6e4-3a7ce1cdfe51"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.535Z"
+evidence: "app\governance\DESIGN.md"
+---
 # 公司治理 Governance
 
 **路徑：** `/governance`

@@ -1,3 +1,9 @@
+---
+uuid: "ff055f95-e2e6-4583-9fdb-ee5c6dc9e004"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.392Z"
+evidence: "skills\gemma-skills\esg-data-advisor\SKILL.md"
+---
 # ESG Data Processing and Compliance Advisor Skill
 
 This skill assists with processing ESG-related data, checking for compliance with various standards (like GRI), and providing actionable insights. It is designed to be extensible and iterative, allowing for continuous improvement and addition of new functionalities.

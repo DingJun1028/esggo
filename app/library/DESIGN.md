@@ -1,3 +1,9 @@
+---
+uuid: "f7a08560-19be-438b-9468-89db44f2bc14"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.529Z"
+evidence: "app\library\DESIGN.md"
+---
 # 永續智庫 Library
 
 **路徑：** `/library`

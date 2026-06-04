@@ -1,3 +1,9 @@
+---
+uuid: "865d7776-302e-4f89-9f37-077a98b9cf69"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.409Z"
+evidence: "docs\OmniBlueTable.md"
+---
 # OmniBlueTable 系統
 
 > **簡述 (Brief Description)**: 藍碳混合雲控制平面 (OmniBlue) × OmniTable 資料表整合系統 — 實現 ESG 數據 Sovereignty、多雲協調與 Logic Node 同步。

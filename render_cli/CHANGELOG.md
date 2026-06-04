@@ -1,3 +1,9 @@
+---
+uuid: "bdbc34fb-ab99-47b9-919a-cb6a8e6fe42c"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.920Z"
+evidence: "render_cli\CHANGELOG.md"
+---
 # Changelog
 
 ## [2.19.0] - 2026-05-28

@@ -1,3 +1,9 @@
+---
+uuid: "5a11eb8b-cba9-4bae-9ce9-454bcbcec2f6"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.423Z"
+evidence: "docs\wiki\Tasks.md"
+---
 # 任務中心 Tasks [Tasks]
 路徑： /tasks | 權限： PM, ALL_USERS | 所屬旅程： III. 執行與協作
 

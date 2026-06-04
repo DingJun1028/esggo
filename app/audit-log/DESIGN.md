@@ -1,3 +1,9 @@
+---
+uuid: "ba2d863c-032a-46a8-8eff-49e310c74b99"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.549Z"
+evidence: "app\audit-log\DESIGN.md"
+---
 # 審計日誌 Audit Log
 
 **路徑：** `/audit-log`

@@ -1,3 +1,9 @@
+---
+uuid: "fe1c2721-ebc7-4beb-82a4-59014d0615be"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.493Z"
+evidence: "docs\wiki\Advisory.md"
+---
 # ESG 策略顧問 (Advisory) ESG Strategy Advisory [Advisory]
 路徑： /advisory | 權限： PM, CSO, ADMIN | 所屬旅程： II. 策略盤點與分派
 

@@ -1,3 +1,9 @@
+---
+uuid: "e3e38d32-2269-46ea-b765-5599306399cf"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.560Z"
+evidence: "app\academy\DESIGN.md"
+---
 # 永續學院 Academy
 
 **路徑：** `/academy`

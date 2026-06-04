@@ -1,0 +1,1 @@
+{"version":3,"file":"SlackGatewayCard.d.ts","sourceRoot":"","sources":["../../../components/slack/SlackGatewayCard.tsx"],"names":[],"mappings":"AAEA;;;;;;;;GAQG;AAEH,OAAO,KAA8B,MAAM,OAAO,CAAC;AAcnD,UAAU,qBAAqB;IAC7B,oBAAoB;IACpB,SAAS,CAAC,EAAE,MAAM,CAAC;CACpB;AAED,wBAAgB,gBAAgB,CAAC,EAAE,SAAc,EAAE,EAAE,qBAAqB,qBA8KzE"}

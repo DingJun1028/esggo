@@ -1,3 +1,9 @@
+---
+uuid: "4e08e6b1-c656-432f-b414-59ad6d0ba54c"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.432Z"
+evidence: "docs\wiki\Supply-Chain.md"
+---
 # **供應鏈透明 Supply Chain Transparency** [Supply Chain]
 路徑： /supply-chain | 權限： Procurement Manager, Sustainability Manager, CSO | 所屬旅程： III. 供應鏈治理與風險
 

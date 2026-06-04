@@ -1,3 +1,9 @@
+---
+uuid: "b71941a5-1f8a-451d-aaad-98d0771c2e14"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.523Z"
+evidence: "app\reading-room\DESIGN.md"
+---
 # 永續閱覽室 Reading Room
 
 **路徑：** `/reading-room`

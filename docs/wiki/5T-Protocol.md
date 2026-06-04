@@ -1,3 +1,9 @@
+---
+uuid: "2ce7716d-3f67-4d17-9f39-c3ce7e6095c9"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.501Z"
+evidence: "docs\wiki\5T-Protocol.md"
+---
 # 5T 信任儀表板 (5T Trust Dashboard) [5T Protocol]
 路徑： /5t-dashboard | 權限： ADMIN, CSO, PM | 所屬旅程： V. 確信審計與發佈
 

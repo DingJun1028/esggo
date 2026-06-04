@@ -1,3 +1,9 @@
+---
+uuid: "059ce76d-6149-48da-a8ae-18d853aeea9f"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.488Z"
+evidence: "docs\wiki\API-Setup.md"
+---
 # 整合中心 [API Setup]
 路徑： /api-setup | 權限： ADMIN, DEV_OPS | 所屬旅程： I. 初始導入與配置
 

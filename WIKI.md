@@ -1,3 +1,9 @@
+---
+uuid: "bd12be1c-c072-48ca-8be5-1cdedfdcb819"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.292Z"
+evidence: "WIKI.md"
+---
 # ESGGO善向永續 官方 Wiki 🏛️
 ## 版本：v8.5.1 | 架構：SaaS User Journey Edition
 

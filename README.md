@@ -1,3 +1,9 @@
+---
+uuid: "0ceddc56-2ae7-4390-a25e-ff36d3dbbd5c"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.310Z"
+evidence: "README.md"
+---
 <div align="center">
   
 # 🌌 ESGGO善向永續

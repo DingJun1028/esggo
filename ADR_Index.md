@@ -1,3 +1,9 @@
+---
+uuid: "c6c6dc2f-99f4-4a5c-b00d-c262d85e0f75"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.371Z"
+evidence: "ADR_Index.md"
+---
 # Architecture Decision Records Index
 
 This document serves as the central index for all Architecture Decision Records (ADRs) within the ESGGO project. ADRs capture significant architectural decisions, their context, options considered, the decision made, and its consequences. This ensures transparency, traceability, and a historical record of our architectural evolution, aligning with the "真 (Truth)" and "信 (Trust)" principles of the 5T Protocol.

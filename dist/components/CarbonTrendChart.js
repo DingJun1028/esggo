@@ -1,0 +1,9 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+export function CarbonTrendChart({ data }) {
+    if (!data || data.length === 0)
+        return null;
+    return (_jsxs("div", { className: "p-6 bg-white border border-slate-200 rounded-xl shadow-sm h-[380px] flex flex-col", children: [_jsxs("div", { className: "mb-6", children: [_jsx("h3", { className: "text-lg font-bold text-slate-800", children: "\u78B3\u6392\u653E\u91CF\u6B77\u53F2\u8DA8\u52E2" }), _jsx("p", { className: "text-sm text-slate-500", children: "\u55AE\u4F4D\uFF1A\u516C\u5678\u4E8C\u6C27\u5316\u78B3\u7576\u91CF (tCO2e)" })] }), _jsx("div", { className: "flex-1 w-full min-h-0", children: _jsx(ResponsiveContainer, { width: "100%", height: "100%", children: _jsxs(AreaChart, { data: data, margin: { top: 10, right: 10, left: -20, bottom: 0 }, children: [_jsx("defs", { children: _jsxs("linearGradient", { id: "colorEmissions", x1: "0", y1: "0", x2: "0", y2: "1", children: [_jsx("stop", { offset: "5%", stopColor: "#10B981", stopOpacity: 0.3 }), _jsx("stop", { offset: "95%", stopColor: "#10B981", stopOpacity: 0 })] }) }), _jsx(CartesianGrid, { strokeDasharray: "3 3", vertical: false, stroke: "#F1F5F9" }), _jsx(XAxis, { dataKey: "month", axisLine: false, tickLine: false, tick: { fill: '#64748B', fontSize: 12 }, dy: 10 }), _jsx(YAxis, { axisLine: false, tickLine: false, tick: { fill: '#64748B', fontSize: 12 } }), _jsx(Tooltip, { contentStyle: { borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }, itemStyle: { color: '#10B981', fontWeight: 'bold' } }), _jsx(Area, { type: "monotone", dataKey: "emissions", name: "\u78B3\u6392\u653E\u91CF", stroke: "#10B981", strokeWidth: 3, fillOpacity: 1, fill: "url(#colorEmissions)" })] }) }) })] }));
+}
+//# sourceMappingURL=CarbonTrendChart.js.map

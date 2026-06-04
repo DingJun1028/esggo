@@ -1,3 +1,9 @@
+---
+uuid: "01b637b2-dd00-409e-ba49-4720b839cfd3"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.510Z"
+evidence: "app\vault\DESIGN.md"
+---
 # 證據金庫 Vault
 
 **路徑：** `/vault`

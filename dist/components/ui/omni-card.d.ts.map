@@ -1,0 +1,1 @@
+{"version":3,"file":"omni-card.d.ts","sourceRoot":"","sources":["../../../components/ui/omni-card.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAC1B,OAAO,EAAE,QAAQ,EAAE,MAAM,oBAAoB,CAAC;AAE9C,UAAU,aAAa;IACrB,IAAI,EAAE,QAAQ,CAAC;IACf,SAAS,CAAC,EAAE,MAAM,CAAC;CACpB;AAED,wBAAgB,UAAU,CAAC,EAAE,IAAI,EAAE,SAAc,EAAE,EAAE,aAAa,qBA6EjE"}

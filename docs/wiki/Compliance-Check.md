@@ -1,3 +1,9 @@
+---
+uuid: "402f6854-f83b-41c5-b2d5-3bdbfb33d1ab"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.483Z"
+evidence: "docs\wiki\Compliance-Check.md"
+---
 # 合規檢查 [Compliance Check]
 路徑： `/compliance-check` | 權限： `ESG_OFFICER`, `AUDITOR`, `ADMIN` | 所屬旅程： `IV. AI 賦能與撰寫`
 

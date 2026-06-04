@@ -4,6 +4,8 @@
  */
 
 import { supabase } from '../lib/supabase';
+import { createClient, SupabaseClient } from '@supabase/supabase-js'; // Add this import
+import * as SupabaseModule from '../lib/supabase'; // Remove this line
 import { THINK_TANK_REGISTRY, getThinkTankRegistrations, type ThinkTankRegistration } from '@/lib/agent/best-practice-registry';
 import { getOmniBlueTablePractices } from '@/lib/agent/best-practice-registry';
 import { aiTableBlueBridge } from '@/lib/services/omni-table-blue-bridge';
@@ -36,10 +38,26 @@ export class OmniBlueTableService {
    */
   async syncBestPracticesToVault() {
     const practices = this.getBestPractices();
+    // Directly create a service role client here
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error('Supabase URL or Service Role Key missing for admin client');
+      return { success: false, error: 'Supabase URL or Service Role Key missing.' };
+    }
+    
+    let serviceRoleSupabase: SupabaseClient | null = null;
+    try {
+      serviceRoleSupabase = createClient(supabaseUrl, serviceRoleKey);
+    } catch (error) {
+      console.error('Supabase Service Role Client initialization error:', error);
+      return { success: false, error: 'Failed to initialize Supabase service role client.' };
+    }
 
     const results = [];
     for (const bp of practices) {
-      const { data, error } = await supabase
+      const { data, error } = await serviceRoleSupabase // Use serviceRoleSupabase for upsert
         .from('best_practices' as any)
         .upsert({
           id: bp.id,
@@ -48,9 +66,9 @@ export class OmniBlueTableService {
           title: bp.title,
           strategy: bp.strategy,
           benchmark_source: bp.benchmark_source,
+          t5_compliance: bp.t5_compliance,
           impact_score: bp.impact_score,
           tags: bp.tags,
-          t5_compliance: bp.t5_compliance,
           last_verified: bp.last_verified,
           updated_at: new Date().toISOString(),
         })
@@ -90,6 +108,20 @@ export class OmniBlueTableService {
    */
   triggerSyncMission(datasheetId: string) {
     return aiTableBlueBridge.syncMetricsToCloud(datasheetId);
+  }
+  /**
+   * 查詢 OmniBlueTable 最佳實踐清單 (從 Supabase 獲取)
+   */
+  async getBestPracticesFromSupabase(): Promise<{ data: BestPractice[], error: string | null }> {
+    const { data, error } = await supabase
+      .from('best_practices')
+      .select('*');
+
+    if (error) {
+      console.error('Error fetching best practices from Supabase:', error.message);
+      return { data: [], error: error.message };
+    }
+    return { data: data as BestPractice[], error: null };
   }
 }
 

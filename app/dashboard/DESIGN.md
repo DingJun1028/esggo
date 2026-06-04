@@ -1,3 +1,9 @@
+---
+uuid: "ed21c418-8999-4ba5-bb7d-46ed44165a41"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.542Z"
+evidence: "app\dashboard\DESIGN.md"
+---
 # 控制台 Dashboard
 
 **路徑：** `/`

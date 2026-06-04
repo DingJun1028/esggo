@@ -1,0 +1,7 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
+export function Modal({ open, onClose, title, children, width = 'max-w-lg' }) {
+    return (_jsx(AnimatePresence, { children: open && (_jsxs("div", { className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [_jsx(motion.div, { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, className: "absolute inset-0 bg-black/30 backdrop-blur-sm", onClick: onClose }), _jsxs(motion.div, { initial: { opacity: 0, scale: 0.95, y: 10 }, animate: { opacity: 1, scale: 1, y: 0 }, exit: { opacity: 0, scale: 0.95 }, className: `relative bg-white rounded-2xl shadow-2xl ${width} w-full max-h-[85vh] flex flex-col`, children: [_jsxs("div", { className: "flex items-center justify-between px-6 py-4 border-b border-slate-100", children: [_jsx("h3", { className: "text-sm font-black text-berkeley-blue", children: title }), _jsx("button", { onClick: onClose, className: "p-1.5 hover:bg-slate-100 rounded-lg transition-colors", children: _jsx(X, { size: 14 }) })] }), _jsx("div", { className: "px-6 py-4 overflow-y-auto flex-1", children: children })] })] })) }));
+}
+//# sourceMappingURL=Modal.js.map

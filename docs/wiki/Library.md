@@ -1,3 +1,9 @@
+---
+uuid: "f4062d07-1599-4885-a9c2-e512e8bc13d5"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.449Z"
+evidence: "docs\wiki\Library.md"
+---
 # ESG Knowledge Hub ESG Knowledge Hub [Library]
 路徑： /library | 權限： ALL_USERS | 所屬旅程： I. 基礎知識與合規準備
 

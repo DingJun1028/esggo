@@ -1,0 +1,1 @@
+{"version":3,"file":"OmniInfoAura.d.ts","sourceRoot":"","sources":["../../src/core/OmniInfoAura.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,qBAAa,YAAY;IACvB;;;;OAIG;IACH,MAAM,CAAC,QAAQ,CAAC,MAAM,EAAE;QAAE,cAAc,EAAE,MAAM,CAAC;QAAC,KAAK,EAAE,MAAM,CAAC;QAAC,MAAM,EAAE,MAAM,CAAA;KAAE,GAAG,MAAM;CAK3F"}

@@ -1,10 +1,10 @@
-import { ai } from './genkit.ts';
+import { ai } from './genkit';
 import { z } from 'genkit';
-import { telemetryService } from '../telemetry/service.ts';
-import { omniAgentBus } from '../omni-agent-bus.ts';
-import { memoryStore } from '../memory/memory-store.ts';
-import { toolSynthesizer } from '../tools/synthesis.ts';
-import type { MemoryRecord } from '../memory/memory-store.ts';
+import { telemetryService } from '../telemetry/service';
+import { omniAgentBus } from '../omni-agent-bus';
+import { memoryStore } from '../memory/memory-store';
+import { toolSynthesizer } from '../tools/synthesis';
+import type { MemoryRecord } from '../memory/memory-store';
 
 // Define the result type from ADKAgent.run
 type ADKAgentResult = {

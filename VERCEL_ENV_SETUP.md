@@ -1,3 +1,9 @@
+---
+uuid: "5a2fe3d8-50ad-4583-acbb-a8447443f863"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.296Z"
+evidence: "VERCEL_ENV_SETUP.md"
+---
 # ESGGO 善向永續 — Vercel 部署與環境變數設定
 
 請在 Vercel Dashboard → Settings → Environment Variables 設定以下變數，確保前後端雙向資料庫連線以及 AI 原生服務能正常啟動。

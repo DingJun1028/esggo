@@ -1,3 +1,9 @@
+---
+uuid: "a6fedba5-8072-4571-9e8b-2f24d84e9d61"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.320Z"
+evidence: "OMNICOMPONENT_REGISTRY.md"
+---
 # OmniComponent Registry (Simulated)
 
 This document serves as a simulated registry for OmniComponents designed in the Pencil environment, adhering to the "Reference Principle" from `BRAND_ATOMIC_LIBRARY.md`.

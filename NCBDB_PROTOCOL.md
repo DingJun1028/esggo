@@ -1,3 +1,9 @@
+---
+uuid: "979d575e-9a9a-4204-b259-2cdc76226bca"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.322Z"
+evidence: "NCBDB_PROTOCOL.md"
+---
 # ESGGO 全域資料庫 (NCBDB) 使用規範 | Global Database Protocol 💎
 
 > **實例 (Instance):** `54686_esggo`  

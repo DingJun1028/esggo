@@ -1,0 +1,1 @@
+{"version":3,"file":"route.d.ts","sourceRoot":"","sources":["../../../../app/api/contracts/route.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,OAAO,WAAW,CAAC;AAChC,eAAO,MAAM,OAAO,kBAAkB,CAAC;AAEvC,OAAO,EAAE,YAAY,EAAE,MAAM,aAAa,CAAC;AAU3C,wBAAsB,IAAI,CAAC,OAAO,EAAE,OAAO,8BAuC1C;AAGD,wBAAsB,GAAG;;IAYxB"}

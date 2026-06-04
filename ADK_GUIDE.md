@@ -1,3 +1,9 @@
+---
+uuid: "b4231059-2e38-4674-9c9b-a72199f1bb75"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.373Z"
+evidence: "ADK_GUIDE.md"
+---
 # 什麼是 ADK 技術？
 
 ADK (Agent Development Kit) 是一套設計給企業，用來開發、管理及部署多智能體 (Multi-Agent) 的標準化工具與框架。

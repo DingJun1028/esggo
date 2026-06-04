@@ -1,4 +1,10 @@
 ---
+uuid: "71c37100-8766-4db6-9246-b5518952edf5"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.504Z"
+evidence: "docs\specs\OmniCore-P0-Genesis.md"
+---
+---
 type: 'EsgSunshine'
 title: ESGGO 善向永續 | OmniCore P0 創世綱領 🌌
 tags: ['#GenesisManifest', '#BidirectionalTS', '#EnglishStandardized']

@@ -1,3 +1,9 @@
+---
+uuid: "d5233853-99ce-458a-a3a4-7f6e85a545a4"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.507Z"
+evidence: "docs\specs\Cognitive-Programming-Skill-Tree.md"
+---
 # 🧠 認知編程架構：ESG 全息編織技能樹 (Cognitive Programming Skill Tree)
 
 > **所屬協定**: OmniCore Matrix / 5T Integrity Protocol

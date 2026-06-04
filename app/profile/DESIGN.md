@@ -1,3 +1,9 @@
+---
+uuid: "86778a70-4b2a-4d92-a54d-de457cf1804b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.526Z"
+evidence: "app\profile\DESIGN.md"
+---
 # 企業管理 Profile
 
 **路徑：** `/profile`

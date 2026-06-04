@@ -1,0 +1,104 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+import { useState, useEffect, createContext, useContext } from 'react';
+import { auth, isDemoMode } from '../lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { supabase } from '../lib/supabase';
+const AuthContext = createContext({
+    user: null,
+    loading: true,
+    isAuthenticated: false,
+    companyId: 'default',
+    systemStatus: 'online'
+});
+export function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [companyId, setCompanyId] = useState('default');
+    const [systemStatus, setSystemStatus] = useState('online');
+    useEffect(() => {
+        // 1. Monitor Browser Network Connectivity
+        const updateOnlineStatus = () => setSystemStatus(navigator.onLine ? 'online' : 'offline');
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        // 2. Initial Local Sync
+        try {
+            const local = localStorage.getItem('omni_user');
+            if (local && local !== 'undefined') {
+                const parsed = JSON.parse(local);
+                if (parsed?.company_id)
+                    setCompanyId(parsed.company_id);
+            }
+        }
+        catch (e) {
+            console.warn('[Auth] Local parse fail, cleared');
+            localStorage.removeItem('omni_user');
+        }
+        // 3. Auth Listener
+        const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+            try {
+                if (fbUser) {
+                    setUser(fbUser);
+                    // Non-blocking Supabase session check
+                    supabase.auth.getSession().then(({ data: { session } }) => {
+                        if (!session) {
+                            setSystemStatus('degraded'); // Auth sync required but session not found
+                        }
+                        else {
+                            setSystemStatus('online');
+                        }
+                    }).catch(() => setSystemStatus('degraded'));
+                    try {
+                        const local = localStorage.getItem('omni_user');
+                        if (local && local !== 'undefined') {
+                            const parsed = JSON.parse(local);
+                            setCompanyId(parsed?.company_id || 'default');
+                        }
+                    }
+                    catch (e) {
+                        localStorage.removeItem('omni_user');
+                    }
+                }
+                else {
+                    // Demo Mode Fallback
+                    try {
+                        const localUser = localStorage.getItem('omni_user');
+                        if (isDemoMode && localUser && localUser !== 'undefined') {
+                            const parsed = JSON.parse(localUser);
+                            setCompanyId(parsed?.company_id || 'default');
+                            setUser({ email: parsed?.email || 'dev@esggo.com', uid: parsed?.id || 'dev_user' });
+                        }
+                        else {
+                            setUser(null);
+                        }
+                    }
+                    catch (e) {
+                        localStorage.removeItem('omni_user');
+                        setUser(null);
+                    }
+                }
+            }
+            catch (err) {
+                console.warn('[Auth Handled Exception]', err);
+            }
+            finally {
+                setLoading(false);
+            }
+        });
+        return () => {
+            unsubscribe();
+            window.removeEventListener('online', updateOnlineStatus);
+            window.removeEventListener('offline', updateOnlineStatus);
+        };
+    }, []);
+    const value = {
+        user,
+        loading,
+        isAuthenticated: !!user,
+        companyId,
+        systemStatus
+    };
+    return _jsx(AuthContext.Provider, { value: value, children: children });
+}
+export const useAuth = () => useContext(AuthContext);
+//# sourceMappingURL=useAuth.js.map

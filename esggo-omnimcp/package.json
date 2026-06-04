@@ -1,0 +1,25 @@
+{
+  "name": "esggo-omnimcp",
+  "version": "1.0.0",
+  "description": "OmniMCP integration for ESGGO platform with master authorization",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node server.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "axios": "^1.5.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "@types/express": "^4.17.17",
+    "@types/uuid": "^9.0.2",
+    "typescript": "^5.1.6",
+    "ts-node": "^10.9.1"
+  }
+}

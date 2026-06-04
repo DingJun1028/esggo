@@ -1,3 +1,9 @@
+---
+uuid: "43c22b96-6e02-4f84-8650-dcd107a5d604"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.517Z"
+evidence: "app\system-test\DESIGN.md"
+---
 # 系統測試 System Test
 
 **路徑：** `/system-test`
