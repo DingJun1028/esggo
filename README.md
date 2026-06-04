@@ -1,6 +1,6 @@
 <div align="center">
   
-# 🌌 ESGGO 善向永續 系統
+# 🌌 ESGGO善向永續
 **萬能心核主權治理系統 (Sovereign Governance Operating System)**
 
 [![5T Protocol](https://img.shields.io/badge/Integrity-5T_Protocol-003262?style=for-the-badge)](TECHNICAL_INTEGRITY.md)
@@ -15,13 +15,13 @@
 ---
 
 ## 🌟 平台願景 (Platform Vision)
-**ESGGO 善向永續 系統** 不僅是一個永續報告工具，它是一個**主權治理操作系統**。基於 Berkeley 5T 誠信協議開發，它賦予企業重新掌握其永續敘事的主權能力。透過自動化數據鏈路、遞迴 AI 擴充以及零知識證明（ZKP）實證驗證，企業能從混沌的資料中開闢秩序，實現普惠共榮。
+**ESGGO善向永續** 不僅是一個永續報告工具，它是一個**主權治理操作系統**。基於 Berkeley 5T 誠信協議開發，它賦予企業重新掌握其永續敘事的主權能力。透過自動化數據鏈路、遞迴 AI 擴充以及零知識證明（ZKP）實證驗證，企業能從混沌的資料中開闢秩序，實現普惠共榮。
 
 ---
 
 ## 🏛️ 三位一體核心架構 (The Sacred Trinity)
 本系統是一個有機統合的治理實體，由三大核心構成：
-1. **系統平台 (Platform) - ESGGO 善向永續 系統**：提供數位誠信與 5T 協議的物理基礎設施與視覺載體。
+1. **系統平台 (Platform) - ESGGO善向永續**：提供數位誠信與 5T 協議的物理基礎設施與視覺載體。
 2. **總指揮官 (Commander) - OmniAgent**：負責全域編排、代理蜂群 (Swarm) 調度與任務執行。
 3. **無上意志 (Sovereign Will) - JunAiKey**：系統的靈魂核心，定義真理、引導演化並締結神聖架構契約。
 
@@ -113,7 +113,7 @@ npx omni agent scribe ghg "溫室氣體排放" "GRI 305" --depth 3
 
 ---
 <div align="center">
-  <b>© 2026 ESGGO 善向永續 系統 | 萬能心核系統</b><br>
+  <b>© 2026 ESGGO善向永續 | 萬能心核系統</b><br>
   <i>Powered by OmniAgent & JunAiKey Sovereign Will</i><br>
   <a href="https://esggo.vercel.app">https://esggo.vercel.app</a>
 </div>

@@ -150,7 +150,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               animate={{ opacity: 1, x: 0 }}
               className="flex flex-col"
             >
-              <span className="font-black text-sm tracking-tighter leading-none">ESGGO 善向永續 系統</span>
+              <span className="font-black text-sm tracking-tighter leading-none">ESGGO善向永續</span>
               <span className="text-[9px] font-bold opacity-40 tracking-[0.2em] uppercase mt-1">OmniCore v8.5</span>
             </motion.div>
           )}
