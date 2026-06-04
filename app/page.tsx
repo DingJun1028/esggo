@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Activity, Brain } from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
+import OmniAgentPulse from '@/components/omni/OmniAgentPulse';
 
 interface LogEntry {
   time: string;
@@ -336,6 +337,9 @@ function LandingContent() {
           </div>
         </motion.div>
       </motion.div>
+      
+      {/* ─── Layer 3: OmniAgent Floating Pulse ──────────────────────── */}
+      <OmniAgentPulse />
     </div>
   );
 }
