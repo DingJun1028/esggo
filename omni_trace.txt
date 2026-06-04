@@ -1,14 +1,22 @@
 ### Execution Trace (OmniCore Matrix):
-- 🔍 Viewed: .github/workflows/auto-heal-ci.yml, .github/workflows/governance.yml, .github/workflows/jes-system-integration.yml, lib/hooks/useColorDropStream.ts, lib/design-system/AtomicLibraryShowcase.tsx, lib/design-system/AtomicTable.tsx, lib/design-system/AtomicToggle.tsx, lib/design-system/AtomicTooltip.tsx, mcp_config.json, components/omni/OmniCommandPalette.tsx
-- ⚡ Ran: gh run list, gh run view, npx tsc --noEmit
-- 🛠️ Modified: 
-  - .github/workflows/auto-heal-ci.yml (removed invalid strategy max-attempts and strategy.attempts)
-  - .github/workflows/governance.yml (fixed bash substitution and if block for PR_BODY)
-  - .github/workflows/jes-system-integration.yml (fixed multiline scalar block syntax)
-  - mcp_config.json (removed invalid $typeName)
-  - lib/design-system/AtomicLibraryShowcase.tsx (fixed TableRowData nullability mismatch)
-  - lib/design-system/AtomicTable.tsx, AtomicToggle.tsx, AtomicTooltip.tsx (refactored drops -> events based on useColorDropStream signature change)
-  - components/omni/OmniCommandPalette.tsx (fixed missing closing div)
+- 🔍 Viewed:
+  - `app/layout.tsx` (L1-L20)
+  - `app/page.tsx` (L1-L350)
+  - `next.config.ts` (L30-L50)
+  - `components/omni/OmniAgentPulse.tsx` (L1-L141)
+  - `package.json` (L1-L138)
+  - `dataconnect/example/mutations.gql` (L1-L25)
+  - `app/globals.css` (L1-L576)
+- ⚡ Ran:
+  - `npm list next`, `npm install next@15`, `npm install @tailwindcss/postcss@latest`, `npm install genkit@latest @genkit-ai/core@latest @genkit-ai/firebase@latest @genkit-ai/google-genai@latest` (Resolved invalid version downgrades and missing module errors causing `npm run build` failures).
+  - `npm run build` (Verified TS compilation integrity).
+- 🛠️ Modified:
+  - `app/page.tsx` (L9): Changed `OmniAgentPulse` default import to named import.
+  - `next.config.ts` (L36): Specified explicit `any` type for Webpack config argument to eliminate implicit `any` TS error.
+  - `package.json` (L11): Reverted build script to standard `next build` instead of unsupported `next build --webpack`.
+  - `dataconnect/example/mutations.gql` (L15-24): Secured `task_update` and `task_delete` mutations by replacing basic `id` matching with `key: { id: $id, userId_expr: "auth.uid" }` ensuring RBAC policy enforcement.
+  - `postcss.config.mjs` (L3): Replaced `tailwindcss` plugin with `@tailwindcss/postcss` for Tailwind v4 compatibility.
+  - `app/globals.css` (L9-11, L223): Replaced legacy `@tailwind` directives with `@import "tailwindcss";` and resolved unknown `no-scrollbar` utility error by hardcoding the CSS properties inside `.kpi-bar`.
 
 ### Synthesis & Outcome:
-The GitHub Actions workflow files have been repaired by eliminating invalid YAML properties and contexts, allowing them to parse and initiate correctly rather than failing at 0 seconds. Additionally, all user-reported IDE warnings regarding TypeScript typings in the UI components and the `mcp_config.json` schema validation error have been resolved, further reducing system entropy. The project is now correctly aligned with the expected OmniCore schemas.
+The system's Type Integrity and Build Stability have been successfully restored. We eradicated the previous compilation errors, secured the DataConnect GraphQL mutations with RBAC rules enforcing `auth.uid` constraints, and synchronized the repository to successfully run Next.js 15 alongside Tailwind CSS v4. The OmniCore Genesis framework is now in a pristine state, ready for the Compliance Engine deployment without any Webpack or Typescript blockers.

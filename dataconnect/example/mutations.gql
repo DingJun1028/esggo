@@ -15,10 +15,10 @@ mutation CreateTask($title: String!, $status: String!, $priority: String!, $comp
 # Update a task
 mutation UpdateTask($id: UUID!, $status: String!)
 @auth(level: USER) {
-  task_update(id: $id, data: { status: $status })
+  task_update(key: { id: $id, userId_expr: "auth.uid" }, data: { status: $status })
 }
 
 # Logged in user can delete their task
 mutation DeleteTask($id: UUID!) @auth(level: USER) {
-  task_delete(id: $id)
+  task_delete(key: { id: $id, userId_expr: "auth.uid" })
 }
