@@ -1,6 +1,6 @@
-# ESGGO 善向永續 系統 v11.7 雲端部屬與驗收手冊 (Vercel)
+# ESGGO善向永續 v11.7 雲端部屬與驗收手冊 (Vercel)
 
-本手冊旨在引導技術團隊將 **ESGGO 善向永續 系統 Sovereign Governance OS**
+本手冊旨在引導技術團隊將 **ESGGO善向永續 Sovereign Governance OS**
 順利部屬至 Vercel 雲端環境，並進行交付前的最終驗收。
 
 ## 1. 前置準備
@@ -73,4 +73,4 @@
 
 ---
 
-**ESGGO 善向永續 系統 研發團隊 · 2026/05/23**
+**ESGGO善向永續 研發團隊 · 2026/05/23**

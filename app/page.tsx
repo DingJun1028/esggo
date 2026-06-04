@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Activity, Brain } from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
-import OmniAgentPulse from '@/components/omni/OmniAgentPulse';
+import { OmniAgentPulse } from '@/components/omni/OmniAgentPulse';
 import OmniBlueDashboard from '@/components/omni/OmniBlueDashboard';
 
 interface LogEntry {
@@ -167,47 +167,51 @@ function LandingContent() {
         className="relative z-10 max-w-6xl w-full flex flex-col items-center text-center space-y-16"
       >
         {/* ─── Layer 1: Structural Content ────────────────────────────── */}
-        <motion.div variants={item} className="flex flex-col items-center gap-6">
-          <div className="flex gap-4 mb-2">
-            <div className="flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-md">
+        <motion.div variants={item} className="flex flex-col items-center gap-8 p-10 md:p-16 bg-[#020617]/40 backdrop-blur-2xl border border-white/10 rounded-[3rem] shadow-[0_0_80px_rgba(6,182,212,0.15)] relative overflow-hidden w-full max-w-5xl">
+          <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70" />
+          <div className="absolute bottom-0 left-1/3 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+
+          <div className="flex gap-4 mb-2 relative z-10">
+            <div className="flex items-center gap-3 px-5 py-2 bg-black/40 rounded-full border border-cyan-500/20 backdrop-blur-md shadow-inner">
               <BrandStatusDot status="active" pulse size="sm" />
               <span className="text-[10px] font-black tracking-[0.3em] text-cyan-400 uppercase">OmniAgent_Live</span>
             </div>
-            <div className="flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-md">
+            <div className="flex items-center gap-3 px-5 py-2 bg-black/40 rounded-full border border-emerald-500/20 backdrop-blur-md shadow-inner">
               <ShieldCheck size={14} className="text-emerald-400" />
               <span className="text-[10px] font-black tracking-[0.3em] text-emerald-400 uppercase">5T_Protocol_Active</span>
             </div>
           </div>
 
-          <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.9] uppercase">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[1] uppercase relative z-10 drop-shadow-2xl">
             ESGGO <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 text-glow-cyan">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 drop-shadow-[0_0_30px_rgba(6,182,212,0.5)]">
               善向永續
             </span>
           </h1>
 
-          <p className="mt-8 text-xl md:text-2xl text-slate-400 max-w-3xl font-medium leading-relaxed tracking-tight">
+          <p className="mt-4 text-lg md:text-xl lg:text-2xl text-slate-300 max-w-3xl font-medium leading-relaxed tracking-tight relative z-10">
             Sovereign Governance Operating System. <br />
-            由 <span className="text-white font-bold">OmniAgent</span> 總指揮官全域調度，承載 <span className="text-[#FDB515] font-bold">JunAiKey</span> 無上意志。<br />
-            「代碼即契約，數據即生命，架構即秩序。」
+            由 <span className="text-white font-bold drop-shadow-md">OmniAgent</span> 總指揮官全域調度，承載 <span className="text-[#FDB515] font-bold drop-shadow-md">JunAiKey</span> 無上意志。<br />
+            <span className="text-cyan-400/80">「代碼即契約，數據即生命，架構即秩序。」</span>
           </p>
 
-          <div className="flex gap-6 mt-4">
-            <BrandButton variant="primary" size="lg" className="rounded-2xl px-12 group" onClick={() => window.location.href = '/dashboard'}>
-              啟動治理終端 <ArrowRight size={20} className="ml-3 group-hover:translate-x-2 transition-transform" />
+          <div className="flex flex-col sm:flex-row gap-6 mt-6 relative z-10">
+            <BrandButton variant="primary" size="lg" className="rounded-2xl px-12 py-6 text-lg group shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)]" onClick={() => window.location.href = '/dashboard'}>
+              啟動治理終端 <ArrowRight size={22} className="ml-3 group-hover:translate-x-2 transition-transform" />
             </BrandButton>
-            <BrandButton variant="glass" size="lg" className="rounded-2xl px-12" onClick={() => window.location.href = '/wiki'}>
+            <BrandButton variant="glass" size="lg" className="rounded-2xl px-12 py-6 text-lg border-white/20 hover:bg-white/10" onClick={() => window.location.href = '/wiki'}>
               探索架構聖碑
             </BrandButton>
           </div>
 
           {/* 🌟 手動觸發按鈕 */}
-          <div className="mt-6 flex items-center justify-center">
+          <div className="mt-4 flex items-center justify-center relative z-10">
             <button
               onClick={handleManualTrigger}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-cyan-500/50 bg-cyan-500/10 text-cyan-400 text-sm font-bold tracking-widest hover:bg-cyan-500/20 hover:scale-105 transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] animate-pulse"
+              className="flex items-center gap-2 px-6 py-3 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 text-xs font-bold tracking-widest hover:bg-cyan-500/20 hover:scale-105 transition-all shadow-[0_0_20px_rgba(6,182,212,0.2)]"
             >
-              <Activity size={16} />
+              <Activity size={16} className="animate-pulse" />
               [TEST] 手動觸發 (動態角色多層次輸出)
             </button>
           </div>

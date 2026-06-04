@@ -1,13 +1,13 @@
-# ESGGO 善向永續 系統 Platform | Technical Integrity Framework
+# ESGGO善向永續 Platform | Technical Integrity Framework
 
 ## 5T 數據信託與 ZKP 隱私保護協議
 
 This document outlines the architectural standards and cryptographic protocols
-used to maintain the **5T Integrity Standard** within the ESGGO 善向永續 系統 ecosystem.
+used to maintain the **5T Integrity Standard** within the ESGGO善向永續 ecosystem.
 
 ## 1. 真善美信通 5T 協議門：數據信託架構
 
-5T 協議是 ESGGO 善向永續 系統
+5T 協議是 ESGGO善向永續
 的核心競爭壁壘。使用者在平台上進行永續報告撰寫時，輸入的數據連同報告書，必須通過以下五道「真善美信通」協議門。這不僅是技術規範，更是將企業誠信具象化的護城河。
 
 | 核心屬性             | 5T 狀態 (4可1不可)         | 實作手段 (The Means)                      | 商業與感知價值                           |
