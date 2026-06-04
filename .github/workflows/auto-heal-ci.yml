@@ -10,8 +10,7 @@ on:
 jobs:
   auto-heal:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
+
     
     steps:
       - name: Checkout Code
