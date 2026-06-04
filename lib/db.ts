@@ -1,24 +1,10 @@
 import { 
-  listCompanyMetrics, 
-  upsertCompanyMetric,
-  listReports,
-  listReportSectionsByReport,
-  listAuditRecords,
-  listRoadmapMilestones,
-  listScrapedArticles,
   listAllTasks,
   upsertTask
 } from '@dataconnect/generated';
 import { dcGetReportById } from './dataconnect-services.ts';
 
 export { 
-  listCompanyMetrics, 
-  upsertCompanyMetric,
-  listReports,
-  listReportSectionsByReport,
-  listAuditRecords,
-  listRoadmapMilestones,
-  listScrapedArticles,
   listAllTasks,
   upsertTask,
   dcGetReportById

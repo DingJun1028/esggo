@@ -4,164 +4,81 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalTable } from '@/components/ui/universal/UniversalTable';
-import { ShieldAlert, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { 
+  ShieldAlert, ShieldCheck, Search, SearchCheck, SearchCode,
+  FileText, Activity, Brain, AlertTriangle, Info,
+  CheckCircle2, FileSearch, ArrowRight, Loader2
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const IntegrityPulse = ({ active }: { active: boolean }) => (
+  <div className="relative flex items-center justify-center w-8 h-8">
+    <div className={`absolute inset-0 rounded-full border-2 border-cyan-400/50 ${active ? 'animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-75' : 'opacity-0'}`} />
+    <div className={`absolute inset-1 rounded-full border border-cyan-400/30 ${active ? 'animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50' : 'opacity-0'}`} />
+    <div className={`w-3 h-3 rounded-full ${active ? 'bg-cyan-400 shadow-[0_0_15px_#22d3ee]' : 'bg-slate-600'}`} />
+  </div>
+);
 
 export default function ComplianceCheckPage() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [sealingId, setSealingId] = useState<number | null>(null);
-  const [verifyingId, setVerifyingId] = useState<number | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanComplete, setScanComplete] = useState(false);
+  const [activeHighlight, setActiveHighlight] = useState<string | null>(null);
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
 
+  // Fetch mock datasets
   useEffect(() => {
-    fetchData();
+    fetch('/api/dashboard/stats')
+      .then(res => res.json())
+      .then(data => setDashboardStats(data))
+      .catch(console.error);
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetching from a universal proxy metrics endpoint
-      const res = await fetch('/api/metrics/compliance-check', { cache: 'no-store' });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json.data || []);
-      } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
-        setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
-        ]);
-      }
-    } catch (e) {
-      console.error('Fetch Error:', e);
-      // Fallback mock data
-      setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-      ]);
-    } finally {
-      setLoading(false);
+  // Mock document scanning progress
+  useEffect(() => {
+    if (isScanning && scanProgress < 100) {
+      const timer = setInterval(() => {
+        setScanProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(timer);
+            setIsScanning(false);
+            setScanComplete(true);
+            return 100;
+          }
+          return prev + Math.floor(Math.random() * 15) + 5;
+        });
+      }, 500);
+      return () => clearInterval(timer);
     }
+  }, [isScanning, scanProgress]);
+
+  const startScan = () => {
+    setIsScanning(true);
+    setScanProgress(0);
+    setScanComplete(false);
+    setActiveHighlight(null);
   };
 
-  const handleSeal = async (id: number) => {
-    setSealingId(id);
-    try {
-      const response = await fetch('/api/vault/seal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'compliance-check', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
-      } else {
-        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
-      }
-    } catch (error) {
-      console.error('Seal exception:', error);
-      alert('無法連線至封印金庫 (Vault Connection Error)。');
-    } finally {
-      setSealingId(null);
-    }
-  };
-
-  const handleVerify = async (id: number) => {
-    setVerifyingId(id);
-    try {
-      const response = await fetch('/api/vault/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.valid) {
-        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
-      } else {
-        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
-      }
-    } catch (e) {
-      console.error('Verify exception:', e);
-      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
-    } finally {
-      setVerifyingId(null);
-    }
-  };
-
-  const handleAddRecord = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      fetchData(); // re-fetch after add
-    }, 1500);
-  };
-
-  const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
-    { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </UniversalBadge>
-      ) : (
-        <UniversalBadge variant="default" size="sm">未封印</UniversalBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
-          </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
-  ];
-
-  
   const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    id: 'ESG-COMPLIANCE',
     title: 'Compliance Check',
-    sub: 'Compliance Check Management'
+    sub: 'AI-Powered Integrity & Compliance Scanner'
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30 font-sans">
+      <div className="max-w-[1400px] mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-emerald-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
               <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <ShieldAlert className="text-cyan-400 relative z-10" size={28} />
+              <ShieldCheck className="text-cyan-400 relative z-10" size={28} />
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</UniversalBadge>
+                <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>Gemini 2.1 Flash + Genkit</UniversalBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
@@ -169,77 +86,254 @@ export default function ComplianceCheckPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</UniversalButton>
-            <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              新增紀錄
+            <UniversalButton 
+              variant={isScanning ? "outline" : "primary"} 
+              icon={isScanning ? <Loader2 size={16} className="animate-spin" /> : <FileSearch size={16}/>} 
+              onClick={startScan}
+              disabled={isScanning}
+              className="flex-1 md:flex-none shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+            >
+              {isScanning ? '5T 誠信掃描中...' : '執行 5T 誠信掃描'}
             </UniversalButton>
           </div>
         </header>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <UniversalCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
-            </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </UniversalCard>
+        {/* 3-Column Sovereign Bento Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-[calc(100vh-200px)] min-h-[700px]">
+          
+          {/* Left Column: Standards & Progress (Layer 1) */}
+          <div className="md:col-span-3 flex flex-col gap-6">
+            <UniversalCard variant="glass" className="p-5 flex-1 flex flex-col relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+              
+              <div className="flex items-center gap-2 text-cyan-400 mb-6">
+                <Activity size={18} />
+                <h3 className="font-bold text-sm tracking-widest uppercase">合規標準與進度</h3>
+              </div>
+              
+              <div className="space-y-4 flex-1">
+                {dashboardStats && (
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <div className="p-2 bg-white/5 rounded-lg border border-white/10 text-center">
+                      <div className="text-[10px] text-slate-400 uppercase tracking-wider">Compliance Rate</div>
+                      <div className="text-lg font-bold text-emerald-400">{dashboardStats.complianceRate}%</div>
+                    </div>
+                    <div className="p-2 bg-white/5 rounded-lg border border-white/10 text-center">
+                      <div className="text-[10px] text-slate-400 uppercase tracking-wider">GRI Coverage</div>
+                      <div className="text-lg font-bold text-cyan-400">{dashboardStats.griCoverage}%</div>
+                    </div>
+                  </div>
+                )}
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
-              <ShieldCheck size={18} className="text-cyan-400" />
-            </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </UniversalCard>
+                <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-bold text-slate-300">GRI 2021 通用準則</span>
+                    <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-1.5 mb-1 overflow-hidden">
+                    <div className="bg-emerald-400 h-1.5 rounded-full transition-all duration-1000" style={{ width: `${scanComplete ? 100 : scanProgress}%` }}></div>
+                  </div>
+                </div>
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
-            </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </UniversalCard>
-        </div>
+                <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-bold text-slate-300">ISSB (IFRS S1/S2)</span>
+                    <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-1.5 mb-1 overflow-hidden">
+                    <div className="bg-cyan-400 h-1.5 rounded-full transition-all duration-1000" style={{ width: `${scanComplete ? 100 : scanProgress * 0.9}%` }}></div>
+                  </div>
+                </div>
 
-        {/* Main Workspace Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3 space-y-6">
-            <UniversalCard 
-              variant="default" 
-              title="業務資料視圖" 
-              subtitle="Data synced with 5T Integrity Protocol"
-              className="min-h-[400px]"
-            >
-              <UniversalTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
+                <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-bold text-slate-300">台灣證交所規範</span>
+                    <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-1.5 mb-1 overflow-hidden">
+                    <div className="bg-indigo-400 h-1.5 rounded-full transition-all duration-1000" style={{ width: `${scanComplete ? 100 : scanProgress * 0.8}%` }}></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Integrity Pulse Status */}
+              <div className="mt-auto p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <IntegrityPulse active={isScanning} />
+                  <div>
+                    <div className="text-xs font-bold text-slate-300">掃描狀態</div>
+                    <div className="text-[10px] font-mono text-cyan-400/80">
+                      {isScanning ? `Analyzing Vectors... ${scanProgress}%` : (scanComplete ? 'Scan Complete (100%)' : 'System Idle')}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </UniversalCard>
           </div>
-          
-          <div className="space-y-6">
-            <UniversalCard 
-              variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
-            >
-              <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
-                </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
+
+          {/* Middle Column: Report Preview & Heatmap (Layer 2 Hologram) */}
+          <div className="md:col-span-6 flex flex-col">
+            <UniversalCard variant="glow" className="p-0 flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-[0_0_40px_rgba(6,182,212,0.1)]">
+              <div className="p-4 border-b border-cyan-500/20 bg-cyan-950/30 flex justify-between items-center backdrop-blur-md">
+                <div className="flex items-center gap-2 text-cyan-300">
+                  <FileText size={16} />
+                  <span className="text-sm font-bold tracking-widest uppercase">2026 ESG 永續報告書草稿</span>
+                </div>
+                <div className="flex gap-2">
+                  <UniversalBadge variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400">pgvector RAG</UniversalBadge>
+                </div>
+              </div>
+
+              <div className="flex-1 p-8 overflow-y-auto bg-[#0a0f16] relative text-slate-400 leading-relaxed font-serif text-sm">
+                
+                {/* Holographic scanning overlay */}
+                {isScanning && (
+                  <motion.div 
+                    className="absolute left-0 right-0 h-32 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent border-y border-cyan-500/30 z-10 pointer-events-none"
+                    animate={{ top: ['0%', '100%', '0%'] }}
+                    transition={{ duration: 4, ease: 'linear', repeat: Infinity }}
+                  />
+                )}
+
+                <div className="space-y-6 max-w-2xl mx-auto">
+                  <h1 className="text-2xl font-bold text-slate-200 mb-6 border-b border-white/10 pb-2">3. 環境永續 (Environmental)</h1>
+                  
+                  <p>本公司致力於減緩氣候變遷的影響，並於2026年度達成多項關鍵環境指標。我們積極導入再生能源，優化生產製程，以降低整體碳足跡。</p>
+                  
+                  {/* Heatmap Area 1: Warning */}
+                  <div 
+                    className={`relative p-2 -mx-2 rounded transition-all duration-300 cursor-pointer ${
+                      (scanComplete || activeHighlight === 'h1') ? 'bg-amber-500/10 border-l-2 border-amber-500' : ''
+                    } ${activeHighlight === 'h1' ? 'ring-1 ring-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)]' : ''}`}
+                    onClick={() => scanComplete && setActiveHighlight('h1')}
+                  >
+                    <p>在範疇一（直接溫室氣體排放）方面，我們本年度總排放量為 12,450 公噸 CO2e，較去年減少了 5%。此數據已根據 ISO 14064-1 進行內部盤查。</p>
+                    {scanComplete && (
+                      <div className="absolute -right-2 -top-2 w-4 h-4 bg-amber-500 rounded-full flex items-center justify-center animate-pulse">
+                        <AlertTriangle size={10} className="text-amber-950" />
+                      </div>
+                    )}
+                  </div>
+
+                  <p>關於水資源管理，本年度總耗水量為 450,000 立方公尺，主要水源來自市政供水。我們已在三個主要廠區建置了雨水回收系統，預計明年可節省 10% 的自來水使用。</p>
+
+                  {/* Heatmap Area 2: Critical */}
+                  <div 
+                    className={`relative p-2 -mx-2 rounded transition-all duration-300 cursor-pointer ${
+                      (scanComplete || activeHighlight === 'h2') ? 'bg-rose-500/10 border-l-2 border-rose-500' : ''
+                    } ${activeHighlight === 'h2' ? 'ring-1 ring-rose-500/50 shadow-[0_0_15px_rgba(243,24,32,0.2)]' : ''}`}
+                    onClick={() => scanComplete && setActiveHighlight('h2')}
+                  >
+                    <p>在範疇三（其他間接溫室氣體排放）方面，我們估算供應鏈產生的排放量約為 150,000 公噸 CO2e。我們承諾將協助供應商進行減碳轉型，並要求主要供應商簽署永續承諾書。</p>
+                    {scanComplete && (
+                      <div className="absolute -right-2 -top-2 w-4 h-4 bg-rose-500 rounded-full flex items-center justify-center animate-pulse shadow-[0_0_10px_#f43f5e]">
+                        <ShieldAlert size={10} className="text-white" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Heatmap Area 3: Good */}
+                  <div 
+                    className={`relative p-2 -mx-2 rounded transition-all duration-300 cursor-pointer ${
+                      (scanComplete || activeHighlight === 'h3') ? 'bg-emerald-500/10 border-l-2 border-emerald-500' : ''
+                    } ${activeHighlight === 'h3' ? 'ring-1 ring-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : ''}`}
+                    onClick={() => scanComplete && setActiveHighlight('h3')}
+                  >
+                    <p>廢棄物管理方面，我們達到 98% 的資源回收率，所有有害廢棄物皆委託具備合法執照之清除處理機構處理，無跨境運送有害廢棄物之情事。</p>
+                    {scanComplete && (
+                      <div className="absolute -right-2 -top-2 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                        <CheckCircle2 size={10} className="text-emerald-950" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </UniversalCard>
+          </div>
+
+          {/* Right Column: Diagnosis Details (Layer 1 Glass) */}
+          <div className="md:col-span-3 flex flex-col gap-6">
+            <UniversalCard variant="glass" className="p-5 flex-1 flex flex-col relative">
+              <div className="flex items-center gap-2 text-slate-300 mb-4 pb-4 border-b border-white/5">
+                <SearchCode size={18} className="text-cyan-400" />
+                <h3 className="font-bold text-sm tracking-widest uppercase">AI 診斷與建議</h3>
+              </div>
+
+              <div className="flex-1 overflow-y-auto pr-2 -mr-2 space-y-4">
+                {!scanComplete ? (
+                  <div className="flex flex-col items-center justify-center h-full text-slate-500 space-y-4 opacity-50">
+                    <Brain size={48} className="animate-pulse" />
+                    <p className="text-xs text-center">點擊左側掃描按鈕<br/>啟動 Gemini 語意比對</p>
+                  </div>
+                ) : (
+                  <AnimatePresence>
+                    {/* Critical Issue */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className={`p-4 rounded-xl border transition-all ${
+                        activeHighlight === 'h2' ? 'bg-rose-950/40 border-rose-500/50' : 'bg-slate-900/50 border-rose-500/20 hover:border-rose-500/40 cursor-pointer'
+                      }`}
+                      onClick={() => setActiveHighlight('h2')}
+                    >
+                      <div className="flex gap-2 items-start mb-2">
+                        <ShieldAlert size={16} className="text-rose-500 mt-0.5 shrink-0" />
+                        <div>
+                          <h4 className="text-sm font-bold text-rose-400">嚴重風險 (綠洗疑慮)</h4>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 font-mono mt-1 inline-block">GRI 305-3</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-300 mb-3 leading-relaxed">第 42 頁關於「範疇三」排放的描述缺少第三方確信證據，且估算方法未透明揭露，面臨主管機關裁罰風險。</p>
+                      
+                      <div className="pt-3 border-t border-rose-500/20">
+                        <div className="text-[10px] text-slate-400 font-bold mb-1">AI 建議行動</div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-cyan-400 hover:underline cursor-pointer">追溯至 source_origin 補件</span>
+                          <ArrowRight size={14} className="text-cyan-400" />
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Warning Issue */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 }}
+                      className={`p-4 rounded-xl border transition-all ${
+                        activeHighlight === 'h1' ? 'bg-amber-950/40 border-amber-500/50' : 'bg-slate-900/50 border-amber-500/20 hover:border-amber-500/40 cursor-pointer'
+                      }`}
+                      onClick={() => setActiveHighlight('h1')}
+                    >
+                      <div className="flex gap-2 items-start mb-2">
+                        <AlertTriangle size={16} className="text-amber-500 mt-0.5 shrink-0" />
+                        <div>
+                          <h4 className="text-sm font-bold text-amber-400">數據揭露不全</h4>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono mt-1 inline-block">GRI 305-1</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-300 mb-3 leading-relaxed">僅聲明經過內部盤查，未說明採用的 GWP (全球暖化潛勢) 版本，語意過於模糊。</p>
+                      
+                      <div className="pt-3 border-t border-amber-500/20">
+                        <div className="text-[10px] text-slate-400 font-bold mb-1">推理鏈 (Chain-of-Thought)</div>
+                        <div className="text-[10px] text-slate-500 leading-tight">
+                          Gemini 判定：ISO 14064-1 聲明需伴隨 IPCC GWP 版本揭露以確保透明度 (善)。
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                )}
+              </div>
+              
+              {/* Hash Lock Trust Status */}
+              <div className="mt-4 pt-4 border-t border-white/5">
+                <div className="p-3 bg-cyan-950/30 rounded-lg border border-cyan-500/20 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Lock size={14} className="text-cyan-400" />
+                    <span className="text-xs text-slate-300 font-mono">Hash Lock Status</span>
+                  </div>
+                  <UniversalBadge variant={scanComplete ? "success" : "default"} size="sm">
+                    {scanComplete ? 'Sealed in Vault' : 'Pending'}
+                  </UniversalBadge>
                 </div>
               </div>
             </UniversalCard>
