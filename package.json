@@ -26,6 +26,7 @@
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@genkit-ai/core": "^1.36.0",
+    "@genkit-ai/firebase": "^1.36.0",
     "@genkit-ai/google-genai": "^1.36.0",
     "@genkit-ai/googleai": "^1.28.0",
     "@google/adk": "^0.1.2",
@@ -89,7 +90,6 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
-    "@genkit-ai/firebase": "^1.36.0",
     "@pencil.dev/cli": "^0.2.7",
     "@storybook/addon-a11y": "^10.4.1",
     "@storybook/addon-docs": "^10.4.1",
