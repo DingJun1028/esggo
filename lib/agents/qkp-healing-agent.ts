@@ -4,11 +4,23 @@ import crypto from 'crypto';
 // =========================================================================
 // 1. 萬能元件心核 (IComponentCore) 規範 - 永恆刻印
 // =========================================================================
+/**
+ * 萬能元件心核 - 觀因循果修復版
+ * 確保數據從因到果的完整性與不可篡改性
+ */
 export interface IComponentCore {
-  readonly uuid: string;         // 萬能永憶主體唯一識別碼
-  readonly version: string;      // 語義化版本控制
-  readonly timestamp: number;    // 刻印時間戳
-  evidence: string;              // 證據佐證庫
+  // 萬能永憶主體唯一識別碼 (Immutable)
+  readonly uuid: string;
+  // 語義化版本控制
+  readonly version: string;
+  // 刻印時間戳 (溯源起點)
+  readonly timestamp: number;
+  // 證據左證庫 (儲存觀因循果的執行軌跡)
+  evidence: {
+    originCause: string;    // 因：原始觸發條件
+    processTrace: string[]; // 循：InfoOne 流轉路徑
+    finalEffect: string;    // 果：最終執行結果與狀態
+  };
 }
 
 // =========================================================================
@@ -20,7 +32,11 @@ export class QkpHealingAgent {
     uuid: "ee4af378-b9d7-412d-91d2-d50b98fa0715",
     version: "2.6.0-stable.5T",
     timestamp: 1772421600000,
-    evidence: "QKP_HEALING_AGENT_DECOUPLED_EXECUTION"
+    evidence: {
+      originCause: "QKP_HEALING_AGENT_DECOUPLED_EXECUTION",
+      processTrace: ["EntropyForge.purify", "HashLock.re-seal"],
+      finalEffect: "[ISO-14064-1] Zero-Hallucination Standard"
+    }
   };
 
   constructor() {
@@ -34,9 +50,9 @@ export class QkpHealingAgent {
     console.log('🤖 [QKP Agent] 啟動自主代行網路... 訂閱 qkp:healing:triggered 頻道');
 
     // 訂閱來自事件總線的治療需求
-    omniAgentBus.subscribe('qkp:healing:triggered', async (payload: any) => {
+    omniAgentBus.subscribe('qkp:healing:triggered', async (payload: unknown) => {
       try {
-        const { evidence_uuid, severity } = payload;
+        const { evidence_uuid, severity } = payload as { evidence_uuid: string; severity: string };
         console.log(`⚖️ [QKP Agent] 接收到 QKP 治療觸發請求！證據 ID: ${evidence_uuid}, 嚴重度: ${severity}`);
         
         await this.executeHealingWorkflow(evidence_uuid, severity);
