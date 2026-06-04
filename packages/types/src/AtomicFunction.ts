@@ -63,8 +63,8 @@ export type AtomicFunction<
   TError = Error
 > = (input: TInput) => Promise<AtomicFunctionResult<TOutput, TError>>;
 
-export const AtomicFunctionSchema = z.function(
-  z.tuple([
+export const AtomicFunctionSchema = z.function()
+  .args(
     z.object({
       context: z.object({
         requestId: z.string(),
@@ -75,8 +75,7 @@ export const AtomicFunctionSchema = z.function(
       }),
       payload: z.unknown()
     })
-  ])
-)
+  )
   .returns(
     z.object({
       success: z.boolean(),
