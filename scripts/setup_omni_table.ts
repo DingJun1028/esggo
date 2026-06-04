@@ -7,7 +7,7 @@ import { getOmniTableServerClient } from '../lib/omni-table/client';
 // 請替換為您在 OmniTable 上的實際 Space ID (空間ID)
 const TARGET_SPACE_ID = process.env.OMNITABLE_SPACE_ID || 'spc_demo_12345';
 
-async function main() {
+export default async function main() {
     console.log('🚀 開始 OmniBlueTable 演練任務...');
     const client = getOmniTableServerClient();
 
@@ -55,4 +55,6 @@ async function main() {
     }
 }
 
-main();
+if (require.main === module) {
+    main();
+}

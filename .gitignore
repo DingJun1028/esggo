@@ -44,6 +44,9 @@ nul
 # Data Connect Generated (Optional: keep if you want type safety in CI without firebase login)
 # src/dataconnect-generated/
 
+# MCP server configs (may contain API keys / secrets)
+.mcp/
+
 # Service account keys
 service-account-key.json
 *.service-account-key.json
