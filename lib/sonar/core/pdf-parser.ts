@@ -1,15 +1,9 @@
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
-import path from 'path';
-import { createRequire } from 'module';
 
-// 用 createRequire 取得 pdfjs-dist 套件根目錄，再指向 standard_fonts
-const require = createRequire(import.meta.url);
-const pdfjsDistBuildPath = require.resolve('pdfjs-dist/legacy/build/pdf.mjs');
-// pdfjs-dist/legacy/build/pdf.mjs → 往上三層 = pdfjs-dist/
-const pdfjsDistRoot = path.resolve(path.dirname(pdfjsDistBuildPath), '..', '..', '..');
-const standardFontDataUrl = path.join(pdfjsDistRoot, 'standard_fonts') + '/';
-// ccmaps 也在根目錄下
-const cMapUrl = path.join(pdfjsDistRoot, 'cmaps') + '/';
+// standardFontDataUrl 和 cMapUrl 用相對路徑，從 legacy/build/pdf.mjs 的位置解析
+// legacy/build/ 下已有 standard_fonts/ 和 cmaps/ 目錄（建置時複製）
+const standardFontDataUrl = './standard_fonts/';
+const cMapUrl = './cmaps/';
 
 export interface PDFMetadata {
   pages: number;
@@ -36,7 +30,6 @@ export class PDFParser {
       data: uint8,
       standardFontDataUrl,
       cMapUrl,
-      isEvalSupported: false,
     }).promise;
 
     const textParts: string[] = [];
@@ -57,6 +50,7 @@ export class PDFParser {
     const pdf = await getDocument({
       data: uint8,
       standardFontDataUrl,
+      cMapUrl,
     }).promise;
 
     const metadata = await pdf.getMetadata();
