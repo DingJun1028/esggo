@@ -15,6 +15,6 @@ services:
 
 databases:
   - name: esggo-db
-    plan: starter
+    plan: free
     databaseName: esggo
     user: esggouser
