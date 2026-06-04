@@ -1,7 +1,7 @@
-# ESGGO 善向永續 系統 官方 Wiki 🏛️
+# ESGGO善向永續 官方 Wiki 🏛️
 ## 版本：v8.5.1 | 架構：SaaS User Journey Edition
 
-歡迎來到 **ESGGO 善向永續 系統** 官方 Wiki。
+歡迎來到 **ESGGO善向永續** 官方 Wiki。
 本平台是一套結合 **ESG 治理、AI 智能協作、可信資料驗證與混合雲調度** 的整合式數位平台。
 
 本 Wiki 的目錄結構嚴格遵循 **SaaS 使用者旅程 (User Journey)** 編排，點擊下方連結可檢閱各模組詳細規範。
@@ -104,4 +104,4 @@
 *   [[Compliance Check-合規檢查]](docs/wiki/Compliance-Check.md) -> `/compliance-check`
 
 ---
-© 2026 ESGGO 善向永續 系統 | **Version:** v8.5.1 | **Last Updated:** 2026-05-31
+© 2026 ESGGO善向永續 | **Version:** v8.5.1 | **Last Updated:** 2026-05-31

@@ -1,7 +1,7 @@
 # 🏛️ 萬能元件品牌原子庫 - 經典版 (Classic Edition)
-## ESGGO 善向永續 系統 X OmniAgent | Official Component Standard v1.2
+## ESGGO善向永續 X OmniAgent | Official Component Standard v1.2
 
-本原子庫為 ESGGO 善向永續 系統 系統的預設視覺與交互標準，基於 Berkeley Haass 學術精準度與 5T 誠信協議開發。
+本原子庫為 ESGGO善向永續 系統的預設視覺與交互標準，基於 Berkeley Haass 學術精準度與 5T 誠信協議開發。
 
 ## 📜 核心設計原則：參照原則 (Reference Principle)
 「參照原則」是萬能原子庫的基石，確保每一 UI 組件不再是孤立的視覺元素，而是誠信協議中的一個活躍節點。

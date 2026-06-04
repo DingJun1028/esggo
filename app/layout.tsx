@@ -6,17 +6,17 @@ import { AuthProvider } from '../components/AuthProvider';
 
 export const metadata: Metadata = {
   title: {
-    default: 'ESGGO 善向永續 系統 | 5T 永續治理系統',
-    template: '%s | ESGGO 善向永續 系統',
+    default: 'ESGGO善向永續 | 5T 永續治理系統',
+    template: '%s | ESGGO善向永續',
   },
-  description: '臺北市中小企業永續治理實證系統 v8.5 · Berkeley Haas × TSISDA · 5T 誠信協議驅動之 ESGGO 善向永續 系統',
+  description: '臺北市中小企業永續治理實證系統 v8.5 · Berkeley Haas × TSISDA · 5T 誠信協議驅動之 ESGGO善向永續',
   keywords: ['ESG', 'GRI', 'TCFD', '永續報告', '台灣', '中小企業', '5T', '誠信協議', 'ESGGO'],
   robots: { index: true, follow: true },
   icons: [{ rel: 'icon', url: '/favicon.svg', type: 'image/svg+xml' }],
   openGraph: {
-    title: 'ESGGO 善向永續 系統 | 5T 永續治理系統',
-    description: 'Berkeley Haas × TSISDA 跨界合作 — 5T 誠信協議驅動之 ESGGO 善向永續 系統自動化平台',
-    siteName: 'ESGGO 善向永續 系統',
+    title: 'ESGGO善向永續 | 5T 永續治理系統',
+    description: 'Berkeley Haas × TSISDA 跨界合作 — 5T 誠信協議驅動之 ESGGO善向永續自動化平台',
+    siteName: 'ESGGO善向永續',
     locale: 'zh_TW',
     type: 'website',
   },
@@ -33,7 +33,7 @@ function LoadingFallback() {
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F8FAFC' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid #003262', borderTopColor: 'transparent', animation: 'spin 0.8s linear infinite' }} />
-        <p style={{ fontSize: 13, color: '#94A3B8', fontFamily: 'system-ui' }}>OmniAgent + ESGGO 善向永續 系統</p>
+        <p style={{ fontSize: 13, color: '#94A3B8', fontFamily: 'system-ui' }}>ESGGO善向永續</p>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
