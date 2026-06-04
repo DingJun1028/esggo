@@ -53,8 +53,8 @@ jobs:
           "
       - name: Test CLI commands
         run: |
-          node cli/omni.mjes status
-          node cli/omni.mjes optimize test-service
+          node cli/omni.mjs status
+          node cli/omni.mjs optimize test-service
 
   # 可選：部署到生產環境（如 Vercel、Cloud Run）
   deploy:
