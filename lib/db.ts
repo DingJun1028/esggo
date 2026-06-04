@@ -9,6 +9,7 @@ import {
   listAllTasks,
   upsertTask
 } from '@dataconnect/generated';
+import { dcGetReportById } from './dataconnect-services.ts';
 
 export { 
   listCompanyMetrics, 
@@ -19,7 +20,8 @@ export {
   listRoadmapMilestones,
   listScrapedArticles,
   listAllTasks,
-  upsertTask
+  upsertTask,
+  dcGetReportById
 };
 import { db } from './firebase.ts';
 import { 
@@ -168,9 +170,6 @@ export const secureHash = async (data: unknown): Promise<string> => {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
-export const simpleHash = secureHash;
-export const simplehash = secureHash;
-
 export const sealRecord = async (data: any, ownerId: string): Promise<string> => {
   const hash = await secureHash(data);
   await logAudit({
@@ -201,8 +200,7 @@ export const getReportsByOwner = async (ownerId: string) => {
 };
 
 export const getReport = async (id: string) => {
-  // This would need a GetReportById query in Data Connect
-  return null; 
+  return await dcGetReportById(id);
 };
 
 export const createReport = async (data: unknown) => 'dummy_id';

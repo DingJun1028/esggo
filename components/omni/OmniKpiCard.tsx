@@ -31,19 +31,21 @@ export default function OmniKpiCard({
     <motion.div
       whileHover={{ y: -4, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`relative p-6 rounded-2xl bg-slate-900/60 border border-slate-700/50 backdrop-blur-xl overflow-hidden group ${className}`}
+      className={`relative p-6 rounded-[2rem] bg-white/[0.03] border border-white/10 backdrop-blur-2xl overflow-hidden group shadow-[0_8px_32px_rgba(0,0,0,0.3)] ${className}`}
     >
       {/* Background Glow */}
-      <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-[50px] group-hover:bg-cyan-500/20 transition-all duration-700 pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-[60px] group-hover:bg-cyan-500/30 transition-all duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none opacity-50" />
+      <div className="absolute top-0 left-10 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-30" />
 
       <div className="relative z-10 flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           {icon && (
-            <div className="p-2 rounded-lg bg-slate-800/50 text-cyan-400 border border-slate-700/50">
+            <div className="p-2.5 rounded-xl bg-black/40 text-cyan-400 border border-cyan-500/20 shadow-inner">
               {icon}
             </div>
           )}
-          <h3 className="text-sm font-medium text-slate-300 tracking-wide">{title}</h3>
+          <h3 className="text-sm font-semibold text-slate-300 tracking-wider uppercase">{title}</h3>
         </div>
         
         {/* Top-right Status Dot */}

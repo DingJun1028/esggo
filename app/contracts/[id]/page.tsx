@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/lib/utils';
+import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
 
 export default function ContractDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const contractId = React.use(params).id;
@@ -126,6 +127,8 @@ export default function ContractDetailPage({ params }: { params: Promise<{ id: s
               ))}
             </div>
           </Card>
+
+          <ShieldOfAbsoluteTruth contentId={contractId} isAiGenerated={true} />
 
           <Card className="p-6 border-slate-200">
             <h3 className="text-xs font-black uppercase tracking-widest text-text-primary mb-4 flex items-center gap-2">
