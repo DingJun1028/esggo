@@ -3,14 +3,17 @@ import { persist } from 'zustand/middleware';
 import { syncTaskAction } from '@/app/actions/omni-notes';
 
 // 定義類似 Capacities 的物件類型 (Object Types)
-export type NoteType = 'log' | 'idea' | 'meeting' | 'task';
+export type NoteType = 'log' | 'idea' | 'meeting' | 'task' | 'research' | 'knowledge';
 
 export interface OmniNote {
     id: string;
     content: string;
     type: NoteType;
-    date: string; // 格式: YYYY-MM-DD，用於綁定日曆
+    date: string;
     createdAt: number;
+    source: 'local' | 'blue' | 'aitable' | 'capacities';
+    externalId?: string;
+    metadata: Record<string, any>;
 }
 
 interface OmniNotesState {

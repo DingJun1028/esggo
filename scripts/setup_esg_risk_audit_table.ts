@@ -7,7 +7,7 @@ import { getOmniTableServerClient } from '../lib/omni-table/client';
 
 const TARGET_SPACE_ID = process.env.OMNITABLE_SPACE_ID || 'spc_demo_12345';
 
-async function main() {
+export default async function main() {
     console.log('🚀 開始建立「ESG 風險稽核庫」OmniTable Datasheet...');
     const client = getOmniTableServerClient();
 
@@ -104,4 +104,6 @@ async function main() {
     }
 }
 
-main();
+if (require.main === module) {
+    main();
+}
