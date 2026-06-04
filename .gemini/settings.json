@@ -4,7 +4,7 @@
       "enabled": true,
       "classifier": {
         "host": "http://localhost:9379",
-        "model": "gemma3-1b-gpu-custom"
+        "model": "google/gemma-4-E4B-it"
       }
     }
   },
