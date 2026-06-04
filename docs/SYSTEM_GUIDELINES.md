@@ -1,7 +1,7 @@
 # OmniCore System Guidelines
 **版本：萬能元件庫_萬能代理篇 (Omni Atomic Components - OmniAgent Edition)**
 
-本文件定義了 AI 與開發者在建構「ESGGO 善向永續系統」中「萬能代理 (OmniAgent)」相關 UI 元件與系統架構時，必須嚴格遵守的設計準則與技術規範。
+本文件定義了 AI 與開發者在建構「ESGGO善向永續」中「萬能代理 (OmniAgent)」相關 UI 元件與系統架構時，必須嚴格遵守的設計準則與技術規範。
 
 ---
 

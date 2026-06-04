@@ -4,7 +4,7 @@
 ## 0. Prelude: The Sacred Purpose
 ## 0. 序言：神聖使命
 This constitution anchors ESGGO 善向永續/System under the Sacred Trinity: Platform, Commander, Soul. It codifies the intent to sustain an evergreen governance system where data integrity, verifiability, and responsible autonomy are the default state. The Genesis (P0) provides the ontological backdrop; Guidelines provide the operational discipline; and Implementation provides the enablers (TypeScript contracts, runtime guards, and governance rituals).
-> 本憲章將「ESGGO 善向永續系統」深度錨定於「神聖三位一體」（平台、指揮官、靈魂）的框架之下。其核心旨意，是將維繫一個「常青（永續演進）治理系統」的意圖予以成文法制化；在此系統中，資料完整性、可驗證性與負責任的自治性皆為系統的預設狀態。「起源 (P0)」提供了本體論的基石；「指南 (Guidelines)」確立了營運紀律；而「實作 (Implementation)」則提供了具體的賦能工具（如 TypeScript 契約、執行期守衛與系統治理儀式）。
+> 本憲章將「ESGGO善向永續」深度錨定於「神聖三位一體」（平台、指揮官、靈魂）的框架之下。其核心旨意，是將維繫一個「常青（永續演進）治理系統」的意圖予以成文法制化；在此系統中，資料完整性、可驗證性與負責任的自治性皆為系統的預設狀態。「起源 (P0)」提供了本體論的基石；「指南 (Guidelines)」確立了營運紀律；而「實作 (Implementation)」則提供了具體的賦能工具（如 TypeScript 契約、執行期守衛與系統治理儀式）。
 
 ## 1. Core Principles
 ## 1. 核心原則
@@ -188,4 +188,4 @@ When requested to fix a bug, resolve an exception, or repair a system anomaly, y
 </RULE[jules_karma_protocol]>
 
 ---
-© 2026 ESGGO 善向永續 系統 — 萬能心核系統憲章 (OmniCore Constitution)。
+© 2026 ESGGO善向永續 — 萬能心核系統憲章 (OmniCore Constitution)。
