@@ -8,7 +8,17 @@
     "start": "node dist/server.js",
     "dev": "ts-node src/server.ts",
     "lint": "eslint src/**/*.ts",
-    "test": "jest"
+    "test": "jest",
+    "omni:setup": "npx tsx scripts/setup_all_tables.ts",
+    "omni:setup:dry": "npx tsx scripts/setup_all_tables.ts --dry-run",
+    "omni:setup:notes": "npx tsx scripts/setup_notes_tasks_table.ts",
+    "omni:setup:intel": "npx tsx scripts/setup_daily_intelligence_table.ts",
+    "omni:setup:esg-risk": "npx tsx scripts/setup_esg_risk_audit_table.ts",
+    "omni:setup:compliance": "npx tsx scripts/setup_compliance_engine_table.ts",
+    "omni:setup:governance": "npx tsx scripts/setup_governance_audit_table.ts",
+    "omni:setup:supplier": "npx tsx scripts/setup_supplier_integrity_table.ts",
+    "omni:setup:vault": "npx tsx scripts/setup_vault_omni_table.ts",
+    "omni:setup:swarm": "npx tsx scripts/setup_swarm_consensus_table.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.80",
