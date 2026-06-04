@@ -37,9 +37,12 @@ export function OmniAgentPulse() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="w-[320px] bg-void-stark/90 backdrop-blur-xl border border-cyan-500/30 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+              transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
+              className="w-[340px] bg-slate-950/30 backdrop-blur-3xl border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/20"
             >
+              {/* Liquid Gloss Highlight */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent z-20"></div>
+              
               {/* Header / Drag Handle */}
               <div className="bg-gradient-to-r from-cyan-900/40 to-blue-900/40 p-3 border-b border-cyan-500/20 flex items-center justify-between cursor-grab active:cursor-grabbing group">
                 <div className="flex items-center gap-2">
@@ -115,15 +118,18 @@ export function OmniAgentPulse() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsExpanded(true)}
-              className="bg-void-stark/80 backdrop-blur-md border border-cyan-500/50 rounded-full p-1.5 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 pr-4 cursor-pointer"
+              className="bg-slate-950/40 backdrop-blur-3xl border border-white/10 rounded-full p-2 shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/30 flex items-center gap-3 pr-5 cursor-pointer relative overflow-hidden"
             >
-              <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center relative">
-                <Bot size={20} className="text-cyan-400 relative z-10" />
+              {/* Gloss Highlight */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"></div>
+              
+              <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center relative border border-cyan-400/20">
+                <Bot size={22} className="text-cyan-400 relative z-10 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
                 <div className="absolute inset-0 rounded-full border border-cyan-400/50 animate-ping opacity-20" />
               </div>
               <div className="flex flex-col items-start text-left">
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider leading-none">OmniAgent</span>
-                <span className="text-[9px] font-mono text-cyan-400 mt-0.5">{connectionStatus}</span>
+                <span className="text-[11px] font-black text-white uppercase tracking-widest leading-none drop-shadow-md">OmniAgent</span>
+                <span className="text-[10px] font-mono text-cyan-400 mt-1 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]">{connectionStatus}</span>
               </div>
             </motion.button>
           )}
