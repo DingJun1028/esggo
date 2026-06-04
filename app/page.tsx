@@ -7,6 +7,7 @@ import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Act
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
 import OmniAgentPulse from '@/components/omni/OmniAgentPulse';
+import OmniBlueDashboard from '@/components/omni/OmniBlueDashboard';
 
 interface LogEntry {
   time: string;
@@ -327,6 +328,11 @@ function LandingContent() {
             </BrandCard>
           </Link>
 
+        </motion.div>
+
+        {/* ─── Layer 2.5: OmniBlue Data Mesh ──────────────────────────── */}
+        <motion.div variants={item} className="w-full">
+          <OmniBlueDashboard />
         </motion.div>
 
         <motion.div variants={item} className="pt-12 text-center">
