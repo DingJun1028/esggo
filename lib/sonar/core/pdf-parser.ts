@@ -1,4 +1,10 @@
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const standardFontDataUrl = path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts/');
 
 export interface PDFMetadata {
   pages: number;
@@ -21,7 +27,10 @@ export class PDFParser {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
 
     const uint8 = new Uint8Array(buffer);
-    const pdf = await getDocument({ data: uint8 }).promise;
+    const pdf = await getDocument({ 
+      data: uint8,
+      standardFontDataUrl: standardFontDataUrl.replace(/\\/g, '/')
+    }).promise;
     const numPages = pdf.numPages;
 
     const textParts: string[] = [];
@@ -39,7 +48,10 @@ export class PDFParser {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
 
     const uint8 = new Uint8Array(buffer);
-    const pdf = await getDocument({ data: uint8 }).promise;
+    const pdf = await getDocument({ 
+      data: uint8,
+      standardFontDataUrl: standardFontDataUrl.replace(/\\/g, '/')
+    }).promise;
     const metadata = await pdf.getMetadata();
 
     const info = metadata.info as any;
