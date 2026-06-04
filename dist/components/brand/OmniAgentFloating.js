@@ -1,0 +1,41 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bot, X, Send, Maximize2, Minimize2, History, Zap } from 'lucide-react';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
+import { useOmniResonance } from '../../src/client/hooks/useOmniResonance';
+import { cn } from '../../lib/utils';
+export default function OmniAgentFloatingAgent() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isMaximized, setIsMaximized] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const { rs, status: rsStatus } = useOmniResonance();
+    const [input, setInput] = useState('');
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape' && isOpen) {
+                setIsOpen(false);
+            }
+        };
+        const handleToggle = (e) => {
+            if (e.detail?.open)
+                setIsOpen(true);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('omni-agent-toggle', handleToggle);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('omni-agent-toggle', handleToggle);
+        };
+    }, [isOpen]);
+    return (_jsxs(motion.div, { drag: true, dragMomentum: false, onDragStart: () => setIsDragging(true), onDragEnd: (e, info) => {
+            setTimeout(() => setIsDragging(false), 150);
+        }, className: "fixed bottom-10 right-10 z-[10000] flex flex-col items-end", children: [_jsx(AnimatePresence, { children: isOpen && (_jsx(motion.div, { initial: { opacity: 0, scale: 0.9, y: 40 }, animate: { opacity: 1, scale: 1, y: 0 }, exit: { opacity: 0, scale: 0.9, y: 40 }, transition: { type: 'spring', damping: 20, stiffness: 300 }, className: cn("mb-6 flex flex-col transition-all duration-500 origin-bottom-right", isMaximized ? "w-full max-w-[90%] sm:max-w-[640px] h-[60vh] sm:h-[80vh] max-h-[80vh]" : "w-full max-w-[90%] sm:max-w-[400px] max-w-md h-[60vh] max-h-[60vh]"), children: _jsxs(Card, { className: "w-full h-full flex flex-col shadow-glass border-white/60 bg-white/80 backdrop-blur-3xl rounded-[3rem] p-0 overflow-hidden", children: [_jsxs("header", { className: "p-8 bg-berkeley-blue text-white flex items-center justify-between relative overflow-hidden cursor-grab active:cursor-grabbing", children: [_jsx("div", { className: "absolute top-0 right-0 w-64 h-full bg-white/5 blur-3xl -z-0" }), _jsxs("div", { className: "flex items-center gap-5 relative z-10", children: [_jsx("div", { className: "w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center shadow-inner border border-white/10", children: _jsx(Bot, { size: 28, className: "text-california-gold" }) }), _jsxs("div", { children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx("p", { className: "text-lg font-black tracking-tight uppercase", children: "OmniAgent Oracle" }), _jsx(Badge, { variant: "verified", className: "bg-emerald-400/20 text-emerald-300 border-none px-2 py-0.5 text-[9px]", children: "ACTIVE" })] }), _jsxs("div", { className: "flex items-center gap-2 mt-1", children: [_jsx("div", { className: "w-1.5 h-1.5 rounded-full bg-california-gold animate-pulse" }), _jsxs("p", { className: "text-[10px] font-black text-blue-200 uppercase tracking-widest", children: ["Resonance: ", (rs * 100).toFixed(1), "%"] })] })] })] }), _jsxs("div", { className: "flex items-center gap-2 relative z-10", children: [_jsx("button", { onClick: () => setIsMaximized(!isMaximized), className: "w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-all text-white/60 hover:text-white", children: isMaximized ? _jsx(Minimize2, { size: 18 }) : _jsx(Maximize2, { size: 18 }) }), _jsx("button", { onClick: () => setIsOpen(false), className: "w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-all text-white/60 hover:text-white", children: _jsx(X, { size: 20 }) })] })] }), _jsxs("div", { className: "flex-1 p-8 overflow-y-auto space-y-6 bg-slate-50/30 no-scrollbar", children: [_jsxs("div", { className: "flex gap-4", children: [_jsx("div", { className: "w-8 h-8 rounded-xl bg-berkeley-blue/5 text-berkeley-blue flex items-center justify-center shrink-0", children: _jsx(Bot, { size: 16 }) }), _jsxs(Card, { className: "bg-white p-5 rounded-3xl rounded-tl-none border border-slate-100/50 shadow-sm text-[13px] text-slate-600 leading-relaxed font-medium", children: ["\u60A8\u597D\uFF0C\u6211\u662F\u60A8\u7684 **OmniAgent \u6578\u64DA\u5927\u796D\u53F8**\u3002\u6211\u6B63\u5728\u5373\u6642\u5E73\u8861\u7CFB\u7D71\u7684\u4EFB\u7763\u4E8C\u8108\u80FD\u91CF\u6D41\u3002\u7576\u524D\u5171\u9CF4\u7B97\u529B\u70BA **", (rs * 100).toFixed(1), "%**\uFF0C\u5168\u57DF 5T \u72C0\u614B\u7A69\u5B9A\u3002"] })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs(Card, { className: "p-5 bg-white/60 border-white/80 shadow-sm flex flex-col items-center text-center gap-3", children: [_jsx(History, { size: 16, className: "text-berkeley-blue" }), _jsx("span", { className: "text-[10px] font-black text-slate-400 uppercase tracking-widest", children: "Ren (DNA)" }), _jsx(Badge, { variant: "primary", className: "text-[9px]", children: "STABLE" })] }), _jsxs(Card, { className: "p-5 bg-white/60 border-white/80 shadow-sm flex flex-col items-center text-center gap-3", children: [_jsx(Zap, { size: 16, className: "text-california-gold" }), _jsx("span", { className: "text-[10px] font-black text-slate-400 uppercase tracking-widest", children: "Du (EXEC)" }), _jsx(Badge, { variant: "warning", className: "text-[9px]", children: "ACTIVE" })] })] })] }), _jsxs("footer", { className: "p-6 bg-white border-t border-slate-100/50", children: [_jsxs("div", { className: "relative group", children: [_jsx("input", { className: "w-full h-14 bg-slate-50 border border-slate-100 rounded-2xl pl-6 pr-16 text-sm font-medium focus:ring-4 focus:ring-berkeley-blue/5 focus:bg-white transition-all outline-none", placeholder: "\u8F38\u5165\u6307\u4EE4\u89E3\u9396\u6676\u6838...", value: input, onChange: e => setInput(e.target.value), onKeyDown: e => e.key === 'Enter' && setInput('') }), _jsx(Button, { variant: "primary", className: "absolute right-2 top-2 w-10 h-10 p-0 rounded-xl", onClick: () => setInput(''), children: _jsx(Send, { size: 16 }) })] }), _jsxs("div", { className: "mt-4 flex items-center justify-center gap-6", children: [_jsx("button", { className: "text-[10px] font-black text-slate-300 hover:text-berkeley-blue transition-colors uppercase tracking-widest", children: "5T_SEAL" }), _jsx("div", { className: "w-1 h-1 rounded-full bg-slate-200" }), _jsx("button", { className: "text-[10px] font-black text-slate-300 hover:text-berkeley-blue transition-colors uppercase tracking-widest", children: "SWARM_SYNC" }), _jsx("div", { className: "w-1 h-1 rounded-full bg-slate-200" }), _jsx("button", { className: "text-[10px] font-black text-slate-300 hover:text-berkeley-blue transition-colors uppercase tracking-widest", children: "TRACE_DNA" })] })] })] }) })) }), _jsxs(motion.button, { whileHover: { scale: 1.05 }, whileTap: { scale: 0.95 }, onClick: () => {
+                    if (!isDragging)
+                        setIsOpen(!isOpen);
+                }, className: cn("w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-glass transition-all duration-500", isOpen ? "bg-white text-berkeley-blue rotate-90 border border-white" : "bg-berkeley-blue text-california-gold"), children: [_jsx(AnimatePresence, { mode: "wait", children: isOpen ? _jsx(X, { size: 32 }, "x") : _jsx(Bot, { size: 36, className: "animate-pulse" }, "bot") }), !isOpen && (_jsx(motion.span, { initial: { scale: 0 }, animate: { scale: 1 }, className: "absolute -top-1 -right-1 w-6 h-6 bg-error rounded-xl border-2 border-white flex items-center justify-center text-[10px] font-black text-white shadow-lg", children: "!" }))] })] }));
+}
+//# sourceMappingURL=OmniAgentFloating.js.map

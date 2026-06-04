@@ -1,0 +1,53 @@
+// app/api/vault/list/route.ts
+import { NextResponse } from 'next/server';
+import { createServerClient } from '../../../../lib/supabase/server';
+import { createSuccessResponse, createErrorResponse } from '@/src/shared/types';
+import { randomUUID } from 'crypto';
+/**
+ * GET /api/vault/list
+ * 查詢證據列表 (Traceable)
+ */
+export async function GET(request) {
+    const requestId = randomUUID();
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const lifecycleStage = searchParams.get('lifecycleStage');
+    const sourceOrigin = searchParams.get('sourceOrigin');
+    try {
+        const supabase = await createServerClient();
+        let query = supabase
+            .from('evidence_vault')
+            .select('*', { count: 'exact' })
+            .order('timestamp', { ascending: false })
+            .range((page - 1) * limit, page * limit - 1);
+        if (lifecycleStage)
+            query = query.eq('lifecycle_stage', lifecycleStage);
+        if (sourceOrigin)
+            query = query.eq('source_origin', sourceOrigin);
+        const { data, error, count } = await query;
+        if (error)
+            throw new Error(`查詢失敗：${error.message}`);
+        return NextResponse.json(createSuccessResponse((data || []).map((item) => ({
+            uuid: item.uuid,
+            timestamp: item.timestamp,
+            formula: item.formula,
+            impactMetric: item.impact_metric,
+            sourceOrigin: item.source_origin,
+            lifecycleStage: item.lifecycle_stage,
+            createdAt: item.created_at,
+        })), {
+            request_id: requestId,
+            pagination: {
+                page,
+                limit,
+                total: count || 0,
+                totalPages: Math.ceil((count || 0) / limit),
+            },
+        }));
+    }
+    catch (error) {
+        return NextResponse.json(createErrorResponse('INTERNAL_ERROR', error.message || '查詢失敗'), { status: 500 });
+    }
+}
+//# sourceMappingURL=route.js.map

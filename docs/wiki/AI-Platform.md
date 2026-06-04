@@ -1,3 +1,9 @@
+---
+uuid: "a2ec6dc7-a43b-416b-9a51-5c009e17d957"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.489Z"
+evidence: "docs\wiki\AI-Platform.md"
+---
 # AI 智能平台 AI Platform [AI Platform]
 路徑： /ai-platform | 權限： ADMIN, PM, DEVELOPER | 所屬旅程： VI. 系統配置與 AI 治理
 

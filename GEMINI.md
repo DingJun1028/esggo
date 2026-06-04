@@ -1,3 +1,9 @@
+---
+uuid: "80793ccc-ceea-4e75-97a5-ea6330744f3b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.335Z"
+evidence: "GEMINI.md"
+---
 # OmniCore Constitution (Convergence of Genesis, Guidelines, and Implementation)
 # OmniCore 憲章（起源、指南與實作之融合圭臬）
 

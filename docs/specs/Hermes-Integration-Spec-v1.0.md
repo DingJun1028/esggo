@@ -1,3 +1,9 @@
+---
+uuid: "867d86ea-0203-4aaf-81d2-e644491acdfc"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.506Z"
+evidence: "docs\specs\Hermes-Integration-Spec-v1.0.md"
+---
 # Hermes × ESG GO 整合規格書 v1.0
 
 ## 一、文件目的

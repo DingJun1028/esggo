@@ -1,3 +1,9 @@
+---
+uuid: "58997814-e6e8-4953-a5b5-8ea2b783b959"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.472Z"
+evidence: "docs\wiki\Digital-Twin.md"
+---
 # Digital Twin Digital Twin [Digital Twin]
 路徑： /digital-twin | 權限： ADMIN, CSO, PM | 所屬旅程： VI. 績效監控與優化
 

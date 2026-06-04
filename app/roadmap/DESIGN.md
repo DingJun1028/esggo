@@ -1,3 +1,9 @@
+---
+uuid: "378caae1-4474-49a0-91be-b226df712ca2"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.522Z"
+evidence: "app\roadmap\DESIGN.md"
+---
 # 淨零路徑 Roadmap
 
 **路徑：** `/roadmap`

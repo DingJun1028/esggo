@@ -1,3 +1,9 @@
+---
+uuid: "402431a7-6b45-4d63-abcd-b97346f43338"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.438Z"
+evidence: "docs\wiki\Reading-Room.md"
+---
 # 閱讀室 Reading Room [Reading Room]
 路徑： /reading-room | 權限： PM, ANALYST, AUDITOR | 所屬旅程： I. 知識探索與學習
 

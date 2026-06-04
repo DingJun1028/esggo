@@ -1,3 +1,9 @@
+---
+uuid: "e87c435e-953d-4398-9813-79e85afb6e5f"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.418Z"
+evidence: "docs\wiki\Wiki-Guidelines.md"
+---
 # ESG GO 功能頁面 Wiki 撰寫規範 (SaaS 交付與體驗導向) [Wiki Guidelines]
 
 為了確保系統迭代過程中「體驗不降級」、「技術不脫鉤」且「UI 不跑版」，本 Wiki 的每一個子功能頁面，都必須嚴格遵守以下 6 大撰寫結構。

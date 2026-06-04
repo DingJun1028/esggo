@@ -1,0 +1,1 @@
+{"version":3,"file":"WorkspacePanel.d.ts","sourceRoot":"","sources":["../../../components/brand/WorkspacePanel.tsx"],"names":[],"mappings":"AAEA,OAAO,KAA8B,MAAM,OAAO,CAAC;AAenD,UAAU,mBAAmB;IAC3B,MAAM,EAAE,OAAO,CAAC;IAChB,OAAO,EAAE,MAAM,IAAI,CAAC;CACrB;AAED,MAAM,CAAC,OAAO,UAAU,cAAc,CAAC,EAAE,MAAM,EAAE,OAAO,EAAE,EAAE,mBAAmB,qBAqN9E"}

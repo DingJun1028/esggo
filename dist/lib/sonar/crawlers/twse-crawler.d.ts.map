@@ -1,0 +1,1 @@
+{"version":3,"file":"twse-crawler.d.ts","sourceRoot":"","sources":["../../../../lib/sonar/crawlers/twse-crawler.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAC;AAI1D;;GAEG;AACH,qBAAa,WAAY,SAAQ,WAAW;IAC1C,OAAO,CAAC,SAAS,CAAmB;IAE9B,KAAK,CAAC,MAAM,EAAE;QAAE,GAAG,EAAE,MAAM,CAAA;KAAE,GAAG,OAAO,CAAC,WAAW,CAAC;CA4C3D"}

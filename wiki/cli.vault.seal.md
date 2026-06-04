@@ -1,3 +1,9 @@
+---
+uuid: "eedd2f3e-fe48-4c2b-a55d-db799c16b603"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.384Z"
+evidence: "wiki\cli.vault.seal.md"
+---
 # omni vault seal <id>
 
 > **簡述 (Brief Description)**: Seals an evidence file cryptographically using ZKP and SHA-256.

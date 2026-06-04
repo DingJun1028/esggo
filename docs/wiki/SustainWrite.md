@@ -1,3 +1,9 @@
+---
+uuid: "d304a081-baeb-47d0-bd51-b2555fbd5c7f"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.430Z"
+evidence: "docs\wiki\SustainWrite.md"
+---
 # SustainWrite 編輯器 [SustainWrite Editor]
 路徑： /editor | 權限： PM, ADMIN | 所屬旅程： IV. AI 賦能與撰寫
 

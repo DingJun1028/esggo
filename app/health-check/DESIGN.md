@@ -1,3 +1,9 @@
+---
+uuid: "66f449a0-fe3a-46ac-a164-caf89b152089"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.532Z"
+evidence: "app\health-check\DESIGN.md"
+---
 # 企業健檢 Health Check
 
 **路徑：** `/health-check`

@@ -1,3 +1,9 @@
+---
+uuid: "5015178a-6599-43c1-af84-195be7c1fa61"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.355Z"
+evidence: "BRAND_ATOMIC_LIBRARY.md"
+---
 # 🏛️ 萬能元件品牌原子庫 - 經典版 (Classic Edition)
 ## ESGGO善向永續 X OmniAgent | Official Component Standard v1.2
 

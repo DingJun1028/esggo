@@ -1,3 +1,9 @@
+---
+uuid: "7c67f92f-c896-4789-a683-35a79fd66f9b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.474Z"
+evidence: "docs\wiki\Development-Workflow.md"
+---
 # ESGGO 功能需求實現流程與 WIKI 建造規範 🌌 [Development Workflow]
 
 > **版本：** v1.0.0 | **核心原則：** 文檔即憲法，代碼即執行 | **狀態：** SACRED OPERATIONAL

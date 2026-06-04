@@ -1,3 +1,9 @@
+---
+uuid: "3561b68c-5e75-4b55-9f93-2b40499ab991"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.537Z"
+evidence: "app\environmental\DESIGN.md"
+---
 # 環境指揮 Environmental
 
 **路徑：** `/environmental`

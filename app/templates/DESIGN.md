@@ -1,3 +1,9 @@
+---
+uuid: "bcd26d1b-cac3-4061-8442-96e38975f413"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.512Z"
+evidence: "app\templates\DESIGN.md"
+---
 # 專家模板 Templates
 
 **路徑：** `/templates`
