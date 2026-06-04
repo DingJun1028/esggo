@@ -6,9 +6,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+TC:wght@100..900&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   /* ── Design Token System v10.0 | Primitive ────────────────────────── */
@@ -221,12 +219,15 @@
 
   /* ─── KPI Bar — Light Frosted ────────────────────────────────────── */
   .kpi-bar {
-    @apply flex items-stretch gap-px overflow-x-auto no-scrollbar;
+    @apply flex items-stretch gap-px overflow-x-auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     background: rgba(0, 50, 98, 0.06);
     border: 1px solid rgba(0, 50, 98, 0.08);
     border-radius: 0.875rem;
     box-shadow: 0 1px 6px rgba(0, 50, 98, 0.05);
   }
+  .kpi-bar::-webkit-scrollbar { display: none; }
 
   .kpi-bar-cell {
     @apply flex-1 flex flex-col justify-center px-3 py-2.5 min-w-[90px];
