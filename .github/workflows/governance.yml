@@ -60,10 +60,10 @@ jobs:
 
       - name: Install Dependencies (packages/types)
         # Assumes npm workspaces or installs inside the package
-        run: pnpm install --prefix packages/types
+        run: cd packages/types && pnpm install
 
       - name: Build Shared Types
-        run: pnpm run build --prefix packages/types
+        run: cd packages/types && pnpm run build
 
       - name: Run Contract Tests
         run: pnpm test -- tests/contract/esg-report.test.ts
