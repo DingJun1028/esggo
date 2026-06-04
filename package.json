@@ -87,7 +87,7 @@
     "tailwind-merge": "2.5.4",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.5.4",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "xss": "^1.0.15",
     "zod": "^4.4.3",
     "zustand": "4.5.5"
