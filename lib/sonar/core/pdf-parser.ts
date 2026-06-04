@@ -1,10 +1,15 @@
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const standardFontDataUrl = path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts/');
+// 用 createRequire 取得 pdfjs-dist 套件根目錄，再指向 standard_fonts
+const require = createRequire(import.meta.url);
+const pdfjsDistBuildPath = require.resolve('pdfjs-dist/legacy/build/pdf.mjs');
+// pdfjs-dist/legacy/build/pdf.mjs → 往上三層 = pdfjs-dist/
+const pdfjsDistRoot = path.resolve(path.dirname(pdfjsDistBuildPath), '..', '..', '..');
+const standardFontDataUrl = path.join(pdfjsDistRoot, 'standard_fonts') + '/';
+// ccmaps 也在根目錄下
+const cMapUrl = path.join(pdfjsDistRoot, 'cmaps') + '/';
 
 export interface PDFMetadata {
   pages: number;
@@ -27,14 +32,15 @@ export class PDFParser {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
 
     const uint8 = new Uint8Array(buffer);
-    const pdf = await getDocument({ 
+    const pdf = await getDocument({
       data: uint8,
-      standardFontDataUrl: standardFontDataUrl.replace(/\\/g, '/')
+      standardFontDataUrl,
+      cMapUrl,
+      isEvalSupported: false,
     }).promise;
-    const numPages = pdf.numPages;
 
     const textParts: string[] = [];
-    for (let i = 1; i <= numPages; i++) {
+    for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
       const pageText = content.items.map((item: any) => item.str).join(' ');
@@ -48,13 +54,14 @@ export class PDFParser {
     if (!this.verify(buffer)) throw new Error('Invalid PDF file');
 
     const uint8 = new Uint8Array(buffer);
-    const pdf = await getDocument({ 
+    const pdf = await getDocument({
       data: uint8,
-      standardFontDataUrl: standardFontDataUrl.replace(/\\/g, '/')
+      standardFontDataUrl,
     }).promise;
-    const metadata = await pdf.getMetadata();
 
+    const metadata = await pdf.getMetadata();
     const info = metadata.info as any;
+
     const result: PDFMetadata = {
       pages: pdf.numPages,
       author: info?.Author || 'Unknown',
