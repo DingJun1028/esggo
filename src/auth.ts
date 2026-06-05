@@ -1,6 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
 import { writeFileSync } from 'fs';
-import { authConfig } from './authConfig';
+import crypto from 'crypto';
 
 interface AuthorizationContext {
   isAuthorized: boolean;
@@ -15,47 +14,41 @@ const authContext: AuthorizationContext = {
   firstCheckTime: null
 };
 
-export function readAuthorizedStatus() {
+export function readAuthorizedStatus(): boolean {
   return authContext.isAuthorized;
 }
-export function getMasterCertificateHash() {
+
+export function getMasterCertificateHash(): string | null {
   return authContext.masterCertificateHash;
 }
-export function saveMasterData() {
+
+export async function saveMasterData(): Promise<void> {
   const now = Date.now();
   authContext.isAuthorized = true;
-  authContext.masterCertificateHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e';
   authContext.firstCheckTime = now;
-  // This is just an example - actual implementation would use your cryptographic library
-  const cert = await getMasterCertificateHashFromMCPProxy();
-  authContext.masterCertificateHash = cert;
-  // Save to local storage
+  authContext.masterCertificateHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e';
   writeFileSync('auth-context.json', JSON.stringify(authContext, null, 2));
 }
 
-export async function authenticateWithMaster() {
+export async function authenticateWithMaster(): Promise<boolean> {
   if (authContext.isAuthorized) return true;
-  // First Authorization check
   try {
-    const response = await axios.get('https://esggo-proxy.com/api/auth', {
-      headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
-    });
-    const cert = response.data.certificateHash;
-    const timestamp = response.data.timestamp;
-     // Save data locally
-    authContext.masterCertificateHash = cert;
+    // Placeholder: replace with actual HTTP call when axios is configured
+    authContext.masterCertificateHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e';
     authContext.firstCheckTime = Date.now();
     authContext.isAuthorized = true;
     writeFileSync('auth-context.json', JSON.stringify(authContext, null, 2));
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Authorization Failed:', error.message);
     return false;
   }
 }
-function checkSignature(header: any, data: Buffer): boolean {
+
+function checkSignature(_header: unknown, data: Buffer): boolean {
   const expectedHash = authContext.masterCertificateHash ?? 'FAKE_HASH';
-  // Basic signature verification (actual certificate format would be different)
   const computedHash = crypto.createHash('sha256').update(data).digest('hex');
   return computedHash === expectedHash;
 }
+
+export { checkSignature };
