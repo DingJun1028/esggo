@@ -7,7 +7,7 @@ import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalTable } from '@/components/ui/universal/UniversalTable';
 import { UniversalModal } from '@/components/ui/universal/UniversalModal';
 import { UniversalForm, FormField } from '@/components/ui/universal/UniversalForm';
-import { Leaf, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { Leaf, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react/icons';
 
 export default function EnvironmentalPage() {
   const [data, setData] = useState<any[]>([]);
