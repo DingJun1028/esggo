@@ -1,6 +1,6 @@
 import React from 'react';
 import { AtomicCard } from '@/lib/design-system/AtomicCard';
-import { Shield, Fingerprint, Activity, Clock, FileKey, CheckCircle } from 'lucide-react';
+import { Shield, Fingerprint, Activity, Clock, FileKey, CheckCircle } from 'lucide-react/icons';
 
 export default function EternalMemoryAuditPage() {
   const auditLogs = [

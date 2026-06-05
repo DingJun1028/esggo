@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Database, Server, RefreshCw, CheckCircle, DatabaseZap } from 'lucide-react';
+import { Database, Server, RefreshCw, CheckCircle, DatabaseZap } from 'lucide-react/icons';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';

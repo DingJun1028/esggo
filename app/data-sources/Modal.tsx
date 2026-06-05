@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X } from 'lucide-react/icons';
 
 export function Modal({ open, onClose, title, children, width = 'max-w-lg' }: {
   open: boolean; onClose: () => void; title: string; children: React.ReactNode; width?: string;

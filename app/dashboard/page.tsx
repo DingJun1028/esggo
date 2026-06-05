@@ -13,7 +13,7 @@ import { AtomicProgress } from '@/lib/design-system/AtomicProgress';
 import { AtomicToggle } from '@/lib/design-system/AtomicToggle';
 import { atomicManager, IAtomicComponent } from '@/lib/design-system/atomic-core';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
-import { Leaf, Users, Building2 } from 'lucide-react';
+import { Leaf, Users, Building2 } from 'lucide-react/icons';
 import { getUniversalNotesAction, semanticCreateTaskAction, TaskRecord } from '@/lib/agent/UniversalNotesTracker';
 
 export default function SovereignDashboard() {

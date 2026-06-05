@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Network, Search, Hash, Lock, Activity, RefreshCw } from 'lucide-react';
+import { Network, Search, Hash, Lock, Activity, RefreshCw } from 'lucide-react/icons';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';

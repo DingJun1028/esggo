@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Leaf, Users, ShieldCheck, Plus, Loader2, Check } from 'lucide-react';
+import { Leaf, Users, ShieldCheck, Plus, Loader2, Check } from 'lucide-react/icons';
 import { ESG_TEMPLATES, type ESGTemplate } from '@/lib/omni-table/templates';
 import { Modal } from './Modal';
 
