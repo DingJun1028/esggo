@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       messages,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

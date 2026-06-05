@@ -8,7 +8,11 @@ import { firebaseAdmin } from '@/lib/firebase-admin';
 // Generate UUID using Firebase Admin Firestore (or we can use crypto)
 // Using Firebase Admin Firestore doc id as UUID
 function generateUUID(): string {
-  return firebaseAdmin!.firestore().collection('_').doc().id;
+  if (!firebaseAdmin) {
+    // Fallback to crypto if Firebase Admin is not initialized
+    return crypto.randomUUID();
+  }
+  return firebaseAdmin.firestore().collection('_').doc().id;
 }
 
 export async function POST(request: Request) {
@@ -33,6 +37,10 @@ export async function POST(request: Request) {
       created_at: new Date().toISOString(),
     };
 
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase client not initialized' }, { status: 500 });
+    }
+
     // Insert into Supabase table 'contracts'
     const { data, error } = await supabase
       .from('contracts')
@@ -55,6 +63,9 @@ export async function POST(request: Request) {
 // Optional: GET all contracts
 export async function GET() {
   try {
+    if (!supabase) {
+      return NextResponse.json({ error: 'Supabase client not initialized' }, { status: 500 });
+    }
     const { data, error } = await supabase.from('contracts').select('*');
     if (error) throw error;
     return NextResponse.json(data ?? [], { status: 200 });

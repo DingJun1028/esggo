@@ -26,6 +26,8 @@ export { OmniTag } from './universal/OmniTag';
 export type { OmniTagProps } from './universal/OmniTag';
 export { OmniDB } from './universal/OmniDB';
 export type { OmniDBRecord, OmniDBCredentials, OmniDBProps } from './universal/OmniDB';
+export { UniversalToggle } from './universal/UniversalToggle';
+export type { UniversalToggleProps } from './universal/UniversalToggle';
 
 // Toast Notification System
 export { ToastContainer } from './Toast';
