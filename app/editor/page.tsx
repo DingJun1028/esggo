@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2 } from 'lucide-react';
+import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2 } from 'lucide-react/icons';
 import VaultOmniTable from '@/components/omni/VaultOmniTable';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { ShieldCheck, Scale, FileText, AlertCircle, TrendingUp, Loader2, BrainCircuit, Sparkles, Database, Lock, Activity } from 'lucide-react';
+import { ShieldCheck, Scale, FileText, AlertCircle, TrendingUp, Loader2, BrainCircuit, Sparkles, Database, Lock, Activity } from 'lucide-react/icons';
 import { supabase } from '@/lib/db/supabase';
 import { useOmniTable } from '@/hooks/useOmniTable';
 
