@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { Button } from './Button';
 
 interface ModalProps {
   open: boolean;
@@ -37,6 +36,9 @@ export function Modal({ open, onClose, title, subtitle, children, footer, size =
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
         className={cn('bg-white rounded-[20px] w-full shadow-2xl flex flex-col max-h-[90vh]', modalSizes[size], className)}
         onClick={(e) => e.stopPropagation()}
         style={{ animation: 'fadeInUp 0.2s ease-out' }}
@@ -44,12 +46,13 @@ export function Modal({ open, onClose, title, subtitle, children, footer, size =
         {/* Header */}
         <div className="flex items-center justify-between px-7 py-5 border-b border-[#f3f4f6] flex-shrink-0">
           <div>
-            <h2 className="text-[18px] font-bold text-[#1a1a2e]">{title}</h2>
+            <h2 id="modal-title" className="text-[18px] font-bold text-[#1a1a2e]">{title}</h2>
             {subtitle && <p className="text-[12px] text-[#6b7280] mt-0.5">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center hover:bg-[#e5e7eb] transition-colors"
+            aria-label="Close modal"
+            className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center hover:bg-[#e5e7eb] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
           >
             <X size={14} color="#374151" />
           </button>
