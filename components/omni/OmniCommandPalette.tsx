@@ -190,7 +190,32 @@ export default function OmniCommandPalette() {
                   <div className="px-4 py-16 flex flex-col items-center justify-center text-slate-500 gap-4">
                     <Bot size={48} className="text-slate-600" />
                     <p className="text-sm font-medium text-slate-400">找不到本地指令，是否要將「{search}」傳送給 AI 核心分析？</p>
-                    <button className="mt-2 px-6 py-2.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-xl text-sm font-bold shadow-md hover:bg-cyan-500/30 hover:shadow-lg transition-all">
+                    <button 
+                      onClick={async () => {
+                        try {
+                          const res = await fetch('/api/nexus/agent', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              tool: 'omni_agent_task',
+                              arguments: { query: search },
+                              userId: 'current-user-uuid'
+                            })
+                          });
+                          const json = await res.json();
+                          if (json.success) {
+                            alert(`✅ OmniAgent 已接收任務！\nTransaction ID: ${json.metadata.transactionId}`);
+                            setIsOpen(false);
+                            setSearch('');
+                          } else {
+                            alert('⚠️ 任務發送失敗: ' + json.error);
+                          }
+                        } catch (e: any) {
+                          alert('⚠️ 連線異常: ' + e.message);
+                        }
+                      }}
+                      className="mt-2 px-6 py-2.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-xl text-sm font-bold shadow-md hover:bg-cyan-500/30 hover:shadow-lg transition-all"
+                    >
                       呼叫 OmniAgent 運算
                     </button>
                   </div>

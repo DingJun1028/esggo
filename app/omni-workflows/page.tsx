@@ -1,26 +1,24 @@
 
 import { omniBlueTableService } from '@/src/server/services/omni-blue-table.service';
-import { UniversalCard } from '@/components/ui/UniversalCard';
-import { UniversalBadge } from '@/components/ui/UniversalBadge';
-import { UniversalButton } from '@/components/ui/UniversalButton'; // Assuming UniversalButton exists
-import { UniversalInput } from '@/components/ui/UniversalInput'; // Assuming UniversalInput exists
-import { UniversalSelect } from '@/components/ui/UniversalSelect'; // Assuming UniversalSelect exists
-import { UniversalTextarea } from '@/components/ui/UniversalTextarea'; // Assuming UniversalTextarea exists
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { UniversalInput, UniversalSelect, UniversalTextarea } from '@/components/ui/universal/UniversalInput';
 import { ShieldCheck, Loader2, PlusCircle, AlertTriangle, Info } from 'lucide-react';
-import { BestPractice, BestPracticeSchema } from '@/lib/agent/best-practice-registry'; // Import BestPracticeSchema
-import { useState } from 'react'; // Import useState
-import { z } from 'zod'; // Import zod for client-side validation
+import { type BestPractice, BestPracticeSchema } from '@/lib/agent/best-practice-registry';
+import { useState, useEffect } from 'react';
+import { z } from 'zod';
 
-export const revalidate = 0; // Ensure data is always fresh
+export const revalidate = 0;
 
-async function OmniWorkflowsPage() {
-  const { data: initialBestPractices, error: fetchError } = await omniBlueTableService.getBestPracticesFromSupabase();
-
-  const [bestPractices, setBestPractices] = useState<BestPractice[]>(initialBestPractices || []);
+export default function OmniWorkflowsPage() {
+  const [bestPractices, setBestPractices] = useState<BestPractice[]>([]);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<Partial<BestPractice>>({
     id: '',
-    category: 'G', // Default category
+    category: 'G',
     industry: '',
     title: '',
     strategy: '',
@@ -33,21 +31,16 @@ async function OmniWorkflowsPage() {
   const [formErrors, setFormErrors] = useState<z.ZodIssue[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Initialize bestPractices state only once with initialBestPractices
-  useState(() => {
-    if (initialBestPractices) {
-      setBestPractices(initialBestPractices);
-    }
-  });
-
-  if (fetchError) {
-    console.error('Failed to fetch workflow best practices:', fetchError);
-    return (
-      <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 flex items-center justify-center">
-        <p className="text-red-500">Error loading workflow best practices: {fetchError}</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    omniBlueTableService.getBestPracticesFromSupabase().then(({ data, error }) => {
+      if (error) {
+        setFetchError(error);
+      } else {
+        setBestPractices(data || []);
+      }
+      setIsLoading(false);
+    });
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -65,7 +58,11 @@ async function OmniWorkflowsPage() {
     setFormData(prev => ({
       ...prev,
       t5_compliance: {
-        ...(prev.t5_compliance || {}),
+        traceable: prev.t5_compliance?.traceable ?? true,
+        transparent: prev.t5_compliance?.transparent ?? true,
+        tangible: prev.t5_compliance?.tangible ?? true,
+        trackable: prev.t5_compliance?.trackable ?? true,
+        trustworthy: prev.t5_compliance?.trustworthy ?? true,
         [name]: checked,
       },
     }));
@@ -114,13 +111,15 @@ async function OmniWorkflowsPage() {
         const { data: updatedPractices } = await omniBlueTableService.getBestPracticesFromSupabase();
         setBestPractices(updatedPractices || []);
       } else {
-        setFormErrors(result.errors || [{ message: result.error || 'Unknown error' }]);
+        const mockError = [{ path: [], message: result.error || 'Unknown error' }] as unknown as z.ZodIssue[];
+        setFormErrors(mockError);
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
         setFormErrors(error.errors);
       } else {
-        setFormErrors([{ message: 'Client-side error: ' + (error as Error).message }]);
+        const mockError = [{ path: [], message: 'Client-side error: ' + (error as Error).message }] as unknown as z.ZodIssue[];
+        setFormErrors(mockError);
       }
     } finally {
       setIsSubmitting(false);
@@ -277,7 +276,11 @@ async function OmniWorkflowsPage() {
         <section>
           <h2 className="text-2xl font-bold text-white mb-6">已註冊的工作流程邏輯</h2>
           
-          {fetchError ? (
+          {isLoading ? (
+            <div className="flex justify-center p-8">
+              <Loader2 className="animate-spin text-cyan-400" size={32} />
+            </div>
+          ) : fetchError ? (
             <div className="p-6 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-4">
               <AlertTriangle className="text-red-400 mt-1 flex-shrink-0" size={24} />
               <div>
@@ -322,5 +325,3 @@ async function OmniWorkflowsPage() {
     </div>
   );
 }
-
-export default OmniWorkflowsPage;

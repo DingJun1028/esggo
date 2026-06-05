@@ -14,6 +14,7 @@ export const UniversalBadge = React.forwardRef(({ className, variant = 'primary'
         default: 'bg-[var(--theme-surface)] text-[var(--theme-text)] border border-[var(--theme-border)]',
     };
     const sizes = {
+        xs: 'px-1.5 py-0.5 text-[10px]',
         sm: 'px-2 py-0.5 text-[10px]',
         md: 'px-2.5 py-1 text-xs',
     };

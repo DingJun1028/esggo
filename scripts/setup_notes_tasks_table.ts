@@ -1,4 +1,7 @@
-import { getOmniTableServerClient } from '../lib/omni-table/client';
+import { getOmniTableServerClient } from '../lib/omni-table/client.js';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 // ============================================================================
 // OmniBlueTable 自動化建表腳本：萬能筆記 - 任務同步專案表

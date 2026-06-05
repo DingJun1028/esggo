@@ -62,3 +62,6 @@ storybook-static
 tsconfig.tsbuildinfo
 
 .vercel
+
+.gemini/
+gha-creds-*.json

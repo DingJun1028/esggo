@@ -58,4 +58,107 @@ export const UniversalInput = React.forwardRef<HTMLInputElement, UniversalInputP
     );
   }
 );
+
 UniversalInput.displayName = 'UniversalInput';
+
+export interface UniversalSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string;
+  error?: string;
+  fullWidth?: boolean;
+  children?: React.ReactNode;
+}
+
+export const UniversalSelect = React.forwardRef<HTMLSelectElement, UniversalSelectProps>(
+  ({ className, label, error, fullWidth = true, id, children, ...props }, ref) => {
+    const generatedId = useId();
+    const selectId = id || generatedId;
+    const errorId = `${selectId}-error`;
+
+    return (
+      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '')}>
+        {label && (
+          <label htmlFor={selectId} className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+            {label}
+          </label>
+        )}
+        <select
+          id={selectId}
+          ref={ref}
+          aria-invalid={!!error}
+          aria-describedby={error ? errorId : undefined}
+          className={cn(
+            'h-10 rounded-lg border text-sm transition-all duration-normal w-full',
+            'bg-[var(--theme-base)] text-[var(--theme-text)]',
+            'px-3 pr-10',
+            error
+              ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500'
+              : 'border-[var(--theme-border)] focus:border-[var(--theme-primary)] focus:ring-1 focus:ring-[var(--theme-primary)]',
+            'focus:outline-none appearance-none',
+            className
+          )}
+          {...props}
+        >
+          {children}
+        </select>
+        {error && (
+          <div id={errorId} className="flex items-center gap-1.5 mt-1 text-red-500" role="alert">
+            <AlertCircle size={12} />
+            <span className="text-xs font-medium">{error}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+UniversalSelect.displayName = 'UniversalSelect';
+
+export interface UniversalTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  error?: string;
+  fullWidth?: boolean;
+}
+
+export const UniversalTextarea = React.forwardRef<HTMLTextAreaElement, UniversalTextareaProps>(
+  ({ className, label, error, fullWidth = true, id, ...props }, ref) => {
+    const generatedId = useId();
+    const textareaId = id || generatedId;
+    const errorId = `${textareaId}-error`;
+
+    return (
+      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '')}>
+        {label && (
+          <label htmlFor={textareaId} className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+            {label}
+          </label>
+        )}
+        <textarea
+          id={textareaId}
+          ref={ref}
+          aria-invalid={!!error}
+          aria-describedby={error ? errorId : undefined}
+          className={cn(
+            'min-h-[80px] rounded-lg border text-sm transition-all duration-normal w-full',
+            'bg-[var(--theme-base)] text-[var(--theme-text)]',
+            'placeholder:text-[var(--theme-text-muted)]/50',
+            'px-3 py-2',
+            error
+              ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500'
+              : 'border-[var(--theme-border)] focus:border-[var(--theme-primary)] focus:ring-1 focus:ring-[var(--theme-primary)]',
+            'focus:outline-none resize-y',
+            className
+          )}
+          {...props}
+        />
+        {error && (
+          <div id={errorId} className="flex items-center gap-1.5 mt-1 text-red-500" role="alert">
+            <AlertCircle size={12} />
+            <span className="text-xs font-medium">{error}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+UniversalTextarea.displayName = 'UniversalTextarea';

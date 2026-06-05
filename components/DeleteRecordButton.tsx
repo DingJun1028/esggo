@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useTransition } from 'react';
-import { UniversalButton } from '@/components/ui/UniversalButton';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { Trash2, Loader2 } from 'lucide-react';
 import { deleteOmniTableRecord } from '@/app/actions/omni-table';
 

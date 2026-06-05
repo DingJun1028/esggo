@@ -15,6 +15,7 @@ evidence: "adr\ADR_Index.md"
 | ADR-005 | SkillBookUI Export Fix | Accepted | 2026-06-02 |
 | ADR-006 | AtomicFunction Interface Spec | Proposed | 2026-06-02 |
 | ADR-007 | Memory Fragment Principle | Active | 2026-06-02 |
+| ADR-008 | Zero-Dependency REST Routing (v2.4.0) | Accepted | 2026-06-05 |
 
 ## Notes
 - All ADRs must be referenced in PR descriptions.

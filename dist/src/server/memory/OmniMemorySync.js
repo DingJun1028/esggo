@@ -1,5 +1,6 @@
 import { OmniEventStore } from '../../../lib/omni-space/event-store';
 import { createClient } from '@supabase/supabase-js';
+import { OmniTableClient } from '@/lib/omni-table/client';
 /**
  * OmniMemorySync: 萬能永憶同步器
  * 負責監聽 EventStore (GPL)，並將狀態同步至向量資料庫 (Vector DB) 或 AI 記憶庫，
@@ -7,27 +8,18 @@ import { createClient } from '@supabase/supabase-js';
  */
 export class OmniMemorySync {
     constructor() {
-        // 訂閱 Omni-Space 絕對真理層的事件廣播
         OmniEventStore.eventBus.on('event_saved', this.handleEventSaved.bind(this));
         console.log('[OmniMemorySync] Attached to Omni-Space event bus. Ready to encode episodic memories.');
     }
-    /**
-     * 處理事件保存，轉化為 AI 向量上下文
-     */
     async handleEventSaved(event) {
         console.log(`[OmniMemorySync] Intercepted new event: ${event.id} (Type: ${event.event_type})`);
-        // 定義所有需要同步的目標系統
         const destinations = [
             { name: 'VectorDB', syncFn: () => this.syncToVectorDB(event) },
             { name: 'AITable', syncFn: () => this.syncToAITable(event) },
             { name: 'OmniTable', syncFn: () => this.syncToOmniTable(event) }
         ];
-        // 對每個目標進行獨立的重試與死信處理，確保部分失敗不會影響整體
         await Promise.all(destinations.map(target => this.syncWithRetry(event, target.name, target.syncFn)));
     }
-    /**
-     * 通用重試邏輯封裝 (具備 Exponential Backoff)
-     */
     async syncWithRetry(event, targetName, syncFn) {
         const maxRetries = 3;
         let attempt = 0;
@@ -54,32 +46,34 @@ export class OmniMemorySync {
             }
         }
     }
-    /**
-     * 模擬將事件寫入 Vector DB (如 Pinecone, Supabase, 或 Firestore)
-     * 供 Genkit RAG 引擎使用
-     */
     async syncToVectorDB(event) {
-        // 這裡為實作預留介面，將 event payload 轉換為 embedding
-        // const embedding = await ai.embed(event.payload.name + " " + event.payload.status);
-        // await vectorDb.upsert(event.id, embedding);
         return new Promise((resolve) => {
-            setTimeout(() => {
-                // Mock DB sync delay
-                resolve();
-            }, 100);
+            setTimeout(() => resolve(), 100);
         });
     }
-    /**
-     * 寫入 AITable (外部 NoCode 關聯資料庫)
-     */
     async syncToAITable(event) {
-        return new Promise((resolve) => {
-            setTimeout(() => resolve(), 80);
-        });
+        const token = process.env.AITABLE_API_KEY;
+        const datasheetId = process.env.AITABLE_DATASHEET_ID;
+        if (!token || !datasheetId) {
+            console.warn("[OmniMemorySync] AITABLE_API_KEY or AITABLE_DATASHEET_ID not configured");
+            return;
+        }
+        const client = new OmniTableClient({ token });
+        const record = {
+            "Task Title": event.payload.content,
+            Status: "Todo",
+            Type: event.payload.type,
+            Source: event.source_origin || "OmniNotes",
+        };
+        try {
+            await client.createRecords(datasheetId, [record]);
+            console.log(`[OmniMemorySync] Synced task "${event.payload.content}" to AITable`);
+        }
+        catch (error) {
+            console.error(`[OmniMemorySync] AITable sync failed:`, error);
+            await this.saveToDeadLetterQueue(event, `[AITable]: ${error}`);
+        }
     }
-    /**
-     * 寫入系統內部的 OmniTable (關聯式資料與 Vault，提供精確查詢)
-     */
     async syncToOmniTable(event) {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -90,7 +84,6 @@ export class OmniMemorySync {
         const supabase = createClient(supabaseUrl, serviceRoleKey, {
             auth: { persistSession: false }
         });
-        // 將事件寫入原生 OmniTable 日誌 (供前端 VaultOmniTable 查詢或後端分析)
         const { error } = await supabase.from('omni_events_log').insert({
             id: event.id,
             omni_card_uuid: event.omni_card_uuid,
@@ -100,13 +93,9 @@ export class OmniMemorySync {
             source_platform: event.source_platform,
             created_at: new Date(event.created_at).toISOString(),
         });
-        if (error) {
-            throw error; // 將觸發上層的重試機制與 DLQ
-        }
+        if (error)
+            throw error;
     }
-    /**
-     * 將重試失敗的事件送入 Supabase Dead Letter Queue
-     */
     async saveToDeadLetterQueue(event, errorLog) {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -136,9 +125,6 @@ export class OmniMemorySync {
             console.error(`[OmniMemorySync] Fatal error while saving to DLQ:`, err);
         }
     }
-    /**
-     * 觸發 DLQ 的重試同步 (手動重新處理所有 failed_sync_events)
-     */
     async replayDLQ() {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -152,10 +138,8 @@ export class OmniMemorySync {
             .from('failed_sync_events')
             .select('*')
             .order('created_at', { ascending: true });
-        if (error) {
-            console.error('[OmniMemorySync] Error fetching DLQ:', error);
+        if (error)
             throw error;
-        }
         if (!failedEvents || failedEvents.length === 0) {
             return { processed: 0, succeeded: 0, failed: 0 };
         }
@@ -172,10 +156,7 @@ export class OmniMemorySync {
                 source_origin: 'DLQ'
             };
             try {
-                // 重試
                 await this.handleEventSaved(mockEvent);
-                // 如果 handleEventSaved 本身就做好了錯誤捕捉跟再次重寫入 DLQ 的機制，
-                // 為了避免重複，只要沒有拋出 global error 就當成功並把原本的 DLQ 清除
                 await supabase.from('failed_sync_events').delete().eq('id', record.id);
                 succeeded++;
             }
@@ -187,6 +168,5 @@ export class OmniMemorySync {
         return { processed: failedEvents.length, succeeded, failed };
     }
 }
-// 匯出單例，供 API Route 直接呼叫
 export const globalOmniMemorySync = new OmniMemorySync();
 //# sourceMappingURL=OmniMemorySync.js.map

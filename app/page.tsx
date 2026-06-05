@@ -8,6 +8,8 @@ import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
 import { OmniAgentPulse } from '@/components/omni/OmniAgentPulse';
 import OmniBlueDashboard from '@/components/omni/OmniBlueDashboard';
+import { ReportBuilder } from '@/components/ReportBuilder';
+import ApolloStudioConsole from '@/components/omni/ApolloStudioConsole';
 
 interface LogEntry {
   time: string;
@@ -98,19 +100,19 @@ function LandingContent() {
                 setHealingStatus('healing'); // 啟動紅轉藍的治癒節點
                 if (data.message) {
                   const getTime = () => new Date().toLocaleTimeString('en-US', { hour12: false });
-                  setHealingLogs(prev => [...prev, { time: getTime(), level: 'error', text: data.message }]);
+                  setHealingLogs((prev: LogEntry[]) => [...prev, { time: getTime(), level: 'error', text: data.message }]);
 
                   setTimeout(() => {
-                    setHealingLogs(prev => [...prev, { time: getTime(), level: 'heal', text: 'OmniAgent 已從 ERP 系統提取缺漏的 350 噸碳排憑證...' }]);
+                    setHealingLogs((prev: LogEntry[]) => [...prev, { time: getTime(), level: 'heal', text: 'OmniAgent 已從 ERP 系統提取缺漏的 350 噸碳排憑證...' }]);
                   }, 800);
 
                   setTimeout(() => {
-                    setHealingLogs(prev => [...prev, { time: getTime(), level: 'zkp', text: '重新產生 Pedersen 承諾並同態加總，驗證通過。' }]);
+                    setHealingLogs((prev: LogEntry[]) => [...prev, { time: getTime(), level: 'zkp', text: '重新產生 Pedersen 承諾並同態加總，驗證通過。' }]);
                   }, 1800);
                 }
                 break;
               case 'SEALING_5T':
-                setHealingStatus(prev => (prev && prev !== 'idle') ? 'success' : prev);
+                setHealingStatus((prev: NodeStatus | undefined) => (prev && prev !== 'idle') ? 'success' : prev);
                 setZkpStatus('success');
                 setVaultStatus('processing');
                 break;
@@ -243,7 +245,7 @@ function LandingContent() {
                 <span className="font-bold tracking-widest uppercase">Healing_Guardian_Terminal</span>
               </div>
               <div className="space-y-2 h-32 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-indigo-500/30 [&::-webkit-scrollbar-thumb]:rounded-full">
-                {healingLogs.map((log, i) => {
+                {healingLogs.map((log: LogEntry, i: number) => {
                   let colorClass = 'text-slate-300';
                   if (log.level === 'error') colorClass = 'text-rose-400';
                   if (log.level === 'heal') colorClass = 'text-cyan-400';
@@ -337,6 +339,16 @@ function LandingContent() {
         {/* ─── Layer 2.5: OmniBlue Data Mesh ──────────────────────────── */}
         <motion.div variants={item} className="w-full">
           <OmniBlueDashboard />
+        </motion.div>
+
+        {/* ─── Layer 2.6: ESG Report Builder (萬能元件預覽) ───────────────── */}
+        <motion.div variants={item} className="w-full text-left mt-8">
+          <ReportBuilder />
+        </motion.div>
+
+        {/* ─── Layer 2.7: Apollo Studio AI Console ──────────────────────── */}
+        <motion.div variants={item} className="w-full text-left mt-12">
+          <ApolloStudioConsole />
         </motion.div>
 
         <motion.div variants={item} className="pt-12 text-center">

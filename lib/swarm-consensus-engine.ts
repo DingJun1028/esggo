@@ -59,7 +59,9 @@ export class SwarmConsensusEngine {
 
   constructor() {
     const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
-    if (apiKey && !apiKey.includes('YOUR_')) {
+    if (process.env.LOCAL_GEMMA_SERVER_URL) {
+      this.genAI = new GoogleGenerativeAI('local-key');
+    } else if (apiKey && !apiKey.includes('YOUR_')) {
       this.genAI = new GoogleGenerativeAI(apiKey);
     }
   }
