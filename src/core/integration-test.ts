@@ -45,7 +45,19 @@ async function main() {
       iso_standard_ref: 'ISO-14064',
       lifecycle_path: ['step1'],
       company_id: 'company-123'
-    } as any);
+    } as TestEvidenceRecord);
+
+interface TestEvidenceRecord {
+  uuid: string;
+  version: string;
+  evidence: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+  evidence_bundle_id: string;
+  hash_value: string;
+  source_origin: string;
+  iso_standard_ref: string;
+  lifecycle_path: string[];
+  company_id: string;
+}
     console.log(`✅ Evidence created: ${evidence.id}`);
   } catch (error) {
     console.error(`❌ Evidence creation failed:`, error);
