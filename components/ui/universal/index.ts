@@ -14,3 +14,4 @@ export { UniversalForm, type FormField, type UniversalFormProps } from './Univer
 export { UniversalProgress, type UniversalProgressProps } from './UniversalProgress';
 export { UniversalStatusDot, type UniversalStatusDotProps } from './UniversalStatusDot';
 export { OmniTag, type OmniTagProps } from './OmniTag';
+export { OmniDB, type OmniDBRecord, type OmniDBCredentials, type OmniDBProps } from './OmniDB';
