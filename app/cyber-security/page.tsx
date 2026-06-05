@@ -19,7 +19,9 @@ export default function CybersecurityPage() {
     <div className="space-y-6 pb-20">
       <div className="page-header">
         <h1>資安與創新中心</h1>
-        <p>Cybersecurity & Innovation · GRI 418 · ISO 27001 · 數位韌性指標</p>
+        <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
         <div className="page-header-meta">
           <span className="badge badge-green"><Shield size={10} /> 系統安全</span>
           <span className="badge badge-blue"><Lock size={10} /> GRI 418 合規</span>

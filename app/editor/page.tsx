@@ -90,7 +90,7 @@ export default function EditorPage() {
       }
     } catch (error) {
       console.error('Seal exception:', error);
-      alert('無法連線至封印金庫 (Vault Connection Error)。');
+      alert('Vault Connection Error');
     } finally {
       setSealingId(null);
     }
@@ -107,13 +107,13 @@ export default function EditorPage() {
       const resData = await response.json();
       // Adjust according to the API's actual response structure (resData.data.isValid)
       if (resData.success && resData.data?.isValid) {
-        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
+        alert('Verification Success: 5T Protocol Compliant');
       } else {
-        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
+        alert('Verification Failed: Invalid Hash Lock');
       }
     } catch (e) {
       console.error('Verify exception:', e);
-      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
+      alert('Vault Connection Error');
     } finally {
       setVerifyingId(null);
     }
@@ -264,12 +264,12 @@ export default function EditorPage() {
           <div className="space-y-6">
             <UniversalCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="OmniAgent 核心"
+              subtitle="AI 能力中心"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
                   <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>

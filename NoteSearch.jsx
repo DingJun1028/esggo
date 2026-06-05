@@ -69,7 +69,7 @@ export function NoteSearch() {
 
     useEffect(() => {
         workerRef.current = new Worker(
-            new URL('../workers/searchWorker.js', import.meta.url),
+            new URL('./workers/searchWorker.js', import.meta.url),
             { type: 'module' }
         );
 

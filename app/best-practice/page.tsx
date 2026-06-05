@@ -21,41 +21,41 @@ import Link from 'next/link';
 const BEST_PRACTICES = [
   { 
     id: 'bp_001', 
-    title: '蝭?銝???蝣喟?亙祕頦?, 
-    industry: '??擃?/ 鋆賡平', 
-    source: '?啁???2024 瘞貊??勗???, 
+    title: 'AI 驅動建築節能系統', 
+    industry: 'Real Estate / Property Management', 
+    source: 'ESG 2024 Report', 
     tags: ['E', 'Scope 3', 'GRI 305-3'],
     rating: 5,
-    summary: '???訾?撟喳?游? 1,200+ 靘???撖衣?豢??芸???? 5T 撽???,
-    impact: '??靘????蝣箇? 35%嚗?雿?????20%'
+    summary: 'Implement AI-based energy savings...',
+    impact: 'Reduced energy use by 35%'
   },
   { 
     id: 'bp_002', 
-    title: '瘞貊????鞎豢狡 (SLB) 瘝餌??嗆?', 
-    industry: '?? / ?銵平', 
-    source: '?陸? SLB 獢 v2.1', 
+    title: 'Sustainability-Linked Bonds (SLB)', 
+    industry: 'Finance', 
+    source: 'SLB Guide v2.1', 
     tags: ['G', 'Finance', 'ISSB S1'],
     rating: 4.8,
-    summary: '撠?ESG KPI ?硫甈曉???歹?銝血??亦洵銝?單?蝣箔縑璈??,
-    impact: '撟游?慦?瘞貊???頞? 500 ??隤縑閰? A+'
+    summary: 'Linking ESG KPIs to interest rates.',
+    impact: 'Raised over 500M'
   },
   { 
     id: 'bp_003', 
-    title: '憭??捆 (DEI) 鈭箸??遙蝑', 
-    industry: '蝘? / 頠?璆?, 
-    source: 'Google Global DEI Report', 
+    title: 'DEI Workforce Policies', 
+    industry: 'Tech', 
+    source: 'Global DEI Report', 
     tags: ['S', 'DEI', 'GRI 405'],
     rating: 4.5,
-    summary: '撱箇??⊥?霅?閬閮?憭見??撣怠摨佗?撘瑕?撘勗?黎?蝞⊿???,
-    impact: '撠???Ｚ????12%嚗??遛?漲??4.2/5'
+    summary: 'Inclusive hiring practices.',
+    impact: 'Increased diversity by 12%'
   }
 ];
 
 const EXPERT_TEMPLATES = [
-  { id: 'tm_001', name: '瘞?◢??TCFD ?剝璅⊥', category: 'Environment', usage: 1240, difficulty: 'High', t5ready: true },
-  { id: 'tm_002', name: '?之?扯降憿????極??, category: 'Governance', usage: 3500, difficulty: 'Medium', t5ready: true },
-  { id: 'tm_003', name: '鈭箸??∟隤踵 (HRDD) 皜', category: 'Social', usage: 890, difficulty: 'High', t5ready: false },
-  { id: 'tm_004', name: 'CBAM 蝣喲?憓?勗??刻”', category: 'Environment', usage: 2100, difficulty: 'Medium', t5ready: true },
+  { id: 'tm_001', name: 'Environment TCFD Blueprint', category: 'Environment', usage: 1240, difficulty: 'High', t5ready: true },
+  { id: 'tm_002', name: 'Governance Architecture', category: 'Governance', usage: 3500, difficulty: 'Medium', t5ready: true },
+  { id: 'tm_003', name: 'HRDD Social Policy', category: 'Social', usage: 890, difficulty: 'High', t5ready: false },
+  { id: 'tm_004', name: 'CBAM Strategy', category: 'Environment', usage: 2100, difficulty: 'Medium', t5ready: true },
 ];
 
 export default function BestPracticeHubPage() {
@@ -83,16 +83,16 @@ export default function BestPracticeHubPage() {
       if (!res.ok) throw new Error('API Error');
       const data = await res.json();
       setAiRecommendations(data.recommendations || []);
-      showToast('撌脩???撅祆?雿喳祕頦遣霅?, 'success');
+      showToast('Successfully generated.', 'success');
     } catch (e) {
-      showToast('AI 撱箄降撘??急?銝??, 'error');
+      showToast('Failed to load.', 'error');
     } finally {
       setLoadingAi(false);
     }
   };
 
   const applyPractice = async (practice: unknown) => {
-    showToast(`甇?憟嚗?{practice.title}...`, 'info');
+    showToast(`Based on the industry data...`, 'info');
     try {
       // 1. Seal the decision with IntegrityService (Best Practice!)
       await integrityService.sealData('Best_Practice_Application', practice, { 
@@ -112,8 +112,7 @@ export default function BestPracticeHubPage() {
   const pageConfig: UniversalPageConfig = {
     id: 'best-practice-hub',
     title: '?雿喳祕頦?蝟餌絞撟喳',
-    subtitle: '璅姪獢? 繚 撠振璅⊥ 繚 ??璅??mniAgent ?箸蝝Ｗ???,
-    icon: <Trophy size={32} className="text-[#003262]" />,
+    subtitle: 'Explore benchmarks and templates',
     griReference: 'Best Practices',
     activeT5Tags: ['T1', 'T4', 'T5'],
     isOXModule: true,
@@ -121,13 +120,13 @@ export default function BestPracticeHubPage() {
 
     primaryActions: [
       { id: 'ai-suggest', label: 'AI ?刻撖西?', icon: loadingAi ? <Loader2 size={16} className="animate-spin"/> : <Sparkles size={16}/>, onClick: fetchAiRecommendations },
-      { id: 'upload', label: '鞎Ｙ獢?', icon: <Share2 size={16}/>, variant: 'secondary', onClick: () => showToast('鞎Ｙ獢???銝?, 'info') }
+      { id: 'upload', label: '鞎Ｙ獢?', icon: <Share2 size={16}/>, variant: 'secondary', onClick: () => showToast('Feature disabled', 'info') }
     ],
 
     kpis: [
       { key: 'case_count', label: '?園?璅姪', value: '450', unit: '+', icon: <Star size={18} className="text-amber-500"/> },
       { key: 'template_use', label: '璅⊥銝?', value: '12', unit: 'K', icon: <Download size={18}/> },
-      { key: 'industry_avg', label: '?Ｘ平????, value: '78', unit: '%', icon: <Target size={18}/>, verified: true },
+      { key: 'industry_avg', label: 'Label', value: '78', unit: '%', icon: <Target size={18}/>, verified: true },
     ],
 
     sections: [
@@ -158,7 +157,7 @@ export default function BestPracticeHubPage() {
                 <Search size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#003262] transition-colors" />
                 <input 
                   className="w-full h-16 bg-white border border-slate-100 rounded-[2rem] pl-16 pr-6 text-sm font-bold shadow-sm focus:ring-4 focus:ring-blue-500/5 transition-all outline-none"
-                  placeholder={`??${activeTab === 'benchmarks' ? '璅姪獢?' : activeTab === 'standards' ? '閬???' : '撠振璅⊥'} 銝剜?撠?..`}
+                  placeholder={`Search...`}
                   value={searchQuery}
                   onChange={(e) => setSearchSearchQuery(e.target.value)}
                 />
