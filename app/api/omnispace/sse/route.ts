@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+﻿import { NextRequest } from 'next/server';
 import { globalHealingService } from '../../../../src/server/healing/GlobalHealingServer';
 
 export const dynamic = 'force-dynamic';

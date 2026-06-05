@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 
 // 模擬的依賴匯入，實際需根據專案結構替換
 // import { dispatchTool } from '@/lib/omni-core/impulsor';

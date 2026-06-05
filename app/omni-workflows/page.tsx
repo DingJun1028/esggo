@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';

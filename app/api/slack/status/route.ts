@@ -1,4 +1,4 @@
-/**
+﻿/**
  * GET /api/slack/status
  * 回傳 Slack Gateway 設定狀態（是否有 Token）
  */

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { promoteToTrustLayer } from '../../../../../../lib/agent/orchestrator';
 
 export async function POST(

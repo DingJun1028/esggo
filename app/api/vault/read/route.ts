@@ -1,4 +1,4 @@
-// app/api/vault/read/route.ts
+﻿// app/api/vault/read/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '../../../../lib/supabase/server';
 import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';

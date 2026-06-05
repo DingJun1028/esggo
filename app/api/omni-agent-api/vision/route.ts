@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { scanEvidenceWithVision } from '@/lib/omni-gateway';
 import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 

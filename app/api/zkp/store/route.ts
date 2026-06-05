@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { omniCore } from '@/lib/omni-core';
 import { ZKPRangeProof } from '@/lib/crypto-proof';
 

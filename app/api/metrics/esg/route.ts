@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 
 export async function GET() {
   // 實務上這裡會呼叫 Supabase 或 Blue.cc / AITable API

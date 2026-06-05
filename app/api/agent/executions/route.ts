@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { GLOBAL_EXECUTIONS } from '@/lib/agent/store';
 
 export async function GET() {

@@ -1,4 +1,4 @@
-import { streamText } from 'ai';
+﻿import { streamText } from 'ai';
 import { google, createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
 
