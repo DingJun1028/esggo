@@ -53,17 +53,7 @@ jobs:
           name: dist
       - name: Test jes-monitor
         run: |
-          node -e "
-            const { JESMonitor } = require('./lib/jes-monitor.ts');
-            const monitor = new JESMonitor();
-            monitor.addData({
-              timestamp: new Date(),
-              service: 'test',
-              energyConsumption: 100,
-              carbonEmission: 50
-            });
-            console.log('JESMonitor test passed');
-          "
+          node -e 'const { JESMonitor } = require("./lib/jes-monitor.ts"); const monitor = new JESMonitor(); monitor.addData({ timestamp: new Date(), service: "test", energyConsumption: 100, carbonEmission: 50 }); console.log("JESMonitor test passed");'
       - name: Test CLI commands
         run: |
           node cli/omni.mjs status
