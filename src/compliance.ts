@@ -32,7 +32,7 @@ export function checkS(data: any): ComplianceResult {
   return { passed, messages: msgs };
 }
 
-export function checkG(data: any): ComplianceResult {
+export function checkG(data: any): ComplianceResult { // eslint-disable-line @typescript-eslint/no-explicit-any
   const msgs: string[] = [];
   if (!Array.isArray(data.boardDiversity) || data.boardDiversity.length < 3) msgs.push('董事會多元化不足');
   if (typeof data.capitalSpending !== 'number' || data.capitalSpending <= 0) msgs.push('資本支出資訊缺失或無效');
