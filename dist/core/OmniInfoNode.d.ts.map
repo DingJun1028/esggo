@@ -1,1 +1,0 @@
-{"version":3,"file":"OmniInfoNode.d.ts","sourceRoot":"","sources":["../../src/core/OmniInfoNode.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,OAAO,EAAE,eAAe,EAAE,MAAM,oBAAoB,CAAC;AAErD,qBAAa,YAAY;IACvB;;;;;OAKG;WACU,OAAO,CAAC,IAAI,EAAE,eAAe,EAAE,OAAO,GAAE;QAAE,cAAc,CAAC,EAAE,MAAM,CAAC;QAAC,OAAO,CAAC,EAAE,OAAO,CAAA;KAAO,GAAG,OAAO,CAAC,MAAM,CAAC;CAW3H"}

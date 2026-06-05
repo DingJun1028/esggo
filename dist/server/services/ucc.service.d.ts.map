@@ -1,1 +1,0 @@
-{"version":3,"file":"ucc.service.d.ts","sourceRoot":"","sources":["../../../src/server/services/ucc.service.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAGH,OAAO,EACL,YAAY,EACZ,UAAU,EAGX,MAAM,8BAA8B,CAAC;AAItC,qBAAa,UAAU;IACrB;;OAEG;IACG,eAAe,CAAC,GAAG,EAAE,YAAY,GAAG,OAAO,CAAC,UAAU,CAAC;CAwD9D;AAED,eAAO,MAAM,UAAU,YAAmB,CAAC"}
