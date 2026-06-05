@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2 } from 'lucide-react/icons';
+import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2 } from 'lucide-react';
 import VaultOmniTable from '@/components/omni/VaultOmniTable';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
 
@@ -22,12 +22,12 @@ export default function EditorPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // ── 1. 優先嘗試從 Blue.cc 拉取真實資料 ──
+      // ?�?� 1. ?��??�試�?Blue.cc ?��??�實資�? ?�?�
       const blueRes = await fetch('/api/bluecc/records', { cache: 'no-store' });
       if (blueRes.ok) {
         const blueJson = await blueRes.json();
         if (blueJson.ok && blueJson.records?.length > 0) {
-          // 將 Blue.cc records 轉換為 editor 需要的格式
+          // �?Blue.cc records 轉�???editor ?�要�??��?
           const mapped = blueJson.records.map((rec: any, idx: number) => ({
             id: rec.id || idx + 1,
             date: rec.updatedAt ? rec.updatedAt.split('T')[0] : new Date().toISOString().split('T')[0],
@@ -46,7 +46,7 @@ export default function EditorPage() {
       console.warn('[Editor] Blue.cc fetch failed, falling back:', blueErr);
     }
 
-    // ── 2. Fallback: 嘗試本地 metrics API ──
+    // ?�?� 2. Fallback: ?�試?�地 metrics API ?�?�
     try {
       const res = await fetch('/api/metrics/editor', { cache: 'no-store' });
       if (res.ok) {
@@ -55,7 +55,7 @@ export default function EditorPage() {
       } else {
         setData([
           { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '??, hash_lock: null, source_origin: 'Manual' },
           { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
       }
@@ -63,7 +63,7 @@ export default function EditorPage() {
       console.error('Fetch Error:', e);
       setData([
         { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '??, hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
       setLoading(false);
@@ -86,7 +86,7 @@ export default function EditorPage() {
       if (resData.success && resData.hashLock) {
         setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
       } else {
-        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        alert('封印失�? (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
     } catch (error) {
       console.error('Seal exception:', error);
@@ -122,8 +122,7 @@ export default function EditorPage() {
   const handleAddRecord = async () => {
     setIsProcessing(true);
     try {
-      // 同步建立 Blue.cc 紀錄
-      await fetch('/api/bluecc/records', {
+      // ?�步建�? Blue.cc 紀??      await fetch('/api/bluecc/records', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -140,9 +139,9 @@ export default function EditorPage() {
   };
 
   const vaultColumns = [
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)' },
-    { key: 'action', label: '操作 (Actions)' }
+    { key: 'metric_name', label: '?��??�稱 (Metric Name)' },
+    { key: 'metric_value', label: '?��?(Value)' },
+    { key: 'action', label: '?��? (Actions)' }
   ];
 
   const vaultRecords = data.map(row => ({
@@ -178,7 +177,7 @@ export default function EditorPage() {
             className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-            {row.hash_lock ? '驗證 5T' : '編輯'}
+            {row.hash_lock ? '驗�? 5T' : '編輯'}
           </button>
         </div>
       )
@@ -214,15 +213,14 @@ export default function EditorPage() {
           <div className="flex gap-3 w-full md:w-auto">
             <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</UniversalButton>
             <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              新增紀錄
-            </UniversalButton>
+              ?��?紀??            </UniversalButton>
           </div>
         </header>
 
         {/* Dashboard Grid using OmniKpiCard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniKpiCard
-            title="活躍代理"
+            title="活�?�??"
             value="3"
             unit="Nodes"
             trend={12.5}
@@ -232,7 +230,7 @@ export default function EditorPage() {
           />
 
           <OmniKpiCard
-            title="5T 驗證率"
+            title="5T 驗�???
             value="98.5"
             unit="%"
             trend={5.2}
@@ -242,7 +240,7 @@ export default function EditorPage() {
           />
 
           <OmniKpiCard
-            title="業務邏輯覆蓋"
+            title="業�??�輯覆�?"
             value="100"
             unit="%"
             fiveTStatus={[true, true, true, false, false]}
@@ -264,18 +262,17 @@ export default function EditorPage() {
           <div className="space-y-6">
             <UniversalCard 
               variant="glow" 
-              title="OmniAgent 核心"
-              subtitle="AI 能力中心"
+              title="OmniAgent ?��?"
+              subtitle="AI ?��?中�?"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
-                </p>
+                  此�?案具??<strong>?�端?�能?��?</strong>，符?�嚴??TypeScript 標�???                </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
+                  <h4 className="font-bold text-cyan-400 mb-2">設�??��? (Trinity UIUX)</h4>
                   <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
+                    <li>客戶體�? (Customer Experience)</li>
+                    <li>業�??�輯 (Business Logic)</li>
                     <li>極致美學 (Liquid Glass Cyan)</li>
                   </ul>
                 </div>

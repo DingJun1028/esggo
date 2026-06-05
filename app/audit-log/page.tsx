@@ -5,7 +5,7 @@ import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalTable } from '@/components/ui/universal/UniversalTable';
-import { History, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react/icons';
+import { History, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
 export default function AuditLogPage() {
   const [data, setData] = useState<any[]>([]);
@@ -30,7 +30,7 @@ export default function AuditLogPage() {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
           { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '??, hash_lock: null, source_origin: 'Manual' },
           { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
       }
@@ -39,7 +39,7 @@ export default function AuditLogPage() {
       // Fallback mock data
       setData([
         { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '??, hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ export default function AuditLogPage() {
       if (resData.success && resData.hashLock) {
         setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
       } else {
-        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        alert('封印失�? (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
     } catch (error) {
       console.error('Seal exception:', error);
@@ -102,22 +102,22 @@ export default function AuditLogPage() {
   };
 
   const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
+    { key: 'date', label: '?��? (Date)' },
+    { key: 'metric_name', label: '?��??�稱 (Metric Name)' },
+    { key: 'metric_value', label: '?��?(Value)', render: (val: any, row: any) => (
       <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
     ) },
-    { key: 'source_origin', label: '來源 (Source)' },
+    { key: 'source_origin', label: '來�? (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
       val ? (
         <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
           {val.substring(0, 8)}...
         </UniversalBadge>
       ) : (
-        <UniversalBadge variant="default" size="sm">未封裝</UniversalBadge>
+        <UniversalBadge variant="default" size="sm">?��?�?/UniversalBadge>
       )
     ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
+    { key: 'action', label: '?��? (Actions)', render: (_: any, row: any) => (
       <div className="flex items-center gap-3">
         {!row.hash_lock && (
           <button 
@@ -135,7 +135,7 @@ export default function AuditLogPage() {
           className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
         >
           {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
+          {row.hash_lock ? '驗�? 5T' : '編輯'}
         </button>
       </div>
     ) }
@@ -157,15 +157,14 @@ export default function AuditLogPage() {
                 <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</UniversalBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">AL-001</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">稽核日誌中心 (Audit Log)</h1>
+              <h1 className="text-4xl font-black text-white tracking-tight">稽核?��?中�? (Audit Log)</h1>
               <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">5T Protocol System Tracker</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
             <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</UniversalButton>
             <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              新增紀錄
-            </UniversalButton>
+              ?��?紀??            </UniversalButton>
           </div>
         </header>
 
@@ -173,7 +172,7 @@ export default function AuditLogPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍節點</span>
+              <span className="text-sm font-bold uppercase tracking-widest">活�?節�?/span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
@@ -182,7 +181,7 @@ export default function AuditLogPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
+              <span className="text-sm font-bold uppercase tracking-widest">5T 驗�???/span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -191,7 +190,7 @@ export default function AuditLogPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯</span>
+              <span className="text-sm font-bold uppercase tracking-widest">業�??�輯</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -204,7 +203,7 @@ export default function AuditLogPage() {
           <div className="lg:col-span-3 space-y-6">
             <UniversalCard 
               variant="default" 
-              title="業務資料預覽" 
+              title="業�?資�??�覽" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
@@ -219,18 +218,17 @@ export default function AuditLogPage() {
           <div className="space-y-6">
             <UniversalCard 
               variant="glow" 
-              title="OmniAgent 核心"
-              subtitle="AI 能力中心"
+              title="OmniAgent ?��?"
+              subtitle="AI ?��?中�?"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
-                </p>
+                  此�?案具??<strong>?�端?�能?��?</strong>，符?�嚴??TypeScript 標�???                </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
+                  <h4 className="font-bold text-cyan-400 mb-2">設�??��? (Trinity UIUX)</h4>
                   <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
+                    <li>客戶體�? (Customer Experience)</li>
+                    <li>業�??�輯 (Business Logic)</li>
                     <li>極致美學 (Liquid Glass Cyan)</li>
                   </ul>
                 </div>

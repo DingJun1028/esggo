@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Save, Loader2, Trash2 } from 'lucide-react/icons';
+import { Save, Loader2, Trash2 } from 'lucide-react';
 import { Modal } from './Modal';
 import type { OmniTableField, OmniTableRecord } from '@/lib/omni-table/client';
 

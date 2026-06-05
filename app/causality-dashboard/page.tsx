@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Network, Search, Hash, Lock, Activity, RefreshCw } from 'lucide-react/icons';
+import { Network, Search, Hash, Lock, Activity, RefreshCw } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -42,21 +42,21 @@ export default function CausalityDashboard() {
 
   const pageConfig: UniversalPageConfig = {
     id: 'causality-dashboard',
-    title: '因果追溯儀表板 🌌',
-    subtitle: '5T Protocol 數據生命週期與 Hash 追蹤，實現完全的「可溯源」與「不可篡改」。',
+    title: '?��?追溯?�表板 ??',
+    subtitle: '5T Protocol ?��??�命?��???Hash 追蹤，實?��??��??�可溯�??��??��??�篡?�」�?,
     icon: <Network size={32} className="text-emerald-soul" />,
     griReference: 'Causality / 5T',
     activeT5Tags: ['T1', 'T4', 'T5'],
     isOXModule: true,
     
     primaryActions: [
-      { id: 'refresh', label: '重新同步 (Sync)', icon: <RefreshCw size={16}/>, onClick: fetchCausalityData }
+      { id: 'refresh', label: '?�新?�步 (Sync)', icon: <RefreshCw size={16}/>, onClick: fetchCausalityData }
     ],
 
     sections: [
       {
         id: 'trace-view',
-        title: '溯源鏈路 (Traceability Chain)',
+        title: '溯�??�路 (Traceability Chain)',
         columns: 12,
         component: (
           <Card className="p-8 bg-white/60 shadow-glass min-h-[500px]">

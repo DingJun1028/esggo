@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Globe } from 'lucide-react/icons';
+import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Globe } from 'lucide-react';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -62,7 +62,7 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      if (!email || !password) throw new Error('請輸入電子郵件與密碼 (Email & Password required)');
+      if (!email || !password) throw new Error('請輸?�電子郵件�?密碼 (Email & Password required)');
       
       if (isDemoMode) {
         console.log('[Auth] Demo Mode Active. Developer Bypass.');
@@ -81,7 +81,7 @@ export default function LoginPage() {
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(data.message || data.error || '登入失敗 (Login Failed)');
+        throw new Error(data.message || data.error || '?�入失�? (Login Failed)');
       }
 
       // Optionally store public info in local storage (session token is secure in cookie)
@@ -94,7 +94,7 @@ export default function LoginPage() {
       
       router.push('/dashboard');
     } catch (err) {
-      const message = err instanceof Error ? err.message : '連線錯誤 (Connection Error)';
+      const message = err instanceof Error ? err.message : '????�誤 (Connection Error)';
       setError(message);
     } finally {
       setLoading(false);
@@ -117,9 +117,9 @@ export default function LoginPage() {
     try {
       // For now, redirecting to a generic unimplemented endpoint until Google is fully set up in NCB.
       // window.location.href = '/api/auth/sign-in/google';
-      setError('Google 登入尚未完全配置，請聯絡管理員 (Google Auth not fully configured)');
+      setError('Google ?�入尚未完全?�置，�??�絡管�???(Google Auth not fully configured)');
     } catch (err: unknown) {
-      setError('Google 登入失敗');
+      setError('Google ?�入失�?');
     } finally {
       setLoading(false);
     }
@@ -153,7 +153,7 @@ export default function LoginPage() {
 
         <BrandCard padding="lg" className="bg-white/90 backdrop-blur-[40px] border-white shadow-extreme rounded-[48px] p-10">
            <div className="mb-10 text-center">
-              <h2 className="text-2xl font-black text-[#003262] tracking-tight">身分驗證中心</h2>
+              <h2 className="text-2xl font-black text-[#003262] tracking-tight">身�?驗�?中�?</h2>
               <p className="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">Sovereign Identity Access</p>
            </div>
 
@@ -161,8 +161,7 @@ export default function LoginPage() {
              <div className="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl flex items-start gap-3 text-rose-600 text-xs font-bold">
                <AlertCircle size={16} className="mt-0.5 shrink-0" />
                <p>
-                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
-                </p>
+                  此�?案具??<strong>?�端?�能?��?</strong>，符?�嚴??TypeScript 標�???                </p>
              </div>
            )}
 
@@ -172,7 +171,7 @@ export default function LoginPage() {
                    <Shield size={18} className="text-blue-600 shrink-0 mt-0.5" />
                    <div>
                       <p className="text-blue-800 text-[11px] font-black uppercase tracking-wider">Developer_Channel_Active</p>
-                      <p className="text-blue-700/70 text-[10px] font-bold leading-relaxed mt-1">開發者測試模式已啟動。您可以直接使用快速存取進入平台管理介面。</p>
+                      <p className="text-blue-700/70 text-[10px] font-bold leading-relaxed mt-1">?�發?�測試模式已?��??�您?�以?�接使用快速�??�進入平台管�?介面??/p>
                    </div>
                 </div>
                 <BrandButton 
@@ -183,7 +182,7 @@ export default function LoginPage() {
                   className="bg-blue-600 hover:bg-blue-700 text-white h-12 text-xs font-black rounded-2xl shadow-lg shadow-blue-500/20"
                   loading={loading}
                 >
-                   <Zap size={14} className="mr-2" /> 快速進入開發者控制台
+                   <Zap size={14} className="mr-2" /> 快速進入?�發?�控?�台
                 </BrandButton>
              </div>
            )}
@@ -215,7 +214,7 @@ export default function LoginPage() {
                        </div>
                        <BrandInput 
                          type="password" 
-                         placeholder="••••••••" 
+                         placeholder="?�••••••�? 
                          value={password}
                          onChange={e => setPassword(e.target.value)}
                          className="bg-slate-50 border-slate-100 text-slate-800 placeholder:text-slate-300 focus:bg-white focus:border-[#003262] focus:ring-8 focus:ring-blue-500/5 h-14 rounded-2xl transition-all font-bold"
@@ -231,12 +230,12 @@ export default function LoginPage() {
                          className="bg-[#003262] h-14 text-sm font-black shadow-xl shadow-blue-900/20 rounded-2xl group"
                          loading={loading}
                        >
-                          啟動主權連線 <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                          ?��?主�???? <ArrowUpRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
                        </BrandButton>
                        
                        <div className="text-center">
                           <p className="text-[11px] font-bold text-slate-400">
-                             尚未擁有帳號？ <Link href="#" className="text-[#3B7EA1] font-black hover:text-[#003262] transition-colors underline underline-offset-4">立即註冊成為成員</Link>
+                             尚未?��?帳�?�?<Link href="#" className="text-[#3B7EA1] font-black hover:text-[#003262] transition-colors underline underline-offset-4">立即註�??�為?�員</Link>
                           </p>
                        </div>
                     </div>
@@ -267,7 +266,7 @@ export default function LoginPage() {
 
         <p className="mt-10 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
           &copy; {new Date().getFullYear()} ESG GO Enterprise Hub <br/>
-          Berkeley × TSISDA Digital Sovereignty Partner
+          Berkeley ? TSISDA Digital Sovereignty Partner
         </p>
       </div>
     </div>

@@ -4,15 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { ShieldCheck, Scale, FileText, AlertCircle, TrendingUp, Loader2, BrainCircuit, Sparkles, Database, Lock, Activity } from 'lucide-react/icons';
+import { ShieldCheck, Scale, FileText, AlertCircle, TrendingUp, Loader2, BrainCircuit, Sparkles, Database, Lock, Activity } from 'lucide-react';
 import { supabase } from '@/lib/db/supabase';
 import { useOmniTable } from '@/hooks/useOmniTable';
 
 // Mock data for UI demonstration of the Memory Shards system
 const MOCK_SHARDS = [
-  { id: '1', title: '解決 Prisma N+1 查詢問題', tags: ['Prisma', 'Performance'], entropyLevel: 12 },
-  { id: '2', title: '實作 ZKP 封裝流程', tags: ['Security', '5T Protocol'], entropyLevel: 5 },
-  { id: '3', title: 'UI 液態玻璃組件重構', tags: ['React', 'LiquidGlass'], entropyLevel: 8 },
+  { id: '1', title: '�?�� Prisma N+1 ?�詢?��?', tags: ['Prisma', 'Performance'], entropyLevel: 12 },
+  { id: '2', title: '實�? ZKP 封�?流�?', tags: ['Security', '5T Protocol'], entropyLevel: 5 },
+  { id: '3', title: 'UI 液�??��?組件?��?', tags: ['React', 'LiquidGlass'], entropyLevel: 8 },
 ];
 
 export default function GovernanceMetricsPage() {
@@ -84,7 +84,7 @@ export default function GovernanceMetricsPage() {
     setIsSynthesizing(true);
     setTimeout(() => {
       setUltimate({
-        name: '全端渲染與安全防護奧義 (Unified)',
+        name: '?�端渲�??��??�防護奧�?(Unified)',
         level: 'Expert'
       });
       setIsSynthesizing(false);
@@ -107,7 +107,7 @@ export default function GovernanceMetricsPage() {
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">GOV-001</span>
                 {loading && <Loader2 className="w-3 h-3 text-cyan-500 animate-spin" />}
               </div>
-              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">治理指標 (Governance)</h1>
+              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">治�??��? (Governance)</h1>
               <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">Board Composition & System Integrity</p>
             </div>
           </div>
@@ -117,26 +117,25 @@ export default function GovernanceMetricsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <UniversalCard variant="glass" className="p-6 transition-all duration-300 hover:border-cyan-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Scale size={18} className="text-cyan-400" /> 董事會獨立性
-            </h3>
+              <Scale size={18} className="text-cyan-400" /> ????�獨立�?            </h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.boardIndependence}%</div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">達標: 獨立董事比例</p>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?��?: ?��????比�?</p>
           </UniversalCard>
 
           <UniversalCard variant="glass" className="p-6 transition-all duration-300 hover:border-emerald-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <FileText size={18} className="text-emerald-400" /> 誠信經營政策
+              <FileText size={18} className="text-emerald-400" /> 誠信經�??��?
             </h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.integrityPolicy}%</div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">達標: 內部簽署率</p>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?��?: ?�部簽署??/p>
           </UniversalCard>
 
           <UniversalCard variant="glass" className="p-6 transition-all duration-300 hover:border-amber-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <AlertCircle size={18} className="text-amber-400" /> 違規事件通報
+              <AlertCircle size={18} className="text-amber-400" /> ?��?事件?�報
             </h3>
-            <div className="text-3xl font-black text-white mb-2">{metrics.violationIncidents} 件</div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">狀態: 本季度無重大違規</p>
+            <div className="text-3xl font-black text-white mb-2">{metrics.violationIncidents} �?/div>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?�?? ?�季度無?�大?��?</p>
           </UniversalCard>
         </div>
 
@@ -144,19 +143,17 @@ export default function GovernanceMetricsPage() {
         <div className="mt-12 space-y-6">
           <div className="flex items-center gap-3 pb-2 border-b border-white/5">
             <BrainCircuit className="text-emerald-400" size={24} />
-            <h2 className="text-2xl font-bold text-white tracking-tight">OmniCore 系統治理 (AI Memory Shards)</h2>
+            <h2 className="text-2xl font-bold text-white tracking-tight">OmniCore 系統治�? (AI Memory Shards)</h2>
           </div>
           <p className="text-slate-400 text-sm">
-            系統代理人透過持續運作，將技術互動萃取為「記憶碎片 (Memory Shards)」。當碎片累積至一定數量，即可合成「技能奧義 (Skill Ultimate)」，達到系統熵減與知識沉澱。
-          </p>
+            系統�??人透�??��??��?，�??�術�??��??�為?��??��???(Memory Shards)?�。當碎�?累�??��?定數?��??�可?��??��??�奧�?(Skill Ultimate)?��??�到系統?��??�知識�?澱�?          </p>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Shards List */}
             <UniversalCard variant="glass" className="p-6 flex flex-col h-full border border-emerald-500/20">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-emerald-400 flex items-center gap-2">
-                  <Database size={18} /> 收集的記憶碎片
-                </h3>
+                  <Database size={18} /> ?��??��??��???                </h3>
                 <UniversalBadge variant="secondary" size="sm">{MOCK_SHARDS.length} Shards</UniversalBadge>
               </div>
               <div className="space-y-4 flex-1">
@@ -165,7 +162,7 @@ export default function GovernanceMetricsPage() {
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-white font-medium">{shard.title}</h4>
                       <span className="text-xs font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded">
-                        熵值: {shard.entropyLevel}
+                        ?��? {shard.entropyLevel}
                       </span>
                     </div>
                     <div className="flex gap-2 mt-3">
@@ -192,26 +189,26 @@ export default function GovernanceMetricsPage() {
                 
                 {!ultimate ? (
                   <>
-                    <h3 className="text-xl font-bold text-white mb-2">無有技藝合成 (Synthesize)</h3>
-                    <p className="text-slate-400 text-sm mb-8">將現有的記憶碎片融合為系統技能奧義，降低系統熵值。</p>
+                    <h3 className="text-xl font-bold text-white mb-2">?��??�?��???(Synthesize)</h3>
+                    <p className="text-slate-400 text-sm mb-8">將現?��?記憶碎�??��??�系統�??�奧義�??��?系統?�值�?/p>
                     <UniversalButton 
                       variant="primary" 
                       className="w-full relative overflow-hidden" 
                       onClick={handleSynthesize}
                       disabled={isSynthesizing}
                     >
-                      {isSynthesizing ? '融合中 (Synthesizing...)' : '開始萃取奧義'}
+                      {isSynthesizing ? '?��?�?(Synthesizing...)' : '?��??��?奧義'}
                     </UniversalButton>
                   </>
                 ) : (
                   <div className="animate-in zoom-in duration-500 w-full">
-                    <UniversalBadge variant="primary" className="mb-4 mx-auto w-fit">奧義合成成功</UniversalBadge>
+                    <UniversalBadge variant="primary" className="mb-4 mx-auto w-fit">奧義?��??��?</UniversalBadge>
                     <h3 className="text-2xl font-black text-cyan-400 mb-2">{ultimate.name}</h3>
                     <p className="text-slate-300 font-mono mb-6 border-t border-white/10 pt-4">
-                      掌握等級: <span className="text-emerald-400 font-bold">{ultimate.level}</span>
+                      ?�握等�?: <span className="text-emerald-400 font-bold">{ultimate.level}</span>
                     </p>
                     <UniversalButton variant="outline" onClick={() => setUltimate(null)} className="w-full">
-                      返回 (Reset)
+                      返�? (Reset)
                     </UniversalButton>
                   </div>
                 )}
@@ -225,7 +222,7 @@ export default function GovernanceMetricsPage() {
           <div className="flex items-center justify-between pb-2 border-b border-white/5">
             <div className="flex items-center gap-3">
               <Lock className="text-cyan-400" size={24} />
-              <h2 className="text-2xl font-bold text-white tracking-tight">OmniTable 邏輯節點封印 (5T Protocol)</h2>
+              <h2 className="text-2xl font-bold text-white tracking-tight">OmniTable ?�輯節點�???(5T Protocol)</h2>
             </div>
             <div className="flex items-center gap-2">
               <Activity className={`w-4 h-4 ${connectionStatus === 'CONNECTED' ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
@@ -233,8 +230,7 @@ export default function GovernanceMetricsPage() {
             </div>
           </div>
           <p className="text-slate-400 text-sm">
-            本區塊即時呈現自 OmniBlueTable 網關回傳之「不可篡改 (Trustworthy)」邏輯節點記錄。每一筆資料皆具備 ZKP Hash Lock，符合 ESGGO 5T 數位誠信標準。
-          </p>
+            ?��?塊即?��??�自 OmniBlueTable 網�??�傳之「�??�篡??(Trustworthy)?��?輯�?點�??�。�?一筆�??��??��? ZKP Hash Lock，符??ESGGO 5T ?��?誠信標�???          </p>
 
           <div className="space-y-4">
             {omniTableRecords.slice(0, 5).map((record) => (
