@@ -1,1 +1,0 @@
-{"version":3,"file":"principles.d.ts","sourceRoot":"","sources":["../../../src/core/T5Core/principles.ts"],"names":[],"mappings":"AAIA,MAAM,WAAW,WAAW;IAC1B,EAAE,EAAE,MAAM,CAAC;IACX,IAAI,EAAE,MAAM,CAAC;IACb,WAAW,EAAE,MAAM,CAAC;IACpB,MAAM,EAAE,MAAM,CAAC;IACf,YAAY,EAAE,MAAM,CAAC;CACtB;AAGD,eAAO,MAAM,aAAa,EAAE,MAAM,CAAC,MAAM,EAAE,WAAW,CAoCrD,CAAC;AAEF,eAAe,aAAa,CAAC"}

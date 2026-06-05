@@ -1,1 +1,0 @@
-{"version":3,"file":"AtomicBadge.d.ts","sourceRoot":"","sources":["../../../lib/design-system/AtomicBadge.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAG1B,MAAM,WAAW,gBAAiB,SAAQ,KAAK,CAAC,cAAc,CAAC,eAAe,CAAC;IAC7E,OAAO,CAAC,EAAE,SAAS,GAAG,SAAS,GAAG,UAAU,GAAG,OAAO,GAAG,SAAS,CAAC;CACpE;AAED,eAAO,MAAM,WAAW,EAAE,KAAK,CAAC,EAAE,CAAC,gBAAgB,CA0BlD,CAAC"}

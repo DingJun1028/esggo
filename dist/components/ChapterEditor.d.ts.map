@@ -1,1 +1,0 @@
-{"version":3,"file":"ChapterEditor.d.ts","sourceRoot":"","sources":["../../components/ChapterEditor.tsx"],"names":[],"mappings":"AAAA,OAAO,KAA2B,MAAM,OAAO,CAAC;AAsBhD,UAAU,kBAAkB;IACxB,SAAS,EAAE,MAAM,CAAC;IAClB,WAAW,EAAE,MAAM,CAAC;IACpB,YAAY,EAAE,MAAM,CAAC;IACrB,OAAO,EAAE,MAAM,EAAE,CAAC;CACrB;AAED,wBAAgB,aAAa,CAAC,EAAE,SAAS,EAAE,WAAW,EAAE,YAAY,EAAE,OAAO,EAAE,EAAE,kBAAkB,qBAqJlG"}
