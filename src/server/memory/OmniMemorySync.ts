@@ -72,7 +72,7 @@ export class OmniMemorySync {
 
     const client = new OmniTableClient({ token });
 
-    const record: { fields: Record<string, any> } = {
+    const record: { fields: Record<string, any> } = { // eslint-disable-line @typescript-eslint/no-explicit-any
       "Task Title": event.payload.content,
       Status: "Todo",
       Type: event.payload.type,
