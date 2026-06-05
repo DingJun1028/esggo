@@ -1,5 +1,6 @@
 import html2pdf from 'html2pdf.js';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
+// @ts-ignore
 import TurndownService from 'turndown';
 
 // PDF 轉換
@@ -16,7 +17,7 @@ export const convertHtmlToPdf = async (htmlContent: string, filename: string = '
   };
 
   try {
-    const pdf = await html2pdf().from(element).set(options).outputPdf('datauristring');
+    const pdf = await html2pdf().from(element).set(options).output('datauristring');
     const link = document.createElement('a');
     link.href = pdf;
     link.download = filename;

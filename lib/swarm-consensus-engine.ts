@@ -3,7 +3,7 @@
  * Orchestrates multiple specialized agents to evaluate and vote on ESG strategies.
  */
 
-import { sha256 } from './crypto-proof.ts';
+import { sha256 } from './crypto-proof';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export type AgentRole = 'COMPLIANCE' | 'HARMONY' | 'SECURITY' | 'INNOVATION';

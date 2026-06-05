@@ -74,7 +74,7 @@ export class WebSocketSwarmSyncService implements ISwarmSyncService {
 
     private mapTasks(remoteTasks: unknown[]): AgentTask[] {
         return remoteTasks.map(t => ({
-            id: t.id, title: t.title, taskType: t.taskType as any, status: t.status as any,
+            id: t.id, title: t.title, taskType: t.taskType as any, status: (t as any).status as any,
             skillKey: t.skillKey || undefined, createdAt: t.createdAt, updatedAt: t.updatedAt,
             tenantId: 'default', actorId: 'system', inputRefIds: [], policyDecisionId: 'none', requiresHumanReview: false
         }));
@@ -84,7 +84,7 @@ export class WebSocketSwarmSyncService implements ISwarmSyncService {
         return [
             {
                 id: 'agt-z0', name: 'Z0-Compliance', role: 'Regulatory Auditor',
-                status: tasks.some(t => t.status === 'approved_for_execution') ? 'processing' : 'active',
+                status: tasks.some(t => (t as any).status === 'approved_for_execution') ? 'processing' : 'active',
                 persona: 'compliance', color: '#003262', t5_score: 98
             },
             {

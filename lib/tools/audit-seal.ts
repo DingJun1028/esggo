@@ -1,7 +1,7 @@
 import { z } from 'genkit';
-import { ai } from '../agents/genkit.ts';
-import { getEvidenceFiles, upsertRoadmapMilestone } from '../db.ts';
-import { telemetryService } from '../telemetry/service.ts';
+import { ai } from '../agents/genkit';
+import { getEvidenceFiles, upsertRoadmapMilestone } from '../db';
+import { telemetryService } from '../telemetry/service';
 
 export const auditSealTool = ai.defineTool({
   name: 'audit_seal',

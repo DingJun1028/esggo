@@ -53,7 +53,7 @@ export interface AtomicFunctionResult<TData = unknown, TError = Error> {
   error?: TError;
   metadata?: {
     executionTime: number;
-    locaversion: string;
+    version: string;
   };
 }
 

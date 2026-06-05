@@ -1,15 +1,24 @@
+'use client';
+
+import React, { useEffect } from 'react';
+
+// Mock omniAgentBus since it is not imported
+const omniAgentBus = {
+  subscribe: (event: string, callback: (payload: any) => void) => {
+    return { unsubscribe: () => {} };
+  }
+};
+
 const HistoricalAuditor = () => {
   useEffect(() => {
-    const subscriber = omniAgentBus.subscribe('system:consensus:aligned', (payload) => {
+    const subscriber = omniAgentBus.subscribe('system:consensus:aligned', (payload: any) => {
       console.log('[Auditor] Consensus aligned:', payload);
-      // Log to external monitoring
       const logEvent = {
         type: 'CONSENSUS_ALIGNMENT',
-        evidence: payload.evidenceUuid,
-        consensusValue: payload.frnLoss,
+        evidence: payload?.evidenceUuid,
+        consensusValue: payload?.frnLoss,
         timestamp: new Date().toISOString()
       };
-      // In production, send to monitoring endpoint
       fetch('/api/audit-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -19,9 +28,10 @@ const HistoricalAuditor = () => {
 
     return () => subscriber.unsubscribe();
   }, []);
+  return null;
 };
 
-export const AuditLogProvider: React.FC = ({ children }) => {
+export const AuditLogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <React.Fragment>
       <HistoricalAuditor />

@@ -28,41 +28,38 @@ jobs:
         with:
           version: 8
 
+      - name: Cache pnpm modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       - name: Install dependencies
         run: pnpm install
 
       - name: Run pnpm audit
-        run: pnpm audit || true
+        run: pnpm audit
 
       - name: Install Playwright
         run: npx playwright install --with-deps
 
       - name: Run lint
         id: lint
-        run: pnpm run lint || true
+        run: pnpm run lint
 
       - name: Run tests with coverage
         id: test
-        run: pnpm run test -- --coverage || true
+        run: pnpm run test -- --coverage
 
       - name: Check coverage threshold
         id: coverage
-        run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
+        run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80
 
       - name: Build (optional)
         id: build
         run: pnpm run build
-
-      - name: Fail Job if Errors
-        if: always()
-        run: |
-          if [ "${{ steps.lint.outcome }}" = "failure" ] || \
-             [ "${{ steps.test.outcome }}" = "failure" ] || \
-             [ "${{ steps.coverage.outcome }}" = "failure" ] || \
-             [ "${{ steps.build.outcome }}" = "failure" ]; then
-            echo "One or more quality checks failed."
-            exit 1
-          fi
 
       - name: Deploy to Render
         if: success()
