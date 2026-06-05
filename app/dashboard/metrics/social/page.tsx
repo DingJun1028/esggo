@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { Users, Heart, GraduationCap, TrendingUp, Briefcase, Loader2 } from 'lucide-react';
+import { Users, Heart, GraduationCap, TrendingUp, Briefcase, Loader2 } from 'lucide-react/icons';
 import { supabase } from '@/lib/db/supabase';
 
 export default function SocialMetricsPage() {

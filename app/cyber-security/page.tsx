@@ -1,5 +1,5 @@
 ﻿'use client';
-import { Shield, Lock, AlertTriangle, CheckCircle, Activity, Server } from 'lucide-react';
+import { Shield, Lock, AlertTriangle, CheckCircle, Activity, Server } from 'lucide-react/icons';
 
 const METRICS = [
   { label: '資安事件數', value: '0', unit: '件', gri: 'GRI 418-1', color: '#22c55e', trend: '同期 0' },

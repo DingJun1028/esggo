@@ -4,7 +4,7 @@ import { ListTemplate } from '@/components/templates/ListTemplate';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
-import { Plus, Search, FileText, ArrowUpRight } from 'lucide-react';
+import { Plus, Search, FileText, ArrowUpRight } from 'lucide-react/icons';
 import Link from 'next/link';
 
 interface Contract {
