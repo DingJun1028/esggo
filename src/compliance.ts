@@ -5,7 +5,7 @@ export interface ComplianceResult {
   messages: string[];
 }
 
-export function checkE(data: any): ComplianceResult {
+export function checkE(data: any): ComplianceResult { // eslint-disable-line @typescript-eslint/no-explicit-any
   const msgs: string[] = [];
   if (typeof data.co2 !== 'number') msgs.push('缺少或無效的 CO2 排放值 (co2)');
   else if (data.co2 > 10) msgs.push(`CO2 排放過高 (${data.co2}t)`);
