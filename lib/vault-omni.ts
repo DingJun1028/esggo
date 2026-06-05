@@ -137,6 +137,24 @@ export async function readFromVault(uuid: string): Promise<IComponentCore | null
 }
 
 /**
+ * @function readFromVaultByHashLock
+ * @description 從聖碑讀取指定雜湊鎖的心核數據。
+ */
+export async function readFromVaultByHashLock(hashLock: string): Promise<IComponentCore | null> {
+  const supabase = getServiceClient();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('vault_omni_core')
+    .select('payload')
+    .eq('hash_lock', hashLock)
+    .single();
+
+  if (error || !data) return null;
+  return JSON.parse(data.payload) as IComponentCore;
+}
+
+/**
  * @function verifyRecord
  * @description 驗證聖碑紀錄的雜湊完整性。
  */

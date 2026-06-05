@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, BookOpen, Layers, Zap } from 'lucide-react';
 import { MemoryShard, SkillUltimate } from '@/lib/agent/memory-shards';
 
-export function SkillBookUI() {
+export default function SkillBookUI() {
   const [shards, setShards] = useState<MemoryShard[]>([]);
   const [ultimate, setUltimate] = useState<SkillUltimate | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
@@ -86,35 +86,66 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
           </button>
         </div>
 
-        {/* Shards Display */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <AnimatePresence>
-            {shards.map((shard, idx) => (
-              <motion.div 
-                key={shard.id}
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="p-4 rounded-xl border border-cyan-500/30 bg-slate-900/60 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.1)] flex flex-col gap-2"
-              >
-                <div className="flex justify-between items-start">
-                  <h3 className="text-sm font-semibold text-cyan-100">{shard.title}</h3>
-                  <span className="text-[10px] text-cyan-500/60 font-mono">#{shard.id.substring(0,6)}</span>
-                </div>
-                <p className="text-xs text-slate-400 leading-relaxed">{shard.description}</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {shard.tags.map(tag => (
-                    <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-800/50">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+        {/* OmniTable (5T ZKP Audited Data Grid) */}
+        <div className="w-full border border-cyan-800/40 rounded-xl bg-black/40 backdrop-blur-md overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-cyan-900/10 to-transparent pointer-events-none" />
+          <table className="w-full text-left border-collapse relative z-10">
+            <thead>
+              <tr className="bg-cyan-950/40 border-b border-cyan-800/40 text-xs text-cyan-500 uppercase tracking-widest font-mono">
+                <th className="p-3 font-semibold">5T Status</th>
+                <th className="p-3 font-semibold">Shard Origin</th>
+                <th className="p-3 font-semibold">Tags & Dimension</th>
+                <th className="p-3 font-semibold text-right">ZKP Hash Lock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <AnimatePresence>
+                {shards.map((shard, idx) => (
+                  <motion.tr 
+                    key={shard.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: idx * 0.1 }}
+                    className="border-b border-cyan-800/20 hover:bg-cyan-900/20 transition-colors group"
+                  >
+                    <td className="p-3">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-3 w-3">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-[10px] text-emerald-400 font-bold tracking-widest">VERIFIED</span>
+                      </div>
+                    </td>
+                    <td className="p-3">
+                      <h3 className="text-sm font-semibold text-cyan-100 group-hover:text-cyan-300 transition-colors">{shard.title}</h3>
+                      <p className="text-xs text-slate-500 max-w-[250px] truncate">{shard.description}</p>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex flex-wrap gap-1">
+                        {shard.tags.map(tag => (
+                          <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-800/50">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="p-3 text-right">
+                      <div className="text-[10px] font-mono text-slate-500 group-hover:text-emerald-400 transition-colors bg-black/50 px-2 py-1 rounded inline-block border border-white/5">
+                        0x{shard.id.replace(/-/g, '').substring(0, 16)}...
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+            </tbody>
+          </table>
           {shards.length === 0 && (
-            <div className="col-span-1 md:col-span-2 text-center py-12 text-slate-500 border border-dashed border-slate-800 rounded-xl">
-              尚未萃取任何記憶碎片，點擊右上角按鈕從對話中擷取。
+            <div className="w-full text-center py-12 text-slate-500 border-t border-dashed border-cyan-800/40">
+              <div className="flex flex-col items-center gap-3">
+                <Layers className="w-8 h-8 text-cyan-800/50" />
+                <span className="text-sm">尚未萃取任何記憶碎片，點擊右上角按鈕從對話中擷取 (5T 協議等待中)</span>
+              </div>
             </div>
           )}
         </div>

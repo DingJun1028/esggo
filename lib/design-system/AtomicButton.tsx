@@ -18,7 +18,7 @@ export const AtomicButton = React.forwardRef<HTMLButtonElement, AtomicButtonProp
       atomId: 'ATOM_BTN_001',
       type: 'atom',
       version: '1.1.0',
-      core: { status: 'Trustworthy' } as any,
+      core: { status: 'Trustworthy' },
       reference: {
         specification: 'Interaction Spec v2.0.1',
         intent: 'Action Trigger',

@@ -317,37 +317,89 @@ export default function OmniSpacePage() {
               </div>
             </div>
 
-            {/* Panel 3: Omni Restoration Protocol */}
+            {/* Omni Core Modules: The Five Pillars of Ascension */}
             <div className="bg-black/40 backdrop-blur-md rounded-2xl p-6 flex flex-col border border-white/5 border-t-cyan-500/30">
               <h3 className="text-sm font-bold text-slate-200 tracking-wider mb-4 flex items-center gap-2">
                 <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
-                OMNI RESTORATION (萬能修復)
+                萬能核心協定 (OMNI PROTOCOLS)
               </h3>
               
               <div className="space-y-3">
+                {/* 1. OmniMemory */}
                 <button 
-                  onClick={() => handleRestoration('Chain Validation (鏈式校驗)', 'SEAL', '0xCV01')}
-                  className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-emerald-500/20 hover:border-emerald-500/60 hover:bg-emerald-950/30 transition-all group flex justify-between items-center"
+                  onClick={() => window.location.href = '/dashboard/audit'}
+                  className="w-full text-left px-4 py-3 rounded bg-black/40 text-slate-300 border border-emerald-500/20 hover:border-emerald-500/60 hover:bg-emerald-950/30 transition-all group relative overflow-hidden"
                 >
-                  <span>1. Chain Validation (鏈式校驗)</span>
-                  <span className="opacity-0 group-hover:opacity-100 text-emerald-400 transition-opacity">EXECUTE</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="flex justify-between items-center relative z-10">
+                    <div>
+                      <span className="block text-xs font-bold text-emerald-400 mb-0.5">I. 萬能永憶 (OmniMemory)</span>
+                      <span className="block text-[10px] text-slate-500">ZKP 封印軌跡與時光樞紐</span>
+                    </div>
+                    <span className="opacity-0 group-hover:opacity-100 text-emerald-400 font-mono text-[10px] transition-opacity duration-300">ACTIVATE</span>
+                  </div>
                 </button>
+                
+                {/* 2. OmniRune */}
                 <button 
-                  onClick={() => handleRestoration('Ghost Recomposition (殘影重組)', 'MEMORY', '0xGR02')}
-                  className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-purple-500/20 hover:border-purple-500/60 hover:bg-purple-950/30 transition-all group flex justify-between items-center"
+                  onClick={() => emitEvent({ type: 'COMPUTE', payload: '[OmniRune] 萬能符文已解鎖，準備重組 Atomic Functions...', integrity_hash: '0xRUNE' })}
+                  className="w-full text-left px-4 py-3 rounded bg-black/40 text-slate-300 border border-purple-500/20 hover:border-purple-500/60 hover:bg-purple-950/30 transition-all group relative overflow-hidden"
                 >
-                  <span>2. Ghost Recomposition (殘影重組)</span>
-                  <span className="opacity-0 group-hover:opacity-100 text-purple-400 transition-opacity">EXECUTE</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="flex justify-between items-center relative z-10">
+                    <div>
+                      <span className="block text-xs font-bold text-purple-400 mb-0.5">II. 萬能符文 (OmniRune)</span>
+                      <span className="block text-[10px] text-slate-500">密碼學算力與原子元件</span>
+                    </div>
+                    <span className="opacity-0 group-hover:opacity-100 text-purple-400 font-mono text-[10px] transition-opacity duration-300">FORGE</span>
+                  </div>
                 </button>
+
+                {/* 3. OmniAgent */}
                 <button 
-                  onClick={() => handleRestoration('Semantic Alignment (語義修正)', 'COMPUTE', '0xSA03')}
-                  className="w-full text-left text-[11px] font-bold px-4 py-2.5 rounded bg-black/40 text-slate-300 border border-cyan-500/20 hover:border-cyan-500/60 hover:bg-cyan-950/30 transition-all group flex justify-between items-center"
+                  onClick={() => window.location.href = '/omni-agent'}
+                  className="w-full text-left px-4 py-3 rounded bg-black/40 text-slate-300 border border-cyan-500/20 hover:border-cyan-500/60 hover:bg-cyan-950/30 transition-all group relative overflow-hidden"
                 >
-                  <span>3. Semantic Alignment (語義修正)</span>
-                  <span className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-opacity">EXECUTE</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="flex justify-between items-center relative z-10">
+                    <div>
+                      <span className="block text-xs font-bold text-cyan-400 mb-0.5">III. 萬能代理 (OmniAgent)</span>
+                      <span className="block text-[10px] text-slate-500">L-Hub 蜂群與 LLM 意識體</span>
+                    </div>
+                    <span className="opacity-0 group-hover:opacity-100 text-cyan-400 font-mono text-[10px] transition-opacity duration-300">AWAKEN</span>
+                  </div>
+                </button>
+
+                {/* 4. OmniTag */}
+                <button 
+                  onClick={() => emitEvent({ type: 'SEAL', payload: '[OmniTag] 萬能標籤掃描中，重構語義網絡矩陣...', integrity_hash: '0xTAG' })}
+                  className="w-full text-left px-4 py-3 rounded bg-black/40 text-slate-300 border border-rose-500/20 hover:border-rose-500/60 hover:bg-rose-950/30 transition-all group relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="flex justify-between items-center relative z-10">
+                    <div>
+                      <span className="block text-xs font-bold text-rose-400 mb-0.5">IV. 萬能標籤 (OmniTag)</span>
+                      <span className="block text-[10px] text-slate-500">語義錨點與維度索引</span>
+                    </div>
+                    <span className="opacity-0 group-hover:opacity-100 text-rose-400 font-mono text-[10px] transition-opacity duration-300">INDEX</span>
+                  </div>
+                </button>
+
+                {/* 5. OmniLibrary */}
+                <button 
+                  onClick={() => window.location.href = '/dashboard/blueprint'}
+                  className="w-full text-left px-4 py-3 rounded bg-black/40 text-slate-300 border border-amber-500/20 hover:border-amber-500/60 hover:bg-amber-950/30 transition-all group relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="flex justify-between items-center relative z-10">
+                    <div>
+                      <span className="block text-xs font-bold text-amber-400 mb-0.5">V. 萬能智庫 (OmniLibrary)</span>
+                      <span className="block text-[10px] text-slate-500">RAG 資料餵養與知識邊界</span>
+                    </div>
+                    <span className="opacity-0 group-hover:opacity-100 text-amber-400 font-mono text-[10px] transition-opacity duration-300">LEARN</span>
+                  </div>
                 </button>
               </div>
             </div>

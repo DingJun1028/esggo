@@ -6,9 +6,11 @@ export interface UniversalButtonProps extends React.ButtonHTMLAttributes<HTMLBut
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg' | 'icon';
   loading?: boolean;
+  isLoading?: boolean;
   fullWidth?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 export const UniversalButton = React.forwardRef<HTMLButtonElement, UniversalButtonProps>(
@@ -18,9 +20,11 @@ export const UniversalButton = React.forwardRef<HTMLButtonElement, UniversalButt
       variant = 'primary',
       size = 'md',
       loading = false,
+      isLoading = false,
       fullWidth = false,
       leftIcon,
       rightIcon,
+      icon,
       children,
       disabled,
       ...props
@@ -46,24 +50,27 @@ export const UniversalButton = React.forwardRef<HTMLButtonElement, UniversalButt
       icon: 'h-10 w-10 justify-center p-0',
     };
 
+    const isBtnLoading = loading || isLoading;
+    const actualLeftIcon = leftIcon || icon;
+
     return (
       <button
         ref={ref}
-        disabled={disabled || loading}
+        disabled={disabled || isBtnLoading}
         className={cn(
           'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-normal ease-spring focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent)] focus:ring-offset-2',
           variants[variant],
           sizes[size],
           fullWidth ? 'w-full' : '',
-          (disabled || loading) && 'opacity-60 cursor-not-allowed',
+          (disabled || isBtnLoading) && 'opacity-60 cursor-not-allowed',
           className
         )}
         {...props}
       >
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {!loading && leftIcon && <span className="mr-2">{leftIcon}</span>}
+        {isBtnLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {!isBtnLoading && actualLeftIcon && <span className="mr-2">{actualLeftIcon}</span>}
         {children}
-        {!loading && rightIcon && <span className="ml-2">{rightIcon}</span>}
+        {!isBtnLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
       </button>
     );
   }

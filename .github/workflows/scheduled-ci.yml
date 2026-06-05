@@ -22,8 +22,14 @@ jobs:
           node-version: '20' # ESGGO 專案目前支援 Node.js 20+
           cache: 'npm'
 
+      - name: Install Build Libraries
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
       - name: Install Dependencies
         run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
 
       - name: Run Linter (ESLint)
         run: npm run lint

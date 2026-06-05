@@ -1,5 +1,5 @@
 import React from 'react';
-import { SkillBookUI } from '@/components/omni/SkillBookUI';
+import SkillBookUI from '@/components/omni/SkillBookUI';
 import { Sparkles, Activity } from 'lucide-react';
 
 export default function OmniShardsPage() {

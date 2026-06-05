@@ -150,11 +150,11 @@ const BLUEPRINT_DATA: BlueprintSection[] = [
     id: 'audit-conclusion',
     title: '12. 技術完整性',
     icon: <ShieldCheck size={18} />,
-    status: 'Planned',
-    description: '系統安全性掃描、5T 協議防篡改測試報告與 RLS 滲透測試結論。',
+    status: 'Completed',
+    description: '系統安全性掃描、5T 協議防篡改測試報告與 RLS 滲透測試結論 (見 /omni-audit)。',
     tasks: [
-      { name: 'ZKP Vulnerability Scan', completed: false },
-      { name: 'Penetration Testing', completed: false },
+      { name: 'ZKP Vulnerability Scan', completed: true },
+      { name: 'Penetration Testing', completed: true },
     ]
   }
 ];
@@ -165,8 +165,16 @@ export default function OmniBlueprintPage() {
   const activeSection = BLUEPRINT_DATA.find(section => section.id === activeTab);
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30 relative overflow-hidden font-sans">
+      
+      {/* OmniBlue Hologram Ambience */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-cyan-600/10 blur-[150px] rounded-full mix-blend-screen animate-pulse-slow" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full mix-blend-screen" />
+        <div className="absolute inset-0 cyber-grid opacity-[0.03]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Header */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">

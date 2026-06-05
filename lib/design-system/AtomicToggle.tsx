@@ -19,9 +19,13 @@ export const AtomicToggle: React.FC<AtomicToggleProps> = ({
     ...props
 }) => {
     const toggleId = React.useId();
-    const { drops, loading } = useColorDropStream(); // Use the Color-Drop stream hook
+    const { events, isLive } = useColorDropStream(); // Use the Color-Drop stream hook
 
-    const colorDropStatus = evidenceUuid && !loading ? drops.get(evidenceUuid)?.status : undefined;
+    const event = evidenceUuid && isLive ? events.find(e => e.id === evidenceUuid) : undefined;
+    let colorDropStatus = undefined;
+    if (event?.event_type === 'color:drop:verified' || event?.event_type === 'vault:seal:medical_zkp_ready') colorDropStatus = 'verified';
+    else if (event?.event_type === 'color:drop:issued') colorDropStatus = 'issued';
+    else if (event?.event_type === 'color:drop:absolute-zero') colorDropStatus = 'absolute-zero';
     const isVerified = colorDropStatus === 'verified';
     const isAbsoluteZero = colorDropStatus === 'absolute-zero';
 

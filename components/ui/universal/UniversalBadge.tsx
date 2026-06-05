@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '../../../lib/utils';
 
 export interface UniversalBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'success' | 'warning' | 'error' | 'info';
+  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'success' | 'warning' | 'error' | 'info' | 'default';
   size?: 'sm' | 'md';
   dot?: boolean;
   icon?: React.ReactNode;
@@ -19,6 +19,7 @@ export const UniversalBadge = React.forwardRef<HTMLSpanElement, UniversalBadgePr
       warning: 'bg-amber-500/10 text-amber-500 border border-amber-500/20',
       error: 'bg-rose-500/10 text-rose-500 border border-rose-500/20',
       info: 'bg-sky-500/10 text-sky-500 border border-sky-500/20',
+      default: 'bg-[var(--theme-surface)] text-[var(--theme-text)] border border-[var(--theme-border)]',
     };
 
     const sizes = {

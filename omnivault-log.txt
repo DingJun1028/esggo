@@ -1,0 +1,7 @@
+### Execution Trace (OmniCore Matrix):
+- 🔍 Viewed: [test-pdf.ts]
+- ⚡ Ran: [Node script to generate valid base64 PDF into public/sample-evidence.pdf, npx tsx test-pdf.ts]
+- 🛠️ Modified: [public/sample-evidence.pdf - Replaced invalid PDF with a valid minimal PDF file]
+
+### Synthesis & Outcome:
+The test failed because the sample PDF file `public/sample-evidence.pdf` was corrupted or empty. A valid base64-encoded PDF containing "Hello, world!" was written to the file. The tests now pass perfectly, and the PDF parser can successfully extract text and metadata.
