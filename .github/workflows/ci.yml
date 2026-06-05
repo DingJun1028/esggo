@@ -39,12 +39,15 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run lint
+        id: lint
         run: pnpm run lint || true
 
       - name: Run tests with coverage
+        id: test
         run: pnpm run test -- --coverage || true
 
       - name: Check coverage threshold
+        id: coverage
         run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
 
       - name: Build (optional)
