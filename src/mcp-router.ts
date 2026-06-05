@@ -42,7 +42,7 @@ export class MCPRouter {
     }
   };
 
-  static async call(server: string, method: string, params: any): Promise<any> {
+  static async call(server: string, method: string, params: any): Promise<any> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const serverConfig = this.servers[server as keyof typeof this.servers];
     if (!serverConfig) {
       throw new Error(`Unknown MCP server: ${server}`);

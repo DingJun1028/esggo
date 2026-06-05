@@ -13,7 +13,7 @@ export const mcp = {
     });
     return response.data;
   },
-  supabase: async (query: string, params: any) => {
+  supabase: async (query: string, params: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     const client = supabaseUrl;
     const { data, error } = await client.from(query).select('*', params);
     if (error) throw error;
