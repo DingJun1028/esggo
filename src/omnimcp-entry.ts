@@ -48,7 +48,7 @@ export async function executeMCPService(service: string, action: string, payload
     }
 
     // Run compliance check
-    const compliance = omniMCP.compliance(payload);
+    const compliance = omniMCP.compliance(payload); // eslint-disable-line @typescript-eslint/no-explicit-any
     
     // Broadcast to UI
     omniMCP.socket.emit('service-executed', {
