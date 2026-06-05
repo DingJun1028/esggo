@@ -27,7 +27,7 @@ export const AtomicModal: React.FC<AtomicModalProps> = ({
       atomId: 'ATOM_MOD_001',
       type: 'atom',
       version: '1.1.0',
-      core: { status: 'Trustworthy' } as any,
+      core: { status: 'Trustworthy' },
       reference: {
         specification: 'Overlays Spec v1.1',
         intent: 'Intervention Dialog',

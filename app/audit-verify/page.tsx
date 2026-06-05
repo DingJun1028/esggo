@@ -141,6 +141,13 @@ export default function AuditVerifyPage() {
     ) }
   ];
 
+  
+  const p = {
+    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    title: 'Audit Verify',
+    sub: 'Audit Verify Management'
+  };
+
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

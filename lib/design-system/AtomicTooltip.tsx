@@ -20,9 +20,13 @@ export const AtomicTooltip: React.FC<AtomicTooltipProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const tooltipId = useId();
-  const { drops, loading } = useColorDropStream();
-  const dropData = evidenceId ? drops.get(evidenceId) : undefined;
-  const status = dropData?.status;
+  const { events } = useColorDropStream();
+  const event = evidenceId ? events.find(e => e.id === evidenceId) : undefined;
+  
+  let status = undefined;
+  if (event?.event_type === 'color:drop:verified' || event?.event_type === 'vault:seal:medical_zkp_ready') status = 'verified';
+  else if (event?.event_type === 'color:drop:issued') status = 'issued';
+  else if (event?.event_type === 'color:drop:absolute-zero') status = 'absolute-zero';
   
   let dropColor = "border-[#06b6d4]/30 shadow-[0_4px_20px_rgba(6,182,212,0.2)]"; // Default
   if (status === 'issued') dropColor = "border-amber-500/50 shadow-[0_4px_20px_rgba(245,158,11,0.2)] text-amber-200";

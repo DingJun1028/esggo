@@ -63,7 +63,7 @@ export default function ProvenanceDrawer({
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">T2 Traceable · 數據溯源</p>
               </div>
             </div>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors p-2">
+            <button aria-label="Close drawer" onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors p-2">
               <X size={20} />
             </button>
           </header>

@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Activity } from 'lucide-react';
+import { Globe, ArrowRight, ShieldCheck, Zap, Layers, Cpu, Layout, Sparkles, Activity, Brain } from 'lucide-react';
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import CausalTopologyGraph, { NodeStatus } from '@/components/ui/CausalTopologyGraph';
+import OmniAgentPulse from '@/components/omni/OmniAgentPulse';
+import OmniBlueDashboard from '@/components/omni/OmniBlueDashboard';
 
 interface LogEntry {
   time: string;
@@ -328,6 +330,11 @@ function LandingContent() {
 
         </motion.div>
 
+        {/* ─── Layer 2.5: OmniBlue Data Mesh ──────────────────────────── */}
+        <motion.div variants={item} className="w-full">
+          <OmniBlueDashboard />
+        </motion.div>
+
         <motion.div variants={item} className="pt-12 text-center">
           <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/5 rounded-2xl border border-white/5 backdrop-blur-sm">
             <span className="text-[10px] uppercase tracking-[0.4em] text-slate-500 font-black">
@@ -336,6 +343,9 @@ function LandingContent() {
           </div>
         </motion.div>
       </motion.div>
+      
+      {/* ─── Layer 3: OmniAgent Floating Pulse ──────────────────────── */}
+      <OmniAgentPulse />
     </div>
   );
 }

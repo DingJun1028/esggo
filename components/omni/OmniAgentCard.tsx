@@ -86,13 +86,16 @@ export default function OmniAgentCard({
       >
         {/* ================= FRONT SIDE ================= */}
         <div 
-          className={`absolute inset-0 backface-hidden rounded-xl border backdrop-blur-xl bg-slate-950/60 overflow-hidden flex flex-col justify-end bg-gradient-to-b ${rarityColors[rarity]} transition-all duration-300`}
+          className={`absolute inset-0 backface-hidden rounded-[2rem] border-white/10 backdrop-blur-3xl bg-slate-950/40 overflow-hidden flex flex-col justify-end bg-gradient-to-b ${rarityColors[rarity]} transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]`}
         >
-          {/* Sci-fi Cut Corners Effect via SVG or absolute divs */}
-          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/30 rounded-tl-xl"></div>
-          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white/30 rounded-tr-xl"></div>
-          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-white/30 rounded-bl-xl"></div>
-          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/30 rounded-br-xl"></div>
+          {/* Gloss Highlight */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent z-30"></div>
+          
+          {/* Sci-fi Cut Corners Effect */}
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/20 rounded-tl-[2rem]"></div>
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-white/20 rounded-tr-[2rem]"></div>
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-white/20 rounded-bl-[2rem]"></div>
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-white/20 rounded-br-[2rem]"></div>
 
           {/* Out-of-bounds Portrait (Middle Layer) */}
           <div className="absolute inset-0 z-10 flex justify-center items-end pb-24 pointer-events-none">
@@ -144,9 +147,11 @@ export default function OmniAgentCard({
 
         {/* ================= BACK SIDE ================= */}
         <div 
-          className={`absolute inset-0 backface-hidden rounded-xl border backdrop-blur-xl bg-slate-950/90 overflow-hidden flex flex-col p-5 bg-gradient-to-b ${rarityColors[rarity]}`}
+          className={`absolute inset-0 backface-hidden rounded-[2rem] border-white/10 backdrop-blur-3xl bg-slate-950/40 overflow-hidden flex flex-col p-6 bg-gradient-to-b ${rarityColors[rarity]} shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)]`}
           style={{ transform: 'rotateY(180deg)' }}
         >
+          {/* Gloss Highlight */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent z-30"></div>
           <div className="flex items-center space-x-2 mb-4">
             <Database className="w-5 h-5 text-cyan-400" />
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">Memory & Schema</h3>

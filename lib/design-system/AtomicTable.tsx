@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { IAtomicComponent, atomicManager } from './atomic-core';
 import { cn } from '../utils';
-import { useColorDropStream, ColorDropData } from '../../lib/hooks/useColorDropStream';
+import { useColorDropStream } from '../../lib/hooks/useColorDropStream';
 
 export interface AtomicTableColumn<T> {
   key: string;
@@ -29,7 +29,7 @@ export function AtomicTable<T>({
   ...props
 }: AtomicTableProps<T>) {
   const tableId = React.useId();
-  const { drops } = useColorDropStream(); // Use the Color-Drop stream hook
+  const { events } = useColorDropStream(); // Use the Color-Drop stream hook
 
   useEffect(() => {
     const atom: IAtomicComponent = {
@@ -95,7 +95,15 @@ export function AtomicTable<T>({
             ) : (
               data.map((row, i) => {
                 const evidenceUuid = getRowEvidenceUuid ? getRowEvidenceUuid(row) : undefined;
-                const colorDropStatus = evidenceUuid ? drops.get(evidenceUuid)?.status : undefined;
+                const event = evidenceUuid ? events.find(e => e.id === evidenceUuid) : undefined;
+                let colorDropStatus = undefined;
+                if (event?.event_type === 'color:drop:verified' || event?.event_type === 'vault:seal:medical_zkp_ready') {
+                  colorDropStatus = 'verified';
+                } else if (event?.event_type === 'color:drop:issued') {
+                  colorDropStatus = 'issued';
+                } else if (event?.event_type === 'color:drop:absolute-zero') {
+                  colorDropStatus = 'absolute-zero';
+                }
 
                 let rowHighlightClass = '';
                 if (colorDropStatus === 'verified') {

@@ -10,9 +10,7 @@ on:
 jobs:
   auto-heal:
     runs-on: ubuntu-latest
-    strategy:
-      max-attempts: 3  # 自動重試最多3次
-      fail-fast: false
+
     
     steps:
       - name: Checkout Code
@@ -114,7 +112,7 @@ jobs:
           - Job: ${{ github.job }}
           - Branch: ${{ github.ref }}
           - Commit: ${{ github.sha }}
-          - Attempt: ${{ strategy.attempts }}/3
+          - Attempt: 1/3
           
           ## Recent Logs
           \`\`\`

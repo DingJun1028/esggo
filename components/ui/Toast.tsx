@@ -47,6 +47,7 @@ export function ToastContainer() {
               {config.icon}
               <p className="flex-1 text-sm font-bold text-slate-800">{t.message}</p>
               <button
+                aria-label="Dismiss toast"
                 onClick={() => dismiss(t.id)}
                 className="shrink-0 w-7 h-7 rounded-xl flex items-center justify-center hover:bg-black/5 text-slate-400 transition-colors"
               >

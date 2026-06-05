@@ -5,7 +5,7 @@ import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalTable } from '@/components/ui/universal/UniversalTable';
-import { Activity, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { Activity, Search, Plus, ShieldCheck, Brain, Lock, Loader2, X } from 'lucide-react';
 
 export default function SystemStatusPage() {
   const [data, setData] = useState<any[]>([]);
@@ -140,6 +140,12 @@ export default function SystemStatusPage() {
       </div>
     ) }
   ];
+
+  const p = {
+    id: 'SYS-001',
+    title: '系統狀態 (System Status)',
+    sub: 'Platform Integrity & Metrics'
+  };
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from 'react';
 import { IAtomicComponent, atomicManager } from './atomic-core';
 import { cn } from '../utils';
@@ -21,7 +23,7 @@ export const AtomicCard = React.forwardRef<HTMLDivElement, AtomicCardProps>(({
       atomId: 'ATOM_CRD_001',
       type: 'atom',
       version: '1.1.0',
-      core: { status: 'Trustworthy' } as any,
+      core: { status: 'Trustworthy' },
       reference: {
         specification: 'Layout Core Spec v1.0.1',
         intent: 'Bento Grid Container',

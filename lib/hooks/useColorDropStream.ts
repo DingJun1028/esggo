@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 // =========================================================================
 // 1. 萬能元件心核 (IComponentCore) 前端對應
@@ -17,7 +17,7 @@ export interface AuditRecord {
   payload: {
     zkp_hash: string;
     nodes_involved: string[];
-    metrics: Record<string, any>;
+    metrics: Record<string, unknown>;
   };
   source_origin: string;
   timestamp: number;
@@ -38,20 +38,18 @@ export interface VisualDropState {
 export function useColorDropStream(token: string = 'taiwan-jwt-token') {
   const [events, setEvents] = useState<AuditRecord[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
-  const [metrics, setMetrics] = useState({
-    totalCount: 0,
-    zkpSuccessRate: '100.0',
-    entropyReduction: '0.0'
-  });
+  // metrics state removed, now calculated with useMemo
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
-  const coreRef = useRef<IComponentCore>({
-    uuid: "ee4af378-b9d7-412d-91d2-d50b98fa0715",
-    version: "2.6.0-stable.5T",
-    timestamp: 1772421600000,
-    evidence: "FRONTEND_SSE_HYDRATION_ACTIVE"
-  });
+  const core = useMemo(() => {
+    return {
+      uuid: "ee4af378-b9d7-412d-91d2-d50b98fa0715",
+      version: "2.6.0-stable.5T",
+      timestamp: 1772421600000,
+      evidence: "FRONTEND_SSE_HYDRATION_ACTIVE"
+    };
+  }, []);
 
   // 3. 實時將後端事件類型映射為液態玻璃設計語彙 (Tangible 視覺共鳴)
   const getVisualState = useCallback((eventType: string): VisualDropState => {
@@ -113,7 +111,7 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
     console.log(`📡 [SSE Client] 正在與 AgentBus 建立安全實時串流連線...`);
 
     // 注意：因瀏覽器 EventSource 原生不支持自訂 Header，實務上可透過 cookie、URL 參數，
-    // 或在 Proxy 路由中依據 Session 憑證進行租戶身分與 RLS 物理隔離對齊
+    // 或在 Proxy 路由中依據 Sessi 憑證進行租戶身分與 RLS 物理隔離對齊
     const eventSource = new EventSource(url);
     eventSourceRef.current = eventSource;
 
@@ -155,7 +153,7 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
   }, [token]);
 
   // 6. 實時計算降熵指標與 ZKP 合規係數 (Transparent)
-  useEffect(() => {
+  const metrics = useMemo(() => {
     const totalCount = events.length;
     const verifiedCount = events.filter(e => 
       e.event_type === 'color:drop:verified' || 
@@ -171,11 +169,11 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
       ? -(totalCount * 3.4).toFixed(1) 
       : '0.0';
 
-    setMetrics({
+    return {
       totalCount,
       zkpSuccessRate,
       entropyReduction
-    });
+    };
   }, [events]);
 
   return {
@@ -184,6 +182,6 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
     metrics,
     getVisualState,
     triggerForensicReplay,
-    core: coreRef.current
+    core
   };
 }

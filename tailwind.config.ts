@@ -56,6 +56,18 @@ const config: Config = {
         'lethal': '#FF4D6D',
         'critical-signal': '#FFB703',
         'optimal': '#219EBC',
+        // --- ESGGO Brand Core Colors ---
+        'berkeley-blue': '#003262',
+        'california-gold': '#FDB515',
+        'founders-rock': '#3B7EA1',
+        'berkeley-dark': '#1A3A5C',
+        'sather-gate': '#B9D9EB',
+        // --- 5T Protocol Status Colors ---
+        't1-tangible-main': '#10B981', 
+        't2-traceable-main': '#3B7EA1', 
+        't3-trackable-main': '#8B5CF6',
+        't4-transparent-main': '#F59E0B', 
+        't5-trustworthy-main': '#003262', 
         theme: {
           primary: 'var(--theme-primary)',
           'primary-hover': 'var(--theme-primary-hover)',
@@ -75,7 +87,7 @@ const config: Config = {
       },
       borderRadius: {
         'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px',
-        'xl': '16px', '2xl': '24px', 'card': '16px', 'full': '9999px',
+        'xl': '16px', '2xl': '20px', 'card': '16px', 'full': '9999px',
       },
       boxShadow: {
         'xs': '0 1px 2px rgba(0, 50, 98, 0.05)',
@@ -117,6 +129,10 @@ const config: Config = {
         'normal': '300ms',
         'slow': '500ms',
         'slower': '800ms',
+      },
+      fontFamily: {
+        sans: ['Inter', 'Noto Sans TC', 'sans-serif'], // Primary font with Noto Sans TC as Chinese fallback
+        mono: ['JetBrains Mono', 'monospace'], // For Data/Code
       },
     },
   },

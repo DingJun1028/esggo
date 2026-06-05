@@ -1,4 +1,4 @@
-const cheerio = require('cheerio');
+import cheerio from 'cheerio';
 
 async function test() {
   const r = await fetch('https://e-info.org.tw/taxonomy/term/39');

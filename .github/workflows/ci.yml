@@ -19,22 +19,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
-      - name: Run npm audit
-        run: npm audit || true
+      - name: Run pnpm audit
+        run: pnpm audit || true
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
 
       - name: Run lint
-        run: npm run lint || true
+        run: pnpm run lint || true
 
       - name: Run tests with coverage
-        run: npm run test -- --coverage || true
+        run: pnpm run test -- --coverage || true
 
       - name: Check coverage threshold
-        run: npx vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
+        run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
 
       - name: Build (optional)
-        run: npm run build
+        run: pnpm run build

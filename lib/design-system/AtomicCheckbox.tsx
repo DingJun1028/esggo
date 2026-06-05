@@ -26,7 +26,7 @@ export const AtomicCheckbox: React.FC<AtomicCheckboxProps> = ({
       atomId: 'ATOM_CBX_001',
       type: 'atom',
       version: '1.1.0',
-      core: { status: 'Trustworthy' } as any,
+      core: { status: 'Trustworthy' },
       reference: {
         specification: 'Form Controls Spec v1.1',
         intent: 'Boolean Selection',

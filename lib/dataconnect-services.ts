@@ -12,6 +12,7 @@ import {
   upsertCompanyProfile,
   listEternalMemories,
   insertEternalMemory,
+  upsertEternalMemory,
   insertAuditRecord,
   listSwarmAgentTasks,
   upsertSwarmAgentTask,
@@ -123,7 +124,7 @@ export const dcListAuditRecords = async (): Promise<any> => {
   }
 };
 
-export const dcInsertAuditRecord = async (input: any) => {
+export const dcUpsertAuditRecord = async (input: any) => {
   try {
     const response = await insertAuditRecord(dataConnect, input as InsertAuditRecordVariables);
     return response.data.auditRecord_insert;

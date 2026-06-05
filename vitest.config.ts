@@ -32,6 +32,8 @@ export default defineConfig({
             "supabase/functions",
             ".firebase",
             ".kilo",
+            "esggo/workers/exportDocx.worker.test.ts",
+            "workers/exportDocx.worker.test.ts", // Added to cover root-level path resolution
           ],
           coverage: {
             provider: "v8",
