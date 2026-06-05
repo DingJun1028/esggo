@@ -1,3 +1,9 @@
+---
+uuid: "e5585c1f-0d38-462d-afe6-a0268ad462ac"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.456Z"
+evidence: "docs\wiki\Intelligence.md"
+---
 # ESG Intelligence Center (ESG Insights Dashboard) [Intelligence]
 路徑： /intelligence | 權限： ADMIN, CSO, PM | 所屬旅程： VI. 績效監控與決策
 

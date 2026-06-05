@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
 
   // 1. Enhanced Security Headers (Best Practice)
   const securityHeaders = {
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://*.firebaseapp.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.supabase.co https://*.unsplash.com; connect-src 'self' https://*.supabase.co https://*.googleapis.com https://*.firebaseio.com;",
+    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://*.firebaseapp.com https://acrobat.adobe.com https://use.typekit.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net; img-src 'self' data: https://*.supabase.co https://*.unsplash.com https://p.typekit.net; connect-src 'self' https://*.supabase.co https://*.googleapis.com https://*.firebaseio.com https://acrobat.adobe.com https://*.adobe.com; frame-src 'self' https://acrobat.adobe.com https://*.adobe.com;",
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
     'X-Frame-Options': 'DENY',
     'X-Content-Type-Options': 'nosniff',

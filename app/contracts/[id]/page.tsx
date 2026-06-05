@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/lib/utils';
+import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
 
 export default function ContractDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const contractId = React.use(params).id;
@@ -58,8 +59,12 @@ export default function ContractDetailPage({ params }: { params: Promise<{ id: s
               <div className="pt-4 border-t border-slate-100">
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">條款細節</p>
                 <div className="space-y-4 text-sm text-text-secondary leading-relaxed font-medium">
-                  <p>1. 乙方需於每季度提供發電數據報告，並由 OmniAgent 自動執行 T1 溯源檢查。</p>
-                  <p>2. 雙方同意所有單據皆需上傳至萬能實證金庫 (Vault)，並執行 SHA-256 哈希鎖定。</p>
+                  <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
+                  <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
                 </div>
               </div>
             </div>
@@ -126,6 +131,8 @@ export default function ContractDetailPage({ params }: { params: Promise<{ id: s
               ))}
             </div>
           </Card>
+
+          <ShieldOfAbsoluteTruth contentId={contractId} isAiGenerated={true} />
 
           <Card className="p-6 border-slate-200">
             <h3 className="text-xs font-black uppercase tracking-widest text-text-primary mb-4 flex items-center gap-2">

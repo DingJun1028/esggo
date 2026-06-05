@@ -1,3 +1,9 @@
+---
+uuid: "1e856684-82e2-405f-a609-54e1283535d7"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.341Z"
+evidence: "DOCUMENT_CENTER.md"
+---
 # Document Center
 
 This document serves as a central hub for various project documents, guides, architectural decisions, and specifications.

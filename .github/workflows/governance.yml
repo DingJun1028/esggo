@@ -8,6 +8,9 @@ on:
       - main
       - master
 
+permissions:
+  contents: read
+
 jobs:
   adr-and-contract-check:
     runs-on: ubuntu-latest
@@ -20,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Specify Node.js version consistent with project
+          node-version: ${{ github.event.inputs.node_version || '22' }} # Specify Node.js version consistent with project
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -72,6 +75,10 @@ jobs:
         run: pnpm run build
 
       - name: Run Root Lint
+        run: pnpm run lint
+
+      - name: Run Root Tests
+        run: pnpm run testame: Run Root Lint
         run: pnpm run lint
 
       - name: Run Root Tests

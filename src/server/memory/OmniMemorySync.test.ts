@@ -64,7 +64,7 @@ describe('OmniMemorySync Retry Mechanism', () => {
     };
 
     let attempts = 0;
-    const syncSpy = vi.spyOn(sync as any, 'syncToVectorDB').mockImplementation(async () => {
+    const syncSpy = vi.spyOn(sync as any, 'syncToVectorDB').mockImplementation(async () => { // eslint-disable-line @typescript-eslint/no-explicit-any
       attempts++;
       if (attempts === 1) throw new Error('First attempt fails');
       return Promise.resolve();

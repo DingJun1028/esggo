@@ -1,3 +1,9 @@
+---
+uuid: "9a468e7c-164a-4b34-a388-4a5f32e28d03"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.434Z"
+evidence: "docs\wiki\Stakeholders.md"
+---
 # 利害關係人 Stakeholders [Stakeholders]
 路徑： /stakeholders | 權限： PM, CSO | 所屬旅程： II. 策略盤點與分派
 

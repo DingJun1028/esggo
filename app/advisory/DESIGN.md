@@ -1,3 +1,9 @@
+---
+uuid: "bf0d13b7-f268-485a-9ced-125b92180ba5"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.556Z"
+evidence: "app\advisory\DESIGN.md"
+---
 # 專家諮詢 Advisory
 
 **路徑：** `/advisory`

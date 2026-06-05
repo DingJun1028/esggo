@@ -1,3 +1,9 @@
+---
+uuid: "b3ee6865-11a7-45c3-8a2b-eafe6d7ff44c"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.405Z"
+evidence: "docs\SwapDeFi-USER-GUIDE.md"
+---
 # Swap‑DeFi‑TEST‑UMES‑ONLINE 使用者指南
 
 ## 目標

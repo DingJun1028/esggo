@@ -1,3 +1,9 @@
+---
+uuid: "8cf80091-fbb1-4ba3-842f-2e71dd06d4be"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.547Z"
+evidence: "app\audit-verify\DESIGN.md"
+---
 # VerifyLink™ / Audit Verify
 
 **路徑：** `/audit-verify`

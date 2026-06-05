@@ -1,3 +1,9 @@
+---
+uuid: "f456e552-eb9f-4c42-9f05-cd1617db83b7"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.475Z"
+evidence: "docs\wiki\Data-Sources.md"
+---
 # 數據來源 [Data Sources]
 路徑： /data-sources | 權限： ADMIN, IT_OPS | 所屬旅程： I. 初始導入與配置
 

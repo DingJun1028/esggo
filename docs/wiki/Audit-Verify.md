@@ -1,3 +1,9 @@
+---
+uuid: "6f9e0e79-30d9-4acc-944e-0b3752069bda"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.485Z"
+evidence: "docs\wiki\Audit-Verify.md"
+---
 # VerifyLinkT / Audit Verification [Audit Verify]
 路徑： /audit-verify | 權限： AUDITOR, COMPLIANCE_OFFICER, PM, ADMIN | 所屬旅程： V. 確信審計與發佈
 

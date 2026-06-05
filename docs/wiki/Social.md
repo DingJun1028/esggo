@@ -1,3 +1,9 @@
+---
+uuid: "66eb6c8d-5e59-4e43-b838-98fb55629ab7"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.435Z"
+evidence: "docs\wiki\Social.md"
+---
 # 社會影響 Social [Social]
 路徑： /social | 權限： HR, PM, ADMIN | 所屬旅程： III. 數據採集與管理
 

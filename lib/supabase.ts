@@ -31,4 +31,7 @@ export const createBrowserClient = () => {
   return supabase;
 };
 
+
+
+
 export default supabase;

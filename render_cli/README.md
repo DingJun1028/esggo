@@ -1,3 +1,9 @@
+---
+uuid: "a616ddf9-0cd8-4892-9711-1f827d3d8a60"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.919Z"
+evidence: "render_cli\README.md"
+---
 # Render CLI
 
 ## Installation
