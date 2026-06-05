@@ -2,10 +2,9 @@
 
 import React, { useState } from 'react';
 import { useOmniTable } from '@/lib/omni-table/useOmniTable';
-import { UniversalCard } from '@/components/ui/UniversalCard';
-import { UniversalButton } from '@/components/ui/UniversalButton';
-import { UniversalInput } from '@/components/ui/UniversalInput';
-import { UniversalTextarea } from '@/components/ui/UniversalTextarea';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { UniversalInput, UniversalTextarea } from '@/components/ui/universal/UniversalInput';
 import { Loader2, PlusCircle, CheckCircle } from 'lucide-react';
 
 interface DailyIntelligenceFormProps {

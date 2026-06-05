@@ -10912,3 +10912,298 @@ Generated sources: main\relation.gql [87522B] main\query.gql [15906B] main\mutat
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0604 16:46:04.440957   35516 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] prelude.gql [84995B] main\\input.gql [174725B] \n"}}
 [debug] [2026-06-04T08:46:04.443Z] I0604 16:46:04.442043   35516 load.go:74] Finished reloading
  {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0604 16:46:04.442043   35516 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-04T21:58:54.321Z] [Firebase Plugin] Activating Firebase extension.
+[info] [Firebase Plugin] Unable to check firebase-tools installation: TypeError: fetch failed
+[debug] [2026-06-04T21:59:12.158Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-04T21:59:12.160Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-04T21:59:12.160Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-04T21:59:12.165Z] Checked if tokens are valid: true, expires at: 1780611415137
+[debug] [2026-06-04T21:59:12.166Z] Checked if tokens are valid: true, expires at: 1780611415137
+[debug] [2026-06-04T21:59:12.167Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-04T21:59:12.169Z] Checked if tokens are valid: true, expires at: 1780611415137
+[debug] [2026-06-04T21:59:12.170Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-04T21:59:12.187Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.10) on port 50001
+[info] i  dataconnect: downloading dataconnect-emulator-3.4.10.exe... {"metadata":{"emulator":{"name":"dataconnect"},"message":"downloading dataconnect-emulator-3.4.10.exe..."}}
+[debug] [2026-06-04T21:59:29.185Z] >>> [apiv2][query] GET https://storage.googleapis.com/firemat-preview-drop/emulator/dataconnect-emulator-windows-amd64-v3.4.10 
+[debug] [2026-06-04T21:59:31.021Z] *** [apiv2] error from fetch(https://firebase.googleapis.com/v1beta1/projects?pageSize=1000, {"headers":{},"method":"GET","signal":{"reason":""}}): FetchError: request to https://firebase.googleapis.com/v1beta1/projects?pageSize=1000 failed, reason: socket hang up
+[debug] [2026-06-04T21:59:31.022Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects?pageSize=1000
+[debug] [2026-06-04T21:59:41.758Z] <<< [apiv2][status] GET https://storage.googleapis.com/firemat-preview-drop/emulator/dataconnect-emulator-windows-amd64-v3.4.10 200
+[debug] [2026-06-04T21:59:41.758Z] <<< [apiv2][body] GET https://storage.googleapis.com/firemat-preview-drop/emulator/dataconnect-emulator-windows-amd64-v3.4.10 [stream]
+[info] i  dataconnect: Removing outdated emulator files: dataconnect-emulator-3.4.8.exe {"metadata":{"emulator":{"name":"dataconnect"},"message":"Removing outdated emulator files: dataconnect-emulator-3.4.8.exe"}}
+[info] i  dataconnect: Removing outdated emulator files: dataconnect-emulator-3.4.9.exe {"metadata":{"emulator":{"name":"dataconnect"},"message":"Removing outdated emulator files: dataconnect-emulator-3.4.9.exe"}}
+[debug] [2026-06-04T22:00:05.719Z] W0605 06:00:05.636524   45064 control.go:74] [projects/emulator/locations/emulator/services/esggo b87a] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 06:00:05.713901   45064 control.go:100] [projects/emulator/locations/emulator/services/esggo b87a] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 06:00:05.636524   45064 control.go:74] [projects/emulator/locations/emulator/services/esggo b87a] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 06:00:05.713901   45064 control.go:100] [projects/emulator/locations/emulator/services/esggo b87a] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-04T22:00:05.722Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-04T22:00:05.722Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-04T22:00:05.722Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.10.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.10.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-04T22:00:05.940Z] I0605 06:00:05.818103   12976 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 06:00:05.818103   12976 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2026-06-04T22:00:06.197Z] W0605 06:00:06.200412   12976 control.go:74] [projects/emulator/locations/emulator/services/esggo 3568] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 06:00:06.200412   12976 control.go:100] [projects/emulator/locations/emulator/services/esggo 3568] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 06:00:06.200412   12976 control.go:74] [projects/emulator/locations/emulator/services/esggo 3568] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 06:00:06.200412   12976 control.go:100] [projects/emulator/locations/emulator/services/esggo 3568] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-04T22:00:06.217Z] E0605 06:00:06.217554   12976 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E0605 06:00:06.217554   12976 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n"}}
+[debug] [2026-06-04T22:00:06.232Z] I0605 06:00:06.236376   12976 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: prelude.gql [84995B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3758B] 
+I0605 06:00:06.236376   12976 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 06:00:06.236376   12976 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: prelude.gql [84995B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] \nI0605 06:00:06.236376   12976 load.go:74] Finished reloading\n"}}
+[debug] [2026-06-04T22:00:07.020Z] I0605 06:00:06.333294   12976 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 06:00:06.333294   12976 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-04T22:00:07.217Z] I0605 06:00:07.221680   12976 engine.go:209] [projects/emulator/locations/emulator/services/esggo 3568] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 06:00:07.221680   12976 engine.go:209] [projects/emulator/locations/emulator/services/esggo 3568] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-05T01:44:39.372Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-06-05T01:45:13.251Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-05T01:45:13.261Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T01:45:13.263Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-05T01:45:13.272Z] Checked if tokens are valid: false, expires at: 1780619712153
+[debug] [2026-06-05T01:45:13.273Z] Checked if tokens are valid: false, expires at: 1780619712153
+[debug] [2026-06-05T01:45:13.274Z] > refreshing access token with scopes: []
+[debug] [2026-06-05T01:45:13.279Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-05T01:45:13.280Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T01:45:13.314Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.10) on port 50001
+[debug] [2026-06-05T01:45:16.533Z] W0605 09:45:16.449042   44160 control.go:74] [projects/emulator/locations/emulator/services/esggo e6d6] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 09:45:16.520388   44160 control.go:100] [projects/emulator/locations/emulator/services/esggo e6d6] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 09:45:16.449042   44160 control.go:74] [projects/emulator/locations/emulator/services/esggo e6d6] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 09:45:16.520388   44160 control.go:100] [projects/emulator/locations/emulator/services/esggo e6d6] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-05T01:45:16.536Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-05T01:45:16.536Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-05T01:45:16.537Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.10.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.10.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-05T01:45:20.644Z] I0605 09:45:16.620394   10440 load.go:31] Reloading schema and connectors...
+W0605 09:45:16.765382   10440 control.go:74] [projects/emulator/locations/emulator/services/esggo 8b40] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 09:45:16.765382   10440 control.go:100] [projects/emulator/locations/emulator/services/esggo 8b40] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\queries.gql [1566B] example\mutations.gql [966B] 
+E0605 09:45:16.771470   10440 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+I0605 09:45:16.778589   10440 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] main\mutation.gql [43315B] prelude.gql [84995B] 
+I0605 09:45:16.780102   10440 load.go:74] Finished reloading
+I0605 09:45:16.814717   10440 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 09:45:16.620394   10440 load.go:31] Reloading schema and connectors...\nW0605 09:45:16.765382   10440 control.go:74] [projects/emulator/locations/emulator/services/esggo 8b40] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 09:45:16.765382   10440 control.go:100] [projects/emulator/locations/emulator/services/esggo 8b40] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\queries.gql [1566B] example\\mutations.gql [966B] \nE0605 09:45:16.771470   10440 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nI0605 09:45:16.778589   10440 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] main\\mutation.gql [43315B] prelude.gql [84995B] \nI0605 09:45:16.780102   10440 load.go:74] Finished reloading\nI0605 09:45:16.814717   10440 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-05T01:45:22.687Z] I0605 09:45:22.572627   10440 engine.go:209] [projects/emulator/locations/emulator/services/esggo 8b40] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 09:45:22.572627   10440 engine.go:209] [projects/emulator/locations/emulator/services/esggo 8b40] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-06-05T01:45:23.104Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-05T01:45:23.104Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T01:45:23.294Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-05T01:45:23.298Z] Checked if tokens are valid: true, expires at: 1780627522105
+[debug] [2026-06-05T01:45:23.300Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-05T01:45:27.214Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-05T01:45:27.214Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-05T02:16:41.026Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-06-05T02:16:46.256Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-05T02:16:46.260Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T02:16:46.260Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-05T02:16:46.263Z] Checked if tokens are valid: true, expires at: 1780627522105
+[debug] [2026-06-05T02:16:46.263Z] Checked if tokens are valid: true, expires at: 1780627522105
+[debug] [2026-06-05T02:16:46.263Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-05T02:16:46.265Z] Checked if tokens are valid: true, expires at: 1780627522105
+[debug] [2026-06-05T02:16:46.266Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-05T02:16:46.275Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.10) on port 50001
+[debug] [2026-06-05T02:16:52.215Z] W0605 10:16:52.166840   42796 control.go:74] [projects/emulator/locations/emulator/services/esggo 6718] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 10:16:52.205859   42796 control.go:100] [projects/emulator/locations/emulator/services/esggo 6718] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 10:16:52.166840   42796 control.go:74] [projects/emulator/locations/emulator/services/esggo 6718] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 10:16:52.205859   42796 control.go:100] [projects/emulator/locations/emulator/services/esggo 6718] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-05T02:16:52.217Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-05T02:16:52.217Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-05T02:16:52.218Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.10.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.10.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-05T02:16:52.642Z] I0605 10:16:52.282334   39416 load.go:31] Reloading schema and connectors...
+W0605 10:16:52.408168   39416 control.go:74] [projects/emulator/locations/emulator/services/esggo f7d0] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 10:16:52.408168   39416 control.go:100] [projects/emulator/locations/emulator/services/esggo f7d0] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+E0605 10:16:52.419362   39416 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+I0605 10:16:52.428473   39416 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] 
+I0605 10:16:52.428473   39416 load.go:74] Finished reloading
+I0605 10:16:52.455934   39416 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 10:16:52.282334   39416 load.go:31] Reloading schema and connectors...\nW0605 10:16:52.408168   39416 control.go:74] [projects/emulator/locations/emulator/services/esggo f7d0] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 10:16:52.408168   39416 control.go:100] [projects/emulator/locations/emulator/services/esggo f7d0] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nE0605 10:16:52.419362   39416 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nI0605 10:16:52.428473   39416 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] \nI0605 10:16:52.428473   39416 load.go:74] Finished reloading\nI0605 10:16:52.455934   39416 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-05T02:16:57.419Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-05T02:16:57.420Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-06-05T02:16:58.845Z] I0605 10:16:58.840077   39416 engine.go:209] [projects/emulator/locations/emulator/services/esggo f7d0] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 10:16:58.840077   39416 engine.go:209] [projects/emulator/locations/emulator/services/esggo f7d0] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-05T02:33:40.392Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-06-05T02:33:45.782Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-05T02:33:45.785Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T02:33:45.785Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-05T02:33:45.788Z] Checked if tokens are valid: false, expires at: 1780627522105
+[debug] [2026-06-05T02:33:45.788Z] Checked if tokens are valid: false, expires at: 1780627522105
+[debug] [2026-06-05T02:33:45.789Z] > refreshing access token with scopes: []
+[debug] [2026-06-05T02:33:45.790Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-06-05T02:33:45.790Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T02:33:45.801Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.10) on port 50001
+[debug] [2026-06-05T02:34:06.942Z] W0605 10:34:06.896018   36844 control.go:74] [projects/emulator/locations/emulator/services/esggo c87a] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 10:34:06.934655   36844 control.go:100] [projects/emulator/locations/emulator/services/esggo c87a] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 10:34:06.896018   36844 control.go:74] [projects/emulator/locations/emulator/services/esggo c87a] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 10:34:06.934655   36844 control.go:100] [projects/emulator/locations/emulator/services/esggo c87a] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-05T02:34:06.944Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-05T02:34:06.944Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-05T02:34:06.944Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.10.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.10.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-05T02:34:07.601Z] I0605 10:34:07.004455   39548 load.go:31] Reloading schema and connectors...
+W0605 10:34:07.085966   39548 control.go:74] [projects/emulator/locations/emulator/services/esggo 6a2d] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 10:34:07.085966   39548 control.go:100] [projects/emulator/locations/emulator/services/esggo 6a2d] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+E0605 10:34:07.092038   39548 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+I0605 10:34:07.096606   39548 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3758B] main\input.gql [174725B] prelude.gql [84995B] main\relation.gql [87522B] 
+I0605 10:34:07.096606   39548 load.go:74] Finished reloading
+I0605 10:34:07.119180   39548 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 10:34:07.004455   39548 load.go:31] Reloading schema and connectors...\nW0605 10:34:07.085966   39548 control.go:74] [projects/emulator/locations/emulator/services/esggo 6a2d] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 10:34:07.085966   39548 control.go:100] [projects/emulator/locations/emulator/services/esggo 6a2d] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nE0605 10:34:07.092038   39548 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nI0605 10:34:07.096606   39548 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] main\\input.gql [174725B] prelude.gql [84995B] main\\relation.gql [87522B] \nI0605 10:34:07.096606   39548 load.go:74] Finished reloading\nI0605 10:34:07.119180   39548 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-05T02:34:11.826Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-06-05T02:34:11.826Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-06-05T02:34:11.864Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-05T02:34:11.865Z] Checked if tokens are valid: true, expires at: 1780630450827
+[debug] [2026-06-05T02:34:11.867Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-05T02:34:12.364Z] I0605 10:34:12.311744   39548 engine.go:209] [projects/emulator/locations/emulator/services/esggo 6a2d] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 10:34:12.311744   39548 engine.go:209] [projects/emulator/locations/emulator/services/esggo 6a2d] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-06-05T02:34:13.174Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-05T02:34:13.175Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-05T03:25:52.788Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-06-05T03:27:05.385Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-05T03:27:05.391Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T03:27:05.393Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-05T03:27:05.412Z] Checked if tokens are valid: true, expires at: 1780633509573
+[debug] [2026-06-05T03:27:05.415Z] Checked if tokens are valid: true, expires at: 1780633509573
+[debug] [2026-06-05T03:27:05.416Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-05T03:27:05.422Z] Checked if tokens are valid: true, expires at: 1780633509573
+[debug] [2026-06-05T03:27:05.425Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-05T03:27:05.454Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.10) on port 50001
+[debug] [2026-06-05T03:27:07.339Z] W0605 11:27:07.305699   27828 control.go:74] [projects/emulator/locations/emulator/services/esggo 4e26] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 11:27:07.333181   27828 control.go:100] [projects/emulator/locations/emulator/services/esggo 4e26] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 11:27:07.305699   27828 control.go:74] [projects/emulator/locations/emulator/services/esggo 4e26] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 11:27:07.333181   27828 control.go:100] [projects/emulator/locations/emulator/services/esggo 4e26] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-05T03:27:07.341Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-05T03:27:07.342Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-05T03:27:07.343Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.10.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.10.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-05T03:27:07.841Z] I0605 11:27:07.412174    3892 load.go:31] Reloading schema and connectors...
+W0605 11:27:07.508796    3892 control.go:74] [projects/emulator/locations/emulator/services/esggo c6e2] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 11:27:07.509794    3892 control.go:100] [projects/emulator/locations/emulator/services/esggo c6e2] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+E0605 11:27:07.516378    3892 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+I0605 11:27:07.520927    3892 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\mutation.gql [43315B] prelude.gql [84995B] main\implicit.gql [3758B] main\input.gql [174725B] main\relation.gql [87522B] main\query.gql [15906B] 
+I0605 11:27:07.520927    3892 load.go:74] Finished reloading
+I0605 11:27:07.553331    3892 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 11:27:07.412174    3892 load.go:31] Reloading schema and connectors...\nW0605 11:27:07.508796    3892 control.go:74] [projects/emulator/locations/emulator/services/esggo c6e2] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 11:27:07.509794    3892 control.go:100] [projects/emulator/locations/emulator/services/esggo c6e2] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nE0605 11:27:07.516378    3892 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nI0605 11:27:07.520927    3892 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\mutation.gql [43315B] prelude.gql [84995B] main\\implicit.gql [3758B] main\\input.gql [174725B] main\\relation.gql [87522B] main\\query.gql [15906B] \nI0605 11:27:07.520927    3892 load.go:74] Finished reloading\nI0605 11:27:07.553331    3892 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-05T03:27:09.341Z] I0605 11:27:09.022517    3892 engine.go:209] [projects/emulator/locations/emulator/services/esggo c6e2] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 11:27:09.022517    3892 engine.go:209] [projects/emulator/locations/emulator/services/esggo c6e2] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}
+[debug] [2026-06-05T03:27:09.917Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-05T03:27:09.917Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] [Firebase Plugin] Stopping SQL Connect toolkit
+[warn] !  SQL Connect Emulator has exited upon receiving signal: SIGINT 
+[debug] [2026-06-05T08:34:28.452Z] [Firebase Plugin] Activating Firebase extension.
+[debug] [2026-06-05T08:35:38.421Z] [Firebase Plugin] requireAuthWrapper
+[debug] [2026-06-05T08:35:38.441Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-06-05T08:35:38.442Z] > authorizing via signed-in user (dingjunhong1028@gmail.com)
+[debug] [2026-06-05T08:35:38.448Z] Checked if tokens are valid: true, expires at: 1780652095755
+[debug] [2026-06-05T08:35:38.448Z] Checked if tokens are valid: true, expires at: 1780652095755
+[debug] [2026-06-05T08:35:38.449Z] [Firebase Plugin] User found:  dingjunhong1028@gmail.com
+[info] [Firebase Plugin] (Core:Project) New user detected, fetching projects
+[debug] [2026-06-05T08:35:38.451Z] Checked if tokens are valid: true, expires at: 1780652095755
+[debug] [2026-06-05T08:35:38.453Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=1000
+[debug] [2026-06-05T08:35:38.470Z] [Firebase Plugin] VSCode notification server listening on port 40001
+[info] [Firebase Plugin] Starting SQL Connect toolkit (version 3.4.10) on port 50001
+[debug] [2026-06-05T08:35:40.872Z] W0605 16:35:40.836528   48044 control.go:74] [projects/emulator/locations/emulator/services/esggo 622c] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 16:35:40.864917   48044 control.go:100] [projects/emulator/locations/emulator/services/esggo 622c] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W0605 16:35:40.836528   48044 control.go:74] [projects/emulator/locations/emulator/services/esggo 622c] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 16:35:40.864917   48044 control.go:100] [projects/emulator/locations/emulator/services/esggo 622c] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \n"}}
+[debug] [2026-06-05T08:35:40.874Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-06-05T08:35:40.874Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-06-05T08:35:40.875Z] Starting SQL Connect Emulator with command {"binary":"C:\\Users\\Administrator\\.cache\\firebase\\emulators\\dataconnect-emulator-3.4.10.exe","args":["--logtostderr","-v=2","dev","--listen=localhost:50001","--config_dir=c:\\Project\\esggo\\esggo\\dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting SQL Connect Emulator with command {\"binary\":\"C:\\\\Users\\\\Administrator\\\\.cache\\\\firebase\\\\emulators\\\\dataconnect-emulator-3.4.10.exe\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=localhost:50001\",\"--config_dir=c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: SQL Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"SQL Connect Emulator logging to \u001b[1mdataconnect-debug.log\u001b[22m"}}
+[debug] [2026-06-05T08:35:41.397Z] I0605 16:35:40.932783   16140 load.go:31] Reloading schema and connectors...
+W0605 16:35:41.044746   16140 control.go:74] [projects/emulator/locations/emulator/services/esggo 0716] connector "example" has errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+
+sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+I0605 16:35:41.044746   16140 control.go:100] [projects/emulator/locations/emulator/services/esggo 0716] UpdateResources(): done
+Main schema: sources: schema\schema.gql [3884B] 
+Connector "example": sources: example\mutations.gql [966B] example\queries.gql [1566B] 
+E0605 16:35:41.055114   16140 load.go:73] Could not load sources: 
+Errors: example\mutations.gql:18:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+example\mutations.gql:23:31: Field "userId_expr" is not defined by type "Task_Key". Did you mean "id_expr"?
+I0605 16:35:41.061445   16140 collector.go:107] schema extensions wrote into "c:\\Project\\esggo\\esggo\\dataconnect\\.dataconnect\\schema"
+Generated sources: main\input.gql [174725B] main\relation.gql [87522B] prelude.gql [84995B] main\query.gql [15906B] main\mutation.gql [43315B] main\implicit.gql [3758B] 
+I0605 16:35:41.061445   16140 load.go:74] Finished reloading
+I0605 16:35:41.094499   16140 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 16:35:40.932783   16140 load.go:31] Reloading schema and connectors...\nW0605 16:35:41.044746   16140 control.go:74] [projects/emulator/locations/emulator/services/esggo 0716] connector \"example\" has errors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\n\nsources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nI0605 16:35:41.044746   16140 control.go:100] [projects/emulator/locations/emulator/services/esggo 0716] UpdateResources(): done\nMain schema: sources: schema\\schema.gql [3884B] \nConnector \"example\": sources: example\\mutations.gql [966B] example\\queries.gql [1566B] \nE0605 16:35:41.055114   16140 load.go:73] Could not load sources: \nErrors: example\\mutations.gql:18:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nexample\\mutations.gql:23:31: Field \"userId_expr\" is not defined by type \"Task_Key\". Did you mean \"id_expr\"?\nI0605 16:35:41.061445   16140 collector.go:107] schema extensions wrote into \"c:\\\\Project\\\\esggo\\\\esggo\\\\dataconnect\\\\.dataconnect\\\\schema\"\nGenerated sources: main\\input.gql [174725B] main\\relation.gql [87522B] prelude.gql [84995B] main\\query.gql [15906B] main\\mutation.gql [43315B] main\\implicit.gql [3758B] \nI0605 16:35:41.061445   16140 load.go:74] Finished reloading\nI0605 16:35:41.094499   16140 dev.go:104] Listening on address (HTTP + gRPC): 127.0.0.1:50001\n"}}
+[debug] [2026-06-05T08:35:44.804Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2026-06-05T08:35:44.806Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2026-06-05T08:35:45.485Z] I0605 16:35:45.056960   16140 engine.go:209] [projects/emulator/locations/emulator/services/esggo 0716] ExecuteGraphqlRead query IntrospectionQuery: succeeded. 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I0605 16:35:45.056960   16140 engine.go:209] [projects/emulator/locations/emulator/services/esggo 0716] ExecuteGraphqlRead query IntrospectionQuery: succeeded. \n"}}

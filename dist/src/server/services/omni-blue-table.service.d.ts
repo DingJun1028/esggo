@@ -3,6 +3,7 @@
  * 提供 OmniBlueTable 體系與萬能智庫的統一操作介面。
  */
 import { type ThinkTankRegistration } from '@/lib/agent/best-practice-registry';
+import { type BestPractice } from '@/lib/agent/best-practice-registry';
 export declare class OmniBlueTableService {
     /**
      * 列出已登入萬能智庫的元件清單
@@ -38,6 +39,11 @@ export declare class OmniBlueTableService {
      */
     syncBestPracticesToVault(): Promise<{
         success: boolean;
+        error: string;
+        synced?: undefined;
+        results?: undefined;
+    } | {
+        success: boolean;
         synced: number;
         results: ({
             id: string;
@@ -47,9 +53,10 @@ export declare class OmniBlueTableService {
         } | {
             id: string;
             success: boolean;
-            data: never;
+            data: any;
             error?: undefined;
         })[];
+        error?: undefined;
     }>;
     /**
      * 取得 OmniTable × OmniBlue 同步任務狀態摘要
@@ -71,6 +78,13 @@ export declare class OmniBlueTableService {
         success: boolean;
         error: string;
         processed?: undefined;
+    }>;
+    /**
+     * 查詢 OmniBlueTable 最佳實踐清單 (從 Supabase 獲取)
+     */
+    getBestPracticesFromSupabase(): Promise<{
+        data: BestPractice[];
+        error: string | null;
     }>;
 }
 export declare const omniBlueTableService: OmniBlueTableService;
