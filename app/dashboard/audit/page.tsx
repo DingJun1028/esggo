@@ -1,13 +1,13 @@
 import React from 'react';
 import { AtomicCard } from '@/lib/design-system/AtomicCard';
-import { Shield, Fingerprint, Activity, Clock, FileKey, CheckCircle } from 'lucide-react/icons';
+import { Shield, Fingerprint, Activity, Clock, FileKey, CheckCircle } from 'lucide-react';
 
 export default function EternalMemoryAuditPage() {
   const auditLogs = [
-    { id: 'seal_904fa2', action: 'GRI[302-1] 碳排數值封印', timestamp: '2026-06-02 14:22:30', zkpStatus: 'Verified', hash: '0x8f2a...391c', user: 'SYSTEM_SYNC', risk: 'Low' },
-    { id: 'seal_381cb1', action: '跨部門 HR D&I 資料同步', timestamp: '2026-06-02 12:15:05', zkpStatus: 'Verified', hash: '0x32ba...110a', user: 'HR_NODE', risk: 'Low' },
-    { id: 'seal_112ef0', action: '董事會決議紀錄上鏈', timestamp: '2026-06-01 18:45:12', zkpStatus: 'Verified', hash: '0x71dc...992f', user: 'GOV_BOARD', risk: 'Medium' },
-    { id: 'seal_998ae1', action: '供應商 ESG 評級變更', timestamp: '2026-06-01 09:10:00', zkpStatus: 'Verified', hash: '0x22cc...444d', user: 'SUPPLY_CHAIN', risk: 'High' }
+    { id: 'seal_904fa2', action: 'GRI[302-1] 碳�??�值�???, timestamp: '2026-06-02 14:22:30', zkpStatus: 'Verified', hash: '0x8f2a...391c', user: 'SYSTEM_SYNC', risk: 'Low' },
+    { id: 'seal_381cb1', action: '跨部?� HR D&I 資�??�步', timestamp: '2026-06-02 12:15:05', zkpStatus: 'Verified', hash: '0x32ba...110a', user: 'HR_NODE', risk: 'Low' },
+    { id: 'seal_112ef0', action: '????�決議�??��???, timestamp: '2026-06-01 18:45:12', zkpStatus: 'Verified', hash: '0x71dc...992f', user: 'GOV_BOARD', risk: 'Medium' },
+    { id: 'seal_998ae1', action: '供�???ESG 評�?變更', timestamp: '2026-06-01 09:10:00', zkpStatus: 'Verified', hash: '0x22cc...444d', user: 'SUPPLY_CHAIN', risk: 'High' }
   ];
 
   return (
@@ -21,20 +21,19 @@ export default function EternalMemoryAuditPage() {
           <div>
             <h1 className="text-3xl font-black tracking-tight text-white flex items-center gap-3">
               <Shield className="text-cyan-400" size={32} />
-              永恆記憶與防禦展廳
-              <span className="text-xs font-mono px-2 py-1 bg-cyan-900/30 text-cyan-400 rounded-full border border-cyan-500/20">
+              永�?記憶?�防禦�?�?              <span className="text-xs font-mono px-2 py-1 bg-cyan-900/30 text-cyan-400 rounded-full border border-cyan-500/20">
                 5T Protocol Active
               </span>
             </h1>
-            <p className="text-slate-400 mt-2">Zero-Knowledge Proofs (ZKP) 與密碼學綁定的全局操作軌跡</p>
+            <p className="text-slate-400 mt-2">Zero-Knowledge Proofs (ZKP) ?��?碼學綁�??�全局?��?軌跡</p>
           </div>
           <div className="flex gap-4">
             <div className="px-4 py-2 bg-slate-900/50 rounded-lg border border-slate-700/50 flex flex-col items-end">
-              <span className="text-xs text-slate-500">今日驗證數 (Pedersen Commitments)</span>
-              <span className="text-xl font-bold text-cyan-400">14,295 筆</span>
+              <span className="text-xs text-slate-500">今日驗�???(Pedersen Commitments)</span>
+              <span className="text-xl font-bold text-cyan-400">14,295 �?/span>
             </div>
             <div className="px-4 py-2 bg-slate-900/50 rounded-lg border border-slate-700/50 flex flex-col items-end">
-              <span className="text-xs text-slate-500">防護層級</span>
+              <span className="text-xs text-slate-500">?�護層�?</span>
               <span className="text-xl font-bold text-emerald-400">OmniCore ZKP</span>
             </div>
           </div>
@@ -43,7 +42,7 @@ export default function EternalMemoryAuditPage() {
         {/* Audit Trail List */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-slate-300 flex items-center gap-2 mb-4">
-            <Activity size={20} className="text-slate-400" /> 最新封印軌跡 (Seal Trail)
+            <Activity size={20} className="text-slate-400" /> ?�?��??��?�?(Seal Trail)
           </h2>
           
           <div className="grid gap-4">

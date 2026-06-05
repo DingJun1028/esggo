@@ -14,8 +14,8 @@ import {
   Star, Zap, Activity, Menu, X, Building2, Link as LinkIcon, Database,
   LayoutTemplate, Stethoscope, ScatterChart, Map, CheckSquare,
   FileCheck, Calculator, Truck, HeartHandshake, PenTool, Dna,
-  Globe, ShieldAlert, History, Vault, BadgeCheck, Link2, Send,
-  Library, BookOpen, PieChart, GraduationCap, Briefcase, Headset,
+  Globe, ShieldAlert, History, Archive, BadgeCheck, Link2, Send,
+  Library, BookOpen, PieChart, GraduationCap, Briefcase, Headphones,
   Network, Cpu, Share2, TestTube, TerminalSquare, Palette, UploadCloud
 } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -51,7 +51,7 @@ const IconMapper: Record<string, React.ReactNode> = {
   ShieldAlert: <ShieldAlert size={20} />,
   LayoutDashboard: <LayoutDashboard size={20} />,
   History: <History size={20} />,
-  Vault: <Vault size={20} />,
+  Archive: <Archive size={20} />,
   BadgeCheck: <BadgeCheck size={20} />,
   Link2: <Link2 size={20} />,
   Send: <Send size={20} />,
@@ -60,7 +60,7 @@ const IconMapper: Record<string, React.ReactNode> = {
   PieChart: <PieChart size={20} />,
   GraduationCap: <GraduationCap size={20} />,
   Briefcase: <Briefcase size={20} />,
-  Headset: <Headset size={20} />,
+  Headphones: <Headphones size={20} />,
   Network: <Network size={20} />,
   Cpu: <Cpu size={20} />,
   Command: <Command size={20} />,
