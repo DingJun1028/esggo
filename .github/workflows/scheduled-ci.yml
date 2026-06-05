@@ -6,6 +6,14 @@ on:
     - cron: '0 */3 * * *'
   # 允許手動觸發
   workflow_dispatch:
+    inputs:
+      node_version:
+        description: 'Node.js version to use'
+        required: false
+        default: '22'
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
@@ -19,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # ESGGO 專案目前支援 Node.js 20+
+          node-version: '22' # ESGGO 專案目前支援 Node.js 20+
           cache: 'npm'
 
       - name: Install Build Libraries
@@ -53,7 +61,7 @@ jobs:
 
       - name: Send Telegram Notification
         if: always()
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@v2
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}

@@ -6,10 +6,9 @@ import {
     Calendar as CalendarIcon, Lightbulb, Users, CheckSquare,
     FileText, Send, Trash2, ChevronLeft, ChevronRight, Share2
 } from 'lucide-react';
-import { UniversalCard } from '@/components/ui/UniversalCard';
-import { UniversalBadge } from '@/components/ui/UniversalBadge';
-import { UniversalButton } from '@/components/ui/UniversalButton';
-import { UniversalTextarea } from '@/components/ui/UniversalTextarea';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { format, addDays, subDays } from 'date-fns';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
@@ -106,12 +105,12 @@ export function DailyNotesView() {
 
                 {/* 輸入區塊 (Capacities 風格) */}
                 <UniversalCard variant="glass" className="p-4 mb-8 border-slate-700/50 focus-within:border-cyan-500/50 transition-colors">
-                    <UniversalTextarea
+                    <textarea
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="記錄今天的靈感、會議紀錄或任務... (Cmd/Ctrl + Enter 送出)"
-                        className="min-h-[100px] border-none bg-transparent focus:ring-0 px-0 text-slate-200 resize-none"
+                        className="min-h-[100px] w-full border-none bg-transparent focus:ring-0 px-0 text-slate-200 resize-none font-medium"
                     />
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-700/50">
                         <div className="flex items-center gap-2">

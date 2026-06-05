@@ -34,7 +34,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20' # 選擇一個穩定的 Node.js 版本
+        node-version: ${{ github.event.inputs.node_version || '22' }} # 選擇一個穩定的 Node.js 版本
 
     - name: Install dependencies
       run: npm install
@@ -49,4 +49,6 @@ jobs:
         git add docs/wiki/WIKI_INDEX.md # 總索引文件
         git add "**/*.md" # 為了捕獲所有可能被修改的元數據
         git commit -m "docs: Auto-sync Omni Bookshelf Wiki Index and metadata" || echo "No changes to commit"
+        git push
+ Bookshelf Wiki Index and metadata" || echo "No changes to commit"
         git push

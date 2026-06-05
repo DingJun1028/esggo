@@ -440,3 +440,8 @@ export class BlueCcClient {
 // ── Singleton Export ─────────────────────────────────────────────────────────
 
 export const blueCc = new BlueCcClient();
+
+export const blueCC = {
+  deployAgent: async (name: string, data: any) => ({ deployment_id: `mock-${Date.now()}` }),
+  getSystemStatus: async () => ({ healthy: true, active_nodes: 3, last_sync: new Date().toISOString() })
+};

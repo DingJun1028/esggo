@@ -1,5 +1,5 @@
+"use client";
 
-import { omniBlueTableService } from '@/src/server/services/omni-blue-table.service';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
@@ -9,7 +9,7 @@ import { type BestPractice, BestPracticeSchema } from '@/lib/agent/best-practice
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
 
-export const revalidate = 0;
+
 
 export default function OmniWorkflowsPage() {
   const [bestPractices, setBestPractices] = useState<BestPractice[]>([]);
@@ -32,7 +32,7 @@ export default function OmniWorkflowsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    omniBlueTableService.getBestPracticesFromSupabase().then(({ data, error }) => {
+    fetch('/api/omni-workflows').then(r => r.json()).then(({ data, error }) => {
       if (error) {
         setFetchError(error);
       } else {
@@ -108,7 +108,8 @@ export default function OmniWorkflowsPage() {
           last_verified: new Date().toISOString().split('T')[0],
         });
         // Re-fetch all best practices to ensure consistency after adding
-        const { data: updatedPractices } = await omniBlueTableService.getBestPracticesFromSupabase();
+        const refetchRes = await fetch('/api/omni-workflows');
+        const { data: updatedPractices } = await refetchRes.json();
         setBestPractices(updatedPractices || []);
       } else {
         const mockError = [{ path: [], message: result.error || 'Unknown error' }] as unknown as z.ZodIssue[];
