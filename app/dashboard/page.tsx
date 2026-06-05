@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Layout, Shield, Activity, Fingerprint, Database,
-  Sparkles, Send, CheckCircle2, Lock, GitMerge, X, Layers
+  Sparkles, Send, CheckCircle2, Lock, GitMerge, X, Layers,
+  Leaf, Users, Building2
 } from 'lucide-react';
 import { AtomicCard } from '@/lib/design-system/AtomicCard';
 import { AtomicButton } from '@/lib/design-system/AtomicButton';
@@ -13,7 +14,6 @@ import { AtomicProgress } from '@/lib/design-system/AtomicProgress';
 import { AtomicToggle } from '@/lib/design-system/AtomicToggle';
 import { atomicManager, IAtomicComponent } from '@/lib/design-system/atomic-core';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
-import { Leaf, Users, Building2 } from 'lucide-react/icons';
 import { getUniversalNotesAction, semanticCreateTaskAction, TaskRecord } from '@/lib/agent/UniversalNotesTracker';
 
 export default function SovereignDashboard() {
