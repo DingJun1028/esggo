@@ -8,12 +8,12 @@ export default function ApolloStudioConsole() {
 
   const triggerSwarm = () => {
     setIsOrchestrating(true);
-    setLogs(prev => [...prev, '[Apollo] 啟動 Hermes Orchestrator...']);
-    setTimeout(() => setLogs(prev => [...prev, '[Nexus] 指令下達至 L-Hub 代理群集']), 800);
-    setTimeout(() => setLogs(prev => [...prev, '[Swarm] 檢索 Vault Omni 進行數據溯源']), 1500);
-    setTimeout(() => setLogs(prev => [...prev, '[ZKP] 生成 5T 零知識證明封印']), 2500);
+    setLogs((prev: string[]) => [...prev, '[Apollo] 啟動 Hermes Orchestrator...']);
+    setTimeout(() => setLogs((prev: string[]) => [...prev, '[Nexus] 指令下達至 L-Hub 代理群集']), 800);
+    setTimeout(() => setLogs((prev: string[]) => [...prev, '[Swarm] 檢索 Vault Omni 進行數據溯源']), 1500);
+    setTimeout(() => setLogs((prev: string[]) => [...prev, '[ZKP] 生成 5T 零知識證明封印']), 2500);
     setTimeout(() => {
-      setLogs(prev => [...prev, '✅ 任務調度完成 (100% Trustworthy)']);
+      setLogs((prev: string[]) => [...prev, '✅ 任務調度完成 (100% Trustworthy)']);
       setIsOrchestrating(false);
     }, 3500);
   };
@@ -74,7 +74,7 @@ export default function ApolloStudioConsole() {
           </div>
         ) : (
           <div className="space-y-3">
-            {logs.map((log, i) => (
+            {logs.map((log: string, i: number) => (
               <motion.div 
                 initial={{ opacity: 0, x: -10 }} 
                 animate={{ opacity: 1, x: 0 }} 
