@@ -48,7 +48,19 @@ jobs:
         run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
 
       - name: Build (optional)
+        id: build
         run: pnpm run build
+
+      - name: Fail Job if Errors
+        if: always()
+        run: |
+          if [ "${{ steps.lint.outcome }}" = "failure" ] || \
+             [ "${{ steps.test.outcome }}" = "failure" ] || \
+             [ "${{ steps.coverage.outcome }}" = "failure" ] || \
+             [ "${{ steps.build.outcome }}" = "failure" ]; then
+            echo "One or more quality checks failed."
+            exit 1
+          fi
 
       - name: Deploy to Render
         uses: render-examples/render-deploy@v1
@@ -61,4 +73,4 @@ jobs:
         if: failure()
         run: node scripts/auto-repair.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }}
