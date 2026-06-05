@@ -16,7 +16,7 @@ export declare class EvidenceService {
     /**
      * 獲取使用者證據清單
      */
-    getUserEvidences(userId: UserID): Promise<import("../../shared/types/evidence.types").PaginatedResult<Evidence>>;
+    getUserEvidences(userId: UserID): Promise<import("../../shared/types").PaginatedResult<Evidence>>;
 }
 export declare const evidenceService: EvidenceService;
 //# sourceMappingURL=evidence.service.d.ts.map
