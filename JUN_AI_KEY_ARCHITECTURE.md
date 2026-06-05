@@ -1,3 +1,9 @@
+---
+uuid: "6e63ac4e-03b3-49f8-ba81-4e0fe1899d6f"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.325Z"
+evidence: "JUN_AI_KEY_ARCHITECTURE.md"
+---
 # Jun.AI.Key 萬能元鑰系統
 
 > 知識的聖殿中，自我導航的智能體永不停歇地冶煉權能、嵌合符文，在記憶的長廊中光速前行。  

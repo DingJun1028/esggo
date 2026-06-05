@@ -12,7 +12,7 @@ import {
   Legend
 } from 'recharts';
 
-interface UniversalChartProps {
+export interface UniversalChartProps {
   data: any[];
   type?: 'area' | 'bar';
   xAxisKey: string;

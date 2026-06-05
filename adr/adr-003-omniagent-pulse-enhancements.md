@@ -1,3 +1,9 @@
+---
+uuid: "679f260e-225d-4ce3-8093-6f5dde9ae715"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.571Z"
+evidence: "adr\adr-003-omniagent-pulse-enhancements.md"
+---
 # ADR-003: Implementing OmniAgent Pulse Draggable, Resizable, and Minimized States
 
 ## Status:

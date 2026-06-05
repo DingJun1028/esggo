@@ -1,3 +1,9 @@
+---
+uuid: "ab861c0f-d407-4ae0-826d-bccd2a865560"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.551Z"
+evidence: "app\api-setup\DESIGN.md"
+---
 # 整合中心 API Setup
 
 **路徑：** `/api-setup`

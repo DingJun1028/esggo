@@ -1,3 +1,9 @@
+---
+uuid: "e83690f8-3f10-4a49-b821-a60b41582b6e"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.299Z"
+evidence: "USER-GUIDE.md"
+---
 # ESGGO 善向永續 | 新手完全指南 🌟
 ## 歡迎來到永續治理的新世界！
 

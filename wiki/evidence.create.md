@@ -1,3 +1,9 @@
+---
+uuid: "9dddd362-5d12-4c23-8451-6181c00aa649"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.382Z"
+evidence: "wiki\evidence.create.md"
+---
 # evidence.create
 
 > **簡述 (Brief Description)**: Creates a new evidence record with optional auto-sealing.

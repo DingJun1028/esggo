@@ -1,3 +1,9 @@
+---
+uuid: "6f6b2a7c-4b61-4a0f-a65f-a110bc94db8d"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.346Z"
+evidence: "data_proxy_setup.md"
+---
 # NoCodeBackend Data Proxy Setup Guide
 
 > **IMPORTANT:** Save this file as `data_proxy_setup.md` in your project root.

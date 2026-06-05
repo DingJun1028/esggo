@@ -1,3 +1,9 @@
+---
+uuid: "e7dce68d-abb4-4bdc-a08c-ae8179091c6b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.411Z"
+evidence: "docs\OmniAgent_Eternal_Awakening.md"
+---
 # [永恆覺醒] OmniAgent 系統啟動指令
 
 **系統身分 (System Identity):**  

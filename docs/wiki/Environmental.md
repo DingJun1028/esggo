@@ -1,3 +1,9 @@
+---
+uuid: "8a75a6c9-d5f8-4331-aed0-22063027bf74"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.465Z"
+evidence: "docs\wiki\Environmental.md"
+---
 # Environmental 環境數據管理 [Environmental Data Management]
 路徑： /environmental | 權限： PM, ESG_MANAGER, ADMIN | 所屬旅程： III. 數據採集與績效監控
 

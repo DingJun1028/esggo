@@ -1,3 +1,9 @@
+---
+uuid: "c95b5015-fe9a-417f-9a36-206d27207158"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.520Z"
+evidence: "app\stakeholders\DESIGN.md"
+---
 # 利害關係人 Stakeholders
 
 **路徑：** `/stakeholders`

@@ -1,3 +1,9 @@
+---
+uuid: "744abcd6-9fb7-4c46-8fe8-1b5a93b4f01e"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.478Z"
+evidence: "docs\wiki\customer_journey_map.md"
+---
 # 🗺️ 客戶旅程地圖 (Customer Journey Map) - WIKI 統一標準指南
 
 > **規範說明**：本文檔基於 **[WIKI 第 66 頁統一標準]** 制定。所有部門在繪製與優化客戶旅程時，必須嚴格遵守此「**以客戶為中心 (Customer-Centric)**」的核心指導原則。

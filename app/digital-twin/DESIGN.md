@@ -1,3 +1,9 @@
+---
+uuid: "ce69125a-5abe-41b2-a576-c958edb1e266"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.541Z"
+evidence: "app\digital-twin\DESIGN.md"
+---
 # 數位分身 Digital Twin
 
 **路徑：** `/digital-twin`

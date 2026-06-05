@@ -1,3 +1,9 @@
+---
+uuid: "e7458cbf-618f-42a8-ab43-fb4708143f42"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.508Z"
+evidence: "docs\adr\001-use-trpc.md"
+---
 # ADR 001: Use tRPC for Type-Safe API Communication
 
 ## Status

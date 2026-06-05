@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -24,6 +27,10 @@ jobs:
         uses: pnpm/action-setup@v3
         with:
           version: 8
+luxurious-marble
+
+          cache: npm
+main
 
       - name: Install dependencies
         run: pnpm install
@@ -35,13 +42,41 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run lint
+        id: lint
         run: pnpm run lint || true
 
       - name: Run tests with coverage
+        id: test
         run: pnpm run test -- --coverage || true
 
       - name: Check coverage threshold
+        id: coverage
         run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
 
       - name: Build (optional)
+        id: build
         run: pnpm run build
+
+      - name: Fail Job if Errors
+        if: always()
+        run: |
+          if [ "${{ steps.lint.outcome }}" = "failure" ] || \
+             [ "${{ steps.test.outcome }}" = "failure" ] || \
+             [ "${{ steps.coverage.outcome }}" = "failure" ] || \
+             [ "${{ steps.build.outcome }}" = "failure" ]; then
+            echo "One or more quality checks failed."
+            exit 1
+          fi
+
+      - name: Deploy to Render
+        uses: render-examples/render-deploy@v1
+        with:
+          apiKey: ${{ secrets.RENDER_API_KEY }}
+          serviceId: ${{ secrets.RENDER_SERVICE_ID }}
+          waitForDeployment: true
+
+      - name: Auto-repair on Render failure
+        if: failure()
+        run: node scripts/auto-repair.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }}

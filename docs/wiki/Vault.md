@@ -1,3 +1,9 @@
+---
+uuid: "f8a17739-07f5-4dc7-aa92-22b84fe16eba"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.420Z"
+evidence: "docs\wiki\Vault.md"
+---
 # 證據金庫 Vault [Vault]
 路徑： /vault | 權限： ALL_USERS | 所屬旅程： V. 確信審計與發佈
 

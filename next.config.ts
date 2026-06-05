@@ -1,12 +1,13 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  // In Next.js 16+, turbopack can be explicitly defined or left out.
+  // We'll leave it out, but if it requires empty config:
+  experimental: {
+    // turbopack: {} // if needed later
   },
   serverExternalPackages: [
     'genkit',
@@ -37,7 +38,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
-  webpack: (config) => {
+  webpack: (config: any) => {
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),
       { module: /node_modules\/@firebase/ },

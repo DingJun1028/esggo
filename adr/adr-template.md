@@ -1,3 +1,9 @@
+---
+uuid: "41c70e98-4162-4fb9-97ec-f5441c14d54e"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.564Z"
+evidence: "adr\adr-template.md"
+---
 # [ADR-XXX: Title of Architecture Decision Record]
 
 ## Status:

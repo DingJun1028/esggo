@@ -1,3 +1,9 @@
+---
+uuid: "a180a3a9-101f-4920-9353-9bf5a1b6a859"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.525Z"
+evidence: "app\publish\DESIGN.md"
+---
 # 報告發佈 Publish
 
 **路徑：** `/publish`

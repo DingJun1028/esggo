@@ -1,3 +1,9 @@
+---
+uuid: "ea1f2ffa-c936-4687-ae23-9c384c4e26e6"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.424Z"
+evidence: "docs\wiki\System-Test.md"
+---
 # 系統測試 System Test [System Test]
 路徑： /system-test | 權限： QA, DEV, PM, DevOps | 所屬旅程： VI. 系統維運與品質保證
 

@@ -1,9 +1,10 @@
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
+import path from 'path';
 
-// standardFontDataUrl 和 cMapUrl 用相對路徑，從 legacy/build/pdf.mjs 的位置解析
-// legacy/build/ 下已有 standard_fonts/ 和 cmaps/ 目錄（建置時複製）
-const standardFontDataUrl = './standard_fonts/';
-const cMapUrl = './cmaps/';
+// 在 Node.js 環境中，必須提供絕對路徑才能正確載入 CMap (用於解析中日韓字體)
+// 注意：路徑結尾必須要有斜線 (Trailing slash)
+const cMapUrl = path.join(process.cwd(), 'node_modules/pdfjs-dist/cmaps').replace(/\\/g, '/') + '/';
+const standardFontDataUrl = path.join(process.cwd(), 'node_modules/pdfjs-dist/standard_fonts').replace(/\\/g, '/') + '/';
 
 export interface PDFMetadata {
   pages: number;
@@ -30,6 +31,7 @@ export class PDFParser {
       data: uint8,
       standardFontDataUrl,
       cMapUrl,
+      cMapPacked: true, // 非常重要：啟用壓縮的 CMap 檔案支援
     }).promise;
 
     const textParts: string[] = [];
@@ -51,6 +53,7 @@ export class PDFParser {
       data: uint8,
       standardFontDataUrl,
       cMapUrl,
+      cMapPacked: true,
     }).promise;
 
     const metadata = await pdf.getMetadata();

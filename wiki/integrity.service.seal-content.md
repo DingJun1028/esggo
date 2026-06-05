@@ -1,3 +1,9 @@
+---
+uuid: "0171176f-d4cc-42ec-9367-79e001677f29"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.380Z"
+evidence: "wiki\integrity.service.seal-content.md"
+---
 # IntegrityService.sealContent
 
 > **簡述 (Brief Description)**: Computes a SHA256 hash for given content to create a cryptographic seal.

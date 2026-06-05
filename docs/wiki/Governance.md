@@ -1,3 +1,9 @@
+---
+uuid: "cbc190af-b5b3-4443-835f-eb3459af4805"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.459Z"
+evidence: "docs\wiki\Governance.md"
+---
 # ESG 治理中心 ESG Governance Hub [Governance]
 路徑： /governance | 權限： CSO, ADMIN, PM | 所屬旅程： VI. 績效監控與持續改進
 

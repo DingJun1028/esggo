@@ -1,3 +1,9 @@
+---
+uuid: "e6d597a6-36cd-49b1-9b5f-f81eabfcb71e"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.364Z"
+evidence: "auth_proxy_setup.md"
+---
 # NoCodeBackend Auth Proxy Setup Guide
 
 > **IMPORTANT:** Save this file as `auth_proxy_setup.md` in your project root.

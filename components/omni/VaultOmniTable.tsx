@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { UniversalButton } from '../ui/universal/UniversalButton';
+import { UniversalBadge } from '../ui/universal/UniversalBadge';
 
 export interface VaultOmniTableRecord {
   id: string;

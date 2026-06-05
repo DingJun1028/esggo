@@ -1,3 +1,9 @@
+---
+uuid: "9a170377-1b67-42cf-b3b9-8637262c9dcb"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.558Z"
+evidence: "app\advisors\DESIGN.md"
+---
 # 顧問專區 Advisors
 
 **路徑：** `/advisors`

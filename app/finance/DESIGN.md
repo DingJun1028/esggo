@@ -1,3 +1,9 @@
+---
+uuid: "1eb73ebf-e10c-4ea8-8905-0bffa5e7e6f9"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.536Z"
+evidence: "app\finance\DESIGN.md"
+---
 # 永續財務 Finance
 
 **路徑：** `/finance`

@@ -1,3 +1,9 @@
+---
+uuid: "9419ba4b-429b-47fc-a44c-f9600c9e452d"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.554Z"
+evidence: "app\agents\DESIGN.md"
+---
 # 代理專區 Agents
 
 **路徑：** `/agents`

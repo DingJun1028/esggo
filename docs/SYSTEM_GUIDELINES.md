@@ -1,3 +1,9 @@
+---
+uuid: "8efe9aff-7a9f-49e7-989d-236268b58b1b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.401Z"
+evidence: "docs\SYSTEM_GUIDELINES.md"
+---
 # OmniCore System Guidelines
 **版本：萬能元件庫_萬能代理篇 (Omni Atomic Components - OmniAgent Edition)**
 

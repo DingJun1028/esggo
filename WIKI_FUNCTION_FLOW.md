@@ -1,3 +1,9 @@
+---
+uuid: "da5aaeb7-f3da-4959-969d-e07f78b02f77"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.280Z"
+evidence: "WIKI_FUNCTION_FLOW.md"
+---
 ## 🛠️ Swap-DeFi-TEST-UMES-ONLINE 功能實現流程
 
 ### 1. 環境配置 (Environment Setup)

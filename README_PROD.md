@@ -1,3 +1,10 @@
+
+uuid: "b6eb1ca5-e2d5-4633-9e9a-ac26f342ba0e"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.308Z"
+evidence: "README_PROD.md"
+---
+
 # ESGGO善向永續 v11.7 雲端部屬與驗收手冊 (Vercel)
 
 本手冊旨在引導技術團隊將 **ESGGO善向永續 Sovereign Governance OS**

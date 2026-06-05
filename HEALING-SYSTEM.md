@@ -1,3 +1,9 @@
+---
+uuid: "e07d8196-c0ba-40b8-a7ca-9398b3ab2be8"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.330Z"
+evidence: "HEALING-SYSTEM.md"
+---
 # ESGGO 自癒系統規範 Healing System 🛡️
 ## 核心原則：Entropy Forge & Sacred Judgement
 

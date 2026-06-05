@@ -1,3 +1,9 @@
+---
+uuid: "592a7ece-19b9-493c-943c-aaa89fc0d59a"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.539Z"
+evidence: "app\editor\DESIGN.md"
+---
 # SustainWrite 永續撰寫
 
 **路徑：** `/editor`

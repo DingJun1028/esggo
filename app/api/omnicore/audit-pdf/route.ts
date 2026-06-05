@@ -27,8 +27,18 @@ export async function POST(request: Request) {
     }
 
     // 2. Extract text using pdf-parse
-    const pdfData = await (pdfParse as any)(pdfBuffer);
-    const extractedText = pdfData.text;
+    let extractedText = '';
+    try {
+      const PDFParseClass = (pdfParseModule as any).PDFParse || (pdfParseModule as any).default?.PDFParse;
+      if (!PDFParseClass) throw new Error("PDFParse class not found");
+      const parser = new PDFParseClass({ data: pdfBuffer });
+      const pdfData = await parser.getText();
+      extractedText = pdfData.text;
+    } catch (e: any) {
+      console.warn(`[Audit PDF] PDF 解析失敗，將使用二進位 Fallback (可能產生亂碼): ${e.message}`);
+      extractedText = `[PDF Extraction Error] Could not parse text.`;
+    }
+    
     console.log(`[Audit PDF] PDF 解析完成，擷取字數: ${extractedText.length}`);
 
     // 3. Use OmniAgent (Genkit) to audit and extract metrics

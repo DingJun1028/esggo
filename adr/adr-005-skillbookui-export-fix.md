@@ -1,3 +1,9 @@
+---
+uuid: "1d766f6c-8795-4424-bfe4-befd22d62a02"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.567Z"
+evidence: "adr\adr-005-skillbookui-export-fix.md"
+---
 # ADR-005: Update SkillBookUI Export Type and Data Connect Imports
 
 ## Context

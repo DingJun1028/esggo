@@ -21,6 +21,7 @@ import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { ToastProvider, ToastContainer } from '../components/ui';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
 import { OmniAgentPulse } from '../components/omni/OmniAgentPulse';
+import OmniCommandPalette from '../components/omni/OmniCommandPalette';
 
 function SystemHealthBanner() {
   const { systemStatus } = useAuth();
@@ -78,7 +79,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   // 1. Public Routes
   if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
-    return <><ToastContainer /><OmniAgentPulse />{children}</>;
+    return <><ToastContainer /><OmniAgentPulse /><OmniCommandPalette />{children}</>;
   }
 
   // 2. Loading State
@@ -100,6 +101,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
         {children}
         <ToastContainer />
         <OmniAgentPulse />
+        <OmniCommandPalette />
       </AppShellV2>
     );
   }

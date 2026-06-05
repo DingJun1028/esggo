@@ -1,3 +1,9 @@
+---
+uuid: "9f132adb-cd84-4174-88c7-6dc2c959f1ea"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.461Z"
+evidence: "docs\wiki\Finance.md"
+---
 # ESG 財務績效分析 ESG Financial Performance Analysis [Finance]
 路徑： /finance | 權限： CFO, Finance_Manager, CSO | 所屬旅程： VI. 績效評估與報告
 

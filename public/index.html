@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniMCP Hub - ESGGO Integration</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="omnimcp-hub">
+    <header>
+      <h1>OmniMCP 代理整合中心</h1>
+      <div class="auth-status">
+        <span class="status-dot"></span>
+        <span>已獲得代主授權</span>
+      </div>
+    </header>
+
+    <section class="services-grid">
+      <div class="service-card" data-service="firebase">
+        <h3>Firebase MCP</h3>
+        <p>即時後端上下文、Crashlytics 資料讀取</p>
+        <span class="status connected">已連線</span>
+      </div>
+      <div class="service-card" data-service="supabase">
+        <h3>Supabase MCP</h3>
+        <p>資料庫查詢、RLS 政策、效能建議</p>
+        <span class="status connected">已連線</span>
+      </div>
+      <div class="service-card" data-service="genkit">
+        <h3>Genkit MCP</h3>
+        <p>Flow 探索、執行、追蹤與運行管理</p>
+        <span class="status connected">已連線</span>
+      </div>
+      <div class="service-card" data-service="boostspace">
+        <h3>Boost.space MCP</h3>
+        <p>2000+ 第三方應用程式 API 量子級整合</p>
+        <span class="status connected">已連線</span>
+      </div>
+    </section>
+
+    <section id="compliance-section">
+      <h2>ESGGO 平台規範驗證</h2>
+      <button id="run-compliance">執行規範驗證</button>
+      <div id="compliance-results"></div>
+    </section>
+
+    <section id="log-section">
+      <h2>工具執行日誌</h2>
+      <div id="logs-container"></div>
+    </section>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

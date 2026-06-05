@@ -1,3 +1,9 @@
+---
+uuid: "316564c3-d5bb-4669-a644-f5158964ed70"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.476Z"
+evidence: "docs\wiki\Dashboard.md"
+---
 # 主權治理控制台 [Sovereign Governance Dashboard]
 路徑： / | 權限： ALL_USERS | 所屬旅程： I. 平台總覽與決策
 

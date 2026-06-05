@@ -1,3 +1,9 @@
+---
+uuid: "2f68360f-16b0-4bae-bfd0-8ba7743c36d4"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.351Z"
+evidence: "CODE_OF_CONDUCT.md"
+---
 # Contributor Code of Conduct
 
 ## Our Pledge

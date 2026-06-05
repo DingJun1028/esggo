@@ -1,3 +1,9 @@
+---
+uuid: "a9bf3a68-be8b-46f8-a656-9181b9cea6c6"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.437Z"
+evidence: "docs\wiki\Roadmap.md"
+---
 # 淨零路徑 Roadmap [Roadmap]
 路徑： /roadmap | 權限： CSO, PM, ADMIN | 所屬旅程： III. 目標設定與管理
 

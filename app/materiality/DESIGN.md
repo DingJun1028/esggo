@@ -1,3 +1,9 @@
+---
+uuid: "482fccb3-e3d7-43ae-bd3a-3c013ff1a752"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.527Z"
+evidence: "app\materiality\DESIGN.md"
+---
 # 重大性矩陣 Materiality
 
 **路徑：** `/materiality`
