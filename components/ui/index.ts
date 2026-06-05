@@ -24,6 +24,10 @@ export { UniversalStatusDot } from './universal/UniversalStatusDot';
 export type { UniversalStatusDotProps } from './universal/UniversalStatusDot';
 export { OmniTag } from './universal/OmniTag';
 export type { OmniTagProps } from './universal/OmniTag';
+export { OmniDB } from './universal/OmniDB';
+export type { OmniDBRecord, OmniDBCredentials, OmniDBProps } from './universal/OmniDB';
+
+// Toast Notification System
 export { ToastContainer } from './Toast';
 export { ToastProvider, useToast } from './toast-provider';
 export type { ToastVariant } from './toast-provider';

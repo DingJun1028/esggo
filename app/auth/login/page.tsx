@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Globe } from 'lucide-react';
+import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Globe } from 'lucide-react/icons';
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
