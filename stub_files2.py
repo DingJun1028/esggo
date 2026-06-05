@@ -1,4 +1,11 @@
-import React from 'react';
+import os
+
+files_to_stub = [
+    'app/contracts/page.tsx',
+    'app/dashboard/metrics/governance/page.tsx'
+]
+
+stub = """import React from 'react';
 
 export default function Page() {
   return (
@@ -8,3 +15,9 @@ export default function Page() {
     </div>
   );
 }
+"""
+
+for f in files_to_stub:
+    if os.path.exists(f):
+        with open(f, 'w', encoding='utf-8') as file:
+            file.write(stub)
