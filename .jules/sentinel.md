@@ -23,3 +23,7 @@
 **Vulnerability:** Found a hardcoded fallback secret (`pat_3eeb4039ad864d2c96569dbbc94cfb0a`) for the `BLUE_CC_TOKEN` in `lib/agents/qkp-healing-agent.ts`, which was used to generate a medical-grade ZKP seal.
 **Learning:** Development test secrets are sometimes left as fallbacks when initializing cryptographic operations, bypassing intended environment configurations. This mirrors the exact vulnerability previously found in API gateway endpoints.
 **Prevention:** Always enforce strict environment variable presence for cryptographic keys. Throw an explicit error during runtime execution or agent initialization if secrets are missing, rather than defaulting to hardcoded development strings.
+## 2026-06-05 - [Fix Webhook Signature Authorization Bypass]
+**Vulnerability:** Found a logic error in `app/api/webhooks/ncbdb/route.ts` where if a webhook signature header (`x-ncb-signature`) was missing, it completely bypassed the verification logic, processing the webhook payload as if it were in unauthenticated "development mode" despite the secret environment variable being configured.
+**Learning:** Checking `if (secret && signature)` creates a dangerous fallback where an attacker only needs to omit the signature header to bypass authentication entirely.
+**Prevention:** Always structure signature checks to first check if a `secret` is configured. If it is configured, strictly require the signature header to be present, returning an immediate `403 Forbidden` if it is missing. Also ensure buffer lengths are checked before `timingSafeEqual` to avoid 500 errors.
