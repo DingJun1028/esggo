@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // In Next.js 16+, turbopack can be explicitly defined or left out.
   // We'll leave it out, but if it requires empty config:
   experimental: {

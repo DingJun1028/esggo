@@ -6,7 +6,7 @@
  */
 
 import type { Command } from 'commander';
-import { omniAgent } from './agents/adk-swarm.ts';
+import { omniAgent } from './agents/adk-swarm';
 import pc from 'picocolors';
 
 export class StateController {
