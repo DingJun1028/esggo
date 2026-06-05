@@ -1,9 +1,12 @@
+
+=======
 ---
 uuid: "9e38f9f3-b5d7-4d4b-aaa9-7280f70cf049"
 version: "1.0.0"
 timestamp: "2026-06-04T10:36:12.301Z"
 evidence: "TECHNICAL_INTEGRITY.md"
 ---
+
 # ESGGO善向永續 Platform | Technical Integrity Framework
 
 ## 5T 數據信託與 ZKP 隱私保護協議
