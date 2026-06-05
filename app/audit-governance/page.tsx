@@ -261,7 +261,14 @@ export default function AuditGovernancePage() {
           {Object.entries(CATEGORY_META).map(([cat, meta]) => {
             const rules = AUDIT_RULES.filter(r => r.category === cat as AuditCategory);
             const isOpen = expandedCat === cat;
-            return (
+            
+  const p = {
+    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    title: 'Audit Governance',
+    sub: 'Audit Governance Management'
+  };
+
+  return (
               <div key={cat} className="card overflow-hidden">
                 <button
                   className="card-header w-full text-left hover:bg-slate-50 transition-colors"

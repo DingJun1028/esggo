@@ -21,8 +21,17 @@ export default function OmniAgentFloatingAgent() {
         setIsOpen(false);
       }
     };
+    const handleToggle = (e: CustomEvent) => {
+      if (e.detail?.open) setIsOpen(true);
+    };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('omni-agent-toggle', handleToggle as EventListener);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('omni-agent-toggle', handleToggle as EventListener);
+    };
   }, [isOpen]);
 
 

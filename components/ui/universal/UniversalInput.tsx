@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { cn } from '../../../lib/utils';
 import { AlertCircle } from 'lucide-react';
 
@@ -10,22 +10,29 @@ export interface UniversalInputProps extends React.InputHTMLAttributes<HTMLInput
 }
 
 export const UniversalInput = React.forwardRef<HTMLInputElement, UniversalInputProps>(
-  ({ className, label, error, icon, fullWidth = true, ...props }, ref) => {
+  ({ className, label, error, icon, fullWidth = true, id, ...props }, ref) => {
+    const generatedId = useId();
+    const inputId = id || generatedId;
+    const errorId = `${inputId}-error`;
+
     return (
       <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '')}>
         {label && (
-          <label className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label htmlFor={inputId} className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
             {label}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--theme-text-muted)]">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--theme-text-muted)] pointer-events-none">
               {icon}
             </div>
           )}
           <input
+            id={inputId}
             ref={ref}
+            aria-invalid={!!error}
+            aria-describedby={error ? errorId : undefined}
             className={cn(
               'h-10 rounded-lg border text-sm transition-all duration-normal w-full',
               'bg-[var(--theme-base)] text-[var(--theme-text)]',
@@ -42,7 +49,7 @@ export const UniversalInput = React.forwardRef<HTMLInputElement, UniversalInputP
           />
         </div>
         {error && (
-          <div className="flex items-center gap-1.5 mt-1 text-red-500">
+          <div id={errorId} className="flex items-center gap-1.5 mt-1 text-red-500" role="alert">
             <AlertCircle size={12} />
             <span className="text-xs font-medium">{error}</span>
           </div>

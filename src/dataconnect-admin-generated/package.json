@@ -2,7 +2,7 @@
   "name": "@dataconnect/admin-generated",
   "version": "0.0.1",
   "author": "Firebase <firebase-support@google.com> (https://firebase.google.com/)",
-  "description": "Generated Admin SDK For omnicore",
+  "description": "Generated Admin SDK For example",
   "license": "Apache-2.0",
   "engines": {
     "node": " >=18.0"

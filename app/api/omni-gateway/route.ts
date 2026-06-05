@@ -52,7 +52,7 @@ type OmniTableSyncPayload = z.infer<typeof OmniTableSyncPayloadSchema>;
 // 3. 雙向防迴圈簽章、Browserbase 設定與內存資料庫配置
 // =========================================================================
 const BOT_SIGNATURE = 'BLUE_Automation_Bot';
-const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN || 'pat_3eeb4039ad864d2c96569dbbc94cfb0a';
+const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;
 
 // Browserbase 模擬配置 (對應 browse.sh 網路自動化技能)
 const BROWSERBASE_CONFIG = {
@@ -376,7 +376,7 @@ export async function POST(req: NextRequest) {
     }
     
     const token = authHeader.split(' ')[1];
-    const isMockAuthorized = token.startsWith('pat_') || token === 'valid-jwt-token' || token === 'taiwan-jwt-token';
+    const isMockAuthorized = !!MOCK_JWT_SECRET && token === MOCK_JWT_SECRET;
     const tenantIdFromToken = "tenant-esg-taiwan";
 
     if (!isMockAuthorized) {

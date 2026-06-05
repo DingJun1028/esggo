@@ -1,6 +1,6 @@
 import { sha256, generateNonce } from '../crypto-proof.ts';
 import type { IComponentCore, IEvidence, IRestorationProtocol, RestorationInput } from '../../src/shared/types/index';
-import { engraveToSingleTable, verifyRecord } from '../vault-omni.ts';
+import { engraveToSingleTable, verifyRecord, readFromVaultByHashLock } from '../vault-omni.ts';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -166,7 +166,25 @@ export class IntegrityModule implements IRestorationProtocol {
    */
   public async recompose(hashLock: string): Promise<IComponentCore> {
     console.log(`[萬能修復：殘影重組] 正在根據雜湊鎖 ${hashLock} 進行數據快照回滾...`);
-    throw new Error('Method not fully implemented: Requires vault access.');
+    const crystal = await readFromVaultByHashLock(hashLock);
+    if (!crystal) {
+      throw new Error(`Recomposition failed: Vault record not found for hash lock ${hashLock}`);
+    }
+    
+    // Audit Trail Enhancement
+    if (crystal.evidence && crystal.evidence.length > 0) {
+      const evidence = crystal.evidence[0];
+      const timestampMsg = `recomposed_at_${Date.now()}`;
+      if (evidence.causality) {
+        evidence.causality.processTrace.push(timestampMsg);
+      }
+      if (evidence.processTrace) {
+        evidence.processTrace.push(timestampMsg);
+      }
+    }
+    
+    console.log(`[萬能修復：殘影重組] 成功根據雜湊鎖 ${hashLock} 回滾數據。`);
+    return crystal;
   }
 
   /**
