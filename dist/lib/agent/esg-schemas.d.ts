@@ -67,19 +67,19 @@ export declare const ESGProposalSchema: z.ZodObject<{
     updatedAt: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     status: "PENDING" | "FAILED" | "IN_PROGRESS" | "COMPLETED" | "REVIEWING";
-    proposalId: string;
-    agentId: string;
     createdAt: string;
     updatedAt: string;
+    proposalId: string;
+    agentId: string;
     formula?: string | undefined;
     evidenceBundle?: string | undefined;
     impactScore?: number | undefined;
 }, {
     status: "PENDING" | "FAILED" | "IN_PROGRESS" | "COMPLETED" | "REVIEWING";
-    proposalId: string;
-    agentId: string;
     createdAt: string;
     updatedAt: string;
+    proposalId: string;
+    agentId: string;
     formula?: string | undefined;
     evidenceBundle?: string | undefined;
     impactScore?: number | undefined;

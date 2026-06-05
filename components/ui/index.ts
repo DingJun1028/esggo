@@ -1,33 +1,25 @@
-// ESG GO 善向永續 — Universal Component Registry
-// Berkeley Academy Design System v8.5
-
-// Primitives
-export { Button } from './Button';
-export { Badge } from './Badge';
-export { Card, CardHeader } from './Card';
-export { KpiCard } from './KpiCard';
-export { Input } from './Input';
-export { Modal } from './Modal';
-export { ProgressBar } from './ProgressBar';
-export { PageHeader } from './PageHeader';
-export { DataTable } from './DataTable';
-export { Tabs } from './Tabs';
-export { Alert } from './Alert';
-export { Spinner } from './Spinner';
-export { Avatar } from './Avatar';
-export { Divider } from './Divider';
-export { EmptyState } from './EmptyState';
-export { StatRow } from './StatRow';
-export { Toggle } from './Toggle';
-export { Tooltip } from './Tooltip';
-export { Tag } from './Tag';
-export { SectionHeader } from './SectionHeader';
-export { ScoreRing } from './ScoreRing';
-
-// Advanced 5T Patterns
-export { default as SelectionHouse } from './SelectionHouse';
-export { default as ProvenanceDrawer } from './ProvenanceDrawer';
-
-// Toast Notification System
+// Universal Components (萬能元件庫)
+export { UniversalButton } from './universal/UniversalButton';
+export type { UniversalButtonProps } from './universal/UniversalButton';
+export { UniversalCard, UniversalCardHeader } from './universal/UniversalCard';
+export type { UniversalCardProps } from './universal/UniversalCard';
+export { UniversalBadge } from './universal/UniversalBadge';
+export type { UniversalBadgeProps } from './universal/UniversalBadge';
+export { UniversalInput } from './universal/UniversalInput';
+export type { UniversalInputProps } from './universal/UniversalInput';
+export { UniversalTable } from './universal/UniversalTable';
+export type { UniversalTableColumn, UniversalTableProps } from './universal/UniversalTable';
+export { UniversalModal } from './universal/UniversalModal';
+export type { UniversalModalProps } from './universal/UniversalModal';
+export { OmniAgentPulse } from './universal/OmniAgentPulse';
+export { UniversalChart } from './universal/UniversalChart';
+export type { UniversalChartProps } from './universal/UniversalChart';
+export { UniversalForm } from './universal/UniversalForm';
+export type { FormField, UniversalFormProps } from './universal/UniversalForm';
+export { UniversalProgress } from './universal/UniversalProgress';
+export type { UniversalProgressProps } from './universal/UniversalProgress';
+export { UniversalStatusDot } from './universal/UniversalStatusDot';
+export type { UniversalStatusDotProps } from './universal/UniversalStatusDot';
 export { ToastContainer } from './Toast';
 export { ToastProvider, useToast } from './toast-provider';
+export type { ToastVariant } from './toast-provider';

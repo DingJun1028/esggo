@@ -1,0 +1,1 @@
+{"version":3,"file":"route.d.ts","sourceRoot":"","sources":["../../../../app/api/omni-workflows/route.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,YAAY,EAAE,MAAM,aAAa,CAAC;AAIxD,eAAO,MAAM,OAAO,WAAW,CAAC;AAChC,eAAO,MAAM,OAAO,kBAAkB,CAAC;AASvC,wBAAsB,IAAI,CAAC,OAAO,EAAE,WAAW;;;;;;;IAmC9C;AAED,wBAAsB,GAAG,CAAC,OAAO,EAAE,WAAW;;;;;;;;;;;;;;;;;;;;;IA0B7C"}

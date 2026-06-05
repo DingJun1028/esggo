@@ -4,10 +4,9 @@
  */
 
 import { supabase } from '../lib/supabase';
-import { createClient, SupabaseClient } from '@supabase/supabase-js'; // Add this import
-import * as SupabaseModule from '../lib/supabase'; // Remove this line
-import { THINK_TANK_REGISTRY, getThinkTankRegistrations, type ThinkTankRegistration } from '@/lib/agent/best-practice-registry';
-import { getOmniBlueTablePractices } from '@/lib/agent/best-practice-registry';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { type ThinkTankRegistration, THINK_TANK_REGISTRY, getThinkTankRegistrations, getOmniBlueTablePractices } from '@/lib/agent/best-practice-registry';
+import { type BestPractice } from '@/lib/agent/best-practice-registry';
 import { aiTableBlueBridge } from '@/lib/services/omni-table-blue-bridge';
 
 export class OmniBlueTableService {

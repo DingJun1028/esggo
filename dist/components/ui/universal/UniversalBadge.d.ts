@@ -1,7 +1,7 @@
 import React from 'react';
 export interface UniversalBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
     variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'success' | 'warning' | 'error' | 'info' | 'default';
-    size?: 'sm' | 'md';
+    size?: 'xs' | 'sm' | 'md';
     dot?: boolean;
     icon?: React.ReactNode;
 }
