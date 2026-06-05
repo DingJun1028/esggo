@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { globalOmniMemorySync } from '@/src/server/memory/OmniMemorySync';
 
 export async function POST() {

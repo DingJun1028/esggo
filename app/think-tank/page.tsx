@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import ThinkTankControl from '@/components/omni/ThinkTankControl';
 
 export const metadata: Metadata = {

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState, useEffect } from 'react';
 import { ListTemplate } from '@/components/templates/ListTemplate';
 import { Button } from '@/components/ui/Button';

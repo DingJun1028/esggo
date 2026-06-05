@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { getOmniTableServerClient } from '@/lib/omni-table/client';
 
 /**

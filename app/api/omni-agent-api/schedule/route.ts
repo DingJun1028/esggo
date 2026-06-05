@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { OmniCommander } from '@/lib/agents/omni-commander';
 import { omniSwarm } from '@/lib/agents/adk-swarm';
 import { pushBusEvent } from '../stream/route';

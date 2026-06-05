@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { AgentStep, AgentStatus } from '../../../../../lib/agent/v3-shared';
 import { runInSandbox } from '../../../../../lib/agent/sandbox';

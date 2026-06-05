@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { ExternalSyncService } from '@/lib/services/external-sync-service';
 import { buildComponent, engraveToSingleTable } from '@/lib/vault-omni';
 

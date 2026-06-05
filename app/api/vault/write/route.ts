@@ -1,4 +1,4 @@
-// app/api/vault/write/route.ts
+﻿// app/api/vault/write/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { UCCEngine } from '../../../../lib/ucc-engine';
 import { getAuthenticatedUser, createServerClient } from '../../../../lib/supabase/server';

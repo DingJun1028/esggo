@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { digitalTwinEngine } from '@/lib/digital-twin-engine';
 import { ncbClient } from '@/lib/ncbdb';
 import { createClient } from '@supabase/supabase-js';

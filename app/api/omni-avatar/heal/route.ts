@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { GlobalHealing, HealingLevel } from '../../../../lib/omni-space/global-healing';
 import { EventStore } from '../../../../lib/omni-space/event-store';
 // 注意：在實際環境中，您需要實例化並注入對應的 AdapterNodes (例如 NotionNode, AlTableNode)
