@@ -5,7 +5,7 @@ import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalTable } from '@/components/ui/universal/UniversalTable';
-import { History, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { History, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react/icons';
 
 export default function AuditLogPage() {
   const [data, setData] = useState<any[]>([]);
