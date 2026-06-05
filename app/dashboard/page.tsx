@@ -6,13 +6,11 @@ import {
   Sparkles, Send, CheckCircle2, Lock, GitMerge, X, Layers,
   Leaf, Users, Building2
 } from 'lucide-react';
-import { AtomicCard } from '@/lib/design-system/AtomicCard';
-import { AtomicButton } from '@/lib/design-system/AtomicButton';
-import { AtomicBadge } from '@/lib/design-system/AtomicBadge';
-import { AtomicInput } from '@/lib/design-system/AtomicInput';
-import { AtomicProgress } from '@/lib/design-system/AtomicProgress';
-import { AtomicToggle } from '@/lib/design-system/AtomicToggle';
-import { atomicManager, IAtomicComponent } from '@/lib/design-system/atomic-core';
+import { UniversalCard } from '@/components/ui/universal/UniversalCard';
+import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { UniversalInput } from '@/components/ui/universal/UniversalInput';
+import { UniversalProgress } from '@/components/ui/universal/UniversalProgress';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
 import { getUniversalNotesAction, semanticCreateTaskAction, TaskRecord } from '@/lib/agent/UniversalNotesTracker';
 
