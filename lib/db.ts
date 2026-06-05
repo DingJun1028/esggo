@@ -197,7 +197,7 @@ export const globalSearch = async (query: unknown): Promise<any> => [];
 // ==========================================
 // Legacy Reports Ref (for remaining components)
 // ==========================================
-export const reportsRef = collection(db, 'reports');
+export const getReportsRef = () => collection(db, 'reports');
 
 export const getReportsByOwner = async (ownerId: string) => {
   const { data } = await listReports();
@@ -211,10 +211,10 @@ export const getReport = async (id: string) => {
 export const createReport = async (data: unknown) => 'dummy_id';
 export const updateReportStatus = async (id: string, status: unknown) => true;
 
-export const evidenceRef = collection(db, 'vault_evidence');
+export const getEvidenceRef = () => collection(db, 'vault_evidence');
 export const getEvidenceForReport = async (reportId: string) => [];
 export const addEvidence = async (data: unknown) => 'dummy_id';
 
-export const signaturesRef = collection(db, 'signatures');
+export const getSignaturesRef = () => collection(db, 'signatures');
 export const getSignaturesForEvidence = async (evidenceId: string) => [];
 export const addSignature = async (data: unknown) => 'dummy_id';

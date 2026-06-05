@@ -1,4 +1,5 @@
-import { queryRef, executeQuery, validateArgsWithOptions, mutationRef, executeMutation, validateArgs, makeMemoryCacheProvider } from 'firebase/data-connect';
+import { queryRef, executeQuery, mutationRef, executeMutation, validateArgs } from 'firebase/data-connect';
+const validateArgsWithOptions = (c, d, o, u, a, b) => validateArgs(c, d, o);
 
 export const connectorConfig = {
   connector: 'example',
@@ -7,7 +8,7 @@ export const connectorConfig = {
 };
 export const dataConnectSettings = {
   cacheSettings: {
-    cacheProvider: makeMemoryCacheProvider()
+    cacheProvider: undefined
   }
 };
 export const upsertUserRef = (dcOrVars, vars) => {

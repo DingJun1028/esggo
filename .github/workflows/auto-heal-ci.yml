@@ -6,6 +6,18 @@ on:
   pull_request:
     branches: [master, main, develop]
   workflow_dispatch:
+    inputs:
+      node_version:
+        description: 'Node.js version to use'
+        required: false
+        default: '22'
+      project_name:
+        description: 'Name of the project/module being healed'
+        required: false
+        default: 'Swap-DeFi'
+
+permissions:
+  contents: read
 
 jobs:
   auto-heal:
@@ -21,7 +33,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ github.event.inputs.node_version || '22' }}
           cache: 'npm'
 
       - name: Install Dependencies
@@ -51,16 +63,17 @@ jobs:
       - name: Run Tests with Auto-Healing
         id: test
         run: |
-          echo "🧪 Running Swap-DeFi tests..."
+          echo "🧪 Running ${{ github.event.inputs.project_name || 'Swap-DeFi' }} tests..."
           
           # 執行測試並捕獲錯誤
           npm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
           
           # 檢查 Swap-DeFi 測試狀態
-          if grep -q "SwapDeFi.*✓" test-output.log; then
-            echo "✅ Swap-DeFi tests passed!"
+          PROJECT_NAME="${{ github.event.inputs.project_name || 'Swap-DeFi' }}"
+          if grep -q "${PROJECT_NAME}.*✓" test-output.log; then
+            echo "✅ ${{ github.event.inputs.project_name || 'Swap-DeFi' }} tests passed!"
           else
-            echo "::error::Swap-DeFi tests failed - initiating heal..."
+            echo "::error::${{ github.event.inputs.project_name || 'Swap-DeFi' }} tests failed - initiating heal..."
             
             # 自動修復常見測試錯誤
             if grep -q "Cannot find module" test-output.log; then
@@ -77,7 +90,7 @@ jobs:
       - name: Docker Build with Retry
         id: docker
         run: |
-          echo "🐳 Building Swap-DeFi Docker image..."
+          echo "🐳 Building ${{ github.event.inputs.project_name || 'Swap-DeFi' }} Docker image..."
           
           # 帶重試機制的 Docker 建置
           for attempt in {1..3}; do
@@ -120,9 +133,9 @@ jobs:
           \`\`\`
           
           ## Recommendations
-          - Check Swap-DeFi environment variables
+          - Check ${{ github.event.inputs.project_name || 'Swap-DeFi' }} environment variables
           - Verify Docker daemon status
-          - Review Swap-DeFi Client implementation
+          - Review ${{ github.event.inputs.project_name || 'Swap-DeFi' }} Client implementation
           
           ## Next Steps
           1. Review error logs above
@@ -136,5 +149,6 @@ jobs:
         if: success()
         run: |
           echo "🎉 All checks passed! System is healthy."
-          echo "📊 Swap-DeFi Integration Status: ✅ Operational"
+          echo "📊 ${{ github.event.inputs.project_name || 'Swap-DeFi' }} Integration Status: ✅ Operational"
+          echo "🚀 Ready for production deployment"on Status: ✅ Operational"
           echo "🚀 Ready for production deployment"

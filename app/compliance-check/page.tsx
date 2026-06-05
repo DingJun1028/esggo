@@ -198,7 +198,9 @@ export default function ComplianceCheckPage() {
                 <div className="space-y-6 max-w-2xl mx-auto">
                   <h1 className="text-2xl font-bold text-slate-200 mb-6 border-b border-white/10 pb-2">3. 環境永續 (Environmental)</h1>
                   
-                  <p>本公司致力於減緩氣候變遷的影響，並於2026年度達成多項關鍵環境指標。我們積極導入再生能源，優化生產製程，以降低整體碳足跡。</p>
+                  <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
                   
                   {/* Heatmap Area 1: Warning */}
                   <div 
@@ -207,7 +209,9 @@ export default function ComplianceCheckPage() {
                     } ${activeHighlight === 'h1' ? 'ring-1 ring-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.2)]' : ''}`}
                     onClick={() => scanComplete && setActiveHighlight('h1')}
                   >
-                    <p>在範疇一（直接溫室氣體排放）方面，我們本年度總排放量為 12,450 公噸 CO2e，較去年減少了 5%。此數據已根據 ISO 14064-1 進行內部盤查。</p>
+                    <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
                     {scanComplete && (
                       <div className="absolute -right-2 -top-2 w-4 h-4 bg-amber-500 rounded-full flex items-center justify-center animate-pulse">
                         <AlertTriangle size={10} className="text-amber-950" />
@@ -215,7 +219,9 @@ export default function ComplianceCheckPage() {
                     )}
                   </div>
 
-                  <p>關於水資源管理，本年度總耗水量為 450,000 立方公尺，主要水源來自市政供水。我們已在三個主要廠區建置了雨水回收系統，預計明年可節省 10% 的自來水使用。</p>
+                  <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
 
                   {/* Heatmap Area 2: Critical */}
                   <div 
@@ -224,7 +230,9 @@ export default function ComplianceCheckPage() {
                     } ${activeHighlight === 'h2' ? 'ring-1 ring-rose-500/50 shadow-[0_0_15px_rgba(243,24,32,0.2)]' : ''}`}
                     onClick={() => scanComplete && setActiveHighlight('h2')}
                   >
-                    <p>在範疇三（其他間接溫室氣體排放）方面，我們估算供應鏈產生的排放量約為 150,000 公噸 CO2e。我們承諾將協助供應商進行減碳轉型，並要求主要供應商簽署永續承諾書。</p>
+                    <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
                     {scanComplete && (
                       <div className="absolute -right-2 -top-2 w-4 h-4 bg-rose-500 rounded-full flex items-center justify-center animate-pulse shadow-[0_0_10px_#f43f5e]">
                         <ShieldAlert size={10} className="text-white" />
@@ -239,7 +247,9 @@ export default function ComplianceCheckPage() {
                     } ${activeHighlight === 'h3' ? 'ring-1 ring-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : ''}`}
                     onClick={() => scanComplete && setActiveHighlight('h3')}
                   >
-                    <p>廢棄物管理方面，我們達到 98% 的資源回收率，所有有害廢棄物皆委託具備合法執照之清除處理機構處理，無跨境運送有害廢棄物之情事。</p>
+                    <p>
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                </p>
                     {scanComplete && (
                       <div className="absolute -right-2 -top-2 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
                         <CheckCircle2 size={10} className="text-emerald-950" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DailyNotesView } from '@/components/omni-notes/DailyNotesView';
+import { DailyNotesView } from '@/store/DailyNotesView';
 
 export const metadata = {
     title: '萬能筆記 OmniNotes - ESG GO',

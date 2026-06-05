@@ -2,11 +2,9 @@ import React from 'react';
 import { getOmniTableServerClient } from '@/lib/omni-table/client';
 import { revalidatePath } from 'next/cache';
 
-interface TaskRecord {
-    id: string;
-    title: string;
-    status: 'Todo' | 'In Progress' | 'Done';
-}
+export { getUniversalNotesAction, semanticCreateTaskAction } from './UniversalNotesActions';
+export type { TaskRecord } from './UniversalNotesActions';
+import { TaskRecord, handleRefresh, markTaskAsDone, assignTaskToAgent } from './UniversalNotesActions';
 
 /**
  * 🌌 Universal Notes Tracker
@@ -33,6 +31,7 @@ export default async function UniversalNotesTracker() {
             id: r.recordId || r.id || Math.random().toString(),
             title: r.fields['Task Title'] || '未命名任務',
             status: r.fields['Status'] || 'Todo',
+            assignee: r.fields['Assignee'] || null,
         }));
 
         // 將最新任務排序於上方
@@ -41,37 +40,7 @@ export default async function UniversalNotesTracker() {
         error = err.message || '無法連接至萬能筆記 OmniTable 節點';
     }
 
-    // Server Action：即時重整萬能筆記資料
-    async function handleRefresh() {
-        'use server';
-        revalidatePath('/', 'layout'); // 清除全域快取並觸發 RSC 重新渲染
-    }
 
-    // Server Action：將任務標記為已癒合 (Done)
-    async function markTaskAsDone(taskId: string) {
-        'use server';
-        try {
-            const client = getOmniTableServerClient();
-            const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
-            if (!datasheetId) return;
-
-            // 根據 OmniTable API 設計推測，更新特定的 Record
-            const recordsToUpdate = [{
-                recordId: taskId,
-                fields: { 'Status': 'Done' }
-            }];
-
-            if (client.updateRecords) {
-                await client.updateRecords(datasheetId, recordsToUpdate);
-            } else if ((client as any).updateRecord) {
-                await (client as any).updateRecord(datasheetId, taskId, { 'Status': 'Done' });
-            }
-
-            revalidatePath('/', 'layout'); // 更新完畢後重新渲染畫面
-        } catch (err) {
-            console.error(`[UniversalNotes] 無法更新任務 ${taskId} 狀態:`, err);
-        }
-    }
 
     return (
         <div className="w-full max-w-4xl mx-auto rounded-2xl border border-cyan-glow/40 bg-void-rich/80 p-6 shadow-glass backdrop-blur-xl transition-all duration-slower">
@@ -137,49 +106,72 @@ export default async function UniversalNotesTracker() {
                                 <span className="text-sm font-medium text-surface-primary group-hover:text-cyan-core transition-colors">
                                     {task.title}
                                 </span>
-                                <span className="text-xs font-mono text-muted">ID: {task.id}</span>
-                            </div>
-
-                            {/* 狀態標籤 */}
-                            <div className={`flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold font-mono border ${task.status === 'Done' ? 'border-emerald-soul/30 bg-emerald-soul/10 text-emerald-soul shadow-emerald-glow' :
-                                task.status === 'In Progress' ? 'border-cyan-core/30 bg-cyan-core/10 text-cyan-core shadow-cyan-glow' :
-                                    'border-california-gold/30 bg-california-gold/10 text-california-gold'
-                                }`}>
-                                {task.status === 'Done' && <span className="h-1.5 w-1.5 rounded-full bg-emerald-soul"></span>}
-                                {task.status === 'In Progress' && <span className="h-1.5 w-1.5 rounded-full bg-cyan-core animate-pulse"></span>}
-                                {task.status === 'Todo' && <span className="h-1.5 w-1.5 rounded-full bg-california-gold"></span>}
-                                {task.status.toUpperCase()}
-                                <div className="flex items-center gap-3">
-                                    {/* 狀態標籤 */}
-                                    <div className={`flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold font-mono border ${task.status === 'Done' ? 'border-emerald-soul/30 bg-emerald-soul/10 text-emerald-soul shadow-emerald-glow' :
-                                        task.status === 'In Progress' ? 'border-cyan-core/30 bg-cyan-core/10 text-cyan-core shadow-cyan-glow' :
-                                            'border-california-gold/30 bg-california-gold/10 text-california-gold'
-                                        }`}>
-                                        {task.status === 'Done' && <span className="h-1.5 w-1.5 rounded-full bg-emerald-soul"></span>}
-                                        {task.status === 'In Progress' && <span className="h-1.5 w-1.5 rounded-full bg-cyan-core animate-pulse"></span>}
-                                        {task.status === 'Todo' && <span className="h-1.5 w-1.5 rounded-full bg-california-gold"></span>}
-                                        {task.status.toUpperCase()}
-                                    </div>
-
-                                    {/* 癒合 (Mark as Done) 按鈕 */}
-                                    {task.status !== 'Done' && (
-                                        <form action={markTaskAsDone.bind(null, task.id)}>
-                                            <button
-                                                type="submit"
-                                                className="p-1.5 rounded-full bg-white/5 border border-white/10 text-slate-400 hover:bg-emerald-soul/20 hover:text-emerald-soul hover:border-emerald-soul/50 transition-all cursor-pointer shadow-sm active:scale-95"
-                                                title="標記為已癒合 (Done)"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                            </button>
-                                        </form>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-mono text-muted">ID: {task.id}</span>
+                                    {/* 顯示被指派的 Agent 標籤 */}
+                                    {task.assignee && (
+                                        <span className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-mono font-medium border border-cyan-core/30 bg-cyan-core/10 text-cyan-core shadow-cyan-glow">
+                                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                            </svg>
+                                            {task.assignee}
+                                        </span>
                                     )}
                                 </div>
                             </div>
-                    ))}
+
+                            <div className="flex items-center gap-3">
+                                {/* Agent 指派操作表單 (若未指派且未完成，且在 hover 狀態下才顯示) */}
+                                {!task.assignee && task.status !== 'Done' && (
+                                    <form action={assignTaskToAgent.bind(null, task.id)} className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <select name="agentId" required className="appearance-none bg-black/40 border border-white/10 text-[10px] font-mono text-slate-300 py-1 pl-2 pr-5 rounded focus:border-cyan-core/50 focus:outline-none cursor-pointer transition-colors">
+                                            <option value="">[Assign Agent]</option>
+                                            <option value="OmniCore">OmniCore Master</option>
+                                            <option value="HealingGuardian">HealingGuardian</option>
+                                            <option value="ZKP-Engine">ZKP Engine</option>
+                                            <option value="Hermes">Hermes Email</option>
+                                            <option value="Swarm-Env">Swarm (Env)</option>
+                                        </select>
+                                        <button
+                                            type="submit"
+                                            className="p-1 rounded bg-white/5 border border-white/10 text-slate-400 hover:bg-cyan-core/20 hover:text-cyan-core hover:border-cyan-core/50 transition-all cursor-pointer shadow-sm active:scale-95"
+                                            title="確認指派"
+                                        >
+                                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                        </button>
+                                    </form>
+                                )}
+
+                                {/* 狀態標籤 */}
+                                <div className={`flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold font-mono border ${task.status === 'Done' ? 'border-emerald-soul/30 bg-emerald-soul/10 text-emerald-soul shadow-emerald-glow' :
+                                    task.status === 'In Progress' ? 'border-cyan-core/30 bg-cyan-core/10 text-cyan-core shadow-cyan-glow' :
+                                        'border-california-gold/30 bg-california-gold/10 text-california-gold'
+                                    }`}>
+                                    {task.status === 'Done' && <span className="h-1.5 w-1.5 rounded-full bg-emerald-soul"></span>}
+                                    {task.status === 'In Progress' && <span className="h-1.5 w-1.5 rounded-full bg-cyan-core animate-pulse"></span>}
+                                    {task.status === 'Todo' && <span className="h-1.5 w-1.5 rounded-full bg-california-gold"></span>}
+                                    {task.status.toUpperCase()}
+                                </div>
+
+                                {/* 癒合 (Mark as Done) 按鈕 */}
+                                {task.status !== 'Done' && (
+                                    <form action={markTaskAsDone.bind(null, task.id)}>
+                                        <button
+                                            type="submit"
+                                            className="p-1.5 rounded-full bg-white/5 border border-white/10 text-slate-400 hover:bg-emerald-soul/20 hover:text-emerald-soul hover:border-emerald-soul/50 transition-all cursor-pointer shadow-sm active:scale-95"
+                                            title="標記為已癒合 (Done)"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                )}
+                            </div>
                         </div>
-                    )}
+                    ))}
                 </div>
-            );
+            )}
+        </div>
+    );
 }

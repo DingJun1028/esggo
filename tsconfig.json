@@ -7,7 +7,7 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "outDir": "./dist",
     "rootDir": "./",
     "strict": true,
@@ -25,7 +25,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "bundler",
-
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -47,17 +46,27 @@
       "playwright": [
         "./node_modules/playwright/index.d.ts"
       ]
-    }
+    },
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "src/**/*",
-    "lib/**/*",
     "app/**/*",
     "components/**/*",
-    "hooks/**/*",
     "dataconnect/**/*",
+    "hooks/**/*",
+    "lib/**/*",
+    "next.config.ts",
+    "src/**/*",
     "types/**/*",
-    "next.config.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

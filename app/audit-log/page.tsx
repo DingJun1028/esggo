@@ -65,7 +65,7 @@ export default function AuditLogPage() {
       }
     } catch (error) {
       console.error('Seal exception:', error);
-      alert('無法連線至封印金庫 (Vault Connection Error)。');
+      alert('Vault Connection Error');
     } finally {
       setSealingId(null);
     }
@@ -81,13 +81,13 @@ export default function AuditLogPage() {
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
-        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
+        alert('Verification Success: 5T Protocol Compliant');
       } else {
-        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
+        alert('Verification Failed: Invalid Hash Lock');
       }
     } catch (e) {
       console.error('Verify exception:', e);
-      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
+      alert('Vault Connection Error');
     } finally {
       setVerifyingId(null);
     }
@@ -114,7 +114,7 @@ export default function AuditLogPage() {
           {val.substring(0, 8)}...
         </UniversalBadge>
       ) : (
-        <UniversalBadge variant="default" size="sm">未封印</UniversalBadge>
+        <UniversalBadge variant="default" size="sm">未封裝</UniversalBadge>
       )
     ) },
     { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
@@ -173,7 +173,7 @@ export default function AuditLogPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
+              <span className="text-sm font-bold uppercase tracking-widest">活躍節點</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
@@ -191,7 +191,7 @@ export default function AuditLogPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
+              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -204,7 +204,7 @@ export default function AuditLogPage() {
           <div className="lg:col-span-3 space-y-6">
             <UniversalCard 
               variant="default" 
-              title="業務資料視圖" 
+              title="業務資料預覽" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
@@ -219,12 +219,12 @@ export default function AuditLogPage() {
           <div className="space-y-6">
             <UniversalCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="OmniAgent 核心"
+              subtitle="AI 能力中心"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
                   <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>

@@ -6,12 +6,15 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
     steps:
       - uses: actions/checkout@v4
 
@@ -23,7 +26,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: ${{ github.event.inputs.pnpm_version || '8' }}
           cache: 'npm'
 
       - name: Install dependencies
@@ -39,6 +42,16 @@ jobs:
         run: pnpm run lint || true
 
       - name: Run tests with coverage
+        run: pnpm run test -- --coverage || true
+
+      - name: Check coverage threshold
+        run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
+
+      - name: Build (optional)
+        run: pnpm run build0' }} || true
+
+      - name: Build (optional)
+        run: pnpm run build - name: Run tests with coverage
         run: pnpm run test -- --coverage || true
 
       - name: Check coverage threshold
