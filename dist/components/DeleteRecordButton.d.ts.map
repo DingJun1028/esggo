@@ -1,1 +1,0 @@
-{"version":3,"file":"DeleteRecordButton.d.ts","sourceRoot":"","sources":["../../components/DeleteRecordButton.tsx"],"names":[],"mappings":"AAEA,OAAO,KAAwB,MAAM,OAAO,CAAC;AAK7C,UAAU,uBAAuB;IAC7B,WAAW,EAAE,MAAM,CAAC;IACpB,QAAQ,EAAE,MAAM,CAAC;IACjB,WAAW,EAAE,MAAM,CAAC;CACvB;AAED,wBAAgB,kBAAkB,CAAC,EAAE,WAAW,EAAE,QAAQ,EAAE,WAAW,EAAE,EAAE,uBAAuB,qBA2BjG"}

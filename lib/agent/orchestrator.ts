@@ -168,6 +168,35 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
 ];
 
 /**
+ * 將自發性治理與自癒任務同步寫入萬能筆記 (OmniTable API)
+ * 實現「無作妙德圓通無礙」的跨模組零摩擦追蹤
+ */
+async function syncTaskToUniversalNotes(task: AgentTask) {
+  try {
+    const { getOmniTableServerClient } = await import('../omni-table/client');
+    const client = getOmniTableServerClient();
+    const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
+
+    if (!datasheetId) {
+      console.warn('[UniversalNotes] ⚠️ OMNITABLE_TASKS_DATASHEET_ID 未設定，跳過同步。');
+      return;
+    }
+
+    const records = [{
+      fields: {
+        'Task Title': task.title,
+        'Status': 'Todo'
+      }
+    }];
+
+    await client.createRecords(datasheetId, records);
+    console.log(`[UniversalNotes] 📝 全通之心顯化：已成功將任務 ${task.id} 寫入萬能筆記 (Datasheet: ${datasheetId})`);
+  } catch (err) {
+    console.error(`[UniversalNotes] ❌ 任務 ${task.id} 寫入萬能筆記失敗:`, err);
+  }
+}
+
+/**
  * 🌟 被動覺醒天賦：[無作妙德圓通無礙] (Effortless Wondrous Virtue, Perfectly Unhindered)
  * 觸發條件：系統達成穩定運行，啟動「意圖共鳴場 (Intent Resonance Field)」
  * 行為：Agent 不再依賴顯式指令，主動感知系統狀態 (Vibe) 並發起跨模塊修復與進化。
@@ -198,6 +227,9 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
   await addTask(task);
 
   console.log(`[OmniAgent Passive Awakening] 🕊️ 圓通無礙：已自主生成並調度最高優先級任務 ${task.id}`);
+
+  // 觸發全通之心顯化，無縫同步至萬能筆記
+  await syncTaskToUniversalNotes(task);
 
   // 在背景自主啟動蜂群交接或任務執行
   executeSwarmTask(task.id).catch(err => {
@@ -450,6 +482,9 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
   await addTask(task);
 
   console.log(`[HealingGuardian] 🛠️ 已發起自動修復子任務 ${task.id}，調度蜂群接手...`);
+
+  // 將自癒歷程歸檔至萬能筆記
+  await syncTaskToUniversalNotes(task);
 
   // 🌟 透過 WebSocket 中繼 API 發送廣播，觸發前端因果律拓樸圖的紅轉藍動畫
   try {

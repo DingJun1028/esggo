@@ -1,1 +1,0 @@
-{"version":3,"file":"db-tools.d.ts","sourceRoot":"","sources":["../../../../lib/ai/tools/db-tools.ts"],"names":[],"mappings":"AAGA,eAAO,MAAM,iBAAiB;;;qBAGL;QAAE,KAAK,EAAE,MAAM,CAAC;QAAC,KAAK,CAAC,EAAE,MAAM,CAAC;QAAC,MAAM,CAAC,EAAE,MAAM,CAAA;KAAE;;;;;;;;;;;CAgB1E,CAAC;AAEF,eAAO,MAAM,kBAAkB;;;qBAGN;QAAE,KAAK,EAAE,MAAM,CAAC;QAAC,OAAO,EAAE,OAAO,CAAA;KAAE;;;;;;;;;CAgB3D,CAAC"}

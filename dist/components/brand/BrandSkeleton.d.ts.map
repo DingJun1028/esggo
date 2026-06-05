@@ -1,1 +1,0 @@
-{"version":3,"file":"BrandSkeleton.d.ts","sourceRoot":"","sources":["../../../components/brand/BrandSkeleton.tsx"],"names":[],"mappings":"AACA,OAAO,KAAK,MAAM,OAAO,CAAC;AAE1B,UAAU,kBAAkB;IAC1B,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,IAAI,CAAC,EAAE,OAAO,CAAC;CAChB;AAED,MAAM,CAAC,OAAO,UAAU,aAAa,CAAC,EAAE,SAAc,EAAE,KAAS,EAAE,IAAY,EAAE,EAAE,kBAAkB,qBA2BpG"}

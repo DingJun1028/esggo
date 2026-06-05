@@ -1,1 +1,0 @@
-{"version":3,"file":"UniversalProgress.d.ts","sourceRoot":"","sources":["../../../../components/ui/universal/UniversalProgress.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAG1B,MAAM,WAAW,sBAAuB,SAAQ,KAAK,CAAC,cAAc,CAAC,cAAc,CAAC;IAClF,KAAK,EAAE,MAAM,CAAC;IACd,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,SAAS,CAAC,EAAE,OAAO,CAAC;CACrB;AAED,eAAO,MAAM,iBAAiB,+FA+B7B,CAAC"}

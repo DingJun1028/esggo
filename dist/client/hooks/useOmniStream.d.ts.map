@@ -1,1 +1,0 @@
-{"version":3,"file":"useOmniStream.d.ts","sourceRoot":"","sources":["../../../src/client/hooks/useOmniStream.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,SAAS;IACxB,EAAE,EAAE,MAAM,CAAC;IACX,IAAI,EAAE,OAAO,GAAG,SAAS,GAAG,MAAM,GAAG,QAAQ,CAAC;IAC9C,OAAO,EAAE,MAAM,CAAC;IAChB,SAAS,EAAE,MAAM,CAAC;IAClB,cAAc,CAAC,EAAE,MAAM,CAAC;CACzB;AAED,wBAAgB,aAAa;;;EA4D5B"}

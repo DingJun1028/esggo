@@ -1,1 +1,0 @@
-{"version":3,"file":"gpl-client.js","sourceRoot":"","sources":["../../../src/clients/gpl-client.ts"],"names":[],"mappings":"AAAA,yBAAyB;AACzB,MAAM,OAAO,SAAS;IACpB,KAAK,CAAC,aAAa,CAAC,IAAY;QAC9B,WAAW;QACX,OAAO;YACL,IAAI;YACJ,SAAS,EAAE,IAAI,CAAC,GAAG,EAAE;YACrB,OAAO,EAAE,iBAAiB;YAC1B,QAAQ,EAAE,EAAE;SACb,CAAC;IACJ,CAAC;CACF"}

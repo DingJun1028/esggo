@@ -1,7 +1,0 @@
-'use client';
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { cn } from '@/lib/cn';
-export function PageHeader({ icon, iconGradient = 'linear-gradient(135deg, #003262, #3b7ea1)', title, subtitle, actions, tags, className, }) {
-    return (_jsxs("div", { className: cn('flex items-start justify-between gap-4 mb-6', className), children: [_jsxs("div", { className: "flex items-center gap-3", children: [icon && (_jsx("div", { className: "w-10 h-10 rounded-[10px] flex items-center justify-center flex-shrink-0", style: { background: iconGradient }, children: _jsx("span", { className: "text-white", children: icon }) })), _jsxs("div", { children: [_jsx("h1", { className: "text-[22px] font-bold text-[#1a1a2e] leading-tight", children: title }), subtitle && _jsx("p", { className: "text-[13px] text-[#6b7280] mt-0.5", children: subtitle }), tags && tags.length > 0 && (_jsx("div", { className: "flex gap-1.5 mt-1.5 flex-wrap", children: tags.map((tag) => (_jsx("span", { className: "px-2 py-0.5 rounded-[5px] bg-[#eff6ff] text-[#2563eb] text-[11px] font-semibold", children: tag }, tag))) }))] })] }), actions && _jsx("div", { className: "flex items-center gap-2 flex-shrink-0", children: actions })] }));
-}
-//# sourceMappingURL=PageHeader.js.map

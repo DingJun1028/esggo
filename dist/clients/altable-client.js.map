@@ -1,1 +1,0 @@
-{"version":3,"file":"altable-client.js","sourceRoot":"","sources":["../../src/clients/altable-client.ts"],"names":[],"mappings":";;;AAAA,6BAA6B;AAC7B,MAAa,aAAa;IACxB,KAAK,CAAC,YAAY,CAAC,IAAY;QAC7B,OAAO,EAAE,IAAI,EAAE,SAAS,EAAE,IAAI,CAAC,GAAG,EAAE,EAAE,OAAO,EAAE,OAAO,EAAE,CAAC;IAC3D,CAAC;CACF;AAJD,sCAIC"}
