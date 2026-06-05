@@ -162,12 +162,3 @@ export default async function UniversalNotesTracker() {
         </div>
     );
 }
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
