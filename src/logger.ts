@@ -5,8 +5,8 @@ interface LogEntry {
   timestamp: string;
   service: string;
   action: string;
-  payload: any;
-  result: any;
+  payload: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  result: any;  // eslint-disable-line @typescript-eslint/no-explicit-any
   error?: string;
 }
 
