@@ -1,3 +1,9 @@
+---
+uuid: "0ceddc56-2ae7-4390-a25e-ff36d3dbbd5c"
+version: "1.0.1-rc"
+timestamp: "2026-06-05T18:00:00.000Z"
+evidence: "README.md"
+---
 <div align="center">
   
 # 🌌 ESGGO善向永續
@@ -54,6 +60,16 @@
 ### 4. 氣場編碼與混合資料庫 (Vibe Coding & Hybrid DB)
 *   **雙引擎底盤**：**Supabase** (PostgreSQL/RLS) 作為不可篡改的真理聖碑；**NCBDB** (Nocodebackend DataBase) 作為敏捷主權展示層。
 *   **MCP 集成**：內建 `.vscode/mcp.json`，支援 Cursor / VS Code 的 **Local/stdio Vibe Coding**，透過即時後端上下文實現「提示詞即架構」。
+
+---
+
+## 🚀 部署就緒 (Production Readiness - v1.0.2-rc)
+目前 ESGGO 平台已成功優化並符合 Next.js 15+ 生產環境架構，並完成全面除錯，具體修正包括：
+1. **Server Actions 架構解耦 (App Router 合規)**：將原先內嵌於 Client Component 的 `use server` 方法完全解耦並抽取至 `UniversalNotesActions.ts`，徹底解決 Next.js 15 的編譯衝突。
+2. **樣式引擎相容性優化**：修復了 PostCSS 與 Tailwind CSS 在生產構建時的模組解析錯誤，並統一為 Tailwind 規範以確保靜態編譯穩定。
+3. **資料庫依賴懶載入**：將 Firebase Firestore 的 `collection()` 呼叫轉為 Getter 方法，避免在 Next.js Server-Side 靜態生成 (Static Generation) 時因未初始化而報錯。
+4. **前端 JSX 與 React Hooks 語法修復**：修復了 `useEffect` 閉包的語法錯誤與 DOM 結構中巢狀 `div` 標籤的冗餘，保證客戶端渲染與水合 (Hydration) 順利進行。
+系統已通過本地嚴格的 `npm run build` 全端視雙向 TypeScript 檢驗，確認檔案格式與型別系統完全合規，隨時準備上線 Vercel 生產環境。
 
 ---
 

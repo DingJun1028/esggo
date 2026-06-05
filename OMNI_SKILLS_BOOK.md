@@ -1,3 +1,9 @@
+---
+uuid: "91d04573-36d7-4922-ae3f-0f63179d1fcb"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.314Z"
+evidence: "OMNI_SKILLS_BOOK.md"
+---
 # 奧義技能全書 (Omni Skills Book)
 ## 萬能元件庫 (Universal Atomic Component Library) - UI/UX 品牌設計指南
 

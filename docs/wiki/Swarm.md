@@ -1,3 +1,9 @@
+---
+uuid: "8480f9a3-d7e4-49ab-8193-099ea795c7f0"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.428Z"
+evidence: "docs\wiki\Swarm.md"
+---
 # 代理人蜂群 Agent Swarm [Swarm]
 路徑： /swarm | 權限： SYSTEM_ADMIN, DEV | 所屬旅程： 核心概念與架構
 

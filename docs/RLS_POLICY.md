@@ -1,3 +1,9 @@
+---
+uuid: "4840f1b4-dbee-4c8c-8f2d-fe4888e29e43"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.408Z"
+evidence: "docs\RLS_POLICY.md"
+---
 # RLS Policy Document for ESGGO System
 
 ## Overview

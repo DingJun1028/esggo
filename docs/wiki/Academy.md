@@ -1,3 +1,9 @@
+---
+uuid: "7f1260c3-ceb3-410e-a026-307f2fe3369d"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.498Z"
+evidence: "docs\wiki\Academy.md"
+---
 # ESG Academy ESG Academy [Academy]
 路徑： /academy | 權限： ALL_USERS | 所屬旅程： I. 學習與能力建構
 

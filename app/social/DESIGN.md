@@ -1,3 +1,9 @@
+---
+uuid: "d3c06c51-b91f-4253-bac1-f9ce6fd197ea"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.521Z"
+evidence: "app\social\DESIGN.md"
+---
 # 社會影響 Social
 
 **路徑：** `/social`

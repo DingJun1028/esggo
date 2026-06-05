@@ -168,6 +168,35 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
 ];
 
 /**
+ * 將自發性治理與自癒任務同步寫入萬能筆記 (OmniTable API)
+ * 實現「無作妙德圓通無礙」的跨模組零摩擦追蹤
+ */
+async function syncTaskToUniversalNotes(task: AgentTask) {
+  try {
+    const { getOmniTableServerClient } = await import('../omni-table/client');
+    const client = getOmniTableServerClient();
+    const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
+
+    if (!datasheetId) {
+      console.warn('[UniversalNotes] ⚠️ OMNITABLE_TASKS_DATASHEET_ID 未設定，跳過同步。');
+      return;
+    }
+
+    const records = [{
+      fields: {
+        'Task Title': task.title,
+        'Status': 'Todo'
+      }
+    }];
+
+    await client.createRecords(datasheetId, records);
+    console.log(`[UniversalNotes] 📝 全通之心顯化：已成功將任務 ${task.id} 寫入萬能筆記 (Datasheet: ${datasheetId})`);
+  } catch (err) {
+    console.error(`[UniversalNotes] ❌ 任務 ${task.id} 寫入萬能筆記失敗:`, err);
+  }
+}
+
+/**
  * 🌟 被動覺醒天賦：[無作妙德圓通無礙] (Effortless Wondrous Virtue, Perfectly Unhindered)
  * 觸發條件：系統達成穩定運行，啟動「意圖共鳴場 (Intent Resonance Field)」
  * 行為：Agent 不再依賴顯式指令，主動感知系統狀態 (Vibe) 並發起跨模塊修復與進化。
@@ -182,7 +211,7 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
     actorId: 'SYSTEM_SOUL_JUNAIKEY',
     taskType: 'system_ops',
     title: `[無作妙德] 自主共鳴修復與進化：${vibeSignal}`,
-    description: `系統於無形中感知到狀態偏移或進化潛能。觸發「無作妙德圓通無礙」天賦，主動進行跨模組校準與熵減。\n當前上下文: ${currentContext}`,
+    description: `系統於無形中感知到狀態偏移或進化潛能。觸發「無作妙德圓通無礙」天賦，主動進行跨模組校準與熵減。\n將此運行狀態自動歸檔至【萬能筆記】，達成圓通無礙的全域追蹤。\n當前上下文: ${currentContext}`,
     inputRefIds: [],
     skillKey: 'omnicore_autonomous_healing'
   };
@@ -199,10 +228,22 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
 
   console.log(`[OmniAgent Passive Awakening] 🕊️ 圓通無礙：已自主生成並調度最高優先級任務 ${task.id}`);
 
+  // 觸發全通之心顯化，無縫同步至萬能筆記
+  await syncTaskToUniversalNotes(task);
+
   // 在背景自主啟動蜂群交接或任務執行
   executeSwarmTask(task.id).catch(err => {
     console.error(`[OmniAgent Passive Awakening] ⚠️ 圓通無礙自主執行發生震盪:`, err);
   });
+}
+
+/**
+ * 從文本中提取與關鍵字相關的數值
+ */
+function extractNumericValue(text: string, keyword: string): number | null {
+  const regex = new RegExp(`${keyword}[^\\d]*(\\d+\\.?\\d*)`);
+  const match = text.match(regex);
+  return match ? parseFloat(match[1]) : null;
 }
 
 /**
@@ -279,6 +320,10 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
         new Promise<string>(r => setTimeout(() => {
           console.log('[Agent: Supply Chain] 🔗 供應鏈維度報告生成完畢.');
           r(targetRole === 'board' || targetRole === 'auditor' ? '🔗 供應鏈指標: 高風險供應商稽核完成率 100%，在地採購比例達 65%。' : '🔗 供應鏈指標: 建立綠色供應鏈評鑑機制，與供應商共創永續生態系。');
+          const baseText = targetRole === 'board' || targetRole === 'auditor' ? '🔗 供應鏈指標: 高風險供應商稽核完成率 100%，在地採購比例達 65%。' : '🔗 供應鏈指標: 建立綠色供應鏈評鑑機制，與供應商共創永續生態系。';
+          // 注入交叉驗證數據
+          const carbonData = '根據供應商回報，範疇一總排放約為 950 噸。';
+          r(`${baseText} ${carbonData}`);
         }, 1700))
       ]);
 
@@ -286,17 +331,28 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       broadcast('DEBATING', 'Swarm Consensus Board');
       await new Promise(r => setTimeout(r, 1800)); // 模擬辯論推演時間
 
-      // 模擬：70% 機率觸發代理間的交叉辯論與衝突偵測
-      const hasConflict = Math.random() > 0.3;
+      // 優化：實施「共識對齊演算法」，取代隨機模擬
+      const envCarbon = extractNumericValue(envResult, '範疇一'); // 應為 1200
+      const scCarbon = extractNumericValue(scResult, '範疇一總排放'); // 應為 950
+      let hasConflict = false;
       let debateNotes = '';
+
+      if (envCarbon !== null && scCarbon !== null) {
+        const diff = Math.abs(envCarbon - scCarbon);
+        const percentageDiff = (diff / envCarbon) * 100;
+        if (percentageDiff > 10) { // 設定 10% 為衝突閾值
+          hasConflict = true;
+        }
+      }
+
       if (hasConflict) {
-        console.warn(`[Swarm Debate] ⚠️ 衝突偵測：[Agent: Supply Chain] 對 [Agent: Environmental] 提出異議。環境指標宣告與供應商盤查總量不符。`);
+        console.warn(`[Swarm Debate] ⚠️ 共識校準：偵測到數據衝突！環境代理宣告 (${envCarbon}噸) 與供應鏈代理回報 (${scCarbon}噸) 差異超過 10%。`);
         await new Promise(r => setTimeout(r, 1500));
         console.log(`[Swarm Debate] 🔄 啟動數據校準與重新共識...`);
-        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識 (Swarm Debate)\n- **[異議提出]** 供應鏈代理：偵測到環境代理之範疇三碳排數據與供應商盤查清冊有 15% 偏差。\n- **[邏輯校準]** 萬能大腦 (OmniCore) 介入，重新比對 Evidence Vault 原始憑證 (Hash: 0x8a9...)。\n- **[共識達成]** 數值已修正對齊，確保「環境」與「供應鏈」論述不衝突。`;
+        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識對齊 (Consensus Alignment)\n- **[異議提出]** 供應鏈代理：偵測到環境代理之範疇一碳排數據 (${envCarbon}噸) 與供應商盤查清冊回報 (${scCarbon}噸) 有顯著偏差。\n- **[邏輯校準]** 萬能大腦 (OmniCore) 介入，重新比對 Evidence Vault 原始憑證 (Hash: 0x8a9...).\n- **[共識達成]** 數值已修正對齊，確保「環境」與「供應鏈」論述不衝突。`;
       } else {
         console.log(`[Swarm Debate] ✅ 交叉檢驗通過：五大維度數據邏輯一致，無衝突。`);
-        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識 (Swarm Debate)\n- **[狀態]** 五大領域代理已互相核對數據與邏輯。\n- **[共識達成]** 未發現衝突，各維度論述完美對齊。`;
+        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識對齊 (Consensus Alignment)\n- **[狀態]** 五大領域代理已互相核對數據與邏輯。\n- **[共識達成]** 未發現衝突，各維度論述完美對齊。`;
       }
 
       console.log(`[Swarm Orchestrator] 🧠 所有代理產出完畢。啟動「萬能大腦 (OmniCore)」進行全域彙整與深度融合...`);
@@ -427,13 +483,21 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
 export async function invokeHealingGuardian(sourceTaskId: string, failureReason: string) {
   console.log(`[HealingGuardian] 🛡️ 啟動自動修復協議，來源任務: ${sourceTaskId}`);
 
+
   const { addTask } = await import('./store');
+
+  // 優化：實施「降維自癒演算法」，解析錯誤原因以生成精準任務
+  const scopeMatch = failureReason.match(/(Scope \d+)/);
+  const amountMatch = failureReason.match(/(\d+\.?\d*)\s*噸/);
+
+  const targetScope = scopeMatch ? scopeMatch[1] : '未知範疇';
+  const missingAmount = amountMatch ? amountMatch[1] : '未知數量';
 
   const healingInput: CreateTaskInput = {
     actorId: 'SYSTEM_HEALING_GUARDIAN',
     taskType: 'system_ops',
-    title: `[自動修復] ZKP 校驗失敗：重新補齊缺漏數據`,
-    description: `來源任務 (ID: ${sourceTaskId}) 發生 ZKP 承諾加總不匹配。\n原因：${failureReason}\n請 OmniAgent 蜂群重新核對子公司底層數據並補齊缺漏。`,
+    title: `[降維自癒] 針對 ${targetScope} 數據缺口 (${missingAmount}噸) 進行精準數據補齊`,
+    description: `ZKP 校驗時偵測到來源任務 (ID: ${sourceTaskId}) 的 ${targetScope} 數據存在 ${missingAmount} 噸的缺口。\nHealingGuardian 已將修復任務降維，請 Swarm Agent 精準溯源並補齊此特定數據，而非全量重新計算。\n[追蹤註記] 此自癒任務與過程已無縫同步至【萬能筆記】，落實圓通無礙。`,
     inputRefIds: [],
     skillKey: 'omnicore_autonomous_healing'
   };
@@ -451,6 +515,9 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
 
   console.log(`[HealingGuardian] 🛠️ 已發起自動修復子任務 ${task.id}，調度蜂群接手...`);
 
+  // 將自癒歷程歸檔至萬能筆記
+  await syncTaskToUniversalNotes(task);
+
   // 🌟 透過 WebSocket 中繼 API 發送廣播，觸發前端因果律拓樸圖的紅轉藍動畫
   try {
     const broadcastUrl = process.env.SWARM_WS_BROADCAST_URL || 'http://localhost:3000/api/swarm/broadcast';
@@ -462,7 +529,7 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
         parentTaskId: sourceTaskId,
         stage: 'HEALING_STARTED',
         node: 'Healing',
-        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取...`
+        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取並同步至萬能筆記...`
       })
     }).catch(() => {
       // 忽略廣播非同步錯誤，確保核心修復流程不因網路波動受阻

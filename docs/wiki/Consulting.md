@@ -1,3 +1,9 @@
+---
+uuid: "a1546f69-074f-4c2f-aab4-02f177728135"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.481Z"
+evidence: "docs\wiki\Consulting.md"
+---
 # ESG 顧問服務模組 ESG Consulting Hub [Consulting]
 路徑： /consulting | 權限： ADMIN, PM, CSO | 所屬旅程： VI. 外部協作與服務
 

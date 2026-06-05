@@ -1,3 +1,9 @@
+---
+uuid: "013edb91-249e-45f1-821a-4dfc754ff224"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.388Z"
+evidence: "src\dataconnect-generated\react\README.md"
+---
 # Generated React README
 This README will guide you through the process of using the generated React SDK package for the connector `example`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
 

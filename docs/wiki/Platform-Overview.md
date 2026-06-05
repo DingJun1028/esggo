@@ -1,3 +1,9 @@
+---
+uuid: "00ed85fb-aaa1-49b9-b951-97b4ac143aae"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.442Z"
+evidence: "docs\wiki\Platform-Overview.md"
+---
 # 平台總覽 Platform Overview [Platform Overview]
 路徑： / | 權限： ALL_USERS | 所屬旅程： 核心概念
 

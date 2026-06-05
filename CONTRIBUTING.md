@@ -1,3 +1,9 @@
+---
+uuid: "2e93223f-1f12-4016-bdcc-18da48fc09fc"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.348Z"
+evidence: "CONTRIBUTING.md"
+---
 # Contributing to ESGGO
 
 Thank you for considering contributing to ESGGO! Please read the following guidelines to help make the contribution process smooth and effective.

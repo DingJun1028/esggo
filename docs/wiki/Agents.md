@@ -1,3 +1,9 @@
+---
+uuid: "d776c1ff-fccb-4c87-8792-bc600f171c7b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.491Z"
+evidence: "docs\wiki\Agents.md"
+---
 # ESG AI Agents ESG AI Agents [Agents]
 路徑： /agents | 權限： PM, ADMIN, USER | 所屬旅程： IV. AI 賦能與撰寫
 

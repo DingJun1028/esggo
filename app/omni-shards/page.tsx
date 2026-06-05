@@ -23,7 +23,7 @@ export default function OmniShardsPage() {
           </h1>
           <p className="text-slate-400 text-sm md:text-base max-w-2xl font-medium leading-relaxed">
             在這裡，OmniAgent 將過去與您的協作對話，自動提煉為結構化的「記憶碎片」。<br/>
-            透過系統的自我反思與歸納，將碎片融合為更具深度的「技能奧義」，達成 <strong>Liquid Glass 治理生態</strong>的自主進化。
+            透過系統的自我反思與歸納，將碎片融合為更具深度的「技能奧義」，達成 <strong>全端智能核心</strong>的自主進化。
           </p>
         </header>
 

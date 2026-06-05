@@ -1,3 +1,9 @@
+---
+uuid: "ec7dc070-c629-494a-b156-c0652eff52f2"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.458Z"
+evidence: "docs\wiki\Health-Check.md"
+---
 # ESG 健檢儀表板 ESG Health Check Dashboard [Health Check]
 路徑： /health-check | 權限： PM, CSO, ADMIN | 所屬旅程： III. 數據採集與分析
 

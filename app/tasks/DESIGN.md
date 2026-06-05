@@ -1,3 +1,9 @@
+---
+uuid: "c73ac861-f3ee-49ff-bdf5-0aab84a9972b"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.514Z"
+evidence: "app\tasks\DESIGN.md"
+---
 # 任務中心 Tasks
 
 **路徑：** `/tasks`

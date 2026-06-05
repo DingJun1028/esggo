@@ -1,3 +1,9 @@
+---
+uuid: "a76be9b4-bcfa-4076-80f0-5d16e3d708d6"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.368Z"
+evidence: "API_SPECIFICATION.md"
+---
 # 🏛️ OmniAgent X ESG GO | 全域 API 規格說明書 v1.2
 ## 數位治理主權與 5T 誠信協議標準
 

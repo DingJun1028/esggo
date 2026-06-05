@@ -1,3 +1,9 @@
+---
+uuid: "2f03950d-0859-4d49-a254-7f62e8ac64c1"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.390Z"
+evidence: "src\components\DESIGN_PRINCIPLES.md"
+---
 # ESG GO Design Principles
 
 ## 核心原則 (Universal Design Principles)

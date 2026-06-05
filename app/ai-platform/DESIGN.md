@@ -1,3 +1,9 @@
+---
+uuid: "05ef0ecc-c981-4dc5-8968-37b2c727f182"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:23.553Z"
+evidence: "app\ai-platform\DESIGN.md"
+---
 # AI 整合平台 AI Platform
 
 **路徑：** `/ai-platform`

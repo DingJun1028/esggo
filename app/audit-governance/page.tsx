@@ -263,7 +263,7 @@ export default function AuditGovernancePage() {
             const isOpen = expandedCat === cat;
             
   const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    id: `ESG-${"OMN"}`,
     title: 'Audit Governance',
     sub: 'Audit Governance Management'
   };
@@ -459,7 +459,7 @@ export default function AuditGovernancePage() {
             <Info size={16} style={{ flexShrink: 0 }} />
             <p className="text-sm">
               每個開發週期的每個頁面都必須完成以下五個階段的檢查，缺少任何一個階段視為
-              <strong> 不完整交付</strong>。
+              <strong>全端智能核心</strong>。
             </p>
           </div>
 

@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Layout, Shield, Activity, Fingerprint, Database,
-  Sparkles, Send, CheckCircle2, Lock, GitMerge, X, Layers
+  Sparkles, Send, CheckCircle2, Lock, GitMerge, X, Layers,
+  Leaf, Users, Building2
 } from 'lucide-react';
 import { AtomicCard } from '@/lib/design-system/AtomicCard';
 import { AtomicButton } from '@/lib/design-system/AtomicButton';
@@ -13,7 +14,7 @@ import { AtomicProgress } from '@/lib/design-system/AtomicProgress';
 import { AtomicToggle } from '@/lib/design-system/AtomicToggle';
 import { atomicManager, IAtomicComponent } from '@/lib/design-system/atomic-core';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
-import { Leaf, Users, Building2 } from 'lucide-react';
+import { getUniversalNotesAction, semanticCreateTaskAction, TaskRecord } from '@/lib/agent/UniversalNotesTracker';
 
 export default function SovereignDashboard() {
   // 三欄式佈局：控制右側 Workspace Panel 展開/收合
@@ -23,6 +24,14 @@ export default function SovereignDashboard() {
   const [isRegistryModalOpen, setIsRegistryModalOpen] = useState(false);
   const [registeredAtoms, setRegisteredAtoms] = useState<IAtomicComponent[]>([]);
   const [esgData, setEsgData] = useState<any>(null);
+  const [universalNotes, setUniversalNotes] = useState<TaskRecord[]>([]);
+  const [hiveMindLogs, setHiveMindLogs] = useState<string[]>([
+    `[${new Date().toISOString().substring(11, 19)}] SYS_BOOT`,
+    '> OmniAgent Bus connected.',
+    '> Awaiting JunAiKey semantics...'
+  ]);
+  const [composerInput, setComposerInput] = useState('');
+  const [isComposing, setIsComposing] = useState(false);
 
   // 當打開註冊表 Modal 時，從萬能心核庫撈取已註冊的元件
   useEffect(() => {
@@ -75,6 +84,104 @@ export default function SovereignDashboard() {
     };
     fetchEsgData();
   }, []);
+
+  // 實時連動：輪詢獲取萬能筆記的最新自主任務狀態
+  useEffect(() => {
+    let mounted = true;
+    const syncNotes = async () => {
+      try {
+        const notes = await getUniversalNotesAction();
+        if (mounted) setUniversalNotes(notes);
+      } catch (e) { }
+    };
+    syncNotes();
+    const interval = setInterval(syncNotes, 3000); // 3秒實時心跳同步
+    return () => { mounted = false; clearInterval(interval); };
+  }, []);
+
+  // 實時連動：建立真實 WebSocket 連線接收 Hive Mind 廣播日誌
+  useEffect(() => {
+    // 支援從環境變數注入 WebSocket 服務，預設回退至同源的 API 串流端點
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = process.env.NEXT_PUBLIC_SWARM_WS_URL || `${protocol}//${window.location.host}/api/swarm/stream`;
+    
+    let ws: WebSocket;
+    let reconnectTimer: NodeJS.Timeout;
+
+    const connect = () => {
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        setHiveMindLogs(prev => [...prev, `[${new Date().toISOString().substring(11, 19)}] 🌐 OmniCore Hive Mind WebSocket Connected.`].slice(-20));
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const time = new Date().toISOString().substring(11, 19);
+          // 支援 orchestrator.ts 中發送的 { stage, node, message, taskId }
+          let logText = `[${time}] `;
+          if (data.node) logText += `[${data.node}] `;
+          if (data.stage) logText += `${data.stage} `;
+          if (data.message) logText += `- ${data.message}`;
+          else if (data.taskId) logText += `- Task ID: ${data.taskId.substring(0, 8)}...`;
+          
+          setHiveMindLogs(prev => [...prev, logText.trim()].slice(-20));
+        } catch (err) {
+          const time = new Date().toISOString().substring(11, 19);
+          setHiveMindLogs(prev => [...prev, `[${time}] ${event.data}`].slice(-20));
+        }
+      };
+
+      ws.onclose = () => {
+        setHiveMindLogs(prev => [...prev, `[${new Date().toISOString().substring(11, 19)}] ⚠️ WebSocket Disconnected. Reconnecting in 5s...`].slice(-20));
+        reconnectTimer = setTimeout(connect, 5000);
+      };
+
+      ws.onerror = (err) => {
+        console.error('[Hive Mind WS Error]', err);
+        ws.close();
+      };
+    };
+
+    connect();
+
+    return () => {
+      clearTimeout(reconnectTimer);
+      if (ws) {
+        ws.onclose = null; // 避免元件卸載時觸發不必要的重連
+        ws.close();
+      }
+    };
+  }, []);
+
+  // 處理語義對話框送出
+  const handleSemanticSubmit = async () => {
+    if (!composerInput.trim()) return;
+    setIsComposing(true);
+    const currentPrompt = composerInput;
+    setComposerInput(''); // 立即清空輸入框提升 UX
+
+    // 將人類引導記錄寫入底層日誌
+    setHiveMindLogs(prev => [...prev, `[${new Date().toISOString().substring(11, 19)}] 接收語義引導: "${currentPrompt}"...`].slice(-20));
+
+    try {
+      await semanticCreateTaskAction(currentPrompt);
+
+      setHiveMindLogs(prev => [...prev, `[${new Date().toISOString().substring(11, 19)}] 語義已轉譯，萬能筆記任務生成完畢。`].slice(-20));
+
+      // 強制立刻同步一次萬能筆記，實現零延遲 UI 回饋
+      const notes = await getUniversalNotesAction();
+      setUniversalNotes(notes);
+
+      // 如果右側面板未展開，則自動展開以展示新任務
+      if (!isWorkspaceOpen) setIsWorkspaceOpen(true);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsComposing(false);
+    }
+  };
 
   return (
     <div className="h-screen w-full bg-[#020617] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#06b6d4]/10 via-[#020617] to-[#020617] text-slate-200 overflow-hidden flex font-sans selection:bg-[#06b6d4]/30">
@@ -280,15 +387,30 @@ export default function SovereignDashboard() {
             {/* 語義引導輸入框 */}
             <div className="flex-1">
               <AtomicInput
-                placeholder="JunAiKey 語義引導：請輸入您的合規要求或數據指令..."
+                value={composerInput}
+                onChange={(e) => setComposerInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !isComposing) handleSemanticSubmit();
+                }}
+                disabled={isComposing}
+                placeholder="JunAiKey 語義引導：請輸入指令，將自動解析為治理任務..."
                 className="!bg-transparent !border-none !outline-none !shadow-none focus:!ring-0 !text-white placeholder:!text-slate-500 !px-0 w-full text-sm font-medium"
               />
             </div>
 
             {/* Context Ring 與發送按鈕 */}
             <div className="w-10 h-10 flex items-center justify-center relative">
-              <div className="absolute inset-0 rounded-full border border-[#10b981]/50 animate-[spin_3s_linear_infinite]"></div>
-              <AtomicButton variant="ghost" className="relative !w-8 !h-8 !p-0 !min-w-0 !rounded-full bg-[#10b981]/20 flex items-center justify-center hover:bg-[#10b981]/40 text-[#10b981] transition-colors">
+              {isComposing ? (
+                <div className="absolute inset-0 rounded-full border border-[#10b981]/50 animate-[spin_3s_linear_infinite]"></div>
+              ) : (
+                <div className="absolute inset-0 rounded-full border border-dashed border-[#06b6d4]/30"></div>
+              )}
+              <AtomicButton
+                onClick={handleSemanticSubmit}
+                disabled={isComposing || !composerInput.trim()}
+                variant="ghost"
+                className={`relative !w-8 !h-8 !p-0 !min-w-0 !rounded-full ${isComposing ? 'bg-[#10b981]/10 text-[#10b981]/50' : 'bg-[#10b981]/20 hover:bg-[#10b981]/40 text-[#10b981]'} flex items-center justify-center transition-colors`}
+              >
                 <Send className="w-4 h-4 ml-0.5" />
               </AtomicButton>
             </div>
@@ -302,17 +424,72 @@ export default function SovereignDashboard() {
           }`}
       >
         <div className="w-80 h-full flex flex-col p-4 bg-black/20">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-bold text-white/70 uppercase tracking-widest font-mono flex items-center gap-2">
-              <Layout className="w-4 h-4" /> Workspace
+          {/* 蜂群控制台標頭 */}
+          <div className="flex items-center justify-between mb-4 shrink-0 border-b border-white/10 pb-3">
+            <h3 className="text-xs font-bold text-[#06b6d4] uppercase tracking-widest font-mono flex items-center gap-2 shadow-cyan-glow">
+              <Activity className="w-4 h-4" /> Hive Mind Console
             </h3>
+            <div className="flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]"></span>
+              </span>
+              <span className="text-[10px] text-[#10b981] font-mono tracking-wide">SYNCED</span>
+            </div>
           </div>
 
-          <div className="flex-1 border border-white/10 rounded bg-[#020617] p-4 overflow-y-auto text-[11px] text-slate-400 font-mono space-y-2">
-            <div className="text-slate-500">[{new Date().toISOString().substring(11, 19)}] SYS_BOOT</div>
-            <div className="text-[#06b6d4]">&gt; OmniAgent Bus connected.</div>
-            <div>&gt; Awaiting JunAiKey semantics...</div>
-            <div className="mt-4 pt-4 border-t border-white/10 text-[#10b981] flex flex-col items-start gap-2">
+          {/* 連動區：萬能筆記實時追蹤 (Universal Notes) */}
+          <div className="mb-4 shrink-0">
+            <h4 className="text-[10px] text-slate-400 font-mono mb-2 flex justify-between">
+              <span>UNIVERSAL_NOTES</span>
+              <span className="text-cyan-core">{universalNotes.length} TASKS</span>
+            </h4>
+            <div className="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+              {universalNotes.length === 0 ? (
+                <div className="text-[10px] text-slate-500 italic flex items-center justify-center p-4 border border-dashed border-white/10 rounded-lg">No autonomous tasks recorded.</div>
+              ) : (
+                universalNotes.slice(0, 4).map(note => (
+                  <div key={note.id} className="p-2.5 rounded-lg bg-white/5 border border-white/10 flex flex-col gap-1.5 hover:border-[#06b6d4]/30 hover:bg-white/10 transition-colors shadow-sm">
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="text-xs text-slate-200 line-clamp-1 font-medium flex-1" title={note.title}>{note.title}</span>
+                      {note.assignee && (
+                        <span className="shrink-0 text-[8px] font-mono px-1.5 py-0.5 rounded border border-[#06b6d4]/30 text-[#06b6d4] bg-[#06b6d4]/10 flex items-center gap-1">
+                          <Activity className="w-2.5 h-2.5" />
+                          {note.assignee}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-[9px] text-slate-500 font-mono">ID: {note.id.substring(0, 6)}...</span>
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${note.status === 'Done' ? 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/30' :
+                        note.status === 'In Progress' ? 'bg-[#06b6d4]/20 text-[#06b6d4] border border-[#06b6d4]/30 animate-pulse' :
+                          'bg-[#F59E0B]/20 text-[#F59E0B] border border-[#F59E0B]/30'
+                        }`}>{note.status.toUpperCase()}</span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* 連動區：蜂群底層日誌 (Swarm Logs) */}
+          <h4 className="text-[10px] text-slate-400 font-mono mb-2 mt-2 pt-2 border-t border-white/10 flex items-center gap-2">
+            <Layers className="w-3 h-3" /> SWARM_EVENT_LOGS
+          </h4>
+          <div className="flex-1 border border-white/10 rounded-lg bg-[#020617] p-3 overflow-y-auto text-[10px] text-slate-400 font-mono space-y-1.5 custom-scrollbar shadow-inner">
+            {hiveMindLogs.map((log, i) => (
+              <div key={i} className={`break-words ${
+                log.includes('OmniCore') || log.includes('🌐') ? 'text-[#06b6d4]' : 
+                log.includes('⚠️') || log.includes('❌') || log.includes('FAILED') ? 'text-[#FF4D6D]' : 
+                log.includes('✅') || log.includes('Healing') || log.includes('COMPLETED') ? 'text-[#10b981]' : 
+                log.includes('SYS_BOOT') ? 'text-slate-500' : 
+                log.includes('ZKP') ? 'text-[#8B5CF6]' : 
+                'text-slate-300'
+              }`}>
+                {log}
+              </div>
+            ))}
+            <div className="mt-3 pt-3 border-t border-white/10 text-[#10b981] flex flex-col items-start gap-1.5">
               <span>&gt; {ncbdbStatus.status}</span>
               {ncbdbStatus.data && (
                 <AtomicBadge variant="verified">DATA CONFIRMED</AtomicBadge>

@@ -1,3 +1,9 @@
+---
+uuid: "8e5f066d-33a6-456c-8f5e-be13115f4ede"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.333Z"
+evidence: "governance_trace.md"
+---
 ### Execution Trace (OmniCore Matrix):
 - 🔍 Viewed: 
   - adr/ADR_Index.md

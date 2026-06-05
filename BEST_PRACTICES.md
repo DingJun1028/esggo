@@ -1,3 +1,9 @@
+---
+uuid: "3f796bc2-431f-4b84-a995-6bc93e946902"
+version: "1.0.0"
+timestamp: "2026-06-04T10:36:12.361Z"
+evidence: "BEST_PRACTICES.md"
+---
 # ESG GO Best Practices Documentation
 
 This document outlines the best practices we've implemented for the ESG GO platform to ensure scalability, maintainability, and security.
