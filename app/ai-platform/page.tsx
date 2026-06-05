@@ -1,11 +1,11 @@
-ï»¿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
 import { UniversalButton } from '@/components/ui/universal/UniversalButton';
 import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
 import { UniversalTable } from '@/components/ui/universal/UniversalTable';
-import { Cpu, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react/icons';
+import { Cpu, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
 export default function AiPlatformPage() {
   const [data, setData] = useState<any[]>([]);
@@ -29,7 +29,7 @@ export default function AiPlatformPage() {
       } else {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'mç³§', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'mÂ³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
           { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
           { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
@@ -38,7 +38,7 @@ export default function AiPlatformPage() {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'mç³§', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'mÂ³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
         { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
@@ -61,7 +61,7 @@ export default function AiPlatformPage() {
       if (resData.success && resData.hashLock) {
         setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
       } else {
-        alert('æ’ î¼»ï™¢æ†­æœ›? (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        alert('å°å°å¤±æ? (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
     } catch (error) {
       console.error('Seal exception:', error);
@@ -102,22 +102,22 @@ export default function AiPlatformPage() {
   };
 
   const columns = [
-    { key: 'date', label: 'æ—¥æœŸ (Date)' },
-    { key: 'metric_name', label: 'æŒ‡æ¨™åç¨± (Metric Name)' },
-    { key: 'metric_value', label: 'æ•¸å€¼ (Value)', render: (val: any, row: any) => (
+    { key: 'date', label: '¤é´Á (Date)' },
+    { key: 'metric_name', label: '«ü¼Ğ¦WºÙ (Metric Name)' },
+    { key: 'metric_value', label: '¼Æ­È (Value)', render: (val: any, row: any) => (
       <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
     ) },
-    { key: 'source_origin', label: 'ä¾†æº (Source)' },
+    { key: 'source_origin', label: '¨Ó·½ (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
       val ? (
         <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
           {val.substring(0, 8)}...
         </UniversalBadge>
       ) : (
-        <UniversalBadge variant="default" size="sm">æœªå°è£</UniversalBadge>
+        <UniversalBadge variant="default" size="sm">¥¼«Ê¸Ë</UniversalBadge>
       )
     ) },
-    { key: 'action', label: 'æ“ä½œ (Actions)', render: (_: any, row: any) => (
+    { key: 'action', label: '¾Ş§@ (Actions)', render: (_: any, row: any) => (
       <div className="flex items-center gap-3">
         {!row.hash_lock && (
           <button 
@@ -126,7 +126,7 @@ export default function AiPlatformPage() {
             className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 æ’ î¼»ï™¢
+            T5 å°å°
           </button>
         )}
         <button 
@@ -135,7 +135,7 @@ export default function AiPlatformPage() {
           className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
         >
           {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? 'é©—è­‰ 5T' : 'ç·¨è¼¯'}
+          {row.hash_lock ? 'ÅçÃÒ 5T' : '½s¿è'}
         </button>
       </div>
     ) }
@@ -169,9 +169,9 @@ export default function AiPlatformPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">ç‘¼ï¼¹æ£</UniversalButton>
+            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">æª¢ç´¢</UniversalButton>
             <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              ?å•£?èÂ€??            </UniversalButton>
+              ?°å?ç´€??            </UniversalButton>
           </div>
         </header>
 
@@ -179,7 +179,7 @@ export default function AiPlatformPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">æ´»èºç¯€é»</span>
+              <span className="text-sm font-bold uppercase tracking-widest">¬¡ÅD¸`ÂI</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
@@ -188,7 +188,7 @@ export default function AiPlatformPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T æ’½î¤œ??</span>
+              <span className="text-sm font-bold uppercase tracking-widest">5T é©—è??</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -197,7 +197,7 @@ export default function AiPlatformPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">æ¥­å‹™é‚è¼¯</span>
+              <span className="text-sm font-bold uppercase tracking-widest">·~°ÈÅŞ¿è</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -210,7 +210,7 @@ export default function AiPlatformPage() {
           <div className="lg:col-span-3 space-y-6">
             <UniversalCard 
               variant="default" 
-              title="æ¥­å‹™è³‡æ–™é è¦½" 
+              title="·~°È¸ê®Æ¹wÄı" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
@@ -225,19 +225,19 @@ export default function AiPlatformPage() {
           <div className="space-y-6">
             <UniversalCard 
               variant="glow" 
-              title="OmniAgent æ ¸å¿ƒ"
-              subtitle="AI èƒ½åŠ›ä¸­å¿ƒ"
+              title="OmniAgent ®Ö¤ß"
+              subtitle="AI ¯à¤O¤¤¤ß"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  æ­¤å°ˆæ¡ˆå…·å‚™ <strong>å…¨ç«¯æ™ºèƒ½æ ¸å¿ƒ</strong>ï¼Œç¬¦åˆåš´æ ¼ TypeScript æ¨™æº–ã€‚
+                  ¦¹±M®×¨ã³Æ <strong>¥şºİ´¼¯à®Ö¤ß</strong>¡A²Å¦XÄY®æ TypeScript ¼Ğ·Ç¡C
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">é–®å‰›??î¸? (Trinity UIUX)</h4>
+                  <h4 className="font-bold text-cyan-400 mb-2">è¨­è??Ÿå? (Trinity UIUX)</h4>
                   <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>æ‘°ï¼¸ï—æ“ƒî†? (Customer Experience)</li>
-                    <li>ç’†å‰–??î´æ‘© (Business Logic)</li>
-                    <li>ç’†è”ïŠ¸è¢î”é£› (Liquid Glass Cyan)</li>
+                    <li>å®¢æˆ¶é«”é? (Customer Experience)</li>
+                    <li>æ¥­å??è¼¯ (Business Logic)</li>
+                    <li>æ¥µè‡´ç¾å­¸ (Liquid Glass Cyan)</li>
                   </ul>
                 </div>
               </div>
