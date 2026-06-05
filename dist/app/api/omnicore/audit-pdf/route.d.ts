@@ -5,7 +5,7 @@ export declare function POST(request: Request): Promise<NextResponse<{
     success: boolean;
     message: string;
     details: {
-        pdfParsedTextLength: any;
+        pdfParsedTextLength: number;
         hashLock: string;
         zkpSeal: string;
         aiExtraction: any;

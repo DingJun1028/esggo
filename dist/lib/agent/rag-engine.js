@@ -1,6 +1,14 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { supabaseAdmin } from '../supabaseAdmin';
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+let genAI;
+if (process.env.LOCAL_GEMMA_SERVER_URL) {
+    // 注意：官方 @google/generative-ai 尚未直接支援 baseURL，若是本地伺服器，可能需要搭配 @ai-sdk/google
+    // 這裡僅先使用 local key 初始化，後續可擴充 Custom Fetch
+    genAI = new GoogleGenerativeAI('local-key');
+}
+else {
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+}
 /**
  * 1. 文本切割器 (Semantic Text Splitter)
  */
@@ -112,7 +120,22 @@ export async function queryKnowledgeBase(query, history = []) {
  * Compatibility: Process PDF
  */
 export async function processPDFAndIngest(buffer, fileName) {
-    const content = buffer.toString('utf-8').slice(0, 5000); // Simple mock for PDF text extraction
+    let content = '';
+    try {
+        const mod = await import('pdf-parse');
+        const PDFParseClass = mod.PDFParse || mod.default?.PDFParse;
+        if (!PDFParseClass) {
+            throw new Error('PDFParse class not found in pdf-parse module');
+        }
+        const parser = new PDFParseClass({ data: buffer });
+        const pdfData = await parser.getText();
+        content = pdfData.text;
+    }
+    catch (error) {
+        console.error('[RAG Engine] Failed to parse PDF:', error);
+        // 發生錯誤時不要再將二進位緩衝區轉為字串，那會產生亂碼
+        content = `[PDF Extraction Error] Could not extract text from ${fileName}. The file might be encrypted, corrupted, or have no extractable text.`;
+    }
     await ingestDocument(fileName, content, 'DOCUMENT', { fileName });
     return chunkText(content).length;
 }

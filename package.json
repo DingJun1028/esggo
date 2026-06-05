@@ -4,7 +4,7 @@
   "description": "OmniMCP integration for ESGGO platform with master authorization",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc",
+    "build": "next build",
     "start": "node dist/server.js",
     "dev": "ts-node src/server.ts",
     "lint": "eslint src/**/*.ts",
