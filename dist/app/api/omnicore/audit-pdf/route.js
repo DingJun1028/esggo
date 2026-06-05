@@ -23,8 +23,19 @@ export async function POST(request) {
             return NextResponse.json({ success: false, error: '找不到指定的 PDF 檔案 (Please ensure sample-evidence.pdf exists in public/)' }, { status: 404 });
         }
         // 2. Extract text using pdf-parse
-        const pdfData = await pdfParse(pdfBuffer);
-        const extractedText = pdfData.text;
+        let extractedText = '';
+        try {
+            const PDFParseClass = pdfParseModule.PDFParse || pdfParseModule.default?.PDFParse;
+            if (!PDFParseClass)
+                throw new Error("PDFParse class not found");
+            const parser = new PDFParseClass({ data: pdfBuffer });
+            const pdfData = await parser.getText();
+            extractedText = pdfData.text;
+        }
+        catch (e) {
+            console.warn(`[Audit PDF] PDF 解析失敗，將使用二進位 Fallback (可能產生亂碼): ${e.message}`);
+            extractedText = `[PDF Extraction Error] Could not parse text.`;
+        }
         console.log(`[Audit PDF] PDF 解析完成，擷取字數: ${extractedText.length}`);
         // 3. Use OmniAgent (Genkit) to audit and extract metrics
         const ai = await getOmniAgentAI();

@@ -8,8 +8,8 @@ export declare const supabase: SupabaseClient<Database>;
 export declare const supabaseAdmin: SupabaseClient<Database>;
 export declare class SupabaseError extends Error {
     code: string;
-    details?: unknown;
-    constructor(message: string, code: string, details?: unknown);
+    details?: unknown | undefined;
+    constructor(message: string, code: string, details?: unknown | undefined);
 }
 export declare function handleSupabaseError(error: unknown): never;
 export declare function testConnection(): Promise<boolean>;

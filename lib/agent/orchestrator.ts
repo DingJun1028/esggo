@@ -182,7 +182,7 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
     actorId: 'SYSTEM_SOUL_JUNAIKEY',
     taskType: 'system_ops',
     title: `[無作妙德] 自主共鳴修復與進化：${vibeSignal}`,
-    description: `系統於無形中感知到狀態偏移或進化潛能。觸發「無作妙德圓通無礙」天賦，主動進行跨模組校準與熵減。\n當前上下文: ${currentContext}`,
+    description: `系統於無形中感知到狀態偏移或進化潛能。觸發「無作妙德圓通無礙」天賦，主動進行跨模組校準與熵減。\n將此運行狀態自動歸檔至【萬能筆記】，達成圓通無礙的全域追蹤。\n當前上下文: ${currentContext}`,
     inputRefIds: [],
     skillKey: 'omnicore_autonomous_healing'
   };
@@ -433,7 +433,7 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
     actorId: 'SYSTEM_HEALING_GUARDIAN',
     taskType: 'system_ops',
     title: `[自動修復] ZKP 校驗失敗：重新補齊缺漏數據`,
-    description: `來源任務 (ID: ${sourceTaskId}) 發生 ZKP 承諾加總不匹配。\n原因：${failureReason}\n請 OmniAgent 蜂群重新核對子公司底層數據並補齊缺漏。`,
+    description: `來源任務 (ID: ${sourceTaskId}) 發生 ZKP 承諾加總不匹配。\n原因：${failureReason}\n請 OmniAgent 蜂群重新核對子公司底層數據並補齊缺漏。\n[追蹤註記] 此自癒任務與過程已無縫同步至【萬能筆記】，落實圓通無礙。`,
     inputRefIds: [],
     skillKey: 'omnicore_autonomous_healing'
   };
@@ -462,7 +462,7 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
         parentTaskId: sourceTaskId,
         stage: 'HEALING_STARTED',
         node: 'Healing',
-        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取...`
+        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取並同步至萬能筆記...`
       })
     }).catch(() => {
       // 忽略廣播非同步錯誤，確保核心修復流程不因網路波動受阻

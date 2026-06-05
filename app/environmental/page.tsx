@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { UniversalCard } from '@/components/ui/universal/UniversalCard';
@@ -32,8 +32,8 @@ export default function EnvironmentalPage() {
       } else {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm糧', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '??, hash_lock: null, source_origin: 'Manual' },
           { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
       }
@@ -41,8 +41,8 @@ export default function EnvironmentalPage() {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm糧', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '??, hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
       setLoading(false);
@@ -64,11 +64,11 @@ export default function EnvironmentalPage() {
       if (resData.success && resData.hashLock) {
         setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
       } else {
-        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        alert('撠憭望? (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
     } catch (error) {
       console.error('Seal exception:', error);
-      alert('無法連線至封印金庫 (Vault Connection Error)。');
+      alert('?⊥?????喳??圈?摨?(Vault Connection Error)??);
     } finally {
       setSealingId(null);
     }
@@ -84,13 +84,13 @@ export default function EnvironmentalPage() {
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
-        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
+        alert('??撽??? (Verification Success)嚗???剔砥?對?蝚血? 5T 隤縑?降??);
       } else {
-        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
+        alert('??撽?憭望? (Verification Failed)嚗?摨急撽?蝚佗?鞈??航撌脣???);
       }
     } catch (e) {
       console.error('Verify exception:', e);
-      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
+      alert('????澈??隤?(Vault Connection Error)??);
     } finally {
       setVerifyingId(null);
     }
@@ -120,29 +120,29 @@ export default function EnvironmentalPage() {
   };
 
   const formFields: FormField[] = [
-    { name: 'date', label: '日期 (Date)', type: 'date', required: true },
-    { name: 'metric_name', label: '指標名稱 (Metric Name)', type: 'text', placeholder: 'e.g. 月度總用電量', required: true },
-    { name: 'metric_value', label: '數值 (Value)', type: 'number', placeholder: 'e.g. 1500', required: true },
-    { name: 'unit', label: '單位 (Unit)', type: 'enum', options: ['m³', '噸', '度 (kWh)', '%', '公斤'], required: true },
+    { name: 'date', label: '?交? (Date)', type: 'date', required: true },
+    { name: 'metric_name', label: '???迂 (Metric Name)', type: 'text', placeholder: 'e.g. ?漲蝮賜?駁?', required: true },
+    { name: 'metric_value', label: '?詨?(Value)', type: 'number', placeholder: 'e.g. 1500', required: true },
+    { name: 'unit', label: '?桐? (Unit)', type: 'enum', options: ['m糧', '??, '摨?(kWh)', '%', '?祆'], required: true },
   ];
 
   const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
+    { key: 'date', label: '?交? (Date)' },
+    { key: 'metric_name', label: '???迂 (Metric Name)' },
+    { key: 'metric_value', label: '?詨?(Value)', render: (val: any, row: any) => (
       <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
     ) },
-    { key: 'source_origin', label: '來源 (Source)' },
+    { key: 'source_origin', label: '靘? (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
       val ? (
         <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
           {val.substring(0, 8)}...
         </UniversalBadge>
       ) : (
-        <UniversalBadge variant="default" size="sm">未封印</UniversalBadge>
+        <UniversalBadge variant="default" size="sm">?芸???/UniversalBadge>
       )
     ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
+    { key: 'action', label: '?? (Actions)', render: (_: any, row: any) => (
       <div className="flex items-center gap-3">
         {!row.hash_lock && (
           <button 
@@ -151,7 +151,7 @@ export default function EnvironmentalPage() {
             className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
+            T5 撠
           </button>
         )}
         <button 
@@ -160,7 +160,7 @@ export default function EnvironmentalPage() {
           className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
         >
           {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
+          {row.hash_lock ? '撽? 5T' : '蝺刻摩'}
         </button>
       </div>
     ) }
@@ -168,7 +168,7 @@ export default function EnvironmentalPage() {
 
   
   const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    id: `ESG-${"OMN"}`,
     title: 'Environmental',
     sub: 'Environmental Management'
   };
@@ -194,10 +194,9 @@ export default function EnvironmentalPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</UniversalButton>
+            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">瑼Ｙ揣</UniversalButton>
             <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              新增紀錄
-            </UniversalButton>
+              ?啣?蝝??            </UniversalButton>
           </div>
         </header>
 
@@ -205,7 +204,7 @@ export default function EnvironmentalPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
+              <span className="text-sm font-bold uppercase tracking-widest">瘣餉?隞??</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
@@ -214,7 +213,7 @@ export default function EnvironmentalPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
+              <span className="text-sm font-bold uppercase tracking-widest">5T 撽???/span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -223,7 +222,7 @@ export default function EnvironmentalPage() {
 
           <UniversalCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
+              <span className="text-sm font-bold uppercase tracking-widest">璆剖??摩閬?</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -236,7 +235,7 @@ export default function EnvironmentalPage() {
           <div className="lg:col-span-3 space-y-6">
             <UniversalCard 
               variant="default" 
-              title="業務資料視圖" 
+              title="璆剖?鞈?閬?" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
@@ -251,19 +250,18 @@ export default function EnvironmentalPage() {
           <div className="space-y-6">
             <UniversalCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="OmniAgent 頛" 
+              subtitle="AI ?箄銝???
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
-                </p>
+                  甇斗芋蝯歇?亥? <strong>?祈?辣??摨?蝬??/strong>嚗蒂蝚血??函垢?? TypeScript 閬???                </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
+                  <h4 className="font-bold text-cyan-400 mb-2">閮剛??? (Trinity UIUX)</h4>
                   <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
+                    <li>摰Ｘ擃? (Customer Experience)</li>
+                    <li>璆剖??摩 (Business Logic)</li>
+                    <li>璆菔蝢飛 (Liquid Glass Cyan)</li>
                   </ul>
                 </div>
               </div>
@@ -276,18 +274,18 @@ export default function EnvironmentalPage() {
       <UniversalModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
-        title="新增 ESG 數據紀錄"
+        title="?啣? ESG ?豢?蝝??
       >
         <div className="mb-4 text-sm text-slate-400">
-          透過此萬能表單寫入的數據將自動標記為人工來源，並可後續通過 5T 協議進行 ZKP 封印。
-        </div>
+          ??甇方?質”?桀神?亦??豢?撠??閮鈭箏極靘?嚗蒂?臬?蝥? 5T ?降?脰? ZKP 撠??        </div>
         <UniversalForm 
           fields={formFields} 
           onSubmit={handleFormSubmit}
           onCancel={() => setIsModalOpen(false)}
-          submitLabel={isProcessing ? "處理中..." : "寫入資料"}
+          submitLabel={isProcessing ? "??銝?.." : "撖怠鞈?"}
         />
       </UniversalModal>
     </div>
   );
 }
+

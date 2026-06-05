@@ -10,6 +10,7 @@ import { SaaSProvider } from '../hooks/useSaaS';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { ToastProvider, ToastContainer } from '../components/ui';
 import { OmniAgentPulse } from '../components/omni/OmniAgentPulse';
+import OmniCommandPalette from '../components/omni/OmniCommandPalette';
 function SystemHealthBanner() {
     const { systemStatus } = useAuth();
     if (systemStatus === 'online')
@@ -45,7 +46,7 @@ function AppContent({ children }) {
         return null;
     // 1. Public Routes
     if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
-        return _jsxs(_Fragment, { children: [_jsx(ToastContainer, {}), _jsx(OmniAgentPulse, {}), children] });
+        return _jsxs(_Fragment, { children: [_jsx(ToastContainer, {}), _jsx(OmniAgentPulse, {}), _jsx(OmniCommandPalette, {}), children] });
     }
     // 2. Loading State
     if (loading) {
@@ -53,7 +54,7 @@ function AppContent({ children }) {
     }
     // 3. Protected Shell
     if (isAuthenticated) {
-        return (_jsxs(AppShellV2, { children: [children, _jsx(ToastContainer, {}), _jsx(OmniAgentPulse, {})] }));
+        return (_jsxs(AppShellV2, { children: [children, _jsx(ToastContainer, {}), _jsx(OmniAgentPulse, {}), _jsx(OmniCommandPalette, {})] }));
     }
     return null;
 }

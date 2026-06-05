@@ -44,7 +44,7 @@ export function useExport() {
             element.className = 'print-container';
             element.innerHTML = `
         <style>
-          .print-container { font-family: ui-sans-serif, system-ui, sans-serif; padding: 40px; color: #0f172a; }
+          .print-container { font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif; padding: 40px; color: #0f172a; }
           .print-title { text-align: center; font-size: 36px; font-weight: 900; margin-bottom: 60px; color: #06b6d4; }
           .print-chapter { page-break-before: always; }
           .print-chapter-title { color: #0891b2; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 24px; font-size: 24px; font-weight: 800; }
