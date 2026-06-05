@@ -15,3 +15,4 @@ export { UniversalProgress, type UniversalProgressProps } from './UniversalProgr
 export { UniversalStatusDot, type UniversalStatusDotProps } from './UniversalStatusDot';
 export { OmniTag, type OmniTagProps } from './OmniTag';
 export { OmniDB, type OmniDBRecord, type OmniDBCredentials, type OmniDBProps } from './OmniDB';
+export { UniversalToggle, type UniversalToggleProps } from './UniversalToggle';

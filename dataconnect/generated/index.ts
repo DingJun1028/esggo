@@ -26,3 +26,7 @@ export const upsertTask = async (_args: Record<string, unknown>): Promise<{ data
 export const getReportById = async (_args: { id: string }): Promise<{ data: { report: Report | null } }> => ({
   data: { report: null },
 });
+
+export const upsertScrapedArticle = async (_dc: any, _args: Record<string, unknown>): Promise<{ data: unknown }> => ({
+  data: null,
+});

@@ -34,8 +34,8 @@ export default function DataConnectDashboard() {
 
   const pageConfig: UniversalPageConfig = {
     id: 'data-connect',
-    title: 'Data Connect (NCBDB/Supabase) æ·±åº¦?Œæ­¥',
-    subtitle: 'Nocodebackend (NCBDB) ??Supabase ?„é??‘æ•¸?šå?æ­¥æ?ç´ã€?,
+    title: 'Data Connect (NCBDB/Supabase) æ·±åº¦?ï¿½æ­¥',
+    subtitle: 'Nocodebackend (NCBDB) ??Supabase ?ï¿½ï¿½??ï¿½æ•¸?ï¿½ï¿½?æ­¥ï¿½?ç´ï¿½?,
     icon: <DatabaseZap size={32} className="text-berkeley-blue" />,
     griReference: 'Data / oX',
     activeT5Tags: ['T1', 'T2', 'T5'],
@@ -44,7 +44,7 @@ export default function DataConnectDashboard() {
     sections: [
       {
         id: 'sync-hub',
-        title: '?Œæ­¥æ¨ç? (Sync Hub)',
+        title: '?ï¿½æ­¥æ¨ï¿½? (Sync Hub)',
         columns: 12,
         component: (
           <div className="space-y-6">
@@ -55,23 +55,23 @@ export default function DataConnectDashboard() {
                   <h3 className="text-xl font-black text-slate-800">Supabase (ä¸»åº«)</h3>
                   <Badge variant="verified" className="ml-auto">Connected</Badge>
                 </div>
-                <p className="text-sm text-slate-500 font-medium">?²å??Ÿå??‘è??ä½¿?¨è€…èº«ä»½ã€ZKP ç´€?„è? 5T å®Œæ•´?§ç°½ç« è??™ã€?/p>
+                <p className="text-sm text-slate-500 font-medium">?ï¿½ï¿½??ï¿½ï¿½??ï¿½ï¿½??ï¿½ä½¿?ï¿½è€…èº«ä»½ã€ZKP ç´€?ï¿½ï¿½? 5T å®Œæ•´?ï¿½ç°½ç« ï¿½??ï¿½ï¿½?/p>
               </Card>
 
               <Card className="p-8 bg-white/60 shadow-glass border-t-4 border-t-blue-400">
                 <div className="flex items-center gap-4 mb-4">
                   <Server size={24} className="text-blue-500" />
-                  <h3 className="text-xl font-black text-slate-800">NCBDB (ä»???†æ?åº?</h3>
+                  <h3 className="text-xl font-black text-slate-800">NCBDB (ï¿½???ï¿½ï¿½?ï¿½?</h3>
                   <Badge variant="verified" className="ml-auto">Connected</Badge>
                 </div>
-                <p className="text-sm text-slate-500 font-medium">Nocodebackend è¦–è¦º?–è??™åº«ï¼Œç”¨??Agent ?–ç”¨?å ±è¡¨ç??è?å¤–éƒ¨ API ?¥è©¢??/p>
+                <p className="text-sm text-slate-500 font-medium">Nocodebackend è¦–è¦º?ï¿½ï¿½??ï¿½åº«ï¼Œç”¨??Agent ?ï¿½ç”¨?ï¿½å ±è¡¨ï¿½??ï¿½ï¿½?å¤–éƒ¨ API ?ï¿½è©¢??/p>
               </Card>
             </div>
 
             <Card className="p-8 bg-berkeley-blue text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
-                <h3 className="text-xl font-black mb-2">?·è??¨å?æ·±åº¦?Œæ­¥ (Global Deep Sync)</h3>
-                <p className="text-sm text-blue-100/70">å°?Supabase ?§ç??€??ESG ?±å??‡å¯¦è­‰æ•¸?šï?å®Œæ•´å°é???NCBDB è¦–è¦º?–ç®¡?†å??°ã€?/p>
+                <h3 className="text-xl font-black mb-2">?ï¿½ï¿½??ï¿½ï¿½?æ·±åº¦?ï¿½æ­¥ (Global Deep Sync)</h3>
+                <p className="text-sm text-blue-100/70">ï¿½?Supabase ?ï¿½ï¿½??ï¿½??ESG ?ï¿½ï¿½??ï¿½å¯¦è­‰æ•¸?ï¿½ï¿½?å®Œæ•´å°ï¿½???NCBDB è¦–è¦º?ï¿½ç®¡?ï¿½ï¿½??ï¿½ï¿½?/p>
               </div>
               <Button 
                 variant="primary" 
@@ -80,9 +80,9 @@ export default function DataConnectDashboard() {
                 disabled={isSyncing}
               >
                 {isSyncing ? (
-                  <><RefreshCw size={20} className="mr-3 animate-spin" /> ?Œæ­¥ä¸?(Syncing...)</>
+                  <><RefreshCw size={20} className="mr-3 animate-spin" /> ?ï¿½æ­¥ï¿½?(Syncing...)</>
                 ) : (
-                  <><RefreshCw size={20} className="mr-3" /> ?Ÿå??Œæ­¥ (Start Sync)</>
+                  <><RefreshCw size={20} className="mr-3" /> ?ï¿½ï¿½??ï¿½æ­¥ (Start Sync)</>
                 )}
               </Button>
             </Card>
@@ -91,7 +91,7 @@ export default function DataConnectDashboard() {
               <Card className="p-8 bg-slate-900 text-emerald-400 font-mono text-sm overflow-auto max-h-[300px]">
                 <div className="flex items-center gap-3 mb-4">
                   <CheckCircle size={20} className="text-emerald-500" />
-                  <span className="font-bold">?Œæ­¥çµæ?</span>
+                  <span className="font-bold">?ï¿½æ­¥çµï¿½?</span>
                 </div>
                 <pre>{JSON.stringify(syncResult, null, 2)}</pre>
               </Card>
