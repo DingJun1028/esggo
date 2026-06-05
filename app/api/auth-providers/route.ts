@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 export async function GET() {
   const url = `${process.env.NCB_AUTH_API_URL}/providers?Instance=${process.env.NCB_INSTANCE}`;

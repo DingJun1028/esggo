@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🗺️ OmniMap v2.0 - Exhaustive MECE Full-Stack Composition Visualizer
  * v2.0 | #MECE_Exhaustive #SystemComposition #SovereigntyDisplay
  * 

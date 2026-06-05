@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { omniAgent } from '@/lib/agents/adk-swarm';
 
 export async function POST(request: NextRequest) {

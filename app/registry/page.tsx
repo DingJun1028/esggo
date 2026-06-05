@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Layers, Database, Sparkles, BrainCircuit, Activity, Server } from 'lucide-react';

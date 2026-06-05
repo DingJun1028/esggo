@@ -1,4 +1,4 @@
-import { POST } from './route';
+﻿import { POST } from './route';
 import { describe, it, expect } from 'vitest';
 
 describe('Crypto Simulator API', () => {

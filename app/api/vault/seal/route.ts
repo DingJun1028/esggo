@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { getGovernanceMetrics } from '@/lib/db';
 
 // Ensure this runs as an Edge Function

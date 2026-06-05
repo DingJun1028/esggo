@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { blueCC } from '../../../lib/services/omni-blue';
 
 export async function GET(request: NextRequest) {

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React from 'react';
 import { DetailTemplate } from '@/components/templates/DetailTemplate';
 import { Badge } from '@/components/ui/Badge';

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-static';
 export const revalidate = 60;

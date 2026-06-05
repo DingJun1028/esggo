@@ -1,4 +1,4 @@
-/**
+﻿/**
  * POST /api/slack/push5t
  * 從 Dashboard 手動觸發 5T 報告推播至 Slack
  *

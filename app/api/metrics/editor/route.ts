@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 
 export async function GET() {
   // Blue.cc GraphQL API Endpoint (依據官方文件，通常是 graphql 結尾)

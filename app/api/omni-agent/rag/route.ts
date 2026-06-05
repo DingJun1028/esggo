@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { enterpriseRagSkill } from '@/src/server/skills/enterpriseRagSkill';
 
 export async function POST(req: NextRequest) {
