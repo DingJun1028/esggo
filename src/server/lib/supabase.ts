@@ -83,7 +83,7 @@ export function handleSupabaseError(error: unknown): never {
 
 export async function testConnection(): Promise<boolean> {
   try {
-    const { error } = await supabase.from('evidences' as any).select('id').limit(1);
+    const { error } = await supabase.from('evidences' as any).select('id').limit(1); // eslint-disable-line @typescript-eslint/no-explicit-any
     return !error;
   } catch {
     return false;
