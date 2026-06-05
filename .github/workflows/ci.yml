@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [20.x]
     steps:
       - uses: actions/checkout@v4
 
@@ -26,8 +26,8 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: ${{ github.event.inputs.pnpm_version || '8' }}
-          cache: 'npm'
+          version: 8
+          cache: npm
 
       - name: Install dependencies
         run: pnpm install
@@ -48,14 +48,17 @@ jobs:
         run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
 
       - name: Build (optional)
-        run: pnpm run build0' }} || true
-
-      - name: Build (optional)
-        run: pnpm run build - name: Run tests with coverage
-        run: pnpm run test -- --coverage || true
-
-      - name: Check coverage threshold
-        run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80 || true
-
-      - name: Build (optional)
         run: pnpm run build
+
+      - name: Deploy to Render
+        uses: render-examples/render-deploy@v1
+        with:
+          apiKey: ${{ secrets.RENDER_API_KEY }}
+          serviceId: ${{ secrets.RENDER_SERVICE_ID }}
+          waitForDeployment: true
+
+      - name: Auto-repair on Render failure
+        if: failure()
+        run: node scripts/auto-repair.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
