@@ -22,7 +22,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
             ws.on('message', (message: unknown) => {
                 try {
-                    const data = JSON.parse(message.toString());
+                    const data = JSON.parse((message as any).toString());
 
                     // 判斷是否為來自 Broadcast Relay API 的特權廣播 (HealingGuardian 意志)
                     if (data._source === 'SYSTEM_BROADCAST_API') {
@@ -48,8 +48,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
         // 綁定 HTTP Upgrade 事件，攔截 Upgrade: websocket
         (res.socket as any).server.on('upgrade', (request: unknown, socket: unknown, head: unknown) => {
-            if (request.url?.includes('/api/swarm/ws')) {
-                wss.handleUpgrade(request, socket, head, (ws: WebSocket) => {
+            if ((request as any).url?.includes('/api/swarm/ws')) {
+                wss.handleUpgrade(request as any, socket, head, (ws: WebSocket) => {
                     wss.emit('connection', ws, request);
                 });
             }
