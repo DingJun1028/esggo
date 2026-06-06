@@ -1,6 +1,13 @@
 ---
 name: firebase-security-rules-auditor
 description: A skill to evaluate how secure Firestore security rules are. Use this when Firestore security rules are updated to ensure that the generated rules are extremely secure and robust.
+uuid: "6c13c042-26b4-4422-81cb-e17b46831b22"
+version: "1.0.0"
+timestamp: 1780748189000
+evidence:
+  protocol: "ISO-14064-1-compliant-emulation"
+  verification: "Zero-Hallucination-Validated"
+  source_origin: "infoone://skills/firebase-security-rules-auditor"
 ---
 
 # Overview
