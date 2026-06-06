@@ -217,15 +217,17 @@ export const ESGSmartQA = () => {
                             {msg.role === 'bot' && msg.id !== 'welcome' && (
                                 <div className="flex items-center gap-2 mt-1 opacity-60 hover:opacity-100 transition-opacity">
                                     <button
+                                        aria-label="這回答有幫助"
                                         onClick={() => handleFeedback(msg.id, 'good', messages[messages.findIndex(m => m.id === msg.id) - 1]?.text || '', msg.text)}
-                                        className={`p-1 rounded hover:bg-emerald-500/20 hover:text-emerald-400 transition-colors ${feedbackStatus[msg.id] === 'good' ? 'text-emerald-400 bg-emerald-500/20' : 'text-slate-400'}`}
+                                        className={`p-1 rounded hover:bg-emerald-500/20 hover:text-emerald-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${feedbackStatus[msg.id] === 'good' ? 'text-emerald-400 bg-emerald-500/20' : 'text-slate-400'}`}
                                         title="這回答有幫助 (觸發進化環同步)"
                                     >
                                         <ThumbsUp size={12} />
                                     </button>
                                     <button
+                                        aria-label="這回答需要改進"
                                         onClick={() => handleFeedback(msg.id, 'bad', messages[messages.findIndex(m => m.id === msg.id) - 1]?.text || '', msg.text)}
-                                        className={`p-1 rounded hover:bg-rose-500/20 hover:text-rose-400 transition-colors ${feedbackStatus[msg.id] === 'bad' ? 'text-rose-400 bg-rose-500/20' : 'text-slate-400'}`}
+                                        className={`p-1 rounded hover:bg-rose-500/20 hover:text-rose-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 ${feedbackStatus[msg.id] === 'bad' ? 'text-rose-400 bg-rose-500/20' : 'text-slate-400'}`}
                                         title="這回答需要改進"
                                     >
                                         <ThumbsDown size={12} />
@@ -251,9 +253,10 @@ export const ESGSmartQA = () => {
                 <div className="flex items-center gap-2 relative">
                     <input type="file" accept=".pdf" className="hidden" ref={fileInputRef} onChange={handleFileUpload} />
                     <button
+                        aria-label="上傳 PDF 擴充知識庫"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isLoading || isStreaming || isUploading}
-                        className="p-2.5 bg-[#020617] border border-white/10 text-slate-400 rounded-full hover:text-cyan-400 hover:border-cyan-500/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        className="p-2.5 bg-[#020617] border border-white/10 text-slate-400 rounded-full hover:text-cyan-400 hover:border-cyan-500/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
                         title="上傳 PDF 擴充知識庫"
                     >
                         {isUploading ? <Loader2 size={16} className="animate-spin text-cyan-400" /> : <UploadCloud size={16} />}
@@ -269,9 +272,10 @@ export const ESGSmartQA = () => {
                         className="flex-1 bg-[#020617] border border-white/10 rounded-full pl-4 pr-12 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors shadow-inner disabled:opacity-50"
                     />
                     <button
+                        aria-label="發送訊息"
                         onClick={handleSend}
                         disabled={!query.trim() || isLoading || isStreaming || isUploading}
-                        className="absolute right-2 p-1.5 bg-blue-500/20 text-blue-400 rounded-full hover:bg-blue-500/40 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-blue-500/30"
+                        className="absolute right-2 p-1.5 bg-blue-500/20 text-blue-400 rounded-full hover:bg-blue-500/40 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border border-blue-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                     >
                         <Send size={16} className={isLoading || isStreaming ? 'opacity-0' : 'opacity-100'} />
                     </button>
