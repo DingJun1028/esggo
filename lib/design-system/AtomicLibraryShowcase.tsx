@@ -18,7 +18,6 @@ import { AtomicModal } from './AtomicModal';
 import { AtomicAlert } from './AtomicAlert';
 import { useAtomicLibrary } from './AtomicLibraryProvider';
 import { OmniThemeId, ModeLayer } from './atomic-core';
-import { useListAuditRecords } from '../../src/dataconnect-generated/react';
 
 export const AtomicLibraryShowcase: React.FC = () => {
   const { theme, mode, setTheme, setMode } = useAtomicLibrary();
@@ -74,16 +73,9 @@ interface TableRowData {
   status: 'Verified' | 'Auditing' | 'Failed';
 }
 
-  const { data: auditData, isLoading: auditLoading } = useListAuditRecords();
+  const auditLoading = false;
 
-  const tableData = auditData?.auditRecords && auditData.auditRecords.length > 0 
-    ? auditData.auditRecords.map(record => ({
-        nodeId: record.source || '',
-        action: record.title || '',
-        category: record.dataType || '',
-        status: (record.zkpStatus as any) || 'Auditing'
-      }))
-    : [
+  const tableData: TableRowData[] = [
         { nodeId: 'GOV_NODE_001', action: '溫室氣體範疇一直接排放量盤查', category: 'Environment', status: 'Verified' },
         { nodeId: 'GOV_NODE_002', action: '供應商全面簽署人權與誠信條約', category: 'Governance', status: 'Auditing' },
         { nodeId: 'GOV_NODE_003', action: '水資源消耗強度減量達標稽核', category: 'Social', status: 'Verified' },
