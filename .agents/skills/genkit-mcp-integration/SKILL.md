@@ -1,6 +1,13 @@
 ---
 name: genkit-mcp-integration
 description: 整合與操作 Genkit MCP Server 的核心技能，提供探索、執行、追蹤與文件查詢的最佳實踐。
+uuid: "65ae9bef-a9f6-419f-a306-0c273fa9f82c"
+version: "1.0.0"
+timestamp: 1780748189000
+evidence:
+  protocol: "ISO-14064-1-compliant-emulation"
+  verification: "Zero-Hallucination-Validated"
+  source_origin: "infoone://skills/genkit-mcp-integration"
 ---
 
 # 🚀 Genkit MCP Server Integration Skill

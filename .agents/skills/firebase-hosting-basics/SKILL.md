@@ -1,6 +1,13 @@
 ---
 name: firebase-hosting-basics
 description: Skill for working with Firebase Hosting (Classic). Use this when you want to deploy static web apps, Single Page Apps (SPAs), or simple microservices. Do NOT use for Firebase App Hosting.
+uuid: "2c821181-66fd-43f8-a366-28fa53fb8652"
+version: "1.0.0"
+timestamp: 1780748189000
+evidence:
+  protocol: "ISO-14064-1-compliant-emulation"
+  verification: "Zero-Hallucination-Validated"
+  source_origin: "infoone://skills/firebase-hosting-basics"
 ---
 
 # hosting-basics
