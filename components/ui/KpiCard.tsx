@@ -51,8 +51,9 @@ export function KpiCard({
             )}
             {formula && (
               <button
+                aria-label="查看計算說明"
                 onClick={(e) => { e.stopPropagation(); setShowFormula(true); }}
-                className="w-6 h-6 rounded-full flex items-center justify-center bg-[#f3f4f6] hover:bg-[#e5e7eb] transition-colors"
+                className="w-6 h-6 rounded-full flex items-center justify-center bg-[#f3f4f6] hover:bg-[#e5e7eb] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
               >
                 <Info size={11} color="#9ca3af" />
               </button>
@@ -73,7 +74,7 @@ export function KpiCard({
           <div className="bg-white rounded-[20px] p-7 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-[17px] font-bold text-[#1a1a2e]">{label} — 計算說明</h3>
-              <button onClick={() => setShowFormula(false)} className="w-7 h-7 rounded-full bg-[#f3f4f6] flex items-center justify-center hover:bg-[#e5e7eb]">
+              <button aria-label="關閉說明" onClick={() => setShowFormula(false)} className="w-7 h-7 rounded-full bg-[#f3f4f6] flex items-center justify-center hover:bg-[#e5e7eb] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400">
                 <X size={14} color="#374151" />
               </button>
             </div>
