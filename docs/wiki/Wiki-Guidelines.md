@@ -42,5 +42,5 @@ evidence: "docs\wiki\Wiki-Guidelines.md"
 7. 矩陣關聯 (Matrix Connection)
 上游數據： (此頁面依賴哪些上游模組或 API 數據源)
 下游影響： (此頁面產出的數據或行為會影響哪些下游模組或 Dashboard KPI)
-依賴組件： (列出此頁面 Import 的核心原子組件，如 BrandButton, UniversalCard)
+依賴組件： (列出此頁面 Import 的核心原子組件，如 BrandButton, OmniBaseCard)
 

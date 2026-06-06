@@ -6,9 +6,9 @@ import {
     Calendar as CalendarIcon, Lightbulb, Users, CheckSquare,
     FileText, Send, Trash2, ChevronLeft, ChevronRight, Share2
 } from 'lucide-react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { format, addDays, subDays } from 'date-fns';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
@@ -98,13 +98,13 @@ export function DailyNotesView() {
                     <h1 className="text-3xl font-black text-white flex items-center gap-4">
                         {format(selectedDate, 'yyyy 年 MM 月 dd 日')}
                         {format(selectedDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') && (
-                            <UniversalBadge variant="primary" size="xs" className="mt-1">TODAY</UniversalBadge>
+                            <OmniBadge variant="primary" size="xs" className="mt-1">TODAY</OmniBadge>
                         )}
                     </h1>
                 </header>
 
                 {/* 輸入區塊 (Capacities 風格) */}
-                <UniversalCard variant="glass" className="p-4 mb-8 border-slate-700/50 focus-within:border-cyan-500/50 transition-colors">
+                <OmniBaseCard variant="glass" className="p-4 mb-8 border-slate-700/50 focus-within:border-cyan-500/50 transition-colors">
                     <textarea
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
@@ -139,11 +139,11 @@ export function DailyNotesView() {
                                 </div>
                             )}
                         </div>
-                        <UniversalButton onClick={handleSubmit} disabled={!inputValue.trim()} size="sm" className="rounded-full px-5">
+                        <OmniButton onClick={handleSubmit} disabled={!inputValue.trim()} size="sm" className="rounded-full px-5">
                             <Send size={14} className="mr-2" /> 記錄
-                        </UniversalButton>
+                        </OmniButton>
                     </div>
-                </UniversalCard>
+                </OmniBaseCard>
 
                 {/* 筆記時間軸 (Stream) */}
                 <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-slate-700">

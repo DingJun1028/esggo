@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { cn } from '../../lib/utils'; // Assuming cn is universally available
+import { cn } from '../../lib/utils'; // Assuming cn is omnily available
 
 type StatusType = 'active' | 'inactive' | 'warning' | 'error' | 'pending' | 'verified';
 

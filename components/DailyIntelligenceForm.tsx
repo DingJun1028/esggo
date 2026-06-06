@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { useOmniTable } from '@/lib/omni-table/useOmniTable';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalInput, UniversalTextarea } from '@/components/ui/universal/UniversalInput';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniInput, OmniTextarea } from '@/components/ui/omni/OmniInput';
 import { Loader2, PlusCircle, CheckCircle } from 'lucide-react';
 
 interface DailyIntelligenceFormProps {
@@ -63,7 +63,7 @@ export function DailyIntelligenceForm({ datasheetId, onSuccess }: DailyIntellige
     };
 
     return (
-        <UniversalCard variant="glass" className="p-6">
+        <OmniBaseCard variant="glass" className="p-6">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <PlusCircle className="text-cyan-400" size={24} />
                 新增每日情資
@@ -82,18 +82,18 @@ export function DailyIntelligenceForm({ datasheetId, onSuccess }: DailyIntellige
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
-                <UniversalInput label="情資標題" name="Title" value={formData.Title} onChange={handleChange} placeholder="輸入情資標題..." required disabled={loading} />
-                <UniversalInput label="資料來源" name="Source" value={formData.Source} onChange={handleChange} disabled={loading} />
+                <OmniInput label="情資標題" name="Title" value={formData.Title} onChange={handleChange} placeholder="輸入情資標題..." required disabled={loading} />
+                <OmniInput label="資料來源" name="Source" value={formData.Source} onChange={handleChange} disabled={loading} />
                 <div className="grid grid-cols-2 gap-4">
-                    <UniversalInput label="日期" type="date" name="Date" value={formData.Date} onChange={handleChange} required disabled={loading} />
-                    <UniversalInput label="嚴重程度 (1-5)" type="number" name="Severity" min="1" max="5" value={formData.Severity} onChange={handleChange} required disabled={loading} />
+                    <OmniInput label="日期" type="date" name="Date" value={formData.Date} onChange={handleChange} required disabled={loading} />
+                    <OmniInput label="嚴重程度 (1-5)" type="number" name="Severity" min="1" max="5" value={formData.Severity} onChange={handleChange} required disabled={loading} />
                 </div>
-                <UniversalTextarea label="情資內容" name="Content" value={formData.Content} onChange={handleChange} placeholder="請貼上商情中心傳來的情資內容..." required disabled={loading} rows={4} />
+                <OmniTextarea label="情資內容" name="Content" value={formData.Content} onChange={handleChange} placeholder="請貼上商情中心傳來的情資內容..." required disabled={loading} rows={4} />
 
-                <UniversalButton type="submit" variant="primary" className="w-full" disabled={loading || !formData.Title}>
+                <OmniButton type="submit" variant="primary" className="w-full" disabled={loading || !formData.Title}>
                     {loading ? <><Loader2 className="animate-spin mr-2" size={18} /> 寫入中...</> : '同步至控制中心'}
-                </UniversalButton>
+                </OmniButton>
             </form>
-        </UniversalCard>
+        </OmniBaseCard>
     );
 }

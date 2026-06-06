@@ -24,7 +24,7 @@ SustainWrite 是 ESG GO 的核心撰寫中樞，提供 208 頁報告框架、佐
 **設計系統： InfoOne v8.1.0 (Light Mode Priority)**
 桌面版佈局： 採用「左中右三欄佈局」。左側為「章節導航樹」，中央為「所見即所得編輯區」，右側為「AI 顧問 / 佐證文件抽屜」。
 視覺風格： 極簡淺色系 (`bg-slate-50`)，搭配液態玻璃 (`backdrop-blur-xl`, `bg-white/80`)。
-核心元件： 使用 `UniversalCard` 作為容器；編輯區背景採用 `bg-white/90`；章節導航使用新的 `ui/TreeNav` (淺色版)。
+核心元件： 使用 `OmniBaseCard` 作為容器；編輯區背景採用 `bg-white/90`；章節導航使用新的 `ui/TreeNav` (淺色版)。
 行動端適配 (RWD)： < 768px 時，左右兩欄自動隱藏為「漢堡選單」與「懸浮 FAB」，中央編輯區必須 100% 滿版。
 
 4. 核心邏輯與 5T 協定 (Logic & 5T Protocol)
@@ -50,4 +50,4 @@ AI 協作與 Swarm 共鳴： 整合 `SwarmResonance` 元件展示代理蜂群的
 7. 矩陣關聯 (Matrix Connection)
 上游數據： 來自 `/data-sources` 的原始採集數據。
 下游影響： 直接影響 `/dashboard` 的全域進度與 `/vault` 的證據鏈。
-依賴組件： `UniversalCard`, `SwarmResonance`, `CausalTopologyGraph`.
+依賴組件： `OmniBaseCard`, `SwarmResonance`, `CausalTopologyGraph`.

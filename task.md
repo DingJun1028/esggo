@@ -12,5 +12,5 @@ evidence: "task.md"
 - [x] Create walkthrough documentation
 - [x] Full-Stack Integration with Firebase SQL Connect
 - [x] 5T Protocol Schema Implementation
-- [x] OmniAgent Universal WIKI Script Implementer
+- [x] OmniAgent Omni WIKI Script Implementer
 - [x] Final Build Verification

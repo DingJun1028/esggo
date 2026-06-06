@@ -1,4 +1,4 @@
-// Universal Resonance Engine
+// Omni Resonance Engine
 // ESG GO v9.0.0 - 全維共鳴計算引擎
 
 import { IComponentCore, ResonanceResult } from '../../lib/core-types';

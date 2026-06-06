@@ -116,7 +116,7 @@ export async function queryWithIntelligence(query: string) {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const prompt = `
 You are the OmniCore Knowledge Architect. 
-Base your answer ONLY on the provided context from the Universal Knowledge Base.
+Base your answer ONLY on the provided context from the Omni Knowledge Base.
 If the information is not in the context, state that clearly.
 
 Context:

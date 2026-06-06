@@ -1,9 +1,9 @@
 ﻿"use client";
 
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalInput, UniversalSelect, UniversalTextarea } from '@/components/ui/universal/UniversalInput';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniInput, OmniSelect, OmniTextarea } from '@/components/ui/omni/OmniInput';
 import { ShieldCheck, Loader2, PlusCircle, AlertTriangle, Info } from 'lucide-react';
 import { type BestPractice, BestPracticeSchema } from '@/lib/agent/best-practice-registry';
 import { useState, useEffect } from 'react';
@@ -137,9 +137,9 @@ export default function OmniWorkflowsPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm">
+                <OmniBadge variant="primary" size="sm">
                   Workflow Management
-                </UniversalBadge>
+                </OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                   OMNI-WF-001
                 </span>
@@ -152,13 +152,13 @@ export default function OmniWorkflowsPage() {
               </p>
             </div>
           </div>
-          <UniversalButton onClick={() => setShowForm(!showForm)} variant="primary" size="lg" className="flex items-center gap-2">
+          <OmniButton onClick={() => setShowForm(!showForm)} variant="primary" size="lg" className="flex items-center gap-2">
             <PlusCircle size={18} /> {showForm ? '取消新增' : '新增最佳實踐'}
-          </UniversalButton>
+          </OmniButton>
         </header>
 
         {showForm && (
-          <UniversalCard variant="glass" className="p-6 mb-8">
+          <OmniBaseCard variant="glass" className="p-6 mb-8">
             <h2 className="text-xl font-bold text-white mb-4">新增工作流程最佳實踐</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               {formErrors.length > 0 && (
@@ -171,7 +171,7 @@ export default function OmniWorkflowsPage() {
                   </ul>
                 </div>
               )}
-              <UniversalInput
+              <OmniInput
                 label="ID (自動生成，可選填)"
                 name="id"
                 value={formData.id || ''}
@@ -179,7 +179,7 @@ export default function OmniWorkflowsPage() {
                 placeholder="例如: bp-new-workflow"
                 disabled={isSubmitting}
               />
-              <UniversalSelect
+              <OmniSelect
                 label="類別"
                 name="category"
                 value={formData.category}
@@ -189,8 +189,8 @@ export default function OmniWorkflowsPage() {
                 <option value="E">E - 環境 (Environmental)</option>
                 <option value="S">S - 社會 (Social)</option>
                 <option value="G">G - 治理 (Governance)</option>
-              </UniversalSelect>
-              <UniversalInput
+              </OmniSelect>
+              <OmniInput
                 label="適用產業"
                 name="industry"
                 value={formData.industry || ''}
@@ -199,7 +199,7 @@ export default function OmniWorkflowsPage() {
                 disabled={isSubmitting}
                 required
               />
-              <UniversalInput
+              <OmniInput
                 label="標題"
                 name="title"
                 value={formData.title || ''}
@@ -208,7 +208,7 @@ export default function OmniWorkflowsPage() {
                 disabled={isSubmitting}
                 required
               />
-              <UniversalTextarea
+              <OmniTextarea
                 label="策略詳情"
                 name="strategy"
                 value={formData.strategy || ''}
@@ -217,7 +217,7 @@ export default function OmniWorkflowsPage() {
                 disabled={isSubmitting}
                 required
               />
-              <UniversalInput
+              <OmniInput
                 label="標竿來源"
                 name="benchmark_source"
                 value={formData.benchmark_source || ''}
@@ -226,7 +226,7 @@ export default function OmniWorkflowsPage() {
                 disabled={isSubmitting}
               />
               <div className="grid grid-cols-2 gap-4">
-                <UniversalInput
+                <OmniInput
                   label="影響分數 (0-100)"
                   name="impact_score"
                   type="number"
@@ -236,7 +236,7 @@ export default function OmniWorkflowsPage() {
                   max="100"
                   disabled={isSubmitting}
                 />
-                <UniversalInput
+                <OmniInput
                   label="標籤 (以逗號分隔)"
                   name="tags"
                   value={formData.tags ? formData.tags.join(', ') : ''}
@@ -266,12 +266,12 @@ export default function OmniWorkflowsPage() {
                 ))}
               </div>
               
-              <UniversalButton type="submit" variant="primary" size="lg" disabled={isSubmitting} className="w-full">
+              <OmniButton type="submit" variant="primary" size="lg" disabled={isSubmitting} className="w-full">
                 {isSubmitting ? <Loader2 className="animate-spin mr-2" size={18} /> : null}
                 {isSubmitting ? '提交中...' : '提交新的最佳實踐'}
-              </UniversalButton>
+              </OmniButton>
             </form>
-          </UniversalCard>
+          </OmniBaseCard>
         )}
 
         <section>
@@ -301,14 +301,14 @@ export default function OmniWorkflowsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {bestPractices.map((bp: BestPractice) => (
-                <UniversalCard key={bp.id} variant="glass" className="p-6 transition-all duration-300 hover:border-cyan-500/30">
+                <OmniBaseCard key={bp.id} variant="glass" className="p-6 transition-all duration-300 hover:border-cyan-500/30">
                   <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
                     <ShieldCheck size={18} className="text-cyan-400" /> {bp.title}
                   </h3>
                   <p className="text-sm text-slate-400 mb-4">{bp.strategy}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {bp.tags.map(tag => (
-                      <UniversalBadge key={tag} variant="secondary" size="xs">{tag}</UniversalBadge>
+                      <OmniBadge key={tag} variant="secondary" size="xs">{tag}</OmniBadge>
                     ))}
                   </div>
                   <div className="text-xs text-slate-500 space-y-1">
@@ -317,7 +317,7 @@ export default function OmniWorkflowsPage() {
                     <p>Impact Score: <span className="text-slate-300">{bp.impact_score}</span></p>
                     <p>Last Verified: <span className="text-slate-300">{bp.last_verified}</span></p>
                   </div>
-                </UniversalCard>
+                </OmniBaseCard>
               ))}
             </div>
           )}

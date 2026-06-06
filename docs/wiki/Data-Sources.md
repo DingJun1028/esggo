@@ -24,7 +24,7 @@ evidence: "docs\wiki\Data-Sources.md"
 **設計系統： InfoOne v8.1.0 (Light Mode Priority)**
 桌面版佈局： 「左導航 + 右視圖」雙欄佈局。左側為 Workspace 導航器，右側為資料表格或欄位定義。
 視覺風格： 極簡淺色系 (`bg-slate-50`)。表格視圖採用 `bg-white` 搭配細膩邊框與毛玻璃標頭。
-核心元件： `UniversalCard` (用於導航與容器), `ui/Badge` (標示狀態), `ui/Button` (操作觸發)。
+核心元件： `OmniBaseCard` (用於導航與容器), `ui/Badge` (標示狀態), `ui/Button` (操作觸發)。
 行動端適配 (RWD)： 左導航器在小螢幕下收合為抽屜，表格轉化為可橫向捲動的寬視圖。
 
 4. 核心邏輯與 5T 協定 (Logic & 5T Protocol)
@@ -48,4 +48,4 @@ Record Editor： 彈窗式編輯器，支援原子化欄位更新。
 7. 矩陣關聯 (Matrix Connection)
 上游數據： OmniTable AI 雲端空間。
 下游影響： 為 `/environmental`, `/social` 提供底層數據支持。
-依賴組件： `UniversalCard`, `ui/Badge`, `ui/Button`, `RecordEditor`.
+依賴組件： `OmniBaseCard`, `ui/Badge`, `ui/Button`, `RecordEditor`.

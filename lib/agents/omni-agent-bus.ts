@@ -258,7 +258,7 @@ export class OmniAgentBus {
       } else if (lowerEssence.includes('seal') || lowerEssence.includes('證明')) {
           matchedNorms.push('5T Cryptographic Seal Protocol');
       } else {
-          matchedNorms.push('OmniCore Universal Base Truth');
+          matchedNorms.push('OmniCore Omni Base Truth');
       }
       
       await this.publish('system:celestial:resonance', { essence, matchedNorms });
@@ -572,14 +572,14 @@ export class OmniAgentBus {
       }
     });
 
-    // Universal Key Skill: unlock any lock
+    // Omni Key Skill: unlock any lock
     this.registerSkill({
-      id: 'universal-key',
-      name: 'Universal Key',
+      id: 'omni-key',
+      name: 'Omni Key',
       description: 'Unlock any door or container',
       trigger: 'lock:engaged',
       handler: async (payload) => {
-        return { unlocked: payload?.target, method: 'universal' };
+        return { unlocked: payload?.target, method: 'omni' };
       }
     });
 

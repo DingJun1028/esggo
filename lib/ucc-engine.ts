@@ -1,5 +1,5 @@
 /**
- * UCC Engine (Universal Carbon Chronicle)
+ * UCC Engine (Omni Carbon Chronicle)
  * InfoOne v8.1.0 核心引擎 - 實作 OmniInfoCrystal 三位一體結晶架構
  */
 

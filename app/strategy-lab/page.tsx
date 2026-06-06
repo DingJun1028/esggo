@@ -16,7 +16,7 @@ import { Tabs } from '../../components/ui/Tabs';
 import { BrandStatusDot } from '../../components/brand';
 import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import { ConsensusVisualizer } from '../../components/ui/ConsensusVisualizer';
 import { swarmConsensusEngine, ConsensusResult } from '../../lib/swarm-consensus-engine';
 import { useSystemEvolution } from '../../hooks/useSystemEvolution';
@@ -63,8 +63,8 @@ export default function StrategyLabPage() {
     { title: '社會共榮實驗室', focus: 'DEI 指標 & 供應鏈韌性', target: '2025 Q2', impact: 92 },
   ];
 
-  // ── Universal Page Configuration ──────────────────────────────────
-  const pageConfig: UniversalPageConfig = {
+  // ── Omni Page Configuration ──────────────────────────────────
+  const pageConfig: OmniPageConfig = {
     id: 'strategy-lab',
     title: '戰略與進化實驗室 Strategy Lab',
     subtitle: 'Swarm Consensus · 自主進化模擬 · 5T 戰略封印。',

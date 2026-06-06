@@ -34,7 +34,7 @@ evidence: "NCBDB_PROTOCOL.md"
 
 ## 5. 擴展指令 (Extension Directives)
 - 新增表 (Table) 時，必須同步更新 `lib/ncbdb.ts` 的類型定義。
-- 所有展示組件 (UniversalTable/Form) 必須綁定此全域實例。
+- 所有展示組件 (OmniBaseTable/Form) 必須綁定此全域實例。
 
 ---
 © 2026 ESGGO 善向永續 | OmniCore P0 創世規範擴展。
