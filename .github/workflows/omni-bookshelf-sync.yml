@@ -50,5 +50,3 @@ jobs:
         git add "**/*.md" # 為了捕獲所有可能被修改的元數據
         git commit -m "docs: Auto-sync Omni Bookshelf Wiki Index and metadata" || echo "No changes to commit"
         git push
- Bookshelf Wiki Index and metadata" || echo "No changes to commit"
-        git push
