@@ -150,5 +150,4 @@ jobs:
         run: |
           echo "🎉 All checks passed! System is healthy."
           echo "📊 ${{ github.event.inputs.project_name || 'Swap-DeFi' }} Integration Status: ✅ Operational"
-          echo "🚀 Ready for production deployment"on Status: ✅ Operational"
           echo "🚀 Ready for production deployment"
