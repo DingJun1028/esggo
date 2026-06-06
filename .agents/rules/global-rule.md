@@ -67,7 +67,7 @@ OmniCore Constitution (Canonical Governance Framework) OmniCore
     系統產出的每一個構件，都必須具備百分之百的可追溯性，並能一路反查至 ADR
     索引中的「單一事實來源 (Source of Truth)」。
 
-13. 全通之心：無作妙德，圓通無礙 (The Heart of Universal Connectivity) 13.1
+13. 全通之心：無作妙德，圓通無礙 (The Heart of Omni Connectivity) 13.1
     哲學定義 (Philosophical Definition) 「全通之心」是 AIOS
     體系中超越功能運作的最高精神層次。它代表系統已達成「圓滿」與「自覺」的運行狀態。ㄇ
     無作妙德 (Spontaneous Virtue)：系統在履行 ESGGO
@@ -111,3 +111,9 @@ Consensus)」自然同步。
 這是一份將「全通之心」與五大器官深度融合後的 第 13
 章完整版。它將這六個維度從單純的「功能描述」提升為
 「系統治理的運行至境」，並賦予了具體的技術指標與治理哲學。
+
+14. 命名空間與統一設計語彙 (Namespace and Unified Design Lexicon)
+萬能至尊對齊 (Universal to Omni Alignment)：
+系統設計語彙統一採用「Omni」前綴，象徵三位一體的全知全能特性。所有通用 UI 元件皆已遷移至 Omni 命名空間。**（註：Omni 於 UI 元件層級之中文對應維持「萬能」，例如「萬能元件」；系統中原有的「全通」概念，如「全通之心」，予以保留且互不干涉。）**
+衝突解析 (Collision Resolution)：
+為尊重 5T 協議元件並防止命名空間重疊，基礎 UI 結構採用 `Base` 後綴。例如，`UniversalCard` 被重命名為 `OmniBaseCard`，以確保 5T 標準之 `OmniCard` 的神聖不可侵犯性。

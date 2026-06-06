@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import MiniSearch from 'minisearch';
 
-const db = new Dexie('UniversalNotesDB');
+const db = new Dexie('OmniNotesDB');
 db.version(1).stores({
     notes: 'id, title, *tags, updatedAt'
 });

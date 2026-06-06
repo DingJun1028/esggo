@@ -39,8 +39,8 @@ export class HealingGuardian {
    * 萬能修復執行協定
    * 由 Agent0 呼叫，強制將數據回溯至真理錨點 (Supabase)
    */
-  static async executeUniversalHealing(targetId: string, table: string): Promise<HealingReport> {
-    console.log(`[HealingGuardian] 🛠️ Executing Universal Healing Protocol for ${targetId} in ${table}...`);
+  static async executeOmniHealing(targetId: string, table: string): Promise<HealingReport> {
+    console.log(`[HealingGuardian] 🛠️ Executing Omni Healing Protocol for ${targetId} in ${table}...`);
     
     omniAgentBus.publish('HEALING_START', { targetId, table });
 

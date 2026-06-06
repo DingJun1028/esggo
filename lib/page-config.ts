@@ -37,7 +37,7 @@ export interface PageSection {
   hidden?: boolean;
 }
 
-export interface UniversalPageConfig {
+export interface OmniPageConfig {
   id: string;
   title: string;
   subtitle: string;

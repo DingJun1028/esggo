@@ -355,7 +355,7 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
           <ApolloStudioConsole />
         </motion.div>
 
-        {/* ─── Layer 2.8: Universal Notes Tracker ──────────────────────── */}
+        {/* ─── Layer 2.8: Omni Notes Tracker ──────────────────────── */}
         {trackerNode && (
           <motion.div variants={item} className="w-full text-left mt-12">
             {trackerNode}

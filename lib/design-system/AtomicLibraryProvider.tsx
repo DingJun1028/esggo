@@ -1,25 +1,25 @@
 /**
- * 🏛️ AtomicLibraryProvider - Universal Governance Context
+ * 🏛️ AtomicLibraryProvider - Omni Governance Context
  * v1.0 | #ThemeManagement #AtomicLibrary
  */
 
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { UniversalThemeId, ModeLayer, atomicManager } from './atomic-core';
+import { OmniThemeId, ModeLayer, atomicManager } from './atomic-core';
 import { applyAtomicTheme } from './theme-engine';
 
 interface AtomicLibraryContextProps {
-  theme: UniversalThemeId;
+  theme: OmniThemeId;
   mode: ModeLayer;
-  setTheme: (theme: UniversalThemeId) => void;
+  setTheme: (theme: OmniThemeId) => void;
   setMode: (mode: ModeLayer) => void;
 }
 
 const AtomicLibraryContext = createContext<AtomicLibraryContextProps | undefined>(undefined);
 
 export const AtomicLibraryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<UniversalThemeId>('best-practice');
+  const [theme, setThemeState] = useState<OmniThemeId>('best-practice');
   const [mode, setModeState] = useState<ModeLayer>('system');
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const AtomicLibraryProvider: React.FC<{ children: React.ReactNode }> = ({
     atomicManager.switchTheme(theme, mode);
   }, [theme, mode]);
 
-  const setTheme = (newTheme: UniversalThemeId) => setThemeState(newTheme);
+  const setTheme = (newTheme: OmniThemeId) => setThemeState(newTheme);
   const setMode = (newMode: ModeLayer) => setModeState(newMode);
 
   return (

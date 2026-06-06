@@ -6,7 +6,7 @@ evidence: "src\components\DESIGN_PRINCIPLES.md"
 ---
 # ESG GO Design Principles
 
-## 核心原則 (Universal Design Principles)
+## 核心原則 (Omni Design Principles)
 
 ### 1. Traceable (T1 - Truth)
 - **描述**: 數據來源可溯源，所有變更有明確責任主體

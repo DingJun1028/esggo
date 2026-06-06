@@ -63,9 +63,17 @@ evidence: "README.md"
 
 ---
 
+## 🌐 命名空間與系統哲學 (Namespace & System Philosophy)
+系統已完成核心架構的語彙升格與統一，嚴格遵循以下雙語境命名規範（詳見 `global-rule.md` 第 14 章）：
+1. **萬能對齊 (Universal to Omni Refactor)**：所有泛用 UI 元件已全面從 `Universal` 遷移至 `Omni` 命名空間（UI 層級中文統稱「萬能」，例如 `OmniBaseCard` 萬能基礎卡片）。
+2. **衝突解析 (Collision Resolution)**：為保護 5T 協議專用的 `Omni` 元件神聖性，泛用型基礎結構皆加上 `Base` 後綴（如 `OmniBaseCard`），避免與特定合規元件（如 `OmniCard`）命名空間重疊。
+3. **全通境界 (Sovereign Independence)**：系統最高哲學境界「全通」（如「全通之心」）保持完全獨立。其代表系統自發治理與圓通無礙的運行狀態，與 UI 級別的「萬能」語彙並存且互不干涉。
+
+---
+
 ## 🚀 部署就緒 (Production Readiness - v1.0.2-rc)
 目前 ESGGO 平台已成功優化並符合 Next.js 15+ 生產環境架構，並完成全面除錯，具體修正包括：
-1. **Server Actions 架構解耦 (App Router 合規)**：將原先內嵌於 Client Component 的 `use server` 方法完全解耦並抽取至 `UniversalNotesActions.ts`，徹底解決 Next.js 15 的編譯衝突。
+1. **Server Actions 架構解耦 (App Router 合規)**：將原先內嵌於 Client Component 的 `use server` 方法完全解耦並抽取至 `OmniNotesActions.ts`，徹底解決 Next.js 15 的編譯衝突。
 2. **樣式引擎相容性優化**：修復了 PostCSS 與 Tailwind CSS 在生產構建時的模組解析錯誤，並統一為 Tailwind 規範以確保靜態編譯穩定。
 3. **資料庫依賴懶載入**：將 Firebase Firestore 的 `collection()` 呼叫轉為 Getter 方法，避免在 Next.js Server-Side 靜態生成 (Static Generation) 時因未初始化而報錯。
 4. **前端 JSX 與 React Hooks 語法修復**：修復了 `useEffect` 閉包的語法錯誤與 DOM 結構中巢狀 `div` 標籤的冗餘，保證客戶端渲染與水合 (Hydration) 順利進行。

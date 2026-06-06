@@ -15,7 +15,7 @@ import { Card } from '../../components/ui/Card';
 import { BrandStatusDot } from '../../components/brand';
 import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 
 const ARCH_NODES = [
   { id: 'alchemy', label: 'OmniAgent Alchemy', sub: 'Vision Extraction', icon: <Sparkles size={20}/>, color: '#FDB515' },
@@ -50,8 +50,8 @@ export default function OmniAgentArchitecturePage() {
     return () => window.removeEventListener('storage', checkEvo);
   }, []);
 
-  // ── Universal Page Configuration ──────────────────────────────────
-  const pageConfig: UniversalPageConfig = {
+  // ── Omni Page Configuration ──────────────────────────────────
+  const pageConfig: OmniPageConfig = {
     id: 'omniagent-architecture',
     title: '動態架構治理中心',
     subtitle: 'Living Architecture · 模組即時拓撲 · 5T 邊界防禦。',

@@ -40,7 +40,7 @@ export interface OmniInfoAura {
 }
 
 // ============================================
-// UCC (Universal Component Core) Alignment
+// UCC (Omni Component Core) Alignment
 // ============================================
 // ... (rest of the file)
 

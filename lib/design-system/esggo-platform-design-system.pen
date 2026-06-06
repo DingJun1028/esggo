@@ -1,0 +1,200 @@
+{
+  "version": "2.13",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none"
+    },
+    {
+      "type": "frame",
+      "id": "Dalnw",
+      "x": 500,
+      "y": 0,
+      "name": "OmniNotification Component",
+      "width": 400,
+      "height": 150,
+      "fill": [
+        "#FFFFFF1A",
+        "#0000001A"
+      ],
+      "cornerRadius": 8,
+      "stroke": "#FFFFFF33",
+      "effect": [
+        {
+          "type": "background_blur",
+          "radius": 16
+        },
+        {
+          "type": "shadow",
+          "shadowType": "outer",
+          "color": "#00BFFF",
+          "blur": 16,
+          "spread": 2
+        }
+      ],
+      "layout": "vertical",
+      "gap": 8,
+      "padding": 16,
+      "children": [
+        {
+          "type": "frame",
+          "id": "b4fuK",
+          "name": "Notification Header",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "xqKoY",
+              "name": "Notification Title",
+              "fill": [
+                "$bg_slate_900",
+                "#000000"
+              ],
+              "content": "System Notification",
+              "fontFamily": "$font_jet_brains_mono",
+              "fontSize": 16,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "tUuyf",
+              "name": "Close Button",
+              "fill": "#888888",
+              "content": "✕",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "C8xS0",
+          "name": "Notification Content",
+          "fill": [
+            "$bg_slate_900",
+            "#000000"
+          ],
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "This is a universal notification from OmniAgentBus.",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "LjVDJ",
+          "x": 0,
+          "y": 0,
+          "name": "Transparent Data Panel",
+          "enabled": false,
+          "width": "fill_container(0)",
+          "height": "fill_container(0)",
+          "fill": "#000000AA",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "HiKR6",
+              "name": "Formula Title",
+              "fill": "$accent_emerald_400",
+              "content": "[📊 VERIFIABLE COMPLIANCE FORMULA]",
+              "fontFamily": "$font_jet_brains_mono",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "n2M3VA",
+              "name": "Formula Content",
+              "fill": "#FFFFFF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "E_total = E_scope1 + E_scope2 + \\sum (Activity_i \\times EF_i)",
+              "fontFamily": "$font_jet_brains_mono",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "jdCI1",
+              "name": "Verification Standard",
+              "fill": "$accent_cyan_500",
+              "content": "STANDARD: [ISO-14064-1:2018]",
+              "fontFamily": "$font_jet_brains_mono",
+              "fontSize": 10,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "iXSbV",
+          "name": "Source Origin Display",
+          "fill": "#AAAAAA",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "Source Origin: ChatBox:Omni-Chat-01",
+          "fontFamily": "$font_jet_brains_mono",
+          "fontSize": 9,
+          "fontWeight": "normal"
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "accent_cyan_500": {
+      "type": "color",
+      "value": "#06B6D4"
+    },
+    "accent_cyan_600": {
+      "type": "color",
+      "value": "#0891B2"
+    },
+    "accent_cyan_950": {
+      "type": "color",
+      "value": "#164E63"
+    },
+    "accent_emerald_400": {
+      "type": "color",
+      "value": "#34D399"
+    },
+    "accent_emerald_500": {
+      "type": "color",
+      "value": "#10B981"
+    },
+    "bg_slate_50": {
+      "type": "color",
+      "value": "#F8FAFC"
+    },
+    "bg_slate_900": {
+      "type": "color",
+      "value": "#0F172A"
+    },
+    "bg_slate_950": {
+      "type": "color",
+      "value": "#020617"
+    },
+    "font_jet_brains_mono": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "primary_rose_500": {
+      "type": "color",
+      "value": "#F43F5E"
+    }
+  }
+}

@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { Server, Database, Key, ShieldCheck, Link as LinkIcon, Activity } from 'lucide-react';
 
 interface TableDef {
@@ -80,7 +80,7 @@ export default function OmniERDPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="success" size="sm" icon={<Database size={12}/>}>NCBDB Core</UniversalBadge>
+                <OmniBadge variant="success" size="sm" icon={<Database size={12}/>}>NCBDB Core</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">ERD-001</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">NCBDB 實體模型 (ERD)</h1>
@@ -120,14 +120,14 @@ export default function OmniERDPage() {
               })}
             </div>
             
-            <UniversalCard variant="glass" className="p-4 mt-8 border-cyan-500/20 bg-cyan-950/10">
+            <OmniBaseCard variant="glass" className="p-4 mt-8 border-cyan-500/20 bg-cyan-950/10">
               <h4 className="text-sm font-bold text-cyan-400 flex items-center gap-2 mb-2">
                 <ShieldCheck size={16} /> Row Level Security
               </h4>
               <p className="text-xs text-slate-400 leading-relaxed">
                 所有資料表皆已啟用 RLS。資料存取必須夾帶 JWT Token，並且依照 `org_id` 進行嚴格的租戶隔離 (Tenant Isolation)。
               </p>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
           {/* Table Details & Columns (Main) */}
@@ -143,7 +143,7 @@ export default function OmniERDPage() {
                     transition={{ duration: 0.3 }}
                     className="h-full"
                   >
-                    <UniversalCard variant="glass" className="p-6 h-full border-emerald-500/20 flex flex-col">
+                    <OmniBaseCard variant="glass" className="p-6 h-full border-emerald-500/20 flex flex-col">
                       <div className="flex items-center justify-between mb-6 pb-6 border-b border-white/5">
                         <div>
                           <h2 className="text-2xl font-bold font-mono text-emerald-100 flex items-center gap-3">
@@ -152,7 +152,7 @@ export default function OmniERDPage() {
                           </h2>
                           <p className="text-slate-400 mt-2">{table.description}</p>
                         </div>
-                        <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                        <OmniBadge variant="success" size="sm">Active</OmniBadge>
                       </div>
 
                       <div className="flex-1 overflow-x-auto">
@@ -205,7 +205,7 @@ export default function OmniERDPage() {
                           5T Protocol Verified Table
                         </div>
                       </div>
-                    </UniversalCard>
+                    </OmniBaseCard>
                   </motion.div>
                 )
               ))}

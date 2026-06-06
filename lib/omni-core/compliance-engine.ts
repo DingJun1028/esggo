@@ -74,10 +74,10 @@ export class ComplianceEngine {
   }
 
   private static mapCategory(code: string): string {
-    if (code.startsWith('GRI 2-') || code.startsWith('GRI 3-')) return 'universal';
+    if (code.startsWith('GRI 2-') || code.startsWith('GRI 3-')) return 'omni';
     if (code.startsWith('GRI 30')) return 'environmental';
     if (code.startsWith('GRI 40')) return 'social';
     if (code.startsWith('GRI 20')) return 'governance';
-    return 'universal';
+    return 'omni';
   }
 }

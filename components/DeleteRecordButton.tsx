@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useTransition } from 'react';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Trash2, Loader2 } from 'lucide-react';
 import { deleteOmniTableRecord } from '@/app/actions/omni-table';
 
@@ -28,7 +28,7 @@ export function DeleteRecordButton({ datasheetId, recordId, currentPath }: Delet
     };
 
     return (
-        <UniversalButton
+        <OmniButton
             variant="ghost"
             onClick={handleDelete}
             disabled={isPending}
@@ -36,6 +36,6 @@ export function DeleteRecordButton({ datasheetId, recordId, currentPath }: Delet
             title="刪除資料"
         >
             {isPending ? <Loader2 size={16} className="animate-spin text-red-400" /> : <Trash2 size={16} />}
-        </UniversalButton>
+        </OmniButton>
     );
 }

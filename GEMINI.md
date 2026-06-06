@@ -48,4 +48,10 @@ This constitution anchors ESGGO 善向永續/System under the Sacred Trinity: Pl
 - Genesis (P0) defines purpose, hierarchy, and perpetual cycles; Guiding rules translate P0 into concrete patterns; Implementation encodes those patterns in code, tests, and deployment.
   > 「起源 (P0)」定義了系統的終極目的、階層架構與永續循環；「指南」將 P0 轉化為具體的運作模式；「實作」則將這些模式深植於程式碼、自動化測試與部署流程之中。
 - The alignment ensures: (a) every action is traceable to source_origin, (b) data remains tamper-evident, and (c) interfaces remain stable through contracts.
-  > 此三者的精準對齊確保了：(a) 每個動作皆可無限溯源至起始點 (source_origin)；(b) 資料始終具備防竄改 (tamper-evident) 特性；(c)
+  > 此三者的精準對齊確保了：(a) 每個動作皆可無限溯源至起始點 (source_origin)；(b) 資料始終具備防竄改 (tamper-evident) 特性；(c) 介面透過契約保持穩定。
+
+## 4. 命名空間與統一設計語彙 (Namespace and Unified Design Lexicon)
+- **Universal to Omni Alignment:** The system design language standardizes on the "Omni" prefix to represent the all-encompassing nature of the Trinity. All generic UI components (previously "Universal") have been migrated to the Omni namespace (e.g. `UniversalBadge` -> `OmniBadge`).
+  > **萬能至尊對齊 (Universal to Omni Alignment)：** 系統設計語彙統一採用「Omni」前綴，象徵三位一體的全知全能特性。所有通用 UI 元件皆已遷移至 Omni 命名空間。**（註：Omni 於 UI 元件層級之中文對應為「萬能」，例如「萬能元件」；系統中原有的「全通」概念，如「全通之心」，予以保留且互不干涉。）**
+- **Collision Resolution:** To respect the 5T protocol components and prevent namespace overlap, foundational UI structures adopt a `Base` suffix. For instance, `UniversalCard` resolves to `OmniBaseCard`, preserving the integrity of the 5T-compliant `OmniCard`.
+  > **衝突解析 (Collision Resolution)：** 為尊重 5T 協議元件並防止命名空間重疊，基礎 UI 結構採用 `Base` 後綴。例如，`UniversalCard` 被重命名為 `OmniBaseCard`，以確保 5T 標準之 `OmniCard` 的神聖不可侵犯性。

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalInput } from '@/components/ui/universal/UniversalInput';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniInput } from '@/components/ui/omni/OmniInput';
 import { Search, Loader2 } from 'lucide-react';
 
 function debounce<F extends (...args: any[]) => any>(func: F, wait: number) {
@@ -153,7 +153,7 @@ export function NoteSearch() {
             <div className="flex gap-2 mb-6">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
-                    <UniversalInput
+                    <OmniInput
                         type="text"
                         placeholder={isReady ? "Search records via Omni-Index..." : "Initializing 5T Integrity Protocols..."}
                         disabled={!isReady}
@@ -212,14 +212,14 @@ export function NoteSearch() {
             </ul>
 
             {hasMore && (
-                <UniversalButton
+                <OmniButton
                     onClick={handleLoadMore}
                     disabled={isSearching}
                     className="w-full mt-6"
                     variant="outline"
                 >
                     {isSearching ? 'Loading...' : 'Load More Context'}
-                </UniversalButton>
+                </OmniButton>
             )}
         </div>
     );

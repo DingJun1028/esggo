@@ -24,7 +24,7 @@ omniAgentBus.subscribe('ERROR_OCCURRED', async (payload) => {
   try {
     const hg = new HG();
     await hg.triggerGlobalHealing('default');
-    await HealingGuardian.executeUniversalHealing(
+    await HealingGuardian.executeOmniHealing(
       payload.context?.evidenceId || 'unknown',
       payload.context?.table || 'unknown'
     );

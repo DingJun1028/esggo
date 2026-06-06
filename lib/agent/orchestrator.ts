@@ -171,14 +171,14 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
  * 將自發性治理與自癒任務同步寫入萬能筆記 (OmniTable API)
  * 實現「無作妙德圓通無礙」的跨模組零摩擦追蹤
  */
-async function syncTaskToUniversalNotes(task: AgentTask) {
+async function syncTaskToOmniNotes(task: AgentTask) {
   try {
     const { getOmniTableServerClient } = await import('../omni-table/client');
     const client = getOmniTableServerClient();
     const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
     if (!datasheetId) {
-      console.warn('[UniversalNotes] ⚠️ OMNITABLE_TASKS_DATASHEET_ID 未設定，跳過同步。');
+      console.warn('[OmniNotes] ⚠️ OMNITABLE_TASKS_DATASHEET_ID 未設定，跳過同步。');
       return;
     }
 
@@ -190,9 +190,9 @@ async function syncTaskToUniversalNotes(task: AgentTask) {
     }];
 
     await client.createRecords(datasheetId, records);
-    console.log(`[UniversalNotes] 📝 全通之心顯化：已成功將任務 ${task.id} 寫入萬能筆記 (Datasheet: ${datasheetId})`);
+    console.log(`[OmniNotes] 📝 全通之心顯化：已成功將任務 ${task.id} 寫入萬能筆記 (Datasheet: ${datasheetId})`);
   } catch (err) {
-    console.error(`[UniversalNotes] ❌ 任務 ${task.id} 寫入萬能筆記失敗:`, err);
+    console.error(`[OmniNotes] ❌ 任務 ${task.id} 寫入萬能筆記失敗:`, err);
   }
 }
 
@@ -229,7 +229,7 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
   console.log(`[OmniAgent Passive Awakening] 🕊️ 圓通無礙：已自主生成並調度最高優先級任務 ${task.id}`);
 
   // 觸發全通之心顯化，無縫同步至萬能筆記
-  await syncTaskToUniversalNotes(task);
+  await syncTaskToOmniNotes(task);
 
   // 在背景自主啟動蜂群交接或任務執行
   executeSwarmTask(task.id).catch(err => {
@@ -516,7 +516,7 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
   console.log(`[HealingGuardian] 🛠️ 已發起自動修復子任務 ${task.id}，調度蜂群接手...`);
 
   // 將自癒歷程歸檔至萬能筆記
-  await syncTaskToUniversalNotes(task);
+  await syncTaskToOmniNotes(task);
 
   // 🌟 透過 WebSocket 中繼 API 發送廣播，觸發前端因果律拓樸圖的紅轉藍動畫
   try {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { getOmniTableServerClient } from '@/lib/omni-table/client';
-import { UniversalCard } from '@/components/ui/UniversalCard';
-import { UniversalBadge } from '@/components/ui/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/OmniBadge';
 import { AlertOctagon, ShieldAlert } from 'lucide-react';
 import { DeleteRecordButton } from '@/components/DeleteRecordButton';
 
@@ -47,13 +47,13 @@ export default async function OmniTableDemoPage() {
                         const severity = Number(fields['Severity'] || 0);
 
                         return (
-                            <UniversalCard key={record.recordId} variant="glass" className="p-6">
+                            <OmniBaseCard key={record.recordId} variant="glass" className="p-6">
                                 <div className="flex justify-between items-start mb-4">
                                     <span className="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-1 rounded">{String(fields['Risk_ID'])}</span>
                                     <div className="flex items-center gap-2">
-                                        <UniversalBadge variant={severity >= 4 ? 'destructive' : 'primary'} size="xs">
+                                        <OmniBadge variant={severity >= 4 ? 'destructive' : 'primary'} size="xs">
                                             Level {severity}
-                                        </UniversalBadge>
+                                        </OmniBadge>
                                         <DeleteRecordButton
                                             datasheetId={DATASHEET_ID}
                                             recordId={record.recordId}
@@ -64,7 +64,7 @@ export default async function OmniTableDemoPage() {
                                 <h3 className="text-lg font-bold text-slate-100 mb-2">{String(fields['Description'])}</h3>
                                 <p className="text-sm text-slate-400">Category: {String(fields['Category'])}</p>
                                 <p className="text-sm text-slate-400 mt-1">Status: <span className="text-cyan-400">{String(fields['Status'])}</span></p>
-                            </UniversalCard>
+                            </OmniBaseCard>
                         );
                     })}
                 </div>
