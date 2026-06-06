@@ -1,13 +1,13 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import { BrandButton, BrandCard, BrandBadge, BrandStatusDot } from './index';
 import { fadeIn, staggerContainer, slideIn } from '../../lib/animations';
 import { cn } from '../../lib/utils';
 
 interface StandardPageProps {
-  config: UniversalPageConfig;
+  config: OmniPageConfig;
   children?: React.ReactNode;
 }
 

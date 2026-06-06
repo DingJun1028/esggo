@@ -16,7 +16,7 @@ import { Card } from '../../components/ui/Card';
 import { BrandStatusDot } from '../../components/brand';
 import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 
 interface AlchemyResult {
   fileName: string;
@@ -126,8 +126,8 @@ export default function OmniAgentAlchemyPage() {
     setIsScanning(false);
   };
 
-  // ── Universal Page Configuration ──────────────────────────────────
-  const pageConfig: UniversalPageConfig = {
+  // ── Omni Page Configuration ──────────────────────────────────
+  const pageConfig: OmniPageConfig = {
     id: 'omniagent-alchemy',
     title: 'OmniAgent Alchemy 煉金術',
     subtitle: '多模態憑證智能提取中心 · 5T 數據轉化 · 自動化 GRI 映射。',

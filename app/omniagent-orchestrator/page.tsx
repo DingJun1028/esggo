@@ -1,9 +1,9 @@
 ﻿'use client';
 
 import React, { useState } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Bot, Cpu, Zap, Activity, Brain, Share2, Layers, Network, Loader2, PlayCircle, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -41,7 +41,7 @@ export default function OmniAgentOrchestratorPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="success" size="sm" icon={<Brain size={12}/>}>Awakening Talent</UniversalBadge>
+                <OmniBadge variant="success" size="sm" icon={<Brain size={12}/>}>Awakening Talent</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">oX-CORE</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">OmniAgent 萬能智庫</h1>
@@ -49,19 +49,19 @@ export default function OmniAgentOrchestratorPage() {
             </div>
           </div>
           <div className="flex gap-3">
-             <UniversalButton variant="outline" icon={<Share2 size={16} />} onClick={triggerAwakeningSync} isLoading={isSyncing}>
+             <OmniButton variant="outline" icon={<Share2 size={16} />} onClick={triggerAwakeningSync} isLoading={isSyncing}>
                 強制神經同步
-             </UniversalButton>
-             <UniversalButton variant="primary" className="bg-gradient-to-r from-purple-600 to-cyan-600 border-none" icon={<Activity size={16} />}>
+             </OmniButton>
+             <OmniButton variant="primary" className="bg-gradient-to-r from-purple-600 to-cyan-600 border-none" icon={<Activity size={16} />}>
                 啟動全域掃描
-             </UniversalButton>
+             </OmniButton>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
            {/* Visual Topology Map */}
            <div className="lg:col-span-3 space-y-8">
-              <UniversalCard variant="glow" className="aspect-video relative overflow-hidden bg-black/40 border-cyan-500/20 p-0 flex items-center justify-center group">
+              <OmniBaseCard variant="glow" className="aspect-video relative overflow-hidden bg-black/40 border-cyan-500/20 p-0 flex items-center justify-center group">
                  <div className="absolute inset-0 cyber-grid opacity-20" />
                  
                  {/* Simulated Nodes */}
@@ -103,13 +103,13 @@ export default function OmniAgentOrchestratorPage() {
                  </div>
 
                  <div className="absolute top-6 left-6 flex flex-col gap-2">
-                    <UniversalBadge variant="success" icon={<ShieldCheck size={12}/>}>5T Protocol: Active</UniversalBadge>
+                    <OmniBadge variant="success" icon={<ShieldCheck size={12}/>}>5T Protocol: Active</OmniBadge>
                     <p className="text-[10px] font-mono text-white/30">OmniAgentBus_ID: 0x82...f9e2</p>
                  </div>
-              </UniversalCard>
+              </OmniBaseCard>
 
               {/* Task Dispatcher */}
-              <UniversalCard title="任務指派與 Swarm Routing" variant="bordered">
+              <OmniBaseCard title="任務指派與 Swarm Routing" variant="bordered">
                  <div className="space-y-6">
                     <div className="flex gap-4">
                       <input 
@@ -119,9 +119,9 @@ export default function OmniAgentOrchestratorPage() {
                         placeholder="請輸入欲委派之任務，如：'自動抓取公開網頁'、'生成永續藍圖'..."
                         className="flex-1 px-4 py-2 border border-slate-700/50 rounded-xl bg-black/40 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                       />
-                      <UniversalButton variant="primary" onClick={runCommand} disabled={!taskInput || isRunning}>
+                      <OmniButton variant="primary" onClick={runCommand} disabled={!taskInput || isRunning}>
                         {isRunning ? <Loader2 size={16} className="animate-spin" /> : '執行 (Execute)'}
-                      </UniversalButton>
+                      </OmniButton>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -139,12 +139,12 @@ export default function OmniAgentOrchestratorPage() {
                        </button>
                     </div>
                  </div>
-              </UniversalCard>
+              </OmniBaseCard>
            </div>
 
            {/* Metrics */}
            <div className="space-y-8">
-              <UniversalCard title="全域神經狀態" variant="glass">
+              <OmniBaseCard title="全域神經狀態" variant="glass">
                  <div className="space-y-6">
                     <div>
                        <p className="text-[10px] font-black uppercase text-white/30 mb-1">已掛載技能 (Skills Loaded)</p>
@@ -159,7 +159,7 @@ export default function OmniAgentOrchestratorPage() {
                        <p className="text-2xl font-black text-purple-400">3 Nodes</p>
                     </div>
                  </div>
-              </UniversalCard>
+              </OmniBaseCard>
 
               <div className="p-8 bg-gradient-to-br from-purple-500/20 to-indigo-600/20 rounded-[2rem] border border-purple-500/30">
                  <Layers size={32} className="text-purple-400 mb-4" />

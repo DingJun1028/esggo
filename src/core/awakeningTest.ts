@@ -1,7 +1,7 @@
 import { executeAwakenedSovereignty, UserIntent } from './OmniAgentAwakening';
 
 const sampleIntent: UserIntent = {
-  description: 'Deploy the universal diffusion mechanism',
+  description: 'Deploy the omni diffusion mechanism',
 };
 
 executeAwakenedSovereignty(sampleIntent).then(result => {

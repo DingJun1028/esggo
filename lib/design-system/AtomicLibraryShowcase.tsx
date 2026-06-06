@@ -1,6 +1,6 @@
 /**
- * 🎪 AtomicLibraryShowcase - Comprehensive Showcase of Universal Atomic Components
- * v3.0 | #AtomicShowcase #UniversalThemes #LiquidGlass #FullSpectrum
+ * 🎪 AtomicLibraryShowcase - Comprehensive Showcase of Omni Atomic Components
+ * v3.0 | #AtomicShowcase #OmniThemes #LiquidGlass #FullSpectrum
  */
 
 'use client';
@@ -17,7 +17,7 @@ import { AtomicTable } from './AtomicTable';
 import { AtomicModal } from './AtomicModal';
 import { AtomicAlert } from './AtomicAlert';
 import { useAtomicLibrary } from './AtomicLibraryProvider';
-import { UniversalThemeId, ModeLayer } from './atomic-core';
+import { OmniThemeId, ModeLayer } from './atomic-core';
 import { useListAuditRecords } from '../../src/dataconnect-generated/react';
 
 export const AtomicLibraryShowcase: React.FC = () => {
@@ -31,7 +31,7 @@ export const AtomicLibraryShowcase: React.FC = () => {
   const [progressVal, setProgressVal] = useState(65);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const themes: { id: UniversalThemeId; label: string }[] = [
+  const themes: { id: OmniThemeId; label: string }[] = [
     { id: 'benevolent-classic', label: '善向永續經典款' },
     { id: 'berkeley-academy', label: '柏克萊學院風' },
     { id: 'extreme-minimalist', label: '極致簡約款' },
@@ -290,7 +290,7 @@ interface TableRowData {
 
       </div>
 
-      {/* 📊 Universal Registry Table (Full-Width Segment) */}
+      {/* 📊 Omni Registry Table (Full-Width Segment) */}
       <div className="space-y-4">
         <h3 className="text-xs font-black uppercase tracking-[0.25em] text-[#06b6d4] pl-2 border-l-2 border-[#06b6d4]">
           治理節點註冊列表 (AtomicTable Spec ATOM_TBL_001)

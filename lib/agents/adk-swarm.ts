@@ -127,9 +127,9 @@ class CollaborativeSwarmAgent {
 
     // 2. Agent0 reacts to Healing Protocol
     if (event === 'HEALING_PROTOCOL' && this.agentConfig.name === 'Agent0') {
-      console.log(`[Agent0] 🛡️ Received Healing Order. Initiating Universal Restoration...`);
+      console.log(`[Agent0] 🛡️ Received Healing Order. Initiating Omni Restoration...`);
       const { HealingGuardian } = await import('../healing-guardian');
-      await HealingGuardian.executeUniversalHealing(payload.targetId as string, payload.table as string);
+      await HealingGuardian.executeOmniHealing(payload.targetId as string, payload.table as string);
     }
 
     // 3. Auditor reacts to Simulation

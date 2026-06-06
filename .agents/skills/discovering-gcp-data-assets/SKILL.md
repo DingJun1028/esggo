@@ -127,7 +127,7 @@ Use this for exact keyword matches or technical strings (e.g., `name:order_v2`).
     `bigquery:project.dataset.table`).
 
 > [!TIP] Dataplex search results rely on metadata being ingested into the
-> Universal Catalog (often via **Discovery Scans**). If an asset is missing from
+> Omni Catalog (often via **Discovery Scans**). If an asset is missing from
 > search, it may not be indexed. - **Fallback 1**: Try searching by the
 > `fully_qualified_name` qualifier. - **Fallback 2**: Use native tools (e.g.,
 > `bq show`, `gcloud storage`) or specific skills for that asset type if you
@@ -207,7 +207,7 @@ context.
 ### Context Lookup Fails with "NOT_FOUND" (despite correct format)
 
 -   **Cause**: The table belongs to a project (e.g., `bigquery-public-data`)
-    that has not fully synchronized its metadata with the Dataplex Universal
+    that has not fully synchronized its metadata with the Dataplex Omni
     Catalog. While the entry appears in search, `context lookup` is unavailable.
 -   **Fix**: Fall back to direct inspection using native tools (e.g., `bq` CLI).
 -   **Stop Rule:** If the native tool (e.g., `bq show`) also returns "Not

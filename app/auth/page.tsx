@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import OmniAuthUniversal from '@/components/omni/OmniAuthUniversal';
+import OmniAuthOmni from '@/components/omni/OmniAuthOmni';
 import { motion } from 'framer-motion';
 
 export default function AuthPage() {
@@ -18,7 +18,7 @@ export default function AuthPage() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md relative z-10"
       >
-        <OmniAuthUniversal />
+        <OmniAuthOmni />
       </motion.div>
     </div>
   );

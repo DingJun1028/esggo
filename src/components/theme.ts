@@ -150,7 +150,7 @@ export const FusionTheme = {
   borderRadius: 'pill',
 };
 
-// ── Universal Theme Switcher ─────────────────────────────────────────────
+// ── Omni Theme Switcher ─────────────────────────────────────────────
 // 主題選擇工具，根據數據連結自動切換國際化樣式或自訂需求
 export type ThemeName = 'Atlantic' | 'Berkeley' | 'Mindful' | 'Fusion';
 

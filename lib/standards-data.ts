@@ -59,7 +59,7 @@ export const STANDARDS: Standard[] = [
   {
     id: 'gri-2021',
     code: 'GRI 2021',
-    name: 'GRI Universal Standards 2021',
+    name: 'GRI Omni Standards 2021',
     nameZh: 'GRI 2021 通用準則',
     category: 'GRI',
     version: '2021',

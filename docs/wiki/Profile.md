@@ -24,14 +24,14 @@ evidence: "docs\wiki\Profile.md"
 **設計系統： InfoOne v8.1.0 (Light Mode Priority)**
 桌面版佈局： 採用「Bento 卡片佈局」，分為基本資料、願景使命、財務概況三大區塊。
 視覺風格： 極簡淺色系 (`bg-slate-50`)，卡片採用 `bg-white/80` 搭配柔和陰影。
-核心元件： `UniversalCard` (用於區塊容器), `UniversalInput` (具備 Icon 引導), `UniversalBadge` (狀態標示)。
+核心元件： `OmniBaseCard` (用於區塊容器), `OmniInput` (具備 Icon 引導), `OmniBadge` (狀態標示)。
 行動端適配 (RWD)： 全表單垂直堆疊，確保在行動端亦能流暢填報。
 
 4. 核心邏輯與 5T 協定 (Logic & 5T Protocol)
 資料流向： 使用者輸入資料 -> Zod 驗證 -> Firebase DataConnect (PostgreSQL) 寫入 `company_profiles` 表。
 5T 實踐點：
 *   [T1 真 Truthful - Traceable]：所有變更皆記錄 `user_email` 與 `timestamp`。
-*   [T3 美 Tasteful - Tangible]：透過 Universal 元件的微互動讓設定過程「可感知」。
+*   [T3 美 Tasteful - Tangible]：透過 Omni 元件的微互動讓設定過程「可感知」。
 *   [T4 信 Trustful - Trustworthy]：企業關鍵參數（如資本額）變更將觸發全域 Hash 更新。
 
 5. 功能項目解說和使用技術 (Features & Tech Stack)
@@ -46,4 +46,4 @@ evidence: "docs\wiki\Profile.md"
 7. 矩陣關聯 (Matrix Connection)
 上游數據： 無（此為系統 Root 資料源）。
 下游影響： 直接影響 `/dashboard` 的強度計算、`/editor` 的報告封面生成。
-依賴組件： `UniversalCard`, `UniversalInput`, `UniversalButton`.
+依賴組件： `OmniBaseCard`, `OmniInput`, `OmniButton`.

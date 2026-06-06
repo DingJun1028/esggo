@@ -18,7 +18,7 @@ import { BrandStatusDot } from '../../components/brand';
 import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
 import { SKILL_REGISTRY } from '../../lib/agent/registry';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 
 interface ExecutionRecord {
   task: unknown;
@@ -144,7 +144,7 @@ export default function OrchestratorPage() {
     }
   }
 
-  const pageConfig: UniversalPageConfig = {
+  const pageConfig: OmniPageConfig = {
     id: 'omniagent-orchestrator',
     title: 'OmniAgent 調度中心',
     subtitle: 'Swarm Orchestration · 多代理任務並行 · 5T 治理日誌。',

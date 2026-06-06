@@ -3,7 +3,7 @@
  * 負責底層元件型別定義、狀態註冊與全域主題治理
  */
 
-export type UniversalThemeId = 'benevolent-classic' | 'berkeley-academy' | 'extreme-minimalist' | 'best-practice';
+export type OmniThemeId = 'benevolent-classic' | 'berkeley-academy' | 'extreme-minimalist' | 'best-practice';
 export type ModeLayer = 'light' | 'dark' | 'system';
 
 // 5T 誠信協議狀態
@@ -46,7 +46,7 @@ class AtomicManager {
    * @param theme 預設主題
    * @param mode 顯示模式
    */
-  public switchTheme(theme: UniversalThemeId, mode: ModeLayer): void {
+  public switchTheme(theme: OmniThemeId, mode: ModeLayer): void {
     console.log(`[OmniCore] Theme switched: ${theme} - ${mode}`);
   }
 

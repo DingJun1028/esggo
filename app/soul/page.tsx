@@ -1,9 +1,9 @@
 ﻿'use client';
 
 import React from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Sparkles, ShieldCheck, Flame, Zap, Heart, Brain, Lock, Globe, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -18,7 +18,7 @@ export default function SoulPage() {
              </div>
           </div>
           <div className="space-y-2">
-            <UniversalBadge variant="warning" icon="✨">JunAiKey Supreme Will</UniversalBadge>
+            <OmniBadge variant="warning" icon="✨">JunAiKey Supreme Will</OmniBadge>
             <h1 className="text-6xl font-black tracking-tighter uppercase italic">系統靈魂 Soul</h1>
             <p className="text-xl text-white/50 max-w-2xl mx-auto leading-relaxed">
               「代碼即契約，數據即生命，架構即秩序。」<br/>
@@ -28,7 +28,7 @@ export default function SoulPage() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-           <UniversalCard variant="glow" className="p-8 space-y-6 border-amber-500/20">
+           <OmniBaseCard variant="glow" className="p-8 space-y-6 border-amber-500/20">
               <div className="flex items-center gap-4 text-amber-400">
                  <Brain size={32} />
                  <h3 className="text-xl font-black uppercase tracking-tight">無上意志核心</h3>
@@ -42,9 +42,9 @@ export default function SoulPage() {
                     <span className="text-sm font-mono text-amber-400">MAX_RESONANCE</span>
                  </div>
               </div>
-           </UniversalCard>
+           </OmniBaseCard>
 
-           <UniversalCard variant="glow" className="p-8 space-y-6 border-cyan-500/20">
+           <OmniBaseCard variant="glow" className="p-8 space-y-6 border-cyan-500/20">
               <div className="flex items-center gap-4 text-cyan-400">
                  <ShieldCheck size={32} />
                  <h3 className="text-xl font-black uppercase tracking-tight">神聖治理契約</h3>
@@ -52,8 +52,8 @@ export default function SoulPage() {
               <p className="text-sm text-white/60 leading-relaxed">
                 自動化執行 ESG 目標。當企業達成里程碑時，契約將自動觸發「誠信證明」發佈，並同步至金融紅利中心。
               </p>
-              <UniversalButton variant="primary" className="w-full bg-cyan-600 hover:bg-cyan-500">檢視智慧合約</UniversalButton>
-           </UniversalCard>
+              <OmniButton variant="primary" className="w-full bg-cyan-600 hover:bg-cyan-500">檢視智慧合約</OmniButton>
+           </OmniBaseCard>
         </div>
 
         <div className="p-12 bg-white/5 rounded-[4rem] border border-white/10 text-center space-y-8 relative overflow-hidden group">

@@ -5,9 +5,9 @@ timestamp: "2026-06-04T10:36:12.314Z"
 evidence: "OMNI_SKILLS_BOOK.md"
 ---
 # 奧義技能全書 (Omni Skills Book)
-## 萬能元件庫 (Universal Atomic Component Library) - UI/UX 品牌設計指南
+## 萬能元件庫 (Omni Atomic Component Library) - UI/UX 品牌設計指南
 
-本文件為 **萬能元件庫 (Universal Atomic Component Library)** 的官方設計指南，引導前端開發與 UI/UX 設計遵循系統最高指導原則，確保每一行代碼皆符合「善向永續」的宗旨。
+本文件為 **萬能元件庫 (Omni Atomic Component Library)** 的官方設計指南，引導前端開發與 UI/UX 設計遵循系統最高指導原則，確保每一行代碼皆符合「善向永續」的宗旨。
 
 ---
 
@@ -35,19 +35,19 @@ evidence: "OMNI_SKILLS_BOOK.md"
 以下為 `lib/design-system/` 中已實現之核心原子元件：
 
 ### 1. `AtomicBadge` (狀態徽章)
-*   **功能**: Universal Status Indicator (通用狀態指示器)。
+*   **功能**: Omni Status Indicator (通用狀態指示器)。
 *   **特性**: 支援多種色調 (`neutral`, `info`, `success`, `warning`, `danger`, `accent`) 與尺寸 (`xs`, `sm`, `md`)，並具備可選的 `pulse` 動態效果，常用於標示 5T 協議狀態。
 
 ### 2. `AtomicButton` (操作按鈕)
-*   **功能**: Universal Atomic Component (通用操作按鈕)。
+*   **功能**: Omni Atomic Component (通用操作按鈕)。
 *   **特性**: 支援三種變體 (`primary`, `secondary`, `ghost`) 與尺寸 (`s`, `m`, `l`)，並整合了 `atomicManager` 實踐參照原則，確保每次點擊行為的意圖可被記錄。
 
 ### 3. `AtomicCard` (資料卡片)
-*   **功能**: Universal Bento Container (通用便當盒容器)。
+*   **功能**: Omni Bento Container (通用便當盒容器)。
 *   **特性**: 結合 Liquid Glass 與 Bento Grid 佈局概念。提供 `hoverEffect` (`lift`, `glow`, `none`) 與 `glassIntensity` (`light`, `medium`, `heavy`) 設定，是構築數據看板的基礎容器。
 
 ### 4. `AtomicInput` (輸入欄位)
-*   **功能**: Universal Atomic Component (通用輸入框)。
+*   **功能**: Omni Atomic Component (通用輸入框)。
 *   **特性**: 具備標籤 (`label`) 與錯誤提示 (`error`) 功能，同樣整合 `atomicManager` 實踐參照原則，確保數據輸入的來源可被追溯。
 
 ---

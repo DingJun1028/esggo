@@ -13,7 +13,7 @@ import {
   BrandCard, BrandButton, BrandBadge, BrandTabs, BrandStatusDot, 
   BrandTable, StandardPage, BrandCardHeader, BrandModal
 } from '../../components/brand';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import { STANDARDS } from '../../lib/standards-data';
 import { integrityService } from '../../lib/services/integrity-service';
 import Link from 'next/link';
@@ -113,8 +113,8 @@ export default function BestPracticeHubPage() {
     }
   };
 
-  // ====== Universal Page Configuration ======
-  const pageConfig: UniversalPageConfig = {
+  // ====== Omni Page Configuration ======
+  const pageConfig: OmniPageConfig = {
     id: 'best-practice-hub',
     title: '最佳實踐與基準導航',
     subtitle: '探索業界最高標準、基準案例與專家模板',

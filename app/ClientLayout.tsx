@@ -68,7 +68,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!mounted || loading) return;
 
-    if (isAuthenticated === false && pathname !== '/auth/login' && pathname !== '/terminal' && pathname !== '/') {
+    if (isAuthenticated === false && pathname !== '/auth/login' && pathname !== '/terminal' && pathname !== '/' && pathname !== '/esggo-omnipencil') {
       router.replace('/auth/login');
     } else if (isAuthenticated === true && pathname === '/auth/login') {
       router.replace('/dashboard');
@@ -78,7 +78,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   if (!mounted) return null;
 
   // 1. Public Routes
-  if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/') {
+  if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/' || pathname === '/esggo-omnipencil') {
     return <><ToastContainer /><OmniAgentPulse /><OmniCommandPalette />{children}</>;
   }
 
