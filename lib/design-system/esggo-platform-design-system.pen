@@ -15,59 +15,65 @@
     },
     {
       "type": "frame",
-      "id": "Dalnw",
+      "id": "T3Yu1P",
       "x": 500,
       "y": 0,
       "name": "OmniNotification Component",
       "width": 400,
       "height": 150,
-      "fill": [
-        "#FFFFFF1A",
-        "#0000001A"
-      ],
+      "fill": "$omni_notification_bg",
       "cornerRadius": 8,
-      "stroke": "#FFFFFF33",
-      "effect": [
-        {
-          "type": "background_blur",
-          "radius": 16
-        },
-        {
-          "type": "shadow",
-          "shadowType": "outer",
-          "color": "#00BFFF",
-          "blur": 16,
-          "spread": 2
-        }
-      ],
+      "stroke": "$omni_notification_stroke",
+      "effect": {
+        "type": "background_blur",
+        "radius": 16
+      },
       "layout": "vertical",
       "gap": 8,
       "padding": 16,
       "children": [
         {
           "type": "frame",
-          "id": "b4fuK",
+          "id": "S1Xa5j",
           "name": "Notification Header",
           "width": "fill_container",
           "justifyContent": "space_between",
           "alignItems": "center",
           "children": [
             {
-              "type": "text",
-              "id": "xqKoY",
-              "name": "Notification Title",
-              "fill": [
-                "$bg_slate_900",
-                "#000000"
-              ],
-              "content": "System Notification",
-              "fontFamily": "$font_jet_brains_mono",
-              "fontSize": 16,
-              "fontWeight": "600"
+              "type": "frame",
+              "id": "Z2OWwD",
+              "name": "Header Left Content",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "XQw4K",
+                  "name": "Status Indicator",
+                  "fill": "$accent_emerald_400",
+                  "width": 8,
+                  "height": 8
+                },
+                {
+                  "type": "text",
+                  "id": "FHBjP",
+                  "name": "Notification Title",
+                  "fill": [
+                    "$bg_slate_900",
+                    "#000000"
+                  ],
+                  "content": "System Notification",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
             },
             {
               "type": "text",
-              "id": "tUuyf",
+              "id": "TbQcR",
               "name": "Close Button",
               "fill": "#888888",
               "content": "✕",
@@ -79,12 +85,9 @@
         },
         {
           "type": "text",
-          "id": "C8xS0",
+          "id": "Msqwn",
           "name": "Notification Content",
-          "fill": [
-            "$bg_slate_900",
-            "#000000"
-          ],
+          "fill": "$omni_text_fill_light",
           "textGrowth": "fixed-width",
           "width": "fill_container",
           "content": "This is a universal notification from OmniAgentBus.",
@@ -94,13 +97,10 @@
         },
         {
           "type": "frame",
-          "id": "LjVDJ",
-          "x": 0,
-          "y": 0,
+          "id": "IDJFH",
           "name": "Transparent Data Panel",
-          "enabled": false,
-          "width": "fill_container(0)",
-          "height": "fill_container(0)",
+          "width": "fill_container",
+          "height": "fill_container",
           "fill": "#000000AA",
           "layout": "vertical",
           "gap": 8,
@@ -108,7 +108,7 @@
           "children": [
             {
               "type": "text",
-              "id": "HiKR6",
+              "id": "fYfgi",
               "name": "Formula Title",
               "fill": "$accent_emerald_400",
               "content": "[📊 VERIFIABLE COMPLIANCE FORMULA]",
@@ -118,7 +118,7 @@
             },
             {
               "type": "text",
-              "id": "n2M3VA",
+              "id": "TXniO",
               "name": "Formula Content",
               "fill": "#FFFFFF",
               "textGrowth": "fixed-width",
@@ -130,7 +130,7 @@
             },
             {
               "type": "text",
-              "id": "jdCI1",
+              "id": "aHwgz",
               "name": "Verification Standard",
               "fill": "$accent_cyan_500",
               "content": "STANDARD: [ISO-14064-1:2018]",
@@ -142,19 +142,34 @@
         },
         {
           "type": "text",
-          "id": "iXSbV",
+          "id": "IoBYG",
           "name": "Source Origin Display",
-          "fill": "#AAAAAA",
+          "fill": "$omni_text_fill_light",
           "textGrowth": "fixed-width",
           "width": "fill_container",
           "content": "Source Origin: ChatBox:Omni-Chat-01",
           "fontFamily": "$font_jet_brains_mono",
           "fontSize": 9,
           "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "rEhQQ",
+          "name": "Trustworthy Lock Indicator",
+          "width": "fill_container",
+          "height": 5,
+          "fill": "$accent_cyan_500",
+          "cornerRadius": 2
         }
       ]
     }
   ],
+  "themes": {
+    "mode": [
+      "light",
+      "dark"
+    ]
+  },
   "variables": {
     "accent_cyan_500": {
       "type": "color",
@@ -195,6 +210,69 @@
     "primary_rose_500": {
       "type": "color",
       "value": "#F43F5E"
+    },
+    "omni_notification_bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF1A",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#0000001A",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "omni_notification_stroke": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF33",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FFFFFF33",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "omni_text_fill_light": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#AAAAAA",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#777777",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "agent_task_glow_color": {
+      "type": "color",
+      "value": "#FFD700"
+    },
+    "evolution_glow_color": {
+      "type": "color",
+      "value": "#32CD32"
+    },
+    "system_glow_color": {
+      "type": "color",
+      "value": "#00BFFF"
     }
   }
 }
