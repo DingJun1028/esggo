@@ -49,7 +49,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         // 綁定 HTTP Upgrade 事件，攔截 Upgrade: websocket
         (res.socket as any).server.on('upgrade', (request: unknown, socket: unknown, head: unknown) => {
             if ((request as any).url?.includes('/api/swarm/ws')) {
-                wss.handleUpgrade(request as any, socket, head, (ws: WebSocket) => {
+                wss.handleUpgrade(request as any, socket as any, head as Buffer, (ws: WebSocket) => {
                     wss.emit('connection', ws, request);
                 });
             }

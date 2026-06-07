@@ -145,7 +145,7 @@ export class EvidenceRepository {
       if (error) handleSupabaseError(error);
       
       return {
-        data: (data || []).map(row => this.mapToEvidence(row)),
+        data: (data || []).map((row: any) => this.mapToEvidence(row)),
         pagination: {
           total: count || 0,
           limit,

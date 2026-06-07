@@ -51,7 +51,7 @@
 
       public async loadSkillModule(skillId: string): Promise<Record<string, (...args: unknown[]) => unknown>> {
         if (this.skillModules.has(skillId)) {
-          return this.skillModules.get(skillId);
+          return this.skillModules.get(skillId)!;
         }
 
         const skill = this.getSkillById(skillId);

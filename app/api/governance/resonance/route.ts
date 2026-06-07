@@ -1,4 +1,4 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { governanceEngine } from '@/lib/governance-engine';
 import { supabase } from '@/lib/supabase';
 import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
@@ -6,6 +6,7 @@ import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/s
 export async function GET() {
   try {
     // 1. 從 Supabase 獲取真實的重大性議題 (Materiality Topics)
+    if (!supabase) throw new Error('Supabase client not initialized');
     const { data: topics, error: topicsError } = await supabase
       .from('materiality_topics')
       .select('*');

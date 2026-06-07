@@ -18,7 +18,7 @@ export class AuditRepository {
    */
   async log(entry: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog | undefined> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('audit_logs')
         .insert({
           user_id: entry.user_id,
@@ -47,7 +47,7 @@ export class AuditRepository {
    */
   async findMany(params: AuditQueryParams) {
     try {
-      let query = supabase.from('audit_logs').select('*', { count: 'exact' });
+      let query = (supabase as any).from('audit_logs').select('*', { count: 'exact' });
 
       if (params.user_id) query = query.eq('user_id', params.user_id);
       if (params.resource_id) query = query.eq('resource_id', params.resource_id);
@@ -64,7 +64,7 @@ export class AuditRepository {
       if (error) handleSupabaseError(error);
 
       return {
-        data: (data || []).map(row => this.mapToAuditLog(row)),
+        data: (data || []).map((row: any) => this.mapToAuditLog(row)),
         total: count || 0
       };
     } catch (error) {

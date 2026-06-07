@@ -1,4 +1,4 @@
-import { getSupabaseClient } from './supabase.ts';
+import { getSupabaseClient } from './supabase';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

@@ -47,14 +47,12 @@ describe('ChapterEditor - AI Style Selection', () => {
             />
         );
 
-        // 2. 找到下拉選單 (select 在 testing-library 中的 role 為 combobox)
-        const styleSelect = screen.getByRole('combobox');
+        // 2. 找到 AI 風格按鈕群組並點擊「數據導向」按鈕
+        const dataDrivenButton = screen.getByRole('button', { name: /數據導向/i });
+        await user.click(dataDrivenButton);
 
-        // 模擬使用者操作：展開選單並選擇「數據導向 (data_driven)」
-        await user.selectOptions(styleSelect, 'data_driven');
-
-        // 驗證 UI 的值確實改變了
-        expect(styleSelect).toHaveValue('data_driven');
+        // 驗證按鈕是否被選中（應該有選中狀態的樣式）
+        expect(dataDrivenButton).toHaveClass(/bg-indigo-600/);
 
         // 3. 找到「AI 智能擴寫」的按鈕並點擊
         // (透過按鈕內的文字 Expert AI Expansion 來定位)

@@ -41,16 +41,16 @@ export function useOmniResonance() {
 
   // 3. 證據變化時初始化壓力狀態
   useEffect(() => {
-    if (evidences.length > 0) {
-      // 使用 setTimeout 確保不在渲染週期內同步更新
-      const t = setTimeout(() => {
-        setStreamStatus({
-          ren: 80 + Math.random() * 20,
-          du: 70 + Math.random() * 30
-        });
-      }, 0);
-      return () => clearTimeout(t);
-    }
+    if (evidences.length === 0) return;
+    
+    // 使用 setTimeout 確保不在渲染週期內同步更新
+    const t = setTimeout(() => {
+      setStreamStatus({
+        ren: 80 + Math.random() * 20,
+        du: 70 + Math.random() * 30
+      });
+    }, 0);
+    return () => clearTimeout(t);
   }, [evidences.length]);
 
   const rs = Math.min(Math.max(baseResonanceData.baseRs + noise, 0), 1.0);

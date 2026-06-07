@@ -10,7 +10,7 @@ export const auditSealTool = ai.defineTool({
     evidenceId: z.string(),
   }),
 }, async ({ evidenceId }) => {
-  const evidence = (await getEvidenceFiles()).find((e: unknown) => e.id === evidenceId);
+  const evidence = (await getEvidenceFiles()).find((e: any) => e.id === evidenceId);
   const startTime = Date.now();
   
   if (!evidence) return { status: 'not_found' };
@@ -45,7 +45,7 @@ export const auditSealValidationTool = ai.defineTool({
   }),
 }, async ({ evidenceId, action }) => {
   const startTime = Date.now();
-  const evidence = (await getEvidenceFiles()).find((e: unknown) => e.id === evidenceId);
+  const evidence = (await getEvidenceFiles()).find((e: any) => e.id === evidenceId);
   
   if (!evidence) {
     telemetryService.recordEvent({

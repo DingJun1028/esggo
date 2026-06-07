@@ -57,7 +57,7 @@ export class ExternalSyncService {
   /**
    * 同步至 OmniTable.ai (知識聖殿的數據基石)
    */
-  public async syncToOmniTable(datasheetId: string, payload: unknown): Promise<boolean> {
+  public async syncToOmniTable(datasheetId: string, payload: any): Promise<boolean> {
     console.log(`[Nexus] 🔄 準備同步數據至 OmniTable.ai (Datasheet: ${datasheetId})`, payload);
     try {
       const token = process.env.OMNITABLE_API_TOKEN;

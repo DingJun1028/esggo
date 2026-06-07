@@ -4,7 +4,7 @@
  * 遵循 5T 協議 (Transferful: 生命週期即時追蹤與可追蹤性)
  */
 
-import { omniAgentBus, OmniSkill } from '../agents/omni-agent-bus.ts';
+import { omniAgentBus, OmniSkill } from '../agents/omni-agent-bus';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface IOmniAgentAwakening {

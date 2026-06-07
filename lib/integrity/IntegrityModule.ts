@@ -1,5 +1,5 @@
 import type { IntegrityRepository, IntegrityRecord } from './IIntegrityRepository';
-import { sha256 } from '../crypto-proof.ts';
+import { sha256 } from '../crypto-proof';
 
 export class IntegrityModule {
     constructor(private readonly repository: IntegrityRepository) { }
