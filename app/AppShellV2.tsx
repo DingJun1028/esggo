@@ -17,7 +17,7 @@ import {
   Globe, ShieldAlert, History, Archive, BadgeCheck, Link2, Send,
   Library, BookOpen, PieChart, GraduationCap, Briefcase, Headphones,
   Network, Cpu, Share2, TestTube, TerminalSquare, Palette, UploadCloud,
-  Flame, Vault
+  Flame
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import BrandButton from '../components/brand/BrandButton';
@@ -71,7 +71,7 @@ const IconMapper: Record<string, React.ReactNode> = {
   TerminalSquare: <TerminalSquare size={20} />,
   Palette: <Palette size={20} />,
   Flame: <Flame size={20} />,
-  Vault: <Vault size={20} />,
+  Vault: <Lock size={20} />,
 };
 
 // Core 6 Journeys for Mobile Bottom Bar (Refined for Mobile optimization)
