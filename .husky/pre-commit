@@ -1,9 +1,10 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# Add node_modules/.bin to PATH for husky hooks
-if [ -d "node_modules/.bin" ]; then
-  PATH=$(pwd)/node_modules/.bin:$PATH
+# Add global npm path to PATH for husky hooks
+GLOBAL_NPM_PATH="C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+if [ -d "$GLOBAL_NPM_PATH" ]; then
+  PATH="$GLOBAL_NPM_PATH:$PATH"
 fi
 
-npx lint-staged
+node node_modules/lint-staged/bin/lint-staged.js
