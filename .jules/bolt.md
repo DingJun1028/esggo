@@ -5,3 +5,7 @@
 ## 2024-06-19 - DataTable Object.values + toLowerCase in React Render Cycle
 **Learning:** In standard React datatables, dynamically filtering data structures using `Object.values(row).some(v => String(v).toLowerCase().includes(search.toLowerCase()))` during every render cycle can be surprisingly slow on large datasets because `toLowerCase()` on the search string is re-evaluated N * M times (Rows * Columns). It also forces a full re-computation of the array when parent components re-render even if the data hasn't changed.
 **Action:** Always wrap data filtering/sorting in `useMemo` hooks with strict dependencies, and hoist the `search.toLowerCase()` call *outside* the filtering loop to evaluate it exactly once per filter pass. Avoid nested `toLowerCase` on constants in high-iteration loops.
+
+## 2026-06-07 - DataTable React.memo Optimization
+**Learning:** Re-renders of parent components will cause `DataTable` to unnecessarily re-render, blocking the main thread during high-volume dataset sorting/filtering. Using `React.memo` directly on generic components loses their type inferences.
+**Action:** Always wrap data-intensive generic components in `React.memo` and type-cast the export `as typeof ComponentInner` to preserve the generic typing correctly while preventing expensive re-renders.
