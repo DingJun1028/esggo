@@ -1,3 +1,20 @@
+/**
+ * @component OMNI-005
+ * @type Molecule
+ * @name OmniOverviewMenu (OmniBookcaseRegistry)
+ * @status 開發中
+ * @version 1.1.0
+ * @uuid a6fedba5-8072-4571-9e8b-2f24d84e9d61
+ * @timestamp 2026-06-06T00:00:00.000Z
+ * @description Provides a comprehensive overview of all features and navigation paths in the application.
+ * @dimensions
+ *   - Tangible: 🟢 (Visualized as an interactive modal menu)
+ *   - Traceable: 🟢 (Linked to OMNICOMPONENT_REGISTRY.md)
+ *   - Trackable: 🟢 (Utilizes React lifecycle hooks and framer-motion)
+ *   - Transparent: 🟢 (Straightforward logic for displaying navigation groups)
+ *   - Trustworthy: 🔴 (No hash lock in component code itself, integrity derived from registry)
+ *   - Attribution: 萬能元件 (Omni Component)
+ */
 // components/OmniOverviewMenu.tsx
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,26 +50,32 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
             initial={{ scale: 0.9, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 50 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
             className={cn(
-              "relative w-full max-w-lg max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl",
-              isDark ? "bg-slate-900 border border-white/10" : "bg-white border border-slate-200"
+              'relative w-full max-w-lg max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl',
+              isDark ? 'bg-slate-900 border border-white/10' : 'bg-white border border-slate-200'
             )}
             onClick={(e) => e.stopPropagation()} // Prevent click from closing modal
           >
-            <div className={cn(
-              "flex items-center justify-between p-6 border-b",
-              isDark ? "border-white/10" : "border-slate-200"
-            )}>
-              <h2 className={cn(
-                "text-2xl font-black tracking-tight",
-                isDark ? "text-white" : "text-slate-800"
-              )}>全觀 (All Features)</h2>
+            <div
+              className={cn(
+                'flex items-center justify-between p-6 border-b',
+                isDark ? 'border-white/10' : 'border-slate-200'
+              )}
+            >
+              <h2
+                className={cn(
+                  'text-2xl font-black tracking-tight',
+                  isDark ? 'text-white' : 'text-slate-800'
+                )}
+              >
+                全觀 (All Features)
+              </h2>
               <button
                 onClick={onClose}
                 className={cn(
-                  "p-2 rounded-full transition-colors",
-                  isDark ? "hover:bg-white/10 text-white" : "hover:bg-slate-100 text-slate-600"
+                  'p-2 rounded-full transition-colors',
+                  isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-600'
                 )}
               >
                 <X size={24} />
@@ -62,27 +85,37 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
             <div className="p-6 overflow-y-auto no-scrollbar grid grid-cols-2 gap-4">
               {allNavGroups.map((group) => (
                 <div key={group.groupId} className="pb-4">
-                  <h3 className={cn(
-                    "text-[11px] font-black uppercase tracking-widest mb-3",
-                    isDark ? "text-slate-400" : "text-slate-500"
-                  )}>
+                  <h3
+                    className={cn(
+                      'text-[11px] font-black uppercase tracking-widest mb-3',
+                      isDark ? 'text-slate-400' : 'text-slate-500'
+                    )}
+                  >
                     {group.groupTitle}
                   </h3>
                   <div className="space-y-2">
                     {group.items.map((item) => (
                       <Link key={item.id} href={item.path} onClick={onClose}>
-                        <div className={cn(
-                          "flex items-center gap-3 p-3 rounded-xl transition-colors",
-                          isDark ? "hover:bg-white/5 text-slate-200" : "hover:bg-slate-50 text-slate-700"
-                        )}>
-                          <div className={cn(
-                            "flex-shrink-0",
-                            isDark ? "text-cyan-400" : "text-[#003262]"
-                          )}>
+                        <div
+                          className={cn(
+                            'flex items-center gap-3 p-3 rounded-xl transition-colors',
+                            isDark
+                              ? 'hover:bg-white/5 text-slate-200'
+                              : 'hover:bg-slate-50 text-slate-700'
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              'flex-shrink-0',
+                              isDark ? 'text-cyan-400' : 'text-[#003262]'
+                            )}
+                          >
                             {IconMapper[item.icon] || <LayoutDashboard size={20} />}
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-[13px] font-bold tracking-tight">{item.title}</span>
+                            <span className="text-[13px] font-bold tracking-tight">
+                              {item.title}
+                            </span>
                             <span className="text-[9px] opacity-60 uppercase">{item.sub}</span>
                           </div>
                         </div>
