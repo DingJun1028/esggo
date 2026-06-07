@@ -80,75 +80,77 @@ export default function OmniAppDashboard() {
     }
   });
 
-  React.useEffect(() => {
-    const fetchNexusData = async () => {
-      try {
-        const [carbonResponse, auditResponse, hermesResponse, sovereignResponse] = await Promise.all([
-          fetch('/api/nexus/agent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              tool: 'verify_carbon', 
-              arguments: { scope: 1, data: { value: 1250.75, unit: 'tCO2e' } } 
-            })
-          }),
-          fetch('/api/nexus/agent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              tool: 'get_audit_ledger', 
-              arguments: { methodology: '[GRI 2021 FRAMEWORK]' } 
-            })
-          }),
-          fetch('/api/nexus/agent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tool: 'get_hermes_status', arguments: {} })
-          }),
-          fetch('/api/nexus/agent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tool: 'get_sovereign_status', arguments: {} })
+  const fetchNexusData = async () => {
+    setIsFetching(true);
+    setFetchError(null);
+    try {
+      const [carbonResponse, auditResponse, hermesResponse, sovereignResponse] = await Promise.all([
+        fetch('/api/nexus/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            tool: 'verify_carbon', 
+            arguments: { scope: 1, data: { value: 1250.75, unit: 'tCO2e' } } 
           })
-        ]);
-        
-        const carbonResult = await carbonResponse.json();
-        const auditResult = await auditResponse.json();
-        const hermesResult = await hermesResponse.json();
-        const sovereignResult = await sovereignResponse.json();
-        
-        if (carbonResult.success && carbonResult.data) {
-          setCarbonValue(carbonResult.data.verifiedValue);
-          setSystemMetadata({
-            uuid: carbonResult.metadata.uuid || "unknown-uuid",
-            componentVersion: "8.5.0-Alpha",
+        }),
+        fetch('/api/nexus/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            tool: 'get_audit_ledger', 
+            arguments: { methodology: '[GRI 2021 FRAMEWORK]' } 
+          })
+        }),
+        fetch('/api/nexus/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tool: 'get_hermes_status', arguments: {} })
+        }),
+        fetch('/api/nexus/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tool: 'get_sovereign_status', arguments: {} })
+        })
+      ]);
+      
+      const carbonResult = await carbonResponse.json();
+      const auditResult = await auditResponse.json();
+      const hermesResult = await hermesResponse.json();
+      const sovereignResult = await sovereignResponse.json();
+      
+      if (carbonResult.success && carbonResult.data) {
+        setCarbonValue(carbonResult.data.verifiedValue);
+        setSystemMetadata({
+          uuid: carbonResult.metadata.uuid || "unknown-uuid",
+          componentVersion: "8.5.0-Alpha",
+          timestamp: carbonResult.metadata.timestamp,
+          evidence: {
+            source_origin: `OmniNexus API :: ${carbonResult.metadata.tool}`,
             timestamp: carbonResult.metadata.timestamp,
-            evidence: {
-              source_origin: `OmniNexus API :: ${carbonResult.metadata.tool}`,
-              timestamp: carbonResult.metadata.timestamp,
-              hash: "0xTRUSTWORTHY_" + carbonResult.metadata.timestamp,
-              flow_path: ["OmniNexus API", "Zero-Knowledge Proof Guard", "Bento Sovereign Grid"]
-            }
-          });
-        }
-
-        if (auditResult.success && auditResult.data) {
-          setAuditLedger(auditResult.data);
-        }
-        if (hermesResult.success && hermesResult.data) {
-          setHermesStatus(hermesResult.data);
-        }
-        if (sovereignResult.success && sovereignResult.data) {
-          setSovereignStatus(sovereignResult.data);
-        }
-      } catch (error) {
-        console.error("OmniNexus integration error:", error);
-        setFetchError((error as Error).message || "An unknown error occurred while fetching data.");
-      } finally {
-        setIsFetching(false);
+            hash: "0xTRUSTWORTHY_" + carbonResult.metadata.timestamp,
+            flow_path: ["OmniNexus API", "Zero-Knowledge Proof Guard", "Bento Sovereign Grid"]
+          }
+        });
       }
-    };
 
+      if (auditResult.success && auditResult.data) {
+        setAuditLedger(auditResult.data);
+      }
+      if (hermesResult.success && hermesResult.data) {
+        setHermesStatus(hermesResult.data);
+      }
+      if (sovereignResult.success && sovereignResult.data) {
+        setSovereignStatus(sovereignResult.data);
+      }
+    } catch (error) {
+      console.error("OmniNexus integration error:", error);
+      setFetchError((error as Error).message || "An unknown error occurred while fetching data.");
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  React.useEffect(() => {
     fetchNexusData();
   }, []);
 
@@ -229,9 +231,32 @@ export default function OmniAppDashboard() {
         </div>
 
         {fetchError && (
-          <div className="mb-4 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-500 text-sm font-mono flex items-center justify-between shrink-0">
-            <span>⚠️ API Connection Failed: {fetchError}</span>
-            <button onClick={() => setFetchError(null)} className="opacity-70 hover:opacity-100">Dismiss</button>
+          <div className="mb-4 p-4 rounded-xl border border-red-500/30 bg-red-500/10 flex flex-col gap-3 shrink-0">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-red-500 text-lg">⚠️</span>
+                <span className="text-red-500 text-sm font-bold font-mono">OmniNexus API Connection Interrupted</span>
+              </div>
+              <button onClick={() => setFetchError(null)} className="text-red-400 opacity-70 hover:opacity-100 transition-opacity text-xs font-mono">Dismiss</button>
+            </div>
+            <div className="text-red-400/80 text-xs font-mono">
+              Diagnostic Details: {fetchError}
+            </div>
+            <div className="flex gap-3 mt-1">
+              <button 
+                onClick={fetchNexusData} 
+                className="px-3 py-1.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-xs font-mono hover:bg-red-500/30 transition-colors flex items-center gap-2"
+                disabled={isFetching}
+              >
+                {isFetching ? '⏳ Retrying...' : '🔄 Retry Connection'}
+              </button>
+              <Link
+                href="/diagnostics"
+                className="px-3 py-1.5 bg-black/10 text-slate-400 dark:text-white/60 border border-current/20 rounded-lg text-xs font-mono hover:bg-black/20 dark:hover:bg-white/10 transition-colors"
+              >
+                🛠️ Run System Diagnostics
+              </Link>
+            </div>
           </div>
         )}
         <div className="w-full flex-1 grid grid-cols-1 md:grid-cols-12 md:auto-rows-fr gap-6 pb-20 md:pb-0 overflow-y-auto pr-2">

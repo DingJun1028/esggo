@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -12,7 +12,8 @@ const myXss = new xss.FilterXSS({
     code: ['class'],
     p: ['class'],
     li: ['class'],
-    td: ['class']
+    td: ['class'],
+    img: ['src', 'alt', 'class']
   }
 });
 import { BrandCard, BrandBadge, BrandStatusDot } from '@/components/brand';
@@ -37,6 +38,7 @@ export interface WikiPageRow {
   data_api: string;
   edge_cases: string;
   acceptance_5t: string;
+  design_image?: string;
 }
 
 export default function WikiClientPage({ pages }: { pages: WikiPageRow[] }) {
@@ -73,6 +75,9 @@ ${page.edge_cases || ''}
 
 ### 6. 驗收標準與 5T 協議 (Acceptance & 5T Protocol)
 ${page.acceptance_5t || ''}
+
+### 7. 設計驗收圖 (Design Acceptance Diagram)
+${page.design_image ? `![${page.title} Design Acceptance Diagram](${page.design_image})` : '*尚無設計驗收圖*'}
       `.trim();
 
       return {
@@ -162,7 +167,8 @@ ${page.acceptance_5t || ''}
       // 處理 Paragraph (段落)
       const formattedText = block
         .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
-        .replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>');
+        .replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>')
+        .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="rounded-xl border border-white/10 shadow-2xl max-w-full my-6 w-full object-cover" />');
 
       return <p key={i} className="text-slate-300 leading-relaxed mb-4 text-[15px]" dangerouslySetInnerHTML={{ __html: myXss.process(formattedText) }} />;
     });

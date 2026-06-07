@@ -12,15 +12,10 @@ import {
   upsertCompanyProfile,
   listEternalMemories,
   insertEternalMemory,
-  upsertEternalMemory,
   insertAuditRecord,
   listSwarmAgentTasks,
   upsertSwarmAgentTask,
   listRegulatoryPolicies,
-  InsertEternalMemoryVariables,
-  UpsertSwarmAgentTaskVariables,
-  InsertAuditRecordVariables,
-  UpsertCompanyProfileVariables,
 } from '@dataconnect/generated';
 
 /**
@@ -41,7 +36,7 @@ export const dcListEternalMemories = async (): Promise<any> => {
 
 export const dcInsertEternalMemory = async (input: any) => {
   try {
-    const response = await insertEternalMemory(dataConnect, input as InsertEternalMemoryVariables);
+    const response = await insertEternalMemory(dataConnect, input);
     return response.data.eternalMemory_insert;
   } catch (error) {
     console.error('Data Connect: Failed to insert eternal memory', error);
@@ -62,7 +57,7 @@ export const dcListSwarmAgentTasks = async (): Promise<any> => {
 
 export const dcUpsertSwarmAgentTask = async (input: any) => {
   try {
-    const response = await upsertSwarmAgentTask(dataConnect, input as UpsertSwarmAgentTaskVariables);
+    const response = await upsertSwarmAgentTask(dataConnect, input);
     return response.data.swarmAgentTask_upsert;
   } catch (error) {
     console.error('Data Connect: Failed to upsert swarm agent task', error);
@@ -126,7 +121,7 @@ export const dcListAuditRecords = async (): Promise<any> => {
 
 export const dcUpsertAuditRecord = async (input: any) => {
   try {
-    const response = await insertAuditRecord(dataConnect, input as InsertAuditRecordVariables);
+    const response = await insertAuditRecord(dataConnect, input);
     return response.data.auditRecord_insert;
   } catch (error) {
     console.error('Data Connect: Failed to insert audit record', error);
@@ -188,7 +183,7 @@ export const dcGetCompanyProfile = async (id: string): Promise<any | null> => {
 
 export const dcUpsertCompanyProfile = async (input: any) => {
   try {
-    const response = await upsertCompanyProfile(dataConnect, input as UpsertCompanyProfileVariables);
+    const response = await upsertCompanyProfile(dataConnect, input);
     return response.data.companyProfile_upsert;
   } catch (error) {
     console.error('Data Connect: Failed to upsert company profile', error);

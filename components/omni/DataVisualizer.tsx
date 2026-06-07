@@ -17,14 +17,14 @@ export default function DataVisualizer() {
   const [highRisk, setHighRisk] = useState(0);
 
   useEffect(() => {
-    async function loadData() {
-      if (!dataConnect) {
-        setIsLoading(false);
-        return;
-      }
-      try {
-        const response = await listScrapedArticles(dataConnect);
-        const articles = response.data.scrapedArticles;
+async function loadData() {
+       if (!dataConnect) {
+         setIsLoading(false);
+         return;
+       }
+       try {
+         const response = await listScrapedArticles(dataConnect, {});
+         const articles = response.data.scrapedArticles;
         
         setTotalArticles(articles.length);
         setHighRisk(articles.filter((a: any) => a.impactLevel === 'high').length);
