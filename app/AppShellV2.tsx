@@ -27,6 +27,7 @@ import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
 import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
 import { GlobalSearch } from '../components/GlobalSearch';
+import AppThemeSwitcher from '../components/AppThemeSwitcher';
 
 // Icon Mapper for Dynamic Navigation
 const IconMapper: Record<string, React.ReactNode> = {
@@ -312,15 +313,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                 <GlobalSearch />
 
                 {/* Theme Switcher */}
-                <BrandButton
-                  onClick={toggleTheme}
-                  variant="ghost"
-                  icon={isDark ? <Moon size={18} /> : <Sun size={18} />}
-                  className={cn(
-                    "p-2.5 rounded-xl border transition-all flex items-center justify-center",
-                    isDark ? "bg-[#FDB515]/10 border-[#FDB515]/20 text-[#FDB515]" : "bg-blue-50 border-blue-200 text-[#003262]"
-                  )}
-                />
+                <AppThemeSwitcher />
 
                 {/* Notifications */}
                 <div className="relative">
@@ -375,16 +368,9 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         )}>
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2 w-full">
             {/* Theme Toggle Mobile */}
-            <BrandButton 
-              onClick={toggleTheme}
-              icon={isDark ? <Moon size={14} /> : <Sun size={14} />}
-              className={cn(
-                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
-                isDark ? "bg-[#FDB515]/20 border-[#FDB515]/30 text-[#FDB515]" : "bg-blue-50 border-blue-100 text-[#003262]"
-              )}
-            >
-              THEME
-            </BrandButton>
+            <div className="flex-shrink-0">
+              <AppThemeSwitcher />
+            </div>
             
             {/* Quick Actions Pills */}
             <BrandButton 
