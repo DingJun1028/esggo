@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -16,7 +16,8 @@ import {
   FileCheck, Calculator, Truck, HeartHandshake, PenTool, Dna,
   Globe, ShieldAlert, History, Archive, BadgeCheck, Link2, Send,
   Library, BookOpen, PieChart, GraduationCap, Briefcase, Headphones,
-  Network, Cpu, Share2, TestTube, TerminalSquare, Palette, UploadCloud
+  Network, Cpu, Share2, TestTube, TerminalSquare, Palette, UploadCloud,
+  Flame, Vault
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import BrandButton from '../components/brand/BrandButton';
@@ -69,6 +70,8 @@ const IconMapper: Record<string, React.ReactNode> = {
   TestTube: <TestTube size={20} />,
   TerminalSquare: <TerminalSquare size={20} />,
   Palette: <Palette size={20} />,
+  Flame: <Flame size={20} />,
+  Vault: <Vault size={20} />,
 };
 
 // Core 6 Journeys for Mobile Bottom Bar (Refined for Mobile optimization)
@@ -249,9 +252,17 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
 
         {/* Sidebar Footer Controls */}
         <div className={cn(
-          "p-4 border-t transition-colors",
+          "p-4 border-t transition-colors flex flex-col gap-2",
           isDark ? "border-white/5" : "border-slate-100"
         )}>
+          {!sidebarCollapsed && (
+            <div className={cn(
+              "text-[10px] text-center font-mono tracking-widest opacity-40 select-none",
+              isDark ? "text-slate-400" : "text-slate-500"
+            )}>
+              v8.5.2-Alpha
+            </div>
+          )}
           <BrandButton
             onClick={handleSidebarToggle}
             variant="ghost"
