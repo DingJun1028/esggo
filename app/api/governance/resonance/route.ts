@@ -5,8 +5,12 @@ import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/s
 
 export async function GET() {
   try {
-    // 1. 從 Supabase 獲取真實的重大性議題 (Materiality Topics)
-    if (!supabase) throw new Error('Supabase client not initialized');
+    if (!supabase) {
+      return NextResponse.json<ApiResponse>(
+        createErrorResponse('SUPABASE_NOT_INITIALIZED', 'Supabase client not initialized'),
+        { status: 503 }
+      );
+    }
     const { data: topics, error: topicsError } = await supabase
       .from('materiality_topics')
       .select('*');

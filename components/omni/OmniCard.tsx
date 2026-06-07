@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { OmniCardProps } from './types';
 import { RecordLifecycleStatus, AttentionStatus } from '@/shared-types/status';

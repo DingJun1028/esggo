@@ -33,16 +33,17 @@ export interface SustainWriteSection {
 async function getOrCreateReportId(companyId: string): Promise<string> {
   try {
     const { dataConnect } = await import('./firebase');
-    if (!dataConnect) throw new Error('Data Connect not initialized');
+    const dc = dataConnect;
+    if (!dc) throw new Error('Data Connect not initialized');
 
     const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
     
-    const { data } = await getReportByCompany({ companyId: cid });
+    const { data } = await getReportByCompany(dc, { companyId: cid });
     if (data?.reports && data.reports.length > 0) {
       return data.reports[0].id;
     }
 
-    const { data: newData } = await upsertReport({
+    const { data: newData } = await upsertReport(dc, {
       companyId: cid,
       templateId: 'standard-gri',
       title: '2024 年度永續報告',
@@ -51,7 +52,7 @@ async function getOrCreateReportId(companyId: string): Promise<string> {
       status: 'draft'
     });
     
-    const { data: refetch } = await getReportByCompany({ companyId: cid });
+    const { data: refetch } = await getReportByCompany(dc, { companyId: cid });
     return refetch?.reports?.[0]?.id || 'simulation-report-id';
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : String(e);
@@ -66,9 +67,10 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
   try {
     const reportId = await getOrCreateReportId(params.company_id);
     const { dataConnect } = await import('./firebase');
-    if (!dataConnect) throw new Error('Simulation Persistence');
+    const dc = dataConnect;
+    if (!dc) throw new Error('Simulation Persistence');
 
-    const { data } = await upsertReportSection({
+    const { data } = await upsertReportSection(dc, {
       reportId: reportId,
       sectionId: params.chapter_id,
       title: params.chapter_name,
@@ -93,7 +95,9 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
 
 export async function loadSustainWriteSections(companyId: string): Promise<SustainWriteSection[]> {
   const reportId = await getOrCreateReportId(companyId);
-  const { data } = await listReportSectionsByReport({ reportId });
+  const { dataConnect } = await import('./firebase');
+  const dc = dataConnect;
+  const { data } = await listReportSectionsByReport(dc, { reportId });
 
   if (!data?.reportSections) return [];
 
@@ -116,8 +120,10 @@ export async function loadSustainWriteSections(companyId: string): Promise<Susta
 }
 
 export async function saveMetric(companyId: string, metric: Record<string, unknown>): Promise<unknown> {
+  const { dataConnect } = await import('./firebase');
+  const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  return await upsertCompanyMetric({
+  return await upsertCompanyMetric(dc, {
     companyId: cid,
     metricName: metric.name as string,
     metricValue: metric.value as number,
@@ -131,14 +137,18 @@ export async function saveMetric(companyId: string, metric: Record<string, unkno
 }
 
 export async function loadMetrics(companyId: string): Promise<unknown[]> {
+  const { dataConnect } = await import('./firebase');
+  const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  const { data } = await listCompanyMetrics({ companyId: cid });
+  const { data } = await listCompanyMetrics(dc, { companyId: cid });
   return data?.companyMetrics || [];
 }
 
 export async function saveMemory(companyId: string, memory: Record<string, unknown>): Promise<unknown> {
+  const { dataConnect } = await import('./firebase');
+  const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  return await insertEternalMemory({
+  return await insertEternalMemory(dc, {
     companyId: cid,
     type: memory.type as string,
     content: memory.content as string,
@@ -150,7 +160,9 @@ export async function saveMemory(companyId: string, memory: Record<string, unkno
 }
 
 export async function loadMemories(companyId: string): Promise<unknown[]> {
+  const { dataConnect } = await import('./firebase');
+  const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  const { data } = await listEternalMemoriesByCompany({ companyId: cid });
+  const { data } = await listEternalMemoriesByCompany(dc, { companyId: cid });
   return data?.eternalMemories || [];
 }
