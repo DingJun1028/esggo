@@ -1,1 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Add node_modules/.bin to PATH for husky hooks
+if [ -d "node_modules/.bin" ]; then
+  PATH=$(pwd)/node_modules/.bin:$PATH
+fi
+
 npx lint-staged
