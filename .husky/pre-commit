@@ -1,16 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# Add Node.js installation path to PATH for husky hooks (common on Windows)
-NODE_INSTALL_PATH="C:\\Program Files\\nodejs"
-if [ -d "$NODE_INSTALL_PATH" ]; then
-  PATH="$NODE_INSTALL_PATH:$PATH"
-fi
+# 1. 導向 Windows 預設的 Node.js 執行路徑
+export PATH="/c/Program Files/nodejs:/c/Users/Administrator/AppData/Roaming/npm:$PATH"
 
-# Add global npm path to PATH for husky hooks
-GLOBAL_NPM_PATH="C:\\Users\\Administrator\\AppData\\Roaming\\npm"
-if [ -d "$GLOBAL_NPM_PATH" ]; then
-  PATH="$GLOBAL_NPM_PATH:$PATH"
-fi
-
-node node_modules/lint-staged/bin/lint-staged.js
+# 2. 為了徹底避免 MODULE_NOT_FOUND，不要使用直接指向 node_modules 的相對 JS 腳本
+# 改為直接調用全域或專案內建的 npx 命令
+npx --no-install lint-staged
