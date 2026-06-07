@@ -1,7 +1,7 @@
 ---
 uuid: "6f9e0e79-30d9-4acc-944e-0b3752069bda"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.485Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Audit-Verify.md"
 ---
 # VerifyLinkT / Audit Verification [Audit Verify]

@@ -1,7 +1,7 @@
 ---
 uuid: "7f1260c3-ceb3-410e-a026-307f2fe3369d"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.498Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Academy.md"
 ---
 # ESG Academy ESG Academy [Academy]

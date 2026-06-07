@@ -1,7 +1,7 @@
 ---
 uuid: "316564c3-d5bb-4669-a644-f5158964ed70"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.476Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Dashboard.md"
 ---
 # 主權治理控制台 [Sovereign Governance Dashboard]

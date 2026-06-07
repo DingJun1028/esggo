@@ -1,7 +1,7 @@
 ---
 uuid: "ae4b9d71-78b8-41a9-b679-37565569fa05"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.470Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Document-Checklist.md"
 ---
 # 文件清單 Document Checklist [Document Checklist]

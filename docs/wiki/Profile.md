@@ -1,7 +1,7 @@
 ---
 uuid: "099afd4c-5366-4d46-9c44-48d115da04fe"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.441Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Profile.md"
 ---
 # 企業管理 [Company Profile]

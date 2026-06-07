@@ -1,7 +1,7 @@
 ---
 uuid: "3fbcc2ed-ca3d-4739-b45e-4d479b02848f"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:12.378Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "wiki\jun-ai-key-architecture.md"
 ---
 # Jun.AI.Key 萬能元鑰系統

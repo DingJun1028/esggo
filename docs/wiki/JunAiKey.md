@@ -1,7 +1,7 @@
 ---
 uuid: "ff3b3091-4ea5-4727-9acb-421042b1ef5a"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.455Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\JunAiKey.md"
 ---
 # Jun.AI.Key 萬能元鑰系統 JunAiKey Core [JunAiKey]

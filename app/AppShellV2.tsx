@@ -95,13 +95,13 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
   // Layout States
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [topbarCollapsed, setTopbarCollapsed] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(true); // Default to true
+
   const [showOverviewMenu, setShowOverviewMenu] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
   const [logoPosition, setLogoPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
   useEffect(() => {
-    setIsMounted(true);
     const savedSidebar = localStorage.getItem('sidebar_collapsed');
     if (savedSidebar === 'true') setSidebarCollapsed(true);
     const savedTopbar = localStorage.getItem('topbar_collapsed');
@@ -145,7 +145,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
     setMode(isDark ? 'light' : 'dark');
   };
 
-  if (!isMounted) return null;
+
 
   return (
     <div className={cn(

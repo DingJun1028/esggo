@@ -1,7 +1,7 @@
 ---
 uuid: "a9bf3a68-be8b-46f8-a656-9181b9cea6c6"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.437Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Roadmap.md"
 ---
 # 淨零路徑 Roadmap [Roadmap]

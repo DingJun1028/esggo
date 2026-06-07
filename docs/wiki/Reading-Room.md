@@ -1,7 +1,7 @@
 ---
 uuid: "402431a7-6b45-4d63-abcd-b97346f43338"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.438Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Reading-Room.md"
 ---
 # 閱讀室 Reading Room [Reading Room]

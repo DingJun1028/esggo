@@ -1,7 +1,7 @@
 ---
 uuid: "0625d0e3-0cba-49c5-b0b5-537ab6ca5c34"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.463Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\ESG-GO-Official-Wiki-Export.md"
 ---
 # OmniHermes 系統 + ESG GO 系統 Wiki (全頁面最終匯出版)
