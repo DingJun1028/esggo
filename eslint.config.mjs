@@ -14,7 +14,11 @@ const eslintConfig = [
   {
     rules: {
       "react/react-in-jsx-scope": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "error", // Override to error
+      "@typescript-eslint/no-explicit-any": "error", // Add
+      "react-hooks/exhaustive-deps": "warn", // Add
+      "@next/next/no-assign-module-variable": "error", // Add
+      "react/no-unescaped-entities": "warn" // Add
     },
   },
   {
