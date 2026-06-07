@@ -231,7 +231,7 @@ var DataView = globalThis.DataView;
 module.exports = function (O) {
   if (!NATIVE_ARRAY_BUFFER || arrayBufferByteLength(O) !== 0) return false;
   try {
-    // eslint-disable-next-line no-new -- thrower
+     
     new DataView(O);
     return false;
   } catch (error) {
@@ -462,7 +462,7 @@ for (NAME in BigIntArrayConstructorsList) {
 
 // WebKit bug - typed arrays constructors prototype is Object.prototype
 if (!NATIVE_ARRAY_BUFFER_VIEWS || !isCallable(TypedArray) || TypedArray === Function.prototype) {
-  // eslint-disable-next-line no-shadow -- safe
+   
   TypedArray = function TypedArray() {
     throw new TypeError('Incorrect invocation');
   };
@@ -530,10 +530,10 @@ var createMethod = function (IS_INCLUDES) {
     var index = toAbsoluteIndex(fromIndex, length);
     var value;
     // Array#includes uses SameValueZero equality algorithm
-    // eslint-disable-next-line no-self-compare -- NaN check
+     
     if (IS_INCLUDES && el !== el) while (length > index) {
       value = O[index++];
-      // eslint-disable-next-line no-self-compare -- NaN check
+       
       if (value !== value) return true;
     // Array#indexOf ignores holes, Array#includes - not
     } else for (;length > index; index++) {
@@ -1182,7 +1182,7 @@ var fails = __webpack_require__(9039);
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-function-prototype-bind -- safe
   var test = function () { /* empty */ }.bind();
-  // eslint-disable-next-line no-prototype-builtins -- safe
+   
   return typeof test != 'function' || test.hasOwnProperty('prototype');
 });
 
@@ -1296,7 +1296,7 @@ module.exports = function (name) {
       return globalThis.process.getBuiltinModule(name);
     } catch (error) { /* empty */ }
     try {
-      // eslint-disable-next-line no-new-func -- safe
+       
       return Function('return require("' + name + '")')();
     } catch (error) { /* empty */ }
   }
@@ -1436,7 +1436,7 @@ module.exports = function (obj) {
   anObject(obj);
   var numSize = +obj.size;
   // NOTE: If size is undefined, then numSize will be NaN
-  // eslint-disable-next-line no-self-compare -- NaN check
+   
   if (numSize !== numSize) throw new $TypeError(INVALID_SIZE);
   var intSize = toIntegerOrInfinity(numSize);
   if (intSize < 0) throw new $RangeError(INVALID_SIZE);
@@ -1459,11 +1459,11 @@ module.exports =
   // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
-  // eslint-disable-next-line no-restricted-globals -- safe
+   
   check(typeof self == 'object' && self) ||
   check(typeof global == 'object' && global) ||
   check(typeof this == 'object' && this) ||
-  // eslint-disable-next-line no-new-func -- fallback
+   
   (function () { return this; })() || Function('return this')();
 
 
@@ -1541,7 +1541,7 @@ var split = uncurryThis(''.split);
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 module.exports = fails(function () {
   // throws an error in rhino, see https://github.com/mozilla/rhino/issues/346
-  // eslint-disable-next-line no-prototype-builtins -- safe
+   
   return !$Object('z').propertyIsEnumerable(0);
 }) ? function (it) {
   return classof(it) === 'String' ? split(it, '') : $Object(it);
@@ -1605,11 +1605,11 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  /* eslint-disable no-self-assign -- prototype methods protection */
+   
   store.get = store.get;
   store.has = store.has;
   store.set = store.set;
-  /* eslint-enable no-self-assign -- prototype methods protection */
+   
   set = function (it, metadata) {
     if (store.has(it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
@@ -2265,7 +2265,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
 };
 
 // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-// eslint-disable-next-line no-extend-native -- required
+ 
 Function.prototype.toString = makeBuiltIn(function toString() {
   return isCallable(this) && getInternalState(this).source || inspectSource(this);
 }, 'toString');
@@ -2389,7 +2389,7 @@ var NullProtoObjectViaActiveX = function (activeXDocument) {
   activeXDocument.write(scriptTag(''));
   activeXDocument.close();
   var temp = activeXDocument.parentWindow.Object;
-  // eslint-disable-next-line no-useless-assignment -- avoid memory leak
+   
   activeXDocument = null;
   return temp;
 };
@@ -2699,7 +2699,7 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
-/* eslint-disable no-proto -- safe */
+ 
 var uncurryThisAccessor = __webpack_require__(6706);
 var isObject = __webpack_require__(34);
 var requireObjectCoercible = __webpack_require__(7750);
@@ -3495,7 +3495,7 @@ var trunc = __webpack_require__(741);
 // https://tc39.es/ecma262/#sec-tointegerorinfinity
 module.exports = function (argument) {
   var number = +argument;
-  // eslint-disable-next-line no-self-compare -- NaN check
+   
   return number !== number || number === 0 ? 0 : trunc(number);
 };
 
@@ -3899,7 +3899,7 @@ var BROKEN_ON_SPARSE = fails(function () {
 
 // Safari 26.4- bug
 var BROKEN_ON_SPARSE_WITH_FROM_INDEX = fails(function () {
-  // eslint-disable-next-line no-sparse-arrays, es/no-array-prototype-includes -- detection
+  // eslint-disable-next-line es/no-array-prototype-includes -- detection
   return [, 1].includes(undefined, 1);
 });
 
@@ -3948,7 +3948,7 @@ var FORCED = INCORRECT_TO_LENGTH || !properErrorOnNonWritableLength();
 // `Array.prototype.push` method
 // https://tc39.es/ecma262/#sec-array.prototype.push
 $({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
-  // eslint-disable-next-line no-unused-vars -- required for `.length`
+   
   push: function push(item) {
     var O = toObject(this);
     var len = lengthOfArrayLike(O);
@@ -5061,7 +5061,7 @@ var $RangeError = RangeError;
 
 var PROPER_ORDER = function () {
   try {
-    // eslint-disable-next-line no-throw-literal, es/no-typed-arrays, es/no-array-prototype-with -- required for testing
+    // eslint-disable-next-line es/no-typed-arrays, es/no-array-prototype-with -- required for testing
     new Int8Array(1)['with'](2, { valueOf: function () { throw 8; } });
   } catch (error) {
     // some early implementations, like WebKit, does not follow the final semantic
@@ -5115,7 +5115,7 @@ var set = WeakMapHelpers.set;
 
 var FORCED = IS_PURE || !function () {
   try {
-    // eslint-disable-next-line es/no-weak-map, no-throw-literal -- testing
+    // eslint-disable-next-line es/no-weak-map -- testing
     if (WeakMap.prototype.getOrInsertComputed) new WeakMap().getOrInsertComputed(1, function () { throw 1; });
   } catch (error) {
     // FF144 Nightly - Beta 3 bug

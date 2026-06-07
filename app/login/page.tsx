@@ -11,7 +11,28 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [developerPassword, setDeveloperPassword] = useState('');
+  const [showDeveloperPasswordInput, setShowDeveloperPasswordInput] = useState(false);
   const router = useRouter();
+
+  const handleDeveloperLogin = async () => {
+    setStatus('loading');
+    setErrorMessage('');
+
+    if (developerPassword === 'sunshine888') {
+      setStatus('success');
+      localStorage.setItem('omni_user', JSON.stringify({
+        email: 'dev_sunshine@omnicore.com',
+        company_id: 'dev_sunshine_company',
+        id: 'dev_sunshine_123'
+      }));
+      router.push('/dashboard');
+      router.refresh();
+    } else {
+      setStatus('error');
+      setErrorMessage('開發者密碼錯誤，請重試。');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,6 +146,53 @@ export default function LoginPage() {
               </span>
             </div>
           </button>
+
+          {process.env.NODE_ENV === 'development' && (
+            <>
+              {showDeveloperPasswordInput ? (
+                <div className="space-y-4">
+                  <div className="relative group">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition-colors" size={20} />
+                    <input 
+                      type="password" 
+                      required
+                      value={developerPassword}
+                      onChange={(e) => setDeveloperPassword(e.target.value)}
+                      placeholder="開發者密碼 (sunshine888)" 
+                      className="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all backdrop-blur-sm"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleDeveloperLogin}
+                    disabled={status === 'loading' || status === 'success'}
+                    className="w-full relative overflow-hidden rounded-xl bg-purple-500/10 border border-purple-500/30 p-3 transition-all hover:bg-purple-500/20 active:scale-95 disabled:opacity-50"
+                  >
+                    <div className="relative flex items-center justify-center gap-2">
+                      <Fingerprint size={16} className="text-purple-400" />
+                      <span className="text-purple-300 font-bold tracking-wider uppercase text-sm">
+                        確認開發者身份
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowDeveloperPasswordInput(true)}
+                  disabled={status === 'loading' || status === 'success'}
+                  className="w-full mt-2 relative overflow-hidden rounded-xl bg-indigo-500/10 border border-indigo-500/30 p-3 transition-all hover:bg-indigo-500/20 active:scale-95 disabled:opacity-50"
+                >
+                  <div className="relative flex items-center justify-center gap-2">
+                    <Activity size={16} className="text-indigo-400" />
+                    <span className="text-indigo-300 font-bold tracking-wider uppercase text-sm">
+                      開發者專用通道
+                    </span>
+                  </div>
+                </button>
+              )}
+            </>
+          )}
         </form>
 
         <div className="mt-8 text-center">

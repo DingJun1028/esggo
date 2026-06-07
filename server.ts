@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import path from 'path';
-import { executeMCPService } from './src/omnimcp-entry.ts';
+import { executeMCPService } from './src/omnimcp-entry';
 
 const app = express();
 const httpServer = createServer(app);
