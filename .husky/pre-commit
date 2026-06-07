@@ -1,6 +1,12 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Add Node.js installation path to PATH for husky hooks (common on Windows)
+NODE_INSTALL_PATH="C:\\Program Files\\nodejs"
+if [ -d "$NODE_INSTALL_PATH" ]; then
+  PATH="$NODE_INSTALL_PATH:$PATH"
+fi
+
 # Add global npm path to PATH for husky hooks
 GLOBAL_NPM_PATH="C:\\Users\\Administrator\\AppData\\Roaming\\npm"
 if [ -d "$GLOBAL_NPM_PATH" ]; then
