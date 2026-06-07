@@ -33,8 +33,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm ci
-          npm install better-sqlite3 # Ensure better-sqlite3 is installed
+          ppnpm install
+          pnpm install better-sqlite3 # Ensure better-sqlite3 is installed
 
       - name: Run Lint (ESLint)
         run: npm run lint
