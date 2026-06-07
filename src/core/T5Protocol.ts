@@ -1,14 +1,14 @@
 import { IComponentCore, IEvidence } from '../../lib/core-types';
 import { createHmac } from 'crypto';
 
-const HMAC_SECRET = 'T5-ZKP-SECURITY-KEY';
+const HMAC_SECRET = process.env.T5_HMAC_SECRET || 'T5-ZKP-SECURITY-KEY';
 
 export enum T5Protocol {
   Traceable = 'Traceable', // T1: 溯源
   Transparent = 'Transparent', // T2: 透明
   Tangible = 'Tangible', // T3: 可感知
   Trustworthy = 'Trustworthy', // T4: 不可篡改
-  Trackable = 'Trackable' // T5: 可追蹤
+  Trackable = 'Trackable', // T5: 可追蹤
 }
 
 // Hash Lock 強化實現 - SHA-512 + HMAC-ZKP
@@ -22,9 +22,7 @@ export class HashLock {
   }
 
   static verify(data: string, hash: string): boolean {
-    const recomputed = createHmac('sha512', HMAC_SECRET)
-      .update(data)
-      .digest('hex');
+    const recomputed = createHmac('sha512', HMAC_SECRET).update(data).digest('hex');
     return recomputed === hash;
   }
 }
@@ -32,9 +30,7 @@ export class HashLock {
 // ZKP 驗證器
 export class ZKPValidator {
   static generateProof(data: string, nonce: number): string {
-    const hash = createHmac('sha512', HMAC_SECRET)
-      .update(`${data}:${nonce}`)
-      .digest('hex');
+    const hash = createHmac('sha512', HMAC_SECRET).update(`${data}:${nonce}`).digest('hex');
     return hash;
   }
 
@@ -48,22 +44,24 @@ export class ZKPValidator {
 export class T5Validator {
   static async validate(component: IComponentCore): Promise<boolean> {
     // T1: 可溯源 - 檢查每條證據的來源標記
-    const traceable = component.evidence.every(e => e.originCause !== '');
-    
+    const traceable = component.evidence.every((e) => e.originCause !== '');
+
     // T2: 可透明 - 檢查處理軌跡 (processTrace)
-    const transparent = component.evidence.every(e => e.processTrace && e.processTrace.length > 0);
-    
+    const transparent = component.evidence.every(
+      (e) => e.processTrace && e.processTrace.length > 0
+    );
+
     // T3: 可感知 - UI 感知（實際由前端組件負責）
     const tangible = true; // 佔位符
-    
+
     // T4: 不可篡改 - 哈希驗證（使用 finalEffect + originCause 作為驗算輸入）
-    const trustworthy = component.evidence.every(e => 
+    const trustworthy = component.evidence.every((e) =>
       HashLock.verify(`${e.finalEffect}|${e.originCause}`, component.hash_lock)
     );
-    
+
     // T5: 可追蹤 - 生命週期鉤子 (processTrace 代替)
-    const trackable = component.evidence.every(e => e.processTrace && e.processTrace.length > 0);
-    
+    const trackable = component.evidence.every((e) => e.processTrace && e.processTrace.length > 0);
+
     return traceable && transparent && tangible && trustworthy && trackable;
   }
 }
@@ -102,10 +100,10 @@ export abstract class BerkeleyComponent implements IComponentCore {
   public evidence: IEvidence[] = [];
 
   // IComponentCore required fields — subclasses must supply concrete values
-  public abstract readonly formula: string;        // 碳排與影響力計算公式 (Transparent)
-  public abstract readonly impact_metric: string;  // 具體影響力指標 (Tangible)
-  public abstract readonly status: 'Trustworthy';  // 唯一的不可狀態
-  public abstract readonly hash_lock: string;      // 數據真理哈希鎖
+  public abstract readonly formula: string; // 碳排與影響力計算公式 (Transparent)
+  public abstract readonly impact_metric: string; // 具體影響力指標 (Tangible)
+  public abstract readonly status: 'Trustworthy'; // 唯一的不可狀態
+  public abstract readonly hash_lock: string; // 數據真理哈希鎖
 
   constructor() {
     this.uuid = this.generateUUID();
@@ -114,7 +112,7 @@ export abstract class BerkeleyComponent implements IComponentCore {
   }
 
   private generateUUID(): string {
-    return 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/x/g, () => 
+    return 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'.replace(/x/g, () =>
       Math.floor(Math.random() * 16).toString(16)
     );
   }

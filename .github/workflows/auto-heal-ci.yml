@@ -39,13 +39,13 @@ jobs:
       - name: Install Dependencies
         id: install
         run: |
-          npm ci || npm install
+          ppnpm install || pnpm install
         continue-on-error: true
 
       - name: Diagnose & Auto-Fix Install Errors
         if: steps.install.outcome == 'failure'
         run: |
-          ERROR_LOG=$(npm ci 2>&1 || true)
+          ERROR_LOG=$(ppnpm install 2>&1 || true)
           echo "❌ Install Error: $ERROR_LOG"
           
           # 常見錯誤自動修復
@@ -56,7 +56,7 @@ jobs:
           if echo "$ERROR_LOG" | grep -q "node_modules"; then
             echo "🔧 Auto-fixing corrupted node_modules..."
             rm -rf node_modules package-lock.json
-            npm install
+            pnpm install
           fi
         shell: bash
 
@@ -78,7 +78,7 @@ jobs:
             # 自動修復常見測試錯誤
             if grep -q "Cannot find module" test-output.log; then
               echo "🔧 Auto-healing: Missing modules detected"
-              npm install --force
+              pnpm install --force
             fi
             
             if grep -q "SyntaxError" test-output.log; then
