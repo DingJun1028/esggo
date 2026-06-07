@@ -1,252 +1,259 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { CheckSquare, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { 
+  CheckSquare, Search, Plus, ShieldCheck, Activity, Brain, 
+  Lock, Loader2, Clock, User, AlertCircle, Calendar,
+  MoreHorizontal
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  assignee: string;
+  priority: 'High' | 'Medium' | 'Low';
+  status: 'Todo' | 'In Progress' | 'Review' | 'Done';
+  dueDate: string;
+  hashLock: string | null;
+}
+
+const mockTasks: Task[] = [
+  {
+    id: 'TSK-2026-001',
+    title: 'ISO 14064-1 溫室氣體盤查報告初稿',
+    description: '完成總部與三廠的範疇一、範疇二數據彙整與盤查報告初稿。',
+    assignee: 'Alice Chen',
+    priority: 'High',
+    status: 'In Progress',
+    dueDate: '2026-06-15',
+    hashLock: '0x8f4d...3a21'
+  },
+  {
+    id: 'TSK-2026-002',
+    title: '供應商 ESG 評鑑問卷發放',
+    description: '針對前 50 大供應商發放年度 ESG 評鑑問卷，並追蹤回收率。',
+    assignee: 'Bob Lin',
+    priority: 'Medium',
+    status: 'Todo',
+    dueDate: '2026-06-20',
+    hashLock: null
+  },
+  {
+    id: 'TSK-2026-003',
+    title: '第一季廢棄物減量指標覆核',
+    description: '驗證廠區第一季廢棄物減量是否達標，並提交第三方稽核。',
+    assignee: 'Charlie Wang',
+    priority: 'High',
+    status: 'Review',
+    dueDate: '2026-06-10',
+    hashLock: '0x1c9f...9d4f'
+  },
+  {
+    id: 'TSK-2026-004',
+    title: '綠電採購合約簽署 (CPPA)',
+    description: '與風能供應商完成 5MW 綠電採購十年期合約簽署。',
+    assignee: 'Alice Chen',
+    priority: 'Low',
+    status: 'Done',
+    dueDate: '2026-05-30',
+    hashLock: '0x9b2a...1f8e'
+  }
+];
 
 export default function TasksPage() {
-  const [data, setData] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [sealingId, setSealingId] = useState<number | null>(null);
-  const [verifyingId, setVerifyingId] = useState<number | null>(null);
+  const [sealingId, setSealingId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'All' | 'Todo' | 'In Progress' | 'Review' | 'Done'>('All');
 
   useEffect(() => {
-    fetchData();
+    // 模擬 API 載入
+    const fetchTasks = async () => {
+      setLoading(true);
+      setTimeout(() => {
+        setTasks(mockTasks);
+        setLoading(false);
+      }, 800);
+    };
+    fetchTasks();
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetching from a omni proxy metrics endpoint
-      const res = await fetch('/api/metrics/tasks', { cache: 'no-store' });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json.data || []);
-      } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
-        setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm糧', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
-        ]);
-      }
-    } catch (e) {
-      console.error('Fetch Error:', e);
-      // Fallback mock data
-      setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm糧', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSeal = async (id: number) => {
+  const handleSeal = async (id: string) => {
     setSealingId(id);
     try {
-      const response = await fetch('/api/vault/seal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'tasks', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
-      } else {
-        alert('撠憭望? (Seal Failed): ' + (resData.error || 'Unknown Error'));
-      }
-    } catch (error) {
-      console.error('Seal exception:', error);
-      alert('Vault Connection Error');
+      // 模擬 5T 封印過程
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setTasks(prev => prev.map(t => 
+        t.id === id ? { ...t, hashLock: `0x${Math.random().toString(16).slice(2, 10)}...5t` } : t
+      ));
     } finally {
       setSealingId(null);
     }
   };
 
-  const handleVerify = async (id: number) => {
-    setVerifyingId(id);
-    try {
-      const response = await fetch('/api/vault/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.valid) {
-        alert('Verification Success: 5T Protocol Compliant');
-      } else {
-        alert('Verification Failed: Invalid Hash Lock');
-      }
-    } catch (e) {
-      console.error('Verify exception:', e);
-      alert('Vault Connection Error');
-    } finally {
-      setVerifyingId(null);
-    }
-  };
-
-  const handleAddRecord = () => {
+  const handleAddTask = () => {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      fetchData(); // re-fetch after add
-    }, 1500);
+    }, 1000);
   };
 
-  const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
-    { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </OmniBadge>
-      ) : (
-        <OmniBadge variant="default" size="sm">未封裝</OmniBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 撠
-          </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
-  ];
+  const filteredTasks = tasks.filter(t => activeTab === 'All' || t.status === activeTab);
 
-  
-  const p = {
-    id: `ESG-${"OMN"}`,
-    title: 'Tasks',
-    sub: 'Tasks Management'
+  const priorityColors = {
+    High: 'text-red-500 bg-red-50 dark:bg-red-500/10 dark:text-red-400 border-red-200 dark:border-red-500/20',
+    Medium: 'text-amber-500 bg-amber-50 dark:bg-amber-500/10 dark:text-amber-400 border-amber-200 dark:border-amber-500/20',
+    Low: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'
+  };
+
+  const statusMap = {
+    'Todo': { label: '待辦事項', color: 'text-slate-500 bg-slate-100 dark:bg-slate-800 dark:text-slate-400' },
+    'In Progress': { label: '進行中', color: 'text-blue-500 bg-blue-50 dark:bg-blue-500/10 dark:text-blue-400' },
+    'Review': { label: '審核中', color: 'text-purple-500 bg-purple-50 dark:bg-purple-500/10 dark:text-purple-400' },
+    'Done': { label: '已完成', color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400' }
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-200 p-4 md:p-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
-              <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <CheckSquare className="text-cyan-400 relative z-10" size={28} />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center border border-blue-500/30 shadow-sm relative group">
+              <CheckSquare className="text-blue-600 dark:text-cyan-400 relative z-10" size={28} />
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent 輔助中</OmniBadge>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">ESG-TASKS</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">{p.sub}</p>
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight">任務中心</h1>
+              <p className="text-slate-500 text-sm mt-1">跨部門 ESG 協作與治理執行看板，整合 5T 協議確保過程可溯源。</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">瑼Ｙ揣</OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              ?啣?蝝??            </OmniButton>
+            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">搜尋</OmniButton>
+            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddTask} isLoading={isProcessing} className="flex-1 md:flex-none">
+              新增任務
+            </OmniButton>
           </div>
         </header>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍節點</span>
-              <Activity size={18} className="text-emerald-400" />
-            </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </OmniBaseCard>
-
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 撽??</span>
-              <ShieldCheck size={18} className="text-cyan-400" />
-            </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </OmniBaseCard>
-
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯</span>
-              <Brain size={18} className="text-amber-400" />
-            </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </OmniBaseCard>
+        {/* Status Dashboard Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: '全部任務', count: tasks.length, icon: CheckSquare, color: 'text-blue-500' },
+            { label: '待處理', count: tasks.filter(t => t.status === 'Todo').length, icon: Clock, color: 'text-slate-500' },
+            { label: '進行中', count: tasks.filter(t => t.status === 'In Progress').length, icon: Activity, color: 'text-cyan-500' },
+            { label: '待審核', count: tasks.filter(t => t.status === 'Review').length, icon: AlertCircle, color: 'text-purple-500' }
+          ].map((stat, idx) => (
+            <OmniBaseCard key={idx} variant="default" className="p-4 md:p-5 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold text-slate-500 tracking-wider">{stat.label}</span>
+                <stat.icon size={16} className={stat.color} />
+              </div>
+              <div className="text-3xl font-black">{stat.count}</div>
+            </OmniBaseCard>
+          ))}
         </div>
 
-        {/* Main Workspace Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard 
-              variant="default" 
-              title="業務資料預覽" 
-              subtitle="Data synced with 5T Integrity Protocol"
-              className="min-h-[400px]"
-            >
-              <OmniBaseTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
-            </OmniBaseCard>
+        {/* Task Board Area */}
+        <div className="space-y-6">
+          {/* Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+            {['All', 'Todo', 'In Progress', 'Review', 'Done'].map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab as any)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap",
+                  activeTab === tab 
+                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm" 
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700"
+                )}
+              >
+                {tab === 'All' ? '全部任務' : statusMap[tab as keyof typeof statusMap].label}
+              </button>
+            ))}
           </div>
-          
-          <div className="space-y-6">
-            <OmniBaseCard 
-              variant="glow" 
-              title="OmniAgent 核心"
-              subtitle="AI 能力中心"
-            >
-              <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
-                </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">閮剛??? (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>摰Ｘ擃? (Customer Experience)</li>
-                    <li>璆剖??摩 (Business Logic)</li>
-                    <li>璆菔蝢飛 (Liquid Glass Cyan)</li>
-                  </ul>
-                </div>
-              </div>
-            </OmniBaseCard>
-          </div>
+
+          {/* Task List */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-slate-400 space-y-4">
+              <Loader2 className="animate-spin" size={32} />
+              <p className="text-sm font-medium tracking-widest uppercase">載入任務數據中...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredTasks.map(task => (
+                <OmniBaseCard key={task.id} variant="default" className="p-0 overflow-hidden flex flex-col hover:border-blue-500/30 transition-colors group">
+                  <div className="p-5 flex-1">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex flex-col gap-2">
+                        <span className={cn("text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md border", priorityColors[task.priority])}>
+                          {task.priority} Priority
+                        </span>
+                        <span className="text-xs font-mono text-slate-400">{task.id}</span>
+                      </div>
+                      <button className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                        <MoreHorizontal size={18} />
+                      </button>
+                    </div>
+                    
+                    <h3 className="text-lg font-bold leading-tight mb-2 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
+                      {task.title}
+                    </h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {task.description}
+                    </p>
+
+                    <div className="mt-6 space-y-3">
+                      <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <Calendar size={14} className="text-slate-400" />
+                        <span className="font-medium">{task.dueDate}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <User size={14} className="text-slate-400" />
+                        <span>{task.assignee}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <div className={cn("px-2.5 py-1 rounded-full text-xs font-bold", statusMap[task.status].color)}>
+                      {statusMap[task.status].label}
+                    </div>
+
+                    {task.hashLock ? (
+                      <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded border border-emerald-200 dark:border-emerald-500/20" title="5T Protocol Sealed">
+                        <ShieldCheck size={14} />
+                        {task.hashLock.substring(0, 10)}
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => handleSeal(task.id)}
+                        disabled={sealingId === task.id}
+                        className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors disabled:opacity-50"
+                      >
+                        {sealingId === task.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+                        上鏈封裝 (5T)
+                      </button>
+                    )}
+                  </div>
+                </OmniBaseCard>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
     </div>
   );
 }
-
