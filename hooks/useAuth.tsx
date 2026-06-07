@@ -1,16 +1,20 @@
 'use client';
 import { useState, useEffect, createContext, useContext } from 'react';
-import { auth, isDemoMode } from '../lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { supabase } from '../lib/supabase';
+import { createBrowserClient } from '@supabase/ssr';
 
 /**
  * ESG GO | Unified Auth Context
- * Synchronizes Firebase (Legacy/UI) and Supabase (Data/RLS)
+ * Fully Migrated to Supabase (Data/RLS/Auth)
  * Monitors Platform System Health
  */
 
 export type SystemStatus = 'online' | 'degraded' | 'offline';
+
+export interface User {
+  id: string;
+  email?: string;
+  [key: string]: any;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -34,13 +38,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [companyId, setCompanyId] = useState('default');
   const [systemStatus, setSystemStatus] = useState<SystemStatus>('online');
 
+  // Using @supabase/ssr for browser client
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
+  
+  const supabase = createBrowserClient(supabaseUrl, supabaseKey);
+
   useEffect(() => {
     // 1. Monitor Browser Network Connectivity
     const updateOnlineStatus = () => setSystemStatus(navigator.onLine ? 'online' : 'offline');
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
-    // 2. Initial Local Sync
+    // 2. Initial Local Sync & Demo Data Fallback
     try {
       const local = localStorage.getItem('omni_user');
       if (local && local !== 'undefined') {
@@ -52,59 +62,65 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem('omni_user');
     }
 
-    // 3. Auth Listener
-    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+    // 3. Supabase Auth Session listener
+    const initSession = async () => {
       try {
-        if (fbUser) {
-          setUser(fbUser);
-          
-          // Non-blocking Supabase session check
-          supabase.auth.getSession().then(({ data: { session } }) => {
-            if (!session) {
-               setSystemStatus('degraded'); // Auth sync required but session not found
-            } else {
-               setSystemStatus('online');
-            }
-          }).catch(() => setSystemStatus('degraded'));
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.warn('[Supabase Auth] Session fetch error', error.message);
+          setSystemStatus('degraded');
+        }
 
-          try {
-            const local = localStorage.getItem('omni_user');
-            if (local && local !== 'undefined') {
-              const parsed = JSON.parse(local);
-              setCompanyId(parsed?.company_id || 'default');
-            }
-          } catch (e) {
-            localStorage.removeItem('omni_user');
-          }
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email,
+            ...session.user.user_metadata
+          });
+          setSystemStatus('online');
         } else {
-          // Demo Mode Fallback
-          try {
-            const localUser = localStorage.getItem('omni_user');
-            if (isDemoMode && localUser && localUser !== 'undefined') {
-               const parsed = JSON.parse(localUser);
-               setCompanyId(parsed?.company_id || 'default');
-               setUser({ email: parsed?.email || 'dev@esggo.com', uid: parsed?.id || 'dev_user' } as any);
-            } else {
-               setUser(null);
-            }
-          } catch (e) {
-             localStorage.removeItem('omni_user');
+          // Demo fallback logic if no user session
+          const localUser = localStorage.getItem('omni_user');
+          if (localUser && localUser !== 'undefined') {
+             const parsed = JSON.parse(localUser);
+             setCompanyId(parsed?.company_id || 'default');
+             setUser({ email: parsed?.email || 'dev@esggo.com', id: parsed?.id || 'dev_user' });
+          } else {
              setUser(null);
           }
         }
       } catch (err) {
-        console.warn('[Auth Handled Exception]', err);
+        console.error('[Auth Init] Failed', err);
+        setSystemStatus('degraded');
       } finally {
         setLoading(false);
       }
-    });
+    };
+
+    initSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email,
+            ...session.user.user_metadata
+          });
+          setSystemStatus('online');
+        } else {
+          setUser(null);
+        }
+      }
+    );
 
     return () => {
-      unsubscribe();
+      authListener.subscription.unsubscribe();
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
     };
-  }, []);
+  }, [supabase.auth]);
 
   const value = {
     user,

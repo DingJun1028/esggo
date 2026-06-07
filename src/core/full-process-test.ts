@@ -31,7 +31,7 @@ async function runFullProcess() {
 
   // 2. 全維共鳴計算
   const resonanceEngine = new ResonanceEngine();
-  const resonanceResult = await resonanceEngine.calculateResonance([coreCard]);
+  const resonanceResult = await resonanceEngine.calculateResonance([coreCard as any]);
   console.log('ResonanceResult:', resonanceResult);
 }
 

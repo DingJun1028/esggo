@@ -1,4 +1,5 @@
-import { isDemoMode } from './firebase.ts';
+// DEMO mode flag
+const isDemoMode = false;
 
 export interface DemoMetric {
   id: string;

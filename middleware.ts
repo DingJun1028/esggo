@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { updateSession } from '@/utils/supabase/middleware';
 
 /**
  * ESG GO | System Middleware v1.2
  * Focus: Security Headers, Performance, and Auth Redirects
  */
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+export async function middleware(request: NextRequest) {
+  // Update Supabase session and handle auth logic
+  const response = await updateSession(request);
 
   // 1. Enhanced Security Headers (Best Practice)
   const securityHeaders = {

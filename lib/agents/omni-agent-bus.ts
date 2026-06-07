@@ -6,7 +6,7 @@
  * Now includes a pluggable SSE broadcast hook for real-time frontend observability.
  */
 
-import { dcUpsertAuditRecord } from '../dataconnect-services.ts';
+import { dcUpsertAuditRecord } from '../dataconnect-services';
 
 export type BusBroadcastHook = (event: string, payload: Record<string, unknown>) => void;
 
@@ -624,7 +624,7 @@ export class OmniAgentBus {
           }
           
           // Dynamic import to avoid breaking client-side logic if not needed
-          const { supabaseAdmin } = await import('../supabaseAdmin.ts');
+          const { supabaseAdmin } = await import('../supabaseAdmin');
           if (!supabaseAdmin) throw new Error('Supabase admin client not found');
           
           const { data, error } = await supabaseAdmin
@@ -677,7 +677,7 @@ export class OmniAgentBus {
             return { status: 'zkp_generated', count: 1 };
           }
 
-          const { supabaseAdmin } = await import('../supabaseAdmin.ts');
+          const { supabaseAdmin } = await import('../supabaseAdmin');
           if (!supabaseAdmin) throw new Error('Supabase admin client not found');
           
           const { data, error } = await supabaseAdmin

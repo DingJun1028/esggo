@@ -134,6 +134,7 @@ npx omni agent scribe ghg "溫室氣體排放" "GRI 305" --depth 3
 |------|------|
 | [Swap-DeFi-TEST-UMES-ONLINE 使用者指南](docs/SwapDeFi-USER-GUIDE.md) | 交易所整合操作手冊 |
 | [OmniAgent 任務中心](app/tasks) | 跨部門 ESG 任務看板 |
+| [SustainWrite 永續編織](/app/sustain-write) | 專家級遞迴撰寫引擎 |
 
 ---
 <div align="center">

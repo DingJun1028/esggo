@@ -6,17 +6,17 @@ import {
   RestorationInput,
   ConsolidationResult,
   EternalMemoryType,
-} from '../src/shared/types/index.ts';
-import { integrityModule } from './omni-core/integrity.ts';
+} from '../src/shared/types/index';
+import { integrityModule } from './omni-core/integrity';
 import {
   sha256,
   generatePedersenCommitment,
   verifyCommitmentSum,
-} from './crypto-proof.ts';
-import type { ZKPRangeProof } from './crypto-proof.ts';
-import { policyEngine } from './policy-engine.ts';
-import type { PolicyValidationResult } from './policy-engine.ts';
-import { dcInsertEternalMemory, dcListEternalMemories } from './dataconnect-services.ts';
+} from './crypto-proof';
+import type { ZKPRangeProof } from './crypto-proof';
+import { policyEngine } from './policy-engine';
+import type { PolicyValidationResult } from './policy-engine';
+import { dcInsertEternalMemory, dcListEternalMemories } from './dataconnect-services';
 
 // ============================================================
 // 萬能心核引擎 - 5T Logic Gate Implementation (Persistent)
@@ -334,7 +334,7 @@ export class OmniCore {
     }
 
     // High-dimensional cryptographic SnarkJS proof generation
-    const { proof, publicSignals } = await import('./crypto-proof.ts').then(m =>
+    const { proof, publicSignals } = await import('./crypto-proof').then(m =>
       m.generateSnarkJSRangeProof(value, min, max, commitment.blindingFactor)
     );
 
@@ -356,7 +356,7 @@ export class OmniCore {
     source: string = "OmniCore"
   ) {
     console.log(`[OmniCore ZKP] Storing ZKP Proof for ${metricName} in Audit Record...`);
-    const { dcUpsertAuditRecord } = await import('./dataconnect-services.ts');
+    const { dcUpsertAuditRecord } = await import('./dataconnect-services');
 
     // Convert proof to JSON string, explicitly omitting the blindingFactor
     // to maintain Zero-Knowledge integrity on the server side.

@@ -6,9 +6,9 @@
  * 尋找合適實證進行鏈路修復與「信」的重塑。
  */
 
-import { supabaseAdmin } from '../supabaseAdmin.ts';
-import { integrityModule } from './integrity.ts';
-import { omniAgentBus } from '../agents/omni-agent-bus.ts';
+import { supabaseAdmin } from '../supabaseAdmin';
+import { integrityModule } from './integrity';
+import { omniAgentBus } from '../agents/omni-agent-bus';
 import { createClient } from '@supabase/supabase-js';
 
 export interface HealingLogEntry {

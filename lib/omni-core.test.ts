@@ -34,10 +34,12 @@ vi.mock('./dataconnect-services', () => {
       const existing = store.findIndex(m => (m as any).id === input.id);
       if (existing >= 0) store[existing] = entry;
       else store.push(entry);
-      return entry;
+      // Return the structure that matches what the actual service expects
+      return { data: { eternalMemory_insert: entry } };
     }),
     dcListEternalMemories: vi.fn().mockImplementation(async () => {
-      return [...store];
+      // Return the structure that matches what the actual service expects
+      return { data: { eternalMemories: [...store] } };
     }),
     dcUpsertAuditRecord: vi.fn().mockResolvedValue({ id: 'mock-audit-id' }),
   };
@@ -85,7 +87,7 @@ vi.mock('./supabase', () => ({
       return { data: null, error: null };
     }),
   },
-}));
+})); 
 
 // Mock vault-omni to support deep verification in tests
 vi.mock('./vault-omni', () => ({

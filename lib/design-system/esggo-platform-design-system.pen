@@ -15,125 +15,195 @@
     },
     {
       "type": "frame",
-      "id": "T3Yu1P",
-      "x": 500,
-      "y": 0,
-      "name": "OmniNotification Component",
-      "width": 400,
-      "height": 150,
-      "fill": "$omni_notification_bg",
-      "cornerRadius": 8,
-      "stroke": "$omni_notification_stroke",
-      "effect": {
-        "type": "background_blur",
-        "radius": 16
-      },
-      "layout": "vertical",
-      "gap": 8,
-      "padding": 16,
+      "id": "KkNEw",
+      "x": 0,
+      "y": 700,
+      "name": "OmniNotification Variants",
+      "fill": "#F0F0F0",
+      "stroke": "#CCCCCC",
+      "gap": 24,
+      "padding": 24,
       "children": [
         {
           "type": "frame",
-          "id": "S1Xa5j",
-          "name": "Notification Header",
-          "width": "fill_container",
-          "justifyContent": "space_between",
-          "alignItems": "center",
-          "children": [
+          "id": "T3Yu1P",
+          "name": "OmniNotification Component",
+          "reusable": true,
+          "width": 400,
+          "height": 150,
+          "fill": "$omni_notification_bg",
+          "cornerRadius": 8,
+          "effect": [
             {
-              "type": "frame",
-              "id": "Z2OWwD",
-              "name": "Header Left Content",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "rectangle",
-                  "cornerRadius": 4,
-                  "id": "XQw4K",
-                  "name": "Status Indicator",
-                  "fill": "$accent_emerald_400",
-                  "width": 8,
-                  "height": 8
-                },
-                {
-                  "type": "text",
-                  "id": "FHBjP",
-                  "name": "Notification Title",
-                  "fill": [
-                    "$bg_slate_900",
-                    "#000000"
-                  ],
-                  "content": "System Notification",
-                  "fontFamily": "$font_jet_brains_mono",
-                  "fontSize": 16,
-                  "fontWeight": "600"
-                }
-              ]
+              "type": "background_blur",
+              "radius": 16
             },
             {
-              "type": "text",
-              "id": "TbQcR",
-              "name": "Close Button",
-              "fill": "#888888",
-              "content": "✕",
-              "fontFamily": "Inter",
-              "fontSize": 16,
-              "fontWeight": "normal"
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "$system_glow_color",
+              "blur": 16,
+              "spread": 2
             }
-          ]
-        },
-        {
-          "type": "text",
-          "id": "Msqwn",
-          "name": "Notification Content",
-          "fill": "$omni_text_fill_light",
-          "textGrowth": "fixed-width",
-          "width": "fill_container",
-          "content": "This is a universal notification from OmniAgentBus.",
-          "fontFamily": "Inter",
-          "fontSize": 14,
-          "fontWeight": "normal"
-        },
-        {
-          "type": "frame",
-          "id": "IDJFH",
-          "name": "Transparent Data Panel",
-          "width": "fill_container",
-          "height": "fill_container",
-          "fill": "#000000AA",
+          ],
           "layout": "vertical",
           "gap": 8,
           "padding": 16,
           "children": [
             {
-              "type": "text",
-              "id": "fYfgi",
-              "name": "Formula Title",
-              "fill": "$accent_emerald_400",
-              "content": "[📊 VERIFIABLE COMPLIANCE FORMULA]",
-              "fontFamily": "$font_jet_brains_mono",
-              "fontSize": 11,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "S1Xa5j",
+              "name": "Notification Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Z2OWwD",
+                  "name": "Header Left Content",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 4,
+                      "id": "XQw4K",
+                      "name": "Status Indicator",
+                      "fill": "$accent_emerald_400",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "FHBjP",
+                      "name": "Notification Title",
+                      "fill": [
+                        "$bg_slate_900",
+                        "#000000"
+                      ],
+                      "content": "System Notification",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "TbQcR",
+                  "name": "Close Button",
+                  "fill": "#888888",
+                  "content": "✕",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
             },
             {
               "type": "text",
-              "id": "TXniO",
-              "name": "Formula Content",
-              "fill": "#FFFFFF",
+              "id": "Msqwn",
+              "name": "Notification Content",
+              "fill": "$omni_text_fill_light",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "E_total = E_scope1 + E_scope2 + \\sum (Activity_i \\times EF_i)",
-              "fontFamily": "$font_jet_brains_mono",
-              "fontSize": 10,
+              "content": "This is a universal notification from OmniAgentBus.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
               "fontWeight": "normal"
             },
             {
               "type": "text",
-              "id": "aHwgz",
-              "name": "Verification Standard",
+              "id": "IoBYG",
+              "name": "Source Origin Display",
+              "fill": "$omni_text_fill_light",
+              "textGrowth": "fixed-width",
+              "width": 200,
+              "content": "Source Origin: ChatBox:Omni-Chat-01",
+              "fontFamily": "$font_jet_brains_mono",
+              "fontSize": 9,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "rEhQQ",
+              "name": "Trustworthy Lock Indicator",
+              "width": 200,
+              "height": 5,
+              "fill": [
+                "$trustworthy_bg_light",
+                "$trustworthy_bg_dark"
+              ],
+              "cornerRadius": 2,
+              "stroke": [
+                "$trustworthy_stroke_light",
+                "$trustworthy_stroke_dark"
+              ],
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "$accent_cyan_500",
+                "blur": 8,
+                "spread": 2
+              }
+            },
+            {
+              "type": "frame",
+              "id": "qY8QL",
+              "x": 16,
+              "y": 109,
+              "name": "Dynamic Utility Slot",
+              "enabled": false,
+              "width": "fill_container(368)",
+              "height": "fill_container(25)",
+              "fill": "#000000CC",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "t38HX",
+                  "name": "Utility Slot Placeholder",
+                  "fill": "#FFFFFF",
+                  "content": "Dynamic UI Controls appear here based on Supreme Will.",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "a5TuWe",
+                  "name": "Example Control",
+                  "width": 100,
+                  "height": 24,
+                  "fill": "$accent_emerald_400",
+                  "cornerRadius": 4,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "G9ni7P",
+                      "name": "Control Text",
+                      "fill": "#FFFFFF",
+                      "content": "Optimize Now",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "f0n4Th",
+              "name": "Deep-Dive View Indicator",
               "fill": "$accent_cyan_500",
-              "content": "STANDARD: [ISO-14064-1:2018]",
+              "content": "Deep-Dive ↘",
+              "textAlign": "right",
               "fontFamily": "$font_jet_brains_mono",
               "fontSize": 10,
               "fontWeight": "normal"
@@ -141,25 +211,934 @@
           ]
         },
         {
+          "id": "rGvsn",
+          "type": "ref",
+          "ref": "T3Yu1P",
+          "name": "System Notification Instance",
+          "x": 448,
+          "y": 24,
+          "stroke": [],
+          "descendants": {
+            "XQw4K": {
+              "fill": "$system_glow_color"
+            }
+          }
+        },
+        {
+          "id": "G9aQMY",
+          "type": "ref",
+          "ref": "T3Yu1P",
+          "name": "Agent Task Notification Instance",
+          "x": 872,
+          "y": 24,
+          "stroke": [],
+          "descendants": {
+            "XQw4K": {
+              "fill": "$agent_task_glow_color"
+            }
+          }
+        },
+        {
+          "id": "Q8MHHT",
+          "type": "ref",
+          "ref": "T3Yu1P",
+          "name": "Evolution Notification Instance",
+          "x": 1296,
+          "y": 24,
+          "stroke": [],
+          "descendants": {
+            "XQw4K": {
+              "fill": "$evolution_glow_color"
+            }
+          }
+        },
+        {
+          "id": "U0P04o",
+          "type": "ref",
+          "ref": "T3Yu1P",
+          "name": "Security Notification Instance",
+          "x": 1720,
+          "y": 24,
+          "stroke": [],
+          "descendants": {
+            "XQw4K": {
+              "fill": "$security_glow_color"
+            }
+          }
+        },
+        {
+          "id": "VvKwX",
+          "type": "ref",
+          "ref": "T3Yu1P",
+          "name": "Hover State Notification Instance",
+          "x": 2144,
+          "y": 24,
+          "stroke": []
+        },
+        {
           "type": "text",
-          "id": "IoBYG",
-          "name": "Source Origin Display",
-          "fill": "$omni_text_fill_light",
-          "textGrowth": "fixed-width",
+          "id": "i1ZPj4",
+          "name": "Variants Section Title",
+          "fill": "#333333",
+          "content": "OmniNotification Variants",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "bold"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Huepx",
+      "x": 1500,
+      "y": 0,
+      "name": "ESGGO Platform App",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "$app_bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "PCeCn",
+          "name": "Header Bar",
           "width": "fill_container",
-          "content": "Source Origin: ChatBox:Omni-Chat-01",
-          "fontFamily": "$font_jet_brains_mono",
-          "fontSize": 9,
-          "fontWeight": "normal"
+          "height": 64,
+          "fill": "$header_bg",
+          "stroke": "$header_stroke",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "effect": {
+            "type": "background_blur",
+            "radius": 8
+          },
+          "padding": [
+            0,
+            24
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "mO0tQ",
+              "name": "App Title",
+              "fill": "$accent_cyan_500",
+              "content": "臺北市中小企業永續治理實證系統 // ESGGO 雙模工版",
+              "fontFamily": "$font_jet_brains_mono",
+              "fontSize": 14,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "shGWY",
+              "name": "Header Actions",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d6FSpQ",
+                  "name": "Theme Switch Button Frame",
+                  "fill": "$theme_switch_fill",
+                  "cornerRadius": 4,
+                  "stroke": "$theme_switch_stroke",
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ah9Wj",
+                      "name": "Theme Switch Button Text",
+                      "fill": "$bg_slate_900",
+                      "content": "☀️ LIGHT MODE",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "BuyW0",
+                  "name": "Version Display",
+                  "fill": [
+                    "#000000",
+                    "#000000"
+                  ],
+                  "content": "v8.5.0-Alpha",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "frame",
-          "id": "rEhQQ",
-          "name": "Trustworthy Lock Indicator",
+          "id": "b4mVYq",
+          "name": "Main Content Area",
           "width": "fill_container",
-          "height": 5,
-          "fill": "$accent_cyan_500",
-          "cornerRadius": 2
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "XPMvT",
+              "name": "OmniCard Component (Embedded)",
+              "width": 400,
+              "height": 250,
+              "fill": "$omni_notification_bg",
+              "cornerRadius": 12,
+              "stroke": "$omni_notification_stroke",
+              "effect": {
+                "type": "background_blur",
+                "radius": 8
+              },
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mGSZQ",
+                  "name": "Header Section",
+                  "width": "fill_container",
+                  "height": 40,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "RkpeD",
+                      "name": "Header Left Content",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "l2sfsx",
+                          "name": "Status Indicator",
+                          "fill": "$accent_emerald_400",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "text",
+                          "id": "K5F5ky",
+                          "name": "Notification Title",
+                          "fill": [
+                            "$bg_slate_900",
+                            "#000000"
+                          ],
+                          "content": "Scope 3 Emissions Tracker",
+                          "fontFamily": "$font_jet_brains_mono",
+                          "fontSize": 14,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UDaSL",
+                      "name": "Action Buttons",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "abNfX",
+                          "name": "Formula Button Frame",
+                          "fill": "#0F172A0D",
+                          "cornerRadius": 4,
+                          "stroke": [
+                            "$accent_emerald_500",
+                            "#000000"
+                          ],
+                          "padding": [
+                            4,
+                            8
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "JunCO",
+                              "name": "Formula Text",
+                              "fill": [
+                                "$accent_emerald_400",
+                                "#000000"
+                              ],
+                              "content": "Formula",
+                              "fontFamily": "$font_jet_brains_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "eX2SB",
+                          "name": "Trace Button Frame",
+                          "fill": "#0F172A0D",
+                          "cornerRadius": 4,
+                          "stroke": [
+                            "$accent_cyan_500",
+                            "$accent_cyan_600"
+                          ],
+                          "padding": [
+                            4,
+                            8
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "L6qxM",
+                              "name": "Trace Text",
+                              "fill": [
+                                "#000000",
+                                "$accent_cyan_600"
+                              ],
+                              "content": "Trace",
+                              "fontFamily": "$font_jet_brains_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "F5fJu",
+                          "name": "Version Display Frame",
+                          "fill": "#0F172A1A",
+                          "padding": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "a1ktu0",
+                              "name": "Version Text",
+                              "fill": [
+                                "#000000",
+                                "#000000"
+                              ],
+                              "content": "v8.5.0-Alpha",
+                              "fontFamily": "$font_jet_brains_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sfPRI",
+                  "name": "Content Slot",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "DQHi7",
+                      "name": "Placeholder Content",
+                      "fill": [
+                        "$bg_slate_900",
+                        "#000000"
+                      ],
+                      "content": "OmniCard Content Area",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "b1ugqb",
+              "name": "OmniNotification Component (Agent Task Notification)",
+              "width": 400,
+              "height": 150,
+              "fill": "$omni_notification_bg",
+              "cornerRadius": 8,
+              "stroke": "$omni_notification_stroke",
+              "effect": {
+                "type": "background_blur",
+                "radius": 16
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "x4f0U",
+                  "name": "Notification Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "no9FR",
+                      "name": "Header Left Content",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "uqZDg",
+                          "name": "Status Indicator",
+                          "fill": "$agent_task_glow_color",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "text",
+                          "id": "yN9nE",
+                          "name": "Notification Title",
+                          "fill": [
+                            "$bg_slate_900",
+                            "#000000"
+                          ],
+                          "content": "Agent Task Notification",
+                          "fontFamily": "$font_jet_brains_mono",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "t8pas",
+                      "name": "Close Button",
+                      "fill": "#888888",
+                      "content": "✕",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "DUE2s",
+                  "name": "Notification Content",
+                  "fill": "$omni_text_fill_light",
+                  "textGrowth": "fixed-width",
+                  "width": 300,
+                  "content": "Agent has completed an important task.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "WrMDI",
+                  "name": "Source Origin Display Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "X3pCe",
+                      "name": "Source Origin Display",
+                      "fill": "$omni_text_fill_light",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Source Origin: ChatBox:Omni-Chat-01",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "w0X6R",
+                  "name": "Trustworthy Lock Indicator Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "hwLY5",
+                      "name": "Trustworthy Lock Indicator",
+                      "width": "fill_container",
+                      "height": 5,
+                      "fill": [
+                        "$trustworthy_bg_light",
+                        "$trustworthy_bg_dark"
+                      ],
+                      "cornerRadius": 2,
+                      "stroke": [
+                        "$trustworthy_stroke_light",
+                        "$trustworthy_stroke_dark"
+                      ],
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "$accent_cyan_500",
+                        "blur": 8,
+                        "spread": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "VynxU",
+                  "name": "Deep-Dive View Indicator",
+                  "fill": "$accent_cyan_500",
+                  "content": "Deep-Dive ↘",
+                  "textAlign": "right",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rftlS",
+              "name": "OmniNotification Component (Evolution Event)",
+              "width": 400,
+              "height": 150,
+              "fill": "$omni_notification_bg",
+              "cornerRadius": 8,
+              "stroke": "$omni_notification_stroke",
+              "effect": {
+                "type": "background_blur",
+                "radius": 16
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ZtTFa",
+                  "name": "Notification Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "u77Lz",
+                      "name": "Header Left Content",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "b5tWYv",
+                          "name": "Status Indicator",
+                          "fill": "$evolution_glow_color",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "text",
+                          "id": "aKzbE",
+                          "name": "Notification Title",
+                          "fill": [
+                            "$bg_slate_900",
+                            "#000000"
+                          ],
+                          "content": "Evolution Event",
+                          "fontFamily": "$font_jet_brains_mono",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ji8lw",
+                      "name": "Close Button",
+                      "fill": "#888888",
+                      "content": "✕",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "arrtZ",
+                  "name": "Notification Content",
+                  "fill": "$omni_text_fill_light",
+                  "textGrowth": "fixed-width",
+                  "width": 300,
+                  "content": "System has evolved to v8.6.0.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "DtkiV",
+                  "name": "Source Origin Display Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MT4Cb",
+                      "name": "Source Origin Display",
+                      "fill": "$omni_text_fill_light",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Source Origin: ChatBox:Omni-Chat-01",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "W5ctW",
+                  "name": "Trustworthy Lock Indicator Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ZIUWO",
+                      "name": "Trustworthy Lock Indicator",
+                      "width": "fill_container",
+                      "height": 5,
+                      "fill": [
+                        "$trustworthy_bg_light",
+                        "$trustworthy_bg_dark"
+                      ],
+                      "cornerRadius": 2,
+                      "stroke": [
+                        "$trustworthy_stroke_light",
+                        "$trustworthy_stroke_dark"
+                      ],
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "$accent_cyan_500",
+                        "blur": 8,
+                        "spread": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "BV19L",
+                  "name": "Deep-Dive View Indicator",
+                  "fill": "$accent_cyan_500",
+                  "content": "Deep-Dive ↘",
+                  "textAlign": "right",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "q3Zl6M",
+              "name": "OmniNotification Component (Security Alert)",
+              "width": 400,
+              "height": 150,
+              "fill": "$omni_notification_bg",
+              "cornerRadius": 8,
+              "stroke": "$omni_notification_stroke",
+              "effect": {
+                "type": "background_blur",
+                "radius": 16
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "u7cSHd",
+                  "name": "Notification Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "VK87f",
+                      "name": "Header Left Content",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "p0Ms5",
+                          "name": "Status Indicator",
+                          "fill": "$security_glow_color",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "text",
+                          "id": "XrRee",
+                          "name": "Notification Title",
+                          "fill": [
+                            "$bg_slate_900",
+                            "#000000"
+                          ],
+                          "content": "Security Alert",
+                          "fontFamily": "$font_jet_brains_mono",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Ftpxy",
+                      "name": "Close Button",
+                      "fill": "#888888",
+                      "content": "✕",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "REQKh",
+                  "name": "Notification Content",
+                  "fill": "$omni_text_fill_light",
+                  "textGrowth": "fixed-width",
+                  "width": 300,
+                  "content": "Unauthorized access attempt detected.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "M6y4Ij",
+                  "name": "Source Origin Display Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PyARa",
+                      "name": "Source Origin Display",
+                      "fill": "$omni_text_fill_light",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Source Origin: ChatBox:Omni-Chat-01",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "v8Irbx",
+                  "name": "Trustworthy Lock Indicator Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "S7HitZ",
+                      "name": "Trustworthy Lock Indicator",
+                      "width": "fill_container",
+                      "height": 5,
+                      "fill": [
+                        "$trustworthy_bg_light",
+                        "$trustworthy_bg_dark"
+                      ],
+                      "cornerRadius": 2,
+                      "stroke": [
+                        "$trustworthy_stroke_light",
+                        "$trustworthy_stroke_dark"
+                      ],
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "$accent_cyan_500",
+                        "blur": 8,
+                        "spread": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "Y71wie",
+                  "name": "Deep-Dive View Indicator",
+                  "fill": "$accent_cyan_500",
+                  "content": "Deep-Dive ↘",
+                  "textAlign": "right",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "VuSmz",
+              "name": "OmniNotification Component (Hover State Example)",
+              "width": 400,
+              "height": 150,
+              "fill": "$omni_notification_bg",
+              "cornerRadius": 8,
+              "stroke": "$omni_notification_stroke",
+              "effect": {
+                "type": "background_blur",
+                "radius": 16
+              },
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 16,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "OcznJ",
+                  "name": "Notification Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "y0HjI",
+                      "name": "Header Left Content",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "MVIab",
+                          "name": "Status Indicator",
+                          "fill": "$system_glow_color",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "text",
+                          "id": "zyWe2",
+                          "name": "Notification Title",
+                          "fill": [
+                            "$bg_slate_900",
+                            "#000000"
+                          ],
+                          "content": "Hover State Example",
+                          "fontFamily": "$font_jet_brains_mono",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "o1res",
+                      "name": "Close Button",
+                      "fill": "#888888",
+                      "content": "✕",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "rueq1",
+                  "name": "Notification Content",
+                  "fill": "$omni_text_fill_light",
+                  "textGrowth": "fixed-width",
+                  "width": 300,
+                  "content": "Hover to see dynamic controls.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "AWFzT",
+                  "name": "Source Origin Display Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "NPTkC",
+                      "name": "Source Origin Display",
+                      "fill": "$omni_text_fill_light",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Source Origin: ChatBox:Omni-Chat-01",
+                      "fontFamily": "$font_jet_brains_mono",
+                      "fontSize": 9,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "guaVZ",
+                  "name": "Trustworthy Lock Indicator Wrapper",
+                  "width": 300,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "v2gLP",
+                      "name": "Trustworthy Lock Indicator",
+                      "width": "fill_container",
+                      "height": 5,
+                      "fill": [
+                        "$trustworthy_bg_light",
+                        "$trustworthy_bg_dark"
+                      ],
+                      "cornerRadius": 2,
+                      "stroke": [
+                        "$trustworthy_stroke_light",
+                        "$trustworthy_stroke_dark"
+                      ],
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "$accent_cyan_500",
+                        "blur": 8,
+                        "spread": 2
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "yTJjz",
+                  "name": "Deep-Dive View Indicator",
+                  "fill": "$accent_cyan_500",
+                  "content": "Deep-Dive ↘",
+                  "textAlign": "right",
+                  "fontFamily": "$font_jet_brains_mono",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -273,6 +1252,115 @@
     "system_glow_color": {
       "type": "color",
       "value": "#00BFFF"
+    },
+    "trustworthy_bg_dark": {
+      "type": "color",
+      "value": "#164E634D"
+    },
+    "trustworthy_bg_light": {
+      "type": "color",
+      "value": "#F8FAFC80"
+    },
+    "trustworthy_stroke_dark": {
+      "type": "color",
+      "value": "#06B6D480"
+    },
+    "trustworthy_stroke_light": {
+      "type": "color",
+      "value": "#0891B299"
+    },
+    "security_glow_color": {
+      "type": "color",
+      "value": "#EF4444"
+    },
+    "border": {
+      "type": "color",
+      "value": "#CCCCCC"
+    },
+    "app_bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "$bg_slate_50",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "$bg_slate_950",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "header_bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#FFFFFF99",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#00000099",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "header_stroke": {
+      "type": "color",
+      "value": [
+        {
+          "value": "$border",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "$border",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "theme_switch_fill": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#0000000D",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "#FFFFFF0D",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
+    },
+    "theme_switch_stroke": {
+      "type": "color",
+      "value": [
+        {
+          "value": "$border",
+          "theme": {
+            "mode": "light"
+          }
+        },
+        {
+          "value": "$border",
+          "theme": {
+            "mode": "dark"
+          }
+        }
+      ]
     }
   }
 }

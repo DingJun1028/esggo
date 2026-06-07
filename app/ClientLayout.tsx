@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -68,9 +68,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!mounted || loading) return;
 
-    if (isAuthenticated === false && pathname !== '/auth/login' && pathname !== '/terminal' && pathname !== '/' && pathname !== '/esggo-omnipencil') {
-      router.replace('/auth/login');
-    } else if (isAuthenticated === true && pathname === '/auth/login') {
+    if (isAuthenticated === false && pathname !== '/login' && pathname !== '/terminal' && pathname !== '/' && pathname !== '/esggo-omnipencil') {
+      router.replace('/login');
+    } else if (isAuthenticated === true && pathname === '/login') {
       router.replace('/dashboard');
     }
   }, [mounted, isAuthenticated, loading, pathname, router]);
@@ -78,7 +78,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   if (!mounted) return null;
 
   // 1. Public Routes
-  if (pathname === '/auth/login' || pathname === '/terminal' || pathname === '/' || pathname === '/esggo-omnipencil') {
+  if (pathname === '/login' || pathname === '/terminal' || pathname === '/' || pathname === '/esggo-omnipencil') {
     return <><ToastContainer /><OmniAgentPulse /><OmniCommandPalette />{children}</>;
   }
 

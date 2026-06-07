@@ -2,7 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import path from 'path';
-import { executeMCPService } from './omnimcp-entry';
+import { executeMCPService } from './src/omnimcp-entry.ts';
 
 const app = express();
 const httpServer = createServer(app);
@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
       const result = await executeMCPService(service, action, payload);
       socket.emit('mcp-result', { success: true, result });
     } catch (err) {
-      socket.emit('mcp-result', { success: false, error: err.message });
+      socket.emit('mcp-result', { success: false, error: err instanceof Error ? err.message : String(err) });
     }
   });
 

@@ -1,11 +1,11 @@
-import { ADKAgent } from './adk-core.ts';
-import type { AgentConfig } from './adk-core.ts';
-import { ADK_STANDARD_TOOLS } from './adk-tools.ts';
-import { OmniCommander } from './omni-commander.ts';
-import { omniAgentBus } from './omni-agent-bus.ts';
-import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal.ts';
-import { memoryStore } from '../memory/memory-store.ts';
-import type { MemoryRecord } from '../memory/memory-store.ts';
+import { ADKAgent } from './adk-core';
+import type { AgentConfig } from './adk-core';
+import { ADK_STANDARD_TOOLS } from './adk-tools';
+import { OmniCommander } from './omni-commander';
+import { omniAgentBus } from './omni-agent-bus';
+import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
+import { memoryStore } from '../memory/memory-store';
+import type { MemoryRecord } from '../memory/memory-store';
 
 // Define the result type from ADKAgent.run
 interface ADKAgentResult {

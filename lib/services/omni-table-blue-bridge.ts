@@ -1,6 +1,6 @@
-import { OmniTableClient } from '../../src/clients/omni-table-client.ts';
+import { OmniTableClient } from '../../src/clients/omni-table-client';
 import { blueCC } from '../services/omni-blue';
-import { omniAgentBus } from '../agents/omni-commander.ts';
+import { omniAgentBus } from '../agents/omni-commander';
 
 /**
  * 🌌 OmniTable & OmniBlue Deep Integration Bridge

@@ -40,3 +40,35 @@ export const parseFnnsNodeName = (nodeName: string | undefined): FnnsData | null
   
   return null;
 };
+
+/**
+ * Verifies if an FNNS node name fully complies with 5T protocols
+ * and is considered Trustworthy.
+ */
+export const verifyFnnsCompliance = (nodeName: string | undefined): { isValid: boolean; messages: string[] } => {
+  const data = parseFnnsNodeName(nodeName);
+  const messages: string[] = [];
+
+  if (!data) {
+    return { isValid: false, messages: ['Invalid FNNS syntax. Node name does not match expected v3 or v4 patterns.'] };
+  }
+
+  let isValid = true;
+
+  if (data.protocol !== 'Trustworthy') {
+    isValid = false;
+    messages.push(`Protocol violation: Expected "Trustworthy", but got "${data.protocol}".`);
+  }
+
+  if (!data.id.match(/^[A-Z]{3}-\d{3}$/)) {
+    isValid = false;
+    messages.push(`MECE Prefix violation: ID "${data.id}" does not match format (e.g., ENV-001).`);
+  }
+
+  if (isValid) {
+    messages.push('Node is fully compliant with 5T protocols.');
+  }
+
+  return { isValid, messages };
+};
+

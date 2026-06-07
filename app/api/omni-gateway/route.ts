@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import crypto from 'crypto';
 
@@ -52,7 +52,7 @@ type OmniTableSyncPayload = z.infer<typeof OmniTableSyncPayloadSchema>;
 // 3. 雙向防迴圈簽章、Browserbase 設定與內存資料庫配置
 // =========================================================================
 const BOT_SIGNATURE = 'BLUE_Automation_Bot';
-const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;
+const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN || 'mock_secret_fallback';
 
 // Browserbase 模擬配置 (對應 browse.sh 網路自動化技能)
 const BROWSERBASE_CONFIG = {

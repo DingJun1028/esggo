@@ -5,9 +5,9 @@
  * 奧義六式 → 12維度治理體系 → 萬能架構完備
  */
 
-import { omniAgentBus } from '../agents/omni-agent-bus.ts';
-import { omniAgent } from '../agents/adk-swarm.ts';
-import type { MissionResult } from '../agents/omni-commander.ts';
+import { omniAgentBus } from '../agents/omni-agent-bus';
+import { omniAgent } from '../agents/adk-swarm';
+import type { MissionResult } from '../agents/omni-commander';
 
 // 12維度治理體系定義
 export type OmniDimension = 'Core' | 'Rune' | 'Agent' | 'Memory' | 'Sync' | 'Protocol' | 'Evolution' | 'Monitor' | 'Security' | 'Meta' | 'Tag' | 'Theme';

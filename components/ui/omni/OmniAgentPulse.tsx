@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useDragControls } from 'framer-motion';
 import { Brain, Activity, Database, CheckCircle2, ChevronRight, Minimize2, Maximize2 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
+import { OmniAgentBus, IOmniEvent } from '../../../lib/omni/OmniAgentBus';
 
 export interface PulseTask {
   id: string;
@@ -13,44 +14,42 @@ export interface PulseTask {
 export function OmniAgentPulse() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [tasks, setTasks] = useState<PulseTask[]>([
-    { id: '1', type: 'etl_sync', status: 'completed', message: '外部 ERP 數據同步完成' },
-    { id: '2', type: 'zkp_seal', status: 'completed', message: '5T 協議 Hash 刻印成功' },
-    { id: '3', type: 'memory_extraction', status: 'active', message: '萃取 ESG 永續記憶碎片中...' },
+    { id: 'boot-1', type: 'memory_extraction', status: 'completed', message: 'OmniAgent Pulse 核心已啟動' }
   ]);
   const dragControls = useDragControls();
 
-  // Simulate incoming tasks
+  // Subscribe to OmniAgentBus
   useEffect(() => {
-    const timer = setInterval(() => {
+    // 廣通：訂閱全域事件
+    const unsubscribe = OmniAgentBus.subscribe('*', (event: IOmniEvent) => {
       setTasks(prev => {
         const newTasks = [...prev];
-        const activeTaskIndex = newTasks.findIndex(t => t.status === 'active');
-        if (activeTaskIndex !== -1) {
-          newTasks[activeTaskIndex].status = 'completed';
-          newTasks[activeTaskIndex].message = newTasks[activeTaskIndex].message.replace('中...', '完成');
-        } else {
-          // add a new random task
-          const types: PulseTask['type'][] = ['etl_sync', 'memory_extraction', 'zkp_seal'];
-          const newType = types[Math.floor(Math.random() * types.length)];
-          const msgMap = {
-            etl_sync: '自動抓取最新碳排指標中...',
-            memory_extraction: '合成「碳排減量奧義」碎片中...',
-            zkp_seal: '為新紀錄執行防篡改封印中...'
-          };
-          
-          newTasks.unshift({
-            id: Date.now().toString(),
-            type: newType,
-            status: 'active',
-            message: msgMap[newType]
-          });
-          
-          if (newTasks.length > 5) newTasks.pop();
-        }
+        
+        // 根據 Event Type 映射 UI icon
+        let type: PulseTask['type'] = 'etl_sync';
+        if (event.type.includes('SEAL') || event.type.includes('TRUST')) type = 'zkp_seal';
+        if (event.type.includes('MEMORY') || event.type.includes('EXTRACT') || event.type.includes('NEXUS')) type = 'memory_extraction';
+        
+        // 提取 payload summary，若無則顯示 source
+        const payloadStr = typeof event.payload === 'object' && event.payload !== null 
+          ? JSON.stringify(event.payload).substring(0, 30) + '...'
+          : String(event.payload || event.source);
+
+        newTasks.unshift({
+          id: event.id,
+          type,
+          status: 'completed',
+          message: `[${event.type}] ${payloadStr}`
+        });
+        
+        if (newTasks.length > 10) newTasks.pop();
         return newTasks;
       });
-    }, 5000);
-    return () => clearInterval(timer);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const getIcon = (type: PulseTask['type']) => {
@@ -77,14 +76,14 @@ export function OmniAgentPulse() {
         <motion.div 
           initial={{ opacity: 0, y: 10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="w-72 bg-void-stark/90 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative"
+          className="w-72 bg-slate-950/90 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
           
           <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
             <div className="flex items-center gap-2 text-cyan-400">
               <Activity size={16} className="animate-pulse" />
-              <span className="text-xs font-bold tracking-widest uppercase">Agent Pulse</span>
+              <span className="text-xs font-bold tracking-widest uppercase">Agent Pulse Ledger</span>
             </div>
             <button onClick={() => setIsExpanded(false)} className="text-slate-400 hover:text-white transition-colors">
               <Minimize2 size={14} />
@@ -110,6 +109,9 @@ export function OmniAgentPulse() {
                 </div>
               </div>
             ))}
+            {tasks.length === 0 && (
+              <p className="text-xs text-slate-500 text-center py-2">等待萬能心核事件中...</p>
+            )}
           </div>
         </motion.div>
       )}
@@ -136,3 +138,4 @@ export function OmniAgentPulse() {
     </motion.div>
   );
 }
+

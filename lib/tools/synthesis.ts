@@ -38,7 +38,7 @@ export class DynamicToolSynthesizer {
     // Retrieve relevant memories for context
     const relevantMemories = await memoryStore.search(problem, 5);
     const memoryContext = relevantMemories
-      .map((m: unknown) => `Past: ${m.task} -> ${m.result}`)
+      .map((m: any) => `Past: ${m.task} -> ${m.result}`)
       .join('\n');
 
     // Generate the tool code
@@ -155,7 +155,7 @@ Return ONLY the function code, no explanations or markdown formatting.
         result,
         executionTime: 0 // Will be filled by caller
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       return {
         success: false,
         error: error.message,

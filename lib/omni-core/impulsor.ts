@@ -3,8 +3,8 @@
  * ADK小隊新手向指導手冊（E001-V2.1） - 系統基礎設備
  */
 
-import { omniAgentBus } from '../agents/omni-agent-bus.ts';
-import { healingGuardian } from './healer.ts';
+import { omniAgentBus } from '../agents/omni-agent-bus';
+import { healingGuardian } from './healer';
 
 export class ImpulsorEngine {
   private status: 'offline' | 'active' | 'overdrive' = 'offline';

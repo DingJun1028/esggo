@@ -186,7 +186,7 @@ export class GlobalHealing implements IGlobalHealing {
         reconciledCount,
         logs,
       };
-    } catch (e: unknown) {
+    } catch (e: any) {
       logs.push(`[災難性失敗] 全局調和過程中發生未預期錯誤: ${e?.message || e}`);
       return {
         status: 'FAILED',

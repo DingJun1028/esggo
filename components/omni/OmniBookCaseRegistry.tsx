@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Database, Plus, RefreshCw, FileText, CheckCircle, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Database, Plus, RefreshCw, FileText, CheckCircle, Search, Loader2 } from 'lucide-react';
 
 import { IOmniComponent } from './types';
+import { useToast } from '@/components/ui';
 import { RecordLifecycleStatus } from '@/shared-types/status';
+import { OmniZKPBadge } from './OmniZKPBadge';
 
 const MOCK_DATA: IOmniComponent[] = [
   { 
@@ -46,10 +48,31 @@ const MOCK_DATA: IOmniComponent[] = [
 ];
 
 export default function OmniBookCaseRegistry() {
-  const [components, setComponents] = useState<IOmniComponent[]>(MOCK_DATA);
+  const { toast } = useToast();
+  const [components, setComponents] = useState<IOmniComponent[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('All');
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchComponents = async () => {
+      try {
+        const res = await fetch('/api/omni-components');
+        if (res.ok) {
+          const data = await res.json();
+          setComponents(data.components || []);
+        } else {
+          toast('Failed to fetch components', 'error');
+        }
+      } catch (e) {
+        toast('Error fetching components', 'error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchComponents();
+  }, [toast]);
   
   const filteredComponents = components.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.id.toLowerCase().includes(searchTerm.toLowerCase());
@@ -77,11 +100,12 @@ export default function OmniBookCaseRegistry() {
 
   const syncToWiki = () => {
     // 模擬自動更新 Wiki 的行為
-    alert("已觸發自動更新！同步至 OMNICOMPONENT_REGISTRY.md (Wiki)");
+    toast("已觸發自動更新！同步至 OMNICOMPONENT_REGISTRY.md (Wiki)", "success");
   };
 
   const verifyCompliance = async () => {
     setIsVerifying(true);
+    toast('ZKP Verification Initiated... Checking zero-knowledge proofs.', 'success');
     try {
       const response = await fetch('/api/5t', {
         method: 'POST',
@@ -89,16 +113,37 @@ export default function OmniBookCaseRegistry() {
         body: JSON.stringify({ components })
       });
       if (response.ok) {
-        alert('5T Protocol Verification Trace Logs Dispatched.');
+        toast('5T Protocol Verification Trace Logs Dispatched.', 'success');
       } else {
-        alert('Verification failed. Check console.');
+        toast('Verification failed. Check console.', 'error');
       }
     } catch (error) {
       console.error('5T Verification Error:', error);
-      alert('Verification encountered an error.');
+      toast('Verification encountered an error.', 'error');
     } finally {
       setIsVerifying(false);
     }
+  };
+
+  const registerNewComponent = () => {
+    const newComponent: IOmniComponent = {
+      uuid: `uuid-${Date.now()}`,
+      componentVersion: '1.0.0-New',
+      timestamp: Date.now(),
+      evidence: { source_origin: 'manual_registration', flow_path: [] },
+      id: `OMNI-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
+      type: 'Atom',
+      name: 'NewComponent_' + Math.floor(Math.random() * 100),
+      lifecycleStatus: RecordLifecycleStatus.Draft,
+      attribution: '萬能元件',
+      tangible: true,
+      traceable: true,
+      trackable: false,
+      transparent: false,
+      trustworthy: false,
+    };
+    setComponents([newComponent, ...components]);
+    toast(`Successfully registered new component: ${newComponent.name}`, "success");
   };
 
   return (
@@ -112,6 +157,9 @@ export default function OmniBookCaseRegistry() {
           <div>
             <h2 className="text-xl font-bold text-gray-800">OmniBookCase Registry</h2>
             <p className="text-sm text-gray-500 mt-1">OmniBookCase元件總表 · 5T+1 維度控管矩陣 (MECE 分類)</p>
+          </div>
+          <div className="ml-4">
+            <OmniZKPBadge />
           </div>
         </div>
         
@@ -131,7 +179,10 @@ export default function OmniBookCaseRegistry() {
             <RefreshCw size={16} />
             <span>同步至 Wiki</span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#63a6b0] hover:bg-[#4a8a94] text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
+          <button 
+            onClick={registerNewComponent}
+            className="flex items-center gap-2 px-4 py-2 bg-[#63a6b0] hover:bg-[#4a8a94] text-white rounded-lg transition-colors text-sm font-medium shadow-sm"
+          >
             <Plus size={16} />
             <span>註冊新元件</span>
           </button>
@@ -178,12 +229,21 @@ export default function OmniBookCaseRegistry() {
               <th className="px-3 py-4 font-semibold border-b border-gray-200 text-center" title="Traceable">溯源</th>
               <th className="px-3 py-4 font-semibold border-b border-gray-200 text-center" title="Trackable">追蹤</th>
               <th className="px-3 py-4 font-semibold border-b border-gray-200 text-center" title="Transparent">驗算</th>
-              <th className="px-3 py-4 font-semibold border-b border-gray-200 text-center" title="Trustworthy">篡改</th>
+              <th className="px-6 py-4 font-semibold text-gray-700 text-center">不可篡改<br/><span className="text-[10px] text-gray-400 normal-case">(Trustworthy)</span></th>
               <th className="px-6 py-4 font-semibold border-b border-gray-200 text-right">按鈕 (Actions)</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {filteredComponents.map((comp) => (
+            {isLoading ? (
+              <tr>
+                <td colSpan={11} className="px-6 py-12 text-center text-gray-500">
+                  <div className="flex flex-col items-center justify-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-[#63a6b0] mb-4" />
+                    <p>載入中... 同步資料庫與 OmniCore 註冊表</p>
+                  </div>
+                </td>
+              </tr>
+            ) : filteredComponents.map((comp) => (
               <tr key={comp.id} className="hover:bg-blue-50/30 transition-colors group">
                 <td className="px-6 py-4">
                   <span className="font-mono text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-1 rounded">{comp.id}</span>

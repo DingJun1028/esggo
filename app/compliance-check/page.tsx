@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
@@ -7,7 +7,7 @@ import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { 
   ShieldAlert, ShieldCheck, Search, SearchCheck, SearchCode,
   FileText, Activity, Brain, AlertTriangle, Info,
-  CheckCircle2, FileSearch, ArrowRight, Loader2
+  CheckCircle2, FileSearch, ArrowRight, Loader2, Lock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

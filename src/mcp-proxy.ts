@@ -4,6 +4,8 @@ import { supabaseUrl, supabaseKey } from './supabaseConfig';
 import {genkitClient} from './genkitClient';
 import { boostSpaceClient } from './boostSpaceClient';
 
+import { createClient } from '@supabase/supabase-js';
+
 // Simple wrapper around four MCP services
 export const mcp = {
   firebase: async (endpoint: string, payload: any) => {
@@ -14,7 +16,7 @@ export const mcp = {
     return response.data;
   },
   supabase: async (query: string, params: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const client = supabaseUrl;
+    const client = createClient(supabaseUrl, supabaseKey);
     const { data, error } = await client.from(query).select('*', params);
     if (error) throw error;
     return data;

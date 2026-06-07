@@ -19,7 +19,7 @@ export const convertHtmlToPdf = async (htmlContent: string, filename: string = '
   try {
     const pdf = await html2pdf().from(element).set(options).output('datauristring');
     const link = document.createElement('a');
-    link.href = pdf;
+    link.href = pdf as string;
     link.download = filename;
     link.click();
     return { success: true, message: 'PDF 匯出成功' };
@@ -49,7 +49,7 @@ export const convertHtmlToDocx = async (htmlContent: string, filename: string = 
 
   try {
     const buffer = await Packer.toBuffer(doc);
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const blob = new Blob([buffer as unknown as BlobPart], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = filename;
