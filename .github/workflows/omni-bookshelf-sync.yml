@@ -37,7 +37,7 @@ jobs:
         node-version: ${{ github.event.inputs.node_version || '22' }} # 選擇一個穩定的 Node.js 版本
 
     - name: Install dependencies
-      run: npm install
+      run: pnpm install
 
     - name: Run Omni Bookshelf Manager
       run: node scripts/omni-bookshelf-manager.mjs

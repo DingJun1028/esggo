@@ -31,7 +31,7 @@ jobs:
           version: 8
 
       - name: Install Dependencies (root)
-        run: pnpm install # Assumes root package.json for installing dependencies
+        run: ppnpm install # Assumes root package.json for installing dependencies
 
       - name: ADR Requirement Check
         id: adr_check
@@ -63,7 +63,7 @@ jobs:
 
       - name: Install Dependencies (packages/types)
         # Assumes npm workspaces or installs inside the package
-        run: pnpm install --prefix packages/types
+        run: ppnpm install --prefix packages/types
 
       - name: Build Shared Types
         run: pnpm run build --prefix packages/types
