@@ -26,8 +26,8 @@ export class ComplianceEngine {
   static async calculateGRIMatrix(companyId: string): Promise<GRIComplianceNode[]> {
     // 1. Fetch real-time data from Supabase
     const [evidenceRes, tasksRes] = await Promise.all([
-      supabase.from('vault_omni_core').select('uuid, formula, hash_lock').eq('company_id', companyId),
-      supabase.from('tasks').select('id, gri_reference, status').eq('company_id', companyId)
+      supabase!.from('vault_omni_core').select('uuid, formula, hash_lock').eq('company_id', companyId),
+      supabase!.from('tasks').select('id, gri_reference, status').eq('company_id', companyId)
     ]);
 
     const evidence = evidenceRes.data || [];

@@ -73,15 +73,17 @@ export class OmniMemorySync {
     const client = new OmniTableClient({ token });
 
     const record: { fields: Record<string, any> } = { // eslint-disable-line @typescript-eslint/no-explicit-any
-      "Task Title": event.payload.content,
-      Status: "Todo",
-      Type: event.payload.type,
-      Source: event.source_origin || "OmniNotes",
+      fields: {
+        "Task Title": (event.payload as any).name || "Unknown Task",
+        Status: "Todo",
+        Type: (event.payload as any).attributes?.join(',') || "OmniEvent",
+        Source: event.source_platform || "OmniNotes",
+      }
     };
 
     try {
       await client.createRecords(datasheetId, [record]);
-      console.log(`[OmniMemorySync] Synced task "${event.payload.content}" to AITable`);
+      console.log(`[OmniMemorySync] Synced task "${event.payload.name}" to AITable`);
     } catch (error) {
       console.error(`[OmniMemorySync] AITable sync failed:`, error);
       await this.saveToDeadLetterQueue(event, `[AITable]: ${error}`);
@@ -175,11 +177,12 @@ export class OmniMemorySync {
     for (const record of failedEvents) {
       const mockEvent: OmniEvent = {
         id: record.event_id,
+        omni_card_uuid: record.payload?.uuid || record.event_id,
         event_type: record.event_type,
-        payload: record.payload,
-        timestamp: record.created_at,
-        actor: 'DLQ_Replay',
-        source_origin: 'DLQ'
+        payload: record.payload as any,
+        created_at: new Date(record.created_at).getTime(),
+        hash_lock: record.payload?.hash_lock || 'REPLAY_HASH',
+        source_platform: 'DLQ'
       };
 
       try {

@@ -1,11 +1,14 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@/utils/supabase/client';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
 import { Link, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+
+const supabase = createClient();
 
 export default function ApiSetupPage() {
   const [data, setData] = useState<any[]>([]);
@@ -21,25 +24,33 @@ export default function ApiSetupPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetching from a omni proxy metrics endpoint
-      const res = await fetch('/api/metrics/api-setup', { cache: 'no-store' });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json.data || []);
-      } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
-        setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
-        ]);
-      }
+      const { data: metricsData, error } = await supabase
+        .from('energy_metrics')
+        .select('*, hash_lock, sealed_at, sealed_by')
+        .order('timestamp', { ascending: false });
+      
+      if (error) throw error;
+      
+      const formattedData = (metricsData || []).map((item: any) => ({
+        id: item.id,
+        date: item.timestamp ? new Date(item.timestamp).toISOString().split('T')[0] : '2026-06-01',
+        metric_name: item.service || 'Energy Metric',
+        metric_value: item.energy_consumption || item.carbon_emission || 0,
+        unit: item.energy_consumption ? 'kWh' : 'kg CO2e',
+        hash_lock: item.hash_lock,
+        source_origin: 'Auto-Agent',
+        sealed_at: item.sealed_at,
+        sealed_by: item.sealed_by
+      }));
+      
+      setData(formattedData);
     } catch (e) {
-      console.error('Fetch Error:', e);
-      // Fallback mock data
+      console.error('Supabase Fetch Error:', e);
+      // Fallback mock data for demonstration
       setData([
         { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
         { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
+        { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
       ]);
     } finally {
       setLoading(false);

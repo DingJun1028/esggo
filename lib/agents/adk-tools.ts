@@ -1,5 +1,5 @@
 import { z } from 'genkit';
-import { ai } from './genkit.ts';
+import { ai } from './genkit';
 import { 
   getEnvironmentalData, 
   getSocialMetrics, 
@@ -7,7 +7,7 @@ import {
   getTasks, 
   getEvidenceFiles, 
   getReadingRoomReports 
-} from '../db.ts';
+} from '../db';
 
 /**
  * ADK Tools: Standard Genkit Tool Definitions
@@ -90,7 +90,7 @@ export const syncToNCBDB = ai.defineTool({
     data: z.record(z.string(), z.unknown()).describe('The record data to upsert')
   }),
 }, async (input) => {
-  const { ncbClient } = await import('../ncbdb.ts');
+  const { ncbClient } = await import('../ncbdb');
   console.log(`[NCBDB Tool] Syncing to table: ${input.tableName}`);
   return await ncbClient.upsertRecord(input.tableName, input.data as any);
 });

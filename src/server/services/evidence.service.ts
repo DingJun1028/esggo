@@ -30,7 +30,9 @@ export class EvidenceService {
       // Repository 會自動處理 hash，這裡可做額外邏輯
     }
 
-    return this.repo.create(userId, dto);
+    const result = await this.repo.create(userId, dto);
+    if (!result) throw new Error("Failed to create evidence");
+    return result;
   }
 
   /**

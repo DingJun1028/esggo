@@ -1,24 +1,82 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield, Activity, Zap, FileText, Database, Compass, 
   ArrowRight, HeartPulse, Sparkles, CheckCircle2, Lock,
-  BarChart, Target, Leaf, Users, Briefcase
+  BarChart, Target, Leaf, Users, Briefcase, Brain, Filter
 } from 'lucide-react';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { cn } from '../../lib/utils';
 import { fadeIn, scaleIn, staggerContainer, slideInRight } from '@/lib/animations';
 
+import OmniAgentCard from '@/components/omni/OmniAgentCard';
+import { OmniAgentCardProps } from '@/components/omni/OmniAgentCard';
+
 export default function DashboardContent() {
   const [healthScore, setHealthScore] = useState(92);
+  const [activeAgents, setActiveAgents] = useState<OmniAgentCardProps[]>([]);
+  const [isLoadingAgents, setIsLoadingAgents] = useState(true);
+  const [filterSkill, setFilterSkill] = useState<string | null>(null);
   
   const activities = [
     { id: 1, agent: 'Jun.Ai.Key', action: '執行了 5T 數據循環檢驗', time: 'Just now', type: 'success' },
     { id: 2, agent: 'ESG_Auditor', action: '鎖定 2024 第三季碳排憑證 (Hash: 0x8a9...)', time: '5m ago', type: 'secure' },
     { id: 3, agent: 'ESG_Researcher', action: '萃取了 3 項新的永續目標標竿數據', time: '12m ago', type: 'info' },
   ];
+
+  // Simulate dynamic data fetching
+  useEffect(() => {
+    const fetchAgents = async () => {
+      setIsLoadingAgents(true);
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      setActiveAgents([
+        {
+          id: 'A-001',
+          name: 'Jun.Ai.Key',
+          role: 'Soul Coordinator',
+          rarity: 'awakened',
+          fiveTStatus: [true, true, true, true, true],
+          confidenceScore: 99,
+          skills: ['Semantic Guidance', 'Intent Alignment', 'Trinity Sync'],
+          jsonSchema: '{\n  "version": "1.0",\n  "status": "awakened",\n  "protocol": "5T"\n}'
+        },
+        {
+          id: 'A-002',
+          name: 'OmniAgent',
+          role: 'Swarm Commander',
+          rarity: 'verified',
+          fiveTStatus: [true, true, true, true, true],
+          confidenceScore: 96,
+          skills: ['Task Orchestration', 'Agent Swarm Scheduling'],
+          jsonSchema: '{\n  "version": "1.0",\n  "status": "active"\n}'
+        },
+        {
+          id: 'A-003',
+          name: 'Dataform_Agent',
+          role: 'Pipeline Executor',
+          rarity: 'standard',
+          fiveTStatus: [true, true, false, true, true],
+          confidenceScore: 88,
+          skills: ['Dataform', 'BigQuery', 'Task Orchestration'],
+          jsonSchema: '{\n  "version": "1.0",\n  "status": "active"\n}'
+        }
+      ]);
+      setIsLoadingAgents(false);
+    };
+
+    fetchAgents();
+  }, []);
+
+  // Get unique skills for the filter
+  const allSkills = Array.from(new Set(activeAgents.flatMap(agent => agent.skills)));
+
+  const filteredAgents = filterSkill 
+    ? activeAgents.filter(agent => agent.skills.includes(filterSkill))
+    : activeAgents;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans relative overflow-hidden p-8">
@@ -119,6 +177,82 @@ export default function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
+          </motion.div>
+
+          {/* Active Agents */}
+          <motion.div variants={fadeIn} className="md:col-span-3 mt-4 bg-white/50 backdrop-blur-md rounded-3xl p-6 border border-slate-200/60 shadow-sm">
+             <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-6 gap-4">
+                <div>
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-2 mb-1">
+                    <Brain size={12} className="text-purple-600" /> Swarm Intelligence
+                  </p>
+                  <h3 className="text-2xl font-bold text-slate-800">Active OmniAgents</h3>
+                </div>
+                
+                {/* Filters */}
+                {!isLoadingAgents && (
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <Filter size={14} className="text-slate-400 mr-1" />
+                    <button
+                      onClick={() => setFilterSkill(null)}
+                      className={cn(
+                        "px-3 py-1 text-xs font-bold rounded-full transition-all border",
+                        filterSkill === null 
+                          ? "bg-slate-800 text-white border-slate-800" 
+                          : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
+                      )}
+                    >
+                      All
+                    </button>
+                    {allSkills.slice(0, 4).map(skill => (
+                      <button
+                        key={skill}
+                        onClick={() => setFilterSkill(skill)}
+                        className={cn(
+                          "px-3 py-1 text-xs font-bold rounded-full transition-all border",
+                          filterSkill === skill
+                            ? "bg-purple-100 text-purple-700 border-purple-200"
+                            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
+                        )}
+                      >
+                        {skill}
+                      </button>
+                    ))}
+                  </div>
+                )}
+             </div>
+             
+             <div className="flex gap-6 overflow-x-auto pb-4 custom-scrollbar min-h-[350px]">
+               {isLoadingAgents ? (
+                 <div className="w-full flex items-center justify-center text-slate-400 font-mono text-sm animate-pulse">
+                   Synchronizing with OmniCore...
+                 </div>
+               ) : (
+                 <AnimatePresence mode="popLayout">
+                   {filteredAgents.map(agent => (
+                     <motion.div
+                       key={agent.id}
+                       initial={{ opacity: 0, scale: 0.9 }}
+                       animate={{ opacity: 1, scale: 1 }}
+                       exit={{ opacity: 0, scale: 0.9 }}
+                       transition={{ duration: 0.2 }}
+                       className="shrink-0"
+                     >
+                       <OmniAgentCard {...agent} />
+                     </motion.div>
+                   ))}
+                   {filteredAgents.length === 0 && (
+                     <motion.div 
+                       initial={{ opacity: 0 }} 
+                       animate={{ opacity: 1 }} 
+                       className="w-full flex items-center justify-center text-slate-400 text-sm"
+                     >
+                       No agents found with the selected filter.
+                     </motion.div>
+                   )}
+                 </AnimatePresence>
+               )}
+             </div>
           </motion.div>
 
           {/* OmniAgent Activity Stream */}

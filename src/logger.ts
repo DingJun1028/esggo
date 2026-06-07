@@ -1,4 +1,4 @@
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
 import path from 'path';
 
 interface LogEntry {
@@ -40,8 +40,8 @@ export function logEvent(service: string, action: string, payload: any, result: 
 export function getRecentLogs(limit: number = 10): LogEntry[] {
   if (!existsSync(LOG_FILE)) return [];
   const content = readFileSync(LOG_FILE, 'utf-8');
-  const lines = content.split('\n').filter(line => line.trim());
-  const entries = lines.map(line => JSON.parse(line) as LogEntry);
+  const lines = content.split('\n').filter((line: string) => line.trim());
+  const entries = lines.map((line: string) => JSON.parse(line) as LogEntry);
   return entries.slice(-limit);
 }
 

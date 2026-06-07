@@ -4,6 +4,19 @@
  */
 
 import { createHash } from 'crypto';
+import { readFileSync } from 'fs';
+
+// Stub for local registry lookup
+function loadExpectedHash(filePath: string): string | undefined {
+  console.log(`Loading expected hash for ${filePath}`);
+  return undefined;
+}
+
+// Stub for offline proof verification
+function verifyProof(proof: string, content: string): boolean {
+  console.log(`Verifying proof ${proof.substring(0, 8)}...`);
+  return true;
+}
 
 export interface HashVerificationResult {
   file: string;

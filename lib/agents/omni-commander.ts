@@ -1,10 +1,10 @@
-import { ADKAgent } from './adk-core.ts';
-import type { AgentConfig } from './adk-core.ts';
-import { ai } from './genkit.ts';
+import { ADKAgent } from './adk-core';
+import type { AgentConfig } from './adk-core';
+import { ai } from './genkit';
 import { createHash } from 'crypto';
-import { NegotiationEngine } from '../negotiation/engine.ts';
-import { negotiationEngine } from '../negotiation/engine.ts';
-import { saveSustainWriteSection } from '../dataconnect-memory.ts';
+import { NegotiationEngine } from '../negotiation/engine';
+import { negotiationEngine } from '../negotiation/engine';
+import { saveSustainWriteSection } from '../dataconnect-memory';
 
 export type { AgentConfig };
 export type CollaborativeADKSwarm = {
@@ -19,7 +19,7 @@ const GRI_CHAPTERS = [
   { id: 'board', title: '公司治理與董事會效能', gri: 'GRI 2-9', order: 4 }
 ];
 
-import { OmniAgentBus, omniAgentBus } from './omni-agent-bus.ts';
+import { OmniAgentBus, omniAgentBus } from './omni-agent-bus';
 export { omniAgentBus };
 
 /**
@@ -254,7 +254,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     omniAgentBus.publish('MISSION_START', { mission: 'Swarm Evidence Audit' });
 
      const results = [];
-     const { getEvidenceFiles } = await import('../db.ts');
+     const { getEvidenceFiles } = await import('../db');
      const files = await getEvidenceFiles();
 
     for (const file of files) {
@@ -301,8 +301,8 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     omniAgentBus.publish('MISSION_START', { mission: 'OmniBlue to OmniTable Sync' });
 
      try {
-       const { supabase } = await import('../db/supabase.ts');
-       const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/omni-table-client.ts');
+       const { supabase } = await import('../db/supabase');
+       const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/omni-table-client');
       
       // 1. Fetch from OmniBlue nodes
       omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching OmniBlue Nodes from Supabase' });

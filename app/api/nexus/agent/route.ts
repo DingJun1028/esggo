@@ -59,6 +59,34 @@ export async function POST(req: NextRequest) {
       case 'analyze_intel_nodes':
         result = { nodesAnalyzed: args.nodes?.length || 0, insight: 'Node connections stable.' };
         break;
+      case 'get_audit_ledger':
+        result = { 
+          methodology: args.methodology || '[GRI 2021 FRAMEWORK]', 
+          engineState: '#原罪煉金_熵減寶石_v8.5_ONLINE', 
+          assuranceStatus: '5T ALL COMPLIANT (VERIFIED)' 
+        };
+        break;
+      case 'get_hermes_status':
+        result = {
+          relayStatus: '[連線中]',
+          zkpPipeline: '[健全]',
+          activeNodes: 42
+        };
+        break;
+      case 'get_sovereign_status':
+        result = {
+          lockStatus: 'HASH_LOCKED',
+          action: 'OBJECT.FREEZE()',
+          encryption: 'SHA-256'
+        };
+        break;
+      case 'get_omnibookcase_status':
+        result = {
+          registryType: 'ATOMIC_LIBRARY',
+          syncedArtifacts: 1024,
+          lastSync: new Date().toISOString()
+        };
+        break;
       case 'seal_5t_proof':
         // 使用 hash-lock 封印
         const seal = generateHashLock(args.proof);

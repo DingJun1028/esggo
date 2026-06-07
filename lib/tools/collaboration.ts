@@ -15,7 +15,7 @@ export const codeSynthesisTool = ai.defineTool({
   }),
 }, async ({ problem, agentName }) => {
   const memories = await memoryStore.search(problem, 5);
-  const context = `Problem: ${problem}\nSimilar Past Solutions: ${memories.map((m: unknown) => m.result).join('; ')}`;
+  const context = `Problem: ${problem}\nSimilar Past Solutions: ${memories.map((m: any) => m.result).join('; ')}`;
   
   const response = await ai.generate({
     model: 'googleai/gemini-2.0-flash',
