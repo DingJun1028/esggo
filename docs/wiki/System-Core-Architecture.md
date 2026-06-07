@@ -1,7 +1,7 @@
 ---
 uuid: "1c87ff1d-7042-408b-a6aa-a8f3291631fc"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.426Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\System-Core-Architecture.md"
 ---
 # 系統核心架構 System Core Architecture [System Core Architecture]

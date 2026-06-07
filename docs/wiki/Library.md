@@ -1,7 +1,7 @@
 ---
 uuid: "f4062d07-1599-4885-a9c2-e512e8bc13d5"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.449Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Library.md"
 ---
 # ESG Knowledge Hub ESG Knowledge Hub [Library]

@@ -1,7 +1,7 @@
 ---
 uuid: "f8a17739-07f5-4dc7-aa92-22b84fe16eba"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.420Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Vault.md"
 ---
 # 證據金庫 Vault [Vault]

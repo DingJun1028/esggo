@@ -1,7 +1,7 @@
 ---
 uuid: "ba9b54a4-1b6b-44c3-b327-7ca88963fbeb"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:12.376Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "wiki\omniblue-table.md"
 ---
 # OmniBlueTable 系統

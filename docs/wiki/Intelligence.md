@@ -1,7 +1,7 @@
 ---
 uuid: "e5585c1f-0d38-462d-afe6-a0268ad462ac"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.456Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Intelligence.md"
 ---
 # ESG Intelligence Center (ESG Insights Dashboard) [Intelligence]

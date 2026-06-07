@@ -1,7 +1,7 @@
 ---
 uuid: "66eb6c8d-5e59-4e43-b838-98fb55629ab7"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.435Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Social.md"
 ---
 # 社會影響 Social [Social]

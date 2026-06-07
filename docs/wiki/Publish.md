@@ -1,7 +1,7 @@
 ---
 uuid: "9f39560c-653c-4b63-89b4-adeac7dda390"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.440Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Publish.md"
 ---
 # SustainPublish 報告發佈中心 SustainPublish [Publish]

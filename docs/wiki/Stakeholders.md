@@ -1,7 +1,7 @@
 ---
 uuid: "9a468e7c-164a-4b34-a388-4a5f32e28d03"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.434Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Stakeholders.md"
 ---
 # 利害關係人 Stakeholders [Stakeholders]

@@ -1,7 +1,7 @@
 ---
 uuid: "059ce76d-6149-48da-a8ae-18d853aeea9f"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.488Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\API-Setup.md"
 ---
 # 整合中心 [API Setup]

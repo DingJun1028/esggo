@@ -1,7 +1,7 @@
 ---
 uuid: "9237fffb-af4f-477d-97b4-beeed9985f05"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.496Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Advisors.md"
 ---
 # 外部顧問管理 External Advisors Management [Advisors]

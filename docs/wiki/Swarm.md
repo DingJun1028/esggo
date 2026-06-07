@@ -1,7 +1,7 @@
 ---
 uuid: "8480f9a3-d7e4-49ab-8193-099ea795c7f0"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.428Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Swarm.md"
 ---
 # 代理人蜂群 Agent Swarm [Swarm]

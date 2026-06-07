@@ -1,7 +1,7 @@
 ---
 uuid: "402f6854-f83b-41c5-b2d5-3bdbfb33d1ab"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.483Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Compliance-Check.md"
 ---
 # 合規檢查 [Compliance Check]

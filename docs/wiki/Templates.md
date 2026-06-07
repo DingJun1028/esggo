@@ -1,7 +1,7 @@
 ---
 uuid: "e55b1b2f-375a-4ed3-8d2d-43532f0cbf94"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.421Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Templates.md"
 ---
 # 專家模板 Expert Templates [Templates]

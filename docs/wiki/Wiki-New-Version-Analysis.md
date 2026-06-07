@@ -1,7 +1,7 @@
 ---
 uuid: "8d85d038-0605-4ef0-9f33-55d78b2d6bd0"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.416Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Wiki-New-Version-Analysis.md"
 ---
 # ESGGO WIKI 新版全解析 (v8.5.1 Synthesis) [Wiki New Version Analysis]

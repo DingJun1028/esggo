@@ -1,7 +1,7 @@
 ---
 uuid: "2ce7716d-3f67-4d17-9f39-c3ce7e6095c9"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.501Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\5T-Protocol.md"
 ---
 # 5T 信任儀表板 (5T Trust Dashboard) [5T Protocol]

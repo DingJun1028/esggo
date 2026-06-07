@@ -1,7 +1,7 @@
 ---
 uuid: "cbc190af-b5b3-4443-835f-eb3459af4805"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.459Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Governance.md"
 ---
 # ESG 治理中心 ESG Governance Hub [Governance]

@@ -1,7 +1,7 @@
 ---
 uuid: "8a75a6c9-d5f8-4331-aed0-22063027bf74"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.465Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Environmental.md"
 ---
 # Environmental 環境數據管理 [Environmental Data Management]

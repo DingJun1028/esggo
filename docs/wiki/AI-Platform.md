@@ -1,7 +1,7 @@
 ---
 uuid: "a2ec6dc7-a43b-416b-9a51-5c009e17d957"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.489Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\AI-Platform.md"
 ---
 # AI 智能平台 AI Platform [AI Platform]

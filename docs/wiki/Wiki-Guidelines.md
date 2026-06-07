@@ -1,7 +1,7 @@
 ---
 uuid: "e87c435e-953d-4398-9813-79e85afb6e5f"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.418Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Wiki-Guidelines.md"
 ---
 # ESG GO 功能頁面 Wiki 撰寫規範 (SaaS 交付與體驗導向) [Wiki Guidelines]

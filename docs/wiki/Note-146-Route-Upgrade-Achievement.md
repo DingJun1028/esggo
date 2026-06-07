@@ -1,7 +1,7 @@
 ---
 uuid: "5c0521db-b6fa-4cd7-bf31-cc51bb7de6d8"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.445Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Note-146-Route-Upgrade-Achievement.md"
 ---
 # 筆記 146: 終極版路由升級解密與系統架構成就
