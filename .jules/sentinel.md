@@ -27,3 +27,8 @@
 **Vulnerability:** Found a logic error in `app/api/webhooks/ncbdb/route.ts` where if a webhook signature header (`x-ncb-signature`) was missing, it completely bypassed the verification logic, processing the webhook payload as if it were in unauthenticated "development mode" despite the secret environment variable being configured.
 **Learning:** Checking `if (secret && signature)` creates a dangerous fallback where an attacker only needs to omit the signature header to bypass authentication entirely.
 **Prevention:** Always structure signature checks to first check if a `secret` is configured. If it is configured, strictly require the signature header to be present, returning an immediate `403 Forbidden` if it is missing. Also ensure buffer lengths are checked before `timingSafeEqual` to avoid 500 errors.
+
+## 2024-06-07 - [Remove Hardcoded HMAC_SECRET in T5Protocol]
+**Vulnerability:** A hardcoded `HMAC_SECRET` key was being used as the security seed for creating HMACs (`createHmac`) in the ZKP validation and hashing processes within `src/core/T5Protocol.ts`.
+**Learning:** Hardcoding security secrets in the source code causes critical risks where any individual with source code access can predict or forge "Trustworthy" cryptographic hashes.
+**Prevention:** Always draw security secrets, like ZKP HMAC keys, from environment variables (e.g., `process.env.T5_HMAC_SECRET`) to ensure they are properly injected in the runtime environments.
