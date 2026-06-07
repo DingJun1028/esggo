@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '22'
       - name: Install dependencies
-        run: npm ci
+        run: ppnpm install
       - name: Run linter
         run: npm run lint
       - name: Run tests
