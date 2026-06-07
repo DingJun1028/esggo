@@ -33,8 +33,8 @@ export default function SelectionHouse({
   onClose,
   onSelect,
   categories,
-  title = "全選項總覽",
-  placeholder = "搜尋關鍵字..."
+  title = '全選項總覽',
+  placeholder = '搜尋關鍵字...',
 }: SelectionHouseProps) {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -53,30 +53,44 @@ export default function SelectionHouse({
 
   if (!isOpen && !mounted) return null;
 
-  const filteredCategories = categories.map(cat => ({
-    ...cat,
-    items: cat.items.filter(item => 
-      item.label.toLowerCase().includes(search.toLowerCase()) || 
-      item.sub?.toLowerCase().includes(search.toLowerCase()) ||
-      item.id.toLowerCase().includes(search.toLowerCase())
-    )
-  })).filter(cat => cat.items.length > 0);
+  const filteredCategories = categories
+    .map((cat) => ({
+      ...cat,
+      items: cat.items.filter(
+        (item) =>
+          item.label.toLowerCase().includes(search.toLowerCase()) ||
+          item.sub?.toLowerCase().includes(search.toLowerCase()) ||
+          item.id.toLowerCase().includes(search.toLowerCase())
+      ),
+    }))
+    .filter((cat) => cat.items.length > 0);
 
-  const displayCategories = activeCategory === 'all' 
-    ? filteredCategories 
-    : filteredCategories.filter(c => c.id === activeCategory);
+  const displayCategories =
+    activeCategory === 'all'
+      ? filteredCategories
+      : filteredCategories.filter((c) => c.id === activeCategory);
 
   return (
-    <div className={`fixed inset-0 z-[2000] flex flex-col bg-white transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+    <div
+      className={`fixed inset-0 z-[2000] flex flex-col bg-white transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="selection-house-title"
+    >
       {/* Header */}
       <header className="flex-shrink-0 px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10">
         <div>
-          <h2 className="text-lg font-bold text-[#003262]">{title}</h2>
-          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Mobile Selection House</p>
+          <h2 id="selection-house-title" className="text-lg font-bold text-[#003262]">
+            {title}
+          </h2>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            Mobile Selection House
+          </p>
         </div>
-        <button 
+        <button
+          aria-label="關閉"
           onClick={onClose}
-          className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors"
+          className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
         >
           <X size={20} />
         </button>
@@ -86,27 +100,27 @@ export default function SelectionHouse({
       <div className="p-6 space-y-4 bg-white border-b border-slate-50 shadow-sm">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
+          <input
             type="text"
             className="w-full h-14 bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-4 text-sm font-medium focus:bg-white focus:border-blue-600 transition-all outline-none"
             placeholder={placeholder}
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
         <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-          <button 
+          <button
             onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${activeCategory === 'all' ? 'bg-[#003262] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${activeCategory === 'all' ? 'bg-[#003262] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
           >
             全部
           </button>
-          {categories.map(cat => (
-            <button 
+          {categories.map((cat) => (
+            <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${activeCategory === cat.id ? 'bg-[#003262] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${activeCategory === cat.id ? 'bg-[#003262] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
             >
               {cat.title}
             </button>
@@ -116,34 +130,47 @@ export default function SelectionHouse({
 
       {/* Options Grid */}
       <div className="flex-1 overflow-y-auto p-6 space-y-8 pb-32">
-        {displayCategories.map(cat => (
+        {displayCategories.map((cat) => (
           <section key={cat.id}>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-blue-700">
                 {cat.icon || <LayoutGrid size={14} />}
               </div>
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">{cat.title}</h3>
-              <span className="ml-auto bg-slate-100 px-2 py-0.5 rounded text-[10px] text-slate-500 font-bold">{cat.items.length}</span>
+              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                {cat.title}
+              </h3>
+              <span className="ml-auto bg-slate-100 px-2 py-0.5 rounded text-[10px] text-slate-500 font-bold">
+                {cat.items.length}
+              </span>
             </div>
-            
+
             <div className="grid grid-cols-1 gap-3">
-              {cat.items.map(item => (
+              {cat.items.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => {
                     onSelect(item);
                     onClose();
                   }}
-                  className="group w-full p-5 rounded-2xl bg-white border border-slate-100 text-left hover:border-blue-600 hover:shadow-lg hover:shadow-blue-900/5 transition-all active:scale-[0.98]"
+                  className="group w-full p-5 rounded-2xl bg-white border border-slate-100 text-left hover:border-blue-600 hover:shadow-lg hover:shadow-blue-900/5 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <span className="text-sm font-bold text-slate-700 group-hover:text-blue-700 transition-colors">{item.label}</span>
-                    <ChevronRight size={14} className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                    <span className="text-sm font-bold text-slate-700 group-hover:text-blue-700 transition-colors">
+                      {item.label}
+                    </span>
+                    <ChevronRight
+                      size={14}
+                      className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all"
+                    />
                   </div>
-                  {item.sub && <p className="text-[11px] text-slate-400 leading-relaxed">{item.sub}</p>}
+                  {item.sub && (
+                    <p className="text-[11px] text-slate-400 leading-relaxed">{item.sub}</p>
+                  )}
                   {item.tag && (
                     <div className="mt-3">
-                      <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700 uppercase tracking-wider">{item.tag}</span>
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700 uppercase tracking-wider">
+                        {item.tag}
+                      </span>
                     </div>
                   )}
                 </button>
