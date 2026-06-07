@@ -1,7 +1,7 @@
 ---
 uuid: "b0226d95-3f3a-4465-8cbb-2f66bc352a4e"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.447Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Materiality.md"
 ---
 # 重大性矩陣 Materiality [Materiality]

@@ -1,7 +1,7 @@
 ---
 uuid: "d776c1ff-fccb-4c87-8792-bc600f171c7b"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.491Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Agents.md"
 ---
 # ESG AI Agents ESG AI Agents [Agents]

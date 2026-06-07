@@ -1,3 +1,9 @@
+---
+uuid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+version: "8.5.1"
+timestamp: "2026-06-07T15:07:42.000Z"
+evidence: "docs\wiki\WIKI_INDEX.md"
+---
 # 萬能元件：萬能書櫃 - 文件管理中心總索引
 
 ## 文件結構遵循 MECE 原則，確保清晰可迭代。
@@ -15,38 +21,10 @@
 *   [[02-DEV-004-CONTRIBUTING CONTRIBUTING]](CONTRIBUTING.md)
 *   [[02-DEV-005-API_SPECIFICATION API_SPECIFICATION]](API_SPECIFICATION.md)
 *   [[02-DEV-006-ADK_GUIDE ADK_GUIDE]](ADK_GUIDE.md)
-*   [[02-DEV-007-server\node_modules\readable-stream\CONTRIBUTING server\node_modules\readable-stream\CONTRIBUTING]](server\node_modules\readable-stream\CONTRIBUTING.md)
-*   [[02-DEV-008-server\node_modules\prebuild-install\CONTRIBUTING server\node_modules\prebuild-install\CONTRIBUTING]](server\node_modules\prebuild-install\CONTRIBUTING.md)
-*   [[02-DEV-009-server\node_modules\diff\CONTRIBUTING server\node_modules\diff\CONTRIBUTING]](server\node_modules\diff\CONTRIBUTING.md)
-*   [[02-DEV-010-esggo-funtions\node_modules\uuid\CONTRIBUTING esggo-funtions\node_modules\uuid\CONTRIBUTING]](esggo-funtions\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-011-esggo-funtions\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING esggo-funtions\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING]](esggo-funtions\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-012-esggo-funtions\node_modules\readable-stream\CONTRIBUTING esggo-funtions\node_modules\readable-stream\CONTRIBUTING]](esggo-funtions\node_modules\readable-stream\CONTRIBUTING.md)
-*   [[02-DEV-013-esggo-funtions\node_modules\google-gax\node_modules\uuid\CONTRIBUTING esggo-funtions\node_modules\google-gax\node_modules\uuid\CONTRIBUTING]](esggo-funtions\node_modules\google-gax\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-014-esggo-funtions\node_modules\gaxios\node_modules\uuid\CONTRIBUTING esggo-funtions\node_modules\gaxios\node_modules\uuid\CONTRIBUTING]](esggo-funtions\node_modules\gaxios\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-015-esggo-dashboard\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-016-esggo-dashboard\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-017-esggo-dashboard\node_modules\readable-stream\CONTRIBUTING esggo-dashboard\node_modules\readable-stream\CONTRIBUTING]](esggo-dashboard\node_modules\readable-stream\CONTRIBUTING.md)
-*   [[02-DEV-018-esggo-dashboard\node_modules\import-in-the-middle\CONTRIBUTING esggo-dashboard\node_modules\import-in-the-middle\CONTRIBUTING]](esggo-dashboard\node_modules\import-in-the-middle\CONTRIBUTING.md)
-*   [[02-DEV-019-esggo-dashboard\node_modules\googleapis-common\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\googleapis-common\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\googleapis-common\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-020-esggo-dashboard\node_modules\google-gax\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\google-gax\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\google-gax\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-021-esggo-dashboard\node_modules\genkit\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\genkit\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\genkit\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-022-esggo-dashboard\node_modules\gaxios\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\gaxios\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\gaxios\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-023-esggo-dashboard\node_modules\@google-cloud\logging\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\@google-cloud\logging\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\@google-cloud\logging\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-024-esggo-dashboard\node_modules\@genkit-ai\ai\node_modules\uuid\CONTRIBUTING esggo-dashboard\node_modules\@genkit-ai\ai\node_modules\uuid\CONTRIBUTING]](esggo-dashboard\node_modules\@genkit-ai\ai\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-025-esggo\node_modules\uuid\CONTRIBUTING esggo\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-026-esggo\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING esggo\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\teeny-request\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-027-esggo\node_modules\readable-stream\CONTRIBUTING esggo\node_modules\readable-stream\CONTRIBUTING]](esggo\node_modules\readable-stream\CONTRIBUTING.md)
-*   [[02-DEV-028-esggo\node_modules\import-in-the-middle\CONTRIBUTING esggo\node_modules\import-in-the-middle\CONTRIBUTING]](esggo\node_modules\import-in-the-middle\CONTRIBUTING.md)
-*   [[02-DEV-029-esggo\node_modules\googleapis-common\node_modules\uuid\CONTRIBUTING esggo\node_modules\googleapis-common\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\googleapis-common\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-030-esggo\node_modules\google-gax\node_modules\uuid\CONTRIBUTING esggo\node_modules\google-gax\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\google-gax\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-031-esggo\node_modules\genkit\node_modules\uuid\CONTRIBUTING esggo\node_modules\genkit\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\genkit\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-032-esggo\node_modules\gaxios\node_modules\uuid\CONTRIBUTING esggo\node_modules\gaxios\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\gaxios\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-033-esggo\node_modules\@google-cloud\logging\node_modules\uuid\CONTRIBUTING esggo\node_modules\@google-cloud\logging\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\@google-cloud\logging\node_modules\uuid\CONTRIBUTING.md)
-*   [[02-DEV-034-esggo\node_modules\@genkit-ai\ai\node_modules\uuid\CONTRIBUTING esggo\node_modules\@genkit-ai\ai\node_modules\uuid\CONTRIBUTING]](esggo\node_modules\@genkit-ai\ai\node_modules\uuid\CONTRIBUTING.md)
 
 ### 03-PRO 產品功能 (Product)
 *   [[03-PRO-待編號-docs\SwapDeFi-USER-GUIDE docs\SwapDeFi-USER-GUIDE]](docs\SwapDeFi-USER-GUIDE.md)
-*   [[03-PRO-待編號-src\components\DESIGN_PRINCIPLES src\components\DESIGN_PRINCIPLES]](src\components\DESIGN_PRINCIPLES.md)
+*   [[03-PRO-待編號-src\components\DESIGN_PRINCIPLES src\components\DESIGN_PRINCIPLES]](src\DESIGN_PRINCIPLES.md)
 
 ### 04-OPS 運維與協作 (Operations)
 *   _尚無文件_

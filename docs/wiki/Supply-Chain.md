@@ -1,7 +1,7 @@
 ---
 uuid: "4e08e6b1-c656-432f-b414-59ad6d0ba54c"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.432Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Supply-Chain.md"
 ---
 # **供應鏈透明 Supply Chain Transparency** [Supply Chain]

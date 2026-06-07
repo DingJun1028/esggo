@@ -1,7 +1,7 @@
 ---
 uuid: "58997814-e6e8-4953-a5b5-8ea2b783b959"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.472Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Digital-Twin.md"
 ---
 # Digital Twin Digital Twin [Digital Twin]

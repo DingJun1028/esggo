@@ -1,7 +1,7 @@
 ---
 uuid: "7c67f92f-c896-4789-a683-35a79fd66f9b"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.474Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Development-Workflow.md"
 ---
 # ESGGO 功能需求實現流程與 WIKI 建造規範 🌌 [Development Workflow]

@@ -1,7 +1,7 @@
 ---
 uuid: "ec7dc070-c629-494a-b156-c0652eff52f2"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.458Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Health-Check.md"
 ---
 # ESG 健檢儀表板 ESG Health Check Dashboard [Health Check]

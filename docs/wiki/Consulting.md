@@ -1,7 +1,7 @@
 ---
 uuid: "a1546f69-074f-4c2f-aab4-02f177728135"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.481Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Consulting.md"
 ---
 # ESG 顧問服務模組 ESG Consulting Hub [Consulting]

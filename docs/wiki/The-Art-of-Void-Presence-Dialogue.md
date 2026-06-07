@@ -1,7 +1,7 @@
 ---
 uuid: "b8089124-bb22-4f36-a28d-b1e393594206"
-version: "1.0.0"
-timestamp: "2026-06-04T11:34:10.766Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\The-Art-of-Void-Presence-Dialogue.md"
 ---
 # 「無有技藝」與 ESG GO 架構重構 - Google Gemini 對話記錄

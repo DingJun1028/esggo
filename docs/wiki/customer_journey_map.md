@@ -1,7 +1,7 @@
 ---
 uuid: "744abcd6-9fb7-4c46-8fe8-1b5a93b4f01e"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.478Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\customer_journey_map.md"
 ---
 # 🗺️ 客戶旅程地圖 (Customer Journey Map) - WIKI 統一標準指南

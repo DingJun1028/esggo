@@ -1,7 +1,7 @@
 ---
 uuid: "fe1c2721-ebc7-4beb-82a4-59014d0615be"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:23.493Z"
+version: "8.5.1"
+timestamp: "2026-06-07T14:59:43.000Z"
 evidence: "docs\wiki\Advisory.md"
 ---
 # ESG 策略顧問 (Advisory) ESG Strategy Advisory [Advisory]
