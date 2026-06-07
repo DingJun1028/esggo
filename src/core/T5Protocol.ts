@@ -1,7 +1,7 @@
 import { IComponentCore, IEvidence } from '../../lib/core-types';
 import { createHmac } from 'crypto';
 
-const HMAC_SECRET = 'T5-ZKP-SECURITY-KEY';
+const HMAC_SECRET = process.env.T5_HMAC_SECRET || 'T5-ZKP-SECURITY-KEY';
 
 export enum T5Protocol {
   Traceable = 'Traceable', // T1: 溯源
