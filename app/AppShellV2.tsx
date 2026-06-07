@@ -28,9 +28,10 @@ import { useTheme } from '../contexts/ThemeContext';
 import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
 import { GlobalSearch } from '../components/GlobalSearch';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
+import OmniOverviewMenu from '../components/OmniOverviewMenu';
 
 // Icon Mapper for Dynamic Navigation
-const IconMapper: Record<string, React.ReactNode> = {
+export const IconMapper: Record<string, React.ReactNode> = {
   Building2: <Building2 size={20} />,
   Link: <LinkIcon size={20} />,
   Database: <Database size={20} />,
@@ -95,6 +96,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [topbarCollapsed, setTopbarCollapsed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [showOverviewMenu, setShowOverviewMenu] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
   const [logoPosition, setLogoPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
@@ -366,7 +368,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           "md:hidden h-16 flex items-center px-4 border-b z-40 sticky top-0 backdrop-blur-3xl shadow-sm transition-colors",
           isDark ? "bg-slate-950/90 border-white/5" : "bg-white/90 border-slate-100"
         )}>
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2 w-full">
+          <div className="flex items-center gap-3 overflow-x-scroll no-scrollbar py-2 w-full"> {/* Changed to overflow-x-scroll */}
             {/* Theme Toggle Mobile */}
             <div className="flex-shrink-0">
               <AppThemeSwitcher />
@@ -399,6 +401,17 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               )}
             >
               SYSTEM
+            </BrandButton>
+            {/* "全觀" (Overview) Button */}
+            <BrandButton
+              icon={<Menu size={14} />}
+              className={cn(
+                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
+                isDark ? "bg-slate-700/50 border-slate-600/50 text-slate-300" : "bg-slate-200 border-slate-300 text-slate-600"
+              )}
+              onClick={() => setShowOverviewMenu(true)}
+            >
+              全觀
             </BrandButton>
           </div>
         </div>
