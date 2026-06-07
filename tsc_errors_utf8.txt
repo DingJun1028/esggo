@@ -1,0 +1,162 @@
+﻿app/api/governance/resonance/route.ts(9,56): error TS18047: 'supabase' is possibly 'null'.
+app/api/governance/resonance/route.ts(16,54): error TS18047: 'supabase' is possibly 'null'.
+app/api/omni-components/route.ts(11,81): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(15,81): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(19,81): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(23,81): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(27,81): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(31,75): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(35,75): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(39,75): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-components/route.ts(43,75): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+app/api/omni-gateway/route.ts(182,27): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'BinaryLike | KeyObject'.
+  Type 'undefined' is not assignable to type 'BinaryLike | KeyObject'.
+app/apollo-studio/page.tsx(241,41): error TS18046: 'e' is of type 'unknown'.
+app/compliance-check/page.tsx(38,13): error TS7030: Not all code paths return a value.
+app/dashboard/metrics/page.tsx(243,16): error TS2322: Type '{ type: "bar"; data: { name: any; value: number; target: number; }[]; dataKey: string; xAxisKey: string; series: { key: string; color: string; name: string; }[]; height: number; }' is not assignable to type 'IntrinsicAttributes & OmniChartProps'.
+  Property 'dataKey' does not exist on type 'IntrinsicAttributes & OmniChartProps'.
+app/dashboard/premium/page.tsx(61,25): error TS2322: Type '"secondary"' is not assignable to type '"default" | "primary" | "ghost" | "outline" | undefined'.
+app/dashboard/premium/page.tsx(64,43): error TS2322: Type '{ children: (string | Element)[]; variant: "primary"; size: string; }' is not assignable to type 'IntrinsicAttributes & AtomicButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & AtomicButtonProps & RefAttributes<HTMLButtonElement>'.
+app/dashboard/premium/page.tsx(79,42): error TS2322: Type '"heavy"' is not assignable to type '"medium" | "high" | "low" | undefined'.
+app/dashboard/premium/page.tsx(106,46): error TS2322: Type '{ children: (string | Element)[]; variant: "ghost"; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & AtomicButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & AtomicButtonProps & RefAttributes<HTMLButtonElement>'.
+app/map/page.tsx(110,7): error TS2322: Type '{ children: (false | Element)[]; layout: true; initial: { opacity: number; x: number; }; animate: { opacity: number; x: number; }; transition: { delay: number; }; className: string; onClick: () => void; hoverEffect: "glow"; padding: "lg"; }' is not assignable to type 'IntrinsicAttributes & AtomicCardProps & RefAttributes<HTMLDivElement>'.
+  Property 'layout' does not exist on type 'IntrinsicAttributes & AtomicCardProps & RefAttributes<HTMLDivElement>'.
+app/map/page.tsx(162,35): error TS2322: Type '{ children: string; key: number; size: string; tone: string; }' is not assignable to type 'IntrinsicAttributes & AtomicBadgeProps'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & AtomicBadgeProps'.
+app/map/page.tsx(167,27): error TS2322: Type '{ children: (string | number)[]; size: string; tone: string; }' is not assignable to type 'IntrinsicAttributes & AtomicBadgeProps'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & AtomicBadgeProps'.
+app/report/page.tsx(22,28): error TS18047: 'supabase' is possibly 'null'.
+app/wiki/WikiClientPage.tsx(8,23): error TS2339: Property 'FilterXSS' does not exist on type '(html: string, options?: IFilterXSSOptions | undefined) => string'.
+app/wiki/WikiClientPage.tsx(10,12): error TS2339: Property 'whiteList' does not exist on type '(html: string, options?: IFilterXSSOptions | undefined) => string'.
+components/GlobalSearch.tsx(124,99): error TS18046: 'res' is of type 'unknown'.
+components/GlobalSearch.tsx(131,54): error TS18046: 'res' is of type 'unknown'.
+components/omni/DataVisualizer.tsx(26,32): error TS2554: Expected 2 arguments, but got 1.
+components/omni/OmniBookCaseRegistry.tsx(13,79): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(17,79): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(21,79): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(25,79): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(29,79): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(33,73): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(34,112): error TS2322: Type '"?刻?辣"' is not assignable to type '"?祈?辣"'.
+components/omni/OmniBookCaseRegistry.tsx(37,73): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(38,118): error TS2322: Type '"?刻?辣"' is not assignable to type '"?祈?辣"'.
+components/omni/OmniBookCaseRegistry.tsx(41,73): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(42,108): error TS2322: Type '"?刻?辣"' is not assignable to type '"?祈?辣"'.
+components/omni/OmniBookCaseRegistry.tsx(45,73): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: string[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniBookCaseRegistry.tsx(46,111): error TS2322: Type '"?刻?辣"' is not assignable to type '"?祈?辣"'.
+components/omni/OmniBookCaseRegistry.tsx(133,7): error TS2741: Property 'timestamp' is missing in type '{ source_origin: string; flow_path: never[]; }' but required in type 'IEvidenceLibrary'.
+components/omni/OmniTable.tsx(110,30): error TS2322: Type '"destructive"' is not assignable to type '"default" | "primary" | "secondary" | "outline" | "warning" | "error" | "success" | "info" | "accent" | undefined'.
+components/omni/SustainWriteTipTapEditor.tsx(50,43): error TS2559: Type 'false' has no properties in common with type 'SetContentOptions'.
+components/ui/omni/OmniForm.tsx(32,65): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, any> | (() => Record<string, any>)'.
+components/ui/omni/OmniToggle.tsx(5,18): error TS2430: Interface 'OmniToggleProps' incorrectly extends interface 'InputHTMLAttributes<HTMLInputElement>'.
+  Types of property 'size' are incompatible.
+    Type '"sm" | "md" | undefined' is not assignable to type 'number | undefined'.
+      Type 'string' is not assignable to type 'number'.
+components/ui/ProvenanceDrawer.tsx(36,13): error TS7030: Not all code paths return a value.
+components/ui/route.ts(14,43): error TS18046: 'error' is of type 'unknown'.
+components/ui/SelectionHouse.tsx(43,13): error TS7030: Not all code paths return a value.
+components/ui/Tooltip.tsx(24,60): error TS2339: Property 'values' does not exist on type '{ events: AuditRecord[]; isLive: boolean; metrics: { totalCount: number; zkpSuccessRate: string; entropyReduction: string | number; }; getVisualState: (eventType: string) => VisualDropState; triggerForensicReplay: (speed?: number) => Promise<...>; core: { ...; }; }'.
+components/ui/Tooltip.tsx(24,81): error TS18046: 'cd' is of type 'unknown'.
+components/ui/Tooltip.tsx(25,30): error TS2339: Property 'verified' does not exist on type '{}'.
+components/ui/Tooltip.tsx(25,69): error TS2339: Property 'status' does not exist on type '{}'.
+components/ui/Tooltip.tsx(26,68): error TS2339: Property 'status' does not exist on type '{}'.
+contexts/ServiceContext.tsx(18,34): error TS18046: 'record' is of type 'unknown'.
+hooks/useOmniRealtime.ts(17,21): error TS2345: Argument of type 'User | null' is not assignable to parameter of type 'Record<string, unknown> | null'.
+  Type 'User' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'User'.
+hooks/useOmniRealtime.ts(30,53): error TS2345: Argument of type 'User | null' is not assignable to parameter of type 'Record<string, unknown> | null'.
+  Type 'User' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'User'.
+hooks/useOmniResonance.ts(10,13): error TS7030: Not all code paths return a value.
+lib/adapters/altable.adapter.ts(26,49): error TS2339: Property 'toLowerCase' does not exist on type '{}'.
+lib/adapters/notion.adapter.ts(21,92): error TS18046: 's' is of type 'unknown'.
+lib/adapters/notion.adapter.ts(22,90): error TS18046: 's' is of type 'unknown'.
+lib/agent/hermes-store.ts(55,37): error TS18046: 'err' is of type 'unknown'.
+lib/agent/memory-shards.ts(69,23): error TS2721: Cannot invoke an object which is possibly 'null'.
+lib/agent/memory-shards.ts(69,23): error TS18047: 'response.output' is possibly 'null'.
+lib/agent/memory-shards.ts(69,32): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+  Type '{ title: string; tags: string[]; description: string; extractedCodeSnippets?: string[] | undefined; entropyLevel?: number | undefined; }' has no call signatures.
+lib/agent/memory-shards.ts(90,7): error TS7053: Element implicitly has an 'any' type because expression of type '"entropy_level"' can't be used to index type '{ id: string; title: string; description: string; tags: string[]; extracted_code_snippets: string[]; timestamp: number; }'.
+  Property 'entropy_level' does not exist on type '{ id: string; title: string; description: string; tags: string[]; extracted_code_snippets: string[]; timestamp: number; }'.
+lib/agent/memory-shards.ts(144,26): error TS2721: Cannot invoke an object which is possibly 'null'.
+lib/agent/memory-shards.ts(144,26): error TS18047: 'response.output' is possibly 'null'.
+lib/agent/memory-shards.ts(144,35): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
+  Type '{ skillName: string; masteryLevel: "Novice" | "Adept" | "Expert" | "Master"; corePrinciples: string[]; synthesis: string; voidDimension?: "Structural Void" | "Logical Void" | "Stateful Void" | "Unified" | undefined; }' has no call signatures.
+lib/agent/memory-shards.ts(166,7): error TS7053: Element implicitly has an 'any' type because expression of type '"void_dimension"' can't be used to index type '{ skill_name: string; mastery_level: "Novice" | "Adept" | "Expert" | "Master"; core_principles: string[]; synthesis: string; source_shards: string[]; timestamp: number; }'.
+  Property 'void_dimension' does not exist on type '{ skill_name: string; mastery_level: "Novice" | "Adept" | "Expert" | "Master"; core_principles: string[]; synthesis: string; source_shards: string[]; timestamp: number; }'.
+lib/agent/memory-shards.ts(198,5): error TS7053: Element implicitly has an 'any' type because expression of type '"entropy_level"' can't be used to index type '{ id: string; title: string; description: string; tags: string[]; extracted_code_snippets: string[]; timestamp: number; }'.
+  Property 'entropy_level' does not exist on type '{ id: string; title: string; description: string; tags: string[]; extracted_code_snippets: string[]; timestamp: number; }'.
+lib/agent/memory-shards.ts(273,5): error TS7053: Element implicitly has an 'any' type because expression of type '"void_dimension"' can't be used to index type '{ skill_name: string; mastery_level: "Novice" | "Adept" | "Expert" | "Master"; core_principles: string[]; synthesis: string; source_shards: string[]; timestamp: number; }'.
+  Property 'void_dimension' does not exist on type '{ skill_name: string; mastery_level: "Novice" | "Adept" | "Expert" | "Master"; core_principles: string[]; synthesis: string; source_shards: string[]; timestamp: number; }'.
+lib/agent/store.ts(62,9): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(63,12): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(64,15): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(65,13): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(66,15): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(67,16): error TS18046: 't' is of type 'unknown'.
+lib/agent/store.ts(68,16): error TS18046: 't' is of type 'unknown'.
+lib/agents/error-handler.ts(28,24): error TS2339: Property 'evidenceId' does not exist on type '{}'.
+lib/agents/error-handler.ts(29,24): error TS2339: Property 'table' does not exist on type '{}'.
+lib/ai/agentz0.ts(105,45): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(strPrompt: string): Promise<GenerateResponse<any>>', gave the following error.
+    Argument of type '{ model: ModelReference<z.ZodObject<{ version: z.ZodOptional<z.ZodString>; maxOutputTokens: z.ZodOptional<z.ZodNumber>; topK: z.ZodOptional<z.ZodNumber>; stopSequences: z.ZodOptional<z.ZodArray<z.ZodString, "many">>; } & { ...; }, "passthrough", z.ZodTypeAny, z.objectOutputType<...>, z.objectInputType<...>>>; prompt...' is not assignable to parameter of type 'string'.
+  Overload 2 of 3, '(parts: ({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]): Promise<...>', gave the following error.
+    Object literal may only specify known properties, and 'model' does not exist in type '({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]'.
+  Overload 3 of 3, '(opts: GenerateOptions<ZodTypeAny, ZodObject<{ version: ZodOptional<ZodString>; maxOutputTokens: ZodOptional<ZodNumber>; topK: ZodOptional<ZodNumber>; stopSequences: ZodOptional<...>; } & { ...; }, "passthrough", ZodTypeAny, objectOutputType<...>, objectInputType<...>>> | PromiseLike<...>): Promise<...>', gave the following error.
+    Type 'unknown[]' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>[]'.
+      Type 'unknown' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>'.
+lib/ai/agentz0.ts(147,45): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(strPrompt: string): GenerateStreamResponse<any>', gave the following error.
+    Argument of type '{ model: ModelReference<z.ZodObject<{ version: z.ZodOptional<z.ZodString>; maxOutputTokens: z.ZodOptional<z.ZodNumber>; topK: z.ZodOptional<z.ZodNumber>; stopSequences: z.ZodOptional<z.ZodArray<z.ZodString, "many">>; } & { ...; }, "passthrough", z.ZodTypeAny, z.objectOutputType<...>, z.objectInputType<...>>>; prompt...' is not assignable to parameter of type 'string'.
+  Overload 2 of 3, '(parts: ({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]): GenerateStreamResponse<...>', gave the following error.
+    Object literal may only specify known properties, and 'model' does not exist in type '({ text: string; metadata?: Record<string, unknown> | undefined; custom?: Record<string, unknown> | undefined; media?: undefined; toolRequest?: undefined; toolResponse?: undefined; data?: unknown; reasoning?: undefined; resource?: undefined; } | ... 6 more ... | { ...; })[]'.
+  Overload 3 of 3, '(opts: GenerateStreamOptions<ZodTypeAny, ZodObject<{ version: ZodOptional<ZodString>; maxOutputTokens: ZodOptional<ZodNumber>; topK: ZodOptional<ZodNumber>; stopSequences: ZodOptional<...>; } & { ...; }, "passthrough", ZodTypeAny, objectOutputType<...>, objectInputType<...>>> | PromiseLike<...>): GenerateStreamResponse<...>', gave the following error.
+    Type 'unknown[]' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>[]'.
+      Type 'unknown' is not assignable to type 'ToolArgument<ZodTypeAny, ZodTypeAny>'.
+lib/ai/tools/db-tools.ts(20,39): error TS18046: 'err' is of type 'unknown'.
+lib/ai/tools/db-tools.ts(41,39): error TS18046: 'err' is of type 'unknown'.
+lib/crypto-proof.ts(212,26): error TS2307: Cannot find module 'snarkjs' or its corresponding type declarations.
+lib/dataconnect-memory.ts(40,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(41,15): error TS2551: Property 'reports' does not exist on type '{ report: any; }'. Did you mean 'report'?
+lib/dataconnect-memory.ts(41,31): error TS2551: Property 'reports' does not exist on type '{ report: any; }'. Did you mean 'report'?
+lib/dataconnect-memory.ts(42,19): error TS2551: Property 'reports' does not exist on type '{ report: any; }'. Did you mean 'report'?
+lib/dataconnect-memory.ts(45,37): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(54,37): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(55,21): error TS2551: Property 'reports' does not exist on type '{ report: any; }'. Did you mean 'report'?
+lib/dataconnect-memory.ts(71,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(96,26): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(120,16): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(135,26): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(141,16): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-memory.ts(154,26): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(15,3): error TS2724: '"@dataconnect/generated"' has no exported member named 'upsertEternalMemory'. Did you mean 'insertEternalMemory'?
+lib/dataconnect-services.ts(20,3): error TS2724: '"@dataconnect/generated"' has no exported member named 'InsertEternalMemoryVariables'. Did you mean 'insertEternalMemory'?
+lib/dataconnect-services.ts(21,3): error TS2724: '"@dataconnect/generated"' has no exported member named 'UpsertSwarmAgentTaskVariables'. Did you mean 'upsertSwarmAgentTask'?
+lib/dataconnect-services.ts(22,3): error TS2305: Module '"@dataconnect/generated"' has no exported member 'InsertAuditRecordVariables'.
+lib/dataconnect-services.ts(23,3): error TS2724: '"@dataconnect/generated"' has no exported member named 'UpsertCompanyProfileVariables'. Did you mean 'upsertCompanyProfile'?
+lib/dataconnect-services.ts(34,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(45,12): error TS18046: 'response.data' is of type 'unknown'.
+lib/dataconnect-services.ts(55,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(66,12): error TS18046: 'response.data' is of type 'unknown'.
+lib/dataconnect-services.ts(76,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(87,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(97,55): error TS2554: Expected 1 arguments, but got 2.
+lib/dataconnect-services.ts(108,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(119,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(130,12): error TS18046: 'response.data' is of type 'unknown'.
+lib/dataconnect-services.ts(140,41): error TS2554: Expected 0 arguments, but got 1.
+lib/dataconnect-services.ts(151,28): error TS2554: Expected 2 arguments, but got 1.
+lib/dataconnect-services.ts(171,12): error TS18046: 'response.data' is of type 'unknown'.
+lib/dataconnect-services.ts(192,12): error TS18046: 'response.data' is of type 'unknown'.
+lib/dataconnect-services.ts(215,12): error TS18046: 'response.data' is of type 'unknown'.
+lib/design-system/AtomicToggle.tsx(6,18): error TS2430: Interface 'AtomicToggleProps' incorrectly extends interface 'Omit<InputHTMLAttributes<HTMLButtonElement>, "type" | "onChange">'.
+  Types of property 'onToggle' are incompatible.
+    Type '(checked: boolean) => void' is not assignable to type 'ToggleEventHandler<HTMLButtonElement>'.
+      Types of parameters 'checked' and 'event' are incompatible.
+        Type 'ToggleEvent<HTMLButtonElement>' is not assignable to type 'boolean'.
+lib/integrity/SupabaseIntegrityRepository.ts(21,19): error TS18047: 'supabase' is possibly 'null'.
+lib/integrity/SupabaseIntegrityRepository.ts(39,36): error TS18047: 'supabase' is possibly 'null'.
+lib/omni-table/QueryProvider.tsx(13,13): error TS2353: Object literal may only specify known properties, and 'gcTime' does not exist in type 'QueryObserverOptions<unknown, unknown, unknown, unknown, QueryKey>'.
+lib/realtime/SupabaseOmniRealtimeService.ts(23,24): error TS18047: 'supabase' is possibly 'null'.

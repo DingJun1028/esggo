@@ -73,13 +73,24 @@ export default function TasksPage() {
   const [activeTab, setActiveTab] = useState<'All' | 'Todo' | 'In Progress' | 'Review' | 'Done'>('All');
 
   useEffect(() => {
-    // 模擬 API 載入
     const fetchTasks = async () => {
       setLoading(true);
-      setTimeout(() => {
-        setTasks(mockTasks);
+      try {
+        const response = await fetch('/api/tasks');
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.length > 0) {
+          setTasks(result.data);
+        } else {
+          // Fallback to mock data if table is empty or doesn't exist yet
+          setTasks(mockTasks);
+        }
+      } catch (error) {
+        console.error('Failed to fetch tasks:', error);
+        setTasks(mockTasks); // Fallback on error
+      } finally {
         setLoading(false);
-      }, 800);
+      }
     };
     fetchTasks();
   }, []);
