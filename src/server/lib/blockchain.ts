@@ -3,7 +3,7 @@
  * 實作 T5 (Trustworthy) 核心存證邏輯
  */
 
-import { BlockchainTxHash, ContentHash } from '../../shared/types/evidence.types';
+import { BlockchainTxHash } from '../../shared/types/evidence.types';
 
 export interface BlockchainAnchorResult {
   tx_hash: BlockchainTxHash;
@@ -16,7 +16,7 @@ export class BlockchainProvider {
    * 將雜湊錨定至區塊鏈 (T5)
    * 這裡為虛擬實作，可介接 Ethereum, Polygon 或專屬私有鏈
    */
-  async anchorHash(hash: ContentHash): Promise<BlockchainAnchorResult> {
+  async anchorHash(): Promise<BlockchainAnchorResult> {
     // 模擬網路延遲
     await new Promise(r => setTimeout(r, 1000));
     
@@ -32,7 +32,7 @@ export class BlockchainProvider {
   /**
    * 驗證區塊鏈上的交易
    */
-  async verifyAnchor(txHash: BlockchainTxHash, expectedHash: ContentHash): Promise<boolean> {
+  async verifyAnchor(): Promise<boolean> {
     // 這裡應向區塊鏈節點查詢交易資料
     return true; 
   }

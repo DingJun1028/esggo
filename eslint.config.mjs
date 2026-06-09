@@ -37,7 +37,11 @@ const eslintConfig = [
       "*.config.js",
       "*.config.mjs",
       "*.config.ts",
-      "scripts/**"
+      "scripts/**",
+      "lib/web/wasm/**",
+      "lib/web/viewer.mjs",
+      "lib/web/debugger.mjs",
+      "lib/pdfjs-6.0.227-legacy-dist/**"
     ]
   }
 ];

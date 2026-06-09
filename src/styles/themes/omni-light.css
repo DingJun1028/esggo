@@ -1,0 +1,86 @@
+/* ESGGO Classic Light Theme - ESGG O Classic v1.1 */
+:root[data-theme="light"], :root:not([data-theme]) {
+  /* Background System */
+  --theme-bg-primary: #FFFFFF;
+  --theme-bg-secondary: #F8F9FA;
+  --theme-bg-tertiary: #F1F5F9;
+  --theme-bg-elevated: rgba(255, 255, 255, 0.85);
+  --theme-bg-overlay: rgba(0, 50, 98, 0.3);
+  
+  /* Text System */
+  --theme-text-primary: #0F172A;
+  --theme-text-secondary: #334155;
+  --theme-text-muted: #64748B;
+  --theme-text-disabled: #94A3B8;
+  --theme-text-inverse: #FFFFFF;
+  
+  /* Brand Colors */
+  --theme-primary: #003262;
+  --theme-primary-hover: #1A3A5C;
+  --theme-primary-active: #002548;
+  --theme-accent: #FDB515;
+  --theme-accent-hover: #FCC136;
+  --theme-secondary: #3B7EA1;
+  
+  /* Status Colors */
+  --theme-success: #22C55E;
+  --theme-success-bg: rgba(34, 197, 94, 0.1);
+  --theme-warning: #F59E0B;
+  --theme-warning-bg: rgba(245, 158, 11, 0.1);
+  --theme-error: #EF4444;
+  --theme-error-bg: rgba(239, 68, 68, 0.1);
+  --theme-info: #06B6D4;
+  --theme-info-bg: rgba(6, 182, 212, 0.1);
+  
+  /* 5T Protocol Colors */
+  --t1-tangible: #10B981;
+  --t1-tangible-bg: rgba(16, 185, 129, 0.1);
+  --t2-traceable: #3B7EA1;
+  --t2-traceable-bg: rgba(59, 126, 161, 0.1);
+  --t3-trackable: #8B5CF6;
+  --t3-trackable-bg: rgba(139, 92, 246, 0.1);
+  --t4-transparent: #F59E0B;
+  --t4-transparent-bg: rgba(245, 158, 11, 0.1);
+  --t5-trustworthy: #003262;
+  --t5-trustworthy-bg: rgba(0, 50, 98, 0.15);
+  
+  /* Surface & Glass */
+  --theme-surface-glass: rgba(255, 255, 255, 0.7);
+  --theme-surface-glass-hover: rgba(255, 255, 255, 0.85);
+  --theme-border: #E2E8F0;
+  --theme-border-hover: #CBD5E1;
+  --theme-divider: #F1F5F9;
+  
+  /* Mobile-specific */
+  --theme-mobile-nav-bg: rgba(255, 255, 255, 0.95);
+  --theme-mobile-safe-area: 16px;
+}
+
+/* Mobile Light Theme Overrides */
+@media (max-width: 1023px) {
+  :root[data-theme="light"] {
+    --theme-mobile-nav-height: 64px;
+    --theme-touch-target-min: 48px;
+  }
+}
+
+/* Glass Card Effect */
+.omni-card-glass {
+  background: var(--theme-surface-glass);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--theme-border);
+  border-radius: 16px;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 50, 98, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.omni-card-glass:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.06),
+    0 12px 24px rgba(0, 50, 98, 0.1);
+  border-color: rgba(0, 50, 98, 0.15);
+}

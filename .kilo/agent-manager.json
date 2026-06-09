@@ -5,6 +5,16 @@
       "path": "c:\\Project\\esggo\\esggo\\.kilo\\worktrees\\luxurious-marble",
       "parentBranch": "main",
       "createdAt": "2026-06-02T02:23:26.984Z",
+      "remote": "origin",
+      "prNumber": 20,
+      "prUrl": "https://github.com/DingJun1028/esggo/pull/20",
+      "prState": "merged"
+    },
+    "wt-1780942090548-1": {
+      "branch": "antique-pram",
+      "path": "c:\\Project\\esggo\\esggo\\.kilo\\worktrees\\antique-pram",
+      "parentBranch": "main",
+      "createdAt": "2026-06-08T18:08:10.548Z",
       "remote": "origin"
     }
   },
@@ -16,14 +26,27 @@
     "ses_17768c3b7ffe6pz2F9Gl7MXFak": {
       "worktreeId": null,
       "createdAt": "2026-06-02T13:47:53.470Z"
+    },
+    "ses_15793b0f9ffeuN65fvB97ZK1cx": {
+      "worktreeId": "wt-1780942090548-1",
+      "createdAt": "2026-06-08T18:08:52.471Z"
+    },
+    "ses_1573cf0a9ffesmfI5MUmugDvRj": {
+      "worktreeId": "wt-1780942090548-1",
+      "createdAt": "2026-06-08T19:43:37.483Z"
     }
   },
   "tabOrder": {
     "local": [
-      "ses_17768c3b7ffe6pz2F9Gl7MXFak"
+      "pending:1"
+    ],
+    "wt-1780942090548-1": [
+      "ses_15793b0f9ffeuN65fvB97ZK1cx",
+      "ses_1573cf0a9ffesmfI5MUmugDvRj"
     ]
   },
   "worktreeOrder": [
-    "wt-1780367006984-1"
+    "wt-1780367006984-1",
+    "wt-1780942090548-1"
   ]
 }

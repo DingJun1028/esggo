@@ -1,5 +1,5 @@
 import { IIntegrityRepository, IntegrityRecord } from './IIntegrityRepository';
-import { supabase } from '../supabase';
+import { getSupabaseClient } from '../supabase'; // Import the function
 
 // In-memory fallback when Supabase unavailable
 const memoryStore = new Map<string, IntegrityRecord>();
@@ -8,16 +8,8 @@ export class SupabaseIntegrityRepository implements IIntegrityRepository {
     async saveRecord(record: IntegrityRecord): Promise<void> {
         console.log(`[Repository] Saving integrity record: ${record.id}`);
         
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-        
-        if (!url || !key) {
-            console.log(`[Repository] Supabase unavailable, using memory fallback.`);
-            memoryStore.set(record.id, record);
-            return;
-        }
-        
         try {
+            const supabase = getSupabaseClient(); // Get client here
             await supabase.from('integrity_logs').insert(record);
         } catch (error) {
             console.warn('[Repository] DB save failed, falling back to memory:', error);
@@ -28,17 +20,12 @@ export class SupabaseIntegrityRepository implements IIntegrityRepository {
     async getRecord(id: string): Promise<IntegrityRecord | null> {
         console.log(`[Repository] Fetching integrity record: ${id}`);
         
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-        
-        if (!url || !key) {
-            return memoryStore.get(id) ?? null;
-        }
-        
         try {
+            const supabase = getSupabaseClient(); // Get client here
             const { data } = await supabase.from('integrity_logs').select('*').eq('id', id).single();
             return data as IntegrityRecord | null;
-        } catch {
+        } catch (error) {
+            console.warn('[Repository] DB fetch failed, falling back to memory:', error);
             return memoryStore.get(id) ?? null;
         }
     }

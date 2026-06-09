@@ -19,7 +19,7 @@ export interface NotionPagePayload {
   id: string;
   url: string;
   last_edited_time: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
 }
 
 /**

@@ -18,7 +18,7 @@ export class AuditRepository {
    */
   async log(entry: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog | undefined> {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('audit_logs')
         .insert({
           user_id: entry.user_id,
@@ -47,7 +47,7 @@ export class AuditRepository {
    */
   async findMany(params: AuditQueryParams) {
     try {
-      let query = (supabase as any).from('audit_logs').select('*', { count: 'exact' });
+      let query = supabase.from('audit_logs').select('*', { count: 'exact' });
 
       if (params.user_id) query = query.eq('user_id', params.user_id);
       if (params.resource_id) query = query.eq('resource_id', params.resource_id);
@@ -64,7 +64,7 @@ export class AuditRepository {
       if (error) handleSupabaseError(error);
 
       return {
-        data: (data || []).map((row: any) => this.mapToAuditLog(row)),
+        data: (data || []).map((row: Record<string, unknown>) => this.mapToAuditLog(row)),
         total: count || 0
       };
     } catch (error) {
@@ -81,7 +81,7 @@ export class AuditRepository {
       severity: row.severity as AuditSeverity,
       resource_type: row.resource_type as 'evidence' | 'ucc' | 'user' | 'system',
       resource_id: row.resource_id as string,
-      details: row.details as any, // details is complex JSON
+      details: row.details as unknown, // details is complex JSON
       ip_address: row.ip_address as string | undefined,
       user_agent: row.user_agent as string | undefined,
       timestamp: new Date(row.timestamp as string),

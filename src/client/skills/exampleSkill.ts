@@ -1,4 +1,4 @@
-import { AtomicFunction, AtomicFunctionInput, AtomicFunctionResult, OmniCoreContext } from '@/packages/types/src/AtomicFunction';
+import { AtomicFunction, AtomicFunctionInput, AtomicFunctionResult } from '@/packages/types/src/AtomicFunction';
 
 /**
  * ExampleSkill demonstrates how to implement a stateless atomic function.
