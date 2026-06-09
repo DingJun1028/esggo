@@ -1,6 +1,8 @@
 import { GlobalHealingService } from '../server/healing/GlobalHealingServer';
 import { ResonanceEngine } from './resonanceEngine';
 import { OmniCard } from '../../lib/core-types';
+import { IComponentCore } from '../shared/types/core.types'; // Import IComponentCore
+import { IEvidence } from '../shared/types/core.types'; // Import IEvidence
 
 async function runFullProcess() {
   // 模擬一組卡牌
@@ -18,11 +20,18 @@ async function runFullProcess() {
   const healingResult = await healingService.healCard(card);
   console.log('HealingResult:', healingResult);
 
-  const coreCard: unknown = {
+  // Minimal valid IEvidence for testing
+  const dummyEvidence: IEvidence = {
+    originCause: 'test-origin',
+    processTrace: ['test-trace-step1'],
+    finalEffect: 'test-effect',
+  };
+
+  const coreCard: IComponentCore = { // Changed to IComponentCore
     uuid: card.uuid,
     version: '1.0.0',
     timestamp: card.lastUpdated,
-    evidence: [],
+    evidence: [dummyEvidence], // Provided valid evidence
     formula: '',
     impact_metric: '',
     status: 'Trustworthy',
@@ -31,7 +40,7 @@ async function runFullProcess() {
 
   // 2. 全維共鳴計算
   const resonanceEngine = new ResonanceEngine();
-  const resonanceResult = await resonanceEngine.calculateResonance([coreCard as any]);
+  const resonanceResult = await resonanceEngine.calculateResonance([coreCard]); // Removed 'as any'
   console.log('ResonanceResult:', resonanceResult);
 }
 

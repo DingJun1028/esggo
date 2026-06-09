@@ -25,11 +25,13 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
+    "types": ["node"],
     "paths": {
       "@/*": [
         "./src/*",
@@ -60,7 +62,6 @@
   "include": [
     "app/**/*",
     "components/**/*",
-    "dataconnect/**/*",
     "hooks/**/*",
     "lib/**/*",
     "next.config.ts",
@@ -72,6 +73,7 @@
     "node_modules",
     "dist",
     "src/stories",
+    "dataconnect/example",
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",

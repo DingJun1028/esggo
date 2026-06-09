@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '../../utils/supabase/client';
-import { Lock, Mail, Activity, AlertCircle, Fingerprint } from 'lucide-react';
-import { motion } from 'framer-motion';
+import Script from 'next/script';
+import { useEffect, useState } from 'react'; // Added useState
+import { useRouter } from 'next/navigation'; // Added useRouter
+import { createClient } from '../../utils/supabase/client'; // Added createClient
+import { Lock, Mail, Activity, AlertCircle, Fingerprint } from 'lucide-react'; // Added lucide-react icons
+import { motion } from 'framer-motion'; // Added framer-motion
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -13,7 +14,61 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [developerPassword, setDeveloperPassword] = useState('');
   const [showDeveloperPasswordInput, setShowDeveloperPasswordInput] = useState(false);
-  const router = useRouter();
+  const router = useRouter(); // Initialize useRouter
+
+  const handleCredentialResponse = async (response: any) => {
+    // Call your backend API route to verify the token
+    const res = await fetch('/api/auth/google-signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: response.credential }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      console.log('Google One Tap Sign-in successful:', data.user);
+      // Simulate setting legacy omni_user for compatibility with useAuth.tsx and ClientLayout
+      // Assuming 'data.user' from backend contains email, id, etc.
+      if (data.user) {
+        localStorage.setItem('omni_user', JSON.stringify({
+          email: data.user.email,
+          company_id: data.user.company_id || 'default', // Assuming company_id is returned by backend
+          id: data.user.googleId // Using googleId as the user id for omni_user
+        }));
+      }
+      router.push('/dashboard'); // Example redirect
+      router.refresh();
+    } else {
+      console.error('Google One Tap Sign-in failed:', data.error);
+      setErrorMessage(data.error || 'Google One Tap 認證失敗');
+      setStatus('error');
+    }
+  };
+
+  useEffect(() => {
+    // Only initialize GSI when the window is fully loaded and on a real page
+    // Using window.onGoogleLibraryLoad to ensure the GSI script is fully loaded
+    (window as any).onGoogleLibraryLoad = () => {
+      if (!(window as any).google) return;
+      
+      (window as any).google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+        use_fedcm_for_prompt: true // Active FedCM flag
+      });
+
+      // Prompt One Tap
+      (window as any).google.accounts.id.prompt((notification: any) => {
+        if (notification.isNotDisplayed()) {
+          console.warn('One Tap not displayed，原因:', notification.getNotDisplayedReason());
+        } else if (notification.isSkippedMoment()) {
+          console.warn('使用者跳過或瀏覽器中斷了 One Tap 提示 (FedCM Aborted)');
+        }
+      });
+    };
+  }, []);
 
   const handleDeveloperLogin = async () => {
     setStatus('loading');
@@ -67,6 +122,7 @@ export default function LoginPage() {
     router.refresh();
   };
 
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#020617] relative overflow-hidden">
       {/* Liquid Glass Background Effects */}
@@ -83,6 +139,15 @@ export default function LoginPage() {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent rounded-[2rem] pointer-events-none" />
         
+        <Script 
+          src="https://accounts.google.com/gsi/client" 
+          strategy="afterInteractive"
+          onLoad={() => {
+            if ((window as any).onGoogleLibraryLoad) (window as any).onGoogleLibraryLoad();
+          }}
+        />
+        <h1 className="sr-only">Login to Omni System</h1> {/* Hidden heading for accessibility */}
+
         <div className="text-center mb-8 relative">
           <div className="mx-auto w-16 h-16 bg-black/40 border border-cyan-500/30 rounded-2xl flex items-center justify-center mb-4 relative overflow-hidden">
             <div className="absolute inset-0 bg-cyan-400/20 blur-xl" />

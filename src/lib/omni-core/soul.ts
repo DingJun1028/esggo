@@ -108,12 +108,12 @@ export class OmniSoul {
   }
 
   private async assessTechnicalDebt(): Promise<number> { return 0; }
-  private async sacrificeTechnicalDebt(_amount: number): Promise<void> { }
+  private async sacrificeTechnicalDebt(): Promise<void> { }
   private generateUUID(): string { return 'uuid-' + Date.now(); }
   private translateToEnglish(input: string): string { return input; }
   private generateCode(input: string): string { return input; }
   private extractEssenceFromMatrix(matrix: IOmniMatrix): string { return JSON.stringify(matrix); }
-  private async queryKnowledgeBase(_essence: string): Promise<Record<string, unknown>> { return {}; }
+  private async queryKnowledgeBase(): Promise<Record<string, unknown>> { return {}; }
   private async applyWisdom(knowledge: Record<string, unknown>): Promise<IOmniWisdom> { 
     return {
       knowledge,
@@ -127,16 +127,7 @@ export class OmniSoul {
   public async manifest(agents: IOmniManifestation): Promise<IOmniManifestation> { return agents; }
 }
 
-class GravityProtocol {
-  async execute(center: Record<string, unknown>, modules: Array<{ process: (c: Record<string, unknown>) => Promise<Record<string, unknown>> }>): Promise<Record<string, unknown>[]> {
-    const results = [];
-    for (const module of modules) {
-      const result = await module.process(center);
-      results.push(result);
-    }
-    return results;
-  }
-}
+
 
 class OmniThinkTank {
   async query(input: IOmniWisdom | string): Promise<IOmniWisdom> {
@@ -148,9 +139,9 @@ class OmniThinkTank {
     };
   }
 
-  private retrieveKnowledge(_input: string): Record<string, unknown> { return {}; }
-  private generateInsights(_input: string): Record<string, unknown> { return {}; }
-  private generateRecommendations(_input: string): Record<string, unknown> { return {}; }
+  private retrieveKnowledge(): Record<string, unknown> { return {}; }
+  private generateInsights(): Record<string, unknown> { return {}; }
+  private generateRecommendations(): Record<string, unknown> { return {}; }
 }
 
 class RuneAPI {
@@ -162,9 +153,9 @@ class RuneAPI {
     };
   }
 
-  private identifyCapabilities(_wisdom: IOmniWisdom): Record<string, unknown> { return {}; }
-  private setupIntegrations(_wisdom: IOmniWisdom): Record<string, unknown> { return {}; }
-  private createAutomations(_wisdom: IOmniWisdom): Record<string, unknown> { return {}; }
+  private identifyCapabilities(): Record<string, unknown> { return {}; }
+  private setupIntegrations(): Record<string, unknown> { return {}; }
+  private createAutomations(): Record<string, unknown> { return {}; }
 }
 
 class AgentNetwork {
@@ -174,7 +165,7 @@ class AgentNetwork {
     return this.aggregateResults(results);
   }
 
-  private distributeTasks(_capabilities: Record<string, unknown>): Record<string, unknown> { return {}; }
+  private distributeTasks(): Record<string, unknown> { return {}; }
   private async executeTasks(tasks: Record<string, unknown>): Promise<Record<string, unknown>> { return tasks; }
   private aggregateResults(results: Record<string, unknown>): Record<string, unknown> { return results; }
 }

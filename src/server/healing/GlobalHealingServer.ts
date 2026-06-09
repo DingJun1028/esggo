@@ -61,7 +61,7 @@ export class GlobalHealingService {
    * @param card 需要自癒調和的卡牌快照
    * @param level 自癒強度等級，預設為自動修復 (LV2_AUTO_HEAL)
    */
-  public async healCard(card: OmniCard, level: HealingLevel = 'LV2_AUTO_HEAL'): Promise<HealingResult> {
+  public async healCard(card: OmniCard): Promise<HealingResult> {
     console.log(`[GlobalHealingService] 啟動卡牌自癒階段，卡牌 UUID: ${card.uuid}`);
 
     // 動態檢查是否已有該卡牌的適配節點註冊在調和網路中

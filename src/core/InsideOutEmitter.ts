@@ -8,7 +8,7 @@ import { OmniInfoAura } from './OmniInfoAura';
 export class InsideOutEmitter {
   async radiate(core: OmniInfoOneCore) {
     // 1. Inside: lock the origin (Key)
-    const key = core.generateKey();
+
     console.log(`[Inside] Core singularity locked: ${core.uuid}`);
 
     // 2. For/4: pass through node (The Lock)

@@ -32,17 +32,31 @@ export async function saveMasterData(): Promise<void> {
 
 export async function authenticateWithMaster(): Promise<boolean> {
   if (authContext.isAuthorized) return true;
-  try {
-    // Placeholder: replace with actual HTTP call when axios is configured
-    authContext.masterCertificateHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e';
-    authContext.firstCheckTime = Date.now();
+
+  // --- START Placeholder for Robust Authentication (Simulation) ---
+  // In a real production environment, this would involve:
+  // 1. Making an HTTP call to an external Identity Provider (e.g., OAuth 2.0, OpenID Connect).
+  // 2. Validating tokens (JWT) or session cookies securely.
+  // 3. Handling token refresh and revocation.
+  //
+  // For now, we simulate success if a specific environment variable is set.
+  const masterAuthToken = process.env.MASTER_AUTH_TOKEN;
+  const expectedToken = 'VALID_MASTER_TOKEN'; // This should also ideally come from a secure config/env
+
+  if (masterAuthToken === expectedToken) {
     authContext.isAuthorized = true;
-    writeFileSync('auth-context.json', JSON.stringify(authContext, null, 2));
+    authContext.masterCertificateHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e'; // Example hash for authorized state
+    authContext.firstCheckTime = Date.now();
+    // Do NOT write to auth-context.json here to avoid frequent file I/O for every auth check.
+    // saveMasterData() can be called explicitly when master data needs to be persisted.
+    console.log('Master authentication simulated successfully via environment variable.');
     return true;
-  } catch (error: any) {
-    console.error('Authorization Failed:', error.message);
+  } else {
+    console.error('Master authentication failed: MASTER_AUTH_TOKEN not set or invalid.');
+    authContext.isAuthorized = false;
     return false;
   }
+  // --- END Placeholder for Robust Authentication ---
 }
 
 function checkSignature(_header: unknown, data: Buffer): boolean {

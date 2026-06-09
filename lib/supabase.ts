@@ -23,8 +23,20 @@ export const supabase: SupabaseClient | null = (() => {
   }
 })();
 
-export function getSupabaseClient(): SupabaseClient | null {
-  return supabase;
+export function getSupabaseClient(): SupabaseClient {
+  if (supabaseInstance) return supabaseInstance;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Supabase URL or Key missing. Supabase client cannot be initialized.');
+  }
+
+  try {
+    supabaseInstance = createClient(supabaseUrl, supabaseKey);
+    return supabaseInstance;
+  } catch (error) {
+    console.error('Supabase initialization error:', error);
+    throw error;
+  }
 }
 
 export const createBrowserClient = () => {

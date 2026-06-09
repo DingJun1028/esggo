@@ -13,7 +13,7 @@ import {
   EvidenceStatus,
   VerificationResult
 } from '../../shared/types/evidence.types';
-import { ErrorCode, createErrorResponse } from '../../shared/types/api.types';
+import { ErrorCode } from '../../shared/types/api.types';
 
 export class EvidenceService {
   private repo = new EvidenceRepository();
@@ -26,7 +26,7 @@ export class EvidenceService {
     
     // 2. 核心業務：如果 auto_seal 為 true，預先計算雜湊
     if (dto.auto_seal) {
-      const { hash } = await integrityService.sealContent(dto.content);
+      await integrityService.sealContent(dto.content);
       // Repository 會自動處理 hash，這裡可做額外邏輯
     }
 

@@ -1,5 +1,5 @@
 import { IOmniRealtimeService, OmniEvent, RealtimeCallbacks } from './IOmniRealtimeService';
-import { supabase } from '../supabase';
+import { getSupabaseClient } from '../supabase'; // Import the function
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
 // Fallback memory store for offline mode
@@ -11,46 +11,50 @@ export class SupabaseOmniRealtimeService implements IOmniRealtimeService {
 
     connect(user: Record<string, any> | null, callbacks: RealtimeCallbacks): void {
         // NCBDB/Simulation Fallback Mode
-        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-            console.log('[OmniRealtime] Supabase unavailable. Using NCBDB simulation mode.');
-            this.isConnected = true;
+        // The check for process.env variables is largely redundant here because getSupabaseClient()
+        // will throw an error if they are missing. The try-catch block below will handle it.
+
+        try {
+            const supabase = getSupabaseClient(); // Get the client here
+            this.channel = supabase.channel('omni-resonance-room');
+
+            this.channel
+                .on('presence', { event: 'sync' }, () => {
+                    if (!this.channel) return;
+                    const newState = this.channel.presenceState();
+                    const users = Object.values(newState).flatMap((arr) => arr || []) as Record<string, unknown>[];
+                    callbacks.onPresenceSync(users);
+                })
+                .on('presence', { event: 'join' }, ({ newPresences }: { newPresences: Record<string, unknown>[] }) => {
+                    console.log('[OmniRealtime] User joined:', newPresences);
+                })
+                .on('presence', { event: 'leave' }, ({ leftPresences }: { leftPresences: Record<string, unknown>[] }) => {
+                    console.log('[OmniRealtime] User left:', leftPresences);
+                })
+                .on('broadcast', { event: 'omni_event' }, ({ payload }: { payload: OmniEvent }) => {
+                    callbacks.onEventReceived(payload);
+                })
+                .subscribe(async (status: string) => {
+                    if (status === 'SUBSCRIBED' && this.channel) {
+                        this.isConnected = true;
+                        callbacks.onStatusChange(true);
+                        const trackPayload = user
+                            ? { user_id: user.uid, email: user.email, online_at: new Date().toISOString() }
+                            : { user_id: `anon_${crypto.randomUUID()}`, email: 'Anonymous Commander', online_at: new Date().toISOString() };
+                        await this.channel.track(trackPayload);
+                    } else {
+                        this.isConnected = false;
+                        callbacks.onStatusChange(false);
+                    }
+                });
+        } catch (error) {
+            console.warn('[OmniRealtime] Supabase unavailable or failed to connect. Using NCBDB simulation mode.', error);
+            this.isConnected = true; // Still "connected" in simulation mode
             callbacks.onStatusChange(true);
             // Simulate presence
             callbacks.onPresenceSync([{ user_id: user?.uid || 'anon', email: user?.email || 'Anonymous Commander' }]);
             return;
         }
-
-        this.channel = supabase.channel('omni-resonance-room');
-
-        this.channel
-            .on('presence', { event: 'sync' }, () => {
-                if (!this.channel) return;
-                const newState = this.channel.presenceState();
-                const users = Object.values(newState).flatMap((arr) => arr || []) as Record<string, unknown>[];
-                callbacks.onPresenceSync(users);
-            })
-            .on('presence', { event: 'join' }, ({ newPresences }: { newPresences: Record<string, unknown>[] }) => {
-                console.log('[OmniRealtime] User joined:', newPresences);
-            })
-            .on('presence', { event: 'leave' }, ({ leftPresences }: { leftPresences: Record<string, unknown>[] }) => {
-                console.log('[OmniRealtime] User left:', leftPresences);
-            })
-            .on('broadcast', { event: 'omni_event' }, ({ payload }: { payload: OmniEvent }) => {
-                callbacks.onEventReceived(payload);
-            })
-            .subscribe(async (status: string) => {
-                if (status === 'SUBSCRIBED' && this.channel) {
-                    this.isConnected = true;
-                    callbacks.onStatusChange(true);
-                    const trackPayload = user
-                        ? { user_id: user.uid, email: user.email, online_at: new Date().toISOString() }
-                        : { user_id: `anon_${crypto.randomUUID()}`, email: 'Anonymous Commander', online_at: new Date().toISOString() };
-                    await this.channel.track(trackPayload);
-                } else {
-                    this.isConnected = false;
-                    callbacks.onStatusChange(false);
-                }
-            });
     }
 
     disconnect(): void {
@@ -70,14 +74,24 @@ export class SupabaseOmniRealtimeService implements IOmniRealtimeService {
         };
 
         if (this.channel && this.isConnected) {
-            await this.channel.send({ type: 'broadcast', event: 'omni_event', payload: newEvent });
+            // Need a try-catch here too, as channel operations can fail
+            try {
+                await this.channel.send({ type: 'broadcast', event: 'omni_event', payload: newEvent });
+            } catch (error) {
+                console.error('[OmniRealtime] Failed to send event via Supabase channel:', error);
+                // Fallback to memory if sending fails
+                memoryEvents.unshift(newEvent);
+                if (memoryEvents.length > 50) memoryEvents.pop();
+            }
+        } else {
+            // If not connected via Supabase, always use memory fallback
+            memoryEvents.unshift(newEvent);
+            if (memoryEvents.length > 50) memoryEvents.pop();
         }
 
-        // Memory fallback
-        memoryEvents.unshift(newEvent);
-        if (memoryEvents.length > 50) memoryEvents.pop();
-
         // 非同步寫入遙測數據 (Fire-and-forget 模式)
+        // This part already checks process.env, but it could also benefit from getSupabaseClient()
+        // For now, I'll leave it as is to keep the change focused on the TS18047 error.
         if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
             fetch('/api/telemetry', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newEvent)

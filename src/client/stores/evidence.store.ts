@@ -23,7 +23,7 @@ interface EvidenceState {
   verifyEvidence: (id: EvidenceID) => Promise<VerificationResult | null>;
 }
 
-export const useEvidenceStore = create<EvidenceState>((set, _get) => ({
+export const useEvidenceStore = create<EvidenceState>((set) => ({
   evidences: [],
   isLoading: false,
   error: null,

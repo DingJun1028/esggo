@@ -1,10 +1,10 @@
 allowBuilds:
-  '@datadog/pprof': set this to true or false
-  '@firebase/util': set this to true or false
-  '@newrelic/fn-inspect': set this to true or false
-  '@newrelic/native-metrics': set this to true or false
-  core-js: set this to true or false
-  esbuild: set this to true or false
-  protobufjs: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  '@datadog/pprof': false
+  '@firebase/util': false
+  '@newrelic/fn-inspect': false
+  '@newrelic/native-metrics': false
+  core-js: false
+  esbuild: false
+  protobufjs: false
+  sharp: false
+  unrs-resolver: false

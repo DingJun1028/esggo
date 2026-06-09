@@ -55,7 +55,7 @@ export class OmniMemorySync {
     }
   }
 
-  private async syncToVectorDB(event: OmniEvent): Promise<void> {
+  private async syncToVectorDB(): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => resolve(), 100);
     });
@@ -72,11 +72,11 @@ export class OmniMemorySync {
 
     const client = new OmniTableClient({ token });
 
-    const record: { fields: Record<string, any> } = { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const record: { fields: Record<string, unknown> } = {
       fields: {
-        "Task Title": (event.payload as any).name || "Unknown Task",
+        "Task Title": (event.payload && typeof event.payload === 'object' && 'name' in event.payload && typeof event.payload.name === 'string') ? event.payload.name : "Unknown Task",
         Status: "Todo",
-        Type: (event.payload as any).attributes?.join(',') || "OmniEvent",
+        Type: (event.payload && typeof event.payload === 'object' && 'attributes' in event.payload && Array.isArray(event.payload.attributes)) ? (event.payload.attributes as string[]).join(',') : "OmniEvent",
         Source: event.source_platform || "OmniNotes",
       }
     };
@@ -179,7 +179,7 @@ export class OmniMemorySync {
         id: record.event_id,
         omni_card_uuid: record.payload?.uuid || record.event_id,
         event_type: record.event_type,
-        payload: record.payload as any,
+        payload: record.payload as Record<string, unknown>,
         created_at: new Date(record.created_at).getTime(),
         hash_lock: record.payload?.hash_lock || 'REPLAY_HASH',
         source_platform: 'DLQ'

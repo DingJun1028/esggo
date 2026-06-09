@@ -1,16 +1,12 @@
 import { NextResponse } from 'next/server';
 import { governanceEngine } from '@/lib/governance-engine';
-import { supabase } from '@/lib/supabase';
+import { getSupabaseClient } from '@/lib/supabase';
 import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 
 export async function GET() {
   try {
-    if (!supabase) {
-      return NextResponse.json<ApiResponse>(
-        createErrorResponse('SUPABASE_NOT_INITIALIZED', 'Supabase client not initialized'),
-        { status: 503 }
-      );
-    }
+    const supabase = getSupabaseClient(); // Get the client via the function, handles errors internally
+
     const { data: topics, error: topicsError } = await supabase
       .from('materiality_topics')
       .select('*');
