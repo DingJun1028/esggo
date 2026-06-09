@@ -66,20 +66,20 @@ jobs:
         run: pnpm install --prefix packages/types
 
       - name: Build Shared Types
-        run: pnpm run build --prefix packages/types
+        run: ppnpm run build --prefix packages/types
 
       - name: Run Contract Tests
         run: pnpm test -- tests/contract/esg-report.test.ts
 
       - name: Run Root Build
-        run: pnpm run build
+        run: ppnpm run build
 
       - name: Run Root Lint
-        run: pnpm run lint
+        run: ppnpm run lint
 
       - name: Run Root Tests
-        run: pnpm run testame: Run Root Lint
-        run: pnpm run lint
+        run: ppnpm run testame: Run Root Lint
+        run: ppnpm run lint
 
       - name: Run Root Tests
-        run: pnpm run test
+        run: ppnpm run test
