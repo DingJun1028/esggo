@@ -34,18 +34,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ github.event.inputs.node_version || '22' }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install Dependencies
         id: install
         run: |
-          ppnpm install || pnpm install
+          pnpm install || pnpm install
         continue-on-error: true
 
       - name: Diagnose & Auto-Fix Install Errors
         if: steps.install.outcome == 'failure'
         run: |
-          ERROR_LOG=$(ppnpm install 2>&1 || true)
+          ERROR_LOG=$(pnpm install 2>&1 || true)
           echo "❌ Install Error: $ERROR_LOG"
           
           # 常見錯誤自動修復
