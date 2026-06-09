@@ -34,18 +34,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ github.event.inputs.node_version || '22' }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install Dependencies
         id: install
         run: |
-          ppnpm install || pnpm install
+          pnpm install || pnpm install
         continue-on-error: true
 
       - name: Diagnose & Auto-Fix Install Errors
         if: steps.install.outcome == 'failure'
         run: |
-          ERROR_LOG=$(ppnpm install 2>&1 || true)
+          ERROR_LOG=$(pnpm install 2>&1 || true)
           echo "❌ Install Error: $ERROR_LOG"
           
           # 常見錯誤自動修復
@@ -66,7 +66,7 @@ jobs:
           echo "🧪 Running ${{ github.event.inputs.project_name || 'Swap-DeFi' }} tests..."
           
           # 執行測試並捕獲錯誤
-          npm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
+          pnpm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
           
           # 檢查 Swap-DeFi 測試狀態
           PROJECT_NAME="${{ github.event.inputs.project_name || 'Swap-DeFi' }}"

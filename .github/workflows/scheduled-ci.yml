@@ -26,18 +26,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22' # Updating to Node.js version 20
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install build libraries
         run: sudo apt-get update && sudo apt-get install -y build-essential
 
       - name: Install Dependencies
         run: |
-          ppnpm install
+          pnpm install
           pnpm install better-sqlite3 # Ensure better-sqlite3 is installed
 
       - name: Run Lint (ESLint)
-        run: npm run lint
+        run: pnpm run lint
         continue-on-error: true # Suppress warnings causing CI failure
 
       - name: Run Formatter Check (Prettier)
@@ -45,7 +45,7 @@ jobs:
         continue-on-error: true
 
       - name: Run Unit Tests (Vitest)
-        run: npm run test
+        run: pnpm run test
 
       - name: Send Slack Notification
         if: always()
