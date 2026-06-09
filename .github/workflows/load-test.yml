@@ -26,7 +26,7 @@ jobs:
         run: pnpm install
 
       - name: Build Next.js application
-        run: npm run build
+        run: pnpm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
 
