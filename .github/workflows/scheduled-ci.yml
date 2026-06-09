@@ -33,7 +33,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          ppnpm install
+          pnpm install
           pnpm install better-sqlite3 # Ensure better-sqlite3 is installed
 
       - name: Run Lint (ESLint)

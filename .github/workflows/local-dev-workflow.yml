@@ -34,7 +34,7 @@ jobs:
           
       - name: 安裝依賴
         working-directory: ./esggo-project
-        run: ppnpm install
+        run: pnpm install
         
       - name: 執行 lint
         working-directory: ./esggo-project
