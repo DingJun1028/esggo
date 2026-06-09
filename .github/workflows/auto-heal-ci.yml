@@ -66,7 +66,7 @@ jobs:
           echo "🧪 Running ${{ github.event.inputs.project_name || 'Swap-DeFi' }} tests..."
           
           # 執行測試並捕獲錯誤
-          npm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
+          pnpm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
           
           # 檢查 Swap-DeFi 測試狀態
           PROJECT_NAME="${{ github.event.inputs.project_name || 'Swap-DeFi' }}"
