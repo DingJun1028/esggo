@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { 
   Map, Activity, LayoutGrid, Database, ShieldCheck, 
   Server, BrainCircuit, Wind, Network, ExternalLink, Zap
@@ -100,7 +100,7 @@ export default function OmniMapPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<Network size={12}/>}>Global Map</UniversalBadge>
+                <OmniBadge variant="primary" size="sm" icon={<Network size={12}/>}>Global Map</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">MAP-001</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">系統版圖與健康監控</h1>
@@ -127,7 +127,7 @@ export default function OmniMapPage() {
           
           {/* Main Network Map (Left, 2 cols) */}
           <div className="lg:col-span-2 space-y-6">
-            <UniversalCard variant="glass" className="p-1 h-full min-h-[500px] flex flex-col">
+            <OmniBaseCard variant="glass" className="p-1 h-full min-h-[500px] flex flex-col">
               <div className="p-4 border-b border-white/5 flex justify-between items-center bg-black/20 rounded-t-2xl">
                 <h3 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
                   <Network size={16} className="text-cyan-400" />
@@ -169,7 +169,7 @@ export default function OmniMapPage() {
                   </motion.div>
                 ))}
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
           {/* Module Detail / Health Check (Right, 1 col) */}
@@ -185,16 +185,16 @@ export default function OmniMapPage() {
                   className="h-full"
                 >
                   {SYSTEM_MODULES.filter(m => m.id === activeModule).map(mod => (
-                    <UniversalCard key={mod.id} variant="glass" className="p-6 h-full flex flex-col">
+                    <OmniBaseCard key={mod.id} variant="glass" className="p-6 h-full flex flex-col">
                       <div className="flex items-center gap-3 mb-6">
                         <div className="p-3 bg-cyan-500/20 text-cyan-300 rounded-xl">
                           {mod.icon}
                         </div>
                         <div>
                           <h3 className="font-bold text-lg text-white">{mod.name}</h3>
-                          <UniversalBadge variant={mod.status === 'Healthy' ? 'success' : 'warning'} size="sm" className="mt-1">
+                          <OmniBadge variant={mod.status === 'Healthy' ? 'success' : 'warning'} size="sm" className="mt-1">
                             {mod.status}
-                          </UniversalBadge>
+                          </OmniBadge>
                         </div>
                       </div>
 
@@ -216,7 +216,7 @@ export default function OmniMapPage() {
                           </div>
                         </div>
                       </div>
-                    </UniversalCard>
+                    </OmniBaseCard>
                   ))}
                 </motion.div>
               ) : (
@@ -227,13 +227,13 @@ export default function OmniMapPage() {
                   exit={{ opacity: 0 }}
                   className="h-full"
                 >
-                  <UniversalCard variant="glass" className="p-6 h-full flex flex-col items-center justify-center text-center border-dashed">
+                  <OmniBaseCard variant="glass" className="p-6 h-full flex flex-col items-center justify-center text-center border-dashed">
                     <Network className="w-12 h-12 text-slate-600 mb-4" />
                     <h3 className="text-lg font-bold text-slate-400">未選擇模組</h3>
                     <p className="text-sm text-slate-500 mt-2">
                       點擊左側網路圖中的節點<br/>以查看詳細健康狀態與可用路由。
                     </p>
-                  </UniversalCard>
+                  </OmniBaseCard>
                 </motion.div>
               )}
             </AnimatePresence>

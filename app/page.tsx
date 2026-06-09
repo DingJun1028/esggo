@@ -1,7 +1,7 @@
-import React from 'react';
+﻿import React from 'react';
 import LandingContent from '@/components/LandingContent';
-import UniversalNotesTracker from '@/lib/agent/UniversalNotesTracker';
+import OmniNotesTracker from '@/lib/agent/OmniNotesTracker';
 
 export default async function LandingPage() {
-  return <LandingContent trackerNode={<UniversalNotesTracker />} />;
+  return <LandingContent trackerNode={<OmniNotesTracker />} />;
 }

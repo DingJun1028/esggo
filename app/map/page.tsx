@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🗺️ OmniMap v2.0 - Exhaustive MECE Full-Stack Composition Visualizer
  * v2.0 | #MECE_Exhaustive #SystemComposition #SovereigntyDisplay
  * 
@@ -93,7 +93,7 @@ const SYSTEM_COMPOSITION = [
     color: 'from-cyan-500/20 to-sky-500/20',
     description: 'T3 Tangible 極致感官體驗與原子化組件。',
     components: [
-      { name: 'Universal Atomic Library', desc: '基於「參照原則」之 4 聖主題原子庫' },
+      { name: 'Omni Atomic Library', desc: '基於「參照原則」之 4 聖主題原子庫' },
       { name: 'Liquid Glass Cyan DNA', desc: 'Blur 20px+ 與 Luminous 發光視覺語言' },
       { name: 'Bento Grid Dashboard', desc: '高密度資訊佈局與響應式主權體驗' },
       { name: 'Causality Visualizer', desc: '數據「因、循、果」軌跡之動態可視化' },

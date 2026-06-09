@@ -1,12 +1,12 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UniversalTable, UniversalTableColumn } from '../../../components/ui/universal/UniversalTable';
-import { UniversalButton } from '../../../components/ui/universal/UniversalButton';
-import { UniversalForm, FormField } from '../../../components/ui/universal/UniversalForm';
-import { UniversalChart } from '../../../components/ui/universal/UniversalChart';
-import { UniversalStatusDot } from '../../../components/ui/universal/UniversalStatusDot';
-import { UniversalBadge } from '../../../components/ui/universal/UniversalBadge';
+import { OmniBaseTable, OmniBaseTableColumn } from '../../../components/ui/omni/OmniBaseTable';
+import { OmniButton } from '../../../components/ui/omni/OmniButton';
+import { OmniForm, FormField } from '../../../components/ui/omni/OmniForm';
+import { OmniChart } from '../../../components/ui/omni/OmniChart';
+import { OmniStatusDot } from '../../../components/ui/omni/OmniStatusDot';
+import { OmniBadge } from '../../../components/ui/omni/OmniBadge';
 import { supabase } from '@/lib/db/supabase';
 
 export default function MetricsPage() {
@@ -127,7 +127,7 @@ export default function MetricsPage() {
     }
   };
 
-  const columns: UniversalTableColumn<any>[] = [
+  const columns: OmniBaseTableColumn<any>[] = [
     { key: 'metric_code', label: 'Code' },
     { key: 'metric_name', label: 'Name' },
     { key: 'category', label: 'Category' },
@@ -137,9 +137,9 @@ export default function MetricsPage() {
       key: 'lifecycle_stage', 
       label: 'Stage',
       render: (val) => (
-        <UniversalBadge variant={val === 'PUBLISHED' ? 'primary' : val === 'REVIEW' ? 'secondary' : 'outline'}>
+        <OmniBadge variant={val === 'PUBLISHED' ? 'primary' : val === 'REVIEW' ? 'secondary' : 'outline'}>
           {val || 'DRAFT'}
-        </UniversalBadge>
+        </OmniBadge>
       )
     },
     { 
@@ -148,7 +148,7 @@ export default function MetricsPage() {
       render: (val, row) => val ? (
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-2">
-            <UniversalStatusDot status="active" />
+            <OmniStatusDot status="active" />
             <span className="text-xs font-mono text-[var(--theme-text-muted)] truncate max-w-[80px]" title={val}>{val.substring(0, 8)}...</span>
           </div>
           {verificationResult?.id === row.id ? (
@@ -166,14 +166,14 @@ export default function MetricsPage() {
       ) : (
         <div className="flex items-center space-x-3">
           <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
-          <UniversalButton 
+          <OmniButton 
             variant="outline" 
             size="sm"
             onClick={() => handleSeal(row.id)}
             disabled={processingId === row.id}
           >
             {processingId === row.id ? 'Sealing...' : 'Seal (ZKP)'}
-          </UniversalButton>
+          </OmniButton>
         </div>
       )
     }
@@ -204,18 +204,18 @@ export default function MetricsPage() {
             數據對接：ESG Metrics (萬能永憶)
           </h1>
           <p className="text-[var(--theme-text-muted)] mt-1">
-            UniversalTable 與 UniversalForm 綁定 NCB 資料庫，實作 CRUD 操作。
+            OmniBaseTable 與 OmniForm 綁定 NCB 資料庫，實作 CRUD 操作。
           </p>
         </div>
-        <UniversalButton onClick={() => setShowAddForm(!showAddForm)}>
+        <OmniButton onClick={() => setShowAddForm(!showAddForm)}>
           {showAddForm ? 'Cancel' : 'Add Metric'}
-        </UniversalButton>
+        </OmniButton>
       </div>
 
       {showAddForm && (
         <div className="p-6 border border-[var(--theme-border)] rounded-xl bg-[var(--theme-surface)]/50 backdrop-blur-md animate-fade-in">
           <h2 className="text-lg font-semibold mb-4 text-[var(--theme-secondary)]">Create New Metric</h2>
-          <UniversalForm 
+          <OmniForm 
             fields={formFields} 
             onSubmit={handleAddMetric} 
             onCancel={() => setShowAddForm(false)} 
@@ -230,14 +230,14 @@ export default function MetricsPage() {
           {loading ? (
              <div className="p-12 text-center text-[var(--theme-text-muted)]">Loading metrics...</div>
           ) : (
-            <UniversalTable columns={columns} data={metrics} />
+            <OmniBaseTable columns={columns} data={metrics} />
           )}
         </div>
         
         <div className="lg:col-span-2 space-y-8">
           <div>
              <h3 className="text-sm tracking-widest text-[var(--theme-text-muted)] mb-4 uppercase font-bold">Metrics Progress Overview</h3>
-             <UniversalChart 
+             <OmniChart 
                type="bar" 
                data={chartData} 
                dataKey="value"

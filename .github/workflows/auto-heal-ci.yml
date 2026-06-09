@@ -34,18 +34,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ github.event.inputs.node_version || '22' }}
-          cache: 'npm'
+          cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
       - name: Install Dependencies
         id: install
         run: |
-          npm ci || npm install
+          pnpm install || pnpm install
         continue-on-error: true
 
       - name: Diagnose & Auto-Fix Install Errors
         if: steps.install.outcome == 'failure'
         run: |
-          ERROR_LOG=$(npm ci 2>&1 || true)
+          ERROR_LOG=$(pnpm install 2>&1 || true)
           echo "❌ Install Error: $ERROR_LOG"
           
           # 常見錯誤自動修復
@@ -56,7 +60,7 @@ jobs:
           if echo "$ERROR_LOG" | grep -q "node_modules"; then
             echo "🔧 Auto-fixing corrupted node_modules..."
             rm -rf node_modules package-lock.json
-            npm install
+            pnpm install
           fi
         shell: bash
 
@@ -66,7 +70,7 @@ jobs:
           echo "🧪 Running ${{ github.event.inputs.project_name || 'Swap-DeFi' }} tests..."
           
           # 執行測試並捕獲錯誤
-          npm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
+          pnpm run test -- --run --reporter=verbose 2>&1 | tee test-output.log || true
           
           # 檢查 Swap-DeFi 測試狀態
           PROJECT_NAME="${{ github.event.inputs.project_name || 'Swap-DeFi' }}"
@@ -78,7 +82,7 @@ jobs:
             # 自動修復常見測試錯誤
             if grep -q "Cannot find module" test-output.log; then
               echo "🔧 Auto-healing: Missing modules detected"
-              npm install --force
+              pnpm install --force
             fi
             
             if grep -q "SyntaxError" test-output.log; then
@@ -150,5 +154,4 @@ jobs:
         run: |
           echo "🎉 All checks passed! System is healthy."
           echo "📊 ${{ github.event.inputs.project_name || 'Swap-DeFi' }} Integration Status: ✅ Operational"
-          echo "🚀 Ready for production deployment"on Status: ✅ Operational"
           echo "🚀 Ready for production deployment"

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { getDashboardStats } from '@/lib/db';
 
 export const runtime = 'edge';

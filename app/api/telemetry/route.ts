@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { telemetryService } from '@/lib/telemetry/service';
 
 export async function GET(req: NextRequest) {

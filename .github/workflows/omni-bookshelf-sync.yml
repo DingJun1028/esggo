@@ -35,9 +35,14 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ github.event.inputs.node_version || '22' }} # 選擇一個穩定的 Node.js 版本
+        cache: 'pnpm'
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8
 
     - name: Install dependencies
-      run: npm install
+      run: pnpm install
 
     - name: Run Omni Bookshelf Manager
       run: node scripts/omni-bookshelf-manager.mjs
@@ -49,6 +54,4 @@ jobs:
         git add docs/wiki/WIKI_INDEX.md # 總索引文件
         git add "**/*.md" # 為了捕獲所有可能被修改的元數據
         git commit -m "docs: Auto-sync Omni Bookshelf Wiki Index and metadata" || echo "No changes to commit"
-        git push
- Bookshelf Wiki Index and metadata" || echo "No changes to commit"
-        git push
+        git push origin HEAD

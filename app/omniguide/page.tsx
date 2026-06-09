@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { Search, ChevronRight, BookOpen, MessageSquare, Sparkles, Send, BrainCircuit, Activity } from 'lucide-react';
 
 export default function OmniGuidePage() {
@@ -35,7 +35,7 @@ export default function OmniGuidePage() {
   };
 
   const knowledgeTree = [
-    { name: 'GRI Standards (2021)', active: true, children: ['Universal (100)', 'Sector Standards (200)', 'Topic Standards (300)'] },
+    { name: 'GRI Standards (2021)', active: true, children: ['Omni (100)', 'Sector Standards (200)', 'Topic Standards (300)'] },
     { name: 'SASB Standards', active: false, children: [] },
     { name: 'Internal Benchmarks 2025', active: false, children: [] },
   ];
@@ -48,9 +48,9 @@ export default function OmniGuidePage() {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <UniversalBadge variant="success" icon="🔮">
+              <OmniBadge variant="success" icon="🔮">
                 萬能法典 (OmniGuide)
-              </UniversalBadge>
+              </OmniBadge>
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-white/90 font-mono flex items-center gap-3">
               Jun.Ai.Key Nexus
@@ -74,7 +74,7 @@ export default function OmniGuidePage() {
           
           {/* Left Pane: Knowledge Tree */}
           <div className="lg:col-span-1 h-full overflow-hidden flex flex-col">
-            <UniversalCard title="Codex Knowledge Tree" variant="bordered" className="h-full flex flex-col">
+            <OmniBaseCard title="Codex Knowledge Tree" variant="bordered" className="h-full flex flex-col">
               <div className="relative mb-4 shrink-0">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                 <input 
@@ -106,7 +106,7 @@ export default function OmniGuidePage() {
                   </div>
                 ))}
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
           {/* Right Pane: Immersive Chat */}

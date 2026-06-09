@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,7 +17,7 @@ import { DataTable } from '../../components/ui/DataTable';
 import { BrandStatusDot } from '../../components/brand';
 import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 
 /**
  * Full-Stack Bidirectional TypeScript Models
@@ -106,7 +106,7 @@ export default function OmniAgentAgentPage() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const pageConfig: UniversalPageConfig = {
+  const pageConfig: OmniPageConfig = {
     id: 'omniagent-agent',
     title: 'OmniAgent Agent 系統 ☤',
     subtitle: '超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心。',

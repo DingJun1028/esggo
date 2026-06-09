@@ -36,7 +36,7 @@ export class OmniSoul {
   }
 
   private async activateAgents(resonated: IOmniWisdom): Promise<IOmniManifestation> {
-    const M = new UniversalThinkTank();
+    const M = new OmniThinkTank();
     const R = new RuneAPI();
     const A = new AgentNetwork();
     const E = new EvolutionEngine();
@@ -138,7 +138,7 @@ class GravityProtocol {
   }
 }
 
-class UniversalThinkTank {
+class OmniThinkTank {
   async query(input: IOmniWisdom | string): Promise<IOmniWisdom> {
     const inputStr = typeof input === 'string' ? input : JSON.stringify(input);
     return {

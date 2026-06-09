@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+﻿import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 export function Modal({ open, onClose, title, children, width = 'max-w-lg' }: {

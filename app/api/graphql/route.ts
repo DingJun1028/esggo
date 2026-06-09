@@ -1,4 +1,4 @@
-import { createYoga } from 'graphql-yoga';
+﻿import { createYoga } from 'graphql-yoga';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { readFileSync } from 'fs';
 import { join } from 'path';

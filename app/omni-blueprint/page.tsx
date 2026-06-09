@@ -1,10 +1,10 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { BookOpen, Map, Layers, ShieldCheck, Database, Rocket, LayoutGrid, Server, Activity, BrainCircuit, Wind } from 'lucide-react';
 
 // =========================================================================
@@ -127,9 +127,9 @@ const BLUEPRINT_DATA: BlueprintSection[] = [
     title: '10. 原子元件庫',
     icon: <BrainCircuit size={18} />,
     status: 'Completed',
-    description: '萬能元件原子庫-經典版，包含 UniversalButton, UniversalTable, UniversalModal 等。',
+    description: '萬能元件原子庫-經典版，包含 OmniButton, OmniBaseTable, OmniModal 等。',
     tasks: [
-      { name: 'Universal Component Interfaces', completed: true },
+      { name: 'Omni Component Interfaces', completed: true },
       { name: 'Liquid Glass Cyan Theming', completed: true },
       { name: 'Interactive Playground', completed: true },
     ]
@@ -185,7 +185,7 @@ export default function OmniBlueprintPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<BrainCircuit size={12}/>}>Blueprint Matrix</UniversalBadge>
+                <OmniBadge variant="primary" size="sm" icon={<BrainCircuit size={12}/>}>Blueprint Matrix</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">WIKI-001</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">[萬能實現] OmniAgent WIKI 藍圖</h1>
@@ -240,7 +240,7 @@ export default function OmniBlueprintPage() {
                   transition={{ duration: 0.3 }}
                   className="space-y-6"
                 >
-                  <UniversalCard variant="glass" className="p-8">
+                  <OmniBaseCard variant="glass" className="p-8">
                     <div className="flex justify-between items-start mb-6">
                       <div className="flex items-center gap-4">
                         <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-cyan-400">
@@ -249,11 +249,11 @@ export default function OmniBlueprintPage() {
                         <div>
                           <h2 className="text-2xl font-black text-white">{activeSection.title}</h2>
                           <div className="mt-2">
-                            <UniversalBadge 
+                            <OmniBadge 
                               variant={activeSection.status === 'Completed' ? 'success' : activeSection.status === 'In Progress' ? 'warning' : 'default'}
                             >
                               {activeSection.status}
-                            </UniversalBadge>
+                            </OmniBadge>
                           </div>
                         </div>
                       </div>
@@ -282,14 +282,14 @@ export default function OmniBlueprintPage() {
                     </div>
                     
                     <div className="mt-8 flex justify-end gap-3 pt-6 border-t border-white/5">
-                      <UniversalButton variant="outline" size="sm">
+                      <OmniButton variant="outline" size="sm">
                         檢視文件 (View Docs)
-                      </UniversalButton>
-                      <UniversalButton variant="primary" size="sm">
+                      </OmniButton>
+                      <OmniButton variant="primary" size="sm">
                         啟動萬能元件 (Launch Atomic Component)
-                      </UniversalButton>
+                      </OmniButton>
                     </div>
-                  </UniversalCard>
+                  </OmniBaseCard>
                 </motion.div>
               )}
             </AnimatePresence>

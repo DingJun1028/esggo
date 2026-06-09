@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createHash, timingSafeEqual } from 'crypto';
 import { HealingGuardian } from '@/lib/healing-guardian';
 
@@ -12,16 +12,19 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get('x-ncb-signature');
     const secret = process.env.NCBDB_WEBHOOK_SECRET;
 
-    if (secret && signature) {
+    if (secret) {
+      if (!signature) {
+        console.warn('[Webhook Sensor] Missing signature, but secret is configured.');
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+
       const payloadString = await req.text();
       const expectedSignature = createHash('sha256').update(`${payloadString}${secret}`).digest('hex');
       
-      const isVerified = timingSafeEqual(
-        new Uint8Array(Buffer.from(signature)),
-        new Uint8Array(Buffer.from(expectedSignature))
-      );
+      const sigBuffer = Buffer.from(signature);
+      const expectedBuffer = Buffer.from(expectedSignature);
 
-      if (!isVerified) {
+      if (sigBuffer.length !== expectedBuffer.length || !timingSafeEqual(new Uint8Array(sigBuffer), new Uint8Array(expectedBuffer))) {
         console.warn('[Webhook Sensor] Invalid signature detected.');
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }

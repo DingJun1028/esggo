@@ -7,7 +7,7 @@ import {
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
 } from '../../components/brand';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface AllianceMember {
@@ -53,7 +53,7 @@ export default function AlliancePage() {
     setVerifying(false);
   };
 
-  const pageConfig: UniversalPageConfig = {
+  const pageConfig: OmniPageConfig = {
     id: 'alliance-protocol',
     title: '王道聯盟數據信託',
     subtitle: 'Alliance Data Sharing Protocol：基於 ZKP 零知識證明與 5T 協議的跨組織誠信主權網絡。',

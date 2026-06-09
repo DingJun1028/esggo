@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,7 +12,7 @@ import {
   BrandCard, BrandButton, BrandBadge, BrandTabs, 
   StandardPage, BrandStatusDot, BrandModal
 } from '../../components/brand';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import { 
   EndToEndMatrix, 
   MatrixLifecycleStage, 
@@ -69,8 +69,8 @@ export default function EndToEndMatrixPage() {
     }
   };
 
-  // ── Universal Page Configuration ──────────────────────────────────
-  const pageConfig: UniversalPageConfig = {
+  // ── Omni Page Configuration ──────────────────────────────────
+  const pageConfig: OmniPageConfig = {
     id: 'e2e-matrix',
     title: '英標繁博 · 終始矩陣',
     subtitle: '語義治理規範 v1.1 | 英標為骨，繁博為魂。',

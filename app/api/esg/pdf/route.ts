@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { PDFDiffService } from '@/lib/sonar/core/pdf-diff';
 
 export async function POST(request: Request) {

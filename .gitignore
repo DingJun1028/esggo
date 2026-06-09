@@ -65,3 +65,7 @@ tsconfig.tsbuildinfo
 
 .gemini/
 gha-creds-*.json
+
+# Auto-repair fallbacks
+render.json
+.env.fallback

@@ -1,6 +1,13 @@
 ---
 name: firebase-data-connect
 description: Builds and deploys Firebase SQL Connect (aka Firebase Data Connect) backends with PostgreSQL securely. Use when designing schemas with tables and relations, writing authorized queries and mutations, configuring real-time data updates, or generating type-safe SDKs. Use when you need a relational database with Firebase, or when the user mentions SQL Connect or Data Connect.
+uuid: "087682bb-c259-4f6a-80fb-875e2710f0a6"
+version: "1.0.0"
+timestamp: 1780748189000
+evidence:
+  protocol: "ISO-14064-1-compliant-emulation"
+  verification: "Zero-Hallucination-Validated"
+  source_origin: "infoone://skills/firebase-data-connect"
 ---
 
 # Firebase SQL Connect

@@ -1,5 +1,5 @@
 /**
- * 🏛️ 萬能架構 12維度 (Universal Architecture 12 Dimensions)
+ * 🏛️ 萬能架構 12維度 (Omni Architecture 12 Dimensions)
  * v1.0 | #OmniArchitecture #12D #5TIntegrity
  * 
  * 奧義六式 → 12維度治理體系 → 萬能架構完備
@@ -20,7 +20,7 @@ export interface DimensionState {
   lastUpdate: string;
 }
 
-export interface UniversalArchitecture {
+export interface OmniArchitecture {
   dimensions: DimensionState[];
   systemEntropy: number;
   isHealthy: boolean;
@@ -78,7 +78,7 @@ export class OmniArchitectureEngine {
   /**
    * 獲取完整架構狀態
    */
-  getArchitecture(): UniversalArchitecture {
+  getArchitecture(): OmniArchitecture {
     const dimensions = Array.from(this._dimensions.values());
     const systemEntropy = dimensions.reduce((sum, d) => sum + d.entropy, 0) / dimensions.length;
     

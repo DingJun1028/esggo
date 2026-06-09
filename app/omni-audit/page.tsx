@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { ShieldCheck, ShieldAlert, Lock, Fingerprint, Activity, Zap, CheckCircle2 } from 'lucide-react';
 
 export default function OmniAuditPage() {
@@ -23,7 +23,7 @@ export default function OmniAuditPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="default" size="sm" icon={<Lock size={12}/>} className="bg-purple-500/20 text-purple-300 border-purple-500/30">Security</UniversalBadge>
+                <OmniBadge variant="default" size="sm" icon={<Lock size={12}/>} className="bg-purple-500/20 text-purple-300 border-purple-500/30">Security</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">AUDIT-001</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">技術完整性與安全稽核</h1>
@@ -39,13 +39,13 @@ export default function OmniAuditPage() {
             <h2 className="text-xl font-bold flex items-center gap-2 text-white">
               <Fingerprint className="text-cyan-400" /> 零知識證明 (ZKP) 弱點掃描
             </h2>
-            <UniversalCard variant="glass" className="p-6">
+            <OmniBaseCard variant="glass" className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="font-bold text-lg text-slate-200">5T Protocol Hash Lock Audit</h3>
                   <p className="text-sm text-slate-400">執行於 Omni Gateway，檢測防篡改與密碼學密封機制的可靠性。</p>
                 </div>
-                <UniversalBadge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>Passed</UniversalBadge>
+                <OmniBadge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>Passed</OmniBadge>
               </div>
 
               <div className="space-y-4">
@@ -65,7 +65,7 @@ export default function OmniAuditPage() {
                   <p className="text-xs text-slate-400">每一次 Hash 封印皆夾帶動態時間戳與 Nonce，有效阻擋重放攻擊與偽造竄改。</p>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
           {/* Penetration Testing */}
@@ -73,13 +73,13 @@ export default function OmniAuditPage() {
             <h2 className="text-xl font-bold flex items-center gap-2 text-white">
               <Zap className="text-purple-400" /> RLS 滲透測試與租戶隔離
             </h2>
-            <UniversalCard variant="glass" className="p-6">
+            <OmniBaseCard variant="glass" className="p-6">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="font-bold text-lg text-slate-200">Supabase Row Level Security (RLS)</h3>
                   <p className="text-sm text-slate-400">針對資料庫層級的權限越界 (Broken Access Control) 進行自動化打擊測試。</p>
                 </div>
-                <UniversalBadge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>Passed</UniversalBadge>
+                <OmniBadge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>Passed</OmniBadge>
               </div>
 
               <div className="space-y-4">
@@ -99,14 +99,14 @@ export default function OmniAuditPage() {
                   <p className="text-xs text-slate-400">防禦未攜帶有效 JWT 簽章或角色為 Viewer 卻嘗試執行 INSERT/UPDATE 的非法行為。</p>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
         </div>
         
         {/* Overall Status */}
         <div className="mt-8">
-          <UniversalCard variant="glass" className="p-4 bg-emerald-950/20 border-emerald-500/30">
+          <OmniBaseCard variant="glass" className="p-4 bg-emerald-950/20 border-emerald-500/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ShieldAlert className="text-emerald-400" size={24} />
@@ -117,7 +117,7 @@ export default function OmniAuditPage() {
               </div>
               <Activity className="text-emerald-500 animate-pulse" size={24} />
             </div>
-          </UniversalCard>
+          </OmniBaseCard>
         </div>
 
       </div>

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { ncbClient } from '@/lib/ncbdb';
 import { createClient } from '@supabase/supabase-js';
 

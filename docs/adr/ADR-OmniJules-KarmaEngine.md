@@ -95,7 +95,7 @@ Antigravity (主代理 · 全棧工程師)
 | 任務 | 根因 | OmniJules 執行 | 結果 |
 |------|------|---------------|------|
 | `orchestrator.ts` 重複變數 | 開發時兩版邏輯合併不當 | 移除冗餘 `const` 宣告 | ✅ 零錯誤 |
-| `UniversalNotesTracker.tsx` 語法殘碼 | 複製貼上覆蓋至元件閉合括號外 | PowerShell 截取前 164 行清除尾部 | ✅ 零錯誤 |
+| `OmniNotesTracker.tsx` 語法殘碼 | 複製貼上覆蓋至元件閉合括號外 | PowerShell 截取前 164 行清除尾部 | ✅ 零錯誤 |
 | 倉庫過時檔案清理 | 累積的測試腳本、日誌、備份檔未入 `.gitignore` | `git rm` 移除 9 個熵增檔案 | ✅ 已刪除 |
 | 遠端同步 | — | `git push origin main` | ✅ 4 commits 推送成功 |
 

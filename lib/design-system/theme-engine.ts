@@ -3,7 +3,7 @@
  * v2.0 | #BenevolentClassic #BerkeleyAcademy #ExtremeMinimalist #BestPractice
  */
 
-import { UniversalThemeId, ModeLayer } from './atomic-core';
+import { OmniThemeId, ModeLayer } from './atomic-core';
 
 export interface AtomicThemeVars {
   '--at-bg-primary': string;
@@ -19,7 +19,7 @@ export interface AtomicThemeVars {
   '--at-glass-opacity': string;
 }
 
-export const UNIVERSAL_THEMES: Record<UniversalThemeId, Record<Exclude<ModeLayer, 'system'>, AtomicThemeVars>> = {
+export const UNIVERSAL_THEMES: Record<OmniThemeId, Record<Exclude<ModeLayer, 'system'>, AtomicThemeVars>> = {
   'benevolent-classic': {
     light: {
       '--at-bg-primary': '#f0f9f6',
@@ -137,7 +137,7 @@ export const UNIVERSAL_THEMES: Record<UniversalThemeId, Record<Exclude<ModeLayer
 /**
  * Apply the selected theme and mode to the document
  */
-export function applyAtomicTheme(themeId: UniversalThemeId, mode: ModeLayer) {
+export function applyAtomicTheme(themeId: OmniThemeId, mode: ModeLayer) {
   let activeMode: Exclude<ModeLayer, 'system'> = 'light';
   
   if (mode === 'system') {

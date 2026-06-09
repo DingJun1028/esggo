@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { BestPracticeSchema, type BestPractice } from '@/lib/agent/best-practice-registry';
 import { omniBlueTableService } from '@/src/server/services/omni-blue-table.service';
 

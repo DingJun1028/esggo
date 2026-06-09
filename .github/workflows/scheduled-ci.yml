@@ -2,15 +2,13 @@ name: Scheduled Omni CI/CD
 
 on:
   schedule:
-    # 每日重複任務：每 3 小時執行一次 (UTC 時間)
-    - cron: '0 */3 * * *'
-  # 允許手動觸發
+    - cron: '0 */3 * * *' # Run every 3 hours (UTC)
   workflow_dispatch:
     inputs:
       node_version:
         description: 'Node.js version to use'
         required: false
-        default: '22'
+        default: '20'
 
 permissions:
   contents: read
@@ -27,28 +25,31 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22' # ESGGO 專案目前支援 Node.js 20+
-          cache: 'npm'
+          node-version: '20' # Updating to Node.js version 20
+          cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
-      - name: Install Build Libraries
+      - name: Install build libraries
         run: sudo apt-get update && sudo apt-get install -y build-essential
 
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          pnpm install
+          pnpm install better-sqlite3 # Ensure better-sqlite3 is installed
 
-      - name: Install Playwright Browsers
-        run: npx playwright install
-
-      - name: Run Linter (ESLint)
-        run: npm run lint
-        continue-on-error: true # 避免因警告中斷排程任務，可依需求調整
+      - name: Run Lint (ESLint)
+        run: pnpm run lint
+        continue-on-error: true # Suppress warnings causing CI failure
 
       - name: Run Formatter Check (Prettier)
-        run: npm run format:check
+        run: pnpm run format:check
         continue-on-error: true
 
       - name: Run Unit Tests (Vitest)
-        run: npm run test
+        run: pnpm run test
 
       - name: Send Slack Notification
         if: always()
@@ -57,7 +58,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: "Omni CI/CD Execution Status: ${{ job.status }}"
           SLACK_TITLE: "Scheduled CI/CD Report"
-          SLACK_COLOR: ${{ job.status == 'success' && 'good' || 'danger' }}
 
       - name: Send Telegram Notification
         if: always()
@@ -66,7 +66,3 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: "Omni CI/CD Execution Status: ${{ job.status }}\nRepository: ${{ github.repository }}\nWorkflow: ${{ github.workflow }}"
-
-      # (可選) 如果需要自動部署到 Vercel 或其他平台，可以將腳本加在後方
-      # - name: Build Project
-      #   run: npm run build

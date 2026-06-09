@@ -1,4 +1,4 @@
-import { streamText } from 'ai';
+﻿import { streamText } from 'ai';
 import { google, createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
 
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       messages,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

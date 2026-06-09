@@ -22,7 +22,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
           
       - name: 檢查目錄結構
         run: |
@@ -34,15 +38,15 @@ jobs:
           
       - name: 安裝依賴
         working-directory: ./esggo-project
-        run: npm ci
+        run: pnpm install
         
       - name: 執行 lint
         working-directory: ./esggo-project
-        run: npm run lint
+        run: pnpm run lint
         
       - name: 執行測試
         working-directory: ./esggo-project
-        run: npm test
+        run: pnpm test
         
       - name: 測試 JES 監控
         working-directory: ./esggo-project
@@ -81,7 +85,7 @@ jobs:
       - name: 執行安全掃描
         working-directory: ./esggo-project
         run: |
-          npm audit --audit-level moderate
+          pnpm audit --audit-level moderate
           
       - name: 檢查環境變數
         run: |

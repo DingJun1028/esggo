@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { Save, Loader2, Trash2 } from 'lucide-react';
 import { Modal } from './Modal';

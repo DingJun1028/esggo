@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, List, FileSearch, FormInput, BarChart3, CheckCircle, XCircle, AlertTriangle, 
@@ -7,7 +7,7 @@ import {
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, BrandPageHeader, StandardPage, BrandScoreRing, BrandCardHeader, BrandKpiCard
 } from '../../components/brand';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import {
   COMPONENT_SPECS, PAGE_VALIDATION_ITEMS, BLOCK_CONDITIONS,
   type ValidationStatus, type ComponentSpec, type PageTemplate,
@@ -259,7 +259,7 @@ export default function AcceptanceChecklistPage() {
     }
   };
 
-  const pageConfig: UniversalPageConfig = {
+  const pageConfig: OmniPageConfig = {
     id: 'acceptance-checklist',
     title: '品質驗收清單',
     subtitle: '頁面模板與元件品牌合規檢查。確保每一頁都符合 Berkeley Academy v14 視覺標準與 5T 誠信協議。',

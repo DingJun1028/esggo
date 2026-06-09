@@ -153,7 +153,7 @@ export interface PageValidationItem {
 }
 
 export const PAGE_VALIDATION_ITEMS: PageValidationItem[] = [
-  // Universal
+  // Omni
   { id: 'u1', question: '這一頁的主任務是否單一且明確', required: true, template: ['dashboard','list','detail','form','report'] },
   { id: 'u2', question: '使用者是否能在 5 秒內理解頁面用途', required: true, template: ['dashboard','list','detail','form','report'] },
   { id: 'u3', question: '主資訊與次資訊是否層級清楚', required: true, template: ['dashboard','list','detail','form','report'] },

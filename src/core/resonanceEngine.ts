@@ -1,4 +1,4 @@
-// Universal Resonance Engine
+// Omni Resonance Engine
 // ESG GO v9.0.0 - 全維共鳴計算引擎
 
 import { IComponentCore, ResonanceResult } from '../../lib/core-types';
@@ -16,7 +16,7 @@ export class ResonanceEngine {
     
     for (const card of cards) {
       // 1. 獲取真實狀態 (GPL)
-      const truthState = await this.gpl.getTruthState(card.uuid) as IComponentCore;
+      const truthState = await this.gpl.getTruthState(card.uuid) as any as IComponentCore;
       
       // 2. 獲取端點狀態
       await this.notion.getCardState(card.uuid);

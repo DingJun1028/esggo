@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { omniAgent, omniSwarm, esgResearcher, esgAuditor, esgStrategist, esgConsultant } from '@/lib/agents/adk-swarm';
 
 // Agent mapping for individual queries

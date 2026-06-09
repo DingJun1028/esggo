@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { 
   ShieldAlert, ShieldCheck, Search, SearchCheck, SearchCode,
   FileText, Activity, Brain, AlertTriangle, Info,
@@ -78,7 +78,7 @@ export default function ComplianceCheckPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>Gemini 2.1 Flash + Genkit</UniversalBadge>
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>Gemini 2.1 Flash + Genkit</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
@@ -86,7 +86,7 @@ export default function ComplianceCheckPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton 
+            <OmniButton 
               variant={isScanning ? "outline" : "primary"} 
               icon={isScanning ? <Loader2 size={16} className="animate-spin" /> : <FileSearch size={16}/>} 
               onClick={startScan}
@@ -94,7 +94,7 @@ export default function ComplianceCheckPage() {
               className="flex-1 md:flex-none shadow-[0_0_20px_rgba(6,182,212,0.3)]"
             >
               {isScanning ? '5T 誠信掃描中...' : '執行 5T 誠信掃描'}
-            </UniversalButton>
+            </OmniButton>
           </div>
         </header>
 
@@ -103,7 +103,7 @@ export default function ComplianceCheckPage() {
           
           {/* Left Column: Standards & Progress (Layer 1) */}
           <div className="md:col-span-3 flex flex-col gap-6">
-            <UniversalCard variant="glass" className="p-5 flex-1 flex flex-col relative overflow-hidden">
+            <OmniBaseCard variant="glass" className="p-5 flex-1 flex flex-col relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
               
               <div className="flex items-center gap-2 text-cyan-400 mb-6">
@@ -128,7 +128,7 @@ export default function ComplianceCheckPage() {
                 <div className="p-3 bg-white/5 rounded-xl border border-white/5">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-xs font-bold text-slate-300">GRI 2021 通用準則</span>
-                    <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                    <OmniBadge variant="success" size="sm">Active</OmniBadge>
                   </div>
                   <div className="w-full bg-slate-800 rounded-full h-1.5 mb-1 overflow-hidden">
                     <div className="bg-emerald-400 h-1.5 rounded-full transition-all duration-1000" style={{ width: `${scanComplete ? 100 : scanProgress}%` }}></div>
@@ -138,7 +138,7 @@ export default function ComplianceCheckPage() {
                 <div className="p-3 bg-white/5 rounded-xl border border-white/5">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-xs font-bold text-slate-300">ISSB (IFRS S1/S2)</span>
-                    <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                    <OmniBadge variant="success" size="sm">Active</OmniBadge>
                   </div>
                   <div className="w-full bg-slate-800 rounded-full h-1.5 mb-1 overflow-hidden">
                     <div className="bg-cyan-400 h-1.5 rounded-full transition-all duration-1000" style={{ width: `${scanComplete ? 100 : scanProgress * 0.9}%` }}></div>
@@ -148,7 +148,7 @@ export default function ComplianceCheckPage() {
                 <div className="p-3 bg-white/5 rounded-xl border border-white/5">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-xs font-bold text-slate-300">台灣證交所規範</span>
-                    <UniversalBadge variant="success" size="sm">Active</UniversalBadge>
+                    <OmniBadge variant="success" size="sm">Active</OmniBadge>
                   </div>
                   <div className="w-full bg-slate-800 rounded-full h-1.5 mb-1 overflow-hidden">
                     <div className="bg-indigo-400 h-1.5 rounded-full transition-all duration-1000" style={{ width: `${scanComplete ? 100 : scanProgress * 0.8}%` }}></div>
@@ -168,19 +168,19 @@ export default function ComplianceCheckPage() {
                   </div>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
           {/* Middle Column: Report Preview & Heatmap (Layer 2 Hologram) */}
           <div className="md:col-span-6 flex flex-col">
-            <UniversalCard variant="glow" className="p-0 flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-[0_0_40px_rgba(6,182,212,0.1)]">
+            <OmniBaseCard variant="glow" className="p-0 flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-[0_0_40px_rgba(6,182,212,0.1)]">
               <div className="p-4 border-b border-cyan-500/20 bg-cyan-950/30 flex justify-between items-center backdrop-blur-md">
                 <div className="flex items-center gap-2 text-cyan-300">
                   <FileText size={16} />
                   <span className="text-sm font-bold tracking-widest uppercase">2026 ESG 永續報告書草稿</span>
                 </div>
                 <div className="flex gap-2">
-                  <UniversalBadge variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400">pgvector RAG</UniversalBadge>
+                  <OmniBadge variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400">pgvector RAG</OmniBadge>
                 </div>
               </div>
 
@@ -258,12 +258,12 @@ export default function ComplianceCheckPage() {
                   </div>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
 
           {/* Right Column: Diagnosis Details (Layer 1 Glass) */}
           <div className="md:col-span-3 flex flex-col gap-6">
-            <UniversalCard variant="glass" className="p-5 flex-1 flex flex-col relative">
+            <OmniBaseCard variant="glass" className="p-5 flex-1 flex flex-col relative">
               <div className="flex items-center gap-2 text-slate-300 mb-4 pb-4 border-b border-white/5">
                 <SearchCode size={18} className="text-cyan-400" />
                 <h3 className="font-bold text-sm tracking-widest uppercase">AI 診斷與建議</h3>
@@ -341,12 +341,12 @@ export default function ComplianceCheckPage() {
                     <Lock size={14} className="text-cyan-400" />
                     <span className="text-xs text-slate-300 font-mono">Hash Lock Status</span>
                   </div>
-                  <UniversalBadge variant={scanComplete ? "success" : "default"} size="sm">
+                  <OmniBadge variant={scanComplete ? "success" : "default"} size="sm">
                     {scanComplete ? 'Sealed in Vault' : 'Pending'}
-                  </UniversalBadge>
+                  </OmniBadge>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
         </div>
 

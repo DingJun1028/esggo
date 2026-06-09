@@ -1,10 +1,10 @@
-'use client';
+ï»¿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalTable } from '@/components/ui/universal/UniversalTable';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
 import { FileCheck, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
 export default function DocumentChecklistPage() {
@@ -21,7 +21,7 @@ export default function DocumentChecklistPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetching from a universal proxy metrics endpoint
+      // Fetching from a omni proxy metrics endpoint
       const res = await fetch('/api/metrics/document-checklist', { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
@@ -61,7 +61,7 @@ export default function DocumentChecklistPage() {
       if (resData.success && resData.hashLock) {
         setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
       } else {
-        alert('å°å°å¤±æ? (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        alert('å°å°å¤±ï¿½? (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
     } catch (error) {
       console.error('Seal exception:', error);
@@ -102,22 +102,22 @@ export default function DocumentChecklistPage() {
   };
 
   const columns = [
-    { key: 'date', label: '¤é´Á (Date)' },
-    { key: 'metric_name', label: '«ü¼Ğ¦WºÙ (Metric Name)' },
-    { key: 'metric_value', label: '¼Æ­È (Value)', render: (val: any, row: any) => (
+    { key: 'date', label: 'ï¿½ï¿½ï¿½ (Date)' },
+    { key: 'metric_name', label: 'ï¿½ï¿½ï¿½Ğ¦Wï¿½ï¿½ (Metric Name)' },
+    { key: 'metric_value', label: 'ï¿½Æ­ï¿½ (Value)', render: (val: any, row: any) => (
       <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
     ) },
-    { key: 'source_origin', label: '¨Ó·½ (Source)' },
+    { key: 'source_origin', label: 'ï¿½Ó·ï¿½ (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
       val ? (
-        <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
+        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
           {val.substring(0, 8)}...
-        </UniversalBadge>
+        </OmniBadge>
       ) : (
-        <UniversalBadge variant="default" size="sm">¥¼«Ê¸Ë</UniversalBadge>
+        <OmniBadge variant="default" size="sm">ï¿½ï¿½ï¿½Ê¸ï¿½</OmniBadge>
       )
     ) },
-    { key: 'action', label: '¾Ş§@ (Actions)', render: (_: any, row: any) => (
+    { key: 'action', label: 'ï¿½Ş§@ (Actions)', render: (_: any, row: any) => (
       <div className="flex items-center gap-3">
         {!row.hash_lock && (
           <button 
@@ -135,7 +135,7 @@ export default function DocumentChecklistPage() {
           className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
         >
           {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? 'ÅçÃÒ 5T' : '½s¿è'}
+          {row.hash_lock ? 'ï¿½ï¿½ï¿½ï¿½ 5T' : 'ï¿½sï¿½ï¿½'}
         </button>
       </div>
     ) }
@@ -161,7 +161,7 @@ export default function DocumentChecklistPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</UniversalBadge>
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
@@ -169,79 +169,79 @@ export default function DocumentChecklistPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">æª¢ç´¢</UniversalButton>
-            <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              ?°å?ç´€??            </UniversalButton>
+            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">æª¢ç´¢</OmniButton>
+            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+              ?ï¿½ï¿½?ç´€??            </OmniButton>
           </div>
         </header>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <UniversalCard variant="glass" className="p-6 space-y-4">
+          <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">¬¡ÅD¸`ÂI</span>
+              <span className="text-sm font-bold uppercase tracking-widest">ï¿½ï¿½ï¿½Dï¿½`ï¿½I</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </UniversalCard>
+          </OmniBaseCard>
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
+          <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T é©—è??</span>
+              <span className="text-sm font-bold uppercase tracking-widest">5T é©—ï¿½??</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </UniversalCard>
+          </OmniBaseCard>
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
+          <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">·~°ÈÅŞ¿è</span>
+              <span className="text-sm font-bold uppercase tracking-widest">ï¿½~ï¿½ï¿½ï¿½Ş¿ï¿½</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
             <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </UniversalCard>
+          </OmniBaseCard>
         </div>
 
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <UniversalCard 
+            <OmniBaseCard 
               variant="default" 
-              title="·~°È¸ê®Æ¹wÄı" 
+              title="ï¿½~ï¿½È¸ï¿½Æ¹wï¿½ï¿½" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
-              <UniversalTable 
+              <OmniBaseTable 
                 columns={columns}
                 data={data}
                 loading={loading}
               />
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
           
           <div className="space-y-6">
-            <UniversalCard 
+            <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent ®Ö¤ß"
-              subtitle="AI ¯à¤O¤¤¤ß"
+              title="OmniAgent ï¿½Ö¤ï¿½"
+              subtitle="AI ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  ¦¹±M®×¨ã³Æ <strong>¥şºİ´¼¯à®Ö¤ß</strong>¡A²Å¦XÄY®æ TypeScript ¼Ğ·Ç¡C
+                  ï¿½ï¿½ï¿½Mï¿½×¨ï¿½ï¿½ <strong>ï¿½ï¿½ï¿½İ´ï¿½ï¿½ï¿½Ö¤ï¿½</strong>ï¿½Aï¿½Å¦Xï¿½Yï¿½ï¿½ TypeScript ï¿½Ğ·Ç¡C
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">è¨­è??Ÿå? (Trinity UIUX)</h4>
+                  <h4 className="font-bold text-cyan-400 mb-2">è¨­ï¿½??ï¿½ï¿½? (Trinity UIUX)</h4>
                   <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>å®¢æˆ¶é«”é? (Customer Experience)</li>
-                    <li>æ¥­å??è¼¯ (Business Logic)</li>
+                    <li>å®¢æˆ¶é«”ï¿½? (Customer Experience)</li>
+                    <li>æ¥­ï¿½??ï¿½è¼¯ (Business Logic)</li>
                     <li>æ¥µè‡´ç¾å­¸ (Liquid Glass Cyan)</li>
                   </ul>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
         </div>
 

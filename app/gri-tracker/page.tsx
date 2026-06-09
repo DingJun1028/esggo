@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   CheckCircle, Circle, AlertCircle, Search, Filter,
@@ -8,7 +8,7 @@ import {
 import { 
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
 } from '../../components/brand';
-import { UniversalPageConfig } from '../../lib/page-config';
+import { OmniPageConfig } from '../../lib/page-config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ComplianceEngine, GRIComplianceNode } from '../../lib/omni-core/compliance-engine';
 import { useAuth } from '../../hooks/useAuth';
@@ -75,13 +75,13 @@ export default function GRITrackerPage() {
   }, [matrix]);
 
   const CATEGORY_META = {
-    universal:     { label: '通用準則', color: '#003262', bg: 'rgba(0, 50, 98, 0.05)', icon: <Globe size={14}/> },
+    omni:     { label: '通用準則', color: '#003262', bg: 'rgba(0, 50, 98, 0.05)', icon: <Globe size={14}/> },
     environmental: { label: '環境面 E', color: '#10B981', bg: 'rgba(16, 185, 129, 0.05)', icon: <Leaf size={14}/> },
     social:        { label: '社會面 S', color: '#8B5CF6', bg: 'rgba(139, 92, 246, 0.05)', icon: <Users size={14}/> },
     governance:    { label: '治理面 G', color: '#FDB515', bg: 'rgba(253, 181, 21, 0.05)', icon: <Building2 size={14}/> },
   };
 
-  const pageConfig: UniversalPageConfig = {
+  const pageConfig: OmniPageConfig = {
     id: 'gri-tracker',
     title: 'GRI 揭露追蹤器',
     subtitle: 'GRI 2021 全域準則監控：結合 5T 協議門，即時動態追蹤數據封印進度與合規缺口。',
@@ -178,7 +178,7 @@ export default function GRITrackerPage() {
                    />
                 </div>
                 <div className="flex gap-2 overflow-x-auto p-1 bg-slate-50 rounded-2xl border border-slate-100 no-scrollbar">
-                   {['all', 'universal', 'environmental', 'social', 'governance'].map(cat => (
+                   {['all', 'omni', 'environmental', 'social', 'governance'].map(cat => (
                      <button key={cat} onClick={() => setCategoryFilter(cat)} className={`px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${categoryFilter === cat ? 'bg-[#003262] text-white shadow-lg' : 'text-slate-400 hover:text-[#003262]'}`}>
                        {cat === 'all' ? 'ALL' : CATEGORY_META[cat as keyof typeof CATEGORY_META].label}
                      </button>

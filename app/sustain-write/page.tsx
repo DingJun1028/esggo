@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { BookOpen, Sparkles, Layers, Cpu, Database, Eye, ShieldCheck, AlignLeft, RefreshCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
@@ -47,7 +47,7 @@ export default function SustainWritePage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<Sparkles size={12}/>}>Cognitive Programming</UniversalBadge>
+                <OmniBadge variant="primary" size="sm" icon={<Sparkles size={12}/>}>Cognitive Programming</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
@@ -55,8 +55,8 @@ export default function SustainWritePage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton variant="outline" icon={<RefreshCcw size={16}/>} className="flex-1 md:flex-none">自動熵減</UniversalButton>
-            <UniversalButton 
+            <OmniButton variant="outline" icon={<RefreshCcw size={16}/>} className="flex-1 md:flex-none">自動熵減</OmniButton>
+            <OmniButton 
               variant="primary" 
               icon={<Layers size={16}/>} 
               onClick={handleWeave} 
@@ -64,7 +64,7 @@ export default function SustainWritePage() {
               className="flex-1 md:flex-none bg-gradient-to-r from-aqua-cyan-midtone to-aqua-cyan hover:from-aqua-cyan hover:to-aqua-cyan-shadow border-none shadow-[0_0_20px_rgba(6,182,212,0.3)]"
             >
               啟動全息編織
-            </UniversalButton>
+            </OmniButton>
           </div>
         </header>
 
@@ -123,21 +123,21 @@ export default function SustainWritePage() {
                     { title: 'Ch.3 社會共融 (Social)', status: 'fragmented', desc: '員工福祉、多元包容與供應商行為準則。' },
                     { title: 'Ch.4 誠信經營 (Governance)', status: 'woven', desc: '商業道德、風險管理與資訊安全防護。' },
                   ].map((chapter, i) => (
-                    <UniversalCard key={i} variant="glass" className="hover:border-cyan-500/50 transition-colors group cursor-pointer">
+                    <OmniBaseCard key={i} variant="glass" className="hover:border-cyan-500/50 transition-colors group cursor-pointer">
                       <div className="flex justify-between items-start mb-4">
                         <div className="p-2 rounded-lg bg-slate-800 text-slate-300 group-hover:bg-cyan-900/50 group-hover:text-cyan-400 transition-colors">
                           <AlignLeft size={20} />
                         </div>
-                        <UniversalBadge 
+                        <OmniBadge 
                           variant={chapter.status === 'woven' ? 'success' : chapter.status === 'weaving' ? 'primary' : 'outline'}
                           size="sm"
                         >
                           {chapter.status.toUpperCase()}
-                        </UniversalBadge>
+                        </OmniBadge>
                       </div>
                       <h3 className="font-bold text-white mb-2">{chapter.title}</h3>
                       <p className="text-xs text-slate-400 leading-relaxed">{chapter.desc}</p>
-                    </UniversalCard>
+                    </OmniBaseCard>
                   ))}
                 </div>
               )}
@@ -184,7 +184,7 @@ export default function SustainWritePage() {
           
           {/* Sidebar */}
           <div className="space-y-6">
-            <UniversalCard 
+            <OmniBaseCard 
               variant="glow" 
               title="ESG 實境之眼" 
               subtitle="Eye of Sustainability Reality"
@@ -204,7 +204,7 @@ export default function SustainWritePage() {
                   </div>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
 
             <ShieldOfAbsoluteTruth 
               contentId="sustain-write-draft" 

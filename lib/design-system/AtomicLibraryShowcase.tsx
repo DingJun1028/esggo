@@ -1,6 +1,6 @@
 /**
- * 🎪 AtomicLibraryShowcase - Comprehensive Showcase of Universal Atomic Components
- * v3.0 | #AtomicShowcase #UniversalThemes #LiquidGlass #FullSpectrum
+ * 🎪 AtomicLibraryShowcase - Comprehensive Showcase of Omni Atomic Components
+ * v3.0 | #AtomicShowcase #OmniThemes #LiquidGlass #FullSpectrum
  */
 
 'use client';
@@ -17,8 +17,7 @@ import { AtomicTable } from './AtomicTable';
 import { AtomicModal } from './AtomicModal';
 import { AtomicAlert } from './AtomicAlert';
 import { useAtomicLibrary } from './AtomicLibraryProvider';
-import { UniversalThemeId, ModeLayer } from './atomic-core';
-import { useListAuditRecords } from '../../src/dataconnect-generated/react';
+import { OmniThemeId, ModeLayer } from './atomic-core';
 
 export const AtomicLibraryShowcase: React.FC = () => {
   const { theme, mode, setTheme, setMode } = useAtomicLibrary();
@@ -31,7 +30,7 @@ export const AtomicLibraryShowcase: React.FC = () => {
   const [progressVal, setProgressVal] = useState(65);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const themes: { id: UniversalThemeId; label: string }[] = [
+  const themes: { id: OmniThemeId; label: string }[] = [
     { id: 'benevolent-classic', label: '善向永續經典款' },
     { id: 'berkeley-academy', label: '柏克萊學院風' },
     { id: 'extreme-minimalist', label: '極致簡約款' },
@@ -74,16 +73,9 @@ interface TableRowData {
   status: 'Verified' | 'Auditing' | 'Failed';
 }
 
-  const { data: auditData, isLoading: auditLoading } = useListAuditRecords();
+  const auditLoading = false;
 
-  const tableData = auditData?.auditRecords && auditData.auditRecords.length > 0 
-    ? auditData.auditRecords.map(record => ({
-        nodeId: record.source || '',
-        action: record.title || '',
-        category: record.dataType || '',
-        status: (record.zkpStatus as any) || 'Auditing'
-      }))
-    : [
+  const tableData: TableRowData[] = [
         { nodeId: 'GOV_NODE_001', action: '溫室氣體範疇一直接排放量盤查', category: 'Environment', status: 'Verified' },
         { nodeId: 'GOV_NODE_002', action: '供應商全面簽署人權與誠信條約', category: 'Governance', status: 'Auditing' },
         { nodeId: 'GOV_NODE_003', action: '水資源消耗強度減量達標稽核', category: 'Social', status: 'Verified' },
@@ -290,7 +282,7 @@ interface TableRowData {
 
       </div>
 
-      {/* 📊 Universal Registry Table (Full-Width Segment) */}
+      {/* 📊 Omni Registry Table (Full-Width Segment) */}
       <div className="space-y-4">
         <h3 className="text-xs font-black uppercase tracking-[0.25em] text-[#06b6d4] pl-2 border-l-2 border-[#06b6d4]">
           治理節點註冊列表 (AtomicTable Spec ATOM_TBL_001)

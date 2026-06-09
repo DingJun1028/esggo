@@ -1,8 +1,8 @@
-'use client';
+ï»¿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { Leaf, Wind, Recycle, TrendingDown, Zap, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/db/supabase';
 
@@ -78,11 +78,11 @@ export default function EnvironmentalMetricsPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="default" size="sm" icon={<Leaf size={12}/>} className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">E-Metrics</UniversalBadge>
+                <OmniBadge variant="default" size="sm" icon={<Leaf size={12}/>} className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">E-Metrics</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">ENV-001</span>
                 {loading && <Loader2 className="w-3 h-3 text-emerald-500 animate-spin" />}
               </div>
-              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">?°å??‡æ? (Environmental)</h1>
+              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">?ï¿½ï¿½??ï¿½ï¿½? (Environmental)</h1>
               <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">Climate Action & Resource Management</p>
             </div>
           </div>
@@ -90,30 +90,30 @@ export default function EnvironmentalMetricsPage() {
 
         {/* Environmental Dashboard Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <UniversalCard variant="glass" className="p-6 transition-all duration-300 hover:border-emerald-500/30">
+          <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-emerald-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Wind size={18} className="text-emerald-400" /> ç¢³æ??¾é? (Scope 1+2)
+              <Wind size={18} className="text-emerald-400" /> ç¢³ï¿½??ï¿½ï¿½? (Scope 1+2)
             </h3>
-            <div className="text-3xl font-black text-white mb-2">{metrics.carbonEmissions.toLocaleString()} <span className="text-lg font-normal text-slate-500">tCO?‚e</span></div>
+            <div className="text-3xl font-black text-white mb-2">{metrics.carbonEmissions.toLocaleString()} <span className="text-lg font-normal text-slate-500">tCO?ï¿½e</span></div>
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
-              <TrendingDown size={14} className="text-emerald-500" /> è¼ƒå»å¹´å??Ÿä???5.4%
+              <TrendingDown size={14} className="text-emerald-500" /> è¼ƒå»å¹´ï¿½??ï¿½ï¿½???5.4%
             </p>
-          </UniversalCard>
+          </OmniBaseCard>
 
-          <UniversalCard variant="glass" className="p-6 transition-all duration-300 hover:border-teal-500/30">
+          <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-teal-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Zap size={18} className="text-teal-400" /> ç¸½èƒ½æºæ???            </h3>
+              <Zap size={18} className="text-teal-400" /> ç¸½èƒ½æºï¿½???            </h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.energyConsumption.toLocaleString()} <span className="text-lg font-normal text-slate-500">kWh</span></div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?€?? ç¶ é›»ä½”æ? 42%</p>
-          </UniversalCard>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?ï¿½?? ç¶ é›»ä½”ï¿½? 42%</p>
+          </OmniBaseCard>
 
-          <UniversalCard variant="glass" className="p-6 transition-all duration-300 hover:border-green-500/30">
+          <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-green-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Recycle size={18} className="text-green-400" /> å»¢æ??©å??¶ç?
+              <Recycle size={18} className="text-green-400" /> å»¢ï¿½??ï¿½ï¿½??ï¿½ï¿½?
             </h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.recyclingRate.toFixed(1)}%</div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?®æ?: 2026å¹´é? 90%</p>
-          </UniversalCard>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?ï¿½ï¿½?: 2026å¹´ï¿½? 90%</p>
+          </OmniBaseCard>
         </div>
 
       </div>

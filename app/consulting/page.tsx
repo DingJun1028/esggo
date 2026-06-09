@@ -1,15 +1,15 @@
-import React from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
+﻿import React from 'react';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 
 export default function ConsultingPage() {
   return (
     <div className="min-h-screen bg-void-stark text-white p-8 animate-in fade-in duration-700">
       <div className="max-w-7xl mx-auto space-y-8">
         <header className="space-y-4">
-          <UniversalBadge variant="success" icon="✨">
+          <OmniBadge variant="success" icon="✨">
             ESG GO 模組
-          </UniversalBadge>
+          </OmniBadge>
           <h1 className="text-4xl font-bold tracking-tight text-white/90">
             顧問服務 Consulting
           </h1>
@@ -19,7 +19,7 @@ export default function ConsultingPage() {
         </header>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <UniversalCard
+          <OmniBaseCard
             title="功能定位"
             variant="default"
             className="flex flex-col gap-4"
@@ -27,8 +27,8 @@ export default function ConsultingPage() {
             <ul className="space-y-2 text-white/70">
               <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="功能說明"
             variant="glow"
             className="flex flex-col gap-4"
@@ -36,8 +36,8 @@ export default function ConsultingPage() {
             <ul className="space-y-2 text-white/70">
               <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="主要內容"
             variant="bordered"
             className="flex flex-col gap-4"
@@ -48,8 +48,8 @@ export default function ConsultingPage() {
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 加購市場</li>
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 顧問服務說明</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="使用方式"
             variant="glass"
             className="flex flex-col gap-4"
@@ -57,8 +57,8 @@ export default function ConsultingPage() {
             <ul className="space-y-2 text-white/70">
               <li className="text-white/40 italic">參閱設計文件以獲取更多細節</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="使用場景"
             variant="default"
             className="flex flex-col gap-4"
@@ -68,8 +68,8 @@ export default function ConsultingPage() {
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 服務模組選購</li>
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 輔導資源展示</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="頁面目標"
             variant="glow"
             className="flex flex-col gap-4"
@@ -78,8 +78,8 @@ export default function ConsultingPage() {
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 讓服務內容標準化、可理解</li>
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 建立平台商業服務轉化入口</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="解決的痛點"
             variant="bordered"
             className="flex flex-col gap-4"
@@ -88,8 +88,8 @@ export default function ConsultingPage() {
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 顧問服務難標準化</li>
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 企業不清楚可購買哪些模組</li>
             </ul>
-          </UniversalCard>
-          <UniversalCard
+          </OmniBaseCard>
+          <OmniBaseCard
             title="目前成果"
             variant="glass"
             className="flex flex-col gap-4"
@@ -98,7 +98,7 @@ export default function ConsultingPage() {
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 已具備顧問服務頁面框架</li>
               <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-core" /> 已整合五大模組概念</li>
             </ul>
-          </UniversalCard>
+          </OmniBaseCard>
         </div>
       </div>
     </div>

@@ -23,18 +23,27 @@ interface DataTableProps<T> {
   className?: string;
 }
 
-export function DataTable<T extends object>({
-  columns, data, loading = false, searchable = false,
-  searchPlaceholder = '搜尋…', emptyMessage = '尚無資料',
-  rowKey, onRowClick, className,
-}: DataTableProps<T>) {
+const DataTableInner = <T extends object>({
+  columns,
+  data,
+  loading = false,
+  searchable = false,
+  searchPlaceholder = '搜尋…',
+  emptyMessage = '尚無資料',
+  rowKey,
+  onRowClick,
+  className,
+}: DataTableProps<T>) => {
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
 
   const handleSort = (key: string) => {
-    if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
-    else { setSortKey(key); setSortDir('asc'); }
+    if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
   };
 
   const filtered = useMemo(() => {
@@ -43,8 +52,12 @@ export function DataTable<T extends object>({
     // ⚡ Bolt Optimization: Hoist toLowerCase() and useMemo to prevent unnecessary recalculations
     if (search) {
       const searchLower = search.toLowerCase();
-      result = result.filter(row =>
-        Object.values(row).some(v => String(v ?? '').toLowerCase().includes(searchLower))
+      result = result.filter((row) =>
+        Object.values(row).some((v) =>
+          String(v ?? '')
+            .toLowerCase()
+            .includes(searchLower)
+        )
       );
     }
     if (sortKey) {
@@ -59,7 +72,9 @@ export function DataTable<T extends object>({
   }, [data, search, sortKey, sortDir]);
 
   return (
-    <div className={cn('bg-white rounded-[16px] border border-[#e5e7eb] overflow-hidden', className)}>
+    <div
+      className={cn('bg-white rounded-[16px] border border-[#e5e7eb] overflow-hidden', className)}
+    >
       {searchable && (
         <div className="px-4 py-3 border-b border-[#f3f4f6] bg-[#f9fafb]">
           <div className="relative">
@@ -91,9 +106,15 @@ export function DataTable<T extends object>({
                     {col.header}
                     {col.sortable && (
                       <span className="text-[#d1d5db]">
-                        {sortKey === String(col.key)
-                          ? sortDir === 'asc' ? <ChevronUp size={12} className="text-[#003262]" /> : <ChevronDown size={12} className="text-[#003262]" />
-                          : <ChevronsUpDown size={12} />}
+                        {sortKey === String(col.key) ? (
+                          sortDir === 'asc' ? (
+                            <ChevronUp size={12} className="text-[#003262]" />
+                          ) : (
+                            <ChevronDown size={12} className="text-[#003262]" />
+                          )
+                        ) : (
+                          <ChevronsUpDown size={12} />
+                        )}
                       </span>
                     )}
                   </div>
@@ -114,7 +135,10 @@ export function DataTable<T extends object>({
               ))
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center text-[13px] text-[#9ca3af]">
+                <td
+                  colSpan={columns.length}
+                  className="px-4 py-12 text-center text-[13px] text-[#9ca3af]"
+                >
                   {emptyMessage}
                 </td>
               </tr>
@@ -149,4 +173,8 @@ export function DataTable<T extends object>({
       )}
     </div>
   );
-}
+};
+
+// ⚡ Bolt Optimization: Wrap component in React.memo to prevent unnecessary re-renders when parent state changes.
+// Using `as typeof DataTableInner` preserves the generic <T> signature.
+export const DataTable = React.memo(DataTableInner) as typeof DataTableInner;
