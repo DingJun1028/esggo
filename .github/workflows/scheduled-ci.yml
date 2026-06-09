@@ -37,7 +37,7 @@ jobs:
           pnpm install better-sqlite3 # Ensure better-sqlite3 is installed
 
       - name: Run Lint (ESLint)
-        run: npm run lint
+        run: pnpm run lint
         continue-on-error: true # Suppress warnings causing CI failure
 
       - name: Run Formatter Check (Prettier)
@@ -45,7 +45,7 @@ jobs:
         continue-on-error: true
 
       - name: Run Unit Tests (Vitest)
-        run: npm run test
+        run: pnpm run test
 
       - name: Send Slack Notification
         if: always()
