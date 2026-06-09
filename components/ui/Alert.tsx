@@ -13,33 +13,14 @@ interface AlertProps {
   className?: string;
 }
 
-const alertConfig: Record<
-  AlertVariant,
-  { icon: React.ReactNode; bg: string; border: string; titleColor: string }
-> = {
-  success: {
-    icon: <CheckCircle size={16} />,
-    bg: '#f0fdf4',
-    border: '#86efac',
-    titleColor: '#16a34a',
-  },
-  warning: {
-    icon: <AlertTriangle size={16} />,
-    bg: '#fffbeb',
-    border: '#fde68a',
-    titleColor: '#d97706',
-  },
-  error: { icon: <XCircle size={16} />, bg: '#fef2f2', border: '#fca5a5', titleColor: '#dc2626' },
-  info: { icon: <Info size={16} />, bg: '#eff6ff', border: '#bfdbfe', titleColor: '#2563eb' },
+const alertConfig: Record<AlertVariant, { icon: React.ReactNode; bg: string; border: string; titleColor: string }> = {
+  success: { icon: <CheckCircle size={16} />, bg: '#f0fdf4', border: '#86efac', titleColor: '#16a34a' },
+  warning: { icon: <AlertTriangle size={16} />, bg: '#fffbeb', border: '#fde68a', titleColor: '#d97706' },
+  error:   { icon: <XCircle size={16} />, bg: '#fef2f2', border: '#fca5a5', titleColor: '#dc2626' },
+  info:    { icon: <Info size={16} />, bg: '#eff6ff', border: '#bfdbfe', titleColor: '#2563eb' },
 };
 
-export function Alert({
-  variant = 'info',
-  title,
-  children,
-  dismissible = false,
-  className,
-}: AlertProps) {
+export function Alert({ variant = 'info', title, children, dismissible = false, className }: AlertProps) {
   const [visible, setVisible] = useState(true);
   if (!visible) return null;
 
@@ -51,19 +32,11 @@ export function Alert({
     >
       <span style={{ color: cfg.titleColor, flexShrink: 0, marginTop: '1px' }}>{cfg.icon}</span>
       <div className="flex-1 min-w-0">
-        {title && (
-          <div className="text-[13px] font-bold mb-0.5" style={{ color: cfg.titleColor }}>
-            {title}
-          </div>
-        )}
+        {title && <div className="text-[13px] font-bold mb-0.5" style={{ color: cfg.titleColor }}>{title}</div>}
         <div className="text-[13px] text-[#374151]">{children}</div>
       </div>
       {dismissible && (
-        <button
-          aria-label="Close alert"
-          onClick={() => setVisible(false)}
-          className="flex-shrink-0 hover:opacity-60 transition-opacity focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-gray-400 rounded-sm"
-        >
+        <button aria-label="Close alert" onClick={() => setVisible(false)} className="flex-shrink-0 hover:opacity-60 transition-opacity">
           <X size={14} color="#9ca3af" />
         </button>
       )}
