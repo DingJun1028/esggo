@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: ppnpm install
+        run: pnpm install
 
       - name: Run pnpm audit
         run: pnpm audit
