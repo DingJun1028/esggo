@@ -9,3 +9,7 @@
 ## 2026-06-07 - DataTable React.memo Optimization
 **Learning:** Re-renders of parent components will cause `DataTable` to unnecessarily re-render, blocking the main thread during high-volume dataset sorting/filtering. Using `React.memo` directly on generic components loses their type inferences.
 **Action:** Always wrap data-intensive generic components in `React.memo` and type-cast the export `as typeof ComponentInner` to preserve the generic typing correctly while preventing expensive re-renders.
+
+## 2024-07-28 - [Search Input API Call Optimization]
+**Learning:** React `useEffect` hooks directly bound to text input states (like `search`) will trigger their callback on every single keystroke. When this callback involves an API request, it leads to excessive backend load, unnecessary network traffic, and potential race conditions.
+**Action:** Always wrap API calls triggered by text inputs in a debouncing mechanism (e.g., `setTimeout` with a 300ms delay inside `useEffect` or using a dedicated debounce hook) to significantly reduce the number of requests while maintaining a responsive UI.
