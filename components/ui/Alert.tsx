@@ -36,7 +36,7 @@ export function Alert({ variant = 'info', title, children, dismissible = false, 
         <div className="text-[13px] text-[#374151]">{children}</div>
       </div>
       {dismissible && (
-        <button aria-label="Close alert" onClick={() => setVisible(false)} className="flex-shrink-0 hover:opacity-60 transition-opacity">
+        <button aria-label="Close alert" onClick={() => setVisible(false)} className="flex-shrink-0 hover:opacity-60 transition-opacity focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-gray-400 rounded-sm">
           <X size={14} color="#9ca3af" />
         </button>
       )}
