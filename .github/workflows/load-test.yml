@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: ppnpm install
+        run: pnpm install
 
       - name: Build Next.js application
         run: npm run build
