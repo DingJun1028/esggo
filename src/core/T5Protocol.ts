@@ -1,7 +1,13 @@
 import { IComponentCore, IEvidence } from '../../lib/core-types';
 import { createHmac } from 'crypto';
 
-const HMAC_SECRET = process.env.T5_HMAC_SECRET || 'T5-ZKP-SECURITY-KEY';
+const getHmacSecret = (): string => {
+  const secret = process.env.T5_HMAC_SECRET;
+  if (!secret) {
+    throw new Error('Server misconfiguration: missing T5_HMAC_SECRET');
+  }
+  return secret;
+};
 
 export enum T5Protocol {
   Traceable = 'Traceable', // T1: 溯源
@@ -16,13 +22,13 @@ export class HashLock {
   private static readonly ALGORITHM = 'SHA-512';
 
   static async lock(data: string): Promise<string> {
-    const hmac = createHmac('sha512', HMAC_SECRET);
+    const hmac = createHmac('sha512', getHmacSecret());
     hmac.update(data);
     return hmac.digest('hex');
   }
 
   static verify(data: string, hash: string): boolean {
-    const recomputed = createHmac('sha512', HMAC_SECRET).update(data).digest('hex');
+    const recomputed = createHmac('sha512', getHmacSecret()).update(data).digest('hex');
     return recomputed === hash;
   }
 }
@@ -30,7 +36,7 @@ export class HashLock {
 // ZKP 驗證器
 export class ZKPValidator {
   static generateProof(data: string, nonce: number): string {
-    const hash = createHmac('sha512', HMAC_SECRET).update(`${data}:${nonce}`).digest('hex');
+    const hash = createHmac('sha512', getHmacSecret()).update(`${data}:${nonce}`).digest('hex');
     return hash;
   }
 
