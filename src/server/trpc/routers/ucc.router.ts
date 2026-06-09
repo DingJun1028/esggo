@@ -14,6 +14,6 @@ export const uccRouter = router({
   package: publicProcedure
     .input(CreateUCCDTOSchema)
     .mutation(async ({ input }) => {
-      return uccService.packageEvidence(input as any);
+      return uccService.packageEvidence(input);
     }),
 });

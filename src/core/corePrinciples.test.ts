@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest';
-import { Principle, Principles, getPrincipleDescription, clampFactor, validateCorePresence } from './CorePrinciples';
+import { Principle, getPrincipleDescription, clampFactor, validateCorePresence } from './CorePrinciples';
 
 describe('CorePrinciples (OmniCore 創世綱領驗證)', () => {
   test('應該能正確取得原則列舉與描述', () => {

@@ -4,7 +4,7 @@
   "mcpServers": {
     "firebase": {
       "command": "npx",
-      "args": ["-y", "firebase-tools", "mcp", "--dir", "c:\Project\esggo_original"]
+      "args": ["-y", "firebase-tools", "mcp", "--dir", "c:\Project\esggo\esggo"]
     }
   },
   "contextFileName": "FIREBASE.md"

@@ -1,9 +1,3 @@
----
-uuid: "95c62a9f-5080-4378-b855-7c963ac420a2"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:12.386Z"
-evidence: "src\dataconnect-generated\README.md"
----
 # Generated TypeScript README
 This README will guide you through the process of using the generated JavaScript SDK package for the connector `example`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
 

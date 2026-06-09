@@ -27,7 +27,7 @@ export interface OmniInfoCore {
 
 export interface OmniInfoNode {
   logic_hash: string;
-  calculations: Record<string, any>;
+  calculations: Record<string, unknown>;
   self_healing_status: 'stable' | 'repairing' | 'synced';
   protocol: 'T2' | 'T4'; // Transparent, Trackable
 }
@@ -246,10 +246,10 @@ export interface CreateUCCDTO {
 
 export interface SealInput {
   formula: string;
-  impactMetric: Record<string, any>;
+  impactMetric: Record<string, unknown>;
   sourceOrigin: string;
   lifecycleStage: 'draft' | 'verified' | 'published' | 'archived';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface UpdateUCCDTO {

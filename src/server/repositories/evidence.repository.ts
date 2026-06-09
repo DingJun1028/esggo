@@ -41,7 +41,7 @@ export class EvidenceRepository {
         ? new Date(Date.now() + data.expires_in_days * 24 * 60 * 60 * 1000)
         : null;
       
-      const { data: evidence, error } = await (supabase as any)
+      const { data: evidence, error } = await supabase
         .from('evidences')
         .insert({
           user_id: userId,
@@ -74,7 +74,7 @@ export class EvidenceRepository {
    */
   async findById(id: EvidenceID): Promise<Evidence | null> {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('evidences')
         .select('*')
         .eq('id', id)
@@ -99,7 +99,7 @@ export class EvidenceRepository {
     params: EvidenceQueryParams
   ): Promise<PaginatedResult<Evidence>> {
     try {
-      let query = (supabase as any).from('evidences').select('*', { count: 'exact' });
+      let query = supabase.from('evidences').select('*', { count: 'exact' });
       
       // 應用篩選條件
       if (params.user_id) {
@@ -133,7 +133,7 @@ export class EvidenceRepository {
       // 排序
       const sortBy = params.sort_by || 'created_at';
       const sortOrder = params.sort_order || 'desc';
-      query = query.order(sortBy as any, { ascending: sortOrder === 'asc' });
+      query = query.order(sortBy, { ascending: sortOrder === 'asc' });
       
       // 分頁
       const limit = params.limit || 20;
@@ -145,7 +145,7 @@ export class EvidenceRepository {
       if (error) handleSupabaseError(error);
       
       return {
-        data: (data || []).map((row: any) => this.mapToEvidence(row)),
+        data: (data || []).map((row: Record<string, unknown>) => this.mapToEvidence(row)),
         pagination: {
           total: count || 0,
           limit,
@@ -164,7 +164,7 @@ export class EvidenceRepository {
    */
   async update(id: EvidenceID, data: UpdateEvidenceDTO): Promise<Evidence | undefined> {
     try {
-      const { data: updated, error } = await (supabase as any)
+      const { data: updated, error } = await supabase
         .from('evidences')
         .update({
           tag: data.tag,

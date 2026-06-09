@@ -5,8 +5,8 @@ interface LogEntry {
   timestamp: string;
   service: string;
   action: string;
-  payload: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  result: any;  // eslint-disable-line @typescript-eslint/no-explicit-any
+  payload: unknown;
+  result: unknown;
   error?: string;
 }
 
@@ -18,7 +18,7 @@ if (!existsSync(LOGS_DIR)) {
 
 const LOG_FILE = path.join(LOGS_DIR, 'omnimcp.log');
 
-export function logEvent(service: string, action: string, payload: any, result: any, error?: string) {
+export function logEvent(service: string, action: string, payload: unknown, result: unknown, error?: string) {
   const entry: LogEntry = {
     timestamp: new Date().toISOString(),
     service,

@@ -3,7 +3,7 @@
     import * as fs from 'fs';
     import * as path from 'path';
     import { validateSkillDefinition } from './skillValidation';
-    import { OmniAgentSkillRegistry, SkillDefinition, ActionDefinition } from '../types/omniagent';
+    import { OmniAgentSkillRegistry, SkillDefinition } from '../types/omniagent';
 
     class OmniAgentSkillManager {
       private skills: Map<string, SkillDefinition>;

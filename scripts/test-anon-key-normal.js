@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
@@ -12,14 +13,14 @@ async function test() {
     console.log('NEXT_PUBLIC_SUPABASE_ANON_KEY not found');
     return;
   }
-  
+
   try {
     // Normal client with anon key (no custom headers)
     const supabase = createClient(supabaseUrl, anonKey);
-    
+
     console.log('Attempting to select from evidence_vault...');
     const { data, error } = await supabase.from('evidence_vault').select('*').limit(1);
-    
+
     if (error) {
       console.log('❌ Error:', error);
       console.log('Error code:', error.code);

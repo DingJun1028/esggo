@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { OmniMemorySync } from '@/src/server/memory/OmniMemorySync';
 import { OmniEventStore } from '@/lib/omni-space/event-store';
+import { OmniEvent } from '@/src/shared/types'; // Import OmniEvent
 
 describe('OmniMemorySync', () => {
   beforeEach(() => {
@@ -18,18 +19,21 @@ describe('OmniMemorySync', () => {
 
   it('should handle event saving', async () => {
     const sync = new OmniMemorySync();
-    const mockEvent = {
+    const mockEvent: OmniEvent = { // Type as OmniEvent
       id: 'test-event-id',
+      omni_card_uuid: 'test-uuid', // Added missing required field
       event_type: 'TEST_EVENT',
-      payload: { test: 'data' },
+      payload: { test: 'data' }, // Typed as Record<string, unknown> implicitly
       source_platform: 'test',
       created_at: Date.now(),
       hash_lock: 'test-hash',
-    } as any;
+    };
     
     // Mock the sync methods
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(sync as any, 'syncWithRetry').mockResolvedValue(undefined);
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (sync as any).handleEventSaved(mockEvent);
     expect(sync['syncWithRetry']).toHaveBeenCalled();
   });

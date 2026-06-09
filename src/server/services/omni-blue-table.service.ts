@@ -57,7 +57,7 @@ export class OmniBlueTableService {
     const results = [];
     for (const bp of practices) {
       const { data, error } = await serviceRoleSupabase // Use serviceRoleSupabase for upsert
-        .from('best_practices' as any)
+        .from('best_practices')
         .upsert({
           id: bp.id,
           category: bp.category,
@@ -90,7 +90,7 @@ export class OmniBlueTableService {
    */
   async getSyncStatus() {
     const { data, error } = await supabase
-      .from('omniblue_nodes' as any)
+      .from('omniblue_nodes')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(10);
