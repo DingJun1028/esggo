@@ -45,3 +45,9 @@
 **Vulnerability:** A hardcoded `HMAC_SECRET` key was being used as the security seed for creating HMACs (`createHmac`) in the ZKP validation and hashing processes within `src/core/T5Protocol.ts`.
 **Learning:** Hardcoding security secrets in the source code causes critical risks where any individual with source code access can predict or forge "Trustworthy" cryptographic hashes.
 **Prevention:** Always draw security secrets, like ZKP HMAC keys, from environment variables (e.g., `process.env.T5_HMAC_SECRET`) to ensure they are properly injected in the runtime environments.
+
+## 2024-06-10 - [Fix Authentication Bypass & Hardcoded Secrets in OmniGateway API]
+
+**Vulnerability:** Found a critical hardcoded fallback secret (`'mock_secret_fallback'`) in `app/api/omni-gateway/route.ts` used when `process.env.BLUE_CC_TOKEN` is unset. This allows trivial authentication bypasses by passing the fallback string as a Bearer token and allows deterministic generation of the ZKP seal (HMAC).
+**Learning:** Hardcoded development placeholders are easily overlooked and left behind during deployment. This mirrors earlier findings regarding hardcoded fallback test logic exposing production endpoints.
+**Prevention:** Remove fallback secrets completely and configure variables to explicitly bind to environment variables (`const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;`). Additionally, introduce early termination logic (like throwing an Error) during critical cryptographic operations (e.g., `generateZkpSeal`) if the required environment variables are absent.
