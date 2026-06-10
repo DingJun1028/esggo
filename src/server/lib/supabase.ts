@@ -25,7 +25,8 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 // 一般客戶端（RLS 限制）
 export const supabase: SupabaseClient<Database> = createClient<Database>(
   SUPABASE_URL,
-  SUPABASE_ANON_KEY, {
+  SUPABASE_ANON_KEY,
+  {
     auth: {
       persistSession: false,
     },
@@ -38,7 +39,8 @@ export const supabase: SupabaseClient<Database> = createClient<Database>(
 // 管理員客戶端（繞過 RLS）
 export const supabaseAdmin: SupabaseClient<Database> = createClient<Database>(
   SUPABASE_URL,
-  SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY, {
+  SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY,
+  {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -54,11 +56,7 @@ export const supabaseAdmin: SupabaseClient<Database> = createClient<Database>(
 // ============================================
 
 export class SupabaseError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public details?: unknown
-  ) {
+  constructor(message: string, public code: string, public details?: unknown) {
     super(message);
     this.name = 'SupabaseError';
   }
@@ -73,7 +71,7 @@ export function handleSupabaseError(error: unknown): never {
       supabaseError.details
     );
   }
-  
+
   throw new SupabaseError('An unknown database error occurred', 'UNKNOWN_ERROR');
 }
 
@@ -83,7 +81,10 @@ export function handleSupabaseError(error: unknown): never {
 
 export async function testConnection(): Promise<boolean> {
   try {
-    const { error } = await supabase.from('evidences' as any).select('id').limit(1); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const { error } = await supabase
+      .from('evidences' as any)
+      .select('id')
+      .limit(1);
     return !error;
   } catch {
     return false;

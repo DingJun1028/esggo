@@ -4,7 +4,7 @@ import { forwardRef, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { X, Eye, EyeOff } from 'lucide-react';
-import { useOmniTheme } from '../theme/OmniThemeProvider';
+import { useOmniTheme } from '@/theme/OmniThemeProvider';
 
 const omniInputVariants = cva(
   'flex items-center w-full rounded-md border bg-theme-bg-primary text-theme-text-primary transition-all duration-150 placeholder:text-theme-text-muted disabled:opacity-60 disabled:cursor-not-allowed',
@@ -45,25 +45,28 @@ export interface OmniInputProps
 }
 
 const OmniInput = forwardRef<HTMLInputElement, OmniInputProps>(
-  ({ 
-    variant, 
-    size,
-    label,
-    placeholder,
-    helperText,
-    errorText,
-    showClearButton = true,
-    showPasswordToggle = false,
-    className,
-    disabled,
-    type,
-    value,
-    ...props 
-  }, ref) => {
+  (
+    {
+      variant,
+      size,
+      label,
+      placeholder,
+      helperText,
+      errorText,
+      showClearButton = true,
+      showPasswordToggle = false,
+      className,
+      disabled,
+      type,
+      value,
+      ...props
+    },
+    ref
+  ) => {
     const { isMobile } = useOmniTheme();
     const [focused, setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    
+
     const hasValue = value !== undefined && value !== '';
     const isActive = focused || hasValue;
     const actualType = type === 'password' && showPassword ? 'text' : type;
@@ -82,11 +85,11 @@ const OmniInput = forwardRef<HTMLInputElement, OmniInputProps>(
           <input
             type={actualType}
             className={cn(
-              omniInputVariants({ 
-                variant, 
+              omniInputVariants({
+                variant,
                 size: inputSize,
                 state: errorText ? 'error' : undefined,
-                className 
+                className,
               }),
               errorText && 'border-theme-error focus:border-theme-error',
               focused && 'ring-2 ring-theme-primary ring-offset-2'
@@ -129,10 +132,9 @@ const OmniInput = forwardRef<HTMLInputElement, OmniInputProps>(
           </div>
         </div>
         {(helperText || errorText) && (
-          <span className={cn(
-            'text-caption',
-            errorText ? 'text-theme-error' : 'text-theme-text-muted'
-          )}>
+          <span
+            className={cn('text-caption', errorText ? 'text-theme-error' : 'text-theme-text-muted')}
+          >
             {errorText || helperText}
           </span>
         )}
