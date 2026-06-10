@@ -1,9 +1,1 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# 1. 導向 Windows 預設的 Node.js 執行路徑
-export PATH="/c/Program Files/nodejs:/c/Users/Administrator/AppData/Roaming/npm:$PATH"
-
-# 2. 為了徹底避免 MODULE_NOT_FOUND，不要使用直接指向 node_modules 的相對 JS 腳本
-# 改為直接調用全域或專案內建的 npx 命令
-npx --no-install lint-staged
+npx lint-staged
