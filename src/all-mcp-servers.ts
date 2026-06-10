@@ -6,31 +6,31 @@ export class MCPRouter {
     firebase: {
       name: 'firebase-mcp-server',
       endpoint: 'c:\\Project\\esggoV1.0',
-      capabilities: ['auth', 'firestore', 'apphosting', 'remoteconfig', 'functions']
+      capabilities: ['auth', 'firestore', 'apphosting', 'remoteconfig', 'functions'],
     },
     genkit: {
       name: 'genkit-mcp-server',
-      capabilities: ['flow', 'action', 'trace']
+      capabilities: ['flow', 'action', 'trace'],
     },
     supabase: {
       name: 'nocodebackend',
-      capabilities: ['database', 'auth', 'storage', 'realtime']
+      capabilities: ['database', 'auth', 'storage', 'realtime'],
     },
     bigquery: {
       name: 'datacloud_bigquery_toolbox',
-      capabilities: ['query', 'table', 'dataset', 'job']
+      capabilities: ['query', 'table', 'dataset', 'job'],
     },
     firestore: {
       name: 'google-cloud-firestore',
-      capabilities: ['document', 'collection', 'query']
+      capabilities: ['document', 'collection', 'query'],
     },
     stitch: {
       name: 'StitchMCP',
-      capabilities: ['ui-design', 'component', 'layout']
-    }
+      capabilities: ['ui-design', 'component', 'layout'],
+    },
   };
 
-  static async call(server: string, method: string, params: any): Promise<any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static async call(server: string, method: string, params: any): Promise<any> {
     const serverConfig = this.servers[server as keyof typeof this.servers];
     if (!serverConfig) {
       throw new Error(`Unknown MCP server: ${server}`);
@@ -45,7 +45,7 @@ export class MCPRouter {
       server: serverConfig.name,
       method,
       data: params,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     logEvent('MCPRouter', 'call', { server, method }, { status: 'completed', result });
