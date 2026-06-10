@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: ppnpm install
+        run: pnpm install
 
       - name: Run pnpm audit
         run: pnpm audit
@@ -47,11 +47,11 @@ jobs:
 
       - name: Run lint
         id: lint
-        run: pnpm run lint
+        run: ppnpm run lint
 
       - name: Run tests with coverage
         id: test
-        run: pnpm run test -- --coverage
+        run: ppnpm run test -- --coverage
 
       - name: Check coverage threshold
         id: coverage
@@ -59,7 +59,7 @@ jobs:
 
       - name: Build (optional)
         id: build
-        run: pnpm run build
+        run: ppnpm run build
 
       - name: Deploy to Render
         if: success()
