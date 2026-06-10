@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { omniAgentBus, IMiaoDeNotification } from '../../../services/OmniAgentBus';
-import { useOmniTheme } from '../../theme/OmniThemeProvider';
+import { omniAgentBus, IMiaoDeNotification } from '@/services/OmniAgentBus';
+import { useOmniTheme } from '@/theme/OmniThemeProvider';
 
 export interface UseOmniAgentBusOptions {
   autoSubscribe?: boolean;
@@ -19,9 +19,9 @@ export function useOmniAgentBus(options: UseOmniAgentBusOptions = {}) {
     if (!autoSubscribe) return;
 
     setIsConnected(true);
-    
+
     const subscription = omniAgentBus.observeSupremeWill().subscribe({
-      next: (will) => {
+      next: (will: string) => {
         setLatestWill(will);
         // Create notification artifact
         const artifact: IMiaoDeNotification = {
@@ -31,9 +31,9 @@ export function useOmniAgentBus(options: UseOmniAgentBusOptions = {}) {
           isUnimpeded: true,
         };
         Object.freeze(artifact);
-        setNotifications(prev => [artifact, ...prev].slice(0, 20));
+        setNotifications((prev) => [artifact, ...prev].slice(0, 20));
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('OmniAgentBus connection error:', err);
         setIsConnected(false);
       },
