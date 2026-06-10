@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
-import { useOmniTheme } from '../../../theme/OmniThemeProvider';
+import { useOmniTheme } from '@/theme/OmniThemeProvider';
 
 export interface OmniModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
@@ -32,16 +32,16 @@ export function OmniModal({
 
   useEffect(() => {
     if (!closeOnEsc) return;
-    
+
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    
+
     if (open) {
       document.addEventListener('keydown', handleEsc);
       document.body.style.overflow = 'hidden';
     }
-    
+
     return () => {
       document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = '';
@@ -59,11 +59,11 @@ export function OmniModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div 
+      <div
         className="absolute inset-0 bg-theme-bg-overlay backdrop-blur-sm"
         onClick={closeOnOverlayClick ? onClose : undefined}
       />
-      <div 
+      <div
         className={cn(
           'relative bg-theme-bg-primary rounded-2xl shadow-xl z-10',
           'max-h-[85vh] overflow-hidden flex flex-col',
@@ -74,15 +74,9 @@ export function OmniModal({
         {(title || showCloseButton) && (
           <div className="flex items-center justify-between p-6 border-b border-theme-divider">
             <div>
-              {title && (
-                <h2 className="text-h2 font-semibold text-theme-text-primary">
-                  {title}
-                </h2>
-              )}
+              {title && <h2 className="text-h2 font-semibold text-theme-text-primary">{title}</h2>}
               {description && (
-                <p className="text-body-sm text-theme-text-muted mt-1">
-                  {description}
-                </p>
+                <p className="text-body-sm text-theme-text-muted mt-1">{description}</p>
               )}
             </div>
             {showCloseButton && (
@@ -96,9 +90,7 @@ export function OmniModal({
             )}
           </div>
         )}
-        <div className="flex-1 overflow-y-auto p-6">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto p-6">{children}</div>
       </div>
     </div>
   );
