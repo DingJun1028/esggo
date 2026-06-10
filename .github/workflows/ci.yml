@@ -47,11 +47,11 @@ jobs:
 
       - name: Run lint
         id: lint
-        run: ppnpm run lint
+        run: pnpm run lint
 
       - name: Run tests with coverage
         id: test
-        run: ppnpm run test -- --coverage
+        run: pnpm run test -- --coverage
 
       - name: Check coverage threshold
         id: coverage
@@ -59,7 +59,7 @@ jobs:
 
       - name: Build (optional)
         id: build
-        run: ppnpm run build
+        run: pnpm run build
 
       - name: Deploy to Render
         if: success()

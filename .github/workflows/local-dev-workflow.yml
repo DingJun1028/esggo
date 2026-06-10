@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
           
       - name: 檢查目錄結構
         run: |
