@@ -1,36 +1,47 @@
 ﻿'use client';
 import { useState, useEffect } from 'react';
-import { memoryStore } from '@/lib/memory/memory-store';
-import xss from 'xss';
 
 export default function MemoryDashboard() {
   const [search, setSearch] = useState('');
   const [agent, setAgent] = useState('');
   const [memories, setMemories] = useState<unknown[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchMemoryData();
-  }, [search, agent]);
+  const [error, setError] = useState(null);
 
   const fetchMemoryData = async () => {
     try {
-      const response = await fetch(
-        `/api/memory${agent ? `?agent=${agent}` : ''}${search ? `&search=${encodeURIComponent(search)}` : ''}`
-      );
+      const params = new URLSearchParams();
+      if (agent) params.append('agent', agent);
+      if (search) params.append('search', search);
+
+      const queryString = params.toString();
+      const url = `/api/memory${queryString ? `?${queryString}` : ''}`;
+
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Memory fetch failed');
       }
       const data = await response.json();
       setMemories(data.data || []);
-      setLoading(false);
+
       setError(null);
-    } catch (error: any) {
-      setLoading(false);
-      setError(error.message);
+    } catch (error: unknown) {
+
+      setError((error as Error).message as never);
     }
   };
+
+  // ⚡ Bolt Optimization: Added debouncing to prevent excessive API calls while typing
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      fetchMemoryData();
+    }, 300);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, agent]);
 
   const clearMemory = () => {
     fetch('/api/memory/DELETE').then(() => {
@@ -78,15 +89,15 @@ export default function MemoryDashboard() {
 
         {memories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {memories.map((mem: any) => (
-              <div key={mem.id} className="bg-gray-50 p-4 rounded shadow">
-                <h3 className="text-xl font-medium">{mem.task}</h3>
-                <p className="text-sm text-gray-600">{mem.timestamp}</p>
+            {memories.map((mem: Record<string, unknown>) => (
+              <div key={mem.id as string} className="bg-gray-50 p-4 rounded shadow">
+                <h3 className="text-xl font-medium">{mem.task as string}</h3>
+                <p className="text-sm text-gray-600">{mem.timestamp as string}</p>
                 <div className="mt-2 flex items-center">
                   <span className="chip bg-green-200 text-green-800 px-2 py-1 rounded mr-2">
-                    {mem.agentName}</span>
+                    {mem.agentName as string}</span>
                   <span className="chip bg-blue-200 text-blue-800 px-2 py-1 rounded">
-                    {mem.success ? '✓' : '✗'}</span>
+                    {mem.success as boolean ? '✓' : '✗'}</span>
                 </div>
               </div>
             ))}
