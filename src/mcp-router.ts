@@ -7,46 +7,46 @@ export class MCPRouter {
     firebase: {
       name: 'firebase-mcp-server',
       endpoint: 'c:\\Project\\esggoV1.0',
-      capabilities: ['auth', 'firestore', 'functions', 'remoteconfig', 'apphosting']
+      capabilities: ['auth', 'firestore', 'functions', 'remoteconfig', 'apphosting'],
     },
     genkit: {
       name: 'genkit-mcp-server',
-      capabilities: ['flow', 'action', 'trace', 'run', 'dev']
+      capabilities: ['flow', 'action', 'trace', 'run', 'dev'],
     },
     supabase: {
       name: 'nocodebackend',
-      capabilities: ['database', 'auth', 'storage', 'realtime']
+      capabilities: ['database', 'auth', 'storage', 'realtime'],
     },
     // Google Cloud data services
     bigquery: {
       name: 'datacloud_bigquery_toolbox',
-      capabilities: ['query', 'table', 'dataset', 'job']
+      capabilities: ['query', 'table', 'dataset', 'job'],
     },
     firestore: {
       name: 'google-cloud-firestore',
-      capabilities: ['document', 'collection', 'query']
+      capabilities: ['document', 'collection', 'query'],
     },
     spanner: {
       name: 'datacloud_spanner_toolbox',
-      capabilities: ['query', 'table', 'database']
+      capabilities: ['query', 'table', 'database'],
     },
     // UI/Design services
     stitch: {
       name: 'StitchMCP',
       endpoint: 'https://stitch.googleapis.com/mcp',
       headers: {
-        "X-Goog-Api-Key": process.env.GOOGLE_STITCH_API_KEY
+        'X-Goog-Api-Key': process.env.GOOGLE_STITCH_API_KEY,
       },
-      capabilities: ['ui-design', 'component', 'layout', 'generate-image']
+      capabilities: ['ui-design', 'component', 'layout', 'generate-image'],
     },
     // Deployment services
     render: {
       name: 'render',
-      capabilities: ['deploy', 'services', 'logs']
-    }
+      capabilities: ['deploy', 'services', 'logs'],
+    },
   };
 
-  static async call(server: string, method: string, params: any): Promise<any> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static async call(server: string, method: string, params: any): Promise<any> {
     const serverConfig = this.servers[server as keyof typeof this.servers];
     if (!serverConfig) {
       throw new Error(`Unknown MCP server: ${server}`);
@@ -84,7 +84,7 @@ export class MCPRouter {
         simulatedCommand: mockCommand,
         // In a real scenario, this would be the actual data returned by the MCP command.
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     // --- END Placeholder for Actual MCP Command Execution ---
 

@@ -5,7 +5,7 @@ import { IComponentCore } from '../../lib/core-types';
 
 async function main() {
   console.log('=== ESG GO v9.0.0 Global Integration ===\n');
-  
+
   // 1. Test 5T Validation
   console.log('1. Testing 5T Validation...');
   const testEvidence: IComponentCore = {
@@ -22,16 +22,16 @@ async function main() {
     formula: 'test-formula',
     impact_metric: 'test-impact',
     status: 'Trustworthy',
-    hash_lock: 'temp-hash'
+    hash_lock: 'temp-hash',
   };
-  
+
   try {
     const isValid = await T5Validator.validate(testEvidence);
     console.log(`✅ 5T Validation passed: ${isValid}`);
   } catch (error) {
     console.error(`❌ 5T Validation failed:`, error);
   }
-  
+
   // 2. Test Evidence Service
   console.log('\n2. Testing Evidence Service...');
   try {
@@ -44,25 +44,25 @@ async function main() {
       source_origin: 'test',
       iso_standard_ref: 'ISO-14064',
       lifecycle_path: ['step1'],
-      company_id: 'company-123'
+      company_id: 'company-123',
     } as TestEvidenceRecord);
 
-interface TestEvidenceRecord {
-  uuid: string;
-  version: string;
-  evidence: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
-  evidence_bundle_id: string;
-  hash_value: string;
-  source_origin: string;
-  iso_standard_ref: string;
-  lifecycle_path: string[];
-  company_id: string;
-}
+    interface TestEvidenceRecord {
+      uuid: string;
+      version: string;
+      evidence: any[];
+      evidence_bundle_id: string;
+      hash_value: string;
+      source_origin: string;
+      iso_standard_ref: string;
+      lifecycle_path: string[];
+      company_id: string;
+    }
     console.log(`✅ Evidence created: ${evidence.id}`);
   } catch (error) {
     console.error(`❌ Evidence creation failed:`, error);
   }
-  
+
   // 3. Test Contract Service
   console.log('\n3. Testing Contract Service...');
   try {
@@ -72,13 +72,13 @@ interface TestEvidenceRecord {
       evidence_bundle_id: 'evidence-bundle-123',
       company_id: 'company-123',
       status: 'draft',
-      created_by: 'system'
+      created_by: 'system',
     });
     console.log(`✅ Contract created: ${contract.id}`);
   } catch (error) {
     console.error(`❌ Contract creation failed:`, error);
   }
-  
+
   // 4. Test Global State Manager
   console.log('\n4. Testing Global State Manager...');
   try {
@@ -88,7 +88,7 @@ interface TestEvidenceRecord {
   } catch (error) {
     console.error(`❌ UI rendering failed:`, error);
   }
-  
+
   console.log('\n=== ESG GO v9.0.0 Integration Complete ===');
 }
 

@@ -14,12 +14,15 @@ describe('OmniMemorySync', () => {
     const sync = new OmniMemorySync();
     expect(sync).toBeDefined();
     expect(OmniEventStore.eventBus.on).toHaveBeenCalledWith('event_saved', expect.any(Function));
-    expect(console.log).toHaveBeenCalledWith('[OmniMemorySync] Attached to Omni-Space event bus. Ready to encode episodic memories.');
+    expect(console.log).toHaveBeenCalledWith(
+      '[OmniMemorySync] Attached to Omni-Space event bus. Ready to encode episodic memories.'
+    );
   });
 
   it('should handle event saving', async () => {
     const sync = new OmniMemorySync();
-    const mockEvent: OmniEvent = { // Type as OmniEvent
+    const mockEvent: OmniEvent = {
+      // Type as OmniEvent
       id: 'test-event-id',
       omni_card_uuid: 'test-uuid', // Added missing required field
       event_type: 'TEST_EVENT',
@@ -28,12 +31,11 @@ describe('OmniMemorySync', () => {
       created_at: Date.now(),
       hash_lock: 'test-hash',
     };
-    
+
     // Mock the sync methods
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     vi.spyOn(sync as any, 'syncWithRetry').mockResolvedValue(undefined);
-    
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     await (sync as any).handleEventSaved(mockEvent);
     expect(sync['syncWithRetry']).toHaveBeenCalled();
   });
