@@ -62,9 +62,8 @@ function DataTableInner<T extends object>({
     }
     if (sortKey) {
       result = [...result].sort((a, b) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const av = String((a as any)[sortKey] ?? '');
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         const bv = String((b as any)[sortKey] ?? '');
         return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
       });
@@ -158,9 +157,7 @@ function DataTableInner<T extends object>({
                   {columns.map((col) => (
                     <td key={String(col.key)} className="px-4 py-3 text-[13px] text-[#374151]">
                       {col.render
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         ? col.render((row as any)[col.key], row)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         : String((row as any)[col.key] ?? '—')}
                     </td>
                   ))}
