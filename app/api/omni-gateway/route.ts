@@ -52,7 +52,7 @@ type OmniTableSyncPayload = z.infer<typeof OmniTableSyncPayloadSchema>;
 // 3. 雙向防迴圈簽章、Browserbase 設定與內存資料庫配置
 // =========================================================================
 const BOT_SIGNATURE = 'BLUE_Automation_Bot';
-const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN || 'mock_secret_fallback';
+const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;
 
 // Browserbase 模擬配置 (對應 browse.sh 網路自動化技能)
 const BROWSERBASE_CONFIG = {
@@ -178,6 +178,10 @@ function generateZkpSeal(
   const serializedData = JSON.stringify(data);
   const rawPayload = `${previousHash}||${serializedData}||${source}||${timestamp}`;
   
+  if (!MOCK_JWT_SECRET) {
+    throw new Error('Server misconfiguration: missing JWT secret');
+  }
+
   return crypto
     .createHmac('sha256', MOCK_JWT_SECRET)
     .update(rawPayload)
