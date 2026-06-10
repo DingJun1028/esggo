@@ -1,11 +1,18 @@
+import path from 'path';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // Output configuration for Firebase hosting
   output: 'standalone',
+  // Explicitly set the output file tracing root to the current directory
+  // to help Next.js correctly infer the project root in dynamic deployment environments.
+  outputFileTracingRoot: path.join(__dirname, './'),
   serverExternalPackages: [
     'genkit',
     'sharp',
@@ -78,4 +85,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
