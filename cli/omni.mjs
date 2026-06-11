@@ -87,12 +87,10 @@ jules.command('browse')
     const apiKey = process.env.BROWSER_USE_API_KEY || 'bu_placeholder';
     const client = new BrowserUse({ apiKey });
     try {
-      const res = await client.run(prompt, { model: options.model, proxyCountryCode: 'us' });
       const res = await runWithRetry('Jules Browser Task', () => client.run(prompt, { model: options.model, proxyCountryCode: 'us' }), 3, 45000);
       console.log(pc.green('[v] Browser task completed'));
       console.log(pc.yellow(res.output));
     } catch (e) {
-      console.log(pc.red('[x] Browser task failed'));
       console.log(pc.red('[x] Browser task failed after retries'));
       console.log(pc.red(e.message));
     }
@@ -454,20 +452,17 @@ agent.command('browse <prompt>')
     const client = new BrowserUse({ apiKey });
 
     try {
-      const result = await client.run(prompt, {
-        const result = await runWithRetry('BrowserUse V3 Task', () => client.run(prompt, {
-          model: options.model,
-          proxyCountryCode: 'us',
-        });
+      const result = await runWithRetry('BrowserUse V3 Task', () => client.run(prompt, {
+        model: options.model,
+        proxyCountryCode: 'us',
       }), 3, 45000); // 3次重試，每次限制 45 秒
-console.log(pc.green('[v] Web Agent task completed.'));
-console.log(pc.white('──────────────────────────────────────────────────'));
-console.log(pc.yellow(result.output));
-console.log(pc.white('──────────────────────────────────────────────────'));
+      console.log(pc.green('[v] Web Agent task completed.'));
+      console.log(pc.white('──────────────────────────────────────────────────'));
+      console.log(pc.yellow(result.output));
+      console.log(pc.white('──────────────────────────────────────────────────'));
     } catch (err) {
-  console.log(pc.red(`[x] BrowserUse Error: ${err.message}`));
-  console.log(pc.red(`[x] BrowserUse Error after retries: ${err.message}`));
-}
+      console.log(pc.red(`[x] BrowserUse Error after retries: ${err.message}`));
+    }
   });
 
 agent.command('consolidate')

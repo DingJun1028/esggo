@@ -1,15 +1,22 @@
-# ESG GO — OmniAgent Full-Stack Platform
+# ESG GO — OmniAgent & OmniJules 雙核驅動平台
 
 ## 🌐 專案簡介 (Project Overview)
-ESG GO 是一個結合 **Bidirectional TypeScript** 架構與 **OmniAgent AI 核心** 的次世代 ESG 自動化平台。本專案透過高度整合的 AI 網關與自動化部署流程，實現從地端開發到雲端運作的零幻覺同步。
+ESG GO 是一個結合 **Bidirectional TypeScript** 架構與 **OmniAgent / OmniJules AI 雙核** 的次世代 ESG 自動化平台。本專案透過高度整合的 AI 網關與自動化部署流程，實現從地端開發到雲端運作的零幻覺同步。
+
+> 💡 **AI 核心原型揭秘：** 
+> 本平台的核心 AI 基於兩大頂尖開源軟體：
+> - **OmniAgent**：原型為 **Hermes**，具備強大的跨平台特性，經 ESGGO 轉化後成為專屬的萬能代理。
+> - **OmniJules**：前身為 **Google Jules**，具備「萬能果因協議」，專職系統底層修復與自主演化。
+> 
+> 在 ESGGO 平台中，我們將這兩大開源傑作發揚光大，所有數據與經驗將跨平台共享，但對外僅以 **OmniAgent** 與 **OmniJules** 命名，象徵它們已完全融入 5T 永續治理的核心。
 
 ### 🚀 核心架構 (Core Architecture)
 - **Frontend/Backend**: Next.js 15 (Standalone Mode)
-- **AI Engine**: Google Gemma 4 (31B) via OpenRouter & Gemini 2.0 Flash
+- **AI Core (Hermes Based)**: OmniAgent (ESG Master Orchestrator)
+- **AI Healer (Jules Based)**: OmniJules (Karma Protocol Enforcer)
 - **Cloud Infrastructure**: Oracle Cloud VM (ARM64 Optimized)
 - **Process Management**: PM2 (Production Runtime)
 - **Security**: Strict transitive dependency overrides & GitHub Push Protection
-
 ---
 
 ## 🛠️ 快速開始 (Quick Start)
