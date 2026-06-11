@@ -411,7 +411,7 @@ export default function AuditGovernancePage() {
                 </thead>
                 <tbody>
                   {PAGE_REGISTRY.map(p => (
-                    <tr key=AUDIT-GOVERNANCE>
+                    <tr key={`audit-gov-${p.id || index}`}>
                       <td>
                         <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                           {p.name}
