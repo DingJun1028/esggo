@@ -1,15 +1,27 @@
 version: 2
 updates:
+  # 檢查 Node.js 依賴更新 (Dependabot 會自動辨識 pnpm-lock.yaml)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
-    open-pull-requests-limit: 10
-    allow:
-      - "github.com"
-      - "npm"
-    ignore:
-      - dependency-type: "devDependencies"
-        versions: [
-          "4.0.0"
-        ]
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
+
+  # 檢查 GitHub Actions 的版本更新
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(ci)"
+
+  # 檢查 Dockerfile 基礎映像檔 (Base Image) 的更新
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(docker)"

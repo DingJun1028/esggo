@@ -237,6 +237,20 @@ export class OmniAgentBus {
     }
   }
 
+  /**
+   * 全域通知與全 Agent 同步 (Global Notification & All-Agent Sync)
+   * 強制觸發系統廣播，讓所有已註冊的代理 (Agents) 同步其狀態並進行全域資料對齊。
+   */
+  async broadcastGlobalNotification(message: string, context?: Record<string, unknown>) {
+    console.log(`[OmniAgentBus] 🌍 全域通知啟動: ${message}`);
+    return this.publish('system:global:sync', {
+      message,
+      context: context || {},
+      sync_timestamp: new Date().toISOString(),
+      action: 'SYNC_ALL_AGENTS'
+    });
+  }
+
   // --- JunAiKey-BindAi Core Protocol Implementations ---
   
   private extractQuantumEssence(intent: string, context: Record<string, unknown>) {

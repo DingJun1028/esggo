@@ -18,6 +18,15 @@ ssh root@161.118.248.180
 
 ---
 
+## 📡 遠端連線資訊 (用于 Hermes Desktop)
+
+您可以將以下資訊填入您的 Hermes Desktop App 中，以連接至此後台伺服器：
+
+*   **Server URL**: `http://161.118.248.180:8642` (生產環境) / `http://127.0.0.1:8642` (地端)
+*   **API Key**: `hermes_gold_2026`
+
+---
+
 ## 📊 進程管理 (PM2 Management)
 
 專案使用 PM2 進行生產環境監控。
@@ -68,6 +77,33 @@ pm2 restart all
    ```
 4. **重新構建**: 如果出現模組丟失，執行 `./deploy-omni.sh` 會自動觸發 `npm ci`
    進行物理級重建。
+
+---
+
+## 🤖 Telegram 機器人配置 (Telegram Bot Setup)
+
+OmniAgent 已集成 Telegram 網關，支援即時 AI 對話與系統通知。
+
+### 1. 建立機器人
+1. 在 Telegram 搜尋 `@BotFather`。
+2. 發送 `/newbot` 並按照指示命名。
+3. 獲取 **API Token**。
+
+### 2. 配置環境變數
+在 VPS 的 `/var/www/esggo/.env` 中加入：
+```env
+TELEGRAM_BOT_TOKEN=你的_API_TOKEN
+TELEGRAM_CHAT_ID=你的_CHAT_ID (可選，用於推播)
+```
+
+### 3. 獲取 Chat ID
+1. 啟動機器人後，對它發送 `/start`。
+2. 發送 `/chatid`，機器人會回傳你的個人或群組 ID。
+
+### 4. 重啟網關
+```bash
+pm2 restart omniagent-gateway
+```
 
 ---
 
