@@ -1,0 +1,18 @@
+{
+  "name": "esggo-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "gateway:dev": "npm run dev -w apps/gateway",
+    "gateway:start": "npm run start -w apps/gateway",
+    "web:dev": "npm run dev -w apps/web",
+    "web:build": "npm run build -w apps/web"
+  },
+  "dependencies": {
+    "@esggo/shared": "^1.0.0"
+  }
+}

@@ -1,0 +1,341 @@
+0 verbose cli /usr/bin/node /usr/bin/npm
+1 info using npm@10.8.2
+2 info using node@v20.20.2
+3 silly config load:file:/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/home/ubuntu/.npmrc
+5 silly config load:file:/usr/etc/npmrc
+6 verbose title npm install ../../packages/shared
+7 verbose argv "install" "../../packages/shared"
+8 verbose logfile logs-max:10 dir:/home/ubuntu/.npm/_logs/2026-06-11T04_33_46_253Z-
+9 verbose logfile /home/ubuntu/.npm/_logs/2026-06-11T04_33_46_253Z-debug-0.log
+10 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+11 silly logfile done cleaning log files
+12 silly idealTree buildDeps
+13 silly reify moves {}
+14 silly audit bulk request {
+14 silly audit   'omniagent-vps-gateway': [ '2.0.0' ],
+14 silly audit   '@esbuild/aix-ppc64': [ '0.27.7' ],
+14 silly audit   '@esbuild/android-arm': [ '0.27.7' ],
+14 silly audit   '@esbuild/android-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/android-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/darwin-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/darwin-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/freebsd-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/freebsd-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-arm': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-ia32': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-loong64': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-mips64el': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-ppc64': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-riscv64': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-s390x': [ '0.27.7' ],
+14 silly audit   '@esbuild/linux-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/netbsd-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/netbsd-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/openbsd-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/openbsd-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/openharmony-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/sunos-x64': [ '0.27.7' ],
+14 silly audit   '@esbuild/win32-arm64': [ '0.27.7' ],
+14 silly audit   '@esbuild/win32-ia32': [ '0.27.7' ],
+14 silly audit   '@esbuild/win32-x64': [ '0.27.7' ],
+14 silly audit   '@google/generative-ai': [ '0.21.0' ],
+14 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+14 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+14 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+14 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+14 silly audit   '@rollup/rollup-android-arm-eabi': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-android-arm64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-darwin-arm64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-darwin-x64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-freebsd-arm64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-freebsd-x64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-arm-gnueabihf': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-arm-musleabihf': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-arm64-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-arm64-musl': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-loong64-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-loong64-musl': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-ppc64-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-ppc64-musl': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-riscv64-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-riscv64-musl': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-s390x-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-x64-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-linux-x64-musl': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-openbsd-x64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-openharmony-arm64': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-win32-arm64-msvc': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-win32-ia32-msvc': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-win32-x64-gnu': [ '4.61.1' ],
+14 silly audit   '@rollup/rollup-win32-x64-msvc': [ '4.61.1' ],
+14 silly audit   '@types/estree': [ '1.0.9' ],
+14 silly audit   accepts: [ '1.3.8' ],
+14 silly audit   acorn: [ '8.16.0' ],
+14 silly audit   'any-promise': [ '1.3.0' ],
+14 silly audit   'array-flatten': [ '1.1.1' ],
+14 silly audit   'body-parser': [ '1.20.5' ],
+14 silly audit   'bundle-require': [ '5.1.0' ],
+14 silly audit   bytes: [ '3.1.2' ],
+14 silly audit   cac: [ '6.7.14' ],
+14 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+14 silly audit   'call-bound': [ '1.0.4' ],
+14 silly audit   chokidar: [ '4.0.3' ],
+14 silly audit   commander: [ '4.1.1' ],
+14 silly audit   confbox: [ '0.1.8' ],
+14 silly audit   consola: [ '3.4.2' ],
+14 silly audit   'content-disposition': [ '0.5.4' ],
+14 silly audit   'content-type': [ '1.0.5' ],
+14 silly audit   cookie: [ '0.7.2' ],
+14 silly audit   'cookie-signature': [ '1.0.7' ],
+14 silly audit   cors: [ '2.8.6' ],
+14 silly audit   debug: [ '2.6.9', '4.4.3' ],
+14 silly audit   depd: [ '2.0.0' ],
+14 silly audit   destroy: [ '1.2.0' ],
+14 silly audit   dotenv: [ '16.6.1' ],
+14 silly audit   'dunder-proto': [ '1.0.1' ],
+14 silly audit   'ee-first': [ '1.1.1' ],
+14 silly audit   encodeurl: [ '2.0.0' ],
+14 silly audit   'es-define-property': [ '1.0.1' ],
+14 silly audit   'es-errors': [ '1.3.0' ],
+14 silly audit   'es-object-atoms': [ '1.1.2' ],
+14 silly audit   esbuild: [ '0.27.7' ],
+14 silly audit   'escape-html': [ '1.0.3' ],
+14 silly audit   etag: [ '1.8.1' ],
+14 silly audit   express: [ '4.22.2' ],
+14 silly audit   'express-rate-limit': [ '7.5.1' ],
+14 silly audit   fdir: [ '6.5.0' ],
+14 silly audit   finalhandler: [ '1.3.2' ],
+14 silly audit   'fix-dts-default-cjs-exports': [ '1.0.1' ],
+14 silly audit   forwarded: [ '0.2.0' ],
+14 silly audit   fresh: [ '0.5.2' ],
+14 silly audit   fsevents: [ '2.3.3' ],
+14 silly audit   'function-bind': [ '1.1.2' ],
+14 silly audit   'get-intrinsic': [ '1.3.0' ],
+14 silly audit   'get-proto': [ '1.0.1' ],
+14 silly audit   gopd: [ '1.2.0' ],
+14 silly audit   'has-symbols': [ '1.1.0' ],
+14 silly audit   hasown: [ '2.0.4' ],
+14 silly audit   helmet: [ '7.2.0' ],
+14 silly audit   'http-errors': [ '2.0.1' ],
+14 silly audit   'iconv-lite': [ '0.4.24' ],
+14 silly audit   inherits: [ '2.0.4' ],
+14 silly audit   'ipaddr.js': [ '1.9.1' ],
+14 silly audit   joycon: [ '3.1.1' ],
+14 silly audit   lilconfig: [ '3.1.3' ],
+14 silly audit   'lines-and-columns': [ '1.2.4' ],
+14 silly audit   'load-tsconfig': [ '0.2.5' ],
+14 silly audit   'magic-string': [ '0.30.21' ],
+14 silly audit   'math-intrinsics': [ '1.1.0' ],
+14 silly audit   'media-typer': [ '0.3.0' ],
+14 silly audit   'merge-descriptors': [ '1.0.3' ],
+14 silly audit   methods: [ '1.1.2' ],
+14 silly audit   mime: [ '1.6.0' ],
+14 silly audit   'mime-db': [ '1.52.0' ],
+14 silly audit   'mime-types': [ '2.1.35' ],
+14 silly audit   mlly: [ '1.8.2' ],
+14 silly audit   ms: [ '2.0.0', '2.1.3' ],
+14 silly audit   mz: [ '2.7.0' ],
+14 silly audit   negotiator: [ '0.6.3' ],
+14 silly audit   'object-assign': [ '4.1.1' ],
+14 silly audit   'object-inspect': [ '1.13.4' ],
+14 silly audit   'on-finished': [ '2.4.1' ],
+14 silly audit   parseurl: [ '1.3.3' ],
+14 silly audit   'path-to-regexp': [ '0.1.13' ],
+14 silly audit   pathe: [ '2.0.3' ],
+14 silly audit   picocolors: [ '1.1.1' ],
+14 silly audit   picomatch: [ '4.0.4' ],
+14 silly audit   pirates: [ '4.0.7' ],
+14 silly audit   'pkg-types': [ '1.3.1' ],
+14 silly audit   'postcss-load-config': [ '6.0.1' ],
+14 silly audit   'proxy-addr': [ '2.0.7' ],
+14 silly audit   qs: [ '6.15.2' ],
+14 silly audit   'range-parser': [ '1.2.1' ],
+14 silly audit   'raw-body': [ '2.5.3' ],
+14 silly audit   readdirp: [ '4.1.2' ],
+14 silly audit   'resolve-from': [ '5.0.0' ],
+14 silly audit   rollup: [ '4.61.1' ],
+14 silly audit   'safe-buffer': [ '5.2.1' ],
+14 silly audit   'safer-buffer': [ '2.1.2' ],
+14 silly audit   send: [ '0.19.2' ],
+14 silly audit   'serve-static': [ '1.16.3' ],
+14 silly audit   setprototypeof: [ '1.2.0' ],
+14 silly audit   'side-channel': [ '1.1.1' ],
+14 silly audit   'side-channel-list': [ '1.0.1' ],
+14 silly audit   'side-channel-map': [ '1.0.1' ],
+14 silly audit   'side-channel-weakmap': [ '1.0.2' ],
+14 silly audit   'source-map': [ '0.7.6' ],
+14 silly audit   statuses: [ '2.0.2' ],
+14 silly audit   sucrase: [ '3.35.1' ],
+14 silly audit   thenify: [ '3.3.1' ],
+14 silly audit   'thenify-all': [ '1.6.0' ],
+14 silly audit   tinyexec: [ '0.3.2' ],
+14 silly audit   tinyglobby: [ '0.2.17' ],
+14 silly audit   toidentifier: [ '1.0.1' ],
+14 silly audit   'tree-kill': [ '1.2.2' ],
+14 silly audit   'ts-interface-checker': [ '0.1.13' ],
+14 silly audit   tsup: [ '8.5.1' ],
+14 silly audit   'type-is': [ '1.6.18' ],
+14 silly audit   typescript: [ '5.9.3' ],
+14 silly audit   ufo: [ '1.6.4' ],
+14 silly audit   unpipe: [ '1.0.0' ],
+14 silly audit   'utils-merge': [ '1.0.1' ],
+14 silly audit   vary: [ '1.1.2' ],
+14 silly audit   '@esggo/shared': [ '1.0.0' ]
+14 silly audit }
+15 verbose reify failed optional dependency /home/ubuntu/node_modules/fsevents
+16 silly reify mark deleted [ '/home/ubuntu/node_modules/fsevents' ]
+17 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-win32-x64-msvc
+18 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-win32-x64-msvc' ]
+19 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-win32-x64-gnu
+20 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-win32-x64-gnu' ]
+21 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-win32-ia32-msvc
+22 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-win32-ia32-msvc' ]
+23 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-win32-arm64-msvc
+24 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-win32-arm64-msvc' ]
+25 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-openharmony-arm64
+26 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-openharmony-arm64' ]
+27 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-openbsd-x64
+28 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-openbsd-x64' ]
+29 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-x64-musl
+30 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-x64-musl' ]
+31 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-x64-gnu
+32 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-x64-gnu' ]
+33 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-s390x-gnu
+34 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-s390x-gnu' ]
+35 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-riscv64-musl
+36 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-riscv64-musl' ]
+37 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-riscv64-gnu
+38 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-riscv64-gnu' ]
+39 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-ppc64-musl
+40 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-ppc64-musl' ]
+41 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-ppc64-gnu
+42 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-ppc64-gnu' ]
+43 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-loong64-musl
+44 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-loong64-musl' ]
+45 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-loong64-gnu
+46 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-loong64-gnu' ]
+47 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-arm-musleabihf
+48 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-arm-musleabihf' ]
+49 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-linux-arm-gnueabihf
+50 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-linux-arm-gnueabihf' ]
+51 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-freebsd-x64
+52 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-freebsd-x64' ]
+53 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-freebsd-arm64
+54 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-freebsd-arm64' ]
+55 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-darwin-x64
+56 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-darwin-x64' ]
+57 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-darwin-arm64
+58 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-darwin-arm64' ]
+59 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-android-arm64
+60 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-android-arm64' ]
+61 verbose reify failed optional dependency /home/ubuntu/node_modules/@rollup/rollup-android-arm-eabi
+62 silly reify mark deleted [ '/home/ubuntu/node_modules/@rollup/rollup-android-arm-eabi' ]
+63 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/win32-x64
+64 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/win32-x64' ]
+65 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/win32-ia32
+66 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/win32-ia32' ]
+67 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/win32-arm64
+68 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/win32-arm64' ]
+69 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/sunos-x64
+70 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/sunos-x64' ]
+71 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/openharmony-arm64
+72 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/openharmony-arm64' ]
+73 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/openbsd-x64
+74 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/openbsd-x64' ]
+75 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/openbsd-arm64
+76 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/openbsd-arm64' ]
+77 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/netbsd-x64
+78 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/netbsd-x64' ]
+79 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/netbsd-arm64
+80 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/netbsd-arm64' ]
+81 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-x64
+82 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-x64' ]
+83 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-s390x
+84 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-s390x' ]
+85 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-riscv64
+86 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-riscv64' ]
+87 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-ppc64
+88 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-ppc64' ]
+89 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-mips64el
+90 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-mips64el' ]
+91 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-loong64
+92 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-loong64' ]
+93 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-ia32
+94 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-ia32' ]
+95 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/linux-arm
+96 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/linux-arm' ]
+97 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/freebsd-x64
+98 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/freebsd-x64' ]
+99 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/freebsd-arm64
+100 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/freebsd-arm64' ]
+101 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/darwin-x64
+102 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/darwin-x64' ]
+103 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/darwin-arm64
+104 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/darwin-arm64' ]
+105 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/android-x64
+106 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/android-x64' ]
+107 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/android-arm64
+108 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/android-arm64' ]
+109 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/android-arm
+110 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/android-arm' ]
+111 verbose reify failed optional dependency /home/ubuntu/node_modules/@esbuild/aix-ppc64
+112 silly reify mark deleted [ '/home/ubuntu/node_modules/@esbuild/aix-ppc64' ]
+113 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 388ms
+114 silly audit report {}
+115 silly ADD
+116 silly ADD
+117 silly ADD
+118 silly ADD
+119 silly ADD
+120 silly ADD
+121 silly ADD
+122 silly ADD
+123 silly ADD
+124 silly ADD
+125 silly ADD
+126 silly ADD
+127 silly ADD
+128 silly ADD
+129 silly ADD
+130 silly ADD
+131 silly ADD
+132 silly ADD
+133 silly ADD
+134 silly ADD
+135 silly ADD
+136 silly ADD
+137 silly ADD
+138 silly ADD
+139 silly ADD
+140 silly ADD
+141 silly ADD
+142 silly ADD
+143 silly ADD
+144 silly ADD
+145 silly ADD
+146 silly ADD
+147 silly ADD
+148 silly ADD
+149 silly ADD
+150 silly ADD
+151 silly ADD
+152 silly ADD
+153 silly ADD
+154 silly ADD
+155 silly ADD
+156 silly ADD
+157 silly ADD
+158 silly ADD
+159 silly ADD
+160 silly ADD
+161 silly ADD
+162 silly ADD
+163 silly ADD
+164 verbose cwd /home/ubuntu/apps/web
+165 verbose os Linux 6.17.0-1010-oracle
+166 verbose node v20.20.2
+167 verbose npm  v10.8.2
+168 verbose exit 0
+169 info ok
