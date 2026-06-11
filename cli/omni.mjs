@@ -12,7 +12,7 @@ if (process.platform === 'win32' && process.stdout) {
 
 try {
   require('child_process').execSync('chcp 65001', { stdio: 'ignore' });
-} catch (e) {}
+} catch (e) { }
 
 /**
  * OmniAgent + ESGGO 善向永續 系統 Native CLI Tool
@@ -25,6 +25,7 @@ import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
 import { BrowserUse } from 'browser-use-sdk/v3';
+import fs from 'fs';
 
 // Import core logic for CLI use
 import { integrityModule } from '../lib/omni-core/integrity.ts';
@@ -87,10 +88,12 @@ jules.command('browse')
     const client = new BrowserUse({ apiKey });
     try {
       const res = await client.run(prompt, { model: options.model, proxyCountryCode: 'us' });
+      const res = await runWithRetry('Jules Browser Task', () => client.run(prompt, { model: options.model, proxyCountryCode: 'us' }), 3, 45000);
       console.log(pc.green('[v] Browser task completed'));
       console.log(pc.yellow(res.output));
     } catch (e) {
       console.log(pc.red('[x] Browser task failed'));
+      console.log(pc.red('[x] Browser task failed after retries'));
       console.log(pc.red(e.message));
     }
   });
@@ -158,14 +161,43 @@ function computeHashLock(data) {
   return createHash('sha256').update(str).digest('hex');
 }
 
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+/**
+ * 帶有逾時與重試機制的非同步執行封裝
+ */
+async function runWithRetry(operationName, taskFn, maxRetries = 3, timeoutMs = 60000) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Timeout of ${timeoutMs}ms exceeded`)), timeoutMs)
+      );
+      return await Promise.race([taskFn(), timeoutPromise]);
+    } catch (err) {
+      if (attempt === maxRetries) throw err;
+      console.log(pc.yellow(`[!] ${operationName} failed (Attempt ${attempt}/${maxRetries}): ${err.message}. Retrying in ${attempt * 2}s...`));
+      await sleep(attempt * 2000); // 隨重試次數遞增的退避延遲
+    }
+  }
+}
+
+function getDbClient(fallbackWarning = '⚠️ Supabase unavailable. Using simulation mode.') {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key || key.includes('SERVICE_ROLE_KEY_FALLBACK')) {
+    if (fallbackWarning) console.log(pc.yellow(fallbackWarning));
+    return { supabase: null, isFallback: true };
+  }
+  return { supabase: createClient(url, key), isFallback: false };
+}
+
 // ── OmniBlue Simulation ────────────────────────────────────────────────────────
 async function fetchBlueStatus() {
   try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!url || !key) throw new Error('Missing credentials');
+    const { supabase, isFallback } = getDbClient(null);
+    if (isFallback) throw new Error('Missing credentials');
 
-    const supabase = createClient(url, key);
     const { count, error } = await supabase.from('audit_logs').select('*', { count: 'exact', head: true });
 
     if (error) throw error;
@@ -259,29 +291,19 @@ db.command('check')
   .action(async () => {
     console.log(pc.blue('[?] Checking Omni_Terminal System Environment...'));
 
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!url || !key) {
-      console.log(pc.red('[x] Missing Supabase environment variables.'));
-      process.exit(1);
-    }
-
     try {
-      let result;
-      if (key.includes('SERVICE_ROLE_KEY_FALLBACK')) {
-        console.log(pc.yellow('[!] Using mock Supabase client (fallback mode)'));
-        result = { data: [], error: null };
-      } else {
-        const supabase = createClient(url, key);
-        result = await supabase.from('audit_logs').select('count').limit(1);
-      }
-      const { data, error } = result;
+      const { supabase, isFallback } = getDbClient('[!] Using mock Supabase client (fallback mode)');
 
+      if (isFallback) {
+        console.log(pc.green('[v] Supabase Connection: SIMULATED (Fallback)'));
+        return;
+      }
+
+      const { error } = await supabase.from('audit_logs').select('count').limit(1);
       if (error) throw error;
 
       console.log(pc.green('[v] Supabase Connection: STABLE'));
-      console.log(pc.cyan(`[o] Endpoint: ${url}`));
+      console.log(pc.cyan(`[o] Endpoint: ${process.env.NEXT_PUBLIC_SUPABASE_URL}`));
     } catch (err) {
       console.log(pc.red(`[x] Database Error: ${err.message}`));
     }
@@ -300,10 +322,10 @@ auth.command('login')
       // In a real environment, this would start a local server and open the browser to /oauth/consent
       // Then wait for the callback with the code, exchange it for a token.
       console.log(pc.gray('    >> Simulating OAuth Device Code flow...'));
-      await new Promise(r => setTimeout(r, 1500));
-      
+      await sleep(1500);
+
       const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFwcF9tZXRhZGF0YSI6eyJjb21wYW55X2lkIjoiZGVmYXVsdCJ9fQ.mock_signature_rls_enabled';
-      
+
       console.log(pc.green('[v] Authorization Granted!'));
       console.log(pc.white('----------------------------------'));
       console.log(`${pc.gray('Client ID:')}    OmniAgent_CLI`);
@@ -312,16 +334,15 @@ auth.command('login')
       console.log(pc.white('----------------------------------'));
 
       // Inject into .env.local for MCP to use
-      const fs = await import('fs');
       const envPath = '.env.local';
       let envContent = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
-      
+
       if (envContent.includes('OMNI_MCP_ACCESS_TOKEN=')) {
         envContent = envContent.replace(/OMNI_MCP_ACCESS_TOKEN=.*/g, `OMNI_MCP_ACCESS_TOKEN=${mockToken}`);
       } else {
         envContent += `\nOMNI_MCP_ACCESS_TOKEN=${mockToken}\n`;
       }
-      
+
       fs.writeFileSync(envPath, envContent.trim() + '\n');
       console.log(pc.green('[v] OMNI_MCP_ACCESS_TOKEN injected into .env.local successfully.'));
       console.log(pc.cyan('[i] MCP tools will now execute with user-level permissions and RLS limits.'));
@@ -393,7 +414,7 @@ agent.command('run <task>')
   .action(async (task, options) => {
     console.log(pc.cyan(`[A] Invoking Edge Agent for task: "${task}"...`));
     if (options.isCommand) console.log(pc.magenta('⚡ Mode: SUPREME COMMANDER'));
-    
+
     try {
       // Use the OmniAgent directly instead of making HTTP request
       const result = await omniAgent.command(task, { isCommand: !!options.isCommand });
@@ -403,11 +424,11 @@ agent.command('run <task>')
       } else {
         console.log(pc.green(`[v] Agent (${result.agent || 'Commander'}) execution successful!`));
         console.log(pc.white('──────────────────────────────────────────────────'));
-        
+
         if (result.message) {
           console.log(pc.white(`Message: ${result.message}`));
         }
-        
+
         if (result.commanderOutput) {
           console.log(pc.cyan('Commander Plan:'));
           console.log(pc.yellow(result.commanderOutput));
@@ -416,7 +437,7 @@ agent.command('run <task>')
         } else if (result.results) {
           console.log(pc.green(`Task Results: ${result.results.length} items processed.`));
         }
-        
+
         console.log(pc.white('──────────────────────────────────────────────────'));
       }
     } catch (err) {
@@ -434,16 +455,19 @@ agent.command('browse <prompt>')
 
     try {
       const result = await client.run(prompt, {
-        model: options.model,
-        proxyCountryCode: 'us',
-      });
-      console.log(pc.green('[v] Web Agent task completed.'));
-      console.log(pc.white('──────────────────────────────────────────────────'));
-      console.log(pc.yellow(result.output));
-      console.log(pc.white('──────────────────────────────────────────────────'));
+        const result = await runWithRetry('BrowserUse V3 Task', () => client.run(prompt, {
+          model: options.model,
+          proxyCountryCode: 'us',
+        });
+      }), 3, 45000); // 3次重試，每次限制 45 秒
+console.log(pc.green('[v] Web Agent task completed.'));
+console.log(pc.white('──────────────────────────────────────────────────'));
+console.log(pc.yellow(result.output));
+console.log(pc.white('──────────────────────────────────────────────────'));
     } catch (err) {
-      console.log(pc.red(`[x] BrowserUse Error: ${err.message}`));
-    }
+  console.log(pc.red(`[x] BrowserUse Error: ${err.message}`));
+  console.log(pc.red(`[x] BrowserUse Error after retries: ${err.message}`));
+}
   });
 
 agent.command('consolidate')
@@ -451,10 +475,10 @@ agent.command('consolidate')
   .option('-t, --type <type>', 'Memory type to consolidate', 'CORE')
   .action(async (options) => {
     console.log(pc.blue(`[+] Initiating Truth-Preserving Consolidation for [${options.type}]...`));
-    
+
     // Simulate consolidation process matching lib/omni-core.ts
     await new Promise(r => setTimeout(r, 1500));
-    
+
     console.log(pc.green('[v] Consolidation complete.'));
     console.log(pc.white('----------------------------------'));
     console.log(`Status:      ${pc.green('SUCCESS')}`);
@@ -472,15 +496,15 @@ celestial.command('execute <intent>')
   .option('-p, --payload <json>', 'Context payload in JSON format', '{}')
   .action(async (intent, options) => {
     console.log(pc.magenta(`[✨] Initiating Celestial Command: "${intent}"`));
-    
+
     try {
       let payload = {};
       if (options.payload) {
         payload = JSON.parse(options.payload);
       }
-      
+
       const result = await omniAgentBus.executeCelestialCommand(intent, payload);
-      
+
       console.log(pc.white('──────────────────────────────────────────────────'));
       console.log(pc.green(`[v] ${result.message}`));
       console.log(`${pc.gray('Artifact UUID:')} ${pc.cyan(result.artifactUuid)}`);
@@ -499,15 +523,12 @@ vault.command('list')
   .description('List recent records from Vault Omni Core')
   .option('-l, --limit <number>', 'Number of records to fetch', '10')
   .action(async (options) => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
     console.log(pc.blue(`[P] Listing recent ${options.limit} Vault records...`));
-    
+    const { supabase, isFallback } = getDbClient('⚠️ Supabase unavailable. Using NCBDB simulation mode.');
+
     // NCBDB Fallback Mode
-    if (!url || !key) {
-      console.log(pc.yellow('⚠️ Supabase unavailable. Using NCBDB simulation mode.'));
-      await new Promise(r => setTimeout(r, 800));
+    if (isFallback) {
+      await sleep(800);
       console.log(pc.white('----------------------------------'));
       console.log(`${pc.gray(new Date().toLocaleString())} | ${pc.cyan('omni_abc123')} | ${pc.green('z5f8a2e1d9c6b4...')}`);
       console.log(`${pc.gray(new Date().toLocaleString())} | ${pc.cyan('omni_def456')} | ${pc.green('t4_sealed_9b1c2d3e...')}`);
@@ -515,7 +536,6 @@ vault.command('list')
       console.log(pc.magenta('Simulated 2 records from Vault Omni Core via NCBDB bridge'));
       return;
     }
-    const supabase = createClient(url, key);
 
     try {
       const { data, error } = await supabase
@@ -541,15 +561,12 @@ vault.command('list')
 vault.command('verify <uuid>')
   .description('Verify integrity of a Vault record (5T Integrity Proof)')
   .action(async (uuid) => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
     console.log(pc.blue(`[?] Verifying integrity for record: ${pc.cyan(uuid)}...`));
-    
+    const { supabase, isFallback } = getDbClient('⚠️ Supabase unavailable. Using NCBDB simulation mode.');
+
     // NCBDB Fallback Mode
-    if (!url || !key) {
-      console.log(pc.yellow('⚠️ Supabase unavailable. Using NCBDB simulation mode.'));
-      await new Promise(r => setTimeout(r, 500));
+    if (isFallback) {
+      await sleep(500);
       const simulatedHash = 'z' + Math.random().toString(16).slice(2);
       console.log(pc.white('----------------------------------'));
       console.log(`Stored Hash:    ${pc.yellow(simulatedHash)}`);
@@ -558,8 +575,6 @@ vault.command('verify <uuid>')
       console.log(pc.green('[v] 5T INTEGRITY VERIFIED: This record is authentic (NCBDB Bridge).'));
       return;
     }
-    
-    const supabase = createClient(url, key);
 
     try {
       const { data: record, error } = await supabase
@@ -610,13 +625,11 @@ vault.command('seal <id>')
   .action(async (id) => {
     console.log(pc.blue(`[S] Initiating Zero-Knowledge Proof sealing for ID: ${id}...`));
 
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
+    const { supabase, isFallback } = getDbClient('⚠️ Supabase unavailable. Using NCBDB bridge simulation.');
+
     // NCBDB Fallback Mode
-    if (!url || !key) {
-      console.log(pc.yellow('⚠️ Supabase unavailable. Using NCBDB bridge simulation.'));
-      await new Promise(r => setTimeout(r, 2000));
+    if (isFallback) {
+      await sleep(2000);
       const hash = computeHashLock(`zkp-seal-${id}-${Date.now()}`);
       console.log(pc.green(`[v] Cryptographic Seal Applied Successfully!`));
       console.log(pc.white(`----------------------------------`));
@@ -627,12 +640,10 @@ vault.command('seal <id>')
       console.log(pc.white(`----------------------------------`));
       return;
     }
-    
-    const supabase = createClient(url, key);
 
     try {
       // simulate ZKP generation delay
-      await new Promise(r => setTimeout(r, 2000));
+      await sleep(2000);
 
       const hash = computeHashLock(`zkp-seal-${id}-${Date.now()}`);
       const { error } = await supabase
@@ -676,7 +687,7 @@ intel.command('fetch <source>')
     console.log(pc.blue(`[?] Fetching ESG intelligence from [${source.toUpperCase()}]...`));
 
     // Simulate scraper logic (matching lib/services/scraper.ts)
-    await new Promise(r => setTimeout(r, 1500));
+    await sleep(1500);
 
     const data = {
       'EU': [{ title: 'EU 2023/956: CBAM Implementing Regulation', date: '2023-05-16' }],
@@ -698,7 +709,7 @@ intel.command('scan <id>')
   .description('Scan evidence with OmniAgent Vision (Multi-Modal)')
   .action(async (id) => {
     console.log(pc.blue(`[V] Initiating Vision Scan for Evidence ID: ${id}...`));
-    await new Promise(r => setTimeout(r, 2000));
+    await sleep(2000);
 
     console.log(pc.green('[v] OCR & Semantic Analysis Complete.'));
     console.log(pc.white('----------------------------------'));
@@ -716,12 +727,10 @@ audit.command('report')
   .action(async () => {
     console.log(pc.blue('[R] Generating 5T Integrity Audit Report...'));
 
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const { supabase, isFallback } = getDbClient('⚠️ Database offline. Showing simulation based on local memory.');
 
-    if (!url || !key) {
-      console.log(pc.yellow('⚠️ Database offline. Showing simulation based on local memory.'));
-      await new Promise(r => setTimeout(r, 1000));
+    if (isFallback) {
+      await sleep(1000);
       console.log(pc.white('------------------------------------------'));
       console.log(`${pc.bold('Organization:')}  ESG GO Terminal v8.5.1`);
       console.log(`${pc.bold('Audit Date:')}    ${new Date().toLocaleDateString()}`);
@@ -737,7 +746,6 @@ audit.command('report')
     }
 
     try {
-      const supabase = createClient(url, key);
       const { data: vaultRecords } = await supabase.from('vault_omni_core').select('uuid');
       const { data: auditLogs } = await supabase.from('audit_logs').select('id');
 
@@ -780,11 +788,11 @@ audit.command('stress')
     const runSeal = async (i) => {
       const val = Math.floor(Math.random() * 1000);
       const commitment = await generatePedersenCommitment(val);
-      
+
       const timestamp = new Date().toISOString();
       const payload = JSON.stringify({ metric: `STRESS_${i}`, value: val, commitment: commitment.commitment });
       const hash = computeHashLock(payload + timestamp);
-      
+
       // Simulate mining delay (difficulty 2)
       let nonce = 0;
       let blockHash = '';
@@ -806,7 +814,7 @@ audit.command('stress')
       console.log(`Avg per Seal:    ${pc.cyan((duration / iterations).toFixed(2) + 'ms')}`);
       console.log(`Throughput:      ${pc.green((iterations / (duration / 1000)).toFixed(2) + ' items/sec')}`);
       console.log(`ZKP Sample:      ${pc.magenta(results[0].commitment.commitment.slice(0, 16) + '...')}`);
-      console.log(`Final Block:     ${pc.yellow(results[results.length-1].blockHash.slice(0, 16) + '...')}`);
+      console.log(`Final Block:     ${pc.yellow(results[results.length - 1].blockHash.slice(0, 16) + '...')}`);
       console.log(pc.white('----------------------------------'));
     } catch (err) {
       console.log(pc.red(`[x] Stress Test Failed: ${err.message}`));
@@ -817,14 +825,12 @@ audit.command('heal')
   .description('Trigger the Autonomous Healing Guardian to repair data gaps')
   .action(async () => {
     console.log(pc.magenta('🩹 [HealingGuardian] INITIATING AUTONOMOUS REPAIR...'));
-    
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!url || !key) {
-      console.log(pc.yellow('⚠️ Database offline. Entering Simulation Mode (Heuristic Healing)...'));
-      await new Promise(r => setTimeout(r, 2000));
-      
+    const { supabase, isFallback } = getDbClient('⚠️ Database offline. Entering Simulation Mode (Heuristic Healing)...');
+
+    if (isFallback) {
+      await sleep(2000);
+
       console.log(pc.green('[v] Heuristic Healing Complete.'));
       console.log(pc.white('------------------------------------------'));
       console.log(`Gaps Identified: 5`);
@@ -838,19 +844,18 @@ audit.command('heal')
     }
 
     try {
-      const supabase = createClient(url, key);
       console.log(pc.blue('[?] Analyzing system_gaps_summary...'));
-      
+
       // Simulate calling the logic in HealingGuardian
-      const { data, error } = await supabase.rpc('execute_autonomous_healing', { 
-        p_company_id: 'default' 
+      const { data, error } = await supabase.rpc('execute_autonomous_healing', {
+        p_company_id: 'default'
       });
 
       if (error) throw error;
 
       const healedCount = data.healed_count || 0;
       console.log(pc.green(`[v] Successfully healed ${healedCount} integrity gaps!`));
-      
+
       if (healedCount > 0) {
         const { data: logs } = await supabase
           .from('healing_log')
@@ -871,18 +876,18 @@ audit.command('restore <json_data>')
   .description('Trigger [Omni Restoration] on faulty/garbled data using [Cause-Effect] logic')
   .action(async (jsonData) => {
     console.log(pc.magenta('⚡ [Omni Restoration] Faulty Data Detected! Activating Passive Talent...'));
-    
+
     try {
       // Handle the case where the shell might have passed a stringified JSON
       let dataString = jsonData;
       if (jsonData.startsWith('"') && jsonData.endsWith('"')) {
         dataString = JSON.parse(jsonData);
       }
-      
+
       const data = typeof dataString === 'string' ? JSON.parse(dataString) : dataString;
       console.log(pc.white('──────────────────────────────────────────────────'));
       console.log(pc.yellow(`Input Data: ${JSON.stringify(data)}`));
-      
+
       // 1. Invoke Restoration logic
       const crystal = await integrityModule.restore(data);
 
@@ -890,16 +895,16 @@ audit.command('restore <json_data>')
       console.log(pc.white('──────────────────────────────────────────────────'));
       console.log(`${pc.cyan('UUID:')}      ${crystal.uuid}`);
       console.log(`${pc.cyan('Metric:')}    ${pc.white(crystal.impact_metric)}`);
-      
+
       const evidence = crystal.evidence && crystal.evidence[0];
       const cau = evidence && evidence.causality;
-      
+
       if (cau) {
         console.log(`${pc.cyan('因 (Cause):')}  ${pc.gray(cau.originCause)}`);
         console.log(`${pc.cyan('循 (Trace):')}  ${pc.gray(cau.processTrace.length + ' steps logged')}`);
         console.log(`${pc.cyan('果 (Effect):')} ${pc.green(cau.finalEffect)}`);
       }
-      
+
       console.log(pc.white('──────────────────────────────────────────────────'));
       console.log(`${pc.magenta('[OmniCore]')} Data Normalized and Sealed with HashLock: ${pc.yellow(crystal.hash_lock.slice(0, 16))}...`);
     } catch (err) {
@@ -925,7 +930,7 @@ blue.command('deploy <agentName>')
   .description('Deploy a new agent instance to the cloud')
   .action(async (name) => {
     console.log(pc.cyan(`🚀 Provisioning Agent [${name}] on OmniBlue...`));
-    await new Promise(r => setTimeout(r, 1500));
+    await sleep(1500);
     console.log(pc.green(`[v] Deployment successful: https://${name}.agents.blue.cc`));
   });
 
@@ -971,11 +976,11 @@ agent.command('pilot')
 
     for (const c of chapters) {
       console.log(pc.blue(`[A] ESG_Researcher -> Generating content for ${c.title}...`));
-      await new Promise(r => setTimeout(r, 1000));
+      await sleep(1000);
       console.log(pc.green(`[v] Draft generated: ${c.title} (500 words)`));
-      
+
       console.log(pc.blue(`[A] ESG_Auditor -> Verifying 5T HashLock...`));
-      await new Promise(r => setTimeout(r, 500));
+      await sleep(500);
       const hash = computeHashLock(`Content for ${c.id}`);
       console.log(pc.cyan(`[S] 5T_SEAL -> Gate T4: ${hash.slice(0, 16)}...`));
       console.log(pc.white('─'));
@@ -994,19 +999,19 @@ agent.command('audit-swarm')
     try {
       // Use the OmniAgent directly instead of making HTTP request
       const result = await omniAgent.command('EVIDENCE_AUDIT', { isCommand: true });
-      
+
       if (result.success) {
         console.log(pc.green('[v] Swarm Evidence Audit executed successfully!'));
         console.log(pc.white('──────────────────────────────────────────────────'));
         console.log(`Message: ${result.message}`);
-        
+
         if (result.results) {
           result.results.forEach(r => {
             console.log(`${pc.green('[v] VERIFIED')} | ${pc.white(r.fileName)} (${pc.cyan(r.gri)})`);
             console.log(`    ${pc.gray('ZKP Seal:')} ${pc.yellow(r.zkp_hash.slice(0, 16) + '...')}`);
           });
         }
-        
+
         console.log(pc.white('──────────────────────────────────────────────────'));
         console.log(pc.magenta(`✨ MISSION COMPLETE: ${result.results?.length || 0} evidence files audited and sealed.`));
       } else {
@@ -1024,7 +1029,7 @@ agent.command('transfer')
     try {
       // Use the OmniAgent directly instead of making HTTP request
       const result = await omniAgent.command('TRANSFER_TO_NCBDB', { isCommand: true });
-      
+
       if (result.success) {
         console.log(pc.green(`[v] ${result.message}`));
       } else {
@@ -1073,21 +1078,21 @@ agent.command('evolve')
     console.log(pc.magenta('🧬 [OmniAgent] AUTO-EVOLUTION CYCLE INITIATED'));
     console.log(pc.cyan(`Phase: ${options.phase}`));
     console.log(pc.white('──────────────────────────────────────────────────'));
-    
+
     const phase = parseInt(options.phase);
     const bestPractices = [
       '自主演化治理框架 (OmniAgent Evolution Protocol)',
       '量子進化能源優化 (Quantum Energy Evolution)',
       'ZKP 治癒循環 (ZKP Healing Loop)'
     ];
-    
+
     for (const [idx, bp] of bestPractices.entries()) {
       if (idx >= phase) continue;
       console.log(pc.blue(`[Evolution] Applying Best Practice: ${bp}`));
-      await new Promise(r => setTimeout(r, 1200));
+      await sleep(1200);
       console.log(pc.green(`[v] ${bp} 已整合至治理層`));
     }
-    
+
     console.log(pc.white('──────────────────────────────────────────────────'));
     console.log(pc.magenta(`✨ Phase ${phase} Evolution Complete. Trust Score elevated.`));
   });
@@ -1097,19 +1102,19 @@ agent.command('learn')
   .action(async () => {
     console.log(pc.magenta('📖 [OmniAgent] AUTONOMOUS LEARNING ENGAGED'));
     console.log(pc.white('──────────────────────────────────────────────────'));
-    
+
     const knowledgeItems = [
       { topic: 'GRI 2021 Standards', insight: 'Aligned with latest ESG disclosure requirements' },
       { topic: 'CBAM Compliance', insight: 'EU import carbon pricing optimization' },
       { topic: 'SBTi Targets', insight: 'Science-based target validation patterns' }
     ];
-    
+
     for (const item of knowledgeItems) {
       console.log(pc.blue(`[Learning] Processing: ${item.topic}`));
-      await new Promise(r => setTimeout(r, 800));
+      await sleep(800);
       console.log(pc.green(`[v] Insight: ${item.insight}`));
     }
-    
+
     console.log(pc.white('──────────────────────────────────────────────────'));
     console.log(pc.magenta('🧠 RAG Knowledge Base Updated. New patterns indexed.'));
   });
@@ -1121,7 +1126,7 @@ bridge.command('sync <datasheetId>')
   .description('Synchronize OmniTable metrics with OmniBlue Cloud Control Plane')
   .action(async (datasheetId) => {
     console.log(pc.cyan(`[~] Initiating Deep Sync for Datasheet: ${datasheetId}...`));
-    
+
     try {
       const { aiTableBlueBridge } = await import('../lib/services/omni-table-blue-bridge.ts');
       const result = await aiTableBlueBridge.syncMetricsToCloud(datasheetId);

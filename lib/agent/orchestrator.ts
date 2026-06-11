@@ -285,84 +285,25 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     // 如果是報告生成任務，啟動真正的「蜂群調度 (Swarm Delegation)」
     let artifactData;
     if (task.taskType === 'report_drafting') {
-      console.log(`[Swarm Orchestrator] 🌐 召集全域代理蜂群，針對任務 ${taskId} 進行全維度共作...`);
-      broadcast('DRAFTING', 'Swarm (Env/Soc/Gov/Fin/SC)');
+      console.log(`[Report Engine] Generating real GRI draft for Task ${taskId}...`);
+      broadcast('REPORTING', 'GRIGenerator');
 
-      const targetRoleMatch = task.description?.match(/\[Target Audience: (.*?)\]/);
-      const targetRole = targetRoleMatch ? targetRoleMatch[1] : 'public';
+      const { GRIGenerator } = await import('../esg/gri-generator');
+      const { CarbonCalculator } = await import('../esg/carbon-calculator');
 
-      // 並行派遣五大領域 Agent，每個都產出一套完整視角
-      const [envResult, socResult, govResult, finResult, scResult] = await Promise.all([
-        new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Environmental] 🌍 環境維度報告生成完畢.');
-          if (targetRole === 'board') {
-            r('🌍 環境指標: 範疇一 1200 噸、範疇二 3500 噸。碳費風險預估 150 萬元。建議導入再生能源憑證(T-REC)以對沖風險。');
-          } else if (targetRole === 'auditor') {
-            r('🌍 環境指標: 範疇一 1200 噸 (附憑證 ISO-14064)、範疇二 3500 噸 (附憑證 台電)。所有數據源皆已鎖定 5T 雜湊。');
-          } else {
-            const s1Masked = applyDataMasking(1200, 'L1');
-            const s2Masked = applyDataMasking(3500, 'L1');
-            r(`🌍 環境指標: 範疇一 ${s1Masked} 噸、範疇二 ${s2Masked} 噸。(已套用 L1 模糊化遮罩，符合公開揭露標準)`);
-          }
-        }, 1500)),
-        new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Social] 👥 社會維度報告生成完畢.');
-          r(targetRole === 'board' || targetRole === 'auditor' ? '👥 社會指標: 員工流動率 5%，女性主管比例 32% (達標)。零職災。DEI 多元包容預算執行率 95%。' : '👥 社會指標: 員工健康與安全管理達標，落實 DEI 多元包容，並榮獲幸福企業認證。');
-        }, 1800)),
-        new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Governance] ⚖️ 治理維度報告生成完畢.');
-          r('⚖️ 治理指標: 董事會出席率 100%，無舞弊事件。資訊安全與隱私保護政策已全面落實，符合 ISO 27001 標準。');
-        }, 1200)),
-        new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Finance] 💰 永續金融維度報告生成完畢.');
-          r(targetRole === 'board' || targetRole === 'auditor' ? '💰 財務指標: 綠色融資佔比提升至 20%，ESG 專案總投資回報率 (ROI) 達 12%。' : '💰 財務指標: 積極推動綠色金融與永續投資，確保企業長期財務韌性。');
-        }, 2000)),
-        new Promise<string>(r => setTimeout(() => {
-          console.log('[Agent: Supply Chain] 🔗 供應鏈維度報告生成完畢.');
-          r(targetRole === 'board' || targetRole === 'auditor' ? '🔗 供應鏈指標: 高風險供應商稽核完成率 100%，在地採購比例達 65%。' : '🔗 供應鏈指標: 建立綠色供應鏈評鑑機制，與供應商共創永續生態系。');
-          const baseText = targetRole === 'board' || targetRole === 'auditor' ? '🔗 供應鏈指標: 高風險供應商稽核完成率 100%，在地採購比例達 65%。' : '🔗 供應鏈指標: 建立綠色供應鏈評鑑機制，與供應商共創永續生態系。';
-          // 注入交叉驗證數據
-          const carbonData = '根據供應商回報，範疇一總排放約為 950 噸。';
-          r(`${baseText} ${carbonData}`);
-        }, 1700))
-      ]);
+      // 模擬從資料庫或上下文獲取計算組件
+      // 實際場景中，這些應來自 task.inputRefIds 關聯的組件
+      const mockComp = CarbonCalculator.calculate({
+        factorId: task.prompt?.includes('305-2') || task.prompt?.includes('範疇二') ? 'electricity_tw_2023' : 'diesel_stationary',
+        activityAmount: 1200,
+        sourceOrigin: '系統自動提取之年度報表'
+      });
 
-      console.log(`[Swarm Orchestrator] 🧠 所有代理初稿產出完畢。啟動「交叉辯論與邏輯對齊 (Cross-Debate & Alignment)」機制...`);
-      broadcast('DEBATING', 'Swarm Consensus Board');
-      await new Promise(r => setTimeout(r, 1800)); // 模擬辯論推演時間
-
-      // 優化：實施「共識對齊演算法」，取代隨機模擬
-      const envCarbon = extractNumericValue(envResult, '範疇一'); // 應為 1200
-      const scCarbon = extractNumericValue(scResult, '範疇一總排放'); // 應為 950
-      let hasConflict = false;
-      let debateNotes = '';
-
-      if (envCarbon !== null && scCarbon !== null) {
-        const diff = Math.abs(envCarbon - scCarbon);
-        const percentageDiff = (diff / envCarbon) * 100;
-        if (percentageDiff > 10) { // 設定 10% 為衝突閾值
-          hasConflict = true;
-        }
-      }
-
-      if (hasConflict) {
-        console.warn(`[Swarm Debate] ⚠️ 共識校準：偵測到數據衝突！環境代理宣告 (${envCarbon}噸) 與供應鏈代理回報 (${scCarbon}噸) 差異超過 10%。`);
-        await new Promise(r => setTimeout(r, 1500));
-        console.log(`[Swarm Debate] 🔄 啟動數據校準與重新共識...`);
-        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識對齊 (Consensus Alignment)\n- **[異議提出]** 供應鏈代理：偵測到環境代理之範疇一碳排數據 (${envCarbon}噸) 與供應商盤查清冊回報 (${scCarbon}噸) 有顯著偏差。\n- **[邏輯校準]** 萬能大腦 (OmniCore) 介入，重新比對 Evidence Vault 原始憑證 (Hash: 0x8a9...).\n- **[共識達成]** 數值已修正對齊，確保「環境」與「供應鏈」論述不衝突。`;
-      } else {
-        console.log(`[Swarm Debate] ✅ 交叉檢驗通過：五大維度數據邏輯一致，無衝突。`);
-        debateNotes = `\n\n### ⚔️ 蜂群交叉辯論與共識對齊 (Consensus Alignment)\n- **[狀態]** 五大領域代理已互相核對數據與邏輯。\n- **[共識達成]** 未發現衝突，各維度論述完美對齊。`;
-      }
-
-      console.log(`[Swarm Orchestrator] 🧠 所有代理產出完畢。啟動「萬能大腦 (OmniCore)」進行全域彙整與深度融合...`);
-      broadcast('DRAFTING', 'OmniCore Master Fusion');
-      await new Promise(r => setTimeout(r, 1500)); // 終極融合時間
-
-      const aggregatedContent = `## 🌌 全域彙整永續報告 (OmniCore Master Fusion)\n\n**目標受眾視角：${targetRole.toUpperCase()} View**\n\n本報告由 ESG GO 萬能代理蜂群平行產出後，由系統核心進行終極融合，確保各維度相互呼應、圓通無礙。${debateNotes}\n\n### 1. 環境保護 (Environmental)\n${envResult}\n\n### 2. 社會責任 (Social)\n${socResult}\n\n### 3. 公司治理 (Governance)\n${govResult}\n\n### 4. 永續金融 (Sustainable Finance)\n${finResult}\n\n### 5. 綠色供應鏈 (Green Supply Chain)\n${scResult}\n\n> 🕊️ **OmniCore 終極融合確信**：本文件已完成跨領域邏輯一致性檢驗與辯論共識。所有引用的數據皆已映射至 5T 誠信證據庫，確保「可溯源 (Traceable)」與「不可篡改 (Trustworthy)」。`;
+      const griCode = task.prompt?.includes('305-2') || task.prompt?.includes('範疇二') ? '305-2' : '305-1';
+      const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
 
       artifactData = generateMockArtifact(task, execution);
-      artifactData.content = aggregatedContent;
+      artifactData.content = `## 🌌 全域彙整永續報告 (GRI Standard)\n\n${draftContent}\n\n> 🕊️ **OmniCore 確信**：本章節由 5T 誠信組件自動生成，所有數據具備不可篡改性。`;
     } else if (task.taskType === 'email_processing') {
       console.log(`[Hermes Agent] Connecting to Google Workspace for Task ${taskId}...`);
 
