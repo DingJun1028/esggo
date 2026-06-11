@@ -38,56 +38,56 @@ dotenv.config({ override: true });
 const program = new Command();
 
 // ── Jules Integration Commands ──────────────────────────────────────────────────────
-const jules = program.command('jules').description('Jules AI coding agent integration');
+const jules = program.command('omni-jules').description('OmniJules (Google Jules Core) AI healer & coding agent');
 
 jules.command('codegen')
   .description('Generate code or documentation using Jules')
   .argument('<prompt>', 'Prompt describing the code to generate')
   .action(async (prompt) => {
-    console.log(pc.blue('[J] Generating code via Jules...'));
-    // Simulate Jules call via omniAgent (replace with real API when available)
+    console.log(pc.blue('[OmniJules] Generating code via OmniJules...'));
+    // Simulate OmniOmniJules call via OmniAgent (replace with real API when available)
     try {
       const result = await omniAgent.command('CODEGEN', { prompt });
       if (result.success) {
-        console.log(pc.green('[v] Jules generation successful'));
+        console.log(pc.green('[v] OmniJules generation successful'));
         console.log(pc.white('--- Output ---'));
         console.log(pc.yellow(result.output || result.message || 'No output'));
       } else {
-        console.log(pc.red('[x] Jules generation failed'));
+        console.log(pc.red('[x] OmniJules generation failed'));
         console.log(pc.red(result.error?.toString() || 'Unknown error'));
       }
     } catch (e) {
-      console.log(pc.red('[x] Exception during Jules call'));
+      console.log(pc.red('[x] Exception during OmniJules call'));
       console.log(pc.red(e.message));
     }
   });
 
 jules.command('run')
-  .description('Run a Jules session command')
+  .description('Run a OmniJules session command')
   .argument('<task>', 'Task description for Jules')
   .option('-c, --command', 'Treat task as a direct command')
   .action(async (task, options) => {
-    console.log(pc.blue('[J] Running Jules task...'));
+    console.log(pc.blue('[OmniJules] Running OmniJules task...'));
     try {
       const result = await omniAgent.command(task, { isCommand: !!options.command });
-      console.log(pc.green('[v] Jules task completed'));
+      console.log(pc.green('[v] OmniJules task completed'));
       console.log(pc.white(result.output || result.message || 'No output'));
     } catch (e) {
-      console.log(pc.red('[x] Jules task error'));
+      console.log(pc.red('[x] OmniJules task error'));
       console.log(pc.red(e.message));
     }
   });
 
 jules.command('browse')
-  .description('Perform web browsing via Jules (BrowserUse)')
+  .description('Perform web browsing via OmniJules (BrowserUse)')
   .argument('<prompt>', 'Search or browse prompt')
   .option('-m, --model <model>', 'LLM model for browsing', 'claude-opus-4.7')
   .action(async (prompt, options) => {
-    console.log(pc.blue('[J] Initiating browser task...'));
+    console.log(pc.blue('[OmniJules] Initiating browser task...'));
     const apiKey = process.env.BROWSER_USE_API_KEY || 'bu_placeholder';
     const client = new BrowserUse({ apiKey });
     try {
-      const res = await runWithRetry('Jules Browser Task', () => client.run(prompt, { model: options.model, proxyCountryCode: 'us' }), 3, 45000);
+      const res = await runWithRetry('OmniJules Browser Task', () => client.run(prompt, { model: options.model, proxyCountryCode: 'us' }), 3, 45000);
       console.log(pc.green('[v] Browser task completed'));
       console.log(pc.yellow(res.output));
     } catch (e) {
@@ -350,7 +350,7 @@ auth.command('login')
   });
 
 // ── Agent & Swarm Commands ───────────────────────────────────────────────────
-const agent = program.command('agent').description('Omni-Agent and Swarm orchestration');
+const agent = program.command('agent').description('OmniAgent (Hermes Core) and Swarm orchestration');
 
 agent.command('status')
   .description('Fetch current OmniAgent Gateway status')
@@ -374,7 +374,7 @@ agent.command('status')
 agent.command('tools')
   .description('List available agent capabilities (Web, Terminal, Video, ZKP)')
   .action(() => {
-    console.log(pc.blue('[#] Omni-Agent Capability Hub:'));
+    console.log(pc.blue('[#] OmniAgent (Hermes Core) Capability Hub:'));
     console.log(pc.white('----------------------------------'));
     const tools = [
       { id: 'web_search', category: 'Information', desc: 'Deep web research' },
