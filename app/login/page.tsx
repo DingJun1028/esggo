@@ -48,9 +48,7 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    // Only initialize GSI when the window is fully loaded and on a real page
-    // Using window.onGoogleLibraryLoad to ensure the GSI script is fully loaded
-    (window as any).onGoogleLibraryLoad = () => {
+    const initializeGoogle = () => {
       if (!(window as any).google) return;
       
       (window as any).google.accounts.id.initialize({
@@ -58,6 +56,21 @@ export default function LoginPage() {
         callback: handleCredentialResponse,
         use_fedcm_for_prompt: true // Active FedCM flag
       });
+
+      // Render standard sign in button
+      const btnContainer = document.getElementById('google-signin-button');
+      if (btnContainer) {
+        (window as any).google.accounts.id.renderButton(
+          btnContainer,
+          {
+            theme: 'filled_black',
+            size: 'large',
+            width: '382', // Fits login card input fields width
+            text: 'signin_with',
+            shape: 'rectangular'
+          }
+        );
+      }
 
       // Prompt One Tap
       (window as any).google.accounts.id.prompt((notification: any) => {
@@ -68,6 +81,12 @@ export default function LoginPage() {
         }
       });
     };
+
+    if ((window as any).google) {
+      initializeGoogle();
+    } else {
+      (window as any).onGoogleLibraryLoad = initializeGoogle;
+    }
   }, []);
 
   const handleDeveloperLogin = async () => {
@@ -211,6 +230,14 @@ export default function LoginPage() {
               </span>
             </div>
           </button>
+
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-white/10"></div>
+            <span className="flex-shrink mx-4 text-slate-500 text-xs tracking-widest uppercase font-mono">Or</span>
+            <div className="flex-grow border-t border-white/10"></div>
+          </div>
+
+          <div id="google-signin-button" className="w-full flex justify-center" />
 
           {process.env.NODE_ENV === 'development' && (
             <>
