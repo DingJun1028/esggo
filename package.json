@@ -80,7 +80,7 @@
     "snarkjs": "^0.7.6",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.8.3",
-    "spectrum-ts": "^1.18.0",
+    "spectrum-ts": "^3.0.0",
     "swr": "^2.4.1",
     "tailwind-merge": "^3.6.0",
     "turndown": "^7.2.4",
