@@ -1,0 +1,107 @@
+{
+  "skills": [
+    {
+      "skillId": "esg-data-advisor",
+      "description": "Gemma skill for ESG data processing, compliance checking, and advisory, adhering to the Skill-Fragmented Knowledge principle.",
+      "entryPoint": "skills/gemma-skills/esg-data-advisor/src/index.ts",
+      "actions": [
+        {
+          "name": "analyzeESGData",
+          "description": "Analyzes provided ESG data and extracts key metrics.",
+          "inputSchema": {
+            "$ref": "#/definitions/ESGData"
+          },
+          "outputSchema": {
+            "$ref": "#/definitions/AnalysisResult"
+          }
+        },
+        {
+          "name": "checkGRICompliance",
+          "description": "Checks provided data against GRI compliance standards.",
+          "inputSchema": {
+            "$ref": "#/definitions/GRIComplianceInput"
+          },
+          "outputSchema": {
+            "$ref": "#/definitions/GRIComplianceResult"
+          }
+        }
+      ],
+      "definitions": {
+        "OmniCoreContext": {
+          "type": "object",
+          "properties": {
+            "taskId": { "type": "string" },
+            "userId": { "type": "string" },
+            "permissions": { "type": "array", "items": { "type": "string" } },
+            "environment": { "type": "string", "enum": ["development", "staging", "production"] }
+          },
+          "required": ["taskId", "userId", "permissions", "environment"]
+        },
+        "ESGData": {
+          "type": "object",
+          "properties": {
+            "data": { "type": "string" },
+            "dataType": { "type": "string", "enum": ["json", "csv", "text"] },
+            "focusAreas": { "type": "array", "items": { "type": "string" } },
+            "context": { "$ref": "#/definitions/OmniCoreContext" }
+          },
+          "required": ["data", "dataType"]
+        },
+        "AnalysisResult": {
+          "type": "object",
+          "properties": {
+            "metrics": { "type": "object" },
+            "summary": { "type": "string" }
+          },
+          "required": ["metrics", "summary"]
+        },
+        "GRIComplianceInput": {
+          "type": "object",
+          "properties": {
+            "esgReportSegment": { "type": "string" },
+            "griStandard": { "type": "string" },
+            "context": { "$ref": "#/definitions/OmniCoreContext" }
+          },
+          "required": ["esgReportSegment", "griStandard"]
+        },
+        "GRIComplianceResult": {
+          "type": "object",
+          "properties": {
+            "complianceStatus": { "type": "string", "enum": ["compliant", "non-compliant", "partially-compliant"] },
+            "details": { "type": "string" },
+            "recommendations": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["complianceStatus", "details", "recommendations"]
+        }
+      }
+    },
+    {
+      "skillId": "gemma-dev",
+      "description": "Provides capabilities and knowledge related to building applications with Gemma models.",
+      "entryPoint": ".\/.agents\/skills\/gemma-dev\/src\/index.ts",
+      "actions": [
+        {
+          "name": "generatePrompt",
+          "description": "Generates an optimized prompt for a Gemma model based on task requirements.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "taskDescription": { "type": "string" },
+              "modelCapabilities": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["taskDescription"]
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {
+              "prompt": { "type": "string" },
+              "optimizationNotes": { "type": "string" }
+            },
+            "required": ["prompt"]
+          }
+        }
+      ],
+      "memoryPrinciple": "Skill-Fragmented Knowledge"
+    }
+  ]
+}

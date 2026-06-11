@@ -1,0 +1,56 @@
+import { NextResponse } from 'next/server';
+import { governanceEngine } from '@/lib/governance-engine';
+import { getSupabaseClient } from '@/lib/supabase';
+import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
+
+export async function GET() {
+  try {
+    const supabase = getSupabaseClient(); // Get the client via the function, handles errors internally
+
+    const { data: topics, error: topicsError } = await supabase
+      .from('materiality_topics')
+      .select('*');
+
+    if (topicsError) throw topicsError;
+
+    // 2. 從 Supabase 獲取真實的利害關係人投票 (Governance Votes)
+    const { data: votes, error: votesError } = await supabase
+      .from('governance_votes')
+      .select('*');
+
+    if (votesError) throw votesError;
+
+    // 3. 使用 GovernanceEngine 進行真實運算
+    const results = governanceEngine.calculateResonance(
+      topics.map(t => ({
+        id: t.id,
+        label: t.label,
+        category: t.category,
+        internalWeight: t.internal_weight
+      })),
+      votes.map(v => ({
+        id: v.id,
+        stakeholderType: v.stakeholder_type,
+        topicId: v.topic_id,
+        priorityScore: v.priority_score,
+        timestamp: v.created_at,
+        hashLock: v.hash_lock
+      }))
+    );
+
+    const overall = governanceEngine.getOverallResonanceIndex(results);
+
+    return NextResponse.json<ApiResponse>(
+      createSuccessResponse({
+        overall,
+        breakdown: results
+      })
+    );
+  } catch (error: any) {
+    console.error('[Resonance API] Failed to fetch live data:', error);
+    return NextResponse.json<ApiResponse>(
+      createErrorResponse('RESONANCE_FAILED', error.message || 'Resonance calculation failed'),
+      { status: 500 }
+    );
+  }
+}

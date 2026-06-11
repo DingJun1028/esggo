@@ -1,0 +1,19 @@
+### Execution Trace:
+- Viewed: 
+  - `lib/memory.ts`
+  - `lib/memory-graph-engine.ts`
+  - `lib/memory/memory-store.ts`
+  - `lib/agents/adk-swarm.ts`
+  - `lib/agent/store.ts`
+  - `lib/agents/omni-commander.ts`
+- Ran:
+  - Checked available memory files.
+  - Ran `next build` check.
+- Modified:
+  - `lib/memory.ts`: Added `'agent_memory'` to `MemoryType`.
+  - `lib/memory/memory-store.ts`: Refactored to asynchronously persist to Supabase `user_memory` via `writeMemory` / `readMemoryByType` (using type `agent_memory`).
+  - `lib/agents/adk-swarm.ts`: Updated `CollaborativeSwarmAgent.execute` to be asynchronous, retrieve memories from `memoryStore`, and persist execution results to the store via `memoryStore.add`.
+  - `lib/agents/omni-commander.ts`: Added `passiveTalent` ("無作妙德圓通無礙") and updated the system prompt + `COMMAND_ISSUED` payload to reflect this state as requested.
+
+### Outcome:
+Agent memory is now deeply integrated. The `MemoryStore` synchronizes the `CollaborativeSwarmAgent` operations with Supabase persistent storage, allowing agents to search past memories and augment future reasoning based on those stored contexts. OmniAgent's passive talent is fully configured and published through the bus.

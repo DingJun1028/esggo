@@ -1,0 +1,41 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { updateSession } from '@/utils/supabase/middleware';
+
+/**
+ * ESG GO | System Middleware v1.2
+ * Focus: Security Headers, Performance, and Auth Redirects
+ */
+export async function middleware(request: NextRequest) {
+  // Update Supabase session and handle auth logic
+  const response = await updateSession(request);
+
+  // 1. Enhanced Security Headers (Best Practice)
+  const securityHeaders = {
+    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com https://*.firebaseapp.com https://acrobat.adobe.com https://use.typekit.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net; img-src 'self' data: https://*.supabase.co https://*.unsplash.com https://p.typekit.net; connect-src 'self' https://*.supabase.co https://accounts.google.com https://*.googleapis.com https://*.firebaseio.com https://acrobat.adobe.com https://*.adobe.com; frame-src 'self' https://accounts.google.com https://acrobat.adobe.com https://*.adobe.com;",
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+    'X-Frame-Options': 'DENY',
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  };
+
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+
+  return response;
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+};
