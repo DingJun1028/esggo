@@ -1,0 +1,4 @@
+## 2024-06-11 - [Missing Authentication on Sensitive AI Endpoint]
+**Vulnerability:** The AI gateway service `omniagent-gateway/omni-server.mjs` exposes a `POST /execute` endpoint that acts as a proxy to LLMs like Gemini and OpenRouter without requiring any form of authentication or API key, making it susceptible to unauthorized access and API quota depletion (billing abuse).
+**Learning:** Even internal gateways or proxy services must authenticate requests, especially when they broker expensive or quota-limited AI tasks, to prevent unauthorized external or unauthorized internal lateral access.
+**Prevention:** Always implement robust authentication logic (such as an API key via an `Authorization` or custom `X-Omni-Token` header) and fail securely (e.g., throwing a 500 error if the configuration secret is completely missing rather than failing open).
