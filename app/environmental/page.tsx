@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useESGAtoms } from '@/lib/supabase/hooks';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Leaf, Plus, Download, ShieldCheck, Factory, Wind, Zap, AlertTriangle, TrendingDown, Brain } from 'lucide-react';
 
@@ -206,6 +207,10 @@ export default function EnvironmentalDashboard() {
                 </OmniButton>
               </div>
             </OmniBaseCard>
+
+            <div className="pt-2">
+              <ESGSmartQA />
+            </div>
           </div>
         </div>
 
