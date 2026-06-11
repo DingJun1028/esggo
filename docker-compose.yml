@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+ mongodb:
+  image: 'mongo:latest'
+  container_name: 'esggo_DB'
+  restart: 'unless-stopped'
+  environment:
+   MONGO_INITDB_ROOT_USERNAME: Dingjunhong1028
+   MONGO_INITDB_ROOT_PASSWORD: "S1421680s"
+  ports:
+   - 27017:27017

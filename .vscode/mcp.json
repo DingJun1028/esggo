@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "nocodebackend": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@nocodebackend/mcp"
+      ],
+      "env": {
+        "NCB_TOKEN": "ncb_3457befca0d16ea709c7e72b2c4f00a6d36d1063ca63dce9"
+      }
+    },
+    "stitch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "stitch-mcp"
+      ],
+      "env": {
+        "GOOGLE_CLOUD_PROJECT": "esg-sunshine"
+      }
+    }
+  }
+}
