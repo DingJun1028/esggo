@@ -56,6 +56,8 @@ const ALLOWED_ORIGINS  = (process.env.ALLOWED_ORIGINS || '').split(',').filter(B
 const YOUR_SITE_URL    = process.env.SITE_URL || `http://${VPS_IP}:${PORT}`;
 const YOUR_SITE_NAME   = process.env.SITE_NAME || 'ESGGO OmniAgent Gateway';
 const TELEGRAM_TOKEN   = process.env.TELEGRAM_BOT_TOKEN;
+const GATEWAY_API_KEY  = process.env.GATEWAY_API_KEY || 'hermes_gold_2026';
+const TG_ALLOWED_USERS = (process.env.TELEGRAM_ALLOWED_USERS || '*').split(',').map(s => s.trim());
 
 // ── OpenRouter: all currently-free models (as of 2026-06-10) ──
 // Source: https://openrouter.ai/api/v1/models  (pricing.prompt === "0")
@@ -103,7 +105,15 @@ if (TELEGRAM_TOKEN) {
       if (!msg.text || msg.text.startsWith('/')) return;
       
       const chatId = msg.chat.id;
+      const userId = String(msg.from?.id);
       const userName = msg.from?.first_name || 'User';
+
+      // ── Access Control ──
+      if (TG_ALLOWED_USERS[0] !== '*' && !TG_ALLOWED_USERS.includes(userId)) {
+        console.warn(`[OmniGateway] ⛔ Unauthorized Telegram access from ${userName} (${userId})`);
+        return bot.sendMessage(chatId, '⛔ 您未獲授權使用此機器人。');
+      }
+
       console.log(`[OmniGateway] 📩 Telegram from ${userName}: ${msg.text.slice(0, 50)}...`);
 
       // Auto-reply with loading status
@@ -137,7 +147,11 @@ if (TELEGRAM_TOKEN) {
 
     bot.onText(/\/status/, (msg) => {
       const uptime = Math.floor((Date.now() - startTime) / 1000);
-      bot.sendMessage(msg.chat.id, `🛰 **OmniAgent 系統狀態**\n\n狀態: ✅ Online\n版本: v2.1.0\n核心: Gemma 4 (31B)\nUptime: ${uptime}s\n\n系統一切運作正常。`, { parse_mode: 'Markdown' });
+      bot.sendMessage(msg.chat.id, `🛰 **OmniAgent 系統狀態**\n\n狀態: ✅ Online\n版本: v2.1.0\n核心: Gemma 4 (31B)\nUptime: ${uptime}s\nChat ID: \`${msg.chat.id}\`\n\n系統一切運作正常。`, { parse_mode: 'Markdown' });
+    });
+
+    bot.onText(/\/chatid/, (msg) => {
+      bot.sendMessage(msg.chat.id, `🆔 你的 Chat ID 是: \`${msg.chat.id}\`\n\n請將此 ID 填入 \`.env\` 中的 \`TELEGRAM_CHAT_ID\` 以啟用推播功能。`, { parse_mode: 'Markdown' });
     });
 
     bot.onText(/\/models/, (msg) => {
@@ -350,24 +364,19 @@ app.get('/models', aiLimiter, async (req, res) => {
  */
 app.post('/execute', aiLimiter, async (req, res) => {
   // 🛡️ Sentinel: Enforce Authentication to prevent unauthorized API quota usage
-  const authHeader = req.headers['x-omni-token'] || req.headers['authorization'];
-  const configuredToken = process.env.OMNI_TOKEN;
+  const authHeader = req.headers['x-omni-token'] || req.headers['authorization'] || req.headers['x-api-key'];
+  const configuredToken = process.env.OMNI_TOKEN || GATEWAY_API_KEY;
 
   if (!configuredToken) {
-    // Fail securely: Do not fallback to open access if the token is not configured
-    console.error('[OmniGateway] 🚨 CRITICAL: OMNI_TOKEN is not configured in the environment.');
+    console.error('[OmniGateway] 🚨 CRITICAL: OMNI_TOKEN or GATEWAY_API_KEY is not configured.');
     return res.status(500).json({ error: 'Server configuration error: Authentication is not configured securely.' });
   }
 
-  // Extract token if it's sent as 'Bearer <token>'
-  let providedToken = authHeader;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    providedToken = authHeader.substring(7);
-  }
+  let providedToken = authHeader?.replace('Bearer ', '');
 
   if (!providedToken || providedToken !== configuredToken) {
-    console.warn(`[OmniGateway] ⚠️ Unauthorized access attempt to /execute from ${req.ip}`);
-    return res.status(401).json({ error: 'Unauthorized: Invalid or missing X-Omni-Token or Authorization header.' });
+    console.warn(`[OmniGateway] ⚠️ Unauthorized access attempt from IP: ${req.ip}`);
+    return res.status(401).json({ error: 'Unauthorized: Invalid API Key or Token' });
   }
 
   const { task } = req.body;

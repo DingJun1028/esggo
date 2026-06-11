@@ -151,7 +151,7 @@ export class JESMonitor {
     const min = Math.min(...history.map(h => h.emission));
     const range = max - min || 1;
 
-    let chart = '\n📊 碳排歷史� graph (最近10筆)\n';
+    let chart = '\n📊 碳排歷史趨勢圖 (最近10筆)\n';
     chart += '─────────────────────────\n';
 
     history.forEach(h => {
