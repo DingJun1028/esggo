@@ -40,33 +40,32 @@ export interface OmniGatewayResponse {
 
 // ── ESG Domain Types ───────────────────────────────────────
 
-export interface ESGMetric {
+/**
+ * 💎 萬能元件心核：5T [4可1不可] 實作規範
+ */
+export interface IComponentCore {
+  readonly uuid: string;           // [真 - Truthful] Traceable (可溯源)
+  readonly timestamp: number;      // [通 - Transferful] Trackable (可追蹤)
+  readonly formula: string;        // [善 - Thankful] Transparent (可透明)
+  readonly impactMetric: string;   // [美 - Tasteful] Tangible (可感知)
+  readonly status: "Trustworthy";  // [信 - Trustful] Trustworthy (不可篡改)
+  
+  /** 證據佐證庫 (Evidence Vault) */
+  evidence: Record<string, any>;
+  
+  /** 🔒 不可篡改封印 */
+  lock(): void; 
+}
+
+export interface ESGMetric extends IComponentCore {
   category: 'Environmental' | 'Social' | 'Governance';
   name: string;
   value: number | string;
   unit: string;
-  timestamp: string;
+  sourceOrigin: string; // [真 - Truthful] Required for Traceability
   integrityProof?: string; 
 }
 
-/**
- * 💎 萬能元件心核：5T [4可1不可] 實作規範
- * --------------------------------------------------
- * 同義詞：萬能晶體、心核、SSOT 契約、Heart
- */
-export interface IComponentCore {
-  readonly uuid: string;           // [Traceable 可溯源] 來自萬能永憶主體
-  readonly timestamp: number;      // [Trackable 可追蹤] 刻印時間戳
-  readonly formula: string;        // [Transparent 可透明] 碳排與影響力計算公式
-  readonly impactMetric: string;   // [Tangible 可感知] 具體影響力指標
-  readonly status: "Trustworthy";  // [Trustworthy 不可篡改] 唯一的不可狀態
- 
-  /** 證據佐證庫 (Evidence Vault) */
-  evidence: Record<string, any>;
-
-  /** 🔒 不可篡改封印：數據封裝後的終態執行 */
-  lock(): void; 
-}
 
 // ── ZK-Privacy Engine Types ───────────────────────────────
 
