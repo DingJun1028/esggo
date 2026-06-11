@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { useESGAtoms } from '@/lib/supabase/hooks';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Landmark, Plus, Download, ShieldCheck, Scale, FileSignature, ShieldAlert, Award, FileText } from 'lucide-react';
@@ -31,14 +32,21 @@ export default function GovernanceDashboard() {
   const [activeTab, setActiveTab] = useState('All');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Mock data for Governance ESG Metrics
-  const governanceData = useMemo(() => [
-    { id: 1, category: '董事會與高管', metric: '女性董事席次佔比', value: '40%', target: '30%', status: 'Sealed' },
-    { id: 2, category: '商業道德', metric: '反貪腐政策培訓完成率', value: '100%', target: '100%', status: 'Sealed' },
-    { id: 3, category: '資訊安全', metric: '5T 協議資料加密覆蓋率', value: '98.5%', target: '100%', status: 'Pending' },
-    { id: 4, category: '風險管理', metric: '重大 ESG 風險鑑別完成度', value: '100%', target: '100%', status: 'Sealed' },
-    { id: 5, category: '供應鏈治理', metric: '高風險供應商稽核率', value: '85%', target: '90%', status: 'Pending' },
-  ], []);
+  const { data: dbAtoms, loading } = useESGAtoms('governance');
+
+  // Use database atoms, or fallback to mock data if database is empty or still loading
+  const governanceData = useMemo(() => {
+    if (!loading && dbAtoms && dbAtoms.length > 0) {
+      return dbAtoms;
+    }
+    return [
+      { id: 1, category: '董事會與高管', metric: '女性董事席次佔比', value: '40%', target: '30%', status: 'Sealed' },
+      { id: 2, category: '商業道德', metric: '反貪腐政策培訓完成率', value: '100%', target: '100%', status: 'Sealed' },
+      { id: 3, category: '資訊安全', metric: '5T 協議資料加密覆蓋率', value: '98.5%', target: '100%', status: 'Pending' },
+      { id: 4, category: '風險管理', metric: '重大 ESG 風險鑑別完成度', value: '100%', target: '100%', status: 'Sealed' },
+      { id: 5, category: '供應鏈治理', metric: '高風險供應商稽核率', value: '85%', target: '90%', status: 'Pending' },
+    ];
+  }, [dbAtoms, loading]);
 
   const filteredData = useMemo(() => {
     return activeTab === 'All' ? governanceData : governanceData.filter(d => d.category === activeTab);
