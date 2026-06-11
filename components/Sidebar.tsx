@@ -93,7 +93,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
       { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'NEW' },
-      { href: '/omniagent-agent', label: 'OmniAgent Agent', sub: 'NousResearch', icon: FlaskConical },
+      { href: '/omni-agent', label: 'OmniAgent Agent', sub: 'NousResearch', icon: FlaskConical },
     ],
   },
 ];

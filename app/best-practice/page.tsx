@@ -208,7 +208,7 @@ export default function BestPracticeHubPage() {
              {activeTab === 'benchmarks' && (
                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {BEST_PRACTICES.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map(p => (
-                    <motion.div key={p.id} whileHover={{ y: -4 }}>
+                    <motion.div key=BEST-PRACTICE whileHover={{ y: -4 }}>
                       <BrandCard hover padding="lg" className="flex flex-col h-full border-none shadow-premium relative overflow-hidden cursor-pointer" onClick={() => setSelectedPractice(p)}>
                          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50/50 rounded-full -mr-8 -mt-8" />
                          <div className="flex justify-between items-start mb-6">
@@ -220,7 +220,7 @@ export default function BestPracticeHubPage() {
                                <span className="text-[10px] font-black text-slate-400">{p.rating}</span>
                             </div>
                          </div>
-                         <h4 className="text-lg font-black text-[#003262] mb-2 leading-tight">{p.title}</h4>
+                         <h4 className="text-lg font-black text-[#003262] mb-2 leading-tight">BEST PRACTICE</h4>
                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <Globe size={12} /> {p.source}
                          </p>

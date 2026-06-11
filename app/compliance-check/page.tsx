@@ -155,10 +155,10 @@ export default function ComplianceCheckPage() {
             <div>
               <div className="flex items-center gap-3 mb-1">
                 <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">COMPLIANCE-CHECK</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">{p.sub}</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">COMPLIANCE CHECK</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">compliance-check dashboard</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">

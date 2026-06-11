@@ -400,7 +400,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       });
 
       artifactData = generateMockArtifact(task, execution);
-      artifactData.content = `## 🌌 碳排放核算報告 (ISO 14064-1)\n\n### 1. 核算摘要\n- **UUID**: \`${calcResult.uuid}\`\n- **時間戳**: ${new Date(calcResult.timestamp).toLocaleString()}\n- **狀態**: ✅ ${calcResult.status}\n\n### 2. 計算結果\n- **活動數據**: ${amount}\n- **計算公式**: \`${calcResult.formula}\`\n- **最終排放量**: **${calcResult.impact_metric}**\n\n### 3. 5T 誠信證據 (Evidence Process Trace)\n${calcResult.evidence[0].process_trace.map(t => `- ${t}`).join('\n')}\n\n> 🔒 **Hash Lock**: \`${calcResult.hash_lock}\` (已寫入 5T 誠信鏈)`;
+      artifactData.content = `## 🌌 碳排放核算報告 (ISO 14064-1)\n\n### 1. 核算摘要\n- **UUID**: \`${calcResult.uuid}\`\n- **時間戳**: ${new Date(calcResult.timestamp).toLocaleString()}\n- **狀態**: ✅ ${calcResult.status}\n\n### 2. 計算結果\n- **活動數據**: ${amount}\n- **計算公式**: \`${calcResult.formula}\`\n- **最終排放量**: **${calcResult.impact_metric}**\n\n### 3. 5T 誠信證據 (Evidence Process Trace)\n${calcResult.evidence[0].processTrace.map(t => `- ${t}`).join('\n')}\n\n> 🔒 **Hash Lock**: \`${calcResult.hash_lock}\` (已寫入 5T 誠信鏈)`;
     } else {
       await new Promise(r => setTimeout(r, 1500));
       artifactData = generateMockArtifact(task, execution);
