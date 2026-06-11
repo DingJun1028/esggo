@@ -62,11 +62,11 @@ const RELEASE_HISTORY: ReleaseNote[] = [
 const QUICKSTART_STEPS: QuickstartStep[] = [
   {
     id: 1,
-    title: '1. Install OmniAgent Agent',
+    title: '1. 載入 OmniAgent (Hermes 原型)',
     icon: <Terminal size={18}/>,
     color: '#009E9D', // ESG Teal
     description: 'Set up the core OmniAgent CLI and initialize your workspace.',
-    command: 'npm install -g @nousresearch/omniagent\nomniagent setup'
+    command: 'npm install -g @esggo/omniagent\nomniagent setup'
   },
   {
     id: 2,
@@ -83,16 +83,16 @@ const QUICKSTART_STEPS: QuickstartStep[] = [
     icon: <Globe size={18}/>,
     color: '#8B5CF6', // ESG Purple
     description: "Register specialized ESG agents using Google's Agent Development Kit.",
-    command: "import { createAgent } from '@google/adk';\n\nconst esgResearcher = createAgent({\n  name: 'ESG_Researcher_Agent',\n  role: 'Sustainability Data Analyst'\n});",
+    command: "import { createOmniAgent } from '@esggo/omniagent';\n\nconst omniAgent = createOmniAgent({\n  core: 'hermes',\n  role: 'OmniAgent (ESG Master)'\n});",
     isSnippet: true
   },
   {
     id: 4,
-    title: '4. Activate Agent Zero',
+    title: '4. 喚醒 OmniJules (Google Jules)',
     icon: <Cpu size={18}/>,
     color: '#FDB515', // California Gold
-    description: 'Enable system-level execution and sub-agent spawning for autonomous ops.',
-    command: 'docker run -it -v $(pwd):/workspace agent0ai/agent-zero\n# AgentZ0 will now monitor and execute autonomously.'
+    description: '啟動具備萬能果因協議 (Karma Protocol) 的 OmniJules，執行底層修復與演化。',
+    command: 'docker run -it -v $(pwd):/workspace esggo/omni-jules\n# OmniJules (Google Jules Core) will now self-heal autonomously.'
   }
 ];
 
@@ -108,8 +108,8 @@ export default function OmniAgentAgentPage() {
 
   const pageConfig: OmniPageConfig = {
     id: 'omniagent-agent',
-    title: 'OmniAgent Agent 系統 ☤',
-    subtitle: '超越單純對話的自主代理：具備閉環學習、記憶固化與跨平台調度的 ESG 治理核心。',
+    title: 'OmniAgent / OmniJules 系統 ☤',
+    subtitle: '超越單純對話的自主代理：以開源 Hermes 為原型進化的 OmniAgent，與承襲自 Google Jules 的 OmniJules，雙核驅動的 ESG 治理核心。',
     icon: <Bot size={32} className="text-berkeley-blue" />,
     griReference: 'Agent System / oX',
     activeT5Tags: ['T4', 'T5'],
@@ -245,8 +245,8 @@ export default function OmniAgentAgentPage() {
               <div className="max-w-5xl mx-auto animate-in fade-in">
                 <Card className="p-10 bg-white/60 border-white/80 shadow-glass">
                   <div className="mb-10 text-center">
-                    <h3 className="text-2xl font-black text-berkeley-blue mb-2 tracking-tight">OmniAgent Agent + ESG GO Quickstart</h3>
-                    <p className="text-sm text-slate-500 font-medium">從零開始構建您的 5T 誠信代理蜂群</p>
+                    <h3 className="text-2xl font-black text-berkeley-blue mb-2 tracking-tight">OmniAgent (Hermes Core) & OmniJules (Jules Core)</h3>
+                    <p className="text-sm text-slate-500 font-medium">將開源 Hermes 與 Google Jules 轉化為 ESGGO 專屬的萬能代理蜂群</p>
                   </div>
                   
                   <div className="flex flex-col md:flex-row gap-12">
@@ -400,7 +400,7 @@ export default function OmniAgentAgentPage() {
                          <h4 className="text-sm font-black text-berkeley-blue uppercase tracking-tight">認證與安全</h4>
                       </div>
                       <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
-                        整合 Nous Research 認證體系，每一筆指令均附帶 Actor ID 與 Policy Guard 決策雜湊，
+                        整合 ESGGO Core 認證體系，每一筆指令均附帶 Actor ID 與 Policy Guard 決策雜湊，
                         符合 Berkeley Academy 最嚴苛的治理標準與 oX 安全協議。
                       </p>
                    </Card>
@@ -474,14 +474,14 @@ export default function OmniAgentAgentPage() {
             <Bot size={24} />
           </div>
           <span className="text-[11px] font-black text-berkeley-blue uppercase tracking-[0.3em] font-mono">
-            OMNIAGENT-AGENT SYSTEM v0.14.1
+            ESGGO OMNIAGENT SYSTEM v0.14.1
           </span>
         </div>
         <div className="flex gap-8">
-          <a href="https://omniagent-agent.nousresearch.com/docs/" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
+          <a href="https://esggo.com/omniagent-docs" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
             <Terminal size={14} /> DOCUMENTATION
           </a>
-          <a href="https://discord.gg/NousResearch" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
+          <a href="https://esggo.com/community" target="_blank" rel="noreferrer" className="text-[11px] text-slate-400 font-black hover:text-berkeley-blue flex items-center gap-2 transition-all uppercase tracking-widest">
             <MessageSquare size={14} /> DISCORD
           </a>
         </div>
