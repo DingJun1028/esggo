@@ -1,0 +1,2577 @@
+{
+  "version": "2.13",
+  "children": [
+    {
+      "type": "frame",
+      "id": "u2TV1",
+      "x": 0,
+      "y": 0,
+      "name": "Component: Trace Panel",
+      "reusable": true,
+      "width": 340,
+      "fill": "$trace_bg",
+      "cornerRadius": 12,
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 12,
+      "children": [
+        {
+          "type": "text",
+          "id": "EvAfa",
+          "name": "TraceLine1",
+          "fill": "$trace_text",
+          "content": ">> [OMNI-WEAVE] INGESTING DATASTREAM",
+          "fontFamily": "$font_mono",
+          "fontSize": 10,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "lQ660",
+          "name": "TraceLine2",
+          "fill": "$text_secondary",
+          "content": "   ↳ HASH: 0x8F9C...E4A1 | STATUS: VERIFIED",
+          "fontFamily": "$font_mono",
+          "fontSize": 10,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "Ht6To",
+          "name": "TraceLine3",
+          "fill": "$trace_text",
+          "content": ">> INTEGRITY SEAL LOCKED",
+          "fontFamily": "$font_mono",
+          "fontSize": 10,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Jjcsc",
+      "x": 380,
+      "y": 0,
+      "name": "Component: Formula Panel",
+      "reusable": true,
+      "width": 340,
+      "fill": "$formula_bg",
+      "cornerRadius": 12,
+      "stroke": "$border_glass",
+      "strokeWidth": 1,
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 12,
+      "children": [
+        {
+          "type": "text",
+          "id": "j1nClP",
+          "name": "FormulaTitle",
+          "fill": "$text_secondary",
+          "content": "CALCULATION RULE:",
+          "fontFamily": "$font_sans",
+          "fontSize": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "BLeRw",
+          "name": "Expression",
+          "fill": "$formula_text",
+          "content": "Scope 1 = ∑ (Fuel_Consumed × EF)",
+          "fontFamily": "$font_mono",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "WzJQS",
+          "name": "Evaluation",
+          "fill": "$text_primary",
+          "content": "✓ Inputs: Fuel [14,205 gal] x Diesel EF [10.21]",
+          "fontFamily": "$font_sans",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ulBmS",
+      "x": 760,
+      "y": 0,
+      "name": "Component: OmniCard",
+      "reusable": true,
+      "width": 380,
+      "fill": "$bg_glass",
+      "cornerRadius": "$radius_2xl",
+      "stroke": "$border_glass",
+      "strokeWidth": 1,
+      "effect": [
+        {
+          "type": "background_blur",
+          "radius": 20
+        },
+        {
+          "type": "shadow",
+          "shadowType": "outer",
+          "color": "#00000010",
+          "offset": {
+            "x": 0,
+            "y": 8
+          },
+          "blur": 24
+        }
+      ],
+      "layout": "vertical",
+      "gap": 14,
+      "padding": 18,
+      "children": [
+        {
+          "type": "frame",
+          "id": "y1arr",
+          "name": "Header",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "aneWj",
+              "name": "TitleGroup",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CpPdZ",
+                  "name": "CardTitle",
+                  "fill": "$text_primary",
+                  "content": "Card Title",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 15,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "QOrZ7",
+                  "name": "CardSubtitle",
+                  "fill": "$text_secondary",
+                  "content": "Card Subtitle",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 11,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "msUIF",
+              "name": "StatusBadge",
+              "fill": "#22D3EE1A",
+              "cornerRadius": 100,
+              "gap": 6,
+              "padding": [
+                4,
+                8
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "w0UsV",
+                  "name": "Dot",
+                  "fill": "$cyan_brand",
+                  "width": 6,
+                  "height": 6
+                },
+                {
+                  "type": "text",
+                  "id": "CngVS",
+                  "name": "StatusText",
+                  "fill": "$cyan_brand",
+                  "content": "ACTIVE",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 10,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Ipj8a",
+          "name": "BodySlot",
+          "width": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "text",
+              "id": "i24J90",
+              "name": "DefaultText",
+              "fill": "$text_primary",
+              "content": "OmniCard workspace content slot. Supports data visualization, interactive controls, or child panels.",
+              "fontFamily": "$font_sans",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "L3EF4y",
+          "name": "Footer",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "cmQWF",
+              "name": "ActionButtons",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "k4z5bR",
+                  "name": "TraceButton",
+                  "fill": "$trace_bg",
+                  "cornerRadius": 8,
+                  "padding": [
+                    6,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "EtDvJ",
+                      "name": "TraceBtnText",
+                      "fill": "$trace_text",
+                      "content": "TRACE",
+                      "fontFamily": "$font_mono",
+                      "fontSize": 10,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jNWL6",
+                  "name": "FormulaButton",
+                  "fill": "$formula_bg",
+                  "cornerRadius": 8,
+                  "stroke": "$border_glass",
+                  "strokeWidth": 1,
+                  "padding": [
+                    6,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "mAeMb",
+                      "name": "FormulaBtnText",
+                      "fill": "$formula_text",
+                      "content": "ƒ FORMULA",
+                      "fontFamily": "$font_sans",
+                      "fontSize": 10,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GHnEN",
+              "name": "LockGroup",
+              "gap": 4,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "M762R",
+                  "name": "LockIcon",
+                  "width": 12,
+                  "height": 12,
+                  "icon": "lock",
+                  "library": "lucide",
+                  "fill": "$text_secondary"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "wsR7i",
+      "x": 1220,
+      "y": 0,
+      "name": "ESGGO Platform - Dark Mode",
+      "theme": {
+        "mode": "dark"
+      },
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg_page",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "ellipse",
+          "id": "qGKFc",
+          "layoutPosition": "absolute",
+          "x": 100,
+          "y": 120,
+          "name": "Cyan Glow",
+          "fill": "#22D3EE15",
+          "width": 500,
+          "height": 500,
+          "effect": {
+            "type": "blur",
+            "radius": 100
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "e5hC7",
+          "layoutPosition": "absolute",
+          "x": 900,
+          "y": 250,
+          "name": "Purple Glow",
+          "fill": "#C084FC12",
+          "width": 600,
+          "height": 600,
+          "effect": {
+            "type": "blur",
+            "radius": 120
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "Trhsv",
+          "layoutPosition": "absolute",
+          "x": 500,
+          "y": 500,
+          "name": "Emerald Glow",
+          "fill": "#34D3990A",
+          "width": 400,
+          "height": 400,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "frame",
+          "id": "HmKGJ",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 72,
+          "stroke": "$border_glass",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            40
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "r0ZBsO",
+              "name": "LogoGroup",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "IlVEM",
+                  "name": "LogoIcon",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "activity",
+                  "library": "lucide",
+                  "fill": "$cyan_brand"
+                },
+                {
+                  "type": "text",
+                  "id": "z12c0T",
+                  "name": "BrandName",
+                  "fill": "$text_primary",
+                  "content": "ESGGO",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 18,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "frame",
+                  "id": "OnmHY",
+                  "name": "WeaveBadge",
+                  "fill": "#22D3EE1A",
+                  "cornerRadius": 6,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "VZXGl",
+                      "name": "WeaveText",
+                      "fill": "$cyan_brand",
+                      "content": "OMNI-WEAVE ARCHITECTURE",
+                      "fontFamily": "$font_mono",
+                      "fontSize": 9,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "No9Cb",
+              "name": "NavGroup",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Nagxv",
+                  "name": "Link1",
+                  "fill": "$text_primary",
+                  "content": "Dashboard",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Q5HopM",
+                  "name": "Link2",
+                  "fill": "$text_secondary",
+                  "content": "Weave Engine",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "rETty",
+                  "name": "Link3",
+                  "fill": "$text_secondary",
+                  "content": "Formula Lab",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "KypqB",
+                  "name": "Link4",
+                  "fill": "$text_secondary",
+                  "content": "Audit Ledger",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "s2UCb",
+              "name": "ControlsGroup",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "C7ALv",
+                  "name": "ThemeToggle",
+                  "fill": "$bg_glass",
+                  "cornerRadius": 20,
+                  "stroke": "$border_glass",
+                  "strokeWidth": 1,
+                  "gap": 8,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "NgPn7",
+                      "name": "SunIcon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "sun",
+                      "library": "lucide",
+                      "fill": "$text_secondary"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "F3zHt1",
+                      "name": "MoonBtn",
+                      "fill": "#22D3EE1A",
+                      "cornerRadius": 12,
+                      "padding": [
+                        4,
+                        6
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "qLcs4",
+                          "name": "MoonIcon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "moon",
+                          "library": "lucide",
+                          "fill": "$cyan_brand"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "HWWe0",
+                  "name": "SecureBadge",
+                  "fill": "#22D3EE15",
+                  "cornerRadius": 100,
+                  "stroke": "#22D3EE30",
+                  "strokeWidth": 1,
+                  "gap": 6,
+                  "padding": [
+                    6,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "N3Sgcd",
+                      "name": "NodeDot",
+                      "fill": "$cyan_brand",
+                      "width": 6,
+                      "height": 6
+                    },
+                    {
+                      "type": "text",
+                      "id": "QYFGM",
+                      "name": "NodeText",
+                      "fill": "$cyan_brand",
+                      "content": "NODE SECURE",
+                      "fontFamily": "$font_mono",
+                      "fontSize": 10,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "F1yTEy",
+          "name": "BentoContainer",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 20,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "qciey",
+              "name": "BentoColumn1",
+              "width": 440,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "id": "I5oAdc",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Scope 1 Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Scope 1 Emissions"
+                    },
+                    "QOrZ7": {
+                      "content": "Direct stationary combustion ledger"
+                    },
+                    "CngVS": {
+                      "content": "AUDITED"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "hJPcV",
+                      "name": "CustomBody1",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "PCnGK",
+                          "name": "MetricRow",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "B7rzKq",
+                              "name": "Value",
+                              "fill": "$text_primary",
+                              "content": "4,210.8",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 28,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZRFRD",
+                              "name": "Unit",
+                              "fill": "$text_secondary",
+                              "content": "tCO2e",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "EMbk4",
+                          "type": "ref",
+                          "ref": "Jjcsc",
+                          "name": "EmbeddedFormula",
+                          "width": "fill_container",
+                          "descendants": {
+                            "BLeRw": {
+                              "content": "Scope 1 = ∑ (Fuel_gln × 10.21 kg/gal)"
+                            },
+                            "WzJQS": {
+                              "content": "✓ Validated: EPA 2026 Emission Factors"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                },
+                {
+                  "id": "YRWmt",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Scope 2 Locked Card",
+                  "width": "fill_container",
+                  "stroke": "$border_locked",
+                  "strokeWidth": 2,
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Scope 2 Location-Based"
+                    },
+                    "QOrZ7": {
+                      "content": "Indirect grid electricity purchase"
+                    },
+                    "CngVS": {
+                      "content": "LOCKED",
+                      "fill": "$cyan_brand"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "N1ta7",
+                      "name": "CustomBody2",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "xn1bt",
+                          "name": "MetricRow",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "kb4qZ",
+                              "name": "Value",
+                              "fill": "$text_primary",
+                              "content": "1,845.2",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 28,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "BHYvT",
+                              "name": "Unit",
+                              "fill": "$text_secondary",
+                              "content": "MWh",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "v6wiAo",
+                          "type": "ref",
+                          "ref": "u2TV1",
+                          "name": "EmbeddedTrace",
+                          "width": "fill_container",
+                          "descendants": {
+                            "EvAfa": {
+                              "content": ">> [GRID-WEAVE] INGESTED ISO-NE DATALINK"
+                            },
+                            "lQ660": {
+                              "content": "   ↳ SIGN: 0x2A1B...D834 | BLK: #104291"
+                            },
+                            "Ht6To": {
+                              "content": ">> CRYPTOGRAPHIC SEAL IMMUTABLE"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": true
+                    },
+                    "M762R": {
+                      "fill": "$cyan_brand"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "fFEjG",
+              "name": "BentoColumn2",
+              "width": 480,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "id": "LxMI3",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Weave Engine Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Omni-Weave Trace Engine"
+                    },
+                    "QOrZ7": {
+                      "content": "Real-time ledger orchestration & tracing"
+                    },
+                    "CngVS": {
+                      "content": "LIVE GRID"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "oQ2CC",
+                      "name": "CustomBody3",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "oN4QE",
+                          "name": "WeaveDiagram",
+                          "width": "fill_container",
+                          "fill": "$bg_glass",
+                          "cornerRadius": 10,
+                          "stroke": "$border_glass",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": 10,
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d14Oyu",
+                              "name": "SourceNode",
+                              "fill": "#22D3EE1A",
+                              "cornerRadius": 6,
+                              "stroke": "$cyan_brand",
+                              "strokeWidth": 1,
+                              "layout": "vertical",
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "obKHf",
+                                  "fill": "$cyan_brand",
+                                  "content": "INGEST",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 9,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "pfct9",
+                              "fill": "$text_secondary",
+                              "content": "──▶",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "o0YBNb",
+                              "name": "WeaveNode",
+                              "fill": "$cyan_brand",
+                              "cornerRadius": 6,
+                              "layout": "vertical",
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "DsP7u",
+                                  "fill": "#0F172A",
+                                  "content": "WEAVE",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 9,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "B8Qav",
+                              "fill": "$text_secondary",
+                              "content": "──▶",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "s9zm3",
+                              "name": "LedgerNode",
+                              "fill": "$trace_bg",
+                              "cornerRadius": 6,
+                              "stroke": "$border_locked",
+                              "strokeWidth": 1,
+                              "layout": "vertical",
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Z7Xvy4",
+                                  "fill": "$trace_text",
+                                  "content": "LEDGER",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 9,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "oh67D",
+                          "type": "ref",
+                          "ref": "u2TV1",
+                          "name": "WeaveTracePanel",
+                          "width": "fill_container",
+                          "descendants": {
+                            "EvAfa": {
+                              "content": ">> [WEAVE-CORE] BLOCKCHAIN PROOFS COMPILED"
+                            },
+                            "lQ660": {
+                              "content": "   ↳ EVIDENCE DIRECTORY INTEGRITY VERIFIED (100%)"
+                            },
+                            "Ht6To": {
+                              "content": ">> BLOCK SEAL CREATED: HASH_0x78E9A...C"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "m21Ncx",
+                          "name": "MetaRow",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "nY4A7",
+                              "fill": "$text_secondary",
+                              "content": "SYNC FREQ: REALTIME (5s)",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "bwcvG",
+                              "fill": "$cyan_brand",
+                              "content": "LATENCY: 42ms",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                },
+                {
+                  "id": "oeuqo",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Formula Hub Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Formula Registry Hub"
+                    },
+                    "QOrZ7": {
+                      "content": "Mathematical consensus calculations"
+                    },
+                    "CngVS": {
+                      "content": "CONSENSUS"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "L5gGD",
+                      "name": "CustomBody4",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "id": "n47DV",
+                          "type": "ref",
+                          "ref": "Jjcsc",
+                          "name": "EmbeddedFormula2",
+                          "width": "fill_container",
+                          "descendants": {
+                            "BLeRw": {
+                              "content": "Scope 3.1 = Purchased Goods × Supplier EF"
+                            },
+                            "WzJQS": {
+                              "content": "✓ Alignment: GHG Protocol Standard V4"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Yt8eD",
+                          "name": "ComplianceGroup",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "k9frB",
+                              "name": "Labels",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "T6WfX",
+                                  "fill": "$text_secondary",
+                                  "content": "Auditor Alignment Consensus",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "f0HAjl",
+                                  "fill": "$cyan_brand",
+                                  "content": "100%",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "sOgp7",
+                              "name": "ProgressBarBackground",
+                              "width": "fill_container",
+                              "height": 6,
+                              "fill": "$border_glass",
+                              "cornerRadius": 100,
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 100,
+                                  "id": "FGzFj",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "ProgressBarFill",
+                                  "fill": "$cyan_brand",
+                                  "width": 320,
+                                  "height": 6
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "R15Sz",
+              "name": "BentoColumn3",
+              "width": 420,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "id": "PyM2Q",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Cold Crystal Vault Card",
+                  "width": "fill_container",
+                  "stroke": "$border_locked",
+                  "strokeWidth": 2,
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Cold Crystal Vault"
+                    },
+                    "QOrZ7": {
+                      "content": "IPFS & Zero-Knowledge secured ledgers"
+                    },
+                    "CngVS": {
+                      "content": "SEALED",
+                      "fill": "$cyan_brand"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "qkpYK",
+                      "name": "CustomBody5",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "MU3Po",
+                          "name": "ZKPInfo",
+                          "width": "fill_container",
+                          "fill": "$formula_bg",
+                          "cornerRadius": 10,
+                          "stroke": "$border_locked",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": 12,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "rhVff",
+                              "name": "VaultTitle",
+                              "fill": "$cyan_brand",
+                              "content": "ZKP PROOF STATE:",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 11,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "LsVTX",
+                              "name": "VaultHash",
+                              "fill": "$text_primary",
+                              "content": "0x3F8B...E1D2_SEAL",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "TZmmY",
+                              "name": "VaultMeta",
+                              "fill": "$text_secondary",
+                              "content": "Cold-storage replication block synchronized successfully.",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "B8VkM",
+                          "name": "StatGrid",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "lC9J3",
+                              "fill": "$cyan_brand",
+                              "content": "SHIELD STAT: MAX",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "DX1Hb",
+                              "fill": "$text_secondary",
+                              "content": "BLOCK: #2,940,102",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": true
+                    },
+                    "M762R": {
+                      "fill": "$cyan_brand"
+                    }
+                  }
+                },
+                {
+                  "id": "TihRK",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Audit Progress Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Platform Integrity Index"
+                    },
+                    "QOrZ7": {
+                      "content": "Consolidated trust scoring & progress"
+                    },
+                    "CngVS": {
+                      "content": "SECURE"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "p4RFX",
+                      "name": "CustomBody6",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "e8lJnO",
+                          "name": "ScoreRow",
+                          "gap": 12,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Gn3UH",
+                              "name": "Value",
+                              "fill": "$text_primary",
+                              "content": "99.98%",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 32,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "EeBT3",
+                              "name": "ScoreLabel",
+                              "fill": "$cyan_brand",
+                              "content": "INTEGRITY RATE",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Y5fEwG",
+                          "name": "AuditChecklist",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "w1ByQZ",
+                              "name": "CheckItem1",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "D9IhV",
+                                  "fill": "$text_primary",
+                                  "content": "Scope 1 Direct Stationary",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Hl211",
+                                  "fill": "$cyan_brand",
+                                  "content": "✓ VERIFIED",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 10,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bir8l",
+                              "name": "CheckItem2",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "HkFZi",
+                                  "fill": "$text_primary",
+                                  "content": "Scope 2 Grid Purchased",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "ZDlJI",
+                                  "fill": "$cyan_brand",
+                                  "content": "✓ VERIFIED",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 10,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "CGsqg",
+                              "name": "CheckItem3",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "BJL8u",
+                                  "fill": "$text_primary",
+                                  "content": "Scope 3 Supplier Survey",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "x514Il",
+                                  "fill": "$text_secondary",
+                                  "content": "⟳ COMPILED",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 10,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ro8U0",
+      "x": 2740,
+      "y": 0,
+      "name": "ESGGO Platform - Light Mode",
+      "theme": {
+        "mode": "light"
+      },
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bg_page",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "ellipse",
+          "id": "hToQh",
+          "layoutPosition": "absolute",
+          "x": 100,
+          "y": 120,
+          "name": "Cyan Glow",
+          "fill": "#22D3EE15",
+          "width": 500,
+          "height": 500,
+          "effect": {
+            "type": "blur",
+            "radius": 100
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "PM4TU",
+          "layoutPosition": "absolute",
+          "x": 900,
+          "y": 250,
+          "name": "Purple Glow",
+          "fill": "#C084FC12",
+          "width": 600,
+          "height": 600,
+          "effect": {
+            "type": "blur",
+            "radius": 120
+          }
+        },
+        {
+          "type": "ellipse",
+          "id": "zQ13E",
+          "layoutPosition": "absolute",
+          "x": 500,
+          "y": 500,
+          "name": "Emerald Glow",
+          "fill": "#34D3990A",
+          "width": 400,
+          "height": 400,
+          "effect": {
+            "type": "blur",
+            "radius": 90
+          }
+        },
+        {
+          "type": "frame",
+          "id": "Dj26c",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 72,
+          "stroke": "$border_glass",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "padding": [
+            0,
+            40
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "oZDpp",
+              "name": "LogoGroup",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "y4e2l",
+                  "name": "LogoIcon",
+                  "width": 22,
+                  "height": 22,
+                  "icon": "activity",
+                  "library": "lucide",
+                  "fill": "$cyan_brand"
+                },
+                {
+                  "type": "text",
+                  "id": "k8igc",
+                  "name": "BrandName",
+                  "fill": "$text_primary",
+                  "content": "ESGGO",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 18,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "frame",
+                  "id": "LyvnH",
+                  "name": "WeaveBadge",
+                  "fill": "#22D3EE1A",
+                  "cornerRadius": 6,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hgpb8",
+                      "name": "WeaveText",
+                      "fill": "$cyan_brand",
+                      "content": "OMNI-WEAVE ARCHITECTURE",
+                      "fontFamily": "$font_mono",
+                      "fontSize": 9,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BHYyK",
+              "name": "NavGroup",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "xLTHW",
+                  "name": "Link1",
+                  "fill": "$text_primary",
+                  "content": "Dashboard",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "S9bsVD",
+                  "name": "Link2",
+                  "fill": "$text_secondary",
+                  "content": "Weave Engine",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "y5DgP",
+                  "name": "Link3",
+                  "fill": "$text_secondary",
+                  "content": "Formula Lab",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "BmEhv",
+                  "name": "Link4",
+                  "fill": "$text_secondary",
+                  "content": "Audit Ledger",
+                  "fontFamily": "$font_sans",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "O9tzE",
+              "name": "ControlsGroup",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eJsZx",
+                  "name": "ThemeToggle",
+                  "fill": "$bg_glass",
+                  "cornerRadius": 20,
+                  "stroke": "$border_glass",
+                  "strokeWidth": 1,
+                  "gap": 8,
+                  "padding": [
+                    4,
+                    8
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "kkGyO",
+                      "name": "SunIcon",
+                      "width": 14,
+                      "height": 14,
+                      "icon": "sun",
+                      "library": "lucide",
+                      "fill": "$text_secondary"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nUwty",
+                      "name": "MoonBtn",
+                      "fill": "#00000000",
+                      "cornerRadius": 12,
+                      "padding": [
+                        4,
+                        6
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "n6vljc",
+                          "name": "MoonIcon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "moon",
+                          "library": "lucide",
+                          "fill": "$cyan_brand"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LFtLE",
+                  "name": "SecureBadge",
+                  "fill": "#22D3EE15",
+                  "cornerRadius": 100,
+                  "stroke": "#22D3EE30",
+                  "strokeWidth": 1,
+                  "gap": 6,
+                  "padding": [
+                    6,
+                    12
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "HXfii",
+                      "name": "NodeDot",
+                      "fill": "$cyan_brand",
+                      "width": 6,
+                      "height": 6
+                    },
+                    {
+                      "type": "text",
+                      "id": "creDL",
+                      "name": "NodeText",
+                      "fill": "$cyan_brand",
+                      "content": "NODE SECURE",
+                      "fontFamily": "$font_mono",
+                      "fontSize": 10,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ipFZB",
+          "name": "BentoContainer",
+          "width": "fill_container",
+          "height": "fill_container",
+          "gap": 20,
+          "padding": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "NO6oh",
+              "name": "BentoColumn1",
+              "width": 440,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "id": "f2P8b",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Scope 1 Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Scope 1 Emissions"
+                    },
+                    "QOrZ7": {
+                      "content": "Direct stationary combustion ledger"
+                    },
+                    "CngVS": {
+                      "content": "AUDITED"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "L729S",
+                      "name": "CustomBody1",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jjb6p",
+                          "name": "MetricRow",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Hd4UN",
+                              "name": "Value",
+                              "fill": "$text_primary",
+                              "content": "4,210.8",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 28,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "WjKom",
+                              "name": "Unit",
+                              "fill": "$text_secondary",
+                              "content": "tCO2e",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "GNElM",
+                          "type": "ref",
+                          "ref": "Jjcsc",
+                          "name": "EmbeddedFormula",
+                          "width": "fill_container",
+                          "descendants": {
+                            "BLeRw": {
+                              "content": "Scope 1 = ∑ (Fuel_gln × 10.21 kg/gal)"
+                            },
+                            "WzJQS": {
+                              "content": "✓ Validated: EPA 2026 Emission Factors"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                },
+                {
+                  "id": "o0MQA0",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Scope 2 Locked Card",
+                  "width": "fill_container",
+                  "stroke": "$border_locked",
+                  "strokeWidth": 2,
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Scope 2 Location-Based"
+                    },
+                    "QOrZ7": {
+                      "content": "Indirect grid electricity purchase"
+                    },
+                    "CngVS": {
+                      "content": "LOCKED",
+                      "fill": "$cyan_brand"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "jbtEg",
+                      "name": "CustomBody2",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "lXNQZ",
+                          "name": "MetricRow",
+                          "gap": 8,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "rGE0N",
+                              "name": "Value",
+                              "fill": "$text_primary",
+                              "content": "1,845.2",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 28,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "U46vO",
+                              "name": "Unit",
+                              "fill": "$text_secondary",
+                              "content": "MWh",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "KlliV",
+                          "type": "ref",
+                          "ref": "u2TV1",
+                          "name": "EmbeddedTrace",
+                          "width": "fill_container",
+                          "descendants": {
+                            "EvAfa": {
+                              "content": ">> [GRID-WEAVE] INGESTED ISO-NE DATALINK"
+                            },
+                            "lQ660": {
+                              "content": "   ↳ SIGN: 0x2A1B...D834 | BLK: #104291"
+                            },
+                            "Ht6To": {
+                              "content": ">> CRYPTOGRAPHIC SEAL IMMUTABLE"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": true
+                    },
+                    "M762R": {
+                      "fill": "$cyan_brand"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UUI8Z",
+              "name": "BentoColumn2",
+              "width": 480,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "id": "KFpeF",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Weave Engine Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Omni-Weave Trace Engine"
+                    },
+                    "QOrZ7": {
+                      "content": "Real-time ledger orchestration & tracing"
+                    },
+                    "CngVS": {
+                      "content": "LIVE GRID"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "CSlhx",
+                      "name": "CustomBody3",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "QH9go",
+                          "name": "WeaveDiagram",
+                          "width": "fill_container",
+                          "fill": "$bg_glass",
+                          "cornerRadius": 10,
+                          "stroke": "$border_glass",
+                          "strokeWidth": 1,
+                          "gap": 10,
+                          "padding": 10,
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "LjzGF",
+                              "name": "SourceNode",
+                              "fill": "#22D3EE1A",
+                              "cornerRadius": 6,
+                              "stroke": "$cyan_brand",
+                              "strokeWidth": 1,
+                              "layout": "vertical",
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "h1wCo2",
+                                  "fill": "$cyan_brand",
+                                  "content": "INGEST",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 9,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "lFd9A",
+                              "fill": "$text_secondary",
+                              "content": "──▶",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "roxer",
+                              "name": "WeaveNode",
+                              "fill": "$cyan_brand",
+                              "cornerRadius": 6,
+                              "layout": "vertical",
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "U1kgH",
+                                  "fill": "#0F172A",
+                                  "content": "WEAVE",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 9,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "En0Dc",
+                              "fill": "$text_secondary",
+                              "content": "──▶",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "G3sVOm",
+                              "name": "LedgerNode",
+                              "fill": "$trace_bg",
+                              "cornerRadius": 6,
+                              "stroke": "$border_locked",
+                              "strokeWidth": 1,
+                              "layout": "vertical",
+                              "padding": [
+                                6,
+                                10
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "jYCNF",
+                                  "fill": "$trace_text",
+                                  "content": "LEDGER",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 9,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "mZ3Hp",
+                          "type": "ref",
+                          "ref": "u2TV1",
+                          "name": "WeaveTracePanel",
+                          "width": "fill_container",
+                          "descendants": {
+                            "EvAfa": {
+                              "content": ">> [WEAVE-CORE] BLOCKCHAIN PROOFS COMPILED"
+                            },
+                            "lQ660": {
+                              "content": "   ↳ EVIDENCE DIRECTORY INTEGRITY VERIFIED (100%)"
+                            },
+                            "Ht6To": {
+                              "content": ">> BLOCK SEAL CREATED: HASH_0x78E9A...C"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "JVQH3",
+                          "name": "MetaRow",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "TnUNl",
+                              "fill": "$text_secondary",
+                              "content": "SYNC FREQ: REALTIME (5s)",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "upmda",
+                              "fill": "$cyan_brand",
+                              "content": "LATENCY: 42ms",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                },
+                {
+                  "id": "oGM0q",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Formula Hub Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Formula Registry Hub"
+                    },
+                    "QOrZ7": {
+                      "content": "Mathematical consensus calculations"
+                    },
+                    "CngVS": {
+                      "content": "CONSENSUS"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "qNZrL",
+                      "name": "CustomBody4",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "id": "msHjY",
+                          "type": "ref",
+                          "ref": "Jjcsc",
+                          "name": "EmbeddedFormula2",
+                          "width": "fill_container",
+                          "descendants": {
+                            "BLeRw": {
+                              "content": "Scope 3.1 = Purchased Goods × Supplier EF"
+                            },
+                            "WzJQS": {
+                              "content": "✓ Alignment: GHG Protocol Standard V4"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "nk5NF",
+                          "name": "ComplianceGroup",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "yEkwp",
+                              "name": "Labels",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ljw7U",
+                                  "fill": "$text_secondary",
+                                  "content": "Auditor Alignment Consensus",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "z0ZVC",
+                                  "fill": "$cyan_brand",
+                                  "content": "100%",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ZdVPa",
+                              "name": "ProgressBarBackground",
+                              "width": "fill_container",
+                              "height": 6,
+                              "fill": "$border_glass",
+                              "cornerRadius": 100,
+                              "layout": "none",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 100,
+                                  "id": "hkGhe",
+                                  "x": 0,
+                                  "y": 0,
+                                  "name": "ProgressBarFill",
+                                  "fill": "$cyan_brand",
+                                  "width": 320,
+                                  "height": 6
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "S9haZX",
+              "name": "BentoColumn3",
+              "width": 420,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "id": "b492o5",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Cold Crystal Vault Card",
+                  "width": "fill_container",
+                  "stroke": "$border_locked",
+                  "strokeWidth": 2,
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Cold Crystal Vault"
+                    },
+                    "QOrZ7": {
+                      "content": "IPFS & Zero-Knowledge secured ledgers"
+                    },
+                    "CngVS": {
+                      "content": "SEALED",
+                      "fill": "$cyan_brand"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "FseMD",
+                      "name": "CustomBody5",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "tv8aU",
+                          "name": "ZKPInfo",
+                          "width": "fill_container",
+                          "fill": "$formula_bg",
+                          "cornerRadius": 10,
+                          "stroke": "$border_locked",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "gap": 6,
+                          "padding": 12,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "aTtsk",
+                              "name": "VaultTitle",
+                              "fill": "$cyan_brand",
+                              "content": "ZKP PROOF STATE:",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 11,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "z9rgAc",
+                              "name": "VaultHash",
+                              "fill": "$text_primary",
+                              "content": "0x3F8B...E1D2_SEAL",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "l4mSRG",
+                              "name": "VaultMeta",
+                              "fill": "$text_secondary",
+                              "content": "Cold-storage replication block synchronized successfully.",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "WHHCy",
+                          "name": "StatGrid",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "x6WYu",
+                              "fill": "$cyan_brand",
+                              "content": "SHIELD STAT: MAX",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "F0UVo7",
+                              "fill": "$text_secondary",
+                              "content": "BLOCK: #2,940,102",
+                              "fontFamily": "$font_mono",
+                              "fontSize": 10,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": true
+                    },
+                    "M762R": {
+                      "fill": "$cyan_brand"
+                    }
+                  }
+                },
+                {
+                  "id": "kiIJP",
+                  "type": "ref",
+                  "ref": "ulBmS",
+                  "name": "Audit Progress Card",
+                  "width": "fill_container",
+                  "descendants": {
+                    "CpPdZ": {
+                      "content": "Platform Integrity Index"
+                    },
+                    "QOrZ7": {
+                      "content": "Consolidated trust scoring & progress"
+                    },
+                    "CngVS": {
+                      "content": "SECURE"
+                    },
+                    "Ipj8a": {
+                      "type": "frame",
+                      "id": "FckeR",
+                      "name": "CustomBody6",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "M0OUig",
+                          "name": "ScoreRow",
+                          "gap": 12,
+                          "alignItems": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "oZ3d1",
+                              "name": "Value",
+                              "fill": "$text_primary",
+                              "content": "99.98%",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 32,
+                              "fontWeight": "bold"
+                            },
+                            {
+                              "type": "text",
+                              "id": "gDHiK",
+                              "name": "ScoreLabel",
+                              "fill": "$cyan_brand",
+                              "content": "INTEGRITY RATE",
+                              "fontFamily": "$font_sans",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rtTaO",
+                          "name": "AuditChecklist",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "rF5cP",
+                              "name": "CheckItem1",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "rVFfY",
+                                  "fill": "$text_primary",
+                                  "content": "Scope 1 Direct Stationary",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "KySty",
+                                  "fill": "$cyan_brand",
+                                  "content": "✓ VERIFIED",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 10,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dG2Nk",
+                              "name": "CheckItem2",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "CmpQN",
+                                  "fill": "$text_primary",
+                                  "content": "Scope 2 Grid Purchased",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Ekj9I",
+                                  "fill": "$cyan_brand",
+                                  "content": "✓ VERIFIED",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 10,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ubPYh",
+                              "name": "CheckItem3",
+                              "width": "fill_container",
+                              "justifyContent": "space_between",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "f960vi",
+                                  "fill": "$text_primary",
+                                  "content": "Scope 3 Supplier Survey",
+                                  "fontFamily": "$font_sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "udqG8",
+                                  "fill": "$text_secondary",
+                                  "content": "⟳ COMPILED",
+                                  "fontFamily": "$font_mono",
+                                  "fontSize": 10,
+                                  "fontWeight": "bold"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "GHnEN": {
+                      "enabled": false
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "mode": [
+      "dark",
+      "light"
+    ]
+  },
+  "variables": {
+    "bg_glass": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#111827C0",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#FFFFFFD0",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "radius_2xl": {
+      "type": "number",
+      "value": 16
+    },
+    "trace_bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#0F172A",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#E0F2FE",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "trace_text": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#22D3EE",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#0891B2",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "font_mono": {
+      "type": "string",
+      "value": "JetBrains Mono"
+    },
+    "formula_bg": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#020617",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#FCFBF7",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "font_sans": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "formula_text": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#34D399",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#15803D",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "cyan_brand": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#22D3EE",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#0891B2",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "border_locked": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#06B6D480",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#0891B299",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "text_primary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#F9FAFB",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#111827",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "text_secondary": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#9CA3AF",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#4B5563",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "bg_page": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#0B0F19",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#F4F7FA",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    },
+    "border_glass": {
+      "type": "color",
+      "value": [
+        {
+          "value": "#37415140",
+          "theme": {
+            "mode": "dark"
+          }
+        },
+        {
+          "value": "#E5E7EB60",
+          "theme": {
+            "mode": "light"
+          }
+        }
+      ]
+    }
+  }
+}

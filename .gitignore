@@ -1,0 +1,9 @@
+node_modules/
+.npm/
+.pm2/
+.cache/
+.ssh/
+.gemini/
+*.log
+.env
+dist/

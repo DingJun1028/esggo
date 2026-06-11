@@ -1,0 +1,10 @@
+{
+  task: {
+    id: task-test-999,
+    taskType: report_drafting,
+    title: Test Report,
+    prompt: Hello, write a 1-sentence welcome message.,
+    model: meta-llama/llama-3.3-70b-instruct:free
+  }
+}
+EOF

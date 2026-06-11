@@ -1,0 +1,30 @@
+# Set default behavior to handle all files as text and force UTF-8
+* text=auto eol=lf
+
+# Explicitly set encoding for text files
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.sql text eol=lf
+*.graphql text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.sh text eol=lf
+*.mjs text eol=lf
+
+# Ensure environments files are handled as text
+.env* text eol=lf
+.gitignore text
+.editorconfig text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+*.pdf binary

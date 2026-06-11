@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run pnpm audit
+        run: pnpm audit
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run lint
+        id: lint
+        run: pnpm run lint
+
+      - name: Run tests with coverage
+        id: test
+        run: pnpm run test -- --coverage
+
+      - name: Check coverage threshold
+        id: coverage
+        run: pnpm exec vitest run --coverage --coverage.thresholds.lines=80 --coverage.thresholds.functions=80
+
+      - name: Build (optional)
+        id: build
+        run: pnpm run build
+
+      - name: Deploy to Render
+        if: success()
+        run: |
+          echo "Deploying to Render via hook..."
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+      - name: Auto-repair on Render failure
+        if: failure()
+        run: node scripts/auto-repair.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

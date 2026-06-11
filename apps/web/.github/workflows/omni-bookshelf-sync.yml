@@ -1,0 +1,57 @@
+name: Omni Bookshelf Sync
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - '**/*.md' # 觸發條件：任何 .md 文件變更
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - '**/*.md'
+  workflow_dispatch: # 允許手動觸發
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 時間午夜執行一次
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref || github.ref_name }} # Checkout branch for push or pull_request
+        token: ${{ secrets.GITHUB_TOKEN }} # 需要讀寫權限來推送修改
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ github.event.inputs.node_version || '22' }} # 選擇一個穩定的 Node.js 版本
+        cache: 'pnpm'
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Run Omni Bookshelf Manager
+      run: node scripts/omni-bookshelf-manager.mjs
+
+    - name: Commit changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add docs/wiki/WIKI_INDEX.md # 總索引文件
+        git add "**/*.md" # 為了捕獲所有可能被修改的元數據
+        git commit -m "docs: Auto-sync Omni Bookshelf Wiki Index and metadata" || echo "No changes to commit"
+        git push origin HEAD
