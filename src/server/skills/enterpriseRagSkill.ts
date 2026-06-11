@@ -12,7 +12,7 @@ export interface RagPayload {
  */
 export const enterpriseRagSkill: AtomicFunction<
   AtomicFunctionInput & { payload: RagPayload },
-  { results: any[]; query: string }
+  { results: Record<string, unknown>[]; query: string }
 > = async (input) => {
   const start = Date.now();
   const { context, payload } = input;
@@ -69,10 +69,16 @@ export const enterpriseRagSkill: AtomicFunction<
         version: '1.0.0'
       }
     };
-  } catch (error: any) {
+  } catch (error: unknown) { // Changed to unknown
+    let errorMessage = 'An unknown error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    }
     return {
       success: false,
-      error: error,
+      error: errorMessage,
       metadata: {
         executionTime: Date.now() - start,
         version: '1.0.0'

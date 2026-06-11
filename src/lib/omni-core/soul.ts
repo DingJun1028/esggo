@@ -130,8 +130,8 @@ export class OmniSoul {
 class GravityProtocol {
   async execute(center: Record<string, unknown>, modules: Array<{ process: (c: Record<string, unknown>) => Promise<Record<string, unknown>> }>): Promise<Record<string, unknown>[]> {
     const results = [];
-    for (const module of modules) {
-      const result = await module.process(center);
+    for (const mod of modules) {
+      const result = await mod.process(center);
       results.push(result);
     }
     return results;

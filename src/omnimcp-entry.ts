@@ -28,9 +28,9 @@ export async function initializeOmniMCP() {
 }
 
 // Execute MCP service call
-export async function executeMCPService(service: string, action: string, payload: any) {
+export async function executeMCPService(service: string, action: string, payload: Record<string, unknown>) {
   const omniMCP = await initializeOmniMCP();
-  let result: any;
+  let result: unknown;
   let error: string | undefined;
 
   try {
@@ -61,8 +61,12 @@ export async function executeMCPService(service: string, action: string, payload
 
     return { result, compliance };
 
-  } catch (err: any) {
-    error = err.message;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      error = err.message;
+    } else {
+      error = String(err);
+    }
     logEvent(service, action, payload, null, error);
     throw err;
   }

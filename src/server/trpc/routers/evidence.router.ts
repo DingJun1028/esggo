@@ -18,14 +18,14 @@ export const evidenceRouter = router({
     .input(EvidenceQueryParamsSchema)
     .query(async ({ input }) => {
       // 這裡 userId 應從 context 取得，input 僅作過濾
-      return evidenceService.getUserEvidences(input.user_id as any);
+      return evidenceService.getUserEvidences(input.user_id);
     }),
 
   // 2. 創建證據
   create: publicProcedure // 暫時使用 public，未來改 protected
     .input(CreateEvidenceDTOSchema)
     .mutation(async ({ input }) => {
-      const mockUserId = 'user_01' as any;
+      const mockUserId = 'user_01' as UserID;
       return evidenceService.createEvidence(mockUserId, input);
     }),
 

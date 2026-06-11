@@ -39,8 +39,12 @@ export async function authenticateWithMaster(): Promise<boolean> {
     authContext.isAuthorized = true;
     writeFileSync('auth-context.json', JSON.stringify(authContext, null, 2));
     return true;
-  } catch (error: any) {
-    console.error('Authorization Failed:', error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Authorization Failed:', error.message);
+    } else {
+      console.error('Authorization Failed:', error);
+    }
     return false;
   }
 }

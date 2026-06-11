@@ -21,12 +21,12 @@ export class UCCService {
     try {
       // 1. 獲取原始證據
       const { data, error: evError } = await supabase
-        .from('evidences' as any)
+        .from('evidences')
         .select('*')
         .eq('id', dto.evidence_id)
         .single();
       
-      const evidence = data as any;
+      const evidence = data as Evidence;
       
       if (evError) handleSupabaseError(evError);
       if (!evidence) throw new Error('Evidence not found');
@@ -64,8 +64,8 @@ export class UCCService {
           content_hash: evidence.content_hash
         },
         tags: [], // 實際應從 ucc_tags 查詢
-        think_tank: mockThinkTank as any,
-        elements: [mockElement] as any,
+        think_tank: mockThinkTank,
+        elements: [mockElement],
         created_at: new Date(),
         version: '8.1.0'
       };

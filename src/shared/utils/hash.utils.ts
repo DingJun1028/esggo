@@ -34,7 +34,7 @@ export async function computeHash(
   
   if (algorithm === HashAlgorithm.SHA512) {
     const hash = createHash('sha512');
-    hash.update(content as any);
+    hash.update(content);
     const hashHex = hash.digest('hex');
     
     // 生成 ZKP 證明
@@ -53,7 +53,7 @@ export async function computeHash(
   } else {
     // 預設使用 SHA-256
     const hash = createHash('sha256');
-    hash.update(content as any);
+    hash.update(content);
     return {
       hash: hash.digest('hex') as ContentHash,
       algorithm: HashAlgorithm.SHA256,
