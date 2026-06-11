@@ -1,4 +1,4 @@
-import { executeTask } from './orchestrator';
+import { executeSwarmTask } from './orchestrator';
 import { addTask, getLatestArtifactByTask } from './store';
 
 async function testIntegration() {
@@ -20,7 +20,7 @@ async function testIntegration() {
 
   // 2. Execute the task
   console.log('🚀 Executing task...');
-  const result = await executeTask(taskId);
+  const result = await executeSwarmTask(taskId);
 
   console.log('✅ Task execution finished.');
   console.log('📊 Provider:', result.execution.modelProvider);
