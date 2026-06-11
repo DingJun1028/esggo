@@ -170,26 +170,15 @@ function SidebarNav({
           borderBottom: '1px solid var(--sidebar-border)',
           display: 'flex', alignItems: 'center', gap: 10, minHeight: 60,
         }}>
-          <div style={{
-            width: 30, height: 30,
-            borderRadius: currentTheme === 'berkeley' ? 6 : 8,
-            background: currentTheme === 'berkeley'
-              ? 'linear-gradient(135deg,#003262,#3b7ea1)'
-              : currentTheme === 'water-zen'
-              ? 'linear-gradient(135deg,#2ea8b0,#52b788)'
-              : currentTheme === 'minimal-blue'
-              ? 'linear-gradient(135deg,#0ea5e9,#22c55e)'
-              : 'linear-gradient(135deg,#06b6d4,#10b981)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-            boxShadow: '0 0 12px var(--shadow-glow, rgba(6,182,212,0.3))',
-          }}>
-            <Leaf size={14} color="#fff" />
-          </div>
+          <img 
+            src="https://thumbs4.imagebam.com/54/c4/da/ME1CG7QT_t.png" 
+            alt="ESGGO Logo"
+            style={{ width: 34, height: 34, objectFit: 'contain', borderRadius: 4, flexShrink: 0 }}
+          />
           {(!collapsed || mobileOpen) && (
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-                ESG GO
+                ESGGO
               </div>
               <div style={{ fontSize: 9, color: 'var(--accent-primary)', fontWeight: 600, letterSpacing: '0.08em' }}>
                 善向永續
