@@ -1,0 +1,92 @@
+:root {
+  /* Core Design Tokens */
+  --color-primary: #003262;
+  --color-secondary: #FDB515;
+  --color-success: #28A745;
+  --color-warning: #FFC107;
+  --color-danger: #DC3545;
+  --color-info: #06B6D4;
+  --color-neutral: #6B7280;
+  
+  /* Background */
+  --color-bg: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-overlay: rgba(0, 0, 0, 0.05);
+  
+  /* Typography */
+  --font-primary: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'Playfair Display', serif;
+  --font-body: 'System Font', system-ui, sans-serif;
+  
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 24px;
+  --space-12: 24px;
+  --space-16: 24px;
+  
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-s: 8px;
+  --radius-m: 8px;
+  --radius-mr: 10px;
+  --radius-l: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* Border */
+  --border-width: 1px;
+  --border-color: #E5E7EB;
+  --border-primary: var(--color-primary);
+  --border-success: #28A745;
+  --border-danger: #DC3545;
+  --border-warning: #FFC107;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 50, 98, 0.06);
+  --shadow-lg: 0 12px 24px rgba(0, 50, 98, 0.1);
+  
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-s: 0.875rem;
+  --font-size-m: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  
+  /* Line Height */
+  --line-height-none: 1;
+  --line-height-tight: 1.1;
+  --line-height-relaxed: 1.6;
+  
+  /* Transition */
+  --transition-fast: 150ms ease-out;
+  --transition-medium: 300ms ease-out;
+  --transition-slow: 500ms ease-out;
+}
+
+/* Material Design-like color variables */
+:root {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+  --color-neutral: var(--color-neutral);
+}
+
+/* Light/Dark Theme Support */
+html.dark {
+  --color-bg: #1F1F1F;
+  --color-surface: #2D2D2D;
+  --color-overlay: rgba(0, 0, 0, 0.3);
+  --color-text: #E5E5E5;
+  --color-muted: #B0B0B0;
+}

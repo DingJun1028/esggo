@@ -1,0 +1,24 @@
+# Example mutations for ESGGO app
+
+# Upsert (update or insert) a user's profile based on their auth.uid
+mutation UpsertUser($displayName: String!, $email: String) @auth(level: USER) {
+  # The "auth.uid" server value ensures that users can only register their own user.
+  user_upsert(data: { id_expr: "auth.uid", displayName: $displayName, email: $email })
+}
+
+# Create a task based on user input
+mutation CreateTask($title: String!, $status: String!, $priority: String!, $completed: Boolean!)
+@auth(level: USER) {
+  task_insert(data: { title: $title, status: $status, priority: $priority, completed: $completed, id_expr: "auth.uid" })
+}
+
+# Update a task
+mutation UpdateTask($id: UUID!, $status: String!)
+@auth(level: USER) {
+  task_update(key: { id: $id }, data: { status: $status })
+}
+
+# Logged in user can delete their task
+mutation DeleteTask($id: UUID!) @auth(level: USER) {
+  task_delete(key: { id: $id })
+}
