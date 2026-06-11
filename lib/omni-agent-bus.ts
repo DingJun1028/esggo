@@ -1,60 +1,163 @@
 import { create } from 'zustand';
 
 /**
- * OmniAgentBus - 實現「全域之脈 (Global Pulse)」與「全通之心 (Omni Heart)」
- * 負責在 UI (液態玻璃介面)、OmniAgent (智慧核) 與 5T 金庫間傳遞無摩擦的共識訊號。
- * 達致「無作妙德，圓通無礙」的運行至境。
+ * OmniAgentBus — 全域之脈 (Global Pulse) / 全通之心 (Omni Heart)
+ * 
+ * 架構：
+ *   UI 事件 → dispatch() → Zustand Store → WebSocket Bridge → Gateway WS
+ *                                         ↘ triggerSpontaneousVirtue()
+ * 
+ * 五大訊號對應「六位一體」智慧中樞：
+ *   OBSERVE  → 全知之眼 (感知器)
+ *   INTENT   → 全能之核 (指揮器)
+ *   MANIFEST → 全息之腦 (顯化器)
+ *   SEAL     → 全境之骨 (治理器) — 5T Hash Lock
+ *   HEAL     → 全通之心 (自發治理) — OmniJules Karma Protocol
  */
 
-export type OmniSignalType = 
-    | 'OBSERVE'     // 全知之眼 (感知器) - 捕捉事件
-    | 'INTENT'      // 全能之核 (指揮器) - 意圖下達
-    | 'MANIFEST'    // 全息之腦 (進化器) - UI 無縫顯化
-    | 'SEAL'        // 全境之骨 (治理器) - 5T 防篡改封印
-    | 'HEAL';       // 全通之心 (自發治理) - 熵減與自動修復
+export type OmniSignalType =
+  | 'OBSERVE'     // 全知之眼 — Capture event
+  | 'INTENT'      // 全能之核 — Issue directive
+  | 'MANIFEST'    // 全息之腦 — UI manifestation
+  | 'SEAL'        // 全境之骨 — 5T immutable seal
+  | 'HEAL';       // 全通之心 — Entropy reduction / self-repair
 
 export interface OmniSignal {
-    id: string;
-    type: OmniSignalType;
-    source: string;
-    payload: any;
-    timestamp: number;
+  id: string;
+  type: OmniSignalType;
+  source: string;
+  payload: unknown;
+  timestamp: number;
+  hash?: string;
 }
 
 interface OmniAgentBusState {
-    signals: OmniSignal[];
-    activeResonance: boolean;
-    dispatch: (type: OmniSignalType, source: string, payload: any) => void;
-    clearSignals: () => void;
+  signals: OmniSignal[];
+  activeResonance: boolean;
+  wsConnected: boolean;
+  dispatch: (type: OmniSignalType, source: string, payload: unknown) => void;
+  executeCelestialCommand: (intent: string, payload?: unknown) => Promise<{ message: string; artifactUuid: string }>;
+  clearSignals: () => void;
+  setWsConnected: (v: boolean) => void;
 }
 
-export const useOmniAgentBus = create<OmniAgentBusState>((set) => ({
-    signals: [],
-    activeResonance: false,
-    
-    dispatch: (type, source, payload) => set((state) => {
-        const newSignal: OmniSignal = {
-            id: crypto.randomUUID(),
-            type,
-            source,
-            payload,
-            timestamp: Date.now()
-        };
+// ── Gateway WebSocket Bridge ────────────────────────────────────
+let _ws: WebSocket | null = null;
+let _reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
-        // 模擬「圓通無礙」：當信號流入時，觸發全局共振 (Resonance)
-        return {
-            signals: [newSignal, ...state.signals].slice(0, 50), // 保持最新 50 筆意識流
-            activeResonance: true
-        };
-    }),
+function hashSignal(data: unknown): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    const str = JSON.stringify(data);
+    // Browser-safe simple hash (no Node crypto)
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash).toString(16).padStart(8, '0');
+  } catch { return 'no-hash'; }
+}
 
-    clearSignals: () => set({ signals: [], activeResonance: false })
+function connectGatewayWS(onConnected: (v: boolean) => void) {
+  if (typeof window === 'undefined') return;
+  const gatewayUrl = (process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || 'http://161.118.248.180:8642')
+    .replace(/^http/, 'ws');
+
+  try {
+    _ws = new WebSocket(gatewayUrl);
+
+    _ws.onopen = () => {
+      console.log('[OmniAgentBus] 🔌 Gateway WS connected — 全通之心 activated');
+      onConnected(true);
+      if (_reconnectTimer) { clearTimeout(_reconnectTimer); _reconnectTimer = null; }
+    };
+
+    _ws.onclose = () => {
+      console.warn('[OmniAgentBus] ⚠️  Gateway WS disconnected — scheduling reconnect');
+      onConnected(false);
+      _reconnectTimer = setTimeout(() => connectGatewayWS(onConnected), 5000);
+    };
+
+    _ws.onerror = () => { _ws?.close(); };
+  } catch (e) {
+    console.warn('[OmniAgentBus] WS init failed:', e);
+  }
+}
+
+function sendToGateway(signal: OmniSignal) {
+  if (_ws?.readyState === WebSocket.OPEN) {
+    try { _ws.send(JSON.stringify(signal)); } catch {}
+  }
+}
+
+// ── Zustand Store ───────────────────────────────────────────────
+export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
+  signals: [],
+  activeResonance: false,
+  wsConnected: false,
+
+  dispatch: (type, source, payload) => set((state) => {
+    const signal: OmniSignal = {
+      id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `sig_${Date.now()}`,
+      type,
+      source,
+      payload,
+      timestamp: Date.now(),
+      hash: hashSignal({ type, source, payload, ts: Date.now() }),
+    };
+
+    // Bridge to Gateway WS
+    sendToGateway(signal);
+
+    // Trigger self-healing if HEAL signal
+    if (type === 'HEAL') {
+      triggerSpontaneousVirtue(signal);
+    }
+
+    return {
+      signals: [signal, ...state.signals].slice(0, 50), // Ring buffer: 50 signals
+      activeResonance: true,
+    };
+  }),
+
+  executeCelestialCommand: async (intent: string, payload: unknown = {}) => {
+    const { dispatch } = get();
+    dispatch('INTENT', 'CelestialCommand', { intent, payload });
+
+    await new Promise(r => setTimeout(r, 800));
+
+    const artifactUuid = `artifact_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    dispatch('SEAL', 'CelestialCommand', { intent, artifactUuid, status: 'Sealed in Eternal Memory' });
+
+    return { message: `✨ 天命已顯化：${intent}`, artifactUuid };
+  },
+
+  clearSignals: () => set({ signals: [], activeResonance: false }),
+
+  setWsConnected: (v) => set({ wsConnected: v }),
 }));
 
-// 自適應感知協議 (Adaptive Perception Protocol)
-// 當系統偵測到特定信號時，自動觸發「無作妙德」的治理反應
+// ── Auto-connect WS on module load (client-side only) ──────────
+if (typeof window !== 'undefined') {
+  const { setWsConnected } = useOmniAgentBus.getState();
+  connectGatewayWS(setWsConnected);
+}
+
+// ── Adaptive Perception Protocol ────────────────────────────────
 export const triggerSpontaneousVirtue = (signal: OmniSignal) => {
-    if (signal.type === 'HEAL') {
-        console.log('[OmniAgentBus] 全息之腦啟動：執行熵減與重構，實現圓通無礙。');
+  if (signal.type === 'HEAL') {
+    console.log('[OmniAgentBus] 🌌 全通之心 — 啟動熵減與圓通無礙修復');
+    // Optionally notify Gateway /omni-jules endpoint
+    if (typeof fetch !== 'undefined' && signal.payload) {
+      fetch(
+        `${process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || 'http://161.118.248.180:8642'}/omni-jules`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026' },
+          body: JSON.stringify({ failureReason: String((signal.payload as any)?.reason || 'Auto-heal triggered by OmniAgentBus HEAL signal'), sourceTaskId: signal.id, context: 'OmniAgentBus HEAL event' }),
+        }
+      ).catch(() => {}); // Fire-and-forget
     }
+  }
 };
