@@ -10,15 +10,19 @@ export default function ReportBuilderUI() {
   const handleGenerate = async () => {
     setLoading(true);
     try {
+      // 讀取 ProfilePage 儲存的本機資料 (若無則使用預設值)
+      const companyInfo = JSON.parse(localStorage.getItem('esg_company_info') || '{"name":"ESGGO 示範企業"}');
+      const userInfo = JSON.parse(localStorage.getItem('esg_user_info') || '{"fullName":"陳永續 (Sustainability Manager)"}');
+
       const response = await fetch('/api/generate-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: 'task_ui_001',
-          companyId: 'company_demo',
+          companyId: companyInfo.name,
+          actorId: userInfo.fullName,
           reportYear: '2026',
           triggerSource: 'user',
-          actorId: 'admin_01',
           evidenceVault: {
             'elec_bill': '5000000',
             'water_bill': '250000'
