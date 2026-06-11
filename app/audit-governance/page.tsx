@@ -180,7 +180,7 @@ export default function AuditGovernancePage() {
                     </span>
                     <div>
                       <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                        {p.title}
+                        AUDIT GOVERNANCE
                       </p>
                       <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                         {p.desc}
@@ -411,7 +411,7 @@ export default function AuditGovernancePage() {
                 </thead>
                 <tbody>
                   {PAGE_REGISTRY.map(p => (
-                    <tr key={p.id}>
+                    <tr key=AUDIT-GOVERNANCE>
                       <td>
                         <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
                           {p.name}

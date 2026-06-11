@@ -79,10 +79,10 @@ export default function SustainWritePage() {
             <div>
               <div className="flex items-center gap-3 mb-1">
                 <OmniBadge variant="primary" size="sm" icon={<Sparkles size={12}/>}>Cognitive Programming</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">SUSTAIN-WRITE</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">{p.sub}</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">SUSTAIN WRITE</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">sustain-write dashboard</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
