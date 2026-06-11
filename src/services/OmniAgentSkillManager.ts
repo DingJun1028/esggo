@@ -16,8 +16,18 @@
       }
 
       private loadSkillDefinitions() {
-        // In a real system, this would load from a database or multiple config files
-        const registryPath = path.join(process.cwd(), 'config', 'omniagent-skills.json');
+        // Support Next.js standalone mode by checking alternative paths
+        let registryPath = path.join(process.cwd(), 'config', 'omniagent-skills.json');
+        if (!fs.existsSync(registryPath)) {
+          const altPath1 = path.join(process.cwd(), '..', '..', 'config', 'omniagent-skills.json');
+          const altPath2 = path.join(process.cwd(), '..', 'config', 'omniagent-skills.json');
+          if (fs.existsSync(altPath1)) {
+            registryPath = altPath1;
+          } else if (fs.existsSync(altPath2)) {
+            registryPath = altPath2;
+          }
+        }
+
         if (!fs.existsSync(registryPath)) {
           console.warn(`OmniAgentSkillManager: Skill registry not found at ${registryPath}`);
           return;
@@ -60,8 +70,33 @@
         }
 
         // Dynamically import the skill module
-        // This assumes skills are local Node.js modules
-        const modulePath = path.join(process.cwd(), skill.entryPoint);
+        // Support Next.js standalone mode: find root directory of the project
+        let projectRoot = process.cwd();
+        if (projectRoot.endsWith('.next/standalone') || projectRoot.endsWith('.next\\standalone')) {
+          projectRoot = path.join(projectRoot, '..', '..');
+        } else if (projectRoot.includes('.next/standalone') || projectRoot.includes('.next\\standalone')) {
+          projectRoot = projectRoot.replace(/[/\\]\.next[/\\]standalone.*$/, '');
+        }
+
+        const modulePath = path.resolve(projectRoot, skill.entryPoint);
+
+        // If it's a TypeScript file, we register ts-node to compile it on the fly
+        if (modulePath.endsWith('.ts')) {
+          try {
+            // Using require to dynamically register ts-node if available
+            const tsNode = require('ts-node');
+            tsNode.register({
+              transpileOnly: true,
+              compilerOptions: {
+                module: 'commonjs'
+              }
+            });
+          } catch (e) {
+            console.warn('[OmniAgentSkillManager] ts-node not available or failed to register. Attempting default import.');
+          }
+        }
+
+        console.log(`[OmniAgentSkillManager] Loading skill module from: ${modulePath}`);
         const skillModule = (await import(modulePath)) as Record<string, (...args: unknown[]) => unknown>;
         this.skillModules.set(skillId, skillModule);
         return skillModule;
