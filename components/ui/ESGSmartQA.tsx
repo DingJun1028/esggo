@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Send, Bot, User, BookOpen, Loader2, UploadCloud, ThumbsUp, ThumbsDown, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 
 interface RagSource {
   title: string;
@@ -15,6 +16,7 @@ export const ESGSmartQA = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [feedbackStatus, setFeedbackStatus] = useState<Record<string, 'good' | 'bad'>>({});
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const dispatchBus = useOmniAgentBus((state) => state.dispatch);
 
     const handleSend = async () => {
         if (!query.trim() || isLoading || isStreaming || isUploading) return;
@@ -22,6 +24,7 @@ export const ESGSmartQA = () => {
         setQuery('');
         setMessages(prev => [...prev, { id: Date.now().toString(), role: 'user', text: newQuery }]);
         setIsLoading(true);
+        dispatchBus('INTENT', 'ESGSmartQA', `User initiated query: ${newQuery.substring(0, 20)}...`);
 
         // 提取歷史對話作為語意記憶 (Semantic Memory)
         const historyForApi = messages.map(m => ({ role: m.role, text: m.text }));
@@ -58,8 +61,9 @@ export const ESGSmartQA = () => {
                 if (i >= fullText.length) {
                     clearInterval(interval);
                     setIsStreaming(false);
+                    dispatchBus('MANIFEST', 'ESGSmartQA', 'RAG response stream completed and UI manifest achieved.');
                 }
-            }, 30);
+            }, 20);
         } catch (e) {
             setIsLoading(false);
             setMessages(prev => [...prev, { id: Date.now().toString(), role: 'bot', text: '系統發生震盪，無法連線至 OmniAgent 知識庫。' }]);

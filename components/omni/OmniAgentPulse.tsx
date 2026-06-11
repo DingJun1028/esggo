@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Activity, CheckCircle2, ChevronRight, Zap, GripHorizontal, Minimize2, Maximize2, ShieldCheck } from 'lucide-react';
 import { useOmniTable } from '@/hooks/useOmniTable';
+import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 
 // =========================================================================
 // OmniAgent Pulse - Liquid Glass Floating UI
@@ -11,6 +12,7 @@ import { useOmniTable } from '@/hooks/useOmniTable';
 export function OmniAgentPulse() {
   const [isExpanded, setIsExpanded] = useState(false);
   const { connectionStatus, records } = useOmniTable('valid-jwt-token');
+  const { signals, activeResonance } = useOmniAgentBus();
   const constraintsRef = useRef(null);
 
   // Derive status from records
@@ -66,8 +68,8 @@ export function OmniAgentPulse() {
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-[10px] text-slate-500 uppercase tracking-widest">Active Mission</span>
                     <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1">
-                      <Activity size={10} className={connectionStatus === 'CONNECTED' ? 'animate-pulse' : ''} /> 
-                      {connectionStatus}
+                      <Activity size={10} className={activeResonance ? 'animate-ping text-emerald-400' : (connectionStatus === 'CONNECTED' ? 'animate-pulse' : '')} /> 
+                      {activeResonance ? 'RESONATING' : connectionStatus}
                     </span>
                   </div>
                   <div className="bg-black/40 border border-white/5 rounded-lg p-2.5">
@@ -96,7 +98,13 @@ export function OmniAgentPulse() {
                 <div className="bg-black/50 border border-white/5 rounded-lg p-2 h-[80px] overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 pointer-events-none z-10" />
                   <div className="space-y-1 relative z-0 flex flex-col justify-end h-full font-mono text-[9px]">
-                    {records.slice(0, 3).map((r, i) => (
+                    {signals.length > 0 ? signals.slice(0, 3).map((s) => (
+                      <div key={s.id} className="flex gap-2 text-slate-400 opacity-80">
+                        <span className="text-emerald-500">[{new Date(s.timestamp).toLocaleTimeString()}]</span>
+                        <span className="text-amber-400">[{s.type}]</span>
+                        <span className="truncate">{s.source}</span>
+                      </div>
+                    )) : records.slice(0, 3).map((r, i) => (
                       <div key={i} className="flex gap-2 text-slate-400 opacity-80">
                         <span className="text-cyan-500">[{new Date(r.timestamp).toLocaleTimeString()}]</span>
                         <span className="truncate">{r.event_type} locked</span>

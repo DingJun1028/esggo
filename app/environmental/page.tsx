@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useESGAtoms } from '@/lib/supabase/hooks';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Leaf, Plus, Download, ShieldCheck, Factory, Wind, Zap, AlertTriangle, TrendingDown, Brain } from 'lucide-react';
@@ -33,21 +34,37 @@ export default function EnvironmentalDashboard() {
   const [activeScope, setActiveScope] = useState('All');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const dispatchBus = useOmniAgentBus((state: any) => state.dispatch);
   const { data: dbAtoms, loading } = useESGAtoms('environmental');
 
-  // Use database atoms, or fallback to mock data if database is empty or still loading
+  const [localData, setLocalData] = useState([
+    { id: 1, scope: 'Scope 1', source: '固定燃燒源 (發電機)', value: 1250, unit: 'tCO2e', status: 'Sealed' },
+    { id: 2, scope: 'Scope 1', source: '移動燃燒源 (公務車)', value: 320, unit: 'tCO2e', status: 'Sealed' },
+    { id: 3, scope: 'Scope 2', source: '外購電力 (總部與廠區)', value: 8450, unit: 'tCO2e', status: 'Sealed' },
+    { id: 4, scope: 'Scope 3', source: '員工通勤與差旅', value: 595, unit: 'tCO2e', status: 'Pending' },
+    { id: 5, scope: 'Scope 3', source: '供應鏈上下游運輸', value: 2100, unit: 'tCO2e', status: 'Pending' },
+  ]);
+
+  // Use database atoms, or fallback to local interactive data if database is empty or still loading
   const emissionsData = useMemo(() => {
     if (!loading && dbAtoms && dbAtoms.length > 0) {
       return dbAtoms;
     }
-    return [
-      { id: 1, scope: 'Scope 1', source: '固定燃燒源 (發電機)', value: 1250, unit: 'tCO2e', status: 'Sealed' },
-      { id: 2, scope: 'Scope 1', source: '移動燃燒源 (公務車)', value: 320, unit: 'tCO2e', status: 'Sealed' },
-      { id: 3, scope: 'Scope 2', source: '外購電力 (總部與廠區)', value: 8450, unit: 'tCO2e', status: 'Sealed' },
-      { id: 4, scope: 'Scope 3', source: '員工通勤', value: 410, unit: 'tCO2e', status: 'Pending' },
-      { id: 5, scope: 'Scope 3', source: '廢棄物處理', value: 185, unit: 'tCO2e', status: 'Pending' },
-    ];
-  }, [dbAtoms, loading]);
+    return localData;
+  }, [dbAtoms, loading, localData]);
+
+  const handleAddRecord = () => {
+    const newRecord = {
+      id: Date.now(),
+      scope: 'Scope 3',
+      source: `自動偵測：供應商物流節點 #${Math.floor(Math.random() * 1000)}`,
+      value: Math.floor(Math.random() * 400) + 50,
+      unit: 'tCO2e',
+      status: 'Pending'
+    };
+    setLocalData([newRecord, ...localData]);
+    dispatchBus('OBSERVE', 'EnvironmentalDashboard', '自動偵測到新排放源並已暫存。');
+  };
 
   const filteredData = useMemo(() => {
     return activeScope === 'All' ? emissionsData : emissionsData.filter(d => d.scope === activeScope);
@@ -85,8 +102,8 @@ export default function EnvironmentalDashboard() {
             <OmniButton variant="outline" icon={<Download size={16}/>} onClick={handleExport} isLoading={isProcessing}>
               匯出盤查清冊
             </OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} className="!bg-emerald-600 hover:!bg-emerald-700">
-              新增排放紀錄
+            <OmniButton variant="primary" icon={<Plus size={16}/>} className="!bg-emerald-600 hover:!bg-emerald-700" onClick={handleAddRecord}>
+              自動載入新紀錄
             </OmniButton>
           </div>
         </header>

@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useESGAtoms } from '@/lib/supabase/hooks';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Landmark, Plus, Download, ShieldCheck, Scale, FileSignature, ShieldAlert, Award, FileText } from 'lucide-react';
@@ -33,21 +34,37 @@ export default function GovernanceDashboard() {
   const [activeTab, setActiveTab] = useState('All');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const dispatchBus = useOmniAgentBus((state: any) => state.dispatch);
   const { data: dbAtoms, loading } = useESGAtoms('governance');
 
-  // Use database atoms, or fallback to mock data if database is empty or still loading
+  const [localData, setLocalData] = useState([
+    { id: 1, category: '董事會與高管', metric: '女性董事席次佔比', value: '40%', target: '30%', status: 'Sealed' },
+    { id: 2, category: '商業道德', metric: '反貪腐政策培訓完成率', value: '100%', target: '100%', status: 'Sealed' },
+    { id: 3, category: '資訊安全', metric: '5T 協議資料加密覆蓋率', value: '98.5%', target: '100%', status: 'Pending' },
+    { id: 4, category: '風險管理', metric: '重大 ESG 風險鑑別完成度', value: '100%', target: '100%', status: 'Sealed' },
+    { id: 5, category: '供應鏈治理', metric: '高風險供應商稽核率', value: '85%', target: '90%', status: 'Pending' },
+  ]);
+
+  // Use database atoms, or fallback to local interactive data if database is empty or still loading
   const governanceData = useMemo(() => {
     if (!loading && dbAtoms && dbAtoms.length > 0) {
       return dbAtoms;
     }
-    return [
-      { id: 1, category: '董事會與高管', metric: '女性董事席次佔比', value: '40%', target: '30%', status: 'Sealed' },
-      { id: 2, category: '商業道德', metric: '反貪腐政策培訓完成率', value: '100%', target: '100%', status: 'Sealed' },
-      { id: 3, category: '資訊安全', metric: '5T 協議資料加密覆蓋率', value: '98.5%', target: '100%', status: 'Pending' },
-      { id: 4, category: '風險管理', metric: '重大 ESG 風險鑑別完成度', value: '100%', target: '100%', status: 'Sealed' },
-      { id: 5, category: '供應鏈治理', metric: '高風險供應商稽核率', value: '85%', target: '90%', status: 'Pending' },
-    ];
-  }, [dbAtoms, loading]);
+    return localData;
+  }, [dbAtoms, loading, localData]);
+
+  const handleAddRecord = () => {
+    const newRecord = {
+      id: Date.now(),
+      category: '風險管理',
+      metric: `自動偵測：ISO 27001 內部稽核缺失項目數 (Q${Math.floor(Math.random() * 4) + 1})`,
+      value: `${Math.floor(Math.random() * 3)} 項`,
+      target: '0 項',
+      status: 'Pending'
+    };
+    setLocalData([newRecord, ...localData]);
+    dispatchBus('OBSERVE', 'GovernanceDashboard', '自動載入內部稽核缺失項目。');
+  };
 
   const filteredData = useMemo(() => {
     return activeTab === 'All' ? governanceData : governanceData.filter(d => d.category === activeTab);
@@ -81,8 +98,8 @@ export default function GovernanceDashboard() {
             <OmniButton variant="outline" icon={<Download size={16}/>} onClick={handleExport} isLoading={isProcessing}>
               匯出治理報告
             </OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} className="!bg-amber-600 hover:!bg-amber-700">
-              新增政策紀錄
+            <OmniButton variant="primary" icon={<Plus size={16}/>} className="!bg-amber-600 hover:!bg-amber-700" onClick={handleAddRecord}>
+              自動載入新紀錄
             </OmniButton>
           </div>
         </header>
