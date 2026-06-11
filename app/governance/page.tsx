@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useESGAtoms } from '@/lib/supabase/hooks';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Landmark, Plus, Download, ShieldCheck, Scale, FileSignature, ShieldAlert, Award, FileText } from 'lucide-react';
 
@@ -199,6 +200,10 @@ export default function GovernanceDashboard() {
                 </OmniButton>
               </div>
             </OmniBaseCard>
+            
+            <div className="pt-2">
+              <ESGSmartQA />
+            </div>
           </div>
         </div>
 
