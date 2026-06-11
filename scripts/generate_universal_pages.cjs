@@ -37,10 +37,10 @@ pages.forEach(p => {
   const content = `'use client';
 
 import React, { useState, useEffect } from 'react';
-import { UniversalCard } from '@/components/ui/universal/UniversalCard';
-import { UniversalButton } from '@/components/ui/universal/UniversalButton';
-import { UniversalBadge } from '@/components/ui/universal/UniversalBadge';
-import { UniversalTable } from '@/components/ui/universal/UniversalTable';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
 import { ${iconName}, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
 export default function ${componentName}() {
@@ -57,7 +57,7 @@ export default function ${componentName}() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetching from a universal proxy metrics endpoint
+      // Fetching from a omni proxy metrics endpoint
       const res = await fetch('/api/metrics/${tableRoute}', { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
@@ -146,11 +146,11 @@ export default function ${componentName}() {
     { key: 'source_origin', label: '來源 (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
       val ? (
-        <UniversalBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
+        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
           {val.substring(0, 8)}...
-        </UniversalBadge>
+        </OmniBadge>
       ) : (
-        <UniversalBadge variant="default" size="sm">未封印</UniversalBadge>
+        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
       )
     ) },
     { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
@@ -190,7 +190,7 @@ export default function ${componentName}() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <UniversalBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</UniversalBadge>
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">{p.id}</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
@@ -198,62 +198,62 @@ export default function ${componentName}() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <UniversalButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</UniversalButton>
-            <UniversalButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
+            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
               新增紀錄
-            </UniversalButton>
+            </OmniButton>
           </div>
         </header>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <UniversalCard variant="glass" className="p-6 space-y-4">
+          <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </UniversalCard>
+          </OmniBaseCard>
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
+          <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </UniversalCard>
+          </OmniBaseCard>
 
-          <UniversalCard variant="glass" className="p-6 space-y-4">
+          <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
             <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </UniversalCard>
+          </OmniBaseCard>
         </div>
 
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <UniversalCard 
+            <OmniBaseCard 
               variant="default" 
               title="業務資料視圖" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
-              <UniversalTable 
+              <OmniBaseTable 
                 columns={columns}
                 data={data}
                 loading={loading}
               />
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
           
           <div className="space-y-6">
-            <UniversalCard 
+            <OmniBaseCard 
               variant="glow" 
               title="OmniAgent 輔助" 
               subtitle="AI 智能上下文"
@@ -271,7 +271,7 @@ export default function ${componentName}() {
                   </ul>
                 </div>
               </div>
-            </UniversalCard>
+            </OmniBaseCard>
           </div>
         </div>
 

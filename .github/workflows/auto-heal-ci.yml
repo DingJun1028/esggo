@@ -30,6 +30,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -51,11 +56,11 @@ jobs:
           # 常見錯誤自動修復
           if echo "$ERROR_LOG" | grep -q "EACCES"; then
             echo "🔧 Auto-fixing permission issues..."
-            sudo chown -R $USER:$GROUP ~/.npm
+            sudo chown -R $USER:$GROUP ~/.local/share/pnpm
           fi
           if echo "$ERROR_LOG" | grep -q "node_modules"; then
             echo "🔧 Auto-fixing corrupted node_modules..."
-            rm -rf node_modules package-lock.json
+            rm -rf node_modules pnpm-lock.yaml
             pnpm install
           fi
         shell: bash
@@ -83,7 +88,7 @@ jobs:
             
             if grep -q "SyntaxError" test-output.log; then
               echo "🔧 Auto-healing: Syntax errors detected"
-              npx tsc --noEmit || true
+              pnpm exec tsc --noEmit || true
             fi
           fi
 

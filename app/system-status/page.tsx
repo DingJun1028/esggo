@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
@@ -65,7 +65,7 @@ export default function SystemStatusPage() {
       }
     } catch (error) {
       console.error('Seal exception:', error);
-      alert('Vault Connection Error');
+      alert('無法連線至封印金庫 (Vault Connection Error)。');
     } finally {
       setSealingId(null);
     }
@@ -81,13 +81,13 @@ export default function SystemStatusPage() {
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
-        alert('Verification Success: 5T Protocol Compliant');
+        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
       } else {
-        alert('Verification Failed: Invalid Hash Lock');
+        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
       }
     } catch (e) {
       console.error('Verify exception:', e);
-      alert('Vault Connection Error');
+      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
     } finally {
       setVerifyingId(null);
     }
@@ -114,7 +114,7 @@ export default function SystemStatusPage() {
           {val.substring(0, 8)}...
         </OmniBadge>
       ) : (
-        <OmniBadge variant="default" size="sm">未封裝</OmniBadge>
+        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
       )
     ) },
     { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
@@ -140,12 +140,6 @@ export default function SystemStatusPage() {
       </div>
     ) }
   ];
-
-  const p = {
-    id: 'SYS-001',
-    title: '系統狀態 (System Status)',
-    sub: 'Platform Integrity & Metrics'
-  };
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
@@ -179,7 +173,7 @@ export default function SystemStatusPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍節點</span>
+              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
@@ -197,7 +191,7 @@ export default function SystemStatusPage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯</span>
+              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -210,7 +204,7 @@ export default function SystemStatusPage() {
           <div className="lg:col-span-3 space-y-6">
             <OmniBaseCard 
               variant="default" 
-              title="業務資料預覽" 
+              title="業務資料視圖" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
@@ -225,12 +219,12 @@ export default function SystemStatusPage() {
           <div className="space-y-6">
             <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent 核心"
-              subtitle="AI 能力中心"
+              title="OmniAgent 輔助" 
+              subtitle="AI 智能上下文"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
                   <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
