@@ -20,10 +20,10 @@ const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorCla
         </div>
       )}
     </div>
-    <h3 className="text-slate-500 text-sm font-bold">{title}</h3>
+    <h3 className="text-slate-500 dark:text-slate-400 text-sm font-bold">{title}</h3>
     <div className="mt-2 flex items-baseline gap-2">
-      <span className="text-3xl font-black text-slate-800">{value}</span>
-      <span className="text-sm font-medium text-slate-500">{unit}</span>
+      <span className="text-3xl font-black text-slate-800 dark:text-white dark:text-slate-100">{value}</span>
+      <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{unit}</span>
     </div>
   </OmniBaseCard>
 ));
@@ -59,22 +59,22 @@ export default function GovernanceDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-800/50 dark:bg-void-stark text-slate-800 dark:text-slate-100 dark:text-slate-200 p-4 md:p-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200 dark:border-white/10">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center border border-amber-200 shadow-sm">
               <Landmark className="text-amber-600" size={28} />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded">TCFD / SASB</span>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">Corporate Governance</span>
+                <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 text-xs font-bold rounded">TCFD / SASB</span>
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-widest">Corporate Governance</span>
               </div>
-              <h1 className="text-3xl font-black text-slate-800 tracking-tight">公司治理與商業道德</h1>
-              <p className="text-slate-500 text-sm mt-1">管理董事會結構、法規遵循與風險控制，資料以 5T 協議防篡改封印</p>
+              <h1 className="text-3xl font-black text-slate-800 dark:text-white dark:text-slate-100 tracking-tight">公司治理與商業道德</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">管理董事會結構、法規遵循與風險控制，資料以 5T 協議防篡改封印</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
@@ -95,28 +95,28 @@ export default function GovernanceDashboard() {
             unit="等級" 
             icon={Award} 
             trend="維持頂級" 
-            colorClass="bg-amber-100 text-amber-600"
+            colorClass="bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
           />
           <MetricCard 
             title="董事會獨立董事佔比" 
             value="60" 
             unit="%" 
             icon={Scale} 
-            colorClass="bg-emerald-100 text-emerald-600"
+            colorClass="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
           />
           <MetricCard 
             title="反貪腐培訓完成率" 
             value="100" 
             unit="%" 
             icon={FileSignature} 
-            colorClass="bg-blue-100 text-blue-600"
+            colorClass="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
           />
           <MetricCard 
             title="5T 協議稽核涵蓋率" 
             value="98.5" 
             unit="%" 
             icon={ShieldAlert} 
-            colorClass="bg-slate-200 text-slate-600"
+            colorClass="bg-slate-200 text-slate-600 dark:text-slate-400"
           />
         </div>
 
@@ -124,14 +124,14 @@ export default function GovernanceDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <OmniBaseCard variant="default" className="p-0 overflow-hidden">
-              <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
-                <h2 className="text-lg font-bold text-slate-800">治理核心指標清冊</h2>
-                <div className="flex bg-slate-100 rounded-lg p-1">
+              <div className="p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-white dark:bg-slate-900/50">
+                <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">治理核心指標清冊</h2>
+                <div className="flex bg-slate-100 dark:bg-slate-800/50 rounded-lg p-1">
                   {['All', '董事會與高管', '商業道德', '資訊安全', '風險管理'].map(tab => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-3 py-1.5 text-sm font-bold rounded-md transition-all ${activeTab === tab ? 'bg-white text-amber-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      className={`px-3 py-1.5 text-sm font-bold rounded-md transition-all ${activeTab === tab ? 'bg-white dark:bg-slate-900/50 text-amber-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'}`}
                     >
                       {tab}
                     </button>
@@ -140,7 +140,7 @@ export default function GovernanceDashboard() {
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-50 border-b border-slate-100 text-xs uppercase text-slate-500">
+                  <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-white/10 text-xs uppercase text-slate-500 dark:text-slate-400">
                     <tr>
                       <th className="px-6 py-4 font-bold">治理面向</th>
                       <th className="px-6 py-4 font-bold">指標描述</th>
@@ -149,20 +149,20 @@ export default function GovernanceDashboard() {
                       <th className="px-6 py-4 font-bold text-center">5T 狀態</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 bg-white">
+                  <tbody className="divide-y divide-slate-100 bg-white dark:bg-slate-900/50">
                     {filteredData.map(row => (
-                      <tr key={row.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4 font-mono text-sm font-bold text-slate-600">{row.category}</td>
-                        <td className="px-6 py-4 text-sm text-slate-700">{row.metric}</td>
+                      <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+                        <td className="px-6 py-4 font-mono text-sm font-bold text-slate-600 dark:text-slate-400">{row.category}</td>
+                        <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{row.metric}</td>
                         <td className="px-6 py-4 text-sm font-black text-amber-600 text-right">{row.value}</td>
-                        <td className="px-6 py-4 text-sm text-slate-500 text-right">{row.target}</td>
+                        <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400 text-right">{row.target}</td>
                         <td className="px-6 py-4 text-center">
                           {row.status === 'Sealed' ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200">
                               <ShieldCheck size={14}/> 已封印
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200">
                               <FileText size={14}/> 待簽核
                             </span>
                           )}
@@ -185,7 +185,7 @@ export default function GovernanceDashboard() {
                 <p>
                   偵測到您的 <strong>高風險供應商稽核率 (85%)</strong> 低於年度目標設定 (90%)。
                 </p>
-                <div className="p-3 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
+                <div className="p-3 bg-white/10 dark:bg-white/5 rounded-lg backdrop-blur-sm border border-white/20">
                   <h4 className="font-bold text-white mb-2 flex items-center gap-2">
                     <ShieldAlert size={16}/> 建議採取行動
                   </h4>
@@ -195,7 +195,7 @@ export default function GovernanceDashboard() {
                     <li>重新檢視供應鏈管理政策，並於下季董事會報告。</li>
                   </ul>
                 </div>
-                <OmniButton variant="outline" className="w-full mt-4 bg-white/10 border-white/20 hover:bg-white/20 text-white">
+                <OmniButton variant="outline" className="w-full mt-4 bg-white/10 dark:bg-white/5 border-white/20 hover:bg-white/20 dark:bg-white/10 text-white">
                   生成供應商改善計畫 (CAP)
                 </OmniButton>
               </div>
