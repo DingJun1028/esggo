@@ -117,8 +117,22 @@ async function refreshOpenRouterFreeModels() {
 }
 
 // ── OpenRouter API call ────────────────────────────────────
-async function callOpenRouter(modelId, systemPrompt, userPrompt) {
+async function callOpenRouter(modelId, systemPrompt, userPrompt, includeReasoning = false) {
   if (!OPENROUTER_KEY) throw new Error('OPENROUTER_API_KEY not configured');
+
+  const body = {
+    model: modelId,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user',   content: userPrompt   },
+    ],
+    temperature: 0.7,
+    max_tokens:  4096,
+  };
+
+  if (includeReasoning) {
+    body.include_reasoning = true;
+  }
 
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
@@ -128,16 +142,20 @@ async function callOpenRouter(modelId, systemPrompt, userPrompt) {
       'X-Title':         YOUR_SITE_NAME,
       'Content-Type':    'application/json',
     },
-    body: JSON.stringify({
-      model: modelId,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user',   content: userPrompt   },
-      ],
-      temperature: 0.7,
-      max_tokens:  2048,
-    }),
+    body: JSON.stringify(body),
   });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(`OpenRouter ${res.status}: ${JSON.stringify(err)}`);
+  }
+
+  const data = await res.json();
+  const content = data.choices?.[0]?.message?.content || '';
+  const reasoning = data.choices?.[0]?.message?.reasoning || null;
+
+  return { content, reasoning };
+}
 
   if (!res.ok) {
     const err = await res.text();
@@ -171,13 +189,19 @@ const ESG_SYSTEM_PROMPT = `你是 ESGGO 平台的 OmniAgent AI 助手，專精�
 // Priority: Gemini → OpenRouter → Mock
 async function dispatchAI(task) {
   const prompt = task.prompt || `請針對以下任務生成 ESG 分析報告：\n任務類型：${task.taskType}\n標題：${task.title || task.taskType}`;
+  const includeReasoning = task.includeReasoning || task.taskType === 'reasoning_analysis';
 
   // 1. Gemini
   if (geminiClient) {
     try {
       const model  = geminiClient.getGenerativeModel({ model: 'gemini-2.0-flash' });
       const result = await model.generateContent([ESG_SYSTEM_PROMPT, prompt]);
-      return { content: result.response.text(), provider: 'Google Gemini', model: 'gemini-2.0-flash' };
+      return { 
+        content: result.response.text(), 
+        provider: 'Google Gemini', 
+        model: 'gemini-2.0-flash',
+        reasoning: null 
+      };
     } catch (err) {
       console.warn(`[OmniGateway] Gemini failed (${err.message}), trying OpenRouter...`);
     }
@@ -187,8 +211,13 @@ async function dispatchAI(task) {
   if (OPENROUTER_KEY) {
     const modelId = task.model || OPENROUTER_DEFAULT;
     try {
-      const content = await callOpenRouter(modelId, ESG_SYSTEM_PROMPT, prompt);
-      return { content, provider: 'OpenRouter', model: modelId };
+      const { content, reasoning } = await callOpenRouter(modelId, ESG_SYSTEM_PROMPT, prompt, includeReasoning);
+      return { 
+        content, 
+        provider: 'OpenRouter', 
+        model: modelId,
+        reasoning 
+      };
     } catch (err) {
       console.warn(`[OmniGateway] OpenRouter failed (${err.message}), falling back to mock...`);
     }
@@ -197,7 +226,12 @@ async function dispatchAI(task) {
   // 3. Mock templates
   const templateFn = MOCK_TEMPLATES[task.taskType];
   const content    = templateFn ? templateFn(task) : `OmniAgent 已處理任務：${task.title || task.taskType}`;
-  return { content, provider: 'Mock Templates', model: 'mock-v2.1' };
+  return { 
+    content, 
+    provider: 'Mock Templates', 
+    model: 'mock-v2.1',
+    reasoning: includeReasoning ? '[MOCK] Reasoning steps performed locally.' : null 
+  };
 }
 
 // ── Express App ────────────────────────────────────────────

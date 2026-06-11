@@ -11,6 +11,7 @@ export interface OmniTask {
   title?: string;
   prompt: string;
   model?: string; // e.g., 'google/gemma-4-31b-it:free'
+  includeReasoning?: boolean; // Enable Deep Reasoning Mode
 }
 
 export interface OmniExecution {
@@ -21,6 +22,7 @@ export interface OmniExecution {
   status: 'pending' | 'completed' | 'failed';
   startedAt: string;
   finishedAt?: string;
+  reasoningLog?: string; // Internal step-by-step logic
 }
 
 export interface OmniArtifact {

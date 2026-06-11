@@ -9,6 +9,7 @@ interface OmniTask {
     title?: string;
     prompt: string;
     model?: string;
+    includeReasoning?: boolean;
 }
 interface OmniExecution {
     id: string;
@@ -18,6 +19,7 @@ interface OmniExecution {
     status: 'pending' | 'completed' | 'failed';
     startedAt: string;
     finishedAt?: string;
+    reasoningLog?: string;
 }
 interface OmniArtifact {
     id: string;
