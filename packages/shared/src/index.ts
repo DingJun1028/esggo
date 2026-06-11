@@ -1,17 +1,19 @@
 /**
- * ESGGO Sacred Contract v1.1
- * Shared TypeScript Definitions for Platform & Commander
+ * ESGGO Sacred Contract v2.1 - Awakening Edition
+ * Shared TypeScript Definitions for Platform, Commander & OmniOne
  */
 
-export type ModelProvider = 'Google' | 'OpenRouter' | 'Mock';
+export type ModelProvider = 'Google' | 'OpenRouter' | 'Mock' | 'Gemma4-Local';
 
 export interface OmniTask {
   id: string;
-  taskType: 'report_drafting' | 'reasoning_analysis' | 'compliance_check' | 'test';
+  taskType: 'report_drafting' | 'reasoning_analysis' | 'compliance_check' | 'test' | 'celestial_alignment';
+  priority: 'High' | 'Medium' | 'Low';
+  dueDate?: string;
   title?: string;
   prompt: string;
-  model?: string; // e.g., 'google/gemma-4-31b-it:free'
-  includeReasoning?: boolean; // Enable Deep Reasoning Mode
+  model?: string;
+  includeReasoning?: boolean;
 }
 
 export interface OmniExecution {
@@ -19,10 +21,10 @@ export interface OmniExecution {
   taskId: string;
   modelProvider: ModelProvider;
   modelName: string;
-  status: 'pending' | 'completed' | 'failed';
+  status: 'pending' | 'completed' | 'failed' | 'Awakened' | 'Repairing' | 'Calibrating';
   startedAt: string;
   finishedAt?: string;
-  reasoningLog?: string; // Internal step-by-step logic
+  reasoningLog?: string;
 }
 
 export interface OmniArtifact {
@@ -38,46 +40,14 @@ export interface OmniGatewayResponse {
   error?: string;
 }
 
-// ── ESG Domain Types ───────────────────────────────────────
+export type ZKPMaskLevel = 'L1' | 'L2' | 'L3';
 
-export interface IOmniTheme {
-  readonly id: string;
-  readonly name: string;
-  readonly type: 'LiquidGlass' | 'SolidState' | 'Amber';
-  readonly tokens: {
-    readonly primary: string;
-    readonly secondary: string;
-    readonly accent: string;
-    readonly surface: string;
-  };
-}
-
-/**
- * 💎 萬能元件心核：5T [4可1不可] 實作規範
- * --------------------------------------------------
- * Governing Authority: UCC (Universal Component Center)
- */
-export interface IComponentCore {
-  readonly uuid: string;           // [真 - Truthful] Traceable (可溯源)
-  readonly version: number;        // [通 - Transferful] Versioning
-  readonly timestamp: number;      // [通 - Transferful] Trackable
-  readonly formula: string;        // [善 - Thankful] Transparent
-  readonly impactMetric: string;   // [美 - Tasteful] Tangible
-  readonly status: "Pending" | "Verified" | "Trustworthy" | "AwaitingAmendment"; 
-  readonly themeId: string;        // [美 - Tasteful] Governing UI Theme
-  
-  /** 證據佐證庫 (Evidence Vault) */
-  evidence: Record<string, any>;
-
-  /** 🧠 ZK-Privacy Proof */
-  zkpProof?: ZKPProof;
-
-  /** 🔗 Amendment Link */
-  parentUuid?: string;
-  amendmentReason?: string;
-  
-  /** 🔒 不可篡改封印 */
-  lock(): void; 
+export interface ZKPProof {
+  id: string;
+  gate: 'Truth' | 'Goodness' | 'Beauty' | 'Trust' | 'Transfer';
+  maskLevel: ZKPMaskLevel;
+  proofHash: string;
+  isVerified: boolean;
 }
 
 export interface OmniAmendmentRequest {
@@ -88,13 +58,39 @@ export interface OmniAmendmentRequest {
   status: 'Pending' | 'Approved' | 'Rejected';
 }
 
+// ── 💎 Universal Component Core (Heart) ──────────────────
+
+export interface IComponentCore<T = any> {
+  readonly uuid: string;
+  readonly version: string;
+  readonly timestamp: number;
+  readonly formula: string;
+  readonly impactMetric: string;
+  readonly status: "Pending" | "Verified" | "Trustworthy" | "AwaitingAmendment"; 
+  readonly themeId: string;
+  
+  evidence: {
+    origin_id: string;
+    origin_hash: string;
+    extraction_method: 'OCR' | 'IoT' | 'Manual' | 'AI';
+  };
+
+  lifecycle_events: Array<{
+    event: string;
+    timestamp: number;
+    actor: string;
+  }>;
+
+  data: T;
+  isFrozen: boolean;
+  zkpProof?: ZKPProof;
+  
+  lock(): void; 
+}
+
 export interface IWuZuoMiaoDe extends IComponentCore {
   readonly state: "Awakened" | "Repairing" | "Calibrating" | "Stable";
- 
-  /** 圓通無礙：流轉控制 (Seamless Flow) */
   stream: <T>(data: T) => void;
- 
-  /** 無作妙德：自發治理 (Spontaneous Virtue) */
   governance: {
     seal: (data: any) => Readonly<any>;
     purify: (entropyLevel: number) => void;
@@ -106,18 +102,5 @@ export interface ESGMetric extends IComponentCore {
   name: string;
   value: number | string;
   unit: string;
-  sourceOrigin: string; // [真 - Truthful] Traceable
-  integrityProof?: string; 
-}
-
-// ── ZK-Privacy Engine Types ───────────────────────────────
-
-export type ZKPMaskLevel = 'L1' | 'L2' | 'L3';
-
-export interface ZKPProof {
-  id: string;
-  gate: 'Truth' | 'Goodness' | 'Beauty' | 'Trust' | 'Transfer';
-  maskLevel: ZKPMaskLevel;
-  proofHash: string; // The ZK-Proof certificate
-  isVerified: boolean;
+  sourceOrigin: string;
 }
