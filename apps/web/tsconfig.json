@@ -7,7 +7,7 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "outDir": "./dist",
     "rootDir": "./",
     "strict": true,
@@ -66,7 +66,8 @@
     "next.config.ts",
     "src/**/*",
     "types/**/*",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -1,0 +1,37 @@
+name: Monorepo CI
+
+on:
+  push:
+    branches: [ "main", "OmniJules-Branch" ]
+  pull_request:
+    branches: [ "main", "OmniJules-Branch" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Shared Contract
+        run: npm run build -w packages/shared
+
+      - name: Build Logic v4
+        run: npm run build -w packages/logic-v4
+
+      - name: Build Gateway
+        run: npm run build --workspace=apps/gateway --if-present
+
+      - name: Build Web App
+        run: npm run build --workspace=apps/web --if-present
+
+      - name: Run Tests
+        run: npm test --workspaces --if-present
