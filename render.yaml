@@ -24,3 +24,11 @@ services:
         sync: false
       - key: NOCODEBACKEND_API_KEY
         sync: false
+        
+      # OmniAgent AI Keys
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OMNI_TOKEN
+        sync: false
+      - key: GATEWAY_API_KEY
+        sync: false
