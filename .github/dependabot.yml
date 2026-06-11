@@ -9,6 +9,10 @@ updates:
       prefix: "chore(deps)"
     labels:
       - "dependencies"
+    ignore:
+      # 忽略 TypeScript 的 Major 更新，避免編譯突然壞掉
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # 檢查 GitHub Actions 的版本更新
   - package-ecosystem: "github-actions"
