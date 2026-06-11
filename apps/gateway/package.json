@@ -8,6 +8,7 @@
     "dev": "node --watch omni-server.mjs"
   },
   "dependencies": {
+    "@esggo/logic-v4": "file:../../packages/logic-v4",
     "@esggo/shared": "file:../../packages/shared",
     "@google/generative-ai": "^0.21.0",
     "cors": "^2.8.5",
