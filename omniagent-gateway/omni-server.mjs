@@ -22,6 +22,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import TelegramBot from 'node-telegram-bot-api';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -54,6 +55,7 @@ const VPS_IP           = process.env.VPS_IP || '161.118.248.180';
 const ALLOWED_ORIGINS  = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean);
 const YOUR_SITE_URL    = process.env.SITE_URL || `http://${VPS_IP}:${PORT}`;
 const YOUR_SITE_NAME   = process.env.SITE_NAME || 'ESGGO OmniAgent Gateway';
+const TELEGRAM_TOKEN   = process.env.TELEGRAM_BOT_TOKEN;
 
 // ── OpenRouter: all currently-free models (as of 2026-06-10) ──
 // Source: https://openrouter.ai/api/v1/models  (pricing.prompt === "0")
@@ -88,6 +90,67 @@ let OPENROUTER_FREE_MODELS = [
 
 // Default OpenRouter model for ESG tasks (best general-purpose free model)
 const OPENROUTER_DEFAULT = 'google/gemma-4-31b-it:free';
+
+// ── Telegram Bot Initialization ────────────────────────────
+let bot = null;
+if (TELEGRAM_TOKEN) {
+  try {
+    bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
+    console.log('[OmniGateway] 🤖 Telegram Bot enabled (Polling)');
+
+    bot.on('message', async (msg) => {
+      // Ignore commands (handled separately) and non-text
+      if (!msg.text || msg.text.startsWith('/')) return;
+      
+      const chatId = msg.chat.id;
+      const userName = msg.from?.first_name || 'User';
+      console.log(`[OmniGateway] 📩 Telegram from ${userName}: ${msg.text.slice(0, 50)}...`);
+
+      // Auto-reply with loading status
+      const loadingMsg = await bot.sendMessage(chatId, '🧠 OmniAgent G4 正在思考中...', { reply_to_message_id: msg.message_id });
+
+      try {
+        const aiResult = await dispatchAI({
+          prompt: msg.text,
+          taskType: 'telegram_chat',
+          title: `Telegram Chat from ${userName}`,
+          model: OPENROUTER_DEFAULT
+        });
+
+        await bot.editMessageText(aiResult.content, {
+          chat_id: chatId,
+          message_id: loadingMsg.message_id,
+          parse_mode: 'Markdown'
+        });
+      } catch (err) {
+        console.error('[OmniGateway] Telegram AI error:', err);
+        await bot.editMessageText('❌ AI 處理失敗，請稍後再試。', {
+          chat_id: chatId,
+          message_id: loadingMsg.message_id
+        });
+      }
+    });
+
+    bot.onText(/\/start/, (msg) => {
+      bot.sendMessage(msg.chat.id, `👋 你好！我是 **OmniAgent G4**。\n\n我已連接至 Oracle Cloud VPS 並由 **Gemma 4 (31B)** 免費推理版驅動。\n\n你可以直接傳送 ESG 相關問題給我，或使用以下指令：\n/status - 檢查系統狀態\n/models - 列出可用模型`, { parse_mode: 'Markdown' });
+    });
+
+    bot.onText(/\/status/, (msg) => {
+      const uptime = Math.floor((Date.now() - startTime) / 1000);
+      bot.sendMessage(msg.chat.id, `🛰 **OmniAgent 系統狀態**\n\n狀態: ✅ Online\n版本: v2.1.0\n核心: Gemma 4 (31B)\nUptime: ${uptime}s\n\n系統一切運作正常。`, { parse_mode: 'Markdown' });
+    });
+
+    bot.onText(/\/models/, (msg) => {
+      const modelList = OPENROUTER_FREE_MODELS.slice(0, 5).map(m => `- ${m.name}`).join('\n');
+      bot.sendMessage(msg.chat.id, `🧠 **部分可用免費模型**\n\n${modelList}\n\n預設使用: Google Gemma 4 31B`, { parse_mode: 'Markdown' });
+    });
+
+  } catch (err) {
+    console.error('[OmniGateway] ❌ Failed to start Telegram Bot:', err.message);
+  }
+} else {
+  console.warn('[OmniGateway] ⚠️ TELEGRAM_BOT_TOKEN not found, Telegram integration disabled');
+}
 
 // ── AI Clients ─────────────────────────────────────────────
 const geminiClient = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
@@ -394,6 +457,7 @@ const server = app.listen(PORT, '0.0.0.0', async () => {
 // ── Graceful shutdown ──────────────────────────────────────
 const shutdown = (sig) => {
   console.log(`\n[OmniGateway] ${sig} received. Shutting down gracefully...`);
+  if (bot) bot.stopPolling();
   server.close(() => { console.log('[OmniGateway] Closed. Bye!'); process.exit(0); });
   setTimeout(() => process.exit(1), 10_000);
 };

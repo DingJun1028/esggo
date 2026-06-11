@@ -1,0 +1,10 @@
+allowBuilds:
+  '@datadog/pprof': false
+  '@firebase/util': false
+  '@newrelic/fn-inspect': false
+  '@newrelic/native-metrics': false
+  core-js: false
+  esbuild: false
+  protobufjs: false
+  sharp: false
+  unrs-resolver: false

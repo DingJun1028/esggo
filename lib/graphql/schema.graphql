@@ -1,0 +1,271 @@
+type Query {
+  # Dashboard
+  dashboardStats: DashboardStats!
+  
+  # ESG Data
+  esgMetrics(category: String, year: Int): [ESGMetric!]!
+  esgMetric(id: ID!): ESGMetric
+  
+  # Evidence Vault
+  evidenceFiles(status: String, category: String): [EvidenceFile!]!
+  evidenceFile(id: ID!): EvidenceFile
+  
+  # Audit Logs
+  auditLogs(limit: Int, offset: Int): [AuditLog!]!
+  auditLog(id: ID!): AuditLog
+  
+  # Environmental
+  environmentalData(category: String, year: Int): [EnvironmentalMetric!]!
+  
+  # Roadmap
+  roadmapMilestones(status: String): [RoadmapMilestone!]!
+  
+  # Tasks
+  tasks(status: String, priority: String): [Task!]!
+  task(id: ID!): Task
+  
+  # Company Profile
+  companyProfile: CompanyProfile
+  
+  # GRI Tracker
+  griDisclosures(status: String): [GRIDisclosure!]!
+  
+  # Advisory Sessions
+  advisorySessions(userId: String): [AdvisorySession!]!
+}
+
+type Mutation {
+  # ESG Metrics
+  upsertESGMetric(input: ESGMetricInput!): ESGMetric!
+  deleteESGMetric(id: ID!): Boolean!
+  
+  # Evidence
+  createEvidence(input: EvidenceInput!): EvidenceFile!
+  sealEvidence(id: ID!, sealType: String!): EvidenceFile!
+  verifyEvidence(id: ID!, hashLock: String!): VerifyResult!
+  
+  # Tasks
+  createTask(input: TaskInput!): Task!
+  updateTaskStatus(id: ID!, status: String!): Task!
+  deleteTask(id: ID!): Boolean!
+  
+  # Audit
+  createAuditLog(input: AuditLogInput!): AuditLog!
+  
+  # Roadmap
+  upsertMilestone(input: MilestoneInput!): RoadmapMilestone!
+  updateMilestoneStatus(id: ID!, status: String!): RoadmapMilestone!
+  
+  # Company Profile
+  updateCompanyProfile(input: CompanyProfileInput!): CompanyProfile!
+}
+
+type Subscription {
+  auditLogAdded: AuditLog!
+  taskUpdated(id: ID): Task!
+  evidenceSealed(id: ID): EvidenceFile!
+}
+
+# --- Types ---
+
+type DashboardStats {
+  complianceRate: Float!
+  carbonEmissions: Float!
+  griCoverage: Float!
+  auditCount: Int!
+  taskCount: Int!
+  evidenceCount: Int!
+  verifiedCount: Int!
+  lastUpdated: String!
+}
+
+type ESGMetric {
+  id: ID!
+  companyId: String!
+  category: String!
+  metricName: String!
+  metricValue: Float
+  unit: String
+  year: Int!
+  griStandard: String
+  sourceOrigin: String
+  hashLock: String
+  verified: Boolean!
+  createdAt: String!
+}
+
+type EvidenceFile {
+  id: ID!
+  fileName: String!
+  fileType: String
+  category: String
+  griReference: String
+  uploader: String!
+  status: String!
+  zkpProof: Boolean!
+  hashLock: String
+  sealType: String
+  createdAt: String!
+}
+
+type AuditLog {
+  id: ID!
+  action: String!
+  resource: String
+  userName: String!
+  department: String
+  griReference: String
+  t5Tag: String
+  hashLock: String
+  details: String
+  createdAt: String!
+}
+
+type EnvironmentalMetric {
+  id: ID!
+  companyId: String!
+  category: String!
+  metricName: String!
+  metricValue: Float
+  unit: String
+  year: Int!
+  griStandard: String
+  verified: Boolean!
+}
+
+type RoadmapMilestone {
+  id: ID!
+  title: String!
+  description: String
+  targetYear: Int!
+  category: String
+  targetValue: Float
+  currentValue: Float
+  unit: String
+  status: String!
+  sbtiAligned: Boolean!
+  griReference: String
+  createdAt: String!
+}
+
+type Task {
+  id: ID!
+  title: String!
+  description: String
+  status: String!
+  priority: String!
+  assignee: String
+  department: String
+  griReference: String
+  dueDate: String
+  hashLock: String
+  createdAt: String!
+}
+
+type CompanyProfile {
+  id: ID!
+  companyName: String!
+  industry: String
+  employeeCount: Int
+  revenueTwd: Float
+  capitalTwd: Float
+  locations: [String!]!
+  esgGoals: String
+  reportingYear: Int!
+}
+
+type GRIDisclosure {
+  id: ID!
+  code: String!
+  title: String!
+  category: String!
+  status: String!
+  department: String
+  priority: String
+  isNew: Boolean!
+}
+
+type AdvisorySession {
+  id: ID!
+  userId: String!
+  persona: String!
+  title: String
+  messages: String
+  createdAt: String!
+}
+
+type VerifyResult {
+  valid: Boolean!
+  message: String!
+  hashMatch: Boolean!
+  timestamp: String!
+}
+
+# --- Inputs ---
+
+input ESGMetricInput {
+  id: ID
+  companyId: String
+  category: String!
+  metricName: String!
+  metricValue: Float
+  unit: String
+  year: Int!
+  griStandard: String
+  sourceOrigin: String
+}
+
+input EvidenceInput {
+  fileName: String!
+  fileType: String
+  category: String
+  griReference: String
+  uploader: String!
+  sourceUrl: String
+}
+
+input TaskInput {
+  title: String!
+  description: String
+  status: String
+  priority: String
+  assignee: String
+  department: String
+  griReference: String
+  dueDate: String
+}
+
+input AuditLogInput {
+  action: String!
+  resource: String
+  userName: String!
+  department: String
+  griReference: String
+  t5Tag: String
+  details: String
+}
+
+input MilestoneInput {
+  id: ID
+  title: String!
+  description: String
+  targetYear: Int!
+  category: String
+  targetValue: Float
+  currentValue: Float
+  unit: String
+  status: String
+  sbtiAligned: Boolean
+  griReference: String
+}
+
+input CompanyProfileInput {
+  companyName: String!
+  industry: String
+  employeeCount: Int
+  revenueTwd: Float
+  capitalTwd: Float
+  locations: [String!]
+  esgGoals: String
+  reportingYear: Int
+}

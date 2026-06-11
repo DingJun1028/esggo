@@ -1,0 +1,12 @@
+{
+  "name": "esggo-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
