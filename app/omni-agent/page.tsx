@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +18,7 @@ import { BrandStatusDot } from '../../components/brand';
 import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
 import { OmniPageConfig } from '../../lib/page-config';
+import HermesEvolutionPanel from '../../components/omni/HermesEvolutionPanel';
 
 /**
  * Full-Stack Bidirectional TypeScript Models
@@ -197,6 +198,11 @@ export default function OmniAgentAgentPage() {
                     </div>
                     <Bot size={140} className="absolute -bottom-10 -right-10 text-berkeley-blue/5 rotate-12" />
                   </Card>
+                </div>
+
+                {/* Hermes Evolution Panel - Full Width */}
+                <div className="lg:col-span-12">
+                  <HermesEvolutionPanel />
                 </div>
 
                 <div className="lg:col-span-4 space-y-8">
