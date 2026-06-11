@@ -5,7 +5,10 @@
       "path": "c:\\Project\\esggo\\esggo\\.kilo\\worktrees\\luxurious-marble",
       "parentBranch": "main",
       "createdAt": "2026-06-02T02:23:26.984Z",
-      "remote": "origin"
+      "remote": "origin",
+      "prNumber": 20,
+      "prUrl": "https://github.com/DingJun1028/esggo/pull/20",
+      "prState": "merged"
     }
   },
   "sessions": {
@@ -20,7 +23,7 @@
   },
   "tabOrder": {
     "local": [
-      "ses_17768c3b7ffe6pz2F9Gl7MXFak"
+      "pending:1"
     ]
   },
   "worktreeOrder": [

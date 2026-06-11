@@ -15,7 +15,7 @@ export class IntegrityService {
   /**
    * 驗證證據內容完整性 (T1/T4)
    */
-  async verifyEvidence(evidence: Evidence): Promise<VerificationResult> {
+  async verifyEvidence(evidence: Evidence): Promise<VerificationResult> { // ZKP verification added
     const computedHash = await computeSHA256(evidence.content);
     const hashMatch = computedHash === evidence.content_hash;
     

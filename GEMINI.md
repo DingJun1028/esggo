@@ -55,3 +55,11 @@ This constitution anchors ESGGO 善向永續/System under the Sacred Trinity: Pl
   > **萬能至尊對齊 (Universal to Omni Alignment)：** 系統設計語彙統一採用「Omni」前綴，象徵三位一體的全知全能特性。所有通用 UI 元件皆已遷移至 Omni 命名空間。**（註：Omni 於 UI 元件層級之中文對應為「萬能」，例如「萬能元件」；系統中原有的「全通」概念，如「全通之心」，予以保留且互不干涉。）**
 - **Collision Resolution:** To respect the 5T protocol components and prevent namespace overlap, foundational UI structures adopt a `Base` suffix. For instance, `UniversalCard` resolves to `OmniBaseCard`, preserving the integrity of the 5T-compliant `OmniCard`.
   > **衝突解析 (Collision Resolution)：** 為尊重 5T 協議元件並防止命名空間重疊，基礎 UI 結構採用 `Base` 後綴。例如，`UniversalCard` 被重命名為 `OmniBaseCard`，以確保 5T 標準之 `OmniCard` 的神聖不可侵犯性。
+
+## 5. 技能衝突解決策略 (Skill Conflict Resolution Strategy)
+- **衝突現狀 (Current State of Conflicts):** 本專案發現技能（Skill）定義存在多重來源衝突。專案目錄下的技能 `C:\Project\esggo\esggo\.agents\skills\` 會覆寫全域安裝的技能 (`C:\Users\Administrator\.gemini\skills\`) 以及來自擴充套件的技能 (`C:\Users\Administrator\.gemini\extensions\data-agent-kit-starter-pack\skills\`)。
+- **解決原則 (Resolution Principle):** 專案層級的技能定義將被優先採用。這意味著，當相同名稱的技能存在於不同位置時，系統會自動使用本專案 `.agents\skills\` 目錄中的版本。
+- **處理建議 (Recommended Action)::** 由於專案技能已優先接管，這些衝突警告通常不會影響本專案的功能運作。因此，可視情況選擇：
+    1. **忽略警告：** 繼續開發，因為專案的預期行為已透過專案層級的技能得到保障。
+    2. **手動清理（由使用者執行）：** 若希望消除這些警告訊息，需要手動從全域或擴充套件目錄中刪除重複的技能檔案。**請注意，此操作不在自動化代理的執行範圍內，且需謹慎執行，避免影響其他專案。**
+- **自動化代理限制 (Automated Agent Limitations):** 自動化代理無法直接修改或重新配置 `C:\Users\Administrator\.gemini\` 目錄下的檔案或全域技能加載路徑。因此，任何全域範圍的清理或配置變更都需要使用者手動執行。

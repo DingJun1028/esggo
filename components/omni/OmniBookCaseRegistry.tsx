@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Database, Plus, RefreshCw, FileText, CheckCircle, Search, Loader2 } from 'lucide-react';
 
 import { IOmniComponent } from './types';
-import { useToast } from '@/components/ui';
+import { useToast } from "@/hooks/use-toast";
 import { RecordLifecycleStatus } from '@/shared-types/status';
 import { OmniZKPBadge } from './OmniZKPBadge';
 

@@ -30,8 +30,10 @@ describe('OmniMemorySync', () => {
     };
     
     // Mock the sync methods
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(sync as any, 'syncWithRetry').mockResolvedValue(undefined);
     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (sync as any).handleEventSaved(mockEvent);
     expect(sync['syncWithRetry']).toHaveBeenCalled();
   });

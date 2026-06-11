@@ -12,9 +12,12 @@ evidence: "docs\wiki\WIKI_INDEX.md"
 *   [[00-SYS-待編號-docs\SYSTEM_ARCHITECTURE docs\SYSTEM_ARCHITECTURE]](docs\SYSTEM_ARCHITECTURE.md)
 
 ### 01-GOV 治理規範 (Governance)
-*   _尚無文件_
+*   [[01-GOV-ZKP-001-IMPLEMENTATION 零知識證明實作]](01-GOV/ZKP-implementation.md)
 
 ### 02-DEV 開發標準 (Development)
+*   [[02-DEV-TMPL-100-萬能需求模板]](02-DEV/template-universal-requirements.md)
+*   [[02-DEV-REQ-002-SUSTAINWRITE 永續撰寫需求]](02-DEV/REQ-002-SUSTAINWRITE.md)
+*   [[02-DEV-TMPL-003-Zero-Compute-Expert 零算力專家模板]](02-DEV/compute.yaml)
 *   [[02-DEV-001-WIKI_FUNCTION_FLOW WIKI_FUNCTION_FLOW]](WIKI_FUNCTION_FLOW.md)
 *   [[02-DEV-002-VERCEL_ENV_SETUP VERCEL_ENV_SETUP]](VERCEL_ENV_SETUP.md)
 *   [[02-DEV-003-implementation_plan implementation_plan]](implementation_plan.md)
