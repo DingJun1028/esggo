@@ -18,9 +18,13 @@ async function runGemma4Test() {
   console.log('🚀 [Test] Sending request to OmniAgent (Gemma 4)...');
 
   try {
+    // Adding X-Omni-Token header to authenticate against the gateway
     const response = await fetch(GATEWAY_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Omni-Token': process.env.OMNI_TOKEN || 'test-token'
+      },
       body: JSON.stringify(payload)
     });
 

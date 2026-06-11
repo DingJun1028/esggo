@@ -1,4 +1,10 @@
 
+## 2024-06-11 - [Missing Authentication on Sensitive AI Endpoint]
+**Vulnerability:** The AI gateway service `omniagent-gateway/omni-server.mjs` exposes a `POST /execute` endpoint that acts as a proxy to LLMs like Gemini and OpenRouter without requiring any form of authentication or API key, making it susceptible to unauthorized access and API quota depletion (billing abuse).
+**Learning:** Even internal gateways or proxy services must authenticate requests, especially when they broker expensive or quota-limited AI tasks, to prevent unauthorized external or unauthorized internal lateral access.
+**Prevention:** Always implement robust authentication logic (such as an API key via an `Authorization` or custom `X-Omni-Token` header) and fail securely (e.g., throwing a 500 error if the configuration secret is completely missing rather than failing open).
+
+
 ## 2026-06-11 - Omni Restoration & Causality Pillar
 
 **Vulnerability:**
@@ -65,4 +71,5 @@ All future core components must implement the updated `IComponentCore` interface
 **Vulnerability:** Found a critical hardcoded fallback secret (`'mock_secret_fallback'`) in `app/api/omni-gateway/route.ts` used when `process.env.BLUE_CC_TOKEN` is unset. This allows trivial authentication bypasses by passing the fallback string as a Bearer token and allows deterministic generation of the ZKP seal (HMAC).
 **Learning:** Hardcoded development placeholders are easily overlooked and left behind during deployment. This mirrors earlier findings regarding hardcoded fallback test logic exposing production endpoints.
 **Prevention:** Remove fallback secrets completely and configure variables to explicitly bind to environment variables (`const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;`). Additionally, introduce early termination logic (like throwing an Error) during critical cryptographic operations (e.g., `generateZkpSeal`) if the required environment variables are absent.
+
 
