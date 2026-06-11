@@ -88,6 +88,7 @@ const NAV_GROUPS: NavGroup[] = [
     title: 'SYSTEM',
     items: [
       { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
+      { href: '/omni-notes', label: '萬能筆記', sub: 'OmniNotes', icon: FileText, badge: 'NEW' },
       { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen, badge: 'NEW' },
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
