@@ -88,6 +88,19 @@ export interface OmniAmendmentRequest {
   status: 'Pending' | 'Approved' | 'Rejected';
 }
 
+export interface IWuZuoMiaoDe extends IComponentCore {
+  readonly state: "Awakened" | "Repairing" | "Calibrating" | "Stable";
+ 
+  /** 圓通無礙：流轉控制 (Seamless Flow) */
+  stream: <T>(data: T) => void;
+ 
+  /** 無作妙德：自發治理 (Spontaneous Virtue) */
+  governance: {
+    seal: (data: any) => Readonly<any>;
+    purify: (entropyLevel: number) => void;
+  };
+}
+
 export interface ESGMetric extends IComponentCore {
   category: 'Environmental' | 'Social' | 'Governance';
   name: string;
