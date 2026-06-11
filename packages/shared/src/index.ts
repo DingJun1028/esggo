@@ -48,10 +48,13 @@ export interface IComponentCore {
   readonly timestamp: number;      // [通 - Transferful] Trackable (可追蹤)
   readonly formula: string;        // [善 - Thankful] Transparent (可透明)
   readonly impactMetric: string;   // [美 - Tasteful] Tangible (可感知)
-  readonly status: "Trustworthy";  // [信 - Trustful] Trustworthy (不可篡改)
+  readonly status: "Pending" | "Verified" | "Trustworthy"; // Updated lifecycle status
   
   /** 證據佐證庫 (Evidence Vault) */
   evidence: Record<string, any>;
+
+  /** 🧠 ZK-Privacy Proof (Must be present before final seal) */
+  zkpProof?: ZKPProof;
   
   /** 🔒 不可篡改封印 */
   lock(): void; 
