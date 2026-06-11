@@ -13,13 +13,26 @@ export type CollaborativeADKSwarm = {
 };
 
 const GRI_CHAPTERS = [
-  { id: 'intro', title: '永續經營與策略願景', gri: 'GRI 2-22', order: 1 },
-  { id: 'ghg', title: '溫室氣體排放與減量', gri: 'GRI 305', order: 2 },
-  { id: 'labor', title: '勞雇關係與職場安全', gri: 'GRI 401', order: 3 },
-  { id: 'board', title: '公司治理與董事會效能', gri: 'GRI 2-9', order: 4 }
+  { id: 'ch1_intro', title: '企業概況與永續願景', gri: 'GRI 2-1~2-5', order: 1 },
+  { id: 'ch2_gov', title: '公司治理與誠信經營', gri: 'GRI 2-9~2-28', order: 2 },
+  { id: 'ch3_stakeholder', title: '利害關係人議合', gri: 'GRI 2-29~2-30', order: 3 },
+  { id: 'ch4_materiality', title: '重大性主題鑑別', gri: 'GRI 3-1~3-3', order: 4 },
+  { id: 'ch5_economic', title: '經濟績效與市場地位', gri: 'GRI 201', order: 5 },
+  { id: 'ch6_procurement', title: '供應鏈與採購實務', gri: 'GRI 204, 308, 414', order: 6 },
+  { id: 'ch7_anti_corruption', title: '反貪腐與反競爭行為', gri: 'GRI 205, 206', order: 7 },
+  { id: 'ch8_energy', title: '能源管理與轉型', gri: 'GRI 302', order: 8 },
+  { id: 'ch9_water', title: '水資源與廢水管理', gri: 'GRI 303', order: 9 },
+  { id: 'ch10_ghg', title: '溫室氣體排放與氣候行動', gri: 'GRI 305', order: 10 },
+  { id: 'ch11_waste', title: '資源循環與廢棄物管理', gri: 'GRI 306', order: 11 },
+  { id: 'ch12_employment', title: '勞雇關係與人才吸引', gri: 'GRI 401', order: 12 },
+  { id: 'ch13_ohs', title: '職業安全與健康', gri: 'GRI 403', order: 13 },
+  { id: 'ch14_training', title: '多元培訓與平權', gri: 'GRI 404, 405', order: 14 },
+  { id: 'ch15_community', title: '在地社區與產品責任', gri: 'GRI 413, 416', order: 15 }
 ];
 
 import { OmniAgentBus, omniAgentBus } from './omni-agent-bus';
+import { sustainWriteZeroCompute } from './sustain-scribe-zero-compute';
+import { sustainScribe } from './sustain-scribe';
 export { omniAgentBus };
 
 /**
@@ -138,74 +151,39 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
 
   private async runPilotMission(context?: Record<string, unknown>): Promise<MissionResult> {
     const ctx = context || {};
-    console.log(`[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot with ${GRI_CHAPTERS.length} chapters...`);
-    omniAgentBus.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot', totalChapters: GRI_CHAPTERS.length });
+    const companyId = (ctx.companyId as string) || 'default';
+    const reportYear = (ctx.reportYear as string) || new Date().getFullYear().toString();
 
-    const results = [];
+    console.log(`[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot (Zero-Compute Expert Mode)...`);
+    omniAgentBus.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot - Zero Compute', companyId, reportYear });
 
-    for (const chapter of GRI_CHAPTERS) {
-      console.log(`[OmniCommander] Processing chapter: ${chapter.id} (${chapter.title})`);
-      omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Generating content for ${chapter.title}` });
-      
-      const researcherAgent = this.swarm.getAgent('ESG_Researcher');
-      if (!researcherAgent) {
-        console.error(`[OmniCommander] ESG_Researcher not found in swarm for chapter ${chapter.id}`);
-        continue;
-      }
+    try {
+      const reportData = await sustainWriteZeroCompute.generateFullReport({
+        companyId,
+        reportYear
+      });
 
-      try {
-        const genResponse = (await researcherAgent.run(`Write a detailed professional draft for the ESG report chapter: ${chapter.title} (${chapter.gri}).`, ctx)) as any;
+      console.log(`[OmniCommander] MISSION COMPLETE. Generated ${reportData.totalWords} words across ${reportData.chapters.length} chapters.`);
+      omniAgentBus.publish('MISSION_COMPLETE', { 
+        mission: 'Autonomous SustainWrite Pilot', 
+        totalSealed: reportData.chapters.length,
+        totalWords: reportData.totalWords 
+      });
 
-        if (!genResponse.success || !genResponse.output) {
-          const errorMsg = genResponse.error || 'No output generated';
-          console.error(`[OmniCommander] Generation failed for ${chapter.id}:`, errorMsg);
-          omniAgentBus.publish('AGENT_ERROR', { agent: 'ESG_Researcher', chapter: chapter.id, error: errorMsg });
-          continue;
-        }
-
-        const content = genResponse.output;
-        console.log(`[OmniCommander] Generated ${content.length} chars for ${chapter.id}`);
-        const hash = createHash('sha256').update(String(content)).digest('hex');
-
-        await saveSustainWriteSection({
-          company_id: (ctx.companyId as string) || 'default',
-          chapter_id: chapter.id,
-          chapter_name: chapter.title,
-          content: content,
-          content_md: content,
-          status: 'completed',
-          chapter_order: chapter.order,
-          gri_references: [chapter.gri],
-          hash_lock: hash
-        });
-
-        omniAgentBus.publish('5T_SEAL', { gate: 'T4', chapter: chapter.id, hash });
-        results.push({ chapter: chapter.id, status: 'sealed', hash });
-
-        // Phase 14: Sync to Notion
-        const strategist = this.swarm.getAgent('ESG_Strategist');
-        if (strategist) {
-          omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Strategist', task: `Syncing ${chapter.title} to Notion` });
-          await strategist.run(`Create a Notion page for chapter ${chapter.title}`, { 
-            parentId: 'notion-workspace-root', 
-            title: `[GRI 2024] ${chapter.title}`,
-            content: content 
-          });
-        }
-      } catch (err: any) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        console.error(`[OmniCommander] Error in chapter ${chapter.id}:`, errorMessage);
-      }
+      return {
+        success: true,
+        message: `Autonomous Pilot (Zero-Compute) Complete. Sealed ${reportData.chapters.length} chapters (${reportData.totalWords} words).`,
+        results: reportData.chapters
+      };
+    } catch (err: any) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error(`[OmniCommander] Pilot Mission Error:`, errorMessage);
+      return {
+        success: false,
+        message: 'Pilot Mission Failed',
+        error: errorMessage
+      };
     }
-
-    console.log(`[OmniCommander] MISSION COMPLETE. Sealed ${results.length} chapters.`);
-    omniAgentBus.publish('MISSION_COMPLETE', { mission: 'Autonomous SustainWrite Pilot', totalSealed: results.length });
-
-    return {
-      success: true,
-      message: `Autonomous Pilot Complete. Sealed ${results.length} chapters.`,
-      results
-    };
   }
 
   private async runNCBDBMigration(context?: Record<string, unknown>): Promise<MissionResult> {

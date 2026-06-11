@@ -19,6 +19,7 @@ export interface ExpansionTask {
   griReference: string;
   context: Record<string, unknown>;
   depth?: number; // 1: 摘要 (500字), 2: 標準 (2000字), 3: 專家級 (5000+ 字)
+  order?: number;
 }
 
 export class SustainWriteScribe {
@@ -62,7 +63,7 @@ export class SustainWriteScribe {
       content: fullContent,
       content_md: fullContent,
       status: 'completed',
-      chapter_order: 1,
+      chapter_order: task.order || 1,
       gri_references: [griReference],
       hash_lock: finalHash
     });

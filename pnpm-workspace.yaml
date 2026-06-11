@@ -3,6 +3,7 @@ allowBuilds:
   '@firebase/util': false
   '@newrelic/fn-inspect': false
   '@newrelic/native-metrics': false
+  better-sqlite3: set this to true or false
   core-js: false
   esbuild: false
   protobufjs: false

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
@@ -29,8 +29,8 @@ export default function ProofCenterPage() {
       } else {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm糧', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
+          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
           { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
       }
@@ -38,8 +38,8 @@ export default function ProofCenterPage() {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm糧', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: 'unit', hash_lock: null, source_origin: 'Manual' },
+        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
       setLoading(false);
@@ -61,11 +61,11 @@ export default function ProofCenterPage() {
       if (resData.success && resData.hashLock) {
         setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
       } else {
-        alert('撠憭望? (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
     } catch (error) {
       console.error('Seal exception:', error);
-      alert('Vault Connection Error');
+      alert('無法連線至封印金庫 (Vault Connection Error)。');
     } finally {
       setSealingId(null);
     }
@@ -81,13 +81,13 @@ export default function ProofCenterPage() {
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
-        alert('Verification Success: 5T Protocol Compliant');
+        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
       } else {
-        alert('Verification Failed: Invalid Hash Lock');
+        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
       }
     } catch (e) {
       console.error('Verify exception:', e);
-      alert('Vault Connection Error');
+      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
     } finally {
       setVerifyingId(null);
     }
@@ -114,7 +114,7 @@ export default function ProofCenterPage() {
           {val.substring(0, 8)}...
         </OmniBadge>
       ) : (
-        <OmniBadge variant="default" size="sm">未封裝</OmniBadge>
+        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
       )
     ) },
     { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
@@ -126,7 +126,7 @@ export default function ProofCenterPage() {
             className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 撠
+            T5 封印
           </button>
         )}
         <button 
@@ -140,13 +140,6 @@ export default function ProofCenterPage() {
       </div>
     ) }
   ];
-
-  
-  const p = {
-    id: `ESG-${"OMN"}`,
-    title: 'Proof Center',
-    sub: 'Proof Center Management'
-  };
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
@@ -169,9 +162,10 @@ export default function ProofCenterPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">瑼Ｙ揣</OmniButton>
+            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
             <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              ?啣?蝝??            </OmniButton>
+              新增紀錄
+            </OmniButton>
           </div>
         </header>
 
@@ -179,7 +173,7 @@ export default function ProofCenterPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍節點</span>
+              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
@@ -188,7 +182,7 @@ export default function ProofCenterPage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 撽??</span>
+              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -197,7 +191,7 @@ export default function ProofCenterPage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯</span>
+              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
@@ -210,7 +204,7 @@ export default function ProofCenterPage() {
           <div className="lg:col-span-3 space-y-6">
             <OmniBaseCard 
               variant="default" 
-              title="業務資料預覽" 
+              title="業務資料視圖" 
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
@@ -225,19 +219,19 @@ export default function ProofCenterPage() {
           <div className="space-y-6">
             <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent 核心"
-              subtitle="AI 能力中心"
+              title="OmniAgent 輔助" 
+              subtitle="AI 智能上下文"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此專案具備 <strong>全端智能核心</strong>，符合嚴格 TypeScript 標準。
+                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">閮剛??? (Trinity UIUX)</h4>
+                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
                   <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>摰Ｘ擃? (Customer Experience)</li>
-                    <li>璆剖??摩 (Business Logic)</li>
-                    <li>璆菔蝢飛 (Liquid Glass Cyan)</li>
+                    <li>客戶體驗 (Customer Experience)</li>
+                    <li>業務邏輯 (Business Logic)</li>
+                    <li>極致美學 (Liquid Glass Cyan)</li>
                   </ul>
                 </div>
               </div>
@@ -249,4 +243,3 @@ export default function ProofCenterPage() {
     </div>
   );
 }
-
