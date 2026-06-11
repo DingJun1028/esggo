@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Database, Plus, RefreshCw, FileText, CheckCircle, Search, Loader2 } from 'lucide-react';
 
 import { IOmniComponent } from './types';
-import { useToast } from '@/components/ui';
+const toast = (msg: string, type?: string) => console.log(`[Toast ${type}]: ${msg}`);
 import { RecordLifecycleStatus } from '@/shared-types/status';
 import { OmniZKPBadge } from './OmniZKPBadge';
 
@@ -48,7 +48,6 @@ const MOCK_DATA: IOmniComponent[] = [
 ];
 
 export default function OmniBookCaseRegistry() {
-  const { toast } = useToast();
   const [components, setComponents] = useState<IOmniComponent[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('All');
