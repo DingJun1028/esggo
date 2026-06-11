@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email.lower() == 'dingjunhong1028@gmail.com' &&
+        request.auth.token.email_verified == true
+      );
+    }
+
+    // Connection Test
+    match /_connection_test/{docId} {
+      allow get: if isSignedIn() && isValidId(docId);
+    }
+
+    // User Activities
+    match /user_activities/{activityId} {
+      allow create: if isSignedIn() && isValidUserActivity(incoming());
+      allow list: if isSignedIn() && resource.data.action is string;
+      allow get: if isSignedIn();
+    }
+
+    function isValidUserActivity(data) {
+      return data.keys().hasAll(['action', 'timestamp', 'serverTime']) &&
+             data.action is string && data.action.size() <= 200 &&
+             data.timestamp is string &&
+             data.serverTime == request.time;
+    }
+
+    // ESG Reports
+    match /esg_reports/{reportId} {
+      allow create: if isSignedIn() && isValidESGReport(incoming());
+      allow read: if isSignedIn();
+      allow update: if isSignedIn() && isValidESGReport(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['title', 'status', 'progress', 'sections', 'updatedAt'])
+      );
+      allow delete: if isAdmin();
+    }
+
+    function isValidESGReport(data) {
+      return data.keys().hasAll(['title', 'year', 'status', 'progress']) &&
+             data.title is string && data.title.size() <= 500 &&
+             data.year is int &&
+             data.status in ['draft', 'completed'] &&
+             data.progress is number;
+    }
+  }
+}

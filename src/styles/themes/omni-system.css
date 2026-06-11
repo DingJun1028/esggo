@@ -1,0 +1,53 @@
+/* ESGGO Classic System Theme - Follow System Preference */
+/* Default to Light Theme */
+:root {
+  --theme-bg-primary: #FFFFFF;
+  --theme-bg-secondary: #F8F9FA;
+  --theme-bg-tertiary: #F1F5F9;
+  --theme-bg-elevated: rgba(255, 255, 255, 0.85);
+  --theme-bg-overlay: rgba(0, 50, 98, 0.3);
+  --theme-text-primary: #0F172A;
+  --theme-text-secondary: #334155;
+  --theme-text-muted: #64748B;
+  --theme-text-disabled: #94A3B8;
+  --theme-text-inverse: #FFFFFF;
+  --theme-primary: #003262;
+  --theme-primary-hover: #1A3A5C;
+  --theme-accent: #FDB515;
+  --theme-secondary: #3B7EA1;
+  --theme-border: #E2E8F0;
+  --theme-divider: #F1F5F9;
+  --theme-surface-glass: rgba(255, 255, 255, 0.7);
+}
+
+/* System Dark Theme Override */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme-bg-primary: #020617;
+    --theme-bg-secondary: #0A0F1E;
+    --theme-bg-tertiary: #1E293B;
+    --theme-bg-elevated: rgba(30, 41, 59, 0.85);
+    --theme-bg-overlay: rgba(0, 0, 0, 0.5);
+    --theme-text-primary: #F8FAFC;
+    --theme-text-secondary: #CBD5E1;
+    --theme-text-muted: #64748B;
+    --theme-text-disabled: #475569;
+    --theme-text-inverse: #020617;
+    --theme-primary: #FDB515;
+    --theme-primary-hover: #FCC136;
+    --theme-accent: #3B7EA1;
+    --theme-secondary: #B9D9EB;
+    --theme-border: #334155;
+    --theme-divider: #1E293B;
+    --theme-surface-glass: rgba(30, 41, 59, 0.7);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,643 @@
+extend type Query {
+  """
+  ✨ Look up a single `AuditRecord` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  auditRecord(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: AuditRecord_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AuditRecord_FirstRow
+  ): AuditRecord @fdc_generated(from: "AuditRecord", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `CompanyMetric` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  companyMetric(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: CompanyMetric_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: CompanyMetric_FirstRow
+  ): CompanyMetric @fdc_generated(from: "CompanyMetric", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `CompanyProfile` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  companyProfile(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: CompanyProfile_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: CompanyProfile_FirstRow
+  ): CompanyProfile @fdc_generated(from: "CompanyProfile", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `EternalMemory` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  eternalMemory(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: EternalMemory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: EternalMemory_FirstRow
+  ): EternalMemory @fdc_generated(from: "EternalMemory", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RegulatoryPolicy` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  regulatoryPolicy(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RegulatoryPolicy_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RegulatoryPolicy_FirstRow
+  ): RegulatoryPolicy @fdc_generated(from: "RegulatoryPolicy", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Report` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  report(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Report_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Report_FirstRow
+  ): Report @fdc_generated(from: "Report", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ReportSection` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  reportSection(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ReportSection_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ReportSection_FirstRow
+  ): ReportSection @fdc_generated(from: "ReportSection", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `RoadmapMilestone` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  roadmapMilestone(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: RoadmapMilestone_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: RoadmapMilestone_FirstRow
+  ): RoadmapMilestone @fdc_generated(from: "RoadmapMilestone", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `ScrapedArticle` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  scrapedArticle(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ScrapedArticle_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ScrapedArticle_FirstRow
+  ): ScrapedArticle @fdc_generated(from: "ScrapedArticle", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `SwarmAgentTask` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  swarmAgentTask(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: SwarmAgentTask_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: SwarmAgentTask_FirstRow
+  ): SwarmAgentTask @fdc_generated(from: "SwarmAgentTask", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Task` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  task(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Task_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Task_FirstRow
+  ): Task @fdc_generated(from: "Task", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `User` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  user(
+    """
+    The unique ID of the object.
+    """
+    id: String
+
+    """
+    ✨ `_expr` server value variant of `id` (The unique ID of the object.)
+    """
+    id_expr: String_Expr
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User @fdc_generated(from: "User", purpose: QUERY_SINGLE)
+  """
+  ✨ List `AuditRecord` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  auditRecords(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AuditRecord_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AuditRecord_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AuditRecord_Having
+  ): [AuditRecord!]! @fdc_generated(from: "AuditRecord", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `CompanyMetric` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  companyMetrics(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: CompanyMetric_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [CompanyMetric_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: CompanyMetric_Having
+  ): [CompanyMetric!]! @fdc_generated(from: "CompanyMetric", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `CompanyProfile` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  companyProfiles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: CompanyProfile_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [CompanyProfile_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: CompanyProfile_Having
+  ): [CompanyProfile!]! @fdc_generated(from: "CompanyProfile", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `EternalMemory` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  eternalMemories(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: EternalMemory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [EternalMemory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: EternalMemory_Having
+  ): [EternalMemory!]! @fdc_generated(from: "EternalMemory", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RegulatoryPolicy` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  regulatoryPolicies(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RegulatoryPolicy_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RegulatoryPolicy_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RegulatoryPolicy_Having
+  ): [RegulatoryPolicy!]! @fdc_generated(from: "RegulatoryPolicy", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Report` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  reports(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Report_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Report_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Report_Having
+  ): [Report!]! @fdc_generated(from: "Report", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ReportSection` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  reportSections(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ReportSection_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ReportSection_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ReportSection_Having
+  ): [ReportSection!]! @fdc_generated(from: "ReportSection", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `RoadmapMilestone` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  roadmapMilestones(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: RoadmapMilestone_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [RoadmapMilestone_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: RoadmapMilestone_Having
+  ): [RoadmapMilestone!]! @fdc_generated(from: "RoadmapMilestone", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `ScrapedArticle` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  scrapedArticles(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: ScrapedArticle_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [ScrapedArticle_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: ScrapedArticle_Having
+  ): [ScrapedArticle!]! @fdc_generated(from: "ScrapedArticle", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `SwarmAgentTask` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  swarmAgentTasks(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: SwarmAgentTask_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [SwarmAgentTask_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: SwarmAgentTask_Having
+  ): [SwarmAgentTask!]! @fdc_generated(from: "SwarmAgentTask", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Task` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  tasks(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Task_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Task_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Task_Having
+  ): [Task!]! @fdc_generated(from: "Task", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `User` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  users(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: User_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [User_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: User_Having
+  ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
+}

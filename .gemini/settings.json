@@ -1,0 +1,19 @@
+{
+  "experimental": {
+    "gemmaModelRouter": {
+      "enabled": true,
+      "classifier": {
+        "host": "http://localhost:9379",
+        "model": "google/gemma-4-E4B-it"
+      }
+    }
+  },
+  "mcpServers": {
+    "render": {
+      "url": "https://mcp.render.com/mcp",
+      "headers": {
+        "Authorization": "Bearer rnd_gjax5HAL2EukYEkrEVd9mv3qXGfj"
+      }
+    }
+  }
+}

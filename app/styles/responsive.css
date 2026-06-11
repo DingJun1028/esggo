@@ -1,0 +1,102 @@
+/* RWD Utilities & Responsive Design System for ESG GO Platform */
+
+/* ─── Responsive Spacing & Sizing ────────────────────────────────── */
+/* Mobile-first base styles, scaled up with breakpoints */
+
+/* Panel/Modal responsive sizing */
+.responsive-panel {
+  @apply w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl h-auto max-h-[80vh] overflow-auto;
+  @apply bg-white/90 backdrop-blur-md border border-white/20 rounded-xl shadow-lg;
+}
+
+/* Card responsive grid system */
+.responsive-card {
+  @apply w-full sm:w-1/2 lg:w-1/3 p-4 bg-white rounded-lg shadow-sm;
+  @apply transition-all duration-300 hover:shadow-md hover:scale-[1.02];
+}
+
+/* Toast/Notification responsive sizing */
+.responsive-toast {
+  @apply w-full max-w-xs sm:max-w-sm md:max-w-md p-4 bg-white/90 backdrop-blur-md rounded-lg shadow-lg;
+  @apply border border-white/20;
+}
+
+/* Navigation drawer */
+.responsive-drawer {
+  @apply fixed inset-y-0 left-0 z-[60] w-64 sm:w-80 md:w-96;
+  @apply bg-white/95 backdrop-blur-xl border-r border-white/20 shadow-2xl;
+  @apply transform transition-transform duration-300 ease-in-out;
+}
+
+/* Touch-friendly hit areas */
+.responsive-touch-target {
+  @apply min-h-12 min-w-12 py-3 px-4;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+}
+
+/* ─── Typography Responsive Scaling ─────────────────────────────── */
+.responsive-text {
+  @apply text-base sm:text-lg md:text-xl lg:text-2xl;
+}
+
+.responsive-text-sm {
+  @apply text-sm sm:text-base;
+}
+
+.responsive-text-xs {
+  @apply text-xs sm:text-sm;
+}
+
+/* ─── Layout Grid Systems ────────────────────────────────────────── */
+/* Responsive grid layouts */
+.responsive-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
+
+.responsive-grid-tight {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2;
+}
+
+.responsive-grid-fluid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 overflow-x-auto;
+}
+
+/* ─── Interactive Elements ───────────────────────────────────────── */
+.responsive-button {
+  @apply responsive-touch-target font-medium rounded-lg transition-all duration-200;
+}
+
+.responsive-input {
+  @apply w-full min-h-11 px-3 py-2 text-sm sm:text-base;
+  @apply border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+/* ─── Responsive Breakpoints ────────────────────────────────────── */
+/* Tailwind breakpoint utilities - ensure consistent usage */
+
+/* Mobile (320px and up - default) */
+/* Tablet (640px and up - sm:) */
+/* Desktop (768px and up - md:) */
+/* Large desktop (1024px and up - lg:) */
+/* Extra large (1280px and up - xl:) */
+/* 2XL (1536px and up - 2xl:) */
+
+/* ─── Accessibility Responsive ────────────────────────────────────── */
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .responsive-panel,
+  .responsive-card,
+  .responsive-toast,
+  .responsive-drawer,
+  .responsive-button,
+  .responsive-input {
+    transition: none;
+  }
+}
+
+/* Focus indicators for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .responsive-touch-target {
+    @apply ring-2 ring-blue-500 ring-offset-2;
+  }
+}
