@@ -25,7 +25,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.80",
+    "@ai-sdk/google": "^3.0.81",
     "@apollo/client": "^4.2.2",
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@dataconnect/generated": "file:src/dataconnect-generated",
