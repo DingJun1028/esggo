@@ -119,7 +119,7 @@ export class OmniTableClient {
 
   constructor(config: OmniTableClientConfig) {
     this.token = config.token;
-    this.baseUrl = (config.baseUrl || 'https://omni-table.ai').replace(/\/$/, '');
+    this.baseUrl = (config.baseUrl || process.env.OMNITABLE_BASE_URL || 'https://api.apitable.com/fusion/v1').replace(/\/$/, '');
   }
 
   private get headers(): HeadersInit {

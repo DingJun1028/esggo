@@ -18,6 +18,11 @@ jobs:
         with:
           path: ./esggo-project
           
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          
       - name: 安裝 Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,13 +47,13 @@ jobs:
         
       - name: 執行測試
         working-directory: ./esggo-project
-        run: npm test
+        run: pnpm test
         
       - name: 測試 JES 監控
         working-directory: ./esggo-project
         run: |
           echo "=== 測試 JES 狀態指令 ==="
-          node cli/omni.mjs status
+          node cli/omni.mjs jes status
           echo "=== 測試 Jules 程式碼生成 ==="
           node cli/omni.mjs codegen "產生一個簡單的 Node.js 函數" --dry-run
           
@@ -81,7 +86,7 @@ jobs:
       - name: 執行安全掃描
         working-directory: ./esggo-project
         run: |
-          npm audit --audit-level moderate
+          pnpm audit --audit-level moderate
           
       - name: 檢查環境變數
         run: |

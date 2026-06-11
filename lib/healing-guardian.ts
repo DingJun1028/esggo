@@ -24,7 +24,9 @@ export class HealingGuardian {
     const action = sensorPayload.action as string | undefined;
     const table = sensorPayload.table as string | undefined;
     const record = sensorPayload.record as Record<string, unknown> | undefined;
-    console.log(`[HealingGuardian] 📡 Intercepted ${action ?? 'unknown'} on ${table ?? 'unknown'}. Evaluating drift...`);
+    const userEmail = sensorPayload.user_email as string | undefined;
+
+    console.log(`[HealingGuardian] 📡 Intercepted ${action ?? 'unknown'} on ${table ?? 'unknown'} by ${userEmail ?? 'unknown'}. Evaluating drift...`);
 
     omniAgentBus.publish('WEBHOOK_RECEIVED', {
       source: 'NCBDB_Sensor',
@@ -33,6 +35,17 @@ export class HealingGuardian {
       recordId: record?.id as string | undefined,
       data: record
     });
+
+    // Evaluate Drift: If data is modified manually in NCB backend (action UPDATE or DELETE)
+    // without the proper OmniAgent/JunAiKey authorization, trigger healing.
+    const isUnauthorized = action === 'UPDATE' || action === 'DELETE';
+    if (isUnauthorized && record?.id && table) {
+      console.warn(`[HealingGuardian] 🚨 Unauthorized drift detected for ${record.id} in ${table}. Triggering Omni Healing Protocol...`);
+      // Run the healing process asynchronously so we don't block the webhook response
+      this.executeOmniHealing(record.id as string, table).catch(err => {
+        console.error(`[HealingGuardian] ❌ Healing execution failed:`, err);
+      });
+    }
   }
 
   /**

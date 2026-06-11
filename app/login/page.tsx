@@ -17,32 +17,49 @@ export default function LoginPage() {
   const router = useRouter(); // Initialize useRouter
 
   const handleCredentialResponse = async (response: any) => {
-    // Call your backend API route to verify the token
-    const res = await fetch('/api/auth/google-signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token: response.credential }),
-    });
+    setStatus('loading');
+    setErrorMessage('');
+    try {
+      const supabase = createClient();
+      // 1. Sign in to Supabase using the Google ID Token
+      const { data: sbData, error: sbError } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: response.credential,
+      });
 
-    const data = await res.json();
-    if (data.success) {
-      console.log('Google One Tap Sign-in successful:', data.user);
-      // Simulate setting legacy omni_user for compatibility with useAuth.tsx and ClientLayout
-      // Assuming 'data.user' from backend contains email, id, etc.
-      if (data.user) {
-        localStorage.setItem('omni_user', JSON.stringify({
-          email: data.user.email,
-          company_id: data.user.company_id || 'default', // Assuming company_id is returned by backend
-          id: data.user.googleId // Using googleId as the user id for omni_user
-        }));
+      if (sbError) {
+        throw sbError;
       }
-      router.push('/dashboard'); // Example redirect
-      router.refresh();
-    } else {
-      console.error('Google One Tap Sign-in failed:', data.error);
-      setErrorMessage(data.error || 'Google One Tap 認證失敗');
+
+      // 2. Call your backend API route to verify the token
+      const res = await fetch('/api/auth/google-signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: response.credential }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        console.log('Google One Tap Sign-in successful:', data.user);
+        // Simulate setting legacy omni_user for compatibility with useAuth.tsx and ClientLayout
+        if (data.user) {
+          localStorage.setItem('omni_user', JSON.stringify({
+            email: data.user.email,
+            company_id: data.user.company_id || 'default', // Assuming company_id is returned by backend
+            id: sbData.user?.id || data.user.googleId // Using Supabase user id if available, fallback to googleId
+          }));
+        }
+        setStatus('success');
+        router.push('/dashboard'); // Example redirect
+        router.refresh();
+      } else {
+        throw new Error(data.error || 'Google One Tap 認證失敗');
+      }
+    } catch (error: any) {
+      console.error('Google One Tap Sign-in failed:', error);
+      setErrorMessage(error.message || 'Google One Tap 認證失敗');
       setStatus('error');
     }
   };

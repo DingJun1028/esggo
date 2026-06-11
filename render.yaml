@@ -1,20 +1,26 @@
 services:
   - type: web
-    name: esggo-web
-    runtime: node
+    name: esggo-platform
+    env: docker
     plan: starter
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
     envVars:
+      # Next.js Settings
       - key: NODE_ENV
         value: production
-      - key: DATABASE_URL
-        fromDatabase:
-          name: esggo-db
-          property: connectionString
-
-databases:
-  - name: esggo-db
-    plan: free
-    databaseName: esggo
-    user: esggouser
+      - key: PORT
+        value: 3000
+        
+      # Security & Supabase Tri-Sync
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+        
+      # Nocodebackend Integration
+      - key: NOCODEBACKEND_API_URL
+        sync: false
+      - key: NOCODEBACKEND_API_KEY
+        sync: false
