@@ -7,7 +7,7 @@
     "build": "next build && node scripts/copy-standalone-assets.js",
     "start": "node -r dotenv/config .next/standalone/server.js",
     "dev": "ts-node server.ts",
-    "lint": "eslint src/**/*.ts",
+    "lint": "next lint",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "omni:setup": "npx tsx scripts/setup_all_tables.ts",
