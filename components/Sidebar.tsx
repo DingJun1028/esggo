@@ -261,13 +261,14 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
         {/* Logo */}
         <div className={`flex items-center justify-between px-4 py-4 ${t.logo}`}>
            <div className="flex items-center gap-2.5">
-              <div className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm",
-                sidebarTheme === 'dark' ? 'bg-[#FDB515] text-[#003262]' : 'bg-[#003262] text-white'
-              )}>GO</div>
+              <img 
+                src="https://thumbs4.imagebam.com/54/c4/da/ME1CG7QT_t.png" 
+                alt="ESGGO Logo" 
+                className="w-10 h-10 object-contain rounded"
+              />
               {!isCollapsed && (
                 <div className="fade-in">
-                  <p className={`text-sm font-bold leading-tight ${t.logoText}`}>ESG GO</p>
+                  <p className={`text-sm font-bold leading-tight ${t.logoText}`}>ESGGO</p>
                   <p className={`text-xs leading-tight ${t.logoSub}`}>善向永續</p>
                 </div>
               )}
