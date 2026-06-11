@@ -64,13 +64,14 @@ const NAV_GROUPS: NavGroup[] = [
     title: 'INSIGHTS',
     items: [
       { href: '/roadmap', label: '淨零路線圖', sub: 'Net-Zero', icon: TrendingDown },
+      { href: '/dashboard/report-builder', label: '報告生成器', sub: 'Report Builder', icon: FileText, badge: 'ZKP' },
       { href: '/publish', label: '報告發布', sub: 'Publish', icon: Globe },
       { href: '/reading-room', label: '永續閱覽室', sub: 'Reading Room', icon: BookOpen },
       { href: '/library', label: '永續智庫', sub: 'Library', icon: Layers },
       { href: '/finance', label: '永續財務', sub: 'Finance', icon: DollarSign },
       { href: '/supply-chain', label: '供應鏈透明', sub: 'Supply Chain', icon: Link2 },
       { href: '/stakeholders', label: '利害關係人', sub: 'Stakeholders', icon: Network },
-      { href: '/audit-verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: Award },
+      { href: '/verify', label: 'VerifyLink™', sub: 'ZKP Verify', icon: Award },
     ],
   },
   {
