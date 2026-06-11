@@ -10,7 +10,7 @@ import {
   UserCheck, Award, HeartHandshake, Bot, Cpu, ChevronDown,
   ChevronRight, PanelLeftClose, PanelLeftOpen, Zap, Activity,
   Settings, FlaskConical, Layers, Target, AlertTriangle, Layout,
-  DollarSign, Link2, Briefcase, Network, Sun, Moon, X
+  DollarSign, Link2, Briefcase, Network, Sun, Moon, X, Server, GitBranch
 } from 'lucide-react';
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
@@ -85,15 +85,16 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    title: 'SYSTEM',
+    title: 'OMNI SYSTEM',
     items: [
       { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
       { href: '/omni-notes', label: '萬能筆記', sub: 'OmniNotes', icon: FileText, badge: 'NEW' },
-      { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen, badge: 'NEW' },
+      { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen },
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
-      { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'NEW' },
-      { href: '/omni-agent', label: 'OmniAgent Agent', sub: 'NousResearch', icon: FlaskConical },
+      { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'AI' },
+      { href: '/omni-agent', label: 'OmniAgent', sub: 'Hermes Evolved', icon: FlaskConical },
+      { href: '/omni-gateway', label: 'OmniAgent 網關', sub: 'Gateway v3.0', icon: Server, badge: 'NEW' },
     ],
   },
 ];
