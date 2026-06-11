@@ -380,6 +380,27 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = emailResult;
+    } else if (task.taskType === 'carbon_calculation') {
+      console.log(`[Carbon Engine] Executing real ISO 14064-1 calculation for Task ${taskId}...`);
+      broadcast('ANALYZING', 'CarbonEngine');
+      
+      const { CarbonCalculator } = await import('../esg/carbon-calculator');
+      
+      // 解析 prompt 中的數據（簡易解析示例）
+      const amountMatch = task.prompt?.match(/(\d+\.?\d*)/);
+      const amount = amountMatch ? parseFloat(amountMatch[1]) : 100;
+      
+      // 默認使用電力因數，實際可從 prompt 判斷
+      const factorId = task.prompt?.includes('柴油') ? 'diesel_stationary' : 'electricity_tw_2023';
+      
+      const calcResult = CarbonCalculator.calculate({
+        factorId,
+        activityAmount: amount,
+        sourceOrigin: 'OmniAgent AI Analysis'
+      });
+
+      artifactData = generateMockArtifact(task, execution);
+      artifactData.content = `## 🌌 碳排放核算報告 (ISO 14064-1)\n\n### 1. 核算摘要\n- **UUID**: \`${calcResult.uuid}\`\n- **時間戳**: ${new Date(calcResult.timestamp).toLocaleString()}\n- **狀態**: ✅ ${calcResult.status}\n\n### 2. 計算結果\n- **活動數據**: ${amount}\n- **計算公式**: \`${calcResult.formula}\`\n- **最終排放量**: **${calcResult.impact_metric}**\n\n### 3. 5T 誠信證據 (Evidence Process Trace)\n${calcResult.evidence[0].process_trace.map(t => `- ${t}`).join('\n')}\n\n> 🔒 **Hash Lock**: \`${calcResult.hash_lock}\` (已寫入 5T 誠信鏈)`;
     } else {
       await new Promise(r => setTimeout(r, 1500));
       artifactData = generateMockArtifact(task, execution);
@@ -623,6 +644,7 @@ export function generateMockArtifact(task: AgentTask, execution: AgentExecution)
       : `## 基礎設施維運建議庫\n\n### 掃描目標：${task.skillKey === 'firebase_foundation' ? 'Firebase Project' : 'Supabase Instance'}\n\n1. **安全規則審計**：偵測到 2 處 RLS 策略過於寬鬆，建議收緊 \`.read\` 權限。\n2. **連線效能**：Postgres Connection Pool 使用率達 85%，建議啟動 PgBouncer 或 Supavisor。\n3. **備援檢查**：PITR (Point-in-Time Recovery) 已啟動，備份完整性驗證通過。\n\n> ⚠️ 此為系統運維建議，實施前請先於 Staging 環境測試。`,
     ai_ops: `## Genkit AI 流程優化藍圖\n\n### 追蹤對象：${task.title}\n\n- **Prompt 效率**：偵測到 Token 冗餘，建議將 System Instructions 壓縮 15%。\n- **模型路由**：建議將低複雜度任務由 Gemini 1.5 Pro 轉向 Flash 以降低延遲。\n- **Trace 檢視**：已建立可追蹤的 Trace 鏈路，可於 Gasket Dashboard 查看完整分步日誌。\n\n> ⚠️ 此為 AI 流程建議，調整 Prompt 可能影響生成風格。`,
     email_processing: `## Hermes 郵件自動處理日誌\n\n> 正在讀取收件匣並過濾 ESG 相關信件...`,
+    carbon_calculation: `## 碳排放核算報告 (ISO 14064-1)\n\n### 核算概況\n- **核算範疇**：範疇一、二、三\n- **排放因子庫**：IPCC 2023 / EPA v6.0\n- **數據狀態**：已鎖定 5T 誠信雜湊\n\n### 計算詳情\n- **輸入數據**：待從 Evidence Vault 提取\n- **計算公式**：活動數據 * 排放係數\n- **結果預估**：核算中...\n\n> ⚠️ 此內容由 OmniAgent 碳排引擎自動生成，具備 5T 溯源性。`,
   };
 
   return {

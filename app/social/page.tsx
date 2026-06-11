@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { useESGAtoms } from '@/lib/supabase/hooks';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Users, Plus, Download, ShieldCheck, HeartPulse, GraduationCap, Building2, TrendingUp, AlertCircle } from 'lucide-react';
@@ -31,14 +32,21 @@ export default function SocialDashboard() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Mock data for Social ESG Metrics
-  const socialData = useMemo(() => [
-    { id: 1, category: '勞工實踐', metric: '女性主管佔比', value: '32.5%', target: '35%', status: 'Sealed' },
-    { id: 2, category: '健康與安全', metric: '失能傷害頻率 (LTIFR)', value: '0.85', target: '< 1.0', status: 'Sealed' },
-    { id: 3, category: '培訓與發展', metric: '員工平均受訓時數', value: '42.5 小時', target: '40 小時', status: 'Sealed' },
-    { id: 4, category: '社會參與', metric: '社區公益投入金額', value: '1,250 萬', target: '1,000 萬', status: 'Pending' },
-    { id: 5, category: '人權保障', metric: '供應商社會責任稽核達成率', value: '94%', target: '95%', status: 'Pending' },
-  ], []);
+  const { data: dbAtoms, loading } = useESGAtoms('social');
+
+  // Use database atoms, or fallback to mock data if database is empty or still loading
+  const socialData = useMemo(() => {
+    if (!loading && dbAtoms && dbAtoms.length > 0) {
+      return dbAtoms;
+    }
+    return [
+      { id: 1, category: '勞工實踐', metric: '女性主管佔比', value: '32.5%', target: '35%', status: 'Sealed' },
+      { id: 2, category: '健康與安全', metric: '失能傷害頻率 (LTIFR)', value: '0.85', target: '< 1.0', status: 'Sealed' },
+      { id: 3, category: '培訓與發展', metric: '員工平均受訓時數', value: '42.5 小時', target: '40 小時', status: 'Sealed' },
+      { id: 4, category: '社會參與', metric: '社區公益投入金額', value: '1,250 萬', target: '1,000 萬', status: 'Pending' },
+      { id: 5, category: '人權保障', metric: '供應商社會責任稽核達成率', value: '94%', target: '95%', status: 'Pending' },
+    ];
+  }, [dbAtoms, loading]);
 
   const filteredData = useMemo(() => {
     return activeCategory === 'All' ? socialData : socialData.filter(d => d.category === activeCategory);

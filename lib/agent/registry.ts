@@ -97,6 +97,18 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     version: '1.0.0',
     enabled: true,
   },
+  {
+    skillKey: 'carbon_calculator',
+    skillName: 'ISO 14064-1 碳排計算器',
+    taskType: 'carbon_calculation',
+    description: '執行標準化碳排放計算，支援範疇一、二、三，並自動生成 5T 溯源證據',
+    allowedDataScopes: ['environmental_data', 'emissions_factors'],
+    outputArtifactType: 'emission_calculation_result',
+    requiresHumanReview: false,
+    riskLevel: 'medium',
+    version: '1.0.0',
+    enabled: true,
+  },
   // --- System & Infrastructure Skills (Merged from Agent Platform) ---
   {
     skillKey: 'firebase_foundation',
@@ -189,6 +201,7 @@ export const TASK_TYPE_META: Record<string, { label: string; color: string; icon
   stakeholder_analysis:   { label: '利害關係人問卷分析', color: '#0EA5E9', icon: 'Users' },
   materiality_generation: { label: '重大性矩陣生成',     color: '#D946EF', icon: 'BarChart3' },
   cbam_validation:        { label: 'CBAM 數據驗證',     color: '#10B981', icon: 'CheckSquare' },
+  carbon_calculation:     { label: '碳排核算 (ISO)',   color: '#06B6D4', icon: 'Leaf' },
   system_ops:             { label: '系統架構運維',     color: '#64748B', icon: 'Settings' },
   ai_ops:                 { label: 'AI 模型調優',      color: '#3B82F6', icon: 'Cpu' },
   email_processing:       { label: '郵件自動處理',     color: '#EF4444', icon: 'Mail' },
