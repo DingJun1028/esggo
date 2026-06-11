@@ -1,0 +1,11 @@
+openapi: 3.0.0
+info:
+  title: ESGGO API
+  version: 1.0.0
+  description: |
+    This is a placeholder OpenAPI specification for ESGGO.
+    The primary API is implemented via tRPC for type-safe communication.
+    External integrations can use this facade (to be implemented).
+paths: {}
+components:
+  schemas: {}

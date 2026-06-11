@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    allow:
+      - "github.com"
+      - "npm"
+    ignore:
+      - dependency-type: "devDependencies"
+        versions: [
+          "4.0.0"
+        ]
