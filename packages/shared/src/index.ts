@@ -45,20 +45,34 @@ export interface OmniGatewayResponse {
  */
 export interface IComponentCore {
   readonly uuid: string;           // [真 - Truthful] Traceable (可溯源)
+  readonly version: number;        // [通 - Transferful] Versioning support
   readonly timestamp: number;      // [通 - Transferful] Trackable (可追蹤)
   readonly formula: string;        // [善 - Thankful] Transparent (可透明)
   readonly impactMetric: string;   // [美 - Tasteful] Tangible (可感知)
-  readonly status: "Pending" | "Verified" | "Trustworthy"; // Updated lifecycle status
+  readonly status: "Pending" | "Verified" | "Trustworthy" | "AwaitingAmendment"; 
   
   /** 證據佐證庫 (Evidence Vault) */
   evidence: Record<string, any>;
 
-  /** 🧠 ZK-Privacy Proof (Must be present before final seal) */
+  /** 🧠 ZK-Privacy Proof */
   zkpProof?: ZKPProof;
+
+  /** 🔗 Amendment Link (If this is a revision) */
+  parentUuid?: string;
+  amendmentReason?: string;
   
   /** 🔒 不可篡改封印 */
   lock(): void; 
 }
+
+export interface OmniAmendmentRequest {
+  targetUuid: string;
+  reason: string;
+  requestedBy: string;
+  requestedAt: number;
+  status: 'Pending' | 'Approved' | 'Rejected';
+}
+
 
 export interface ESGMetric extends IComponentCore {
   category: 'Environmental' | 'Social' | 'Governance';
