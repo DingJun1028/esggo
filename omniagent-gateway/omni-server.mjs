@@ -349,6 +349,27 @@ app.get('/models', aiLimiter, async (req, res) => {
  *        If omitted, uses Gemini → OpenRouter default → Mock
  */
 app.post('/execute', aiLimiter, async (req, res) => {
+  // 🛡️ Sentinel: Enforce Authentication to prevent unauthorized API quota usage
+  const authHeader = req.headers['x-omni-token'] || req.headers['authorization'];
+  const configuredToken = process.env.OMNI_TOKEN;
+
+  if (!configuredToken) {
+    // Fail securely: Do not fallback to open access if the token is not configured
+    console.error('[OmniGateway] 🚨 CRITICAL: OMNI_TOKEN is not configured in the environment.');
+    return res.status(500).json({ error: 'Server configuration error: Authentication is not configured securely.' });
+  }
+
+  // Extract token if it's sent as 'Bearer <token>'
+  let providedToken = authHeader;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    providedToken = authHeader.substring(7);
+  }
+
+  if (!providedToken || providedToken !== configuredToken) {
+    console.warn(`[OmniGateway] ⚠️ Unauthorized access attempt to /execute from ${req.ip}`);
+    return res.status(401).json({ error: 'Unauthorized: Invalid or missing X-Omni-Token or Authorization header.' });
+  }
+
   const { task } = req.body;
   if (!task?.id || !task?.taskType) {
     return res.status(400).json({ error: 'task.id and task.taskType are required' });
