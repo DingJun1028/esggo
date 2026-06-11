@@ -208,7 +208,7 @@ export default function BestPracticeHubPage() {
              {activeTab === 'benchmarks' && (
                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {BEST_PRACTICES.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).map(p => (
-                    <motion.div key=BEST-PRACTICE whileHover={{ y: -4 }}>
+                    <motion.div key={`bp-${p.id}`} whileHover={{ y: -4 }}>
                       <BrandCard hover padding="lg" className="flex flex-col h-full border-none shadow-premium relative overflow-hidden cursor-pointer" onClick={() => setSelectedPractice(p)}>
                          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50/50 rounded-full -mr-8 -mt-8" />
                          <div className="flex justify-between items-start mb-6">
