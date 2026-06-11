@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { Leaf, Plus, Download, ShieldCheck, Factory, Wind, Zap, AlertTriangle, TrendingDown } from 'lucide-react';
+import { Leaf, Plus, Download, ShieldCheck, Factory, Wind, Zap, AlertTriangle, TrendingDown, Brain } from 'lucide-react';
 
 // === Jules Karma Protocol: Performance Optimization with React.memo ===
 const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorClass }: any) => (
