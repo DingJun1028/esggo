@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "next build && node scripts/copy-standalone-assets.js",
-    "start": "node dist/server.js",
+    "start": "node -r dotenv/config .next/standalone/server.js",
     "dev": "ts-node server.ts",
     "lint": "eslint src/**/*.ts",
     "test": "vitest",
@@ -49,11 +49,13 @@
     "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
     "class-variance-authority": "^0.7.1",
+    "cors": "^2.8.5",
     "date-fns": "^4.4.0",
     "dexie": "^4.4.3",
     "docx": "^9.7.1",
     "dotenv": "^17.4.2",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "firebase": "^12.14.0",
     "firebase-admin": "^13.10.0",
     "framer-motion": "^10.16.4",
@@ -62,11 +64,13 @@
     "graphql": "^16.14.1",
     "graphql-ws": "^6.0.8",
     "graphql-yoga": "^5.21.1",
+    "helmet": "^7.1.0",
     "idb-keyval": "^6.2.5",
     "lucide-react": "^0.292.0",
     "minisearch": "^7.2.0",
     "newrelic": "^14.1.0",
     "next": "^15.0.3",
+    "node-telegram-bot-api": "^0.66.0",
     "pdf-parse": "^2.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -79,7 +83,7 @@
     "swr": "^2.4.1",
     "tailwind-merge": "^3.6.0",
     "turndown": "^7.2.4",
-    "uuid": "^14.0.0",
+    "uuid": "^11.1.1",
     "xss": "^1.0.15",
     "zod": "^3.22.4",
     "zustand": "^4.4.6"
@@ -123,5 +127,14 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
     "vitest": "^4.1.8"
+  },
+  "overrides": {
+    "postcss": "^8.5.15",
+    "tar": "^7.5.11",
+    "underscore": "^1.13.7",
+    "uuid": "^11.1.1",
+    "esbuild": "^0.25.0",
+    "@opentelemetry/sdk-node": "^0.57.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.56.0"
   }
 }
