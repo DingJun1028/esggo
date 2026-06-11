@@ -20,10 +20,10 @@ const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorCla
         </div>
       )}
     </div>
-    <h3 className="text-slate-500 text-sm font-bold">{title}</h3>
+    <h3 className="text-slate-500 dark:text-slate-400 text-sm font-bold">{title}</h3>
     <div className="mt-2 flex items-baseline gap-2">
-      <span className="text-3xl font-black text-slate-800">{value}</span>
-      <span className="text-sm font-medium text-slate-500">{unit}</span>
+      <span className="text-3xl font-black text-slate-800 dark:text-white dark:text-slate-100">{value}</span>
+      <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{unit}</span>
     </div>
   </OmniBaseCard>
 ));
@@ -63,22 +63,22 @@ export default function EnvironmentalDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-800/50 dark:bg-void-stark text-slate-800 dark:text-slate-100 dark:text-slate-200 p-4 md:p-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200 dark:border-white/10">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center border border-emerald-200 shadow-sm">
               <Leaf className="text-emerald-600" size={28} />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="px-2 py-1 bg-teal-100 text-teal-800 text-xs font-bold rounded">ISO 14064-1</span>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">Environmental</span>
+                <span className="px-2 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-400 text-xs font-bold rounded">ISO 14064-1</span>
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-widest">Environmental</span>
               </div>
-              <h1 className="text-3xl font-black text-slate-800 tracking-tight">環境指揮中心 (碳盤查)</h1>
-              <p className="text-slate-500 text-sm mt-1">追蹤並分析 Scope 1, 2, 3 溫室氣體排放量，數據受 5T 協議保護</p>
+              <h1 className="text-3xl font-black text-slate-800 dark:text-white dark:text-slate-100 tracking-tight">環境指揮中心 (碳盤查)</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">追蹤並分析 Scope 1, 2, 3 溫室氣體排放量，數據受 5T 協議保護</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
@@ -99,28 +99,28 @@ export default function EnvironmentalDashboard() {
             unit="tCO2e" 
             icon={Wind} 
             trend="-4.2%" 
-            colorClass="bg-slate-100 text-slate-600"
+            colorClass="bg-slate-100 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400"
           />
           <MetricCard 
             title="範疇一 (Scope 1)" 
             value="1,570" 
             unit="tCO2e" 
             icon={Factory} 
-            colorClass="bg-orange-100 text-orange-600"
+            colorClass="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400"
           />
           <MetricCard 
             title="範疇二 (Scope 2)" 
             value="8,450" 
             unit="tCO2e" 
             icon={Zap} 
-            colorClass="bg-blue-100 text-blue-600"
+            colorClass="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
           />
           <MetricCard 
             title="範疇三 (Scope 3)" 
             value="595" 
             unit="tCO2e" 
             icon={Leaf} 
-            colorClass="bg-emerald-100 text-emerald-600"
+            colorClass="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
           />
         </div>
 
@@ -128,14 +128,14 @@ export default function EnvironmentalDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <OmniBaseCard variant="default" className="p-0 overflow-hidden">
-              <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-white">
-                <h2 className="text-lg font-bold text-slate-800">溫室氣體排放源清冊</h2>
-                <div className="flex bg-slate-100 rounded-lg p-1">
+              <div className="p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-white dark:bg-slate-900/50">
+                <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">溫室氣體排放源清冊</h2>
+                <div className="flex bg-slate-100 dark:bg-slate-800/50 rounded-lg p-1">
                   {['All', 'Scope 1', 'Scope 2', 'Scope 3'].map(scope => (
                     <button
                       key={scope}
                       onClick={() => setActiveScope(scope)}
-                      className={`px-4 py-1.5 text-sm font-bold rounded-md transition-all ${activeScope === scope ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      className={`px-4 py-1.5 text-sm font-bold rounded-md transition-all ${activeScope === scope ? 'bg-white dark:bg-slate-900/50 text-emerald-600 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'}`}
                     >
                       {scope}
                     </button>
@@ -144,7 +144,7 @@ export default function EnvironmentalDashboard() {
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-50 border-b border-slate-100 text-xs uppercase text-slate-500">
+                  <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-white/10 text-xs uppercase text-slate-500 dark:text-slate-400">
                     <tr>
                       <th className="px-6 py-4 font-bold">排放範疇</th>
                       <th className="px-6 py-4 font-bold">排放源描述</th>
@@ -152,27 +152,27 @@ export default function EnvironmentalDashboard() {
                       <th className="px-6 py-4 font-bold text-center">5T 狀態</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 bg-white">
+                  <tbody className="divide-y divide-slate-100 bg-white dark:bg-slate-900/50">
                     {filteredData.map(row => (
-                      <tr key={row.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4 font-mono text-sm font-bold text-slate-600">{row.scope}</td>
-                        <td className="px-6 py-4 text-sm text-slate-700">{row.source}</td>
-                        <td className="px-6 py-4 text-sm font-bold text-slate-800 text-right">{row.value.toLocaleString()}</td>
+                      <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+                        <td className="px-6 py-4 font-mono text-sm font-bold text-slate-600 dark:text-slate-400">{row.scope}</td>
+                        <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300">{row.source}</td>
+                        <td className="px-6 py-4 text-sm font-bold text-slate-800 dark:text-slate-100 text-right">{row.value.toLocaleString()}</td>
                         <td className="px-6 py-4 text-center">
                           {row.status === 'Sealed' ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200">
                               <ShieldCheck size={14}/> 已封印
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200">
                               <AlertTriangle size={14}/> 待驗證
                             </span>
                           )}
                         </td>
                       </tr>
                     ))}
-                    <tr className="bg-slate-50">
-                      <td colSpan={2} className="px-6 py-4 text-right font-bold text-slate-600">總計 (Total):</td>
+                    <tr className="bg-slate-50 dark:bg-slate-800/50">
+                      <td colSpan={2} className="px-6 py-4 text-right font-bold text-slate-600 dark:text-slate-400">總計 (Total):</td>
                       <td className="px-6 py-4 text-right font-black text-emerald-600 text-lg">{totalEmissions}</td>
                       <td></td>
                     </tr>
@@ -192,7 +192,7 @@ export default function EnvironmentalDashboard() {
                 <p>
                   根據目前的盤查數據，您的 <strong>外購電力 (Scope 2)</strong> 佔總排放量的 <strong>79.6%</strong>。
                 </p>
-                <div className="p-3 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
+                <div className="p-3 bg-white/10 dark:bg-white/5 rounded-lg backdrop-blur-sm border border-white/20">
                   <h4 className="font-bold text-white mb-2 flex items-center gap-2">
                     <Zap size={16}/> 減碳建議行動
                   </h4>
@@ -202,7 +202,7 @@ export default function EnvironmentalDashboard() {
                     <li>導入 EMS 能源管理系統。</li>
                   </ul>
                 </div>
-                <OmniButton variant="outline" className="w-full mt-4 bg-white/10 border-white/20 hover:bg-white/20 text-white">
+                <OmniButton variant="outline" className="w-full mt-4 bg-white/10 dark:bg-white/5 border-white/20 hover:bg-white/20 dark:bg-white/10 text-white">
                   生成完整減碳規劃書
                 </OmniButton>
               </div>
