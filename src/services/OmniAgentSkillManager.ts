@@ -83,8 +83,9 @@
         // If it's a TypeScript file, we register ts-node to compile it on the fly
         if (modulePath.endsWith('.ts')) {
           try {
-            // Using require to dynamically register ts-node if available
-            const tsNode = require('ts-node');
+            // Using eval("require") to dynamically register ts-node without webpack bundling it
+            const dynamicRequire = eval('require');
+            const tsNode = dynamicRequire('ts-node');
             tsNode.register({
               transpileOnly: true,
               compilerOptions: {
