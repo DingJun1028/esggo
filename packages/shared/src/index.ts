@@ -1,5 +1,5 @@
 /**
- * ESGGO Sacred Contract v1.0
+ * ESGGO Sacred Contract v1.1
  * Shared TypeScript Definitions for Platform & Commander
  */
 
@@ -40,16 +40,31 @@ export interface OmniGatewayResponse {
 
 // ── ESG Domain Types ───────────────────────────────────────
 
+export interface IOmniTheme {
+  readonly id: string;
+  readonly name: string;
+  readonly type: 'LiquidGlass' | 'SolidState' | 'Amber';
+  readonly tokens: {
+    readonly primary: string;
+    readonly secondary: string;
+    readonly accent: string;
+    readonly surface: string;
+  };
+}
+
 /**
  * 💎 萬能元件心核：5T [4可1不可] 實作規範
+ * --------------------------------------------------
+ * Governing Authority: UCC (Universal Component Center)
  */
 export interface IComponentCore {
   readonly uuid: string;           // [真 - Truthful] Traceable (可溯源)
-  readonly version: number;        // [通 - Transferful] Versioning support
-  readonly timestamp: number;      // [通 - Transferful] Trackable (可追蹤)
-  readonly formula: string;        // [善 - Thankful] Transparent (可透明)
-  readonly impactMetric: string;   // [美 - Tasteful] Tangible (可感知)
+  readonly version: number;        // [通 - Transferful] Versioning
+  readonly timestamp: number;      // [通 - Transferful] Trackable
+  readonly formula: string;        // [善 - Thankful] Transparent
+  readonly impactMetric: string;   // [美 - Tasteful] Tangible
   readonly status: "Pending" | "Verified" | "Trustworthy" | "AwaitingAmendment"; 
+  readonly themeId: string;        // [美 - Tasteful] Governing UI Theme
   
   /** 證據佐證庫 (Evidence Vault) */
   evidence: Record<string, any>;
@@ -57,7 +72,7 @@ export interface IComponentCore {
   /** 🧠 ZK-Privacy Proof */
   zkpProof?: ZKPProof;
 
-  /** 🔗 Amendment Link (If this is a revision) */
+  /** 🔗 Amendment Link */
   parentUuid?: string;
   amendmentReason?: string;
   
@@ -73,16 +88,14 @@ export interface OmniAmendmentRequest {
   status: 'Pending' | 'Approved' | 'Rejected';
 }
 
-
 export interface ESGMetric extends IComponentCore {
   category: 'Environmental' | 'Social' | 'Governance';
   name: string;
   value: number | string;
   unit: string;
-  sourceOrigin: string; // [真 - Truthful] Required for Traceability
+  sourceOrigin: string; // [真 - Truthful] Traceable
   integrityProof?: string; 
 }
-
 
 // ── ZK-Privacy Engine Types ───────────────────────────────
 
@@ -95,4 +108,3 @@ export interface ZKPProof {
   proofHash: string; // The ZK-Proof certificate
   isVerified: boolean;
 }
-
