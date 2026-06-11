@@ -1,10 +1,11 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
+import { authenticateWithMaster } from '@/auth';
 import { v4 as uuidv4 } from 'uuid';
-import { AgentStep, AgentStatus } from '../../../../../lib/agent/v3-shared';
-import { runInSandbox } from '../../../../../lib/agent/sandbox';
-import { callGeminiWithTools } from '../../../../../lib/services/ai-server';
-import { getSupabaseClient } from '../../../../../lib/supabase';
-import { upsertTask } from '../../../../../lib/db';
+import { AgentStep, AgentStatus } from '@/agent/v3-shared';
+import { runInSandbox } from '@/agent/sandbox';
+import { callGeminiWithTools } from '@/services/ai-server';
+import { getSupabaseClient } from '@/supabase';
+import { upsertTask } from '@/db';
 
 /**
  * Omni-Sovereign Agent V3: Core Execution Endpoint
@@ -14,7 +15,10 @@ import { upsertTask } from '../../../../../lib/db';
 export const runtime = 'nodejs'; // Use Node.js for terminal/sandbox capabilities
 
 export async function POST(req: NextRequest) {
-  const encoder = new TextEncoder();
+  const isAuth = await authenticateWithMaster();
+  if (!isAuth) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const body = await req.json();
   const { prompt, autoRepair } = body;
 

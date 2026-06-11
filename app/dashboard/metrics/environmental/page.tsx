@@ -82,7 +82,7 @@ export default function EnvironmentalMetricsPage() {
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">ENV-001</span>
                 {loading && <Loader2 className="w-3 h-3 text-emerald-500 animate-spin" />}
               </div>
-              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">?��??��? (Environmental)</h1>
+              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">環境指標 (Environmental)</h1>
               <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">Climate Action & Resource Management</p>
             </div>
           </div>
@@ -92,27 +92,27 @@ export default function EnvironmentalMetricsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-emerald-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Wind size={18} className="text-emerald-400" /> 碳�??��? (Scope 1+2)
+              <Wind size={18} className="text-emerald-400" /> 碳排放量 (Scope 1+2)
             </h3>
-            <div className="text-3xl font-black text-white mb-2">{metrics.carbonEmissions.toLocaleString()} <span className="text-lg font-normal text-slate-500">tCO?�e</span></div>
+            <div className="text-3xl font-black text-white mb-2">{metrics.carbonEmissions.toLocaleString()} <span className="text-lg font-normal text-slate-500">tCO₂e</span></div>
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
-              <TrendingDown size={14} className="text-emerald-500" /> 較去年�??��???5.4%
+              <TrendingDown size={14} className="text-emerald-500" /> 較去年降低 5.4%
             </p>
           </OmniBaseCard>
 
           <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-teal-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Zap size={18} className="text-teal-400" /> 總能源�???            </h3>
+              <Zap size={18} className="text-teal-400" /> 總能源消耗</h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.energyConsumption.toLocaleString()} <span className="text-lg font-normal text-slate-500">kWh</span></div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?�?? 綠電佔�? 42%</p>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">目前綠電佔比 42%</p>
           </OmniBaseCard>
 
           <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-green-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
-              <Recycle size={18} className="text-green-400" /> 廢�??��??��?
+              <Recycle size={18} className="text-green-400" /> 廢棄物回收率
             </h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.recyclingRate.toFixed(1)}%</div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">?��?: 2026年�? 90%</p>
+            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">年度目標: 2026年達 90%</p>
           </OmniBaseCard>
         </div>
 

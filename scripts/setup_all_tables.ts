@@ -1,4 +1,6 @@
 #!/usr/bin/env tsx
+import 'dotenv/config';
+
 // ============================================================================
 // OmniBlueTable 全域初始化 Runner
 // 一鍵依序執行所有 setup_*.ts 建表腳本
@@ -120,10 +122,9 @@ async function runAll() {
         try {
             await mod.run();
             results.push({ key: mod.key, label: mod.label, status: 'ok' });
-        } catch (err) {
-            const msg = err instanceof Error ? err.message : String(err);
-            console.error(`❌ 失敗: ${msg}`);
-            results.push({ key: mod.key, label: mod.label, status: 'fail', error: msg });
+        } catch (err: any) {
+            console.error(`❌ [${mod.key}] 執行失敗:`, err.message);
+            results.push({ key: mod.key, label: mod.label, status: 'fail', error: err.message });
         }
     }
 

@@ -63,6 +63,7 @@ if npm run | grep -q " build"; then
 fi
 
 pm2 delete "${APP_NAME}" >/dev/null 2>&1 || true
+pm2 delete "omniagent-gateway" >/dev/null 2>&1 || true
 
 if npm run | grep -q " start"; then
   pm2 start npm --name "${APP_NAME}" -- start
@@ -73,6 +74,11 @@ elif [ -f "app.js" ]; then
 else
   echo "No start command or server entry found."
   exit 1
+fi
+
+# 啟動 AI 網關
+if [ -f "omniagent-gateway/omni-server.mjs" ]; then
+  pm2 start omniagent-gateway/omni-server.mjs --name "omniagent-gateway"
 fi
 
 pm2 save
