@@ -95,6 +95,8 @@ export default function SwarmPage() {
         status: 'success' as 'processing' | 'success' | 'healing'
       } as SwarmLog, ...prev].slice(0, 8));
     }
+  };
+
   const triggerStressTest = () => {
     // 模擬 16 法則壓力測試
     const events: { type: 'HEAL'|'STRATEGIZE'|'EXECUTE'|'OBSERVE'; source: string; msg: string }[] = [
