@@ -126,9 +126,23 @@ Question: ${query}
 `;
 
   const result = await model.generateContent(prompt);
+  
+  // 5T Protocol: Generate Immutable Hash Locks for the retrieved contexts
+  const sources = contextDocs.map((d: any) => {
+    const rawData = `${d.document_id || d.id}-${d.content}`;
+    const hashLock = createHash('sha256').update(rawData).digest('hex');
+    
+    return { 
+      id: d.document_id || d.id, 
+      title: d.title || `Intel Node [${(d.document_id || d.id || 'N/A').toString().substring(0,6)}]`,
+      score: d.similarity || 0.99,
+      hashLock: hashLock
+    };
+  });
+
   return {
     answer: result.response.text(),
-    sources: contextDocs.map((d: any) => ({ id: d.document_id, score: d.similarity }))
+    sources: sources
   };
 }
 
