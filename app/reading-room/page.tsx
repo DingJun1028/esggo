@@ -5,7 +5,8 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { BookOpen, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
+import { BookOpen, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, FileText, Database } from 'lucide-react';
 
 export default function ReadingRoomPage() {
   const [data, setData] = useState<any[]>([]);
@@ -27,19 +28,19 @@ export default function ReadingRoomPage() {
         const json = await res.json();
         setData(json.data || []);
       } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
+        // Fallback mock data for Reading Room
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          { id: 1, date: '2026-06-12', doc_title: '2026 ESG 永續報告草案', status: '已索引', vectors: 1250, hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+          { id: 2, date: '2026-06-10', doc_title: '歐盟 CBAM 規範指南 v2.pdf', status: '處理中', vectors: 0, hash_lock: null, source_origin: 'Manual' },
+          { id: 3, date: '2026-06-05', doc_title: '供應鏈減碳宣導手冊', status: '已索引', vectors: 840, hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 1, date: '2026-06-12', doc_title: '2026 ESG 永續報告草案', status: '已索引', vectors: 1250, hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
+        { id: 2, date: '2026-06-10', doc_title: '歐盟 CBAM 規範指南 v2.pdf', status: '處理中', vectors: 0, hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
       setLoading(false);
@@ -102,10 +103,15 @@ export default function ReadingRoomPage() {
   };
 
   const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
+    { key: 'date', label: '上傳日期' },
+    { key: 'doc_title', label: '文獻名稱 (Document Title)', render: (val: any) => (
+      <span className="flex items-center gap-2"><FileText size={14} className="text-cyan-400"/> {val}</span>
+    ) },
+    { key: 'status', label: '知識庫狀態', render: (val: any) => (
+      <OmniBadge variant={val === '已索引' ? 'success' : 'warning'} size="sm">{val}</OmniBadge>
+    ) },
+    { key: 'vectors', label: '向量切塊 (Chunks)', render: (val: any) => (
+      <span className="font-mono text-xs text-slate-400">{val} 塊</span>
     ) },
     { key: 'source_origin', label: '來源 (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
@@ -157,8 +163,8 @@ export default function ReadingRoomPage() {
                 <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">READING-ROOM</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">READING ROOM</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">reading-room dashboard</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">永續閱覽室</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">SUSTAINABILITY READING ROOM</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
@@ -173,11 +179,11 @@ export default function ReadingRoomPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">收錄文獻</span>
+              <BookOpen size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
+            <div className="text-4xl font-black text-white">124<span className="text-lg text-slate-500 ml-2 font-normal">Docs</span></div>
+            <p className="text-xs text-emerald-400/80 font-mono">Status: Indexed</p>
           </OmniBaseCard>
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
@@ -191,11 +197,11 @@ export default function ReadingRoomPage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">知識庫向量數</span>
+              <Database size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
+            <div className="text-4xl font-black text-white">8,452<span className="text-lg text-slate-500 ml-2 font-normal">Chunks</span></div>
+            <p className="text-xs text-amber-400/80 font-mono">OmniVector Syncing</p>
           </OmniBaseCard>
         </div>
 
@@ -219,21 +225,15 @@ export default function ReadingRoomPage() {
           <div className="space-y-6">
             <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="永續知識大腦" 
+              subtitle="ESGSmartQA (RAG Powered)"
             >
               <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                <p className="mb-4">
+                  您可以直接在下方詢問關於 TCFD、CBAM、或者上傳的 ESG 報告書內容。
                 </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
-                </div>
+                {/* 注入真實的 RAG QA 組件 */}
+                <ESGSmartQA />
               </div>
             </OmniBaseCard>
           </div>

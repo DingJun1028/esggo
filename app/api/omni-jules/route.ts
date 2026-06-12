@@ -18,11 +18,11 @@ export async function POST(req: NextRequest) {
     console.log(`[OmniJules] 觀果 (Observe Effect): ${failureReason} (Load: ${energyLoadFactor})`);
 
     // 1. 寫入不可篡改審計日誌 (Audit Governance)
-    await writeAuditLog({ 
-      userId: 'system-omni-jules', 
-      action: 'HEAL_PROTOCOL_ACTIVATED', 
-      targetId: sourceTaskId || 'N/A', 
-      payload: { failureReason, context, energyLoadFactor } 
+    await writeAuditLog({
+      userId: 'system-omni-jules',
+      action: 'HEAL_PROTOCOL_ACTIVATED',
+      targetId: sourceTaskId || 'N/A',
+      payload: { failureReason, context, energyLoadFactor }
     });
 
     // 2. 模擬 Jules 萬能果因分析的推演與「確信與進化」回饋
@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
       timestamp: Date.now()
     });
   } catch (error) {
-    return NextResponse.json({ 
-      success: false, 
+    return NextResponse.json({
+      success: false,
       error: (error as Error).message,
     }, { status: 500 });
   }
