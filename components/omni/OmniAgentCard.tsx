@@ -18,7 +18,19 @@ const colors = {
   accent: { cyan: '#55C7FF', blue: '#3B82F6', gold: '#F4C95D', purple: '#9B7CFF' }
 };
 
-export function OmniAgentCard() {
+export interface OmniAgentCardProps {
+  id?: string;
+  name?: string;
+  role?: string;
+  rarity?: string;
+  confidenceScore?: number;
+  fiveTStatus?: boolean[];
+  skills?: string[];
+  jsonSchema?: string;
+  imageUrl?: string;
+}
+
+export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
   const [currentVoiceLine, setCurrentVoiceLine] = useState(0);
 
   useEffect(() => {

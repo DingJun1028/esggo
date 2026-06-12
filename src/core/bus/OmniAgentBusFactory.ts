@@ -3,6 +3,8 @@
 import { IOmniNotification } from './IOmniNotification';
 import { IT5Protocol } from '../types/IComponentCore';
 
+export type { IOmniNotification };
+
 // 4. 萬能通知核心鑄造工廠
 export class OmniAgentBusFactory {
   public static createNotification(

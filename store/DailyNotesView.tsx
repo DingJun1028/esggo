@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useOmniNotesStore, NoteType } from '@/store/useOmniNotesStore';
 import {
     Calendar as CalendarIcon, Lightbulb, Users, CheckSquare,
-    FileText, Send, Trash2, ChevronLeft, ChevronRight, Share2
+    FileText, Send, Trash2, ChevronLeft, ChevronRight, Share2,
+    Search, BookOpen
 } from 'lucide-react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
@@ -20,6 +21,8 @@ const TYPE_CONFIG: Record<NoteType, { icon: React.ElementType, label: string, co
     idea: { icon: Lightbulb, label: '靈感', color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
     meeting: { icon: Users, label: '會議', color: 'text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
     task: { icon: CheckSquare, label: '任務', color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+    research: { icon: Search, label: '研究', color: 'text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
+    knowledge: { icon: BookOpen, label: '知識', color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
 };
 
 export function DailyNotesView() {

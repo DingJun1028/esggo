@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import React, { useState, useEffect } from 'react';
 import { X, Search, ChevronRight, Globe, Users, Shield, Zap, LayoutGrid, List } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandInput, BrandButton } from '../brand';
@@ -41,14 +41,17 @@ export default function SelectionHouse({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
     if (isOpen) {
       setMounted(true);
       document.body.style.overflow = 'hidden';
     } else {
-      const timer = setTimeout(() => setMounted(false), 300);
+      timer = setTimeout(() => setMounted(false), 300);
       document.body.style.overflow = 'unset';
-      return () => clearTimeout(timer);
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isOpen]);
 
   if (!isOpen && !mounted) return null;

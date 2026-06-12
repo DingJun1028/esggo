@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useColorDropStream } from '@/lib/hooks/useColorDropStream';
@@ -21,7 +21,7 @@ const positionClasses: Record<string, string> = {
 export function Tooltip({ content, children, position = 'top', className, evidenceUuid }: TooltipProps & { evidenceUuid?: string }) {
   const [visible, setVisible] = useState(false);
   const colorDropMap = useColorDropStream();
-  const colorDrop = evidenceUuid ? Array.from(colorDropMap.values()).find(cd => cd.evidenceUuid === evidenceUuid) : undefined;
+  const colorDrop = evidenceUuid ? Array.from((colorDropMap as any).values?.() || []).find((cd: any) => cd.evidenceUuid === evidenceUuid) as any : undefined;
   const bgStyle = colorDrop?.verified ? 'bg-green-600' : colorDrop?.status === 'issued' ? 'bg-yellow-600' : 'bg-[#1a1a2e]';
   const displayContent = colorDrop ? `${content} (色碼滴: ${colorDrop.status ?? 'unknown'})` : content;
 

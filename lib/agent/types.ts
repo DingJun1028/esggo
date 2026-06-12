@@ -10,7 +10,9 @@ export type AgentTaskType =
   | 'system_ops'
   | 'ai_ops'
   | 'email_processing'
-  | 'calendar_scheduling';
+  | 'calendar_scheduling'
+  | 'carbon_calculation'
+  | 'supplier_assessment';
 
 export type AgentExecutionStatus =
   | 'queued'
@@ -38,7 +40,9 @@ export type ArtifactType =
   | 'db_optimization_plan'
   | 'ai_flow_blueprint'
   | 'email_archival_log'
-  | 'calendar_schedule_log';
+  | 'calendar_schedule_log'
+  | 'emission_calculation_result'
+  | 'supplier_risk_profile';
 
 export type ReviewStatus =
   | 'draft'

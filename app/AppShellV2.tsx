@@ -8,7 +8,7 @@ import {
   LayoutDashboard, FileText, Fingerprint, HeartPulse, 
   MessageSquare, BarChart3, Cable, Rocket, Bot, Sparkles, 
   Trophy, Brain, Layers, Command, Leaf, Users, ShieldCheck, 
-  Grid3X3, Hexagon, ListChecks, Lock, ClipboardList, Shield, 
+  Grid3X3, Hexagon, ListChecks, Lock, ClipboardList, Shield, Heart, 
   Landmark, Sun, Moon, Bell, ChevronLeft, ChevronRight, 
   ChevronDown, ChevronUp, User, Search, Settings, MoreHorizontal,
   Star, Zap, Activity, Menu, X, Building2, Link as LinkIcon, Database,
@@ -25,6 +25,7 @@ import BrandStatusDot from '../components/brand/BrandStatusDot';
 import OmniAgentPulseFloating from '../components/core/OmniAgentPulseFloating';
 import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../hooks/useAuth';
 import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
 import { GlobalSearch } from '../components/GlobalSearch';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
@@ -74,11 +75,14 @@ export const IconMapper: Record<string, React.ReactNode> = {
   Palette: <Palette size={20} />,
   Flame: <Flame size={20} />,
   Vault: <Lock size={20} />,
+  Shield: <Shield size={20} />,
+  Heart: <Heart size={20} />,
+  Star: <Star size={20} />,
 };
 
 // Core 6 Journeys for Mobile Bottom Bar (Refined for Mobile optimization)
 const mobileBottomItems = [
-  { href: '/', label: '首頁', icon: <LayoutDashboard size={24} /> },
+  { href: '/dashboard', label: '首頁', icon: <LayoutDashboard size={24} /> },
   { href: '/editor', label: '撰寫', icon: <FileText size={24} /> },
   { href: '/vault', label: '金庫', icon: <Lock size={24} /> },
   { href: '/intelligence', label: '情報', icon: <BarChart3 size={24} /> },
@@ -91,6 +95,8 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
   const router = useRouter();
   const { resolvedTheme, setMode } = useTheme();
   const isDark = resolvedTheme === 'dark';
+  const { user } = useAuth();
+  const isSuperAdmin = user && (user.role === 'superadmin' || user.email === 'dev@esggo.com' || user.id === 'dev_user');
   
   // Layout States
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -100,6 +106,74 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
   const [showOverviewMenu, setShowOverviewMenu] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
   const [logoPosition, setLogoPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
+
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [favorites, setFavorites] = useState<{ id: string; title: string; path: string; icon: string; sub?: string }[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('esggo_favorites');
+    if (stored) {
+      try {
+        const favs = JSON.parse(stored);
+        setFavorites(favs);
+        setIsFavorited(favs.some((item: any) => item.path === pathname));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      const initial = [
+        { id: 'dashboard', title: '全域控制台', path: '/dashboard', icon: 'LayoutDashboard', sub: 'Overview' },
+        { id: 'editor', title: 'SustainWrite 編輯器', path: '/editor', icon: 'PenTool', sub: 'Editor' }
+      ];
+      localStorage.setItem('esggo_favorites', JSON.stringify(initial));
+      setFavorites(initial);
+      setIsFavorited(initial.some((item: any) => item.path === pathname));
+    }
+  }, [pathname]);
+
+  const toggleFavorite = () => {
+    const stored = localStorage.getItem('esggo_favorites');
+    let favs = [];
+    if (stored) {
+      try {
+        favs = JSON.parse(stored);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    
+    const exists = favs.some((item: any) => item.path === pathname);
+    let updated = [];
+    if (exists) {
+      updated = favs.filter((item: any) => item.path !== pathname);
+      setIsFavorited(false);
+    } else {
+      const allNavItems = [...SaaS_NAVIGATION, ...IT_OPS_NAVIGATION].flatMap(g => g.items);
+      const currentItem = allNavItems.find(item => item.path === pathname);
+      
+      if (currentItem) {
+        updated = [...favs, {
+          id: currentItem.id,
+          title: currentItem.title,
+          path: currentItem.path,
+          icon: currentItem.icon,
+          sub: currentItem.sub
+        }];
+        setIsFavorited(true);
+      } else {
+        updated = [...favs, {
+          id: pathname.replace('/', '') || 'home',
+          title: document.title.replace(' | ESGGO', '') || '目前頁面',
+          path: pathname,
+          icon: 'Star',
+          sub: 'Custom'
+        }];
+        setIsFavorited(true);
+      }
+    }
+    localStorage.setItem('esggo_favorites', JSON.stringify(updated));
+    setFavorites(updated);
+  };
 
   useEffect(() => {
     const savedSidebar = localStorage.getItem('sidebar_collapsed');
@@ -190,14 +264,63 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
 
         {/* Navigation Groups */}
         <nav className="flex-1 overflow-y-auto overflow-x-hidden py-8 px-4 space-y-10 no-scrollbar">
-          {[...SaaS_NAVIGATION, ...IT_OPS_NAVIGATION].map((group, i) => (
-            <div key={group.groupId} className="space-y-3">
+          {[
+            ...SaaS_NAVIGATION.map(g => {
+              if (g.groupId === 'favorites') {
+                return {
+                  ...g,
+                  items: [
+                    ...favorites.map(fav => ({
+                      id: `fav-${fav.id}`,
+                      title: fav.title,
+                      path: fav.path,
+                      icon: fav.icon,
+                      sub: fav.sub
+                    })),
+                    {
+                      id: 'manage-favorites',
+                      title: '管理我的最愛',
+                      path: '/favorites',
+                      icon: 'Heart',
+                      sub: 'Manage'
+                    }
+                  ]
+                };
+              }
+              return g;
+            }),
+            ...(isSuperAdmin ? IT_OPS_NAVIGATION : [])
+          ].map((group, i) => (
+            <div 
+              key={group.groupId} 
+              className={cn(
+                "space-y-3 transition-all duration-500",
+                group.groupId === 'super-admin' && !sidebarCollapsed 
+                  ? "p-4 bg-gradient-to-br from-purple-500/5 to-pink-500/5 border border-purple-500/10 dark:border-purple-500/20 rounded-3xl relative overflow-hidden shadow-inner" 
+                  : "",
+                group.groupId === 'favorites' && !sidebarCollapsed 
+                  ? "p-4 bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border border-amber-500/10 dark:border-amber-500/20 rounded-3xl relative overflow-hidden shadow-inner" 
+                  : ""
+              )}
+            >
+              {group.groupId === 'super-admin' && !sidebarCollapsed && (
+                <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500/10 dark:bg-pink-500/10 blur-2xl rounded-full pointer-events-none" />
+              )}
+              {group.groupId === 'favorites' && !sidebarCollapsed && (
+                <div className="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 dark:bg-yellow-500/10 blur-2xl rounded-full pointer-events-none" />
+              )}
               {!sidebarCollapsed && (
-                <p className="px-4 text-[10px] font-black opacity-30 uppercase tracking-[0.3em] whitespace-nowrap">
-                  {group.groupTitle}
+                <p className="px-4 text-[10px] font-black opacity-40 uppercase tracking-[0.3em] whitespace-nowrap flex items-center justify-between">
+                  <span>{group.groupTitle}</span>
+                  {group.groupId === 'super-admin' && (
+                    <span className="text-[9px] bg-purple-500/10 text-purple-400 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-normal">SYS</span>
+                  )}
+                  {group.groupId === 'favorites' && (
+                    <span className="text-[9px] bg-amber-500/10 text-amber-400 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-normal">FAV</span>
+                  )}
                 </p>
               )}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative z-10">
                 {group.items.map((item) => {
                   const isActive = pathname === item.path;
                   return (
@@ -317,6 +440,18 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                 {/* Theme Switcher */}
                 <AppThemeSwitcher />
 
+                {/* Favorite Toggle Button */}
+                <BrandButton
+                  onClick={toggleFavorite}
+                  variant="ghost"
+                  icon={<Star size={18} className={cn(isFavorited ? "fill-yellow-400 text-yellow-400" : "text-slate-400")} />}
+                  className={cn(
+                    "p-2.5 rounded-xl border transition-all flex items-center justify-center",
+                    isDark ? "bg-white/5 border-white/10 text-slate-400" : "bg-slate-50 border-slate-200 text-slate-500"
+                  )}
+                  title={isFavorited ? "移出我的最愛" : "加入我的最愛"}
+                />
+
                 {/* Notifications */}
                 <div className="relative">
                   <BrandButton
@@ -376,13 +511,16 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             
             {/* Quick Actions Pills */}
             <BrandButton 
-              icon={<Star size={14} />}
+              onClick={toggleFavorite}
+              icon={<Star size={14} className={cn(isFavorited ? "fill-yellow-400 text-yellow-400" : "")} />}
               className={cn(
                 "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
-                isDark ? "bg-white/5 border-white/10 text-slate-300" : "bg-slate-50 border-slate-100 text-slate-500"
+                isFavorited 
+                  ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-500" 
+                  : (isDark ? "bg-white/5 border-white/10 text-slate-300" : "bg-slate-50 border-slate-100 text-slate-500")
               )}
             >
-              FAVORITE
+              {isFavorited ? "已最愛" : "加最愛"}
             </BrandButton>
             <BrandButton 
               icon={<Bot size={14} />}

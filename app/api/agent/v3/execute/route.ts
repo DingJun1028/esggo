@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { authenticateWithMaster } from '@/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { AgentStep, AgentStatus } from '@/agent/v3-shared';
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { prompt, autoRepair } = body;
 
+  const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       const sendStep = (status: AgentStatus, message: string, payload?: any) => {

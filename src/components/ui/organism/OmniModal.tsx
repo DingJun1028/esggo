@@ -28,7 +28,7 @@ export function OmniModal({
   children,
   className,
 }: OmniModalProps) {
-  const { isMobile } = useOmniTheme();
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
   useEffect(() => {
     if (!closeOnEsc) return;

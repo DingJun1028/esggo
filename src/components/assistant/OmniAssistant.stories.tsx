@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { OmniAssistant } from './OmniAssistant';
-import { ThemeProvider } from '../theme/OmniThemeProvider';
+import { OmniThemeProvider } from '../theme/OmniThemeProvider';
 
 const meta: Meta<typeof OmniAssistant> = {
   title: 'OmniUI/OmniAssistant',
@@ -25,11 +25,11 @@ const meta: Meta<typeof OmniAssistant> = {
   },
   decorators: [
     (Story) => (
-      <ThemeProvider>
+      <OmniThemeProvider>
         <div className="relative h-screen w-full bg-theme-bg-secondary">
           <Story />
         </div>
-      </ThemeProvider>
+      </OmniThemeProvider>
     ),
   ],
 };

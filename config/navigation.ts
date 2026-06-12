@@ -23,14 +23,14 @@ export const SaaS_NAVIGATION: NavGroup[] = [
     groupId: 'favorites',
     groupTitle: '⭐ 我的最愛 (Favorites)',
     items: [
-      { id: 'fav-dashboard', title: '全域控制台', path: '/', icon: 'LayoutDashboard', sub: 'Overview' },
+      { id: 'fav-dashboard', title: '全域控制台', path: '/dashboard', icon: 'LayoutDashboard', sub: 'Overview' },
     ],
   },
   {
     groupId: 'onboard',
     groupTitle: '0. 觀測與啟航 (Observe & Onboard)',
     items: [
-      { id: 'dashboard', title: '全域控制台', path: '/', icon: 'LayoutDashboard', sub: 'Overview' },
+      { id: 'dashboard', title: '全域控制台', path: '/dashboard', icon: 'LayoutDashboard', sub: 'Overview' },
       { id: 'profile', title: '企業管理', path: '/profile', icon: 'Building2', sub: 'Profile' },
       { id: 'api-setup', title: '整合中心', path: '/api-setup', icon: 'Link', sub: 'Integrations' },
       { id: 'data-sources', title: '資料來源', path: '/data-sources', icon: 'Database', sub: 'Data Hub' },
@@ -64,7 +64,7 @@ export const SaaS_NAVIGATION: NavGroup[] = [
     groupId: 'draft',
     groupTitle: '3. 洞察與成卷 (Analyze & Draft)',
     items: [
-      { id: 'editor', title: 'SustainWrite 編輯器', path: '/editor', icon: 'PenTool', sub: 'Editor' },
+      { id: 'editor', title: 'SustainWrite 編輯器', path: '/sustain-write', icon: 'PenTool', sub: 'SustainWrite' },
       { id: 'advisory', title: '專家諮詢', path: '/advisory', icon: 'MessageSquare', sub: 'Advisory' },
       { id: 'intelligence', title: '商情中心', path: '/intelligence', icon: 'Globe', sub: 'Intelligence' },
       { id: 'compliance-check', title: '合規檢查', path: '/compliance-check', icon: 'ShieldAlert', sub: 'Compliance' },
@@ -110,11 +110,11 @@ export const IT_OPS_NAVIGATION: NavGroup[] = [
     groupId: 'super-admin',
     groupTitle: '👑 超級管理員區 (Super Admin)',
     items: [
+      { id: 'super-admin-portal', title: '超級管理員中心', path: '/super-admin', icon: 'Shield', sub: 'Control Center' },
       { id: 'ai-platform', title: 'AI 整合平台', path: '/ai-platform', icon: 'Cpu', sub: 'AI OS' },
       { id: 'swarm', title: '代理蜂群', path: '/swarm', icon: 'Share2', sub: 'Swarm' },
       { id: 'system-status', title: '系統狀態', path: '/system-status', icon: 'Activity', sub: 'Status' },
       { id: 'system-test', title: '系統測試', path: '/system-test', icon: 'TestTube', sub: 'Test' },
-      { id: 'terminal', title: '終端主控', path: '/terminal', icon: 'TerminalSquare', sub: 'CLI' },
       { id: 'design-library', title: '設計圖書館', path: '/design-library', icon: 'Palette', sub: 'Design' },
       { id: 'walkthrough', title: '系統導覽', path: '/walkthrough', icon: 'Rocket', sub: 'Guide' },
     ],

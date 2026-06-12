@@ -37,13 +37,15 @@ export const useOmniNotesStore = create<OmniNotesState>()(
                     type,
                     date,
                     createdAt: Date.now(),
+                    source: 'local',
+                    metadata: {},
                 };
                 set((state) => ({ notes: [newNote, ...state.notes] }));
 
                 // 如果筆記類型是 'task'，則觸發同步到 OmniTable
                 if (type === 'task') {
                     set({ isSyncing: true });
-                    syncTaskAction(content)
+                    syncTaskAction(newNote.id, content)
                         .then(() => console.log('[OmniNotes] Task synced to OmniTable successfully.'))
                         .catch((err) => console.error('[OmniNotes] Failed to sync task:', err))
                         .finally(() => {

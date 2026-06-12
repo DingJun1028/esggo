@@ -21,7 +21,7 @@ export function useESGAtoms(domain: string) {
       }
 
       // Transform generic atoms into dashboard-friendly format
-      const formatted = (atoms || []).map(atom => ({
+      const formatted = (atoms as any[] || []).map((atom: any) => ({
         id: atom.uuid,
         status: atom.status === 'Trustworthy' ? 'Sealed' : 'Pending',
         hash_lock: atom.hash_lock,

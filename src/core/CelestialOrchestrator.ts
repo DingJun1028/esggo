@@ -12,7 +12,7 @@ interface IGovernance {
   purify: (entropyLevel: number) => void;
 }
 
-interface IWuZuoMiaoDe {
+export interface IWuZuoMiaoDe {
   uuid: string;
   version: string;
   timestamp: number;

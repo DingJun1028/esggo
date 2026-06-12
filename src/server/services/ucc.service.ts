@@ -8,8 +8,10 @@ import {
   CreateUCCDTO, 
   UCCPackage, 
   EntityType, 
-  ElementType 
+  ElementType,
+  AttributeType
 } from '../../shared/types/ucc.types';
+import { Evidence } from '../../shared/types/evidence.types';
 
 export class UCCService {
   /**
@@ -36,7 +38,7 @@ export class UCCService {
         entity_type: EntityType.DOCUMENT,
         entity_name: evidence.tag,
         attributes: [
-          { key: 'version', value: '8.1.0', type: 'string', confidence: 1.0 }
+          { key: 'version', value: '8.1.0', type: AttributeType.STRING, confidence: 1.0 }
         ],
         relations: [],
         confidence_score: 0.98,

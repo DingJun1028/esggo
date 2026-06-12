@@ -108,12 +108,12 @@ export class OmniSoul {
   }
 
   private async assessTechnicalDebt(): Promise<number> { return 0; }
-  private async sacrificeTechnicalDebt(): Promise<void> { }
+  private async sacrificeTechnicalDebt(...args: any[]): Promise<void> { }
   private generateUUID(): string { return 'uuid-' + Date.now(); }
   private translateToEnglish(input: string): string { return input; }
   private generateCode(input: string): string { return input; }
   private extractEssenceFromMatrix(matrix: IOmniMatrix): string { return JSON.stringify(matrix); }
-  private async queryKnowledgeBase(): Promise<Record<string, unknown>> { return {}; }
+  private async queryKnowledgeBase(...args: any[]): Promise<Record<string, unknown>> { return {}; }
   private async applyWisdom(knowledge: Record<string, unknown>): Promise<IOmniWisdom> { 
     return {
       knowledge,
@@ -139,9 +139,9 @@ class OmniThinkTank {
     };
   }
 
-  private retrieveKnowledge(): Record<string, unknown> { return {}; }
-  private generateInsights(): Record<string, unknown> { return {}; }
-  private generateRecommendations(): Record<string, unknown> { return {}; }
+  private retrieveKnowledge(...args: any[]): Record<string, unknown> { return {}; }
+  private generateInsights(...args: any[]): Record<string, unknown> { return {}; }
+  private generateRecommendations(...args: any[]): Record<string, unknown> { return {}; }
 }
 
 class RuneAPI {
@@ -153,9 +153,9 @@ class RuneAPI {
     };
   }
 
-  private identifyCapabilities(): Record<string, unknown> { return {}; }
-  private setupIntegrations(): Record<string, unknown> { return {}; }
-  private createAutomations(): Record<string, unknown> { return {}; }
+  private identifyCapabilities(...args: any[]): Record<string, unknown> { return {}; }
+  private setupIntegrations(...args: any[]): Record<string, unknown> { return {}; }
+  private createAutomations(...args: any[]): Record<string, unknown> { return {}; }
 }
 
 class AgentNetwork {
@@ -165,7 +165,7 @@ class AgentNetwork {
     return this.aggregateResults(results);
   }
 
-  private distributeTasks(): Record<string, unknown> { return {}; }
+  private distributeTasks(...args: any[]): Record<string, unknown> { return {}; }
   private async executeTasks(tasks: Record<string, unknown>): Promise<Record<string, unknown>> { return tasks; }
   private aggregateResults(results: Record<string, unknown>): Record<string, unknown> { return results; }
 }
