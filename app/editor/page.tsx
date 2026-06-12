@@ -74,7 +74,9 @@ export default function EditorPage() {
       activeChapter.name, 
       activeChapter.order, 
       activeChapter.gri, 
-      customPrompt || `請針對「${activeChapter.name}」進行深度展開，需符合 ${activeChapter.gri.join(', ')} 規範，使用專業語氣，強調具體行動與數據量化。`
+      customPrompt 
+        ? `請針對「${activeChapter.name}」進行深度展開，需符合 ${activeChapter.gri.join(', ')} 規範，使用專業語氣，強調具體行動與數據量化。\n【附加指示】：${customPrompt}` 
+        : `請針對「${activeChapter.name}」進行深度展開，需符合 ${activeChapter.gri.join(', ')} 規範，使用專業語氣，強調具體行動與數據量化。`
     );
   };
 
@@ -152,7 +154,7 @@ export default function EditorPage() {
               {isGenerating && <span className="flex items-center gap-1 text-[10px] font-mono tracking-widest text-cyan-400 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20"><Activity size={10} className="animate-pulse"/> GENERATING</span>}
             </h1>
             <div className="flex flex-wrap items-center gap-3 mt-2">
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {activeChapter.gri.map(g => (
                   <span key={g} className="text-[10px] font-mono tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                     {g}

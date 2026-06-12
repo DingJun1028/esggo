@@ -105,7 +105,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
         title="Clear Formatting"
       >
-        <RemoveFormatting size={16} />
+        <span className="flex items-center gap-1">
+          <RemoveFormatting size={16} />
+          <span className="text-[10px] hidden sm:inline-block font-bold">清除格式</span>
+        </span>
       </ToolbarButton>
     </div>
   );
