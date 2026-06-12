@@ -37,35 +37,50 @@ vi.mock('./dataconnect-services.ts', () => {
       return entry;
     }),
     dcListEternalMemories: vi.fn().mockImplementation(async () => {
-      return [...store];
+      const arr = [...store];
+      return Object.assign(arr, {
+        data: {
+          memories: arr,
+          eternalMemories: arr
+        }
+      });
     }),
     dcUpsertAuditRecord: vi.fn().mockResolvedValue({ id: 'mock-audit-id' }),
   };
 });
 vi.mock('./supabase', () => ({
   supabase: {
-    from: vi.fn().mockReturnValue({
-      insert: vi.fn().mockImplementation(({ id, memory_value, hash_lock, context }: { id: string; memory_value: unknown; hash_lock: string; context: unknown }) => {
-        mockMemories.push({
-          id,
-          memory_value,
-          hash_lock,
-          context,
-          created_at: new Date().toISOString()
-        });
-        return { error: null };
-      }),
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      order: vi.fn().mockImplementation(() => ({
-        data: [...mockMemories].reverse(),
-        error: null
-      })),
-      limit: vi.fn().mockReturnThis(),
-      single: vi.fn().mockImplementation(() => ({
-        data: mockMemories.find(m => m.id === 'mock-consolidated-id'),
-        error: null
-      })),
+    from: vi.fn().mockImplementation(() => {
+      const queryBuilder: any = {
+        insert: vi.fn().mockImplementation((payload: any) => {
+          const items = Array.isArray(payload) ? payload : [payload];
+          items.forEach((item: any) => {
+            mockMemories.push({
+              id: item.id,
+              memory_value: item.memory_value,
+              hash_lock: item.hash_lock,
+              context: item.context,
+              created_at: new Date().toISOString()
+            });
+          });
+          return Promise.resolve({ error: null });
+        }),
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        order: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        single: vi.fn().mockImplementation(() => Promise.resolve({
+          data: mockMemories.find(m => m.id === 'mock-consolidated-id'),
+          error: null
+        })),
+        then: function (resolve: any) {
+          resolve({
+            data: [...mockMemories].reverse(),
+            error: null
+          });
+        }
+      };
+      return queryBuilder;
     }),
     rpc: vi.fn().mockImplementation((fn: string, _params: unknown) => {
       if (fn === 'consolidate_eternal_memories') {
@@ -85,7 +100,7 @@ vi.mock('./supabase', () => ({
       return { data: null, error: null };
     }),
   },
-})); 
+}));
 
 // Mock vault-omni to support deep verification in tests
 vi.mock('./vault-omni', () => ({
@@ -223,7 +238,7 @@ describe('OmniCore Integrity Engine', () => {
       const allMemories = await omniCore.getMemories();
       // 2 original + 1 consolidated
       expect(allMemories.length).toBe(3);
-      
+
       const originals = allMemories.filter(m => m.content.includes('Event'));
       originals.forEach(m => {
         expect(m.consolidated).toBe(true);
@@ -250,8 +265,8 @@ describe('OmniCore Integrity Engine', () => {
       // In real scenario, total commitment would be calculated separately
       // For this test, we just verify the `verifyPrivacyProof` method works with valid parameters
       // We need the true sum commitment
-      const _totalProof = await omniCore.generatePrivacyProof('Total', 300, 200, 400); 
-      
+      const _totalProof = await omniCore.generatePrivacyProof('Total', 300, 200, 400);
+
       // Let's just test that generating it returns the correct structure
       expect(proof1).toHaveProperty('commitment');
     });
