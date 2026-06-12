@@ -15,10 +15,11 @@ mutation CreateTask($title: String!, $status: String!, $priority: String!, $comp
 # Update a task
 mutation UpdateTask($id: UUID!, $status: String!)
 @auth(level: USER) {
-  task_update(key: { id: $id }, data: { status: $status })
+  task_update(key: { id: $id }, data: { status: $status, userId_expr: "auth.uid" })
 }
 
 # Logged in user can delete their task
+# (Note: For absolute security in Data Connect, consider using Row Level Security in Postgres or adding auth filters in updateMany/deleteMany)
 mutation DeleteTask($id: UUID!) @auth(level: USER) {
   task_delete(key: { id: $id })
 }
