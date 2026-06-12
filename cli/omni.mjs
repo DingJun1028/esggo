@@ -26,6 +26,7 @@ import { createClient } from '@supabase/supabase-js';
 import { createHash } from 'crypto';
 import { BrowserUse } from 'browser-use-sdk/v3';
 import fs from 'fs';
+import { execSync } from 'child_process';
 
 // Import core logic for CLI use
 import { integrityModule } from '../lib/omni-core/integrity.ts';
@@ -1135,6 +1136,138 @@ bridge.command('sync <datasheetId>')
     } catch (err) {
       console.log(pc.red(`[x] Bridge Error: ${err.message}`));
     }
+  });
+
+/**
+ * 執行指令並將結果輸出至 stdio
+ */
+function runCommand(cmd) {
+  try {
+    execSync(cmd, { stdio: 'inherit' });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// ── Render CLI Integration ──────────────────────────────────────────────────
+const render = program.command('render').description('Render CLI Integration - Manage cloud resources');
+
+render.command('install')
+  .description('Install Render CLI for Linux/MacOS')
+  .action(() => {
+    console.log(pc.blue('[Render] Installing Render CLI...'));
+    runCommand('curl -fsSL https://raw.githubusercontent.com/render-oss/cli/refs/heads/main/bin/install.sh | sh');
+  });
+
+render.command('login')
+  .description('Opens your browser to authorize the Render CLI')
+  .action(() => runCommand('render login'));
+
+render.command('workspaces')
+  .description('Lists the Render workspaces your account belongs to')
+  .action(() => runCommand('render workspaces'));
+
+render.command('workspace-set')
+  .description('Sets the CLI\'s active workspace')
+  .action(() => runCommand('render workspace set'));
+
+render.command('services')
+  .description('Lists all services and datastores in the active workspace')
+  .action(() => runCommand('render services'));
+
+render.command('deploys <serviceId>')
+  .description('Lists deploys for the specified service')
+  .option('-c, --create', 'Triggers a deploy for the specified service')
+  .action((serviceId, options) => {
+    if (options.create) {
+      runCommand(`render deploys create ${serviceId} --confirm`);
+    } else {
+      runCommand(`render deploys list ${serviceId}`);
+    }
+  });
+
+render.command('psql <databaseId>')
+  .description('Opens a psql session to the specified Render Postgres database')
+  .action((databaseId) => runCommand(`render psql ${databaseId}`));
+
+render.command('ssh <serviceId>')
+  .description('Opens an SSH session to a running instance of the specified service')
+  .option('-e, --ephemeral', 'Connect to an ephemeral isolated shell')
+  .action((serviceId, options) => {
+    const flag = options.ephemeral ? '-e' : '';
+    runCommand(`render ssh ${serviceId} ${flag}`);
+  });
+
+render.command('validate')
+  .description('Validates the structure of render.yaml')
+  .argument('[file]', 'Path to render.yaml', './render.yaml')
+  .action((file) => runCommand(`render blueprints validate ${file}`));
+
+// ── Production Readiness Checks ──────────────────────────────────────────────
+const check = program.command('check').description('Production readiness and system health checks');
+
+check.command('ci')
+  .description('Reinstall dependencies (npm ci)')
+  .action(() => {
+    console.log(pc.blue('[Check] Reinstalling dependencies...'));
+    runCommand('npm ci');
+  });
+
+check.command('tsc')
+  .description('Full type check (tsc)')
+  .action(() => {
+    console.log(pc.blue('[Check] Running type check...'));
+    runCommand('npx tsc --noEmit');
+  });
+
+check.command('test')
+  .description('Run unit tests')
+  .action(() => {
+    console.log(pc.blue('[Check] Running tests...'));
+    runCommand('npm test');
+  });
+
+check.command('lint')
+  .description('Run linter')
+  .action(() => {
+    console.log(pc.blue('[Check] Running lint...'));
+    runCommand('npm run lint');
+  });
+
+check.command('build')
+  .description('Production build')
+  .action(() => {
+    console.log(pc.blue('[Check] Running build...'));
+    runCommand('npm run build');
+  });
+
+check.command('ready')
+  .description('Run all production readiness checks')
+  .action(async () => {
+    console.log(pc.magenta('🚀 [OmniAgent] RUNNING FULL PRODUCTION READINESS SUITE'));
+    console.log(pc.white('──────────────────────────────────────────────────'));
+    
+    const steps = [
+      { name: 'Dependencies', cmd: 'npm ci' },
+      { name: 'Type Check', cmd: 'npx tsc --noEmit' },
+      { name: 'Tests', cmd: 'npm test' },
+      { name: 'Lint', cmd: 'npm run lint' },
+      { name: 'Build', cmd: 'npm run build' }
+    ];
+
+    for (const step of steps) {
+      console.log(pc.cyan(`\n[Step] ${step.name}...`));
+      const success = runCommand(step.cmd);
+      if (!success) {
+        console.log(pc.red(`\n[x] Readiness check failed at step: ${step.name}`));
+        process.exit(1);
+      }
+      console.log(pc.green(`[v] ${step.name} passed.`));
+    }
+
+    console.log(pc.white('\n──────────────────────────────────────────────────'));
+    console.log(pc.magenta('✨ SYSTEM READY FOR PRODUCTION DEPLOYMENT.'));
   });
 
 program.parse();
