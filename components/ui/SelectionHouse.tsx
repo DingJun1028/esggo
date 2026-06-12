@@ -1,5 +1,5 @@
 ﻿'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Search, ChevronRight, Globe, Users, Shield, Zap, LayoutGrid, List } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandInput, BrandButton } from '../brand';
 
@@ -53,22 +53,29 @@ export default function SelectionHouse({
 
   if (!isOpen && !mounted) return null;
 
-  const filteredCategories = categories
-    .map((cat) => ({
-      ...cat,
-      items: cat.items.filter(
-        (item) =>
-          item.label.toLowerCase().includes(search.toLowerCase()) ||
-          item.sub?.toLowerCase().includes(search.toLowerCase()) ||
-          item.id.toLowerCase().includes(search.toLowerCase())
-      ),
-    }))
-    .filter((cat) => cat.items.length > 0);
+  // ⚡ Bolt Optimization: Wrapped in useMemo and hoisted toLowerCase() to prevent N*M recalculations
+  // per render cycle when search or categories haven't changed.
+  const filteredCategories = useMemo(() => {
+    const searchLower = search.toLowerCase();
+    return categories
+      .map((cat) => ({
+        ...cat,
+        items: cat.items.filter(
+          (item) =>
+            item.label.toLowerCase().includes(searchLower) ||
+            item.sub?.toLowerCase().includes(searchLower) ||
+            item.id.toLowerCase().includes(searchLower)
+        ),
+      }))
+      .filter((cat) => cat.items.length > 0);
+  }, [categories, search]);
 
-  const displayCategories =
-    activeCategory === 'all'
+  // ⚡ Bolt Optimization: Wrapped in useMemo to prevent redundant array operations when unrelated state changes
+  const displayCategories = useMemo(() => {
+    return activeCategory === 'all'
       ? filteredCategories
       : filteredCategories.filter((c) => c.id === activeCategory);
+  }, [activeCategory, filteredCategories]);
 
   return (
     <div
