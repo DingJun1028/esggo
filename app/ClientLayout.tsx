@@ -8,7 +8,6 @@ import {
   User, Database, ShieldCheck, Activity, Zap, Bot, Layout, 
   HelpCircle, MessageSquare, Plus, RefreshCw, Lock, Globe, Cpu, MoreVertical, AlertCircle
 } from 'lucide-react';
-import Sidebar from '../components/Sidebar';
 import { BrandBadge, BrandButton, BrandCard } from '../components/brand';
 import { cn } from '../lib/utils';
 import { initAnalytics, isDemoMode } from '../lib/firebase';

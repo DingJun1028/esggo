@@ -23,7 +23,7 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 // ============================================
 
 // 一般客戶端（RLS 限制）
-export const supabase: SupabaseClient<Database> = createClient<Database>(
+export const supabase: SupabaseClient<any> = createClient<any>(
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   {
@@ -37,7 +37,7 @@ export const supabase: SupabaseClient<Database> = createClient<Database>(
 );
 
 // 管理員客戶端（繞過 RLS）
-export const supabaseAdmin: SupabaseClient<Database> = createClient<Database>(
+export const supabaseAdmin: SupabaseClient<any> = createClient<any>(
   SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY,
   {

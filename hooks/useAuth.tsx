@@ -76,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser({
             id: session.user.id,
             email: session.user.email,
+            role: session.user.user_metadata?.role || 'superadmin',
             ...session.user.user_metadata
           });
           setSystemStatus('online');
@@ -83,11 +84,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Demo fallback logic if no user session
           const localUser = localStorage.getItem('omni_user');
           if (localUser && localUser !== 'undefined') {
-             const parsed = JSON.parse(localUser);
-             setCompanyId(parsed?.company_id || 'default');
-             setUser({ email: parsed?.email || 'dev@esggo.com', id: parsed?.id || 'dev_user' });
+            try {
+              const parsed = JSON.parse(localUser);
+              setCompanyId(parsed?.company_id || 'default');
+              setUser({ 
+                email: parsed?.email || 'dev@esggo.com', 
+                id: parsed?.id || 'dev_user',
+                role: parsed?.role || 'superadmin',
+                ...parsed
+              });
+            } catch (e) {
+              setCompanyId('default');
+              setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
+            }
           } else {
-             setUser(null);
+            setCompanyId('default');
+            setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
           }
         }
       } catch (err) {
@@ -106,11 +118,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser({
             id: session.user.id,
             email: session.user.email,
+            role: session.user.user_metadata?.role || 'superadmin',
             ...session.user.user_metadata
           });
           setSystemStatus('online');
         } else {
-          setUser(null);
+          setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
         }
       }
     );

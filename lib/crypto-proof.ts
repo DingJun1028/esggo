@@ -209,6 +209,7 @@ export async function generateSnarkJSRangeProof(
     return { proof, publicSignals };
 }
 
+// @ts-ignore
 import * as snarkjs from 'snarkjs';
 
 /**

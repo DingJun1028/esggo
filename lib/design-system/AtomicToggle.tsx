@@ -3,7 +3,7 @@ import { IAtomicComponent, atomicManager } from './atomic-core';
 import { cn } from '../utils';
 import { useColorDropStream } from '../../lib/hooks/useColorDropStream'; // Import the hook
 
-export interface AtomicToggleProps extends Omit<React.InputHTMLAttributes<HTMLButtonElement>, 'type' | 'onChange'> {
+export interface AtomicToggleProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onChange' | 'onToggle'> {
     label?: string;
     isToggled: boolean;
     onToggle: (checked: boolean) => void;

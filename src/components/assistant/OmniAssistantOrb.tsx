@@ -97,8 +97,6 @@ export function OmniAssistant({
           isMobile ? 'bottom-20 right-4' : 'bottom-6 right-6'
         )}
         style={{
-          right: isMobile ? 16 : `auto`,
-          bottom: isMobile ? 80 : `auto`,
           ...(isDragging ? { 
             right: currentPosition.x, 
             bottom: currentPosition.y,
@@ -106,7 +104,10 @@ export function OmniAssistant({
           } : !isMobile ? {
             right: currentPosition.x ? window.innerWidth - currentPosition.x - 56 : undefined,
             bottom: currentPosition.y,
-          } : {}),
+          } : {
+            right: 16,
+            bottom: 80,
+          }),
         }}
         onClick={() => setIsExpanded(true)}
         onMouseDown={handleMouseDown}

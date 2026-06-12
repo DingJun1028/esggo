@@ -29,7 +29,6 @@ evidence: "WIKI.md"
 *   [[平台總覽]](docs/wiki/Platform-Overview.md)
 *   [[系統核心架構]](docs/wiki/System-Core-Architecture.md)
 *   [[5T-誠信協議]](docs/wiki/5T-Protocol.md)
-*   [[OmniAgent 對 ESGGO 平台的理解與自身角色說明]](docs/wiki/OmniAgent-Platform-Summary.md)
 
 ### I. 初始導入與配置
 *   [[API Setup-整合中心]](docs/wiki/API-Setup.md) -> `/api-setup`

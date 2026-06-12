@@ -33,7 +33,7 @@ const EsgReportManager: React.FC = () => {
   const auth = getAuth(); // Get auth instance
 
   // Reference to the callable function
-  const manageEsgReports = httpsCallable<ManageEsgReportsPayload, { data: EsgReport[] | EsgReport | { message: string } }>(functions, 'manageEsgReports');
+  const manageEsgReports = (httpsCallable as any)(functions, 'manageEsgReports');
 
   const fetchEsgReports = useCallback(async () => {
     if (!user) {
@@ -55,7 +55,7 @@ const EsgReportManager: React.FC = () => {
   }, [user, manageEsgReports]); // Add manageEsgReports to dependencies
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser: User | null) => {
       setUser(currentUser);
       if (currentUser) {
         fetchEsgReports();

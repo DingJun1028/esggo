@@ -1,7 +1,7 @@
 import { ai } from './genkit';
 import { z } from 'genkit';
 import { telemetryService } from '../telemetry/service';
-import { omniAgentBus } from '../omni-agent-bus';
+import { omniAgentBus } from './omni-agent-bus';
 import { memoryStore } from '../memory/memory-store';
 import { toolSynthesizer } from '../tools/synthesis';
 import type { MemoryRecord } from '../memory/memory-store';

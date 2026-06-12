@@ -294,12 +294,12 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       // 模擬從資料庫或上下文獲取計算組件
       // 實際場景中，這些應來自 task.inputRefIds 關聯的組件
       const mockComp = CarbonCalculator.calculate({
-        factorId: task.prompt?.includes('305-2') || task.prompt?.includes('範疇二') ? 'electricity_tw_2023' : 'diesel_stationary',
+        factorId: (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二') ? 'electricity_tw_2023' : 'diesel_stationary',
         activityAmount: 1200,
         sourceOrigin: '系統自動提取之年度報表'
       });
 
-      const griCode = task.prompt?.includes('305-2') || task.prompt?.includes('範疇二') ? '305-2' : '305-1';
+      const griCode = (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二') ? '305-2' : '305-1';
       const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
 
       artifactData = generateMockArtifact(task, execution);
@@ -328,11 +328,11 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       const { CarbonCalculator } = await import('../esg/carbon-calculator');
       
       // 解析 prompt 中的數據（簡易解析示例）
-      const amountMatch = task.prompt?.match(/(\d+\.?\d*)/);
+      const amountMatch = (task as any).prompt?.match(/(\d+\.?\d*)/);
       const amount = amountMatch ? parseFloat(amountMatch[1]) : 100;
       
       // 默認使用電力因數，實際可從 prompt 判斷
-      const factorId = task.prompt?.includes('柴油') ? 'diesel_stationary' : 'electricity_tw_2023';
+      const factorId = (task as any).prompt?.includes('柴油') ? 'diesel_stationary' : 'electricity_tw_2023';
       
       const calcResult = CarbonCalculator.calculate({
         factorId,
@@ -349,16 +349,16 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       const { SupplierAssessmentEngine } = await import('../esg/supplier-assessment');
       
       // 解析供應商資訊 (示例解析)
-      const supplierName = task.prompt?.match(/供應商\s*[:：]?\s*([^\n,，]+)/)?.[1] || '未知供應商';
-      const saqMatch = task.prompt?.match(/SAQ[^0-9]*(\d+)/);
+      const supplierName = (task as any).prompt?.match(/供應商\s*[:：]?\s*([^\n,，]+)/)?.[1] || '未知供應商';
+      const saqMatch = (task as any).prompt?.match(/SAQ[^0-9]*(\d+)/);
       const saqScore = saqMatch ? parseInt(saqMatch[1]) : 75;
 
       const assessment = SupplierAssessmentEngine.assess({
         supplierName,
-        region: task.prompt?.includes('台灣') ? 'Taiwan' : 'Overseas',
+        region: (task as any).prompt?.includes('台灣') ? 'Taiwan' : 'Overseas',
         category: 'Electronics',
         rbaSelfAssessmentScore: saqScore,
-        esgCertificates: task.prompt?.includes('ISO') ? ['ISO 14001', 'ISO 45001'] : []
+        esgCertificates: (task as any).prompt?.includes('ISO') ? ['ISO 14001', 'ISO 45001'] : []
       });
 
       artifactData = generateMockArtifact(task, execution);

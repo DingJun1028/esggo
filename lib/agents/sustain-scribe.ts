@@ -137,7 +137,7 @@ export class SustainWriteScribe {
    ): Promise<string> {
     
     // 若無配置真實 API Key，則使用模擬的高品質長文生成邏輯
-    if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY && !process.env.OPENAI_API_KEY) {
+    if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY && !process.env.GEMINI_API_KEY && !process.env.OPENAI_API_KEY) {
       return this.generateMockExpertText(mainTitle, subTitle, focus, depth);
     }
 

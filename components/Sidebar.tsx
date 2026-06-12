@@ -7,13 +7,14 @@ import {
   LayoutDashboard, Leaf, Users, Shield, FileText, Search,
   BarChart3, ClipboardList, Database, TrendingDown, BookOpen,
   Building2, CheckSquare, Globe, Fingerprint, GraduationCap,
-  UserCheck, Award, HeartHandshake, Bot, Cpu, ChevronDown,
+  UserCheck, Award, HeartHandshake, Heart, Bot, Cpu, ChevronDown,
   ChevronRight, PanelLeftClose, PanelLeftOpen, Zap, Activity,
   Settings, FlaskConical, Layers, Target, AlertTriangle, Layout,
   DollarSign, Link2, Briefcase, Network, Sun, Moon, X, Server, GitBranch
 } from 'lucide-react';
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
+import { useAuth } from '../hooks/useAuth';
 import { BrandBadge } from './brand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -214,6 +215,11 @@ function SaaSStatusWidget() {
 export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }: SidebarProps) {
   const pathname = usePathname() || '/';
   const { sidebarTheme } = useThemeStore();
+  const { user } = useAuth();
+  const visibleGroups = NAV_GROUPS.filter((group) => {
+    if (group.title === '超級管理員區') return user?.role === 'superadmin';
+    return true;
+  });
   const t = getThemeStyles(sidebarTheme);
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
     CORE: true,
@@ -296,7 +302,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
         )}
 
         <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
-          {NAV_GROUPS.map((group) => {
+          {visibleGroups.map((group) => {
             const isGroupActive = group.items.some(item => isActive(item.href));
             const isExpanded = expandedGroups[group.title] ?? true;
 

@@ -16,8 +16,8 @@ export const queryDatabaseTool = {
         return { success: false, error: error.message };
       }
       return { success: true, data };
-    } catch (err: unknown) {
-      return { success: false, error: err.message };
+    } catch (err: any) {
+      return { success: false, error: err?.message || String(err) };
     }
   }
 };
@@ -37,8 +37,8 @@ export const insertDatabaseTool = {
         return { success: false, error: error.message };
       }
       return { success: true, data };
-    } catch (err: unknown) {
-      return { success: false, error: err.message };
+    } catch (err: any) {
+      return { success: false, error: err?.message || String(err) };
     }
   }
 };

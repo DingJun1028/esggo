@@ -44,6 +44,8 @@ export function useTouchGesture(
       }
     };
     
+    const element = elementRef.current;
+    
     const handleTouchEnd = () => {
       if (longPressTimer.current) {
         clearTimeout(longPressTimer.current);
@@ -54,11 +56,12 @@ export function useTouchGesture(
         onTap?.();
       }
       
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
+      if (element) {
+        element.removeEventListener('touchmove', handleTouchMove);
+        element.removeEventListener('touchend', handleTouchEnd);
+      }
     };
     
-    const element = elementRef.current;
     if (element) {
       element.addEventListener('touchmove', handleTouchMove, { passive: !options?.preventScroll });
       element.addEventListener('touchend', handleTouchEnd);

@@ -57,7 +57,11 @@ export class EvidenceService {
   /**
    * 獲取使用者證據清單
    */
-  async getUserEvidences(userId: UserID) {
+  async getUserEvidences(userId?: UserID) {
+    if (!userId) {
+      // No user filter – return all evidences (admin / global view)
+      return this.repo.findMany({});
+    }
     return this.repo.findMany({ user_id: userId });
   }
 }

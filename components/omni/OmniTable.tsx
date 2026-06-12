@@ -107,7 +107,7 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                   <OmniBadge variant="warning" size="sm" icon={<AlertTriangle size={12}/>}>Unsealed</OmniBadge>
                 )}
                 {row.status === 'Void' && (
-                  <OmniBadge variant="destructive" size="sm">Void</OmniBadge>
+                  <OmniBadge variant="error" size="sm">Void</OmniBadge>
                 )}
               </div>
 

@@ -33,7 +33,7 @@ export class OmniSpaceService {
    */
   async healCard(card: OmniCard) {
     const validated = OmniCardSchema.parse(card);
-    return globalHealingService.healCard(validated, 'LV2_AUTO_HEAL');
+    return globalHealingService.healCard(validated);
   }
 
   /**

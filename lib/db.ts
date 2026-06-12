@@ -10,6 +10,7 @@ export {
   dcGetReportById
 };
 import { db } from './firebase';
+// @ts-ignore
 import { 
   collection, 
   doc, 

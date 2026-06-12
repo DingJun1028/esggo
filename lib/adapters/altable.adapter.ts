@@ -22,8 +22,8 @@ export class AlTableAdapter {
    */
   public static transform(payload: AlTableRecordPayload): OmniCard {
     // 從 fields 提取本質數據 (Traceable)
-    const name = payload.fields['Name'] || 'Unknown Card';
-    const statusVal = payload.fields['Status']?.toLowerCase();
+    const name = String(payload.fields['Name'] || 'Unknown Card');
+    const statusVal = typeof payload.fields['Status'] === 'string' ? payload.fields['Status'].toLowerCase() : '';
     
     const validStatus = ['todo', 'doing', 'done'].includes(statusVal) ? statusVal : 'todo';
 

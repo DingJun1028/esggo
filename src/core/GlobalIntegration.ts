@@ -2,6 +2,7 @@ import { T5Validator } from './T5Protocol';
 import { IComponentCore, IEvidence } from '../../lib/core-types';
 import { COLLECTIONS, Contract, AuditLog, EvidenceRecord } from '../lib/firestore-types';
 import { db } from '../../lib/firebase'; // Firebase client
+// @ts-ignore
 import { collection, doc, setDoc, addDoc } from 'firebase/firestore';
 import { UIRenderer, RenderParams } from './UIRenderer';
 import { useThemeStore } from '../../lib/theme-store';

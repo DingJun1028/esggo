@@ -14,7 +14,7 @@ export default function OmniTableQueryProvider({ children }: { children: React.R
             retry: 1,
             refetchOnWindowFocus: false,
           },
-        },
+        } as any,
       })
   );
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>;

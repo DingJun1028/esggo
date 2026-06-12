@@ -1,4 +1,4 @@
-﻿/**
+/**
  * 🍱 Premium Bento Dashboard - ESGGO 善向永續
  * v3.0 | #BentoGrid #LiquidGlass #UXTranscendence
  */
@@ -58,10 +58,10 @@ const DashboardContent = () => {
           </p>
         </div>
         <div className="flex gap-3">
-          <AtomicButton variant="secondary" size="m">
+          <AtomicButton variant="outline">
             <Database size={16} className="mr-2" /> 實證金庫
           </AtomicButton>
-          <AtomicButton variant="primary" size="m">
+          <AtomicButton variant="primary">
             <Zap size={16} className="mr-2" /> 快速審計
           </AtomicButton>
         </div>
@@ -76,7 +76,7 @@ const DashboardContent = () => {
       >
         {/* Environment - Large Card */}
         <motion.div variants={item} className="md:col-span-2 md:row-span-2 group">
-          <AtomicCard hoverEffect="glow" glassIntensity="heavy" className="h-full flex flex-col justify-between">
+          <AtomicCard hoverEffect="glow" glassIntensity="medium" className="h-full flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-8">
                 <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform duration-300">
@@ -103,7 +103,7 @@ const DashboardContent = () => {
             </div>
             <div className="mt-8 flex items-center justify-between border-t border-[var(--at-border)] pt-6">
                <span className="text-[10px] text-[var(--at-text-sub)] font-bold">更新於 2 分鐘前</span>
-               <AtomicButton variant="ghost" size="s" className="text-[var(--at-accent)] hover:bg-[var(--at-accent)]/10">
+               <AtomicButton variant="ghost" className="text-[var(--at-accent)] hover:bg-[var(--at-accent)]/10">
                  進入指揮中心 <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
                </AtomicButton>
             </div>

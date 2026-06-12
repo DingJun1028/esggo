@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { OmniInput } from './OmniInput';
-import { ThemeProvider } from '../../theme/OmniThemeProvider';
+import { OmniThemeProvider } from '../../theme/OmniThemeProvider';
 
 const meta: Meta<typeof OmniInput> = {
   title: 'OmniUI/Atom/OmniInput',
@@ -30,11 +30,11 @@ const meta: Meta<typeof OmniInput> = {
   },
   decorators: [
     (Story) => (
-      <ThemeProvider>
+      <OmniThemeProvider>
         <div className="p-8 bg-theme-bg-secondary min-h-screen w-80">
           <Story />
         </div>
-      </ThemeProvider>
+      </OmniThemeProvider>
     ),
   ],
 };

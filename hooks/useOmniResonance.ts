@@ -17,6 +17,7 @@ export function useOmniResonance() {
         ren: 85 + Math.random() * 15, 
         du: 80 + Math.random() * 20   
       });
+      return () => {};
     } else {
       // 閒置時的生命感微擾
       const interval = setInterval(() => {

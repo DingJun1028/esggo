@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '../../../lib/cn';
 
-export interface OmniToggleProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface OmniToggleProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'onChange'> {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;

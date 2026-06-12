@@ -124,7 +124,7 @@ export default function OmniBookCaseRegistry() {
     }
   };
 
-  const registerNewComponent = () => {
+  const registerNewComponent = async () => {
     const newComponent: IOmniComponent = {
       uuid: `uuid-${Date.now()}`,
       componentVersion: '1.0.0-New',
@@ -141,8 +141,29 @@ export default function OmniBookCaseRegistry() {
       transparent: false,
       trustworthy: false,
     };
+    // Optimistically update UI
     setComponents([newComponent, ...components]);
     toast(`Successfully registered new component: ${newComponent.name}`, "success");
+    // Sync to OmniCore backend
+    try {
+      const res = await fetch(`/api/omni-core/${newComponent.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          version: newComponent.componentVersion,
+          matrix: {},
+          crystal: {},
+          eternalMemory: {}
+        })
+      });
+      if (!res.ok) {
+        console.error('Failed to sync OmniCore record', await res.text());
+        toast('OmniCore sync failed', 'error');
+      }
+    } catch (e) {
+      console.error('Error syncing OmniCore', e);
+      toast('Error syncing OmniCore', 'error');
+    }
   };
 
   return (

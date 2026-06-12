@@ -103,9 +103,9 @@ Please analyze the request, use any available tools to query the databases for n
       // Utilize Genkit for core generation (Base LLM execution)
       const { gemini20Flash } = await import('@genkit-ai/googleai');
       const response = await genkitInstance.generate({
-        model: gemini20Flash,
+        model: gemini20Flash as any,
         prompt: prompt,
-        tools: this.tools, // Enable function calling
+        tools: this.tools as any, // Enable function calling
         config: {
           temperature: 0.2,
         }
@@ -140,18 +140,18 @@ Available context data:
 ${JSON.stringify(dataContext || {}, null, 2)}
 
 Please analyze the request, use any available tools to query the databases for necessary data, and provide a professional, structured response.
-需針對該專案內容深度撰寫，字數需儘可能豐富詳盡。
+Refined writing for the project, make the output as detailed and rich as possible.
       `;
 
     const { gemini20Flash } = await import('@genkit-ai/googleai');
     const { stream } = await genkitInstance.generateStream({
-      model: gemini20Flash,
+      model: gemini20Flash as any,
       prompt: prompt,
-      tools: this.tools,
+      tools: this.tools as any,
       config: {
         temperature: 0.3,
         maxOutputTokens: 8192,
-      }
+      } as any
     });
 
     for await (const chunk of stream) {

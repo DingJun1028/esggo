@@ -40,7 +40,7 @@ export function OmniAgentBusWidget({
 
   return (
     <div
-      ref={touchRef}
+      ref={touchRef as any}
       className={cn(
         'omni-card-glass rounded-xl p-4 transition-all duration-300',
         isMobile ? 'w-full' : 'w-80',
