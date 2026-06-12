@@ -153,11 +153,13 @@ if (typeof window !== 'undefined') {
 export const triggerSpontaneousVirtue = (signal: OmniSignal, loadFactor: number = 1.0) => {
   if (signal.type === 'HEAL') {
     console.log(`[OmniAgentBus] 🌌 全通之心 — 啟動熵減與圓通無礙修復 (Load Factor: ${loadFactor.toFixed(2)})`);
-    // Optionally notify Gateway /omni-jules endpoint
+    // Forward to internal /api/omni-jules or external gateway
     if (typeof fetch !== 'undefined' && signal.payload) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || 'http://161.118.248.180:8642'}/omni-jules`,
-        {
+      const endpoint = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL 
+        ? `${process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL}/omni-jules`
+        : '/api/omni-jules';
+        
+      fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026' },
           body: JSON.stringify({ 
