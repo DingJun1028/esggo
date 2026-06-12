@@ -1,5 +1,5 @@
 # --- Stage 1: Base & Dependencies ---
-FROM node:20-alpine AS base
+FROM node:26-alpine AS base
 
 FROM base AS deps
 # Install libc6-compat for native Node modules if needed (e.g., sharp, bcrypt)
