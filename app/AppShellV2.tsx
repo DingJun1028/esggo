@@ -17,7 +17,7 @@ import {
   Globe, ShieldAlert, History, Archive, BadgeCheck, Link2, Send,
   Library, BookOpen, PieChart, GraduationCap, Briefcase, Headphones,
   Network, Cpu, Share2, TestTube, TerminalSquare, Palette, UploadCloud,
-  Flame
+  Flame, Plus, Save
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import BrandButton from '../components/brand/BrandButton';
@@ -80,14 +80,12 @@ export const IconMapper: Record<string, React.ReactNode> = {
   Star: <Star size={20} />,
 };
 
-// Core 6 Journeys for Mobile Bottom Bar (Refined for Mobile optimization)
+// Core Journeys for Mobile Bottom Bar (Refined for Mobile optimization)
 const mobileBottomItems = [
   { href: '/dashboard', label: '首頁', icon: <LayoutDashboard size={24} /> },
   { href: '/editor', label: '撰寫', icon: <FileText size={24} /> },
   { href: '/vault', label: '金庫', icon: <Lock size={24} /> },
   { href: '/intelligence', label: '情報', icon: <BarChart3 size={24} /> },
-  { href: '/omniagent-orchestrator', label: '代理', icon: <Bot size={24} /> },
-  { href: '/profile', label: '帳號', icon: <User size={24} /> },
 ];
 
 export default function AppShellV2({ children }: { children: React.ReactNode }) {
@@ -104,6 +102,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
   const [isMounted, setIsMounted] = useState(true); // Default to true
 
   const [showOverviewMenu, setShowOverviewMenu] = useState(false);
+  const [showFabMenu, setShowFabMenu] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
   const [logoPosition, setLogoPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
 
@@ -226,7 +225,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
       "flex h-screen overflow-hidden transition-all duration-700 font-sans relative",
       isDark 
         ? "bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-200" 
-        : "bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-indigo-50/20 to-white text-[#003262]"
+        : "bg-[#FAF9F6] text-[#003262]"
     )}>
       {/* ─── DESKTOP SIDEBAR ─── */}
       <motion.aside
@@ -495,9 +494,9 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         {/* ─── MOBILE TOP FUNCTION BAR ─── */}
         <div className={cn(
           "md:hidden h-16 flex items-center px-4 border-b z-40 sticky top-0 backdrop-blur-3xl shadow-sm transition-colors",
-          isDark ? "bg-slate-950/90 border-white/5" : "bg-white/90 border-slate-100"
+          isDark ? "bg-slate-950/90 border-white/5" : "bg-white/90 border-slate-300"
         )}>
-          <div className="flex items-center gap-3 overflow-x-scroll no-scrollbar py-2 w-full"> {/* Changed to overflow-x-scroll */}
+          <div className="flex items-center gap-3 overflow-x-scroll no-scrollbar py-2 w-full pr-4"> 
             {/* Theme Toggle Mobile */}
             <div className="flex-shrink-0">
               <AppThemeSwitcher />
@@ -506,45 +505,23 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             {/* Quick Actions Pills */}
             <BrandButton 
               onClick={toggleFavorite}
-              icon={<Star size={14} className={cn(isFavorited ? "fill-yellow-400 text-yellow-400" : "")} />}
+              icon={<Star size={18} className={cn(isFavorited ? "fill-yellow-400 text-yellow-400" : "text-slate-400")} />}
               className={cn(
-                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
+                "flex-shrink-0 w-10 h-10 rounded-full border transition-all shadow-sm flex items-center justify-center p-0",
                 isFavorited 
-                  ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-500" 
-                  : (isDark ? "bg-white/5 border-white/10 text-slate-300" : "bg-slate-50 border-slate-100 text-slate-500")
+                  ? "bg-yellow-500/10 border-yellow-500/20" 
+                  : (isDark ? "bg-white/5 border-white/10" : "bg-white border-slate-300")
               )}
-            >
-              {isFavorited ? "已最愛" : "加最愛"}
-            </BrandButton>
-            <BrandButton 
-              icon={<Bot size={14} />}
-              className={cn(
-                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
-                isDark ? "bg-cyan-500/10 border-cyan-500/20 text-cyan-400" : "bg-cyan-50 border-cyan-100 text-cyan-700"
-              )}
-            >
-              AI_CORE
-            </BrandButton>
-            <BrandButton 
-              icon={<Settings size={14} />}
-              className={cn(
-                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
-                isDark ? "bg-amber-500/10 border-amber-500/20 text-amber-400" : "bg-amber-50 border-amber-100 text-amber-700"
-              )}
-            >
-              SYSTEM
-            </BrandButton>
+            />
             {/* "全觀" (Overview) Button */}
             <BrandButton
-              icon={<Menu size={14} />}
+              icon={<Menu size={18} />}
               className={cn(
-                "flex-shrink-0 px-5 py-2.5 rounded-full text-[11px] font-black border transition-all shadow-sm",
+                "flex-shrink-0 w-10 h-10 rounded-full border transition-all shadow-sm flex items-center justify-center p-0",
                 isDark ? "bg-slate-700/50 border-slate-600/50 text-slate-300" : "bg-slate-200 border-slate-300 text-slate-600"
               )}
               onClick={() => setShowOverviewMenu(true)}
-            >
-              全觀
-            </BrandButton>
+            />
           </div>
         </div>
 
@@ -563,47 +540,100 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             </motion.div>
           </AnimatePresence>
           
-          {/* Background Decorative Blobs */}
-          <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-blue-500/5 blur-[120px] pointer-events-none -z-0" />
-          <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-[#FDB515]/3 blur-[100px] pointer-events-none -z-0" />
+          {/* Background Decorative Blobs Removed for Cleanliness */}
         </main>
 
-        {/* ─── MOBILE BOTTOM TAB BAR ─── */}
+        {/* ─── MOBILE BOTTOM TAB BAR & FAB ─── */}
         <div className={cn(
-          "md:hidden h-24 fixed bottom-0 left-0 right-0 z-[100] border-t flex items-center px-4 backdrop-blur-[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transition-colors",
-          isDark ? "bg-slate-950/90 border-white/5" : "bg-white/90 border-slate-100"
+          "md:hidden h-24 fixed bottom-0 left-0 right-0 z-[100] border-t flex justify-center px-4 backdrop-blur-[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transition-colors",
+          isDark ? "bg-slate-950/90 border-white/5" : "bg-white/90 border-slate-300"
         )}>
-          <div className="flex items-center justify-between w-full overflow-x-auto no-scrollbar gap-2 py-3 px-2">
-            {mobileBottomItems.map((item, idx) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={idx}
-                  href={item.href}
+          
+          {/* FAB Pop-up Menu */}
+          <AnimatePresence>
+            {showFabMenu && (
+              <>
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowFabMenu(false)}
+                  className="fixed inset-0 bg-black/40 z-[-1] backdrop-blur-sm -top-[100vh]"
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 50, scale: 0.9 }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                   className={cn(
-                    "flex flex-col items-center justify-center min-w-[68px] h-16 rounded-3xl transition-all duration-500 relative",
-                    isActive ? "scale-105" : "opacity-40"
+                    "absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col gap-3 p-4 rounded-3xl shadow-2xl border w-64",
+                    isDark ? "bg-slate-900 border-white/10" : "bg-white border-slate-200"
                   )}
                 >
-                  {isActive && (
-                    <motion.div 
-                      layoutId="mobileActiveBg"
-                      className="absolute inset-0 bg-[#FDB515]/10 rounded-3xl border border-[#FDB515]/20" 
-                    />
+                  <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#FDB515]/10 text-left transition-colors">
+                    <div className="bg-[#FDB515]/20 p-2 rounded-xl text-[#FDB515]"><Plus size={20} /></div>
+                    <span className="font-bold text-sm">新增紀錄</span>
+                  </button>
+                  <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-cyan-500/10 text-left transition-colors">
+                    <div className="bg-cyan-500/20 p-2 rounded-xl text-cyan-500"><MessageSquare size={20} /></div>
+                    <span className="font-bold text-sm">快速留言</span>
+                  </button>
+                  <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-blue-500/10 text-left transition-colors">
+                    <div className="bg-blue-500/20 p-2 rounded-xl text-blue-500"><Save size={20} /></div>
+                    <span className="font-bold text-sm">SustainWrite 儲存</span>
+                  </button>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+          <div className="flex items-center justify-between w-full max-w-sm gap-2 py-3 px-2">
+            {mobileBottomItems.map((item, idx) => {
+              const isActive = pathname === item.href;
+              const isCenter = idx === 2; // We want 2 items, FAB, 2 items
+              
+              return (
+                <React.Fragment key={idx}>
+                  {isCenter && (
+                    <div className="flex flex-col items-center justify-center min-w-[72px] h-16 relative z-50">
+                      <button
+                        onClick={() => setShowFabMenu(!showFabMenu)}
+                        className={cn(
+                          "w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl transform transition-transform duration-300",
+                          showFabMenu ? "rotate-45 bg-rose-500" : "bg-[#FDB515] hover:scale-110"
+                        )}
+                      >
+                        <Plus size={28} strokeWidth={3} />
+                      </button>
+                    </div>
                   )}
-                  <div className={cn(
-                    "p-2 rounded-2xl transition-colors relative z-10",
-                    isActive ? "text-[#FDB515]" : (isDark ? "text-white" : "text-[#003262]")
-                  )}>
-                    {item.icon}
-                  </div>
-                  <span className={cn(
-                    "text-[10px] font-black tracking-tighter transition-colors mt-1 relative z-10",
-                    isActive ? "text-[#FDB515]" : (isDark ? "text-slate-400" : "text-slate-500")
-                  )}>
-                    {item.label}
-                  </span>
-                </Link>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex flex-col items-center justify-center min-w-[64px] h-16 rounded-3xl transition-all duration-500 relative",
+                      isActive ? "scale-105" : "opacity-40"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div 
+                        layoutId="mobileActiveBg"
+                        className="absolute inset-0 bg-[#FDB515]/10 rounded-3xl border border-[#FDB515]/20" 
+                      />
+                    )}
+                    <div className={cn(
+                      "p-2 rounded-2xl transition-colors relative z-10",
+                      isActive ? "text-[#FDB515]" : (isDark ? "text-white" : "text-[#003262]")
+                    )}>
+                      {item.icon}
+                    </div>
+                    <span className={cn(
+                      "text-[10px] font-black tracking-tighter transition-colors mt-1 relative z-10",
+                      isActive ? "text-[#FDB515]" : (isDark ? "text-slate-400" : "text-slate-500")
+                    )}>
+                      {item.label}
+                    </span>
+                  </Link>
+                </React.Fragment>
               );
             })}
           </div>
