@@ -19,8 +19,8 @@ COPY . .
 # Disable Next.js telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Run the custom build script to resolve Render dependency conflicts
-RUN chmod +x render-build.sh && ./render-build.sh
+# Run Next.js build directly
+RUN npm run build
 
 # --- Stage 3: Runner (Production) ---
 FROM base AS runner
