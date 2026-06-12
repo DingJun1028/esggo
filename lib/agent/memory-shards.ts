@@ -3,10 +3,17 @@ import { ai } from '../agents/genkit';
 import { createClient } from '@supabase/supabase-js';
 
 // 初始化 Service Role Client 以寫入資料庫
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+let supabaseAdmin: ReturnType<typeof createClient> | null = null;
+if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  try {
+    supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+  } catch (e) {
+    console.warn('Supabase initialization failed in memory-shards.ts', e);
+  }
+}
 
 // 定義記憶碎片 Schema
 export const MemoryShardSchema = z.object({
@@ -90,12 +97,16 @@ ${conversationLog}
       insertData['entropy_level'] = shard.entropyLevel;
     }
 
-    const { error: dbError } = await supabaseAdmin
-      .from('omni_memory_shards')
-      .insert(insertData);
+    if (supabaseAdmin) {
+      const { error: dbError } = await supabaseAdmin
+        .from('omni_memory_shards')
+        .insert(insertData);
 
-    if (dbError) {
-      console.warn('⚠️ 記憶碎片已生成，但存檔至資料庫失敗:', dbError.message);
+      if (dbError) {
+        console.warn('⚠️ 記憶碎片已生成，但存檔至資料庫失敗:', dbError.message);
+      }
+    } else {
+      console.warn('⚠️ Supabase 未配置，記憶碎片僅返回未存檔');
     }
 
     return shard;
@@ -166,12 +177,16 @@ ${shardsContext}
       insertData['void_dimension'] = ultimate.voidDimension;
     }
 
-    const { error: dbError } = await supabaseAdmin
-      .from('omni_skill_ultimates')
-      .insert(insertData);
+    if (supabaseAdmin) {
+      const { error: dbError } = await supabaseAdmin
+        .from('omni_skill_ultimates')
+        .insert(insertData);
 
-    if (dbError) {
-      console.warn('⚠️ 技能奧義已合成，但存檔至資料庫失敗:', dbError.message);
+      if (dbError) {
+        console.warn('⚠️ 技能奧義已合成，但存檔至資料庫失敗:', dbError.message);
+      }
+    } else {
+      console.warn('⚠️ Supabase 未配置，技能奧義僅返回未存檔');
     }
 
     return ultimate;
@@ -198,6 +213,10 @@ export async function storeMemoryShard(shard: MemoryShard): Promise<void> {
     insertData['entropy_level'] = shard.entropyLevel;
   }
 
+  if (!supabaseAdmin) {
+    console.warn('Supabase 未配置，無法存儲碎片');
+    return;
+  }
   const { error } = await supabaseAdmin
     .from('omni_memory_shards')
     .insert(insertData);
@@ -215,6 +234,8 @@ export async function retrieveMemoryShards(options?: {
   startTime?: number;
   endTime?: number;
 }): Promise<MemoryShard[]> {
+  if (!supabaseAdmin) return [];
+  
   let query = supabaseAdmin.from('omni_memory_shards').select('*');
   
   if (options?.tags && options.tags.length > 0) {
@@ -273,6 +294,10 @@ export async function storeSkillUltimate(ultimate: SkillUltimate): Promise<void>
     insertData['void_dimension'] = ultimate.voidDimension;
   }
 
+  if (!supabaseAdmin) {
+    console.warn('Supabase 未配置，無法存儲奧義');
+    return;
+  }
   const { error } = await supabaseAdmin
     .from('omni_skill_ultimates')
     .insert(insertData);
@@ -291,6 +316,8 @@ export async function retrieveSkillUltimates(options?: {
   startTime?: number;
   endTime?: number;
 }): Promise<SkillUltimate[]> {
+  if (!supabaseAdmin) return [];
+
   let query = supabaseAdmin.from('omni_skill_ultimates').select('*');
   
   if (options?.skillName) {
