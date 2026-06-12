@@ -144,7 +144,7 @@ describe('SupabaseOmniRealtimeService', () => {
 
         // 1. 模擬觸發 Presence Sync
         capturedPresenceSyncCb!();
-        expect(mockCallbacks.onPresenceSync).toHaveBeenCalledWith(mockChannel.presenceState());
+        expect(mockCallbacks.onPresenceSync).toHaveBeenCalledWith([{ user_id: 'user_123' }]);
 
         // 2. 模擬觸發 Presence Join
         capturedPresenceJoinCb!({ key: 'user_123', newPresences: [] });
