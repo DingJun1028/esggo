@@ -6,7 +6,7 @@
  * Now includes a pluggable SSE broadcast hook for real-time frontend observability.
  */
 
-import { dcUpsertAuditRecord } from '../dataconnect-services';
+import { dcUpsertAuditRecord } from '../dataconnect-services.ts';
 
 export type BusBroadcastHook = (event: string, payload: Record<string, unknown>) => void;
 

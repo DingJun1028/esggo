@@ -7,9 +7,9 @@
  */
 
 import { createHash } from 'crypto';
-import { omniAgentBus } from './omni-commander';
-import { omniCore } from '../omni-core';
-import { saveSustainWriteSection } from '../dataconnect-memory';
+import { omniAgentBus } from './omni-commander.ts';
+import { omniCore } from '../omni-core.ts';
+import { saveSustainWriteSection } from '../dataconnect-memory.ts';
 
 export interface ZeroComputeExpansionTask {
   companyId: string;

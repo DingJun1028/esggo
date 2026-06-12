@@ -1,5 +1,5 @@
 import { z } from 'genkit';
-import { writeMemory, readMemoryByType } from '../memory';
+import { writeMemory, readMemoryByType } from '../memory.ts';
 
 export interface MemoryRecord {
    id: string;

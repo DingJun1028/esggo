@@ -1,5 +1,5 @@
 import { z } from 'genkit';
-import { ai } from './genkit';
+import { ai } from './genkit.ts';
 import { 
   getEnvironmentalData, 
   getSocialMetrics, 
@@ -7,7 +7,7 @@ import {
   getTasks, 
   getEvidenceFiles, 
   getReadingRoomReports 
-} from '../db';
+} from '../db.ts';
 
 /**
  * ADK Tools: Standard Genkit Tool Definitions

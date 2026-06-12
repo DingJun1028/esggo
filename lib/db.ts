@@ -2,14 +2,14 @@ import {
   listAllTasks,
   upsertTask
 } from '@dataconnect/generated';
-import { dcGetReportById } from './dataconnect-services';
+import { dcGetReportById } from './dataconnect-services.ts';
 
 export { 
   listAllTasks,
   upsertTask,
   dcGetReportById
 };
-import { db } from './firebase';
+import { db } from './firebase.js';
 // @ts-ignore
 import { 
   collection, 
@@ -24,8 +24,8 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
-import { isDemoMode } from './firebase';
-import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data';
+import { isDemoMode } from './firebase.js';
+import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data.ts';
 
 // ==========================================
 // Types

@@ -1,5 +1,5 @@
 import { IOmniRealtimeService, OmniEvent, RealtimeCallbacks } from './IOmniRealtimeService';
-import { getSupabaseClient } from '../supabase'; // Import the function
+import { getSupabaseClient } from '../supabase.ts'; // Import the function
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
 // Fallback memory store for offline mode

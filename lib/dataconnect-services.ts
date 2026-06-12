@@ -1,4 +1,4 @@
-import { dataConnect } from './firebase';
+import { dataConnect } from './firebase.js';
 // @ts-ignore
 import { 
   listReports, 
