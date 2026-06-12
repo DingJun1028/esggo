@@ -28,8 +28,11 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [processing, setProcessing] = useState<string | null>(null);
 
+  const lowerFilter = filter.toLowerCase();
   const filteredData = data.filter(row => 
-    row.content.includes(filter) || row.source_origin.includes(filter)
+    row.content.toLowerCase().includes(lowerFilter) || 
+    row.source_origin.toLowerCase().includes(lowerFilter) ||
+    (row.hash && row.hash.toLowerCase().includes(lowerFilter))
   );
 
   const handleSeal = async (id: string) => {
@@ -52,7 +55,7 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
           <input 
             type="text" 
-            placeholder="Search origin, content..." 
+            placeholder="搜尋資料來源、單據、Hash..." 
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -131,13 +134,13 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden border-t border-slate-800/50"
                 >
-                  <div className="p-5 bg-[#0a0f1d] flex flex-col gap-4 rounded-b-2xl">
-                    <div className="grid grid-cols-3 gap-6">
+                  <div className="p-5 bg-[#0a0f1d]/80 backdrop-blur-2xl flex flex-col gap-4 rounded-b-2xl border-t border-white/5">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Formula Transparency</h4>
-                        <div className="text-sm text-emerald-400 flex items-center gap-2 font-mono">
+                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">公式透明度</h4>
+                        <div className="text-sm text-emerald-400 flex items-center gap-2 font-mono bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
                           {row.formula_visibility ? <CheckCircle size={14}/> : <AlertTriangle size={14} className="text-amber-400"/>}
-                          {row.formula_visibility ? 'VISIBLE (ISO-14064)' : 'OPAQUE'}
+                          {row.formula_visibility ? 'ISO-14064 公開可驗證' : 'OPAQUE'}
                         </div>
                       </div>
                       <div>
@@ -145,9 +148,21 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                         <div className="text-sm text-slate-300 font-mono">{row.timestamp}</div>
                       </div>
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Hash Lock</h4>
-                        <div className="text-xs text-slate-400 font-mono break-all bg-black/40 p-2 rounded-lg border border-slate-800">
-                          {row.hash || 'N/A (Awaiting Seal)'}
+                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Hash Lock (哈希封印)</h4>
+                        <div className="flex flex-col gap-2">
+                          <div className="text-xs text-slate-300 font-mono break-all bg-black/60 p-2.5 rounded-lg border border-white/10 shadow-inner">
+                            {row.hash || 'N/A (Awaiting Seal)'}
+                          </div>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              alert(`正向 OmniCore Gateway 發起溯源請求...\n目標 Hash: ${row.hash || '無效'}\n此功能將展示原始單據與 5T 驗證路徑。`);
+                            }}
+                            className="flex items-center justify-center gap-2 px-3 py-1.5 mt-1 bg-indigo-500/10 hover:bg-indigo-500/30 text-indigo-400 text-xs font-bold rounded-lg border border-indigo-500/20 transition-all"
+                          >
+                            <Search size={12} />
+                            溯源反查 (Trace Origin)
+                          </button>
                         </div>
                       </div>
                     </div>

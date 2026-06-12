@@ -117,6 +117,15 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
   }, [logoPosition, initialPulseRect]); // Recalculate if these change
 
 
+  useEffect(() => {
+    const handleRestore = () => {
+      setIsMinimized(false);
+      setIsVisible(true);
+    };
+    window.addEventListener('restore-omni-pulse', handleRestore);
+    return () => window.removeEventListener('restore-omni-pulse', handleRestore);
+  }, []);
+
   const sizeClasses = {
     sm: "px-4 py-2 text-sm gap-3",
     md: "px-8 py-4 text-base gap-5",
@@ -131,17 +140,18 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
 
   return (
     <motion.div
-      ref={pulseRef} // Attach ref here
+      ref={pulseRef}
       drag={!isMinimized}
       dragMomentum={false}
       onDragEnd={handleDragEnd}
-      animate={isMinimized ? calculatedMinimizedTarget : { x: position.x, y: position.y, scale: 1 }} // Apply drag offsets here when not minimized
+      animate={isMinimized ? calculatedMinimizedTarget : { scale: 1 }} // Remove x/y here, let framer motion handle drag internally
+      style={!isMinimized && position.x !== 0 && position.y !== 0 ? { x: position.x, y: position.y } : undefined} // Only set initial style position once, don't bind to animate
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={cn(
         "hidden md:flex fixed z-[60] group",
-        isMinimized ? "cursor-pointer" : "bottom-12 right-12", // Initial position for floating
+        isMinimized ? "cursor-pointer" : "bottom-12 right-12",
       )}
-      onTap={() => { if (isMinimized) setIsMinimized(false); }} // Tap to restore from minimized
+      onTap={() => { if (isMinimized) setIsMinimized(false); }}
     >
       <motion.div
         whileHover={{ scale: 1.05, y: -5 }}
