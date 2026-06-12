@@ -20,7 +20,6 @@ esggo-dashboard/
 esggo-funtions/
 esggo-omnimcp/
 inventory-tracker/
-package-lock.json
 pnpm-lock.yaml
 pnpm-workspace.yaml
 *.exe

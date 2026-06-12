@@ -5,7 +5,7 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { Truck, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { Truck, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, Factory, Share2 } from 'lucide-react';
 
 export default function SupplyChainPage() {
   const [data, setData] = useState<any[]>([]);
@@ -27,19 +27,19 @@ export default function SupplyChainPage() {
         const json = await res.json();
         setData(json.data || []);
       } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
+        // Fallback mock data for Supply Chain
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          { id: 1, date: '2026-06-12', supplier_name: '台達電子工業 (Delta)', scope3_emissions: 8450, unit: 'tCO2e', status: '已查驗', hash_lock: '0x8f...3a21', source_origin: 'API Sync' },
+          { id: 2, date: '2026-06-11', supplier_name: '緯創資通 (Wistron)', scope3_emissions: 5200, unit: 'tCO2e', status: '查驗中', hash_lock: null, source_origin: 'Supplier Portal' },
+          { id: 3, date: '2026-06-10', supplier_name: '日月光投控 (ASE)', scope3_emissions: 12500, unit: 'tCO2e', status: '已查驗', hash_lock: '0x1c...9d4f', source_origin: 'API Sync' },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 1, date: '2026-06-12', supplier_name: '台達電子工業 (Delta)', scope3_emissions: 8450, unit: 'tCO2e', status: '已查驗', hash_lock: '0x8f...3a21', source_origin: 'API Sync' },
+        { id: 2, date: '2026-06-11', supplier_name: '緯創資通 (Wistron)', scope3_emissions: 5200, unit: 'tCO2e', status: '查驗中', hash_lock: null, source_origin: 'Supplier Portal' },
       ]);
     } finally {
       setLoading(false);
@@ -102,10 +102,15 @@ export default function SupplyChainPage() {
   };
 
   const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
+    { key: 'date', label: '更新日期' },
+    { key: 'supplier_name', label: '供應商名稱 (Supplier)', render: (val: any) => (
+      <span className="font-bold text-emerald-400 flex items-center gap-2"><Factory size={14}/> {val}</span>
+    ) },
+    { key: 'scope3_emissions', label: '範疇三碳排 (Scope 3)', render: (val: any, row: any) => (
+      <span className="font-mono">{val.toLocaleString()} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
+    ) },
+    { key: 'status', label: '查驗狀態', render: (val: any) => (
+      <OmniBadge variant={val === '已查驗' ? 'success' : 'warning'} size="sm">{val}</OmniBadge>
     ) },
     { key: 'source_origin', label: '來源 (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
@@ -157,8 +162,8 @@ export default function SupplyChainPage() {
                 <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">SUPPLY-CHAIN</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">SUPPLY CHAIN</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">supply-chain dashboard</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">供應鏈碳網中心</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">SUPPLY CHAIN SUSTAINABILITY</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
@@ -173,11 +178,11 @@ export default function SupplyChainPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">活躍供應商</span>
+              <Factory size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
+            <div className="text-4xl font-black text-white">324<span className="text-lg text-slate-500 ml-2 font-normal">Partners</span></div>
+            <p className="text-xs text-emerald-400/80 font-mono">Status: Connected</p>
           </OmniBaseCard>
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
@@ -191,11 +196,11 @@ export default function SupplyChainPage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">範疇三 盤查進度</span>
+              <Share2 size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
+            <div className="text-4xl font-black text-white">82<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <p className="text-xs text-amber-400/80 font-mono">Target: 100% by Q4</p>
           </OmniBaseCard>
         </div>
 
@@ -219,21 +224,22 @@ export default function SupplyChainPage() {
           <div className="space-y-6">
             <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="OmniAgent 供應鏈巡檢" 
+              subtitle="Scope 3 Analysis"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  已為您追蹤上游供應商的碳排數據，並透過 API 雙向同步。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
+                  <h4 className="font-bold text-cyan-400 mb-2">自動偵測警告 (AI Alert)</h4>
+                  <p className="text-slate-400 text-xs leading-relaxed">
+                    發現 <strong className="text-emerald-400">緯創資通</strong> 的範疇三申報數據較上季成長 12%，建議透過 OmniAgent 發送自動化詢問表單以釐清排放熱點。
+                  </p>
                 </div>
+                <OmniButton variant="outline" className="w-full mt-4 bg-white/5 border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400">
+                  啟動自動化訪談代理
+                </OmniButton>
               </div>
             </OmniBaseCard>
           </div>
