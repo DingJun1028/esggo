@@ -30,7 +30,14 @@ export const BrandLogo = ({ className, size = 'md' }: BrandLogoProps) => {
           className="w-full h-full object-contain drop-shadow-md"
         />
       </div>
-
+      <div className="flex flex-col">
+        <span className={cn("font-black tracking-tight text-slate-900 dark:text-white drop-shadow-sm", currentSize.text)}>
+          ESGGO
+        </span>
+        <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 tracking-widest uppercase">
+          善向永續
+        </span>
+      </div>
     </div>
   );
 };

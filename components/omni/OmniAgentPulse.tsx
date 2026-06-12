@@ -26,10 +26,9 @@ export function OmniAgentPulse() {
   if (isDismissed) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden" ref={constraintsRef}>
+    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
       <motion.div
         drag
-        dragConstraints={constraintsRef}
         dragElastic={0.1}
         dragMomentum={false}
         initial={{ x: 20, y: typeof window !== 'undefined' ? window.innerHeight - 250 : 500 }}
