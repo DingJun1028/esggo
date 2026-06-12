@@ -270,16 +270,10 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
         <div className={`flex items-center justify-between px-4 py-4 ${t.logo}`}>
            <div className="flex items-center gap-2.5">
               <img 
-                src="https://thumbs4.imagebam.com/54/c4/da/ME1CG7QT_t.png" 
+                src="/logo.png" 
                 alt="ESGGO Logo" 
-                className="w-10 h-10 object-contain rounded"
+                className="h-16 w-auto object-contain rounded"
               />
-              {!isCollapsed && (
-                <div className="fade-in">
-                  <p className={`text-sm font-bold leading-tight ${t.logoText}`}>ESGGO</p>
-                  <p className={`text-xs leading-tight ${t.logoSub}`}>善向永續</p>
-                </div>
-              )}
            </div>
            
            <button onClick={() => setMobileOpen?.(false)} className="lg:hidden p-2 text-slate-400">

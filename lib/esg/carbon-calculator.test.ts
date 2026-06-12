@@ -24,7 +24,7 @@ describe('CarbonCalculator', () => {
 
     // 50 * 2.602 = 130.1
     expect(result.impact_metric).toBe('130.1000 kgCO2e');
-    expect(result.evidence[0].processTrace).toContain('Identified Factor: Diesel Fuel (Stationary Combustion) (Scope 1)');
+    expect(result.evidence[0]?.processTrace || []).toContain('Identified Factor: Diesel Fuel (Stationary Combustion) (Scope 1)');
   });
 
   it('should throw error for unknown factor', () => {

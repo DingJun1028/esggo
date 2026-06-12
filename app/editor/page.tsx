@@ -11,12 +11,30 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
-// Mock framework for 208-page report structure (simplified for demo)
+// Full framework for comprehensive ESG Sustainability Report structure
 const REPORT_CHAPTERS = [
-  { id: 'chap-01', name: '永續發展策略與願景', order: 1, gri: ['GRI 2-22'] },
-  { id: 'chap-02', name: '氣候變遷與溫室氣體管理', order: 2, gri: ['GRI 305', 'TCFD'] },
-  { id: 'chap-03', name: '水資源管理', order: 3, gri: ['GRI 303'] },
-  { id: 'chap-04', name: '人權與社會參與', order: 4, gri: ['GRI 406', 'GRI 413'] },
+  { id: 'chap-01', name: '董事長的話與永續願景', order: 1, gri: ['GRI 2-22'] },
+  { id: 'chap-02', name: '關於本報告書', order: 2, gri: ['GRI 2-1', 'GRI 2-2', 'GRI 2-3'] },
+  { id: 'chap-03', name: '公司概況與營運績效', order: 3, gri: ['GRI 2-6', 'GRI 201'] },
+  { id: 'chap-04', name: '重大性議題分析 (Materiality)', order: 4, gri: ['GRI 3-1', 'GRI 3-2', 'GRI 3-3'] },
+  { id: 'chap-05', name: '利害關係人溝通與議合', order: 5, gri: ['GRI 2-29'] },
+  { id: 'chap-06', name: '公司治理與誠信經營', order: 6, gri: ['GRI 2-9', 'GRI 2-11', 'GRI 205'] },
+  { id: 'chap-07', name: '風險管理架構', order: 7, gri: ['GRI 2-12', 'GRI 2-13'] },
+  { id: 'chap-08', name: '氣候變遷與溫室氣體盤查', order: 8, gri: ['GRI 305', 'TCFD'] },
+  { id: 'chap-09', name: '能源管理與減碳策略', order: 9, gri: ['GRI 302'] },
+  { id: 'chap-10', name: '水資源與廢水管理', order: 10, gri: ['GRI 303'] },
+  { id: 'chap-11', name: '廢棄物與循環經濟', order: 11, gri: ['GRI 306'] },
+  { id: 'chap-12', name: '人才吸引與留任', order: 12, gri: ['GRI 401'] },
+  { id: 'chap-13', name: '員工發展與培育', order: 13, gri: ['GRI 404'] },
+  { id: 'chap-14', name: '職業安全與衛生', order: 14, gri: ['GRI 403'] },
+  { id: 'chap-15', name: '人權保障與多元共融 (DEI)', order: 15, gri: ['GRI 406', 'GRI 408', 'GRI 409'] },
+  { id: 'chap-16', name: '供應鏈永續管理', order: 16, gri: ['GRI 308', 'GRI 414'] },
+  { id: 'chap-17', name: '綠色採購與在地發展', order: 17, gri: ['GRI 204'] },
+  { id: 'chap-18', name: '資訊安全與客戶隱私', order: 18, gri: ['GRI 418'] },
+  { id: 'chap-19', name: '社會參與與公益回饋', order: 19, gri: ['GRI 413'] },
+  { id: 'chap-20', name: '附錄：GRI 對照表', order: 20, gri: ['GRI Index'] },
+  { id: 'chap-21', name: '附錄：SASB / TCFD 對照表', order: 21, gri: ['SASB', 'TCFD'] },
+  { id: 'chap-22', name: '第三方查證聲明', order: 22, gri: ['Assurance'] },
 ];
 
 export default function EditorPage() {
@@ -84,7 +102,7 @@ export default function EditorPage() {
           </div>
         </div>
 
-        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-white/5">
+        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar">
           {REPORT_CHAPTERS.map(chapter => (
             <button
               key={chapter.id}

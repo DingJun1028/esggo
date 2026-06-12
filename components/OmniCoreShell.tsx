@@ -170,23 +170,13 @@ function SidebarNav({
         <div style={{
           padding: '14px 16px',
           borderBottom: '1px solid var(--sidebar-border)',
-          display: 'flex', alignItems: 'center', gap: 10, minHeight: 60,
+          display: 'flex', alignItems: 'center', gap: 10, minHeight: 80,
         }}>
           <img 
-            src="https://thumbs4.imagebam.com/54/c4/da/ME1CG7QT_t.png" 
+            src="/logo.png" 
             alt="ESGGO Logo"
-            style={{ width: 34, height: 34, objectFit: 'contain', borderRadius: 4, flexShrink: 0 }}
+            style={{ height: 60, width: 'auto', objectFit: 'contain', borderRadius: 4, flexShrink: 0 }}
           />
-          {(!collapsed || mobileOpen) && (
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
-                ESGGO
-              </div>
-              <div style={{ fontSize: 9, color: 'var(--accent-primary)', fontWeight: 600, letterSpacing: '0.08em' }}>
-                善向永續
-              </div>
-            </div>
-          )}
           {mobileOpen && (
             <button
               onClick={() => setMobileOpen(false)}
