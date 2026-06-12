@@ -295,7 +295,15 @@ export const useSustainWriteStore = create<SustainWriteState>()(
                         })
                     });
 
-                    if (!res.ok) throw new Error('AI Expansion API Failed');
+                    if (!res.ok) {
+                        const errText = await res.text();
+                        try {
+                            const errJson = JSON.parse(errText);
+                            throw new Error(errJson.details || errJson.error || 'AI Expansion API Failed');
+                        } catch {
+                            throw new Error(errText || 'AI Expansion API Failed');
+                        }
+                    }
 
                     const reader = res.body?.getReader();
                     const decoder = new TextEncoder();
@@ -316,8 +324,11 @@ export const useSustainWriteStore = create<SustainWriteState>()(
                         }));
                     }
 
-                } catch (error) {
+                } catch (error: any) {
                     console.error('[SustainWriteStore] AI Expansion Error:', error);
+                    if (typeof window !== 'undefined') {
+                        alert('【專家 AI 展開失敗】\n\n' + (error.message || error.toString()) + '\n\n請確認您的伺服器環境或 Gemini API 金鑰是否有效。');
+                    }
                 } finally {
                     set((s) => ({ isGeneratingAI: { ...s.isGeneratingAI, [chapterId]: false } }));
                     get().triggerAutoSave(chapterId, chapterName, chapterOrder, griRefs);
