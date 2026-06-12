@@ -9,7 +9,7 @@ mutation UpsertUser($displayName: String!, $email: String) @auth(level: USER) {
 # Create a task based on user input
 mutation CreateTask($title: String!, $status: String!, $priority: String!, $completed: Boolean!)
 @auth(level: USER) {
-  task_insert(data: { title: $title, status: $status, priority: $priority, completed: $completed, id_expr: "auth.uid" })
+  task_insert(data: { title: $title, status: $status, priority: $priority, completed: $completed, userId_expr: "auth.uid" })
 }
 
 # Update a task
