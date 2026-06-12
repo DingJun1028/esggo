@@ -1,12 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { Send, Bot, User, BookOpen, Loader2, UploadCloud, ThumbsUp, ThumbsDown, Download } from 'lucide-react';
+import { Send, Bot, User, BookOpen, Loader2, UploadCloud, ThumbsUp, ThumbsDown, Download, ShieldCheck, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 import { OmniThinkingChain } from '@/components/omni/OmniThinkingChain';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 
-interface RagSource {
+export interface RagSource {
   title: string;
   score: number;
+  hashLock?: string;
+  value?: string | number;
 }
 
 export const ESGSmartQA = () => {
@@ -209,11 +212,24 @@ export const ESGSmartQA = () => {
                             </div>
                             {/* RAG 來源標註 */}
                             {msg.sources && msg.sources.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mt-1">
+                                <div className="flex flex-wrap gap-2 mt-2">
                                     {msg.sources.map((src, idx) => (
-                                        <div key={idx} className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-400 shadow-sm">
-                                            <BookOpen size={10} className="text-emerald-400" />
-                                            {src.title} <span className="opacity-50">({(src.score * 100).toFixed(0)}%)</span>
+                                        <div key={idx} className="flex flex-col gap-1 text-[10px] p-2 rounded-md bg-slate-900 border border-slate-700 text-slate-300 shadow-sm relative overflow-hidden group">
+                                            <div className="flex items-center gap-1.5">
+                                                <BookOpen size={10} className={src.hashLock ? "text-cyan-400" : "text-emerald-400"} />
+                                                <span className="font-bold">{src.title}</span> 
+                                                <span className="opacity-50 font-mono">({(src.score * 100).toFixed(0)}%)</span>
+                                            </div>
+                                            {src.hashLock && (
+                                                <div className="flex items-center gap-1.5 mt-1 border-t border-slate-700/50 pt-1">
+                                                    <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={10} />}>
+                                                        5T Validated
+                                                    </OmniBadge>
+                                                    <span className="font-mono text-[9px] text-slate-500 flex items-center gap-1">
+                                                        <Lock size={8}/> {src.hashLock.substring(0, 8)}...
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
