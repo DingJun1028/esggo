@@ -1,3 +1,6 @@
+packages:
+  - '.'
+
 allowBuilds:
   '@datadog/pprof': false
   '@firebase/util': false
