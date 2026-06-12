@@ -15,6 +15,7 @@ import {
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
 import { useAuth } from '../hooks/useAuth';
+import { useOmniAgentBus } from '../lib/omni-agent-bus';
 import { BrandBadge } from './brand';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
@@ -216,6 +217,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
   const pathname = usePathname() || '/';
   const { sidebarTheme } = useThemeStore();
   const { user } = useAuth();
+  const { isPulseDismissed, setPulseDismissed } = useOmniAgentBus();
   const visibleGroups = NAV_GROUPS.filter((group) => {
     if (group.title === '超級管理員區') return user?.role === 'superadmin';
     return true;
@@ -356,7 +358,16 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
         {!isCollapsed && <SaaSStatusWidget />}
 
         {/* Footer */}
-        <div className={`px-3 py-3 ${t.footer}`}>
+        <div className={`px-3 py-3 ${t.footer} flex flex-col gap-2`}>
+          {isPulseDismissed && !isCollapsed && (
+            <button 
+              onClick={() => setPulseDismissed(false)}
+              className="flex items-center justify-center gap-2 w-full py-1.5 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 text-[10px] font-bold uppercase tracking-wider transition-colors border border-cyan-500/20"
+            >
+              <Bot size={12} />
+              喚醒萬能精靈
+            </button>
+          )}
           {!isCollapsed ? (
             <div className={`flex items-center gap-2 text-xs ${t.footerText}`}>
               <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
@@ -364,7 +375,10 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
               <span className="ml-auto opacity-40">v8.5</span>
             </div>
           ) : (
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-3">
+              {isPulseDismissed && (
+                 <button onClick={() => setPulseDismissed(false)} className="text-cyan-500 hover:text-cyan-400" title="喚醒精靈"><Bot size={16}/></button>
+              )}
               <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
             </div>
           )}

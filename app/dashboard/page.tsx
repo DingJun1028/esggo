@@ -81,14 +81,19 @@ export default function DashboardPage() {
               OmniCore Data Routing & 5T Integrity Audit Workflow. 確保所有數據具備 Transparent (透明)、Trustworthy (不可竄改) 與 Traceable (可溯源) 的至高標準。
             </p>
           </div>
-          <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-md">
-            <span className="text-xs text-slate-400 font-mono">ZKP SEALED</span>
-            <span className="text-xl font-bold text-cyan-400">99.9%</span>
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-md">
+              <span className="text-xs text-slate-400 font-mono">ZKP 零知識證明封裝率</span>
+              <span className="text-xl font-bold text-cyan-400">99.9%</span>
+            </div>
+            <span className="text-[10px] text-slate-500 font-mono tracking-wider">確保資料具備 100% 不可篡改性</span>
           </div>
         </header>
 
         {/* 行動端特優化：橫向滑動式 極小功能鍵 (Horizontal Swipeable Micro-Action Dock) */}
-        <div className="w-full overflow-x-auto pb-4 mb-6 scrollbar-hide snap-x snap-mandatory">
+        <div>
+          <h3 className="text-sm font-bold text-slate-400 tracking-wider uppercase mb-3 px-2">快速操作 (Quick Actions)</h3>
+          <div className="w-full overflow-x-auto pb-4 mb-6 scrollbar-hide snap-x snap-mandatory">
           <div className="flex items-center gap-3 md:gap-4 min-w-max px-2">
             {[
               { icon: BarChart3, label: 'Analytics', color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
@@ -107,6 +112,7 @@ export default function DashboardPage() {
                 <span className="text-[10px] md:text-xs font-bold text-slate-300 tracking-wider uppercase">{action.label}</span>
               </button>
             ))}
+            </div>
           </div>
         </div>
 

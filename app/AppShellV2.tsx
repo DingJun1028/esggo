@@ -247,8 +247,8 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           "px-6 py-4 min-h-[96px] flex items-center gap-4 overflow-hidden border-b transition-colors",
           isDark ? "border-white/5" : "border-slate-100"
         )}>
-          <div className="flex justify-center" ref={logoRef}>
-            <BrandLogo size="sm" />
+          <div className="flex justify-center w-full" ref={logoRef}>
+            <BrandLogo size="sm" hideText={sidebarCollapsed} />
           </div>
         </div>
 
@@ -411,7 +411,11 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               )}
             >
               <div className="flex items-center gap-6">
-                <div className="flex items-center gap-3 px-4 py-2 bg-slate-900/5 rounded-full border border-slate-900/5">
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('restore-omni-pulse'))}
+                  className="flex items-center gap-3 px-4 py-2 bg-slate-900/5 hover:bg-slate-900/10 dark:hover:bg-white/10 rounded-full border border-slate-900/5 transition-colors cursor-pointer"
+                  title="喚醒萬能精靈 (Restore OmniAgent Pulse)"
+                >
                   <BrandStatusDot 
                     status="active" 
                     pulse={true} 
@@ -420,7 +424,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                     dotOnly={true} 
                   />
                   <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">OmniSync_Operational</span>
-                </div>
+                </button>
               </div>
 
               <div className="flex items-center gap-4">

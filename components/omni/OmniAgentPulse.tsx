@@ -11,9 +11,8 @@ import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 // =========================================================================
 export function OmniAgentPulse() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
   const { connectionStatus, records } = useOmniTable('valid-jwt-token');
-  const { signals, activeResonance } = useOmniAgentBus();
+  const { signals, activeResonance, isPulseDismissed, setPulseDismissed } = useOmniAgentBus();
   const constraintsRef = useRef(null);
 
   // Derive status from records
@@ -23,7 +22,7 @@ export function OmniAgentPulse() {
     ? Math.floor((Date.now() - lastSyncRecord.timestamp) / 1000)
     : 0;
 
-  if (isDismissed) return null;
+  if (isPulseDismissed) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -64,7 +63,7 @@ export function OmniAgentPulse() {
                     <Minimize2 size={14} />
                   </button>
                   <button 
-                    onClick={() => setIsDismissed(true)}
+                    onClick={() => setPulseDismissed(true)}
                     className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-white transition-colors"
                     title="關閉"
                   >
@@ -144,7 +143,7 @@ export function OmniAgentPulse() {
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"></div>
               
               <button
-                onClick={(e) => { e.stopPropagation(); setIsDismissed(true); }}
+                onClick={(e) => { e.stopPropagation(); setPulseDismissed(true); }}
                 className="absolute top-1 right-1 p-1 bg-black/40 hover:bg-red-500/80 text-white/50 hover:text-white rounded-full transition-colors z-20"
                 title="隱藏精靈"
               >
