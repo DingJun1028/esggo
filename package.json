@@ -22,7 +22,7 @@
     "omni:setup:swarm": "npx tsx scripts/setup_swarm_consensus_table.ts",
     "omni:scan": "npx tsx scripts/fnns-scanner.ts",
     "list-stitch-projects": "npx tsx scripts/list-stitch-projects.ts",
-    "prepare": "husky"
+    "prepare": "node -e \"try { require('child_process').execSync('husky') } catch (e) {}\""
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.81",
