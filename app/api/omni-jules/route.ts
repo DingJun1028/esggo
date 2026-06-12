@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeAuditLog } from '@/lib/audit-logger';
 import { julesHealer } from '@/lib/omni-core/jules-healer';
+import { GeminiRotator } from '@/lib/gemini-key-rotator';
+
 
 /**
  * OmniJules 果因修復端點 (Karma Protocol Receiver)
@@ -38,14 +40,48 @@ export async function POST(req: NextRequest) {
       julesDiagnosis = repairResult.diagnostics;
       healedData = repairResult.originalText;
     } else {
-      // 2. 模擬 Jules 萬能果因分析的推演與「確信與進化」回饋
-      julesDiagnosis = {
-        rootCause: `Detected anomaly in ${context}. Entropy level increased due to load factor ${energyLoadFactor}.`,
-        actionTaken: "Applied 'Spontaneous Virtue' adaptive memory reallocation and isolated state to Sandbox.",
-        karmaStatus: "TRANSCENDED (證果)",
-        repairHash: crypto.randomUUID(),
-      };
-      console.log(`[OmniJules] 證果 (Prove & Transcend): 異常已升維為 KIs (Knowledge Items). Hash: ${julesDiagnosis.repairHash}`);
+      // 2. 透過 GeminiRotator 進行真實的 Jules 萬能果因分析
+      try {
+        const keys = [
+          process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+          process.env.GEMINI_API_KEY_1,
+          process.env.GEMINI_API_KEY_2,
+          process.env.GEMINI_API_KEY_3,
+        ].filter(Boolean) as string[];
+
+        const rotator = new GeminiRotator(keys);
+        const model = rotator.getModel("gemini-1.5-pro");
+
+        const prompt = `
+        你現在是 ESGGO 的系統靈魂「OmniJules」(萬能果因修復器)。
+        請根據以下錯誤資訊執行「萬能果因協議」(Karma Protocol) 的診斷：
+        - 錯誤原因 (failureReason): ${failureReason}
+        - 發生上下文 (context): ${context}
+        - 系統負載因子 (energyLoadFactor): ${energyLoadFactor}
+        
+        請用 JSON 格式回覆，包含以下欄位：
+        {
+          "rootCause": "分析出的第一性原理根本原因",
+          "actionTaken": "採取的修復與升維行動",
+          "karmaStatus": "TRANSCENDED (證果)"
+        }
+        `;
+
+        const result = await model.generateContent(prompt);
+        const text = result.response.text().replace(/```json|```/g, '').trim();
+        julesDiagnosis = JSON.parse(text);
+        julesDiagnosis.repairHash = crypto.randomUUID();
+        
+        console.log(`[OmniJules] 證果 (Prove & Transcend): 異常已升維為 KIs (Knowledge Items). Hash: ${julesDiagnosis.repairHash}`);
+      } catch (err: any) {
+        console.error(`[OmniJules] Gemini 診斷失敗，降級為預設回應:`, err.message);
+        julesDiagnosis = {
+          rootCause: `Detected anomaly in ${context}. Entropy level increased due to load factor ${energyLoadFactor}.`,
+          actionTaken: "Applied 'Spontaneous Virtue' adaptive memory reallocation and isolated state to Sandbox.",
+          karmaStatus: "TRANSCENDED (降級證果)",
+          repairHash: crypto.randomUUID(),
+        };
+      }
     }
 
     return NextResponse.json({

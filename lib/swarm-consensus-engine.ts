@@ -4,7 +4,7 @@
  */
 
 import { sha256 } from './crypto-proof';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GeminiRotator } from './gemini-key-rotator';
 
 export type AgentRole = 'COMPLIANCE' | 'HARMONY' | 'SECURITY' | 'INNOVATION';
 
@@ -55,14 +55,17 @@ const SWARM_AGENTS: { id: string; role: AgentRole; name: string; persona: string
 
 export class SwarmConsensusEngine {
   private static instance: SwarmConsensusEngine;
-  private genAI: GoogleGenerativeAI | null = null;
+  private geminiRotator: GeminiRotator | null = null;
 
   constructor() {
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
-    if (process.env.LOCAL_GEMMA_SERVER_URL) {
-      this.genAI = new GoogleGenerativeAI('local-key');
-    } else if (apiKey && !apiKey.includes('YOUR_')) {
-      this.genAI = new GoogleGenerativeAI(apiKey);
+    const keys = [
+      process.env.GEMINI_API_KEY_1,
+      process.env.GEMINI_API_KEY_2,
+      process.env.GEMINI_API_KEY_3,
+    ].filter(Boolean) as string[];
+
+    if (keys.length > 0) {
+      this.geminiRotator = new GeminiRotator(keys);
     }
   }
 
@@ -73,15 +76,11 @@ export class SwarmConsensusEngine {
     return SwarmConsensusEngine.instance;
   }
 
-  /**
-   * Dispatches a proposal to the swarm and collects opinions via multi-agent deliberation.
-   */
   async evaluateProposal(proposal: string): Promise<ConsensusResult> {
     const timestamp = new Date().toISOString();
     const id = `CONSENSUS-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
-    // Fallback mode when Gemini API unavailable
-    if (!this.genAI) {
+    if (!this.geminiRotator) {
       console.log('[SwarmConsensus] Gemini unavailable. Using simulation mode.');
       await new Promise(r => setTimeout(r, 1200));
       
@@ -100,17 +99,15 @@ export class SwarmConsensusEngine {
       return { id, proposal, timestamp, opinions, consensusScore, status, hashLock };
     }
 
-    // Parallel Agent Deliberation
     const opinionPromises = SWARM_AGENTS.map(async (agent) => {
-      const model = this.genAI!.getGenerativeModel({ 
-        model: 'gemini-1.5-flash',
-        systemInstruction: `${agent.persona}\n\n你的任務是針對下述 ESG 提案給出投票與評論。`
-      });
-
       const prompt = `提案內容：\n"${proposal}"\n\n請以 JSON 格式回應，包含以下欄位：\n- vote: 'AGREE', 'DISAGREE', 或 'CONDITIONALLY_AGREE'\n- confidence: 0-1 之間的數字\n- critique: 繁體中文評論（約 50 字）`;
 
       try {
-        const result = await model.generateContent(prompt);
+        const result = await this.geminiRotator!.generateContent(
+          'gemini-1.5-flash',
+          prompt,
+          `${agent.persona}\n\n你的任務是針對下述 ESG 提案給出投票與評論。`
+        );
         const text = result.response.text();
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         const parsed = JSON.parse(jsonMatch?.[0] || '{}');
@@ -136,7 +133,6 @@ export class SwarmConsensusEngine {
 
     const opinions = await Promise.all(opinionPromises);
 
-    // Calculate Consensus Score
     const agreeCount = opinions.filter(o => o.vote === 'AGREE').length;
     const conditionalCount = opinions.filter(o => o.vote === 'CONDITIONALLY_AGREE').length;
     const consensusScore = Math.round(((agreeCount * 1.0 + conditionalCount * 0.6) / opinions.length) * 100);

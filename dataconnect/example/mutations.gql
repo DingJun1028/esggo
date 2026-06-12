@@ -18,8 +18,7 @@ mutation UpdateTask($id: UUID!, $status: String!)
   task_update(key: { id: $id }, data: { status: $status, userId_expr: "auth.uid" })
 }
 
-# Logged in user can delete their task
-# (Note: For absolute security in Data Connect, consider using Row Level Security in Postgres or adding auth filters in updateMany/deleteMany)
-mutation DeleteTask($id: UUID!) @auth(level: USER) {
+# 5T Security: auth.uid enforced via CEL expression — only task owner can delete
+mutation DeleteTask($id: UUID!) @auth(expr: "auth.uid == task.userId") {
   task_delete(key: { id: $id })
 }
