@@ -1,243 +1,197 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { PenTool, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import SustainWriteTipTapEditor, { SustainWriteEditorRef } from '@/components/omni/SustainWriteTipTapEditor';
+import { useSustainWriteStore } from '@/store/useSustainWriteStore';
+import { 
+  FileText, Wand2, Save, Undo2, Redo2, ShieldCheck, 
+  BookOpen, ChevronRight, Activity, Loader2
+} from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+
+// Mock framework for 208-page report structure (simplified for demo)
+const REPORT_CHAPTERS = [
+  { id: 'chap-01', name: '永續發展策略與願景', order: 1, gri: ['GRI 2-22'] },
+  { id: 'chap-02', name: '氣候變遷與溫室氣體管理', order: 2, gri: ['GRI 305', 'TCFD'] },
+  { id: 'chap-03', name: '水資源管理', order: 3, gri: ['GRI 303'] },
+  { id: 'chap-04', name: '人權與社會參與', order: 4, gri: ['GRI 406', 'GRI 413'] },
+];
 
 export default function EditorPage() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [sealingId, setSealingId] = useState<number | null>(null);
-  const [verifyingId, setVerifyingId] = useState<number | null>(null);
+  const { user } = useAuth();
+  const companyId = user?.id || 'demo-company-id';
+  
+  const { 
+    initData, 
+    generatedContent, 
+    updateContent, 
+    expandContentWithAI, 
+    isGeneratingAI,
+    manualSave,
+    undoContent,
+    redoContent,
+    lastSaved
+  } = useSustainWriteStore();
+
+  const [activeChapter, setActiveChapter] = useState(REPORT_CHAPTERS[0]);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const editorRef = useRef<SustainWriteEditorRef>(null);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    initData(companyId);
+  }, [companyId, initData]);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const currentContent = generatedContent[activeChapter.id] || '';
+  const isGenerating = isGeneratingAI[activeChapter.id];
+
+  const handleContentChange = (newContent: string) => {
+    updateContent(activeChapter.id, newContent, activeChapter.name, activeChapter.order, activeChapter.gri);
+  };
+
+  const handleAIExpand = async () => {
+    await expandContentWithAI(
+      activeChapter.id, 
+      activeChapter.name, 
+      activeChapter.order, 
+      activeChapter.gri, 
+      customPrompt || `請針對「${activeChapter.name}」進行深度展開，需符合 ${activeChapter.gri.join(', ')} 規範，使用專業語氣，強調具體行動與數據量化。`
+    );
+  };
+
+  const handleSave = async () => {
     try {
-      // Fetching from a omni proxy metrics endpoint
-      const res = await fetch('/api/metrics/editor', { cache: 'no-store' });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json.data || []);
-      } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
-        setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
-        ]);
-      }
+      await manualSave(activeChapter.id, activeChapter.name, activeChapter.order, activeChapter.gri);
+      // alert('儲存成功');
     } catch (e) {
-      console.error('Fetch Error:', e);
-      // Fallback mock data
-      setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-      ]);
-    } finally {
-      setLoading(false);
+      alert('儲存失敗');
     }
   };
-
-  const handleSeal = async (id: number) => {
-    setSealingId(id);
-    try {
-      const response = await fetch('/api/vault/seal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'editor', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
-      } else {
-        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
-      }
-    } catch (error) {
-      console.error('Seal exception:', error);
-      alert('無法連線至封印金庫 (Vault Connection Error)。');
-    } finally {
-      setSealingId(null);
-    }
-  };
-
-  const handleVerify = async (id: number) => {
-    setVerifyingId(id);
-    try {
-      const response = await fetch('/api/vault/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.valid) {
-        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
-      } else {
-        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
-      }
-    } catch (e) {
-      console.error('Verify exception:', e);
-      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
-    } finally {
-      setVerifyingId(null);
-    }
-  };
-
-  const handleAddRecord = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      fetchData(); // re-fetch after add
-    }, 1500);
-  };
-
-  const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
-    { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </OmniBadge>
-      ) : (
-        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
-          </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
-  ];
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 flex flex-col md:flex-row gap-6 selection:bg-cyan-500/30">
+      
+      {/* Sidebar: Chapter Navigation */}
+      <div className="w-full md:w-64 shrink-0 flex flex-col gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30">
+            <BookOpen className="text-cyan-400" size={20} />
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-white">SustainWrite</h2>
+            <p className="text-[10px] font-mono text-slate-500 tracking-widest">GRI COMPLIANT</p>
+          </div>
+        </div>
+
+        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-white/5">
+          {REPORT_CHAPTERS.map(chapter => (
+            <button
+              key={chapter.id}
+              onClick={() => setActiveChapter(chapter)}
+              className={`flex items-center justify-between w-full text-left px-3 py-2.5 rounded-lg transition-all text-sm ${
+                activeChapter.id === chapter.id 
+                  ? 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]' 
+                  : 'text-slate-400 hover:bg-white/5 hover:text-slate-200 border border-transparent'
+              }`}
+            >
+              <span className="truncate flex-1 font-medium">{chapter.order}. {chapter.name}</span>
+              {activeChapter.id === chapter.id && <ChevronRight size={14} />}
+            </button>
+          ))}
+        </OmniBaseCard>
         
-        {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
-              <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <PenTool className="text-cyan-400 relative z-10" size={28} />
-            </div>
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">EDITOR</span>
-              </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">EDITOR</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">editor dashboard</p>
+        <OmniBaseCard variant="glow" className="p-4 mt-auto">
+           <div className="flex items-center gap-2 mb-2">
+             <ShieldCheck size={16} className="text-emerald-400"/>
+             <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">系統狀態</span>
+           </div>
+           <p className="text-xs text-slate-400 mb-1 flex justify-between">
+             <span>Auto-Sync:</span> <span className="text-emerald-400">Active</span>
+           </p>
+           <p className="text-[10px] text-slate-500 font-mono">
+             Last Saved: {lastSaved ? lastSaved.toLocaleTimeString() : 'N/A'}
+           </p>
+        </OmniBaseCard>
+      </div>
+
+      {/* Main Workspace Area */}
+      <div className="flex-1 flex flex-col gap-6 min-w-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        
+        {/* Editor Toolbar */}
+        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+          <div>
+            <h1 className="text-2xl font-black text-white flex items-center gap-3">
+              {activeChapter.name}
+              {isGenerating && <span className="flex items-center gap-1 text-[10px] font-mono tracking-widest text-cyan-400 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20"><Activity size={10} className="animate-pulse"/> GENERATING</span>}
+            </h1>
+            <div className="flex gap-2 mt-2">
+              {activeChapter.gri.map(g => (
+                <span key={g} className="text-[10px] font-mono tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                  {g}
+                </span>
+              ))}
             </div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
-              新增紀錄
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex bg-slate-900 rounded-lg p-1 border border-white/5 mr-2">
+              <button 
+                onClick={() => undoContent(activeChapter.id, activeChapter.name, activeChapter.order, activeChapter.gri)}
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                title="復原 (Undo)"
+              >
+                <Undo2 size={16} />
+              </button>
+              <button 
+                onClick={() => redoContent(activeChapter.id, activeChapter.name, activeChapter.order, activeChapter.gri)}
+                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                title="重做 (Redo)"
+              >
+                <Redo2 size={16} />
+              </button>
+            </div>
+
+            <OmniButton variant="outline" icon={<Save size={14}/>} onClick={handleSave}>
+              保存草稿
+            </OmniButton>
+            <OmniButton 
+              variant="primary" 
+              icon={isGenerating ? <Loader2 className="animate-spin" size={14}/> : <Wand2 size={14}/>} 
+              onClick={handleAIExpand}
+              isLoading={isGenerating}
+            >
+              專家 AI 展開 (Scribe)
             </OmniButton>
           </div>
         </header>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
-            </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </OmniBaseCard>
+        {/* AI Control Panel (Optional Custom Prompt) */}
+        <OmniBaseCard variant="default" className="p-4 border-white/5">
+          <input 
+            type="text" 
+            placeholder="附加指示 (可留空，如：強調水資源回收的具體投資額與減量成效...)" 
+            className="w-full bg-slate-950/50 border border-slate-800 rounded-lg p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+            value={customPrompt}
+            onChange={(e) => setCustomPrompt(e.target.value)}
+            disabled={isGenerating}
+          />
+        </OmniBaseCard>
 
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
-              <ShieldCheck size={18} className="text-cyan-400" />
-            </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </OmniBaseCard>
-
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
-            </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </OmniBaseCard>
-        </div>
-
-        {/* Main Workspace Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard 
-              variant="default" 
-              title="業務資料視圖" 
-              subtitle="Data synced with 5T Integrity Protocol"
-              className="min-h-[400px]"
-            >
-              <OmniBaseTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
-            </OmniBaseCard>
-          </div>
+        {/* TipTap Editor Surface */}
+        <OmniBaseCard variant="glass" className="flex-1 flex flex-col overflow-hidden border-white/10 relative p-1">
+          {/* Subtle liquid glass background glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-cyan-500/5 blur-[100px] pointer-events-none mix-blend-screen" />
           
-          <div className="space-y-6">
-            <OmniBaseCard 
-              variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
-            >
-              <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
-                </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
-                </div>
-              </div>
-            </OmniBaseCard>
+          <div className="flex-1 overflow-y-auto bg-slate-950/40 rounded-xl relative z-10">
+            <SustainWriteTipTapEditor 
+              ref={editorRef}
+              value={currentContent}
+              onChange={handleContentChange}
+              editable={!isGenerating}
+            />
           </div>
-        </div>
+        </OmniBaseCard>
 
       </div>
     </div>
