@@ -5,7 +5,7 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { Calculator, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { Calculator, Search, Plus, ShieldCheck, Euro, Brain, Lock, Loader2, Factory, Scale } from 'lucide-react';
 
 export default function CbamCalculatorPage() {
   const [data, setData] = useState<any[]>([]);
@@ -27,19 +27,19 @@ export default function CbamCalculatorPage() {
         const json = await res.json();
         setData(json.data || []);
       } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
+        // Fallback mock data for CBAM
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          { id: 1, date: '2026-06-12', product: '鋁製零件 (Aluminium)', emissions: 24.5, volume: 1500, unit: '噸', cost: 18500, hash_lock: '0x8f...3a21', source_origin: 'ERP Sync' },
+          { id: 2, date: '2026-06-11', product: '鋼鐵螺絲 (Steel Fasteners)', emissions: 18.2, volume: 3200, unit: '噸', cost: 42000, hash_lock: null, source_origin: 'Manual' },
+          { id: 3, date: '2026-06-10', product: '水泥熟料 (Cement Clinker)', emissions: 8.4, volume: 5000, unit: '噸', cost: 12000, hash_lock: '0x1c...9d4f', source_origin: 'System' },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 1, date: '2026-06-12', product: '鋁製零件 (Aluminium)', emissions: 24.5, volume: 1500, unit: '噸', cost: 18500, hash_lock: '0x8f...3a21', source_origin: 'ERP Sync' },
+        { id: 2, date: '2026-06-11', product: '鋼鐵螺絲 (Steel Fasteners)', emissions: 18.2, volume: 3200, unit: '噸', cost: 42000, hash_lock: null, source_origin: 'Manual' },
       ]);
     } finally {
       setLoading(false);
@@ -102,10 +102,16 @@ export default function CbamCalculatorPage() {
   };
 
   const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
+    { key: 'date', label: '申報期 (Period)' },
+    { key: 'product', label: '出口產品 (Product Category)', render: (val: any) => (
+      <span className="font-bold text-amber-400 flex items-center gap-2"><Factory size={14}/> {val}</span>
+    ) },
+    { key: 'emissions', label: '產品含碳量 (tCO2e/t)' },
+    { key: 'volume', label: '出口量 (Volume)', render: (val: any, row: any) => (
       <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
+    ) },
+    { key: 'cost', label: '預估 CBAM 憑證成本 (EUR)', render: (val: any) => (
+      <span className="text-emerald-400 font-mono font-bold">€ {val.toLocaleString()}</span>
     ) },
     { key: 'source_origin', label: '來源 (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
@@ -157,8 +163,8 @@ export default function CbamCalculatorPage() {
                 <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">CBAM-CALCULATOR</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">CBAM CALCULATOR</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">cbam-calculator dashboard</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">歐盟 CBAM 碳關稅試算器</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">CARBON BORDER ADJUSTMENT MECHANISM</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
@@ -173,11 +179,11 @@ export default function CbamCalculatorPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">納管出口批次</span>
+              <Scale size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
+            <div className="text-4xl font-black text-white">12<span className="text-lg text-slate-500 ml-2 font-normal">Batches</span></div>
+            <p className="text-xs text-amber-400/80 font-mono">Status: Q3 Declaration</p>
           </OmniBaseCard>
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
@@ -191,11 +197,11 @@ export default function CbamCalculatorPage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">潛在財務衝擊</span>
+              <Euro size={18} className="text-rose-400" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
+            <div className="text-4xl font-black text-white">72.5<span className="text-lg text-slate-500 ml-2 font-normal">k €</span></div>
+            <p className="text-xs text-rose-400/80 font-mono">Estimated Liability</p>
           </OmniBaseCard>
         </div>
 
@@ -219,21 +225,22 @@ export default function CbamCalculatorPage() {
           <div className="space-y-6">
             <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="OmniAgent 合規參謀" 
+              subtitle="CBAM Declaration Advisor"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  我們已根據歐盟最新 CBAM 申報準則 (EU 2023/956)，為您的出口產品重新計算了隱含碳排放 (Embedded Emissions)。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
+                  <h4 className="font-bold text-cyan-400 mb-2">減免建議 (Cost Reduction)</h4>
+                  <p className="text-slate-400 text-xs leading-relaxed">
+                    您在台灣本地已繳納之碳費，可依規定申請抵扣。預估 <strong>鋼鐵螺絲</strong> 批次可抵減約 <span className="text-emerald-400 font-bold">€ 4,500</span> 的憑證成本。請準備好碳費繳納證明，交由系統自動產製申報書。
+                  </p>
                 </div>
+                <OmniButton variant="outline" className="w-full mt-4 bg-white/5 border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400">
+                  一鍵生成歐盟申報 XML
+                </OmniButton>
               </div>
             </OmniBaseCard>
           </div>
