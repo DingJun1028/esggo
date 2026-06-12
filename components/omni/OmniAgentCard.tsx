@@ -219,3 +219,4 @@ export function OmniAgentCard() {
     </div>
   );
 }
+export default OmniAgentCard;

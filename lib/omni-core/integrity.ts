@@ -1,6 +1,6 @@
-import { sha256, generateNonce } from '../crypto-proof';
+import { sha256, generateNonce } from '../../crypto-proof.ts';
 import type { IComponentCore, IEvidence, IRestorationProtocol, RestorationInput } from '../../src/shared/types/index';
-import { engraveToSingleTable, verifyRecord, readFromVaultByHashLock } from '../vault-omni';
+import { engraveToSingleTable, verifyRecord, readFromVaultByHashLock } from '../vault-omni.ts';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
