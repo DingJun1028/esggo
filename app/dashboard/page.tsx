@@ -5,7 +5,7 @@ import { OmniTable, OmniTableDataRow } from '@/components/omni/OmniTable';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniCard } from '@/components/omni/OmniCard';
 import { RecordLifecycleStatus, AttentionStatus } from '@/shared-types/status';
-import { Leaf, Droplets, Zap, ShieldAlert } from 'lucide-react';
+import { Leaf, Droplets, Zap, ShieldAlert, BarChart3, Fingerprint, FileText, Settings, Search, Bell } from 'lucide-react';
 
 const mockData: OmniTableDataRow[] = [
   {
@@ -87,7 +87,30 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* 萬能卡片網格佈局 (OmniCard CSS Grid) */}
+        {/* 行動端特優化：橫向滑動式 極小功能鍵 (Horizontal Swipeable Micro-Action Dock) */}
+        <div className="w-full overflow-x-auto pb-4 mb-6 scrollbar-hide snap-x snap-mandatory">
+          <div className="flex items-center gap-3 md:gap-4 min-w-max px-2">
+            {[
+              { icon: BarChart3, label: 'Analytics', color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
+              { icon: Fingerprint, label: 'Audit Trail', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
+              { icon: FileText, label: 'GRI Reports', color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20' },
+              { icon: Bell, label: 'Alerts', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20' },
+              { icon: Search, label: 'Data Mining', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+              { icon: Settings, label: 'Matrix Config', color: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/20' }
+            ].map((action, idx) => (
+              <button 
+                key={idx}
+                className={`snap-start flex flex-col items-center justify-center min-w-[80px] md:min-w-[100px] h-20 md:h-24 rounded-2xl border ${action.border} ${action.bg} hover:bg-white/5 transition-all duration-300 backdrop-blur-md group relative overflow-hidden`}
+              >
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-${action.color.split('-')[1]}-500/20 to-transparent`} />
+                <action.icon size={20} className={`${action.color} mb-2 group-hover:scale-110 transition-transform duration-300`} />
+                <span className="text-[10px] md:text-xs font-bold text-slate-300 tracking-wider uppercase">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 萬能卡片網格佈局 (OmniCard CSS Grid - Panoramic View) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <OmniCard
             uuid="vlt-scope1-001"

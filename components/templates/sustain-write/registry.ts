@@ -38,8 +38,8 @@ export const SustainWriteTemplates: ZeroComputeTemplate[] = [
       { 
         title: 'Ch.2 溫室氣體盤查', 
         desc: 'Scope 1, 2, 3 排放量深度分析與確信。', 
-        requiredIndicators: ['ENV-001', 'ENV-002'],
-        contentBlueprint: '為具體掌握本公司營運邊界內之溫室氣體排放現況，本年度全面導入 ISO 14064-1 盤查機制。我們秉持「透明、精確、可溯源」之 5T 原則，將所有數據鎖定於區塊鏈與全息金庫中。\n\n【排放數據實證】\n本年度範疇一 (Scope 1) 直接溫室氣體排放量為 {{ENV-001}}；範疇二 (Scope 2) 間接溫室氣體排放量為 {{ENV-002}}。相較於基準年，整體碳排強度已展現初步下降趨勢，為未來的減碳路徑奠定堅實基礎。'
+        requiredIndicators: ['GRI-305-1', 'GRI-305-2'],
+        contentBlueprint: '為具體掌握本公司營運邊界內之溫室氣體排放現況，本年度全面導入 ISO 14064-1 盤查機制。我們秉持「透明、精確、可溯源」之 5T 原則，將所有數據鎖定於區塊鏈與全息金庫中。\n\n【排放數據實證】\n本年度範疇一 (Scope 1) 直接溫室氣體排放量為 {{GRI-305-1}}；範疇二 (Scope 2) 間接溫室氣體排放量為 {{GRI-305-2}}。相較於基準年，整體碳排強度已展現初步下降趨勢，為未來的減碳路徑奠定堅實基礎。'
       },
       { 
         title: 'Ch.3 淨零轉型路徑', 
@@ -96,8 +96,8 @@ export const SustainWriteTemplates: ZeroComputeTemplate[] = [
       { 
         title: 'Ch.2 環境守護 (Environmental)', 
         desc: '溫室氣體盤查、能源管理與水資源足跡。', 
-        requiredIndicators: ['ENV-001', 'ENV-002'],
-        contentBlueprint: '面對氣候變遷帶來的極端挑戰，我們採取積極的環境保護措施。除了逐步提高能源使用效率外，更全面展開範疇一與範疇二之溫室氣體盤查。\n\n本年度範疇一碳排放量為 {{ENV-001}}；範疇二碳排放量為 {{ENV-002}}。我們將依據此盤查結果，擬定具體可行的短中長期減碳路徑。'
+        requiredIndicators: ['GRI-305-1', 'GRI-305-2'],
+        contentBlueprint: '面對氣候變遷帶來的極端挑戰，我們採取積極的環境保護措施。除了逐步提高能源使用效率外，更全面展開範疇一與範疇二之溫室氣體盤查。\n\n本年度範疇一碳排放量為 {{GRI-305-1}}；範疇二碳排放量為 {{GRI-305-2}}。我們將依據此盤查結果，擬定具體可行的短中長期減碳路徑。'
       },
       { 
         title: 'Ch.3 社會共融 (Social)', 

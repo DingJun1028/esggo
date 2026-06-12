@@ -37,7 +37,19 @@ vi.mock('../lib/supabase', () => ({
 }));
 
 // Mock better-sqlite3
-vi.mock('better-sqlite3');
+vi.mock('better-sqlite3', () => {
+  const mockDb = {
+    exec: vi.fn(),
+    prepare: vi.fn().mockReturnValue({
+      run: vi.fn(),
+      get: vi.fn(),
+      all: vi.fn().mockReturnValue([]),
+    }),
+  };
+  return {
+    default: vi.fn().mockReturnValue(mockDb),
+  };
+});
 
 // Mock LogicRepo to prevent better-sqlite3 resolution issues
 vi.mock('../esggo/server/src/storage/LogicRepo');

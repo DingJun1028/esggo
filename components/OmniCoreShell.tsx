@@ -16,6 +16,8 @@ import OmniAgentFloatingAgent from './brand/OmniAgentFloating';
 import OmniCommandPalette from './omni/OmniCommandPalette';
 import { THEMES, type ThemeId, applyTheme, getSavedTheme } from '../lib/theme-config';
 import OmniSearchBar from './omni/OmniSearchBar';
+import OmniMatrixInput from './omni/OmniMatrixInput';
+import OmniJulesPassiveGuard from './omni/OmniJulesPassiveGuard';
 
 interface NavItem {
   href: string;
@@ -290,6 +292,7 @@ function SidebarNav({
             onSelect={onThemeChange}
             collapsed={collapsed && !mobileOpen}
           />
+          <OmniMatrixInput collapsed={collapsed && !mobileOpen} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6 }}>
             {(!collapsed || mobileOpen) && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10, color: 'var(--text-muted)' }}>
@@ -488,6 +491,9 @@ export default function OmniCoreShell({ children }: { children: React.ReactNode 
 
       {/* 懸浮 Agent */}
       <OmniAgentFloatingAgent />
+
+      {/* OmniJules 被動亂碼守衛 (全知之眼) */}
+      <OmniJulesPassiveGuard />
 
       <style>{`
         @media (max-width: 768px) {

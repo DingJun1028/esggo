@@ -6,17 +6,17 @@ import {
   RestorationInput,
   ConsolidationResult,
   EternalMemoryType,
-} from '../src/shared/types/index';
-import { integrityModule } from './omni-core/integrity';
+} from '../src/shared/types/index.ts';
+import { integrityModule } from './omni-core/integrity.ts';
 import {
   sha256,
   generatePedersenCommitment,
   verifyCommitmentSum,
-} from './crypto-proof';
-import type { ZKPRangeProof } from './crypto-proof';
-import { policyEngine } from './policy-engine';
-import type { PolicyValidationResult } from './policy-engine';
-import { dcInsertEternalMemory, dcListEternalMemories } from './dataconnect-services';
+} from './crypto-proof.ts';
+import type { ZKPRangeProof } from './crypto-proof.ts';
+import { policyEngine } from './policy-engine.ts';
+import type { PolicyValidationResult } from './policy-engine.ts';
+import { dcInsertEternalMemory, dcListEternalMemories } from './dataconnect-services.ts';
 
 // ============================================================
 // 萬能心核引擎 - 5T Logic Gate Implementation (Persistent)

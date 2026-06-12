@@ -1,12 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SupabaseOmniRealtimeService } from './SupabaseOmniRealtimeService';
-import { supabase } from '../supabase';
+import { supabase } from '../supabase.ts';
 
 // 1. 模擬外部依賴：Supabase Client
-vi.mock('../supabase', () => ({
-    supabase: {
-        channel: vi.fn(),
-    },
+const mockSupabase = vi.hoisted(() => ({
+    channel: vi.fn(),
+}));
+
+vi.mock('../supabase.ts', () => ({
+    supabase: mockSupabase,
+    getSupabaseClient: () => mockSupabase,
 }));
 
 describe('SupabaseOmniRealtimeService', () => {

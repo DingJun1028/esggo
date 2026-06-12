@@ -1,10 +1,10 @@
-import { ADKAgent } from './adk-core';
-import type { AgentConfig } from './adk-core';
-import { ai } from './genkit';
+import { ADKAgent } from './adk-core.ts';
+import type { AgentConfig } from './adk-core.ts';
+import { ai } from './genkit.ts';
 import { createHash } from 'crypto';
-import { NegotiationEngine } from '../negotiation/engine';
-import { negotiationEngine } from '../negotiation/engine';
-import { saveSustainWriteSection } from '../dataconnect-memory';
+import { NegotiationEngine } from '../negotiation/engine.ts';
+import { negotiationEngine } from '../negotiation/engine.ts';
+import { saveSustainWriteSection } from '../dataconnect-memory.ts';
 
 export type { AgentConfig };
 export type CollaborativeADKSwarm = {
@@ -30,9 +30,9 @@ const GRI_CHAPTERS = [
   { id: 'ch15_community', title: '在地社區與產品責任', gri: 'GRI 413, 416', order: 15 }
 ];
 
-import { OmniAgentBus, omniAgentBus } from './omni-agent-bus';
-import { sustainWriteZeroCompute } from './sustain-scribe-zero-compute';
-import { sustainScribe } from './sustain-scribe';
+import { OmniAgentBus, omniAgentBus } from './omni-agent-bus.ts';
+import { sustainWriteZeroCompute } from './sustain-scribe-zero-compute.ts';
+import { sustainScribe } from './sustain-scribe.ts';
 export { omniAgentBus };
 
 /**

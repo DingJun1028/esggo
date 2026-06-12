@@ -17,7 +17,7 @@ const mockMemories: Record<string, any>[] = [];
 
 // Mock Data Connect services to avoid Firebase initialization in tests
 const dcMockStore = vi.hoisted(() => ({ ref: [] as Record<string, unknown>[] }));
-vi.mock('./dataconnect-services', () => {
+vi.mock('./dataconnect-services.ts', () => {
   const store: Record<string, unknown>[] = [];
   dcMockStore.ref = store;
   return {
@@ -34,12 +34,10 @@ vi.mock('./dataconnect-services', () => {
       const existing = store.findIndex(m => (m as any).id === input.id);
       if (existing >= 0) store[existing] = entry;
       else store.push(entry);
-      // Return the structure that matches what the actual service expects
-      return { data: { eternalMemory_insert: entry } };
+      return entry;
     }),
     dcListEternalMemories: vi.fn().mockImplementation(async () => {
-      // Return the structure that matches what the actual service expects
-      return { data: { eternalMemories: [...store] } };
+      return [...store];
     }),
     dcUpsertAuditRecord: vi.fn().mockResolvedValue({ id: 'mock-audit-id' }),
   };
