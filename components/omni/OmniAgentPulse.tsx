@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Activity, CheckCircle2, ChevronRight, Zap, GripHorizontal, Minimize2, Maximize2, ShieldCheck } from 'lucide-react';
+import { Bot, Activity, CheckCircle2, ChevronRight, Zap, GripHorizontal, Minimize2, Maximize2, ShieldCheck, X } from 'lucide-react';
 import { useOmniTable } from '@/hooks/useOmniTable';
 import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 
@@ -11,6 +11,7 @@ import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 // =========================================================================
 export function OmniAgentPulse() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
   const { connectionStatus, records } = useOmniTable('valid-jwt-token');
   const { signals, activeResonance } = useOmniAgentBus();
   const constraintsRef = useRef(null);
@@ -21,6 +22,8 @@ export function OmniAgentPulse() {
   const timeSinceLastSync = lastSyncRecord 
     ? Math.floor((Date.now() - lastSyncRecord.timestamp) / 1000)
     : 0;
+
+  if (isDismissed) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden" ref={constraintsRef}>
@@ -53,12 +56,22 @@ export function OmniAgentPulse() {
                     <Bot size={14} /> OmniCommander
                   </span>
                 </div>
-                <button 
-                  onClick={() => setIsExpanded(false)}
-                  className="p-1.5 rounded-lg bg-black/20 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
-                >
-                  <Minimize2 size={14} />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button 
+                    onClick={() => setIsExpanded(false)}
+                    className="p-1.5 rounded-lg bg-black/20 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                    title="縮小"
+                  >
+                    <Minimize2 size={14} />
+                  </button>
+                  <button 
+                    onClick={() => setIsDismissed(true)}
+                    className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-400 hover:text-white transition-colors"
+                    title="關閉"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
               </div>
 
               {/* Body */}
@@ -130,6 +143,14 @@ export function OmniAgentPulse() {
             >
               {/* Gloss Highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"></div>
+              
+              <button
+                onClick={(e) => { e.stopPropagation(); setIsDismissed(true); }}
+                className="absolute top-1 right-1 p-1 bg-black/40 hover:bg-red-500/80 text-white/50 hover:text-white rounded-full transition-colors z-20"
+                title="隱藏精靈"
+              >
+                <X size={10} />
+              </button>
               
               <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center relative border border-cyan-400/20">
                 <Bot size={22} className="text-cyan-400 relative z-10 drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
