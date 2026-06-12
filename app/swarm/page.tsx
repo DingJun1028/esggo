@@ -5,6 +5,7 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
+import { OmniAgentCard } from '@/components/omni/OmniAgentCard';
 import { Share2, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
 export default function SwarmPage() {
@@ -217,25 +218,35 @@ export default function SwarmPage() {
           </div>
           
           <div className="space-y-6">
-            <OmniBaseCard 
-              variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
-            >
-              <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
-                </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
-                </div>
-              </div>
-            </OmniBaseCard>
+            <OmniAgentCard 
+              id="SW-01"
+              name="SwarmOverseer"
+              role="蜂群監控節點"
+              rarity="SR"
+              isAwakened={false}
+              tags={['監控', '排程', '路由', '5T驗證']}
+              stats={[
+                { label: '吞吐量', rank: 'A+', value: 88 },
+                { label: '穩定度', rank: 'S', value: 95 },
+                { label: '容錯率', rank: 'S+', value: 96 }
+              ]}
+              skills={[
+                { icon: Search, nameEN: 'Node Ping', nameZH: '節點探測', type: '被動' },
+                { icon: ShieldCheck, nameEN: '5T Guard', nameZH: '實證守衛', type: '主動' }
+              ]}
+              ultimate={{
+                nameEN: 'Swarm Reboot',
+                nameZH: '蜂群重啟',
+                description: '重新平衡所有代理節點的負載。'
+              }}
+              overview="SwarmOverseer 負責監控所有在背景運行的 OmniAgent 節點，確保資料流與 5T 驗證過程順暢無阻。"
+              systemStatus={{
+                STATUS: 'ONLINE',
+                PING: '12ms',
+                TASKS: '4 Active',
+                MODE: 'OBSERVER'
+              }}
+            />
           </div>
         </div>
 

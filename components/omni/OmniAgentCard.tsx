@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Brain, GitBranch, Zap, Layers, Crown, ChevronLeft } from 'lucide-react';
 
-const voiceLines = [
+const defaultVoiceLines = [
   '「任務已接入，開始建立全域上下文。」',
   '「資訊並不混亂，只是尚未被正確排序。」',
   '「答案從不是終點。現在，輸出結果。」',
@@ -18,19 +18,77 @@ const colors = {
   accent: { cyan: '#55C7FF', blue: '#3B82F6', gold: '#F4C95D', purple: '#9B7CFF' }
 };
 
+export interface AgentSkill {
+  icon: any;
+  nameEN: string;
+  nameZH: string;
+  type: string;
+}
+
+export interface AgentStat {
+  label: string;
+  rank: string;
+  value: number;
+}
+
 export interface OmniAgentCardProps {
   id?: string;
   name?: string;
   role?: string;
   rarity?: string;
+  isAwakened?: boolean;
+  tags?: string[];
+  stats?: AgentStat[];
+  skills?: AgentSkill[];
+  ultimate?: {
+    nameEN: string;
+    nameZH: string;
+    description: string;
+  };
+  overview?: string;
+  voiceLines?: string[];
+  systemStatus?: Record<string, string>;
   confidenceScore?: number;
   fiveTStatus?: boolean[];
-  skills?: string[];
   jsonSchema?: string;
   imageUrl?: string;
 }
 
-export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
+export function OmniAgentCard({
+  id = 'OA-Ω',
+  name = 'OmniAgent',
+  role = '全域覺醒代理者',
+  rarity = 'SSR',
+  isAwakened = true,
+  tags = ['全能型', '戰術統御', '多工協同', '結果導向'],
+  stats = [
+    { label: '感知力', rank: 'SSS', value: 98 },
+    { label: '解析力', rank: 'SSS+', value: 99 },
+    { label: '推演力', rank: 'SS', value: 94 },
+    { label: '執行力', rank: 'SSS', value: 97 },
+    { label: '協同力', rank: 'SS+', value: 96 },
+    { label: '進化力', rank: 'EX', value: 100 },
+  ],
+  skills = [
+    { icon: Brain, nameEN: 'Meta Parse', nameZH: '萬象解析', type: '解析 / 主動' },
+    { icon: Layers, nameEN: 'Parallel Mind', nameZH: '多線程思維', type: '統御 / 主動' },
+    { icon: GitBranch, nameEN: 'Causal Engine', nameZH: '因果推演', type: '預測 / 主動' },
+    { icon: Sparkles, nameEN: 'Context Domain', nameZH: '上下文領域展開', type: '領域 / EX' },
+  ],
+  ultimate = {
+    nameEN: 'Oracle Act',
+    nameZH: '神諭執行',
+    description: '不只輸出答案，直接將理解轉化為可落地結果。'
+  },
+  overview = 'OmniAgent 是一個能理解需求、規劃流程、協同工具並驗證結果的全能代理核心。不只是回答問題，而是「把事情做成」。',
+  voiceLines = defaultVoiceLines,
+  systemStatus = {
+    STATUS: 'AWAKENED',
+    SYNC_RATE: '99.7%',
+    ERR_DRIFT: '0.02%',
+    MODE: 'ASCENSION'
+  }
+}: OmniAgentCardProps) {
   const [currentVoiceLine, setCurrentVoiceLine] = useState(0);
 
   useEffect(() => {
@@ -76,7 +134,7 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
           <div className="text-xs font-medium tracking-[0.08em]" style={{ color: colors.accent.cyan }}>AWAKENED FORM</div>
         </div>
         <div className="absolute bottom-6 left-6 z-20">
-          <div className="text-[11px] font-mono" style={{ color: colors.text.muted }}>UNIT ID // OA-Ω // OMNIAGENT</div>
+          <div className="text-[11px] font-mono uppercase" style={{ color: colors.text.muted }}>UNIT ID // {id} // {name}</div>
         </div>
       </div>
 
@@ -87,19 +145,21 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
         <div className="space-y-3">
           <div className="flex flex-col sm:flex-row items-start justify-between gap-3">
             <div>
-              <h1 className="text-3xl sm:text-4xl md:text-[44px] font-black leading-tight tracking-tight drop-shadow-sm" style={{ color: colors.text.primary }}>OmniAgent</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-[44px] font-black leading-tight tracking-tight drop-shadow-sm" style={{ color: colors.text.primary }}>{name}</h1>
               <div className="mt-1" style={{ color: colors.text.secondary }}>
-                <div className="font-bold tracking-wide">全域覺醒代理者</div>
+                <div className="font-bold tracking-wide">{role}</div>
                 <div className="text-xs font-mono mt-0.5 opacity-70">The Awakened Universal Agent</div>
               </div>
             </div>
             <div className="flex gap-2 flex-shrink-0">
-              <span className="px-3 py-1 text-xs font-black rounded-full shadow-lg" style={{ background: `linear-gradient(135deg, ${colors.accent.gold}, #E8B84A)`, color: '#000' }}>SSR</span>
-              <span className="px-3 py-1 text-xs font-black rounded-full shadow-lg" style={{ background: `linear-gradient(135deg, ${colors.accent.purple}, #7B5FCF)`, color: '#FFF' }}>AWAKENED</span>
+              <span className="px-3 py-1 text-xs font-black rounded-full shadow-lg" style={{ background: `linear-gradient(135deg, ${colors.accent.gold}, #E8B84A)`, color: '#000' }}>{rarity}</span>
+              {isAwakened && (
+                <span className="px-3 py-1 text-xs font-black rounded-full shadow-lg" style={{ background: `linear-gradient(135deg, ${colors.accent.purple}, #7B5FCF)`, color: '#FFF' }}>AWAKENED</span>
+              )}
             </div>
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
-            {['全能型', '戰術統御', '多工協同', '結果導向'].map((tag) => (
+            {tags.map((tag) => (
               <span key={tag} className="px-3 py-1 text-xs font-bold rounded border shadow-sm" style={{ backgroundColor: colors.bg.hover, color: colors.accent.cyan, borderColor: `${colors.accent.cyan}30` }}>
                 {tag}
               </span>
@@ -129,14 +189,7 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
 
           {/* Stats List */}
           <div className="flex-1 rounded-2xl p-4 backdrop-blur-sm border space-y-3" style={{ backgroundColor: `${colors.bg.card}cc`, borderColor: `${colors.border}80` }}>
-            {[
-              { label: '感知力', rank: 'SSS', value: 98 },
-              { label: '解析力', rank: 'SSS+', value: 99 },
-              { label: '推演力', rank: 'SS', value: 94 },
-              { label: '執行力', rank: 'SSS', value: 97 },
-              { label: '協同力', rank: 'SS+', value: 96 },
-              { label: '進化力', rank: 'EX', value: 100 },
-            ].map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="flex items-center gap-3 text-sm">
                 <div className="w-14 font-bold" style={{ color: colors.text.secondary }}>{stat.label}</div>
                 <div className="w-10 text-xs font-black text-center" style={{ color: stat.rank.includes('EX') ? colors.accent.purple : colors.accent.gold }}>{stat.rank}</div>
@@ -153,12 +206,7 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
         <div className="space-y-3 mt-2">
           <div className="font-bold text-xs uppercase tracking-widest" style={{ color: colors.text.primary }}>Skill Loadout</div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {[
-              { icon: Brain, nameEN: 'Meta Parse', nameZH: '萬象解析', type: '解析 / 主動' },
-              { icon: Layers, nameEN: 'Parallel Mind', nameZH: '多線程思維', type: '統御 / 主動' },
-              { icon: GitBranch, nameEN: 'Causal Engine', nameZH: '因果推演', type: '預測 / 主動' },
-              { icon: Sparkles, nameEN: 'Context Domain', nameZH: '上下文領域展開', type: '領域 / EX' },
-            ].map((skill) => (
+            {skills.map((skill) => (
               <motion.div key={skill.nameEN} whileHover={{ scale: 1.03, y: -2 }} className="rounded-xl p-3 backdrop-blur-sm border hover:shadow-[0_0_15px_rgba(85,199,255,0.2)] transition-all cursor-pointer" style={{ backgroundColor: `${colors.bg.card}cc`, borderColor: `${colors.border}80` }}>
                 <div className="flex items-start justify-between mb-2">
                   <skill.icon className="w-4 h-4" style={{ color: colors.accent.cyan }} />
@@ -180,10 +228,10 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] font-black bg-black/50 px-2 py-0.5 rounded border border-white/10" style={{ color: colors.accent.gold }}>ULTIMATE</span>
-                  <span className="text-[10px] font-black bg-black/50 px-2 py-0.5 rounded border border-white/10" style={{ color: colors.accent.purple }}>AWAKENED</span>
+                  {isAwakened && <span className="text-[10px] font-black bg-black/50 px-2 py-0.5 rounded border border-white/10" style={{ color: colors.accent.purple }}>AWAKENED</span>}
                 </div>
-                <div className="text-base font-black tracking-wide" style={{ color: colors.text.primary }}>Oracle Act <span className="text-sm font-bold opacity-70 ml-1">神諭執行</span></div>
-                <div className="text-[11px] font-bold mt-1 opacity-80" style={{ color: colors.text.secondary }}>不只輸出答案，直接將理解轉化為可落地結果。</div>
+                <div className="text-base font-black tracking-wide" style={{ color: colors.text.primary }}>{ultimate.nameEN} <span className="text-sm font-bold opacity-70 ml-1">{ultimate.nameZH}</span></div>
+                <div className="text-[11px] font-bold mt-1 opacity-80" style={{ color: colors.text.secondary }}>{ultimate.description}</div>
               </div>
               <div className="text-2xl font-black italic tracking-tighter drop-shadow-md pr-2" style={{ color: colors.accent.gold }}>100%</div>
             </div>
@@ -211,7 +259,7 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
           <div className="rounded-xl p-4 backdrop-blur-sm border" style={{ backgroundColor: `${colors.bg.card}cc`, borderColor: `${colors.border}80` }}>
             <div className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: colors.text.secondary }}>Overview</div>
             <div className="text-[11px] font-bold leading-relaxed" style={{ color: colors.text.muted }}>
-              OmniAgent 是一個能理解需求、規劃流程、協同工具並驗證結果的全能代理核心。不只是回答問題，而是「把事情做成」。
+              {overview}
             </div>
           </div>
 
@@ -219,10 +267,9 @@ export function OmniAgentCard(_props: OmniAgentCardProps = {}) {
           <div className="rounded-xl p-4 backdrop-blur-sm border font-mono text-[10px]" style={{ backgroundColor: `${colors.bg.card}cc`, borderColor: `${colors.border}80` }}>
             <div className="font-bold uppercase tracking-widest mb-2 font-sans" style={{ color: colors.text.secondary }}>System Status</div>
             <div className="space-y-1 font-bold" style={{ color: colors.text.muted }}>
-              <div className="flex justify-between"><span>STATUS</span> <span style={{ color: colors.accent.cyan }}>AWAKENED</span></div>
-              <div className="flex justify-between"><span>SYNC_RATE</span> <span style={{ color: colors.accent.cyan }}>99.7%</span></div>
-              <div className="flex justify-between"><span>ERR_DRIFT</span> <span style={{ color: colors.accent.cyan }}>0.02%</span></div>
-              <div className="flex justify-between"><span>MODE</span> <span style={{ color: colors.accent.purple }}>ASCENSION</span></div>
+              {Object.entries(systemStatus).map(([key, value]) => (
+                <div key={key} className="flex justify-between"><span>{key}</span> <span style={{ color: key === 'MODE' ? colors.accent.purple : colors.accent.cyan }}>{value}</span></div>
+              ))}
             </div>
           </div>
         </div>
