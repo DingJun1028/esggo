@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Zap, Search, GitBranch, Shield, CheckCircle, Sparkles, ChevronRight, Circle } from 'lucide-react';
+import { Brain, Zap, Search, GitBranch, Shield, CheckCircle, Sparkles, ChevronRight, Circle, AlertTriangle, RefreshCw } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 export interface ThinkingStep {
@@ -10,7 +10,7 @@ export interface ThinkingStep {
   phase: 'observe' | 'reason' | 'synthesize' | 'verify' | 'seal';
   label: string;
   detail: string;
-  status: 'pending' | 'active' | 'done';
+  status: 'pending' | 'active' | 'done' | 'failed' | 'fallback';
   depth?: number; // 0-2, sub-thought depth
 }
 
@@ -57,11 +57,34 @@ const ThinkingConnector = ({ active, depth }: { active: boolean; depth: number }
 // ── Thinking Node ─────────────────────────────────────────────────────────────
 const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) => {
   const cfg = PHASE_CONFIG[step.phase];
-  const Icon = cfg.icon;
+
   const isActive = step.status === 'active';
   const isDone   = step.status === 'done';
+  const isFailed = step.status === 'failed';
+  const isFallback = step.status === 'fallback';
   const isPending = step.status === 'pending';
   const indent = (step.depth ?? 0) * 20;
+
+  // Handle override for icon and color based on status
+  let Icon = cfg.icon;
+  let iconColor = cfg.color;
+  let bgColor = cfg.bg;
+  let borderColor = cfg.border;
+  let glowClass = cfg.glow;
+
+  if (isFailed) {
+    Icon = AlertTriangle;
+    iconColor = 'text-red-400';
+    bgColor = 'bg-red-400/10';
+    borderColor = 'border-red-400/30';
+    glowClass = 'shadow-red-500/20';
+  } else if (isFallback) {
+    Icon = RefreshCw;
+    iconColor = 'text-orange-400';
+    bgColor = 'bg-orange-400/10';
+    borderColor = 'border-orange-400/30';
+    glowClass = 'shadow-orange-500/20';
+  }
 
   return (
     <motion.div
@@ -73,24 +96,32 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
     >
       <div className={`
         flex items-start gap-3 px-3 py-2.5 rounded-xl border transition-all duration-500
-        ${isActive  ? `${cfg.bg} ${cfg.border} shadow-lg ${cfg.glow}` : ''}
+        ${(isActive || isFailed || isFallback) ? `${bgColor} ${borderColor} shadow-lg ${glowClass}` : ''}
         ${isDone    ? 'bg-white/3 border-white/5' : ''}
         ${isPending ? 'border-transparent' : ''}
       `}>
         {/* Icon */}
         <div className={`
           flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center mt-0.5
-          ${isActive ? `${cfg.bg} border ${cfg.border}` : 'bg-white/5'}
+          ${(isActive || isFailed || isFallback) ? `${bgColor} border ${borderColor}` : 'bg-white/5'}
           transition-all duration-300
         `}>
           {isDone ? (
             <CheckCircle size={14} className="text-emerald-400" />
+          ) : isFailed ? (
+            <motion.div animate={{ x: [-2, 2, -2, 2, 0] }} transition={{ duration: 0.4 }}>
+              <Icon size={14} className={iconColor} />
+            </motion.div>
+          ) : isFallback ? (
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}>
+              <Icon size={14} className={iconColor} />
+            </motion.div>
           ) : isActive ? (
             <motion.div
               animate={{ rotate: [0, 360] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             >
-              <Icon size={14} className={cfg.color} />
+              <Icon size={14} className={iconColor} />
             </motion.div>
           ) : (
             <Circle size={10} className="text-white/20" />
@@ -101,22 +132,22 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             {(step.depth ?? 0) === 0 && (
-              <span className={`text-[9px] font-black tracking-widest font-mono ${isDone ? 'text-emerald-500' : isActive ? cfg.color : 'text-white/20'}`}>
+              <span className={`text-[9px] font-black tracking-widest font-mono ${isDone ? 'text-emerald-500' : isActive ? cfg.color : isFailed ? 'text-red-400' : isFallback ? 'text-orange-400' : 'text-white/20'}`}>
                 {cfg.label}
               </span>
             )}
-            <span className={`text-xs font-bold truncate ${isDone ? 'text-white/60' : isActive ? 'text-white' : 'text-white/25'}`}>
+            <span className={`text-xs font-bold truncate ${isDone ? 'text-white/60' : (isActive || isFallback) ? 'text-white' : isFailed ? 'text-red-200' : 'text-white/25'}`}>
               {step.label}
             </span>
           </div>
 
           <AnimatePresence>
-            {(isActive || isDone) && (
+            {(isActive || isDone || isFailed || isFallback) && (
               <motion.p
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className={`text-[10px] leading-relaxed font-mono ${isDone ? 'text-white/30' : 'text-white/55'}`}
+                className={`text-[10px] leading-relaxed font-mono ${isDone ? 'text-white/30' : isFailed ? 'text-red-300/80' : isFallback ? 'text-orange-300/80' : 'text-white/55'}`}
               >
                 {step.detail}
               </motion.p>
@@ -124,11 +155,11 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
           </AnimatePresence>
 
           {/* Active typing cursor */}
-          {isActive && (
+          {(isActive || isFallback) && (
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.6, repeat: Infinity }}
-              className={`inline-block w-1 h-3 ml-1 rounded-sm ${cfg.color.replace('text-', 'bg-')} opacity-80`}
+              className={`inline-block w-1 h-3 ml-1 rounded-sm ${iconColor.replace('text-', 'bg-')} opacity-80`}
             />
           )}
         </div>
@@ -188,12 +219,41 @@ export function OmniThinkingChain({
     setDone(false);
 
     let idx = 0;
+    let hasFailed = false;
+
     const advance = () => {
-      setSteps(prev => prev.map((s, i) =>
-        i < idx  ? { ...s, status: 'done' }   :
-        i === idx ? { ...s, status: 'active' } :
-        { ...s, status: 'pending' }
-      ));
+      // Simulate failure at index 8 (id: '4a', ZKP) if not external steps
+      if (idx === 8 && !hasFailed && !externalSteps) {
+        setSteps(prev => prev.map((s, i) => 
+          i === idx ? { ...s, status: 'failed', detail: '驗算失敗：發現不一致的雜湊簽章 (Hash Mismatch)' } : s
+        ));
+        hasFailed = true;
+        // After 1.2s, trigger fallback
+        timerRef.current = setTimeout(() => {
+          setSteps(prev => {
+            const newSteps = [...prev];
+            // Insert fallback step
+            newSteps.splice(idx + 1, 0, {
+              id: '4b', phase: 'verify', status: 'fallback', label: '啟動萬能果因協議 (Karma Protocol)', detail: '執行 HEAL 進行自動修復與重新封印...', depth: 1
+            });
+            return newSteps;
+          });
+          // After another 2s, mark fallback as done and proceed
+          timerRef.current = setTimeout(() => {
+            setSteps(prev => prev.map((s, i) => i === idx + 1 ? { ...s, status: 'done', detail: '修復完成，ZKP 已重新綁定' } : s));
+            idx += 2; // skip the failed one and the fallback
+            advance();
+          }, 2500);
+        }, 1200);
+        return;
+      }
+
+      setSteps(prev => prev.map((s, i) => {
+        if (s.status === 'failed' || s.status === 'fallback' || s.status === 'done') return s;
+        if (i < idx) return { ...s, status: 'done' };
+        if (i === idx) return { ...s, status: 'active' };
+        return { ...s, status: 'pending' };
+      }));
       setActiveIdx(idx);
 
       const delay = 400 + Math.random() * 600 + (list[idx]?.depth ?? 0) * 200;
