@@ -244,22 +244,12 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
       >
         {/* Logo Section */}
         <div className={cn(
-          "p-6 h-20 flex items-center gap-4 overflow-hidden border-b transition-colors",
+          "px-6 py-4 min-h-[96px] flex items-center gap-4 overflow-hidden border-b transition-colors",
           isDark ? "border-white/5" : "border-slate-100"
         )}>
-          <div className="min-w-[40px] flex justify-center" ref={logoRef}>
+          <div className="flex justify-center" ref={logoRef}>
             <BrandLogo size="sm" />
           </div>
-          {!sidebarCollapsed && (
-            <motion.div 
-              initial={{ opacity: 0, x: -10 }} 
-              animate={{ opacity: 1, x: 0 }}
-              className="flex flex-col"
-            >
-              <span className="font-black text-sm tracking-tighter leading-none">ESGGO善向永續</span>
-              <span className="text-[9px] font-bold opacity-40 tracking-[0.2em] uppercase mt-1">OmniCore v8.5</span>
-            </motion.div>
-          )}
         </div>
 
         {/* Navigation Groups */}

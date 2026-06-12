@@ -63,7 +63,7 @@ function hashSignal(data: unknown): string {
 
 function connectGatewayWS(onConnected: (v: boolean) => void) {
   if (typeof window === 'undefined') return;
-  const gatewayUrl = (process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || 'https://1fb3-161-118-248-180.ngrok-free.app')
+  const gatewayUrl = (process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || 'http://161.118.248.180:8080')
     .replace(/^http/, 'ws');
 
   try {

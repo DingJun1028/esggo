@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { SupabaseOmniRealtimeService } from './SupabaseOmniRealtimeService';
-import { supabase } from '../supabase.ts';
+import { supabase } from '../supabase';
 
 // 1. 模擬外部依賴：Supabase Client
 const mockSupabase = vi.hoisted(() => ({
     channel: vi.fn(),
 }));
 
-vi.mock('../supabase.ts', () => ({
+vi.mock('../supabase', () => ({
     supabase: mockSupabase,
     getSupabaseClient: () => mockSupabase,
 }));
@@ -15,23 +15,25 @@ vi.mock('../supabase.ts', () => ({
 describe('SupabaseOmniRealtimeService', () => {
     let service: SupabaseOmniRealtimeService;
     let mockCallbacks: {
-      onPresenceSync: ReturnType<typeof vi.fn>;
-      onEventReceived: ReturnType<typeof vi.fn>;
-      onStatusChange: ReturnType<typeof vi.fn>;
+        onPresenceSync: ReturnType<typeof vi.fn>;
+        onEventReceived: ReturnType<typeof vi.fn>;
+        onStatusChange: ReturnType<typeof vi.fn>;
     };
     let mockChannel: {
-      on: ReturnType<typeof vi.fn>;
-      subscribe: ReturnType<typeof vi.fn>;
-      unsubscribe: ReturnType<typeof vi.fn>;
-      track: ReturnType<typeof vi.fn>;
-      send: ReturnType<typeof vi.fn>;
-      presenceState: ReturnType<typeof vi.fn>;
+        on: ReturnType<typeof vi.fn>;
+        subscribe: ReturnType<typeof vi.fn>;
+        unsubscribe: ReturnType<typeof vi.fn>;
+        track: ReturnType<typeof vi.fn>;
+        send: ReturnType<typeof vi.fn>;
+        presenceState: ReturnType<typeof vi.fn>;
     };
     let originalFetch: typeof global.fetch;
 
     // 用來捕捉在 .on() 中註冊的回呼函式，以便在測試中手動觸發
     let capturedBroadcastCb: Function | null = null;
     let capturedPresenceSyncCb: Function | null = null;
+    let capturedPresenceJoinCb: Function | null = null;
+    let capturedPresenceLeaveCb: Function | null = null;
     let originalSupabaseUrl: string | undefined;
     let originalSupabaseKey: string | undefined;
 
@@ -39,6 +41,8 @@ describe('SupabaseOmniRealtimeService', () => {
         vi.clearAllMocks();
         capturedBroadcastCb = null;
         capturedPresenceSyncCb = null;
+        capturedPresenceJoinCb = null;
+        capturedPresenceLeaveCb = null;
 
         originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         originalSupabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -61,6 +65,12 @@ describe('SupabaseOmniRealtimeService', () => {
                 }
                 if (event_type === 'presence' && filter.event === 'sync') {
                     capturedPresenceSyncCb = cb;
+                }
+                if (event_type === 'presence' && filter.event === 'join') {
+                    capturedPresenceJoinCb = cb;
+                }
+                if (event_type === 'presence' && filter.event === 'leave') {
+                    capturedPresenceLeaveCb = cb;
                 }
                 return mockChannel; // 支援 .on().on() 鏈式呼叫
             }),
@@ -123,6 +133,24 @@ describe('SupabaseOmniRealtimeService', () => {
 
         // 確保 UI 的 onEventReceived 有拿到內層的 payload
         expect(mockCallbacks.onEventReceived).toHaveBeenCalledWith(incomingPayload.payload);
+    });
+
+    it('接收到 presence (sync, join, leave) 事件時，系統應能正常捕捉與處理', () => {
+        service.connect(null, mockCallbacks);
+
+        expect(capturedPresenceSyncCb).toBeDefined();
+        expect(capturedPresenceJoinCb).toBeDefined();
+        expect(capturedPresenceLeaveCb).toBeDefined();
+
+        // 1. 模擬觸發 Presence Sync
+        capturedPresenceSyncCb!();
+        expect(mockCallbacks.onPresenceSync).toHaveBeenCalledWith(mockChannel.presenceState());
+
+        // 2. 模擬觸發 Presence Join
+        capturedPresenceJoinCb!({ key: 'user_123', newPresences: [] });
+
+        // 3. 模擬觸發 Presence Leave
+        capturedPresenceLeaveCb!({ key: 'user_123', leftPresences: [] });
     });
 
     it('執行 disconnect 時應該釋放頻道訂閱', () => {
