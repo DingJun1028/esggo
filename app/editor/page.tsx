@@ -13,28 +13,28 @@ import { useAuth } from '@/hooks/useAuth';
 
 // Full framework for comprehensive ESG Sustainability Report structure
 const REPORT_CHAPTERS = [
-  { id: 'chap-01', name: '董事長的話與永續願景', order: 1, gri: ['GRI 2-22'] },
-  { id: 'chap-02', name: '關於本報告書', order: 2, gri: ['GRI 2-1', 'GRI 2-2', 'GRI 2-3'] },
-  { id: 'chap-03', name: '公司概況與營運績效', order: 3, gri: ['GRI 2-6', 'GRI 201'] },
-  { id: 'chap-04', name: '重大性議題分析 (Materiality)', order: 4, gri: ['GRI 3-1', 'GRI 3-2', 'GRI 3-3'] },
-  { id: 'chap-05', name: '利害關係人溝通與議合', order: 5, gri: ['GRI 2-29'] },
-  { id: 'chap-06', name: '公司治理與誠信經營', order: 6, gri: ['GRI 2-9', 'GRI 2-11', 'GRI 205'] },
-  { id: 'chap-07', name: '風險管理架構', order: 7, gri: ['GRI 2-12', 'GRI 2-13'] },
-  { id: 'chap-08', name: '氣候變遷與溫室氣體盤查', order: 8, gri: ['GRI 305', 'TCFD'] },
-  { id: 'chap-09', name: '能源管理與減碳策略', order: 9, gri: ['GRI 302'] },
-  { id: 'chap-10', name: '水資源與廢水管理', order: 10, gri: ['GRI 303'] },
-  { id: 'chap-11', name: '廢棄物與循環經濟', order: 11, gri: ['GRI 306'] },
-  { id: 'chap-12', name: '人才吸引與留任', order: 12, gri: ['GRI 401'] },
-  { id: 'chap-13', name: '員工發展與培育', order: 13, gri: ['GRI 404'] },
-  { id: 'chap-14', name: '職業安全與衛生', order: 14, gri: ['GRI 403'] },
-  { id: 'chap-15', name: '人權保障與多元共融 (DEI)', order: 15, gri: ['GRI 406', 'GRI 408', 'GRI 409'] },
-  { id: 'chap-16', name: '供應鏈永續管理', order: 16, gri: ['GRI 308', 'GRI 414'] },
-  { id: 'chap-17', name: '綠色採購與在地發展', order: 17, gri: ['GRI 204'] },
-  { id: 'chap-18', name: '資訊安全與客戶隱私', order: 18, gri: ['GRI 418'] },
-  { id: 'chap-19', name: '社會參與與公益回饋', order: 19, gri: ['GRI 413'] },
-  { id: 'chap-20', name: '附錄：GRI 對照表', order: 20, gri: ['GRI Index'] },
-  { id: 'chap-21', name: '附錄：SASB / TCFD 對照表', order: 21, gri: ['SASB', 'TCFD'] },
-  { id: 'chap-22', name: '第三方查證聲明', order: 22, gri: ['Assurance'] },
+  { id: 'chap-01', name: '董事長的話與永續願景', order: 1, gri: ['GRI 2-22'], words: 2400, pages: 2.0 },
+  { id: 'chap-02', name: '關於本報告書', order: 2, gri: ['GRI 2-1', 'GRI 2-2', 'GRI 2-3'], words: 4800, pages: 4.0 },
+  { id: 'chap-03', name: '公司概況與營運績效', order: 3, gri: ['GRI 2-6', 'GRI 201'], words: 12000, pages: 10.0 },
+  { id: 'chap-04', name: '重大性議題分析 (Materiality)', order: 4, gri: ['GRI 3-1', 'GRI 3-2', 'GRI 3-3'], words: 15600, pages: 13.0 },
+  { id: 'chap-05', name: '利害關係人溝通與議合', order: 5, gri: ['GRI 2-29'], words: 9600, pages: 8.0 },
+  { id: 'chap-06', name: '公司治理與誠信經營', order: 6, gri: ['GRI 2-9', 'GRI 2-11', 'GRI 205'], words: 18000, pages: 15.0 },
+  { id: 'chap-07', name: '風險管理架構', order: 7, gri: ['GRI 2-12', 'GRI 2-13'], words: 12000, pages: 10.0 },
+  { id: 'chap-08', name: '氣候變遷與溫室氣體盤查', order: 8, gri: ['GRI 305', 'TCFD'], words: 24000, pages: 20.0 },
+  { id: 'chap-09', name: '能源管理與減碳策略', order: 9, gri: ['GRI 302'], words: 18000, pages: 15.0 },
+  { id: 'chap-10', name: '水資源與廢水管理', order: 10, gri: ['GRI 303'], words: 14400, pages: 12.0 },
+  { id: 'chap-11', name: '廢棄物與循環經濟', order: 11, gri: ['GRI 306'], words: 12000, pages: 10.0 },
+  { id: 'chap-12', name: '人才吸引與留任', order: 12, gri: ['GRI 401'], words: 14400, pages: 12.0 },
+  { id: 'chap-13', name: '員工發展與培育', order: 13, gri: ['GRI 404'], words: 12000, pages: 10.0 },
+  { id: 'chap-14', name: '職業安全與衛生', order: 14, gri: ['GRI 403'], words: 15600, pages: 13.0 },
+  { id: 'chap-15', name: '人權保障與多元共融 (DEI)', order: 15, gri: ['GRI 406', 'GRI 408', 'GRI 409'], words: 12000, pages: 10.0 },
+  { id: 'chap-16', name: '供應鏈永續管理', order: 16, gri: ['GRI 308', 'GRI 414'], words: 14400, pages: 12.0 },
+  { id: 'chap-17', name: '綠色採購與在地發展', order: 17, gri: ['GRI 204'], words: 7200, pages: 6.0 },
+  { id: 'chap-18', name: '資訊安全與客戶隱私', order: 18, gri: ['GRI 418'], words: 6000, pages: 5.0 },
+  { id: 'chap-19', name: '社會參與與公益回饋', order: 19, gri: ['GRI 413'], words: 9600, pages: 8.0 },
+  { id: 'chap-20', name: '附錄：GRI 對照表', order: 20, gri: ['GRI Index'], words: 2400, pages: 2.0 },
+  { id: 'chap-21', name: '附錄：SASB / TCFD 對照表', order: 21, gri: ['SASB', 'TCFD'], words: 2400, pages: 2.0 },
+  { id: 'chap-22', name: '第三方查證聲明', order: 22, gri: ['Assurance'], words: 1200, pages: 1.0 },
 ];
 
 export default function EditorPage() {
@@ -88,7 +88,7 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 flex flex-col md:flex-row gap-6 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0B1121] to-[#020617] relative text-slate-200 p-4 md:p-8 flex flex-col md:flex-row gap-6 selection:bg-cyan-500/30">
       
       {/* Sidebar: Chapter Navigation */}
       <div className="w-full md:w-64 shrink-0 flex flex-col gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
@@ -102,19 +102,24 @@ export default function EditorPage() {
           </div>
         </div>
 
-        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar">
+        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar backdrop-blur-2xl bg-white/[0.02]">
           {REPORT_CHAPTERS.map(chapter => (
             <button
               key={chapter.id}
               onClick={() => setActiveChapter(chapter)}
               className={`flex items-center justify-between w-full text-left px-3 py-2.5 rounded-lg transition-all text-sm ${
                 activeChapter.id === chapter.id 
-                  ? 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]' 
-                  : 'text-slate-400 hover:bg-white/5 hover:text-slate-200 border border-transparent'
+                  ? 'bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 shadow-[inset_0_0_15px_rgba(6,182,212,0.15)] backdrop-blur-md' 
+                  : 'text-slate-400 hover:bg-white/10 hover:text-slate-100 border border-transparent'
               }`}
             >
-              <span className="truncate flex-1 font-medium">{chapter.order}. {chapter.name}</span>
-              {activeChapter.id === chapter.id && <ChevronRight size={14} />}
+              <div className="flex flex-col flex-1 items-start min-w-0 pr-2">
+                <span className="truncate w-full font-medium">{chapter.order}. {chapter.name}</span>
+                <span className={`text-[10px] mt-1 ${activeChapter.id === chapter.id ? 'text-cyan-400/80' : 'text-slate-500'}`}>
+                  {chapter.words.toLocaleString()} 字 / {chapter.pages} 頁
+                </span>
+              </div>
+              {activeChapter.id === chapter.id && <ChevronRight size={14} className="shrink-0 text-cyan-400" />}
             </button>
           ))}
         </OmniBaseCard>
@@ -137,18 +142,29 @@ export default function EditorPage() {
       <div className="flex-1 flex flex-col gap-6 min-w-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Editor Toolbar */}
-        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-slate-900/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-5 rounded-2xl border border-white/10 relative overflow-hidden">
+          {/* Subtle accent glow */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500/0 via-cyan-500/30 to-blue-600/0"></div>
+          
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3">
               {activeChapter.name}
               {isGenerating && <span className="flex items-center gap-1 text-[10px] font-mono tracking-widest text-cyan-400 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20"><Activity size={10} className="animate-pulse"/> GENERATING</span>}
             </h1>
-            <div className="flex gap-2 mt-2">
-              {activeChapter.gri.map(g => (
-                <span key={g} className="text-[10px] font-mono tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                  {g}
-                </span>
-              ))}
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              <div className="flex gap-2">
+                {activeChapter.gri.map(g => (
+                  <span key={g} className="text-[10px] font-mono tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    {g}
+                  </span>
+                ))}
+              </div>
+              <div className="h-4 w-px bg-white/20 hidden sm:block"></div>
+              <div className="text-xs text-slate-400 font-mono flex items-center gap-2">
+                <span>目標篇幅:</span>
+                <span className="text-cyan-400 font-bold">{activeChapter.words.toLocaleString()} 字</span>
+                <span className="text-slate-500">({activeChapter.pages} 頁)</span>
+              </div>
             </div>
           </div>
 
@@ -185,11 +201,11 @@ export default function EditorPage() {
         </header>
 
         {/* AI Control Panel (Optional Custom Prompt) */}
-        <OmniBaseCard variant="default" className="p-4 border-white/5">
+        <OmniBaseCard variant="glass" className="p-4 border-white/10 shadow-lg backdrop-blur-xl bg-white/[0.02]">
           <input 
             type="text" 
             placeholder="附加指示 (可留空，如：強調水資源回收的具體投資額與減量成效...)" 
-            className="w-full bg-slate-950/50 border border-slate-800 rounded-lg p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
+            className="w-full bg-black/20 border border-white/10 rounded-lg p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:bg-black/40 transition-colors backdrop-blur-sm"
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             disabled={isGenerating}
@@ -197,7 +213,7 @@ export default function EditorPage() {
         </OmniBaseCard>
 
         {/* TipTap Editor Surface */}
-        <OmniBaseCard variant="glass" className="flex-1 flex flex-col overflow-hidden border-white/10 relative p-1">
+        <OmniBaseCard variant="glass" className="flex-1 flex flex-col overflow-hidden border-white/10 relative p-1 shadow-2xl backdrop-blur-2xl bg-white/[0.03]">
           {/* Subtle liquid glass background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-cyan-500/5 blur-[100px] pointer-events-none mix-blend-screen" />
           
