@@ -7,6 +7,7 @@
     "build": "next build && node scripts/copy-standalone-assets.js",
     "start": "node -r dotenv/config .next/standalone/server.js",
     "dev": "ts-node server.ts",
+    "dev:ui": "next dev -p 3001",
     "lint": "next lint",
     "test": "vitest",
     "typecheck": "tsc --noEmit",

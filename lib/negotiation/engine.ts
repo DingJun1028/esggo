@@ -1,5 +1,5 @@
-import { ai } from '../agents/genkit';
-import { memoryStore } from '../memory/memory-store';
+import { ai } from '../agents/genkit.ts';
+import { memoryStore } from '../memory/memory-store.ts';
 
 export interface NegotiationRound {
    round: number;

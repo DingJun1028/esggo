@@ -29,6 +29,7 @@ evidence: "WIKI.md"
 *   [[平台總覽]](docs/wiki/Platform-Overview.md)
 *   [[系統核心架構]](docs/wiki/System-Core-Architecture.md)
 *   [[5T-誠信協議]](docs/wiki/5T-Protocol.md)
+*   [[第十二章｜名詞定義]](docs/wiki/Chapter-12-Term-Definitions.md)
 
 ### I. 初始導入與配置
 *   [[API Setup-整合中心]](docs/wiki/API-Setup.md) -> `/api-setup`

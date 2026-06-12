@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeAuditLog } from '@/lib/audit-logger';
+import { julesHealer } from '@/lib/omni-core/jules-healer';
 
 /**
  * OmniJules 果因修復端點 (Karma Protocol Receiver)
@@ -12,7 +13,7 @@ import { writeAuditLog } from '@/lib/audit-logger';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { failureReason, sourceTaskId, context, energyLoadFactor } = body;
+    const { failureReason, sourceTaskId, context, energyLoadFactor, rawData } = body;
 
     console.log(`[OmniJules Karma Protocol] 🚨 覺察與導向 (Phase 1): 收到系統修復請求`);
     console.log(`[OmniJules] 觀果 (Observe Effect): ${failureReason} (Load: ${energyLoadFactor})`);
@@ -25,20 +26,33 @@ export async function POST(req: NextRequest) {
       payload: { failureReason, context, energyLoadFactor }
     });
 
-    // 2. 模擬 Jules 萬能果因分析的推演與「確信與進化」回饋
-    const julesDiagnosis = {
-      rootCause: `Detected anomaly in ${context}. Entropy level increased due to load factor ${energyLoadFactor}.`,
-      actionTaken: "Applied 'Spontaneous Virtue' adaptive memory reallocation and isolated state to Sandbox.",
-      karmaStatus: "TRANSCENDED (證果)",
-      repairHash: crypto.randomUUID(),
-    };
+    let julesDiagnosis: any = {};
+    let healedData: any = null;
 
-    console.log(`[OmniJules] 證果 (Prove & Transcend): 異常已升維為 KIs (Knowledge Items). Hash: ${julesDiagnosis.repairHash}`);
+    // 判斷是否為亂碼異常 (Garbled Text)
+    if (failureReason.includes('亂碼') || failureReason.includes('garbled') || failureReason.includes('encoding')) {
+      // 假設 rawData 是一串 array of numbers 或 base64
+      const bytes = rawData ? (Array.isArray(rawData) ? rawData : Buffer.from(rawData, 'base64')) : [0xe4, 0xb8, 0x8a, 0xe5, 0x96, 0x84, 0xe8, 0x8b, 0xa5, 0xe6, 0xb0, 0xb4]; // Fallback mock "上善若水"
+      
+      const repairResult = await julesHealer.fixGarbledText(bytes);
+      julesDiagnosis = repairResult.diagnostics;
+      healedData = repairResult.originalText;
+    } else {
+      // 2. 模擬 Jules 萬能果因分析的推演與「確信與進化」回饋
+      julesDiagnosis = {
+        rootCause: `Detected anomaly in ${context}. Entropy level increased due to load factor ${energyLoadFactor}.`,
+        actionTaken: "Applied 'Spontaneous Virtue' adaptive memory reallocation and isolated state to Sandbox.",
+        karmaStatus: "TRANSCENDED (證果)",
+        repairHash: crypto.randomUUID(),
+      };
+      console.log(`[OmniJules] 證果 (Prove & Transcend): 異常已升維為 KIs (Knowledge Items). Hash: ${julesDiagnosis.repairHash}`);
+    }
 
     return NextResponse.json({
       success: true,
       message: "Karma Protocol Successfully Executed. System has been Transcended.",
       diagnosis: julesDiagnosis,
+      healedData,
       timestamp: Date.now()
     });
   } catch (error) {

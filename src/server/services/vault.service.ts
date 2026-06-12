@@ -25,6 +25,10 @@ export class VaultService {
     'GOV-001': { id: 'GOV-001', name: '高階氣候薪酬連結', val: '15%', status: 'verified', hash: '0x1e3a...7b2d' },
     'GOV-002': { id: 'GOV-002', name: '人權盡職調查覆蓋率', val: '100%', status: 'verified', hash: '0x8d2b...5a1c' },
     'GOV-003': { id: 'GOV-003', name: '高階主管薪酬連結 ESG 指標', val: '25%', status: 'pending', hash: '等待稽核鎖定...' },
+    'GRI-305-1': { id: 'GRI-305-1', name: '直接 (範疇一) 溫室氣體排放', val: '1,245 tCO2e', status: 'verified', hash: '0x8f2a...c3d1' },
+    'GRI-305-2': { id: 'GRI-305-2', name: '能源間接 (範疇二) 溫室氣體排放', val: '3,890 tCO2e', status: 'verified', hash: '0x1a4b...9b8e' },
+    'GRI-305-3': { id: 'GRI-305-3', name: '其他間接 (範疇三) 溫室氣體排放', val: '15,400 tCO2e', status: 'verified', hash: '0x9c4a...2f11' },
+    'GRI-2-1': { id: 'GRI-2-1', name: '組織詳細資訊', val: '已確認', status: 'verified', hash: '0x12ab...34cd' }
   };
 
   /**
