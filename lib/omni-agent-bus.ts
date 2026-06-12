@@ -41,6 +41,8 @@ interface OmniAgentBusState {
   setWsConnected: (v: boolean) => void;
   energyLoadFactor: number; // JES Monitor Load Factor
   setEnergyLoadFactor: (factor: number) => void;
+  isPulseDismissed: boolean;
+  setPulseDismissed: (v: boolean) => void;
 }
 
 // ── Gateway WebSocket Bridge ────────────────────────────────────
@@ -99,6 +101,7 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
   activeResonance: false,
   wsConnected: false,
   energyLoadFactor: 1.0,
+  isPulseDismissed: false,
 
   dispatch: (type, source, payload) => set((state) => {
     const signal: OmniSignal = {
@@ -141,6 +144,7 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
 
   setWsConnected: (v) => set({ wsConnected: v }),
   setEnergyLoadFactor: (factor) => set({ energyLoadFactor: factor }),
+  setPulseDismissed: (v) => set({ isPulseDismissed: v }),
 }));
 
 // ── Auto-connect WS on module load (client-side only) ──────────
