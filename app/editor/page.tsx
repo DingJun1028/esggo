@@ -88,7 +88,7 @@ export default function EditorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0B1121] to-[#020617] relative text-slate-200 p-4 md:p-8 flex flex-col md:flex-row gap-6 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-slate-50 dark:bg-gradient-to-br dark:from-[#020617] dark:via-[#0B1121] dark:to-[#020617] relative text-slate-900 dark:text-slate-200 p-4 md:p-8 flex flex-col md:flex-row gap-6 selection:bg-cyan-500/30">
       
       {/* Sidebar: Chapter Navigation */}
       <div className="w-full md:w-64 shrink-0 flex flex-col gap-4 animate-in fade-in slide-in-from-left-4 duration-500">
@@ -97,29 +97,29 @@ export default function EditorPage() {
             <BookOpen className="text-cyan-400" size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-black text-white">SustainWrite</h2>
+            <h2 className="text-lg font-black text-slate-900 dark:text-white">SustainWrite</h2>
             <p className="text-[10px] font-mono text-slate-500 tracking-widest">GRI COMPLIANT</p>
           </div>
         </div>
 
-        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar backdrop-blur-2xl bg-white/[0.02]">
+        <OmniBaseCard variant="glass" className="p-3 flex flex-col gap-1 border-slate-200 dark:border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar backdrop-blur-2xl bg-white/50 dark:bg-white/[0.02]">
           {REPORT_CHAPTERS.map(chapter => (
             <button
               key={chapter.id}
               onClick={() => setActiveChapter(chapter)}
               className={`flex items-center justify-between w-full text-left px-3 py-2.5 rounded-lg transition-all text-sm ${
                 activeChapter.id === chapter.id 
-                  ? 'bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 shadow-[inset_0_0_15px_rgba(6,182,212,0.15)] backdrop-blur-md' 
-                  : 'text-slate-400 hover:bg-white/10 hover:text-slate-100 border border-transparent'
+                  ? 'bg-cyan-100 dark:bg-cyan-500/15 border border-cyan-400 dark:border-cyan-500/40 text-cyan-800 dark:text-cyan-300 shadow-[inset_0_0_15px_rgba(6,182,212,0.15)] backdrop-blur-md' 
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-slate-100 border border-transparent'
               }`}
             >
               <div className="flex flex-col flex-1 items-start min-w-0 pr-2">
                 <span className="truncate w-full font-medium">{chapter.order}. {chapter.name}</span>
-                <span className={`text-[10px] mt-1 ${activeChapter.id === chapter.id ? 'text-cyan-400/80' : 'text-slate-500'}`}>
+                <span className={`text-[10px] mt-1 ${activeChapter.id === chapter.id ? 'text-cyan-600 dark:text-cyan-400/80' : 'text-slate-500'}`}>
                   {chapter.words.toLocaleString()} 字 / {chapter.pages} 頁
                 </span>
               </div>
-              {activeChapter.id === chapter.id && <ChevronRight size={14} className="shrink-0 text-cyan-400" />}
+              {activeChapter.id === chapter.id && <ChevronRight size={14} className="shrink-0 text-cyan-600 dark:text-cyan-400" />}
             </button>
           ))}
         </OmniBaseCard>
@@ -142,12 +142,12 @@ export default function EditorPage() {
       <div className="flex-1 flex flex-col gap-6 min-w-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Editor Toolbar */}
-        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-slate-900/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-5 rounded-2xl border border-white/10 relative overflow-hidden">
+        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-5 rounded-2xl border border-slate-200 dark:border-white/10 relative overflow-hidden">
           {/* Subtle accent glow */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500/0 via-cyan-500/30 to-blue-600/0"></div>
           
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-3">
               {activeChapter.name}
               {isGenerating && <span className="flex items-center gap-1 text-[10px] font-mono tracking-widest text-cyan-400 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20"><Activity size={10} className="animate-pulse"/> GENERATING</span>}
             </h1>
@@ -159,7 +159,7 @@ export default function EditorPage() {
                   </span>
                 ))}
               </div>
-              <div className="h-4 w-px bg-white/20 hidden sm:block"></div>
+              <div className="h-4 w-px bg-slate-300 dark:bg-white/20 hidden sm:block"></div>
               <div className="text-xs text-slate-400 font-mono flex items-center gap-2">
                 <span>目標篇幅:</span>
                 <span className="text-cyan-400 font-bold">{activeChapter.words.toLocaleString()} 字</span>
@@ -169,17 +169,17 @@ export default function EditorPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex bg-slate-900 rounded-lg p-1 border border-white/5 mr-2">
+            <div className="flex bg-slate-100 dark:bg-slate-900 rounded-lg p-1 border border-slate-200 dark:border-white/5 mr-2">
               <button 
                 onClick={() => undoContent(activeChapter.id, activeChapter.name, activeChapter.order, activeChapter.gri)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-md transition-colors"
                 title="復原 (Undo)"
               >
                 <Undo2 size={16} />
               </button>
               <button 
                 onClick={() => redoContent(activeChapter.id, activeChapter.name, activeChapter.order, activeChapter.gri)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-md transition-colors"
                 title="重做 (Redo)"
               >
                 <Redo2 size={16} />
@@ -201,11 +201,11 @@ export default function EditorPage() {
         </header>
 
         {/* AI Control Panel (Optional Custom Prompt) */}
-        <OmniBaseCard variant="glass" className="p-4 border-white/10 shadow-lg backdrop-blur-xl bg-white/[0.02]">
+        <OmniBaseCard variant="glass" className="p-4 border-slate-200 dark:border-white/10 shadow-sm dark:shadow-lg backdrop-blur-xl bg-white/80 dark:bg-white/[0.02]">
           <input 
             type="text" 
             placeholder="附加指示 (可留空，如：強調水資源回收的具體投資額與減量成效...)" 
-            className="w-full bg-black/20 border border-white/10 rounded-lg p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:bg-black/40 transition-colors backdrop-blur-sm"
+            className="w-full bg-slate-100 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white dark:focus:bg-black/40 transition-colors backdrop-blur-sm"
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             disabled={isGenerating}
@@ -213,11 +213,11 @@ export default function EditorPage() {
         </OmniBaseCard>
 
         {/* TipTap Editor Surface */}
-        <OmniBaseCard variant="glass" className="flex-1 flex flex-col overflow-hidden border-white/10 relative p-1 shadow-2xl backdrop-blur-2xl bg-white/[0.03]">
+        <OmniBaseCard variant="glass" className="flex-1 flex flex-col overflow-hidden border-slate-200 dark:border-white/10 relative p-1 shadow-md dark:shadow-2xl backdrop-blur-2xl bg-white/80 dark:bg-white/[0.03]">
           {/* Subtle liquid glass background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-cyan-500/5 blur-[100px] pointer-events-none mix-blend-screen" />
           
-          <div className="flex-1 overflow-y-auto bg-slate-950/40 rounded-xl relative z-10">
+          <div className="flex-1 overflow-y-auto bg-white/90 dark:bg-slate-950/40 rounded-xl relative z-10">
             <SustainWriteTipTapEditor 
               ref={editorRef}
               value={currentContent}
