@@ -1,5 +1,6 @@
 import { createHash } from 'crypto';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GeminiRotator } from '../gemini-key-rotator';
 import { supabaseAdmin } from '../supabaseAdmin';
 
 export interface KnowledgeDocument {
@@ -10,14 +11,13 @@ export interface KnowledgeDocument {
   embedding?: number[];
 }
 
-let genAI: GoogleGenerativeAI;
-if (process.env.LOCAL_GEMMA_SERVER_URL) {
-  // 注意：官方 @google/generative-ai 尚未直接支援 baseURL，若是本地伺服器，可能需要搭配 @ai-sdk/google
-  // 這裡僅先使用 local key 初始化，後續可擴充 Custom Fetch
-  genAI = new GoogleGenerativeAI('local-key');
-} else {
-  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-}
+const keys = [
+  process.env.GEMINI_API_KEY_1 || process.env.GEMINI_API_KEY,
+  process.env.GEMINI_API_KEY_2,
+  process.env.GEMINI_API_KEY_3,
+].filter(Boolean) as string[];
+
+const geminiRotator = new GeminiRotator(keys);
 
 /**
  * 1. 文本切割器 (Semantic Text Splitter)
@@ -37,12 +37,10 @@ export function chunkText(text: string, chunkSize: number = 500, overlap: number
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
   try {
-    const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
-    const result = await model.embedContent(text);
+    const result = await geminiRotator.embedContent(text, "text-embedding-004");
     return result.embedding.values;
   } catch (e: any) {
     console.error('[RAG Engine] Embedding Generation Failed:', e);
-    // Fallback to pseudo-random for simulation if API fails in dev
     const pseudoRandom = text.length % 100;
     return Array.from({ length: 768 }, (_, i) => Math.sin(i + pseudoRandom));
   }
@@ -113,7 +111,7 @@ export async function queryWithIntelligence(query: string) {
   const contextDocs = await searchKnowledgeBase(query);
   const contextText = contextDocs.map((d: any) => d.content).join('\n---\n');
 
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = geminiRotator.getModel("gemini-1.5-flash");
   const prompt = `
 You are the OmniCore Knowledge Architect. 
 Base your answer ONLY on the provided context from the Omni Knowledge Base.
@@ -127,7 +125,6 @@ Question: ${query}
 
   const result = await model.generateContent(prompt);
   
-  // 5T Protocol: Generate Immutable Hash Locks for the retrieved contexts
   const sources = contextDocs.map((d: any) => {
     const rawData = `${d.document_id || d.id}-${d.content}`;
     const hashLock = createHash('sha256').update(rawData).digest('hex');
