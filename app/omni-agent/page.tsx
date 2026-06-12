@@ -19,6 +19,7 @@ import StandardPage from '../../components/brand/StandardPage';
 import { fadeIn, staggerContainer } from '../../lib/animations';
 import { OmniPageConfig } from '../../lib/page-config';
 import HermesEvolutionPanel from '../../components/omni/HermesEvolutionPanel';
+import { OmniAgentCard } from '../../components/omni/OmniAgentCard';
 
 /**
  * Full-Stack Bidirectional TypeScript Models
@@ -157,6 +158,11 @@ export default function OmniAgentAgentPage() {
           <div className="min-h-[500px]">
             {activeTab === 'overview' && (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in">
+                {/* OmniAgent Awakened Card Hero */}
+                <div className="lg:col-span-12">
+                  <OmniAgentCard />
+                </div>
+                
                 <div className="lg:col-span-8 space-y-8">
                   <Card className="p-8 bg-white/60 border-white/80 shadow-glass">
                     <div className="flex items-center gap-3 mb-8">

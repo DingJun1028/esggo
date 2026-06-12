@@ -109,6 +109,18 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     version: '1.0.0',
     enabled: true,
   },
+  {
+    skillKey: 'supplier_integrity_assessment',
+    skillName: '供應鏈誠信評估',
+    taskType: 'supplier_assessment',
+    description: '基於 RBA 8.0 與 ESG 證照對供應商進行誠信評分與風險分級',
+    allowedDataScopes: ['supplier_data', 'compliance_records'],
+    outputArtifactType: 'supplier_risk_profile',
+    requiresHumanReview: true,
+    riskLevel: 'medium',
+    version: '1.0.0',
+    enabled: true,
+  },
   // --- System & Infrastructure Skills (Merged from Agent Platform) ---
   {
     skillKey: 'firebase_foundation',
@@ -202,6 +214,7 @@ export const TASK_TYPE_META: Record<string, { label: string; color: string; icon
   materiality_generation: { label: '重大性矩陣生成',     color: '#D946EF', icon: 'BarChart3' },
   cbam_validation:        { label: 'CBAM 數據驗證',     color: '#10B981', icon: 'CheckSquare' },
   carbon_calculation:     { label: '碳排核算 (ISO)',   color: '#06B6D4', icon: 'Leaf' },
+  supplier_assessment:    { label: '供應鏈評估',       color: '#F59E0B', icon: 'Link' },
   system_ops:             { label: '系統架構運維',     color: '#64748B', icon: 'Settings' },
   ai_ops:                 { label: 'AI 模型調優',      color: '#3B82F6', icon: 'Cpu' },
   email_processing:       { label: '郵件自動處理',     color: '#EF4444', icon: 'Mail' },

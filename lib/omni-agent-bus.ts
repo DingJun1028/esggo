@@ -39,6 +39,8 @@ interface OmniAgentBusState {
   executeCelestialCommand: (intent: string, payload?: unknown) => Promise<{ message: string; artifactUuid: string }>;
   clearSignals: () => void;
   setWsConnected: (v: boolean) => void;
+  energyLoadFactor: number; // JES Monitor Load Factor
+  setEnergyLoadFactor: (factor: number) => void;
 }
 
 // ── Gateway WebSocket Bridge ────────────────────────────────────
@@ -96,6 +98,7 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
   signals: [],
   activeResonance: false,
   wsConnected: false,
+  energyLoadFactor: 1.0,
 
   dispatch: (type, source, payload) => set((state) => {
     const signal: OmniSignal = {
@@ -112,7 +115,7 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
 
     // Trigger self-healing if HEAL signal
     if (type === 'HEAL') {
-      triggerSpontaneousVirtue(signal);
+      triggerSpontaneousVirtue(signal, state.energyLoadFactor);
     }
 
     return {
@@ -122,10 +125,11 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
   }),
 
   executeCelestialCommand: async (intent: string, payload: unknown = {}) => {
-    const { dispatch } = get();
+    const { dispatch, energyLoadFactor } = get();
     dispatch('INTENT', 'CelestialCommand', { intent, payload });
 
-    await new Promise(r => setTimeout(r, 800));
+    // Adaptive delay based on JES energy load factor
+    await new Promise(r => setTimeout(r, 800 * Math.max(0.5, energyLoadFactor)));
 
     const artifactUuid = `artifact_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     dispatch('SEAL', 'CelestialCommand', { intent, artifactUuid, status: 'Sealed in Eternal Memory' });
@@ -136,6 +140,7 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
   clearSignals: () => set({ signals: [], activeResonance: false }),
 
   setWsConnected: (v) => set({ wsConnected: v }),
+  setEnergyLoadFactor: (factor) => set({ energyLoadFactor: factor }),
 }));
 
 // ── Auto-connect WS on module load (client-side only) ──────────
@@ -145,9 +150,9 @@ if (typeof window !== 'undefined') {
 }
 
 // ── Adaptive Perception Protocol ────────────────────────────────
-export const triggerSpontaneousVirtue = (signal: OmniSignal) => {
+export const triggerSpontaneousVirtue = (signal: OmniSignal, loadFactor: number = 1.0) => {
   if (signal.type === 'HEAL') {
-    console.log('[OmniAgentBus] 🌌 全通之心 — 啟動熵減與圓通無礙修復');
+    console.log(`[OmniAgentBus] 🌌 全通之心 — 啟動熵減與圓通無礙修復 (Load Factor: ${loadFactor.toFixed(2)})`);
     // Optionally notify Gateway /omni-jules endpoint
     if (typeof fetch !== 'undefined' && signal.payload) {
       fetch(
@@ -155,7 +160,12 @@ export const triggerSpontaneousVirtue = (signal: OmniSignal) => {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026' },
-          body: JSON.stringify({ failureReason: String((signal.payload as any)?.reason || 'Auto-heal triggered by OmniAgentBus HEAL signal'), sourceTaskId: signal.id, context: 'OmniAgentBus HEAL event' }),
+          body: JSON.stringify({ 
+            failureReason: String((signal.payload as any)?.reason || 'Auto-heal triggered by OmniAgentBus HEAL signal'), 
+            sourceTaskId: signal.id, 
+            context: 'OmniAgentBus HEAL event',
+            energyLoadFactor: loadFactor 
+          }),
         }
       ).catch(() => {}); // Fire-and-forget
     }

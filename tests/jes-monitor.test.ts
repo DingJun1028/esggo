@@ -36,4 +36,36 @@ describe('JESMonitor (Energy Flow Conflict)', () => {
         const conflicts = monitor.detectConflicts();
         expect(conflicts.length).toBe(0);
     });
+
+    it('在高負載 (High Load) 下，應能快速偵測衝突並維持 HEAL 觸發效能', () => {
+        // 模擬高負載：快速注入 10,000 筆資料
+        const startInject = performance.now();
+        for (let i = 0; i < 10000; i++) {
+            monitor.addData({
+                timestamp: new Date(),
+                service: i % 2 === 0 ? 'test-service' : 'other-service',
+                energyConsumption: 150,
+                carbonEmission: i % 2 === 0 ? 120 : 80 // test-service 超標 (120 > 100)
+            });
+        }
+        const endInject = performance.now();
+        expect(endInject - startInject).toBeLessThan(500); // 注入應在 500ms 內完成
+
+        // 偵測衝突效能
+        const startDetect = performance.now();
+        const conflicts = monitor.detectConflicts();
+        const endDetect = performance.now();
+        
+        expect(endDetect - startDetect).toBeLessThan(100); // 偵測應在 100ms 內完成
+        expect(conflicts.length).toBeGreaterThan(0);
+        
+        // 模擬轉換為 HEAL 信號
+        const healSignals = conflicts.map(c => ({
+            type: 'HEAL',
+            payload: { reason: `High Energy Load detected: ${c.difference}kgCO2e excess`, service: c.service }
+        }));
+        
+        expect(healSignals.length).toBeGreaterThan(0);
+        expect(healSignals[0].payload.service).toBe('test-service');
+    });
 });
