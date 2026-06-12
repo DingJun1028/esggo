@@ -1,5 +1,5 @@
 // lib/stitch-client.ts
-import { StitchClient } from '@google/stitch-sdk';
+import { StitchToolClient } from '@google/stitch-sdk';
 
 const projectId = process.env.STITCH_PROJECT_ID;
 
@@ -7,7 +7,7 @@ if (!projectId) {
   throw new Error('STITCH_PROJECT_ID environment variable is not set.');
 }
 
-export const stitchClient = new StitchClient({ projectId });
+export const stitchClient = new StitchToolClient({ projectId });
 
 // You can further configure and export specific Stitch services here if needed.
 // For example:

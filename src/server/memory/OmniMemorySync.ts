@@ -55,7 +55,7 @@ export class OmniMemorySync {
     }
   }
 
-  private async syncToVectorDB(): Promise<void> {
+  private async syncToVectorDB(event?: OmniEvent): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(() => resolve(), 100);
     });
@@ -179,9 +179,9 @@ export class OmniMemorySync {
         id: record.event_id,
         omni_card_uuid: record.payload?.uuid || record.event_id,
         event_type: record.event_type,
-        payload: record.payload as Record<string, unknown>,
+        payload: record.payload as any,
         created_at: new Date(record.created_at).getTime(),
-        hash_lock: record.payload?.hash_lock || 'REPLAY_HASH',
+        hash_lock: (record.payload as any)?.hash_lock || 'REPLAY_HASH',
         source_platform: 'DLQ'
       };
 

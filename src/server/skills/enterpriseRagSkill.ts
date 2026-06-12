@@ -78,7 +78,7 @@ export const enterpriseRagSkill: AtomicFunction<
     }
     return {
       success: false,
-      error: errorMessage,
+      error: error instanceof Error ? error : new Error(errorMessage),
       metadata: {
         executionTime: Date.now() - start,
         version: '1.0.0'

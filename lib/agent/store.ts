@@ -58,7 +58,7 @@ export async function updateTask(taskId: string, patch: Partial<AgentTask>) {
 export async function syncTasksFromDB() {
   const remoteTasks = await dcListSwarmAgentTasks();
   // Map schema type to AgentTask interface
-  GLOBAL_TASKS = remoteTasks.map((t: unknown) => ({
+  GLOBAL_TASKS = remoteTasks.map((t: any) => ({
     id: t.id,
     title: t.title,
     taskType: t.taskType as any,

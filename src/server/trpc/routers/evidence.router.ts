@@ -9,7 +9,8 @@ import { evidenceService } from '../../services/evidence.service';
 import { 
   CreateEvidenceDTOSchema, 
   EvidenceQueryParamsSchema,
-  EvidenceID
+  EvidenceID,
+  UserID
 } from '@/src/shared/types';
 
 export const evidenceRouter = router({
@@ -17,8 +18,7 @@ export const evidenceRouter = router({
   list: publicProcedure
     .input(EvidenceQueryParamsSchema)
     .query(async ({ input }) => {
-      // 這裡 userId 應從 context 取得，input 僅作過濾
-      return evidenceService.getUserEvidences(input.user_id);
+      return evidenceService.getUserEvidences(input.user_id as UserID | undefined);
     }),
 
   // 2. 創建證據

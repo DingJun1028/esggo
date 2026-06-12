@@ -29,7 +29,7 @@ export function OmniForm({
   submitLabel = 'Submit',
   className
 }: OmniFormProps) {
-  const [formData, setFormData] = useState<Record<string, any>>(initialValues);
+  const [formData, setFormData] = useState<Record<string, any>>(initialValues as Record<string, any>);
 
   const handleChange = (name: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [name]: value }));

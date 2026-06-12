@@ -4,7 +4,7 @@
  */
 
 import { router, publicProcedure } from '../trpc';
-import { CreateUCCDTOSchema } from '@/src/shared/types';
+import { CreateUCCDTOSchema, CreateUCCDTO } from '@/src/shared/types';
 import { uccService } from '../../services/ucc.service';
 
 export const uccRouter = router({
@@ -14,6 +14,6 @@ export const uccRouter = router({
   package: publicProcedure
     .input(CreateUCCDTOSchema)
     .mutation(async ({ input }) => {
-      return uccService.packageEvidence(input);
+      return uccService.packageEvidence(input as CreateUCCDTO);
     }),
 });

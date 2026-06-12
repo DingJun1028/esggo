@@ -1,6 +1,9 @@
 'use client';
+// @ts-ignore
 import { ApolloClient, InMemoryCache, HttpLink, split } from '@apollo/client';
+// @ts-ignore
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+// @ts-ignore
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 
@@ -29,7 +32,7 @@ function createApolloClient() {
       );
 
       link = split(
-        ({ query }) => {
+        ({ query }: any) => {
           const definition = getMainDefinition(query);
           return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
         },

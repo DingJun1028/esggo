@@ -51,7 +51,7 @@ const OmniCard = forwardRef<HTMLDivElement, OmniCardProps>(
     },
     ref
   ) => {
-    const { isMobile } = useOmniTheme();
+    const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
     return (
       <div

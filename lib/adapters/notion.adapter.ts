@@ -12,14 +12,14 @@ export class NotionAdapter {
    * @returns 淨化且符合契約的 OmniCard
    */
   public static transform(payload: NotionPagePayload): OmniCard {
-    // 從 Notion properties 提取本質數據 (此處為假設結構，依實際 Notion DB 屬性調整)
-    const name = payload.properties['Name']?.title?.[0]?.plain_text || 'Unknown Card';
-    const statusVal = payload.properties['Status']?.status?.name?.toLowerCase();
+    const props = payload.properties as Record<string, any>;
+    const name = props['Name']?.title?.[0]?.plain_text || 'Unknown Card';
+    const statusVal = props['Status']?.status?.name?.toLowerCase();
     
     const validStatus = ['todo', 'doing', 'done'].includes(statusVal) ? statusVal : 'todo';
 
-    const attributes = payload.properties['Attributes']?.multi_select?.map((s: unknown) => s.name) || [];
-    const abilities = payload.properties['Abilities']?.multi_select?.map((s: unknown) => s.name) || [];
+    const attributes = props['Attributes']?.multi_select?.map((s: any) => s.name) || [];
+    const abilities = props['Abilities']?.multi_select?.map((s: any) => s.name) || [];
 
     const rawCard = {
       uuid: randomUUID(), // 若需溯源，可將 Notion ID 經 Hash Lock 轉為 UUID (Traceable)

@@ -8,7 +8,8 @@ import {
   AuditLog, 
   AuditQueryParams, 
   AuditAction, 
-  AuditSeverity 
+  AuditSeverity,
+  AuditDetails
 } from '../../shared/types/audit.types';
 import { UserID } from '../../shared/types/evidence.types';
 
@@ -81,7 +82,7 @@ export class AuditRepository {
       severity: row.severity as AuditSeverity,
       resource_type: row.resource_type as 'evidence' | 'ucc' | 'user' | 'system',
       resource_id: row.resource_id as string,
-      details: row.details as unknown, // details is complex JSON
+      details: row.details as AuditDetails, // details is complex JSON
       ip_address: row.ip_address as string | undefined,
       user_agent: row.user_agent as string | undefined,
       timestamp: new Date(row.timestamp as string),

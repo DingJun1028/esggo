@@ -63,7 +63,7 @@ const OmniInput = forwardRef<HTMLInputElement, OmniInputProps>(
     },
     ref
   ) => {
-    const { isMobile } = useOmniTheme();
+    const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
     const [focused, setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 

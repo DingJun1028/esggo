@@ -66,17 +66,17 @@ ${conversationLog}
       output: { schema: MemoryShardSchema }
     });
 
-    const shardData = response.output();
+    const shardData = response.output;
     if (!shardData) throw new Error('無法萃取記憶碎片：模型輸出為空');
 
     const shard: MemoryShard = {
-      ...shardData,
+      ...(shardData as any),
       id: crypto.randomUUID(),
       timestamp: Date.now()
     };
 
     // 持久化至 Supabase - 只包含資料庫中存在的欄位
-    const insertData = {
+    const insertData: Record<string, any> = {
       id: shard.id,
       title: shard.title,
       description: shard.description,
@@ -141,18 +141,18 @@ ${shardsContext}
       output: { schema: SkillUltimateSchema }
     });
 
-    const ultimateData = response.output();
+    const ultimateData = response.output;
     if (!ultimateData) throw new Error('無法合成技能奧義：模型輸出為空');
 
     const ultimate: SkillUltimate = {
-      ...ultimateData,
+      ...(ultimateData as any),
       id: crypto.randomUUID(),
       sourceShards: shards.map(s => s.id),
       timestamp: Date.now()
     };
 
     // 持久化至 Supabase - 只包含資料庫中存在的欄位
-    const insertData = {
+    const insertData: Record<string, any> = {
       skill_name: ultimate.skillName,
       mastery_level: ultimate.masteryLevel,
       core_principles: ultimate.corePrinciples,
@@ -184,7 +184,7 @@ ${shardsContext}
 // 核心機制：將記憶碎片存入資料庫
 export async function storeMemoryShard(shard: MemoryShard): Promise<void> {
   // 只包含資料庫中存在的欄位
-  const insertData = {
+  const insertData: Record<string, any> = {
     id: shard.id,
     title: shard.title,
     description: shard.description,
@@ -259,7 +259,7 @@ export async function retrieveMemoryShards(options?: {
 // 核心機制：將技能奧義存入資料庫
 export async function storeSkillUltimate(ultimate: SkillUltimate): Promise<void> {
   // 只包含資料庫中存在的欄位
-  const insertData = {
+  const insertData: Record<string, any> = {
     skill_name: ultimate.skillName,
     mastery_level: ultimate.masteryLevel,
     core_principles: ultimate.corePrinciples,

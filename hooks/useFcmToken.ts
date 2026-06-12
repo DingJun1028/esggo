@@ -49,7 +49,7 @@ export const useFcmToken = () => {
     const setupListener = async () => {
       const messaging = await initMessaging();
       if (messaging) {
-        unsubscribe = onMessage(messaging, (payload) => {
+        unsubscribe = onMessage(messaging, (payload: any) => {
           console.log('[useFcmToken] Received foreground message:', payload);
           // You can show a custom UI toast here
         });

@@ -1,7 +1,5 @@
-﻿import React from 'react';
-import LandingContent from '@/components/LandingContent';
-import OmniNotesTracker from '@/lib/agent/OmniNotesTracker';
+import { redirect } from 'next/navigation';
 
-export default async function LandingPage() {
-  return <LandingContent trackerNode={<OmniNotesTracker />} />;
+export default function LandingPage() {
+  redirect('/dashboard');
 }

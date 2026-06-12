@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { OmniBadge } from './OmniBadge';
-import { ThemeProvider } from '../../theme/OmniThemeProvider';
+import { OmniThemeProvider } from '../../theme/OmniThemeProvider';
 
 const meta: Meta<typeof OmniBadge> = {
   title: 'OmniUI/Atom/OmniBadge',
@@ -28,11 +28,11 @@ const meta: Meta<typeof OmniBadge> = {
   },
   decorators: [
     (Story) => (
-      <ThemeProvider>
+      <OmniThemeProvider>
         <div className="p-8 bg-theme-bg-secondary min-h-screen flex flex-wrap gap-4">
           <Story />
         </div>
-      </ThemeProvider>
+      </OmniThemeProvider>
     ),
   ],
 };

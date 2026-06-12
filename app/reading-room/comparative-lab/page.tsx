@@ -55,7 +55,7 @@ export default function ComparativeLabPage() {
           ))}
         </div>
 
-        <OmniBaseCard variant="glow" title="國際 ESG 情勢深度對比" icon={<Search size={20}/>}>
+        <OmniBaseCard variant="glow" title="國際 ESG 情勢深度對比">
           <div className="aspect-video bg-void-dark rounded-xl border border-white/5 flex items-center justify-center relative overflow-hidden group">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/10 via-transparent to-transparent opacity-50" />
             <p className="text-slate-500 font-mono text-xs uppercase tracking-[0.2em] relative z-10 group-hover:text-cyan-400 transition-colors">

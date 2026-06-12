@@ -121,7 +121,7 @@ export class SustainWriteZeroComputeEngine {
       } else {
         // ✨ 真實 ZKP (Zero-Knowledge Proof) 深度刻印與隱私遮蔽
         // 此處將傳入的數據總和轉化為數值進行 Pedersen Commitment，並透過 omniCore 寫入 Data Connect AuditRecord
-        const numericValue = Object.values(evidenceData!).reduce((sum, val) => sum + (typeof val === 'number' ? val : 0), 0);
+        const numericValue = Object.values(evidenceData!).reduce((sum: any, val: any) => sum + (typeof val === 'number' ? val : 0), 0);
         const isConfidential = evidenceData!['isConfidential'] === true;
         
         try {

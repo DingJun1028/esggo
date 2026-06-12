@@ -113,7 +113,7 @@ export function GlobalSearch() {
                                 {results.length > 0 ? (
                                     <div className="space-y-2">
                                         <p className="px-3 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">最相關的智庫片段</p>
-                                        {results.map((res, i) => (
+                                        {results.map((res: any, i) => (
                                             <div 
                                                 key={i} 
                                                 className="group p-5 rounded-2xl border border-slate-50 hover:border-cyan-100 hover:bg-white hover:shadow-md transition-all cursor-default"

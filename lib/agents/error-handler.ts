@@ -25,8 +25,8 @@ omniAgentBus.subscribe('ERROR_OCCURRED', async (payload) => {
     const hg = new HG();
     await hg.triggerGlobalHealing('default');
     await HealingGuardian.executeOmniHealing(
-      payload.context?.evidenceId || 'unknown',
-      payload.context?.table || 'unknown'
+      (payload as any).context?.evidenceId || 'unknown',
+      (payload as any).context?.table || 'unknown'
     );
     console.log(`[ErrorHandler] ✅ Healing complete for ${payload.agent}`);
     omniAgentBus.publish('HEALING_COMPLETE', { agent: payload.agent, recovered: true });

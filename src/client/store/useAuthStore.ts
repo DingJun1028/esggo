@@ -1,7 +1,12 @@
 'use client';
 
 import { create } from 'zustand';
-import { User } from 'firebase/auth';
+interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  [key: string]: any;
+}
 
 interface AuthState {
   user: User | null;

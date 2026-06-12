@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { OmniButton } from './OmniButton';
 import { action } from '@storybook/addon-actions';
-import { ThemeProvider } from '../theme/OmniThemeProvider';
+import { OmniThemeProvider } from '../../theme/OmniThemeProvider';
 
 const meta: Meta<typeof OmniButton> = {
   title: 'OmniUI/Atom/OmniButton',
@@ -28,11 +28,11 @@ const meta: Meta<typeof OmniButton> = {
   },
   decorators: [
     (Story) => (
-      <ThemeProvider>
+      <OmniThemeProvider>
         <div className="p-8 bg-theme-bg-secondary min-h-screen">
           <Story />
         </div>
-      </ThemeProvider>
+      </OmniThemeProvider>
     ),
   ],
 };
