@@ -1,37 +1,43 @@
-# ---- Multi-stage Dockerfile for ESGGO (Powered by OmniCore) ----
+# --- Stage 1: Base & Dependencies ---
+FROM node:20-alpine AS base
 
-# Base setup for pnpm
-FROM node:24-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable pnpm
+FROM base AS deps
+# Install libc6-compat for native Node modules if needed (e.g., sharp, bcrypt)
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
-# Stage 1: Build (Node.js 24)
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# --- Stage 2: Build ---
 FROM base AS builder
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Build Next.js app
-ENV NODE_ENV=production
-RUN pnpm run build
 
-# Stage 2: Runtime (Node.js 24)
-FROM node:24-slim AS runtime
+# Disable Next.js telemetry
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Run the custom build script to resolve Render dependency conflicts
+RUN chmod +x render-build.sh && ./render-build.sh
+
+# --- Stage 3: Runner (Production) ---
+FROM base AS runner
 WORKDIR /app
+
 ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Switch to non-root user for security
-RUN chown -R node:node /app
-USER node
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy built assets for standalone mode
-COPY --from=builder --chown=node:node /app/public ./public
-COPY --from=builder --chown=node:node /app/.next/standalone ./
-COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+# Set correct permissions
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Expose default Next.js port
+USER nextjs
+
 EXPOSE 3000
 CMD ["node", "server.js"]
