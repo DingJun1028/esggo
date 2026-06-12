@@ -304,7 +304,7 @@ export default function SwarmPage() {
 
       {/* 自主通典 (Codex) 展覽 & 終始矩陣 */}
       <div className="mt-8 mb-16">
-        <OmniCodexViewer isVpsBound={isVpsBound} toggleVpsBinding={toggleVpsBinding} />
+        <OmniCodexViewer isVpsBound={isVpsBound} toggleVpsBindingAction={toggleVpsBinding} />
       </div>
 
     </div>

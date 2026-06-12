@@ -4,7 +4,7 @@ import React from 'react';
 import { BookOpen, CheckCircle, ScrollText, Link as LinkIcon, Unlink, ArrowRightLeft, Server, Laptop } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export default function OmniCodexViewer({ isVpsBound, toggleVpsBinding }: { isVpsBound: boolean, toggleVpsBinding: () => void }) {
+export default function OmniCodexViewer({ isVpsBound, toggleVpsBindingAction }: { isVpsBound: boolean, toggleVpsBindingAction: () => void }) {
   return (
     <div className="relative bg-[#020617]/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 mt-8 overflow-hidden group w-full">
       <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
@@ -104,7 +104,7 @@ export default function OmniCodexViewer({ isVpsBound, toggleVpsBinding }: { isVp
 
           <div className="mt-8 flex justify-center">
             <button 
-              onClick={toggleVpsBinding}
+              onClick={toggleVpsBindingAction}
               className={`flex items-center gap-2 px-6 py-2 rounded-full border text-xs font-bold tracking-widest uppercase transition-all duration-300 ${
                 isVpsBound 
                   ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20' 
