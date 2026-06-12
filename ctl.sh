@@ -18,6 +18,16 @@ show_help() {
   echo "  logs       Tail the system logs"
   echo "  restart    Restart all services"
   echo "  stop       Stop all background services"
+  echo "  ready      Run full production readiness suite (ci, tsc, test, lint, build)"
+  echo "  render     Proxy to Render CLI commands"
+}
+
+ready() {
+  npx tsx cli/omni.mjs check ready
+}
+
+render() {
+  npx tsx cli/omni.mjs render "$@"
 }
 
 start() {
@@ -67,5 +77,7 @@ case "$1" in
   stop)    stop ;;
   restart) stop; sleep 2; start ;;
   logs)    logs ;;
+  ready)   ready ;;
+  render)  shift; render "$@" ;;
   *)       show_help ;;
 esac
