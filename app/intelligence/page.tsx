@@ -5,7 +5,7 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { Globe, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import { Globe, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, TrendingUp, AlertTriangle } from 'lucide-react';
 
 export default function IntelligencePage() {
   const [data, setData] = useState<any[]>([]);
@@ -27,19 +27,19 @@ export default function IntelligencePage() {
         const json = await res.json();
         setData(json.data || []);
       } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
+        // Fallback mock data for Intelligence Center
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          { id: 1, date: '2026-06-12', trend_title: '歐盟碳邊境調整機制 (CBAM) 申報期程異動', impact: 'High', sentiment: 'Negative', hash_lock: '0x8f...3a21', source_origin: 'EU Commission' },
+          { id: 2, date: '2026-06-11', trend_title: '台積電承諾加速 RE100 目標達成', impact: 'Medium', sentiment: 'Positive', hash_lock: null, source_origin: 'Reuters' },
+          { id: 3, date: '2026-06-09', trend_title: '綠色融資審查標準升級，防範漂綠風險', impact: 'High', sentiment: 'Neutral', hash_lock: '0x1c...9d4f', source_origin: 'Bloomberg ESG' },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        { id: 1, date: '2026-06-12', trend_title: '歐盟碳邊境調整機制 (CBAM) 申報期程異動', impact: 'High', sentiment: 'Negative', hash_lock: '0x8f...3a21', source_origin: 'EU Commission' },
+        { id: 2, date: '2026-06-11', trend_title: '台積電承諾加速 RE100 目標達成', impact: 'Medium', sentiment: 'Positive', hash_lock: null, source_origin: 'Reuters' },
       ]);
     } finally {
       setLoading(false);
@@ -102,10 +102,23 @@ export default function IntelligencePage() {
   };
 
   const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
+    { key: 'date', label: '發布日期' },
+    { key: 'trend_title', label: '情報標題 (Intelligence Title)', render: (val: any) => (
+      <span className="font-medium">{val}</span>
+    ) },
+    { key: 'impact', label: '衝擊程度', render: (val: any) => (
+      <OmniBadge variant={val === 'High' ? 'danger' : val === 'Medium' ? 'warning' : 'primary'} size="sm">
+        {val} Impact
+      </OmniBadge>
+    ) },
+    { key: 'sentiment', label: '市場情緒', render: (val: any) => (
+      <span className={`text-xs px-2 py-1 rounded-md border ${
+        val === 'Positive' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+        val === 'Negative' ? 'bg-rose-500/10 border-rose-500/20 text-rose-400' :
+        'bg-slate-500/10 border-slate-500/20 text-slate-400'
+      }`}>
+        {val}
+      </span>
     ) },
     { key: 'source_origin', label: '來源 (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
@@ -157,8 +170,8 @@ export default function IntelligencePage() {
                 <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">INTELLIGENCE</span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">INTELLIGENCE</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">intelligence dashboard</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">ESG 商情中心</h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">GLOBAL INTELLIGENCE & TRENDS</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
@@ -173,11 +186,11 @@ export default function IntelligencePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">本日追蹤情報</span>
+              <TrendingUp size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
+            <div className="text-4xl font-black text-white">42<span className="text-lg text-slate-500 ml-2 font-normal">News</span></div>
+            <p className="text-xs text-emerald-400/80 font-mono">+12 since yesterday</p>
           </OmniBaseCard>
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
@@ -191,11 +204,11 @@ export default function IntelligencePage() {
 
           <OmniBaseCard variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
+              <span className="text-sm font-bold uppercase tracking-widest">高風險預警</span>
+              <AlertTriangle size={18} className="text-rose-400" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
+            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Alerts</span></div>
+            <p className="text-xs text-rose-400/80 font-mono">Needs Attention</p>
           </OmniBaseCard>
         </div>
 
@@ -219,20 +232,18 @@ export default function IntelligencePage() {
           <div className="space-y-6">
             <OmniBaseCard 
               variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+              title="OmniAgent 趨勢分析" 
+              subtitle="Trend Analysis Engine"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  商情中心代理 (Intelligence Agent) 已為您整理最新的全球永續發展動態。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
+                  <h4 className="font-bold text-cyan-400 mb-2">本週洞察 (Weekly Insight)</h4>
+                  <p className="text-slate-400 text-xs leading-relaxed">
+                    近期歐盟 CBAM 申報規則變動對亞太區供應鏈造成顯著影響，建議企業應盡速完成第三範疇碳盤查作業以應對即將到來的稽核。
+                  </p>
                 </div>
               </div>
             </OmniBaseCard>
