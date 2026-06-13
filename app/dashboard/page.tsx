@@ -37,7 +37,7 @@ const mockData: OmniTableDataRow[] = [
     status: 'Void',
     content: 'Unverified Water Usage',
     value: '890 m3',
-    timestamp: new Date(Date.now() - 86400000).toISOString()
+    timestamp: new Date(1718300000000 - 86400000).toISOString()
   }
 ];
 
@@ -121,13 +121,14 @@ export default function DashboardPage() {
           <OmniCard
             uuid="vlt-scope1-001"
             componentVersion="8.5.0-Alpha"
-            timestamp={Date.now()}
+            timestamp={1718300000000}
             status={RecordLifecycleStatus.Draft}
             title="Scope 1 Emissions"
             evidence={{
               source_origin: 'ERP_System_A',
               flow_path: ['IoT Sensor X1', 'ERP_System_A', 'OmniCore Gateway'],
-              hash: '0xabc123...890def'
+              hash: '0xabc123...890def',
+              timestamp: 1718300000000
             }}
             nodeName="OMNI-ENV-SCOPE1-01:ACTION-RECORD-ISO14064"
           >
@@ -145,14 +146,15 @@ export default function DashboardPage() {
           <OmniCard
             uuid="vlt-water-002"
             componentVersion="8.5.0-Alpha"
-            timestamp={Date.now()}
+            timestamp={1718300000000}
             status={RecordLifecycleStatus.Archived}
             isLocked={true}
             title="Water Usage"
             evidence={{
               source_origin: 'Facility_Manager_Upload',
               flow_path: ['Meter Readings', 'Facility_Manager_Upload', 'ZKP OmniRouter'],
-              hash: '0x456def...123abc'
+              hash: '0x456def...123abc',
+              timestamp: 1718300000000
             }}
             nodeName="OMNI-ENV-WATER-02:ACTION-VERIFY-ISO14046"
           >
@@ -170,14 +172,15 @@ export default function DashboardPage() {
           <OmniCard
             uuid="vlt-energy-003"
             componentVersion="8.5.0-Alpha"
-            timestamp={Date.now()}
+            timestamp={1718300000000}
             status={RecordLifecycleStatus.Draft}
             attention={AttentionStatus.Critical}
             title="Energy Grid (Anomaly)"
             evidence={{
               source_origin: 'Smart_Grid_API',
               flow_path: ['Smart_Grid_API', 'Anomaly Detection Core'],
-              hash: ''
+              hash: '',
+              timestamp: 1718300000000
             }}
             nodeName="OMNI-ENV-ENERGY-03:ACTION-ALERT-ISO50001"
           >

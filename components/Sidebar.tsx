@@ -10,7 +10,7 @@ import {
   UserCheck, Award, HeartHandshake, Heart, Bot, Cpu, ChevronDown,
   ChevronRight, PanelLeftClose, PanelLeftOpen, Zap, Activity,
   Settings, FlaskConical, Layers, Target, AlertTriangle, Layout,
-  DollarSign, Link2, Briefcase, Network, Sun, Moon, X, Server, GitBranch
+  DollarSign, Link2, Briefcase, Network, Sun, Moon, X, Server, GitBranch, ShieldCheck
 } from 'lucide-react';
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
@@ -60,6 +60,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/templates', label: '專家模板', sub: 'Templates', icon: Layout },
       { href: '/audit-log', label: '審計日誌', sub: 'Audit Log', icon: ClipboardList },
       { href: '/vault', label: '證據金庫', sub: 'Evidence Vault', icon: Database },
+      { href: '/integrity', label: '數位誠信', sub: 'ZKP Center', icon: ShieldCheck, badge: '5T' },
     ],
   },
   {
@@ -233,6 +234,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
   });
   const [mounted, setMounted] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true); }, []);
 
   const isActive = (href: string) => {

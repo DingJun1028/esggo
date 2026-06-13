@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { OmniBaseTable, OmniBaseTableColumn } from '../../../components/ui/omni/OmniBaseTable';
@@ -240,7 +240,6 @@ export default function MetricsPage() {
              <OmniChart 
                type="bar" 
                data={chartData} 
-               dataKey="value"
                xAxisKey="name"
                series={[
                  { key: 'value', color: 'var(--theme-primary)', name: 'Current Value' },

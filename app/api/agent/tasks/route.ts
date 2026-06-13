@@ -42,7 +42,10 @@ export async function POST(req: NextRequest) {
     try {
       const vpsRes = await fetch('http://127.0.0.1:8642/execute', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026',
+        },
         body: JSON.stringify({ task: agentTask }),
       });
       if (vpsRes.ok) {

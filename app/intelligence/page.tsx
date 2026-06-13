@@ -14,10 +14,6 @@ export default function IntelligencePage() {
   const [sealingId, setSealingId] = useState<number | null>(null);
   const [verifyingId, setVerifyingId] = useState<number | null>(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -45,6 +41,11 @@ export default function IntelligencePage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   const handleSeal = async (id: number) => {
     setSealingId(id);
@@ -107,7 +108,7 @@ export default function IntelligencePage() {
       <span className="font-medium">{val}</span>
     ) },
     { key: 'impact', label: '衝擊程度', render: (val: any) => (
-      <OmniBadge variant={val === 'High' ? 'danger' : val === 'Medium' ? 'warning' : 'primary'} size="sm">
+      <OmniBadge variant={val === 'High' ? 'error' : val === 'Medium' ? 'warning' : 'primary'} size="sm">
         {val} Impact
       </OmniBadge>
     ) },

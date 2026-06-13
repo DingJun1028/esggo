@@ -47,9 +47,12 @@ export async function executeOmniAgentTask(task: AgentTask): Promise<{ execution
   try {
     const res = await fetch(`${BASE_URL}/execute`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026',
+      },
       body: JSON.stringify({ task }),
-      signal: AbortSignal.timeout(10000) // 10s timeout
+      signal: AbortSignal.timeout(10000)
     });
 
     if (!res.ok) throw new Error(`Gateway returned ${res.status}`);
