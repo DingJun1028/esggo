@@ -1,4 +1,4 @@
-﻿import { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 /**
@@ -11,41 +11,7 @@ import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
  * 5T Protocol Gate: T5 Trackable — lifecycle-aware event propagation.
  */
 
-// In-memory event buffer (shared across SSE connections in the same process)
-interface BusEvent {
-  id: string;
-  event: string;
-  payload: Record<string, unknown>;
-  timestamp: string;
-}
-
-const EVENT_BUFFER_MAX = 200;
-const eventBuffer: BusEvent[] = [];
-const subscribers: Set<(event: BusEvent) => void> = new Set();
-
-/**
- * Push an event into the SSE broadcast channel.
- * Called by the OmniAgentBus broadcast hook layer.
- */
-export function pushBusEvent(event: string, payload: Record<string, unknown>) {
-  const entry: BusEvent = {
-    id: Math.random().toString(36).substring(2, 10),
-    event,
-    payload,
-    timestamp: new Date().toISOString(),
-  };
-  eventBuffer.push(entry);
-  if (eventBuffer.length > EVENT_BUFFER_MAX) eventBuffer.shift();
-
-  // Notify all active SSE subscribers
-  subscribers.forEach(cb => cb(entry));
-}
-
-/**
- * Auto-register pushBusEvent as a broadcast hook on the OmniAgentBus.
- * This bridges all agent events → SSE stream → frontend in real-time.
- */
-omniAgentBus.registerBroadcastHook(pushBusEvent);
+import { pushBusEvent, eventBuffer, subscribers, type BusEvent } from './events';
 
 /**
  * GET /api/omni-agent-api/stream

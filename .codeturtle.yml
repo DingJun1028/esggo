@@ -1,0 +1,24 @@
+# Code Turtle Repository Review Norms for ESG GO
+# https://github.com/DingJun1028/CodeTurtle
+
+# Reviewer settings overrides (Agent/Keys are ignored here for security, configured globally instead)
+rules:
+  # General Code Quality
+  - "All code must be written in strict TypeScript. Any use of 'any' is strictly forbidden."
+  - "Favor functional programming paradigms and pure functions where possible."
+  
+  # OmniCore & 5T Protocol Compliance
+  - "Ensure all data state modifications are trackable and conform to the '5T Protocol' (Tangible, Traceable, Trackable, Transparent, Trustworthy)."
+  - "When adding new UI components, always prefix them with 'Omni' (e.g., 'OmniCard', 'OmniButton') and ensure they do not collide with legacy 'Universal' components."
+  - "Any new UI component must include Storybook stories."
+  
+  # Styling
+  - "Use standard CSS or CSS Modules. Do NOT use Tailwind CSS unless explicitly configured for the component."
+  - "Follow the 'LiquidGlass' design system for motion and UI elements."
+  
+  # Testing
+  - "Ensure new utilities and hooks include Vitest test coverage."
+  
+  # Architecture
+  - "For complex state, use custom hooks. Avoid deeply nested inline components."
+  - "Do not commit console.log statements. Use a dedicated logging utility if needed."

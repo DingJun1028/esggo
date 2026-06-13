@@ -13,7 +13,6 @@ export async function POST(req: Request) {
     
     return NextResponse.json({ 
       success: true, 
-      document: result.document, 
       chapters: result.chapters,
       totalWords: result.totalWords
     });

@@ -1,0 +1,7 @@
+### Execution Trace (OmniCore Matrix):
+- Viewed: store/useSustainWriteStore.ts, app/api/ai/expand/route.ts, lib/gemini-key-rotator.ts
+- Ran: command_status to track previous findstr results
+- Modified: app/api/ai/expand/route.ts (Implemented Gemini API Key rotation loop to handle 429 errors using Vercel AI SDK)
+
+### Synthesis & Outcome:
+Resolved the "AI Expansion API Failed" error by applying the Jules Karma Protocol. The root cause was 429 Quota Exhaustion on the primary Gemini API key. The API route was refactored to seamlessly rotate through the `GEMINI_API_KEY_1`, `2`, `3`, and `OMNI_TOKEN` pool on failure, guaranteeing resilience and uninterrupted operation for the SustainWrite AI Editor.

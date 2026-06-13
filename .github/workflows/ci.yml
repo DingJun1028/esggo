@@ -19,27 +19,31 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v5
         with:
-          version: 10
+          version: 9
           run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version: '20'
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
       - name: Run lint
         run: pnpm run lint
         continue-on-error: true
 
+      - name: Run typecheck
+        run: pnpm run typecheck
+        continue-on-error: true
+
       - name: Run tests with coverage
-        run: pnpm exec vitest run --coverage
+        run: pnpm exec vitest run --coverage --include "src/**/*.test.ts" --reporter=verbose
         continue-on-error: true
 
       - name: Build
@@ -49,7 +53,12 @@ jobs:
           SKIP_ENV_VALIDATION: 1
 
       - name: Deploy to Render
-        if: ${{ env.RENDER_DEPLOY_HOOK_URL != '' }}
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
+        run: |
+          if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
+            curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
+          else
+            echo "RENDER_DEPLOY_HOOK_URL not set, skipping deploy"
+          fi

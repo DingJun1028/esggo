@@ -63,10 +63,15 @@ function hashSignal(data: unknown): string {
   } catch { return 'no-hash'; }
 }
 
+const DEFAULT_GATEWAY_URL = 'http://161.118.248.180:8642';
+
+function toWebSocketUrl(httpUrl: string): string {
+  return httpUrl.replace(/^http:/, 'ws:').replace(/^https:/, 'wss:');
+}
+
 function connectGatewayWS(onConnected: (v: boolean) => void) {
   if (typeof window === 'undefined') return;
-  const gatewayUrl = (process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || 'http://161.118.248.180:8080')
-    .replace(/^http/, 'ws');
+  const gatewayUrl = toWebSocketUrl(process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || DEFAULT_GATEWAY_URL);
 
   try {
     _ws = new WebSocket(gatewayUrl);
@@ -159,18 +164,20 @@ export const triggerSpontaneousVirtue = (signal: OmniSignal, loadFactor: number 
     console.log(`[OmniAgentBus] 🌌 全通之心 — 啟動熵減與圓通無礙修復 (Load Factor: ${loadFactor.toFixed(2)})`);
     // Forward to internal /api/omni-jules or external gateway
     if (typeof fetch !== 'undefined' && signal.payload) {
-      const endpoint = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL 
-        ? `${process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL}/omni-jules`
+      const gatewayBaseUrl = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL;
+      const endpoint = gatewayBaseUrl
+        ? `${gatewayBaseUrl.replace(/\/$/, '')}/omni-jules`
         : '/api/omni-jules';
-        
+      const payload = signal.payload as { reason?: unknown };
+
       fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026' },
-          body: JSON.stringify({ 
-            failureReason: String((signal.payload as any)?.reason || 'Auto-heal triggered by OmniAgentBus HEAL signal'), 
-            sourceTaskId: signal.id, 
+          body: JSON.stringify({
+            failureReason: String(payload?.reason ?? 'Auto-heal triggered by OmniAgentBus HEAL signal'),
+            sourceTaskId: signal.id,
             context: 'OmniAgentBus HEAL event',
-            energyLoadFactor: loadFactor 
+            energyLoadFactor: loadFactor
           }),
         }
       ).catch(() => {}); // Fire-and-forget

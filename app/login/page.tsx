@@ -174,7 +174,7 @@ export default function LoginPage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // Route to home page
       window.location.href = '/';
-      setIsLoading(false);
+      setStatus('idle');
       return;
     }
 

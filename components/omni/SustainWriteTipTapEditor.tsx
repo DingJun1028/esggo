@@ -20,25 +20,25 @@ interface SustainWriteTipTapEditorProps {
   editable?: boolean;
 }
 
+const ToolbarButton = ({ onClick, isActive = false, disabled = false, children, title }: any) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    title={title}
+    className={cn(
+      "p-2 rounded-md transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed",
+      isActive ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400" : "text-slate-600 dark:text-slate-400"
+    )}
+  >
+    {children}
+  </button>
+);
+
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
     return null;
   }
-
-  const ToolbarButton = ({ onClick, isActive = false, disabled = false, children, title }: any) => (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      title={title}
-      className={cn(
-        "p-2 rounded-md transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed",
-        isActive ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400" : "text-slate-600 dark:text-slate-400"
-      )}
-    >
-      {children}
-    </button>
-  );
 
   return (
     <div className="flex flex-wrap items-center gap-1 p-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 rounded-t-lg">
@@ -154,7 +154,7 @@ const AIBubbleMenu = ({ editor }: { editor: Editor }) => {
   };
 
   return (
-    <BubbleMenu editor={editor} tippyOptions={{ duration: 100 } as any} className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl rounded-lg overflow-hidden divide-x divide-slate-100 dark:divide-slate-800">
+    <BubbleMenu editor={editor} className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl rounded-lg overflow-hidden divide-x divide-slate-100 dark:divide-slate-800">
       <button
         onClick={() => handleAiRewrite('refine')}
         disabled={isAiLoading}

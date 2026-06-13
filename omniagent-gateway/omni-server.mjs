@@ -46,10 +46,16 @@ const PORT           = Number(process.env.PORT || 8642);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || 'hermes_gold_2026';
-const SITE_URL       = process.env.SITE_URL || `http://${VPS_IP}:${PORT}`;
+const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'hermes_gold_2026';
+const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').filter(Boolean);
+const DEFAULT_ALLOWED_ORIGINS = [
+  SITE_URL,
+  `http://${VPS_IP}`,
+  `http://127.0.0.1:${process.env.NEXT_PUBLIC_APP_PORT || 3000}`,
+  `http://localhost:${process.env.NEXT_PUBLIC_APP_PORT || 3000}`,
+];
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS.join(',')).split(',').map((origin) => origin.trim()).filter(Boolean);
 
 const startTime = Date.now();
 const genId = (p) => `${p}_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
@@ -417,8 +423,17 @@ app.post('/swarm/broadcast', async (req, res) => {
 // GET /swarm/events — Recent bus events
 app.get('/swarm/events', (_req, res) => res.json({ total: busEvents.length, events: busEvents.slice(-50) }));
 
+app.post('/api/sync/bus', async (req, res) => {
+  const event = req.body;
+  if (!event) return res.status(400).json({ error: 'event body required' });
+  busEvents.push({ ...event, ts: Date.now() });
+  if (busEvents.length > 200) busEvents.shift();
+  broadcastWS({ type: 'SYNC', source: 'AgentBus', payload: event });
+  res.json({ ok: true, clients_notified: wssClients.size });
+});
+
 // 404 + error handlers
-app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast'] }));
+app.use((_req, res) => res.status(404).json({ error: 'Not found', endpoints: ['/health','/status','/models','/skills','/execute','/stream','/omni-jules','/evolve','/swarm/broadcast','/swarm/events','/api/sync/bus'] }));
 app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }));
 
 // ── Start ─────────────────────────────────────────────────────

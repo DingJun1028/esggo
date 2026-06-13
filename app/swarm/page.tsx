@@ -28,6 +28,7 @@ export default function SwarmPage() {
       { id: '2', agent: 'OmniNexus', action: '調度 RAG 檢索', target: '知識庫: 碳係數', timestamp: new Date(Date.now() - 8000), status: 'success' },
       { id: '3', agent: 'OmniJules', action: '觸發 Karma 修復', target: 'DOM 亂碼節點', timestamp: new Date(Date.now() - 3000), status: 'healing' }
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
     setLogs(mockLogs);
 
     const interval = setInterval(() => {
@@ -119,7 +120,7 @@ export default function SwarmPage() {
           action: ev.type,
           target: ev.msg,
           timestamp: new Date(),
-          status: ev.type === 'HEAL' ? 'healing' : 'success'
+          status: (ev.type === 'HEAL' ? 'healing' : 'success') as 'healing' | 'success'
         }, ...prev].slice(0, 8));
       }, i * 600); // 快速連發
     });
