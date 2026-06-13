@@ -54,24 +54,28 @@ export default function SelectionHouse({
     };
   }, [isOpen]);
 
-  if (!isOpen && !mounted) return null;
+  // ⚡ Bolt Optimization: Hoist toLowerCase() and useMemo to prevent O(N*M) main thread blocking on re-renders
+  const displayCategories = React.useMemo(() => {
+    const searchLower = search.toLowerCase();
 
-  const filteredCategories = categories
-    .map((cat) => ({
-      ...cat,
-      items: cat.items.filter(
-        (item) =>
-          item.label.toLowerCase().includes(search.toLowerCase()) ||
-          item.sub?.toLowerCase().includes(search.toLowerCase()) ||
-          item.id.toLowerCase().includes(search.toLowerCase())
-      ),
-    }))
-    .filter((cat) => cat.items.length > 0);
+    const filteredCategories = categories
+      .map((cat) => ({
+        ...cat,
+        items: cat.items.filter(
+          (item) =>
+            item.label.toLowerCase().includes(searchLower) ||
+            item.sub?.toLowerCase().includes(searchLower) ||
+            item.id.toLowerCase().includes(searchLower)
+        ),
+      }))
+      .filter((cat) => cat.items.length > 0);
 
-  const displayCategories =
-    activeCategory === 'all'
+    return activeCategory === 'all'
       ? filteredCategories
       : filteredCategories.filter((c) => c.id === activeCategory);
+  }, [categories, search, activeCategory]);
+
+  if (!isOpen && !mounted) return null;
 
   return (
     <div
