@@ -14,11 +14,7 @@ vi.mock('../supabase', () => ({
 
 describe('SupabaseOmniRealtimeService', () => {
     let service: SupabaseOmniRealtimeService;
-    let mockCallbacks: {
-        onPresenceSync: ReturnType<typeof vi.fn>;
-        onEventReceived: ReturnType<typeof vi.fn>;
-        onStatusChange: ReturnType<typeof vi.fn>;
-    };
+    let mockCallbacks: any;
     let mockChannel: {
         on: ReturnType<typeof vi.fn>;
         subscribe: ReturnType<typeof vi.fn>;
@@ -83,7 +79,7 @@ describe('SupabaseOmniRealtimeService', () => {
             }),
         };
 
-        (supabase.channel as any).mockReturnValue(mockChannel);
+        (supabase!.channel as any).mockReturnValue(mockChannel);
 
         // 模擬 UI 傳進來的 Callbacks
         mockCallbacks = {
@@ -106,7 +102,7 @@ describe('SupabaseOmniRealtimeService', () => {
         service.connect(mockUser, mockCallbacks);
 
         // 斷言 1: 確保連接了正確的房間名稱
-        expect(supabase.channel).toHaveBeenCalledWith('omni-resonance-room');
+        expect(supabase!.channel).toHaveBeenCalledWith('omni-resonance-room');
 
         // 斷言 2: 確保四個核心事件 (sync, join, leave, broadcast) 都有被註冊
         expect(mockChannel.on).toHaveBeenCalledTimes(4);
