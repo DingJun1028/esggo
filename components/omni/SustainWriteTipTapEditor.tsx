@@ -1,8 +1,10 @@
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
-import React, { useEffect, useImperativeHandle, forwardRef } from 'react';
-import { Bold, Italic, Heading1, Heading2, Heading3, List, ListOrdered, Quote, RemoveFormatting } from 'lucide-react';
+import React, { useEffect, useImperativeHandle, forwardRef, useState } from 'react';
+import { Bold, Italic, Heading1, Heading2, Heading3, List, ListOrdered, Quote, RemoveFormatting, Sparkles, Wand2, RefreshCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 
 // 定義暴露給父組件的 ref 類型
 export interface SustainWriteEditorRef {
@@ -114,6 +116,81 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   );
 };
 
+const AIBubbleMenu = ({ editor }: { editor: Editor }) => {
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  const handleAiRewrite = async (promptType: 'refine' | 'expand' | 'formal' | 'grammar') => {
+    if (!editor) return;
+    const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, ' ');
+    if (!selectedText) return;
+
+    setIsAiLoading(true);
+    try {
+      let prompt = '';
+      if (promptType === 'refine') prompt = `請將以下文字精煉、修正錯漏字，使其更通順：\n\n${selectedText}`;
+      if (promptType === 'expand') prompt = `請以永續報告書的專業口吻，將以下文字擴寫並補充相關細節：\n\n${selectedText}`;
+      if (promptType === 'formal') prompt = `請將以下文字轉換為符合 GRI 準則與上市櫃公司永續報告書的正式、客觀專業語氣：\n\n${selectedText}`;
+      if (promptType === 'grammar') prompt = `請找出以下文字中的錯別字、文法語病或標點符號問題，並直接給出校正後的完美版本，不需解釋：\n\n${selectedText}`;
+
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt,
+          systemInstruction: '你是一個專業的 ESG 永續報告書撰寫助理，專精於修飾文辭、精煉語句、文法校正。直接回覆修改後的文字，不要包含任何開場白或說明。',
+        })
+      });
+
+      const data = await res.json();
+      if (data.text) {
+        editor.chain().focus().insertContent(data.text).run();
+      }
+    } catch (error) {
+      console.error('AI Rewrite Failed:', error);
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
+  return (
+    <BubbleMenu editor={editor} tippyOptions={{ duration: 100 } as any} className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl rounded-lg overflow-hidden divide-x divide-slate-100 dark:divide-slate-800">
+      <button
+        onClick={() => handleAiRewrite('refine')}
+        disabled={isAiLoading}
+        className="flex items-center gap-1 px-3 py-2 text-xs font-bold text-cyan-600 hover:bg-cyan-50 dark:text-cyan-400 dark:hover:bg-cyan-900/30 disabled:opacity-50 transition-colors"
+      >
+        {isAiLoading ? <RefreshCcw size={14} className="animate-spin" /> : <Sparkles size={14} />}
+        精煉文句
+      </button>
+      <button
+        onClick={() => handleAiRewrite('grammar')}
+        disabled={isAiLoading}
+        className="flex items-center gap-1 px-3 py-2 text-xs font-bold text-emerald-600 hover:bg-emerald-50 dark:text-emerald-500 dark:hover:bg-emerald-900/30 disabled:opacity-50 transition-colors"
+      >
+        <Sparkles size={14} />
+        文法校正
+      </button>
+      <button
+        onClick={() => handleAiRewrite('formal')}
+        disabled={isAiLoading}
+        className="flex items-center gap-1 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50 dark:text-amber-500 dark:hover:bg-amber-900/30 disabled:opacity-50 transition-colors"
+      >
+        <Wand2 size={14} />
+        正式語氣
+      </button>
+      <button
+        onClick={() => handleAiRewrite('expand')}
+        disabled={isAiLoading}
+        className="flex items-center gap-1 px-3 py-2 text-xs font-bold text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-900/30 disabled:opacity-50 transition-colors"
+      >
+        <Heading2 size={14} />
+        擴寫細節
+      </button>
+    </BubbleMenu>
+  );
+};
+
 const SustainWriteTipTapEditor = forwardRef<SustainWriteEditorRef, SustainWriteTipTapEditorProps>(
   ({ value, onChange, editable = true }, ref) => {
     const editor = useEditor({
@@ -144,7 +221,7 @@ const SustainWriteTipTapEditor = forwardRef<SustainWriteEditorRef, SustainWriteT
     useEffect(() => {
       // 檢查 editor 是否存在，並且外部 value 與編輯器當前內容不同才更新
       if (editor && editor.getHTML() !== value) {
-        editor.commands.setContent(value, false); // false 表示不觸發 onUpdate
+        editor.commands.setContent(value, { emitUpdate: false }); // 不觸發 onUpdate
       }
     }, [value, editor]);
 
@@ -153,8 +230,9 @@ const SustainWriteTipTapEditor = forwardRef<SustainWriteEditorRef, SustainWriteT
     }
 
     return (
-      <div className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-white dark:bg-slate-950/50 shadow-sm focus-within:border-cyan-500/50 transition-colors">
+      <div className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-white dark:bg-slate-950/50 shadow-sm focus-within:border-cyan-500/50 transition-colors relative">
         <MenuBar editor={editor} />
+        {editor && <AIBubbleMenu editor={editor} />}
         <EditorContent editor={editor} />
       </div>
     );
@@ -164,3 +242,4 @@ const SustainWriteTipTapEditor = forwardRef<SustainWriteEditorRef, SustainWriteT
 SustainWriteTipTapEditor.displayName = 'SustainWriteTipTapEditor'; // 為了更好的調試
 
 export default SustainWriteTipTapEditor;
+

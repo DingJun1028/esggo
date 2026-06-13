@@ -31,27 +31,31 @@ Guidelines:
 - Use Traditional Chinese (zh-TW).
     `;
 
-    const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-    if (!GEMINI_API_KEY) throw new Error('API Key missing');
+    
+    const AGNES_API_KEY = process.env.AGNES_API || process.env.AGNES_API_KEY;
+    if (!AGNES_API_KEY) throw new Error('Agnes API Key missing');
 
-    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    const agnesRes = await fetch(`https://apihub.agnes-ai.com/v1/chat/completions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AGNES_API_KEY}`
+      },
       body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3 }
+        model: 'agnes-2.0-flash',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3
       })
     });
 
-    if (!geminiRes.ok) {
-      const errData = await geminiRes.text();
-      console.error('Gemini API failed:', errData);
-      throw new Error('Gemini API failed');
+    if (!agnesRes.ok) {
+      const errData = await agnesRes.text();
+      console.error('Agnes API failed:', errData);
+      throw new Error('Agnes API failed');
     }
-    const data = await geminiRes.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '無法生成洞察報告。';
-
-    return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
+    const data = await agnesRes.json();
+    const text = data.choices?.[0]?.message?.content || '無法生成內容。';
+return NextResponse.json({ insights: text, metrics_analyzed: metrics.length });
   } catch (error: any) {
     console.error('Environmental Insights API Error:', error);
     return NextResponse.json(

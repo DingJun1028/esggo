@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { ai } from '../agents/genkit';
+import { generateObject } from 'ai';
+import { agnes } from '@/lib/ai/agnes';
 import { createClient } from '@supabase/supabase-js';
 
 // 初始化 Service Role Client 以寫入資料庫
@@ -67,13 +68,14 @@ ${conversationLog}
 `;
 
   try {
-    const response = await ai.generate({
+    const response = await generateObject({
+      model: agnes('agnes-2.0-flash'),
       system: "你是一個專業的【無有技藝】記憶萃取系統。你的目標是從雜亂的對話與執行紀錄中，提煉出具有高度技術價值的記憶碎片。",
       prompt,
-      output: { schema: MemoryShardSchema }
+      schema: MemoryShardSchema
     });
 
-    const shardData = response.output;
+    const shardData = response.object;
     if (!shardData) throw new Error('無法萃取記憶碎片：模型輸出為空');
 
     const shard: MemoryShard = {
@@ -100,7 +102,7 @@ ${conversationLog}
     if (supabaseAdmin) {
       const { error: dbError } = await supabaseAdmin
         .from('omni_memory_shards')
-        .insert(insertData);
+        .insert(insertData as any);
 
       if (dbError) {
         console.warn('⚠️ 記憶碎片已生成，但存檔至資料庫失敗:', dbError.message);
@@ -146,13 +148,14 @@ ${shardsContext}
 `;
 
   try {
-    const response = await ai.generate({
+    const response = await generateObject({
+      model: agnes('agnes-2.0-flash'),
       system: "你是一個專業的【無有技藝】奧義合成系統。能夠將散落的知識融合為具有系統化與哲理深度的技能奧義，並精準歸類其無有維度。",
       prompt,
-      output: { schema: SkillUltimateSchema }
+      schema: SkillUltimateSchema
     });
 
-    const ultimateData = response.output;
+    const ultimateData = response.object;
     if (!ultimateData) throw new Error('無法合成技能奧義：模型輸出為空');
 
     const ultimate: SkillUltimate = {
@@ -180,7 +183,7 @@ ${shardsContext}
     if (supabaseAdmin) {
       const { error: dbError } = await supabaseAdmin
         .from('omni_skill_ultimates')
-        .insert(insertData);
+        .insert(insertData as any);
 
       if (dbError) {
         console.warn('⚠️ 技能奧義已合成，但存檔至資料庫失敗:', dbError.message);
@@ -219,7 +222,7 @@ export async function storeMemoryShard(shard: MemoryShard): Promise<void> {
   }
   const { error } = await supabaseAdmin
     .from('omni_memory_shards')
-    .insert(insertData);
+    .insert(insertData as any);
 
   if (error) {
     console.error('存儲記憶碎片失敗:', error);
@@ -265,7 +268,7 @@ export async function retrieveMemoryShards(options?: {
   }
   
   // 將資料庫記錄轉換為 MemoryShard 物件
-  return data.map(record => ({
+  return (data as any[]).map(record => ({
     id: record.id,
     title: record.title,
     description: record.description,
@@ -300,7 +303,7 @@ export async function storeSkillUltimate(ultimate: SkillUltimate): Promise<void>
   }
   const { error } = await supabaseAdmin
     .from('omni_skill_ultimates')
-    .insert(insertData);
+    .insert(insertData as any);
 
   if (error) {
     console.error('存儲技能奧義失敗:', error);
@@ -350,7 +353,7 @@ export async function retrieveSkillUltimates(options?: {
   }
   
   // 將資料庫記錄轉換為 SkillUltimate 物件
-  return data.map(record => ({
+  return (data as any[]).map(record => ({
     skillName: record.skill_name,
     masteryLevel: record.mastery_level as 'Novice' | 'Adept' | 'Expert' | 'Master',
     corePrinciples: record.core_principles,

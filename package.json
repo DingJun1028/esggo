@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.81",
+    "@ai-sdk/openai": "^3.0.71",
     "@apollo/client": "^4.2.2",
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@dataconnect/generated": "file:src/dataconnect-generated",
@@ -70,7 +71,9 @@
     "graphql-ws": "^6.0.8",
     "graphql-yoga": "^5.21.1",
     "helmet": "^7.1.0",
+    "html2canvas": "^1.4.1",
     "idb-keyval": "^6.2.5",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.292.0",
     "minisearch": "^7.2.0",
     "newrelic": "^14.1.0",

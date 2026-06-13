@@ -11,21 +11,20 @@ describe('Social Insights API', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.NEXT_PUBLIC_GEMINI_API_KEY = 'test-api-key';
+    process.env.AGNES_API = 'test-agnes-api-key';
   });
 
   it('should return insights successfully', async () => {
-    // Mock DB response
     vi.mocked(db.getSocialMetrics).mockResolvedValue([
       { id: '1', metric: 'Diversity', value: '80%' }
     ] as any);
 
-    // Mock fetch for Gemini API
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
-        candidates: [{
-          content: {
-            parts: [{ text: 'Mocked Insight Report' }]
+        choices: [{
+          message: {
+            content: 'Mocked Insight Report'
           }
         }]
       })
@@ -42,18 +41,17 @@ describe('Social Insights API', () => {
   });
 
   it('should return 500 if API key is missing', async () => {
-    process.env.NEXT_PUBLIC_GEMINI_API_KEY = '';
-    process.env.GOOGLE_API_KEY = '';
+    process.env.AGNES_API = '';
 
     const req = new NextRequest('http://localhost:3000/api/social/insights');
     const res = await GET(req);
     const json = await res.json();
 
     expect(res.status).toBe(500);
-    expect(json.error).toBe('API Key missing');
+    expect(json.error).toBe('Agnes API Key missing');
   });
 
-  it('should return 500 if Gemini API fails', async () => {
+  it('should return 500 if Agnes API fails', async () => {
     vi.mocked(db.getSocialMetrics).mockResolvedValue([]);
 
     global.fetch = vi.fn().mockResolvedValue({
@@ -66,6 +64,6 @@ describe('Social Insights API', () => {
     const json = await res.json();
 
     expect(res.status).toBe(500);
-    expect(json.error).toBe('Gemini API failed');
+    expect(json.error).toBe('Agnes API failed');
   });
 });

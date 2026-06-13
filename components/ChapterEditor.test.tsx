@@ -5,9 +5,13 @@ import { vi } from 'vitest';
 import { ChapterEditor } from './ChapterEditor';
 import { useSustainWriteStore } from '../store/useSustainWriteStore';
 
-// 1. 模擬 Zustand Store，避免測試時引發真實的狀態改變或 API 呼叫
 vi.mock('../store/useSustainWriteStore', () => ({
     useSustainWriteStore: vi.fn(),
+}));
+
+vi.mock('./omni/SustainWriteTipTapEditor', () => ({
+    default: () => React.createElement('div', { 'data-testid': 'mock-editor' }),
+    SustainWriteEditorRef: {},
 }));
 
 describe('ChapterEditor - AI Style Selection', () => {

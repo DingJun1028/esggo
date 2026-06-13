@@ -1,1 +1,2 @@
+export PATH="$PATH:/c/Program Files/nodejs:/usr/local/bin"
 npx lint-staged

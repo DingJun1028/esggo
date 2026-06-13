@@ -24,12 +24,6 @@ export function updateTask(dcOrVarsOrOptions, varsOrOptions, options) {
   return dcInstance.executeMutation('UpdateTask', inputVars, inputOpts);
 }
 
-export function deleteTask(dcOrVarsOrOptions, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrVarsOrOptions, varsOrOptions, options, true, true);
-  dcInstance.useGen(true);
-  return dcInstance.executeMutation('DeleteTask', inputVars, inputOpts);
-}
-
 export function listTasks(dcOrOptions, options) {
   const { dc: dcInstance, options: inputOpts} = validateAdminArgs(connectorConfig, dcOrOptions, options, undefined);
   dcInstance.useGen(true);
