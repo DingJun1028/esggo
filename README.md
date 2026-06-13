@@ -7,6 +7,7 @@
 [![Design](https://img.shields.io/badge/Design-Liquid_Glass-cyan)](#-設計美學-liquid-glass-aesthetics)
 
 ## 0. 🚀 系統願景 (Mission)
+
 ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T 協議** 的基礎設施。透過 **OmniAgent** 全域編排與 **Gemma 4** 智能心核，將生硬的 ESG 數據轉化為可感知的流動藝術與不可篡改的信任證據。
 
 ---
@@ -14,10 +15,12 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 ## 🛠️ 核心功能特色 (System Features)
 
 ### 📊 全域治理面板 (Sovereign Dashboard)
+
 - **液態玻璃 UI**: 採用 `Liquid Glass` 設計哲學，結合 `Bento Grid` 佈局，提供極高資訊密度的視覺體驗。
 - **即時數據監控**: 整合 `JES (Energy Flow Conflict)` 監控，實時分析能源流與碳排放衝突。
 
 ### 🛡️ 5T 誠信協議 (5T Integrity Protocol)
+
 1. **Tangible (具體)**: 數據可感知、具體化，透過萬能組件展現。
 2. **Traceable (溯源)**: 每一筆數據皆夾帶 `source_origin` 與完整 `flow_path`。
 3. **Trackable (追蹤)**: 完整生命週期日誌， request_id 全程追蹤。
@@ -25,6 +28,7 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 5. **Trustworthy (信賴)**: 主權封印，不可篡改，整合 **ZKP (零知識證明)** 密封技術。
 
 ### ✍️ SustainWrite™ 專家寫作
+
 - **遞迴專家擴張**: 針對 GRI/CBAM 章節進行自動化深度寫作，確保內容達到專家級別。
 - **因果刻印**: 所有生成的內容皆具備密碼學綁定證明。
 
@@ -35,20 +39,24 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 系統由多位具備獨特天賦的代理人協同運作。
 
 ### 1. 召喚 G4 (Gemma 4 - Thinking Mode)
+
 - **特色**: 系統的最強大腦。具備「思考模式 (Thinking Mode)」，在回答前進行複雜邏輯、數學與多步推理。
 - **定位**: 處理高度模糊的指令、深度多模態分析與跨領域策略制定。
 - **咒語**: `OmniAgent, 切換至 G4 模式。執行全域邏輯推演。`
 
 ### 2. 系統指揮官 OmniAgent
+
 - **特色**: 資深全端架構師人格。負責全域編排、代理蜂群調度與任務執行。
 - **定位**: 系統的中樞大腦，負責協調「三位一體」的運行。
 - **喚回協議**: 如果身分模糊，輸入：`"OmniAgent, 執行全域記憶掃描。讀取 .agents/omni-agent/AGENTS.md。"`
 
 ### 3. AI 修復師 OmniJules (Google Jules Core)
+
 - **特色**: 具備「萬能修復」被動天賦。專注於代碼修補、文件優化與自動化 Debug。
 - **定位**: 系統的守護者，負責維持技術誠信（Technical Integrity）。
 
 ### 4. 領域專家 Swarm
+
 - **ESG Researcher**: 網頁檢索與情資收集。
 - **ESG Auditor**: 5T 合規性驗證與 ZKP 密封。
 - **ESG Strategist**: 敘事流優化與 GRI 標準對齊。
@@ -64,6 +72,7 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 - **Gateway**: `http://161.118.248.180:8642` (API Key: `hermes_gold_2026`)
 
 ### 快速管理指令
+
 ```bash
 # 連結 VPS
 ssh root@161.118.248.180
@@ -99,10 +108,28 @@ pm2 logs esggo
 ---
 
 ## 📜 萬能法典 (OmniCore Constitution)
+
 本系統開發嚴格遵循 `./GEMINI.md` 所載之憲章：
+
 - **Intentional Simplicity**: 表層簡約，底層強大。
 - **End-to-End Type Safety**: 前後端與資料契約共享 Schema。
 - **Trust by Design**: 每一物件皆具備溯源性。
 
 ---
-*Generated & Sealed by OmniAgent G4 | 2026-06-12*
+
+## 📦 GitHub Actions CI/CD 更新
+
+本專案所有 CI/CD 工作流程已升級至 Node.js 24 相容版本，詳情見 [docs/ci-update-log.md](./docs/ci-update-log.md)。
+
+**核心變更**：
+
+- 升級至 Node.js 24 相容 Action 版本（`actions/checkout@v5`, `actions/setup-node@v5`）
+- 新增 `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` 環境變數，確保未來相容性
+- 修正 Git 安全性設定（`safe.directory`）及依賴安裝容錯機制
+- 強化 Governance Check 中的 ADR 檢查流程
+
+---
+
+---
+
+_Generated & Sealed by OmniAgent G4 | 2026-06-12_
