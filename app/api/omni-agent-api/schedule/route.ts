@@ -5,7 +5,6 @@ import { pushBusEvent } from '../stream/events';
 import { pushAlert } from '@/lib/slack/slack-gateway';
 import { pushTelegramAlert } from '@/lib/slack/telegram-gateway';
 
-
 /**
  * Scheduled Auto-Sync Endpoint
  * ──────────────────────────────
@@ -30,11 +29,10 @@ const VALID_MISSIONS = [
   'CODE_QUALITY_REPORT',
 ] as const;
 
-type MissionType = typeof VALID_MISSIONS[number];
+type MissionType = (typeof VALID_MISSIONS)[number];
 
 export async function POST(req: NextRequest) {
   try {
-
     let body = {};
     try {
       body = await req.json();
@@ -50,22 +48,32 @@ export async function POST(req: NextRequest) {
     const context = body ? (body as any).context : {};
     const cronSecret = body ? (body as any).cronSecret : undefined;
 
-
     // Security: Validate cron secret for automated triggers
     const expectedSecret = process.env.CRON_SECRET;
     const headerSecret = req.headers.get('x-cron-secret');
     if (expectedSecret && headerSecret !== expectedSecret && cronSecret !== expectedSecret) {
       // Allow manual triggers without secret in dev mode
       if (process.env.NODE_ENV === 'production') {
-        return NextResponse.json({ error: 'Unauthorized: Invalid cron secret' }, { status: 401 });
+        return NextResponse.json(
+          {
+            id: crypto.randomUUID(),
+            status: 'error',
+            content: 'Unauthorized: Invalid cron secret',
+            timestamp: Date.now(),
+          },
+          { status: 401 }
+        );
       }
     }
 
     if (!mission || !VALID_MISSIONS.includes(mission as MissionType)) {
       return NextResponse.json(
         {
-          error: `Invalid mission. Valid missions: ${VALID_MISSIONS.join(', ')}`,
-          validMissions: VALID_MISSIONS,
+          id: crypto.randomUUID(),
+          status: 'error',
+          content: `Invalid mission. Valid missions: ${VALID_MISSIONS.join(', ')}`,
+          data: { validMissions: VALID_MISSIONS },
+          timestamp: Date.now(),
         },
         { status: 400 }
       );
@@ -82,7 +90,6 @@ export async function POST(req: NextRequest) {
     const commander = new OmniCommander(omniSwarm);
     const result = await commander.command(mission, context);
 
-
     // Broadcast completion
     pushBusEvent('SCHEDULE_COMPLETE', {
       mission,
@@ -96,25 +103,29 @@ ${result.message || ''}`;
       severity: 'info',
       title: 'Cron Job Completed',
       message: successMessage,
-      sourceModule: 'OmniAgent-Schedule'
-    }).catch(e => console.error('Slack notification failed:', e));
+      sourceModule: 'OmniAgent-Schedule',
+    }).catch((e) => console.error('Slack notification failed:', e));
 
     await pushTelegramAlert({
       severity: 'info',
       title: 'Cron Job Completed',
       message: successMessage,
-    }).catch(e => console.error('Telegram notification failed:', e));
-
+    }).catch((e) => console.error('Telegram notification failed:', e));
 
     return NextResponse.json({
-      scheduled: true,
-      mission,
-      ...result,
+      id: crypto.randomUUID(),
+      status: 'success',
+      content: `Mission ${mission} completed successfully`,
+      data: {
+        scheduled: true,
+        mission,
+        ...result,
+      },
+      timestamp: Date.now(),
     });
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('[Schedule API Error]', errorMessage);
-
 
     pushBusEvent('SCHEDULE_ERROR', {
       error: errorMessage,
@@ -125,23 +136,27 @@ ${result.message || ''}`;
       severity: 'critical',
       title: 'Cron Job Failed',
       message: `Mission failed: ${errorMessage}`,
-      sourceModule: 'OmniAgent-Schedule'
-    }).catch(e => console.error('Slack error notification failed:', e));
+      sourceModule: 'OmniAgent-Schedule',
+    }).catch((e) => console.error('Slack error notification failed:', e));
 
     await pushTelegramAlert({
       severity: 'critical',
       title: 'Cron Job Failed',
       message: `Mission failed: ${errorMessage}`,
-    }).catch(e => console.error('Telegram error notification failed:', e));
-
+    }).catch((e) => console.error('Telegram error notification failed:', e));
 
     return NextResponse.json(
-      { error: errorMessage, scheduled: false },
+      {
+        id: crypto.randomUUID(),
+        status: 'error',
+        content: `Mission failed: ${errorMessage}`,
+        data: { scheduled: false, error: errorMessage },
+        timestamp: Date.now(),
+      },
       { status: 500 }
     );
   }
 }
-
 
 export async function GET(req: NextRequest) {
   try {
@@ -154,15 +169,26 @@ export async function GET(req: NextRequest) {
     const expectedSecret = process.env.CRON_SECRET;
     if (expectedSecret && cronSecret !== expectedSecret) {
       if (process.env.NODE_ENV === 'production') {
-        return NextResponse.json({ error: 'Unauthorized: Invalid cron secret' }, { status: 401 });
+        return NextResponse.json(
+          {
+            id: crypto.randomUUID(),
+            status: 'error',
+            content: 'Unauthorized: Invalid cron secret',
+            timestamp: Date.now(),
+          },
+          { status: 401 }
+        );
       }
     }
 
     if (!mission || !VALID_MISSIONS.includes(mission as MissionType)) {
       return NextResponse.json(
         {
-          error: `Invalid mission. Valid missions: ${VALID_MISSIONS.join(', ')}`,
-          validMissions: VALID_MISSIONS,
+          id: crypto.randomUUID(),
+          status: 'error',
+          content: `Invalid mission. Valid missions: ${VALID_MISSIONS.join(', ')}`,
+          data: { validMissions: VALID_MISSIONS },
+          timestamp: Date.now(),
         },
         { status: 400 }
       );
@@ -191,20 +217,25 @@ export async function GET(req: NextRequest) {
       severity: 'info',
       title: 'Cron Job Completed',
       message: successMessage,
-      sourceModule: 'OmniAgent-Schedule'
-    }).catch(e => console.error('Slack notification failed:', e));
+      sourceModule: 'OmniAgent-Schedule',
+    }).catch((e) => console.error('Slack notification failed:', e));
 
     await pushTelegramAlert({
       severity: 'info',
       title: 'Cron Job Completed',
       message: successMessage,
-    }).catch(e => console.error('Telegram notification failed:', e));
-
+    }).catch((e) => console.error('Telegram notification failed:', e));
 
     return NextResponse.json({
-      scheduled: true,
-      mission,
-      ...result,
+      id: crypto.randomUUID(),
+      status: 'success',
+      content: successMessage,
+      data: {
+        scheduled: true,
+        mission,
+        ...result,
+      },
+      timestamp: Date.now(),
     });
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -219,18 +250,23 @@ export async function GET(req: NextRequest) {
       severity: 'critical',
       title: 'Cron Job Failed',
       message: `Mission failed: ${errorMessage}`,
-      sourceModule: 'OmniAgent-Schedule'
-    }).catch(e => console.error('Slack error notification failed:', e));
+      sourceModule: 'OmniAgent-Schedule',
+    }).catch((e) => console.error('Slack error notification failed:', e));
 
     await pushTelegramAlert({
       severity: 'critical',
       title: 'Cron Job Failed',
       message: `Mission failed: ${errorMessage}`,
-    }).catch(e => console.error('Telegram error notification failed:', e));
-
+    }).catch((e) => console.error('Telegram error notification failed:', e));
 
     return NextResponse.json(
-      { error: errorMessage, scheduled: false },
+      {
+        id: crypto.randomUUID(),
+        status: 'error',
+        content: `Mission failed: ${errorMessage}`,
+        data: { scheduled: false, error: errorMessage },
+        timestamp: Date.now(),
+      },
       { status: 500 }
     );
   }
