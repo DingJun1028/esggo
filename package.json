@@ -49,7 +49,7 @@
     "@trpc/client": "^10.43.0",
     "@trpc/react-query": "^10.45.4",
     "@trpc/server": "^10.43.0",
-    "ai": "^6.0.196",
+    "ai": "^6.0.204",
     "axios": "^1.17.0",
     "browser-use-sdk": "^3.8.4",
     "cheerio": "^1.2.0",
