@@ -1,23 +1,52 @@
-import { useEditor, EditorContent, Editor } from '@tiptap/react';
+﻿import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import React, { useEffect, useImperativeHandle, forwardRef, useState } from 'react';
-import { Bold, Italic, Heading1, Heading2, Heading3, List, ListOrdered, Quote, RemoveFormatting, Sparkles, Wand2, RefreshCcw } from 'lucide-react';
+import {
+  Bold,
+  Italic,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Quote,
+  RemoveFormatting,
+  Sparkles,
+  Wand2,
+  RefreshCcw,
+  Lock,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
 
 // 定義暴露給父組件的 ref 類型
-export interface SustainWriteEditorRef {
+export interface OmniSustainWriteEditorRef {
   getHTML: () => string;
   getText: () => string;
   getJSON: () => Record<string, any>;
   editorInstance: Editor | null; // 暴露編輯器實例以供進階操作
 }
 
-interface SustainWriteTipTapEditorProps {
+interface OmniSustainWriteEditorProps {
   value: string;
   onChange: (value: string) => void;
   editable?: boolean;
+  documentId?: string; // 用於區分不同文件的本地草稿
+}
+
+// 簡單的 SHA-256 Hash 產生器 (5T Trustworthy)
+async function generateHashLock(text: string) {
+  if (!text) return '0000000000000000';
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+    return hashHex.substring(0, 16);
+  } catch (e) {
+    return 'HASH_ERR';
+  }
 }
 
 const ToolbarButton = ({ onClick, isActive = false, disabled = false, children, title }: any) => (
@@ -27,8 +56,10 @@ const ToolbarButton = ({ onClick, isActive = false, disabled = false, children, 
     disabled={disabled}
     title={title}
     className={cn(
-      "p-2 rounded-md transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed",
-      isActive ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400" : "text-slate-600 dark:text-slate-400"
+      'p-2 rounded-md transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed',
+      isActive
+        ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400'
+        : 'text-slate-600 dark:text-slate-400'
     )}
   >
     {children}
@@ -128,33 +159,51 @@ const AIBubbleMenu = ({ editor }: { editor: Editor }) => {
     setIsAiLoading(true);
     try {
       let prompt = '';
-      if (promptType === 'refine') prompt = `請將以下文字精煉、修正錯漏字，使其更通順：\n\n${selectedText}`;
-      if (promptType === 'expand') prompt = `請以永續報告書的專業口吻，將以下文字擴寫並補充相關細節：\n\n${selectedText}`;
-      if (promptType === 'formal') prompt = `請將以下文字轉換為符合 GRI 準則與上市櫃公司永續報告書的正式、客觀專業語氣：\n\n${selectedText}`;
-      if (promptType === 'grammar') prompt = `請找出以下文字中的錯別字、文法語病或標點符號問題，並直接給出校正後的完美版本，不需解釋：\n\n${selectedText}`;
+      if (promptType === 'refine')
+        prompt = `請將以下文字精煉、修正錯漏字，使其更通順：\n\n${selectedText}`;
+      if (promptType === 'expand')
+        prompt = `請以永續報告書的專業口吻，將以下文字擴寫並補充相關細節：\n\n${selectedText}`;
+      if (promptType === 'formal')
+        prompt = `請將以下文字轉換為符合 GRI 準則與上市櫃公司永續報告書的正式、客觀專業語氣：\n\n${selectedText}`;
+      if (promptType === 'grammar')
+        prompt = `請找出以下文字中的錯別字、文法語病或標點符號問題，並直接給出校正後的完美版本，不需解釋：\n\n${selectedText}`;
 
-      const res = await fetch('/api/ai/generate', {
+      // 5T 協議: 透過 OmniNexus 進行 L-Hub Swarm Routing
+      const res = await fetch('/api/nexus/agent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt,
-          systemInstruction: '你是一個專業的 ESG 永續報告書撰寫助理，專精於修飾文辭、精煉語句、文法校正。直接回覆修改後的文字，不要包含任何開場白或說明。',
-        })
+          tool: 'mcp_lhub_ai_ask',
+          arguments: {
+            prompt,
+            context:
+              '你是一個專業的 ESG 永續報告書撰寫助理，專精於修飾文辭、精煉語句、文法校正。直接回覆修改後的文字，不要包含任何開場白或說明。',
+          },
+        }),
       });
 
       const data = await res.json();
-      if (data.text) {
-        editor.chain().focus().insertContent(data.text).run();
+      // 兼容舊版 API 或新版 Nexus Response
+      const responseText = data.data?.text || data.text || data.data;
+
+      if (responseText && typeof responseText === 'string') {
+        editor.chain().focus().insertContent(responseText).run();
+      } else {
+        console.warn('L-Hub Swarm Routing returned unexpected format:', data);
       }
     } catch (error) {
-      console.error('AI Rewrite Failed:', error);
+      console.error('L-Hub Swarm Routing Failed:', error);
+      // Graceful Degradation: 若 AI 服務中斷，可在此實作 Toast 提示
     } finally {
       setIsAiLoading(false);
     }
   };
 
   return (
-    <BubbleMenu editor={editor} className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl rounded-lg overflow-hidden divide-x divide-slate-100 dark:divide-slate-800">
+    <BubbleMenu
+      editor={editor}
+      className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl rounded-lg overflow-hidden divide-x divide-slate-100 dark:divide-slate-800"
+    >
       <button
         onClick={() => handleAiRewrite('refine')}
         disabled={isAiLoading}
@@ -191,21 +240,33 @@ const AIBubbleMenu = ({ editor }: { editor: Editor }) => {
   );
 };
 
-const SustainWriteTipTapEditor = forwardRef<SustainWriteEditorRef, SustainWriteTipTapEditorProps>(
-  ({ value, onChange, editable = true }, ref) => {
+const OmniSustainWriteEditor = forwardRef<OmniSustainWriteEditorRef, OmniSustainWriteEditorProps>(
+  ({ value, onChange, editable = true, documentId = 'default' }, ref) => {
+    const [hashLock, setHashLock] = useState<string>('0000000000000000');
+
     const editor = useEditor({
-      extensions: [
-        StarterKit,
-      ],
+      extensions: [StarterKit],
       content: value,
       editable: editable,
-      onUpdate: ({ editor }) => {
-        onChange(editor.getHTML()); // 當編輯器內容更新時，將 HTML 格式的內容傳遞給 onChange
+      onUpdate: async ({ editor }) => {
+        const html = editor.getHTML();
+        onChange(html);
+
+        // 5T Graceful Degradation: 本地草稿保存
+        try {
+          localStorage.setItem(`omni_draft_${documentId}`, html);
+        } catch (e) {
+          console.warn('Failed to save draft to localStorage', e);
+        }
+
+        // 5T Trustworthy: 即時計算 Hash Lock
+        const newHash = await generateHashLock(editor.getText());
+        setHashLock(newHash);
       },
       editorProps: {
         attributes: {
           class:
-            'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none min-h-[400px] p-6',
+            'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl focus:outline-none min-h-[400px] p-6 pb-12', // pb-12 預留空間給 Hash Badge
         },
       },
     });
@@ -219,27 +280,42 @@ const SustainWriteTipTapEditor = forwardRef<SustainWriteEditorRef, SustainWriteT
     }));
 
     useEffect(() => {
-      // 檢查 editor 是否存在，並且外部 value 與編輯器當前內容不同才更新
+      // 初始載入時計算 Hash
+      if (editor && value) {
+        generateHashLock(editor.getText()).then(setHashLock);
+      }
+    }, [editor, value]);
+
+    useEffect(() => {
       if (editor && editor.getHTML() !== value) {
-        editor.commands.setContent(value, { emitUpdate: false }); // 不觸發 onUpdate
+        editor.commands.setContent(value, { emitUpdate: false });
       }
     }, [value, editor]);
 
     if (!editor) {
-      return <div className="min-h-[400px] p-4 flex items-center justify-center text-slate-400 border border-slate-200 dark:border-slate-800 rounded-lg">載入智能編撰器中...</div>;
+      return (
+        <div className="min-h-[400px] p-4 flex items-center justify-center text-slate-400 border border-slate-200 dark:border-slate-800 rounded-lg">
+          載入萬能智能編撰器中...
+        </div>
+      );
     }
 
     return (
-      <div className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-white dark:bg-slate-950/50 shadow-sm focus-within:border-cyan-500/50 transition-colors relative">
-        <MenuBar editor={editor} />
-        {editor && <AIBubbleMenu editor={editor} />}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-white dark:bg-slate-950/50 shadow-sm focus-within:border-cyan-500/50 transition-colors relative group">
+        {editable && <MenuBar editor={editor} />}
+        {editor && editable && <AIBubbleMenu editor={editor} />}
         <EditorContent editor={editor} />
+
+        {/* 5T Protocol: Trustworthy Hash Lock Badge */}
+        <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur text-[10px] text-slate-500 dark:text-slate-400 font-mono rounded-md border border-slate-200/50 dark:border-slate-700/50 opacity-50 group-hover:opacity-100 transition-opacity">
+          <Lock size={10} className="text-cyan-600 dark:text-cyan-400" />
+          <span>5T-LOCK:{hashLock}</span>
+        </div>
       </div>
     );
   }
 );
 
-SustainWriteTipTapEditor.displayName = 'SustainWriteTipTapEditor'; // 為了更好的調試
+OmniSustainWriteEditor.displayName = 'OmniSustainWriteEditor';
 
-export default SustainWriteTipTapEditor;
-
+export default OmniSustainWriteEditor;
