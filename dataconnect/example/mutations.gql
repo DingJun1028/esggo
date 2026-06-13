@@ -18,7 +18,7 @@ mutation UpdateTask($id: UUID!, $status: String!)
   task_update(key: { id: $id }, data: { status: $status, userId_expr: "auth.uid" })
 }
 
-# 5T Security: auth.uid enforced via CEL expression — only task owner can delete
-mutation DeleteTask($id: UUID!) @auth(expr: "auth.uid == task.userId") {
-  task_delete(key: { id: $id })
-}
+# 5T Security: Delete functionality is restricted in OmniCore.
+# mutation DeleteTask($id: UUID!, $userId: String!) @auth(expr: "auth.uid == userId") {
+#   task_delete(key: { id: $id })
+# }

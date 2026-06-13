@@ -37,14 +37,6 @@ export interface CreateTaskVariables {
   completed: boolean;
 }
 
-export interface DeleteTaskData {
-  task_delete?: Task_Key | null;
-}
-
-export interface DeleteTaskVariables {
-  id: UUIDString;
-}
-
 export interface EternalMemory_Key {
   id: UUIDString;
   __typename?: 'EternalMemory_Key';
@@ -209,18 +201,6 @@ export const updateTaskRef: UpdateTaskRef;
 
 export function updateTask(vars: UpdateTaskVariables): MutationPromise<UpdateTaskData, UpdateTaskVariables>;
 export function updateTask(dc: DataConnect, vars: UpdateTaskVariables): MutationPromise<UpdateTaskData, UpdateTaskVariables>;
-
-interface DeleteTaskRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: DeleteTaskVariables): MutationRef<DeleteTaskData, DeleteTaskVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: DeleteTaskVariables): MutationRef<DeleteTaskData, DeleteTaskVariables>;
-  operationName: string;
-}
-export const deleteTaskRef: DeleteTaskRef;
-
-export function deleteTask(vars: DeleteTaskVariables): MutationPromise<DeleteTaskData, DeleteTaskVariables>;
-export function deleteTask(dc: DataConnect, vars: DeleteTaskVariables): MutationPromise<DeleteTaskData, DeleteTaskVariables>;
 
 interface ListTasksRef {
   /* Allow users to create refs without passing in DataConnect */

@@ -10,6 +10,7 @@ import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
 import { SustainWriteTemplates, aiTemplateSelector, ZeroComputeTemplate } from '@/components/templates/sustain-write/registry';
 import SustainWriteTipTapEditor from '@/components/omni/SustainWriteTipTapEditor';
 import { useSustainWriteStore } from '@/store/useSustainWriteStore';
+import OmniEvidenceUploader from '@/components/omni/OmniEvidenceUploader';
 
 const TRAITS_POOL = ['製造業', '服務業', '科技業', '金控業', '綜合企業', '能源密集', '淨零承諾', '注重人才', '初次編製'];
 
@@ -25,6 +26,9 @@ export default function SustainWritePage() {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   
   const { generatedContent, updateContent, manualSave, initData, undoContent, redoContent, expandContentWithAI, isGeneratingAI, contentHistory } = useSustainWriteStore();
+
+  const [uploaderTarget, setUploaderTarget] = useState<string | null>(null);
+  const [uploadedEvidences, setUploadedEvidences] = useState<Record<string, {name: string, url: string, hash: string}>>({});
 
   useEffect(() => {
     initData('default');
@@ -111,52 +115,91 @@ export default function SustainWritePage() {
     }
   };
 
-  const handleWeave = () => {
+  const handleWeave = async () => {
     if (!activeTemplate) return;
     setIsWeaving(true);
     setWeavingProgress(0);
-    const interval = setInterval(() => {
-      setWeavingProgress(p => {
-        if (p >= 100) {
-          clearInterval(interval);
-          setIsWeaving(false);
-          
-        if (activeTemplate) {
-          activeTemplate.chapters.forEach((ch, idx) => {
-            const chId = `chapter-${idx}`;
-            const content = `<h2>${ch.title}</h2><p>${ch.contentBlueprint?.replace(/\n\n/g, '</p><p>')}</p>`;
-            updateContent(chId, content, ch.title, idx + 1, ch.requiredIndicators);
-          });
-        }
+    
+    try {
+      // Auto-switch to preview to see the magic typing live
+      setActiveTab('preview');
+      setActiveChapterIndex(0);
 
-        setActiveChapterIndex(0);
-        setActiveTab('preview'); // Auto-switch to preview when done
-          return 100;
-        }
-        return p + 5;
-      });
-    }, 200);
+      for (let i = 0; i < activeTemplate.chapters.length; i++) {
+        const ch = activeTemplate.chapters[i];
+        const chId = `chapter-${i}`;
+        
+        setActiveChapterIndex(i);
+
+        const contextDataStr = ch.requiredIndicators.map(ref => {
+          const dataItem = vaultIndicators.find(item => item.id === ref);
+          return dataItem ? `${dataItem.name}: ${dataItem.val}` : `${ref}: (尚未連結數據)`;
+        }).join('; ');
+
+        // Initialize empty content
+        updateContent(chId, `<h2>${ch.title}</h2>\n`, ch.title, i + 1, ch.requiredIndicators);
+
+        // Real AI generation with streaming
+        await expandContentWithAI(
+          chId, 
+          ch.title, 
+          i + 1, 
+          ch.requiredIndicators, 
+          `你是一個專業的 ESG 永續報告編撰系統。請根據以下藍圖要求：\n${ch.contentBlueprint}\n\n並且融合以下 5T 實證數據：\n[${contextDataStr}]\n\n為本章節撰寫專業、正式且詳細的永續報告內容。避免過多的前言，直接進入正題，使用 HTML 段落 (<p>, <ul>, <li> 等) 進行排版。`
+        );
+        
+        setWeavingProgress(Math.floor(((i + 1) / activeTemplate.chapters.length) * 100));
+      }
+    } catch (error) {
+      console.error('Weaving failed:', error);
+      alert('AI 編織過程發生錯誤！');
+    } finally {
+      setIsWeaving(false);
+      setWeavingProgress(100);
+    }
   };
 
-  const handleExportReport = () => {
+  const handleExportReport = async () => {
     if (!activeTemplate) return;
-    let fullReportHTML = `<h1>${activeTemplate.title}</h1>\n\n`;
-    activeTemplate.chapters.forEach((ch, idx) => {
-      const chId = `chapter-${idx}`;
-      fullReportHTML += `<h2>${ch.title}</h2>\n`;
-      fullReportHTML += generatedContent[chId] || '<p>(此章節尚無內容)</p>';
-      fullReportHTML += '\n<hr/>\n';
-    });
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const { jsPDF } = await import('jspdf');
+      
+      const printDiv = document.createElement('div');
+      printDiv.style.position = 'absolute';
+      printDiv.style.top = '-9999px';
+      printDiv.style.width = '800px';
+      printDiv.style.backgroundColor = '#ffffff';
+      printDiv.style.padding = '40px';
+      printDiv.style.color = '#000000';
+      printDiv.style.fontFamily = 'sans-serif';
 
-    const blob = new Blob([fullReportHTML], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${activeTemplate.title}-ESGGO報告.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+      let htmlContent = `<div style="text-align:center;margin-bottom:40px;"><h1 style="color:#06b6d4;">${activeTemplate.name}</h1><p>ESGGO OmniCore Verified Report</p></div>`;
+      
+      activeTemplate.chapters.forEach((ch, idx) => {
+        const chId = `chapter-${idx}`;
+        htmlContent += `<h2 style="color:#003262;border-bottom:1px solid #ccc;padding-bottom:10px;margin-top:30px;">${ch.title}</h2>`;
+        htmlContent += `<div style="line-height:1.6;font-size:14px;">${generatedContent[chId] || '<p>(此章節尚無內容)</p>'}</div>`;
+      });
+      
+      printDiv.innerHTML = htmlContent;
+      document.body.appendChild(printDiv);
+      
+      const canvas = await html2canvas(printDiv, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${activeTemplate.name}-ESGGO報告.pdf`);
+      
+      document.body.removeChild(printDiv);
+    } catch (e) {
+      console.error('PDF Export Error:', e);
+      alert('PDF 匯出失敗，請檢查日誌');
+    }
   };
 
   const p = {
@@ -167,6 +210,14 @@ export default function SustainWritePage() {
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+      {uploaderTarget && (
+        <OmniEvidenceUploader 
+          onClose={() => setUploaderTarget(null)}
+          onUploadSuccess={(evidence) => {
+            setUploadedEvidences(prev => ({...prev, [uploaderTarget]: evidence}));
+          }}
+        />
+      )}
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         {/* Header Area */}
@@ -505,6 +556,37 @@ export default function SustainWritePage() {
                               <span className={item.status === 'verified' ? 'text-emerald-400/80 font-mono tracking-widest' : 'text-slate-500 italic'}>
                                 {item.hash}
                               </span>
+                            </div>
+                            {/* Evidence Receipt Collection Section (萬能智庫佐證庫) */}
+                            <div className="mt-3 pt-3 border-t border-white/5">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-xs text-slate-400 flex items-center gap-1">
+                                  <ShieldCheck size={12} className="text-cyan-500" />
+                                  萬能智庫佐證單據
+                                </span>
+                                <span className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">
+                                  {uploadedEvidences[item.id] || item.status === 'verified' ? '已鏈接' : '待收集'}
+                                </span>
+                              </div>
+                              <div className="flex gap-2">
+                                <OmniButton variant="outline" size="sm" className="flex-1 text-[10px] h-7 border-slate-700 hover:bg-slate-800 text-slate-300">
+                                  瀏覽智庫
+                                </OmniButton>
+                                {uploadedEvidences[item.id] ? (
+                                  <div className="flex-1 text-[10px] h-7 flex items-center justify-center gap-1 bg-emerald-950/50 text-emerald-400 rounded-md border border-emerald-500/30 font-bold">
+                                    <CheckCircle2 size={12} /> 單據已封印
+                                  </div>
+                                ) : (
+                                  <OmniButton 
+                                    variant="primary" 
+                                    size="sm" 
+                                    className="flex-1 text-[10px] h-7 bg-cyan-900/50 hover:bg-cyan-800 border-cyan-700/50 text-cyan-300"
+                                    onClick={() => setUploaderTarget(item.id)}
+                                  >
+                                    上傳單據
+                                  </OmniButton>
+                                )}
+                              </div>
                             </div>
                           </OmniBaseCard>
                         );

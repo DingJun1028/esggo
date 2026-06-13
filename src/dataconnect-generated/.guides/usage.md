@@ -12,7 +12,7 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useUpsertUser, useCreateTask, useUpdateTask, useDeleteTask, useListTasks, useListUsers, useListUserTasks, useGetTaskById, useSearchTask } from '@dataconnect/generated/react';
+import { useUpsertUser, useCreateTask, useUpdateTask, useListTasks, useListUsers, useListUserTasks, useGetTaskById, useSearchTask } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
 
 const { data, isPending, isSuccess, isError, error } = useUpsertUser(upsertUserVars);
@@ -20,8 +20,6 @@ const { data, isPending, isSuccess, isError, error } = useUpsertUser(upsertUserV
 const { data, isPending, isSuccess, isError, error } = useCreateTask(createTaskVars);
 
 const { data, isPending, isSuccess, isError, error } = useUpdateTask(updateTaskVars);
-
-const { data, isPending, isSuccess, isError, error } = useDeleteTask(deleteTaskVars);
 
 const { data, isPending, isSuccess, isError, error } = useListTasks();
 
@@ -70,7 +68,7 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { upsertUser, createTask, updateTask, deleteTask, listTasks, listUsers, listUserTasks, getTaskById, searchTask } from '@dataconnect/generated';
+import { upsertUser, createTask, updateTask, listTasks, listUsers, listUserTasks, getTaskById, searchTask } from '@dataconnect/generated';
 
 
 // Operation UpsertUser:  For variables, look at type UpsertUserVars in ../index.d.ts
@@ -81,9 +79,6 @@ const { data } = await CreateTask(dataConnect, createTaskVars);
 
 // Operation UpdateTask:  For variables, look at type UpdateTaskVars in ../index.d.ts
 const { data } = await UpdateTask(dataConnect, updateTaskVars);
-
-// Operation DeleteTask:  For variables, look at type DeleteTaskVars in ../index.d.ts
-const { data } = await DeleteTask(dataConnect, deleteTaskVars);
 
 // Operation ListTasks: 
 const { data } = await ListTasks(dataConnect);

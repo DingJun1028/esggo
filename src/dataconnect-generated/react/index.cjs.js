@@ -1,4 +1,4 @@
-const { upsertUserRef, createTaskRef, updateTaskRef, deleteTaskRef, listTasksRef, listUsersRef, listUserTasksRef, getTaskByIdRef, searchTaskRef, connectorConfig } = require('../index.cjs.js');
+const { upsertUserRef, createTaskRef, updateTaskRef, listTasksRef, listUsersRef, listUserTasksRef, getTaskByIdRef, searchTaskRef, connectorConfig } = require('../index.cjs.js');
 const { validateArgs, CallerSdkTypeEnum } = require('firebase/data-connect');
 const { useDataConnectQuery, useDataConnectMutation, validateReactArgs } = require('@tanstack-query-firebase/react/data-connect');
 
@@ -22,14 +22,6 @@ exports.useUpdateTask = function useUpdateTask(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
     return updateTaskRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useDeleteTask = function useDeleteTask(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return deleteTaskRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }

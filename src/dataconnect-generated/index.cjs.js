@@ -55,20 +55,6 @@ exports.updateTask = function updateTask(dcOrVars, vars) {
 }
 ;
 
-const deleteTaskRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeleteTask', inputVars);
-}
-deleteTaskRef.operationName = 'DeleteTask';
-exports.deleteTaskRef = deleteTaskRef;
-
-exports.deleteTask = function deleteTask(dcOrVars, vars) {
-  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
-  return executeMutation(deleteTaskRef(dcInstance, inputVars));
-}
-;
-
 const listTasksRef = (dc) => {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();
