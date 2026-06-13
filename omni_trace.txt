@@ -1,7 +1,0 @@
-### Execution Trace (OmniCore Matrix):
-- Viewed: components/brand/BrandLogo.tsx
-- Ran: grep_search on withText and ESGGO text
-- Modified: components/brand/BrandLogo.tsx (Replaced SVG and text with /logo.png), app/AppShellV2.tsx (Removed redundant motion.div logo text to fix duplicate logo).
-
-### Synthesis & Outcome:
-Successfully fixed the "double logo" UI glitch by consolidating BrandLogo to strictly use the high-quality /logo.png asset and removing the redundant text previously injected in AppShellV2.tsx. The platform branding is now visually aligned and 5T Tangible compliant.

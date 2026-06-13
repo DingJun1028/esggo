@@ -1,6 +1,0 @@
-### Execution Trace (OmniCore Matrix):
-- Viewed: app/editor/page.tsx
-- Modified: app/editor/page.tsx (Replaced mock 4-chapter REPORT_CHAPTERS array with a comprehensive 22-chapter ESG report framework based on GRI, SASB, and TCFD standards. Added UI scrolling `overflow-y-auto` to the sidebar to accommodate the full list).
-
-### Synthesis & Outcome:
-Successfully transitioned the SustainWrite Editor from a demo mock structure to a complete, production-ready "Full Version" sustainability writing framework. Users can now navigate and auto-generate comprehensive 22-chapter ESG reports aligned with international standards.
