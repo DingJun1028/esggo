@@ -1,15 +1,11 @@
-import { defineConfig } from "eslint/config";
-import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
-import nextTypescript from "eslint-config-next/typescript";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
-export default defineConfig([{
-    extends: [...nextCoreWebVitals, ...nextTypescript],
-
+export default [
+  {
     rules: {
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",
@@ -18,4 +14,5 @@ export default defineConfig([{
         "@next/next/no-img-element": "off",
         "no-unused-vars": "off",
     },
-}]);
+  }
+];
