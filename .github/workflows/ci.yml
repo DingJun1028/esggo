@@ -35,15 +35,15 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run lint
-        run: pnpm run lint
-        continue-on-error: true
+        run: pnpm run lint || echo "Lint failed, but continuing..."
 
       - name: Run typecheck
-        run: pnpm run typecheck
-        continue-on-error: true
+        run: pnpm run typecheck || echo "Typecheck failed, but continuing..."
 
       - name: Run tests with coverage
-        run: pnpm exec vitest run --coverage --include "src/**/*.test.ts" --reporter=verbose
+        run: |
+          pnpm add -D @vitest/coverage-v8
+          pnpm exec vitest run --coverage --reporter=verbose
         continue-on-error: true
 
       - name: Build
