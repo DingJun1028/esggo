@@ -1,9 +1,0 @@
-### Execution Trace (OmniCore Matrix):
-- Viewed: app/editor/page.tsx, components/omni/SustainWriteTipTapEditor.tsx, components/brand/BrandLogo.tsx, components/omni/OmniAgentPulse.tsx
-- Modified: app/editor/page.tsx (Changed AI Expansion instruction logic to append `customPrompt` instead of overriding the core GRI generation prompts. Added `flex-wrap` to GRI tags to fix layout overflow).
-- Modified: components/omni/SustainWriteTipTapEditor.tsx (Added clear Chinese label "清除格式" to the `RemoveFormatting` icon to clarify the ambiguous "T" symbol).
-- Modified: components/brand/BrandLogo.tsx (Restored the "ESGGO 善向永續" text to make the brand clearer during localhost development).
-- Modified: components/omni/OmniAgentPulse.tsx (Removed the restrictive `dragConstraints` and the `fixed inset-0` parent container so the widget can be freely dragged anywhere on the screen without intercepting mouse clicks for the rest of the application).
-
-### Synthesis & Outcome:
-The system UI/UX has been further refined based on user feedback. The OmniAgent Pulse is now freely movable and dismissable. The Brand Logo text has been restored for clarity. The Tiptap editor toolbar is now unambiguous. The AI Expansion mechanism safely merges the user's custom instructions with the core "Zero-Code" Chapter and GRI requirements, ensuring strict 5T compliance without overwriting base instructions.

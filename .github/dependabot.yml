@@ -1,31 +1,24 @@
 version: 2
 updates:
-  # 檢查 Node.js 依賴更新 (Dependabot 會自動辨識 pnpm-lock.yaml)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "eslint-config-next"
+        # Allow dependabot to update but we pin to compatible version in package.json
+        versions: ["17.*"]
     commit-message:
-      prefix: "chore(deps)"
+      prefix: "deps"
+    pull-request-branch-name:
+      separator: "-"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    reviewers:
+      - "dependabot[bot]"
+    assignees:
+      - "dependabot[bot]"
     labels:
       - "dependencies"
-    ignore:
-      # 忽略 TypeScript 的 Major 更新，避免編譯突然壞掉
-      - dependency-name: "typescript"
-        update-types: ["version-update:semver-major"]
-
-  # 檢查 GitHub Actions 的版本更新
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore(ci)"
-
-  # 檢查 Dockerfile 基礎映像檔 (Base Image) 的更新
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore(docker)"
