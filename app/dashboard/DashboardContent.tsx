@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield, Activity, Zap, FileText, Database, Compass, 
   ArrowRight, HeartPulse, Sparkles, CheckCircle2, Lock,
-  BarChart, Target, Leaf, Users, Briefcase, Brain, Filter
+  BarChart, Target, Leaf, Users, Briefcase, Brain, Filter, Layers, GitBranch
 } from 'lucide-react';
 import { Card, CardContent } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
@@ -41,7 +41,11 @@ export default function DashboardContent() {
           rarity: 'awakened',
           fiveTStatus: [true, true, true, true, true],
           confidenceScore: 99,
-          skills: ['Semantic Guidance', 'Intent Alignment', 'Trinity Sync'],
+          skills: [
+            { icon: Brain, nameEN: 'Semantic Guidance', nameZH: '語意引導', type: '核心 / 主動' },
+            { icon: Sparkles, nameEN: 'Intent Alignment', nameZH: '意圖對齊', type: '核心 / 主動' },
+            { icon: Layers, nameEN: 'Trinity Sync', nameZH: '三位一體同步', type: '同步 / EX' }
+          ],
           jsonSchema: '{\n  "version": "1.0",\n  "status": "awakened",\n  "protocol": "5T"\n}'
         },
         {
@@ -51,7 +55,10 @@ export default function DashboardContent() {
           rarity: 'verified',
           fiveTStatus: [true, true, true, true, true],
           confidenceScore: 96,
-          skills: ['Task Orchestration', 'Agent Swarm Scheduling'],
+          skills: [
+            { icon: Layers, nameEN: 'Task Orchestration', nameZH: '任務編排', type: '統御 / 主動' },
+            { icon: GitBranch, nameEN: 'Agent Swarm Scheduling', nameZH: '代理蜂群排程', type: '統御 / 主動' }
+          ],
           jsonSchema: '{\n  "version": "1.0",\n  "status": "active"\n}'
         },
         {
@@ -61,7 +68,10 @@ export default function DashboardContent() {
           rarity: 'standard',
           fiveTStatus: [true, true, false, true, true],
           confidenceScore: 88,
-          skills: ['Dataform', 'BigQuery', 'Task Orchestration'],
+          skills: [
+            { icon: Database, nameEN: 'Dataform', nameZH: '資料表單', type: '執行 / 主動' },
+            { icon: Database, nameEN: 'BigQuery', nameZH: '巨量查詢', type: '執行 / 主動' }
+          ],
           jsonSchema: '{\n  "version": "1.0",\n  "status": "active"\n}'
         }
       ]);
@@ -72,10 +82,10 @@ export default function DashboardContent() {
   }, []);
 
   // Get unique skills for the filter
-  const allSkills = Array.from(new Set(activeAgents.flatMap(agent => agent.skills)));
+  const allSkills = Array.from(new Set(activeAgents.flatMap(agent => agent.skills?.map(s => s.nameEN) || [])));
 
   const filteredAgents = filterSkill 
-    ? activeAgents.filter(agent => agent.skills.includes(filterSkill))
+    ? activeAgents.filter(agent => agent.skills?.some(s => s.nameEN === filterSkill))
     : activeAgents;
 
   return (
