@@ -10,11 +10,16 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Git Safety Config
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v5
