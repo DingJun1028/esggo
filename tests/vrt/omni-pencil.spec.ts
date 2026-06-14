@@ -9,6 +9,7 @@ test.describe('OmniPencilCanvas Visual Regression', () => {
 
   test('tool palette snapshot', async ({ page }) => {
     await page.goto('http://localhost:3001/esggo-omnipencil');
+    await page.waitForSelector('text=5T TRUST COMPLIANCE WORKSPACE', { timeout: 10000 });
     const palette = page.locator('header').first();
     await palette.waitFor({ state: 'visible' });
     expect(await palette.screenshot()).toMatchSnapshot('omni-pencil-tools.png');
@@ -16,6 +17,7 @@ test.describe('OmniPencilCanvas Visual Regression', () => {
 
   test('layer panel snapshot', async ({ page }) => {
     await page.goto('http://localhost:3001/esggo-omnipencil');
+    await page.waitForSelector('text=5T TRUST COMPLIANCE WORKSPACE', { timeout: 10000 });
     const layers = page.locator('main').first();
     await layers.waitFor({ state: 'visible' });
     expect(await layers.screenshot()).toMatchSnapshot('omni-pencil-layers.png');
