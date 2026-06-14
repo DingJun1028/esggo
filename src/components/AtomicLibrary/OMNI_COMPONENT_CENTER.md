@@ -715,38 +715,40 @@ TRANSCENDENT & MATRIX_COMPLETION_PASS
 
 以下原子/分子元件已與平台功能共同完成終極矩陣註記，成為 ESGGO 全域 UI/UX 的標準構件。
 
-| 類別           | 元件名稱                 | 主要功能                              | 5T 狀態                 | 溯源路徑                                    | 終態註記            |
-| :------------- | :----------------------- | :------------------------------------ | :---------------------- | :------------------------------------------ | :------------------ |
-| UI Atom        | `OmniButton`             | 統一按鈕、禁用、載入與觸控回饋。      | Traceable / Tangible    | `components/ui/omni/OmniButton.tsx`         | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniBadge`              | 狀態徽章、警示、成功、輪廓樣式。      | Traceable / Tangible    | `components/ui/omni/OmniBadge.tsx`          | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniInput`              | 表單輸入、錯誤提示與一致性邊界。      | Traceable / Tangible    | `components/ui/omni/OmniInput.tsx`          | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniTextarea`           | 多行文字輸入與報告欄位編輯。          | Traceable / Tangible    | `components/ui/omni/OmniTextarea.tsx`       | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniToggle`             | 布林開關與功能啟停。                  | Traceable / Tangible    | `components/ui/omni/OmniToggle.tsx`         | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniModal`              | 通用對話框、表單與確認流程。          | Traceable / Tangible    | `components/ui/omni/OmniModal.tsx`          | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniProgress`           | 任務進度、上傳進度與流程狀態。        | Trackable / Tangible    | `components/ui/omni/OmniProgress.tsx`       | `MATRIX_REGISTERED` |
-| UI Atom        | `OmniStatusDot`          | 連線、存活與狀態燈號。                | Trackable / Tangible    | `components/ui/omni/OmniStatusDot.tsx`      | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniForm`               | 表單容器、驗證與提交流程。            | Traceable / Transparent | `components/ui/omni/OmniForm.tsx`           | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniDB`                 | 資料庫狀態、連線與資料脈絡展示。      | Traceable / Transparent | `components/ui/omni/OmniDB.tsx`             | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniChart`              | 圖表與指標視覺化。                    | Traceable / Tangible    | `components/ui/omni/OmniChart.tsx`          | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniSearchBar`          | 全站搜尋、過濾與意圖輸入。            | Traceable / Tangible    | `components/omni/OmniSearchBar.tsx`         | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniMatrixInput`        | 多維度矩陣資料輸入與映射。            | Traceable / Transparent | `components/omni/OmniMatrixInput.tsx`       | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniKpiCard`            | KPI 卡片、趨勢與狀態摘要。            | Trackable / Tangible    | `components/omni/OmniKpiCard.tsx`           | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniBookCaseRegistry`   | 元件書櫃與知識資產展示。              | Traceable / Transparent | `components/omni/OmniBookCaseRegistry.tsx`  | `MATRIX_REGISTERED` |
-| UI Molecule    | `NoteSearch`             | 永續報告與知識庫深度搜尋。            | Traceable / Tangible    | `components/omni/NoteSearch.tsx`            | `MATRIX_REGISTERED` |
-| UI Molecule    | `AiStyleSelector`        | AI 撰寫風格選擇與語氣控制。           | Traceable / Tangible    | `components/omni/AiStyleSelector.tsx`       | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniCardsDemo`          | 卡片樣式展示與設計語彙庫。            | Tangible / Trackable    | `components/omni/OmniCardsDemo.tsx`         | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniAgentCard`          | 單一代理能力、狀態與任務展示。        | Traceable / Trackable   | `components/omni/OmniAgentCard.tsx`         | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniThinkingChain`      | 代理推理鏈與透明思考展示。            | Traceable / Transparent | `components/omni/OmniThinkingChain.tsx`     | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniLHubWidget`         | L-Hub 代理共識與委派監控。            | Traceable / Trackable   | `components/ui/omni/OmniLHubWidget.tsx`     | `MATRIX_REGISTERED` |
-| UI Molecule    | `OmniAllianceHub`        | 多代理結盟、任務分配與協作。          | Traceable / Trackable   | `components/omni/OmniAllianceHub.tsx`       | `MATRIX_REGISTERED` |
-| Security UI    | `ShieldOfAbsoluteTruth`  | 數據封印與防篡改徽章。                | Trustworthy / Tangible  | `components/omni/ShieldOfAbsoluteTruth.tsx` | `MATRIX_REGISTERED` |
-| Security UI    | `OmniJulesPassiveGuard`  | Jules 被動防禦與因果協議展示。        | Trustworthy / Trackable | `components/omni/OmniJulesPassiveGuard.tsx` | `MATRIX_REGISTERED` |
-| Security UI    | `OmniAuthOmni`           | 身份、權限與高階操作入口。            | Trustworthy / Traceable | `components/omni/OmniAuthOmni.tsx`          | `MATRIX_REGISTERED` |
-| Security UI    | `Protocol5TStrip`        | 5T 協議狀態橫幅與快速檢查。           | Traceable / Transparent | `components/omni/Protocol5TStrip.tsx`       | `MATRIX_REGISTERED` |
-| Integration UI | `HermesEvolutionPanel`   | Hermes 資料管線演化與效能面板。       | Traceable / Trackable   | `components/omni/HermesEvolutionPanel.tsx`  | `MATRIX_REGISTERED` |
-| Integration UI | `ApolloStudioConsole`    | GraphQL/Apollo 整合與 API 測試終端。  | Traceable / Transparent | `components/omni/ApolloStudioConsole.tsx`   | `MATRIX_REGISTERED` |
-| Factory UI     | `OmniFactory DSL 提交器` | 以 DSL 產生、驗證、封印並發布元件。   | Traceable / Trustworthy | `app/omni-factory/page.tsx`                 | `MATRIX_REGISTERED` |
-| Audit UI       | `AuditCenterPage`        | 不可篡改日誌、hash lock 與 RLS 稽核。 | Traceable / Trustworthy | `app/dashboard/audit/page.tsx`              | `MATRIX_REGISTERED` |
+| 類別           | 元件名稱                 | 主要功能                                  | 5T 狀態                 | 溯源路徑                                    | 終態註記            |
+| :------------- | :----------------------- | :---------------------------------------- | :---------------------- | :------------------------------------------ | :------------------ |
+| UI Atom        | `OmniButton`             | 統一按鈕、禁用、載入與觸控回饋。          | Traceable / Tangible    | `components/ui/omni/OmniButton.tsx`         | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniBadge`              | 狀態徽章、警示、成功、輪廓樣式。          | Traceable / Tangible    | `components/ui/omni/OmniBadge.tsx`          | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniInput`              | 表單輸入、錯誤提示與一致性邊界。          | Traceable / Tangible    | `components/ui/omni/OmniInput.tsx`          | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniTextarea`           | 多行文字輸入與報告欄位編輯。              | Traceable / Tangible    | `components/ui/omni/OmniTextarea.tsx`       | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniToggle`             | 布林開關與功能啟停。                      | Traceable / Tangible    | `components/ui/omni/OmniToggle.tsx`         | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniModal`              | 通用對話框、表單與確認流程。              | Traceable / Tangible    | `components/ui/omni/OmniModal.tsx`          | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniProgress`           | 任務進度、上傳進度與流程狀態。            | Trackable / Tangible    | `components/ui/omni/OmniProgress.tsx`       | `MATRIX_REGISTERED` |
+| UI Atom        | `OmniStatusDot`          | 連線、存活與狀態燈號。                    | Trackable / Tangible    | `components/ui/omni/OmniStatusDot.tsx`      | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniForm`               | 表單容器、驗證與提交流程。                | Traceable / Transparent | `components/ui/omni/OmniForm.tsx`           | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniDB`                 | 資料庫狀態、連線與資料脈絡展示。          | Traceable / Transparent | `components/ui/omni/OmniDB.tsx`             | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniChart`              | 圖表與指標視覺化。                        | Traceable / Tangible    | `components/ui/omni/OmniChart.tsx`          | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniSearchBar`          | 全站搜尋、過濾與意圖輸入。                | Traceable / Tangible    | `components/omni/OmniSearchBar.tsx`         | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniMatrixInput`        | 多維度矩陣資料輸入與映射。                | Traceable / Transparent | `components/omni/OmniMatrixInput.tsx`       | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniKpiCard`            | KPI 卡片、趨勢與狀態摘要。                | Trackable / Tangible    | `components/omni/OmniKpiCard.tsx`           | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniBookCaseRegistry`   | 元件書櫃與知識資產展示。                  | Traceable / Transparent | `components/omni/OmniBookCaseRegistry.tsx`  | `MATRIX_REGISTERED` |
+| UI Molecule    | `NoteSearch`             | 永續報告與知識庫深度搜尋。                | Traceable / Tangible    | `components/omni/NoteSearch.tsx`            | `MATRIX_REGISTERED` |
+| UI Molecule    | `AiStyleSelector`        | AI 撰寫風格選擇與語氣控制。               | Traceable / Tangible    | `components/omni/AiStyleSelector.tsx`       | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniCardsDemo`          | 卡片樣式展示與設計語彙庫。                | Tangible / Trackable    | `components/omni/OmniCardsDemo.tsx`         | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniAgentCard`          | 單一代理能力、狀態與任務展示。            | Traceable / Trackable   | `components/omni/OmniAgentCard.tsx`         | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniThinkingChain`      | 代理推理鏈與透明思考展示。                | Traceable / Transparent | `components/omni/OmniThinkingChain.tsx`     | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniLHubWidget`         | L-Hub 代理共識與委派監控。                | Traceable / Trackable   | `components/ui/omni/OmniLHubWidget.tsx`     | `MATRIX_REGISTERED` |
+| UI Molecule    | `OmniAllianceHub`        | 多代理結盟、任務分配與協作。              | Traceable / Trackable   | `components/omni/OmniAllianceHub.tsx`       | `MATRIX_REGISTERED` |
+| Security UI    | `ShieldOfAbsoluteTruth`  | 數據封印與防篡改徽章。                    | Trustworthy / Tangible  | `components/omni/ShieldOfAbsoluteTruth.tsx` | `MATRIX_REGISTERED` |
+| Security UI    | `OmniJulesPassiveGuard`  | Jules 被動防禦與因果協議展示。            | Trustworthy / Trackable | `components/omni/OmniJulesPassiveGuard.tsx` | `MATRIX_REGISTERED` |
+| Security UI    | `OmniAuthOmni`           | 身份、權限與高階操作入口。                | Trustworthy / Traceable | `components/omni/OmniAuthOmni.tsx`          | `MATRIX_REGISTERED` |
+| Security UI    | `Protocol5TStrip`        | 5T 協議狀態橫幅與快速檢查。               | Traceable / Transparent | `components/omni/Protocol5TStrip.tsx`       | `MATRIX_REGISTERED` |
+| Integration UI | `HermesEvolutionPanel`   | Hermes 資料管線演化與效能面板。           | Traceable / Trackable   | `components/omni/HermesEvolutionPanel.tsx`  | `MATRIX_REGISTERED` |
+| Integration UI | `ApolloStudioConsole`    | GraphQL/Apollo 整合與 API 測試終端。      | Traceable / Transparent | `components/omni/ApolloStudioConsole.tsx`   | `MATRIX_REGISTERED` |
+| Factory UI     | `OmniFactory DSL 提交器` | 以 DSL 產生、驗證、封印並發布元件。       | Traceable / Trustworthy | `app/omni-factory/page.tsx`                 | `MATRIX_REGISTERED` |
+| Audit UI       | `AuditCenterPage`        | 不可篡改日誌、hash lock 與 RLS 稽核。     | Traceable / Trustworthy | `app/dashboard/audit/page.tsx`              | `MATRIX_REGISTERED` |
+| Feature UI     | `OmniNotesWorkspace`     | 萬能筆記、Markdown 與自發性任務追蹤看板。 | Traceable / Trackable   | `components/omni/OmniNotesWorkspace.tsx`    | `MATRIX_REGISTERED` |
+| Page Feature   | `OmniNotesPage`          | 萬能筆記頁面樞紐與 5T 雙向同步入口。      | Traceable / Transparent | `app/omni-notes/page.tsx`                   | `MATRIX_REGISTERED` |
 
 ---
 

@@ -7,13 +7,13 @@ import TurndownService from 'turndown';
 export const convertHtmlToPdf = async (htmlContent: string, filename: string = 'document.pdf') => {
   const element = document.createElement('div');
   element.innerHTML = htmlContent; // html2pdf 可以直接從 HTML 字符串生成
-  
+
   const options = {
     margin: 1,
     filename: filename,
-    image: { type: 'jpeg', quality: 0.98 },
+    image: { type: 'jpeg' as const, quality: 0.98 },
     html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+    jsPDF: { unit: 'in' as const, format: 'letter', orientation: 'portrait' as const },
   };
 
   try {
@@ -30,26 +30,33 @@ export const convertHtmlToPdf = async (htmlContent: string, filename: string = '
 };
 
 // DOCX 轉換
-export const convertHtmlToDocx = async (htmlContent: string, filename: string = 'document.docx') => {
+export const convertHtmlToDocx = async (
+  htmlContent: string,
+  filename: string = 'document.docx'
+) => {
   // DOCX 轉換比較複雜，因為 docx 庫不是直接從 HTML 轉換。
   // 這裡需要將 HTML 內容轉換為 DOCX 庫的結構。
   // 為了簡化，目前只將純文本內容放入 DOCX。更完善的轉換需要更複雜的解析。
   const doc = new Document({
-    sections: [{
-      properties: {},
-      children: [
-        new Paragraph({
-          children: [
-            new TextRun(htmlContent.replace(/<[^>]*>/g, '')), // 暫時只提取純文本
-          ],
-        }),
-      ],
-    }],
+    sections: [
+      {
+        properties: {},
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun(htmlContent.replace(/<[^>]*>/g, '')), // 暫時只提取純文本
+            ],
+          }),
+        ],
+      },
+    ],
   });
 
   try {
     const buffer = await Packer.toBuffer(doc);
-    const blob = new Blob([buffer as unknown as BlobPart], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const blob = new Blob([buffer as unknown as BlobPart], {
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = filename;
