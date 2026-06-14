@@ -54,6 +54,8 @@
     "axios": "^1.17.0",
     "browser-use-sdk": "^3.8.4",
     "cheerio": "^1.2.0",
+    "pdfjs-dist": "^4.10.38",
+    "picocolors": "^1.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "commander": "^11.1.0",
