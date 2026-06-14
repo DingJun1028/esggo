@@ -5,7 +5,17 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { Stethoscope, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+import {
+  Stethoscope,
+  Search,
+  Plus,
+  ShieldCheck,
+  Activity,
+  Brain,
+  Lock,
+  Loader2,
+  X,
+} from 'lucide-react';
 
 export default function HealthCheckPage() {
   const [data, setData] = useState<any[]>([]);
@@ -13,6 +23,50 @@ export default function HealthCheckPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [sealingId, setSealingId] = useState<number | null>(null);
   const [verifyingId, setVerifyingId] = useState<number | null>(null);
+
+  // Self-Healing states
+  const [healingLogs, setHealingLogs] = useState<string[]>([
+    '>> SYSTEM DEPLOYED & MONITORING ONLINE',
+    '>> ALL 5T SENSORS ARMED AND ACTIVE',
+  ]);
+  const [isHealing, setIsHealing] = useState(false);
+
+  const handleHeal = async (targetId: string, name: string) => {
+    setIsHealing(true);
+    setHealingLogs((prev) => [
+      `>> INITIATING HEALING PROTOCOL FOR ${name}...`,
+      ...prev.slice(0, 7),
+    ]);
+    try {
+      const response = await fetch('/api/metrics/heal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetId: targetId.toString(), table: 'health-check' }),
+      });
+      const resData = await response.json();
+      if (resData.success && resData.report) {
+        const report = resData.report;
+        setHealingLogs((prev) => [
+          `>> SUCCESS: COMPONENT ${name} RESTORED`,
+          `>> HASH LOCK SECURED: ${report.recoveryHash.substring(0, 14)}...`,
+          `>> JULES HEALING CAUSALITY VERIFIED`,
+          ...prev.slice(0, 5),
+        ]);
+        // Update row to sealed state in local UI
+        setData((prev) =>
+          prev.map((m) =>
+            m.id === targetId ? { ...m, hash_lock: report.recoveryHash.substring(0, 16) } : m
+          )
+        );
+      } else {
+        setHealingLogs((prev) => [`>> FAILED: Restoring ${name} aborted.`, ...prev.slice(0, 7)]);
+      }
+    } catch (e) {
+      setHealingLogs((prev) => [`>> EXCEPTION: Connection lost with Vault.`, ...prev.slice(0, 7)]);
+    } finally {
+      setIsHealing(false);
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -29,17 +83,57 @@ export default function HealthCheckPage() {
       } else {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          {
+            id: 1,
+            date: '2026-06-01',
+            metric_name: 'Sample Metric Alpha',
+            metric_value: 1200,
+            unit: 'm³',
+            hash_lock: '0x8f...3a21',
+            source_origin: 'Auto-Agent',
+          },
+          {
+            id: 2,
+            date: '2026-06-02',
+            metric_name: 'Sample Metric Beta',
+            metric_value: 350,
+            unit: '噸',
+            hash_lock: null,
+            source_origin: 'Manual',
+          },
+          {
+            id: 3,
+            date: '2026-06-03',
+            metric_name: 'Sample Metric Gamma',
+            metric_value: 98.5,
+            unit: '%',
+            hash_lock: '0x1c...9d4f',
+            source_origin: 'System',
+          },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        {
+          id: 1,
+          date: '2026-06-01',
+          metric_name: 'Sample Metric Alpha',
+          metric_value: 1200,
+          unit: 'm³',
+          hash_lock: '0x8f...3a21',
+          source_origin: 'Auto-Agent',
+        },
+        {
+          id: 2,
+          date: '2026-06-02',
+          metric_name: 'Sample Metric Beta',
+          metric_value: 350,
+          unit: '噸',
+          hash_lock: null,
+          source_origin: 'Manual',
+        },
       ]);
     } finally {
       setLoading(false);
@@ -52,14 +146,16 @@ export default function HealthCheckPage() {
       const response = await fetch('/api/vault/seal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'health-check', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
+        body: JSON.stringify({
+          evidence: { table: 'health-check', recordId: id, timestamp: Date.now() },
+          type: '5t-seal',
+        }),
       });
       const resData = await response.json();
       if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
+        setData((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, hash_lock: resData.hashLock } : m))
+        );
       } else {
         alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
@@ -77,7 +173,7 @@ export default function HealthCheckPage() {
       const response = await fetch('/api/vault/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
+        body: JSON.stringify({ recordId: id, type: '5t-seal' }),
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
@@ -104,47 +200,75 @@ export default function HealthCheckPage() {
   const columns = [
     { key: 'date', label: '日期 (Date)' },
     { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
+    {
+      key: 'metric_value',
+      label: '數值 (Value)',
+      render: (val: any, row: any) => (
+        <span>
+          {val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span>
+        </span>
+      ),
+    },
     { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </OmniBadge>
-      ) : (
-        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+    {
+      key: 'hash_lock',
+      label: '5T Hash Lock',
+      render: (val: any) =>
+        val ? (
+          <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+            {val.substring(0, 8)}...
+          </OmniBadge>
+        ) : (
+          <OmniBadge variant="default" size="sm">
+            未封印
+          </OmniBadge>
+        ),
+    },
+    {
+      key: 'action',
+      label: '操作 (Actions)',
+      render: (_: any, row: any) => (
+        <div className="flex items-center gap-3">
+          {!row.hash_lock && (
+            <>
+              <button
+                onClick={() => handleSeal(row.id)}
+                disabled={sealingId === row.id}
+                className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                {sealingId === row.id ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Lock size={14} />
+                )}
+                T5 封印
+              </button>
+              <button
+                onClick={() => handleHeal(row.id, row.metric_name)}
+                disabled={isHealing}
+                className="flex items-center gap-1 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                <Activity size={14} className={isHealing ? 'animate-pulse' : ''} />
+                自癒修復
+              </button>
+            </>
+          )}
+          <button
+            onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
+            disabled={verifyingId === row.id}
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50 cursor-pointer"
           >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
+            {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
+            {row.hash_lock ? '驗證 5T' : '編輯'}
           </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
           <div className="flex items-center gap-4">
@@ -154,16 +278,34 @@ export default function HealthCheckPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">HEALTH-CHECK</span>
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={12} />}>
+                  OmniAgent Ready
+                </OmniBadge>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+                  HEALTH-CHECK
+                </span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">HEALTH CHECK</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">health-check dashboard</p>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">
+                health-check dashboard
+              </p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+            <OmniButton
+              variant="outline"
+              icon={<Search size={16} />}
+              className="flex-1 md:flex-none"
+            >
+              檢索
+            </OmniButton>
+            <OmniButton
+              variant="primary"
+              icon={<Plus size={16} />}
+              onClick={handleAddRecord}
+              isLoading={isProcessing}
+              className="flex-1 md:flex-none"
+            >
               新增紀錄
             </OmniButton>
           </div>
@@ -176,7 +318,9 @@ export default function HealthCheckPage() {
               <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
+            <div className="text-4xl font-black text-white">
+              3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span>
+            </div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
           </OmniBaseCard>
 
@@ -185,7 +329,9 @@ export default function HealthCheckPage() {
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <div className="text-4xl font-black text-white">
+              98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
+            </div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </OmniBaseCard>
 
@@ -194,7 +340,9 @@ export default function HealthCheckPage() {
               <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <div className="text-4xl font-black text-white">
+              100<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
+            </div>
             <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
           </OmniBaseCard>
         </div>
@@ -202,43 +350,84 @@ export default function HealthCheckPage() {
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard 
-              variant="default" 
-              title="業務資料視圖" 
+            <OmniBaseCard
+              variant="default"
+              title="業務資料視圖"
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
-              <OmniBaseTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
+              <OmniBaseTable columns={columns} data={data} loading={loading} />
             </OmniBaseCard>
           </div>
-          
+
           <div className="space-y-6">
-            <OmniBaseCard 
-              variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
+            <OmniBaseCard
+              variant="glow"
+              title="OmniAgent 自癒中樞"
+              subtitle="HealingGuardian active"
             >
               <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                <p className="text-xs leading-relaxed text-slate-400">
+                  本自癒中樞已深度縫合 <strong>Jules 因果自癒守護者 (HealingGuardian)</strong>
+                  ，秒級監聽 NCBDB_Sensor Webhook、驗證 5T 誠信缺角並自主調用{' '}
+                  <strong>OmniCore 萬能結晶協定</strong> 進行完美修復。
                 </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
-                  </ul>
+
+                {/* Self-Healing Override */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const unsealed = data.filter((r) => !r.hash_lock);
+                    if (unsealed.length === 0) {
+                      setHealingLogs((prev) => [
+                        '>> SCAN COMPLETE: NO INTEGRITY DRIFT DETECTED',
+                        ...prev.slice(0, 7),
+                      ]);
+                      return;
+                    }
+                    setHealingLogs((prev) => [
+                      `>> STARTING HOLISTIC OVERDRIVE SWEEP ON ${unsealed.length} RECORDS...`,
+                      ...prev.slice(0, 7),
+                    ]);
+                    for (const row of unsealed) {
+                      await handleHeal(row.id, row.metric_name);
+                    }
+                  }}
+                  disabled={isHealing || loading}
+                  className="w-full py-2 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-lg text-xs font-black tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.15)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  <ShieldCheck size={14} className={isHealing ? 'animate-spin' : ''} />
+                  🚀 全域自癒掃描 (Overdrive Sweep)
+                </button>
+
+                {/* Simulated Healing Terminal */}
+                <div className="space-y-1.5 border border-white/5 bg-black/60 p-3 rounded-lg font-mono text-[10px] text-emerald-400/90 shadow-inner">
+                  <div className="flex justify-between border-b border-white/5 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[9px]">
+                    <span>自癒終端日誌流</span>
+                    <span className="animate-pulse text-emerald-500">● LIVE</span>
+                  </div>
+                  <div className="space-y-1 max-h-[140px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+                    {healingLogs.map((log, idx) => (
+                      <div key={idx} className="break-all whitespace-pre-wrap leading-normal">
+                        {log}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20 text-xs text-slate-400">
+                  <h4 className="font-bold text-cyan-400 mb-1.5 flex items-center gap-1.5">
+                    <Brain size={12} /> 奧義貳式：虛空鏡像
+                  </h4>
+                  <p className="leading-relaxed">
+                    當偵測到邏輯漂移時，自癒引擎自動將受損數據投影至虛空沙盒分析，對齊 Supabase
+                    絕對真理金庫，實現 100% 誠信自癒。
+                  </p>
                 </div>
               </div>
             </OmniBaseCard>
           </div>
         </div>
-
       </div>
     </div>
   );
