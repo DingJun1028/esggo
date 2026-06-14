@@ -10,6 +10,7 @@ export { OmniBadge } from './atom/OmniBadge';
 export { OmniCard } from './atom/OmniCard';
 export { OmniIcon } from './atom/OmniIcon';
 export { OmniDivider } from './atom/OmniDivider';
+export { OmniWeather } from './atom/OmniWeather';
 
 // Molecule Components
 export { OmniFormField } from './molecule/OmniFormField';
@@ -38,4 +39,8 @@ export * from '../../types/omni-component';
 export * from '../../types/omni-assistant';
 
 // Factory
-export { ComponentBuilder, FactoryRegistry, RequirementSheetSchema } from '../../lib/factory/omni-factory-builder';
+export {
+  ComponentBuilder,
+  FactoryRegistry,
+  RequirementSheetSchema,
+} from '../../lib/factory/omni-factory-builder';

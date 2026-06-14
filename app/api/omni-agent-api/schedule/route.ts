@@ -17,6 +17,10 @@ import { pushTelegramAlert } from '@/lib/slack/telegram-gateway';
  * Security: Validates CRON_SECRET header for automated triggers.
  */
 
+function getQueryParam(req: NextRequest, key: string) {
+  return req.nextUrl.searchParams.get(key) || new URL(req.url).searchParams.get(key);
+}
+
 const VALID_MISSIONS = [
   'SYNC_OMNIBLUE_OMNITABLE',
   'EVIDENCE_AUDIT',
@@ -43,7 +47,7 @@ export async function POST(req: NextRequest) {
     const bodyMission = body ? (body as any).mission : undefined;
 
     const searchParams = req.nextUrl.searchParams;
-    const missionParam = searchParams.get('mission');
+    const missionParam = getQueryParam(req, 'mission');
     const mission = bodyMission || missionParam;
     const context = body ? (body as any).context : {};
     const cronSecret = body ? (body as any).cronSecret : undefined;
@@ -115,10 +119,11 @@ ${result.message || ''}`;
     return NextResponse.json({
       id: crypto.randomUUID(),
       status: 'success',
+      success: result.success,
+      mission,
       content: `Mission ${mission} completed successfully`,
       data: {
         scheduled: true,
-        mission,
         ...result,
       },
       timestamp: Date.now(),
@@ -161,7 +166,7 @@ ${result.message || ''}`;
 export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
-    const mission = searchParams.get('mission');
+    const mission = getQueryParam(req, 'mission');
     const authHeader = req.headers.get('Authorization');
     const cronSecret = authHeader ? authHeader.replace('Bearer ', '') : undefined;
 
@@ -229,10 +234,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       id: crypto.randomUUID(),
       status: 'success',
+      success: result.success,
+      mission,
       content: successMessage,
       data: {
         scheduled: true,
-        mission,
         ...result,
       },
       timestamp: Date.now(),

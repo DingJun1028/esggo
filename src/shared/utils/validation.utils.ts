@@ -31,32 +31,41 @@ export async function validateContent(
 ): Promise<ContentValidationResult> {
   const errors: string[] = [];
   const warnings: string[] = [];
-  
+
   const size = Buffer.isBuffer(content) ? content.length : Buffer.byteLength(content as string);
   const maxSize = options.maxSize || 10 * 1024 * 1024; // 預設 10MB
-  
+
   // 檢查大小
   if (size > maxSize) {
     errors.push(`Content size (${size} bytes) exceeds maximum (${maxSize} bytes)`);
   }
-  
+
   // 檢查類型
   if (options.allowedTypes && !options.allowedTypes.includes(contentType)) {
     errors.push(`Content type '${contentType}' is not allowed`);
   }
-  
+
   // 檢查內容是否為空
   if (size === 0) {
     errors.push('Content is empty');
   }
-  
+
+  // 檢查編碼
+  if (options.requireEncoding) {
+    try {
+      Buffer.from(content as Buffer | string);
+    } catch (error) {
+      errors.push(`Invalid content encoding: ${(error as Error).message}`);
+    }
+  }
+
   // 檢測潛在的惡意內容（基礎檢查）
   if (typeof content === 'string') {
     if (content.includes('<script>') || content.includes('javascript:')) {
       warnings.push('Potential XSS content detected');
     }
   }
-  
+
   return {
     valid: errors.length === 0,
     errors,
@@ -76,17 +85,17 @@ export function validateTag(tag: string): { valid: boolean; error?: string } {
   if (!tag || tag.trim().length === 0) {
     return { valid: false, error: 'Tag cannot be empty' };
   }
-  
+
   if (tag.length > 200) {
     return { valid: false, error: 'Tag is too long (max 200 characters)' };
   }
-  
+
   // 禁止特殊字符
   const invalidChars = /[<>{}[\]\\]/;
   if (invalidChars.test(tag)) {
     return { valid: false, error: 'Tag contains invalid characters' };
   }
-  
+
   return { valid: true };
 }
 
@@ -140,23 +149,20 @@ export function getMimeTypeCategory(mimeType: string): string | null {
 export const extendedValidators = {
   contentHash: z.string().regex(/^[a-f0-9]{64}$/i, 'Invalid SHA-256 hash'),
   uuid: z.string().uuid('Invalid UUID format'),
-  tag: z.string()
+  tag: z
+    .string()
     .min(1, 'Tag cannot be empty')
     .max(200, 'Tag is too long')
-    .refine(
-      (val) => !/[<>{}[\]\\]/.test(val),
-      'Tag contains invalid characters'
-    ),
-  mimeType: z.string().regex(
-    /^[a-z]+\/[a-z0-9\-\+\.]+$/i,
-    'Invalid MIME type format'
-  ),
-  base64: z.string().regex(
-    /^[A-Za-z0-9+/]*={0,2}$/,
-    'Invalid Base64 format'
-  ),
+    .refine((val) => !/[<>{}[\]\\]/.test(val), 'Tag contains invalid characters'),
+  mimeType: z.string().regex(/^[a-z]+\/[a-z0-9\-\+\.]+$/i, 'Invalid MIME type format'),
+  base64: z.string().regex(/^[A-Za-z0-9+/]*={0,2}$/, 'Invalid Base64 format'),
   url: z.string().url('Invalid URL format'),
-  ipAddress: z.string().regex(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/, 'Invalid IP address'),
+  ipAddress: z
+    .string()
+    .regex(
+      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
+      'Invalid IP address'
+    ),
   positiveNumber: z.number().positive('Must be a positive number'),
   percentage: z.number().min(0).max(100, 'Percentage must be between 0 and 100'),
   confidence: z.number().min(0).max(1, 'Confidence score must be between 0 and 1'),
@@ -185,7 +191,7 @@ export async function validateBatch<T>(
 ): Promise<BatchValidationResult<T>> {
   const valid: T[] = [];
   const invalid: Array<{ item: T; errors: string[] }> = [];
-  
+
   for (const item of items) {
     const result = await validator(item);
     if (result.valid) {
@@ -197,7 +203,7 @@ export async function validateBatch<T>(
       });
     }
   }
-  
+
   return {
     valid,
     invalid,
@@ -226,7 +232,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(
   allowedKeys: (keyof T)[]
 ): Partial<T> {
   const sanitized: Partial<T> = {};
-  
+
   for (const key of allowedKeys) {
     if (key in obj) {
       const value = obj[key];
@@ -237,7 +243,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(
       }
     }
   }
-  
+
   return sanitized;
 }
 
@@ -258,10 +264,7 @@ export function getFileExtension(filename: string): string {
   return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : '';
 }
 
-export function isAllowedFileExtension(
-  filename: string,
-  allowedExtensions: string[]
-): boolean {
+export function isAllowedFileExtension(filename: string, allowedExtensions: string[]): boolean {
   const ext = getFileExtension(filename);
   return allowedExtensions.includes(ext);
 }
