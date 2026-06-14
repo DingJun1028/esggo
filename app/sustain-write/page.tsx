@@ -18,6 +18,11 @@ import {
   Undo2,
   Redo2,
   Wand2,
+  Search,
+  Plus,
+  StickyNote,
+  Trash2,
+  ArrowRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
@@ -29,6 +34,7 @@ import {
 import OmniSustainWriteEditor from '@/components/omni/OmniSustainWriteEditor';
 import { useSustainWriteStore } from '@/store/useSustainWriteStore';
 import OmniEvidenceUploader from '@/components/omni/OmniEvidenceUploader';
+import { useOmniNotesStore } from '@/store/useOmniNotesStore';
 
 const TRAITS_POOL = [
   '製造業',
@@ -69,6 +75,12 @@ export default function SustainWritePage() {
   const [uploadedEvidences, setUploadedEvidences] = useState<
     Record<string, { name: string; url: string; hash: string }>
   >({});
+
+  // OmniNotes Integration States
+  const editorRef = React.useRef<any>(null);
+  const { notes: omniNotes } = useOmniNotesStore();
+  const [noteSearchQuery, setNoteSearchQuery] = useState('');
+  const [noteFilterType, setNoteFilterType] = useState<string>('all');
 
   useEffect(() => {
     initData('default');
@@ -603,6 +615,7 @@ export default function SustainWritePage() {
                       )}
 
                       <OmniSustainWriteEditor
+                        ref={editorRef}
                         value={generatedContent[currentChapterId] || ''}
                         onChange={(val: string) =>
                           updateContent(
@@ -629,6 +642,181 @@ export default function SustainWritePage() {
                           </span>
                         </p>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Right Sidebar: OmniNotes 5T Materials Panel */}
+                  <div className="w-full lg:w-80 flex-shrink-0 bg-slate-900/45 backdrop-blur-md border border-white/10 rounded-xl p-4 space-y-4">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <h3 className="text-white font-bold text-sm flex items-center gap-2">
+                        <StickyNote className="text-cyan-400" size={16} />
+                        萬能筆記 5T 素材庫
+                      </h3>
+                      <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full">
+                        {omniNotes.length} 筆
+                      </span>
+                    </div>
+
+                    {/* Filter and Search */}
+                    <div className="space-y-2">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={noteSearchQuery}
+                          onChange={(e) => setNoteSearchQuery(e.target.value)}
+                          placeholder="搜尋筆記內容..."
+                          className="w-full bg-black/40 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
+                        />
+                        <Search className="absolute left-2.5 top-2.5 text-slate-500" size={12} />
+                      </div>
+
+                      {/* Type Pills */}
+                      <div className="flex flex-wrap gap-1">
+                        <button
+                          onClick={() => setNoteFilterType('all')}
+                          className={cn(
+                            'px-2 py-1 rounded text-[10px] font-bold border transition-colors',
+                            noteFilterType === 'all'
+                              ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+                              : 'bg-black/30 border-transparent text-slate-400 hover:text-slate-200'
+                          )}
+                        >
+                          全部
+                        </button>
+                        {['log', 'idea', 'meeting', 'task', 'research', 'knowledge'].map((type) => (
+                          <button
+                            key={type}
+                            onClick={() => setNoteFilterType(type)}
+                            className={cn(
+                              'px-2 py-1 rounded text-[10px] font-bold border transition-colors',
+                              noteFilterType === type
+                                ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+                                : 'bg-black/30 border-transparent text-slate-400 hover:text-slate-200'
+                            )}
+                          >
+                            {type === 'log'
+                              ? '日誌'
+                              : type === 'idea'
+                              ? '靈感'
+                              : type === 'meeting'
+                              ? '會議'
+                              : type === 'task'
+                              ? '任務'
+                              : type === 'research'
+                              ? '研究'
+                              : '知識'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Notes List */}
+                    <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+                      {omniNotes.filter((note) => {
+                        const matchesQuery = note.content
+                          .toLowerCase()
+                          .includes(noteSearchQuery.toLowerCase());
+                        const matchesType =
+                          noteFilterType === 'all' || note.type === noteFilterType;
+                        return matchesQuery && matchesType;
+                      }).length === 0 ? (
+                        <div className="text-center py-12 text-slate-500 border border-dashed border-white/5 rounded-xl">
+                          <StickyNote
+                            size={24}
+                            className="mx-auto mb-2 opacity-20 text-slate-500"
+                          />
+                          <p className="text-[11px]">無匹配的筆記素材</p>
+                        </div>
+                      ) : (
+                        omniNotes
+                          .filter((note) => {
+                            const matchesQuery = note.content
+                              .toLowerCase()
+                              .includes(noteSearchQuery.toLowerCase());
+                            const matchesType =
+                              noteFilterType === 'all' || note.type === noteFilterType;
+                            return matchesQuery && matchesType;
+                          })
+                          .map((note) => (
+                            <div
+                              key={note.id}
+                              className="bg-black/30 border border-white/5 rounded-xl p-3 hover:border-cyan-500/25 transition-all group"
+                            >
+                              <div className="flex justify-between items-center mb-2">
+                                <span
+                                  className={cn(
+                                    'text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded',
+                                    note.type === 'log'
+                                      ? 'bg-slate-500/10 text-slate-400 border border-slate-500/10'
+                                      : note.type === 'idea'
+                                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/10'
+                                      : note.type === 'meeting'
+                                      ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/10'
+                                      : note.type === 'task'
+                                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/10'
+                                      : note.type === 'research'
+                                      ? 'bg-purple-500/10 text-purple-400 border border-purple-500/10'
+                                      : 'bg-blue-500/10 text-blue-400 border border-blue-500/10'
+                                  )}
+                                >
+                                  {note.type === 'log'
+                                    ? '日誌'
+                                    : note.type === 'idea'
+                                    ? '靈感'
+                                    : note.type === 'meeting'
+                                    ? '會議'
+                                    : note.type === 'task'
+                                    ? '任務'
+                                    : note.type === 'research'
+                                    ? '研究'
+                                    : '知識'}
+                                </span>
+                                <span className="text-[9px] text-slate-500 font-mono">
+                                  {note.date}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed mb-3 break-words">
+                                {note.content}
+                              </p>
+                              <div className="flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (editorRef.current?.editorInstance) {
+                                      editorRef.current.editorInstance
+                                        .chain()
+                                        .focus()
+                                        .insertContent(`<p>${note.content}</p>`)
+                                        .run();
+                                    } else {
+                                      alert('請先在編輯器中點擊，以定位插入游標');
+                                    }
+                                  }}
+                                  className="flex-1 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 rounded px-2 py-1 text-[10px] font-bold text-cyan-400 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                                >
+                                  <Plus size={10} /> 插入游標
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const contextDataStr = `[筆記類型: ${note.type}, 內容: ${note.content}]`;
+                                    expandContentWithAI(
+                                      currentChapterId,
+                                      currentChapterName,
+                                      currentChapterOrder,
+                                      currentGriRefs,
+                                      `請參考以下 5T 萬能筆記素材，將其融入、修飾擴寫並補充至目前段落中，使其符合正式、專業的永續報告書規格：${contextDataStr}。確保符合 GRI 準則並排除多餘開場口吻。`
+                                    );
+                                  }}
+                                  disabled={isGeneratingAI[currentChapterId]}
+                                  className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 rounded px-2 py-1 text-[10px] font-bold text-amber-400 transition-colors flex items-center justify-center gap-1 disabled:opacity-50 cursor-pointer"
+                                >
+                                  <Sparkles size={10} /> AI 融入
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                      )}
                     </div>
                   </div>
                 </div>
