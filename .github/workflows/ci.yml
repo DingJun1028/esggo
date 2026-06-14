@@ -57,13 +57,34 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           SKIP_ENV_VALIDATION: 1
 
-      - name: Deploy to Render
+      - name: Deploy to Oracle VPS
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
-            curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"
-          else
-            echo "RENDER_DEPLOY_HOOK_URL not set, skipping deploy"
-          fi
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 161.118.248.180
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            echo "==== 📥 1. Pulling latest code from GitHub ===="
+            cd /var/www/esggo
+            git checkout main
+            git pull origin main
+            
+            echo "==== 📦 2. Installing dependencies ===="
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+            
+            echo "==== 🏗️ 3. Building Next.js production standalone ===="
+            NODE_OPTIONS=--max_old_space_size=4096 npm run build
+            
+            echo "==== 🚀 4. Hot Reload PM2 Servers ===="
+            pm2 reload esggo omniagent-gateway --update-env
+            pm2 save
+            
+            echo "==== 🩺 5. Running Health Check ===="
+            curl -fsS http://127.0.0.1:3000/ -I
+            curl -fsS http://127.0.0.1:8642/status
