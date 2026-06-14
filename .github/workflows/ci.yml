@@ -40,10 +40,10 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run lint
-        run: pnpm run lint || echo "Lint failed, but continuing..."
+        run: pnpm run lint || exit 1
 
       - name: Run typecheck
-        run: pnpm run typecheck || echo "Typecheck failed, but continuing..."
+        run: pnpm run typecheck || exit 1
 
       - name: Run tests with coverage
         run: |

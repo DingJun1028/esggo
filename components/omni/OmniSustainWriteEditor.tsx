@@ -1,4 +1,4 @@
-﻿import { useEditor, EditorContent, Editor } from '@tiptap/react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import React, { useEffect, useImperativeHandle, forwardRef, useState } from 'react';
@@ -16,6 +16,7 @@ import {
   Wand2,
   RefreshCcw,
   Lock,
+  FileDown,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -66,10 +67,41 @@ const ToolbarButton = ({ onClick, isActive = false, disabled = false, children, 
   </button>
 );
 
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
+const MenuBar = ({ editor, documentId }: { editor: Editor | null; documentId: string }) => {
+  const [isExporting, setIsExporting] = useState(false);
+
   if (!editor) {
     return null;
   }
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    try {
+      // @ts-ignore - html2pdf might not have strict TS definitions
+      const html2pdf = (await import('html2pdf.js')).default;
+      const element = editor.view.dom;
+
+      // Temporarily add styling for PDF export
+      const originalCssText = element.style.cssText;
+      element.style.padding = '40px';
+      element.style.fontFamily = 'Inter, sans-serif';
+
+      const opt = {
+        margin: 10,
+        filename: `ESG_Report_${documentId}_${new Date().toISOString().split('T')[0]}.pdf`,
+        image: { type: 'jpeg' as const, quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+      };
+
+      await html2pdf().set(opt).from(element).save();
+      element.style.cssText = originalCssText;
+    } catch (e) {
+      console.error('PDF Export failed:', e);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-1 p-2 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 rounded-t-lg">
@@ -134,11 +166,19 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         <Quote size={16} />
       </ToolbarButton>
       <div className="flex-grow" />
+
+      <ToolbarButton onClick={handleExportPDF} disabled={isExporting} title="Export to PDF">
+        <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+          {isExporting ? <RefreshCcw size={16} className="animate-spin" /> : <FileDown size={16} />}
+          <span className="text-[10px] hidden sm:inline-block font-bold">匯出 PDF</span>
+        </span>
+      </ToolbarButton>
+
       <ToolbarButton
         onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
         title="Clear Formatting"
       >
-        <span className="flex items-center gap-1">
+        <span className="flex items-center gap-1 text-amber-600 dark:text-amber-500">
           <RemoveFormatting size={16} />
           <span className="text-[10px] hidden sm:inline-block font-bold">清除格式</span>
         </span>
@@ -302,7 +342,7 @@ const OmniSustainWriteEditor = forwardRef<OmniSustainWriteEditorRef, OmniSustain
 
     return (
       <div className="border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden bg-white dark:bg-slate-950/50 shadow-sm focus-within:border-cyan-500/50 transition-colors relative group">
-        {editable && <MenuBar editor={editor} />}
+        {editable && <MenuBar editor={editor} documentId={documentId} />}
         {editor && editable && <AIBubbleMenu editor={editor} />}
         <EditorContent editor={editor} />
 

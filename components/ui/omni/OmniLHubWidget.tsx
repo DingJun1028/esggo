@@ -23,7 +23,7 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
     if (isProcessing) {
       setDisplayedInsights([]);
       setCurrentIndex(0);
-      return;
+      return undefined;
     }
 
     if (currentIndex < insights.length) {
@@ -33,6 +33,7 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
       }, 1000); // 模擬每條洞察需要 1 秒鐘的處理時間
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [currentIndex, insights, isProcessing]);
 
   return (
