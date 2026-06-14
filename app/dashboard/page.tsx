@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { OmniTable, OmniTableDataRow } from '@/components/omni/OmniTable';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniCard } from '@/components/omni/OmniCard';
+import { OmniWeather } from '@/components/ui/atom/OmniWeather';
 import { useRouter } from 'next/navigation';
 import { RecordLifecycleStatus, AttentionStatus } from '@/shared-types/status';
 import {
@@ -104,11 +105,12 @@ export default function DashboardPage() {
               (透明)、Trustworthy (不可竄改) 與 Traceable (可溯源) 的至高標準。
             </p>
           </div>
-          <div className="flex flex-col items-end gap-1">
+          <div className="flex flex-col items-end gap-2">
             <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-md">
               <span className="text-xs text-slate-400 font-mono">ZKP 零知識證明封裝率</span>
               <span className="text-xl font-bold text-cyan-400">99.9%</span>
             </div>
+            <OmniWeather className="w-full md:w-auto min-w-[200px]" />
             <span className="text-[10px] text-slate-500 font-mono tracking-wider">
               確保資料具備 100% 不可篡改性
             </span>
