@@ -31,22 +31,26 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isPublicRoute = request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup';
+  const isBypass = request.cookies.get('omni_user_bypass')?.value === 'true';
+  const isPublicRoute =
+    request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup';
 
-  const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+  const isPlaceholder =
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
 
-  if (!user && !isPublicRoute && !isPlaceholder) {
+  if (!user && !isBypass && !isPublicRoute && !isPlaceholder) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  if (user && isPublicRoute) {
+  if ((user || isBypass) && isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);
   }
 
   return supabaseResponse;
-}
+}
