@@ -167,6 +167,42 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
+/** Generated Node Admin SDK operation action function for the 'UpsertUser' Mutation. Allow users to execute without passing in DataConnect. */
+export function upsertUser(
+  dc: DataConnect,
+  vars: UpsertUserVariables,
+  options?: OperationOptions
+): Promise<ExecuteOperationResponse<UpsertUserData>>;
+/** Generated Node Admin SDK operation action function for the 'UpsertUser' Mutation. Allow users to pass in custom DataConnect instances. */
+export function upsertUser(
+  vars: UpsertUserVariables,
+  options?: OperationOptions
+): Promise<ExecuteOperationResponse<UpsertUserData>>;
+
+/** Generated Node Admin SDK operation action function for the 'CreateTask' Mutation. Allow users to execute without passing in DataConnect. */
+export function createTask(
+  dc: DataConnect,
+  vars: CreateTaskVariables,
+  options?: OperationOptions
+): Promise<ExecuteOperationResponse<CreateTaskData>>;
+/** Generated Node Admin SDK operation action function for the 'CreateTask' Mutation. Allow users to pass in custom DataConnect instances. */
+export function createTask(
+  vars: CreateTaskVariables,
+  options?: OperationOptions
+): Promise<ExecuteOperationResponse<CreateTaskData>>;
+
+/** Generated Node Admin SDK operation action function for the 'UpdateTask' Mutation. Allow users to execute without passing in DataConnect. */
+export function updateTask(
+  dc: DataConnect,
+  vars: UpdateTaskVariables,
+  options?: OperationOptions
+): Promise<ExecuteOperationResponse<UpdateTaskData>>;
+/** Generated Node Admin SDK operation action function for the 'UpdateTask' Mutation. Allow users to pass in custom DataConnect instances. */
+export function updateTask(
+  vars: UpdateTaskVariables,
+  options?: OperationOptions
+): Promise<ExecuteOperationResponse<UpdateTaskData>>;
+
 /** Generated Node Admin SDK operation action function for the 'ListTasks' Query. Allow users to execute without passing in DataConnect. */
 export function listTasks(
   dc: DataConnect,
@@ -220,39 +256,3 @@ export function searchTask(
   vars?: SearchTaskVariables,
   options?: OperationOptions
 ): Promise<ExecuteOperationResponse<SearchTaskData>>;
-
-/** Generated Node Admin SDK operation action function for the 'UpsertUser' Mutation. Allow users to execute without passing in DataConnect. */
-export function upsertUser(
-  dc: DataConnect,
-  vars: UpsertUserVariables,
-  options?: OperationOptions
-): Promise<ExecuteOperationResponse<UpsertUserData>>;
-/** Generated Node Admin SDK operation action function for the 'UpsertUser' Mutation. Allow users to pass in custom DataConnect instances. */
-export function upsertUser(
-  vars: UpsertUserVariables,
-  options?: OperationOptions
-): Promise<ExecuteOperationResponse<UpsertUserData>>;
-
-/** Generated Node Admin SDK operation action function for the 'CreateTask' Mutation. Allow users to execute without passing in DataConnect. */
-export function createTask(
-  dc: DataConnect,
-  vars: CreateTaskVariables,
-  options?: OperationOptions
-): Promise<ExecuteOperationResponse<CreateTaskData>>;
-/** Generated Node Admin SDK operation action function for the 'CreateTask' Mutation. Allow users to pass in custom DataConnect instances. */
-export function createTask(
-  vars: CreateTaskVariables,
-  options?: OperationOptions
-): Promise<ExecuteOperationResponse<CreateTaskData>>;
-
-/** Generated Node Admin SDK operation action function for the 'UpdateTask' Mutation. Allow users to execute without passing in DataConnect. */
-export function updateTask(
-  dc: DataConnect,
-  vars: UpdateTaskVariables,
-  options?: OperationOptions
-): Promise<ExecuteOperationResponse<UpdateTaskData>>;
-/** Generated Node Admin SDK operation action function for the 'UpdateTask' Mutation. Allow users to pass in custom DataConnect instances. */
-export function updateTask(
-  vars: UpdateTaskVariables,
-  options?: OperationOptions
-): Promise<ExecuteOperationResponse<UpdateTaskData>>;
