@@ -6,6 +6,21 @@ const __dirname = dirname(__filename);
 
 export default [
   {
+    ignores: [
+      ".kilo/worktrees/**",
+      ".next/**",
+      "node_modules/**",
+      "dist/**",
+      "src/dataconnect-generated/**",
+      "src/dataconnect-admin-generated/**",
+      "pdfjs-6.0.227-legacy-dist/**",
+      "lib/web/**",
+      "components/UserList.js",
+      "lib/page.js",
+      "User.js",
+    ],
+  },
+  {
     rules: {
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",

@@ -111,7 +111,7 @@ export default function ${id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g,
 `;
 };
 
-console.log(\`Found \${pages.length} pages in navigation.ts\`);
+console.log(`Found ${pages.length} pages in navigation.ts`);
 
 let createdCount = 0;
 
@@ -127,10 +127,10 @@ pages.forEach(page => {
   }
 
   if (!fs.existsSync(targetFile)) {
-    fs.writeFileSync(targetFile, getTemplate(page.title, page.sub, page.icon, page.id));
-    console.log(\`Created: \${page.path}/page.tsx\`);
+    fs.writeFileSync(targetFile, getTemplate(page.title, page.sub, icon, id));
+    console.log(`Created: ${page.path}/page.tsx`);
     createdCount++;
   }
 });
 
-console.log(\`Done. Created \${createdCount} missing pages.\`);
+console.log(`Done. Created ${createdCount} missing pages.`);
