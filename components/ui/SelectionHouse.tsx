@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Search, ChevronRight, Globe, Users, Shield, Zap, LayoutGrid, List } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandInput, BrandButton } from '../brand';
 
@@ -54,24 +54,32 @@ export default function SelectionHouse({
     };
   }, [isOpen]);
 
+  // ⚡ Bolt Optimization: Hoist search.toLowerCase() and use useMemo to prevent O(N*M) recalculations on every render.
+  const displayCategories = useMemo(() => {
+    if (!search.trim()) {
+      return activeCategory === 'all'
+        ? categories
+        : categories.filter((c) => c.id === activeCategory);
+    }
+
+    const searchLower = search.toLowerCase();
+
+    const filtered = categories
+      .map((cat) => ({
+        ...cat,
+        items: cat.items.filter(
+          (item) =>
+            item.label.toLowerCase().includes(searchLower) ||
+            item.sub?.toLowerCase().includes(searchLower) ||
+            item.id.toLowerCase().includes(searchLower)
+        ),
+      }))
+      .filter((cat) => cat.items.length > 0);
+
+    return activeCategory === 'all' ? filtered : filtered.filter((c) => c.id === activeCategory);
+  }, [categories, search, activeCategory]);
+
   if (!isOpen && !mounted) return null;
-
-  const filteredCategories = categories
-    .map((cat) => ({
-      ...cat,
-      items: cat.items.filter(
-        (item) =>
-          item.label.toLowerCase().includes(search.toLowerCase()) ||
-          item.sub?.toLowerCase().includes(search.toLowerCase()) ||
-          item.id.toLowerCase().includes(search.toLowerCase())
-      ),
-    }))
-    .filter((cat) => cat.items.length > 0);
-
-  const displayCategories =
-    activeCategory === 'all'
-      ? filteredCategories
-      : filteredCategories.filter((c) => c.id === activeCategory);
 
   return (
     <div
