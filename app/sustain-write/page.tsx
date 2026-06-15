@@ -23,6 +23,9 @@ import {
   StickyNote,
   Trash2,
   ArrowRight,
+  Pin,
+  Loader2,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
@@ -35,6 +38,9 @@ import OmniSustainWriteEditor from '@/components/omni/OmniSustainWriteEditor';
 import { useSustainWriteStore } from '@/store/useSustainWriteStore';
 import OmniEvidenceUploader from '@/components/omni/OmniEvidenceUploader';
 import { useOmniNotesStore } from '@/store/useOmniNotesStore';
+import AppThemeSwitcher from '@/components/AppThemeSwitcher';
+import { logUserActivity } from '@/lib/telemetry';
+import { usePreferencesStore } from '@/usePreferencesStore';
 
 const TRAITS_POOL = [
   '製造業',
@@ -82,9 +88,75 @@ export default function SustainWritePage() {
   const [noteSearchQuery, setNoteSearchQuery] = useState('');
   const [noteFilterType, setNoteFilterType] = useState<string>('all');
 
+  // OmniNotes Custom Integrations
+  const [pinnedNotes, setPinnedNotes] = useState<Record<string, string[]>>({});
+  const [isRefining, setIsRefining] = useState<Record<string, boolean>>({});
+  const [showBlueprintBanner, setShowBlueprintBanner] = useState(true);
+  const [showPublishNotification, setShowPublishNotification] = useState(false);
+  const [showAuditSidebar, setShowAuditSidebar] = useState(false);
+
+  const togglePinNote = (noteId: string) => {
+    if (!currentChapterId) return;
+    setPinnedNotes((prev) => {
+      const currentPinned = prev[currentChapterId] || [];
+      const isPinned = currentPinned.includes(noteId);
+      const newPinned = isPinned
+        ? currentPinned.filter((id) => id !== noteId)
+        : [...currentPinned, noteId];
+      return { ...prev, [currentChapterId]: newPinned };
+    });
+  };
+
+  const handleRefineAndInsert = async (noteContent: string, noteId: string) => {
+    if (!editorRef.current?.editorInstance) {
+      alert('請先在編輯器中點擊，以定位插入游標');
+      return;
+    }
+
+    setIsRefining((prev) => ({ ...prev, [noteId]: true }));
+    try {
+      const res = await fetch('/api/ai/expand', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyId: 'default',
+          chapterName: currentChapterName,
+          content: '', // Empty start content so it only returns the refined version
+          prompt: `請將以下日常/草稿筆記，潤飾改寫成一段正式、流暢、符合 GRI 標準的 ESG 報告段落。直接輸出改寫後的內容，不需任何客套話、解釋或引言：\n\n"${noteContent}"`,
+          targetWordCount: 200,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Refinement failed');
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error('Failed to get stream reader');
+
+      const editor = editorRef.current.editorInstance;
+      editor.chain().focus().run();
+
+      const decoder = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        editor.chain().insertContent(chunk).run();
+      }
+    } catch (err) {
+      console.error('Refinement failed:', err);
+      alert('AI 潤飾失敗，請重試');
+    } finally {
+      setIsRefining((prev) => ({ ...prev, [noteId]: false }));
+    }
+  };
+
+  const { syncWithBackend } = usePreferencesStore();
+
   useEffect(() => {
     initData('default');
-  }, [initData]);
+    syncWithBackend();
+  }, [initData, syncWithBackend]);
 
   const currentChapter = activeTemplate?.chapters[activeChapterIndex] || null;
   const currentChapterId = currentChapter ? `chapter-${activeChapterIndex}` : 'main-chapter';
@@ -134,9 +206,11 @@ export default function SustainWritePage() {
   const toggleTrait = (trait: string) => {
     if (selectedTraits.includes(trait)) {
       setSelectedTraits((prev) => prev.filter((t) => t !== trait));
+      logUserActivity('sustainwrite_toggle_trait_remove', { trait });
     } else {
       if (selectedTraits.length < 3) {
         setSelectedTraits((prev) => [...prev, trait]);
+        logUserActivity('sustainwrite_toggle_trait_add', { trait });
       }
     }
   };
@@ -144,22 +218,29 @@ export default function SustainWritePage() {
   const handleAiAnalysis = () => {
     if (selectedTraits.length === 0) return;
     setIsAiAnalyzing(true);
+    logUserActivity('sustainwrite_ai_profile_start', { traits: selectedTraits });
     // Simulate AI thinking time for effect
     setTimeout(() => {
       const template = aiTemplateSelector(selectedTraits);
       setActiveTemplate(template);
       setIsAiAnalyzing(false);
+      logUserActivity('sustainwrite_ai_profile_complete', { templateName: template?.name });
     }, 1500);
   };
-
   const handlePublish = () => {
     setIsPublishing(true);
     setTimeout(() => {
-      setPublishedHash(
+      const hash =
         '0x' +
-          Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('')
-      );
+        Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+      setPublishedHash(hash);
       setIsPublishing(false);
+      setShowPublishNotification(true);
+      logUserActivity('sustainwrite_chapter_publish', {
+        chapterId: currentChapterId,
+        chapterName: currentChapterName,
+        hash,
+      });
     }, 1500);
   };
 
@@ -167,6 +248,10 @@ export default function SustainWritePage() {
     try {
       await manualSave(currentChapterId, currentChapterName, currentChapterOrder, currentGriRefs);
       alert('當前章節草稿已安全加密儲存至 OmniVault！');
+      logUserActivity('sustainwrite_chapter_save_draft', {
+        chapterId: currentChapterId,
+        chapterName: currentChapterName,
+      });
     } catch (e) {
       alert('儲存失敗！');
     }
@@ -176,6 +261,7 @@ export default function SustainWritePage() {
     if (!activeTemplate) return;
     setIsWeaving(true);
     setWeavingProgress(0);
+    logUserActivity('sustainwrite_holographic_weave_start', { templateName: activeTemplate.name });
 
     try {
       // Auto-switch to preview to see the magic typing live
@@ -209,6 +295,9 @@ export default function SustainWritePage() {
 
         setWeavingProgress(Math.floor(((i + 1) / activeTemplate.chapters.length) * 100));
       }
+      logUserActivity('sustainwrite_holographic_weave_complete', {
+        templateName: activeTemplate.name,
+      });
     } catch (error) {
       console.error('Weaving failed:', error);
       alert('AI 編織過程發生錯誤！');
@@ -270,7 +359,7 @@ export default function SustainWritePage() {
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal">
       {uploaderTarget && (
         <OmniEvidenceUploader
           onClose={() => setUploaderTarget(null)}
@@ -281,32 +370,57 @@ export default function SustainWritePage() {
       )}
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-200/80">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
-              <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <BookOpen className="text-cyan-400 relative z-10" size={28} />
+            <div
+              onClick={() => {
+                setShowAuditSidebar(!showAuditSidebar);
+                logUserActivity('sustainwrite_toggle_audit_sidebar_via_logo', {
+                  isOpen: !showAuditSidebar,
+                });
+              }}
+              className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20 shadow-sm relative cursor-pointer hover:bg-cyan-500/20 active:scale-95 transition-all"
+              title="點擊切換顯示/隱藏實境審計與真實之盾面板"
+            >
+              <BookOpen className="text-cyan-600" size={20} />
             </div>
             <div>
-              <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Sparkles size={12} />}>
-                  Cognitive Programming
-                </OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
+                  <Sparkles size={11} className="text-cyan-500 animate-pulse" /> Cognitive
+                  Programming
+                </span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-cyan-100/80 text-cyan-800 rounded font-mono">
                   {p.id}
                 </span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">{p.title}</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">
+              <h1 className="text-2xl font-black text-slate-900 tracking-tight">{p.title}</h1>
+              <p className="text-xs font-mono text-slate-400 mt-1 uppercase tracking-wider">
                 {p.sub}
               </p>
             </div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
+          <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
+            <OmniButton
+              variant="outline"
+              icon={<ShieldCheck size={16} />}
+              onClick={() => {
+                setShowAuditSidebar(!showAuditSidebar);
+                logUserActivity('sustainwrite_toggle_audit_sidebar', { isOpen: !showAuditSidebar });
+              }}
+              className={cn(
+                'flex-1 md:flex-none border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2',
+                showAuditSidebar
+                  ? 'bg-cyan-50 border-cyan-200 text-cyan-700 font-bold shadow-sm'
+                  : ''
+              )}
+            >
+              {showAuditSidebar ? '隱藏實境審計' : '顯示實境審計'}
+            </OmniButton>
             <OmniButton
               variant="outline"
               icon={<RefreshCcw size={16} />}
-              className="flex-1 md:flex-none"
+              className="flex-1 md:flex-none border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2"
             >
               重置引擎
             </OmniButton>
@@ -315,7 +429,7 @@ export default function SustainWritePage() {
                 variant="outline"
                 icon={<AlignLeft size={16} />}
                 onClick={handleExportReport}
-                className="flex-1 md:flex-none text-emerald-400 border-emerald-500/30 hover:bg-emerald-950/30"
+                className="flex-1 md:flex-none bg-white hover:bg-slate-50 text-emerald-600 border-slate-200 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2"
               >
                 匯出報告 (HTML)
               </OmniButton>
@@ -326,7 +440,7 @@ export default function SustainWritePage() {
               onClick={handleWeave}
               isLoading={isWeaving}
               disabled={!activeTemplate || isWeaving}
-              className="flex-1 md:flex-none bg-gradient-to-r from-aqua-cyan-midtone to-aqua-cyan hover:from-aqua-cyan hover:to-aqua-cyan-shadow border-none shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50 disabled:shadow-none"
+              className="flex-1 md:flex-none bg-[#63a6b0] hover:bg-[#528d96] text-white border-none shadow-sm flex items-center gap-2 rounded-xl h-10 px-4 transition-all"
             >
               啟動全息編織
             </OmniButton>
@@ -335,13 +449,13 @@ export default function SustainWritePage() {
 
         {/* AI Setup / Profiling Section */}
         {!activeTemplate && (
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 relative overflow-hidden">
+          <div className="bg-white border border-slate-200 rounded-2xl p-8 relative overflow-hidden shadow-sm">
             <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-3xl rounded-full" />
-            <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-              <Cpu className="text-cyan-400" size={20} />
+            <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <Cpu className="text-cyan-600" size={20} />
               零算力專家模板 (Zero-Compute AI Profiling)
             </h2>
-            <p className="text-slate-400 text-sm mb-6 max-w-2xl">
+            <p className="text-slate-500 text-sm mb-6 max-w-2xl">
               選擇最符合您企業當前特徵的標籤（最多 3 項）。AI
               將根據這些特徵，從預先部署的專家模板庫中為您配對最佳的永續報告藍圖。
             </p>
@@ -354,8 +468,8 @@ export default function SustainWritePage() {
                   className={cn(
                     'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border',
                     selectedTraits.includes(trait)
-                      ? 'bg-cyan-950/50 border-cyan-400 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-                      : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200'
+                      ? 'bg-cyan-50 border-cyan-300 text-cyan-700 shadow-sm'
+                      : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400 hover:text-slate-800 shadow-sm'
                   )}
                 >
                   {trait}
@@ -401,13 +515,14 @@ export default function SustainWritePage() {
 
         <div
           className={cn(
-            'grid grid-cols-1 lg:grid-cols-4 gap-6 transition-all duration-700',
+            'grid grid-cols-1 gap-6 transition-all duration-700',
+            showAuditSidebar ? 'lg:grid-cols-4' : 'grid-cols-1',
             activeTemplate ? 'opacity-100' : 'opacity-30 pointer-events-none filter blur-sm'
           )}
         >
-          <div className="lg:col-span-3 space-y-6">
+          <div className={cn('space-y-6', showAuditSidebar ? 'lg:col-span-3' : 'w-full')}>
             {/* Nav Tabs */}
-            <div className="flex gap-4 border-b border-slate-800 pb-2">
+            <div className="flex gap-2 border-b border-slate-200/80 pb-px overflow-x-auto">
               {[
                 { id: 'blueprint', label: '永續藍圖 (Blueprint)', icon: <Layers size={16} /> },
                 { id: 'data', label: '實證數據庫 (Vault)', icon: <Database size={16} /> },
@@ -417,10 +532,10 @@ export default function SustainWritePage() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={cn(
-                    'flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-t-lg border-b-2',
+                    'pb-3 px-4 text-sm font-semibold transition-all border-b-2 flex items-center gap-2',
                     activeTab === tab.id
-                      ? 'text-cyan-400 border-cyan-400 bg-cyan-950/30'
-                      : 'text-slate-500 border-transparent hover:text-slate-300 hover:bg-white/5'
+                      ? 'border-[#63a6b0] text-[#63a6b0] font-bold'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
                   )}
                 >
                   {tab.icon}
@@ -433,22 +548,38 @@ export default function SustainWritePage() {
             <div className="min-h-[500px]">
               {activeTab === 'blueprint' && activeTemplate && (
                 <div className="space-y-6">
-                  <div className="p-4 bg-cyan-950/20 border border-cyan-500/20 rounded-xl flex items-start gap-4 animate-in fade-in zoom-in duration-500">
-                    <div className="p-3 bg-cyan-900/50 text-cyan-400 rounded-lg">
-                      <activeTemplate.icon size={24} />
+                  {showBlueprintBanner && (
+                    <div className="p-4 bg-cyan-950/20 border border-cyan-500/20 rounded-xl flex items-start justify-between gap-4 animate-in fade-in zoom-in duration-500 relative">
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 bg-cyan-900/50 text-cyan-400 rounded-lg">
+                          <activeTemplate.icon size={24} />
+                        </div>
+                        <div>
+                          <h3 className="text-cyan-300 font-bold flex items-center gap-2">
+                            {activeTemplate.name}
+                            <OmniBadge
+                              variant="success"
+                              size="sm"
+                              icon={<CheckCircle2 size={12} />}
+                            >
+                              AI Selected
+                            </OmniBadge>
+                          </h3>
+                          <p className="text-sm text-cyan-500/80 mt-1">
+                            {activeTemplate.aiSelectionPrompt}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowBlueprintBanner(false)}
+                        className="text-cyan-400/50 hover:text-cyan-400 p-1 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                        title="關閉說明"
+                      >
+                        <X size={16} />
+                      </button>
                     </div>
-                    <div>
-                      <h3 className="text-cyan-300 font-bold flex items-center gap-2">
-                        {activeTemplate.name}
-                        <OmniBadge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>
-                          AI Selected
-                        </OmniBadge>
-                      </h3>
-                      <p className="text-sm text-cyan-500/80 mt-1">
-                        {activeTemplate.aiSelectionPrompt}
-                      </p>
-                    </div>
-                  </div>
+                  )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {activeTemplate.chapters.map((chapter, i) => (
@@ -489,7 +620,7 @@ export default function SustainWritePage() {
                 <div className="flex flex-col lg:flex-row gap-4 animate-in fade-in slide-in-from-bottom-4">
                   {/* Left Sidebar: Chapter List */}
                   <div className="w-full lg:w-64 flex-shrink-0 space-y-2">
-                    <h3 className="text-cyan-400 font-bold mb-3 px-2 flex items-center gap-2">
+                    <h3 className="text-cyan-600 font-bold mb-3 px-2 flex items-center gap-2">
                       <Layers size={16} /> 報告目錄
                     </h3>
                     {activeTemplate?.chapters.map((ch, idx) => (
@@ -497,16 +628,19 @@ export default function SustainWritePage() {
                         key={idx}
                         onClick={() => setActiveChapterIndex(idx)}
                         className={cn(
-                          'w-full text-left px-4 py-3 rounded-lg text-sm transition-all border',
+                          'w-full text-left px-4 py-3 rounded-xl text-sm transition-all border',
                           activeChapterIndex === idx
-                            ? 'bg-cyan-900/50 border-cyan-500/50 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
-                            : 'bg-slate-800/30 border-transparent text-slate-400 hover:bg-slate-800/80 hover:text-slate-200'
+                            ? 'bg-cyan-50 border-cyan-200 text-cyan-700 shadow-sm font-semibold'
+                            : 'bg-white/40 border-transparent text-slate-500 hover:bg-white/80 hover:text-slate-850'
                         )}
                       >
                         <div className="font-bold truncate">{ch.title}</div>
                         <div className="text-[10px] text-slate-500 mt-1 flex gap-1 flex-wrap">
                           {ch.requiredIndicators.map((r) => (
-                            <span key={r} className="bg-slate-900 px-1 rounded">
+                            <span
+                              key={r}
+                              className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 border border-slate-200/40"
+                            >
                               {r}
                             </span>
                           ))}
@@ -516,7 +650,7 @@ export default function SustainWritePage() {
                   </div>
 
                   {/* Right: Editor */}
-                  <div className="flex-1 p-4 bg-white text-slate-800 rounded-xl shadow-2xl relative overflow-hidden">
+                  <div className="flex-1 p-6 bg-white border border-slate-200/60 text-slate-850 rounded-2xl shadow-sm relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-cyan-500" />
                     <div className="max-w-4xl mx-auto space-y-4">
                       <div className="flex flex-wrap md:flex-nowrap justify-between items-center pb-4 border-b border-slate-100 mt-2 gap-4">
@@ -599,18 +733,28 @@ export default function SustainWritePage() {
                         </div>
                       </div>
 
-                      {publishedHash && (
-                        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-lg flex items-start gap-3 animate-in fade-in">
-                          <CheckCircle2 className="text-emerald-500 mt-0.5" size={20} />
-                          <div>
-                            <h4 className="font-bold">章節發布成功！</h4>
-                            <p className="text-sm mt-1">
-                              此章節已完成 5T 驗證並上鏈，不可篡改雜湊值：
-                            </p>
-                            <p className="text-xs font-mono bg-emerald-100 px-2 py-1 rounded mt-2 break-all">
-                              {publishedHash}
-                            </p>
+                      {publishedHash && showPublishNotification && (
+                        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-lg flex items-start justify-between gap-3 animate-in fade-in relative">
+                          <div className="flex items-start gap-3">
+                            <CheckCircle2 className="text-emerald-500 mt-0.5" size={20} />
+                            <div>
+                              <h4 className="font-bold">章節發布成功！</h4>
+                              <p className="text-sm mt-1">
+                                此章節已完成 5T 驗證並上鏈，不可篡改雜湊值：
+                              </p>
+                              <p className="text-xs font-mono bg-emerald-100 px-2 py-1 rounded mt-2 break-all">
+                                {publishedHash}
+                              </p>
+                            </div>
                           </div>
+                          <button
+                            type="button"
+                            onClick={() => setShowPublishNotification(false)}
+                            className="text-emerald-800/50 hover:text-emerald-800 p-1 hover:bg-emerald-100/50 rounded transition-colors cursor-pointer"
+                            title="關閉通知"
+                          >
+                            <X size={16} />
+                          </button>
                         </div>
                       )}
 
@@ -628,31 +772,52 @@ export default function SustainWritePage() {
                         }
                       />
 
-                      <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-500 font-mono">
-                        <p className="flex justify-between border-b border-slate-200 pb-2 mb-2">
-                          <span>5T 協議狀態 ({currentGriRefs.join(', ')})</span>
-                          <span className="font-bold text-slate-800 flex items-center gap-1">
-                            即時同步中 <CheckCircle2 size={14} className="text-emerald-500" />
+                      {/* Native Collapsible 5T Status Drawer to Clean Up Space */}
+                      <details className="mt-4 bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden transition-all duration-300">
+                        <summary className="p-3 text-xs font-mono font-bold text-slate-600 cursor-pointer flex justify-between items-center hover:bg-slate-100 select-none">
+                          <span className="flex items-center gap-1.5">
+                            <ShieldCheck size={14} className="text-emerald-500" />
+                            5T Protocol Cryptographic Meta
                           </span>
-                        </p>
-                        <p className="flex justify-between">
-                          <span>全息驗證 Hash</span>
-                          <span className="text-cyan-600">
-                            0x{Math.random().toString(16).substring(2, 10)}...
+                          <span className="text-[10px] text-slate-400 group-open:hidden">
+                            點擊展開詳細
                           </span>
-                        </p>
-                      </div>
+                          <span className="text-[10px] text-slate-400 hidden group-open:inline">
+                            點擊收合
+                          </span>
+                        </summary>
+                        <div className="p-4 border-t border-slate-200 space-y-2 text-xs text-slate-500 font-mono bg-white">
+                          <p className="flex justify-between">
+                            <span>GRI Indicators:</span>
+                            <span className="font-bold text-slate-800">
+                              {currentGriRefs.join(', ')}
+                            </span>
+                          </p>
+                          <p className="flex justify-between">
+                            <span>Synchronization Status:</span>
+                            <span className="font-bold text-emerald-600 flex items-center gap-1">
+                              LIVE <CheckCircle2 size={12} className="text-emerald-500" />
+                            </span>
+                          </p>
+                          <p className="flex justify-between">
+                            <span>Verification Hash:</span>
+                            <span className="text-cyan-600 font-bold select-all">
+                              0x{Math.random().toString(16).substring(2, 10)}...verified
+                            </span>
+                          </p>
+                        </div>
+                      </details>
                     </div>
                   </div>
 
                   {/* Right Sidebar: OmniNotes 5T Materials Panel */}
-                  <div className="w-full lg:w-80 flex-shrink-0 bg-slate-900/45 backdrop-blur-md border border-white/10 rounded-xl p-4 space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                      <h3 className="text-white font-bold text-sm flex items-center gap-2">
-                        <StickyNote className="text-cyan-400" size={16} />
+                  <div className="w-full lg:w-80 flex-shrink-0 bg-white border border-slate-200/60 rounded-2xl p-4 space-y-4 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <h3 className="text-slate-800 font-bold text-sm flex items-center gap-2">
+                        <StickyNote className="text-cyan-600" size={16} />
                         萬能筆記 5T 素材庫
                       </h3>
-                      <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-mono text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-full border border-cyan-100">
                         {omniNotes.length} 筆
                       </span>
                     </div>
@@ -665,9 +830,9 @@ export default function SustainWritePage() {
                           value={noteSearchQuery}
                           onChange={(e) => setNoteSearchQuery(e.target.value)}
                           placeholder="搜尋筆記內容..."
-                          className="w-full bg-black/40 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500/50"
                         />
-                        <Search className="absolute left-2.5 top-2.5 text-slate-500" size={12} />
+                        <Search className="absolute left-2.5 top-2.5 text-slate-400" size={12} />
                       </div>
 
                       {/* Type Pills */}
@@ -677,8 +842,8 @@ export default function SustainWritePage() {
                           className={cn(
                             'px-2 py-1 rounded text-[10px] font-bold border transition-colors',
                             noteFilterType === 'all'
-                              ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
-                              : 'bg-black/30 border-transparent text-slate-400 hover:text-slate-200'
+                              ? 'bg-cyan-50 border-cyan-200 text-cyan-700'
+                              : 'bg-slate-100 border-transparent text-slate-500 hover:text-slate-800'
                           )}
                         >
                           全部
@@ -690,8 +855,8 @@ export default function SustainWritePage() {
                             className={cn(
                               'px-2 py-1 rounded text-[10px] font-bold border transition-colors',
                               noteFilterType === type
-                                ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
-                                : 'bg-black/30 border-transparent text-slate-400 hover:text-slate-200'
+                                ? 'bg-cyan-50 border-cyan-200 text-cyan-700'
+                                : 'bg-slate-100 border-transparent text-slate-500 hover:text-slate-800'
                             )}
                           >
                             {type === 'log'
@@ -712,35 +877,55 @@ export default function SustainWritePage() {
 
                     {/* Notes List */}
                     <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
-                      {omniNotes.filter((note) => {
-                        const matchesQuery = note.content
-                          .toLowerCase()
-                          .includes(noteSearchQuery.toLowerCase());
-                        const matchesType =
-                          noteFilterType === 'all' || note.type === noteFilterType;
-                        return matchesQuery && matchesType;
-                      }).length === 0 ? (
-                        <div className="text-center py-12 text-slate-500 border border-dashed border-white/5 rounded-xl">
-                          <StickyNote
-                            size={24}
-                            className="mx-auto mb-2 opacity-20 text-slate-500"
-                          />
-                          <p className="text-[11px]">無匹配的筆記素材</p>
-                        </div>
-                      ) : (
-                        omniNotes
-                          .filter((note) => {
-                            const matchesQuery = note.content
-                              .toLowerCase()
-                              .includes(noteSearchQuery.toLowerCase());
-                            const matchesType =
-                              noteFilterType === 'all' || note.type === noteFilterType;
-                            return matchesQuery && matchesType;
-                          })
-                          .map((note) => (
+                      {(() => {
+                        const filteredNotes = omniNotes.filter((note) => {
+                          const matchesQuery = note.content
+                            .toLowerCase()
+                            .includes(noteSearchQuery.toLowerCase());
+                          const matchesType =
+                            noteFilterType === 'all' || note.type === noteFilterType;
+                          return matchesQuery && matchesType;
+                        });
+
+                        const currentChapterPinned = pinnedNotes[currentChapterId] || [];
+
+                        // Sort: Pinned notes first, then latest created
+                        const sortedNotes = [...filteredNotes].sort((a, b) => {
+                          const aPinned = currentChapterPinned.includes(a.id);
+                          const bPinned = currentChapterPinned.includes(b.id);
+                          if (aPinned && !bPinned) return -1;
+                          if (!aPinned && bPinned) return 1;
+                          return b.createdAt - a.createdAt;
+                        });
+
+                        if (sortedNotes.length === 0) {
+                          return (
+                            <div className="text-center py-12 text-slate-500 border border-dashed border-white/5 rounded-xl">
+                              <StickyNote
+                                size={24}
+                                className="mx-auto mb-2 opacity-20 text-slate-500"
+                              />
+                              <p className="text-[11px]">無匹配的筆記素材</p>
+                            </div>
+                          );
+                        }
+
+                        return sortedNotes.map((note) => {
+                          const isPinned = currentChapterPinned.includes(note.id);
+                          return (
                             <div
                               key={note.id}
-                              className="bg-black/30 border border-white/5 rounded-xl p-3 hover:border-cyan-500/25 transition-all group"
+                              draggable="true"
+                              onDragStart={(e) => {
+                                e.dataTransfer.setData('text/plain', note.content);
+                              }}
+                              className={cn(
+                                'bg-black/30 border rounded-xl p-3 hover:border-cyan-500/25 transition-all group relative cursor-grab active:cursor-grabbing',
+                                isPinned
+                                  ? 'border-cyan-500/35 bg-cyan-950/10 shadow-[0_0_15px_rgba(6,182,212,0.05)]'
+                                  : 'border-white/5'
+                              )}
+                              title="可直接拖曳筆記內容至編輯器中任意位置"
                             >
                               <div className="flex justify-between items-center mb-2">
                                 <span
@@ -771,14 +956,32 @@ export default function SustainWritePage() {
                                     ? '研究'
                                     : '知識'}
                                 </span>
-                                <span className="text-[9px] text-slate-500 font-mono">
-                                  {note.date}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-[9px] text-slate-500 font-mono">
+                                    {note.date}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => togglePinNote(note.id)}
+                                    className={cn(
+                                      'p-1 rounded hover:bg-white/5 transition-colors cursor-pointer',
+                                      isPinned
+                                        ? 'text-cyan-400'
+                                        : 'text-slate-500 hover:text-slate-300'
+                                    )}
+                                    title={isPinned ? '取消釘選' : '釘選到此章節'}
+                                  >
+                                    <Pin
+                                      size={10}
+                                      className={isPinned ? 'rotate-45 text-cyan-400' : ''}
+                                    />
+                                  </button>
+                                </div>
                               </div>
                               <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed mb-3 break-words">
                                 {note.content}
                               </p>
-                              <div className="flex gap-2">
+                              <div className="flex flex-wrap gap-1.5">
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -792,9 +995,22 @@ export default function SustainWritePage() {
                                       alert('請先在編輯器中點擊，以定位插入游標');
                                     }
                                   }}
-                                  className="flex-1 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 rounded px-2 py-1 text-[10px] font-bold text-cyan-400 transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                                  className="flex-1 min-w-[70px] bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 rounded px-1.5 py-1 text-[9px] font-bold text-cyan-400 transition-colors flex items-center justify-center gap-0.5 cursor-pointer"
                                 >
-                                  <Plus size={10} /> 插入游標
+                                  <Plus size={9} /> 插入
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRefineAndInsert(note.content, note.id)}
+                                  disabled={isRefining[note.id]}
+                                  className="flex-1 min-w-[70px] bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 rounded px-1.5 py-1 text-[9px] font-bold text-emerald-400 transition-colors flex items-center justify-center gap-0.5 cursor-pointer disabled:opacity-50"
+                                >
+                                  {isRefining[note.id] ? (
+                                    <Loader2 size={9} className="animate-spin text-emerald-400" />
+                                  ) : (
+                                    <Wand2 size={9} />
+                                  )}
+                                  潤飾
                                 </button>
                                 <button
                                   type="button"
@@ -809,14 +1025,15 @@ export default function SustainWritePage() {
                                     );
                                   }}
                                   disabled={isGeneratingAI[currentChapterId]}
-                                  className="flex-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 rounded px-2 py-1 text-[10px] font-bold text-amber-400 transition-colors flex items-center justify-center gap-1 disabled:opacity-50 cursor-pointer"
+                                  className="flex-1 min-w-[70px] bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 rounded px-1.5 py-1 text-[9px] font-bold text-amber-400 transition-colors flex items-center justify-center gap-0.5 disabled:opacity-50 cursor-pointer"
                                 >
-                                  <Sparkles size={10} /> AI 融入
+                                  <Sparkles size={9} /> 融入
                                 </button>
                               </div>
                             </div>
-                          ))
-                      )}
+                          );
+                        });
+                      })()}
                     </div>
                   </div>
                 </div>
@@ -947,42 +1164,44 @@ export default function SustainWritePage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
-            <OmniBaseCard
-              variant="glow"
-              title="ESG 實境之眼"
-              subtitle="Eye of Sustainability Reality"
-            >
-              <div className="space-y-4 text-sm text-slate-300">
-                <p>
-                  SustainWrite 引擎正即時將 Vault 中的 5T
-                  實證數據庫映射至報告書藍圖，確保每一字節的揭露皆無懈可擊。
-                </p>
-                <div className="space-y-2 mt-4">
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className="text-cyan-400">邏輯量子糾纏</span>
-                    <span className="text-emerald-400">Active</span>
-                  </div>
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className="text-cyan-400">Hash 連結連續體</span>
-                    <span className="text-emerald-400">Stable</span>
-                  </div>
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className="text-cyan-400">當前模板引擎</span>
-                    <span className="text-slate-400">
-                      {activeTemplate ? activeTemplate.id : '等待配對'}
-                    </span>
+          {showAuditSidebar && (
+            <div className="space-y-6">
+              <OmniBaseCard
+                variant="glow"
+                title="ESG 實境之眼"
+                subtitle="Eye of Sustainability Reality"
+              >
+                <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                  <p>
+                    SustainWrite 引擎正即時將 Vault 中的 5T
+                    實證數據庫映射至報告書藍圖，確保每一字節的揭露皆無懈可擊。
+                  </p>
+                  <div className="space-y-2 mt-4">
+                    <div className="flex justify-between text-xs font-mono">
+                      <span className="text-cyan-600 dark:text-cyan-400">邏輯量子糾纏</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Active</span>
+                    </div>
+                    <div className="flex justify-between text-xs font-mono">
+                      <span className="text-cyan-600 dark:text-cyan-400">Hash 連結連續體</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Stable</span>
+                    </div>
+                    <div className="flex justify-between text-xs font-mono">
+                      <span className="text-cyan-600 dark:text-cyan-400">當前模板引擎</span>
+                      <span className="text-slate-500 dark:text-slate-400">
+                        {activeTemplate ? activeTemplate.id : '等待配對'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </OmniBaseCard>
+              </OmniBaseCard>
 
-            <ShieldOfAbsoluteTruth
-              contentId="sustain-write-draft"
-              isAiGenerated={true}
-              className="bg-slate-900 border-white/10"
-            />
-          </div>
+              <ShieldOfAbsoluteTruth
+                contentId="sustain-write-draft"
+                isAiGenerated={true}
+                className="bg-white border-slate-200"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

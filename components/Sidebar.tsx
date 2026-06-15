@@ -4,13 +4,50 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Leaf, Users, Shield, FileText, Search,
-  BarChart3, ClipboardList, Database, TrendingDown, BookOpen,
-  Building2, CheckSquare, Globe, Fingerprint, GraduationCap,
-  UserCheck, Award, HeartHandshake, Heart, Bot, Cpu, ChevronDown,
-  ChevronRight, PanelLeftClose, PanelLeftOpen, Zap, Activity,
-  Settings, FlaskConical, Layers, Target, AlertTriangle, Layout,
-  DollarSign, Link2, Briefcase, Network, Sun, Moon, X, Server, GitBranch, ShieldCheck
+  LayoutDashboard,
+  Leaf,
+  Users,
+  Shield,
+  FileText,
+  Search,
+  BarChart3,
+  ClipboardList,
+  Database,
+  TrendingDown,
+  BookOpen,
+  Building2,
+  CheckSquare,
+  Globe,
+  Fingerprint,
+  GraduationCap,
+  UserCheck,
+  Award,
+  HeartHandshake,
+  Heart,
+  Bot,
+  Cpu,
+  ChevronDown,
+  ChevronRight,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Zap,
+  Activity,
+  Settings,
+  FlaskConical,
+  Layers,
+  Target,
+  AlertTriangle,
+  Layout,
+  DollarSign,
+  Link2,
+  Briefcase,
+  Network,
+  Sun,
+  Moon,
+  X,
+  Server,
+  GitBranch,
+  ShieldCheck,
 } from 'lucide-react';
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
@@ -67,7 +104,13 @@ const NAV_GROUPS: NavGroup[] = [
     title: 'INSIGHTS',
     items: [
       { href: '/roadmap', label: '淨零路線圖', sub: 'Net-Zero', icon: TrendingDown },
-      { href: '/dashboard/report-builder', label: '報告生成器', sub: 'Report Builder', icon: FileText, badge: 'ZKP' },
+      {
+        href: '/dashboard/report-builder',
+        label: '報告生成器',
+        sub: 'Report Builder',
+        icon: FileText,
+        badge: 'ZKP',
+      },
       { href: '/publish', label: '報告發布', sub: 'Publish', icon: Globe },
       { href: '/reading-room', label: '永續閱覽室', sub: 'Reading Room', icon: BookOpen },
       { href: '/library', label: '永續智庫', sub: 'Library', icon: Layers },
@@ -93,11 +136,18 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/tasks', label: '任務中心', sub: 'Tasks', icon: CheckSquare },
       { href: '/omni-notes', label: '萬能筆記', sub: 'OmniNotes', icon: FileText, badge: 'NEW' },
       { href: '/wiki', label: '系統智庫', sub: 'Wiki', icon: BookOpen },
+      { href: '/guide', label: '平台導覽', sub: 'Guide', icon: Award, badge: 'v8.5.1' },
       { href: '/profile', label: '企業管理', sub: 'Profile', icon: Building2 },
       { href: '/api-setup', label: '整合中心', sub: 'API Setup', icon: Settings },
       { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'AI' },
       { href: '/omni-agent', label: 'OmniAgent', sub: 'Hermes Evolved', icon: FlaskConical },
-      { href: '/omni-gateway', label: 'OmniAgent 網關', sub: 'Gateway v3.0', icon: Server, badge: 'NEW' },
+      {
+        href: '/omni-gateway',
+        label: 'OmniAgent 網關',
+        sub: 'Gateway v3.0',
+        icon: Server,
+        badge: 'NEW',
+      },
     ],
   },
 ];
@@ -130,7 +180,8 @@ function getThemeStyles(theme: SidebarTheme) {
   }
   if (theme === 'glass') {
     return {
-      sidebar: 'bg-white/40 backdrop-blur-xl border-r border-white/50 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]',
+      sidebar:
+        'bg-white/40 backdrop-blur-xl border-r border-white/50 shadow-[4px_0_24px_-12px_rgba(0,0,0,0.1)]',
       logo: 'border-b border-white/40',
       logoText: 'text-[#003262]',
       logoSub: 'text-[#003262]/60',
@@ -191,30 +242,43 @@ function SaaSStatusWidget() {
 
   return (
     <div className="mx-4 mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 shadow-sm">
-       <div className="flex items-center justify-between">
-          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">SaaS Plan</p>
-          <BrandBadge variant="gold" size="xs" className="scale-75 origin-right uppercase">{plan}</BrandBadge>
-       </div>
-       <div className="space-y-1">
-          <div className="flex justify-between items-end">
-             <span className="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">AI Capacity</span>
-             <span className="text-[9px] font-black text-[#003262]">{pct}%</span>
-          </div>
-          <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-             <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} className="h-full bg-blue-600" />
-          </div>
-       </div>
-       <button 
-         onClick={upgradePlan}
-         className="w-full py-1.5 rounded-lg bg-white border border-slate-200 text-[#003262] text-[8px] font-black uppercase tracking-widest hover:bg-[#003262] hover:text-white transition-all shadow-sm"
-       >
-          Upgrade
-       </button>
+      <div className="flex items-center justify-between">
+        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">SaaS Plan</p>
+        <BrandBadge variant="gold" size="xs" className="scale-75 origin-right uppercase">
+          {plan}
+        </BrandBadge>
+      </div>
+      <div className="space-y-1">
+        <div className="flex justify-between items-end">
+          <span className="text-[7px] font-bold text-slate-400 uppercase tracking-tighter">
+            AI Capacity
+          </span>
+          <span className="text-[9px] font-black text-[#003262]">{pct}%</span>
+        </div>
+        <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${pct}%` }}
+            className="h-full bg-blue-600"
+          />
+        </div>
+      </div>
+      <button
+        onClick={upgradePlan}
+        className="w-full py-1.5 rounded-lg bg-white border border-slate-200 text-[#003262] text-[8px] font-black uppercase tracking-widest hover:bg-[#003262] hover:text-white transition-all shadow-sm"
+      >
+        Upgrade
+      </button>
     </div>
   );
 }
 
-export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }: SidebarProps) {
+export default function Sidebar({
+  isCollapsed,
+  setIsCollapsed,
+  mobileOpen,
+  setMobileOpen,
+}: SidebarProps) {
   const pathname = usePathname() || '/';
   const { sidebarTheme } = useThemeStore();
   const { user } = useAuth();
@@ -235,7 +299,9 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
   const [mounted, setMounted] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) => {
     if (!pathname) return false;
@@ -244,7 +310,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
   };
 
   const toggleGroup = (title: string) => {
-    setExpandedGroups(prev => ({ ...prev, [title]: !prev[title] }));
+    setExpandedGroups((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
   if (!mounted) return null;
@@ -253,40 +319,39 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
     <>
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={() => setMobileOpen?.(false)}
             className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] lg:hidden"
           />
         )}
       </AnimatePresence>
-<aside
-  className={cn(
-    `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-300 ease-in-out ${t.sidebar}`,
-    isCollapsed ? 'w-[72px]' : 'w-[280px]',
-    // Mobile visibility: fixed on mobile, static position on desktop
-    mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-  )}
->
+      <aside
+        className={cn(
+          `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-300 ease-in-out ${t.sidebar}`,
+          isCollapsed ? 'w-[72px]' : 'w-[280px]',
+          // Mobile visibility: fixed on mobile, static position on desktop
+          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        )}
+      >
         {/* Logo */}
         <div className={`flex items-center justify-between px-4 py-4 ${t.logo}`}>
-           <div className="flex items-center gap-2.5">
-              <img 
-                src="/logo.png" 
-                alt="ESGGO Logo" 
-                className="h-16 w-auto object-contain rounded"
-              />
-           </div>
-           
-           <button onClick={() => setMobileOpen?.(false)} className="lg:hidden p-2 text-slate-400">
-              <X size={20} />
-           </button>
-           
-           <button onClick={() => setIsCollapsed(!isCollapsed)} className="hidden lg:block p-1.5 rounded-lg text-slate-400 hover:text-[#003262] transition-colors">
-              {isCollapsed ? <PanelLeftOpen size={16}/> : <PanelLeftClose size={16}/>}
-           </button>
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.png" alt="ESGGO Logo" className="h-16 w-auto object-contain rounded" />
+          </div>
+
+          <button onClick={() => setMobileOpen?.(false)} className="lg:hidden p-2 text-slate-400">
+            <X size={20} />
+          </button>
+
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="hidden lg:block p-1.5 rounded-lg text-slate-400 hover:text-[#003262] transition-colors"
+          >
+            {isCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+          </button>
         </div>
 
         {/* Desktop Expand button */}
@@ -301,7 +366,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
 
         <nav className="flex-1 overflow-y-auto py-3 scrollbar-thin">
           {visibleGroups.map((group) => {
-            const isGroupActive = group.items.some(item => isActive(item.href));
+            const isGroupActive = group.items.some((item) => isActive(item.href));
             const isExpanded = expandedGroups[group.title] ?? true;
 
             return (
@@ -313,12 +378,16 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
                       isGroupActive ? t.groupExpanded : t.groupHeader
                     }`}
                   >
-                    <span className={`text-[10px] font-bold tracking-widest uppercase ${t.groupTitle}`}>
+                    <span
+                      className={`text-[10px] font-bold tracking-widest uppercase ${t.groupTitle}`}
+                    >
                       {group.title}
                     </span>
                     <ChevronDown
                       size={12}
-                      className={`transition-transform ${t.chevron} ${isExpanded ? '' : '-rotate-90'}`}
+                      className={`transition-transform ${t.chevron} ${
+                        isExpanded ? '' : '-rotate-90'
+                      }`}
                     />
                   </button>
                 )}
@@ -338,12 +407,27 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
                           } ${isCollapsed ? 'justify-center' : ''}`}
                           onClick={() => setMobileOpen?.(false)}
                         >
-                          <Icon size={16} className={`flex-shrink-0 ${active ? t.iconActive : t.iconInactive}`} />
+                          <Icon
+                            size={16}
+                            className={`flex-shrink-0 ${active ? t.iconActive : t.iconInactive}`}
+                          />
                           {!isCollapsed && (
                             <>
                               <span className="flex-1 truncate">{item.label}</span>
-                              {item.badge && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${t.badge}`}>{item.badge}</span>}
-                              <span className={`text-[10px] ${active ? t.navItemSubActive : t.navItemSub}`}>{item.sub}</span>
+                              {item.badge && (
+                                <span
+                                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${t.badge}`}
+                                >
+                                  {item.badge}
+                                </span>
+                              )}
+                              <span
+                                className={`text-[10px] ${
+                                  active ? t.navItemSubActive : t.navItemSub
+                                }`}
+                              >
+                                {item.sub}
+                              </span>
                             </>
                           )}
                         </Link>
@@ -362,7 +446,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
         {/* Footer */}
         <div className={`px-3 py-3 ${t.footer} flex flex-col gap-2`}>
           {isPulseDismissed && !isCollapsed && (
-            <button 
+            <button
               onClick={() => setPulseDismissed(false)}
               className="flex items-center justify-center gap-2 w-full py-1.5 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 text-[10px] font-bold uppercase tracking-wider transition-colors border border-cyan-500/20"
             >
@@ -379,7 +463,13 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, mobileOpen, setMo
           ) : (
             <div className="flex flex-col items-center gap-3">
               {isPulseDismissed && (
-                 <button onClick={() => setPulseDismissed(false)} className="text-cyan-500 hover:text-cyan-400" title="喚醒精靈"><Bot size={16}/></button>
+                <button
+                  onClick={() => setPulseDismissed(false)}
+                  className="text-cyan-500 hover:text-cyan-400"
+                  title="喚醒精靈"
+                >
+                  <Bot size={16} />
+                </button>
               )}
               <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${t.footerDot}`} />
             </div>
