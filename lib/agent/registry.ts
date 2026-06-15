@@ -159,10 +159,11 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     enabled: true,
   },
   {
-    skillKey: 'hermes_google_workspace',
-    skillName: 'Google Workspace (Hermes)',
+    skillKey: 'OmniAgent_google_workspace',
+    skillName: 'Google Workspace (OmniAgent)',
     taskType: 'system_ops',
-    description: '使用 Hermes Agent 的 Google Workspace Skill 進行 Gmail, Calendar, Drive 等辦公自動化整合',
+    description:
+      '使用 OmniAgent Agent 的 Google Workspace Skill 進行 Gmail, Calendar, Drive 等辦公自動化整合',
     allowedDataScopes: ['google_workspace_auth', 'emails', 'calendar_events'],
     outputArtifactType: 'system_config_draft',
     requiresHumanReview: false,
@@ -172,7 +173,7 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
   },
   {
     skillKey: 'hermes_email_archival',
-    skillName: 'Hermes 郵件自動歸檔',
+    skillName: 'OmniAgent 郵件自動歸檔',
     taskType: 'email_processing',
     description: '讀取 Google Workspace Email 並將 ESG 相關信件自動過濾與歸檔',
     allowedDataScopes: ['google_workspace_auth', 'emails'],
@@ -184,7 +185,7 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
   },
   {
     skillKey: 'hermes_calendar_agent',
-    skillName: 'Hermes 行事曆自動排程',
+    skillName: 'OmniAgent 行事曆自動排程',
     taskType: 'calendar_scheduling',
     description: '整合 Google Calendar，自動提取 ESG 會議與稽核排程，並建立待辦事項。',
     allowedDataScopes: ['google_workspace_auth', 'calendar_events'],
@@ -197,37 +198,37 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
 ];
 
 export function getSkill(skillKey: string): SkillRegistryItem | undefined {
-  return SKILL_REGISTRY.find(s => s.skillKey === skillKey && s.enabled);
+  return SKILL_REGISTRY.find((s) => s.skillKey === skillKey && s.enabled);
 }
 
 export function getSkillsByTaskType(taskType: string): SkillRegistryItem[] {
-  return SKILL_REGISTRY.filter(s => s.taskType === taskType && s.enabled);
+  return SKILL_REGISTRY.filter((s) => s.taskType === taskType && s.enabled);
 }
 
 export const TASK_TYPE_META: Record<string, { label: string; color: string; icon: string }> = {
-  report_drafting:        { label: '報告草稿生成',     color: '#003262', icon: 'FileText' },
-  compliance_review:      { label: '合規比對審查',     color: '#8B5CF6', icon: 'ShieldCheck' },
-  evidence_mapping:       { label: '證據映射整理',     color: '#22C55E', icon: 'Database' },
-  course_assistant:       { label: '課程助教支援',     color: '#FDB515', icon: 'GraduationCap' },
-  task_planning:          { label: '任務規劃拆解',     color: '#F59E0B', icon: 'ClipboardList' },
-  stakeholder_analysis:   { label: '利害關係人問卷分析', color: '#0EA5E9', icon: 'Users' },
-  materiality_generation: { label: '重大性矩陣生成',     color: '#D946EF', icon: 'BarChart3' },
-  cbam_validation:        { label: 'CBAM 數據驗證',     color: '#10B981', icon: 'CheckSquare' },
-  carbon_calculation:     { label: '碳排核算 (ISO)',   color: '#06B6D4', icon: 'Leaf' },
-  supplier_assessment:    { label: '供應鏈評估',       color: '#F59E0B', icon: 'Link' },
-  system_ops:             { label: '系統架構運維',     color: '#64748B', icon: 'Settings' },
-  ai_ops:                 { label: 'AI 模型調優',      color: '#3B82F6', icon: 'Cpu' },
-  email_processing:       { label: '郵件自動處理',     color: '#EF4444', icon: 'Mail' },
-  calendar_scheduling:    { label: '行事曆自動排程',   color: '#22C55E', icon: 'Calendar' },
+  report_drafting: { label: '報告草稿生成', color: '#003262', icon: 'FileText' },
+  compliance_review: { label: '合規比對審查', color: '#8B5CF6', icon: 'ShieldCheck' },
+  evidence_mapping: { label: '證據映射整理', color: '#22C55E', icon: 'Database' },
+  course_assistant: { label: '課程助教支援', color: '#FDB515', icon: 'GraduationCap' },
+  task_planning: { label: '任務規劃拆解', color: '#F59E0B', icon: 'ClipboardList' },
+  stakeholder_analysis: { label: '利害關係人問卷分析', color: '#0EA5E9', icon: 'Users' },
+  materiality_generation: { label: '重大性矩陣生成', color: '#D946EF', icon: 'BarChart3' },
+  cbam_validation: { label: 'CBAM 數據驗證', color: '#10B981', icon: 'CheckSquare' },
+  carbon_calculation: { label: '碳排核算 (ISO)', color: '#06B6D4', icon: 'Leaf' },
+  supplier_assessment: { label: '供應鏈評估', color: '#F59E0B', icon: 'Link' },
+  system_ops: { label: '系統架構運維', color: '#64748B', icon: 'Settings' },
+  ai_ops: { label: 'AI 模型調優', color: '#3B82F6', icon: 'Cpu' },
+  email_processing: { label: '郵件自動處理', color: '#EF4444', icon: 'Mail' },
+  calendar_scheduling: { label: '行事曆自動排程', color: '#22C55E', icon: 'Calendar' },
 };
 
 export const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {
-  queued:           { label: '排隊中',   color: '#64748B', bg: '#F1F5F9' },
-  running:          { label: '執行中',   color: '#3B7EA1', bg: '#EBF2FA' },
-  draft_generated:  { label: '草稿生成', color: '#8B5CF6', bg: '#F5F3FF' },
-  awaiting_review:  { label: '待審核',   color: '#F59E0B', bg: '#FEF3C7' },
-  approved:         { label: '已核准',   color: '#22C55E', bg: '#DCFCE7' },
-  rejected:         { label: '已拒絕',   color: '#EF4444', bg: '#FFE4E6' },
-  published:        { label: '已發布',   color: '#003262', bg: '#EBF2FA' },
-  archived:         { label: '已歸檔',   color: '#94A3B8', bg: '#F1F5F9' },
+  queued: { label: '排隊中', color: '#64748B', bg: '#F1F5F9' },
+  running: { label: '執行中', color: '#3B7EA1', bg: '#EBF2FA' },
+  draft_generated: { label: '草稿生成', color: '#8B5CF6', bg: '#F5F3FF' },
+  awaiting_review: { label: '待審核', color: '#F59E0B', bg: '#FEF3C7' },
+  approved: { label: '已核准', color: '#22C55E', bg: '#DCFCE7' },
+  rejected: { label: '已拒絕', color: '#EF4444', bg: '#FFE4E6' },
+  published: { label: '已發布', color: '#003262', bg: '#EBF2FA' },
+  archived: { label: '已歸檔', color: '#94A3B8', bg: '#F1F5F9' },
 };

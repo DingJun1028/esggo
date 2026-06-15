@@ -24,14 +24,15 @@ import {
   Globe,
 } from 'lucide-react';
 
+const DEFAULT_OPENROUTER_MODEL = 'google/gemma-4-31b-it:free';
+
 export default function ApiSetupPage() {
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
   // API Key States
-  const [openrouterKey, setOpenrouterKey] = useState(
-    'sk-or-v1-1361a80899e5acec9b2bcce632c7f9e0adae77... (已加密保護)'
-  );
+  const [openrouterKey, setOpenrouterKey] = useState('已加密保護');
+  const [openrouterModel, setOpenrouterModel] = useState(DEFAULT_OPENROUTER_MODEL);
   const [geminiKey, setGeminiKey] = useState('AIzaSyD-unconfigured-api-key');
   const [gatewayUrl, setGatewayUrl] = useState('http://161.118.248.180:8642');
   const [supabaseUrl, setSupabaseUrl] = useState('https://tenant-esg-taiwan.supabase.co');
@@ -51,6 +52,7 @@ export default function ApiSetupPage() {
       setSaved(true);
       logUserActivity('apisetup_save_keys_simulation', {
         hasOpenRouter: !!openrouterKey,
+        openrouterModel,
         hasGemini: !!geminiKey,
         gatewayUrl,
       });
@@ -60,7 +62,8 @@ export default function ApiSetupPage() {
   };
 
   const handleResetDefaults = () => {
-    setOpenrouterKey('sk-or-v1-1361a80899e5acec9b2bcce632c7f9e0adae77... (已加密保護)');
+    setOpenrouterKey('已加密保護');
+    setOpenrouterModel(DEFAULT_OPENROUTER_MODEL);
     setGeminiKey('');
     setGatewayUrl('http://161.118.248.180:8642');
     setSupabaseUrl('https://tenant-esg-taiwan.supabase.co');
@@ -128,7 +131,7 @@ export default function ApiSetupPage() {
                       <Cpu size={14} className="text-cyan-600" /> OpenRouter API Key
                     </label>
                     <span className="text-[10px] text-cyan-600 font-mono font-bold bg-cyan-50 px-1.5 py-0.5 rounded">
-                      預設 G4 大腦金鑰
+                      OpenRouter G4 金鑰
                     </span>
                   </div>
                   <div className="relative">
@@ -147,6 +150,25 @@ export default function ApiSetupPage() {
                       {showOR ? <EyeOff size={14} /> : <Eye size={14} />}
                     </button>
                   </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                      <Globe size={14} className="text-cyan-600" /> OpenRouter G4 免費版模型
+                    </label>
+                    <span className="text-[10px] text-emerald-600 font-mono font-bold bg-emerald-50 px-1.5 py-0.5 rounded">
+                      無限免費版
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={openrouterModel}
+                    onChange={(e) => setOpenrouterModel(e.target.value)}
+                    placeholder={DEFAULT_OPENROUTER_MODEL}
+                    className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-slate-700 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 font-mono"
+                  />
+                  <p className="text-[10px] text-slate-400">目前設定：{openrouterModel}</p>
                 </div>
 
                 {/* Gemini API Key Input */}
@@ -241,7 +263,7 @@ export default function ApiSetupPage() {
                     1
                   </div>
                   <div>
-                    <strong className="text-slate-800">Gemma 4 (G4) 專家全息編寫：</strong>
+                    <strong className="text-slate-800">OpenRouter G4 免費版專家全息編寫：</strong>
                     <p className="text-slate-500 mt-1">
                       解鎖 SustainWrite 引擎的「啟動全息編織」與「AI 融入/潤飾」。AI
                       會在您的游標處動態打字，將情資完美轉化成 GRI/CBAM 專家報告。

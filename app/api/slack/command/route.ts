@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ESGGO Slack Slash Command Handler
  * Route: POST /api/slack/command
  *
@@ -43,7 +43,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // ── 3. 路由至對應指令處理器 ───────────────────────
   switch (cmd.command) {
-
     // /esg-five-t <公司名> — 觸發 5T 評分報告
     case '/esg-five-t': {
       const companyName = cmd.text.trim() || '未指定企業';
@@ -84,7 +83,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           `• 記憶體：${status.memory_usage}`,
           `• 最後同步：${status.last_learning_sync}`,
           status.is_mock ? `_（備援模式）_` : '',
-        ].filter(Boolean).join('\n'),
+        ]
+          .filter(Boolean)
+          .join('\n'),
       });
     }
 
@@ -116,7 +117,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     case '/omni': {
       return NextResponse.json({
         response_type: 'ephemeral',
-        text: `🤖 OmniAgent 收到指令：\`${cmd.text}\`\n_此功能正在建構中，即將整合 Hermes Socket Mode 雙向通訊。_`,
+        text: `🤖 OmniAgent 收到指令：\`${cmd.text}\`\n_此功能正在建構中，即將整合 OmniAgent Socket Mode 雙向通訊。_`,
       });
     }
 
