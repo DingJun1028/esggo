@@ -496,7 +496,7 @@ export default function OmniComponentsPage() {
                         </span>
                       </td>
                       <td className="p-4 font-mono text-[10px] text-slate-500 max-w-[220px] break-all leading-normal">
-                        {item.deliverables.split(', ').map((file, i) => (
+                        {item.deliverables.split(', ').map((file: string, i: number) => (
                           <div
                             key={i}
                             className="mb-0.5 bg-slate-50 border border-slate-200/40 p-1 rounded"

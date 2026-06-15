@@ -42,6 +42,7 @@ const nextConfig: any = {
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
+  turbopack: {},
   webpack: (config: any) => {
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),
