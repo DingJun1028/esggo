@@ -123,13 +123,13 @@ const mapNodesData: MapNode[] = [
   // 2. Data Ring (r = 170)
   {
     id: 'dat-001',
-    name: 'HermesIntegrations',
+    name: 'OmniAgentIntegrations',
     category: 'Data',
     description: '各類第三方平台與 ERP 系統的串接管理。',
     r: 170,
     angle: Math.PI / 4,
     registered: true,
-    deliverables: ['components/omni/HermesIntegrations.tsx', 'Webhook Connector API'],
+    deliverables: ['components/omni/OmniAgentIntegrations.tsx', 'Webhook Connector API'],
     businessLogic: '管理與 ERP、SCM 等外部系統的 Webhook 和 API 連接，具備數據清洗與格式對齊邏輯。',
     uiux: '插頭連接插座動效、數據包流動粒子動畫、連接狀態徽章。',
     customerJourney: '數據導入與多平台整合旅程，打通企業資訊孤島。',

@@ -30,6 +30,20 @@ import {
 // =========================================================================
 // OmniComponent Center - Master Registry & Factory Page ( 白色底色 • 極致簡約 )
 // =========================================================================
+type OmniComponentState = 'registered' | 'pending';
+
+interface OmniComponent {
+  id: number;
+  name: string;
+  label: string;
+  route: string;
+  state: OmniComponentState;
+  date: string;
+  deliverables: string;
+  businessLogic: string;
+  uiux: string;
+}
+
 export default function OmniComponentsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterState, setFilterState] = useState<'all' | 'registered' | 'pending'>('all');
@@ -42,7 +56,7 @@ export default function OmniComponentsPage() {
   const systemVersion = 'v8.5.1 (OmniCore Matrix Evolved)';
 
   // The 55 components dataset defined in UNIVERSAL_COMPONENT_MATRIX.md
-  const [componentsList, setComponentsList] = useState<any[]>([
+  const [componentsList, setComponentsList] = useState<OmniComponent[]>([
     {
       id: 1,
       name: 'DashboardShell',
@@ -480,7 +494,7 @@ export default function OmniComponentsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-xs">
-                  {filteredComponents.map((item) => (
+                  {filteredComponents.map((item: OmniComponent) => (
                     <tr key={item.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="p-4 pl-6 font-mono text-slate-400 font-bold">{item.id}</td>
                       <td className="p-4">
@@ -496,7 +510,7 @@ export default function OmniComponentsPage() {
                         </span>
                       </td>
                       <td className="p-4 font-mono text-[10px] text-slate-500 max-w-[220px] break-all leading-normal">
-                        {item.deliverables.split(', ').map((file, i) => (
+                        {item.deliverables.split(', ').map((file: string, i: number) => (
                           <div
                             key={i}
                             className="mb-0.5 bg-slate-50 border border-slate-200/40 p-1 rounded"

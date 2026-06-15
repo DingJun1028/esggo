@@ -1,7 +1,9 @@
 'use client';
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || '';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const OPENROUTER_API_KEY =
+  process.env.OPENROUTER_API_KEY || process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || '';
+const OPENROUTER_MODEL = process.env.AI_MODEL || 'google/gemma-4-31b-it:free';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 export interface GeminiMessage {
   role: 'user' | 'model';
@@ -18,40 +20,41 @@ export interface ESGAnalysisResult {
 }
 
 async function callGeminiAPI(prompt: string, systemInstruction?: string): Promise<string> {
-  if (!GEMINI_API_KEY) {
-    return '⚠️ Gemini API 金鑰未設定，請在 .env 中配置 NEXT_PUBLIC_GEMINI_API_KEY。';
+  if (!OPENROUTER_API_KEY) {
+    return '⚠️ OpenRouter API 金鑰未設定，請在 .env 中配置 OPENROUTER_API_KEY。';
   }
 
   try {
     const body: any = {
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 2048,
-      },
+      model: OPENROUTER_MODEL,
+      messages: [
+        ...(systemInstruction ? [{ role: 'system', content: systemInstruction }] : []),
+        { role: 'user', content: prompt },
+      ],
+      temperature: 0.7,
+      max_tokens: 2048,
     };
 
-    if (systemInstruction) {
-      body.systemInstruction = { parts: [{ text: systemInstruction }] };
-    }
-
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(OPENROUTER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'http://localhost:3000',
+        'X-Title': 'ESGGO',
+      },
       body: JSON.stringify(body),
     });
 
     if (!response.ok) {
       const err = await response.json();
-      throw new Error(err.error?.message || 'Gemini API error');
+      throw new Error(err.error?.message || 'OpenRouter API error');
     }
 
     const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '無回應內容';
+    return data.choices?.[0]?.message?.content || '無回應內容';
   } catch (error: any) {
-    console.error('Gemini API Error:', error);
+    console.error('OpenRouter API Error:', error);
     return `AI 服務暫時無法使用：${error.message}`;
   }
 }
@@ -102,9 +105,12 @@ export async function generateGRIContent(
   existingData?: string
 ): Promise<string> {
   const personaDescriptions = {
-    compliance: '你是「合規守衛」，專注於 GRI 標準的精確遵循、風險控管與法規要求。文字風格嚴謹、精確、具說服力。',
-    harmony: '你是「共榮引導」，強調利害關係人關係、社區影響與企業文化。文字風格溫暖、包容、具人文關懷。',
-    innovation: '你是「創新先行」，探索永續技術、轉型機會與未來趨勢。文字風格前瞻、積極、具啟發性。',
+    compliance:
+      '你是「合規守衛」，專注於 GRI 標準的精確遵循、風險控管與法規要求。文字風格嚴謹、精確、具說服力。',
+    harmony:
+      '你是「共榮引導」，強調利害關係人關係、社區影響與企業文化。文字風格溫暖、包容、具人文關懷。',
+    innovation:
+      '你是「創新先行」，探索永續技術、轉型機會與未來趨勢。文字風格前瞻、積極、具啟發性。',
   };
 
   const prompt = `
@@ -141,35 +147,39 @@ ${companyContext ? `企業背景：${companyContext}` : ''}
 請根據對話脈絡，提供最相關且有價值的 ESG 治理建議。
 `;
 
-  if (!GEMINI_API_KEY) {
-    return '⚠️ Gemini API 金鑰未設定，請在 .env 中配置 NEXT_PUBLIC_GEMINI_API_KEY。';
+  if (!OPENROUTER_API_KEY) {
+    return '⚠️ OpenRouter API 金鑰未設定，請在 .env 中配置 OPENROUTER_API_KEY。';
   }
 
   try {
     const body = {
-      contents: messages,
-      systemInstruction: { parts: [{ text: systemInstruction }] },
-      generationConfig: {
-        temperature: 0.8,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 1024,
-      },
+      model: OPENROUTER_MODEL,
+      messages: [
+        ...(systemInstruction ? [{ role: 'system', content: systemInstruction }] : []),
+        ...messages,
+      ],
+      temperature: 0.8,
+      max_tokens: 1024,
     };
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(OPENROUTER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+        'HTTP-Referer': 'http://localhost:3000',
+        'X-Title': 'ESGGO',
+      },
       body: JSON.stringify(body),
     });
 
     if (!response.ok) {
       const err = await response.json();
-      throw new Error(err.error?.message || 'Gemini API error');
+      throw new Error(err.error?.message || 'OpenRouter API error');
     }
 
     const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '無法獲取回應';
+    return data.choices?.[0]?.message?.content || '無法獲取回應';
   } catch (error: any) {
     return `AI 顧問暫時無法連線：${error.message || error}`;
   }
