@@ -9,18 +9,21 @@ export interface OmniBaseCardProps extends Omit<React.HTMLAttributes<HTMLDivElem
 }
 
 export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
-  ({ className, padding = 'md', variant = 'default', title, subtitle, children, ...props }, ref) => {
-    
+  (
+    { className, padding = 'md', variant = 'default', title, subtitle, children, ...props },
+    ref
+  ) => {
     const paddings = {
       none: 'p-0',
       sm: 'p-4',
       md: 'p-6',
       lg: 'p-8',
     };
-    
+
     const variants = {
       default: 'bg-[var(--theme-base)] border border-[var(--theme-border)] shadow-card',
-      glass: 'bg-[var(--theme-base)]/80 backdrop-blur-xl border border-[var(--theme-border)] shadow-glass',
+      glass:
+        'bg-slate-950/45 dark:bg-slate-950/45 light:bg-white/70 backdrop-blur-xl border border-white/15 dark:border-white/15 light:border-slate-900/15 shadow-glass saturate-150',
       outline: 'bg-transparent border-2 border-[var(--theme-border)]',
       glow: 'bg-[var(--theme-base)] border border-[var(--theme-primary)]/30 shadow-[0_0_20px_rgba(var(--theme-primary-rgb),0.1)]',
       bordered: 'bg-white border border-slate-100 shadow-sm',
@@ -37,9 +40,7 @@ export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
         )}
         {...props}
       >
-        {(title || subtitle) && (
-          <OmniBaseCardHeader title={title} subtitle={subtitle} />
-        )}
+        {(title || subtitle) && <OmniBaseCardHeader title={title} subtitle={subtitle} />}
         {children}
       </div>
     );
@@ -47,19 +48,24 @@ export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
 );
 OmniBaseCard.displayName = 'OmniBaseCard';
 
-export function OmniBaseCardHeader({ 
-  title, 
-  subtitle, 
-  action, 
-  className 
-}: { 
-  title: React.ReactNode; 
-  subtitle?: React.ReactNode; 
+export function OmniBaseCardHeader({
+  title,
+  subtitle,
+  action,
+  className,
+}: {
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
   action?: React.ReactNode;
   className?: string;
 }) {
   return (
-    <div className={cn('flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4', className)}>
+    <div
+      className={cn(
+        'flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4',
+        className
+      )}
+    >
       <div>
         <h3 className="text-lg font-bold text-[var(--theme-text)] tracking-tight">{title}</h3>
         {subtitle && <p className="text-sm text-[var(--theme-text-muted)] mt-1">{subtitle}</p>}

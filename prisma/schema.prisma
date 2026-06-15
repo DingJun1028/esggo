@@ -83,3 +83,20 @@ model NotificationLog {
   isRead          Boolean  @default(false)
   timestamp       DateTime @default(now())
 }
+
+model UserPreference {
+  id               String   @id @default(uuid())
+  userId           String   @unique @default("default-user")
+  theme            String   @default("light")
+  language         String   @default("zh-TW")
+  sidebarCollapsed Boolean  @default(false)
+  updatedAt        DateTime @updatedAt
+}
+
+model UserActivityLog {
+  id        String   @id @default(uuid())
+  userId    String   @default("default-user")
+  action    String
+  details   String   @db.Text // JSON string containing action details
+  createdAt DateTime @default(now())
+}

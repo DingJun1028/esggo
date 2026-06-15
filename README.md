@@ -122,6 +122,19 @@ pm2 restart esggo omniagent-gateway
   npm run test
   ```
 
+### 📊 118 項全系統功能導覽與技術合規矩陣 (118 Tested Capabilities & 5T Compliance Matrix)
+
+本專案全數通過的 **118 項測試功能** 代表著平台在五大技術維度（5T 誠信協議）下的核心能力。以下為平台主要功能的導覽與對應之自動化測試清單：
+
+| #     | 平台核心模組 (Platform Modules)                            | 測試能力與功能細節 (Tested Capabilities)                                                                                                                 | 測試檔案對應 (Test Files Location)                                                                           | 5T 誠信維度對齊 (5T Dimensions)                |
+| ----- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| **1** | **5T 誠信與安全金庫**<br>_(5T Integrity & Vault)_          | - 零知識證明 (ZKP) 密碼學防篡改雜湊鎖<br>- SHA-256 數位簽章與哈希密封技術<br>- RLS (行級安全) 權限阻斷校驗<br>- 實證單據上傳 (OmniEvidenceUploader) 封印 | `lib/crypto-proof.test.ts`<br>`app/api/crypto/simulator/route.test.ts`<br>`lib/omni-core/integrity.test.ts`  | **Trustworthy (信賴)**<br>**Traceable (溯源)** |
+| **2** | **SustainWrite™ 專家寫作**<br>_(SustainWrite Engine)_      | - GRI / CBAM 永續編織專家模板配對<br>- 編輯器 (Tiptap) 原子狀態與倒退/重做操作<br>- AI 筆記融入與即時打字流編織<br>- 筆記章節專屬釘選 (Pinning) 狀態     | `useSustainWriteStore.test.ts`<br>`components/ChapterEditor.test.tsx`<br>`tests/contract/esg-report.test.ts` | **Tangible (具體)**<br>**Transparent (透明)**  |
+| **3** | **商情與外部情資感知**<br>_(Intelligence Hub)_             | - 外部環境監測、政策與法規動態抓取<br>- 今日永續觀察者日報 (Daily Observer Report) AI 生成<br>- 5T Hash Lock 鏈上雜湊校驗                                | `app/api/social/insights/route.test.ts`<br>`app/api/omni-agent-api/schedule/route.test.ts`                   | **Trackable (追蹤)**<br>**Transparent (透明)** |
+| **4** | **雙重大宗性與碳排核算**<br>_(Materiality & CBAM)_         | - GRI 大宗性衝突矩陣評估算法<br>- 範疇一、二、三 CBAM 碳排放公式精密計算<br>- 行動交辦與數位孿生模擬                                                     | `lib/esg/carbon-calculator.test.ts`<br>`tests/test-pdf.test.ts`                                              | **Tangible (具體)**<br>**Transparent (透明)**  |
+| **5** | **自癒守護者與代理蜂群**<br>_(Autonomous Healing & Swarm)_ | - 啟發式故障自我修復 (Heuristic Healing) 診斷<br>- 連線中斷時的 Simulation 模擬降級保護<br>- 智慧筆記 (OmniNotes) 跨組件數據流橋接                       | `lib/omni-core/healer.test.ts`<br>`lib/omni-space/global-healing.test.ts`<br>`tests/jes-monitor.test.ts`     | **Traceable (溯源)**<br>**Trackable (追蹤)**   |
+| **6** | **系統底層與全遙測日誌**<br>_(Core Logging & Telemetry)_   | - 跨平台雙向 TypeScript 類型漂移校驗<br>- 全遙測 (Telemetry) 動作、點擊與配置儲存<br>- 多維度關聯知識圖譜與時序日誌                                      | `OmniLoggerService.test.ts`<br>`app/actions/test-actions.test.ts`<br>`lib/memory-graph-engine.test.ts`       | **Trackable (追蹤)**<br>**Traceable (溯源)**   |
+
 ---
 
 ## 💻 OmniCLI 指令集 (Command Center)
