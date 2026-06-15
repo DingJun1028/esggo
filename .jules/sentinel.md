@@ -73,3 +73,7 @@ All future core components must implement the updated `IComponentCore` interface
 **Prevention:** Remove fallback secrets completely and configure variables to explicitly bind to environment variables (`const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;`). Additionally, introduce early termination logic (like throwing an Error) during critical cryptographic operations (e.g., `generateZkpSeal`) if the required environment variables are absent.
 
 
+## 2024-05-18 - [CRITICAL] Fix hardcoded JWT secret fallback in auth middleware
+**Vulnerability:** The `server/src/middleware/auth.ts` file used a hardcoded fallback string `'change_this_secret'` for the JWT secret if the `JWT_SECRET` environment variable was not set.
+**Learning:** This is a critical security vulnerability as it would allow an attacker to forge JWT tokens if the application is deployed without `JWT_SECRET` set, as the fallback is predictable and easily found in the codebase.
+**Prevention:** To maintain security, cryptographic operations and API calls must fail securely by throwing an explicit Error if required environment variables are missing, rather than relying on hardcoded fallback secrets.
