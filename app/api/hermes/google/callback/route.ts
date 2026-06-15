@@ -1,12 +1,12 @@
 ﻿export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-import { NextRequest, NextResponse } from "next/server";
-import { saveHermesCredentials } from "@/lib/agent/hermes-store";
+import { NextRequest, NextResponse } from 'next/server';
+import { saveOmniAgentCredentials } from '@/lib/agent/omni-agent-store';
 
 export async function GET(req: NextRequest) {
-  const code = req.nextUrl.searchParams.get("code");
-  const error = req.nextUrl.searchParams.get("error");
+  const code = req.nextUrl.searchParams.get('code');
+  const error = req.nextUrl.searchParams.get('error');
 
   const baseUrl = req.nextUrl.origin;
 
@@ -26,38 +26,40 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
+    const res = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
         client_id: GOOGLE_CLIENT_ID,
         client_secret: GOOGLE_CLIENT_SECRET,
         code,
-        grant_type: "authorization_code",
+        grant_type: 'authorization_code',
         redirect_uri: `${baseUrl}/api/hermes/google/callback`,
       }),
     });
 
     const data = await res.json();
     if (!res.ok) {
-      console.error("Token exchange failed:", data);
+      console.error('Token exchange failed:', data);
       return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=token_exchange_failed`);
     }
 
     // Securely store the credentials to Supabase Vault
-    await saveHermesCredentials('system_default', {
+    await saveOmniAgentCredentials('system_default', {
       access_token: data.access_token,
       refresh_token: data.refresh_token,
       expires_in: data.expires_in,
       token_type: data.token_type,
       scope: data.scope,
     });
-    
-    return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_success=google_workspace_connected`);
+
+    return NextResponse.redirect(
+      `${baseUrl}/omni-skills?hermes_success=google_workspace_connected`
+    );
   } catch (err) {
-    console.error("OAuth Callback error:", err);
+    console.error('OAuth Callback error:', err);
     return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=internal_server_error`);
   }
 }

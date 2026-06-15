@@ -8,7 +8,7 @@ function getServiceClient() {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-export interface HermesCredentials {
+export interface OmniAgentCredentials {
   access_token: string;
   refresh_token?: string;
   expires_in?: number;
@@ -18,24 +18,24 @@ export interface HermesCredentials {
 }
 
 /**
- * 將 Hermes Agent (Google Workspace) 的憑證安全地存儲至 Supabase Vault
+ * 將 OmniAgent 憑證安全地存儲至 Supabase Vault
  */
-export async function saveHermesCredentials(
+export async function saveOmniAgentCredentials(
   userId: string = 'system_default',
-  credentials: Omit<HermesCredentials, 'timestamp'>
+  credentials: Omit<OmniAgentCredentials, 'timestamp'>
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = getServiceClient();
   if (!supabase) {
-    console.warn('[HermesStore] 未設定 Supabase 服務金鑰，跳過憑證儲存');
+    console.warn('[OmniAgentStore] 未設定 Supabase 服務金鑰，跳過憑證儲存');
     return { success: false, error: 'No Supabase configuration' };
   }
 
-  const payload: HermesCredentials = {
+  const payload: OmniAgentCredentials = {
     ...credentials,
     timestamp: Date.now(),
   };
 
-  const secretName = `hermes_google_oauth_${userId}`;
+  const secretName = `omni_agent_google_oauth_${userId}`;
 
   try {
     // We use Supabase Vault to store the credentials securely.
@@ -43,15 +43,15 @@ export async function saveHermesCredentials(
     const { error } = await supabase.rpc('create_evidence_seal', {
       p_secret: JSON.stringify(payload),
       p_name: secretName,
-      p_description: `Google Workspace OAuth tokens for Hermes Agent (${userId})`
+      p_description: `Google Workspace OAuth tokens for OmniAgent (${userId})`,
     });
 
     if (error) throw error;
-    
-    console.log(`[HermesStore] Successfully secured Hermes credentials for ${userId} in Vault.`);
+
+    console.log(`[OmniAgentStore] Successfully secured Hermes credentials for ${userId} in Vault.`);
     return { success: true };
   } catch (err: any) {
-    console.error('[HermesStore] Failed to save credentials:', err);
+    console.error('[OmniAgentStore] Failed to save credentials:', err);
     return { success: false, error: err.message };
   }
 }
@@ -59,13 +59,13 @@ export async function saveHermesCredentials(
 /**
  * 取得 Hermes Agent 的 Google Workspace 憑證 (需要解密)
  */
-export async function getHermesCredentials(
+export async function getOmniAgentCredentials(
   userId: string = 'system_default'
-): Promise<HermesCredentials | null> {
+): Promise<OmniAgentCredentials | null> {
   const supabase = getServiceClient();
   if (!supabase) return null;
 
-  const secretName = `hermes_google_oauth_${userId}`;
+  const secretName = `omni_agent_google_oauth_${userId}`;
 
   try {
     // In a real environment, reading from vault.secrets requires appropriate permissions
@@ -78,9 +78,9 @@ export async function getHermesCredentials(
 
     if (error || !data) return null;
 
-    return JSON.parse(data.secret) as HermesCredentials;
+    return JSON.parse(data.secret) as OmniAgentCredentials;
   } catch {
-    console.error('[HermesStore] Failed to retrieve credentials');
+    console.error('[OmniAgentStore] Failed to retrieve credentials');
     return null;
   }
 }

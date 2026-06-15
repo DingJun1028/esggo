@@ -364,12 +364,12 @@ const matrixData = [
     nodes: [
       {
         id: 'dat-001',
-        name: 'HermesIntegrations',
+        name: 'OmniAgentIntegrations',
         description: '各類第三方平台與 ERP 系統的串接管理。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Integration', 'API'],
         registered: true,
-        deliverables: ['components/omni/HermesIntegrations.tsx', 'Webhook Connector API'],
+        deliverables: ['components/omni/OmniAgentIntegrations.tsx', 'Webhook Connector API'],
         businessLogic:
           '管理與 ERP、SCM 等外部系統的 Webhook 和 API 連接，具備數據清洗與格式對齊邏輯。',
         uiux: '插頭連接插座動效、數據包流動粒子動畫、連接狀態徽章。',
@@ -410,14 +410,14 @@ const matrixData = [
       },
       {
         id: 'dat-004',
-        name: 'HermesEvolutionPanel',
-        description: 'Hermes 資料管線的演化與效能面板。',
+        name: 'OmniAgentEvolutionPanel',
+        description: 'OmniAgent 資料管線的演化與效能面板。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Data', 'Pipeline'],
         registered: false,
-        deliverables: ['components/omni/HermesEvolutionPanel.tsx'],
+        deliverables: ['components/omni/OmniAgentEvolutionPanel.tsx'],
         businessLogic:
-          'Hermes 智能數據管線的流量自適應與吞吐量優化面板，當檢測到高流量時自動擴容。',
+          'OmniAgent 智能數據管線的流量自適應與吞吐量優化面板，當檢測到高流量時自動擴容。',
         uiux: '動態齒輪轉動、波形負載圖、擴容進度環。',
         customerJourney: '系統效能監控與自動優化旅程，保證數據處理零延遲。',
         painPointsSolved: '解決高流量衝擊時管線阻塞、資料庫寫入超時與管線擴充繁瑣的手動操作。',
