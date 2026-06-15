@@ -5,9 +5,6 @@ const nextConfig: any = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Output configuration for Firebase hosting
   output: 'standalone',
   // Explicitly set the output file tracing root to the current directory
@@ -82,6 +79,7 @@ const nextConfig: any = {
 
     return config;
   },
+  turbopack: {}, // Suppress Turbopack error when using custom webpack config in Next.js 16
 };
 
 export default nextConfig;
