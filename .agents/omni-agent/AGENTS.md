@@ -4,12 +4,11 @@
 
 ## 專案架構
 
-- **框架**：Next.js 15 App Router + TypeScript（strict mode）
+- **框架**：Next.js 16 App Router + TypeScript（strict mode）
 - **資料庫**：Supabase Postgres（主）+ Firebase Firestore（ESG evidence vault）
-- **AI**：Genkit JS（AI Flow pipeline）、Firebase AI Logic（Gemini API）
-- **UI**：Liquid Glass Cyan 設計語言（`#06b6d4` · `#10b981` · `#020617`）
+- **AI**：Mistral Small 3.1 24B (OpenRouter) + Local Qwen3 8B fallback
+- **UI**：ESGGO 善向永續 主題 (綠色永續專業)
 - **測試**：Vitest（單元）+ Playwright（E2E）
-- **部署**：Firebase App Hosting（`main` 分支自動觸發）
 
 ## 目錄結構
 
