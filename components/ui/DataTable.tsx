@@ -82,6 +82,7 @@ function DataTableInner<T extends object>({
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9ca3af]" />
             <input
               value={search}
+              aria-label={searchPlaceholder || '搜尋表格'}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={searchPlaceholder}
               className="w-full pl-8 pr-3 py-2 rounded-[8px] border border-[#e5e7eb] text-[13px] outline-none focus:border-[#003262]"
