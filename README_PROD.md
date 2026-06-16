@@ -1,20 +1,21 @@
-
 uuid: "b6eb1ca5-e2d5-4633-9e9a-ac26f342ba0e"
 version: "1.0.0"
 timestamp: "2026-06-04T10:36:12.308Z"
 evidence: "README_PROD.md"
+
 ---
 
-# ESGGO善向永續 v11.7 雲端部屬與驗收手冊 (Vercel)
+# ESGGO 善向永續 v11.7 雲端部屬與驗收手冊 (Vercel)
 
-本手冊旨在引導技術團隊將 **ESGGO善向永續 Sovereign Governance OS**
+本手冊旨在引導技術團隊將 **ESGGO 善向永續 Sovereign Governance OS**
 順利部屬至 Vercel 雲端環境，並進行交付前的最終驗收。
 
 ## 1. 前置準備
 
 - **GitHub 倉庫存取權**：確保已連接 `DingJun1028/esggo`。
 - **Supabase 專案**：需具備運行中的 Supabase 實例（資料庫與 Auth）。
-- **Google GenAI Key**：需具備有效之 Gemini 2.0 API 存取權限。
+- **AI API Key**：需填入 `AI_MODEL=mistralai/mistral-small-3.1-24b:free` 並設定 `OPENROUTER_API_KEY`。
+- **Google GenAI Key**：選填，用於備用 AI 服務。
 
 ## 2. Vercel 部屬流程
 
@@ -52,6 +53,7 @@ evidence: "README_PROD.md"
 - **路徑**：前往 `/ai-platform`。
 - **驗收點**：查看 **"ADK Framework Readiness"** 面板。
 - **預期狀態**：核心調度器、技能註冊庫應顯示為 **100% READY**。
+- **預設模型**：Mistral Small 3.1 24B (OpenRouter)
 
 ### D. 5T 誠信協議驗收
 
@@ -75,9 +77,9 @@ evidence: "README_PROD.md"
 
 - **Build 失敗**：請檢查 `next.config.ts` 是否有殘留的 `eslint` 設定（v11.7
   已移除）。
-- **AI 無回應**：確認 `NEXT_PUBLIC_GEMINI_API_KEY` 已在 Vercel Environment
-  Variables 中正確設置，且無配額限制。
+- **AI 無回應**：確認 `OPENROUTER_API_KEY` 已在 Vercel Environment Variables 中正確設置，且 `AI_MODEL` 設為 `mistralai/mistral-small-3.1-24b:free`。
+- **建議**：可切換備用模型或檢查 API 配額。
 
 ---
 
-**ESGGO善向永續 研發團隊 · 2026/05/23**
+**ESGGO 善向永續 研發團隊 · 2026/05/23**

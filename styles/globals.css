@@ -13,6 +13,9 @@
     --error: 0 100% 50%;
     --card: 0 0% 100%;
     --border: 222.2 46.3% 91.2%;
+    --esggo-green: 16 100% 44.9%;
+    --esggo-light: 145 40% 85%;
+    --esggo-accent: 160 30% 50%;
   }
 
   .dark {

@@ -5,6 +5,25 @@
 -- 2. "EternalMemory"
 
 -- 確保 RLS 被開啟
+CREATE TABLE IF NOT EXISTS public."AuditRecord" (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    source_origin TEXT,
+    last_modified_by TEXT,
+    timestamp TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public."EternalMemory" (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id TEXT,
+    type TEXT,
+    content TEXT,
+    hash_lock TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE public."AuditRecord" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public."EternalMemory" ENABLE ROW LEVEL SECURITY;
 

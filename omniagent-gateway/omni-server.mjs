@@ -1,14 +1,14 @@
 /**
  * OmniAgent VPS Gateway Server v3.0
  * 
- * Origin: Hermes (Open Source) → ESGGO OmniAgent (ESG Specialized)
+ * Origin: OmniAgent (Open Source) → ESGGO OmniAgent (ESG Specialized)
  * 
  * New in v3.0:
  *  - WebSocket broadcast channel (OmniAgentBus bridge)
  *  - POST /stream  → Server-Sent Events streaming AI output
  *  - POST /omni-jules → OmniJules self-healing endpoint
- *  - GET  /skills  → Hermes skill registry (absorbed skills)
- *  - POST /evolve  → Trigger Hermes→OmniAgent evolution pull
+ *  - GET  /skills  → OmniAgent skill registry (absorbed skills)
+ *  - POST /evolve  → Trigger OmniAgent→OmniAgent evolution pull
  *  - POST /swarm/broadcast → Swarm task event relay
  *  - Multi-model routing with skill-based model selection
  */
@@ -46,7 +46,7 @@ const PORT           = Number(process.env.PORT || 8642);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 const VPS_IP         = process.env.VPS_IP || '161.118.248.180';
-const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'hermes_gold_2026';
+const GATEWAY_KEY    = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'omniagent_gold_2026';
 const SITE_URL       = process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || `http://${VPS_IP}:${PORT}`;
 const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -65,21 +65,22 @@ const hashLock = (d) => createHash('sha256').update(JSON.stringify(d)).digest('h
 const gemini = GEMINI_API_KEY ? new GoogleGenerativeAI(GEMINI_API_KEY) : null;
 console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPENROUTER_KEY ? '✅' : '❌'}`);
 
-// ── Hermes Skill Registry (OmniAgent absorbed skills) ─────────
+// ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
 const SKILL_REGISTRY = [
-  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'hermes:data_synthesis',      model: 'google/gemma-4-31b-it:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
-  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'hermes:code_generation',     model: 'google/gemma-4-31b-it:free', esgDomain: 'E',     fiveT: 'T1', status: 'transcended' },
-  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'hermes:web_search',           model: 'nousresearch/hermes-3-llama-3.1-405b:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
-  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'hermes:file_analysis',        model: 'google/gemma-4-26b-a4b-it:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
-  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'hermes:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'transcended' },
-  { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'hermes:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
+  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
+  { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'transcended' },
+  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'nousresearch/hermes-3-llama-3.1-405b:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
+  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'google/gemma-4-26b-a4b-it:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
+  { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'transcended' },
+  { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
   { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
-  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'hermes:multi_agent',          model: 'google/gemma-4-31b-it:free', esgDomain: 'SYS', fiveT: 'T5', status: 'absorbed' },
+  { id: 'swarm_orchestration',  name: 'OmniAgent 蜂群調度',    origin: 'omniagent:multi_agent',          model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'SYS', fiveT: 'T5', status: 'absorbed' },
 ];
 
 // ── Free Models List ──────────────────────────────────────────
 let FREE_MODELS = [
-  { id: 'google/gemma-4-31b-it:free',                       name: 'Google: Gemma 4 31B (ESG Default)' },
+  { id: 'mistralai/mistral-small-3.1-24b:free',               name: 'Mistral: Small 3.1 24B (Default)' },
+  { id: 'google/gemma-4-31b-it:free',                       name: 'Google: Gemma 4 31B' },
   { id: 'nousresearch/hermes-3-llama-3.1-405b:free',        name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
   { id: 'openai/gpt-oss-120b:free',                         name: 'OpenAI: GPT-OSS 120B' },
   { id: 'meta-llama/llama-3.3-70b-instruct:free',           name: 'Meta: Llama 3.3 70B' },
@@ -88,7 +89,7 @@ let FREE_MODELS = [
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
-const ESG_SYSTEM_PROMPT = `你是 ESGGO 平台的 OmniAgent AI 助手（原型：Hermes，ESGGO 洗鍊進化版）。
+const ESG_SYSTEM_PROMPT = `你是 ESGGO 平台的 OmniAgent AI 助手（Open Source 來自 OmniAgent 生態），ESGGO 專屬能力。
 專精於 ESG 永續報告、GRI 框架、CSRD 合規、TCFD 與碳盤查（ISO 14064-1）。
 以專業繁體中文回覆，使用 Markdown 格式，提供具體可執行的分析。
 所有輸出須符合 5T 誠信協議：可溯源、透明、可感知、可信任、可追蹤。`;
@@ -123,9 +124,31 @@ async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PRO
 async function dispatchAI(task, skillId) {
   const prompt = task.prompt || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
   const skill = SKILL_REGISTRY.find(s => s.id === skillId);
-  const model = skill?.model || 'google/gemma-4-31b-it:free';
+  const model = skill?.model || 'qwen3:8b';
+  const localServer = process.env.LOCAL_GEMMA_SERVER_URL;
 
-  // 1. Try Gemini first
+  // 1. Try local Ollama/Gemma server first
+  if (localServer) {
+    try {
+      const response = await fetch(`${localServer}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b',
+          prompt: `${ESG_SYSTEM_PROMPT}\n\n${prompt}`,
+          stream: false
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b' };
+      }
+    } catch (e) {
+      console.warn('[OmniGateway] Local server fallback:', e.message);
+    }
+  }
+
+  // 2. Try Gemini first
   if (gemini) {
     try {
       const m = gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
@@ -134,6 +157,28 @@ async function dispatchAI(task, skillId) {
     } catch (e) {
       console.warn('[OmniGateway] Gemini fallback:', e.message);
     }
+  }
+
+  // 3. OpenRouter with skill-selected model
+  if (OPENROUTER_KEY) {
+    try {
+      const content = await callOpenRouter(model, prompt);
+      return { content, provider: 'OpenRouter', model };
+    } catch (e) {
+      console.warn('[OmniGateway] OpenRouter fallback:', e.message);
+    }
+  }
+
+  // 4. Mock
+  const mock = {
+    gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工健康安全。\n\n> ⚠️ OmniAgent Mock 模式 — 請設定 AI API Key 啟用真實推理`,
+    carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**\n\n> Hash Lock: ${hashLock(task)}`,
+    compliance_review:    `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
+    omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動降維自癒，自動生成修復子任務。\n\n### 傳法 (Impart)\n此修復模式已寫入 OmniAgent 技能書。`,
+  };
+  const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
+  return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
+}
   }
 
   // 2. OpenRouter with skill-selected model
@@ -236,11 +281,11 @@ app.get('/status', (_req, res) => {
 
 app.get('/models', (_, res) => res.json({ provider: 'OpenRouter', free_models: FREE_MODELS, default: FREE_MODELS[0]?.id, count: FREE_MODELS.length }));
 
-// GET /skills — Hermes-absorbed skill registry
+// GET /skills — OmniAgent-absorbed skill registry
 app.get('/skills', (_req, res) => {
   res.json({
     total: SKILL_REGISTRY.length,
-    source: 'Hermes Open Source + Google Jules → ESGGO OmniAgent',
+    source: 'OmniAgent Open Source + Google Jules → ESGGO OmniAgent',
     skills: SKILL_REGISTRY.map(s => ({
       ...s,
       description: `ESG Domain: ${s.esgDomain} | 5T Tag: ${s.fiveT} | Origin: ${s.origin}`,
@@ -381,22 +426,22 @@ app.post('/omni-jules', requireAuth, aiLimiter, async (req, res) => {
   }
 });
 
-// POST /evolve — Trigger Hermes→OmniAgent evolution
+// POST /evolve — Trigger OmniAgent→OmniAgent evolution
 app.post('/evolve', requireAuth, async (req, res) => {
-  const { hermesVersion = 'v0.14.1', notes = [] } = req.body;
+  const { omniagentVersion = 'v3.0.0', notes = [] } = req.body;
 
-  console.log(`[OmniGateway] 🧬 Evolution triggered: Hermes ${hermesVersion} → OmniAgent`);
-  broadcastWS({ type: 'OBSERVE', source: 'EvolutionEngine', payload: { hermesVersion, stage: 'ABSORBING' } });
+  console.log(`[OmniGateway] 🧬 Evolution triggered: OmniAgent ${omniagentVersion} → OmniAgent`);
+  broadcastWS({ type: 'OBSERVE', source: 'EvolutionEngine', payload: { omniagentVersion, stage: 'ABSORBING' } });
 
   await new Promise(r => setTimeout(r, 800));
 
   const entry = {
     id: genId('evo'),
     ts: new Date().toISOString(),
-    fromHermes: hermesVersion,
+    fromOmniAgent: omniagentVersion,
     toOmniAgent: '3.0.0',
     skillsAbsorbed: SKILL_REGISTRY.filter(s => s.status !== 'pending').length,
-    hash: hashLock({ hermesVersion, ts: Date.now() }),
+    hash: hashLock({ omniagentVersion, ts: Date.now() }),
     notes,
     status: 'transcended',
   };
@@ -404,7 +449,7 @@ app.post('/evolve', requireAuth, async (req, res) => {
 
   broadcastWS({ type: 'MANIFEST', source: 'EvolutionEngine', payload: entry });
 
-  res.json({ message: `Hermes ${hermesVersion} → OmniAgent evolution complete`, entry, total_evolutions: evolutionLog.length });
+  res.json({ message: `OmniAgent ${omniagentVersion} → OmniAgent evolution complete`, entry, total_evolutions: evolutionLog.length });
 });
 
 // GET /evolve — Evolution history
@@ -440,7 +485,7 @@ app.use((err, _req, res, _next) => res.status(500).json({ error: err.message }))
 httpServer.listen(PORT, '0.0.0.0', () => {
   console.log('═══════════════════════════════════════════════════════');
   console.log(`🚀 OmniAgent Gateway v3.0 — LIVE`);
-  console.log(`   Origin : Hermes (Open Source) → ESGGO OmniAgent`);
+  console.log(`   Origin : OmniAgent (Open Source) → ESGGO OmniAgent`);
   console.log(`   URL    : http://${VPS_IP}:${PORT}`);
   console.log(`   WS     : ws://${VPS_IP}:${PORT} (OmniAgentBus Bridge)`);
   console.log(`   Skills : ${SKILL_REGISTRY.length} (${SKILL_REGISTRY.filter(s=>s.status==='transcended').length} transcended)`);
