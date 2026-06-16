@@ -1,15 +1,15 @@
 ---
 uuid: "8d85d038-0605-4ef0-9f33-55d78b2d6bd0"
-version: "8.6.0"
-timestamp: "2026-06-16T15:44:03.000Z"
+version: "1.4.0"
+timestamp: "2026-06-17T09:00:00.000Z"
 evidence: "docs\wiki\Wiki-New-Version-Analysis.md"
 ---
 
-# ESGGO WIKI 新版全解析 (v8.6.0 Synthesis) [Wiki New Version Analysis]
+# ESGGO WIKI 新版全解析 (v1.4 合成) [Wiki New Version Analysis]
 
 > **"Wiki 不僅是文檔，更是系統運行的數位孿生。"** —— OmniAgent 指揮官
 
-## 🚀 v8.6.0 新增功能 (2026-06-16)
+## 🚀 v1.4 更新摘要 (2026-06-17)
 
 ### AI 模型升級
 

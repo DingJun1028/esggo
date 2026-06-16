@@ -1,6 +1,6 @@
 ---
 uuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
-version: '8.6.0'
+version: '1.4.0'
 timestamp: '2026-06-16T16:54:00.000Z'
 evidence: 'docs/wiki/WIKI_INDEX.md'
 ---
@@ -48,13 +48,15 @@ evidence: 'docs/wiki/WIKI_INDEX.md'
 
 ---
 
-## 🚀 v8.6.0 更新摘要
+## 🚀 v1.4 更新摘要
 
 | 變更項目        | 狀態                                      |
 | --------------- | ----------------------------------------- |
 | AI 模型升級     | ✅ `mistralai/mistral-small-3.1-24b:free` |
-| ESGGO 主題      | ✅ 綠色永續專業                           |
-| TypeScript 修復 | ✅ 全部錯誤解決                           |
+| ESGGO 主題      | ✅ 六組品牌主題（含水色青·永恆金） |
+| Theme V1.4      | ✅ docs/ESGGO_v1.4_THEMES.md / lib/theme-config.ts |
+| OpenAPI         | ✅ docs/api/README.md + openapi.yaml |
+| VPS 服務        | ✅ :3000/:3001/:8642/:8443 全 UP |
 | 生產部署        | ✅ 就緒                                   |
 
 ### 05-ARC 存檔與迭代 (Archive)

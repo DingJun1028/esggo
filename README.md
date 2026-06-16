@@ -1,6 +1,6 @@
 # 🌌 ESGGO 善向永續 | OmniAgent 萬能系統
 
-> **Platform:** ESGGO 善向永續 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** mistralai/mistral-small-3.1-24b:free
+> **Platform:** ESGGO 善向永續 V1.4 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** mistralai/mistral-small-3.1-24b:free
 
 [![Render Deployment](https://img.shields.io/badge/Render-Deployed-brightgreen)](https://dashboard.render.com)
 [![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t誠信協議-5t-integrity-protocol)
@@ -18,6 +18,9 @@
 ## 0. 🚀 系統願景 (Mission)
 
 ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T 協議** 的基礎設施。透過 **OmniAgent** 全域編排與 **Gemma 4** 智能心核，將生硬的 ESG 數據轉化為可感知的流動藝術與不可篡改的信任證據。
+
+---
+> ESGGO 善向永續 V1.4 | 主題：六組品牌面板（含水色青·永恆金） | 頁面：App Router 170 頁 | VPS：四端點就緒
 
 ---
 
