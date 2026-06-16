@@ -91,6 +91,14 @@
   .gradient-blue-gold {
     background: linear-gradient(135deg, #003262 0%, #fdb515 100%);
   }
+
+  .gradient-esggo {
+    background: linear-gradient(135deg, #166534 0%, #dcfce7 50%, #16a34a 100%);
+  }
+
+  .esggo-shadow {
+    box-shadow: 0 4px 20px rgba(22, 163, 74, 0.15);
+  }
 }
 
 @media (max-width: 768px) {
