@@ -2,15 +2,18 @@
 import { createServerClient } from '../../../../lib/supabase/server';
 import { ApiResponse, createSuccessResponse, createErrorResponse } from '@/src/shared/types';
 import { randomUUID } from 'crypto';
-import type { Database } from '@/types/supabase';
 
-type EvidenceVault = Database['public']['Tables']['evidence_vault']['Row'];
+type EvidenceVault = {
+  lifecycle_stage?: string;
+  source_origin?: string;
+  [key: string]: unknown;
+};
 
 export async function GET(request: NextRequest) {
   const requestId = randomUUID();
 
   try {
-    const supabase = await createServerClient<Database>();
+    const supabase = await createServerClient();
 
     const { count: totalCount, error: totalError } = await supabase
       .from('evidence_vault')

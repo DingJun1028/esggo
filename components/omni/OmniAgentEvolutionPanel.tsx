@@ -171,10 +171,7 @@ export default function OmniAgentEvolutionPanel() {
       <div className="px-8 py-4 bg-slate-50/80 border-b border-slate-100 flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-black font-mono">
-            latestRelease &&{' '}
-            <span className="font-mono">
-              {OmniAgent} {HERMES_LATEST_RELEASES[0].version}
-            </span>
+            <span className="font-mono">OmniAgent {HERMES_LATEST_RELEASES[0].version}</span>
           </div>
           <ArrowRight size={16} className="text-violet-500" />
           <div className="px-3 py-1.5 rounded-xl bg-violet-600 text-white text-xs font-black font-mono">
@@ -320,7 +317,7 @@ export default function OmniAgentEvolutionPanel() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <code className="text-xs font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">
-                        {skill.hermesSkillName}
+                        {skill.OmniAgentSkillName}
                       </code>
                       <ArrowRight size={12} className="text-violet-400 flex-shrink-0" />
                       <code className="text-xs font-mono bg-violet-100 px-2 py-0.5 rounded text-violet-700 font-bold">
@@ -352,7 +349,7 @@ export default function OmniAgentEvolutionPanel() {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-black font-mono text-sm text-slate-800">
-                          {log.fromHermesVersion}
+                          {log.fromOmniAgentVersion}
                         </span>
                         <ArrowRight size={12} className="text-violet-500" />
                         <span className="font-black font-mono text-sm text-violet-700">
