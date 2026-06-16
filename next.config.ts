@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  output: 'standalone',
+  output: 'export',
   outputFileTracingRoot: path.join(__dirname, './'),
   serverExternalPackages: [
     'genkit',
