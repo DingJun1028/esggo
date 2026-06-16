@@ -1,4 +1,4 @@
-export type ThemeId = 'esggo' | 'minimal-blue' | 'dark-navy' | 'water-zen' | 'berkeley';
+export type ThemeId = 'esggo' | 'minimal-blue' | 'dark-navy' | 'water-zen' | 'berkeley' | 'cyan-eternal';
 
 export interface ThemeConfig {
   id: ThemeId;
@@ -211,6 +211,56 @@ export const THEMES: ThemeConfig[] = [
     },
   },
   {
+    id: 'cyan-eternal',
+    name: '水色青·永恆金',
+    nameEn: 'Cyan Eternal',
+    description: '水色青與永恆金的品牌主題，流動永續',
+    emoji: '🌊',
+    vars: {
+      '--bg-primary': '#f0f9fa',
+      '--bg-card': '#ffffff',
+      '--bg-hover': '#e0f7f9',
+      '--bg-active': '#c8eef3',
+      '--text-primary': '#083344',
+      '--text-secondary': '#2c5f6e',
+      '--text-muted': '#5e8a99',
+      '--border-color': '#c8eef3',
+      '--border-strong': '#8fd3df',
+      '--accent-primary': '#0891b2',
+      '--accent-secondary': '#22d3ee',
+      '--accent-gold': '#D4A853',
+      '--accent-green': '#0891b2',
+      '--accent-red': '#dc2626',
+      '--shadow-sm': '0 1px 2px rgba(8,145,178,0.08)',
+      '--shadow-md': '0 4px 12px rgba(8,145,178,0.12)',
+      '--shadow-lg': '0 8px 24px rgba(8,145,178,0.16)',
+      '--sidebar-bg': '#f0f9fa',
+      '--sidebar-text': '#2c5f6e',
+      '--sidebar-active-bg': '#c8eef3',
+      '--sidebar-active-text': '#0891b2',
+      '--sidebar-active-border': '#0891b2',
+      '--sidebar-group-text': '#5e8a99',
+      '--sidebar-hover-bg': '#e0f7f9',
+      '--btn-primary-bg': '#0891b2',
+      '--btn-primary-text': '#ffffff',
+      '--btn-secondary-bg': '#f0f9fa',
+      '--btn-secondary-text': '#2c5f6e',
+      '--input-bg': '#ffffff',
+      '--input-border': '#c8eef3',
+      '--input-focus': '#0891b2',
+      '--badge-blue-bg': '#c8eef3',
+      '--badge-blue-text': '#083344',
+      '--badge-green-bg': '#ecfdf5',
+      '--badge-green-text': '#0891b2',
+      '--badge-gold-bg': '#fff7ed',
+      '--badge-gold-text': '#B45309',
+      '--badge-red-bg': '#fef2f2',
+      '--badge-red-text': '#dc2626',
+      '--table-header-bg': '#f0f9fa',
+      '--table-row-hover': '#e0f7f9',
+    },
+  },
+  {
     id: 'berkeley',
     name: '柏克萊學院',
     nameEn: 'Berkeley Academy',
@@ -275,7 +325,12 @@ export function applyTheme(themeId: ThemeId) {
 }
 
 export function getSavedTheme(): ThemeId {
-  if (typeof window === 'undefined') return 'esggo';
+  if (typeof window === 'undefined') {
+    if (typeof document !== 'undefined') {
+      return (document.documentElement.getAttribute('data-theme') as ThemeId) || 'esggo';
+    }
+    return 'esggo';
+  }
   return (localStorage.getItem('esg-theme') as ThemeId) || 'esggo';
 }
 

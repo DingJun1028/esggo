@@ -19,8 +19,8 @@
 
 ```yaml
 AI: ✅ mistralai/mistral-small-3.1-24b:free
-Theme: ✅ ESGGO 善向永續
-Version: v8.6.0
+Theme: ✅ ESGGO 善向永續 V1.4
+Version: v1.4.0
 Status: Production Ready
 ```
 
