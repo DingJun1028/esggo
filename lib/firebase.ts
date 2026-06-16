@@ -1,9 +1,7 @@
 'use client';
 
-import { getApps, initializeApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, type Auth } from 'firebase/auth';
-import { getFirestore, type Firestore } from 'firebase/firestore';
-import { getStorage, type Storage } from 'firebase/storage';
+import { getApps, initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
 export const firebaseConfig = {
@@ -18,13 +16,16 @@ export const firebaseConfig = {
 
 export const isDemoMode = true;
 
-const app: FirebaseApp = getApps().length > 0 ? getApps()[0] : initializeApp(firebaseConfig);
+const app = getApps().length > 0 ? getApps()[0] : initializeApp(firebaseConfig);
 
 export { app };
 
-export const db: Firestore = getFirestore(app);
-export const auth: Auth = getAuth(app);
-export const storage: Storage = getStorage(app);
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const db = require('firebase/firestore').getFirestore(app);
+export const auth = getAuth(app);
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const storage = require('firebase/storage').getStorage(app);
+export const dataConnect = null;
 
 export const initAnalytics = async () => {
   if (firebaseConfig.apiKey === 'fake-api-key' || !firebaseConfig.apiKey) {

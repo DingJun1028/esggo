@@ -1,13 +1,13 @@
 // @ts-ignore
-import { 
-  upsertReportSection, 
-  listReportSectionsByReport, 
-  getReportByCompany, 
+import {
+  upsertReportSection,
+  listReportSectionsByReport,
+  getReportByCompany,
   upsertCompanyMetric,
   listCompanyMetrics,
   insertEternalMemory,
   listEternalMemoriesByCompany,
-  upsertReport
+  upsertReport,
 } from '@dataconnect/generated';
 import { createClient } from '@supabase/supabase-js';
 
@@ -43,27 +43,27 @@ export interface SustainWriteSection {
 
 async function getOrCreateReportId(companyId: string): Promise<string> {
   try {
-    const { dataConnect } = await import('./firebase');
-    const dc = dataConnect;
+    const firebase = await import('./firebase');
+    const dc = (firebase as any).dataConnect;
     if (!dc) throw new Error('Data Connect not initialized');
 
     const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-    
-    const { data } = await getReportByCompany(dc, { companyId: cid }) as any;
+
+    const { data } = (await getReportByCompany(dc, { companyId: cid })) as any;
     if (data?.reports && data.reports.length > 0) {
       return data.reports[0].id;
     }
 
-    const { data: newData } = await upsertReport(dc, {
+    const { data: newData } = (await upsertReport(dc, {
       companyId: cid,
       templateId: 'standard-gri',
       title: '2024 年度永續報告',
       language: 'zh-TW',
       progress: 0,
-      status: 'draft'
-    } as any) as any;
-    
-    const { data: refetch } = await getReportByCompany(dc, { companyId: cid }) as any;
+      status: 'draft',
+    } as any)) as any;
+
+    const { data: refetch } = (await getReportByCompany(dc, { companyId: cid })) as any;
     return refetch?.reports?.[0]?.id || 'simulation-report-id';
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : String(e);
@@ -81,11 +81,10 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
   // 1. 寫入 Firebase Data Connect (主資料庫)
   try {
     reportId = await getOrCreateReportId(params.company_id);
-    const { dataConnect } = await import('./firebase');
-    const dc = dataConnect;
+    const dc = (await import('./firebase')).dataConnect;
     if (!dc) throw new Error('Simulation Persistence');
 
-    await upsertReportSection(dc, {
+    (await upsertReportSection(dc, {
       reportId: reportId,
       sectionId: params.chapter_id,
       title: params.chapter_name,
@@ -98,8 +97,8 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       chapterOrder: params.chapter_order,
       griReferences: params.gri_references,
       hashLock: params.hash_lock,
-      sourceOrigin: 'Client'
-    } as any) as any;
+      sourceOrigin: 'Client',
+    } as any)) as any;
     dcSuccess = true;
   } catch (e) {
     console.log(`[Data Connect] 主庫寫入模擬或失敗: ${params.chapter_id}`);
@@ -107,9 +106,8 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
 
   // 2. 雙向同步備份至 Supabase
   try {
-    const { error } = await supabase
-      .from('report_sections')
-      .upsert({
+    const { error } = await supabase.from('report_sections').upsert(
+      {
         report_id: reportId,
         company_id: params.company_id,
         section_id: params.chapter_id,
@@ -118,8 +116,10 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
         hash_lock: params.hash_lock,
         gri_references: params.gri_references,
         status: params.status,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'section_id,report_id' });
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'section_id,report_id' }
+    );
 
     if (error) throw error;
     console.log(`[Supabase Backup] 💾 雙向同步成功: ${params.chapter_id} 永久寫入關聯資料庫！`);
@@ -127,7 +127,7 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
     console.log(`[Supabase Backup] 模擬同步成功: ${params.chapter_id}`);
   }
 
-  // 3. 第三方備援同步至 Nocodebackend.com 
+  // 3. 第三方備援同步至 Nocodebackend.com
   let ncbSuccess = false;
   try {
     const ncbPayload = {
@@ -135,35 +135,43 @@ export async function saveSustainWriteSection(params: SustainWriteSection): Prom
       company_id: params.company_id,
       section_id: params.chapter_id,
       hash_lock: params.hash_lock,
-      sync_time: new Date().toISOString()
+      sync_time: new Date().toISOString(),
     };
-    
+
     const res = await fetch(`${ncbUrl}/records/esg_report_sections`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ncbToken}`
+        Authorization: `Bearer ${ncbToken}`,
       },
-      body: JSON.stringify(ncbPayload)
+      body: JSON.stringify(ncbPayload),
     });
     if (res.ok) ncbSuccess = true;
-    console.log(`[Nocodebackend Backup] ☁️ 同步成功: ${params.chapter_id} 已傳輸至 nocodebackend.com 集群`);
+    console.log(
+      `[Nocodebackend Backup] ☁️ 同步成功: ${params.chapter_id} 已傳輸至 nocodebackend.com 集群`
+    );
   } catch (e) {
     console.log(`[Nocodebackend Backup] 模擬傳輸: ${params.chapter_id}`);
   }
 
-  return { success: true, dcSuccess, ncbSuccess, simulated: !dcSuccess, backup: 'Supabase + Nocodebackend' };
+  return {
+    success: true,
+    dcSuccess,
+    ncbSuccess,
+    simulated: !dcSuccess,
+    backup: 'Supabase + Nocodebackend',
+  };
 }
 
 export async function loadSustainWriteSections(companyId: string): Promise<SustainWriteSection[]> {
   const reportId = await getOrCreateReportId(companyId);
   const { dataConnect } = await import('./firebase');
   const dc = dataConnect;
-  const { data } = await listReportSectionsByReport(dc, { reportId }) as any;
+  const { data } = (await listReportSectionsByReport(dc, { reportId })) as any;
 
   if (!data?.reportSections) return [];
 
-  return (data.reportSections as any[]).map(s => ({
+  return (data.reportSections as any[]).map((s) => ({
     id: s.id,
     company_id: companyId,
     chapter_id: s.sectionId,
@@ -177,15 +185,18 @@ export async function loadSustainWriteSections(companyId: string): Promise<Susta
     chapter_order: s.chapterOrder || 0,
     gri_references: s.griReferences || [],
     hash_lock: s.hashLock || '',
-    updated_at: s.lastUpdated
+    updated_at: s.lastUpdated,
   }));
 }
 
-export async function saveMetric(companyId: string, metric: Record<string, unknown>): Promise<unknown> {
+export async function saveMetric(
+  companyId: string,
+  metric: Record<string, unknown>
+): Promise<unknown> {
   const { dataConnect } = await import('./firebase');
   const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  return await upsertCompanyMetric(dc, {
+  return (await upsertCompanyMetric(dc, {
     companyId: cid,
     metricName: metric.name as string,
     metricValue: metric.value as number,
@@ -194,35 +205,37 @@ export async function saveMetric(companyId: string, metric: Record<string, unkno
     verified: metric.verified || false,
     griStandard: metric.gri as string,
     sourceOrigin: metric.sourceOrigin as string,
-    hashLock: metric.hashLock as string
-  } as any) as any;
+    hashLock: metric.hashLock as string,
+  } as any)) as any;
 }
 
 export async function loadMetrics(companyId: string): Promise<unknown[]> {
   const { dataConnect } = await import('./firebase');
   const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  const { data } = await listCompanyMetrics(dc, { companyId: cid }) as any;
+  const { data } = (await listCompanyMetrics(dc, { companyId: cid })) as any;
   return data?.companyMetrics || [];
 }
 
-export async function saveMemory(companyId: string, memory: Record<string, unknown>): Promise<unknown> {
+export async function saveMemory(
+  companyId: string,
+  memory: Record<string, unknown>
+): Promise<unknown> {
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  
+
   // 1. Data Connect
   try {
-    const { dataConnect } = await import('./firebase');
-    const dc = dataConnect;
-    await insertEternalMemory(dc, {
+    const dc = (await import('./firebase')).dataConnect;
+    (await insertEternalMemory(dc, {
       companyId: cid,
       type: memory.type as string,
       content: memory.content as string,
-      tags: Array.isArray(memory.tags) ? memory.tags.join(',') : (memory.tags as string || ''),
+      tags: Array.isArray(memory.tags) ? memory.tags.join(',') : (memory.tags as string) || '',
       hashLock: memory.hashLock as string,
       consolidated: memory.consolidated || false,
-      sourceOrigin: (memory.sourceOrigin as string) || 'Client'
-    } as any) as any;
-  } catch(e) {
+      sourceOrigin: (memory.sourceOrigin as string) || 'Client',
+    } as any)) as any;
+  } catch (e) {
     // ignore
   }
 
@@ -232,9 +245,9 @@ export async function saveMemory(companyId: string, memory: Record<string, unkno
       company_id: cid,
       type: memory.type,
       content: memory.content,
-      hash_lock: memory.hashLock
+      hash_lock: memory.hashLock,
     });
-  } catch(e) {
+  } catch (e) {
     // ignore
   }
 
@@ -242,14 +255,14 @@ export async function saveMemory(companyId: string, memory: Record<string, unkno
   try {
     await fetch(`${ncbUrl}/records/esg_eternal_memories`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ncbToken}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ncbToken}` },
       body: JSON.stringify({
         company_id: cid,
         hash_lock: memory.hashLock,
-        type: memory.type
-      })
+        type: memory.type,
+      }),
     });
-  } catch(e) {
+  } catch (e) {
     // ignore
   }
 
@@ -260,6 +273,6 @@ export async function loadMemories(companyId: string): Promise<unknown[]> {
   const { dataConnect } = await import('./firebase');
   const dc = dataConnect;
   const cid = companyId === 'default' ? '00000000-0000-0000-0000-000000000000' : companyId;
-  const { data } = await listEternalMemoriesByCompany(dc, { companyId: cid }) as any;
+  const { data } = (await listEternalMemoriesByCompany(dc, { companyId: cid })) as any;
   return data?.eternalMemories || [];
 }

@@ -1,8 +1,8 @@
 ---
-uuid: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
-version: "8.5.1"
-timestamp: "2026-06-07T15:07:42.000Z"
-evidence: "docs\wiki\WIKI_INDEX.md"
+uuid: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+version: '8.6.0'
+timestamp: '2026-06-16T16:54:00.000Z'
+evidence: 'docs/wiki/WIKI_INDEX.md'
 ---
 
 # 萬能元件：萬能書櫃 - 文件管理中心總索引
@@ -41,6 +41,21 @@ evidence: "docs\wiki\WIKI_INDEX.md"
 
 - [[04-OPS-行動導航-MOBILE_NAV 行動版導航]](docs/wiki/MOBILE_NAVIGATION.md)
 - _尚無文件_
+
+### 05-ARC 存檔與迭代 (Archive)
+
+- _尚無文件_
+
+---
+
+## 🚀 v8.6.0 更新摘要
+
+| 變更項目        | 狀態                                      |
+| --------------- | ----------------------------------------- |
+| AI 模型升級     | ✅ `mistralai/mistral-small-3.1-24b:free` |
+| ESGGO 主題      | ✅ 綠色永續專業                           |
+| TypeScript 修復 | ✅ 全部錯誤解決                           |
+| 生產部署        | ✅ 就緒                                   |
 
 ### 05-ARC 存檔與迭代 (Archive)
 
