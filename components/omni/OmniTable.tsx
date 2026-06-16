@@ -1,8 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, History, Search, Filter, AlertTriangle, CheckCircle, Database } from 'lucide-react';
+import {
+  ShieldCheck,
+  History,
+  Search,
+  Filter,
+  AlertTriangle,
+  CheckCircle,
+  Database,
+} from 'lucide-react';
 import { OmniBaseCard } from '../ui/omni/OmniBaseCard';
 import { OmniBadge } from '../ui/omni/OmniBadge';
 
@@ -28,12 +36,17 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [processing, setProcessing] = useState<string | null>(null);
 
-  const lowerFilter = filter.toLowerCase();
-  const filteredData = data.filter(row => 
-    row.content.toLowerCase().includes(lowerFilter) || 
-    row.source_origin.toLowerCase().includes(lowerFilter) ||
-    (row.hash && row.hash.toLowerCase().includes(lowerFilter))
-  );
+  // ⚡ Bolt Optimization: Added useMemo and hoisted toLowerCase() to prevent unnecessary O(N) recalculations on unrelated state changes (like expandedId or processing)
+  const filteredData = useMemo(() => {
+    if (!filter) return data;
+    const lowerFilter = filter.toLowerCase();
+    return data.filter(
+      (row) =>
+        row.content.toLowerCase().includes(lowerFilter) ||
+        row.source_origin.toLowerCase().includes(lowerFilter) ||
+        (row.hash && row.hash.toLowerCase().includes(lowerFilter))
+    );
+  }, [data, filter]);
 
   const handleSeal = async (id: string) => {
     if (!onSealAction) return;
@@ -53,9 +66,9 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
       <div className="flex justify-between items-center bg-[#0f172a] p-4 rounded-2xl border border-slate-800">
         <div className="relative w-64">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
-          <input 
-            type="text" 
-            placeholder="搜尋資料來源、單據、Hash..." 
+          <input
+            type="text"
+            placeholder="搜尋資料來源、單據、Hash..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -71,24 +84,26 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
       {/* Liquid Interaction Table Body */}
       <div className="flex flex-col gap-3">
         {filteredData.map((row) => (
-          <motion.div 
+          <motion.div
             key={row.id}
             layout
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`group rounded-2xl border transition-all duration-300 \${
-              row.status === 'Void' 
-                ? 'bg-slate-900/50 border-slate-800' 
+            className={`group rounded-2xl border transition-all duration-300 ${
+              row.status === 'Void'
+                ? 'bg-slate-900/50 border-slate-800'
                 : 'bg-black/40 border-cyan-500/10 hover:border-cyan-500/30 hover:bg-black/60 shadow-[0_0_20px_rgba(6,182,212,0)] hover:shadow-[0_0_20px_rgba(6,182,212,0.1)]'
             }`}
           >
             {/* Main Row */}
-            <div 
+            <div
               className="p-5 flex items-center justify-between cursor-pointer"
               onClick={() => setExpandedId(expandedId === row.id ? null : row.id)}
             >
               <div className="flex items-center gap-4 w-1/3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center \${row.status === 'Void' ? 'bg-slate-800 text-slate-500' : 'bg-cyan-500/20 text-cyan-400'}`}>
+                <div
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center ${row.status === 'Void' ? 'bg-slate-800 text-slate-500' : 'bg-cyan-500/20 text-cyan-400'}`}
+                >
                   <Database size={20} />
                 </div>
                 <div>
@@ -98,25 +113,32 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                   </p>
                 </div>
               </div>
-              
-              <div className="w-1/4 text-sm font-mono text-slate-300">
-                {row.value}
-              </div>
+
+              <div className="w-1/4 text-sm font-mono text-slate-300">{row.value}</div>
 
               <div className="w-1/4 flex gap-2 items-center">
                 {row.zkp_sealed ? (
-                  <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>ZKP Sealed</OmniBadge>
+                  <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+                    ZKP Sealed
+                  </OmniBadge>
                 ) : (
-                  <OmniBadge variant="warning" size="sm" icon={<AlertTriangle size={12}/>}>Unsealed</OmniBadge>
+                  <OmniBadge variant="warning" size="sm" icon={<AlertTriangle size={12} />}>
+                    Unsealed
+                  </OmniBadge>
                 )}
                 {row.status === 'Void' && (
-                  <OmniBadge variant="error" size="sm">Void</OmniBadge>
+                  <OmniBadge variant="error" size="sm">
+                    Void
+                  </OmniBadge>
                 )}
               </div>
 
               <div className="w-[100px] flex justify-end">
-                <button 
-                  onClick={(e) => { e.stopPropagation(); handleSeal(row.id); }}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSeal(row.id);
+                  }}
                   disabled={row.zkp_sealed || processing === row.id || row.status === 'Void'}
                   className="px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-50 transition-colors"
                 >
@@ -128,7 +150,7 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
             {/* Expandable Trace Details */}
             <AnimatePresence>
               {expandedId === row.id && (
-                <motion.div 
+                <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
@@ -137,26 +159,38 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                   <div className="p-5 bg-[#0a0f1d]/80 backdrop-blur-2xl flex flex-col gap-4 rounded-b-2xl border-t border-white/5">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">公式透明度</h4>
+                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                          公式透明度
+                        </h4>
                         <div className="text-sm text-emerald-400 flex items-center gap-2 font-mono bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
-                          {row.formula_visibility ? <CheckCircle size={14}/> : <AlertTriangle size={14} className="text-amber-400"/>}
+                          {row.formula_visibility ? (
+                            <CheckCircle size={14} />
+                          ) : (
+                            <AlertTriangle size={14} className="text-amber-400" />
+                          )}
                           {row.formula_visibility ? 'ISO-14064 公開可驗證' : 'OPAQUE'}
                         </div>
                       </div>
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Timestamp</h4>
+                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                          Timestamp
+                        </h4>
                         <div className="text-sm text-slate-300 font-mono">{row.timestamp}</div>
                       </div>
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Hash Lock (哈希封印)</h4>
+                        <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
+                          Hash Lock (哈希封印)
+                        </h4>
                         <div className="flex flex-col gap-2">
                           <div className="text-xs text-slate-300 font-mono break-all bg-black/60 p-2.5 rounded-lg border border-white/10 shadow-inner">
                             {row.hash || 'N/A (Awaiting Seal)'}
                           </div>
-                          <button 
+                          <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              alert(`正向 OmniCore Gateway 發起溯源請求...\n目標 Hash: ${row.hash || '無效'}\n此功能將展示原始單據與 5T 驗證路徑。`);
+                              alert(
+                                `正向 OmniCore Gateway 發起溯源請求...\n目標 Hash: ${row.hash || '無效'}\n此功能將展示原始單據與 5T 驗證路徑。`
+                              );
                             }}
                             className="flex items-center justify-center gap-2 px-3 py-1.5 mt-1 bg-indigo-500/10 hover:bg-indigo-500/30 text-indigo-400 text-xs font-bold rounded-lg border border-indigo-500/20 transition-all"
                           >
