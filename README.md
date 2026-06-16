@@ -1,10 +1,12 @@
 # 🌌 ESGGO 善向永續 | OmniAgent 萬能系統
 
-> **Platform:** ESGGO 善向永續 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY
+> **Platform:** ESGGO 善向永續 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** mistralai/mistral-small-3.1-24b:free
 
 [![Render Deployment](https://img.shields.io/badge/Render-Deployed-brightgreen)](https://dashboard.render.com)
 [![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t誠信協議-5t-integrity-protocol)
 [![Wiki](https://img.shields.io/badge/Wiki-OmniSystem-green)](docs/wiki/OMNI_SYSTEM.md)
+[![VPS Agent](https://img.shields.io/badge/VPS-Ready-blue)]()
+[![Tests](https://img.shields.io/badge/Tests-111%2F113-yellow)]()
 
 ## 📚 Wiki 導航
 
@@ -51,6 +53,12 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 - **定位**: 處理高度模糊的指令、深度多模態分析與跨領域策略制定。
 - **咒語**: `OmniAgent, 切換至 G4 模式。執行全域邏輯推演。`
 
+### 1.1 召喚 Mistral (Mistral Small 3.1 24B - Default)
+
+- **特色**: 預設 AI 模型，專業 ESG 分析。
+- **定位**: 處理 ESG 报告、法規分析與永續策略。
+- **模型鏈**: Local (qwen3:8b) → OpenRouter (mistralai/mistral-small-3.1-24b:free) → Mock
+
 ### 2. 系統指揮官 OmniAgent
 
 - **特色**: 資深全端架構師人格。負責全域編排、代理蜂群調度與任務執行。
@@ -67,6 +75,12 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 - **ESG Researcher**: 網頁檢索與情資收集。
 - **ESG Auditor**: 5T 合規性驗證與 ZKP 密封。
 - **ESG Strategist**: 敘事流優化與 GRI 標準對齊。
+
+### 5. VPS 部署代理 (VPS Agent)
+
+- **責任**: 負責所有伺服器相關事務，包含部署、監控與維護。
+- **配置**: `.agents/vps-agent/`
+- **服務端點**: Port 3000 (API), Port 3001 (UI), Port 8642 (Gateway)
 
 ---
 
@@ -122,14 +136,16 @@ pm2 restart esggo omniagent-gateway
 
 本平台實施嚴格的 **5T 誠信協議**（可溯源、透明、可感知、可信任、可追蹤）。所有程式碼變更皆須通過全自動測試。
 
-- **單元與整合測試狀態**：🟢 **100% 全數綠燈通過**
-- **測試統計**：`32` 個測試檔案，共 `118` 個 Test Cases 完美通過。
+- **單元與整合測試狀態**：🟡 **111/113 通過** (2 預存在位)
+- **測試統計**：`32` 個測試檔案，共 `111` 個 Test Cases 通過。
 - **一鍵執行本機誠信自檢**：
   ```bash
   npm run test
+  npm run typecheck
+  npm run lint
   ```
 
-### 📊 118 項全系統功能導覽與技術合規矩陣 (118 Tested Capabilities & 5T Compliance Matrix)
+### 📊 111 項全系統功能導覽與技術合規矩陣 (111 Tested Capabilities & 5T Compliance Matrix)
 
 本專案全數通過的 **118 項測試功能** 代表著平台在五大技術維度（5T 誠信協議）下的核心能力。以下為平台主要功能的導覽與對應之自動化測試清單：
 
