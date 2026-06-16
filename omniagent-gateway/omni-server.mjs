@@ -134,7 +134,7 @@ async function dispatchAI(task, skillId) {
   const prompt = task.prompt || task.message || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
   const imageUrl = task.imageUrl || task.image_url || null;
   const skill = SKILL_REGISTRY.find(s => s.id === skillId);
-  const model = skill?.model || 'qwen3:8b-vision';
+  const model = skill?.model || 'llava-phi3:latest';
   const localServer = process.env.LOCAL_GEMMA_SERVER_URL;
 
   // 1. Try local Ollama/Gemma server first (vision-capable)
