@@ -179,28 +179,7 @@ async function dispatchAI(task, skillId) {
   const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
   return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
 }
-  }
 
-  // 2. OpenRouter with skill-selected model
-  if (OPENROUTER_KEY) {
-    try {
-      const content = await callOpenRouter(model, prompt);
-      return { content, provider: 'OpenRouter', model };
-    } catch (e) {
-      console.warn('[OmniGateway] OpenRouter fallback:', e.message);
-    }
-  }
-
-  // 3. Mock
-  const mock = {
-    gri_report_draft:     `## GRI 報告草稿\n\n根據 GRI 2021 框架，本章節針對 **${task.title}** 進行揭露。\n\n**核心指標**：範疇一排放量、能源使用強度、員工健康安全。\n\n> ⚠️ OmniAgent Mock 模式 — 請設定 AI API Key 啟用真實推理`,
-    carbon_calculation:   `## 碳排計算結果 (ISO 14064-1)\n\n- 活動數據：${task.inputData || '待輸入'}\n- 排放係數：0.509 kgCO₂e/kWh（台電 2023）\n- **計算結果：8,450 tCO₂e**\n\n> Hash Lock: ${hashLock(task)}`,
-    compliance_review:    `## 合規審查報告\n\n| 框架 | 符合率 | 缺口 |\n|------|--------|------|\n| GRI 2021 | 78% | 305-3 未揭露 |\n| CSRD/ESRS | 65% | E1 氣候適應缺失 |`,
-    omni_jules_heal:      `## OmniJules 自動修復報告 (萬能果因協議)\n\n### 觀果 (Observe)\n${task.failureReason || '系統偵測到異常'}\n\n### 修因 (Cultivate)\n已啟動降維自癒，自動生成修復子任務。\n\n### 傳法 (Impart)\n此修復模式已寫入 OmniAgent 技能書。`,
-  };
-  const content = mock[skillId] || mock[task.taskType] || `OmniAgent 已處理任務：${task.title || task.taskType}`;
-  return { content, provider: 'Mock (No API Key)', model: 'mock-v3.0' };
-}
 
 // ── WebSocket Server ──────────────────────────────────────────
 const wssClients = new Set();
