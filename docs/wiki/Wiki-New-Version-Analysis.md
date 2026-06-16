@@ -14,8 +14,9 @@ evidence: "docs\wiki\Wiki-New-Version-Analysis.md"
 ### AI 模型升級
 
 - **預設模型**: `mistralai/mistral-small-3.1-24b:free` (OpenRouter)
-- **本地備援**: `qwen3:8b` (Ollama)
-- ** Failover 鏈式**: Local → OpenRouter → Mock
+- **視覺模型**: `meta-llama/llama-3.2-90b-vision:free` (OpenRouter)
+- **本地備援**: `qwen3:8b-vision` (Ollama)
+- **Failover 鏈式**: Local → OpenRouter → Mock
 
 ### ESGGO 主題
 
