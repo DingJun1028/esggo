@@ -67,10 +67,10 @@ console.log(`[OmniGateway] Gemini: ${gemini ? '✅' : '❌'} | OpenRouter: ${OPE
 
 // ── OmniAgent Skill Registry (OmniAgent absorbed skills) ─────────
 const SKILL_REGISTRY = [
-  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
+  { id: 'gri_report_draft',     name: 'GRI 報告草稿生成',     origin: 'omniagent:data_synthesis',      model: 'meta-llama/llama-3.2-90b-vision:free', esgDomain: 'E/S/G', fiveT: 'T2', status: 'transcended' },
   { id: 'carbon_calculation',   name: 'ISO 14064 碳排計算',    origin: 'omniagent:code_generation',     model: 'mistralai/mistral-small-3.1-24b:free', esgDomain: 'E',     fiveT: 'T1', status: 'transcended' },
-  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'nousresearch/hermes-3-llama-3.1-405b:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
-  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'google/gemma-4-26b-a4b-it:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
+  { id: 'compliance_review',    name: 'CSRD/GRI 合規審查',    origin: 'omniagent:web_search',           model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'G', fiveT: 'T2', status: 'absorbed' },
+  { id: 'evidence_ocr',        name: '碳排帳單 OCR 提取',     origin: 'omniagent:file_analysis',        model: 'qwen/qwen3-vl-8b:free', esgDomain: 'E', fiveT: 'T1', status: 'absorbed' },
   { id: 'email_archival',       name: 'ESG 郵件自動歸檔',     origin: 'omniagent:email_reading',        model: 'meta-llama/llama-3.3-70b-instruct:free', esgDomain: 'G', fiveT: 'T1', status: 'transcended' },
   { id: 'stakeholder_analysis', name: '利害關係人問卷分析',    origin: 'omniagent:data_synthesis',      model: 'qwen/qwen3-next-80b-a3b-instruct:free', esgDomain: 'S', fiveT: 'T3', status: 'absorbed' },
   { id: 'omni_jules_heal',      name: 'OmniJules 自動修復',   origin: 'google_jules:karma_protocol', model: 'openai/gpt-oss-120b:free',     esgDomain: 'SYS', fiveT: 'T4', status: 'transcended' },
@@ -80,12 +80,12 @@ const SKILL_REGISTRY = [
 // ── Free Models List ──────────────────────────────────────────
 let FREE_MODELS = [
   { id: 'mistralai/mistral-small-3.1-24b:free',               name: 'Mistral: Small 3.1 24B (Default)' },
+  { id: 'meta-llama/llama-3.2-90b-vision:free',               name: 'Meta: Llama 3.2 90B Vision (Free)' },
+  { id: 'google/gemma-3-27b-it:free',                        name: 'Google: Gemma 3 27B (Vision)' },
+  { id: 'qwen/qwen3-vl-8b:free',                            name: 'Qwen: Qwen3-VL 8B (Free Vision)' },
   { id: 'google/gemma-4-31b-it:free',                       name: 'Google: Gemma 4 31B' },
   { id: 'nousresearch/hermes-3-llama-3.1-405b:free',        name: 'Nous: Hermes 3 405B (OmniAgent Origin)' },
   { id: 'openai/gpt-oss-120b:free',                         name: 'OpenAI: GPT-OSS 120B' },
-  { id: 'meta-llama/llama-3.3-70b-instruct:free',           name: 'Meta: Llama 3.3 70B' },
-  { id: 'qwen/qwen3-next-80b-a3b-instruct:free',            name: 'Qwen: Qwen3 Next 80B' },
-  { id: 'nvidia/nemotron-3-ultra-550b-a55b:free',           name: 'NVIDIA: Nemotron Ultra 550B' },
 ];
 
 // ── ESG System Prompt ─────────────────────────────────────────
@@ -95,8 +95,20 @@ const ESG_SYSTEM_PROMPT = `你是 ESGGO 平台的 OmniAgent AI 助手（Open Sou
 所有輸出須符合 5T 誠信協議：可溯源、透明、可感知、可信任、可追蹤。`;
 
 // ── OpenRouter Call ───────────────────────────────────────────
-async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PROMPT) {
+async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PROMPT, imageUrl = null) {
   if (!OPENROUTER_KEY) throw new Error('No OPENROUTER_API_KEY');
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    {
+      role: 'user',
+      content: imageUrl
+        ? [
+            { type: 'text', text: userPrompt },
+            { type: 'image_url', image_url: { url: imageUrl } },
+          ]
+        : userPrompt,
+    },
+  ];
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -107,12 +119,9 @@ async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PRO
     },
     body: JSON.stringify({
       model: modelId,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
+      messages,
       temperature: 0.7,
-      max_tokens: 2048,
+      max_tokens: 4096,
     }),
   });
   if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${await res.text()}`);
@@ -122,26 +131,28 @@ async function callOpenRouter(modelId, userPrompt, systemPrompt = ESG_SYSTEM_PRO
 
 // ── AI Dispatcher ─────────────────────────────────────────────
 async function dispatchAI(task, skillId) {
-  const prompt = task.prompt || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
+  const prompt = task.prompt || task.message || `請分析並回覆：類型=${task.taskType} 標題=${task.title}`;
+  const imageUrl = task.imageUrl || task.image_url || null;
   const skill = SKILL_REGISTRY.find(s => s.id === skillId);
-  const model = skill?.model || 'qwen3:8b';
+  const model = skill?.model || 'qwen3:8b-vision';
   const localServer = process.env.LOCAL_GEMMA_SERVER_URL;
 
-  // 1. Try local Ollama/Gemma server first
-  if (localServer) {
+  // 1. Try local Ollama/Gemma server first (vision-capable)
+  if (localServer && imageUrl) {
     try {
       const response = await fetch(`${localServer}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b',
+          model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision',
           prompt: `${ESG_SYSTEM_PROMPT}\n\n${prompt}`,
+          image: imageUrl.startsWith('data:') ? imageUrl : undefined,
           stream: false
         })
       });
       if (response.ok) {
         const data = await response.json();
-        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b' };
+        return { content: data.response || data.content, provider: 'Local', model: process.env.LOCAL_GEMMA_MODEL || 'qwen3:8b-vision' };
       }
     } catch (e) {
       console.warn('[OmniGateway] Local server fallback:', e.message);
@@ -159,10 +170,10 @@ async function dispatchAI(task, skillId) {
     }
   }
 
-  // 3. OpenRouter with skill-selected model
+  // 3. OpenRouter with skill-selected model (vision-capable)
   if (OPENROUTER_KEY) {
     try {
-      const content = await callOpenRouter(model, prompt);
+      const content = await callOpenRouter(model, prompt, ESG_SYSTEM_PROMPT, imageUrl);
       return { content, provider: 'OpenRouter', model };
     } catch (e) {
       console.warn('[OmniGateway] OpenRouter fallback:', e.message);
