@@ -4,7 +4,7 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
 
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
-const DEFAULT_OPENROUTER_MODEL = 'google/gemma-4-31b-it:free';
+const DEFAULT_OPENROUTER_MODEL = 'mistralai/mistral-small-3.1-24b:free';
 
 export async function POST(req: Request) {
   try {
