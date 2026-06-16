@@ -51,7 +51,8 @@ export async function findBacklinks(noteId: string, type: string): Promise<OmniT
   const records = await client.getRecords(datasheetId, { pageSize: 100 });
   return records.records.filter(
     (r) =>
-      r.fields['Content']?.includes(`[[${noteId}]]`) || r.fields['Content']?.includes(`#${noteId}`)
+      String(r.fields['Content'])?.includes(`[[${noteId}]]`) ||
+      String(r.fields['Content'])?.includes(`#${noteId}`)
   );
 }
 
@@ -174,8 +175,8 @@ export async function getDeviceSyncStatus(
     });
     const device = records.records.find((r) => r.fields['DeviceId'] === deviceId);
     return {
-      lastSync: device?.fields['LastSync'] || Date.now(),
-      pendingCount: device?.fields['PendingCount'] || 0,
+      lastSync: Number(device?.fields['LastSync']) || Date.now(),
+      pendingCount: Number(device?.fields['PendingCount']) || 0,
     };
   } catch {
     return { lastSync: Date.now(), pendingCount: 0 };

@@ -105,17 +105,6 @@ export const OmniAgent_TO_OMNI_SKILL_MAP: OmniAgentSkillAbsorption[] = [
   },
 ];
 
-export const HERMES_LATEST_RELEASES = OmniAgent_LATEST_RELEASES;
-export const HERMES_TO_OMNI_SKILL_MAP = OmniAgent_TO_OMNI_SKILL_MAP;
-
-export async function pullHermesAndEvolve(): Promise<{
-  latestRelease: OmniAgentRelease;
-  evolution: OmniAgentEvolution;
-  newSkillsAbsorbed: OmniAgentSkillAbsorption[];
-}> {
-  return pullOmniAgentAndEvolve();
-}
-
 /**
  * 最新版本的 OmniAgent 更新記錄 (從官方源同步)
  */
@@ -146,6 +135,17 @@ export const OmniAgent_LATEST_RELEASES: OmniAgentRelease[] = [
     breakingChanges: ['Deprecated `agent run` simple mode'],
   },
 ];
+
+export const HERMES_LATEST_RELEASES = OmniAgent_LATEST_RELEASES;
+export const HERMES_TO_OMNI_SKILL_MAP = OmniAgent_TO_OMNI_SKILL_MAP;
+
+export async function pullHermesAndEvolve(): Promise<{
+  latestRelease: OmniAgentRelease;
+  evolution: OmniAgentEvolution;
+  newSkillsAbsorbed: OmniAgentSkillAbsorption[];
+}> {
+  return pullOmniAgentAndEvolve();
+}
 
 /**
  * OmniAgent 洗鍊進化歷程 (每次從 OmniAgent 更新後觸發)
