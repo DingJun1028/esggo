@@ -57,7 +57,13 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 
 - **特色**: 預設 AI 模型，專業 ESG 分析。
 - **定位**: 處理 ESG 报告、法規分析與永續策略。
-- **模型鏈**: Local (qwen3:8b) → OpenRouter (mistralai/mistral-small-3.1-24b:free) → Mock
+- **模型鏈**: Local (llava-phi3:latest) → OpenRouter (mistralai/mistral-small-3.1-24b:free) → Mock
+
+### 1.2 召喚 Vision (Llava-Phi3 - Image Analysis)
+
+- **特色**: 視覺分析模型，支援圖片描述與 ESG 圖表識別。
+- **定位**: 處理圖片問題、圖表識別、視覺數據分析。
+- **模型**: `llava-phi3:latest` (本地 Ollama)
 
 ### 2. 系統指揮官 OmniAgent
 
