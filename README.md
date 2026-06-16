@@ -3,8 +3,15 @@
 > **Platform:** ESGGO 善向永續 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY
 
 [![Render Deployment](https://img.shields.io/badge/Render-Deployed-brightgreen)](https://dashboard.render.com)
-[![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t-誠信協議-5t-integrity-protocol)
-[![Design](https://img.shields.io/badge/Design-Liquid_Glass-cyan)](#-設計美學-liquid-glass-aesthetics)
+[![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t誠信協議-5t-integrity-protocol)
+[![Wiki](https://img.shields.io/badge/Wiki-OmniSystem-green)](docs/wiki/OMNI_SYSTEM.md)
+
+## 📚 Wiki 導航
+
+- [OmniSystem MECE 架構](docs/wiki/OMNI_SYSTEM.md) - 24 類別定義
+- [萬能系列組件](docs/wiki/OMNI_SERIES.md) - Memory, Knowledge, Runes, Notes...
+- [終極矩陣](docs/wiki/OMNI_COMPONENT_MATRIX.md) - 功能導覽地圖
+- [行動版設計](docs/wiki/MOBILE_NAVIGATION.md) - RWD 響應式設計
 
 ## 0. 🚀 系統願景 (Mission)
 
@@ -150,6 +157,25 @@ pm2 restart esggo omniagent-gateway
 
 ---
 
+## 🔌 API 端點 | API Endpoints
+
+| 端點                   | 方法 | 功能     |
+| ---------------------- | ---- | -------- |
+| `/api/omni-notes`      | POST | 筆記同步 |
+| `/api/omni-agent/chat` | POST | AI 對話  |
+| `/api/system/health`   | GET  | 系統健康 |
+
+### 快速測試
+
+```bash
+# 筆記同步
+curl -X POST http://localhost:3000/api/omni-notes \
+  -H "Content-Type: application/json" \
+  -d '{"action":"sync","note":{"id":"test","type":"knowledge","content":"ESG永續發展 #永續"}}'
+```
+
+---
+
 ## 🎨 設計美學 (Liquid Glass Aesthetics)
 
 - **核心色彩**: Berkeley Blue (`#003262`) & California Gold (`#FDB515`)。
@@ -183,4 +209,4 @@ pm2 restart esggo omniagent-gateway
 
 ---
 
-_Generated & Sealed by OmniAgent G4 | 2026-06-12_
+_Generated & Sealed by OmniAgent G4 | 2026-06-16_
