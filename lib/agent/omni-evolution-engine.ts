@@ -39,6 +39,9 @@ export interface OmniAgentSkillAbsorption {
   absorptionStatus: 'pending' | 'absorbed' | 'transcended';
 }
 
+export type HermesRelease = OmniAgentRelease;
+export type HermesSkillAbsorption = OmniAgentSkillAbsorption;
+
 /**
  * OmniAgent → OmniAgent 技能轉化映射表
  * 這是 ESGGO 的核心機密：如何將通用 OmniAgent 技能「洗鍊」為 ESG 專屬能力
@@ -101,6 +104,17 @@ export const OmniAgent_TO_OMNI_SKILL_MAP: OmniAgentSkillAbsorption[] = [
     absorptionStatus: 'absorbed',
   },
 ];
+
+export const HERMES_LATEST_RELEASES = OmniAgent_LATEST_RELEASES;
+export const HERMES_TO_OMNI_SKILL_MAP = OmniAgent_TO_OMNI_SKILL_MAP;
+
+export async function pullHermesAndEvolve(): Promise<{
+  latestRelease: OmniAgentRelease;
+  evolution: OmniAgentEvolution;
+  newSkillsAbsorbed: OmniAgentSkillAbsorption[];
+}> {
+  return pullOmniAgentAndEvolve();
+}
 
 /**
  * 最新版本的 OmniAgent 更新記錄 (從官方源同步)

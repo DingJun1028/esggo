@@ -24,7 +24,7 @@ import {
   Globe,
 } from 'lucide-react';
 
-const DEFAULT_OPENROUTER_MODEL = 'google/gemma-4-31b-it:free';
+const DEFAULT_OPENROUTER_MODEL = 'mistralai/mistral-small-3.1-24b:free';
 
 export default function ApiSetupPage() {
   const [loading, setLoading] = useState(false);
