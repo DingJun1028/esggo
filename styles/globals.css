@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 46.3% 6.1%;
+    --berkeley-blue: 204 100% 19.6%;
+    --california-gold: 48 100% 52.4%;
+    --success: 16 100% 44.9%;
+    --warning: 45 100% 52.4%;
+    --error: 0 100% 50%;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+  }
+
+  body {
+    @apply bg-neutral-50 text-neutral-900;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-berkeley-blue text-white px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity;
+  }
+
+  .btn-secondary {
+    @apply bg-neutral-100 text-neutral-800 px-4 py-2 rounded-lg font-medium hover:bg-neutral-200 transition-colors;
+  }
+
+  .btn-accent {
+    @apply bg-california-gold text-neutral-900 px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-lg border border-neutral-200;
+  }
+
+  .liquid-glass {
+    @apply backdrop-blur bg-white/10 border border-white/20 rounded-xl shadow-2xl;
+  }
+}
+
+@layer utilities {
+  .text-h1 {
+    @apply text-[32px] font-bold leading-tight;
+  }
+
+  .text-h2 {
+    @apply text-[28px] font-semibold leading-tight;
+  }
+
+  .text-h3 {
+    @apply text-[24px] font-medium leading-tight;
+  }
+
+  .gradient-blue-gold {
+    background: linear-gradient(135deg, #003262 0%, #fdb515 100%);
+  }
+}
