@@ -178,6 +178,21 @@ create table if not exists public.report_styles (
     created_at timestamp with time zone default now()
 );
 
+-- Create sustain_write_notes table for sustainability writing notes
+create table if not exists public.sustain_write_notes (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    gri_code text not null,
+    section text not null,
+    title text not null,
+    content text,
+    context jsonb,
+    linked_documents uuid[],
+    status text check (status in ('draft', 'review', 'final')) default 'draft',
+    word_target integer,
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
