@@ -6,6 +6,7 @@ import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
 import { logUserActivity } from '@/lib/telemetry';
+import xss from 'xss';
 import {
   Globe,
   Search,
@@ -270,8 +271,8 @@ export default function IntelligencePage() {
             val === 'Positive'
               ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
               : val === 'Negative'
-              ? 'bg-rose-50 border-rose-200 text-rose-700'
-              : 'bg-slate-100 border-slate-200 text-slate-600'
+                ? 'bg-rose-50 border-rose-200 text-rose-700'
+                : 'bg-slate-100 border-slate-200 text-slate-600'
           }`}
         >
           {val}
@@ -473,7 +474,7 @@ export default function IntelligencePage() {
                 {generatedReport && (
                   <div
                     className="animate-in fade-in duration-300 font-normal leading-relaxed text-slate-700"
-                    dangerouslySetInnerHTML={{ __html: generatedReport }}
+                    dangerouslySetInnerHTML={{ __html: xss(generatedReport) }}
                   />
                 )}
                 {isGeneratingReport && generatedReport && (
