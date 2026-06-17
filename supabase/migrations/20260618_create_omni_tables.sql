@@ -74,6 +74,37 @@ create table if not exists public.cbam_calculations (
     metadata jsonb
 );
 
+-- Create omni_vault table for secure document storage
+create table if not exists public.omni_vault (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    file_name text not null,
+    file_type text not null,
+    file_size integer,
+    file_path text,
+    encryption_level text default 'L1',
+    hash_lock text not null,
+    tag text,
+    category text check (category in ('evidence', 'report', 'template', 'archive')),
+    created_at timestamp with time zone default now(),
+    expires_at timestamp with time zone
+);
+
+-- Create reading_room_documents table for document library
+create table if not exists public.reading_room_documents (
+    id text primary key,
+    title text not null,
+    description text,
+    category text check (category in ('standard', 'template', 'case-study', 'regulation', 'industry-report')),
+    file_url text,
+    gri_reference text,
+    esg_category text check (esg_category in ('Environmental', 'Social', 'Governance')),
+    tags text[],
+    source text,
+    published_date date,
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
@@ -96,6 +127,22 @@ create table if not exists public.omni_notes (
     pinned boolean default false,
     last_edited_time timestamp with time zone default now(),
     created_at timestamp with time zone default now()
+);
+
+-- Create sustain_write_documents table for Sustain Write workspace
+create table if not exists public.sustain_write_documents (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    title text not null,
+    content text,
+    document_type text check (document_type in ('sustainability', 'carbon-accounting', 'esg-disclosure', 'transition-plan')),
+    gri_mappings text[],
+    evidence_ids uuid[],
+    version integer default 1,
+    status text check (status in ('draft', 'review', 'published', 'archived')) default 'draft',
+    collaborators uuid[],
+    created_at timestamp with time zone default now(),
+    updated_at timestamp with time zone default now()
 );
 
 -- Create index for faster route lookups
