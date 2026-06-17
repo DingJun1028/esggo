@@ -1,9 +1,38 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { OmniUltimateMatrix } from '@/components/omni/OmniUltimateMatrix';
+import { MATRIX_ROUTES } from '@/lib/omni-core/matrix-store';
+
+interface MatrixStats {
+  totalComponents: number;
+  registeredComponents: number;
+  lastUpdated: string;
+}
 
 export default function UltimateMatrixPage() {
+  const [stats, setStats] = useState<MatrixStats>({
+    totalComponents: MATRIX_ROUTES.length,
+    registeredComponents: 55,
+    lastUpdated: '2026-06-14',
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/matrix')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.components) {
+          setStats({
+            totalComponents: data.components.length,
+            registeredComponents: data.components.filter((c: any) => c.registered).length,
+            lastUpdated: data.components[0]?.lastUpdated || stats.lastUpdated,
+          });
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-200 relative overflow-hidden">
       {/* Background glow for Matrix Page */}
@@ -20,7 +49,7 @@ export default function UltimateMatrixPage() {
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center gap-4">
-              萬能元件。終極矩陣
+              萬能元件。終極矩陀
             </h1>
             <p className="text-slate-400 mt-3 text-sm max-w-xl">
               OmniCore Governance Architecture. 全局檢視與驗證系統中每一個功能設施的 5T
@@ -29,8 +58,12 @@ export default function UltimateMatrixPage() {
           </div>
           <div className="flex flex-col items-end gap-1">
             <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-md">
-              <span className="text-xs text-slate-400 font-mono">16-Dimensional Matrix</span>
-              <span className="text-xl font-bold text-cyan-400">Active</span>
+              <span className="text-xs text-slate-400 font-mono">
+                {stats.totalComponents} Components
+              </span>
+              <span className="text-xl font-bold text-cyan-400">
+                {loading ? 'Loading...' : `${stats.registeredComponents} Registered`}
+              </span>
             </div>
           </div>
         </header>
