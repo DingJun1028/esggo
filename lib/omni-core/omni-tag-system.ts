@@ -135,6 +135,8 @@ export const getAllTags = async (): Promise<OmniTag[]> => {
   }
 };
 
+export { DEFAULT_TAGS };
+
 // 建立標籤
 export const createTag = async (tag: OmniTag): Promise<string | null> => {
   const { data, error } = await supabase.from('omni_tags').insert(tag).select('id').single();
