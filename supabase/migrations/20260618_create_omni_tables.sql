@@ -149,3 +149,17 @@ create table if not exists public.sustain_write_documents (
 create index if not exists idx_omni_matrix_route on public.omni_matrix_components(route);
 create index if not exists idx_omni_evidence_report on public.omni_evidence(report_id);
 create index if not exists idx_omni_notes_user on public.omni_notes(user_id);
+
+-- Create gri_expert_templates table for GRI templates
+create table if not exists public.gri_expert_templates (
+    id text primary key,
+    gri_code text not null references public.gri_standards(gri_code),
+    template_name text not null,
+    industry text,
+    section integer,
+    content text,
+    placeholders jsonb,
+    compliance_checklist jsonb,
+    disclosure_hints jsonb,
+    created_at timestamp with time zone default now()
+);
