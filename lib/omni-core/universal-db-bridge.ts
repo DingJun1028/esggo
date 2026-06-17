@@ -3,9 +3,15 @@
  * 整合 Supabase, Firebase DataConnect, NCBDB 三大資料來源
  */
 
-import { supabase } from './db/supabase';
-import { dcInsertEternalMemory, dcListEternalMemories } from './dataconnect-services';
-import { ncbClient } from './ncbdb';
+import { supabase } from '../db/supabase';
+import { dcInsertEternalMemory, dcListEternalMemories } from '../dataconnect-services';
+import { ncbClient } from '../ncbdb';
+import { createHash } from 'crypto';
+
+const secureHash = async (data: unknown): Promise<string> => {
+  const str = typeof data === 'string' ? data : JSON.stringify(data);
+  return createHash('sha256').update(str).digest('hex');
+};
 
 // 萬能永憶 (Eternal Memory) - Firebase DataConnect 儲存
 export async function storeEternalMemory(memory: {
@@ -14,14 +20,15 @@ export async function storeEternalMemory(memory: {
   tags?: string[];
   sourceOrigin?: string;
 }) {
+  const hashLock = await secureHash(memory.content);
   return await dcInsertEternalMemory({
     type: memory.type as any,
     content: memory.content,
     tags: memory.tags?.join(',') || '',
-    hashLock: (await import('./crypto-proof').then((m) => m.secureHash(memory.content))) as string,
+    hashLock: hashLock,
     consolidated: false,
     sourceOrigin: memory.sourceOrigin || 'Client',
-  });
+  } as any);
 }
 
 // 萬能智庫 (Knowledge Library) - Supabase
@@ -49,7 +56,7 @@ export async function storeUserMemory(memory: {
   memoryType: string;
   context?: unknown;
 }) {
-  const hashLock = await import('./crypto-proof').then((m) => m.secureHash(memory.memoryValue));
+  const hashLock = await secureHash(memory.memoryValue);
   const { error } = await supabase.from('user_memory').upsert({
     user_id: memory.userId,
     memory_key: memory.memoryKey,
@@ -70,7 +77,7 @@ export async function syncToNCBDB(tableName: string, data: Record<string, unknow
 // 三大資料庫的統一查詢介面
 export const omniDB = {
   eternal: {
-    list: () => dcListEternalMemories({}),
+    list: () => dcListEternalMemories(),
     store: storeEternalMemory,
   },
   knowledge: {
