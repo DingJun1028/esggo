@@ -73,3 +73,7 @@ All future core components must implement the updated `IComponentCore` interface
 **Prevention:** Remove fallback secrets completely and configure variables to explicitly bind to environment variables (`const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;`). Additionally, introduce early termination logic (like throwing an Error) during critical cryptographic operations (e.g., `generateZkpSeal`) if the required environment variables are absent.
 
 
+## 2024-06-11 - [XSS Protection in Intelligence Report]
+**Vulnerability:** The AI-generated `SustainObserver` report was directly rendered into the DOM using `dangerouslySetInnerHTML={{ __html: generatedReport }}` in `app/intelligence/page.tsx` without sanitization. This is a critical XSS vector if the AI model hallucinates or maliciously crafted external data is returned and injected.
+**Learning:** Even internal AI outputs should be treated as untrusted user input, especially when returning HTML meant for direct DOM rendering.
+**Prevention:** Used the `xss` library to wrap the generated report before injection (`xss(generatedReport)`), ensuring any potentially harmful `<script>` tags or inline event handlers are stripped.
