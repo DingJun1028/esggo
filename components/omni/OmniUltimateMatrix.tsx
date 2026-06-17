@@ -142,7 +142,7 @@ const matrixData = [
         description: '卡片佈局與視覺動效的展示畫廊。',
         fiveTStatus: [false, false, true, false, false],
         tags: ['UI', 'Demo'],
-        registered: false,
+        registered: true,
         deliverables: ['components/ui/omni/OmniCardsDemo.tsx'],
         businessLogic: '展示各式卡片動效與毛玻璃質感的靜態畫廊，不包含後端 API 連結。',
         uiux: '九宮格網格佈局、hover 傾斜、彩虹光圈流動邊框。',
@@ -221,7 +221,7 @@ const matrixData = [
         description: '多代理結盟與任務分配的協作樞紐。',
         fiveTStatus: [true, true, true, true, true],
         tags: ['Agent', 'Collaboration'],
-        registered: false,
+        registered: true,
         deliverables: ['components/omni/OmniAllianceHub.tsx'],
         businessLogic:
           '多代理結盟決策與衝突仲裁邏輯，當多個代理對同一決策產生分歧時進行投票與共識仲裁。',
@@ -414,7 +414,7 @@ const matrixData = [
         description: 'OmniAgent 資料管線的演化與效能面板。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Data', 'Pipeline'],
-        registered: false,
+        registered: true,
         deliverables: ['components/omni/OmniAgentEvolutionPanel.tsx'],
         businessLogic:
           'OmniAgent 智能數據管線的流量自適應與吞吐量優化面板，當檢測到高流量時自動擴容。',
@@ -709,7 +709,7 @@ const matrixData = [
         description: '資料庫狀態、連線與資料脈絡展示。',
         fiveTStatus: [true, true, true, true, true],
         tags: ['Molecule', 'Database'],
-        registered: false,
+        registered: true,
         deliverables: ['components/ui/omni/OmniDB.tsx'],
         businessLogic:
           '展示資料庫表結構、連線池 (Connection Pool) 佔用率與 PostgreSQL 唯讀複本狀態。',
