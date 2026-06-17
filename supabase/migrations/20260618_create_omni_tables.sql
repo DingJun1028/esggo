@@ -105,6 +105,33 @@ create table if not exists public.reading_room_documents (
     created_at timestamp with time zone default now()
 );
 
+-- Create data_sources table for system integration
+create table if not exists public.data_sources (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    source_type text check (source_type in ('hr', 'finance', 'erp', 'api', 'scraped', 'ocr')),
+    source_name text not null,
+    api_endpoint text,
+    connection_config jsonb,
+    last_sync timestamp with time zone,
+    sync_frequency text,
+    created_at timestamp with time zone default now()
+);
+
+-- Create ocr_documents table for OCR processing
+create table if not exists public.ocr_documents (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    file_name text not null,
+    file_url text,
+    extracted_data jsonb,
+    gri_reference text,
+    confidence numeric,
+    ocr_engine text,
+    hash_lock text,
+    processed_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
