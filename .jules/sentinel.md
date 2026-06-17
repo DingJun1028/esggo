@@ -73,7 +73,18 @@ All future core components must implement the updated `IComponentCore` interface
 **Prevention:** Remove fallback secrets completely and configure variables to explicitly bind to environment variables (`const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN;`). Additionally, introduce early termination logic (like throwing an Error) during critical cryptographic operations (e.g., `generateZkpSeal`) if the required environment variables are absent.
 
 
+
 ## 2024-05-18 - [CRITICAL] Fix hardcoded JWT secret fallback in auth middleware
 **Vulnerability:** The `server/src/middleware/auth.ts` file used a hardcoded fallback string `'change_this_secret'` for the JWT secret if the `JWT_SECRET` environment variable was not set.
 **Learning:** This is a critical security vulnerability as it would allow an attacker to forge JWT tokens if the application is deployed without `JWT_SECRET` set, as the fallback is predictable and easily found in the codebase.
 **Prevention:** To maintain security, cryptographic operations and API calls must fail securely by throwing an explicit Error if required environment variables are missing, rather than relying on hardcoded fallback secrets.
+
+## 2024-06-11 - [XSS Protection in Intelligence Report]
+**Vulnerability:** The AI-generated `SustainObserver` report was directly rendered into the DOM using `dangerouslySetInnerHTML={{ __html: generatedReport }}` in `app/intelligence/page.tsx` without sanitization. This is a critical XSS vector if the AI model hallucinates or maliciously crafted external data is returned and injected.
+**Learning:** Even internal AI outputs should be treated as untrusted user input, especially when returning HTML meant for direct DOM rendering.
+**Prevention:** Used the `xss` library to wrap the generated report before injection (`xss(generatedReport)`), ensuring any potentially harmful `<script>` tags or inline event handlers are stripped.
+## 2024-06-11 - [Dockerfile using npm instead of pnpm]
+**Vulnerability:** The `Dockerfile` used `npm install` and copied `package-lock.json`, which conflicts with the project's strict usage of `pnpm`. This caused `npm` to attempt to resolve an incompatible dependency tree (`@opentelemetry/core`, `react-native`, etc.), failing the Docker build process in CI.
+**Learning:** Container builds must mirror the environment logic of the host application, specifically package managers. Using `npm` instead of `pnpm` will invariably cause resolution errors when a lockfile format mismatch exists.
+**Prevention:** Ensured `Dockerfile` explicitly installs and runs `pnpm` (`RUN npm install -g pnpm && pnpm install --no-frozen-lockfile`) and references `pnpm-lock.yaml`.
+

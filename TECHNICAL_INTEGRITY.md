@@ -130,4 +130,4 @@ Engine，實現**「驗證事實，而不揭露數據」**的零信任防護。
 
 ---
 
-**Standard Version:** v1.3.0 | **Maintained by:** OmniAgent Architecture Team
+**Standard Version:** v1.4.0 | **Maintained by:** OmniAgent Architecture Team

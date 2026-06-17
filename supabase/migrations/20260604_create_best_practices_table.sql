@@ -17,9 +17,13 @@ CREATE TABLE IF NOT EXISTS public.best_practices (
 ALTER TABLE public.best_practices ENABLE ROW LEVEL SECURITY;
 
 -- Policy example: Allow authenticated users to read best practices
+DROP POLICY IF EXISTS "Authenticated users can read best_practices" ON public.best_practices;
 CREATE POLICY "Authenticated users can read best_practices" ON public.best_practices
-    FOR SELECT USING (auth.role() = 'authenticated');
+    FOR SELECT
+    TO authenticated
+    USING (true);
 
 -- Policy example: Allow service role to full access
+DROP POLICY IF EXISTS "Service Role can full access best_practices" ON public.best_practices;
 CREATE POLICY "Service Role can full access best_practices" ON public.best_practices
     USING (auth.jwt() ->> 'role' = 'service_role');

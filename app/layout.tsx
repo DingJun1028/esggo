@@ -6,7 +6,7 @@ import { AuthProvider } from '../components/AuthProvider';
 
 export const metadata: Metadata = {
   title: {
-    default: 'ESGGO善向永續 | 5T 永續治理系統',
+    default: 'ESGGO善向永續 | 2026 永續治理系統',
     template: '%s | ESGGO善向永續',
   },
   description: '臺北市中小企業永續治理實證系統 v8.5 · Berkeley Haas × TSISDA · 5T 誠信協議驅動之 ESGGO善向永續',
@@ -51,7 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <Suspense fallback={<LoadingFallback />}>
           <AuthProvider>
-            <ClientLayout>{children}</ClientLayout>
+
+
+              <ClientLayout>{children}</ClientLayout>
+
           </AuthProvider>
         </Suspense>
       </body>

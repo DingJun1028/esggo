@@ -2,8 +2,13 @@
 import { useState, useEffect } from 'react';
 import { Palette, Star, StarOff, Check, Heart } from 'lucide-react';
 import {
-  THEMES, applyTheme, getSavedTheme, getFavoriteThemes,
-  saveFavoriteTheme, removeFavoriteTheme, type ThemeId
+  THEMES,
+  applyTheme,
+  getSavedTheme,
+  getFavoriteThemes,
+  saveFavoriteTheme,
+  removeFavoriteTheme,
+  type ThemeId,
 } from '../lib/theme-config';
 
 interface ThemeSelectorProps {
@@ -14,8 +19,8 @@ interface ThemeSelectorProps {
 
 export default function ThemeSelector({ collapsed, currentTheme, onSelect }: ThemeSelectorProps) {
   const [open, setOpen] = useState(false);
-  const [current, setCurrent] = useState<ThemeId>('minimal-blue');
-  const [favorites, setFavorites] = useState<ThemeId[]>(['minimal-blue']);
+  const [current, setCurrent] = useState<ThemeId>('esggo');
+  const [favorites, setFavorites] = useState<ThemeId[]>(['esggo']);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -40,7 +45,7 @@ export default function ThemeSelector({ collapsed, currentTheme, onSelect }: The
     const favs = getFavoriteThemes();
     if (favs.includes(id)) {
       removeFavoriteTheme(id);
-      setFavorites(favs.filter(f => f !== id));
+      setFavorites(favs.filter((f) => f !== id));
     } else {
       saveFavoriteTheme(id);
       setFavorites([...favs, id]);
@@ -48,9 +53,9 @@ export default function ThemeSelector({ collapsed, currentTheme, onSelect }: The
   };
 
   const activeTheme = currentTheme || current;
-  const activeThemeObj = THEMES.find(t => t.id === activeTheme);
-  const favoriteThemes = THEMES.filter(t => favorites.includes(t.id));
-  const otherThemes = THEMES.filter(t => !favorites.includes(t.id));
+  const activeThemeObj = THEMES.find((t) => t.id === activeTheme);
+  const favoriteThemes = THEMES.filter((t) => favorites.includes(t.id));
+  const otherThemes = THEMES.filter((t) => !favorites.includes(t.id));
 
   return (
     <div style={{ position: 'relative' }}>
@@ -76,7 +81,9 @@ export default function ThemeSelector({ collapsed, currentTheme, onSelect }: The
         <span style={{ fontSize: '14px', flexShrink: 0 }}>{activeThemeObj?.emoji}</span>
         {!collapsed && (
           <>
-            <span style={{ flex: 1, textAlign: 'left', fontWeight: 500, color: 'var(--text-primary)' }}>
+            <span
+              style={{ flex: 1, textAlign: 'left', fontWeight: 500, color: 'var(--text-primary)' }}
+            >
               {activeThemeObj?.name}
             </span>
             <Palette size={12} style={{ flexShrink: 0 }} />
@@ -86,36 +93,59 @@ export default function ThemeSelector({ collapsed, currentTheme, onSelect }: The
 
       {open && (
         <>
+          <div style={{ position: 'fixed', inset: 0, zIndex: 40 }} onClick={() => setOpen(false)} />
           <div
-            style={{ position: 'fixed', inset: 0, zIndex: 40 }}
-            onClick={() => setOpen(false)}
-          />
-          <div style={{
-            position: 'absolute',
-            bottom: 'calc(100% + 8px)',
-            left: collapsed ? '100%' : 0,
-            marginLeft: collapsed ? '8px' : 0,
-            width: '260px',
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border-color)',
-            borderRadius: '12px',
-            boxShadow: 'var(--shadow-lg)',
-            zIndex: 50,
-            overflow: 'hidden',
-          }}>
-            <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            style={{
+              position: 'absolute',
+              bottom: 'calc(100% + 8px)',
+              left: collapsed ? '100%' : 0,
+              marginLeft: collapsed ? '8px' : 0,
+              width: '260px',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '12px',
+              boxShadow: 'var(--shadow-lg)',
+              zIndex: 50,
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                padding: '12px 14px',
+                borderBottom: '1px solid var(--border-color)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
               <Palette size={14} style={{ color: 'var(--accent-primary)' }} />
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>外觀主題</span>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginLeft: 'auto' }}>點 ★ 加入最愛</span>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                外觀主題
+              </span>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginLeft: 'auto' }}>
+                點 ★ 加入最愛
+              </span>
             </div>
 
             <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
               {favoriteThemes.length > 0 && (
                 <div>
-                  <div style={{ padding: '8px 14px 4px', fontSize: '10px', fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div
+                    style={{
+                      padding: '8px 14px 4px',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      color: 'var(--text-muted)',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
                     <Heart size={10} fill="currentColor" /> 我的最愛
                   </div>
-                  {favoriteThemes.map(theme => (
+                  {favoriteThemes.map((theme) => (
                     <ThemeItem
                       key={theme.id}
                       theme={theme}
@@ -131,11 +161,20 @@ export default function ThemeSelector({ collapsed, currentTheme, onSelect }: The
               {otherThemes.length > 0 && (
                 <div>
                   {favoriteThemes.length > 0 && (
-                    <div style={{ padding: '8px 14px 4px', fontSize: '10px', fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                    <div
+                      style={{
+                        padding: '8px 14px 4px',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        color: 'var(--text-muted)',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                      }}
+                    >
                       其他主題
                     </div>
                   )}
-                  {otherThemes.map(theme => (
+                  {otherThemes.map((theme) => (
                     <ThemeItem
                       key={theme.id}
                       theme={theme}
@@ -149,7 +188,13 @@ export default function ThemeSelector({ collapsed, currentTheme, onSelect }: The
               )}
             </div>
 
-            <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border-color)', background: 'var(--bg-hover)' }}>
+            <div
+              style={{
+                padding: '10px 14px',
+                borderTop: '1px solid var(--border-color)',
+                background: 'var(--bg-hover)',
+              }}
+            >
               <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
                 主題偏好已自動儲存至本機
               </div>
@@ -198,18 +243,44 @@ function ThemeItem({ theme, isCurrent, isFavorite, onSelect, onToggleFav }: Them
     >
       <div style={{ display: 'flex', gap: '3px', flexShrink: 0 }}>
         {previewColors.map((c, i) => (
-          <div key={i} style={{ width: '12px', height: '12px', borderRadius: '3px', background: c, border: '1px solid rgba(0,0,0,0.08)' }} />
+          <div
+            key={i}
+            style={{
+              width: '12px',
+              height: '12px',
+              borderRadius: '3px',
+              background: c,
+              border: '1px solid rgba(0,0,0,0.08)',
+            }}
+          />
         ))}
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ fontSize: '13px', fontWeight: isCurrent ? 600 : 400, color: 'var(--text-primary)' }}>
+          <span
+            style={{
+              fontSize: '13px',
+              fontWeight: isCurrent ? 600 : 400,
+              color: 'var(--text-primary)',
+            }}
+          >
             {theme.emoji} {theme.name}
           </span>
-          {isCurrent && <Check size={11} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />}
+          {isCurrent && (
+            <Check size={11} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+          )}
         </div>
-        <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <div
+          style={{
+            fontSize: '10px',
+            color: 'var(--text-muted)',
+            marginTop: '1px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
           {theme.description}
         </div>
       </div>
@@ -217,7 +288,17 @@ function ThemeItem({ theme, isCurrent, isFavorite, onSelect, onToggleFav }: Them
       <button
         onClick={onToggleFav}
         title={isFavorite ? '從最愛移除' : '加入最愛'}
-        style={{ background: 'none', border: 'none', cursor: 'pointer', color: isFavorite ? '#f59e0b' : '#d1d5db', flexShrink: 0, padding: '2px', display: 'flex', alignItems: 'center', borderRadius: '4px' }}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: isFavorite ? '#f59e0b' : '#d1d5db',
+          flexShrink: 0,
+          padding: '2px',
+          display: 'flex',
+          alignItems: 'center',
+          borderRadius: '4px',
+        }}
       >
         <Star size={13} fill={isFavorite ? '#f59e0b' : 'none'} />
       </button>

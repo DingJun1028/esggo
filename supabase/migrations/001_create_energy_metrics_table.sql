@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS energy_metrics (
   status TEXT DEFAULT 'Trustworthy' NOT NULL
 );
 
+ALTER TABLE energy_metrics ADD COLUMN IF NOT EXISTS hash_lock TEXT NOT NULL DEFAULT 'PENDING';
+
 -- 5T Immutability: Prevent UPDATE/DELETE to ensure audit integrity
 CREATE OR REPLACE FUNCTION prevent_energy_metrics_update()
 RETURNS TRIGGER AS $$
