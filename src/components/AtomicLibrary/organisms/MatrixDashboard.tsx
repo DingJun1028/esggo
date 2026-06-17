@@ -1,16 +1,18 @@
-// src/components/AtomicLibrary/organisms/MatrixDashboard.tsx
+'use client';
+
 import React from 'react';
-import { useMatrixComponents, MATRIX_ROUTES } from '@/lib/omni-core/matrix-store';
-import { getRouteComponent } from '@/lib/omni-core/matrix-component-registry';
+import { getMatrixComponents, MATRIX_ROUTES } from '@/lib/omni-core/matrix-store';
+import { MATRIX_ROUTE_COMPONENTS } from '@/lib/omni-core/matrix-component-registry';
 
 export const MatrixDashboard: React.FC = () => {
-  const {
-    data: components,
-    isLoading,
-    error,
-  } = useMatrixComponents({
-    queryKey: ['matrix-components'],
-  });
+  const [components, setComponents] = React.useState<any[]>([]);
+  const [isLoading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    getMatrixComponents()
+      .then(setComponents)
+      .finally(() => setLoading(false));
+  }, []);
 
   const categories = [
     'Perception',
@@ -21,8 +23,11 @@ export const MatrixDashboard: React.FC = () => {
     'Atoms',
   ] as const;
 
+  const getRouteComponent = (route: string) => {
+    return MATRIX_ROUTE_COMPONENTS.find((rc) => rc.route === route);
+  };
+
   if (isLoading) return <div>Loading matrix...</div>;
-  if (error) return <div>Error loading matrix</div>;
 
   return (
     <div className="p-6">
@@ -51,30 +56,4 @@ export const MatrixDashboard: React.FC = () => {
       </div>
     </div>
   );
-};
-
-const useMatrixComponents = ({ queryKey }: { queryKey: string[] }) => {
-  // 模擬 React Query 行為
-  const queryFn = React.useCallback(async () => {
-    const { getMatrixComponents } = await import('@/lib/omni-core/matrix-store');
-    return getMatrixComponents();
-  }, []);
-
-  const [data, setData] = React.useState<any[]>([]);
-  const [isLoading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(false);
-
-  React.useEffect(() => {
-    queryFn()
-      .then(setData)
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
-  }, [queryFn]);
-
-  return { data, isLoading, error };
-};
-
-const getRouteComponent = (route: string) => {
-  const { MATRIX_ROUTE_COMPONENTS } = require('@/lib/omni-core/matrix-component-registry');
-  return MATRIX_ROUTE_COMPONENTS.find((rc: any) => rc.route === route);
 };
