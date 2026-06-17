@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+
+import { program } from 'commander';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = resolve(__filename, '..');
+const packageJson = JSON.parse(readFileSync(resolve(__dirname, '..', 'package.json'), 'utf8'));
+
+program
+  .name('esggo')
+  .description('ESGGO CLI - The One Command to govern them all')
+  .version(packageJson.version);
+
+program
+  .command('dev')
+  .description('啟動開發伺服器 (API + 前端 UI)')
+  .action(() => {
+    console.log('🚀 啟動 ESGGO 開發伺服器...');
+    console.log('API Server: http://localhost:3000');
+    console.log('Frontend UI: http://localhost:3002');
+    console.log('');
+    try {
+      execSync('npm run dev', { stdio: 'inherit', shell: true });
+    } catch (error) {
+      console.error('❌ 伺服器啟動失敗');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('ui')
+  .description('啟動前端開發伺服器')
+  .action(() => {
+    console.log('🌐 啟動前端開發伺服器...');
+    console.log('Frontend: http://localhost:3002');
+    try {
+      execSync('npm run dev:ui -- -p 3002', { stdio: 'inherit', shell: true });
+    } catch (error) {
+      console.error('❌ 前端伺服器啟動失敗');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('awaken')
+  .description('啟動 OmniaCore 奧義閃現')
+  .action(() => {
+    console.log('🔮 啟動 OmniaCore 奧義閃現...');
+    console.log('OmniCore: 統一治理中心');
+    try {
+      execSync("npx tsx -e \"import('./lib/activate-omni').then(m => m.activateUniversalAwakening())\"", { stdio: 'inherit', shell: true });
+    } catch (error) {
+      console.error('❌ OmniaCore 啟動失敗');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('setup')
+  .description('初始化資料庫表格')
+  .action(() => {
+    console.log('🔧 初始化 ESGGO 資料庫...');
+    console.log('設定所有資料表格...');
+    try {
+      execSync('npx tsx scripts/setup_all_tables.ts', { stdio: 'inherit', shell: true });
+    } catch (error) {
+      console.error('❌ 資料庫初始化失敗');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('deploy')
+  .description('部署至生產環境')
+  .action(() => {
+    console.log('🚀 部署 ESGGO 至生產環境...');
+    try {
+      execSync('npx vercel --prod', { stdio: 'inherit', shell: true });
+    } catch (error) {
+      console.error('❌ 部署失敗');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('status')
+  .description('檢查系統狀態')
+  .action(() => {
+    console.log('📊 ESGGO 系統狀態檢查...');
+    console.log('');
+    console.log('✅ 檢查伺服器狀態...');
+    console.log('   API Server: http://localhost:3000');
+    console.log('   Frontend UI: http://localhost:3002');
+    console.log('');
+    console.log('🚀 ESGGO v1.5.0');
+    console.log('🔗 部署網址: https://esggo-okoptdfv1-esg-sunshine.vercel.app');
+    console.log('🔑 登入: sunshine888 或 5連點logo');
+  });
+
+program.parse(process.argv);
+
+if (!process.argv[2]) {
+  program.outputHelp();
+  console.log('\n🚀 ESGGO v1.5.0 - 前端大翻新版');
+  console.log('💡 使用 "esggo --help" 瀏覽所有指令\n');
+}

@@ -1,4 +1,5 @@
-import { type QPIScoreInput, type QPIScoreResult } from '@/lib/qpi/score';
+import { type QPIScoreInput } from '@/lib/qpi/score';
+import { computeQPIScore } from '@/lib/qpi/computation';
 
 export const POST = async (request: Request) => {
   const body = (await request.json().catch(() => ({}))) as Partial<QPIScoreInput>;
@@ -14,25 +15,3 @@ export const POST = async (request: Request) => {
     return Response.json({ error: 'Failed to compute QPI score' }, { status: 500 });
   }
 };
-
-async function computeQPIScore(input: QPIScoreInput): Promise<QPIScoreResult> {
-  const baseScores: Record<string, number> = {
-    E: Math.round(Math.random() * 30 + 50),
-    S: Math.round(Math.random() * 30 + 50),
-    G: Math.round(Math.random() * 30 + 50),
-  };
-
-  const categoryScores: Record<string, number> = {};
-  let total = 0;
-
-  for (const cat of input.categories ?? ['E', 'S', 'G']) {
-    const score = baseScores[cat] ?? Math.round(Math.random() * 30 + 50);
-    categoryScores[cat] = score;
-    total += score;
-  }
-
-  const qpiScore = Math.round(total / Math.max(1, Object.keys(categoryScores).length));
-  const recommendation = qpiScore >= 70 ? 'Continue current ESG strategy.' : 'Review and improve ESG practices.';
-
-  return { qpiScore, categoryScores, recommendation };
-}
