@@ -1,34 +1,31 @@
 services:
   - type: web
     name: esggo-platform
-    env: docker
+    runtime: node
     plan: starter
-    region: singapore
-    dockerfilePath: ./Dockerfile
-    healthCheckPath: /
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm start
     envVars:
-      # Next.js Settings
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 3000
-        
-      # Security & Supabase Tri-Sync
       - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
+        fromSecret: supabase-url
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        fromSecret: supabase-anon-key
+    healthCheckPath: /api/system/health
+    autoDeploy: true
+
+  - type: postgresql
+    name: esggo-db
+    plan: starter
+    databaseName: esggo_production
+
+envVarGroups:
+  - name: esggo-secrets
+    envVars:
+      - key: SUPABASE_URL
         sync: false
-        
-      # Nocodebackend Integration
-      - key: NOCODEBACKEND_API_URL
+      - key: SUPABASE_ANON_KEY
         sync: false
-      - key: NOCODEBACKEND_API_KEY
-        sync: false
-        
-      # OmniAgent AI Keys
-      - key: GEMINI_API_KEY
-        sync: false
-      - key: OMNI_TOKEN
-        sync: false
-      - key: GATEWAY_API_KEY
+      - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
