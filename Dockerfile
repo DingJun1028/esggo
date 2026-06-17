@@ -1,43 +1,41 @@
-# --- Stage 1: Base & Dependencies ---
-FROM node:20-alpine AS base
+# ESGGO Docker Deployment - VPS 容器化部署
+FROM node:20-alpine AS builder
 
-FROM base AS deps
-# Install libc6-compat for native Node modules if needed (e.g., sharp, bcrypt)
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies
+# Install pnpm
+RUN npm install -g pnpm@9
+
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
-# --- Stage 2: Build ---
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy source code
 COPY . .
 
-# Disable Next.js telemetry
-ENV NEXT_TELEMETRY_DISABLED=1
+# Build application
+RUN pnpm run build
 
-# Run Next.js build directly
-RUN npm install -g pnpm && pnpm run build
-
-# --- Stage 3: Runner (Production) ---
-FROM base AS runner
+# Production stage
+FROM node:20-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
+# Install pnpm
+RUN npm install -g pnpm@9
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Copy built application
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
-# Set correct permissions
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+# Install production dependencies only
+RUN pnpm install --prod --frozen-lockfile
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+CMD ["pnpm", "start"]
