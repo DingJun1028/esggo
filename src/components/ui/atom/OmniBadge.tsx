@@ -1,79 +1,42 @@
-'use client';
+// src/components/AtomicLibrary/atoms/OmniBadge.tsx
+import React from 'react';
 
-import { forwardRef } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
-
-
-const omniBadgeVariants = cva(
-  'inline-flex items-center font-medium transition-colors',
-  {
-    variants: {
-      variant: {
-        default: 'bg-theme-bg-tertiary text-theme-text-secondary',
-        t1: 'bg-t1-tangible-bg text-t1-tangible',
-        t2: 'bg-t2-traceable-bg text-t2-traceable',
-        t3: 'bg-t3-trackable-bg text-t3-trackable',
-        t4: 'bg-t4-transparent-bg text-t4-transparent',
-        t5: 'bg-t5-trustworthy-bg text-t5-trustworthy',
-        verified: 'bg-theme-success/10 text-theme-success',
-        warning: 'bg-theme-warning/10 text-theme-warning',
-        error: 'bg-theme-error/10 text-theme-error',
-        info: 'bg-theme-info/10 text-theme-info',
-      },
-      size: {
-        sm: 'px-1.5 py-0.5 text-caption',
-        md: 'px-2 py-1 text-caption',
-        lg: 'px-3 py-1.5 text-body-sm',
-      },
-      shape: {
-        rounded: 'rounded-md',
-        pill: 'rounded-full',
-        square: 'rounded-none',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'sm',
-      shape: 'rounded',
-    },
-  }
-);
-
-export interface OmniBadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof omniBadgeVariants> {
+interface OmniBadgeProps {
+  variant?: 'default' | 'verified' | 'warning' | 'error' | 'info' | 'success';
+  size?: 'sm' | 'md' | 'lg';
   dot?: boolean;
+  className?: string;
+  children: React.ReactNode;
 }
 
-const OmniBadge = forwardRef<HTMLSpanElement, OmniBadgeProps>(
-  ({ 
-    variant, 
-    size, 
-    shape, 
-    dot,
-    children, 
-    className, 
-    ...props 
-  }, ref) => {
-    return (
-      <span
-        className={cn(omniBadgeVariants({ variant, size, shape, className }))}
-        ref={ref}
-        {...props}
-      >
-        {dot && (
-          <span className={cn(
-            'w-1.5 h-1.5 rounded-full mr-1',
-            variant === 'error' || variant === 'warning' ? 'bg-current' : 'bg-current'
-          )} />
-        )}
-        {children}
-      </span>
-    );
-  }
-);
+export const OmniBadge: React.FC<OmniBadgeProps> = ({
+  variant = 'default',
+  size = 'md',
+  dot = false,
+  className = '',
+  children,
+}) => {
+  const variantClasses = {
+    default: 'bg-gray-100 text-gray-800',
+    verified: 'bg-green-100 text-green-800',
+    warning: 'bg-yellow-100 text-yellow-800',
+    error: 'bg-red-100 text-red-800',
+    info: 'bg-blue-100 text-blue-800',
+    success: 'bg-green-500 text-white',
+  };
 
-OmniBadge.displayName = 'OmniBadge';
+  const sizeClasses = {
+    sm: 'px-2 py-0.5 text-xs',
+    md: 'px-3 py-1 text-sm',
+    lg: 'px-4 py-1.5 text-base',
+  };
 
-export { OmniBadge };
+  const classes = `inline-flex items-center rounded-full ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+
+  return (
+    <span className={classes}>
+      {dot && <span className="w-2 h-2 rounded-full bg-current mr-1" />}
+      {children}
+    </span>
+  );
+};
