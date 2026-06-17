@@ -1,30 +1,29 @@
-import { defineConfig } from "vitest/config";
-import path from "path";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vitest/config';
+import path from 'path';
+import react from '@vitejs/plugin-react';
 
 const dirname =
-  typeof __dirname !== "undefined"
-    ? __dirname
-    : path.dirname(new URL(import.meta.url).pathname);
+  typeof __dirname !== 'undefined' ? __dirname : path.dirname(new URL(import.meta.url).pathname);
 
 export default defineConfig({
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: ["tests/setup.ts"],
-    include: ["**/*.test.{ts,tsx}"],
+    environment: 'jsdom',
+    setupFiles: ['tests/setup.ts'],
+    include: ['**/*.test.{ts,tsx}'],
     exclude: [
-      "**/node_modules/**",
-      "**/.next/**",
-      "**/supabase/functions/**",
-      "**/.firebase/**",
-      "**/.kilo/**",
-      "**/esggo/workers/exportDocx.worker.test.ts",
-      "**/workers/exportDocx.worker.test.ts",
+      '**/node_modules/**',
+      '**/.next/**',
+      '**/supabase/functions/**',
+      '**/.firebase/**',
+      '**/.kilo/**',
+      '**/esggo/workers/exportDocx.worker.test.ts',
+      '**/workers/exportDocx.worker.test.ts',
+      '**/*.js',
     ],
     coverage: {
-      provider: "v8",
-      reporter: ["text", "json-summary", "html"],
+      provider: 'v8',
+      reporter: ['text', 'json-summary', 'html'],
       thresholds: {
         lines: 80,
         functions: 80,
@@ -36,7 +35,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./"),
+      '@': path.resolve(__dirname, './'),
     },
   },
 });
