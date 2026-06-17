@@ -21,7 +21,7 @@ create table if not exists public.omni_matrix_components (
 -- Create gri_standards table for GRI 2021 reference
 create table if not exists public.gri_standards (
     id text primary key,
-    gri_code text not null,
+    gri_code text not null unique,
     material_topic text not null,
     esg_category text not null check (esg_category in ('Environmental', 'Social', 'Governance')),
     disclosure_requirements jsonb,
@@ -282,7 +282,7 @@ create index if not exists idx_omni_notes_user on public.omni_notes(user_id);
 -- Create gri_expert_templates table for GRI templates
 create table if not exists public.gri_expert_templates (
     id text primary key,
-    gri_code text not null references public.gri_standards(gri_code),
+    gri_code text not null,
     template_name text not null,
     industry text,
     section integer,
