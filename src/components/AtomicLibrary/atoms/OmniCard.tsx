@@ -1,6 +1,5 @@
 // src/components/AtomicLibrary/atoms/OmniCard.tsx
 import React from 'react';
-import { ThemeContext, useThemeContext } from '../../theme';
 
 interface OmniCardProps {
   title?: string;
@@ -17,8 +16,6 @@ export const OmniCard: React.FC<OmniCardProps> = ({
   onClick,
   selected = false,
 }) => {
-  const { theme } = useThemeContext();
-
   const baseClasses = `
     p-4 rounded-lg border transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-offset-2
