@@ -73,13 +73,13 @@ jobs:
             
             echo "==== 📦 2. Installing dependencies ===="
             if [ -f package-lock.json ]; then
-              npm ci
+              pnpm install --frozen-lockfile
             else
-              npm install
+              pnpm install
             fi
             
             echo "==== 🏗️ 3. Building Next.js production standalone ===="
-            NODE_OPTIONS=--max_old_space_size=4096 npm run build
+            NODE_OPTIONS=--max_old_space_size=4096 pnpm run build
             
             echo "==== 🚀 4. Hot Reload PM2 Servers ===="
             pm2 reload esggo omniagent-gateway --update-env
