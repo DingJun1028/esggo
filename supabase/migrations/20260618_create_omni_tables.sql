@@ -220,6 +220,20 @@ create table if not exists public.report_versions (
     created_at timestamp with time zone default now()
 );
 
+-- Create esg_api_keys table for API key management
+create table if not exists public.esg_api_keys (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    key_name text not null,
+    api_key text not null,
+    scopes text[] default array['read'],
+    rate_limit integer default 1000,
+    expires_at timestamp with time zone,
+    last_used_at timestamp with time zone,
+    active boolean default true,
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
