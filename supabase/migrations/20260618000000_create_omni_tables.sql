@@ -204,6 +204,22 @@ create table if not exists public.submission_filled (
     created_at timestamp with time zone default now()
 );
 
+-- Create sustain_write_documents table for Sustain Write workspace
+create table if not exists public.sustain_write_documents (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    title text not null,
+    content text,
+    document_type text check (document_type in ('sustainability', 'carbon-accounting', 'esg-disclosure', 'transition-plan')),
+    gri_mappings text[],
+    evidence_ids uuid[],
+    version integer default 1,
+    status text check (status in ('draft', 'review', 'published', 'archived')) default 'draft',
+    collaborators uuid[],
+    created_at timestamp with time zone default now(),
+    updated_at timestamp with time zone default now()
+);
+
 -- Create report_versions table for ZKP integrity and version control
 create table if not exists public.report_versions (
     id uuid primary key default gen_random_uuid(),
@@ -237,7 +253,7 @@ create table if not exists public.esg_api_keys (
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
-    report_id uuid references public.omni_reports(id) on delete cascade,
+    report_id uuid,
     file_name text not null,
     file_url text,
     hash_lock text not null,
@@ -250,7 +266,7 @@ create table if not exists public.omni_evidence (
 create table if not exists public.omni_notes (
     id uuid primary key default gen_random_uuid(),
     user_id uuid references auth.users(id),
-    card_uuid text references public.omni_matrix_components(id),
+    card_uuid text,
     content text,
     type text default 'knowledge',
     pinned boolean default false,
@@ -258,23 +274,7 @@ create table if not exists public.omni_notes (
     created_at timestamp with time zone default now()
 );
 
--- Create sustain_write_documents table for Sustain Write workspace
-create table if not exists public.sustain_write_documents (
-    id uuid primary key default gen_random_uuid(),
-    user_id uuid references auth.users(id),
-    title text not null,
-    content text,
-    document_type text check (document_type in ('sustainability', 'carbon-accounting', 'esg-disclosure', 'transition-plan')),
-    gri_mappings text[],
-    evidence_ids uuid[],
-    version integer default 1,
-    status text check (status in ('draft', 'review', 'published', 'archived')) default 'draft',
-    collaborators uuid[],
-    created_at timestamp with time zone default now(),
-    updated_at timestamp with time zone default now()
-);
-
--- Create index for faster route lookups
+-- Create indexes for faster lookups
 create index if not exists idx_omni_matrix_route on public.omni_matrix_components(route);
 create index if not exists idx_omni_evidence_report on public.omni_evidence(report_id);
 create index if not exists idx_omni_notes_user on public.omni_notes(user_id);
