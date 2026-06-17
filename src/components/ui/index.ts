@@ -11,6 +11,7 @@ export { OmniCard } from './atom/OmniCard';
 export { OmniIcon } from './atom/OmniIcon';
 export { OmniDivider } from './atom/OmniDivider';
 export { OmniWeather } from './atom/OmniWeather';
+export { OmniChart } from './atom/OmniChart';
 
 // Molecule Components
 export { OmniFormField } from './molecule/OmniFormField';
@@ -18,6 +19,7 @@ export { OmniKPICard } from './molecule/OmniKPICard';
 
 // Organism Components
 export { OmniModal } from './organism/OmniModal';
+export { MatrixDashboard } from './organism/MatrixDashboard';
 
 // Mobile Components
 export { MobileBottomNav } from './mobile/MobileBottomNav';
