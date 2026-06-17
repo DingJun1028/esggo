@@ -7,8 +7,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies
-COPY package.json package-lock.json* ./
-RUN npm install
+COPY package.json pnpm-lock.yaml* ./
+RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
 
 # --- Stage 2: Build ---
 FROM base AS builder
@@ -20,7 +20,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Run Next.js build directly
-RUN npm run build
+RUN npm install -g pnpm && pnpm run build
 
 # --- Stage 3: Runner (Production) ---
 FROM base AS runner
