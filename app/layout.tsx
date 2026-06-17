@@ -3,11 +3,6 @@ import { Suspense } from 'react';
 import './globals.css';
 import ClientLayout from './ClientLayout';
 import { AuthProvider } from '../components/AuthProvider';
-import GuidedTour from '@/components/ui/GuideTour';
-import { ThemeProvider } from '@/contexts/ThemeProvider';
-import { activateUniversalAwakening } from '@/lib/activate-omni';
-
-activateUniversalAwakening();
 
 export const metadata: Metadata = {
   title: {
@@ -56,10 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <Suspense fallback={<LoadingFallback />}>
           <AuthProvider>
-            <ThemeProvider>
-              <GuidedTour />
+
+
               <ClientLayout>{children}</ClientLayout>
-            </ThemeProvider>
+
           </AuthProvider>
         </Suspense>
       </body>
