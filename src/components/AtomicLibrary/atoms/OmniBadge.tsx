@@ -1,6 +1,5 @@
 // src/components/AtomicLibrary/atoms/OmniBadge.tsx
 import React from 'react';
-import { useThemeContext } from '../../theme';
 
 interface OmniBadgeProps {
   variant?: 'default' | 'verified' | 'warning' | 'error' | 'info' | 'success';
@@ -17,8 +16,6 @@ export const OmniBadge: React.FC<OmniBadgeProps> = ({
   className = '',
   children,
 }) => {
-  const { theme } = useThemeContext();
-
   const variantClasses = {
     default: 'bg-gray-100 text-gray-800',
     verified: 'bg-green-100 text-green-800',
