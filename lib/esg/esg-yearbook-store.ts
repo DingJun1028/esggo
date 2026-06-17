@@ -151,11 +151,8 @@ export const getEsxYearbook = async (year?: number): Promise<BenchmarkEnterprise
 
 // 初始化標竿企業資料表
 export const initializeBenchmarkTable = async () => {
-  const { error } = await supabase.from('esg_benchmark_enterprises').upsert(
-    SAMPLE_BENCHMARK_ENTERPRISES.map((e, i) => ({
-      id: `bench-${i + 1}`,
-      ...e,
-    }))
-  );
+  const { error } = await supabase
+    .from('esg_benchmark_enterprises')
+    .upsert(SAMPLE_BENCHMARK_ENTERPRISES);
   return !error;
 };
