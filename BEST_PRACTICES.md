@@ -1,7 +1,7 @@
 ---
 uuid: "3f796bc2-431f-4b84-a995-6bc93e946902"
-version: "1.0.0"
-timestamp: "2026-06-04T10:36:12.361Z"
+version: "1.4.0"
+timestamp: "2026-06-17T09:00:00.000Z"
 evidence: "BEST_PRACTICES.md"
 ---
 # ESG GO Best Practices Documentation
@@ -227,6 +227,6 @@ interface ApiResponse<T = unknown> {
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: 2025-05-28  
-**Maintained by**: ESG GO Core Team
+**Version**: 1.4.0  
+**Last Updated**: 2026-06-17  
+**Maintained by**: OmniAgent Architecture Team

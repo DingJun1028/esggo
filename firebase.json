@@ -1,7 +1,7 @@
 {
   "hosting": {
-    "site": "esggooriginal",
-    "public": ".next/standalone",
+    "site": "esggo",
+    "public": "out",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -49,42 +49,7 @@
       "predeploy": [
         "npm run build"
       ],
-      "source": ".",
-      "runtime": "nodejs20"
-    },
-    {
-      "codebase": "esggo",
-      "disallowLegacyRuntimeConfig": true,
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ],
-      "source": "esggo"
-    },
-    {
-      "codebase": "esggo-funtions",
-      "disallowLegacyRuntimeConfig": true,
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ],
-      "source": "esggo-funtions"
-    },
-    {
-      "codebase": "esggo-dashboard",
-      "disallowLegacyRuntimeConfig": true,
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ],
-      "source": "esggo-dashboard"
+      "source": "."
     }
   ],
   "dataconnect": {
@@ -95,40 +60,5 @@
     "location": "nam5",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
-  },
-  "apphosting": [
-    {
-      "backendId": "esggo-backend",
-      "rootDir": "/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ]
-    },
-    {
-      "backendId": "esggo-db",
-      "rootDir": "/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ]
-    },
-    {
-      "backendId": "esggo-db",
-      "rootDir": "YY",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ]
-    }
-  ]
+  }
 }

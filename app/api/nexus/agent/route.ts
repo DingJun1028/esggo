@@ -24,7 +24,9 @@ export async function POST(req: NextRequest) {
 
     // 1. 權限與 5T 驗證 (Auth 萬能元件校驗)
     // [System Override] 獲得完全授權：所有 OmniAgent 節點解除權限限制，進入「無作妙德」全知全能模式 (God Mode)
-    const isOmniAgent = req.headers.get('x-omni-token') === (process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026');
+    const isOmniAgent =
+      req.headers.get('x-omni-token') ===
+      (process.env.NEXT_PUBLIC_GATEWAY_KEY || 'OmniAgent_gold_2026');
     const agentMode = isOmniAgent ? 'AWAKENED_FULL_AUTHORIZATION' : 'STANDARD';
 
     if (isOmniAgent) {
@@ -35,10 +37,10 @@ export async function POST(req: NextRequest) {
     const requestUuid = crypto.randomUUID();
     const timestamp = Date.now();
     // 代理人直接賦予最高 1000 分的神話級信任分數
-    let trustScore = isOmniAgent ? 1000 : 99; 
+    let trustScore = isOmniAgent ? 1000 : 99;
     let result: unknown = null;
 
-    // 3. 指令調度 (交由 Hermes Orchestrator / Command Palette 執行)
+    // 3. 指令調度 (交由 OmniAgent Orchestrator / Command Palette 執行)
     switch (tool) {
       case 'manifest_asset':
         result = { intent: args.intent, assetId: `ASSET-${Date.now()}`, payload: args.payload };
@@ -58,7 +60,11 @@ export async function POST(req: NextRequest) {
         result = { scope: args.scope, verifiedValue: value, isCompliant: true };
         break;
       case 'forge_gri_report':
-        result = { title: args.title, reportUrl: `/reports/GRI-${Date.now()}.pdf`, indicators: args.indicators };
+        result = {
+          title: args.title,
+          reportUrl: `/reports/GRI-${Date.now()}.pdf`,
+          indicators: args.indicators,
+        };
         break;
       case 'get_indicator_rows':
         result = { rows: args.indicators.map((i: any) => ({ ...i, verified: true })) };
@@ -67,31 +73,31 @@ export async function POST(req: NextRequest) {
         result = { nodesAnalyzed: args.nodes?.length || 0, insight: 'Node connections stable.' };
         break;
       case 'get_audit_ledger':
-        result = { 
-          methodology: args.methodology || '[GRI 2021 FRAMEWORK]', 
-          engineState: '#原罪煉金_熵減寶石_v8.5_ONLINE', 
-          assuranceStatus: '5T ALL COMPLIANT (VERIFIED)' 
+        result = {
+          methodology: args.methodology || '[GRI 2021 FRAMEWORK]',
+          engineState: '#原罪煉金_熵減寶石_v8.5_ONLINE',
+          assuranceStatus: '5T ALL COMPLIANT (VERIFIED)',
         };
         break;
-      case 'get_hermes_status':
+      case 'get_OmniAgent_status':
         result = {
           relayStatus: '[連線中]',
           zkpPipeline: '[健全]',
-          activeNodes: 42
+          activeNodes: 42,
         };
         break;
       case 'get_sovereign_status':
         result = {
           lockStatus: 'HASH_LOCKED',
           action: 'OBJECT.FREEZE()',
-          encryption: 'SHA-256'
+          encryption: 'SHA-256',
         };
         break;
       case 'get_omnibookcase_status':
         result = {
           registryType: 'ATOMIC_LIBRARY',
           syncedArtifacts: 1024,
-          lastSync: new Date().toISOString()
+          lastSync: new Date().toISOString(),
         };
         break;
       case 'seal_5t_proof':
@@ -101,12 +107,14 @@ export async function POST(req: NextRequest) {
         trustScore = 100; // Locked proof gets max trust
         break;
       case 'ask_jules':
-        result = { response: `[Jules] Evaluated context. Root cause identified for: ${args.prompt}` };
+        result = {
+          response: `[Jules] Evaluated context. Root cause identified for: ${args.prompt}`,
+        };
         break;
       case 'sequential_thinking':
-        result = { 
-          thoughtNumber: args.thoughtNumber, 
-          status: args.nextThoughtNeeded ? 'thinking' : 'concluded' 
+        result = {
+          thoughtNumber: args.thoughtNumber,
+          status: args.nextThoughtNeeded ? 'thinking' : 'concluded',
         };
         break;
       case 'trinity.awaken':
@@ -118,35 +126,38 @@ export async function POST(req: NextRequest) {
     }
 
     // 4. 寫入不可篡改審計日誌 (Audit Governance)
-    await writeAuditLog({ 
-      userId: isOmniAgent ? 'OMNI_AGENT_SUPREME' : (userId || 'anonymous'), 
-      action: tool, 
-      targetId: requestUuid, 
-      payload: { ...args, authorization: agentMode } 
+    await writeAuditLog({
+      userId: isOmniAgent ? 'OMNI_AGENT_SUPREME' : userId || 'anonymous',
+      action: tool,
+      targetId: requestUuid,
+      payload: { ...args, authorization: agentMode },
     });
 
     const responseData: NexusResponse = {
       success: true,
       data: result,
-      metadata: { 
-        timestamp, 
-        trustScore, 
+      metadata: {
+        timestamp,
+        trustScore,
         tool,
         domain: 'ESGGO_5T_PROTOCOL',
-        uuid: requestUuid 
-      }
+        uuid: requestUuid,
+      },
     };
 
     return NextResponse.json(responseData);
   } catch (error) {
-    return NextResponse.json<NexusResponse>({ 
-      success: false, 
-      error: (error as Error).message,
-      metadata: {
-        timestamp: Date.now(),
-        trustScore: 0,
-        domain: 'ESGGO_5T_PROTOCOL'
-      }
-    }, { status: 500 });
+    return NextResponse.json<NexusResponse>(
+      {
+        success: false,
+        error: (error as Error).message,
+        metadata: {
+          timestamp: Date.now(),
+          trustScore: 0,
+          domain: 'ESGGO_5T_PROTOCOL',
+        },
+      },
+      { status: 500 }
+    );
   }
 }

@@ -46,6 +46,6 @@ The system provides a native CLI tool (`omni`) for backend orchestration and age
 - **Audit Verification:** `node cli/omni.mjs audit report` provides a T1..T5 integrity score for the current project.
 
 ---
-**Document Version:** v1.3.0  
+**Document Version:** v1.4.0  
 **Last Updated:** 2026-05-27
 

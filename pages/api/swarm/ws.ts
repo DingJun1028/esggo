@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { WebSocketServer, WebSocket } from 'ws';
 import { IncomingMessage } from 'http';
 
-// 關閉 Next.js 預設的 Body Parser，因為這是一個 WebSocket Upgrade 請求
+// 關閉 Next.js 預設的 Body Parser，因為這是一個 any Upgrade 請求
 export const config = {
     api: {
         bodyParser: false,
@@ -10,14 +9,14 @@ export const config = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    // 確保 WebSocket 伺服器只被初始化一次 (Singleton)
+    // 確保 any 伺服器只被初始化一次 (Singleton)
     if (!(res.socket as any).server.wss) {
-        console.log('[Swarm WS Server] 🌌 正在初始化 OmniAgent 蜂群中樞神經 (WebSocket)...');
+        console.log('[Swarm WS Server] 🌌 正在初始化 OmniAgent 蜂群中樞神經 (any)...');
 
-        const wss = new WebSocketServer({ noServer: true });
+        const wss = new (require('ws').WebSocketServer)({ noServer: true });
         (res.socket as any).server.wss = wss;
 
-        wss.on('connection', (ws: WebSocket, request: IncomingMessage) => {
+        wss.on('connection', (ws: any, request: IncomingMessage) => {
             console.log(`[Swarm WS Server] 🟢 客戶端已連線 (當前共 ${wss.clients.size} 個觀測節點)`);
 
             ws.on('message', (message: unknown) => {
@@ -29,9 +28,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
                         console.log(`[Swarm WS Server] 📡 收到系統意志，向所有觀測節點廣播: ${data.stage}`);
 
                         // 進行群發 (Broadcast) 給所有前端 Dashboard
-                        wss.clients.forEach((client: WebSocket) => {
+                        wss.clients.forEach((client: any) => {
                             // 排除發送者自身，並且只發送給狀態為 OPEN 的客戶端
-                            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                            if (client !== ws && client.readyState === 1 /* OPEN */) {
                                 client.send(JSON.stringify(data));
                             }
                         });
@@ -49,7 +48,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         // 綁定 HTTP Upgrade 事件，攔截 Upgrade: websocket
         (res.socket as any).server.on('upgrade', (request: unknown, socket: unknown, head: unknown) => {
             if ((request as any).url?.includes('/api/swarm/ws')) {
-                wss.handleUpgrade(request as any, socket as any, head as Buffer, (ws: WebSocket) => {
+                wss.handleUpgrade(request as any, socket as any, head as Buffer, (ws: any) => {
                     wss.emit('connection', ws, request);
                 });
             }

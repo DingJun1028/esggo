@@ -16,5 +16,18 @@ WHERE hash_lock IS NULL;
 
 -- Add constraint to ensure hash_lock is provided when sealing
 ALTER TABLE energy_metrics 
-ADD CONSTRAINT chk_hash_lock_format 
-CHECK (hash_lock ~ '^0x[0-9a-fA-F]{64}$' OR hash_lock IS NULL);
+DROP CONSTRAINT IF EXISTS chk_hash_lock_format;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'chk_hash_lock_format'
+          AND conrelid = 'energy_metrics'::regclass
+    ) THEN
+        ALTER TABLE energy_metrics
+        ADD CONSTRAINT chk_hash_lock_format
+        CHECK (hash_lock ~ '^0x[0-9a-fA-F]{64}$' OR hash_lock IS NULL);
+    END IF;
+END $$;

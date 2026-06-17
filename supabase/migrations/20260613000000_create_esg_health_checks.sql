@@ -2,7 +2,7 @@
 -- Creates the esg_health_checks table to store Enterprise Health Check results with Hash Locks
 
 CREATE TABLE IF NOT EXISTS public.esg_health_checks (
-  uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  uuid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   user_id UUID REFERENCES auth.users(id),
   score_e NUMERIC DEFAULT 0 NOT NULL,
@@ -33,14 +33,19 @@ EXECUTE FUNCTION prevent_esg_health_checks_update();
 -- Row Level Security (RLS)
 ALTER TABLE public.esg_health_checks ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can read own health checks" ON public.esg_health_checks;
+DROP POLICY IF EXISTS "Authenticated Insert Health Checks" ON public.esg_health_checks;
+
 -- Allow users to read their own health checks
 CREATE POLICY "Users can read own health checks"
 ON public.esg_health_checks
 FOR SELECT
+TO authenticated
 USING (auth.uid() = user_id);
 
 -- Insert policy (authenticated users)
 CREATE POLICY "Authenticated Insert Health Checks"
 ON public.esg_health_checks
 FOR INSERT
-WITH CHECK (auth.role() = 'authenticated');
+TO authenticated
+WITH CHECK (auth.uid() = user_id);

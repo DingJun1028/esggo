@@ -21,19 +21,26 @@ CREATE TABLE IF NOT EXISTS public.integrity_proofs (
 -- 2. Enable RLS
 ALTER TABLE public.integrity_proofs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Public can read verified proofs" ON public.integrity_proofs;
+DROP POLICY IF EXISTS "Authenticated users can insert proofs" ON public.integrity_proofs;
+
 -- 3. RLS Policies
 -- 允許所有人讀取已驗證的憑證 (Transparent)
 CREATE POLICY "Public can read verified proofs" 
 ON public.integrity_proofs FOR SELECT 
+TO anon, authenticated
 USING (true);
 
 -- 允許已認證使用者插入憑證
 CREATE POLICY "Authenticated users can insert proofs" 
 ON public.integrity_proofs FOR INSERT 
-WITH CHECK (auth.role() = 'authenticated' OR true); -- For dev convenience
+TO authenticated
+WITH CHECK (true);
 
 -- 4. Immutable 5T Trigger (T5: Trustworthy)
 -- ZKP 證明一經寫入，絕對不可篡改或刪除
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 CREATE OR REPLACE FUNCTION public.prevent_proof_tampering()
 RETURNS TRIGGER AS $$
 BEGIN
