@@ -29,8 +29,9 @@ export interface BenchmarkEnterprise {
 }
 
 // ESG 年鑑樣本資料 (2020-2025)
-const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at'>[] = [
+const SAMPLE_BENCHMARK_ENTERPRISES: BenchmarkEnterprise[] = [
   {
+    id: 'bench-1',
     name: '台積電',
     year: 2025,
     category: 'carbon',
@@ -39,6 +40,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.tsmc.com',
   },
   {
+    id: 'bench-2',
     name: '台積電',
     year: 2024,
     category: 'renewable',
@@ -47,6 +49,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.tsmc.com',
   },
   {
+    id: 'bench-3',
     name: '台積電',
     year: 2023,
     category: 'supply_chain',
@@ -54,6 +57,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.tsmc.com',
   },
   {
+    id: 'bench-4',
     name: 'Apple',
     year: 2025,
     category: 'supply_chain',
@@ -62,6 +66,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.apple.com',
   },
   {
+    id: 'bench-5',
     name: 'Microsoft',
     year: 2025,
     category: 'carbon',
@@ -71,6 +76,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.microsoft.com',
   },
   {
+    id: 'bench-6',
     name: 'Google',
     year: 2025,
     category: 'renewable',
@@ -79,6 +85,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.google.com',
   },
   {
+    id: 'bench-7',
     name: 'Samsung',
     year: 2024,
     category: 'carbon',
@@ -87,6 +94,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.samsung.com',
   },
   {
+    id: 'bench-8',
     name: 'UNIQLO (Fast Retailing)',
     year: 2025,
     category: 'supply_chain',
@@ -94,6 +102,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.uniqlo.com',
   },
   {
+    id: 'bench-9',
     name: 'IKEA',
     year: 2024,
     category: 'renewable',
@@ -102,6 +111,7 @@ const SAMPLE_BENCHMARK_ENTERPRISES: Omit<BenchmarkEnterprise, 'id' | 'created_at
     source_url: 'https://www.ikea.com',
   },
   {
+    id: 'bench-10',
     name: 'Ørsted',
     year: 2025,
     category: 'carbon',

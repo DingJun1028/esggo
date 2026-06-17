@@ -4,7 +4,7 @@
  */
 
 import { supabase } from '../db/supabase';
-import { secureHash } from '../crypto-proof';
+import { createHashLock } from '../crypto-proof';
 
 export type DocumentType =
   | 'sustainability_report'
@@ -59,16 +59,16 @@ export const getSubmissionOverview = async (companyId: string): Promise<Submissi
       .from('esg_submission_documents')
       .select('status, submission_date')
       .eq('company_id', companyId);
-    if (error || !data) throw error;
+    if (error || !data) throw error || new Error('No data');
 
     const total = data.length;
-    const verified = data.filter((d) => d.status === 'verified').length;
-    const pending = data.filter((d) => d.status !== 'verified').length;
+    const verified = data.filter((d: any) => d.status === 'verified').length;
+    const pending = data.filter((d: any) => d.status !== 'verified').length;
     const compliance = total > 0 ? (verified / total) * 100 : 0;
 
     const now = new Date();
     const overdue = data.filter(
-      (d) => d.submission_date && new Date(d.submission_date) < now && d.status !== 'submitted'
+      (d: any) => d.submission_date && new Date(d.submission_date) < now && d.status !== 'submitted'
     ).length;
 
     return {
@@ -93,12 +93,11 @@ export const createESGDocument = async (
   doc: Omit<ESGDocument, 'id' | 'created_at'>
 ): Promise<string | null> => {
   try {
-    const hashLock = await secureHash(
-      `${doc.company_id}-${doc.document_type}-${doc.year}-${doc.title}`
-    );
+    const str = `${doc.company_id}-${doc.document_type}-${doc.year}-${doc.title}`;
+    const { hash } = await createHashLock(str);
     const { data, error } = await supabase
       .from('esg_submission_documents')
-      .insert({ ...doc, hash_lock: hashLock })
+      .insert({ ...doc, hash_lock: hash })
       .select('id')
       .single();
     if (error) throw error;

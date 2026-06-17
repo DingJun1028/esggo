@@ -18,6 +18,62 @@ create table if not exists public.omni_matrix_components (
     last_updated timestamp with time zone default now()
 );
 
+-- Create gri_standards table for GRI 2021 reference
+create table if not exists public.gri_standards (
+    id text primary key,
+    gri_code text not null,
+    material_topic text not null,
+    esg_category text not null check (esg_category in ('Environmental', 'Social', 'Governance')),
+    disclosure_requirements jsonb,
+    sub_metrics jsonb,
+    guidance_reference text,
+    created_at timestamp with time zone default now()
+);
+
+-- Create esg_benchmark_enterprises table for yearbook
+create table if not exists public.esg_benchmark_enterprises (
+    id text primary key,
+    name text not null,
+    year integer not null,
+    category text not null check (category in ('carbon', 'renewable', 'supply_chain', 'diversity', 'governance')),
+    esg_score numeric,
+    carbon_intensity numeric,
+    renewable_percentage numeric,
+    diversity_score numeric,
+    governance_rating numeric,
+    hash_lock text,
+    source_url text,
+    created_at timestamp with time zone default now()
+);
+
+-- Create cbam_emissions_factors table for CBAM calculator
+create table if not exists public.cbam_emissions_factors (
+    id text primary key,
+    product_category text not null,
+    hs_code text,
+    default_emission_factor numeric not null,
+    unit text not null,
+    source text,
+    updated_at timestamp with time zone default now()
+);
+
+-- Create cbam_calculations table for user calculations
+create table if not exists public.cbam_calculations (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    product_name text not null,
+    product_category text not null,
+    import_value_usd numeric,
+    quantity numeric not null,
+    emission_factor numeric not null,
+    calculated_emissions numeric not null,
+    currency text,
+    country_of_origin text,
+    calculation_date timestamp with time zone default now(),
+    hash_lock text,
+    metadata jsonb
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
