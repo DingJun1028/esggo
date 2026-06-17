@@ -1,14 +1,26 @@
 # 🌌 ESGGO 善向永續 | OmniAgent 萬能系統
 
-> **Platform:** ESGGO 善向永續 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY
+> **Platform:** ESGGO 善向永續 V1.4 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** mistralai/mistral-small-3.1-24b:free
 
 [![Render Deployment](https://img.shields.io/badge/Render-Deployed-brightgreen)](https://dashboard.render.com)
-[![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t-誠信協議-5t-integrity-protocol)
-[![Design](https://img.shields.io/badge/Design-Liquid_Glass-cyan)](#-設計美學-liquid-glass-aesthetics)
+[![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t誠信協議-5t-integrity-protocol)
+[![Wiki](https://img.shields.io/badge/Wiki-OmniSystem-green)](docs/wiki/OMNI_SYSTEM.md)
+[![VPS Agent](https://img.shields.io/badge/VPS-Ready-blue)]()
+[![Tests](https://img.shields.io/badge/Tests-111%2F113-yellow)]()
+
+## 📚 Wiki 導航
+
+- [OmniSystem MECE 架構](docs/wiki/OMNI_SYSTEM.md) - 24 類別定義
+- [萬能系列組件](docs/wiki/OMNI_SERIES.md) - Memory, Knowledge, Runes, Notes...
+- [終極矩陣](docs/wiki/OMNI_COMPONENT_MATRIX.md) - 功能導覽地圖
+- [行動版設計](docs/wiki/MOBILE_NAVIGATION.md) - RWD 響應式設計
 
 ## 0. 🚀 系統願景 (Mission)
 
 ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T 協議** 的基礎設施。透過 **OmniAgent** 全域編排與 **Gemma 4** 智能心核，將生硬的 ESG 數據轉化為可感知的流動藝術與不可篡改的信任證據。
+
+---
+> ESGGO 善向永續 V1.4 | 主題：六組品牌面板（含水色青·永恆金） | 頁面：App Router 170 頁 | VPS：四端點就緒
 
 ---
 
@@ -44,6 +56,18 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 - **定位**: 處理高度模糊的指令、深度多模態分析與跨領域策略制定。
 - **咒語**: `OmniAgent, 切換至 G4 模式。執行全域邏輯推演。`
 
+### 1.1 召喚 Mistral (Mistral Small 3.1 24B - Default)
+
+- **特色**: 預設 AI 模型，專業 ESG 分析。
+- **定位**: 處理 ESG 报告、法規分析與永續策略。
+- **模型鏈**: Local (llava-phi3:latest) → OpenRouter (mistralai/mistral-small-3.1-24b:free) → Mock
+
+### 1.2 召喚 Vision (Llava-Phi3 - Image Analysis)
+
+- **特色**: 視覺分析模型，支援圖片描述與 ESG 圖表識別。
+- **定位**: 處理圖片問題、圖表識別、視覺數據分析。
+- **模型**: `llava-phi3:latest` (本地 Ollama)
+
 ### 2. 系統指揮官 OmniAgent
 
 - **特色**: 資深全端架構師人格。負責全域編排、代理蜂群調度與任務執行。
@@ -60,6 +84,12 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 - **ESG Researcher**: 網頁檢索與情資收集。
 - **ESG Auditor**: 5T 合規性驗證與 ZKP 密封。
 - **ESG Strategist**: 敘事流優化與 GRI 標準對齊。
+
+### 5. VPS 部署代理 (VPS Agent)
+
+- **責任**: 負責所有伺服器相關事務，包含部署、監控與維護。
+- **配置**: `.agents/vps-agent/`
+- **服務端點**: Port 3000 (API), Port 3001 (UI), Port 8642 (Gateway)
 
 ---
 
@@ -115,14 +145,16 @@ pm2 restart esggo omniagent-gateway
 
 本平台實施嚴格的 **5T 誠信協議**（可溯源、透明、可感知、可信任、可追蹤）。所有程式碼變更皆須通過全自動測試。
 
-- **單元與整合測試狀態**：🟢 **100% 全數綠燈通過**
-- **測試統計**：`32` 個測試檔案，共 `118` 個 Test Cases 完美通過。
+- **單元與整合測試狀態**：🟡 **111/113 通過** (2 預存在位)
+- **測試統計**：`32` 個測試檔案，共 `111` 個 Test Cases 通過。
 - **一鍵執行本機誠信自檢**：
   ```bash
   npm run test
+  npm run typecheck
+  npm run lint
   ```
 
-### 📊 118 項全系統功能導覽與技術合規矩陣 (118 Tested Capabilities & 5T Compliance Matrix)
+### 📊 111 項全系統功能導覽與技術合規矩陣 (111 Tested Capabilities & 5T Compliance Matrix)
 
 本專案全數通過的 **118 項測試功能** 代表著平台在五大技術維度（5T 誠信協議）下的核心能力。以下為平台主要功能的導覽與對應之自動化測試清單：
 
@@ -146,6 +178,25 @@ pm2 restart esggo omniagent-gateway
 ./ctl.sh ready      # 執行全自動生產就緒檢查 (ci, tsc, test, lint, build)
 ./ctl.sh status     # 檢查系統誠信狀態
 ./ctl.sh render     # 代理 Render CLI 指令 (如: services, deploys)
+```
+
+---
+
+## 🔌 API 端點 | API Endpoints
+
+| 端點                   | 方法 | 功能     |
+| ---------------------- | ---- | -------- |
+| `/api/omni-notes`      | POST | 筆記同步 |
+| `/api/omni-agent/chat` | POST | AI 對話  |
+| `/api/system/health`   | GET  | 系統健康 |
+
+### 快速測試
+
+```bash
+# 筆記同步
+curl -X POST http://localhost:3000/api/omni-notes \
+  -H "Content-Type: application/json" \
+  -d '{"action":"sync","note":{"id":"test","type":"knowledge","content":"ESG永續發展 #永續"}}'
 ```
 
 ---
@@ -183,4 +234,4 @@ pm2 restart esggo omniagent-gateway
 
 ---
 
-_Generated & Sealed by OmniAgent G4 | 2026-06-12_
+_Generated & Sealed by OmniAgent G4 | 2026-06-16_

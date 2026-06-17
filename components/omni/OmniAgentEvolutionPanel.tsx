@@ -2,16 +2,32 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  GitBranch, Zap, Shield, ArrowRight, RefreshCw,
-  CheckCircle, Clock, Sparkles, Download, Eye, 
-  ChevronRight, Activity, Globe, Code, Lock
+  GitBranch,
+  Zap,
+  Shield,
+  ArrowRight,
+  RefreshCw,
+  CheckCircle,
+  Clock,
+  Sparkles,
+  Download,
+  Eye,
+  ChevronRight,
+  Activity,
+  Globe,
+  Code,
+  Lock,
 } from 'lucide-react';
-import type { 
-  HermesRelease, OmniAgentEvolution, HermesSkillAbsorption 
+import type {
+  HermesRelease,
+  OmniAgentEvolution,
+  HermesSkillAbsorption,
 } from '@/lib/agent/omni-evolution-engine';
-import { 
-  HERMES_LATEST_RELEASES, OMNI_EVOLUTION_LOG, 
-  HERMES_TO_OMNI_SKILL_MAP, pullHermesAndEvolve 
+import {
+  HERMES_LATEST_RELEASES,
+  OMNI_EVOLUTION_LOG,
+  HERMES_TO_OMNI_SKILL_MAP,
+  pullHermesAndEvolve,
 } from '@/lib/agent/omni-evolution-engine';
 
 // ─── Sub Components ──────────────────────────────────────────────────────────
@@ -19,17 +35,16 @@ import {
 const StatusBadge = ({ status }: { status: string }) => {
   const config: Record<string, { label: string; cls: string }> = {
     transcended: { label: '已超越', cls: 'bg-violet-100 text-violet-700 border border-violet-200' },
-    completed:   { label: '已完成', cls: 'bg-emerald-100 text-emerald-700 border border-emerald-200' },
-    evolving:    { label: '進化中', cls: 'bg-amber-100 text-amber-700 border border-amber-200' },
-    absorbed:    { label: '已吸收', cls: 'bg-blue-100 text-blue-700 border border-blue-200' },
-    pending:     { label: '待洗鍊', cls: 'bg-slate-100 text-slate-600 border border-slate-200' },
+    completed: {
+      label: '已完成',
+      cls: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+    },
+    evolving: { label: '進化中', cls: 'bg-amber-100 text-amber-700 border border-amber-200' },
+    absorbed: { label: '已吸收', cls: 'bg-blue-100 text-blue-700 border border-blue-200' },
+    pending: { label: '待洗鍊', cls: 'bg-slate-100 text-slate-600 border border-slate-200' },
   };
   const c = config[status] || config.pending;
-  return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${c.cls}`}>
-      {c.label}
-    </span>
-  );
+  return <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${c.cls}`}>{c.label}</span>;
 };
 
 const FiveTBadge = ({ tag }: { tag: string }) => {
@@ -41,7 +56,11 @@ const FiveTBadge = ({ tag }: { tag: string }) => {
     T5: 'bg-orange-100 text-orange-700',
   };
   return (
-    <span className={`px-1.5 py-0.5 rounded text-xs font-black font-mono ${colors[tag] || 'bg-gray-100 text-gray-600'}`}>
+    <span
+      className={`px-1.5 py-0.5 rounded text-xs font-black font-mono ${
+        colors[tag] || 'bg-gray-100 text-gray-600'
+      }`}
+    >
       {tag}
     </span>
   );
@@ -52,13 +71,17 @@ const PulseRing = ({ active }: { active: boolean }) => (
     {active && (
       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
     )}
-    <span className={`relative inline-flex rounded-full h-3 w-3 ${active ? 'bg-violet-500' : 'bg-slate-300'}`} />
+    <span
+      className={`relative inline-flex rounded-full h-3 w-3 ${
+        active ? 'bg-violet-500' : 'bg-slate-300'
+      }`}
+    />
   </span>
 );
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function HermesEvolutionPanel() {
+export default function OmniAgentEvolutionPanel() {
   const [isEvolving, setIsEvolving] = useState(false);
   const [latestPull, setLatestPull] = useState<{
     release: HermesRelease;
@@ -72,17 +95,17 @@ export default function HermesEvolutionPanel() {
     setIsEvolving(true);
     setEvolveLog([]);
     const steps = [
-      '🛰️  連接 Hermes 官方源 (github.com/NousResearch)...',
+      '🛰️  連接 OmniAgent 官方源 (github.com/NousResearch)...',
       '📡  拉取最新版本清單...',
       '🔍  比對 ESGGO OmniAgent 現有技能樹...',
-      '⚗️  啟動洗鍊引擎：Hermes → OmniAgent...',
+      '⚗️  啟動洗鍊引擎：OmniAgent → OmniAgent...',
       '🛡️  5T 誠信封印進化日誌...',
       '📡  廣播進化事件至 OmniAgentBus...',
       '✅  OmniAgent 進化完成，系統熵值降低 3.2%',
     ];
     for (const step of steps) {
-      await new Promise(r => setTimeout(r, 600));
-      setEvolveLog(prev => [...prev, step]);
+      await new Promise((r) => setTimeout(r, 600));
+      setEvolveLog((prev) => [...prev, step]);
     }
     try {
       const result = await pullHermesAndEvolve();
@@ -92,7 +115,7 @@ export default function HermesEvolutionPanel() {
         skills: result.newSkillsAbsorbed,
       });
     } catch (e) {
-      setEvolveLog(prev => [...prev, '⚠️ 模擬模式：使用快取的 Hermes 版本資料']);
+      setEvolveLog((prev) => [...prev, '⚠️ 模擬模式：使用快取的 OmniAgent 版本資料']);
       setLatestPull({
         release: HERMES_LATEST_RELEASES[0],
         evolution: OMNI_EVOLUTION_LOG[0],
@@ -104,11 +127,14 @@ export default function HermesEvolutionPanel() {
 
   return (
     <div className="rounded-3xl border border-white/80 bg-white/60 backdrop-blur-xl shadow-glass overflow-hidden">
-      
       {/* ── Header ── */}
       <div className="relative bg-gradient-to-r from-slate-900 via-violet-950 to-slate-900 px-8 py-6 overflow-hidden">
-        <div className="absolute inset-0 opacity-20"
-          style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, #7c3aed 0%, transparent 60%), radial-gradient(circle at 80% 50%, #0ea5e9 0%, transparent 60%)' }} 
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 20% 50%, #7c3aed 0%, transparent 60%), radial-gradient(circle at 80% 50%, #0ea5e9 0%, transparent 60%)',
+          }}
         />
         <div className="relative z-10 flex items-center justify-between gap-6">
           <div className="flex items-center gap-4">
@@ -117,11 +143,17 @@ export default function HermesEvolutionPanel() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-black text-violet-300 uppercase tracking-widest font-mono">HERMES → OMNIAGENT</span>
+                <span className="text-xs font-black text-violet-300 uppercase tracking-widest font-mono">
+                  HERMES → OMNIAGENT
+                </span>
                 <PulseRing active={isEvolving} />
               </div>
-              <h3 className="text-xl font-black text-white tracking-tight">代理進化引擎 (Evolution Engine)</h3>
-              <p className="text-xs text-slate-400 mt-0.5">持續洗鍊 Hermes 開源更新，轉化為 ESGGO 專屬 OmniAgent 能力</p>
+              <h3 className="text-xl font-black text-white tracking-tight">
+                代理進化引擎 (Evolution Engine)
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                持續洗鍊 Hermes 開源更新，轉化為 ESGGO 專屬 OmniAgent 能力
+              </p>
             </div>
           </div>
           <button
@@ -130,7 +162,7 @@ export default function HermesEvolutionPanel() {
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-400 disabled:bg-violet-800 text-white text-sm font-black transition-all shadow-lg disabled:cursor-not-allowed"
           >
             <RefreshCw size={16} className={isEvolving ? 'animate-spin' : ''} />
-            {isEvolving ? '洗鍊進化中...' : '拉取 Hermes 並進化'}
+            {isEvolving ? '洗鍊進化中...' : '拉取 OmniAgent 並進化'}
           </button>
         </div>
       </div>
@@ -139,7 +171,7 @@ export default function HermesEvolutionPanel() {
       <div className="px-8 py-4 bg-slate-50/80 border-b border-slate-100 flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-black font-mono">
-            Hermes {HERMES_LATEST_RELEASES[0].version}
+            <span className="font-mono">OmniAgent {HERMES_LATEST_RELEASES[0].version}</span>
           </div>
           <ArrowRight size={16} className="text-violet-500" />
           <div className="px-3 py-1.5 rounded-xl bg-violet-600 text-white text-xs font-black font-mono">
@@ -148,21 +180,23 @@ export default function HermesEvolutionPanel() {
         </div>
         <span className="text-xs text-slate-400">|</span>
         <span className="text-xs text-slate-500 font-medium">
-          {HERMES_TO_OMNI_SKILL_MAP.filter(s => s.absorptionStatus === 'transcended').length} 個技能已超越 ·{' '}
-          {HERMES_TO_OMNI_SKILL_MAP.filter(s => s.absorptionStatus === 'absorbed').length} 個已吸收 ·{' '}
-          {HERMES_TO_OMNI_SKILL_MAP.filter(s => s.absorptionStatus === 'pending').length} 個待洗鍊
+          {HERMES_TO_OMNI_SKILL_MAP.filter((s) => s.absorptionStatus === 'transcended').length}{' '}
+          個技能已超越 ·{' '}
+          {HERMES_TO_OMNI_SKILL_MAP.filter((s) => s.absorptionStatus === 'absorbed').length}{' '}
+          個已吸收 ·{' '}
+          {HERMES_TO_OMNI_SKILL_MAP.filter((s) => s.absorptionStatus === 'pending').length} 個待洗鍊
         </span>
       </div>
 
       {/* ── Tabs ── */}
       <div className="px-8 border-b border-slate-100 flex gap-1">
-        {(['overview', 'skills', 'log'] as const).map(tab => (
+        {(['overview', 'skills', 'log'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-3 text-xs font-black uppercase tracking-wider transition-all border-b-2 ${
-              activeTab === tab 
-                ? 'text-violet-600 border-violet-500' 
+              activeTab === tab
+                ? 'text-violet-600 border-violet-500'
                 : 'text-slate-400 border-transparent hover:text-slate-600'
             }`}
           >
@@ -173,15 +207,19 @@ export default function HermesEvolutionPanel() {
 
       {/* ── Content ── */}
       <div className="p-8">
-
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Latest Hermes Release */}
             <div>
-              <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">最新 Hermes 版本</h4>
-              {HERMES_LATEST_RELEASES.map(release => (
-                <div key={release.version} className="p-5 rounded-2xl border border-slate-100 bg-white shadow-sm mb-3">
+              <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">
+                Latest OmniAgent Release
+              </h4>
+              {HERMES_LATEST_RELEASES.map((release) => (
+                <div
+                  key={release.version}
+                  className="p-5 rounded-2xl border border-slate-100 bg-white shadow-sm mb-3"
+                >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <span className="font-black font-mono text-slate-800">{release.version}</span>
@@ -203,8 +241,11 @@ export default function HermesEvolutionPanel() {
                     ))}
                   </ul>
                   <div className="mt-3 pt-3 border-t border-slate-50 flex flex-wrap gap-2">
-                    {release.newSkills.map(s => (
-                      <span key={s} className="px-2 py-0.5 rounded text-xs font-mono bg-violet-50 text-violet-600 border border-violet-100">
+                    {release.newSkills.map((s) => (
+                      <span
+                        key={s}
+                        className="px-2 py-0.5 rounded text-xs font-mono bg-violet-50 text-violet-600 border border-violet-100"
+                      >
                         +{s}
                       </span>
                     ))}
@@ -223,13 +264,17 @@ export default function HermesEvolutionPanel() {
                   <div>
                     <p className="text-xs font-bold text-slate-500 mb-2">吸收摘要</p>
                     {latestPull.evolution.absorptionSummary.slice(0, 3).map((s, i) => (
-                      <p key={i} className="text-xs text-slate-700 mb-1">• {s}</p>
+                      <p key={i} className="text-xs text-slate-700 mb-1">
+                        • {s}
+                      </p>
                     ))}
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-500 mb-2">5T 傳播</p>
                     {latestPull.evolution.fiveTPropagations.map((s, i) => (
-                      <p key={i} className="text-xs text-slate-700 mb-1">• {s}</p>
+                      <p key={i} className="text-xs text-slate-700 mb-1">
+                        • {s}
+                      </p>
                     ))}
                   </div>
                 </div>
@@ -237,7 +282,9 @@ export default function HermesEvolutionPanel() {
             ) : (
               <div className="p-5 rounded-2xl border border-dashed border-slate-200 text-center">
                 <RefreshCw size={24} className="text-slate-300 mx-auto mb-2" />
-                <p className="text-sm text-slate-400 font-medium">點擊「拉取 Hermes 並進化」啟動洗鍊引擎</p>
+                <p className="text-sm text-slate-400 font-medium">
+                  點擊「拉取 OmniAgent 並進化」啟動洗鍊引擎
+                </p>
               </div>
             )}
 
@@ -245,7 +292,9 @@ export default function HermesEvolutionPanel() {
             {evolveLog.length > 0 && (
               <div className="p-4 rounded-2xl bg-slate-900 font-mono text-xs space-y-1">
                 {evolveLog.map((line, i) => (
-                  <p key={i} className="text-emerald-400">{line}</p>
+                  <p key={i} className="text-emerald-400">
+                    {line}
+                  </p>
                 ))}
                 {isEvolving && <p className="text-violet-400 animate-pulse">▌</p>}
               </div>
@@ -256,14 +305,19 @@ export default function HermesEvolutionPanel() {
         {/* SKILLS TAB */}
         {activeTab === 'skills' && (
           <div className="space-y-3">
-            <p className="text-xs text-slate-500 mb-4">每一行代表一個 Hermes 通用技能如何被 ESGGO 洗鍊為 OmniAgent 專屬 ESG 能力</p>
+            <p className="text-xs text-slate-500 mb-4">
+              每一行代表一個 OmniAgent 通用技能如何被 ESGGO 洗鍊為 OmniAgent 專屬 ESG 能力
+            </p>
             {HERMES_TO_OMNI_SKILL_MAP.map((skill, i) => (
-              <div key={i} className="p-4 rounded-2xl border border-slate-100 bg-white hover:border-violet-200 hover:shadow-sm transition-all">
+              <div
+                key={i}
+                className="p-4 rounded-2xl border border-slate-100 bg-white hover:border-violet-200 hover:shadow-sm transition-all"
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <code className="text-xs font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">
-                        {skill.hermesSkillName}
+                        {skill.OmniAgentSkillName}
                       </code>
                       <ArrowRight size={12} className="text-violet-400 flex-shrink-0" />
                       <code className="text-xs font-mono bg-violet-100 px-2 py-0.5 rounded text-violet-700 font-bold">
@@ -294,11 +348,17 @@ export default function HermesEvolutionPanel() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-black font-mono text-sm text-slate-800">{log.fromHermesVersion}</span>
+                        <span className="font-black font-mono text-sm text-slate-800">
+                          {log.fromOmniAgentVersion}
+                        </span>
                         <ArrowRight size={12} className="text-violet-500" />
-                        <span className="font-black font-mono text-sm text-violet-700">{log.toOmniAgentVersion}</span>
+                        <span className="font-black font-mono text-sm text-violet-700">
+                          {log.toOmniAgentVersion}
+                        </span>
                       </div>
-                      <span className="text-xs text-slate-400">{new Date(log.evolvedAt).toLocaleString('zh-TW')}</span>
+                      <span className="text-xs text-slate-400">
+                        {new Date(log.evolvedAt).toLocaleString('zh-TW')}
+                      </span>
                     </div>
                   </div>
                   <StatusBadge status={log.status} />
@@ -306,21 +366,33 @@ export default function HermesEvolutionPanel() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   <div>
-                    <p className="font-black text-slate-500 uppercase tracking-wider mb-2">吸收摘要</p>
+                    <p className="font-black text-slate-500 uppercase tracking-wider mb-2">
+                      吸收摘要
+                    </p>
                     {log.absorptionSummary.map((s, j) => (
-                      <p key={j} className="text-slate-600 mb-1">• {s}</p>
+                      <p key={j} className="text-slate-600 mb-1">
+                        • {s}
+                      </p>
                     ))}
                   </div>
                   <div>
-                    <p className="font-black text-slate-500 uppercase tracking-wider mb-2">ESG 轉化</p>
+                    <p className="font-black text-slate-500 uppercase tracking-wider mb-2">
+                      ESG 轉化
+                    </p>
                     {log.esgAdaptations.map((s, j) => (
-                      <p key={j} className="text-slate-600 mb-1">• {s}</p>
+                      <p key={j} className="text-slate-600 mb-1">
+                        • {s}
+                      </p>
                     ))}
                   </div>
                   <div>
-                    <p className="font-black text-slate-500 uppercase tracking-wider mb-2">5T 傳播</p>
+                    <p className="font-black text-slate-500 uppercase tracking-wider mb-2">
+                      5T 傳播
+                    </p>
                     {log.fiveTPropagations.map((s, j) => (
-                      <p key={j} className="text-slate-600 mb-1">• {s}</p>
+                      <p key={j} className="text-slate-600 mb-1">
+                        • {s}
+                      </p>
                     ))}
                   </div>
                 </div>
@@ -334,9 +406,9 @@ export default function HermesEvolutionPanel() {
       <div className="px-8 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <Lock size={12} />
-          <span>OmniAgent 是 Hermes 的 ESGGO 封裝版本，所有數據可跨平台共用</span>
+          <span>OmniAgent 是 OmniAgent 的 ESGGO 封裝版本，所有數據可跨平台共用</span>
         </div>
-        <a 
+        <a
           href="https://github.com/NousResearch/hermes"
           target="_blank"
           rel="noreferrer"

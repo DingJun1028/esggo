@@ -1,12 +1,28 @@
 ---
 uuid: "8d85d038-0605-4ef0-9f33-55d78b2d6bd0"
-version: "8.5.1"
-timestamp: "2026-06-07T14:59:43.000Z"
+version: "1.4.0"
+timestamp: "2026-06-17T09:00:00.000Z"
 evidence: "docs\wiki\Wiki-New-Version-Analysis.md"
 ---
-# ESGGO WIKI 新版全解析 (v8.5.1 Synthesis) [Wiki New Version Analysis]
+
+# ESGGO WIKI 新版全解析 (v1.4 合成) [Wiki New Version Analysis]
 
 > **"Wiki 不僅是文檔，更是系統運行的數位孿生。"** —— OmniAgent 指揮官
+
+## 🚀 v1.4 更新摘要 (2026-06-17)
+
+### AI 模型升級
+
+- **文本模型**: `mistralai/mistral-small-3.1-24b:free` (OpenRouter)
+- **視覺模型**: `llava-phi3:latest` (Local Ollama)
+- **本地備援**: `llava-phi3:latest` (Ollama)
+- **Failover 鏈式**: Local → OpenRouter → Mock
+
+### ESGGO 主題
+
+- **主題名稱**: ESGGO 善向永續
+- **設計語言**: 綠色永續專業
+- **CSS 變數**: 已加入 ESGGO Gradient 風格
 
 ## 🌌 1. 核心哲學：SaaS 旅程導向 (User-Journey Centric)
 
@@ -49,4 +65,4 @@ evidence: "docs\wiki\Wiki-New-Version-Analysis.md"
 
 ---
 
-© 2026 ESGGO善向永續 | 萬能心核知識庫
+© 2026 ESGGO 善向永續 | 萬能心核知識庫

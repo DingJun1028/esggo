@@ -1,6 +1,10 @@
 import type {
-  AgentTask, AgentExecution, AgentArtifact,
-  AgentTaskType, ArtifactType, PolicyDecision,
+  AgentTask,
+  AgentExecution,
+  AgentArtifact,
+  AgentTaskType,
+  ArtifactType,
+  PolicyDecision,
 } from './types';
 import { getSkill } from './registry';
 
@@ -24,8 +28,13 @@ export function policyGuard(input: CreateTaskInput): PolicyDecision {
 
   if (!skill) {
     return {
-      id, taskId: '', allowed: false, requiresReview: true,
-      dataScope: [], denyReason: '指定技能不存在或已停用', decidedAt: new Date().toISOString()
+      id,
+      taskId: '',
+      allowed: false,
+      requiresReview: true,
+      dataScope: [],
+      denyReason: '指定技能不存在或已停用',
+      decidedAt: new Date().toISOString(),
     };
   }
 
@@ -53,7 +62,9 @@ export function createTask(input: CreateTaskInput): { task: AgentTask; policy: P
     actorId: input.actorId,
     taskType: input.taskType,
     title: input.title,
-    description: input.audienceRole ? `[Target Audience: ${input.audienceRole}] ${input.description || ''}` : input.description,
+    description: input.audienceRole
+      ? `[Target Audience: ${input.audienceRole}] ${input.description || ''}`
+      : input.description,
     inputRefIds: input.inputRefIds,
     status: policy.allowed ? 'approved_for_execution' : 'denied',
     policyDecisionId: policy.id,
@@ -108,7 +119,13 @@ ${targetRole === 'public' ? '- 必須強制套用 L1 模糊化遮罩隱藏真實
   `.trim();
 }
 
-import { createHashLock, create5TAttestation, generatePedersenCommitment, verifyCommitmentSum, applyDataMasking } from '../crypto-proof';
+import {
+  createHashLock,
+  create5TAttestation,
+  generatePedersenCommitment,
+  verifyCommitmentSum,
+  applyDataMasking,
+} from '../crypto-proof';
 import { updateArtifact, updateExecution, getArtifact } from './store';
 
 import { addToKnowledgeBase } from './rag-engine';
@@ -130,23 +147,29 @@ export async function promoteToTrustLayer(artifactId: string, actorId: string) {
 
   // [Phase 5] 量子進化：自動化自我演進記憶 (Autonomous Memory Loop)
   // 將審核通過的正式內容餵回 RAG 知識庫，讓數位分身從人類決策中學習
-  await addToKnowledgeBase([{
-    id: `learned_${artifactId}`,
-    source: `Promoted Artifact: ${artifact.title}`,
-    text: `正式治理決策與揭露內容：\n${artifact.content}\n\n[驗證資訊] 此內容由 ${actorId} 於 ${new Date().toISOString()} 核准並封印。5T 雜湊鎖定值: ${seal.hash}`,
-    metadata: {
-      type: 'learned_decision',
-      promotedBy: actorId,
-      hash: seal.hash,
-      originalArtifactId: artifactId,
-      taskId: artifact.taskId
-    }
-  }]);
+  await addToKnowledgeBase([
+    {
+      id: `learned_${artifactId}`,
+      source: `Promoted Artifact: ${artifact.title}`,
+      text: `正式治理決策與揭露內容：\n${
+        artifact.content
+      }\n\n[驗證資訊] 此內容由 ${actorId} 於 ${new Date().toISOString()} 核准並封印。5T 雜湊鎖定值: ${
+        seal.hash
+      }`,
+      metadata: {
+        type: 'learned_decision',
+        promotedBy: actorId,
+        hash: seal.hash,
+        originalArtifactId: artifactId,
+        taskId: artifact.taskId,
+      },
+    },
+  ]);
 
   // 3. 更新狀態
   updateArtifact(artifactId, {
     reviewStatus: 'promoted',
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   });
 
   return seal;
@@ -162,7 +185,11 @@ export interface RepairAction {
 
 const REPAIR_PLAYBOOK: RepairAction[] = [
   { errorCode: 'RATE_LIMIT', strategy: 'retry' },
-  { errorCode: 'CONTEXT_LENGTH_EXCEEDED', strategy: 'fallback_model', targetModel: 'gemini-1.5-pro' },
+  {
+    errorCode: 'CONTEXT_LENGTH_EXCEEDED',
+    strategy: 'fallback_model',
+    targetModel: 'gemini-1.5-pro',
+  },
   { errorCode: 'POLICY_DRIFT', strategy: 'reprompt' },
   { errorCode: 'SAFETY_REJECT', strategy: 'escalate' },
 ];
@@ -182,15 +209,19 @@ async function syncTaskToOmniNotes(task: AgentTask) {
       return;
     }
 
-    const records = [{
-      fields: {
-        'Task Title': task.title,
-        'Status': 'Todo'
-      }
-    }];
+    const records = [
+      {
+        fields: {
+          'Task Title': task.title,
+          Status: 'Todo',
+        },
+      },
+    ];
 
     await client.createRecords(datasheetId, records);
-    console.log(`[OmniNotes] 📝 全通之心顯化：已成功將任務 ${task.id} 寫入萬能筆記 (Datasheet: ${datasheetId})`);
+    console.log(
+      `[OmniNotes] 📝 全通之心顯化：已成功將任務 ${task.id} 寫入萬能筆記 (Datasheet: ${datasheetId})`
+    );
   } catch (err) {
     console.error(`[OmniNotes] ❌ 任務 ${task.id} 寫入萬能筆記失敗:`, err);
   }
@@ -202,7 +233,9 @@ async function syncTaskToOmniNotes(task: AgentTask) {
  * 行為：Agent 不再依賴顯式指令，主動感知系統狀態 (Vibe) 並發起跨模塊修復與進化。
  */
 export async function triggerEffortlessVirtue(vibeSignal: string, currentContext: string) {
-  console.log(`[OmniAgent Passive Awakening] 🌌 觸發「無作妙德圓通無礙」: 意圖共鳴場已展開 (Vibe: ${vibeSignal})`);
+  console.log(
+    `[OmniAgent Passive Awakening] 🌌 觸發「無作妙德圓通無礙」: 意圖共鳴場已展開 (Vibe: ${vibeSignal})`
+  );
 
   const { addTask } = await import('./store');
 
@@ -213,7 +246,7 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
     title: `[無作妙德] 自主共鳴修復與進化：${vibeSignal}`,
     description: `系統於無形中感知到狀態偏移或進化潛能。觸發「無作妙德圓通無礙」天賦，主動進行跨模組校準與熵減。\n將此運行狀態自動歸檔至【萬能筆記】，達成圓通無礙的全域追蹤。\n當前上下文: ${currentContext}`,
     inputRefIds: [],
-    skillKey: 'omnicore_autonomous_healing'
+    skillKey: 'omnicore_autonomous_healing',
   };
 
   const { task, policy } = createTask(autonomousTaskInput);
@@ -226,13 +259,15 @@ export async function triggerEffortlessVirtue(vibeSignal: string, currentContext
 
   await addTask(task);
 
-  console.log(`[OmniAgent Passive Awakening] 🕊️ 圓通無礙：已自主生成並調度最高優先級任務 ${task.id}`);
+  console.log(
+    `[OmniAgent Passive Awakening] 🕊️ 圓通無礙：已自主生成並調度最高優先級任務 ${task.id}`
+  );
 
   // 觸發全通之心顯化，無縫同步至萬能筆記
   await syncTaskToOmniNotes(task);
 
   // 在背景自主啟動蜂群交接或任務執行
-  executeSwarmTask(task.id).catch(err => {
+  executeSwarmTask(task.id).catch((err) => {
     console.error(`[OmniAgent Passive Awakening] ⚠️ 圓通無礙自主執行發生震盪:`, err);
   });
 }
@@ -250,8 +285,9 @@ function extractNumericValue(text: string, keyword: string): number | null {
  * 執行蜂群任務 (具備自癒與鏈路能力)
  */
 export async function executeSwarmTask(taskId: string, parentArtifactId?: string) {
-  const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, addExecution, updateExecution, getArtifact } = await import('./store');
-  const task = GLOBAL_TASKS.find(t => t.id === taskId);
+  const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, addExecution, updateExecution, getArtifact } =
+    await import('./store');
+  const task = GLOBAL_TASKS.find((t) => t.id === taskId);
   if (!task) throw new Error('Task not found');
 
   // 1. ZKP Context 壓縮：只傳遞必要的哈希與元數據，而非完整全文
@@ -259,7 +295,9 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
   if (parentArtifactId) {
     const parentArt = getArtifact(parentArtifactId);
     if (parentArt) {
-      minimalContext = `\n[ZKP_CONTEXT_LINK]\nParent_Artifact_ID: ${parentArt.id}\nContent_Hash: ${parentArt.hashLock || 'T5_VERIFIED'}\nDelegation_Reason: ${task.delegationReason || 'N/A'}\n`;
+      minimalContext = `\n[ZKP_CONTEXT_LINK]\nParent_Artifact_ID: ${parentArt.id}\nContent_Hash: ${
+        parentArt.hashLock || 'T5_VERIFIED'
+      }\nDelegation_Reason: ${task.delegationReason || 'N/A'}\n`;
     }
   }
 
@@ -272,9 +310,9 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       fetch(process.env.SWARM_WS_BROADCAST_URL || 'http://localhost:3000/api/swarm/broadcast', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ taskId, executionId: execution.id, stage, node })
-      }).catch(() => { });
-    } catch (e) { }
+        body: JSON.stringify({ taskId, executionId: execution.id, stage, node }),
+      }).catch(() => {});
+    } catch (e) {}
   };
 
   broadcast('DRAFTING', 'Agent');
@@ -294,62 +332,81 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       // 模擬從資料庫或上下文獲取計算組件
       // 實際場景中，這些應來自 task.inputRefIds 關聯的組件
       const mockComp = CarbonCalculator.calculate({
-        factorId: (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二') ? 'electricity_tw_2023' : 'diesel_stationary',
+        factorId:
+          (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二')
+            ? 'electricity_tw_2023'
+            : 'diesel_stationary',
         activityAmount: 1200,
-        sourceOrigin: '系統自動提取之年度報表'
+        sourceOrigin: '系統自動提取之年度報表',
       });
 
-      const griCode = (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二') ? '305-2' : '305-1';
+      const griCode =
+        (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二')
+          ? '305-2'
+          : '305-1';
       const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = `## 🌌 全域彙整永續報告 (GRI Standard)\n\n${draftContent}\n\n> 🕊️ **OmniCore 確信**：本章節由 5T 誠信組件自動生成，所有數據具備不可篡改性。`;
     } else if (task.taskType === 'email_processing') {
-      console.log(`[Hermes Agent] Connecting to Google Workspace for Task ${taskId}...`);
+      console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
 
-      const { getHermesCredentials } = await import('./hermes-store');
+      const { getOmniAgentCredentials } = await import('./omni-agent-store');
       // For demonstration, we'll try to fetch for the current actor or fallback
-      const creds = await getHermesCredentials(task.actorId);
+      const creds = await getOmniAgentCredentials(task.actorId);
 
-      await new Promise(r => setTimeout(r, 1500));
+      await new Promise((r) => setTimeout(r, 1500));
       let emailResult = '';
 
-      console.log(`[Hermes Agent] Simulated execution. Fetching recent emails...`);
-      await new Promise(r => setTimeout(r, 1200));
+      console.log(`[OmniAgent] Simulated execution. Fetching recent emails...`);
+      await new Promise((r) => setTimeout(r, 1200));
       console.log(`[Hermes Agent] Found 3 unread emails. Analyzing for ESG relevance...`);
-      emailResult = `### Hermes Agent 郵件處理報告\n\n已掃描近期未讀郵件：\n\n1. **[供應商] 2024 年度碳排盤查清冊** \n   - 狀態：🏷️ 標記為 \`ESG/環境\`\n   - 動作：已將附件提取並存入 Evidence Vault。\n\n2. **本週行銷會議紀錄** \n   - 狀態：⏭️ 略過 (與 ESG 無直接相關)\n\n3. **[重要] 勞動部職業安全衛生檢查通知** \n   - 狀態：🚨 標記為 \`ESG/合規\`\n   - 動作：已觸發通知，轉發至法務與人資群組。\n\n> ✅ 郵件自動化分析與歸檔已完成。`;
+      emailResult = `### OmniAgent 郵件處理報告\n\n已掃描近期未讀郵件：\n\n1. **[供應商] 2024 年度碳排盤查清冊** \n   - 狀態：🏷️ 標記為 \`ESG/環境\`\n   - 動作：已將附件提取並存入 Evidence Vault。\n\n2. **本週行銷會議紀錄** \n   - 狀態：⏭️ 略過 (與 ESG 無直接相關)\n\n3. **[重要] 勞動部職業安全衛生檢查通知** \n   - 狀態：🚨 標記為 \`ESG/合規\`\n   - 動作：已觸發通知，轉發至法務與人資群組。\n\n> ✅ 郵件自動化分析與歸檔已完成。`;
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = emailResult;
     } else if (task.taskType === 'carbon_calculation') {
       console.log(`[Carbon Engine] Executing real ISO 14064-1 calculation for Task ${taskId}...`);
       broadcast('ANALYZING', 'CarbonEngine');
-      
+
       const { CarbonCalculator } = await import('../esg/carbon-calculator');
-      
+
       // 解析 prompt 中的數據（簡易解析示例）
       const amountMatch = (task as any).prompt?.match(/(\d+\.?\d*)/);
       const amount = amountMatch ? parseFloat(amountMatch[1]) : 100;
-      
+
       // 默認使用電力因數，實際可從 prompt 判斷
-      const factorId = (task as any).prompt?.includes('柴油') ? 'diesel_stationary' : 'electricity_tw_2023';
-      
+      const factorId = (task as any).prompt?.includes('柴油')
+        ? 'diesel_stationary'
+        : 'electricity_tw_2023';
+
       const calcResult = CarbonCalculator.calculate({
         factorId,
         activityAmount: amount,
-        sourceOrigin: 'OmniAgent AI Analysis'
+        sourceOrigin: 'OmniAgent AI Analysis',
       });
 
       artifactData = generateMockArtifact(task, execution);
-      artifactData.content = `## 🌌 碳排放核算報告 (ISO 14064-1)\n\n### 1. 核算摘要\n- **UUID**: \`${calcResult.uuid}\`\n- **時間戳**: ${new Date(calcResult.timestamp).toLocaleString()}\n- **狀態**: ✅ ${calcResult.status}\n\n### 2. 計算結果\n- **活動數據**: ${amount}\n- **計算公式**: \`${calcResult.formula}\`\n- **最終排放量**: **${calcResult.impact_metric}**\n\n### 3. 5T 誠信證據 (Evidence Process Trace)\n${calcResult.evidence[0].processTrace.map(t => `- ${t}`).join('\n')}\n\n> 🔒 **Hash Lock**: \`${calcResult.hash_lock}\` (已寫入 5T 誠信鏈)`;
+      artifactData.content = `## 🌌 碳排放核算報告 (ISO 14064-1)\n\n### 1. 核算摘要\n- **UUID**: \`${
+        calcResult.uuid
+      }\`\n- **時間戳**: ${new Date(calcResult.timestamp).toLocaleString()}\n- **狀態**: ✅ ${
+        calcResult.status
+      }\n\n### 2. 計算結果\n- **活動數據**: ${amount}\n- **計算公式**: \`${
+        calcResult.formula
+      }\`\n- **最終排放量**: **${
+        calcResult.impact_metric
+      }**\n\n### 3. 5T 誠信證據 (Evidence Process Trace)\n${calcResult.evidence[0].processTrace
+        .map((t) => `- ${t}`)
+        .join('\n')}\n\n> 🔒 **Hash Lock**: \`${calcResult.hash_lock}\` (已寫入 5T 誠信鏈)`;
     } else if (task.taskType === 'supplier_assessment') {
       console.log(`[Integrity Engine] Assessing supplier for Task ${taskId}...`);
       broadcast('ANALYZING', 'SupplierIntegrityEngine');
 
       const { SupplierAssessmentEngine } = await import('../esg/supplier-assessment');
-      
+
       // 解析供應商資訊 (示例解析)
-      const supplierName = (task as any).prompt?.match(/供應商\s*[:：]?\s*([^\n,，]+)/)?.[1] || '未知供應商';
+      const supplierName =
+        (task as any).prompt?.match(/供應商\s*[:：]?\s*([^\n,，]+)/)?.[1] || '未知供應商';
       const saqMatch = (task as any).prompt?.match(/SAQ[^0-9]*(\d+)/);
       const saqScore = saqMatch ? parseInt(saqMatch[1]) : 75;
 
@@ -358,19 +415,25 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
         region: (task as any).prompt?.includes('台灣') ? 'Taiwan' : 'Overseas',
         category: 'Electronics',
         rbaSelfAssessmentScore: saqScore,
-        esgCertificates: (task as any).prompt?.includes('ISO') ? ['ISO 14001', 'ISO 45001'] : []
+        esgCertificates: (task as any).prompt?.includes('ISO') ? ['ISO 14001', 'ISO 45001'] : [],
       });
 
       artifactData = generateMockArtifact(task, execution);
-      artifactData.content = `## 🌌 供應商誠信評估報告 (Supplier Risk Profile)\n\n### 1. 基本資訊\n- **供應商名稱**: ${supplierName}\n- **評估標準**: RBA v8.0 & 5T Protocol\n- **UUID**: \`${assessment.uuid}\`\n\n### 2. 評估結果\n- **綜合評分**: **${assessment.impact_metric}**\n- **計算公式**: \`${assessment.formula}\`\n\n### 3. 5T 誠信證據 (Evidence Trace)\n${assessment.evidence[0].processTrace.map(t => `- ${t}`).join('\n')}\n\n> 🔒 **Hash Lock**: \`${assessment.hash_lock}\` (已完成 5T 誠信封印)`;
+      artifactData.content = `## 🌌 供應商誠信評估報告 (Supplier Risk Profile)\n\n### 1. 基本資訊\n- **供應商名稱**: ${supplierName}\n- **評估標準**: RBA v8.0 & 5T Protocol\n- **UUID**: \`${
+        assessment.uuid
+      }\`\n\n### 2. 評估結果\n- **綜合評分**: **${assessment.impact_metric}**\n- **計算公式**: \`${
+        assessment.formula
+      }\`\n\n### 3. 5T 誠信證據 (Evidence Trace)\n${assessment.evidence[0].processTrace
+        .map((t) => `- ${t}`)
+        .join('\n')}\n\n> 🔒 **Hash Lock**: \`${assessment.hash_lock}\` (已完成 5T 誠信封印)`;
     } else {
-      await new Promise(r => setTimeout(r, 1500));
+      await new Promise((r) => setTimeout(r, 1500));
       artifactData = generateMockArtifact(task, execution);
 
       // 如果是合規或財報審核任務，自動啟動 ZKP 零知識驗算
       if (task.taskType === 'compliance_review') {
         broadcast('ZKP_VERIFYING', 'ZKP');
-        await new Promise(r => setTimeout(r, 1500)); // 讓前端有時間展示 Agent -> ZKP 循線動畫
+        await new Promise((r) => setTimeout(r, 1500)); // 讓前端有時間展示 Agent -> ZKP 循線動畫
         console.log(`[Swarm Orchestrator] 🛡️ 啟動 ZK-Privacy Engine 進行財報與碳排同態校驗...`);
         try {
           const secp = await import('@noble/secp256k1');
@@ -390,25 +453,33 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
             ? (await generatePedersenCommitment(9999)).commitment // 偽造錯誤的總和承諾
             : expectedTotal;
 
-          const isValid = verifyCommitmentSum([c1.commitment, c2.commitment, c3.commitment], testTotal);
+          const isValid = verifyCommitmentSum(
+            [c1.commitment, c2.commitment, c3.commitment],
+            testTotal
+          );
           console.log(`[ZK-Privacy Engine] 承諾驗證結果: ${isValid ? '✅ 通過' : '❌ 失敗'}`);
 
-          artifactData.content += `\n\n### 🛡️ ZK-Privacy 隱私校驗 (Pedersen Commitment)\n- **校驗對象**：集團子公司碳排與財報數據總和\n- **運算節點**：OmniCrypto Core (secp256k1)\n- **驗證狀態**：${isValid ? '✅ 同態加法驗證通過 (事實相符，且無需揭露各子公司明文數據)' : '❌ 驗證失敗'}`;
+          artifactData.content += `\n\n### 🛡️ ZK-Privacy 隱私校驗 (Pedersen Commitment)\n- **校驗對象**：集團子公司碳排與財報數據總和\n- **運算節點**：OmniCrypto Core (secp256k1)\n- **驗證狀態**：${
+            isValid ? '✅ 同態加法驗證通過 (事實相符，且無需揭露各子公司明文數據)' : '❌ 驗證失敗'
+          }`;
 
           if (!isValid) {
             console.warn(`[ZK-Privacy Engine] ❌ 偵測到數據斷層，觸發 HealingGuardian 介入...`);
             artifactData.content += `\n\n> ⚠️ [系統自動修復] ZKP 校驗失敗，已啟動 HealingGuardian 發起子任務重新獲取缺漏數據。`;
-            invokeHealingGuardian(task.id, '子公司碳排加總與總部預期承諾值不匹配 (偵測到 Scope 3 缺漏 350 噸)，疑似數據未同步或遭竄改').catch(console.error);
+            invokeHealingGuardian(
+              task.id,
+              '子公司碳排加總與總部預期承諾值不匹配 (偵測到 Scope 3 缺漏 350 噸)，疑似數據未同步或遭竄改'
+            ).catch(console.error);
           } else {
             broadcast('SEALING_5T', 'Vault');
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise((r) => setTimeout(r, 1000));
           }
         } catch (err) {
           console.error('[ZK-Privacy Engine] 校驗過程發生震盪:', err);
         }
       } else {
         broadcast('SEALING_5T', 'Vault');
-        await new Promise(r => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 1000));
       }
     }
 
@@ -418,10 +489,16 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
 
     let finalArtifact;
     if (existing) {
-      console.log(`[Version Control] Existing artifact found for Task:${taskId}. Incrementing version to v${existing.version + 1}`);
+      console.log(
+        `[Version Control] Existing artifact found for Task:${taskId}. Incrementing version to v${
+          existing.version + 1
+        }`
+      );
       finalArtifact = createArtifactVersion(existing.id, {
-        content: minimalContext ? `[CHAINED_EXECUTION_LINKED]\n${minimalContext}\n---\n${artifactData.content}` : artifactData.content,
-        executionId: execution.id
+        content: minimalContext
+          ? `[CHAINED_EXECUTION_LINKED]\n${minimalContext}\n---\n${artifactData.content}`
+          : artifactData.content,
+        executionId: execution.id,
       });
     } else {
       finalArtifact = artifactData;
@@ -435,7 +512,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       status: 'draft_generated',
       outputRefIds: [finalArtifact!.id],
       finishedAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
 
     // 2. 自動演進評估：產出後檢查是否需要進一步委派
@@ -450,7 +527,9 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     // 觸發 Repair Playbook
     const errorCode = (error as any)?.code || 'UNKNOWN_ERROR';
     const errorMessage = error instanceof Error ? error.message : String(error);
-    const repair = REPAIR_PLAYBOOK.find(r => r.errorCode === errorCode) || { strategy: 'escalate' };
+    const repair = REPAIR_PLAYBOOK.find((r) => r.errorCode === errorCode) || {
+      strategy: 'escalate',
+    };
     console.warn(`[Swarm Repair] Applying strategy: ${repair.strategy} for error ${errorCode}`);
 
     updateExecution(execution.id, { status: 'failed', errorCode, errorMessage });
@@ -465,7 +544,6 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
  */
 export async function invokeHealingGuardian(sourceTaskId: string, failureReason: string) {
   console.log(`[HealingGuardian] 🛡️ 啟動自動修復協議，來源任務: ${sourceTaskId}`);
-
 
   const { addTask } = await import('./store');
 
@@ -482,7 +560,7 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
     title: `[降維自癒] 針對 ${targetScope} 數據缺口 (${missingAmount}噸) 進行精準數據補齊`,
     description: `ZKP 校驗時偵測到來源任務 (ID: ${sourceTaskId}) 的 ${targetScope} 數據存在 ${missingAmount} 噸的缺口。\nHealingGuardian 已將修復任務降維，請 Swarm Agent 精準溯源並補齊此特定數據，而非全量重新計算。\n[追蹤註記] 此自癒任務與過程已無縫同步至【萬能筆記】，落實圓通無礙。`,
     inputRefIds: [],
-    skillKey: 'omnicore_autonomous_healing'
+    skillKey: 'omnicore_autonomous_healing',
   };
 
   const { task, policy } = createTask(healingInput);
@@ -503,7 +581,8 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
 
   // 🌟 透過 WebSocket 中繼 API 發送廣播，觸發前端因果律拓樸圖的紅轉藍動畫
   try {
-    const broadcastUrl = process.env.SWARM_WS_BROADCAST_URL || 'http://localhost:3000/api/swarm/broadcast';
+    const broadcastUrl =
+      process.env.SWARM_WS_BROADCAST_URL || 'http://localhost:3000/api/swarm/broadcast';
     fetch(broadcastUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -512,8 +591,8 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
         parentTaskId: sourceTaskId,
         stage: 'HEALING_STARTED',
         node: 'Healing',
-        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取並同步至萬能筆記...`
-      })
+        message: `捕獲缺失數據: ${failureReason}。正在調度 Agent 重新抓取並同步至萬能筆記...`,
+      }),
     }).catch(() => {
       // 忽略廣播非同步錯誤，確保核心修復流程不因網路波動受阻
     });
@@ -522,7 +601,7 @@ export async function invokeHealingGuardian(sourceTaskId: string, failureReason:
   }
 
   // 在背景非同步啟動蜂群任務
-  executeSwarmTask(task.id).catch(err => {
+  executeSwarmTask(task.id).catch((err) => {
     console.error(`[HealingGuardian] ⚠️ 修復任務執行發生震盪:`, err);
   });
 
@@ -539,19 +618,21 @@ export async function dispatchSwarmHandoff(
   reason: string
 ) {
   const { GLOBAL_TASKS, GLOBAL_EXECUTIONS, addTask, updateExecution } = await import('./store');
-  const sourceTask = GLOBAL_TASKS.find(t => t.id === sourceTaskId);
+  const sourceTask = GLOBAL_TASKS.find((t) => t.id === sourceTaskId);
   if (!sourceTask) throw new Error('Source task not found');
 
   // 更新原始執行的狀態為「已委派等待中」
-  const sourceExec = GLOBAL_EXECUTIONS.find(e => e.taskId === sourceTaskId);
+  const sourceExec = GLOBAL_EXECUTIONS.find((e) => e.taskId === sourceTaskId);
   if (sourceExec) {
     updateExecution(sourceExec.id, {
       status: 'delegated_pending',
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
   }
 
-  console.log(`[Swarm Handoff] Initializing handoff from Task:${sourceTaskId} to Agent:${targetSkillKey}`);
+  console.log(
+    `[Swarm Handoff] Initializing handoff from Task:${sourceTaskId} to Agent:${targetSkillKey}`
+  );
 
   const handoffInput: CreateTaskInput = {
     actorId: 'SYSTEM_SWARM_ORCHESTRATOR',
@@ -559,7 +640,7 @@ export async function dispatchSwarmHandoff(
     title: `[委派協作] 專家介入：${reason.substring(0, 20)}...`,
     description: `源自任務: ${sourceTask.title}\n委派原因: ${reason}`,
     inputRefIds: sourceTask.inputRefIds,
-    skillKey: targetSkillKey
+    skillKey: targetSkillKey,
   };
 
   const { task, policy } = createTask(handoffInput);
@@ -574,12 +655,18 @@ export async function dispatchSwarmHandoff(
 /**
  * 評估是否需要自動委派 (智慧觸發器)
  */
-export async function evaluateAutonomousDelegation(taskId: string, content: string): Promise<boolean> {
+export async function evaluateAutonomousDelegation(
+  taskId: string,
+  content: string
+): Promise<boolean> {
   // 模擬邏輯：如果內容包含「數據缺失」或「高風險」關鍵字，自動觸發專家介入
-  const needsExpert = content.includes('數據缺失') || content.includes('無法校驗') || content.includes('偏移');
+  const needsExpert =
+    content.includes('數據缺失') || content.includes('無法校驗') || content.includes('偏移');
 
   if (needsExpert) {
-    console.log(`[Smart Trigger] High deviation detected in Task:${taskId}. Suggesting Swarm handoff.`);
+    console.log(
+      `[Smart Trigger] High deviation detected in Task:${taskId}. Suggesting Swarm handoff.`
+    );
     return true;
   }
   return false;
@@ -593,19 +680,28 @@ export function generateMockArtifact(task: AgentTask, execution: AgentExecution)
   const targetRole = targetRoleMatch ? targetRoleMatch[1] : 'public';
 
   const contentMap: Record<string, string> = {
-    report_drafting: `## ${task.title}\n\n根據貴公司提供的 ESG 指標數據，本節依 GRI 2021 框架進行揭露。\n\n### 核心指標摘要 (Target: ${targetRole.toUpperCase()})\n- 範疇一排放量：待填入（來源：ISO 14064-1 盤查清冊）\n- 範疇二排放量：待填入（來源：台電帳單）\n- 可再生能源比例：待填入（來源：T-REC 憑證）\n\n> ⚠️ 此為 OmniAgent 草稿，需人工審核後方可轉為正式揭露內容。`,
-    compliance_review: `## 合規缺口分析報告 (Target: ${targetRole.toUpperCase()})\n\n**掃描框架：** GRI 2021 / TCFD / 金管會規範\n\n### 高風險缺口\n1. GRI 305-3 範疇三排放量 — **未揭露**${targetRole === 'public' ? ' (細節已隱藏)' : '（短少 350 噸，罰鍰風險：NT$ 3M）'}\n2. TCFD 氣候情境分析 — **資料不完整**${targetRole === 'public' ? '' : '（缺少 2.0°C 情境模型）'}\n\n> ⚠️ 此為 OmniAgent 合規分析草稿，針對不同角色展示相應的細節。`,
+    report_drafting: `## ${
+      task.title
+    }\n\n根據貴公司提供的 ESG 指標數據，本節依 GRI 2021 框架進行揭露。\n\n### 核心指標摘要 (Target: ${targetRole.toUpperCase()})\n- 範疇一排放量：待填入（來源：ISO 14064-1 盤查清冊）\n- 範疇二排放量：待填入（來源：台電帳單）\n- 可再生能源比例：待填入（來源：T-REC 憑證）\n\n> ⚠️ 此為 OmniAgent 草稿，需人工審核後方可轉為正式揭露內容。`,
+    compliance_review: `## 合規缺口分析報告 (Target: ${targetRole.toUpperCase()})\n\n**掃描框架：** GRI 2021 / TCFD / 金管會規範\n\n### 高風險缺口\n1. GRI 305-3 範疇三排放量 — **未揭露**${
+      targetRole === 'public' ? ' (細節已隱藏)' : '（短少 350 噸，罰鍰風險：NT$ 3M）'
+    }\n2. TCFD 氣候情境分析 — **資料不完整**${
+      targetRole === 'public' ? '' : '（缺少 2.0°C 情境模型）'
+    }\n\n> ⚠️ 此為 OmniAgent 合規分析草稿，針對不同角色展示相應的細節。`,
     evidence_mapping: `## 證據映射草稿\n\n| 指標 | 段落 | 建議對應佐證 | 狀態 |\n|------|------|------------|------|\n| GRI 302-1 | 能源管理章節 | 台電帳單 PDF | 待確認 |\n| GRI 305-1 | 環境績效章節 | ISO 14064-1 清冊 | 待確認 |\n| GRI 2-7 | 員工結構章節 | 人資系統報表 | 待確認 |\n\n> ⚠️ 此為 OmniAgent 映射草稿，需與實際佐證文件核對後方可確認。`,
     course_assistant: `## 課程 FAQ 草稿\n\n**Q1: 什麼是 GRI 2021 框架？**\nGRI（全球報告倡議組織）是國際最廣泛採用的永續報告框架，2021 版本重構為三個系列標準...\n\n**Q2: ESG 與 CSR 有何不同？**\nCSR（企業社會責任）是較舊的概念；ESG 則是可量化、可驗算的投資評估框架...\n\n> ⚠️ 此為 OmniAgent 草稿，需課程設計師審核後方可納入正式教材。`,
     task_planning: `## 任務規劃草稿\n\n### 永續報告書撰寫專案\n\n**Phase 1（第1-4週）：** 資料盤點\n- [ ] 完成環境數據收集（負責：環安衛）\n- [ ] 完成社會指標填報（負責：人資）\n\n**Phase 2（第5-8週）：** 初稿撰寫\n- [ ] 完成各章節草稿（負責：永續委員會）\n- [ ] 完成合規比對（負責：法務）\n\n> ⚠️ 此為 OmniAgent 規劃草稿，需專案負責人確認後方可啟動。`,
     stakeholder_analysis: `## 利害關係人問卷分析報告\n\n### 調查概況\n- 有效樣本數：342\n- 參與群體：員工 (45%)、供應商 (30%)、客戶 (20%)、社區/NGO (5%)\n\n### 關注議題排名 (Top 5)\n1. **氣候變遷因應** (權重: 0.88)\n2. **員工健康與安全** (權重: 0.85)\n3. **產品品質與安全** (權重: 0.82)\n4. **公司治理與誠信** (權重: 0.79)\n5. **供應鏈環境管理** (權重: 0.75)\n\n> ⚠️ 此為 OmniAgent 分析草稿，權重計算邏輯需永續長確認。`,
     materiality_generation: `## 重大性矩陣草稿 (Materiality Matrix)\n\n### 核心議題定義\n- **X軸：對營運衝擊程度** (由 ESG GO 數據庫 analysis)\n- **Y軸：利害關係人關注度** (由問卷分析模組回傳)\n\n### 象限分配\n- **高度重大 (High Materiality):** 氣候風險、人才吸引、職業安全\n- **中度重大 (Medium Materiality):** 水資源管理、生物多樣性\n- **一般關注:** 社區參與、廢棄物管理\n\n![Matrix Placeholder]\n\n> ⚠️ 此為 OmniAgent 生成草稿，矩陣座標需經永續委員會審議通過。`,
     cbam_validation: `## CBAM 數據驗證日誌\n\n### 驗證規則集：EU 2023/956 (CBAM Regulation)\n\n| 申報項 | CN Code | 數據來源 | 狀態 | 備註 |\n|--------|---------|---------|------|------|\n| 鋼鐵扣件 | 7318 | 採購清單 | ✅ 通過 | 格式符合要求 |\n| 鋁製板材 | 7606 | ERP 匯出 | ⚠️ 警告 | 排放係數非預設值，需上傳佐證 |\n| 水泥 | 2523 | 工廠報表 | ❌ 錯誤 | 缺少 Scope 2 電源來源證明 |\n\n> ⚠️ 此為 OmniAgent 校驗日誌，請針對紅字部分進行補件。`,
-    system_ops: task.skillKey === 'omnicore_autonomous_healing'
-      ? `## 🌌 無作妙德圓通無礙 - 自主修復與熵減日誌\n\n### 意圖共鳴目標：系統動態平衡與自生長\n\n1. **跨模組修復**：自動偵測並修正了 3 處資料同步延遲，確保 5T [Trackable] 追蹤無縫對接。\n2. **技能樹共鳴**：基於最新 Vibe Coding 氣場，自主預編譯了 1 個潛在 AgentSkill 模組。\n3. **狀態昇華**：系統熵值已主動降低 2.4%，維持「圓通無礙」最佳運行態。\n\n> 🕊️ 萬能元鑰加持：此操作為被動天賦自主執行，無需人類介入，已寫入永恆刻印。`
-      : `## 基礎設施維運建議庫\n\n### 掃描目標：${task.skillKey === 'firebase_foundation' ? 'Firebase Project' : 'Supabase Instance'}\n\n1. **安全規則審計**：偵測到 2 處 RLS 策略過於寬鬆，建議收緊 \`.read\` 權限。\n2. **連線效能**：Postgres Connection Pool 使用率達 85%，建議啟動 PgBouncer 或 Supavisor。\n3. **備援檢查**：PITR (Point-in-Time Recovery) 已啟動，備份完整性驗證通過。\n\n> ⚠️ 此為系統運維建議，實施前請先於 Staging 環境測試。`,
+    system_ops:
+      task.skillKey === 'omnicore_autonomous_healing'
+        ? `## 🌌 無作妙德圓通無礙 - 自主修復與熵減日誌\n\n### 意圖共鳴目標：系統動態平衡與自生長\n\n1. **跨模組修復**：自動偵測並修正了 3 處資料同步延遲，確保 5T [Trackable] 追蹤無縫對接。\n2. **技能樹共鳴**：基於最新 Vibe Coding 氣場，自主預編譯了 1 個潛在 AgentSkill 模組。\n3. **狀態昇華**：系統熵值已主動降低 2.4%，維持「圓通無礙」最佳運行態。\n\n> 🕊️ 萬能元鑰加持：此操作為被動天賦自主執行，無需人類介入，已寫入永恆刻印。`
+        : `## 基礎設施維運建議庫\n\n### 掃描目標：${
+            task.skillKey === 'firebase_foundation' ? 'Firebase Project' : 'Supabase Instance'
+          }\n\n1. **安全規則審計**：偵測到 2 處 RLS 策略過於寬鬆，建議收緊 \`.read\` 權限。\n2. **連線效能**：Postgres Connection Pool 使用率達 85%，建議啟動 PgBouncer 或 Supavisor。\n3. **備援檢查**：PITR (Point-in-Time Recovery) 已啟動，備份完整性驗證通過。\n\n> ⚠️ 此為系統運維建議，實施前請先於 Staging 環境測試。`,
     ai_ops: `## Genkit AI 流程優化藍圖\n\n### 追蹤對象：${task.title}\n\n- **Prompt 效率**：偵測到 Token 冗餘，建議將 System Instructions 壓縮 15%。\n- **模型路由**：建議將低複雜度任務由 Gemini 1.5 Pro 轉向 Flash 以降低延遲。\n- **Trace 檢視**：已建立可追蹤的 Trace 鏈路，可於 Gasket Dashboard 查看完整分步日誌。\n\n> ⚠️ 此為 AI 流程建議，調整 Prompt 可能影響生成風格。`,
-    email_processing: `## Hermes 郵件自動處理日誌\n\n> 正在讀取收件匣並過濾 ESG 相關信件...`,
+    email_processing: `## OmniAgent 郵件自動處理日誌\n\n> 正在讀取收件匣並過濾 ESG 相關信件...`,
     carbon_calculation: `## 碳排放核算報告 (ISO 14064-1)\n\n### 核算概況\n- **核算範疇**：範疇一、二、三\n- **排放因子庫**：IPCC 2023 / EPA v6.0\n- **數據狀態**：已鎖定 5T 誠信雜湊\n\n### 計算詳情\n- **輸入數據**：待從 Evidence Vault 提取\n- **計算公式**：活動數據 * 排放係數\n- **結果預估**：核算中...\n\n> ⚠️ 此內容由 OmniAgent 碳排引擎自動生成，具備 5T 溯源性。`,
     supplier_assessment: `## 供應商誠信評估報告 (Supplier Risk Profile)\n\n### 評估概況\n- **對象**：指定供應商\n- **標準**：RBA v8.0 / ISO 14001 / ISO 45001\n- **維度**：環境、社會、治理 (ESG)\n\n### 誠信評分\n- **綜合得分**：計算中...\n- **風險等級**：待評定\n\n> ⚠️ 此報告由 OmniAgent 誠信引擎自動生成，所有評分皆具備 5T 溯源證據。`,
   };

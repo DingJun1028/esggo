@@ -1,10 +1,8 @@
 -- ESGGO 5T Protocol Core Tables
 -- Creates the esg_atoms table to store Trustworthy data with Hash Locks
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE IF NOT EXISTS public.esg_atoms (
-  uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  uuid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   hash_lock TEXT NOT NULL,
   status TEXT DEFAULT 'Trustworthy' NOT NULL,
@@ -29,14 +27,19 @@ EXECUTE FUNCTION prevent_esg_atoms_update();
 -- Row Level Security (RLS)
 ALTER TABLE public.esg_atoms ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Public Read for Transparency" ON public.esg_atoms;
+DROP POLICY IF EXISTS "Authenticated Insert" ON public.esg_atoms;
+
 -- Allow public read for transparency, but restrict writes to authenticated services/users
 CREATE POLICY "Public Read for Transparency"
 ON public.esg_atoms
 FOR SELECT
+TO anon, authenticated
 USING (true);
 
 -- Insert policy (e.g. only authenticated users/agents)
 CREATE POLICY "Authenticated Insert"
 ON public.esg_atoms
 FOR INSERT
-WITH CHECK (auth.role() = 'authenticated');
+TO authenticated
+WITH CHECK (true);
