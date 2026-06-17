@@ -204,6 +204,22 @@ create table if not exists public.submission_filled (
     created_at timestamp with time zone default now()
 );
 
+-- Create report_versions table for ZKP integrity and version control
+create table if not exists public.report_versions (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    report_id uuid references public.sustain_write_documents(id),
+    version integer default 1,
+    content text,
+    hash_lock text,
+    zkp_proof jsonb,
+    approved boolean default false,
+    approved_at timestamp with time zone,
+    approved_by uuid,
+    modifications_requested jsonb,
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
