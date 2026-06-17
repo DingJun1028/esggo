@@ -730,11 +730,351 @@ const GRI_EXPERT_TEMPLATES: GRIExpertTemplate[] = [
     industry: 'general',
     section: 2,
     content: `## 供應鏈風險
-
-### 風險評估
-- 高風險供應商: [HIGH_RISK_SUPPLIERS]
-- 風險因應: [SUPPLIER_RISK_ACTIONS]`,
+ 
+    ### 風險評估
+    - 高風險供應商: [HIGH_RISK_SUPPLIERS]
+    - 風險因應: [SUPPLIER_RISK_ACTIONS]`,
     placeholders: ['HIGH_RISK_SUPPLIERS', 'SUPPLIER_RISK_ACTIONS'],
+  },
+
+  // === GRI 419 供應鏈評鑑 3 節 ===
+  {
+    id: 'template-419-1-1',
+    griCode: 'GRI 419-1',
+    templateName: '供應鏈評鑑-政策範本',
+    industry: 'general',
+    section: 1,
+    content: `## 供應鏈評鑑政策
+ 
+    ### 政策概述
+    - 評鑑政策: [EVALUATION_POLICY]
+    - 供應商訓練: [SUPPLIER_TRAINING]
+    - 改善措施: [SUPPLIER_IMPROVEMENT]`,
+    placeholders: ['EVALUATION_POLICY', 'SUPPLIER_TRAINING', 'SUPPLIER_IMPROVEMENT'],
+  },
+  {
+    id: 'template-419-2-1',
+    griCode: 'GRI 419-2',
+    templateName: '供應鏈評鑑-結果範本',
+    industry: 'general',
+    section: 2,
+    content: `## 供應鏈評鑑結果
+ 
+    ### 結果統計
+    - 評鑑數量: [EVALUATION_COUNT]
+    - 平均分數: [AVERAGE_SCORE]
+    - 改善情況: [IMPROVEMENT_RATE]%`,
+    placeholders: ['EVALUATION_COUNT', 'AVERAGE_SCORE', 'IMPROVEMENT_RATE'],
+  },
+
+  // === GRI 201 經濟 7 節 ===
+  {
+    id: 'template-201-1-1',
+    griCode: 'GRI 201-1',
+    templateName: '經濟-直接經濟值範本',
+    industry: 'general',
+    section: 1,
+    content: `## 直接經濟值
+ 
+    ### 經濟價值創造
+    - 營業收入: [REVENUE] USD
+    - 本土供應商採購: [LOCAL_PROCUREMENT] USD
+    - 本土員工薪資: [LOCAL_SALARIES] USD`,
+    placeholders: ['REVENUE', 'LOCAL_PROCUREMENT', 'LOCAL_SALARIES'],
+    complianceChecklist: ['經濟價值創造報告'],
+  },
+  {
+    id: 'template-201-2-1',
+    griCode: 'GRI 201-2',
+    templateName: '經濟-間接經濟值範本',
+    industry: 'general',
+    section: 2,
+    content: `## 間接經濟值
+ 
+    ### 間接價值
+    - 供應鏈價值: [SUPPLY_CHAIN_VALUE] USD
+    - 間接就業創造: [INDIRECT_JOBS] 人`,
+    placeholders: ['SUPPLY_CHAIN_VALUE', 'INDIRECT_JOBS'],
+  },
+  {
+    id: 'template-201-3-1',
+    griCode: 'GRI 201-3',
+    templateName: '經濟-產業價值範本',
+    industry: 'general',
+    section: 3,
+    content: `## 產業價值
+ 
+    ### 產業貢獻
+    - 產業投資: [INDUSTRY_INVESTMENT] USD
+    - 產業人員訓練: [INDUSTRY_TRAINING] 小時`,
+    placeholders: ['INDUSTRY_INVESTMENT', 'INDUSTRY_TRAINING'],
+  },
+
+  // === GRI 202 市場 2 節 ===
+  {
+    id: 'template-202-1-1',
+    griCode: 'GRI 202-1',
+    templateName: '市場-客戶滿意度範本',
+    industry: 'general',
+    section: 1,
+    content: `## 客戶滿意度
+ 
+    ### 滿意度指標
+    - NPS 分數: [NPS_SCORE]
+    - 客戶保留率: [CUSTOMER_RETENTION]%`,
+    placeholders: ['NPS_SCORE', 'CUSTOMER_RETENTION'],
+  },
+  {
+    id: 'template-202-2-1',
+    griCode: 'GRI 202-2',
+    templateName: '市場-產品責任範本',
+    industry: 'general',
+    section: 2,
+    content: `## 產品責任
+ 
+    ### 責任措施
+    - 產品回收率: [PRODUCT_RECYCLING_RATE]%
+    - 客戶健康事件: [HEALTH_INCIDENTS] 件`,
+    placeholders: ['PRODUCT_RECYCLING_RATE', 'HEALTH_INCIDENTS'],
+  },
+
+  // === GRI 203 供應鏈 13 節 ===
+  {
+    id: 'template-203-1-1',
+    griCode: 'GRI 203-1',
+    templateName: '供應鏈-新供應商範本',
+    industry: 'general',
+    section: 1,
+    content: `## 新供應商評鑑
+ 
+    ### 評鑑結果
+    - 新供應商數: [NEW_SUPPLIERS] 家
+    - 合規採購比: [COMPLIANT_PURCHASE_RATE]%`,
+    placeholders: ['NEW_SUPPLIERS', 'COMPLIANT_PURCHASE_RATE'],
+  },
+  {
+    id: 'template-203-2-1',
+    griCode: 'GRI 203-2',
+    templateName: '供應鏈-風險管理範本',
+    industry: 'general',
+    section: 2,
+    content: `## 供應鏈風險管理
+ 
+    ### 風險分析
+    - 風險分類數: [RISK_CATEGORIES] 類
+    - 因應措施: [RISK_RESPONSES]`,
+    placeholders: ['RISK_CATEGORIES', 'RISK_RESPONSES'],
+  },
+  {
+    id: 'template-203-3-1',
+    griCode: 'GRI 203-3',
+    templateName: '供應鏈-偏離偏好範本',
+    industry: 'general',
+    section: 3,
+    content: `## 偏離偏好
+ 
+    ### 偏好情況
+    - 偏好供應商: [PREFERRED_SUPPLIERS] 家
+    - 偏好比例: [PREFERENCE_RATE]%`,
+    placeholders: ['PREFERRED_SUPPLIERS', 'PREFERENCE_RATE'],
+  },
+
+  // === GRI 204 價值鏈 10 節 ===
+  {
+    id: 'template-204-1-1',
+    griCode: 'GRI 204-1',
+    templateName: '價值鏈-評鑑政策範本',
+    industry: 'general',
+    section: 1,
+    content: `## 價值鏈評鑑政策
+ 
+    ### 政策內容
+    - 評鑑政策: [VALUE_CHAIN_AUDIT_POLICY]
+    - 供應商參與率: [SUPPLIER_PARTICIPATION_RATE]%`,
+    placeholders: ['VALUE_CHAIN_AUDIT_POLICY', 'SUPPLIER_PARTICIPATION_RATE'],
+  },
+  {
+    id: 'template-204-2-1',
+    griCode: 'GRI 204-2',
+    templateName: '價值鏈-評鑑結果範本',
+    industry: 'general',
+    section: 2,
+    content: `## 價值鏈評鑑結果
+ 
+    ### 結果統計
+    - 評鑑項目: [AUDIT_ITEMS] 項
+    - 合規百分比: [COMPLIANCE_PERCENT]%`,
+    placeholders: ['AUDIT_ITEMS', 'COMPLIANCE_PERCENT'],
+  },
+
+  // === GRI 207 永續目標 3 節 ===
+  {
+    id: 'template-207-1-1',
+    griCode: 'GRI 207-1',
+    templateName: '永續目標-經濟價值範本',
+    industry: 'general',
+    section: 1,
+    content: `## 永續目標經濟價值
+ 
+    ### 價值創造
+    - 永續投資: [SUSTAINABLE_INVESTMENT] USD
+    - 永續收益: [SUSTAINABLE_REVENUE] USD`,
+    placeholders: ['SUSTAINABLE_INVESTMENT', 'SUSTAINABLE_REVENUE'],
+  },
+  {
+    id: 'template-207-2-1',
+    griCode: 'GRI 207-2',
+    templateName: '永續目標-環境影響範本',
+    industry: 'general',
+    section: 2,
+    content: `## 永續目標環境影響
+ 
+    ### 影響指標
+    - 減碳投資: [CARBON_REDUCTION_INVESTMENT] USD
+    - 再生能源安裝: [RENEWABLE_INSTALLATION] MW`,
+    placeholders: ['CARBON_REDUCTION_INVESTMENT', 'RENEWABLE_INSTALLATION'],
+  },
+
+  // === GRI 301 材料 4 節 ===
+  {
+    id: 'template-301-1-1',
+    griCode: 'GRI 301-1',
+    templateName: '材料-材料使用範本',
+    industry: 'general',
+    section: 1,
+    content: `## 材料使用
+ 
+    ### 使用統計
+    - 材料總量: [MATERIAL_QUANTITY] tons
+    - 回收材料: [RECOVERED_MATERIAL] tons`,
+    placeholders: ['MATERIAL_QUANTITY', 'RECOVERED_MATERIAL'],
+  },
+  {
+    id: 'template-301-2-1',
+    griCode: 'GRI 301-2',
+    templateName: '材料-回收材料範本',
+    industry: 'general',
+    section: 2,
+    content: `## 回收材料
+ 
+    ### 回收情況
+    - 回收率: [RECOVERY_RATE]%
+    - 回收來源: [RECOVERY_SOURCES]`,
+    placeholders: ['RECOVERY_RATE', 'RECOVERY_SOURCES'],
+  },
+  {
+    id: 'template-301-3-1',
+    griCode: 'GRI 301-3',
+    templateName: '材料-責任委外範本',
+    industry: 'general',
+    section: 3,
+    content: `## 責任委外
+ 
+    ### 委外情況
+    - 委外數量: [OUTSOURCED_QUANTITY] 項
+    - 委外比例: [OUTSOURCE_RATE]%`,
+    placeholders: ['OUTSOURCED_QUANTITY', 'OUTSOURCE_RATE'],
+  },
+
+  // === GRI 409 勞工實踐 9 節 ===
+  {
+    id: 'template-409-1-1',
+    griCode: 'GRI 409-1',
+    templateName: '勞工實踐-勞工條件範本',
+    industry: 'general',
+    section: 1,
+    content: `## 勞工條件
+ 
+    ### 條件指標
+    - 工作條件評分: [WORKING_CONDITIONS_SCORE]
+    - 違規事件: [VIOLATION_EVENTS] 件`,
+    placeholders: ['WORKING_CONDITIONS_SCORE', 'VIOLATION_EVENTS'],
+  },
+  {
+    id: 'template-409-2-1',
+    griCode: 'GRI 409-2',
+    templateName: '勞工實踐-健康與安全範本',
+    industry: 'general',
+    section: 2,
+    content: `## 健康與安全
+ 
+    ### 安全指標
+    - 安全訓練率: [SAFETY_TRAINING_RATE]%
+    - 員工健康投資: [HEALTH_INVESTMENT] USD`,
+    placeholders: ['SAFETY_TRAINING_RATE', 'HEALTH_INVESTMENT'],
+  },
+
+  // === GRI 411 社會性責任 7 節 ===
+  {
+    id: 'template-411-1-1',
+    griCode: 'GRI 411-1',
+    templateName: '社會性責任-社會投資範本',
+    industry: 'general',
+    section: 1,
+    content: `## 社會投資
+ 
+    ### 投資情況
+    - 社會投資總額: [SOCIAL_INVESTMENT_TOTAL] USD
+    - 社會專案數: [SOCIAL_PROJECTS] 個`,
+    placeholders: ['SOCIAL_INVESTMENT_TOTAL', 'SOCIAL_PROJECTS'],
+  },
+  {
+    id: 'template-411-2-1',
+    griCode: 'GRI 411-2',
+    templateName: '社會性責任-社會衝擊範本',
+    industry: 'general',
+    section: 2,
+    content: `## 社會衝擊
+ 
+    ### 衝擊評估
+    - 社會衝擊評分: [SOCIAL_IMPACT_SCORE]
+    - 社會承諾執行: [SOCIAL_COMMITMENT_EXECUTION]%`,
+    placeholders: ['SOCIAL_IMPACT_SCORE', 'SOCIAL_COMMITMENT_EXECUTION'],
+  },
+
+  // === GRI 415 包容性與多元化 1 節 ===
+  {
+    id: 'template-415-1-1',
+    griCode: 'GRI 415-1',
+    templateName: '包容性與多元化範本',
+    industry: 'general',
+    section: 1,
+    content: `## 包容性與多元化
+ 
+    ### 多元化指標
+    - 包容性政策: [INCLUSION_POLICY]
+    - 多元化目標: [DIVERSITY_TARGET]%`,
+    placeholders: ['INCLUSION_POLICY', 'DIVERSITY_TARGET'],
+  },
+
+  // === GRI 416 組織多元化與社會正義 3 節 ===
+  {
+    id: 'template-416-1-1',
+    griCode: 'GRI 416-1',
+    templateName: '組織多元化-政策範本',
+    industry: 'general',
+    section: 1,
+    content: `## 組織多元化政策
+ 
+    ### 政策內容
+    - 政策概述: [DIVERSITY_POLICY_OVERVIEW]
+    - 改善措施: [DIVERSITY_IMPROVEMENT_ACTIONS]`,
+    placeholders: ['DIVERSITY_POLICY_OVERVIEW', 'DIVERSITY_IMPROVEMENT_ACTIONS'],
+  },
+
+  // === GRI 206 反貪腐 3 節 ===
+  {
+    id: 'template-206-1-1',
+    griCode: 'GRI 206-1',
+    templateName: '反貪腐-政策範本',
+    industry: 'general',
+    section: 1,
+    content: `## 反貪腐政策
+ 
+    ### 政策內容
+    - 政策概述: [ANTI_CORRUPTION_POLICY]
+    - 員工訓練情況: [ANTI_CORRUPTION_TRAINING]`,
+    placeholders: ['ANTI_CORRUPTION_POLICY', 'ANTI_CORRUPTION_TRAINING'],
   },
 ];
 
@@ -774,6 +1114,62 @@ const GRI_CHAPTERS: GRIChapter[] = [
     chapterTitle: '廢棄物 (Waste)',
     sections: 4,
     templateIds: ['template-306-1-1', 'template-306-2-1', 'template-306-3-1'],
+  },
+  {
+    id: 'chapter-301',
+    griCode: 'GRI 301',
+    chapterTitle: '材料 (Materials)',
+    sections: 4,
+    templateIds: ['template-301-1-1', 'template-301-2-1', 'template-301-3-1'],
+  },
+  {
+    id: 'chapter-201',
+    griCode: 'GRI 201',
+    chapterTitle: '經濟 (Economic)',
+    sections: 3,
+    templateIds: ['template-201-1-1', 'template-201-2-1', 'template-201-3-1'],
+  },
+  {
+    id: 'chapter-202',
+    griCode: 'GRI 202',
+    chapterTitle: '市場 (Market)',
+    sections: 2,
+    templateIds: ['template-202-1-1', 'template-202-2-1'],
+  },
+  {
+    id: 'chapter-203',
+    griCode: 'GRI 203',
+    chapterTitle: '供應鏈 (Supply Chain)',
+    sections: 13,
+    templateIds: ['template-203-1-1', 'template-203-2-1', 'template-203-3-1'],
+  },
+  {
+    id: 'chapter-204',
+    griCode: 'GRI 204',
+    chapterTitle: '價值鏈 (Value Chain)',
+    sections: 10,
+    templateIds: ['template-204-1-1', 'template-204-2-1'],
+  },
+  {
+    id: 'chapter-205',
+    griCode: 'GRI 205',
+    chapterTitle: '反貪腐 (Anti-Corruption)',
+    sections: 1,
+    templateIds: ['template-205-1-1'],
+  },
+  {
+    id: 'chapter-206',
+    griCode: 'GRI 206',
+    chapterTitle: '反貪腐 (Anti-Corruption)',
+    sections: 3,
+    templateIds: ['template-206-1-1'],
+  },
+  {
+    id: 'chapter-207',
+    griCode: 'GRI 207',
+    chapterTitle: '永續目標 (Sustainability Goals)',
+    sections: 3,
+    templateIds: ['template-207-1-1', 'template-207-2-1'],
   },
   {
     id: 'chapter-401',
@@ -821,8 +1217,22 @@ const GRI_CHAPTERS: GRIChapter[] = [
     id: 'chapter-407',
     griCode: 'GRI 407',
     chapterTitle: '勞工實踐 (Labor Practices)',
-    sections: 3,
-    templateIds: ['template-407-1-1', 'template-408-1-1', 'template-408-2-1'],
+    sections: 1,
+    templateIds: ['template-407-1-1'],
+  },
+  {
+    id: 'chapter-408',
+    griCode: 'GRI 408',
+    chapterTitle: '人權跨越 (Human Rights Crossing)',
+    sections: 4,
+    templateIds: ['template-408-1-1', 'template-408-2-1'],
+  },
+  {
+    id: 'chapter-409',
+    griCode: 'GRI 409',
+    chapterTitle: '勞工實踐 (Labor Practices)',
+    sections: 9,
+    templateIds: ['template-409-1-1', 'template-409-2-1'],
   },
   {
     id: 'chapter-413',
@@ -839,6 +1249,20 @@ const GRI_CHAPTERS: GRIChapter[] = [
     templateIds: ['template-414-1-1'],
   },
   {
+    id: 'chapter-415',
+    griCode: 'GRI 415',
+    chapterTitle: '包容性與多元化 (Inclusivity & Diversity)',
+    sections: 1,
+    templateIds: ['template-415-1-1'],
+  },
+  {
+    id: 'chapter-416',
+    griCode: 'GRI 416',
+    chapterTitle: '組織多元化與社會正義 (Org Diversity & Social Justice)',
+    sections: 3,
+    templateIds: ['template-416-1-1'],
+  },
+  {
     id: 'chapter-417',
     griCode: 'GRI 417',
     chapterTitle: '客戶關係 (Customer Relations)',
@@ -849,15 +1273,22 @@ const GRI_CHAPTERS: GRIChapter[] = [
     id: 'chapter-418',
     griCode: 'GRI 418',
     chapterTitle: '供應鏈 (Supply Chain)',
-    sections: 2,
+    sections: 6,
     templateIds: ['template-418-1-1', 'template-418-2-1'],
   },
   {
-    id: 'chapter-205',
-    griCode: 'GRI 205',
-    chapterTitle: '反貪腐 (Anti-Corruption)',
-    sections: 1,
-    templateIds: ['template-205-1-1'],
+    id: 'chapter-419',
+    griCode: 'GRI 419',
+    chapterTitle: '供應鏈評鑑 (Supply Chain Assessment)',
+    sections: 3,
+    templateIds: ['template-419-1-1', 'template-419-2-1'],
+  },
+  {
+    id: 'chapter-411',
+    griCode: 'GRI 411',
+    chapterTitle: '社會性責任 (Social Responsibility)',
+    sections: 7,
+    templateIds: ['template-411-1-1', 'template-411-2-1'],
   },
 ];
 
