@@ -1,30 +1,23 @@
-import { 
-  listAllTasks,
-  upsertTask
-} from '@dataconnect/generated';
+import { listAllTasks, upsertTask } from '@dataconnect/generated';
 import { dcGetReportById } from './dataconnect-services.ts';
 
-export { 
-  listAllTasks,
-  upsertTask,
-  dcGetReportById
-};
-import { db } from './firebase.js';
+export { listAllTasks, upsertTask, dcGetReportById };
+import { db } from './firebase';
 // @ts-ignore
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
   where,
   serverTimestamp,
-  Timestamp
+  Timestamp,
 } from 'firebase/firestore';
-import { isDemoMode } from './firebase.js';
+import { isDemoMode } from './firebase';
 import { getDemoData, MOCK_ENVIRONMENTAL, MOCK_TASKS, MOCK_AUDIT } from './demo-data.ts';
 
 // ==========================================
@@ -57,14 +50,38 @@ export interface Signature {
   timestamp: unknown;
 }
 
-export interface GovernanceMetric { id?: string; [key: string]: unknown; }
-export interface Task { id?: string; [key: string]: unknown; }
-export interface EvidenceFile { id?: string; [key: string]: unknown; }
-export interface AuditRecord { id?: string; [key: string]: unknown; }
-export interface AdvisoryMessage { id?: string; [key: string]: unknown; }
-export interface EnvironmentalMetric { id?: string; [key: string]: unknown; }
-export interface RoadmapMilestone { id?: string; [key: string]: unknown; }
-export interface SocialMetric { id?: string; [key: string]: unknown; }
+export interface GovernanceMetric {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface Task {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface EvidenceFile {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface AuditRecord {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface AdvisoryMessage {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface EnvironmentalMetric {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface RoadmapMilestone {
+  id?: string;
+  [key: string]: unknown;
+}
+export interface SocialMetric {
+  id?: string;
+  [key: string]: unknown;
+}
 
 const DEFAULT_COMPANY_ID = '00000000-0000-0000-0000-000000000000';
 
@@ -72,20 +89,17 @@ const DEFAULT_COMPANY_ID = '00000000-0000-0000-0000-000000000000';
 // Stub Functions (for missing DataConnect operations)
 // ==========================================
 
-const listAuditRecords = async () =>
-  ({ data: { auditRecords: [] as any[] } });
+const listAuditRecords = async () => ({ data: { auditRecords: [] as any[] } });
 
-const listScrapedArticles = async () =>
-  ({ data: { scrapedArticles: [] as any[] } });
+const listScrapedArticles = async () => ({ data: { scrapedArticles: [] as any[] } });
 
-const listRoadmapMilestones = async () =>
-  ({ data: { roadmapMilestones: [] as any[] } });
+const listRoadmapMilestones = async () => ({ data: { roadmapMilestones: [] as any[] } });
 
-const listReports = async () =>
-  ({ data: { reports: [] as any[] } });
+const listReports = async () => ({ data: { reports: [] as any[] } });
 
-const listCompanyMetrics = async (_args: { companyId: string }) =>
-  ({ data: { companyMetrics: [] as any[] } });
+const listCompanyMetrics = async (_args: { companyId: string }) => ({
+  data: { companyMetrics: [] as any[] },
+});
 
 // ==========================================
 // ESG Metrics (Migrated to Data Connect)
@@ -94,22 +108,26 @@ const listCompanyMetrics = async (_args: { companyId: string }) =>
 export const getGovernanceMetrics = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return getDemoData('gov', []);
   const { data } = await listCompanyMetrics({ companyId: DEFAULT_COMPANY_ID });
-  return (data?.companyMetrics || []).filter(m => m.category === 'G' || m.category === 'Governance');
+  return (data?.companyMetrics || []).filter(
+    (m) => m.category === 'G' || m.category === 'Governance'
+  );
 };
 
 export const getSocialMetrics = async (ownerId?: unknown): Promise<any> => {
   if (isDemoMode) return getDemoData('soc', []);
   const { data } = await listCompanyMetrics({ companyId: DEFAULT_COMPANY_ID });
-  return (data?.companyMetrics || []).filter(m => m.category === 'S' || m.category === 'Social');
+  return (data?.companyMetrics || []).filter((m) => m.category === 'S' || m.category === 'Social');
 };
 
 export const getEnvironmentalData = async (activeCategory?: unknown): Promise<any> => {
   if (isDemoMode) {
     const all = await getDemoData('env', MOCK_ENVIRONMENTAL);
-    return activeCategory ? all.filter(m => m.category === activeCategory) : all;
+    return activeCategory ? all.filter((m) => m.category === activeCategory) : all;
   }
   const { data } = await listCompanyMetrics({ companyId: DEFAULT_COMPANY_ID });
-  const metrics = (data?.companyMetrics || []).filter(m => m.category === 'E' || m.category === 'Environmental' || m.category === activeCategory);
+  const metrics = (data?.companyMetrics || []).filter(
+    (m) => m.category === 'E' || m.category === 'Environmental' || m.category === activeCategory
+  );
   return metrics;
 };
 
@@ -144,7 +162,8 @@ export const logAudit = async (record: unknown): Promise<any> => {
 };
 
 export const getDashboardStats = async (ownerId?: unknown): Promise<any> => {
-  if (isDemoMode) return { complianceRate: 78, griCoverage: 67, totalEvidence: 42, carbonEmissions: 1247 };
+  if (isDemoMode)
+    return { complianceRate: 78, griCoverage: 67, totalEvidence: 42, carbonEmissions: 1247 };
   return { complianceRate: 0, griCoverage: 0, totalEvidence: 0 };
 };
 
@@ -155,12 +174,24 @@ export const getDashboardStats = async (ownerId?: unknown): Promise<any> => {
 export const getEvidenceFiles = async (): Promise<any> => {
   if (isDemoMode) {
     return [
-      { id: 'ev_1', file_name: '2023_Electricity_Bill.pdf', gri_reference: 'GRI 302-1', hash_lock: 'sha256:bill_hash_123', dataType: 'EVIDENCE' },
-      { id: 'ev_2', file_name: 'ISO_14064_Report.pdf', gri_reference: 'GRI 305-1', hash_lock: 'sha256:iso_hash_456', dataType: 'EVIDENCE' }
+      {
+        id: 'ev_1',
+        file_name: '2023_Electricity_Bill.pdf',
+        gri_reference: 'GRI 302-1',
+        hash_lock: 'sha256:bill_hash_123',
+        dataType: 'EVIDENCE',
+      },
+      {
+        id: 'ev_2',
+        file_name: 'ISO_14064_Report.pdf',
+        gri_reference: 'GRI 305-1',
+        hash_lock: 'sha256:iso_hash_456',
+        dataType: 'EVIDENCE',
+      },
     ];
   }
   const { data } = await listAuditRecords();
-  return (data?.auditRecords || []).filter(r => r.dataType === 'EVIDENCE');
+  return (data?.auditRecords || []).filter((r) => r.dataType === 'EVIDENCE');
 };
 
 export const getReadingRoomReports = async (): Promise<any> => {
@@ -173,7 +204,7 @@ export const secureHash = async (data: unknown): Promise<string> => {
   const msgBuffer = new TextEncoder().encode(str);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 };
 
 export const sealRecord = async (data: any, ownerId: string): Promise<string> => {

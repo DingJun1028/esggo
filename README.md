@@ -1,6 +1,6 @@
 # 🌌 ESGGO 善向永續 | OmniAgent 萬能系統
 
-> **Platform:** ESGGO 善向永續 V1.4 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** mistralai/mistral-small-3.1-24b:free
+> **Platform:** ESGGO 善向永續 V1.5.0 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** google/gemma-3-27b-it:free
 
 [![Render Deployment](https://img.shields.io/badge/Render-Deployed-brightgreen)](https://dashboard.render.com)
 [![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t誠信協議-5t-integrity-protocol)
@@ -20,7 +20,8 @@
 ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T 協議** 的基礎設施。透過 **OmniAgent** 全域編排與 **Gemma 4** 智能心核，將生硬的 ESG 數據轉化為可感知的流動藝術與不可篡改的信任證據。
 
 ---
-> ESGGO 善向永續 V1.4 | 主題：六組品牌面板（含水色青·永恆金） | 頁面：App Router 170 頁 | VPS：四端點就緒
+
+> ESGGO 善向永續 V1.5.0 | 主題：5 種顏色主題（green, blue, earth, sunset, cyan） | 頁面：App Router 180 頁 | VPS：四端點就緒
 
 ---
 
@@ -50,9 +51,9 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 
 系統由多位具備獨特天賦的代理人協同運作。
 
-### 1. 召喚 G4 (Gemma 4 - Thinking Mode)
+### 1. 召喚 G4 (Gemma 3 - Thinking Mode)
 
-- **特色**: 系統的最強大腦。具備「思考模式 (Thinking Mode)」，在回答前進行複雜邏輯、數學與多步推理。
+- **特色**: 系統的最強大腦。具備「思考模式 (Thinking Mode)」，在回答前進行複雜邏輂與多步推理。
 - **定位**: 處理高度模糊的指令、深度多模態分析與跨領域策略制定。
 - **咒語**: `OmniAgent, 切換至 G4 模式。執行全域邏輯推演。`
 
@@ -67,6 +68,12 @@ ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T
 - **特色**: 視覺分析模型，支援圖片描述與 ESG 圖表識別。
 - **定位**: 處理圖片問題、圖表識別、視覺數據分析。
 - **模型**: `llava-phi3:latest` (本地 Ollama)
+
+### 1.3 召喚 Gemma3 (Gemma 3 27B - Free)
+
+- **特色**: v1.5.0 預設 AI 模型，免費版 Gemma 3。
+- **定位**: 全域智能分析、對話與策略制定。
+- **模型**: `google/gemma-3-27b-it:free`
 
 ### 2. 系統指揮官 OmniAgent
 
