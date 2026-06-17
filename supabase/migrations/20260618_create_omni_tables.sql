@@ -193,6 +193,17 @@ create table if not exists public.sustain_write_notes (
     created_at timestamp with time zone default now()
 );
 
+-- Create submission_filled table for filled submission records
+create table if not exists public.submission_filled (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    gri_code text not null,
+    filled_content text,
+    data_values jsonb,
+    validated boolean default false,
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
