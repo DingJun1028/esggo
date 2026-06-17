@@ -132,6 +132,25 @@ create table if not exists public.ocr_documents (
     processed_at timestamp with time zone default now()
 );
 
+-- Create omni_tags table for tagging system
+create table if not exists public.omni_tags (
+    id text primary key,
+    name text not null,
+    category text check (category in ('environmental', 'social', 'governance', 'compliance', 'benchmark', 'risk')),
+    color text,
+    description text,
+    created_at timestamp with time zone default now()
+);
+
+-- Create tagged_items table for item-tag associations
+create table if not exists public.tagged_items (
+    id uuid primary key default gen_random_uuid(),
+    item_id text not null,
+    item_type text check (item_type in ('report', 'document', 'evidence', 'note', 'calculation')),
+    tags text[] not null,
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
