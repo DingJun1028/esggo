@@ -1,7 +1,11 @@
+/**
+ * QPI Score Types and Computation Logic
+ * Quality Performance Index for ESG scoring
+ */
 
 export interface QPIScoreInput {
-  companyId?: string;
   categories?: string[];
+  companyId?: string;
   year?: number;
 }
 

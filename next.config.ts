@@ -5,14 +5,10 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-
   // Output configuration for Firebase hosting
   output: 'standalone',
   // Explicitly set the output file tracing root to the current directory
   // to help Next.js correctly infer the project root in dynamic deployment environments.
-
-  output: 'export',
-
   outputFileTracingRoot: path.join(__dirname, './'),
   serverExternalPackages: [
     'genkit',
