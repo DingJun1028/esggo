@@ -68,7 +68,6 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  turbopack: {}, // Suppress Turbopack error when using custom webpack config in Next.js 16
 };
 
 export default nextConfig;
