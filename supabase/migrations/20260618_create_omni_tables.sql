@@ -151,6 +151,33 @@ create table if not exists public.tagged_items (
     created_at timestamp with time zone default now()
 );
 
+-- Create brand_themes table for report styling
+create table if not exists public.brand_themes (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid references auth.users(id),
+    brand_name text not null,
+    primary_color text default '#003262',
+    secondary_color text default '#3B7EA1',
+    accent_color text default '#FDB515',
+    font_family text default 'Inter, system-ui, sans-serif',
+    logo_url text,
+    cover_page text,
+    created_at timestamp with time zone default now()
+);
+
+-- Create report_styles table for report templates
+create table if not exists public.report_styles (
+    id text primary key,
+    user_id uuid references auth.users(id),
+    template text check (template in ('classic', 'modern', 'executive', 'technical')),
+    page_size text check (page_size in ('A4', 'Letter', 'Legal')) default 'A4',
+    orientation text check (orientation in ('portrait', 'landscape')) default 'portrait',
+    margins jsonb,
+    sections jsonb,
+    brand_theme_id uuid references public.brand_themes(id),
+    created_at timestamp with time zone default now()
+);
+
 -- Create omni_evidence table for Vault evidence storage
 create table if not exists public.omni_evidence (
     id uuid primary key default gen_random_uuid(),
