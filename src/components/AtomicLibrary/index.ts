@@ -5,3 +5,6 @@
 export * from './atoms/Button';
 export * from './atoms/Input';
 export * from './atoms/Tag';
+export * from './atoms/OmniCard';
+export * from './atoms/OmniBadge';
+export * from './organisms/MatrixDashboard';
