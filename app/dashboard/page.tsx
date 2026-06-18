@@ -1,80 +1,234 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniTable, OmniTableDataRow } from '@/components/omni/OmniTable';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniCard } from '@/components/omni/OmniCard';
-import { OmniWeather } from '@/components/ui/atom/OmniWeather';
-import { useRouter } from 'next/navigation';
-import { RecordLifecycleStatus, AttentionStatus } from '@/shared-types/status';
+import { motion } from 'motion/react';
 import {
   Leaf,
   Droplets,
   Zap,
   ShieldAlert,
   BarChart3,
-  Fingerprint,
   FileText,
-  Settings,
-  Search,
   Bell,
+  Search,
+  Settings,
+  Fingerprint,
+  RefreshCw,
+  Loader2,
+  CheckCircle2,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import OmniKpiCard from '@/components/omni/OmniKpiCard';
+import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 
-const mockData: OmniTableDataRow[] = [
+/* ─── Types ─── */
+interface OmniTableDataRow {
+  id: string;
+  source_origin: string;
+  zkp_sealed: boolean;
+  status: 'Verified' | 'Pending' | 'Void';
+  content: string;
+  value: string;
+  hash: string;
+}
+
+interface KpiCardData {
+  id: string;
+  title: string;
+  value: string;
+  unit: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  iconColor: string;
+  iconBg: string;
+  trend?: number;
+  fiveTStatus: [boolean, boolean, boolean, boolean, boolean];
+  accentBorder?: 'emerald' | 'cyan' | 'rose' | 'amber';
+}
+
+/* ─── Mock Data ─── */
+const KPI_CARDS: KpiCardData[] = [
+  {
+    id: 'scope1',
+    title: 'Scope 1 直接排放',
+    value: '450.2',
+    unit: 'tCO₂e',
+    icon: Leaf,
+    iconColor: 'text-emerald-600',
+    iconBg: 'bg-emerald-50',
+    trend: -3.2,
+    fiveTStatus: [true, true, true, true, true],
+    accentBorder: 'emerald',
+  },
+  {
+    id: 'water',
+    title: '水資源使用量',
+    value: '8,205',
+    unit: 'm³',
+    icon: Droplets,
+    iconColor: 'text-cyan-600',
+    iconBg: 'bg-cyan-50',
+    trend: 1.5,
+    fiveTStatus: [true, true, true, true, false],
+    accentBorder: 'cyan',
+  },
+  {
+    id: 'energy',
+    title: '能源消耗',
+    value: '12.5M',
+    unit: 'kWh',
+    icon: Zap,
+    iconColor: 'text-rose-600',
+    iconBg: 'bg-rose-50',
+    trend: -8.1,
+    fiveTStatus: [true, true, true, false, false],
+    accentBorder: 'rose',
+  },
+  {
+    id: 'supply',
+    title: '供應鏈合規',
+    value: '94.8',
+    unit: '%',
+    icon: ShieldAlert,
+    iconColor: 'text-amber-600',
+    iconBg: 'bg-amber-50',
+    trend: 2.3,
+    fiveTStatus: [true, true, true, true, true],
+    accentBorder: 'amber',
+  },
+];
+
+const INITIAL_TABLE_DATA: OmniTableDataRow[] = [
   {
     id: 'esg-001',
     source_origin: 'ERP_System_A',
-    formula_visibility: true,
     zkp_sealed: true,
     status: 'Verified',
     content: 'Scope 1 Direct Emissions',
     value: '450.2 tCO2e',
-    timestamp: new Date().toISOString(),
     hash: '0xabc123...890def',
   },
   {
     id: 'esg-002',
     source_origin: 'Supplier_API_Node',
-    formula_visibility: true,
     zkp_sealed: false,
     status: 'Pending',
     content: 'Scope 3 Purchased Goods',
     value: '1,205.8 tCO2e',
-    timestamp: new Date().toISOString(),
+    hash: '',
   },
   {
     id: 'esg-003',
     source_origin: 'Legacy_CSV_Upload',
-    formula_visibility: false,
     zkp_sealed: false,
     status: 'Void',
     content: 'Unverified Water Usage',
-    value: '890 m3',
-    timestamp: new Date(1718300000000 - 86400000).toISOString(),
+    value: '890 m³',
+    hash: '',
+  },
+  {
+    id: 'esg-004',
+    source_origin: 'Smart_Grid_API',
+    zkp_sealed: true,
+    status: 'Verified',
+    content: 'ISO 50001 Energy Audit',
+    value: '98.5%',
+    hash: '0x789xyz...456abc',
   },
 ];
 
+const QUICK_ACTIONS = [
+  {
+    icon: BarChart3,
+    label: 'Analytics',
+    color: 'text-cyan-600',
+    bg: 'bg-cyan-50',
+    border: 'border-cyan-100',
+  },
+  {
+    icon: Fingerprint,
+    label: 'Audit Trail',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
+    border: 'border-emerald-100',
+  },
+  {
+    icon: FileText,
+    label: 'GRI Reports',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50',
+    border: 'border-indigo-100',
+  },
+  {
+    icon: Bell,
+    label: 'Alerts',
+    color: 'text-rose-600',
+    bg: 'bg-rose-50',
+    border: 'border-rose-100',
+  },
+  {
+    icon: Search,
+    label: 'Data Mining',
+    color: 'text-amber-600',
+    bg: 'bg-amber-50',
+    border: 'border-amber-100',
+  },
+  {
+    icon: Settings,
+    label: 'Config',
+    color: 'text-slate-600',
+    bg: 'bg-slate-50',
+    border: 'border-slate-100',
+  },
+];
+
+/* ─── Helpers ─── */
+function getStatusColor(status: OmniTableDataRow['status']): string {
+  switch (status) {
+    case 'Verified':
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    case 'Pending':
+      return 'bg-amber-50 text-amber-700 border-amber-200';
+    case 'Void':
+      return 'bg-slate-50 text-slate-500 border-slate-200';
+  }
+}
+
+function getAccentBorderStyle(accent?: string): string {
+  switch (accent) {
+    case 'emerald':
+      return 'border-l-4 border-l-emerald-400';
+    case 'cyan':
+      return 'border-l-4 border-l-cyan-400';
+    case 'rose':
+      return 'border-l-4 border-l-rose-400';
+    case 'amber':
+      return 'border-l-4 border-l-amber-400';
+    default:
+      return '';
+  }
+}
+
 export default function DashboardPage() {
-  const router = useRouter();
-  const [data, setData] = useState<OmniTableDataRow[]>(mockData);
+  const [data, setData] = useState<OmniTableDataRow[]>(INITIAL_TABLE_DATA);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 模擬 API 載入時間 (API Fetch Simulation)
-    const timer = setTimeout(() => setLoading(false), 800);
+    const timer = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSealAction = async (id: string) => {
-    // 模擬 ZKP 封裝過程 (ZKP Cryptographic Sealing)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+  const handleSeal = async (id: string) => {
+    await new Promise((r) => setTimeout(r, 800));
     setData((prev) =>
       prev.map((row) =>
         row.id === id
           ? {
               ...row,
               zkp_sealed: true,
-              status: 'Verified',
+              status: 'Verified' as const,
               hash: '0x' + Math.random().toString(16).substring(2, 10) + '...sealed',
             }
           : row
@@ -83,107 +237,101 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-200 animate-in fade-in duration-700 relative overflow-hidden">
-      {/* 5T Protocol 背景光暈 */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-500/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
-
-      <div className="max-w-7xl mx-auto space-y-10 relative z-10">
-        <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
+    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
+      <div className="max-w-[1400px] mx-auto space-y-8">
+        {/* ─── Header ─── */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
-              <span className="text-xs font-mono font-black tracking-[0.2em] text-cyan-400 uppercase">
-                ESG Data Vault
+            <div className="flex items-center gap-2 mb-1">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+              </span>
+              <span className="text-xs font-bold text-emerald-600 tracking-wider uppercase">
+                OmniSync Active
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center gap-4">
+            <h1 className="text-2xl md:text-3xl font-black text-[#003262] tracking-tight">
               全域數據金庫
             </h1>
-            <p className="text-slate-400 mt-3 text-sm max-w-xl">
-              OmniCore Data Routing & 5T Integrity Audit Workflow. 確保所有數據具備 Transparent
-              (透明)、Trustworthy (不可竄改) 與 Traceable (可溯源) 的至高標準。
+            <p className="text-sm text-slate-400 mt-1">
+              OmniCore Data Routing & 5T Integrity Audit Workflow
             </p>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-md">
-              <span className="text-xs text-slate-400 font-mono">ZKP 零知識證明封裝率</span>
-              <span className="text-xl font-bold text-cyan-400">99.9%</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-xl">
+              <span className="text-xs text-slate-500 font-medium">ZKP 封裝率</span>
+              <span className="text-base font-bold text-[#003262]">99.9%</span>
             </div>
-            <OmniWeather className="w-full md:w-auto min-w-[200px]" />
-            <span className="text-[10px] text-slate-500 font-mono tracking-wider">
-              確保資料具備 100% 不可篡改性
-            </span>
+            <OmniButton variant="outline" size="sm" icon={<RefreshCw size={14} />}>
+              同步
+            </OmniButton>
           </div>
         </header>
 
-        {/* 行動端特優化：橫向滑動式 極小功能鍵 (Horizontal Swipeable Micro-Action Dock) */}
+        {/* ─── KPI Cards ─── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {KPI_CARDS.map((kpi, i) => (
+            <motion.div
+              key={kpi.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+            >
+              <div
+                className={cn(
+                  'bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all duration-300',
+                  getAccentBorderStyle(kpi.accentBorder)
+                )}
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <div className={cn('p-2.5 rounded-xl', kpi.iconBg)}>
+                    <kpi.icon size={20} className={kpi.iconColor} />
+                  </div>
+                  {kpi.trend !== undefined && (
+                    <span
+                      className={cn(
+                        'text-xs font-bold px-2 py-0.5 rounded-full',
+                        kpi.trend >= 0
+                          ? 'bg-emerald-50 text-emerald-600'
+                          : 'bg-rose-50 text-rose-600'
+                      )}
+                    >
+                      {kpi.trend >= 0 ? '↑' : '↓'} {Math.abs(kpi.trend)}%
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">
+                  {kpi.title}
+                </p>
+                <div className="flex items-baseline gap-1.5 mb-3">
+                  <span className="text-2xl font-black text-[#003262]">{kpi.value}</span>
+                  <span className="text-sm text-slate-400">{kpi.unit}</span>
+                </div>
+                <Protocol5TStrip status={kpi.fiveTStatus} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ─── Quick Actions ─── */}
         <div>
-          <h3 className="text-sm font-bold text-slate-400 tracking-wider uppercase mb-3 px-2">
-            快速操作 (Quick Actions)
-          </h3>
-          <div className="w-full overflow-x-auto pb-4 mb-6 scrollbar-hide snap-x snap-mandatory">
-            <div className="flex items-center gap-3 md:gap-4 min-w-max px-2">
-              {[
-                {
-                  icon: BarChart3,
-                  label: 'Analytics',
-                  color: 'text-cyan-400',
-                  bg: 'bg-cyan-500/10',
-                  border: 'border-cyan-500/20',
-                },
-                {
-                  icon: Fingerprint,
-                  label: 'Audit Trail',
-                  color: 'text-emerald-400',
-                  bg: 'bg-emerald-500/10',
-                  border: 'border-emerald-500/20',
-                },
-                {
-                  icon: FileText,
-                  label: 'GRI Reports',
-                  color: 'text-indigo-400',
-                  bg: 'bg-indigo-500/10',
-                  border: 'border-indigo-500/20',
-                },
-                {
-                  icon: Bell,
-                  label: 'Alerts',
-                  color: 'text-rose-400',
-                  bg: 'bg-rose-500/10',
-                  border: 'border-rose-500/20',
-                },
-                {
-                  icon: Search,
-                  label: 'Data Mining',
-                  color: 'text-amber-400',
-                  bg: 'bg-amber-500/10',
-                  border: 'border-amber-500/20',
-                },
-                {
-                  icon: Settings,
-                  label: 'Matrix Config',
-                  color: 'text-slate-400',
-                  bg: 'bg-slate-500/10',
-                  border: 'border-slate-500/20',
-                  action: () => router.push('/dashboard/matrix'),
-                },
-              ].map((action, idx) => (
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-3">
+            快速操作
+          </p>
+          <div className="w-full overflow-x-auto pb-2 -mx-4 px-4">
+            <div className="flex gap-3 min-w-max">
+              {QUICK_ACTIONS.map((action) => (
                 <button
-                  key={idx}
-                  onClick={action.action}
-                  className={`snap-start flex flex-col items-center justify-center min-w-[80px] md:min-w-[100px] h-20 md:h-24 rounded-2xl border ${action.border} ${action.bg} hover:bg-white/5 transition-all duration-300 backdrop-blur-md group relative overflow-hidden`}
+                  key={action.label}
+                  className={cn(
+                    'flex flex-col items-center justify-center min-w-[80px] md:min-w-[100px] h-20 md:h-24 rounded-2xl border transition-all duration-200 hover:shadow-md',
+                    action.bg,
+                    action.border
+                  )}
                 >
-                  <div
-                    className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-${
-                      action.color.split('-')[1]
-                    }-500/20 to-transparent`}
-                  />
-                  <action.icon
-                    size={20}
-                    className={`${action.color} mb-2 group-hover:scale-110 transition-transform duration-300`}
-                  />
-                  <span className="text-[10px] md:text-xs font-bold text-slate-300 tracking-wider uppercase">
+                  <action.icon size={20} className={cn(action.color, 'mb-1.5')} />
+                  <span className="text-[10px] md:text-xs font-bold text-slate-600">
                     {action.label}
                   </span>
                 </button>
@@ -192,113 +340,86 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* 萬能卡片網格佈局 (OmniCard CSS Grid - Panoramic View) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <OmniCard
-            uuid="vlt-scope1-001"
-            componentVersion="8.5.0-Alpha"
-            timestamp={1718300000000}
-            status={RecordLifecycleStatus.Draft}
-            title="Scope 1 Emissions"
-            evidence={{
-              source_origin: 'ERP_System_A',
-              flow_path: ['IoT Sensor X1', 'ERP_System_A', 'OmniCore Gateway'],
-              hash: '0xabc123...890def',
-              timestamp: 1718300000000,
-            }}
-            nodeName="OMNI-ENV-SCOPE1-01:ACTION-RECORD-ISO14064"
-          >
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex flex-col">
-                <span className="text-4xl font-black text-white">450.2</span>
-                <span className="text-xs text-slate-400 uppercase tracking-widest mt-1">tCO2e</span>
-              </div>
-              <div className="p-4 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-emerald-400 shadow-[inset_0_0_15px_rgba(52,211,153,0.1)]">
-                <Leaf size={28} />
-              </div>
-            </div>
-          </OmniCard>
-
-          <OmniCard
-            uuid="vlt-water-002"
-            componentVersion="8.5.0-Alpha"
-            timestamp={1718300000000}
-            status={RecordLifecycleStatus.Archived}
-            isLocked={true}
-            title="Water Usage"
-            evidence={{
-              source_origin: 'Facility_Manager_Upload',
-              flow_path: ['Meter Readings', 'Facility_Manager_Upload', 'ZKP OmniRouter'],
-              hash: '0x456def...123abc',
-              timestamp: 1718300000000,
-            }}
-            nodeName="OMNI-ENV-WATER-02:ACTION-VERIFY-ISO14046"
-          >
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex flex-col">
-                <span className="text-4xl font-black text-cyan-400">8,205</span>
-                <span className="text-xs text-slate-400 uppercase tracking-widest mt-1">
-                  Cubic Meters
-                </span>
-              </div>
-              <div className="p-4 bg-cyan-500/10 rounded-full border border-cyan-500/20 text-cyan-400 shadow-[inset_0_0_15px_rgba(6,182,212,0.1)]">
-                <Droplets size={28} />
-              </div>
-            </div>
-          </OmniCard>
-
-          <OmniCard
-            uuid="vlt-energy-003"
-            componentVersion="8.5.0-Alpha"
-            timestamp={1718300000000}
-            status={RecordLifecycleStatus.Draft}
-            attention={AttentionStatus.Critical}
-            title="Energy Grid (Anomaly)"
-            evidence={{
-              source_origin: 'Smart_Grid_API',
-              flow_path: ['Smart_Grid_API', 'Anomaly Detection Core'],
-              hash: '',
-              timestamp: 1718300000000,
-            }}
-            nodeName="OMNI-ENV-ENERGY-03:ACTION-ALERT-ISO50001"
-          >
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex flex-col">
-                <span className="text-4xl font-black text-rose-500">12.5M</span>
-                <span className="text-xs text-slate-400 uppercase tracking-widest mt-1">
-                  kWh (Spike Detected)
-                </span>
-              </div>
-              <div className="p-4 bg-rose-500/10 rounded-full border border-rose-500/20 text-rose-500 shadow-[inset_0_0_15px_rgba(244,63,94,0.15)] animate-pulse">
-                <Zap size={28} />
-              </div>
-            </div>
-          </OmniCard>
-        </div>
-
-        <div className="mt-12">
+        {/* ─── Data Ledger Table ─── */}
+        <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-white tracking-wide">
-              Data Ledger (資料溯源帳本)
-            </h3>
-            <button className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-2">
-              <span>Sync Status</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            </button>
-          </div>
-          <OmniBaseCard
-            variant="glass"
-            className="border-white/10 bg-black/40 overflow-hidden relative"
-          >
-            {loading ? (
-              <div className="h-64 flex flex-col items-center justify-center space-y-4">
-                <div className="w-10 h-10 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
-                <span className="text-slate-400 font-mono text-sm animate-pulse">
-                  Synchronizing OmniMemorySync...
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-bold text-[#003262]">資料溯源帳本</h3>
+              <div className="flex items-center gap-1.5 text-xs text-emerald-600">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                 </span>
+                Live Sync
+              </div>
+            </div>
+            <span className="text-xs text-slate-400 font-mono">{data.length} records</span>
+          </div>
+
+          <OmniBaseCard padding="none" className="overflow-hidden">
+            {loading ? (
+              <div className="h-48 flex flex-col items-center justify-center gap-3">
+                <Loader2 size={24} className="text-cyan-500 animate-spin" />
+                <span className="text-sm text-slate-400">Synchronizing OmniMemorySync...</span>
               </div>
             ) : (
-              <OmniTable data={data} onSealAction={handleSealAction} />
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-slate-50/80 border-b border-slate-100">
+                      {['Content', 'Value', 'Source', 'Status', '5T Seal', 'Action'].map((h) => (
+                        <th
+                          key={h}
+                          className="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]"
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-50">
+                    {data.map((row) => (
+                      <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="px-4 py-3 text-sm font-medium text-[#003262]">
+                          {row.content}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-slate-600 font-mono">{row.value}</td>
+                        <td className="px-4 py-3 text-xs text-slate-400">{row.source_origin}</td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={cn(
+                              'text-[10px] font-bold px-2 py-0.5 rounded-full border',
+                              getStatusColor(row.status)
+                            )}
+                          >
+                            {row.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          {row.zkp_sealed ? (
+                            <div className="flex items-center gap-1.5 text-xs text-emerald-600">
+                              <Lock size={12} />
+                              <span className="font-mono">{row.hash.substring(0, 10)}...</span>
+                            </div>
+                          ) : (
+                            <span className="text-[10px] text-slate-400">—</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          {!row.zkp_sealed && (
+                            <button
+                              onClick={() => handleSeal(row.id)}
+                              className="text-xs font-bold text-cyan-600 hover:text-cyan-800 transition-colors"
+                            >
+                              Seal
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </OmniBaseCard>
         </div>
