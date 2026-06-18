@@ -223,7 +223,6 @@ function SidebarNav({
           bottom: 0,
           width: mobileOpen ? 240 : sidebarWidth,
           background: 'var(--sidebar-bg)',
-          backdropFilter: 'blur(20px) saturate(180%)',
           borderRight: '1px solid var(--sidebar-border)',
           display: 'flex',
           flexDirection: 'column',
