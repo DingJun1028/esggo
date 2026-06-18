@@ -185,6 +185,24 @@ export default function LandingPage() {
               Berkeley Haas × TSISDA · 5T 誠信協議驅動
             </p>
 
+            {/* Key Metrics */}
+            <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto mb-8">
+              {[
+                { label: '節省人工', value: '80 hrs', icon: '⏱️' },
+                { label: '降低成本', value: '97%', icon: '💰' },
+                { label: '報告生成', value: '15 min', icon: '⚡' },
+              ].map((metric) => (
+                <div
+                  key={metric.label}
+                  className="text-center p-3 bg-white rounded-xl border border-slate-100 shadow-sm"
+                >
+                  <span className="text-lg">{metric.icon}</span>
+                  <p className="text-lg font-black text-[#003262] mt-1">{metric.value}</p>
+                  <p className="text-[9px] text-slate-400 font-medium">{metric.label}</p>
+                </div>
+              ))}
+            </div>
+
             {/* 5T Strip */}
             <div className="max-w-sm mx-auto mb-10">
               <Protocol5TStrip status={[true, true, true, true, true]} showLabels />
