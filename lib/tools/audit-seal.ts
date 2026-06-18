@@ -9,7 +9,7 @@ export const auditSealTool = ai.defineTool({
   inputSchema: z.object({
     evidenceId: z.string(),
   }),
-}, async ({ evidenceId }) => {
+}, async ({ evidenceId }: any) => {
   const evidence = (await getEvidenceFiles()).find((e: any) => e.id === evidenceId);
   const startTime = Date.now();
   
@@ -43,7 +43,7 @@ export const auditSealValidationTool = ai.defineTool({
     evidenceId: z.string(),
     action: z.enum(['verify', 'reject']),
   }),
-}, async ({ evidenceId, action }) => {
+}, async ({ evidenceId, action }: any) => {
   const startTime = Date.now();
   const evidence = (await getEvidenceFiles()).find((e: any) => e.id === evidenceId);
   

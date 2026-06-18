@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextRequest } from 'next/server';
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 

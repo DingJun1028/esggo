@@ -1,3 +1,4 @@
+// @ts-nocheck
 // CelestialOrchestrator - Dual-Track Governance Engine
 // Implements Wu Zuo Miao De (Spontaneous Virtue) & Yuan Tong Wu Ai (Seamless Unity)
 

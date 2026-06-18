@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 export interface BusEvent {

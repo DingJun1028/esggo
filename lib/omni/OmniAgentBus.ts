@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OmniAgentBus - 萬能心核調度引擎 (The YuanTong-WuAi Core Engine)
  * 

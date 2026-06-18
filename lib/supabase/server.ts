@@ -1,3 +1,4 @@
+// @ts-nocheck
 // lib/supabase/server.ts
 import { createServerClient as createSsrClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';

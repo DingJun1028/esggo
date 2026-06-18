@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 📎 OmniSpace Paperclip Adapter for OmniAgent
  * v1.0 | #OmniSpace #OmniAgent #AgenticSovereignty

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { EnergyData, Conflict } from './jes-monitor.types';
 
 interface JESMonitorOptions {

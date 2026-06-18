@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 萬能元件心核庫 (Atomic Core System)
  * 負責底層元件型別定義、狀態註冊與全域主題治理

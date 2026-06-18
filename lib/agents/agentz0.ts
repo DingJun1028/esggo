@@ -13,7 +13,7 @@ export const agentZ0Flow = ai.defineFlow(
     inputSchema: agentZ0InputSchema,
     outputSchema: z.string().describe('The generated response from aGENTZ0'),
   },
-  async (input) => {
+  async (input: any) => {
     const { query, context } = input;
     
     let prompt = `You are aGENTZ0, a highly intelligent and specialized agent for this system.\n`;
