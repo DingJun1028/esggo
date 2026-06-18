@@ -40,14 +40,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Using @supabase/ssr for browser client
   // Memoize the client to avoid re-creating on every render
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    '';
+
   const supabase = React.useMemo(() => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-    const supabaseKey =
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-      'placeholder-key';
-    return createBrowserClient(supabaseUrl, supabaseKey);
-  }, []);
+    if (!supabaseUrl || !supabaseKey) return null;
+    try {
+      return createBrowserClient(supabaseUrl, supabaseKey);
+    } catch {
+      return null;
+    }
+  }, [supabaseUrl, supabaseKey]);
 
   useEffect(() => {
     // 1. Monitor Browser Network Connectivity
@@ -70,6 +76,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 3. Supabase Auth Session listener
     const initSession = async () => {
       try {
+        if (!supabase) {
+          console.warn('[Auth] Supabase client 未初始化，使用 demo 模式');
+          setSystemStatus('degraded');
+          setLoading(false);
+          return;
+        }
+
         const {
           data: { session },
           error,
@@ -113,12 +126,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (err) {
         console.error('[Auth Init] Failed', err);
         setSystemStatus('degraded');
+        setLoading(false);
       } finally {
         setLoading(false);
       }
     };
 
     initSession();
+
+    // 只有在 supabase 有效時才監聽 auth state change
+    if (!supabase?.auth) {
+      return () => {
+        window.removeEventListener('online', updateOnlineStatus);
+        window.removeEventListener('offline', updateOnlineStatus);
+      };
+    }
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
@@ -139,7 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
     };
-  }, [supabase.auth]);
+  }, [supabase]);
 
   const value = {
     user,
