@@ -126,7 +126,7 @@ export default function OmniAgentEvolutionPanel() {
   }, []);
 
   return (
-    <div className="rounded-3xl border border-white/80 bg-white/60 backdrop-blur-xl shadow-glass overflow-hidden">
+    <div className="rounded-3xl border border-white/80 overflow-hidden">
       {/* ── Header ── */}
       <div className="relative bg-gradient-to-r from-slate-900 via-violet-950 to-slate-900 px-8 py-6 overflow-hidden">
         <div

@@ -108,7 +108,7 @@ export default function OmniEvidenceUploader({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 backdrop-blur-sm p-4 font-sans select-none animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 font-sans select-none animate-in fade-in duration-300">
       <div className="bg-white border border-slate-200 w-full max-w-md rounded-2xl shadow-lg overflow-hidden flex flex-col relative animate-in zoom-in-95 duration-300">
         {/* Header */}
         <div className="bg-slate-50 p-4 border-b border-slate-200/80 flex justify-between items-center">

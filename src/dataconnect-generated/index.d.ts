@@ -1,4 +1,13 @@
-import { ConnectorConfig, DataConnect, QueryRef, QueryPromise, ExecuteQueryOptions, MutationRef, MutationPromise, DataConnectSettings } from 'firebase/data-connect';
+import {
+  ConnectorConfig,
+  DataConnect,
+  QueryRef,
+  QueryPromise,
+  ExecuteQueryOptions,
+  MutationRef,
+  MutationPromise,
+  DataConnectSettings,
+} from 'firebase/data-connect';
 
 export const connectorConfig: ConnectorConfig;
 export const dataConnectSettings: DataConnectSettings;
@@ -7,9 +16,6 @@ export type TimestampString = string;
 export type UUIDString = string;
 export type Int64String = string;
 export type DateString = string;
-
-
-
 
 export interface AuditRecord_Key {
   id: UUIDString;
@@ -166,42 +172,6 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
-interface UpsertUserRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpsertUserVariables): MutationRef<UpsertUserData, UpsertUserVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpsertUserVariables): MutationRef<UpsertUserData, UpsertUserVariables>;
-  operationName: string;
-}
-export const upsertUserRef: UpsertUserRef;
-
-export function upsertUser(vars: UpsertUserVariables): MutationPromise<UpsertUserData, UpsertUserVariables>;
-export function upsertUser(dc: DataConnect, vars: UpsertUserVariables): MutationPromise<UpsertUserData, UpsertUserVariables>;
-
-interface CreateTaskRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: CreateTaskVariables): MutationRef<CreateTaskData, CreateTaskVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: CreateTaskVariables): MutationRef<CreateTaskData, CreateTaskVariables>;
-  operationName: string;
-}
-export const createTaskRef: CreateTaskRef;
-
-export function createTask(vars: CreateTaskVariables): MutationPromise<CreateTaskData, CreateTaskVariables>;
-export function createTask(dc: DataConnect, vars: CreateTaskVariables): MutationPromise<CreateTaskData, CreateTaskVariables>;
-
-interface UpdateTaskRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpdateTaskVariables): MutationRef<UpdateTaskData, UpdateTaskVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpdateTaskVariables): MutationRef<UpdateTaskData, UpdateTaskVariables>;
-  operationName: string;
-}
-export const updateTaskRef: UpdateTaskRef;
-
-export function updateTask(vars: UpdateTaskVariables): MutationPromise<UpdateTaskData, UpdateTaskVariables>;
-export function updateTask(dc: DataConnect, vars: UpdateTaskVariables): MutationPromise<UpdateTaskData, UpdateTaskVariables>;
-
 interface ListTasksRef {
   /* Allow users to create refs without passing in DataConnect */
   (): QueryRef<ListTasksData, undefined>;
@@ -212,7 +182,10 @@ interface ListTasksRef {
 export const listTasksRef: ListTasksRef;
 
 export function listTasks(options?: ExecuteQueryOptions): QueryPromise<ListTasksData, undefined>;
-export function listTasks(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListTasksData, undefined>;
+export function listTasks(
+  dc: DataConnect,
+  options?: ExecuteQueryOptions
+): QueryPromise<ListTasksData, undefined>;
 
 interface ListUsersRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -224,7 +197,10 @@ interface ListUsersRef {
 export const listUsersRef: ListUsersRef;
 
 export function listUsers(options?: ExecuteQueryOptions): QueryPromise<ListUsersData, undefined>;
-export function listUsers(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListUsersData, undefined>;
+export function listUsers(
+  dc: DataConnect,
+  options?: ExecuteQueryOptions
+): QueryPromise<ListUsersData, undefined>;
 
 interface ListUserTasksRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -235,8 +211,13 @@ interface ListUserTasksRef {
 }
 export const listUserTasksRef: ListUserTasksRef;
 
-export function listUserTasks(options?: ExecuteQueryOptions): QueryPromise<ListUserTasksData, undefined>;
-export function listUserTasks(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<ListUserTasksData, undefined>;
+export function listUserTasks(
+  options?: ExecuteQueryOptions
+): QueryPromise<ListUserTasksData, undefined>;
+export function listUserTasks(
+  dc: DataConnect,
+  options?: ExecuteQueryOptions
+): QueryPromise<ListUserTasksData, undefined>;
 
 interface GetTaskByIdRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -247,8 +228,15 @@ interface GetTaskByIdRef {
 }
 export const getTaskByIdRef: GetTaskByIdRef;
 
-export function getTaskById(vars: GetTaskByIdVariables, options?: ExecuteQueryOptions): QueryPromise<GetTaskByIdData, GetTaskByIdVariables>;
-export function getTaskById(dc: DataConnect, vars: GetTaskByIdVariables, options?: ExecuteQueryOptions): QueryPromise<GetTaskByIdData, GetTaskByIdVariables>;
+export function getTaskById(
+  vars: GetTaskByIdVariables,
+  options?: ExecuteQueryOptions
+): QueryPromise<GetTaskByIdData, GetTaskByIdVariables>;
+export function getTaskById(
+  dc: DataConnect,
+  vars: GetTaskByIdVariables,
+  options?: ExecuteQueryOptions
+): QueryPromise<GetTaskByIdData, GetTaskByIdVariables>;
 
 interface SearchTaskRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -259,6 +247,63 @@ interface SearchTaskRef {
 }
 export const searchTaskRef: SearchTaskRef;
 
-export function searchTask(vars?: SearchTaskVariables, options?: ExecuteQueryOptions): QueryPromise<SearchTaskData, SearchTaskVariables>;
-export function searchTask(dc: DataConnect, vars?: SearchTaskVariables, options?: ExecuteQueryOptions): QueryPromise<SearchTaskData, SearchTaskVariables>;
+export function searchTask(
+  vars?: SearchTaskVariables,
+  options?: ExecuteQueryOptions
+): QueryPromise<SearchTaskData, SearchTaskVariables>;
+export function searchTask(
+  dc: DataConnect,
+  vars?: SearchTaskVariables,
+  options?: ExecuteQueryOptions
+): QueryPromise<SearchTaskData, SearchTaskVariables>;
 
+interface UpsertUserRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpsertUserVariables): MutationRef<UpsertUserData, UpsertUserVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpsertUserVariables): MutationRef<UpsertUserData, UpsertUserVariables>;
+  operationName: string;
+}
+export const upsertUserRef: UpsertUserRef;
+
+export function upsertUser(
+  vars: UpsertUserVariables
+): MutationPromise<UpsertUserData, UpsertUserVariables>;
+export function upsertUser(
+  dc: DataConnect,
+  vars: UpsertUserVariables
+): MutationPromise<UpsertUserData, UpsertUserVariables>;
+
+interface CreateTaskRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateTaskVariables): MutationRef<CreateTaskData, CreateTaskVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateTaskVariables): MutationRef<CreateTaskData, CreateTaskVariables>;
+  operationName: string;
+}
+export const createTaskRef: CreateTaskRef;
+
+export function createTask(
+  vars: CreateTaskVariables
+): MutationPromise<CreateTaskData, CreateTaskVariables>;
+export function createTask(
+  dc: DataConnect,
+  vars: CreateTaskVariables
+): MutationPromise<CreateTaskData, CreateTaskVariables>;
+
+interface UpdateTaskRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateTaskVariables): MutationRef<UpdateTaskData, UpdateTaskVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateTaskVariables): MutationRef<UpdateTaskData, UpdateTaskVariables>;
+  operationName: string;
+}
+export const updateTaskRef: UpdateTaskRef;
+
+export function updateTask(
+  vars: UpdateTaskVariables
+): MutationPromise<UpdateTaskData, UpdateTaskVariables>;
+export function updateTask(
+  dc: DataConnect,
+  vars: UpdateTaskVariables
+): MutationPromise<UpdateTaskData, UpdateTaskVariables>;

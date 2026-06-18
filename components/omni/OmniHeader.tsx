@@ -13,7 +13,7 @@ export interface OmniHeaderProps {
 
 export default function OmniHeader({ title, subtitle, icon, badge, actions }: OmniHeaderProps) {
   return (
-    <header className="w-full border-b border-[rgba(0,50,98,0.08)] bg-white/60 backdrop-blur-xl px-4 md:px-6 py-4 flex items-center justify-between relative z-20 gap-4">
+    <header className="w-full border-b border-[rgba(0,50,98,0.08)] px-4 md:px-6 py-4 flex items-center justify-between relative z-20 gap-4">
       <div className="flex items-center gap-3 min-w-0">
         {icon && (
           <div className="p-2 bg-cyan-50 rounded-xl border border-cyan-100 text-cyan-600 shrink-0">

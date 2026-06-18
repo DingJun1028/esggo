@@ -37,18 +37,19 @@ export default function BrandModal({
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [open]);
 
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0" onClick={onClose} />
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-      />
-      <div className={`relative w-full ${sizeStyles[size]} bg-white rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col`}>
+        className={`relative w-full ${sizeStyles[size]} bg-white rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col`}
+      >
         <div className="flex items-start justify-between p-5 border-b border-slate-100">
           <div className="flex items-start gap-3">
             {icon && (
@@ -70,9 +71,7 @@ export default function BrandModal({
         </div>
         <div className="overflow-y-auto flex-1 p-5">{children}</div>
         {footer && (
-          <div className="p-5 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl">
-            {footer}
-          </div>
+          <div className="p-5 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl">{footer}</div>
         )}
       </div>
     </div>

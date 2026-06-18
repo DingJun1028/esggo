@@ -23,14 +23,14 @@ export default function OmniKpiCard({
   fiveTStatus,
   icon,
   dataSource,
-  className = ''
+  className = '',
 }: OmniKpiCardProps) {
   const isPositive = trend && trend >= 0;
 
   return (
     <motion.div
       whileHover={{ y: -4, scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className={`relative p-6 rounded-[2rem] bg-white/[0.03] border border-white/10 backdrop-blur-2xl overflow-hidden group shadow-[0_8px_32px_rgba(0,0,0,0.3)] ${className}`}
     >
       {/* Background Glow */}
@@ -41,20 +41,24 @@ export default function OmniKpiCard({
       <div className="relative z-10 flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           {icon && (
-            <div className="p-2.5 rounded-xl bg-black/40 text-cyan-400 border border-cyan-500/20 shadow-inner">
+            <div className="p-2.5 rounded-xl text-cyan-400 border border-cyan-500/20 shadow-inner">
               {icon}
             </div>
           )}
           <h3 className="text-sm font-semibold text-slate-300 tracking-wider uppercase">{title}</h3>
         </div>
-        
+
         {/* Top-right Status Dot */}
         <div className="flex items-center gap-2">
-           <span className="relative flex h-2.5 w-2.5">
+          <span className="relative flex h-2.5 w-2.5">
             {fiveTStatus.every(Boolean) && (
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
             )}
-            <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${fiveTStatus.every(Boolean) ? 'bg-cyan-500' : 'bg-slate-600'}`}></span>
+            <span
+              className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                fiveTStatus.every(Boolean) ? 'bg-cyan-500' : 'bg-slate-600'
+              }`}
+            ></span>
           </span>
         </div>
       </div>
@@ -67,7 +71,11 @@ export default function OmniKpiCard({
       {(trend !== undefined || trendLabel) && (
         <div className="relative z-10 flex items-center gap-2 mb-6 text-sm">
           {trend !== undefined && (
-            <span className={`flex items-center font-semibold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
+            <span
+              className={`flex items-center font-semibold ${
+                isPositive ? 'text-emerald-400' : 'text-rose-400'
+              }`}
+            >
               {isPositive ? '↑' : '↓'} {Math.abs(trend)}%
             </span>
           )}

@@ -478,8 +478,8 @@ export default function OmniMapPage() {
   return (
     <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-200 relative overflow-hidden selection:bg-cyan-500/30">
       {/* Absolute background cosmos glows */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[130px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10 animate-in fade-in duration-700">
         <OmniHeader
@@ -490,7 +490,7 @@ export default function OmniMapPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: SVG Star Orbit Map (8 Cols) */}
-          <div className="lg:col-span-8 bg-slate-950/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
+          <div className="lg:col-span-8 bg-slate-950/40 -md border border-white/5 rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
             {/* Hologram Circle Frame */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,6,23,0.9))] pointer-events-none z-10" />
 
@@ -786,7 +786,7 @@ export default function OmniMapPage() {
                 </div>
 
                 {/* Simulated Log Terminal */}
-                <div className="space-y-1 bg-black/60 border border-white/5 p-3 rounded-lg font-mono text-[9px] text-emerald-400/90 shadow-inner">
+                <div className="space-y-1 border border-white/5 p-3 rounded-lg font-mono text-[9px] text-emerald-400/90 shadow-inner">
                   <div className="flex justify-between border-b border-white/5 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[8px]">
                     <span>誠信與自癒日誌</span>
                     <span className="animate-pulse text-emerald-500">● ONLINE</span>
@@ -809,7 +809,7 @@ export default function OmniMapPage() {
                       {selectedNode.deliverables.map((d, idx) => (
                         <span
                           key={idx}
-                          className="text-[9px] font-mono bg-black/40 border border-white/5 text-slate-300 px-1.5 py-0.5 rounded"
+                          className="text-[9px] font-mono border border-white/5 text-slate-300 px-1.5 py-0.5 rounded"
                         >
                           {d}
                         </span>

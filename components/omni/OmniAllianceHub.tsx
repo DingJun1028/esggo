@@ -123,7 +123,7 @@ export default function OmniAllianceHub() {
         </div>
 
         <div className="flex gap-4">
-          <div className="px-4 py-2 bg-white/5 rounded-full border border-white/10 flex items-center gap-2">
+          <div className="px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
             <Network size={16} className="text-blue-400" />
             <span className="text-xs font-bold text-slate-300">Total Nodes: 1,402</span>
           </div>
@@ -162,7 +162,7 @@ export default function OmniAllianceHub() {
                   />
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="px-2 py-1 bg-white/5 rounded-md text-slate-400 capitalize">
+                  <span className="px-2 py-1 rounded-md text-slate-400 capitalize">
                     {node.type}
                   </span>
                   <span className="text-blue-400 font-mono">TS: {node.trustScore}</span>
@@ -174,7 +174,7 @@ export default function OmniAllianceHub() {
 
         {/* Right Col: Network Visualization & Data */}
         <div className="lg:col-span-2 flex flex-col gap-6">
-          <div className="flex-1 bg-black/40 rounded-3xl border border-white/10 p-6 flex flex-col items-center justify-center relative min-h-[300px]">
+          <div className="flex-1 rounded-3xl border border-white/10 p-6 flex flex-col items-center justify-center relative min-h-[300px]">
             <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none rounded-3xl" />
 
             <AnimatePresence mode="wait">

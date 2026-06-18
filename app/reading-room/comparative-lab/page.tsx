@@ -57,7 +57,7 @@ export default function ComparativeLabPage() {
               subtitle={`涵蓋期間: ${region.coverage}`}
             >
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                <div className="flex items-center justify-between p-3 rounded-lg border border-white/10">
                   <div className="flex items-center gap-3">
                     <Globe className="text-cyan-400" size={18} />
                     <span className="text-sm font-medium">企業覆蓋範圍</span>
@@ -79,7 +79,7 @@ export default function ComparativeLabPage() {
         </div>
 
         <OmniBaseCard variant="glow" title="國際 ESG 情勢深度對比">
-          <div className="aspect-video bg-black/40 rounded-xl border border-white/5 p-6 relative overflow-hidden group flex flex-col justify-end">
+          <div className="aspect-video rounded-xl border border-white/5 p-6 relative overflow-hidden group flex flex-col justify-end">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/5 via-transparent to-transparent opacity-50 pointer-events-none" />
 
             {/* Mock Chart Area */}
@@ -90,7 +90,7 @@ export default function ComparativeLabPage() {
                   className="w-full flex flex-col justify-end items-center group/bar relative h-full"
                 >
                   {/* Tooltip */}
-                  <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 bg-black/80 text-cyan-300 text-[10px] py-1 px-2 rounded border border-cyan-500/30 transition-opacity whitespace-nowrap font-mono pointer-events-none">
+                  <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 text-cyan-300 text-[10px] py-1 px-2 rounded border border-cyan-500/30 transition-opacity whitespace-nowrap font-mono pointer-events-none">
                     Score: {height}
                   </div>
                   {/* Bar */}
@@ -102,7 +102,7 @@ export default function ComparativeLabPage() {
                     }`}
                     style={{ height: `${height}%` }}
                   >
-                    <div className="w-full h-full border-t border-white/30 rounded-t-sm opacity-50 mix-blend-overlay"></div>
+                    <div className="w-full h-full border-t border-white/30 rounded-t-sm opacity-50"></div>
                   </div>
                 </div>
               ))}

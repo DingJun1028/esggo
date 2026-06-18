@@ -18,7 +18,7 @@ export default function ThinkTankPage() {
     setLoading(true);
     setError(null);
     setSearched(true);
-    
+
     // 清空舊結果，營造重新搜尋的動態
     setResults([]);
 
@@ -26,7 +26,7 @@ export default function ThinkTankPage() {
       const res = await fetch('/api/omni-agent/rag', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, topK: 5 })
+        body: JSON.stringify({ query, topK: 5 }),
       });
       const json = await res.json();
 
@@ -46,7 +46,7 @@ export default function ThinkTankPage() {
     <div className="p-8 max-w-6xl mx-auto min-h-screen">
       {/* 標題與簡介 */}
       <div className="mb-10 text-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 mb-6"
@@ -58,21 +58,22 @@ export default function ThinkTankPage() {
           萬能智庫檢索中心
         </h1>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
-          透過 OmniMatrix 與 RAG 技術，直接對 ESGGO 永續知識庫進行高維度語意搜索。無論是 GRI 準則、過往的架構決策 (ADR) 或是碳盤查規範，皆能瞬間召回。
+          透過 OmniMatrix 與 RAG 技術，直接對 ESGGO 永續知識庫進行高維度語意搜索。無論是 GRI
+          準則、過往的架構決策 (ADR) 或是碳盤查規範，皆能瞬間召回。
         </p>
       </div>
 
       {/* 搜尋列 */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1 }}
         className="relative max-w-3xl mx-auto mb-12"
       >
         <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-70"></div>
-        <form 
+        <form
           onSubmit={handleSearch}
-          className="relative bg-[#020617]/70 backdrop-blur-2xl border border-white/10 rounded-2xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+          className="relative bg-[#020617]/70 border border-white/10 rounded-2xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
         >
           <div className="pl-4 pr-2 text-cyan-400/50">
             <Search size={24} />
@@ -149,10 +150,11 @@ export default function ThinkTankPage() {
             <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
               <Library size={20} className="text-slate-400" />
               <h2 className="text-lg font-semibold text-slate-200">
-                檢索結果 <span className="text-cyan-400 text-sm ml-2">({results.length} 筆關聯節點)</span>
+                檢索結果{' '}
+                <span className="text-cyan-400 text-sm ml-2">({results.length} 筆關聯節點)</span>
               </h2>
             </div>
-            
+
             <div className="grid gap-4">
               {results.map((item, idx) => (
                 <motion.div
@@ -160,10 +162,10 @@ export default function ThinkTankPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="group relative bg-[#020617]/40 backdrop-blur-md border border-white/5 rounded-2xl p-6 hover:bg-white/5 hover:border-cyan-500/30 transition-all duration-300"
+                  className="group relative bg-[#020617]/40 -md border border-white/5 rounded-2xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
                 >
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
-                  
+
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -174,17 +176,19 @@ export default function ThinkTankPage() {
                           信心指數: {((item.score || 0.9) * 100).toFixed(1)}%
                         </span>
                       </div>
-                      
+
                       <h3 className="text-xl font-bold text-slate-200 mb-3 group-hover:text-cyan-300 transition-colors">
                         {item.metadata?.title || '未命名知識節點'}
                       </h3>
-                      
+
                       <p className="text-sm text-slate-400 leading-relaxed">
-                        {item.content?.length > 200 ? item.content.substring(0, 200) + '...' : item.content}
+                        {item.content?.length > 200
+                          ? item.content.substring(0, 200) + '...'
+                          : item.content}
                       </p>
                     </div>
-                    
-                    <button className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
+
+                    <button className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
                       <ExternalLink size={16} />
                     </button>
                   </div>

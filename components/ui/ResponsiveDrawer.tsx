@@ -60,10 +60,7 @@ export default function ResponsiveDrawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={cn(
-              'fixed inset-0 bg-black/20 backdrop-blur-sm z-50',
-              overlayClassName
-            )}
+            className={cn('fixed inset-0   z-50', overlayClassName)}
             onClick={onClose}
           />
           <motion.aside
@@ -73,7 +70,7 @@ export default function ResponsiveDrawer({
             exit={{ x: side === 'left' ? '-100%' : '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className={cn(
-              'fixed top-0 bottom-0 z-50 h-full bg-white/95 backdrop-blur-xl border-r border-white/20 shadow-2xl',
+              'fixed top-0 bottom-0 z-50 h-full   border-r border-white/20 shadow-2xl',
               side === 'left' ? 'left-0' : 'right-0',
               sizeClasses[size]
             )}
@@ -85,7 +82,7 @@ export default function ResponsiveDrawer({
                 <h2 className="text-lg font-bold text-slate-800">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                  className="p-2 rounded-lg hover: transition-colors"
                   aria-label="Close drawer"
                 >
                   <X size={20} />

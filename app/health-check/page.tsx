@@ -401,7 +401,7 @@ export default function HealthCheckPage() {
                 </button>
 
                 {/* Simulated Healing Terminal */}
-                <div className="space-y-1.5 border border-white/5 bg-black/60 p-3 rounded-lg font-mono text-[10px] text-emerald-400/90 shadow-inner">
+                <div className="space-y-1.5 border border-white/5 p-3 rounded-lg font-mono text-[10px] text-emerald-400/90 shadow-inner">
                   <div className="flex justify-between border-b border-white/5 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[9px]">
                     <span>自癒終端日誌流</span>
                     <span className="animate-pulse text-emerald-500">● LIVE</span>

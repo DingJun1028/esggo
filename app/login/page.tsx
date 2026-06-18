@@ -210,15 +210,15 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] relative overflow-hidden px-4">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-80 h-80 bg-cyan-100/40 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-100/30 rounded-full blur-3xl" />
+        <div className="absolute -top-32 -right-32 w-80 h-80 bg-cyan-100/30 rounded-full" />
+        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-100/20 rounded-full" />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="z-10 w-full max-w-md p-8 rounded-3xl bg-white/80 border border-slate-100 shadow-xl backdrop-blur-xl relative"
+        className="z-10 w-full max-w-md p-8 rounded-3xl border border-slate-100 shadow-xl relative"
       >
         <Script
           src="https://accounts.google.com/gsi/client"

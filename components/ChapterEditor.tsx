@@ -224,11 +224,11 @@ export function ChapterEditor({
         {/* AI Loading Overlay */}
         <div
           className={cn(
-            'absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-[1px] transition-all duration-500 pointer-events-none',
+            'absolute inset-0 flex items-center justify-center  -[1px] transition-all duration-500 pointer-events-none',
             isGeneratingAI[chapterId] ? 'opacity-100' : 'opacity-0'
           )}
         >
-          <div className="p-4 bg-white/80 rounded-2xl border border-indigo-100 shadow-2xl flex flex-col items-center gap-3">
+          <div className="p-4 rounded-2xl border border-indigo-100 shadow-2xl flex flex-col items-center gap-3">
             <RefreshCw size={24} className="text-indigo-600 animate-spin" />
             <span className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">
               Generating Content...

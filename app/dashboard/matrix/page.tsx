@@ -36,8 +36,8 @@ export default function UltimateMatrixPage() {
   return (
     <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-200 relative overflow-hidden">
       {/* Background glow for Matrix Page */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-10 relative z-10">
         <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
@@ -57,7 +57,7 @@ export default function UltimateMatrixPage() {
             </p>
           </div>
           <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-3 bg-black/40 border border-white/10 px-4 py-2 rounded-lg backdrop-blur-md">
+            <div className="flex items-center gap-3 border border-white/10 px-4 py-2 rounded-lg -md">
               <span className="text-xs text-slate-400 font-mono">
                 {stats.totalComponents} Components
               </span>

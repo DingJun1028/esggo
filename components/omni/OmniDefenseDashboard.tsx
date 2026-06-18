@@ -7,7 +7,8 @@ import { motion } from 'framer-motion';
 import { Activity, Shield, Database, FastForward } from 'lucide-react';
 
 export function OmniDefenseDashboard() {
-  const { events, isLive, metrics, getVisualState, triggerForensicReplay, core } = useColorDropStream();
+  const { events, isLive, metrics, getVisualState, triggerForensicReplay, core } =
+    useColorDropStream();
 
   return (
     <div className="w-full max-w-5xl mx-auto p-6 space-y-8 bg-[#020617] min-h-screen text-slate-200 font-sans">
@@ -19,7 +20,7 @@ export function OmniDefenseDashboard() {
             實時防禦監測儀表板 (Omni Defense)
           </h1>
           <p className="text-sm text-slate-400 mt-1 font-mono">
-            System V{core.version} | 5T Protocol Active | UUID: {core.uuid.substring(0,8)}...
+            System V{core.version} | 5T Protocol Active | UUID: {core.uuid.substring(0, 8)}...
           </p>
         </div>
         <OmniZKPBadge />
@@ -27,29 +28,29 @@ export function OmniDefenseDashboard() {
 
       {/* Metrics Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard 
-          title="ZKP 合規率" 
-          value={`${metrics.zkpSuccessRate}%`} 
-          icon={<Shield className="w-5 h-5 text-purple-400" />} 
+        <MetricCard
+          title="ZKP 合規率"
+          value={`${metrics.zkpSuccessRate}%`}
+          icon={<Shield className="w-5 h-5 text-purple-400" />}
           glow="shadow-[0_0_15px_rgba(167,139,250,0.15)]"
         />
-        <MetricCard 
-          title="系統降熵指標 (ΔS)" 
-          value={`${metrics.entropyReduction}%`} 
-          icon={<Activity className="w-5 h-5 text-emerald-400" />} 
+        <MetricCard
+          title="系統降熵指標 (ΔS)"
+          value={`${metrics.entropyReduction}%`}
+          icon={<Activity className="w-5 h-5 text-emerald-400" />}
           glow="shadow-[0_0_15px_rgba(16,185,129,0.15)]"
         />
-        <MetricCard 
-          title="已防護事件總數" 
-          value={metrics.totalCount} 
-          icon={<Database className="w-5 h-5 text-cyan-400" />} 
+        <MetricCard
+          title="已防護事件總數"
+          value={metrics.totalCount}
+          icon={<Database className="w-5 h-5 text-cyan-400" />}
           glow="shadow-[0_0_15px_rgba(6,182,212,0.15)]"
         />
       </div>
 
       {/* Replay Controls */}
       <div className="flex justify-end">
-        <button 
+        <button
           onClick={() => triggerForensicReplay(2)}
           className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-600 rounded-lg text-sm transition-all text-cyan-100 hover:text-cyan-300 hover:border-cyan-500/50 shadow-md"
         >
@@ -59,10 +60,16 @@ export function OmniDefenseDashboard() {
       </div>
 
       {/* Event Stream Log */}
-      <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-4 backdrop-blur-xl h-[400px] overflow-y-auto custom-scrollbar relative shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
-        <div className="sticky top-0 bg-slate-900/90 pb-2 mb-4 border-b border-slate-800 z-10 flex justify-between items-center backdrop-blur-md pt-2 px-2 rounded-t-lg">
+      <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-4 h-[400px] overflow-y-auto custom-scrollbar relative shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+        <div className="sticky top-0 bg-slate-900/90 pb-2 mb-4 border-b border-slate-800 z-10 flex justify-between items-center -md pt-2 px-2 rounded-t-lg">
           <h2 className="text-lg font-semibold text-slate-300">數據流轉日誌 (Audit Trail)</h2>
-          <span className={`text-xs px-2 py-1 rounded-full border ${isLive ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' : 'bg-red-500/10 text-red-300 border-red-500/30'}`}>
+          <span
+            className={`text-xs px-2 py-1 rounded-full border ${
+              isLive
+                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                : 'bg-red-500/10 text-red-300 border-red-500/30'
+            }`}
+          >
             {isLive ? '● 串流連線中' : '○ 連線中斷'}
           </span>
         </div>
@@ -72,24 +79,28 @@ export function OmniDefenseDashboard() {
             const vs = getVisualState(evt.event_type);
             const borderColor = vs.borderColor?.replace('border-', '') || 'rgba(255,255,255,0.1)';
             return (
-              <motion.div 
+              <motion.div
                 key={evt.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3 }}
-                className="p-3 rounded-lg border backdrop-blur-md flex flex-col gap-2"
+                className="p-3 rounded-lg border -md flex flex-col gap-2"
                 style={{ backgroundColor: vs.bgColor, borderColor: borderColor }}
               >
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-white bg-black/40 px-2 py-1 rounded shadow-sm">
+                    <span className="text-xs font-bold text-white px-2 py-1 rounded shadow-sm">
                       {vs.label}
                     </span>
-                    <span className="text-xs text-slate-400 font-mono">{new Date(evt.timestamp).toLocaleTimeString()}</span>
+                    <span className="text-xs text-slate-400 font-mono">
+                      {new Date(evt.timestamp).toLocaleTimeString()}
+                    </span>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-mono">ID: {evt.id.substring(0,8)}</span>
+                  <span className="text-[10px] text-slate-500 font-mono">
+                    ID: {evt.id.substring(0, 8)}
+                  </span>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 mt-1">
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider">來源 (Origin)</p>
@@ -97,7 +108,9 @@ export function OmniDefenseDashboard() {
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider">ZKP 封印雜湊</p>
-                    <p className="text-sm text-cyan-300 font-mono truncate mt-1">{evt.payload?.zkp_hash}</p>
+                    <p className="text-sm text-cyan-300 font-mono truncate mt-1">
+                      {evt.payload?.zkp_hash}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -115,12 +128,22 @@ export function OmniDefenseDashboard() {
   );
 }
 
-function MetricCard({ title, value, icon, glow }: { title: string, value: string | number, icon: React.ReactNode, glow: string }) {
+function MetricCard({
+  title,
+  value,
+  icon,
+  glow,
+}: {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  glow: string;
+}) {
   return (
-    <div className={`p-5 rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-md flex items-center gap-4 transition-all hover:bg-slate-800/50 ${glow}`}>
-      <div className="p-3 rounded-lg bg-black/40 border border-slate-700/50">
-        {icon}
-      </div>
+    <div
+      className={`p-5 rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-md flex items-center gap-4 transition-all hover:bg-slate-800/50 ${glow}`}
+    >
+      <div className="p-3 rounded-lg border border-slate-700/50">{icon}</div>
       <div>
         <h3 className="text-sm text-slate-400 font-medium tracking-wide">{title}</h3>
         <p className="text-2xl font-bold text-slate-100 font-mono mt-1">{value}</p>

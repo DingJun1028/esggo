@@ -33,32 +33,44 @@ export function OmniCardUI({ card, className = '' }: OmniCardProps) {
       style={{ zIndex: 1 }} // Layer 1 (Structure)
     >
       {/* Liquid Hologram Effect on Hover (Layer 2) */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ zIndex: 2 }}>
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ zIndex: 2 }}
+      >
         <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-45 group-hover:animate-liquid-sweep"></div>
       </div>
 
       <div className="flex justify-between items-start mb-4 relative z-10">
-        <h3 className="text-xl font-bold text-white tracking-wide">
-          {card.name}
-        </h3>
-        <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${statusStyles[card.status]} bg-[#020617]/50`}>
+        <h3 className="text-xl font-bold text-white tracking-wide">{card.name}</h3>
+        <span
+          className={`px-3 py-1 text-xs font-semibold rounded-full border ${
+            statusStyles[card.status]
+          } bg-[#020617]/50`}
+        >
           {statusLabels[card.status]}
         </span>
       </div>
 
       <div className="space-y-4 relative z-10">
         <div>
-          <p className="text-xs text-white/50 uppercase tracking-wider mb-2 font-mono">Trace UUID</p>
-          <p className="text-sm text-white/80 font-mono truncate bg-black/20 p-2 rounded border border-white/5">
+          <p className="text-xs text-white/50 uppercase tracking-wider mb-2 font-mono">
+            Trace UUID
+          </p>
+          <p className="text-sm text-white/80 font-mono truncate p-2 rounded border border-white/5">
             {card.uuid}
           </p>
         </div>
 
         <div>
-          <p className="text-xs text-white/50 uppercase tracking-wider mb-2 font-mono">Attributes</p>
+          <p className="text-xs text-white/50 uppercase tracking-wider mb-2 font-mono">
+            Attributes
+          </p>
           <div className="flex flex-wrap gap-2">
             {card.attributes.map((attr, idx) => (
-              <span key={idx} className="px-2 py-1 text-xs text-[#06b6d4] bg-[#06b6d4]/10 rounded border border-[#06b6d4]/20">
+              <span
+                key={idx}
+                className="px-2 py-1 text-xs text-[#06b6d4] bg-[#06b6d4]/10 rounded border border-[#06b6d4]/20"
+              >
                 {attr}
               </span>
             ))}
@@ -69,7 +81,10 @@ export function OmniCardUI({ card, className = '' }: OmniCardProps) {
           <p className="text-xs text-white/50 uppercase tracking-wider mb-2 font-mono">Abilities</p>
           <div className="flex flex-wrap gap-2">
             {card.abilities.map((ability, idx) => (
-              <span key={idx} className="px-2 py-1 text-xs text-[#10b981] bg-[#10b981]/10 rounded border border-[#10b981]/20">
+              <span
+                key={idx}
+                className="px-2 py-1 text-xs text-[#10b981] bg-[#10b981]/10 rounded border border-[#10b981]/20"
+              >
                 {ability}
               </span>
             ))}

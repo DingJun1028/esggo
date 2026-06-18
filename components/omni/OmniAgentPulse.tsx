@@ -87,7 +87,7 @@ export function OmniAgentPulse() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', stiffness: 400, damping: 25, mass: 0.8 }}
-              className="w-[340px] bg-slate-950/70 backdrop-blur-3xl border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/20"
+              className="w-[340px] bg-slate-950/70 border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/20"
             >
               {/* Liquid Gloss Highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent z-20"></div>
@@ -106,7 +106,7 @@ export function OmniAgentPulse() {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => setIsExpanded(false)}
-                    className="p-1.5 rounded-lg bg-black/20 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg hover: text-slate-400 hover:text-white transition-colors cursor-pointer"
                     title="縮小"
                   >
                     <Minimize2 size={14} />
@@ -154,7 +154,7 @@ export function OmniAgentPulse() {
                       {activeResonance ? 'RESONATING' : connectionStatus}
                     </span>
                   </div>
-                  <div className="bg-black/40 border border-white/5 rounded-lg p-2.5">
+                  <div className="border border-white/5 rounded-lg p-2.5">
                     <h4 className="text-xs font-bold text-white mb-1">SYNC_OMNIBLUE_OMNITABLE</h4>
                     <p className="text-[10px] text-slate-400 leading-relaxed">
                       Maintaining bidirectional 5T protocol synchronization across Logic Nodes and
@@ -178,7 +178,7 @@ export function OmniAgentPulse() {
                       onChange={(e) => setCommandInput(e.target.value)}
                       placeholder="Enter command (e.g. Optimize Energy)..."
                       disabled={isExecuting}
-                      className="flex-1 text-xs bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
+                      className="flex-1 text-xs border border-white/10 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20"
                     />
                     <button
                       type="submit"
@@ -211,12 +211,12 @@ export function OmniAgentPulse() {
 
                 {/* Real-time Metrics */}
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 flex flex-col items-center text-center">
+                  <div className="border border-white/5 rounded-lg p-2 flex flex-col items-center text-center">
                     <ShieldCheck size={14} className="text-emerald-400 mb-1" />
                     <span className="text-[10px] text-slate-500">ZKP Seals</span>
                     <span className="text-sm font-black text-white">{records.length}</span>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 flex flex-col items-center text-center">
+                  <div className="border border-white/5 rounded-lg p-2 flex flex-col items-center text-center">
                     <Zap size={14} className={isSyncing ? 'text-cyan-400' : 'text-slate-600'} />
                     <span className="text-[10px] text-slate-500">Last Sync</span>
                     <span className="text-sm font-black text-white">
@@ -226,7 +226,7 @@ export function OmniAgentPulse() {
                 </div>
 
                 {/* Log Stream */}
-                <div className="bg-black/50 border border-white/5 rounded-lg p-2 h-[80px] overflow-hidden relative">
+                <div className="border border-white/5 rounded-lg p-2 h-[80px] overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 pointer-events-none z-10" />
                   <div className="space-y-1 relative z-0 flex flex-col justify-end h-full font-mono text-[9px]">
                     {signals.length > 0
@@ -270,7 +270,7 @@ export function OmniAgentPulse() {
                   setIsExpanded(true);
                 }
               }}
-              className="bg-slate-950/60 backdrop-blur-3xl border border-white/10 rounded-full p-2 shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/30 flex items-center gap-3 pr-5 cursor-pointer relative overflow-hidden focus:outline-none focus:ring-cyan-500/50"
+              className="bg-slate-950/60 border border-white/10 rounded-full p-2 shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/30 flex items-center gap-3 pr-5 cursor-pointer relative overflow-hidden focus:outline-none focus:ring-cyan-500/50"
             >
               {/* Gloss Highlight */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"></div>
@@ -280,7 +280,7 @@ export function OmniAgentPulse() {
                   e.stopPropagation();
                   setPulseDismissed(true);
                 }}
-                className="absolute top-1 right-1 p-1 bg-black/40 hover:bg-red-500/80 text-white/50 hover:text-white rounded-full transition-colors z-20 cursor-pointer"
+                className="absolute top-1 right-1 p-1 hover:bg-red-500/80 text-white/50 hover:text-white rounded-full transition-colors z-20 cursor-pointer"
                 title="隱藏精靈"
               >
                 <X size={10} />
