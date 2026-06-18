@@ -286,6 +286,80 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ─── User Testimonials ─── */}
+      <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
+        <SectionTitle>
+          <span className="flex items-center gap-2">
+            <MessageSquare size={24} className="text-amber-500" />
+            用戶怎麼說
+          </span>
+        </SectionTitle>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              quote: '這真的幫我省了 2 週！',
+              author: '王顧問',
+              role: '永續顧問',
+              avatar: '📊',
+              rating: 5,
+              highlight: '節省 2 週',
+            },
+            {
+              quote: '原來 ESG 可以這麼智能！AI 幫我找到了從未注意到的碳排熱點。',
+              author: '林永續',
+              role: '某製造業 CSO',
+              avatar: '🌱',
+              rating: 5,
+              highlight: '智能洞察',
+            },
+            {
+              quote: '15 分鐘完成過去 3 個月的工作，而且品質更好！',
+              author: '陳廠長',
+              role: '製造業廠長',
+              avatar: '🏭',
+              rating: 5,
+              highlight: '15 分鐘',
+            },
+          ].map((testimonial, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 + i * 0.1 }}
+              className="bg-white rounded-2xl border border-slate-100 p-6 hover:shadow-lg transition-all relative overflow-hidden"
+            >
+              {/* Highlight Badge */}
+              <div className="absolute top-4 right-4">
+                <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-50 text-amber-600 rounded-full">
+                  {testimonial.highlight}
+                </span>
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center gap-0.5 mb-3">
+                {Array.from({ length: testimonial.rating }).map((_, j) => (
+                  <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
+                ))}
+              </div>
+
+              {/* Quote */}
+              <p className="text-base text-slate-700 leading-relaxed mb-4 italic">
+                "{testimonial.quote}"
+              </p>
+
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
+                <span className="text-2xl">{testimonial.avatar}</span>
+                <div>
+                  <p className="text-sm font-bold text-[#003262]">{testimonial.author}</p>
+                  <p className="text-[10px] text-slate-400">{testimonial.role}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       {/* ─── Quick Links ─── */}
       <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
         <SectionTitle>快速入口</SectionTitle>
