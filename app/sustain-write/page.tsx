@@ -440,7 +440,7 @@ export default function SustainWritePage() {
               onClick={handleWeave}
               isLoading={isWeaving}
               disabled={!activeTemplate || isWeaving}
-              className="flex-1 md:flex-none bg-[#63a6b0] hover:bg-[#528d96] text-white border-none shadow-sm flex items-center gap-2 rounded-xl h-10 px-4 transition-all"
+              className="flex-1 md:flex-none bg-[#003262] hover:bg-[#002244] text-white border-none shadow-sm shadow-blue-900/20 flex items-center gap-2 rounded-xl h-10 px-4 transition-all"
             >
               啟動全息編織
             </OmniButton>
