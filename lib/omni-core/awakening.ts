@@ -1,7 +1,7 @@
 /**
  * OmniAgent Awakening Talent (萬能智庫·神經共享)
  * 全域神經同步機制：一點習得，全網賦能。
- * 遵循 5T 協議 (Transferful: 生命週期即時追蹤與可追蹤性)
+ * 遵循 5T 協議 (Trackable: 生命週期即時追蹤與可追蹤性)
  */
 
 import { omniAgentBus, OmniSkill } from '../agents/omni-agent-bus';
@@ -9,10 +9,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export interface IOmniAgentAwakening {
   readonly uuid: string; // 萬能永憶主體唯一識別碼
-  
+
   // 核心天賦：技術同步
   syncAbility(skill: OmniSkill): Promise<void>;
-  
+
   // 核心天賦：動態庫管理
   skillLibrary: Map<string, OmniSkill>;
   toggleSkill(skillId: string, state: 'loaded' | 'unloaded'): void;
@@ -40,7 +40,10 @@ export class OmniAgentAwakening implements IOmniAgentAwakening {
   // 核心天賦：技術同步
   public async syncAbility(skill: OmniSkill): Promise<void> {
     // 發布廣播，觸發神經共享擴散 (Diffusion)
-    await omniAgentBus.publish('agent:skill:learned', { skill, timestamp: new Date().toISOString() });
+    await omniAgentBus.publish('agent:skill:learned', {
+      skill,
+      timestamp: new Date().toISOString(),
+    });
   }
 
   // 當任意代理習得技能時，觸發此 Hook
@@ -65,12 +68,12 @@ export class OmniAgentAwakening implements IOmniAgentAwakening {
         omniAgentBus.unregisterSkill(skillId);
         console.log(`[覺醒天賦] 卸載技能以優化資源: ${skill.name}`);
       }
-      
-      // 紀錄 5T Transferful 軌跡
-      omniAgentBus.publish('agent:skill:toggled', { 
-        skillId, 
-        state, 
-        timestamp: new Date().toISOString() 
+
+      // 紀錄 5T Trackable 軌跡
+      omniAgentBus.publish('agent:skill:toggled', {
+        skillId,
+        state,
+        timestamp: new Date().toISOString(),
       });
     } else {
       console.warn(`[覺醒天賦] 找不到指定技能: ${skillId}`);

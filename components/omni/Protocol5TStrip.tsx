@@ -2,17 +2,25 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 export interface Protocol5TStripProps {
-  status: [boolean, boolean, boolean, boolean, boolean]; // [Truth, Goodness, Beauty, Trust, Transferful]
+  status: [boolean, boolean, boolean, boolean, boolean]; // [Tangible, Traceable, Trackable, Transparent, Trustworthy]
   className?: string;
   showLabels?: boolean;
+  labels?: [string, string, string, string, string]; // Custom labels (optional)
 }
 
-const T_LABELS = ['Truth', 'Goodness', 'Beauty', 'Trust', 'Transferful'];
+const DEFAULT_LABELS: [string, string, string, string, string] = [
+  'Tangible',
+  'Traceable',
+  'Trackable',
+  'Transparent',
+  'Trustworthy',
+];
 
 export default function Protocol5TStrip({
   status,
   className = '',
   showLabels = false,
+  labels = DEFAULT_LABELS,
 }: Protocol5TStripProps) {
   const completedCount = status.filter(Boolean).length;
   const progress = (completedCount / 5) * 100;
@@ -51,7 +59,7 @@ export default function Protocol5TStrip({
                   isVerified ? 'text-cyan-300' : 'text-slate-600 group-hover:text-slate-400'
                 }`}
               >
-                {T_LABELS[index]}
+                {labels[index]}
               </span>
             </div>
           ))}
