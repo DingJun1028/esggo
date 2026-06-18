@@ -88,11 +88,11 @@ export default function OmniFactoryBasePage() {
       {/* Liquid Glass Background Effects */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div
-          className="absolute top-[-25%] left-[-15%] w-[60%] h-[60%] bg-cyan-500 opacity-20 blur-[130px] rounded-full mix-blend-screen animate-pulse"
+          className="absolute top-[-25%] left-[-15%] w-[60%] h-[60%] bg-cyan-500 opacity-20 blur-[130px] rounded-full animate-pulse"
           style={{ animationDuration: '8s' }}
         />
         <div
-          className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500 opacity-15 blur-[110px] rounded-full mix-blend-screen animate-pulse"
+          className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-emerald-500 opacity-15 blur-[110px] rounded-full animate-pulse"
           style={{ animationDuration: '10s' }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0)_95%,rgba(6,182,212,0.015)_95%)] bg-[length:100%_40px] pointer-events-none" />
@@ -100,7 +100,7 @@ export default function OmniFactoryBasePage() {
 
       <div className="relative z-10 flex-1 flex flex-col p-4 md:p-8 max-w-7xl mx-auto w-full gap-6">
         {/* Header Dashboard */}
-        <header className="bg-black/40 backdrop-blur-xl p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+        <header className="p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
           <div className="flex items-center gap-4">
             <div className="relative w-14 h-14 flex items-center justify-center bg-cyan-950/40 border border-cyan-500/30 rounded-xl shadow-[0_0_10px_rgba(6,182,212,0.2)]">
               <Factory className="w-7 h-7 text-cyan-400" />
@@ -125,7 +125,7 @@ export default function OmniFactoryBasePage() {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <div className="bg-black/50 border border-white/5 px-4 py-2 rounded-lg flex items-center gap-3">
+            <div className="border border-white/5 px-4 py-2 rounded-lg flex items-center gap-3">
               <Code className="text-emerald-400" size={18} />
               <div>
                 <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">
@@ -134,7 +134,7 @@ export default function OmniFactoryBasePage() {
                 <div className="text-lg font-bold font-mono text-emerald-400">1,204</div>
               </div>
             </div>
-            <div className="bg-black/50 border border-white/5 px-4 py-2 rounded-lg flex items-center gap-3">
+            <div className="border border-white/5 px-4 py-2 rounded-lg flex items-center gap-3">
               <ShieldCheck className="text-indigo-400" size={18} />
               <div>
                 <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">
@@ -143,7 +143,7 @@ export default function OmniFactoryBasePage() {
                 <div className="text-lg font-bold font-mono text-indigo-400">99.8%</div>
               </div>
             </div>
-            <div className="bg-black/50 border border-white/5 px-4 py-2 rounded-lg flex items-center gap-3">
+            <div className="border border-white/5 px-4 py-2 rounded-lg flex items-center gap-3">
               <Activity className="text-cyan-400" size={18} />
               <div>
                 <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">
@@ -200,7 +200,7 @@ export default function OmniFactoryBasePage() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 bg-black/40 backdrop-blur-md rounded-b-2xl rounded-tr-2xl p-6 border border-white/5 relative overflow-hidden min-h-[600px]">
+        <div className="flex-1 -md rounded-b-2xl rounded-tr-2xl p-6 border border-white/5 relative overflow-hidden min-h-[600px]">
           {/* TAB 1: FACTORY */}
           {activeTab === 'factory' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col gap-6">
@@ -214,14 +214,14 @@ export default function OmniFactoryBasePage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
                 {/* Left: Input */}
                 <div className="flex flex-col gap-4">
-                  <div className="bg-black/50 border border-cyan-500/20 rounded-xl p-4 flex-1 flex flex-col">
+                  <div className="border border-cyan-500/20 rounded-xl p-4 flex-1 flex flex-col">
                     <label className="text-xs text-cyan-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
                       <Code size={14} /> OmniFactory DSL 腳本定義
                     </label>
                     <textarea
                       value={dslInput}
                       onChange={(e) => setDslInput(e.target.value)}
-                      className="w-full flex-1 bg-black/50 border border-white/10 rounded-lg p-4 text-cyan-100 font-mono text-sm focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
+                      className="w-full flex-1 border border-white/10 rounded-lg p-4 text-cyan-100 font-mono text-sm focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
                       placeholder="請輸入需求單 (OmniAssistant-REQ) 的 YAML DSL..."
                     />
                     <div className="mt-4 flex justify-between items-center">
@@ -249,13 +249,13 @@ export default function OmniFactoryBasePage() {
 
                 {/* Right: Pipeline Status */}
                 <div className="flex flex-col gap-4">
-                  <div className="bg-black/50 border border-white/5 rounded-xl p-4 flex-1 flex flex-col">
+                  <div className="border border-white/5 rounded-xl p-4 flex-1 flex flex-col">
                     <label className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
                       <Database size={14} /> 生產線與審核狀態 (Pipeline Status)
                     </label>
 
                     {/* Live Streaming Logs */}
-                    <div className="bg-black/80 border border-white/5 rounded-lg p-4 flex-1 font-mono text-xs overflow-y-auto max-h-[300px]">
+                    <div className="border border-white/5 rounded-lg p-4 flex-1 font-mono text-xs overflow-y-auto max-h-[300px]">
                       {pipelineLogs.length === 0 ? (
                         <span className="text-slate-600">
                           Awaiting DSL submission to start pipeline...
@@ -379,7 +379,7 @@ export default function OmniFactoryBasePage() {
                 {/* Tool 1 */}
                 <a
                   href="/sustain-write"
-                  className="group block bg-black/40 border border-white/10 hover:border-purple-500/50 rounded-xl p-5 transition-all hover:bg-purple-950/20 relative overflow-hidden"
+                  className="group block border border-white/10 hover:border-purple-500/50 rounded-xl p-5 transition-all hover:bg-purple-950/20 relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative z-10">
@@ -412,7 +412,7 @@ export default function OmniFactoryBasePage() {
                 {/* Tool 2 */}
                 <a
                   href="/think-tank"
-                  className="group block bg-black/40 border border-white/10 hover:border-cyan-500/50 rounded-xl p-5 transition-all hover:bg-cyan-950/20 relative overflow-hidden"
+                  className="group block border border-white/10 hover:border-cyan-500/50 rounded-xl p-5 transition-all hover:bg-cyan-950/20 relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative z-10">
@@ -442,7 +442,7 @@ export default function OmniFactoryBasePage() {
                 {/* Tool 3 */}
                 <a
                   href="/design-library"
-                  className="group block bg-black/40 border border-white/10 hover:border-emerald-500/50 rounded-xl p-5 transition-all hover:bg-emerald-950/20 relative overflow-hidden"
+                  className="group block border border-white/10 hover:border-emerald-500/50 rounded-xl p-5 transition-all hover:bg-emerald-950/20 relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative z-10">

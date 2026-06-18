@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Bot, X, Maximize2, Minimize2 } from 'lucide-react'; 
+import { Bot, X, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { useTheme } from '../../contexts/ThemeContext'; 
+import { useTheme } from '../../contexts/ThemeContext';
 import BrandStatusDot from '../brand/BrandStatusDot';
 
 type PulseSize = 'sm' | 'md' | 'lg';
@@ -35,7 +35,7 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
 
     const savedPosition = localStorage.getItem('omniagent_pulse_position');
     if (savedPosition) setPosition(JSON.parse(savedPosition));
-    
+
     const savedMinimized = localStorage.getItem('omniagent_pulse_minimized');
     if (savedMinimized !== null) setIsMinimized(JSON.parse(savedMinimized));
   }, []);
@@ -92,8 +92,8 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
   // Calculate minimizedTarget dynamically using logoPosition and initialPulseRect
   const calculatedMinimizedTarget = useMemo(() => {
     if (!logoPosition || !initialPulseRect) {
-        // Fallback or wait if positions are not available yet
-        return { x: 0, y: 0, scale: 0.3 }; // Default to no movement, just scale
+      // Fallback or wait if positions are not available yet
+      return { x: 0, y: 0, scale: 0.3 }; // Default to no movement, just scale
     }
 
     // Calculate center of logo
@@ -116,7 +116,6 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
     };
   }, [logoPosition, initialPulseRect]); // Recalculate if these change
 
-
   useEffect(() => {
     const handleRestore = () => {
       setIsMinimized(false);
@@ -127,9 +126,9 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
   }, []);
 
   const sizeClasses = {
-    sm: "px-4 py-2 text-sm gap-3",
-    md: "px-8 py-4 text-base gap-5",
-    lg: "px-10 py-5 text-lg gap-6",
+    sm: 'px-4 py-2 text-sm gap-3',
+    md: 'px-8 py-4 text-base gap-5',
+    lg: 'px-10 py-5 text-lg gap-6',
   };
 
   const dotIconSize = {
@@ -145,44 +144,53 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
       dragMomentum={false}
       onDragEnd={handleDragEnd}
       animate={isMinimized ? calculatedMinimizedTarget : { scale: 1 }} // Remove x/y here, let framer motion handle drag internally
-      style={!isMinimized && position.x !== 0 && position.y !== 0 ? { x: position.x, y: position.y } : undefined} // Only set initial style position once, don't bind to animate
-      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      style={
+        !isMinimized && position.x !== 0 && position.y !== 0
+          ? { x: position.x, y: position.y }
+          : undefined
+      } // Only set initial style position once, don't bind to animate
+      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       className={cn(
-        "hidden md:flex fixed z-[60] group",
-        isMinimized ? "cursor-pointer" : "bottom-12 right-12",
+        'hidden md:flex fixed z-[60] group',
+        isMinimized ? 'cursor-pointer' : 'bottom-12 right-12'
       )}
-      onTap={() => { if (isMinimized) setIsMinimized(false); }}
+      onTap={() => {
+        if (isMinimized) setIsMinimized(false);
+      }}
     >
       <motion.div
         whileHover={{ scale: 1.05, y: -5 }}
         className={cn(
-          "rounded-[2.5rem] border backdrop-blur-3xl shadow-2xl flex items-center transition-all duration-500",
+          'rounded-[2.5rem] border  shadow-2xl flex items-center transition-all duration-500',
           sizeClasses[currentSize],
           isDark
-            ? "bg-[#003262]/60 border-[#FDB515]/30 shadow-[#FDB515]/5"
-            : "bg-white/80 border-[#003262]/20 shadow-xl",
-          isMinimized && "p-0 rounded-full w-10 h-10 flex items-center justify-center" // Styles for minimized state
+            ? 'bg-[#003262]/60 border-[#FDB515]/30 shadow-[#FDB515]/5'
+            : ' border-[#003262]/20 shadow-xl',
+          isMinimized && 'p-0 rounded-full w-10 h-10 flex items-center justify-center' // Styles for minimized state
         )}
       >
         {isMinimized ? (
-          <Bot size={24} className={isDark ? "text-[#FDB515]" : "text-[#003262]"} />
+          <Bot size={24} className={isDark ? 'text-[#FDB515]' : 'text-[#003262]'} />
         ) : (
           <>
             <div className="relative">
-              <div className={cn(
-                "p-3 rounded-2xl transition-colors",
-                isDark ? "bg-[#FDB515]/10 text-[#FDB515]" : "bg-[#003262] text-white shadow-lg"
-              )}>
-                <Bot size={dotIconSize[currentSize]} className="group-hover:rotate-12 transition-transform" />
+              <div
+                className={cn(
+                  'p-3 rounded-2xl transition-colors',
+                  isDark ? 'bg-[#FDB515]/10 text-[#FDB515]' : 'bg-[#003262] text-white shadow-lg'
+                )}
+              >
+                <Bot
+                  size={dotIconSize[currentSize]}
+                  className="group-hover:rotate-12 transition-transform"
+                />
               </div>
               <div className="absolute -top-1 -right-1">
                 <BrandStatusDot
                   status="active"
                   pulse={true}
                   sizeClassName={
-                    currentSize === 'sm' ? 'w-3 h-3' :
-                    currentSize === 'md' ? 'w-4 h-4' :
-                    'w-5 h-5'
+                    currentSize === 'sm' ? 'w-3 h-3' : currentSize === 'md' ? 'w-4 h-4' : 'w-5 h-5'
                   }
                   borderClassName="border-2 border-white"
                   shadowClassName="shadow-[0_0_10px_#10b981]"
@@ -192,11 +200,19 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
               </div>
             </div>
             <div className="flex flex-col">
-              <span className={cn(
-                "font-black uppercase tracking-[0.25em]",
-                currentSize === 'sm' ? "text-[9px]" : currentSize === 'md' ? "text-[11px]" : "text-xs",
-                isDark ? "text-[#FDB515]" : "text-[#003262]"
-              )}>OmniAgent Pulse</span>
+              <span
+                className={cn(
+                  'font-black uppercase tracking-[0.25em]',
+                  currentSize === 'sm'
+                    ? 'text-[9px]'
+                    : currentSize === 'md'
+                    ? 'text-[11px]'
+                    : 'text-xs',
+                  isDark ? 'text-[#FDB515]' : 'text-[#003262]'
+                )}
+              >
+                OmniAgent Pulse
+              </span>
               <div className="flex items-center gap-3 mt-1.5">
                 <div className="h-1.5 w-32 bg-slate-200/20 rounded-full overflow-hidden">
                   <motion.div
@@ -211,10 +227,16 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
         )}
         {!isMinimized && ( // Hide controls when minimized
           <div className="absolute -top-3 -right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={cycleSize} className="bg-slate-700/50 hover:bg-slate-600/70 p-1 rounded-full text-white">
+            <button
+              onClick={cycleSize}
+              className="bg-slate-700/50 hover:bg-slate-600/70 p-1 rounded-full text-white"
+            >
               {currentSize === 'lg' ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
             </button>
-            <button onClick={toggleVisibility} className="bg-red-500/80 hover:bg-red-600/90 p-1 rounded-full text-white">
+            <button
+              onClick={toggleVisibility}
+              className="bg-red-500/80 hover:bg-red-600/90 p-1 rounded-full text-white"
+            >
               <X size={16} />
             </button>
           </div>

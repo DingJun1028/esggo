@@ -43,7 +43,7 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
@@ -75,7 +75,7 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
                 onClick={onClose}
                 className={cn(
                   'p-2 rounded-full transition-colors',
-                  isDark ? 'hover:bg-white/10 text-white' : 'hover:bg-slate-100 text-slate-600'
+                  isDark ? 'hover: text-white' : 'hover:bg-slate-100 text-slate-600'
                 )}
               >
                 <X size={24} />
@@ -99,9 +99,7 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
                         <div
                           className={cn(
                             'flex items-center gap-3 p-3 rounded-xl transition-colors',
-                            isDark
-                              ? 'hover:bg-white/5 text-slate-200'
-                              : 'hover:bg-slate-50 text-slate-700'
+                            isDark ? 'hover: text-slate-200' : 'hover:bg-slate-50 text-slate-700'
                           )}
                         >
                           <div

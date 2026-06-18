@@ -153,6 +153,7 @@ export const getRouteMatrixMap = async (): Promise<Record<string, MatrixComponen
 export const MATRIX_ROUTES = [
   '/',
   '/login',
+  '/gri',
   '/materiality',
   '/carbon-heatmap',
   '/cbam-calculator',

@@ -12,7 +12,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Send, CheckCircle, AlertCircle, Loader2, Slack, Zap, Hash } from 'lucide-react';
+import {
+  MessageSquare,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+  Slack,
+  Zap,
+  Hash,
+} from 'lucide-react';
 import { BrandCard, BrandBadge, BrandStatusDot } from '@/components/brand';
 
 interface PushLog {
@@ -39,8 +48,8 @@ export function SlackGatewayCard({ className = '' }: SlackGatewayCardProps) {
   // 檢查 Slack Gateway 是否已設定
   useEffect(() => {
     fetch('/api/slack/status')
-      .then(r => r.json())
-      .then(d => setIsConfigured(d.configured ?? false))
+      .then((r) => r.json())
+      .then((d) => setIsConfigured(d.configured ?? false))
       .catch(() => setIsConfigured(false));
   }, []);
 
@@ -60,15 +69,19 @@ export function SlackGatewayCard({ className = '' }: SlackGatewayCardProps) {
       const ok = res.ok && data.ok;
       setLastResult(ok ? 'success' : 'failed');
 
-      setPushLog(prev => [{
-        id: `LOG-${Date.now()}`,
-        company: companyName,
-        score: (data.overallScore as number) ?? 0,
-        channel: (data.channel as string) ?? '#esggo',
-        time: new Date().toLocaleTimeString('zh-TW'),
-        status: (ok ? 'success' : 'failed') as 'success' | 'failed',
-      }, ...prev].slice(0, 5));
-
+      setPushLog((prev) =>
+        [
+          {
+            id: `LOG-${Date.now()}`,
+            company: companyName,
+            score: (data.overallScore as number) ?? 0,
+            channel: (data.channel as string) ?? '#esggo',
+            time: new Date().toLocaleTimeString('zh-TW'),
+            status: (ok ? 'success' : 'failed') as 'success' | 'failed',
+          },
+          ...prev,
+        ].slice(0, 5)
+      );
     } catch {
       setLastResult('failed');
     } finally {
@@ -77,9 +90,7 @@ export function SlackGatewayCard({ className = '' }: SlackGatewayCardProps) {
     }
   };
 
-  const configStatus = isConfigured === null
-    ? 'checking'
-    : isConfigured ? 'online' : 'offline';
+  const configStatus = isConfigured === null ? 'checking' : isConfigured ? 'online' : 'offline';
 
   return (
     <BrandCard className={`p-6 flex flex-col gap-5 ${className}`}>
@@ -118,8 +129,10 @@ export function SlackGatewayCard({ className = '' }: SlackGatewayCardProps) {
       {configStatus === 'offline' && (
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-300 leading-relaxed">
           <p className="font-bold mb-1">⚙️ 需要設定 Slack Token</p>
-          <p className="text-amber-400/70">在 <code className="bg-black/30 px-1 rounded">.env</code> 中加入：</p>
-          <pre className="mt-2 text-emerald-400 bg-black/30 rounded-lg p-2 font-mono overflow-x-auto">{`SLACK_BOT_TOKEN=xoxb-...
+          <p className="text-amber-400/70">
+            在 <code className="px-1 rounded">.env</code> 中加入：
+          </p>
+          <pre className="mt-2 text-emerald-400 rounded-lg p-2 font-mono overflow-x-auto">{`SLACK_BOT_TOKEN=xoxb-...
 SLACK_SIGNING_SECRET=...
 SLACK_ALLOWED_USERS=U...
 SLACK_HOME_CHANNEL=C...`}</pre>
@@ -135,9 +148,9 @@ SLACK_HOME_CHANNEL=C...`}</pre>
               <input
                 type="text"
                 value={companyName}
-                onChange={e => setCompanyName(e.target.value)}
+                onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="企業名稱..."
-                className="w-full bg-black/30 border border-white/10 rounded-lg pl-8 pr-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 transition-colors"
+                className="w-full border border-white/10 rounded-lg pl-8 pr-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 transition-colors"
               />
             </div>
             <button
@@ -145,14 +158,15 @@ SLACK_HOME_CHANNEL=C...`}</pre>
               disabled={isPushing || !companyName.trim()}
               className="flex items-center gap-2 px-4 py-2 bg-[#4A154B]/60 hover:bg-[#4A154B]/80 border border-[#E01E5A]/30 hover:border-[#E01E5A]/60 text-white text-sm font-bold rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {isPushing
-                ? <Loader2 size={14} className="animate-spin" />
-                : lastResult === 'success'
-                  ? <CheckCircle size={14} className="text-emerald-400" />
-                  : lastResult === 'failed'
-                    ? <AlertCircle size={14} className="text-red-400" />
-                    : <Send size={14} />
-              }
+              {isPushing ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : lastResult === 'success' ? (
+                <CheckCircle size={14} className="text-emerald-400" />
+              ) : lastResult === 'failed' ? (
+                <AlertCircle size={14} className="text-red-400" />
+              ) : (
+                <Send size={14} />
+              )}
               推播 5T
             </button>
           </div>
@@ -168,19 +182,22 @@ SLACK_HOME_CHANNEL=C...`}</pre>
             exit={{ opacity: 0, height: 0 }}
             className="space-y-1.5"
           >
-            <p className="text-xs text-slate-500 font-mono uppercase tracking-widest mb-2">Recent Pushes</p>
-            {pushLog.map(log => (
+            <p className="text-xs text-slate-500 font-mono uppercase tracking-widest mb-2">
+              Recent Pushes
+            </p>
+            {pushLog.map((log) => (
               <motion.div
                 key={log.id}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex items-center justify-between text-xs bg-black/20 rounded-lg px-3 py-2 border border-white/5"
+                className="flex items-center justify-between text-xs rounded-lg px-3 py-2 border border-white/5"
               >
                 <div className="flex items-center gap-2 overflow-hidden">
-                  {log.status === 'success'
-                    ? <CheckCircle size={12} className="text-emerald-400 shrink-0" />
-                    : <AlertCircle size={12} className="text-red-400 shrink-0" />
-                  }
+                  {log.status === 'success' ? (
+                    <CheckCircle size={12} className="text-emerald-400 shrink-0" />
+                  ) : (
+                    <AlertCircle size={12} className="text-red-400 shrink-0" />
+                  )}
                   <span className="text-slate-300 truncate">{log.company}</span>
                   <span className="text-cyan-400 font-mono font-bold shrink-0">{log.score}分</span>
                 </div>
@@ -193,14 +210,16 @@ SLACK_HOME_CHANNEL=C...`}</pre>
 
       {/* ── Footer 快捷指令提示 ───────────────── */}
       <div className="border-t border-white/5 pt-4 flex flex-wrap gap-2">
-        {['/esg-five-t', '/esg-status', '/esg-alert', '/omni'].map(cmd => (
-          <span key={cmd} className="text-xs font-mono text-slate-500 bg-black/20 px-2 py-1 rounded border border-white/5">
+        {['/esg-five-t', '/esg-status', '/esg-alert', '/omni'].map((cmd) => (
+          <span
+            key={cmd}
+            className="text-xs font-mono text-slate-500 px-2 py-1 rounded border border-white/5"
+          >
             {cmd}
           </span>
         ))}
         <span className="text-xs text-slate-600 ml-auto self-center">Slash Commands</span>
       </div>
-
     </BrandCard>
   );
 }

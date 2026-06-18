@@ -83,13 +83,15 @@ export default function SelectionHouse({
 
   return (
     <div
-      className={`fixed inset-0 z-[2000] flex flex-col bg-white transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 z-[2000] flex flex-col bg-white transition-all duration-300 ${
+        isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="selection-house-title"
     >
       {/* Header */}
-      <header className="flex-shrink-0 px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10">
+      <header className="flex-shrink-0 px-6 py-4 border-b border-slate-100 flex items-center justify-between sticky top-0 -md z-10">
         <div>
           <h2 id="selection-house-title" className="text-lg font-bold text-[#003262]">
             {title}
@@ -123,7 +125,11 @@ export default function SelectionHouse({
         <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${activeCategory === 'all' ? 'bg-[#003262] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${
+              activeCategory === 'all'
+                ? 'bg-[#003262] text-white'
+                : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+            }`}
           >
             全部
           </button>
@@ -131,7 +137,11 @@ export default function SelectionHouse({
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${activeCategory === cat.id ? 'bg-[#003262] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${
+                activeCategory === cat.id
+                  ? 'bg-[#003262] text-white'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+              }`}
             >
               {cat.title}
             </button>

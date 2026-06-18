@@ -573,7 +573,7 @@ export default function SustainWritePage() {
                       <button
                         type="button"
                         onClick={() => setShowBlueprintBanner(false)}
-                        className="text-cyan-400/50 hover:text-cyan-400 p-1 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                        className="text-cyan-400/50 hover:text-cyan-400 p-1 hover: rounded-lg transition-colors cursor-pointer"
                         title="關閉說明"
                       >
                         <X size={16} />
@@ -631,7 +631,7 @@ export default function SustainWritePage() {
                           'w-full text-left px-4 py-3 rounded-xl text-sm transition-all border',
                           activeChapterIndex === idx
                             ? 'bg-cyan-50 border-cyan-200 text-cyan-700 shadow-sm font-semibold'
-                            : 'bg-white/40 border-transparent text-slate-500 hover:bg-white/80 hover:text-slate-850'
+                            : ' border-transparent text-slate-500 hover: hover:text-slate-850'
                         )}
                       >
                         <div className="font-bold truncate">{ch.title}</div>
@@ -920,7 +920,7 @@ export default function SustainWritePage() {
                                 e.dataTransfer.setData('text/plain', note.content);
                               }}
                               className={cn(
-                                'bg-black/30 border rounded-xl p-3 hover:border-cyan-500/25 transition-all group relative cursor-grab active:cursor-grabbing',
+                                ' border rounded-xl p-3 hover:border-cyan-500/25 transition-all group relative cursor-grab active:cursor-grabbing',
                                 isPinned
                                   ? 'border-cyan-500/35 bg-cyan-950/10 shadow-[0_0_15px_rgba(6,182,212,0.05)]'
                                   : 'border-white/5'
@@ -964,7 +964,7 @@ export default function SustainWritePage() {
                                     type="button"
                                     onClick={() => togglePinNote(note.id)}
                                     className={cn(
-                                      'p-1 rounded hover:bg-white/5 transition-colors cursor-pointer',
+                                      'p-1 rounded hover: transition-colors cursor-pointer',
                                       isPinned
                                         ? 'text-cyan-400'
                                         : 'text-slate-500 hover:text-slate-300'

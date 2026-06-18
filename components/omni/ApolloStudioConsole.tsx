@@ -47,7 +47,7 @@ export default function ApolloStudioConsole() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3 px-4 py-2 bg-black/40 border border-white/10 rounded-full backdrop-blur-md">
+        <div className="flex items-center gap-3 px-4 py-2 border border-white/10 rounded-full -md">
           <div
             className={`w-2.5 h-2.5 rounded-full ${
               isOrchestrating
@@ -63,7 +63,7 @@ export default function ApolloStudioConsole() {
 
       {/* KPI Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 relative z-10">
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+        <div className="border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
           <Zap
             size={24}
             className="text-cyan-400 mb-3 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
@@ -73,7 +73,7 @@ export default function ApolloStudioConsole() {
             Swarm Latency
           </span>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+        <div className="border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
           <Network
             size={24}
             className="text-indigo-400 mb-3 drop-shadow-[0_0_10px_rgba(99,102,241,0.8)]"
@@ -83,7 +83,7 @@ export default function ApolloStudioConsole() {
             Active Nodes
           </span>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover:bg-white/10 transition-colors">
+        <div className="border border-white/10 rounded-2xl p-5 flex flex-col items-center justify-center text-center hover: transition-colors">
           <ShieldCheck
             size={24}
             className="text-emerald-400 mb-3 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]"
@@ -132,7 +132,7 @@ export default function ApolloStudioConsole() {
             : 'bg-indigo-600 text-white shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:bg-indigo-500 hover:shadow-[0_0_40px_rgba(79,70,229,0.6)] active:scale-[0.98]'
         }`}
       >
-        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+        <div className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
         <span className="relative z-10 flex items-center justify-center gap-3">
           {isOrchestrating ? (
             <>

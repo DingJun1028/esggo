@@ -10,7 +10,7 @@ import { ShieldAlert, Zap } from 'lucide-react';
  * 立即觸發 OmniAgentBus 的 HEAL 訊號，由 OmniJules 介入。
  */
 export default function OmniJulesPassiveGuard() {
-  const [healingAlert, setHealingAlert] = useState<{ id: string, text: string } | null>(null);
+  const [healingAlert, setHealingAlert] = useState<{ id: string; text: string } | null>(null);
 
   useEffect(() => {
     // 建立一個 MutationObserver 來監視 DOM 變化，充當全知之眼
@@ -41,9 +41,9 @@ export default function OmniJulesPassiveGuard() {
         if (!node.parentElement?.hasAttribute('data-healed')) {
           const id = crypto.randomUUID();
           console.warn(`[OmniJules Passive Skill] 🚨 視覺層發現亂碼: ${text}`);
-          
+
           setHealingAlert({ id, text: text.substring(0, 20) + '...' });
-          
+
           // 標記避免重複掃描
           if (node.parentElement) {
             node.parentElement.setAttribute('data-healed', 'processing');
@@ -64,11 +64,11 @@ export default function OmniJulesPassiveGuard() {
                 context: 'OmniJulesPassiveGuard DOM Scanner',
                 energyLoadFactor: 0.9,
                 // 此處模擬將前端字串轉成 bytes 交由後端果因修復
-                rawData: Array.from(new TextEncoder().encode(text))
-              })
+                rawData: Array.from(new TextEncoder().encode(text)),
+              }),
             });
             const result = await res.json();
-            
+
             if (result.success && result.healedData) {
               // 替換原本的亂碼
               node.nodeValue = result.healedData;
@@ -77,7 +77,7 @@ export default function OmniJulesPassiveGuard() {
                 // 轉為清淨樣貌 (Cyan 發光)
                 node.parentElement.style.boxShadow = '0 0 15px rgba(6, 182, 212, 0.8)';
                 node.parentElement.style.color = '#06b6d4';
-                
+
                 setTimeout(() => {
                   if (node.parentElement) {
                     node.parentElement.style.boxShadow = 'none';
@@ -99,7 +99,7 @@ export default function OmniJulesPassiveGuard() {
     observer.observe(document.body, {
       childList: true,
       subtree: true,
-      characterData: true
+      characterData: true,
     });
 
     // 發布啟動事件到全局 (供其他系統識別)
@@ -115,12 +115,12 @@ export default function OmniJulesPassiveGuard() {
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 50, scale: 0.9 }}
-          className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 bg-slate-900/90 backdrop-blur-xl border border-red-500/50 rounded-2xl p-4 shadow-[0_0_30px_rgba(245,34,45,0.3)]"
+          className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 bg-slate-900/90 border border-red-500/50 rounded-2xl p-4 shadow-[0_0_30px_rgba(245,34,45,0.3)]"
         >
           <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 relative overflow-hidden">
-            <motion.div 
-              animate={{ rotate: 360 }} 
-              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
               className="absolute inset-0 border-2 border-transparent border-t-red-500 rounded-full"
             />
             <ShieldAlert size={20} />
@@ -128,7 +128,9 @@ export default function OmniJulesPassiveGuard() {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-red-400">OmniJules 被動觸發</span>
-              <span className="text-[10px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Karma Protocol</span>
+              <span className="text-[10px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                Karma Protocol
+              </span>
             </div>
             <div className="text-xs text-slate-300 mt-1 flex items-center gap-1.5">
               <Zap size={12} className="text-cyan-400" />

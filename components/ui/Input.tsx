@@ -21,14 +21,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-       
+
         <div className="relative">
           {icon && (
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
               {icon}
             </div>
           )}
-         
+
           <input
             id={inputId}
             ref={ref}
@@ -36,7 +36,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-describedby={error ? errorId : undefined}
             className={cn(
               'w-full rounded-input border px-4 py-2',
-              'bg-white/50 backdrop-blur-sm',
+              ' ',
               'transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
               icon && 'pl-10',
@@ -47,9 +47,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
         </div>
-       
+
         {error && (
-          <p id={errorId} className="mt-1 text-sm text-error" role="alert">{error}</p>
+          <p id={errorId} className="mt-1 text-sm text-error" role="alert">
+            {error}
+          </p>
         )}
       </div>
     );

@@ -54,9 +54,9 @@
 ```bash
 GET  /api/matrix              # 矩陀路由查詢
 GET  /api/gri                 # GRI 標準
-POST /api/cbam                # CBAM 計算
-POST /api/sustain-write       # 生成永續報告
-POST /api/data/integrator     # 數據串接與 OCR
+POST /api/sustain-write/generate # 生成永續報告
+POST /api/cbam                 # CBAM 計算
+POST /api/vault/indicators     # 數據串接與 OCR
 ```
 
 ### 支援的模型

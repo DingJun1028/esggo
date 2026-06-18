@@ -14,9 +14,9 @@ interface IComponentCore {
 const FloatingKey: React.FC = () => {
   const [core] = useState<IComponentCore>({
     uuid: uuidv4(),
-    version: "1.0.0",
+    version: '1.0.0',
     timestamp: Date.now(),
-    evidence: []
+    evidence: [],
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +33,7 @@ const FloatingKey: React.FC = () => {
       <motion.button
         whileHover={{ scale: 1.1, rotate: 5 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-blue-500/30 backdrop-blur-md border border-white/20 shadow-lg flex items-center justify-center text-white z-50"
+        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-blue-500/30 -md border border-white/20 shadow-lg flex items-center justify-center text-white z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
         ⚛️
@@ -46,13 +46,15 @@ const FloatingKey: React.FC = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-28 right-8 w-80 p-6 rounded-2xl bg-slate-900/80 backdrop-blur-2xl border border-blue-500/30 shadow-2xl z-50 text-xs text-blue-100 font-mono"
+            className="fixed bottom-28 right-8 w-80 p-6 rounded-2xl bg-slate-900/80 border border-blue-500/30 shadow-2xl z-50 text-xs text-blue-100 font-mono"
           >
             <h3 className="text-sm font-bold mb-2">OmniAgent 心核狀態</h3>
             <div className="space-y-1">
               <p>UUID: {core.uuid.slice(0, 8)}...</p>
               <p>Hash: {getHashSignature()}</p>
-              <p>Status: <span className="text-green-400">Object.frozen</span></p>
+              <p>
+                Status: <span className="text-green-400">Object.frozen</span>
+              </p>
             </div>
           </motion.div>
         )}
