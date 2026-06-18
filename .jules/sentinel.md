@@ -88,3 +88,8 @@ All future core components must implement the updated `IComponentCore` interface
 **Learning:** Container builds must mirror the environment logic of the host application, specifically package managers. Using `npm` instead of `pnpm` will invariably cause resolution errors when a lockfile format mismatch exists.
 **Prevention:** Ensured `Dockerfile` explicitly installs and runs `pnpm` (`RUN npm install -g pnpm && pnpm install --no-frozen-lockfile`) and references `pnpm-lock.yaml`.
 
+
+## 2026-06-18 - [Fix Hardcoded Secret in Omni-Table API]
+**Vulnerability:** Found a hardcoded fallback secret (`'hermes_gold_2026'`) in `app/api/omni-table/route.ts` used when `process.env.BLUE_CC_TOKEN` is unset. This allowed authentication bypass by passing the fallback string as a Bearer token.
+**Learning:** Hardcoded development placeholders are easily overlooked and left behind during deployment.
+**Prevention:** Remove fallback secrets completely and configure variables to explicitly bind to environment variables (`const MOCK_JWT_SECRET = process.env.BLUE_CC_TOKEN || process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_TOKEN;`).
