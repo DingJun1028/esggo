@@ -2,22 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  ShieldCheck,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-  TrendingUp,
-  FileText,
-  Lock,
-  Eye,
-  GitBranch,
-  Activity,
-} from 'lucide-react';
+import { ShieldCheck, CheckCircle2, AlertTriangle, TrendingUp, Activity, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FIVE_T_PROTOCOL, FOUR_PLUS_ONE, type FiveTGateCode } from '@/shared/constants/protocol';
-import { OmniBaseCard } from '@/components/ui/omni/omniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
 /* ─── Types ─── */
@@ -122,7 +110,7 @@ const COMPLIANCE_EVENTS: ComplianceEvent[] = [
 
 /* ─── Components ─── */
 
-function GateCard({ status }: { status: GateStatus }) {
+function GateCard({ status, index }: { status: GateStatus; index: number }) {
   const gate = FIVE_T_PROTOCOL[status.gate];
   const isPassed = status.passed;
 
@@ -130,60 +118,87 @@ function GateCard({ status }: { status: GateStatus }) {
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.08 }}
       className={cn(
-        'bg-white rounded-2xl border p-5 transition-all duration-300',
-        isPassed ? 'border-slate-100 hover:shadow-md' : 'border-amber-200 bg-amber-50/30'
+        'bg-white rounded-2xl border p-5 transition-all duration-300 relative overflow-hidden',
+        isPassed ? 'border-slate-100 hover:shadow-lg' : 'border-amber-200 bg-amber-50/30'
       )}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={cn(
-              'w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-sm',
-              gate.bgColor
-            )}
-          >
-            {status.gate}
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-[#003262]">{gate.title}</h3>
-            <p className="text-[10px] text-slate-400">{gate.shortDesc}</p>
-          </div>
-        </div>
-        {isPassed ? (
-          <CheckCircle2 size={20} className="text-emerald-500" />
-        ) : (
-          <AlertTriangle size={20} className="text-amber-500" />
-        )}
-      </div>
-
-      <p className="text-xs text-slate-500 leading-relaxed mb-4">{gate.fullDesc}</p>
-
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2">
-          <Activity size={12} className="text-slate-400" />
-          <span className="text-slate-400">證據數</span>
-          <span className="font-mono font-bold text-[#003262]">{status.evidenceCount}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <TrendingUp size={12} className="text-slate-400" />
-          <span className="text-slate-400">評分</span>
-          <span
-            className={cn('font-mono font-bold', isPassed ? 'text-emerald-600' : 'text-amber-600')}
-          >
-            {status.score}%
-          </span>
-        </div>
-      </div>
-
-      {/* Score Bar */}
-      <div className="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${status.score}%` }}
-          transition={{ duration: 0.8 }}
-          className={cn('h-full rounded-full', isPassed ? 'bg-emerald-500' : 'bg-amber-500')}
+      {/* Breathing Glow Background */}
+      {isPassed && (
+        <div
+          className={cn(
+            'absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-20 blur-2xl',
+            gate.bgColor
+          )}
+          style={{ animation: 'breathingGlow 3s ease-in-out infinite' }}
         />
+      )}
+
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            {/* Gate Icon with Breathing Glow */}
+            <div className="relative">
+              <div
+                className={cn(
+                  'w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-lg',
+                  gate.bgColor,
+                  isPassed && 'breathing-glow'
+                )}
+              >
+                {gate.zh}
+              </div>
+              {isPassed && (
+                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+                </span>
+              )}
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-[#003262]">{gate.title}</h3>
+              <p className="text-[10px] text-slate-400">{gate.shortDesc}</p>
+            </div>
+          </div>
+          {isPassed ? (
+            <CheckCircle2 size={20} className="text-emerald-500" />
+          ) : (
+            <AlertTriangle size={20} className="text-amber-500" />
+          )}
+        </div>
+
+        <p className="text-xs text-slate-500 leading-relaxed mb-4">{gate.fullDesc}</p>
+
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Activity size={12} className="text-slate-400" />
+            <span className="text-slate-400">證據數</span>
+            <span className="font-mono font-bold text-[#003262]">{status.evidenceCount}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <TrendingUp size={12} className="text-slate-400" />
+            <span className="text-slate-400">評分</span>
+            <span
+              className={cn(
+                'font-mono font-bold',
+                isPassed ? 'text-emerald-600' : 'text-amber-600'
+              )}
+            >
+              {status.score}%
+            </span>
+          </div>
+        </div>
+
+        {/* Score Bar */}
+        <div className="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${status.score}%` }}
+            transition={{ duration: 0.8 }}
+            className={cn('h-full rounded-full', isPassed ? 'bg-emerald-500' : 'bg-amber-500')}
+          />
+        </div>
       </div>
     </motion.div>
   );
@@ -236,46 +251,62 @@ export default function FiveTDashboardPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-cyan-50 rounded-xl border border-cyan-100">
-                <ShieldCheck size={24} className="text-cyan-600" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-black text-[#003262] tracking-tight">5T 信任儀表板</h1>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">
-                  5T Trust Dashboard · 真善美信通
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-2xl font-black text-[#003262]">{overallScore}%</p>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">整體信任分數</p>
-              </div>
-              <div className="w-px h-10 bg-slate-100" />
-              <div className="text-right">
-                <p className="text-2xl font-black text-emerald-600">{passedGates}/5</p>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">門徑通過</p>
-              </div>
-              <div className="w-px h-10 bg-slate-100" />
-              <div className="text-right">
-                <p className="text-2xl font-black text-[#003262]">{totalEvidence}</p>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">證據總數</p>
-              </div>
-            </div>
-          </div>
+        <header className="bg-white rounded-2xl border border-slate-100 p-6 relative overflow-hidden">
+          {/* Background Breathing Glow */}
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-cyan-100/30 rounded-full blur-3xl breathing-glow" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-amber-100/20 rounded-full blur-3xl breathing-glow-amber" />
 
-          {/* 5T Strip */}
-          <div className="mt-6 max-w-md">
-            <Protocol5TStrip
-              status={
-                GATE_STATUSES.map((s) => s.passed) as [boolean, boolean, boolean, boolean, boolean]
-              }
-              showLabels
-              size="lg"
-            />
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg breathing-glow">
+                    <ShieldCheck size={28} className="text-white" />
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-black text-[#003262] tracking-tight">
+                    5T 信任儀表板
+                  </h1>
+                  <p className="text-xs text-slate-400 font-mono mt-0.5">
+                    5T Trust Dashboard · 真善美信通
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-2xl font-black text-[#003262]">{overallScore}%</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase">整體信任分數</p>
+                </div>
+                <div className="w-px h-10 bg-slate-100" />
+                <div className="text-right">
+                  <p className="text-2xl font-black text-emerald-600">{passedGates}/5</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase">門徑通過</p>
+                </div>
+                <div className="w-px h-10 bg-slate-100" />
+                <div className="text-right">
+                  <p className="text-2xl font-black text-[#003262]">{totalEvidence}</p>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase">證據總數</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 5T Strip */}
+            <div className="mt-6 max-w-lg">
+              <Protocol5TStrip
+                status={
+                  GATE_STATUSES.map((s) => s.passed) as [
+                    boolean,
+                    boolean,
+                    boolean,
+                    boolean,
+                    boolean
+                  ]
+                }
+                showLabels
+                size="lg"
+              />
+            </div>
           </div>
         </header>
 
@@ -305,8 +336,8 @@ export default function FiveTDashboardPage() {
         {/* ─── Content ─── */}
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {GATE_STATUSES.map((status) => (
-              <GateCard key={status.gate} status={status} />
+            {GATE_STATUSES.map((status, i) => (
+              <GateCard key={status.gate} status={status} index={i} />
             ))}
           </div>
         )}
@@ -328,10 +359,9 @@ export default function FiveTDashboardPage() {
         {activeTab === '4plus1' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {Object.entries(FOUR_PLUS_ONE).map(([key, value], i) => {
-              const gateStatus = GATE_STATUSES.find(
-                (s) => s.gate === (`T${i + 1}` as FiveTGateCode)
-              );
+              const gateStatus = GATE_STATUSES[i];
               const isPassed = gateStatus?.passed ?? false;
+              const gate = FIVE_T_PROTOCOL[gateStatus?.gate ?? 'T1'];
               return (
                 <motion.div
                   key={key}
@@ -339,31 +369,41 @@ export default function FiveTDashboardPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08 }}
                   className={cn(
-                    'bg-white rounded-2xl border p-5 text-center',
+                    'bg-white rounded-2xl border p-5 text-center relative overflow-hidden',
                     isPassed ? 'border-slate-100' : 'border-amber-200 bg-amber-50/30'
                   )}
                 >
-                  <div
-                    className={cn(
-                      'w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3',
-                      isPassed ? 'bg-emerald-50' : 'bg-amber-50'
-                    )}
-                  >
-                    {isPassed ? (
-                      <CheckCircle2 size={24} className="text-emerald-500" />
-                    ) : (
-                      <AlertTriangle size={24} className="text-amber-500" />
-                    )}
-                  </div>
-                  <h3 className="text-sm font-bold text-[#003262] mb-1">{value.label}</h3>
-                  <p className="text-[10px] text-slate-400">{value.question}</p>
-                  <div
-                    className={cn(
-                      'mt-3 text-xs font-bold px-2 py-1 rounded-full inline-block',
-                      isPassed ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
-                    )}
-                  >
-                    {isPassed ? '✓ 已通過' : '⚠ 待改善'}
+                  {/* Breathing Glow */}
+                  {isPassed && (
+                    <div
+                      className={cn(
+                        'absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-20 blur-xl',
+                        gate.bgColor,
+                        'breathing-glow'
+                      )}
+                    />
+                  )}
+
+                  <div className="relative z-10">
+                    <div
+                      className={cn(
+                        'w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 text-white font-black',
+                        isPassed ? gate.bgColor : 'bg-slate-300',
+                        isPassed && 'breathing-glow'
+                      )}
+                    >
+                      {gate.zh}
+                    </div>
+                    <h3 className="text-sm font-bold text-[#003262] mb-1">{value.label}</h3>
+                    <p className="text-[10px] text-slate-400">{value.question}</p>
+                    <div
+                      className={cn(
+                        'mt-3 text-xs font-bold px-2 py-1 rounded-full inline-block',
+                        isPassed ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                      )}
+                    >
+                      {isPassed ? '✓ 已通過' : '⚠ 待改善'}
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -374,7 +414,7 @@ export default function FiveTDashboardPage() {
         {/* ─── Footer ─── */}
         <div className="text-center py-4">
           <p className="text-[10px] text-slate-400">
-            5T 誠信協議 · 真善美信通 · Tangible · Traceable · Trackable · Transparent · Trustworthy
+            5T 誠信協議 · 真善美信通 · Truth · Goodness · Beauty · Trust · Transferful
           </p>
         </div>
       </div>
