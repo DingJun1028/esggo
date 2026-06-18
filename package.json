@@ -4,6 +4,9 @@
   "type": "module",
   "description": "OmniMCP integration for ESGGO platform with master authorization",
   "main": "dist/server.js",
+  "bin": {
+    "oa": "./cli/omni-cli.ts"
+  },
   "scripts": {
     "build": "next build && node scripts/copy-standalone-assets.js",
     "start": "node -r dotenv/config .next/standalone/server.js",
@@ -25,7 +28,11 @@
     "omni:scan": "npx tsx scripts/fnns-scanner.ts",
     "list-stitch-projects": "npx tsx scripts/list-stitch-projects.ts",
     "prepare": "node -e \"try { require('child_process').execSync('husky') } catch (e) {}\"",
-    "test:vrt": "playwright test --project=visual"
+    "test:vrt": "playwright test --project=visual",
+    "oa": "npx ts-node --esm cli/omni-cli.ts",
+    "oa:help": "npx ts-node --esm cli/omni-cli.ts --help",
+    "oa:summon": "npx ts-node --esm cli/omni-cli.ts summon",
+    "oa:heal": "npx ts-node --esm cli/omni-cli.ts flash-heal"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.83",
@@ -67,7 +74,7 @@
     "express-rate-limit": "^7.1.5",
     "firebase": "^12.15.0",
     "firebase-admin": "^13.10.0",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^11.18.2",
     "genkit": "^1.37.0",
     "google-auth-library": "^10.7.0",
     "graphql": "^16.14.1",
@@ -131,6 +138,7 @@
     "@types/ws": "^8.18.1",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/coverage-v8": "^4.1.8",
+    "chalk": "^5.6.2",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.3",
     "eslint-plugin-es": "^4.1.0",
@@ -139,6 +147,7 @@
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.7",
+    "ora": "^9.4.0",
     "playwright": "^1.61.0",
     "storybook": "^7.5.3",
     "ts-node": "^10.9.1",

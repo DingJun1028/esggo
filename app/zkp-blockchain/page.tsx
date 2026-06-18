@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   Lock,
   ShieldCheck,
   Zap,
@@ -37,7 +38,7 @@ interface ZKPStep {
   id: string;
   title: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   status: 'completed' | 'processing' | 'pending';

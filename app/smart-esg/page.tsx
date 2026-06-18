@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   Brain,
   Sparkles,
   TrendingUp,
@@ -30,6 +31,7 @@ import {
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 
 /* ─── Types ─── */
 interface AICapability {
@@ -37,7 +39,7 @@ interface AICapability {
   title: string;
   subtitle: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   before: string;
@@ -50,7 +52,7 @@ interface OpportunityPoint {
   id: string;
   title: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   potentialSaving: string;

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
+  LucideIcon,
   TrendingUp,
   ArrowRight,
   CheckCircle2,
@@ -36,7 +37,7 @@ interface ValueTier {
   name: string;
   subtitle: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   borderColor: string;

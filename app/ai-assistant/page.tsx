@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   Bot,
   Send,
   Mic,
@@ -41,7 +42,7 @@ interface ChatMessage {
   status?: 'sending' | 'sent' | 'error';
   actions?: {
     label: string;
-    icon: React.ComponentType<{ size?: number; className?: string }>;
+    icon: LucideIcon;
     action: string;
   }[];
 }
@@ -49,7 +50,7 @@ interface ChatMessage {
 interface QuickAction {
   id: string;
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   prompt: string;
 }

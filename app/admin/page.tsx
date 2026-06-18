@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   LayoutDashboard,
   Users,
   Database,
@@ -38,6 +39,7 @@ import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 
 /* ─── Types ─── */
 interface SystemMetric {
@@ -45,7 +47,7 @@ interface SystemMetric {
   value: string;
   unit?: string;
   trend?: number;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
 }
 

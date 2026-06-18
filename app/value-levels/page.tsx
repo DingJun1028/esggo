@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
+  LucideIcon,
   TrendingUp,
   FileText,
   ShieldCheck,
@@ -37,14 +38,14 @@ interface LevelData {
   subtitle: string;
   period: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   borderColor: string;
   features: {
     title: string;
     description: string;
-    icon: React.ComponentType<{ size?: number; className?: string }>;
+    icon: LucideIcon;
     color: string;
   }[];
   metrics: { label: string; value: string; trend?: string }[];

@@ -26,6 +26,7 @@ import {
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { OmniButton } from '@/components/ui/omni/OmniButton';
 
 /* ─── Types ─── */
 interface CommunityPost {

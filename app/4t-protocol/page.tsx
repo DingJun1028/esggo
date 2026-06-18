@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   ShieldCheck,
   Eye,
   Globe,
@@ -36,7 +37,7 @@ interface ProtocolDimension {
   zh: string;
   subtitle: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   checks: string[];

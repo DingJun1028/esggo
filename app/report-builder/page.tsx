@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   FileText,
   Download,
   Eye,
@@ -40,7 +41,7 @@ interface ReportTemplate {
   name: string;
   framework: 'GRI' | 'SASB' | 'TCFD' | 'ISSB' | 'Custom';
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   sections: string[];
   estimatedTime: string;

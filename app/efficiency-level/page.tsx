@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import 'framer-motion';
 import {
+  LucideIcon,
   Zap,
   Clock,
   TrendingUp,
@@ -32,7 +33,7 @@ interface EfficiencyMetric {
   before: string;
   after: string;
   improvement: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
 }
 
@@ -40,7 +41,7 @@ interface DayMilestone {
   day: string;
   title: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   completed: boolean;

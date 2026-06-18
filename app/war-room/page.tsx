@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
+  LucideIcon,
   Globe,
   ShieldCheck,
   AlertTriangle,
@@ -43,7 +44,7 @@ interface RiskNode {
 interface PestelFactor {
   id: string;
   name: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   score: number;
   trend: 'up' | 'down' | 'stable';
   factors: { name: string; impact: number; description: string }[];
