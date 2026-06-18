@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import {
   Leaf,
   Droplets,
@@ -16,6 +16,7 @@ import {
   RefreshCw,
   Loader2,
   CheckCircle2,
+  Lock as LockIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
@@ -40,7 +41,7 @@ interface KpiCardData {
   title: string;
   value: string;
   unit: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ElementType;
   iconColor: string;
   iconBg: string;
   trend?: number;
@@ -398,7 +399,7 @@ export default function DashboardPage() {
                         <td className="px-4 py-3">
                           {row.zkp_sealed ? (
                             <div className="flex items-center gap-1.5 text-xs text-emerald-600">
-                              <Lock size={12} />
+                              <LockIcon size={12} />
                               <span className="font-mono">{row.hash.substring(0, 10)}...</span>
                             </div>
                           ) : (

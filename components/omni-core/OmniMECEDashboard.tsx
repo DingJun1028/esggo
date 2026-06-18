@@ -3,7 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Target, Zap, Activity } from 'lucide-react';
-import { meceEngine, MECEExecutionLog, OMNI_MECE_PRINCIPLES, OmniMECEKey } from '@/lib/omni-core/omni-mece-engine';
+import {
+  meceEngine,
+  MECEExecutionLog,
+  OMNI_MECE_PRINCIPLES,
+  OmniMECEKey,
+} from '@/lib/omni-core/omni-mece-engine';
 
 export default function OmniMECEDashboard() {
   const [logs, setLogs] = useState<MECEExecutionLog[]>([]);
@@ -22,9 +27,9 @@ export default function OmniMECEDashboard() {
   const totalScore = logs.reduce((acc, log) => acc + log.impactMetric, 0);
 
   return (
-    <div className="relative bg-[#020617]/60 backdrop-blur-xl border border-indigo-500/30 rounded-2xl p-6 mt-8 overflow-hidden group w-full">
+    <div className="relative bg-[#020617]/60 border border-indigo-500/30 rounded-2xl p-6 mt-8 overflow-hidden group w-full">
       <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-      
+
       <div className="flex items-center justify-between mb-6 border-b border-indigo-500/20 pb-4">
         <h2 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-300 flex items-center gap-2">
           <ShieldCheck className="text-indigo-400" />
@@ -33,7 +38,9 @@ export default function OmniMECEDashboard() {
         <div className="flex items-center gap-4">
           <div className="text-right">
             <p className="text-xs text-slate-500 uppercase tracking-widest">累積進化能量</p>
-            <p className="text-xl font-mono text-indigo-400 font-bold">{totalScore} <span className="text-xs text-slate-500">T/E</span></p>
+            <p className="text-xl font-mono text-indigo-400 font-bold">
+              {totalScore} <span className="text-xs text-slate-500">T/E</span>
+            </p>
           </div>
           <Activity className="text-emerald-400 animate-pulse" />
         </div>
@@ -47,24 +54,31 @@ export default function OmniMECEDashboard() {
           </h3>
           <div className="space-y-3">
             {logs.length === 0 ? (
-              <p className="text-sm text-slate-500 italic">尚未偵測到進化事件，系統處於寂靜狀態...</p>
+              <p className="text-sm text-slate-500 italic">
+                尚未偵測到進化事件，系統處於寂靜狀態...
+              </p>
             ) : (
               logs.map((log, idx) => (
-                <motion.div 
+                <motion.div
                   key={`${log.timestamp}-${idx}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-3 bg-black/40 border border-white/5 rounded-lg text-sm"
+                  className="p-3 border border-white/5 rounded-lg text-sm"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-bold text-slate-200">{log.event}</span>
-                    <span className="text-[10px] text-slate-500 font-mono">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                    <span className="text-[10px] text-slate-500 font-mono">
+                      {new Date(log.timestamp).toLocaleTimeString()}
+                    </span>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
-                    {log.principleKeys.map(k => {
+                    {log.principleKeys.map((k) => {
                       const p = OMNI_MECE_PRINCIPLES[k];
                       return (
-                        <span key={k} className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        <span
+                          key={k}
+                          className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                        >
                           {p?.name}
                         </span>
                       );
@@ -81,15 +95,17 @@ export default function OmniMECEDashboard() {
           <h3 className="text-sm font-bold text-slate-300 mb-4 flex items-center gap-2 uppercase tracking-wider">
             <Target size={16} className="text-emerald-400" /> 短板診斷 (Gap Analysis)
           </h3>
-          <p className="text-xs text-slate-400 mb-4">以下法則在近期運行中尚未被觸發，建議排程對應之優化任務以達「無縫接軌」與「最佳實踐」。</p>
-          
+          <p className="text-xs text-slate-400 mb-4">
+            以下法則在近期運行中尚未被觸發，建議排程對應之優化任務以達「無縫接軌」與「最佳實踐」。
+          </p>
+
           <div className="flex flex-wrap gap-2">
             {gaps.length === 0 ? (
               <p className="text-sm text-emerald-400 font-bold flex items-center gap-1">
                 <ShieldCheck size={16} /> 所有法則皆已落實，系統處於圓滿狀態！
               </p>
             ) : (
-              gaps.map(k => {
+              gaps.map((k) => {
                 const p = OMNI_MECE_PRINCIPLES[k];
                 return (
                   <div key={k} className="group relative">

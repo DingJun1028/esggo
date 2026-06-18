@@ -347,7 +347,7 @@ const OmniSustainWriteEditor = forwardRef<OmniSustainWriteEditorRef, OmniSustain
         <EditorContent editor={editor} />
 
         {/* 5T Protocol: Trustworthy Hash Lock Badge */}
-        <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur text-[10px] text-slate-500 dark:text-slate-400 font-mono rounded-md border border-slate-200/50 dark:border-slate-700/50 opacity-50 group-hover:opacity-100 transition-opacity">
+        <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-slate-100/80 dark:bg-slate-800/80 text-[10px] text-slate-500 dark:text-slate-400 font-mono rounded-md border border-slate-200/50 dark:border-slate-700/50 opacity-50 group-hover:opacity-100 transition-opacity">
           <Lock size={10} className="text-cyan-600 dark:text-cyan-400" />
           <span>5T-LOCK:{hashLock}</span>
         </div>

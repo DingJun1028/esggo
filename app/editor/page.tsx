@@ -256,7 +256,7 @@ export default function EditorPage() {
 
         <OmniBaseCard
           variant="glass"
-          className="p-3 flex flex-col gap-1 border-slate-200 dark:border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar backdrop-blur-2xl bg-white/50 dark:bg-white/[0.02]"
+          className="p-3 flex flex-col gap-1 border-slate-200 dark:border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar dark:"
         >
           {REPORT_CHAPTERS.map((chapter) => (
             <button
@@ -308,7 +308,7 @@ export default function EditorPage() {
       {/* Main Workspace Area */}
       <div className="flex-1 flex flex-col gap-6 min-w-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Editor Toolbar */}
-        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-5 rounded-2xl border border-slate-200 dark:border-white/10 relative overflow-hidden">
+        <header className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 dark:bg-slate-900/40 shadow-[0_8px_32px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-5 rounded-2xl border border-slate-200 dark:border-white/10 relative overflow-hidden">
           {/* Subtle accent glow */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500/0 via-cyan-500/30 to-blue-600/0"></div>
 
@@ -332,7 +332,7 @@ export default function EditorPage() {
                   </span>
                 ))}
               </div>
-              <div className="h-4 w-px bg-slate-300 dark:bg-white/20 hidden sm:block"></div>
+              <div className="h-4 w-px bg-slate-300 dark: hidden sm:block"></div>
               <div className="text-xs text-slate-400 font-mono flex items-center gap-2">
                 <span>目標篇幅:</span>
                 <span className="text-cyan-400 font-bold">
@@ -354,7 +354,7 @@ export default function EditorPage() {
                     activeChapter.gri
                   )
                 }
-                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-md transition-colors"
+                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover: rounded-md transition-colors"
                 title="復原 (Undo)"
               >
                 <Undo2 size={16} />
@@ -368,7 +368,7 @@ export default function EditorPage() {
                     activeChapter.gri
                   )
                 }
-                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-md transition-colors"
+                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover: rounded-md transition-colors"
                 title="重做 (Redo)"
               >
                 <Redo2 size={16} />
@@ -394,12 +394,12 @@ export default function EditorPage() {
         {/* AI Control Panel (Optional Custom Prompt) */}
         <OmniBaseCard
           variant="glass"
-          className="p-4 border-slate-200 dark:border-white/10 shadow-sm dark:shadow-lg backdrop-blur-xl bg-white/80 dark:bg-white/[0.02]"
+          className="p-4 border-slate-200 dark:border-white/10 shadow-sm dark:shadow-lg dark:"
         >
           <input
             type="text"
             placeholder="附加指示 (可留空，如：強調水資源回收的具體投資額與減量成效...)"
-            className="w-full bg-slate-100 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white dark:focus:bg-black/40 transition-colors backdrop-blur-sm"
+            className="w-full bg-slate-100 dark: border border-slate-200 dark:border-white/10 rounded-lg p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:bg-white dark:focus: transition-colors"
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             disabled={isGenerating}
@@ -409,12 +409,12 @@ export default function EditorPage() {
         {/* TipTap Editor Surface */}
         <OmniBaseCard
           variant="glass"
-          className="flex-1 flex flex-col overflow-hidden border-slate-200 dark:border-white/10 relative p-1 shadow-md dark:shadow-2xl backdrop-blur-2xl bg-white/80 dark:bg-white/[0.03]"
+          className="flex-1 flex flex-col overflow-hidden border-slate-200 dark:border-white/10 relative p-1 shadow-md dark:shadow-2xl dark:"
         >
           {/* Subtle liquid glass background glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-cyan-500/5 blur-[100px] pointer-events-none mix-blend-screen" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-cyan-500/5 blur-[100px] pointer-events-none" />
 
-          <div className="flex-1 overflow-y-auto bg-white/90 dark:bg-slate-950/40 rounded-xl relative z-10">
+          <div className="flex-1 overflow-y-auto dark:bg-slate-950/40 rounded-xl relative z-10">
             <OmniSustainWriteEditor
               ref={editorRef}
               value={currentContent}

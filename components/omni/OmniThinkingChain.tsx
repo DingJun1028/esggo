@@ -524,7 +524,7 @@ export function OmniThinkingChain({
             {doneCount}/{steps.length}
           </span>
         </div>
-        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+        <div className="h-1 rounded-full overflow-hidden">
           <motion.div
             className={`h-full rounded-full ${
               done

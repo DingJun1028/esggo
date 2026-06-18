@@ -5,7 +5,18 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { Calculator, Search, Plus, ShieldCheck, Euro, Brain, Lock, Loader2, Factory, Scale } from 'lucide-react';
+import {
+  Calculator,
+  Search,
+  Plus,
+  ShieldCheck,
+  Euro,
+  Brain,
+  Lock,
+  Loader2,
+  Factory,
+  Scale,
+} from 'lucide-react';
 
 export default function CbamCalculatorPage() {
   const [data, setData] = useState<any[]>([]);
@@ -29,17 +40,67 @@ export default function CbamCalculatorPage() {
       } else {
         // Fallback mock data for CBAM
         setData([
-          { id: 1, date: '2026-06-12', product: '鋁製零件 (Aluminium)', emissions: 24.5, volume: 1500, unit: '噸', cost: 18500, hash_lock: '0x8f...3a21', source_origin: 'ERP Sync' },
-          { id: 2, date: '2026-06-11', product: '鋼鐵螺絲 (Steel Fasteners)', emissions: 18.2, volume: 3200, unit: '噸', cost: 42000, hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-10', product: '水泥熟料 (Cement Clinker)', emissions: 8.4, volume: 5000, unit: '噸', cost: 12000, hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          {
+            id: 1,
+            date: '2026-06-12',
+            product: '鋁製零件 (Aluminium)',
+            emissions: 24.5,
+            volume: 1500,
+            unit: '噸',
+            cost: 18500,
+            hash_lock: '0x8f...3a21',
+            source_origin: 'ERP Sync',
+          },
+          {
+            id: 2,
+            date: '2026-06-11',
+            product: '鋼鐵螺絲 (Steel Fasteners)',
+            emissions: 18.2,
+            volume: 3200,
+            unit: '噸',
+            cost: 42000,
+            hash_lock: null,
+            source_origin: 'Manual',
+          },
+          {
+            id: 3,
+            date: '2026-06-10',
+            product: '水泥熟料 (Cement Clinker)',
+            emissions: 8.4,
+            volume: 5000,
+            unit: '噸',
+            cost: 12000,
+            hash_lock: '0x1c...9d4f',
+            source_origin: 'System',
+          },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-12', product: '鋁製零件 (Aluminium)', emissions: 24.5, volume: 1500, unit: '噸', cost: 18500, hash_lock: '0x8f...3a21', source_origin: 'ERP Sync' },
-        { id: 2, date: '2026-06-11', product: '鋼鐵螺絲 (Steel Fasteners)', emissions: 18.2, volume: 3200, unit: '噸', cost: 42000, hash_lock: null, source_origin: 'Manual' },
+        {
+          id: 1,
+          date: '2026-06-12',
+          product: '鋁製零件 (Aluminium)',
+          emissions: 24.5,
+          volume: 1500,
+          unit: '噸',
+          cost: 18500,
+          hash_lock: '0x8f...3a21',
+          source_origin: 'ERP Sync',
+        },
+        {
+          id: 2,
+          date: '2026-06-11',
+          product: '鋼鐵螺絲 (Steel Fasteners)',
+          emissions: 18.2,
+          volume: 3200,
+          unit: '噸',
+          cost: 42000,
+          hash_lock: null,
+          source_origin: 'Manual',
+        },
       ]);
     } finally {
       setLoading(false);
@@ -52,14 +113,16 @@ export default function CbamCalculatorPage() {
       const response = await fetch('/api/vault/seal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'cbam-calculator', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
+        body: JSON.stringify({
+          evidence: { table: 'cbam-calculator', recordId: id, timestamp: Date.now() },
+          type: '5t-seal',
+        }),
       });
       const resData = await response.json();
       if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
+        setData((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, hash_lock: resData.hashLock } : m))
+        );
       } else {
         alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
@@ -77,7 +140,7 @@ export default function CbamCalculatorPage() {
       const response = await fetch('/api/vault/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
+        body: JSON.stringify({ recordId: id, type: '5t-seal' }),
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
@@ -103,54 +166,82 @@ export default function CbamCalculatorPage() {
 
   const columns = [
     { key: 'date', label: '申報期 (Period)' },
-    { key: 'product', label: '出口產品 (Product Category)', render: (val: any) => (
-      <span className="font-bold text-amber-400 flex items-center gap-2"><Factory size={14}/> {val}</span>
-    ) },
+    {
+      key: 'product',
+      label: '出口產品 (Product Category)',
+      render: (val: any) => (
+        <span className="font-bold text-amber-400 flex items-center gap-2">
+          <Factory size={14} /> {val}
+        </span>
+      ),
+    },
     { key: 'emissions', label: '產品含碳量 (tCO2e/t)' },
-    { key: 'volume', label: '出口量 (Volume)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
-    { key: 'cost', label: '預估 CBAM 憑證成本 (EUR)', render: (val: any) => (
-      <span className="text-emerald-400 font-mono font-bold">€ {val.toLocaleString()}</span>
-    ) },
+    {
+      key: 'volume',
+      label: '出口量 (Volume)',
+      render: (val: any, row: any) => (
+        <span>
+          {val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span>
+        </span>
+      ),
+    },
+    {
+      key: 'cost',
+      label: '預估 CBAM 憑證成本 (EUR)',
+      render: (val: any) => (
+        <span className="text-emerald-400 font-mono font-bold">€ {val.toLocaleString()}</span>
+      ),
+    },
     { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </OmniBadge>
-      ) : (
-        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+    {
+      key: 'hash_lock',
+      label: '5T Hash Lock',
+      render: (val: any) =>
+        val ? (
+          <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+            {val.substring(0, 8)}...
+          </OmniBadge>
+        ) : (
+          <OmniBadge variant="default" size="sm">
+            未封印
+          </OmniBadge>
+        ),
+    },
+    {
+      key: 'action',
+      label: '操作 (Actions)',
+      render: (_: any, row: any) => (
+        <div className="flex items-center gap-3">
+          {!row.hash_lock && (
+            <button
+              onClick={() => handleSeal(row.id)}
+              disabled={sealingId === row.id}
+              className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+            >
+              {sealingId === row.id ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Lock size={14} />
+              )}
+              T5 封印
+            </button>
+          )}
+          <button
+            onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
+            disabled={verifyingId === row.id}
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
           >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
+            {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
+            {row.hash_lock ? '驗證 5T' : '編輯'}
           </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
           <div className="flex items-center gap-4">
@@ -160,16 +251,36 @@ export default function CbamCalculatorPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">CBAM-CALCULATOR</span>
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={12} />}>
+                  OmniAgent Ready
+                </OmniBadge>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+                  CBAM-CALCULATOR
+                </span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">歐盟 CBAM 碳關稅試算器</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">CARBON BORDER ADJUSTMENT MECHANISM</p>
+              <h1 className="text-4xl font-black text-white tracking-tight">
+                歐盟 CBAM 碳關稅試算器
+              </h1>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">
+                CARBON BORDER ADJUSTMENT MECHANISM
+              </p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+            <OmniButton
+              variant="outline"
+              icon={<Search size={16} />}
+              className="flex-1 md:flex-none"
+            >
+              檢索
+            </OmniButton>
+            <OmniButton
+              variant="primary"
+              icon={<Plus size={16} />}
+              onClick={handleAddRecord}
+              isLoading={isProcessing}
+              className="flex-1 md:flex-none"
+            >
               新增紀錄
             </OmniButton>
           </div>
@@ -182,7 +293,9 @@ export default function CbamCalculatorPage() {
               <span className="text-sm font-bold uppercase tracking-widest">納管出口批次</span>
               <Scale size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">12<span className="text-lg text-slate-500 ml-2 font-normal">Batches</span></div>
+            <div className="text-4xl font-black text-white">
+              12<span className="text-lg text-slate-500 ml-2 font-normal">Batches</span>
+            </div>
             <p className="text-xs text-amber-400/80 font-mono">Status: Q3 Declaration</p>
           </OmniBaseCard>
 
@@ -191,7 +304,9 @@ export default function CbamCalculatorPage() {
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <div className="text-4xl font-black text-white">
+              98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
+            </div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </OmniBaseCard>
 
@@ -200,7 +315,9 @@ export default function CbamCalculatorPage() {
               <span className="text-sm font-bold uppercase tracking-widest">潛在財務衝擊</span>
               <Euro size={18} className="text-rose-400" />
             </div>
-            <div className="text-4xl font-black text-white">72.5<span className="text-lg text-slate-500 ml-2 font-normal">k €</span></div>
+            <div className="text-4xl font-black text-white">
+              72.5<span className="text-lg text-slate-500 ml-2 font-normal">k €</span>
+            </div>
             <p className="text-xs text-rose-400/80 font-mono">Estimated Liability</p>
           </OmniBaseCard>
         </div>
@@ -208,44 +325,45 @@ export default function CbamCalculatorPage() {
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard 
-              variant="default" 
-              title="業務資料視圖" 
+            <OmniBaseCard
+              variant="default"
+              title="業務資料視圖"
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
-              <OmniBaseTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
+              <OmniBaseTable columns={columns} data={data} loading={loading} />
             </OmniBaseCard>
           </div>
-          
+
           <div className="space-y-6">
-            <OmniBaseCard 
-              variant="glow" 
-              title="OmniAgent 合規參謀" 
+            <OmniBaseCard
+              variant="glow"
+              title="OmniAgent 合規參謀"
               subtitle="CBAM Declaration Advisor"
             >
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  我們已根據歐盟最新 CBAM 申報準則 (EU 2023/956)，為您的出口產品重新計算了隱含碳排放 (Embedded Emissions)。
+                  我們已根據歐盟最新 CBAM 申報準則 (EU 2023/956)，為您的出口產品重新計算了隱含碳排放
+                  (Embedded Emissions)。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
                   <h4 className="font-bold text-cyan-400 mb-2">減免建議 (Cost Reduction)</h4>
                   <p className="text-slate-400 text-xs leading-relaxed">
-                    您在台灣本地已繳納之碳費，可依規定申請抵扣。預估 <strong>鋼鐵螺絲</strong> 批次可抵減約 <span className="text-emerald-400 font-bold">€ 4,500</span> 的憑證成本。請準備好碳費繳納證明，交由系統自動產製申報書。
+                    您在台灣本地已繳納之碳費，可依規定申請抵扣。預估 <strong>鋼鐵螺絲</strong>{' '}
+                    批次可抵減約 <span className="text-emerald-400 font-bold">€ 4,500</span>{' '}
+                    的憑證成本。請準備好碳費繳納證明，交由系統自動產製申報書。
                   </p>
                 </div>
-                <OmniButton variant="outline" className="w-full mt-4 bg-white/5 border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400">
+                <OmniButton
+                  variant="outline"
+                  className="w-full mt-4 border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400"
+                >
                   一鍵生成歐盟申報 XML
                 </OmniButton>
               </div>
             </OmniBaseCard>
           </div>
         </div>
-
       </div>
     </div>
   );

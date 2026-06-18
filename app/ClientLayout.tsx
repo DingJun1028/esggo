@@ -9,6 +9,7 @@ import { ToastProvider, ToastContainer } from '../components/ui';
 import OmniCommandPalette from '../components/omni/OmniCommandPalette';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import AppShellV2 from './AppShellV2';
+import { DebugPanel } from '../lib/debug-platform';
 
 function SystemHealthBanner() {
   const { systemStatus } = useAuth();
@@ -112,6 +113,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const isDebugEnabled =
+    process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_DEBUG_ENABLED === 'true';
+
   return (
     <ThemeProvider>
       <ToastProvider>
@@ -119,6 +123,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <Suspense fallback={null}>
             <AppContent>{children}</AppContent>
           </Suspense>
+          {isDebugEnabled && <DebugPanel />}
         </AuthProvider>
       </ToastProvider>
     </ThemeProvider>

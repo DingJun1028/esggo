@@ -324,7 +324,7 @@ export default function Sidebar({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setMobileOpen?.(false)}
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] lg:hidden"
+            className="fixed inset-0 bg-slate-900/60 z-[45] lg:hidden"
           />
         )}
       </AnimatePresence>

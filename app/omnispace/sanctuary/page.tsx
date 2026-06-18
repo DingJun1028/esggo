@@ -13,11 +13,11 @@ export default function SanctuaryDashboardPage() {
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div
-          className="absolute top-[-10%] left-[20%] w-[60%] h-[60%] bg-indigo-500 opacity-10 blur-[150px] rounded-full mix-blend-screen animate-pulse"
+          className="absolute top-[-10%] left-[20%] w-[60%] h-[60%] bg-indigo-500 opacity-10 blur-[150px] rounded-full animate-pulse"
           style={{ animationDuration: '15s' }}
         />
         <div
-          className="absolute bottom-[-10%] right-[10%] w-[40%] h-[40%] bg-cyan-500 opacity-10 blur-[120px] rounded-full mix-blend-screen animate-pulse"
+          className="absolute bottom-[-10%] right-[10%] w-[40%] h-[40%] bg-cyan-500 opacity-10 blur-[120px] rounded-full animate-pulse"
           style={{ animationDuration: '12s' }}
         />
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
@@ -46,7 +46,7 @@ export default function SanctuaryDashboardPage() {
       <main className="relative z-10 flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 mt-8">
         {/* Left Stats Panel */}
         <div className="flex flex-col gap-6 w-full max-w-xs">
-          <div className="bg-black/40 border border-cyan-500/20 rounded-2xl p-5 backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+          <div className="border border-cyan-500/20 rounded-2xl p-5 -md shadow-[0_0_20px_rgba(6,182,212,0.1)]">
             <h3 className="text-xs text-cyan-500 font-bold uppercase tracking-widest flex items-center gap-2 mb-4">
               <Activity size={14} /> 全境之骨 (Integrity)
             </h3>
@@ -55,7 +55,7 @@ export default function SanctuaryDashboardPage() {
             </div>
             <div className="text-xs text-slate-500 mt-1">5T Protocol Compliance Rate</div>
           </div>
-          <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-5 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div className="border border-emerald-500/20 rounded-2xl p-5 -md shadow-[0_0_20px_rgba(16,185,129,0.1)]">
             <h3 className="text-xs text-emerald-500 font-bold uppercase tracking-widest flex items-center gap-2 mb-4">
               <Network size={14} /> 全域之脈 (Flow)
             </h3>
@@ -67,13 +67,13 @@ export default function SanctuaryDashboardPage() {
         </div>
 
         {/* Center Sanctuary */}
-        <div className="flex items-center justify-center bg-black/20 p-12 rounded-[3rem] border border-white/5 backdrop-blur-xl shadow-2xl relative">
+        <div className="flex items-center justify-center p-12 rounded-[3rem] border border-white/5 shadow-2xl relative">
           <OmniConcentricSanctuary />
         </div>
 
         {/* Right Stats Panel */}
         <div className="flex flex-col gap-6 w-full max-w-xs">
-          <div className="bg-black/40 border border-purple-500/20 rounded-2xl p-5 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+          <div className="border border-purple-500/20 rounded-2xl p-5 -md shadow-[0_0_20px_rgba(168,85,247,0.1)]">
             <h3 className="text-xs text-purple-500 font-bold uppercase tracking-widest flex items-center gap-2 mb-4">
               <Zap size={14} /> 全能之核 (Decisiveness)
             </h3>
@@ -82,7 +82,7 @@ export default function SanctuaryDashboardPage() {
             </div>
             <div className="text-xs text-slate-500 mt-1">Active Swarm Agent Nodes</div>
           </div>
-          <div className="bg-black/40 border border-indigo-500/20 rounded-2xl p-5 backdrop-blur-md shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+          <div className="border border-indigo-500/20 rounded-2xl p-5 -md shadow-[0_0_20px_rgba(99,102,241,0.1)]">
             <h3 className="text-xs text-indigo-500 font-bold uppercase tracking-widest flex items-center gap-2 mb-4">
               <Server size={14} /> 全息之腦 (Evolution)
             </h3>

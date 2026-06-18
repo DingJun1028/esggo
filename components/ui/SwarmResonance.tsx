@@ -25,9 +25,11 @@ export function SwarmResonance() {
         timestamp: new Date().toLocaleTimeString(),
         event,
         payload,
-        agent: (payload as any)?.agent || (event.startsWith('AGENT_') ? (payload as any)?.agent : 'System')
+        agent:
+          (payload as any)?.agent ||
+          (event.startsWith('AGENT_') ? (payload as any)?.agent : 'System'),
       };
-      setLogs(prev => [newLog, ...prev].slice(0, 50));
+      setLogs((prev) => [newLog, ...prev].slice(0, 50));
     };
 
     // Subscribe to all known events
@@ -41,24 +43,30 @@ export function SwarmResonance() {
       omniAgentBus.subscribe('MISSION_COMPLETE', (p) => handleEvent('MISSION_COMPLETE', p)),
     ];
 
-    return () => unsubscribes.forEach(unsub => unsub());
+    return () => unsubscribes.forEach((unsub) => unsub());
   }, []);
 
   const getAgentIcon = (agent?: string) => {
     switch (agent) {
-      case 'ESG_Auditor': return <Shield className="text-emerald-400" size={14} />;
-      case 'Agent0': return <Cpu className="text-cyan-400" size={14} />;
-      case 'OmniAgent': return <Zap className="text-amber-400" size={14} />;
-      default: return <Activity className="text-blue-400" size={14} />;
+      case 'ESG_Auditor':
+        return <Shield className="text-emerald-400" size={14} />;
+      case 'Agent0':
+        return <Cpu className="text-cyan-400" size={14} />;
+      case 'OmniAgent':
+        return <Zap className="text-amber-400" size={14} />;
+      default:
+        return <Activity className="text-blue-400" size={14} />;
     }
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/5">
+    <div className="flex flex-col h-full bg-slate-900/80 border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
         <div className="flex items-center gap-2">
           <Terminal size={16} className="text-cyan-400" />
-          <span className="text-xs font-black tracking-widest uppercase text-white/90">Swarm Resonance Monitor</span>
+          <span className="text-xs font-black tracking-widest uppercase text-white/90">
+            Swarm Resonance Monitor
+          </span>
         </div>
         <div className="flex gap-1">
           <div className="w-2 h-2 rounded-full bg-red-500/50" />
@@ -67,7 +75,7 @@ export function SwarmResonance() {
         </div>
       </div>
 
-      <div 
+      <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 font-mono text-[10px] space-y-3 custom-scrollbar"
       >
@@ -87,7 +95,7 @@ export function SwarmResonance() {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-white/30">[{log.timestamp}]</span>
-                  <span className="px-1.5 py-0.5 rounded bg-white/5 text-cyan-400 font-bold border border-white/5">
+                  <span className="px-1.5 py-0.5 rounded text-cyan-400 font-bold border border-white/5">
                     {log.event}
                   </span>
                   <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800 text-white/60 text-[9px]">
@@ -104,8 +112,10 @@ export function SwarmResonance() {
         </AnimatePresence>
       </div>
 
-      <div className="px-4 py-2 bg-black/20 border-t border-white/5 flex items-center justify-between">
-        <span className="text-[9px] text-white/30 font-bold uppercase tracking-tighter">Connection: Active (5T Secure)</span>
+      <div className="px-4 py-2 border-t border-white/5 flex items-center justify-between">
+        <span className="text-[9px] text-white/30 font-bold uppercase tracking-tighter">
+          Connection: Active (5T Secure)
+        </span>
         <span className="text-[9px] text-cyan-500/50 font-mono animate-pulse">● LIVE</span>
       </div>
     </div>

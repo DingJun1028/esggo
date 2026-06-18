@@ -168,12 +168,12 @@ export default function ReportBuilderUI() {
               </div>
 
               <OmniBaseCard variant="glass" className="overflow-hidden">
-                <div className="p-4 border-b border-white/5 bg-white/[0.02]">
+                <div className="p-4 border-b border-white/5">
                   <h3 className="text-sm font-bold text-slate-300 font-mono">
                     報告結果預覽 (Document Preview)
                   </h3>
                 </div>
-                <div className="p-8 h-[600px] overflow-y-auto font-serif prose prose-invert prose-slate max-w-none whitespace-pre-wrap selection:bg-teal-500/30 bg-black/20 text-slate-300">
+                <div className="p-8 h-[600px] overflow-y-auto font-serif prose prose-invert prose-slate max-w-none whitespace-pre-wrap selection:bg-teal-500/30 text-slate-300">
                   {reportDoc}
                 </div>
               </OmniBaseCard>

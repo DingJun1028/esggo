@@ -14,7 +14,10 @@ function ConsentContent() {
   const consentId = searchParams?.get('consent');
   const [status, setStatus] = useState<'pending' | 'approving' | 'success' | 'error'>('pending');
   const [errorMsg, setErrorMsg] = useState('');
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   useEffect(() => {
     if (!consentId) {
@@ -26,12 +29,12 @@ function ConsentContent() {
   const handleApprove = async () => {
     if (!consentId) return;
     setStatus('approving');
-    
+
     try {
       // 在實際生產環境中，這裡會呼叫 Supabase 的 /auth/v1/oauth/consent 端點
       // 這裡示範如何透過 Supabase JS Client 處理同意邏輯 (需確認 Supabase 具體支援方式，通常是透過 redirect)
       const { data, error } = await supabase.auth.getSession();
-      
+
       if (error || !data.session) {
         throw new Error('未授權的存取，請先登入。');
       }
@@ -41,7 +44,7 @@ function ConsentContent() {
       const response = await fetch('/api/oauth/consent/approve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ consent_id: consentId, user_id: data.session.user.id })
+        body: JSON.stringify({ consent_id: consentId, user_id: data.session.user.id }),
       });
 
       if (!response.ok) {
@@ -53,7 +56,6 @@ function ConsentContent() {
         // 重導回請求方，或者關閉視窗
         window.close();
       }, 3000);
-
     } catch (err) {
       setStatus('error');
       setErrorMsg(err instanceof Error ? err.message : '發生未知錯誤');
@@ -71,8 +73,8 @@ function ConsentContent() {
   return (
     <div className="min-h-screen bg-void-stark text-white flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-void-stark to-void-stark pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         className="max-w-md w-full relative z-10"
@@ -87,17 +89,22 @@ function ConsentContent() {
             </div>
 
             <div className="space-y-2">
-              <OmniBadge variant="success" className="mb-2">OAuth 2.1 授權</OmniBadge>
+              <OmniBadge variant="success" className="mb-2">
+                OAuth 2.1 授權
+              </OmniBadge>
               <h1 className="text-2xl font-black tracking-tight">授權存取請求</h1>
               <p className="text-sm text-white/60 leading-relaxed">
-                <strong className="text-white">OmniAgent (MCP)</strong> 想要存取您的 ESGGO 帳號與 5T 治理數據。
+                <strong className="text-white">OmniAgent (MCP)</strong> 想要存取您的 ESGGO 帳號與 5T
+                治理數據。
               </p>
             </div>
 
             {status === 'pending' && (
               <>
-                <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-left space-y-3">
-                  <h3 className="text-[10px] font-black uppercase text-white/40 tracking-widest">要求權限範圍 (Scopes)</h3>
+                <div className="w-full border border-white/10 rounded-2xl p-4 text-left space-y-3">
+                  <h3 className="text-[10px] font-black uppercase text-white/40 tracking-widest">
+                    要求權限範圍 (Scopes)
+                  </h3>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <Lock size={16} className="text-emerald-400 shrink-0" />
@@ -110,15 +117,21 @@ function ConsentContent() {
                       <Activity size={16} className="text-cyan-400 shrink-0" />
                       <div>
                         <p className="text-xs font-bold text-white/90">寫入 Audit Logs</p>
-                        <p className="text-[10px] text-white/50 mt-0.5">允許代表您寫入不可篡改的稽核日誌。</p>
+                        <p className="text-[10px] text-white/50 mt-0.5">
+                          允許代表您寫入不可篡改的稽核日誌。
+                        </p>
                       </div>
                     </li>
                   </ul>
                 </div>
 
                 <div className="flex gap-4 w-full pt-4">
-                  <OmniButton variant="secondary" onClick={handleDeny} className="flex-1 py-4">拒絕</OmniButton>
-                  <OmniButton variant="primary" onClick={handleApprove} className="flex-1 py-4">允許存取</OmniButton>
+                  <OmniButton variant="secondary" onClick={handleDeny} className="flex-1 py-4">
+                    拒絕
+                  </OmniButton>
+                  <OmniButton variant="primary" onClick={handleApprove} className="flex-1 py-4">
+                    允許存取
+                  </OmniButton>
                 </div>
               </>
             )}
@@ -127,12 +140,12 @@ function ConsentContent() {
               <div className="py-12 space-y-4 flex flex-col items-center">
                 <Bot size={48} className="text-cyan-core animate-bounce" />
                 <p className="text-sm font-bold text-white/80">正在建立加密授權通道...</p>
-                <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }} 
-                    animate={{ width: '100%' }} 
-                    transition={{ duration: 2, ease: "linear" }}
-                    className="h-full bg-cyan-core" 
+                <div className="w-48 h-1 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 2, ease: 'linear' }}
+                    className="h-full bg-cyan-core"
                   />
                 </div>
               </div>
@@ -144,7 +157,11 @@ function ConsentContent() {
                   <ShieldCheck size={32} />
                 </div>
                 <h3 className="text-xl font-bold text-emerald-400">授權成功</h3>
-                <p className="text-xs text-white/50">OmniAgent 已成功與您的身份綁定。<br/>此視窗將自動關閉。</p>
+                <p className="text-xs text-white/50">
+                  OmniAgent 已成功與您的身份綁定。
+                  <br />
+                  此視窗將自動關閉。
+                </p>
               </div>
             )}
 
@@ -155,13 +172,17 @@ function ConsentContent() {
                 </div>
                 <h3 className="text-xl font-bold text-rose-400">授權失敗</h3>
                 <p className="text-xs text-rose-300/70">{errorMsg}</p>
-                <OmniButton variant="secondary" onClick={() => window.close()} className="mt-4">關閉視窗</OmniButton>
+                <OmniButton variant="secondary" onClick={() => window.close()} className="mt-4">
+                  關閉視窗
+                </OmniButton>
               </div>
             )}
           </div>
-          
+
           <div className="mt-8 text-center border-t border-white/5 pt-4">
-             <p className="text-[9px] text-white/20 uppercase tracking-widest font-mono">Secured by Supabase Row Level Security</p>
+            <p className="text-[9px] text-white/20 uppercase tracking-widest font-mono">
+              Secured by Supabase Row Level Security
+            </p>
           </div>
         </OmniBaseCard>
       </motion.div>
@@ -171,7 +192,13 @@ function ConsentContent() {
 
 export default function OAuthConsentPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-void-stark flex items-center justify-center text-white/50 font-mono text-sm">Loading Sacred Auth Protocol...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-void-stark flex items-center justify-center text-white/50 font-mono text-sm">
+          Loading Sacred Auth Protocol...
+        </div>
+      }
+    >
       <ConsentContent />
     </Suspense>
   );

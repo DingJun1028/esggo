@@ -114,8 +114,8 @@ export function OmniNotesWorkspace() {
       {/* LEFT COLUMN: Markdown Editor */}
       <div
         className={cn(
-          'flex-1 flex flex-col rounded-2xl border transition-all duration-500 overflow-hidden shadow-glass backdrop-blur-md',
-          isDark ? 'bg-[#111827]/75 border-gray-800/40' : 'bg-white/80 border-gray-200/60'
+          'flex-1 flex flex-col rounded-2xl border transition-all duration-500 overflow-hidden  -md',
+          isDark ? 'bg-[#111827]/75 border-gray-800/40' : ' border-gray-200/60'
         )}
       >
         <div className="h-14 px-5 flex items-center justify-between border-b border-gray-800/10 dark:border-gray-700/10">
@@ -170,7 +170,7 @@ export function OmniNotesWorkspace() {
         {/* Terminal Trace Box */}
         <div
           className={cn(
-            'h-[120px] rounded-xl border flex flex-col p-4 overflow-hidden shadow-glass backdrop-blur-md relative',
+            'h-[120px] rounded-xl border flex flex-col p-4 overflow-hidden  -md relative',
             isDark ? 'bg-[#020617] border-gray-800/60' : 'bg-gray-50 border-gray-200'
           )}
         >
@@ -209,8 +209,8 @@ export function OmniNotesWorkspace() {
         {/* Task Board */}
         <div
           className={cn(
-            'flex-1 rounded-2xl border flex flex-col overflow-hidden shadow-glass backdrop-blur-md',
-            isDark ? 'bg-[#111827]/75 border-gray-800/40' : 'bg-white/80 border-gray-200/60'
+            'flex-1 rounded-2xl border flex flex-col overflow-hidden  -md',
+            isDark ? 'bg-[#111827]/75 border-gray-800/40' : ' border-gray-200/60'
           )}
         >
           <div className="h-14 px-5 flex items-center justify-between border-b border-gray-800/10 dark:border-gray-700/10">

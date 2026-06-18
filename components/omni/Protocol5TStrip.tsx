@@ -9,7 +9,11 @@ export interface Protocol5TStripProps {
 
 const T_LABELS = ['Truth', 'Goodness', 'Beauty', 'Trust', 'Transferful'];
 
-export default function Protocol5TStrip({ status, className = '', showLabels = false }: Protocol5TStripProps) {
+export default function Protocol5TStrip({
+  status,
+  className = '',
+  showLabels = false,
+}: Protocol5TStripProps) {
   const completedCount = status.filter(Boolean).length;
   const progress = (completedCount / 5) * 100;
 
@@ -21,13 +25,13 @@ export default function Protocol5TStrip({ status, className = '', showLabels = f
         </span>
         <span>{completedCount} / 5</span>
       </div>
-      
+
       {/* Progress Bar Container */}
-      <div className="relative h-2 w-full bg-slate-800/50 rounded-full overflow-hidden backdrop-blur-sm border border-slate-700/50">
-        <motion.div 
+      <div className="relative h-2 w-full bg-slate-800/50 rounded-full overflow-hidden border border-slate-700/50">
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 1, ease: 'easeOut' }}
           className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-600 to-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)]"
         />
       </div>
@@ -37,16 +41,16 @@ export default function Protocol5TStrip({ status, className = '', showLabels = f
         <div className="flex justify-between mt-1">
           {status.map((isVerified, index) => (
             <div key={index} className="flex flex-col items-center gap-1 group">
-              <div 
+              <div
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  isVerified 
-                    ? 'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]' 
-                    : 'bg-slate-700'
+                  isVerified ? 'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]' : 'bg-slate-700'
                 }`}
               />
-              <span className={`text-[10px] uppercase tracking-wider transition-colors duration-300 ${
-                isVerified ? 'text-cyan-300' : 'text-slate-600 group-hover:text-slate-400'
-              }`}>
+              <span
+                className={`text-[10px] uppercase tracking-wider transition-colors duration-300 ${
+                  isVerified ? 'text-cyan-300' : 'text-slate-600 group-hover:text-slate-400'
+                }`}
+              >
                 {T_LABELS[index]}
               </span>
             </div>
