@@ -2,41 +2,65 @@
 
 ## 5T = 真善美信通
 
-| 代碼 | 英文（正確）    | 中文（正確） | 說明                                                                  |
-| ---- | --------------- | ------------ | --------------------------------------------------------------------- |
-| T1   | **Tangible**    | 真           | 可感知/具體化：將抽象的永續願景轉化為具體的指標成果與實作項目。       |
-| T2   | **Traceable**   | 善           | 可溯源：鏈式日誌必須包含原始資料來源 (source_origin) 備註。           |
-| T3   | **Trackable**   | 美           | 可追蹤：利用生命週期 Hook 即時記錄數據在平台間的流轉路徑。            |
-| T4   | **Transparent** | 信           | 可透明驗算：算法公式公開化，且必須通過「零幻覺驗證」。                |
-| T5   | **Trustworthy** | 通           | 不可篡改：數據寫入後即刻執行雜湊鎖定 (Hash Lock) 與 Object.freeze()。 |
+**重要：「真善美信通」是中文口訣，順序非 T1-T5 技術編號順序**
+
+| 代碼 | 英文            | 中文 | 核心定義                   | 技術實作                                  |
+| ---- | --------------- | ---- | -------------------------- | ----------------------------------------- |
+| T1   | **Tangible**    | 美   | 抽象數據轉化為具體治理指標 | Bento Grid 視覺化 + Skeleton Loader       |
+| T2   | **Traceable**   | 真   | 每筆數據與原始憑證精確關聯 | `evidence_id` 外鍵 + `source_origin` 欄位 |
+| T3   | **Trackable**   | 信   | 完整編輯軌跡與生命週期追蹤 | `audit_logs` 表 + 生命週期 Hook           |
+| T4   | **Transparent** | 善   | 主動掃描綠漂風險，算法公開 | AI 合規引擎 + GRI 對齊檢查                |
+| T5   | **Trustworthy** | 通   | SHA-256 雜湊鎖定，不可篡改 | `hash_lock` 欄位 + `Object.freeze()`      |
+
+## UCC 誠信協議核心架構
+
+### T1 Tangible (美) — 具體治理
+
+- **定義**：將抽象的永續願景轉化為具體的指標成果與實作項目
+- **實作**：Bento Grid 視覺化 + Skeleton Loader
+- **驗收**：指標是否已具體化？
+
+### T2 Traceable (真) — 原始憑證
+
+- **定義**：每筆數據皆夾帶 `source_origin` 與完整 `flow_path`
+- **實作**：`evidence_id` 外鍵 + `source_origin` 欄位
+- **驗收**：來源是否已標註？
+
+### T3 Trackable (信) — 生命軌跡
+
+- **定義**：完整生命週期日誌，request_id 全程追蹤
+- **實作**：`audit_logs` 表 + 生命週期 Hook
+- **驗收**：路徑是否已紀錄？
+
+### T4 Transparent (善) — 算法公開
+
+- **定義**：主動掃描綠漂風險，算法公式公開化
+- **實作**：AI 合規引擎 + GRI 對齊檢查
+- **驗收**：公式是否已公開且通過驗證？
+
+### T5 Trustworthy (通) — 不可篡改
+
+- **定義**：數據寫入後即刻執行雜湊鎖定
+- **實作**：`hash_lock` 欄位 + `Object.freeze()`
+- **驗收**：雜湊鎖定是否已完成？
 
 ## 4 可 1 不可狀態機
 
-- **可感知** (Tangible)：指標是否已具體化？
-- **可溯源** (Traceable)：來源是否已標註？
-- **可追蹤** (Trackable)：路徑是否已紀錄？
-- **可透明驗算** (Transparent)：公式是否已公開且通過驗證？
-- **不可篡改** (Trustworthy)：雜湊鎖定是否已完成？
-
-## 常見錯誤對應（已棄用）
-
-| 舊版（錯誤） | 新版（正確）    |
-| ------------ | --------------- |
-| Truth        | **Tangible**    |
-| Goodness     | **Traceable**   |
-| Beauty       | **Trackable**   |
-| Trust        | **Transparent** |
-| Transferful  | **Trustworthy** |
+- **可感知** (Tangible/美)：指標是否已具體化？
+- **可溯源** (Traceable/真)：來源是否已標註？
+- **可追蹤** (Trackable/信)：路徑是否已紀錄？
+- **可透明驗算** (Transparent/善)：公式是否已公開且通過驗證？
+- **不可篡改** (Trustworthy/通)：雜湊鎖定是否已完成？
 
 ## 使用範例
 
 ```typescript
 // 正確的 5T 狀態型別
 interface FiveTStatus {
-  tangible: boolean;      // T1: 真 - 可感知/具體化
-  traceable: boolean;     // T2: 善 - 可溯源
-  trackable: boolean;     // T3: 美 - 可追蹤
-  transparent: boolean;   // T4: 信 - 可透明驗算
+  tangible: boolean;      // T1: 美 - 具體治理
+  traceable: boolean;     // T2: 真 - 原始憑證
+  trackable: boolean;     // T3: 信 - 生命軌跡
+  transparent: boolean;   // T4: 善 - 算法公開
   trustworthy: boolean;   // T5: 通 - 不可篡改
 }
 
@@ -47,18 +71,10 @@ interface FiveTStatus {
 />
 // 顯示: Tangible · Traceable · Trackable · Transparent · Trustworthy
 
-// 自訂標籤（可選用中文）
+// 自訂中文標籤
 <Protocol5TStrip
   status={[true, true, true, false, false]}
-  labels={['真', '善', '美', '信', '通']}
+  labels={['美', '真', '信', '善', '通']}
   showLabels
 />
 ```
-
-## ADR 合規對應
-
-- **T1 Tangible (真)**: GRI 覆蓋率矩陣、KPI 卡片數據完整度
-- **T2 Traceable (善)**: 數據溯源路徑圖、evidence_id、source_origin
-- **T3 Trackable (美)**: 合規事件時間軸、lifecycle hooks、event trail
-- **T4 Transparent (信)**: AI 協作透明度分數、推理日誌、GRI 條款引用
-- **T5 Trustworthy (通)**: SHA-256 hash lock、ZKP verification badge
