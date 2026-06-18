@@ -33,11 +33,11 @@ export type T5GateState = I5TGovernance;
 
 /** 5T 門徑代碼 (5T Gate Codes) */
 export const T5StatusSchema = z.enum([
-  'Traceable', // 真
-  'Transparent', // 善
-  'Tangible', // 美
-  'Trackable', // 通
-  'Trustworthy', // 信
+  'Tangible', // 真 (T1)
+  'Traceable', // 善 (T2)
+  'Trackable', // 美 (T3)
+  'Transparent', // 信 (T4)
+  'Trustworthy', // 通 (T5)
 ]);
 
 export type T5Status = z.infer<typeof T5StatusSchema>;
