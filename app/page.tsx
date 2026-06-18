@@ -186,11 +186,12 @@ export default function LandingPage() {
             </p>
 
             {/* Key Metrics */}
-            <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto mb-8">
               {[
-                { label: '節省人工', value: '80 hrs', icon: '⏱️' },
-                { label: '降低成本', value: '97%', icon: '💰' },
-                { label: '報告生成', value: '15 min', icon: '⚡' },
+                { label: 'AI 輔助分析', value: '98.5%', icon: '🤖', sub: '準確率' },
+                { label: '節省時間', value: '70%', icon: '⏱️', sub: 'vs 傳統方式' },
+                { label: '降低成本', value: '97%', icon: '💰', sub: 'vs 外包' },
+                { label: '報告生成', value: '15 min', icon: '⚡', sub: '一鍵完成' },
               ].map((metric) => (
                 <div
                   key={metric.label}
@@ -199,6 +200,7 @@ export default function LandingPage() {
                   <span className="text-lg">{metric.icon}</span>
                   <p className="text-lg font-black text-[#003262] mt-1">{metric.value}</p>
                   <p className="text-[9px] text-slate-400 font-medium">{metric.label}</p>
+                  <p className="text-[8px] text-slate-300">{metric.sub}</p>
                 </div>
               ))}
             </div>
