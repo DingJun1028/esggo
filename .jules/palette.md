@@ -1,0 +1,3 @@
+## 2023-10-27 - Sidebar Icon Buttons Accessibility
+**Learning:** Icon-only buttons used for navigation and layout control (like expanding/collapsing the sidebar or mobile menus) frequently lack `aria-label` attributes and focus states (`focus-visible`). This makes them invisible to screen readers and difficult to use for keyboard navigators.
+**Action:** When implementing or modifying icon-only layout controls, always add a descriptive `aria-label`, an `aria-expanded` attribute if they control visibility of other elements, and ensure clear keyboard focus rings using classes like `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary`.

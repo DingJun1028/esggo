@@ -342,13 +342,19 @@ export default function Sidebar({
             <img src="/logo.png" alt="ESGGO Logo" className="h-16 w-auto object-contain rounded" />
           </div>
 
-          <button onClick={() => setMobileOpen?.(false)} className="lg:hidden p-2 text-slate-400">
+          <button
+            onClick={() => setMobileOpen?.(false)}
+            className="lg:hidden p-2 text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
+            aria-label="Close menu"
+          >
             <X size={20} />
           </button>
 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:block p-1.5 rounded-lg text-slate-400 hover:text-[#003262] transition-colors"
+            className="hidden lg:block p-1.5 rounded-lg text-slate-400 hover:text-[#003262] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262]"
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-expanded={!isCollapsed}
           >
             {isCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
           </button>
@@ -358,7 +364,9 @@ export default function Sidebar({
         {isCollapsed && (
           <button
             onClick={() => setIsCollapsed(false)}
-            className={`hidden lg:flex mx-auto mt-2 p-1.5 rounded-lg transition-colors ${t.collapseBtn}`}
+            className={`hidden lg:flex mx-auto mt-2 p-1.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003262] ${t.collapseBtn}`}
+            aria-label="Expand sidebar"
+            aria-expanded="false"
           >
             <PanelLeftOpen size={16} />
           </button>
