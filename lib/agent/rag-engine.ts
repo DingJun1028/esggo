@@ -18,6 +18,7 @@ const keys = [
 ].filter(Boolean) as string[];
 
 const geminiRotator = new GeminiRotator(keys);
+const hasGeminiKey = geminiRotator.isAvailable();
 
 /**
  * 1. 文本切割器 (Semantic Text Splitter)
@@ -37,7 +38,12 @@ export function chunkText(text: string, chunkSize: number = 500, overlap: number
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
   try {
-    const result = await geminiRotator.embedContent(text, "text-embedding-004");
+    if (!hasGeminiKey) {
+      console.warn('[RAG Engine] Gemini Key 未設定，使用假嵌入');
+      const pseudoRandom = text.length % 100;
+      return Array.from({ length: 768 }, (_, i) => Math.sin(i + pseudoRandom));
+    }
+    const result = await geminiRotator.embedContent(text, 'text-embedding-004');
     return result.embedding.values;
   } catch (e: any) {
     console.error('[RAG Engine] Embedding Generation Failed:', e);
@@ -49,9 +55,14 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 /**
  * 3. 核心：文獻寫入與向量化
  */
-export async function ingestDocument(title: string, content: string, type: string = 'POLICY', metadata: unknown = {}) {
+export async function ingestDocument(
+  title: string,
+  content: string,
+  type: string = 'POLICY',
+  metadata: unknown = {}
+) {
   console.log(`[RAG Engine] 📥 Ingesting document: ${title}`);
-  
+
   if (!supabaseAdmin) throw new Error('Supabase Admin not initialized');
 
   // 1. Save main document
@@ -68,13 +79,13 @@ export async function ingestDocument(title: string, content: string, type: strin
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
     const embedding = await generateEmbedding(chunk);
-    
+
     await supabaseAdmin.from('kb_document_embeddings').insert({
       document_id: doc.id,
       chunk_index: i,
       content: chunk,
       embedding: JSON.stringify(embedding),
-      metadata: { ...(metadata as any), chunk_index: i }
+      metadata: { ...(metadata as any), chunk_index: i },
     });
   }
 
@@ -89,11 +100,11 @@ export async function searchKnowledgeBase(query: string, limit: number = 3) {
   if (!supabaseAdmin) return [];
 
   const queryEmbedding = await generateEmbedding(query);
-  
+
   const { data: matches, error } = await supabaseAdmin.rpc('match_kb_documents', {
     query_embedding: JSON.stringify(queryEmbedding),
     match_threshold: 0.5,
-    match_count: limit
+    match_count: limit,
   });
 
   if (error) {
@@ -111,7 +122,23 @@ export async function queryWithIntelligence(query: string) {
   const contextDocs = await searchKnowledgeBase(query);
   const contextText = contextDocs.map((d: any) => d.content).join('\n---\n');
 
-  const model = geminiRotator.getModel("gemini-1.5-flash");
+  if (!hasGeminiKey) {
+    console.warn('[RAG Engine] Gemini Key 未設定，返回純上下文而不進行 AI 推理');
+    return {
+      answer: `找到 ${contextDocs.length} 篇相關文件，但 AI 推理功能因未設定 Gemini Key 而停用。`,
+      sources: contextDocs.map((d: any) => ({
+        id: d.document_id || d.id,
+        title: d.title || 'Unknown',
+        score: d.similarity || 0,
+        hashLock: '',
+      })),
+    };
+  }
+
+  const model = geminiRotator.getModel('gemini-1.5-flash');
+  if (!model) {
+    throw new Error('Gemini 模型初始化失敗');
+  }
   const prompt = `
 You are the OmniCore Knowledge Architect. 
 Base your answer ONLY on the provided context from the Omni Knowledge Base.
@@ -124,22 +151,23 @@ Question: ${query}
 `;
 
   const result = await model.generateContent(prompt);
-  
+
   const sources = contextDocs.map((d: any) => {
     const rawData = `${d.document_id || d.id}-${d.content}`;
     const hashLock = createHash('sha256').update(rawData).digest('hex');
-    
-    return { 
-      id: d.document_id || d.id, 
-      title: d.title || `Intel Node [${(d.document_id || d.id || 'N/A').toString().substring(0,6)}]`,
+
+    return {
+      id: d.document_id || d.id,
+      title:
+        d.title || `Intel Node [${(d.document_id || d.id || 'N/A').toString().substring(0, 6)}]`,
       score: d.similarity || 0.99,
-      hashLock: hashLock
+      hashLock: hashLock,
     };
   });
 
   return {
     answer: result.response.text(),
-    sources: sources
+    sources: sources,
   };
 }
 
@@ -159,9 +187,9 @@ export async function processPDFAndIngest(buffer: Buffer, fileName: string): Pro
   try {
     const mod = await import('pdf-parse');
     const PDFParseClass = mod.PDFParse || (mod as any).default?.PDFParse;
-    
+
     if (!PDFParseClass) {
-        throw new Error('PDFParse class not found in pdf-parse module');
+      throw new Error('PDFParse class not found in pdf-parse module');
     }
 
     const parser = new PDFParseClass({ data: buffer });
@@ -182,6 +210,11 @@ export async function processPDFAndIngest(buffer: Buffer, fileName: string): Pro
  */
 export async function addToKnowledgeBase(documents: unknown[]) {
   for (const doc of documents as any[]) {
-    await ingestDocument(doc.source || doc.id, doc.text, doc.metadata?.type || 'DOCUMENT', doc.metadata);
+    await ingestDocument(
+      doc.source || doc.id,
+      doc.text,
+      doc.metadata?.type || 'DOCUMENT',
+      doc.metadata
+    );
   }
 }

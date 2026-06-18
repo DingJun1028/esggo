@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 /**
  * Gemini API Key 自動輪替器 (Auto-Rotator)
@@ -7,14 +7,21 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export class GeminiRotator {
   private apiKeys: string[];
   private currentIndex: number = 0;
+  public readonly hasValidKey: boolean;
 
   constructor(keys: string[]) {
-    this.apiKeys = keys.filter(k => k && k.trim() !== '');
+    this.apiKeys = keys.filter((k) => k && k.trim() !== '');
+    this.hasValidKey = this.apiKeys.length > 0;
+  }
+
+  /** 檢查是否有任何有效的 API Key */
+  public isAvailable(): boolean {
+    return this.hasValidKey;
   }
 
   private getCurrentKey(): string {
     if (this.apiKeys.length === 0) {
-      throw new Error("必須提供至少一把有效的 Gemini API Key");
+      return '';
     }
     return this.apiKeys[this.currentIndex];
   }
@@ -23,12 +30,16 @@ export class GeminiRotator {
     this.currentIndex = (this.currentIndex + 1) % this.apiKeys.length;
   }
 
-  public getClient(): GoogleGenerativeAI {
-    return new GoogleGenerativeAI(this.getCurrentKey());
+  public getClient(): GoogleGenerativeAI | null {
+    const key = this.getCurrentKey();
+    if (!key) return null;
+    return new GoogleGenerativeAI(key);
   }
 
-  public getModel(modelName: string = "gemini-1.5-flash") {
-    return this.getClient().getGenerativeModel({ model: modelName });
+  public getModel(modelName: string = 'gemini-1.5-flash') {
+    const client = this.getClient();
+    if (!client) return null;
+    return client.getGenerativeModel({ model: modelName });
   }
 
   /**
@@ -40,10 +51,10 @@ export class GeminiRotator {
     systemInstruction?: string
   ): Promise<any> {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt < this.apiKeys.length; attempt++) {
       const genAI = this.getClient();
-      const model = systemInstruction 
+      const model = systemInstruction
         ? genAI.getGenerativeModel({ model: modelName, systemInstruction })
         : genAI.getGenerativeModel({ model: modelName });
 
@@ -52,59 +63,67 @@ export class GeminiRotator {
         return result;
       } catch (error: any) {
         lastError = error;
-        
+
         const errorMsg = error?.message || error?.toString() || '';
-        const isQuotaExhausted = 
+        const isQuotaExhausted =
           error?.status === 'RESOURCE_EXHAUSTED' ||
           errorMsg.includes('429') ||
           errorMsg.includes('quota') ||
           errorMsg.includes('spending cap');
 
         if (isQuotaExhausted && attempt < this.apiKeys.length - 1) {
-          console.warn(`[GeminiRotator] 警告: 第 ${this.currentIndex + 1} 把 API Key 額度已耗盡，正在自動切換備用鑰匙...`);
+          console.warn(
+            `[GeminiRotator] 警告: 第 ${
+              this.currentIndex + 1
+            } 把 API Key 額度已耗盡，正在自動切換備用鑰匙...`
+          );
           this.rotateKey();
           continue;
         }
-        
+
         throw error;
       }
     }
-    
+
     throw lastError || new Error('所有備用的 Gemini API Keys 均已耗盡');
   }
 
   /**
    * 帶自動重試的嵌入生成
    */
-  async embedContent(text: string, modelName: string = "text-embedding-004"): Promise<any> {
+  async embedContent(text: string, modelName: string = 'text-embedding-004'): Promise<any> {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt < this.apiKeys.length; attempt++) {
       const model = this.getClient().getGenerativeModel({ model: modelName });
-      
+
       try {
         const result = await model.embedContent(text);
         return result;
       } catch (error: any) {
         lastError = error;
-        
+
         const errorMsg = error?.message || error?.toString() || '';
-        const isQuotaExhausted = 
+        const isQuotaExhausted =
           error?.status === 'RESOURCE_EXHAUSTED' ||
           errorMsg.includes('429') ||
           errorMsg.includes('quota') ||
           errorMsg.includes('spending cap');
 
         if (isQuotaExhausted && attempt < this.apiKeys.length - 1) {
-          console.warn(`[GeminiRotator] 警告: 第 ${this.currentIndex + 1} 把 API Key 額度已耗盡，正在自動切換備用鑰匙...`);
+          console.warn(
+            `[GeminiRotator] 警告: 第 ${
+              this.currentIndex + 1
+            } 把 API Key 額度已耗盡，正在自動切換備用鑰匙...`
+          );
           this.rotateKey();
           continue;
         }
-        
+
         throw error;
       }
     }
-    
+
     throw lastError || new Error('所有備用的 Gemini API Keys 均已耗盡');
   }
 }
