@@ -29,6 +29,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   MoreHorizontal,
+  User,
+  Eye,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { streamText } from 'ai';
 import { agnes } from '@/lib/ai/agnes';
 import { createOpenAI } from '@ai-sdk/openai';

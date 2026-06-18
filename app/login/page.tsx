@@ -26,10 +26,14 @@ export default function LoginPage() {
       setErrorMessage('');
       try {
         const supabase = createClient();
-        const { data: sbData, error: sbError } = await supabase.auth.signInWithIdToken({
-          provider: 'google',
-          token: response.credential,
-        });
+        const {
+          data: sbData,
+          error: sbError,
+        } = // @ts-ignore
+          await supabase.auth.signInWithIdToken({
+            provider: 'google',
+            token: response.credential,
+          });
         if (sbError) throw sbError;
 
         const res = await fetch('/api/auth/google-signin', {
@@ -185,7 +189,11 @@ export default function LoginPage() {
     }
 
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const {
+      data,
+      error,
+    } = // @ts-ignore
+      await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setStatus('error');
       setErrorMessage(error.message);

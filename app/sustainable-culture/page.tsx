@@ -211,7 +211,7 @@ function RoadmapPhase({ phase, index }: { phase: (typeof CULTURE_ROADMAP)[0]; in
     in_progress: { label: '進行中', color: 'bg-amber-50 text-amber-600', icon: Zap },
     pending: { label: '待開始', color: 'bg-slate-50 text-slate-400', icon: Clock },
   };
-  const config = statusConfig[phase.status];
+  const config = statusConfig[phase.status as keyof typeof statusConfig];
   const StatusIcon = config.icon;
 
   return (
