@@ -26,7 +26,7 @@ import {
   Clock,
   DollarSign,
 } from 'lucide-react';
-import { cn } from '@/lib-utils';
+import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
