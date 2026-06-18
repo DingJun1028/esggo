@@ -66,7 +66,7 @@ const HIGHLIGHTS = [
   {
     icon: ShieldCheck,
     title: '5T 誠信協議',
-    desc: 'Truth · Goodness · Beauty · Trust · Transferful',
+    desc: 'Tangible · Traceable · Trackable · Transparent · Trustworthy',
     color: 'text-cyan-600',
     bg: 'bg-cyan-50',
     border: 'border-cyan-100',

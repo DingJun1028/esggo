@@ -1,7 +1,7 @@
 /**
  * ESG GO | OmniCore P0 Shared Types & Validators 🌌
  * v3.1 | #OmniCore #Sovereignty #英標繁博 #ZodDriven
- * 
+ *
  * 英標為骨 (American English Core)，繁博為魂 (Traditional Chinese Soul)
  * 遵循「4可1不可」狀態機 (The 4+1 State Machine)
  */
@@ -13,29 +13,31 @@ import { z } from 'zod';
 // ============================================================
 
 /** 5T 門徑狀態 Schema */
-export const I5TGovernanceSchema = z.object({
-  /** 真 (Truth)：數據源頭可溯源 (Origin-verified) */
-  traceable: z.boolean(),
-  /** 善 (Goodness)：算法可驗證且透明 (ISO-14064-1) */
-  transparent: z.boolean(),
-  /** 美 (Beauty)：視覺呈現直觀且具質感 (UI/UX Excellence) */
-  tangible: z.boolean(),
-  /** 通 (Transferful)：數據路徑可追蹤 (Lifecycle-aware) */
-  trackable: z.boolean(),
-  /** 信 (Trust)：數據不可篡改 (Hash Locked) */
-  trustworthy: z.boolean(),
-}).readonly();
+export const I5TGovernanceSchema = z
+  .object({
+    /** T1 Tangible (具體)：數據可感知、具體化 */
+    tangible: z.boolean(),
+    /** T2 Traceable (溯源)：數據源頭可溯源 */
+    traceable: z.boolean(),
+    /** T3 Trackable (追蹤)：完整生命週期追蹤 */
+    trackable: z.boolean(),
+    /** T4 Transparent (透明)：算法可驗證且透明 */
+    transparent: z.boolean(),
+    /** T5 Trustworthy (信賴)：數據不可篡改 */
+    trustworthy: z.boolean(),
+  })
+  .readonly();
 
 export type I5TGovernance = z.infer<typeof I5TGovernanceSchema>;
 export type T5GateState = I5TGovernance;
 
 /** 5T 門徑代碼 (5T Gate Codes) */
 export const T5StatusSchema = z.enum([
-  'Traceable',    // 真
-  'Transparent',  // 善
-  'Tangible',     // 美
-  'Trackable',    // 通
-  'Trustworthy',  // 信
+  'Traceable', // 真
+  'Transparent', // 善
+  'Tangible', // 美
+  'Trackable', // 通
+  'Trustworthy', // 信
 ]);
 
 export type T5Status = z.infer<typeof T5StatusSchema>;
@@ -58,11 +60,13 @@ export const IEvidenceSchema = z.object({
   source_origin: z.string().optional(),
   lifecycle_hooks: z.array(z.string()).optional(),
   formula_ref: z.string().optional(),
-  causality: z.object({
-    originCause: z.string(),
-    processTrace: z.array(z.string()),
-    finalEffect: z.string(),
-  }).optional(),
+  causality: z
+    .object({
+      originCause: z.string(),
+      processTrace: z.array(z.string()),
+      finalEffect: z.string(),
+    })
+    .optional(),
 });
 
 export type IEvidence = z.infer<typeof IEvidenceSchema>;
@@ -88,16 +92,16 @@ export const IComponentCoreSchema = z.object({
   version: z.string(),
   /** 刻印時間戳 (Genesis Timestamp) */
   timestamp: z.number(),
-  
+
   /** 碳排與影響力計算公式 (Transparent Formula) */
   formula: z.string(),
   /** 具體影響力指標 (Tangible Impact Metric) */
   impact_metric: z.string(),
   /** 唯一的不可狀態 (Trustworthy Status) */
-  status: z.literal("Trustworthy"),
+  status: z.literal('Trustworthy'),
   /** 數據真理哈希鎖 (Hash Lock) */
   hash_lock: z.string(),
-  
+
   /** 證據左證庫 (Evidence Vault) */
   evidence: z.array(IEvidenceSchema),
 });
@@ -105,12 +109,14 @@ export const IComponentCoreSchema = z.object({
 export type IComponentCore = z.infer<typeof IComponentCoreSchema>;
 
 /** 萬能修復輸入 (Restoration Input) */
-export const RestorationInputSchema = z.record(z.string(), z.unknown()).and(z.object({
-  metric: z.string().optional(),
-  source: z.string().optional(),
-  formula: z.string().optional(),
-  trigger: z.string().optional(),
-}));
+export const RestorationInputSchema = z.record(z.string(), z.unknown()).and(
+  z.object({
+    metric: z.string().optional(),
+    source: z.string().optional(),
+    formula: z.string().optional(),
+    trigger: z.string().optional(),
+  })
+);
 
 export type RestorationInput = z.infer<typeof RestorationInputSchema>;
 
@@ -124,7 +130,7 @@ export const EternalMemoryType = {
   PROCEDURAL: 'PROCEDURAL',
   SPATIAL: 'SPATIAL',
   EMOTIONAL: 'EMOTIONAL',
-  CREATIVE: 'CREATIVE'
+  CREATIVE: 'CREATIVE',
 } as const;
 
 export const EternalMemoryTypeSchema = z.nativeEnum(EternalMemoryType);
