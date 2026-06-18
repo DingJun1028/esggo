@@ -6,12 +6,12 @@ const app = express();
 const port = 8642;
 
 const API_KEY = process.env.GEMINI_API_KEY;
+const GATEWAY_KEY = process.env.GATEWAY_API_KEY || process.env.GATEWAY_KEY || 'hermes_gold_2026';
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 app.use(cors());
 app.use(express.json());
 
-// Mock/Simple implementation of IDs and content for the VPS server
 const genId = (prefix) => `${prefix}_vps_${Date.now()}`;
 
 app.get('/status', (req, res) => {
@@ -26,7 +26,15 @@ app.get('/status', (req, res) => {
   });
 });
 
-app.post('/execute', async (req, res) => {
+function requireAuth(req, res, next) {
+  const token = (req.headers['x-omni-token'] || req.headers['x-api-key'] || '').replace('Bearer ', '');
+  if (!token || token !== GATEWAY_KEY) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid API Key', hint: 'Set X-Omni-Token header' });
+  }
+  next();
+}
+
+app.post('/execute', requireAuth, async (req, res) => {
   const { task } = req.body;
   console.log(`[OmniAgent VPS] Executing task: ${task.id} (${task.taskType})`);
 
