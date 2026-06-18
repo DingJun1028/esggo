@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 
 /**
@@ -29,7 +29,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   isAuthenticated: false,
   companyId: 'default',
-  systemStatus: 'online'
+  systemStatus: 'online',
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -39,10 +39,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [systemStatus, setSystemStatus] = useState<SystemStatus>('online');
 
   // Using @supabase/ssr for browser client
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-key';
-  
-  const supabase = createBrowserClient(supabaseUrl, supabaseKey);
+  // Memoize the client to avoid re-creating on every render
+  const supabase = React.useMemo(() => {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+    const supabaseKey =
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      'placeholder-key';
+    return createBrowserClient(supabaseUrl, supabaseKey);
+  }, []);
 
   useEffect(() => {
     // 1. Monitor Browser Network Connectivity
@@ -65,8 +70,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 3. Supabase Auth Session listener
     const initSession = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
         if (error) {
           console.warn('[Supabase Auth] Session fetch error', error.message);
           setSystemStatus('degraded');
@@ -77,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             id: session.user.id,
             email: session.user.email,
             role: session.user.user_metadata?.role || 'superadmin',
-            ...session.user.user_metadata
+            ...session.user.user_metadata,
           });
           setSystemStatus('online');
         } else {
@@ -87,11 +95,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             try {
               const parsed = JSON.parse(localUser);
               setCompanyId(parsed?.company_id || 'default');
-              setUser({ 
-                email: parsed?.email || 'dev@esggo.com', 
+              setUser({
+                email: parsed?.email || 'dev@esggo.com',
                 id: parsed?.id || 'dev_user',
                 role: parsed?.role || 'superadmin',
-                ...parsed
+                ...parsed,
               });
             } catch (e) {
               setCompanyId('default');
@@ -112,21 +120,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            email: session.user.email,
-            role: session.user.user_metadata?.role || 'superadmin',
-            ...session.user.user_metadata
-          });
-          setSystemStatus('online');
-        } else {
-          setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
-        }
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setUser({
+          id: session.user.id,
+          email: session.user.email,
+          role: session.user.user_metadata?.role || 'superadmin',
+          ...session.user.user_metadata,
+        });
+        setSystemStatus('online');
+      } else {
+        setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
       }
-    );
+    });
 
     return () => {
       authListener.subscription.unsubscribe();
@@ -140,7 +146,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     isAuthenticated: !!user,
     companyId,
-    systemStatus
+    systemStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
