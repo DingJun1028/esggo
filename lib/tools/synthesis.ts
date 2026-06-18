@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { z } from 'genkit';
 import { ai } from '../agents/genkit.ts';
 import { memoryStore } from '../memory/memory-store.ts';

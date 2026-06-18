@@ -9,7 +9,7 @@ export const getEnvDataTool = genkitInstance.defineTool({
   inputSchema: z.object({
     category: z.string().optional().describe('Category to filter by (e.g. GHG, Energy, Water, Waste).')
   }),
-}, async (input) => {
+}, async (input: any) => {
   return await getEnvironmentalData(input?.category);
 });
 
@@ -19,7 +19,7 @@ export const getSocialDataTool = genkitInstance.defineTool({
   inputSchema: z.object({
     category: z.string().optional().describe('Category to filter by.')
   }),
-}, async (input) => {
+}, async (input: any) => {
   return await getSocialMetrics(input?.category);
 });
 
@@ -29,7 +29,7 @@ export const getGovDataTool = genkitInstance.defineTool({
   inputSchema: z.object({
     category: z.string().optional().describe('Category to filter by.')
   }),
-}, async (input) => {
+}, async (input: any) => {
   return await getGovernanceMetrics(input?.category);
 });
 

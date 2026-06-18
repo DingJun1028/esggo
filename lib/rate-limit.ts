@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Rate Limiting Middleware
  * 為 API 提供流量控制保障

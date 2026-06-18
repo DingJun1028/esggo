@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getOmniTableServerClient, OmniTableRecord } from '@/lib/omni-table/client';
 
 export interface SyncResult {

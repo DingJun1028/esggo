@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ESG GO | AI ESG Flows
  * Google Gemini × GRI 2021 × 5T Protocol

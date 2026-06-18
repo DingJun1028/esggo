@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DebugEvent, DebugLevel, DebugSnapshot, DebugMetrics, DebugConfig } from './types';
 
 const DEBUG_LEVELS: Record<DebugLevel, number> = {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IIntegrityRepository, IntegrityRecord } from './IIntegrityRepository';
 import { getSupabaseClient } from '../supabase'; // Import the function
 

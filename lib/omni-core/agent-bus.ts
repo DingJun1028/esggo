@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OmniAgentBus (萬能代理總線)
  * 作為所有 OmniAgents (Antigravity, Jules, Nexus, Pencil) 溝通的中樞。

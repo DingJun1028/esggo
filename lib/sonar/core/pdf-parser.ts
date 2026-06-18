@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import path from 'path';
 

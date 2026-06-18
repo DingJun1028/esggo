@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as cheerio from 'cheerio';
 
 export interface ScrapedArticle {

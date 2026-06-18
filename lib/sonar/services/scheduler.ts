@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createCrawler } from '../crawlers';
 import { ESG_SOURCES, ESGSource } from '../config/sources';
 

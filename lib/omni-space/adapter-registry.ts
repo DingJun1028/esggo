@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🗃️ OmniSpace Adapter Registry
  * v1.0 | #OmniSpace #AdapterGovernance

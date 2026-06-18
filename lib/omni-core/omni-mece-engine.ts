@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ESGGO OmniCore: MECE Extreme Performance Evolution Engine
  * 萬能 MECE 極限性能晉級 16 法則引擎

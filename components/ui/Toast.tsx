@@ -40,7 +40,7 @@ export function ToastContainer() {
               exit={{ opacity: 0, x: 100, scale: 0.95 }}
               transition={{ type: 'spring', damping: 20, stiffness: 300 }}
               className={cn(
-                'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg -md min-w-[300px] max-w-[420px]',
+                'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg min-w-[300px] max-w-[420px]',
                 config.containerClass
               )}
             >
@@ -49,7 +49,7 @@ export function ToastContainer() {
               <button
                 aria-label="Dismiss toast"
                 onClick={() => dismiss(t.id)}
-                className="shrink-0 w-7 h-7 rounded-xl flex items-center justify-center hover: text-slate-400 transition-colors"
+                className="shrink-0 w-7 h-7 rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors"
               >
                 <X size={14} />
               </button>
