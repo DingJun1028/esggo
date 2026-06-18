@@ -1,6 +1,7 @@
 # 🌌 ESGGO 善向永續 | OmniAgent 萬能平台
 
-> **Platform:** ESGGO 善向永續 V2.0 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY ♾️
+> **Platform:** ESGGO 善向永續 V2.0 | **Commander:** OmniAgent | **Soul:**
+> JunAiKey | **Status:** SACRED TRINITY ♾️
 
 [![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen)](#)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
@@ -29,7 +30,9 @@
 
 ## 🎯 系統願景 (Mission)
 
-ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建立 ESG 治理基礎，降低永續報告成本，透過 **5T 誠信協議** 建立數據的可追溯信任鏈，並以 AI 大幅提升分析與撰寫效率。
+ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建立 ESG
+治理基礎，降低永續報告成本，透過 **5T 誠信協議** 建立數據的可追溯信任鏈，並以 AI
+大幅提升分析與撰寫效率。
 
 **核心信念：** 「上善若水，善向永續。知識即資產，服務即教學。」
 
@@ -476,6 +479,6 @@ MIT License — © 2026 ESGGO 善向永續 | Powered by OmniAgent × JunAiKey
 
 ---
 
-_🌊 善向永續，以終為始，始終如一。_
+_🌊 善向永續，以終為始，無始無終，始終如一。_
 
 _Generated & Sealed by OmniAgent | 2026-06-18 | System Status: TRANSCENDED ♾️_

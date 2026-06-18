@@ -1,4 +1,10 @@
 import {
+  UpsertUserData,
+  UpsertUserVariables,
+  CreateTaskData,
+  CreateTaskVariables,
+  UpdateTaskData,
+  UpdateTaskVariables,
   ListTasksData,
   ListUsersData,
   ListUserTasksData,
@@ -6,12 +12,6 @@ import {
   GetTaskByIdVariables,
   SearchTaskData,
   SearchTaskVariables,
-  UpsertUserData,
-  UpsertUserVariables,
-  CreateTaskData,
-  CreateTaskVariables,
-  UpdateTaskData,
-  UpdateTaskVariables,
 } from '../';
 import {
   UseDataConnectQueryResult,
@@ -23,6 +23,30 @@ import { UseQueryResult, UseMutationResult } from '@tanstack/react-query';
 import { DataConnect } from 'firebase/data-connect';
 import { FirebaseError } from 'firebase/app';
 
+export function useUpsertUser(
+  options?: useDataConnectMutationOptions<UpsertUserData, FirebaseError, UpsertUserVariables>
+): UseDataConnectMutationResult<UpsertUserData, UpsertUserVariables>;
+export function useUpsertUser(
+  dc: DataConnect,
+  options?: useDataConnectMutationOptions<UpsertUserData, FirebaseError, UpsertUserVariables>
+): UseDataConnectMutationResult<UpsertUserData, UpsertUserVariables>;
+
+export function useCreateTask(
+  options?: useDataConnectMutationOptions<CreateTaskData, FirebaseError, CreateTaskVariables>
+): UseDataConnectMutationResult<CreateTaskData, CreateTaskVariables>;
+export function useCreateTask(
+  dc: DataConnect,
+  options?: useDataConnectMutationOptions<CreateTaskData, FirebaseError, CreateTaskVariables>
+): UseDataConnectMutationResult<CreateTaskData, CreateTaskVariables>;
+
+export function useUpdateTask(
+  options?: useDataConnectMutationOptions<UpdateTaskData, FirebaseError, UpdateTaskVariables>
+): UseDataConnectMutationResult<UpdateTaskData, UpdateTaskVariables>;
+export function useUpdateTask(
+  dc: DataConnect,
+  options?: useDataConnectMutationOptions<UpdateTaskData, FirebaseError, UpdateTaskVariables>
+): UseDataConnectMutationResult<UpdateTaskData, UpdateTaskVariables>;
+
 export function useListTasks(
   options?: useDataConnectQueryOptions<ListTasksData>
 ): UseDataConnectQueryResult<ListTasksData, undefined>;
@@ -66,27 +90,3 @@ export function useSearchTask(
   vars?: SearchTaskVariables,
   options?: useDataConnectQueryOptions<SearchTaskData>
 ): UseDataConnectQueryResult<SearchTaskData, SearchTaskVariables>;
-
-export function useUpsertUser(
-  options?: useDataConnectMutationOptions<UpsertUserData, FirebaseError, UpsertUserVariables>
-): UseDataConnectMutationResult<UpsertUserData, UpsertUserVariables>;
-export function useUpsertUser(
-  dc: DataConnect,
-  options?: useDataConnectMutationOptions<UpsertUserData, FirebaseError, UpsertUserVariables>
-): UseDataConnectMutationResult<UpsertUserData, UpsertUserVariables>;
-
-export function useCreateTask(
-  options?: useDataConnectMutationOptions<CreateTaskData, FirebaseError, CreateTaskVariables>
-): UseDataConnectMutationResult<CreateTaskData, CreateTaskVariables>;
-export function useCreateTask(
-  dc: DataConnect,
-  options?: useDataConnectMutationOptions<CreateTaskData, FirebaseError, CreateTaskVariables>
-): UseDataConnectMutationResult<CreateTaskData, CreateTaskVariables>;
-
-export function useUpdateTask(
-  options?: useDataConnectMutationOptions<UpdateTaskData, FirebaseError, UpdateTaskVariables>
-): UseDataConnectMutationResult<UpdateTaskData, UpdateTaskVariables>;
-export function useUpdateTask(
-  dc: DataConnect,
-  options?: useDataConnectMutationOptions<UpdateTaskData, FirebaseError, UpdateTaskVariables>
-): UseDataConnectMutationResult<UpdateTaskData, UpdateTaskVariables>;

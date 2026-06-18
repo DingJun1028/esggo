@@ -19,7 +19,7 @@ import {
   Zap,
   Clock,
   MessageSquare,
-  Handshake,
+  Link as Handshake,
   Factory,
   GraduationCap,
   Landmark,
