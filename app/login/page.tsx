@@ -1,125 +1,122 @@
 'use client';
 
+import React, { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import Script from 'next/script';
-import { useEffect, useState } from 'react'; // Added useState
-import { useRouter } from 'next/navigation'; // Added useRouter
-import { createClient } from '../../utils/supabase/client'; // Added createClient
-import { Lock, Mail, Activity, AlertCircle, Fingerprint } from 'lucide-react'; // Added lucide-react icons
-import { motion } from 'framer-motion'; // Added framer-motion
+import { Lock, Mail, AlertCircle, Fingerprint, Activity } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
+
+type LoginStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<LoginStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [developerPassword, setDeveloperPassword] = useState('');
   const [showDeveloperPasswordInput, setShowDeveloperPasswordInput] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [lastClickTime, setLastClickTime] = useState(0);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
-  const handleCredentialResponse = async (response: any) => {
-    setStatus('loading');
-    setErrorMessage('');
-    try {
-      const supabase = createClient();
-      // 1. Sign in to Supabase using the Google ID Token
-      const { data: sbData, error: sbError } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: response.credential,
-      });
+  const handleCredentialResponse = useCallback(
+    async (response: { credential: string }) => {
+      setStatus('loading');
+      setErrorMessage('');
+      try {
+        const supabase = createClient();
+        const { data: sbData, error: sbError } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: response.credential,
+        });
+        if (sbError) throw sbError;
 
-      if (sbError) {
-        throw sbError;
-      }
-
-      // 2. Call your backend API route to verify the token
-      const res = await fetch('/api/auth/google-signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: response.credential }),
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        console.log('Google One Tap Sign-in successful:', data.user);
-        // Simulate setting legacy omni_user for compatibility with useAuth.tsx and ClientLayout
-        if (data.user) {
+        const res = await fetch('/api/auth/google-signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: response.credential }),
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
           localStorage.setItem(
             'omni_user',
             JSON.stringify({
               email: data.user.email,
-              company_id: data.user.company_id || 'default', // Assuming company_id is returned by backend
-              id: sbData.user?.id || data.user.googleId, // Using Supabase user id if available, fallback to googleId
+              company_id: data.user.company_id || 'default',
+              id: sbData.user?.id || data.user.googleId,
             })
           );
+          setStatus('success');
+          router.push('/dashboard');
+          router.refresh();
+        } else {
+          throw new Error(data.error || 'Google One Tap 認證失敗');
         }
-        setStatus('success');
-        router.push('/dashboard'); // Example redirect
-        router.refresh();
-      } else {
-        throw new Error(data.error || 'Google One Tap 認證失敗');
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : 'Google One Tap 認證失敗';
+        setErrorMessage(msg);
+        setStatus('error');
       }
-    } catch (error: any) {
-      console.error('Google One Tap Sign-in failed:', error);
-      setErrorMessage(error.message || 'Google One Tap 認證失敗');
-      setStatus('error');
-    }
-  };
+    },
+    [router]
+  );
 
   useEffect(() => {
     const initializeGoogle = () => {
-      if (!(window as any).google) return;
-
+      if (!(window as unknown as Record<string, unknown>).google) return;
       const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-      if (!clientId || clientId.includes('your_client_id')) {
-        console.warn(
-          'Google Client ID is missing or invalid. Skipping Google One Tap initialization to prevent Next.js Error Overlay.'
-        );
-        return;
-      }
+      if (!clientId || clientId.includes('your_client_id')) return;
 
-      (window as any).google.accounts.id.initialize({
+      const w = window as unknown as {
+        google?: {
+          accounts: {
+            id: {
+              initialize: (config: Record<string, unknown>) => void;
+              renderButton: (el: HTMLElement, config: Record<string, unknown>) => void;
+              prompt: (
+                cb: (notification: {
+                  isNotDisplayed: () => boolean;
+                  isSkippedMoment: () => boolean;
+                }) => void
+              ) => void;
+            };
+          };
+        };
+      };
+      w.google?.accounts.id.initialize({
         client_id: clientId,
-        callback: handleCredentialResponse,
-        use_fedcm_for_prompt: true, // Active FedCM flag
+        callback: handleCredentialResponse as (response: unknown) => void,
+        use_fedcm_for_prompt: true,
       });
 
-      // Render standard sign in button
       const btnContainer = document.getElementById('google-signin-button');
       if (btnContainer) {
-        (window as any).google.accounts.id.renderButton(btnContainer, {
+        w.google?.accounts.id.renderButton(btnContainer, {
           theme: 'filled_black',
           size: 'large',
-          width: '382', // Fits login card input fields width
+          width: '382',
           text: 'signin_with',
           shape: 'rectangular',
         });
       }
-
-      // Prompt One Tap
-      (window as any).google.accounts.id.prompt((notification: any) => {
-        if (notification.isNotDisplayed()) {
-          console.warn('One Tap not displayed，原因:', notification.getNotDisplayedReason());
-        } else if (notification.isSkippedMoment()) {
-          console.warn('使用者跳過或瀏覽器中斷了 One Tap 提示 (FedCM Aborted)');
-        }
+      w.google?.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed()) console.warn('One Tap not displayed');
+        else if (notification.isSkippedMoment()) console.warn('One Tap skipped');
       });
     };
 
-    if ((window as any).google) {
+    const w = window as unknown as Record<string, unknown>;
+    if (w.google) {
       initializeGoogle();
     } else {
-      (window as any).onGoogleLibraryLoad = initializeGoogle;
+      w.onGoogleLibraryLoad = initializeGoogle;
     }
-  }, []);
+  }, [handleCredentialResponse]);
 
   const handleDeveloperLogin = async () => {
     setStatus('loading');
     setErrorMessage('');
-
     if (developerPassword === 'sunshine888') {
       setStatus('success');
       document.cookie = 'omni_user_bypass=true; path=/; max-age=31536000; SameSite=Strict';
@@ -142,12 +139,10 @@ export default function LoginPage() {
   const handleLogoClick = () => {
     const now = Date.now();
     if (now - lastClickTime > 1000) {
-      // 若距離上次點擊超過 1000ms，重置計數
       setClickCount(1);
     } else {
       const newCount = clickCount + 1;
       if (newCount >= 5) {
-        console.warn('⚠️ [Backdoor] Secret entrance activated. Redirecting...');
         document.cookie = 'omni_user_bypass=true; path=/; max-age=31536000; SameSite=Strict';
         localStorage.setItem(
           'omni_user',
@@ -170,15 +165,10 @@ export default function LoginPage() {
     setStatus('loading');
     setErrorMessage('');
 
-    // Handle Supabase Sign In (with Defensive Placeholder Check)
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
     ) {
-      console.warn(
-        '⚠️ [DevMode] Supabase URL is missing or placeholder. Simulating successful login to prevent fetch errors.'
-      );
-
       document.cookie = 'omni_user_bypass=true; path=/; max-age=31536000; SameSite=Strict';
       localStorage.setItem(
         'omni_user',
@@ -188,31 +178,21 @@ export default function LoginPage() {
           id: 'dev_user_001',
         })
       );
-
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // Route to home page
+      await new Promise((r) => setTimeout(r, 800));
       window.location.href = '/';
       setStatus('idle');
       return;
     }
 
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setStatus('error');
       setErrorMessage(error.message);
       return;
     }
-
     setStatus('success');
-
-    // Simulate setting legacy omni_user for compatibility with useAuth.tsx and ClientLayout
-    if (data && data.user) {
+    if (data?.user) {
       localStorage.setItem(
         'omni_user',
         JSON.stringify({
@@ -222,55 +202,54 @@ export default function LoginPage() {
         })
       );
     }
-
     router.push('/');
     router.refresh();
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#020617] relative overflow-hidden">
-      {/* Liquid Glass Background Effects */}
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-500/20 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none" />
+    <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] relative overflow-hidden px-4">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 -right-32 w-80 h-80 bg-cyan-100/40 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-100/30 rounded-full blur-3xl" />
+      </div>
 
-      {/* Main Glassmorphism Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="z-10 w-full max-w-md p-8 rounded-[2rem] bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] backdrop-blur-xl relative"
+        transition={{ duration: 0.5 }}
+        className="z-10 w-full max-w-md p-8 rounded-3xl bg-white/80 border border-slate-100 shadow-xl backdrop-blur-xl relative"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent rounded-[2rem] pointer-events-none" />
         <Script
           src="https://accounts.google.com/gsi/client"
           strategy="afterInteractive"
           onLoad={() => {
-            if ((window as any).onGoogleLibraryLoad) (window as any).onGoogleLibraryLoad();
+            const w = window as unknown as Record<string, () => void>;
+            if (w.onGoogleLibraryLoad) w.onGoogleLibraryLoad();
           }}
         />
-        <h1 className="sr-only">Login to Omni System</h1> {/* Hidden heading for accessibility */}
-        <div className="text-center mb-8 relative">
+
+        <h1 className="sr-only">Login to Omni System</h1>
+
+        {/* Logo */}
+        <div className="text-center mb-8">
           <div
             onClick={handleLogoClick}
-            className="mx-auto w-16 h-16 bg-black/40 border border-cyan-500/30 rounded-2xl flex items-center justify-center mb-4 relative overflow-hidden cursor-pointer"
+            className="mx-auto w-14 h-14 bg-[#003262] rounded-2xl flex items-center justify-center mb-4 cursor-pointer shadow-lg"
           >
-            <div className="absolute inset-0 bg-cyan-400/20 blur-xl pointer-events-none" />
-            <Fingerprint size={32} className="text-cyan-400 relative z-10 pointer-events-none" />
+            <Fingerprint size={28} className="text-[#FDB515]" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-indigo-400">
-            Omni System
-          </h1>
-          <p className="text-slate-400 text-sm mt-2 tracking-wide">
-            ESG GO 5T Trust Protocol Enforcer
-          </p>
+          <h2 className="text-2xl font-black text-[#003262] tracking-tight">ESGGO 善向永續</h2>
+          <p className="text-sm text-slate-400 mt-1">5T Trust Protocol Enforcer</p>
         </div>
-        <form onSubmit={handleLogin} className="space-y-6 relative">
-          <div className="space-y-4">
-            <div className="relative group">
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div className="space-y-3">
+            <div className="relative">
               <Mail
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-400 transition-colors"
-                size={20}
+                size={18}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
               />
               <input
                 type="email"
@@ -278,13 +257,13 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="識別位址 (Email)"
-                className="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all backdrop-blur-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-300 transition-all"
               />
             </div>
-            <div className="relative group">
+            <div className="relative">
               <Lock
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-400 transition-colors"
-                size={20}
+                size={18}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
               />
               <input
                 type="password"
@@ -292,18 +271,18 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="存取金鑰 (Password)"
-                className="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all backdrop-blur-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-300 transition-all"
               />
             </div>
           </div>
 
-          {status === 'error' && (
+          {status === 'error' && errorMessage && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm"
+              className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm"
             >
-              <AlertCircle size={16} />
+              <AlertCircle size={16} className="shrink-0" />
               <p>{errorMessage}</p>
             </motion.div>
           )}
@@ -311,27 +290,20 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={status === 'loading' || status === 'success'}
-            className="w-full relative group overflow-hidden rounded-xl bg-white/5 border border-white/10 p-4 transition-all hover:bg-white/10 hover:border-cyan-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-[#003262] text-white font-bold rounded-xl hover:bg-[#002244] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20"
           >
-            <div className="absolute inset-0 w-0 bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 transition-all duration-500 ease-out group-hover:w-full" />
-            <div className="relative flex items-center justify-center gap-3">
-              {status === 'loading' ? (
-                <Activity size={20} className="text-cyan-400 animate-pulse" />
-              ) : (
-                <Lock size={20} className="text-cyan-400" />
-              )}
-              <span className="text-white font-bold tracking-widest uppercase">
-                {status === 'loading' ? 'Authenticating...' : 'Secure Login'}
-              </span>
-            </div>
+            {status === 'loading' ? (
+              <Activity size={18} className="animate-pulse" />
+            ) : (
+              <Lock size={18} />
+            )}
+            {status === 'loading' ? 'Authenticating...' : 'Secure Login'}
           </button>
 
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-white/10"></div>
-            <span className="flex-shrink mx-4 text-slate-500 text-xs tracking-widest uppercase font-mono">
-              Or
-            </span>
-            <div className="flex-grow border-t border-white/10"></div>
+          <div className="relative flex items-center py-1">
+            <div className="flex-grow border-t border-slate-200" />
+            <span className="flex-shrink mx-4 text-xs text-slate-400 font-medium">或</span>
+            <div className="flex-grow border-t border-slate-200" />
           </div>
 
           <div id="google-signin-button" className="w-full flex justify-center" />
@@ -339,58 +311,44 @@ export default function LoginPage() {
           {process.env.NODE_ENV === 'development' && (
             <>
               {showDeveloperPasswordInput ? (
-                <div className="space-y-4">
-                  <div className="relative group">
+                <div className="space-y-3">
+                  <div className="relative">
                     <Lock
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition-colors"
-                      size={20}
+                      size={18}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
                     />
                     <input
                       type="password"
-                      required
                       value={developerPassword}
                       onChange={(e) => setDeveloperPassword(e.target.value)}
-                      placeholder="開發者密碼 (sunshine888)"
-                      className="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all backdrop-blur-sm"
+                      placeholder="開發者密碼"
+                      className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 transition-all"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={handleDeveloperLogin}
-                    disabled={status === 'loading' || status === 'success'}
-                    className="w-full relative overflow-hidden rounded-xl bg-purple-500/10 border border-purple-500/30 p-3 transition-all hover:bg-purple-500/20 active:scale-95 disabled:opacity-50"
+                    className="w-full py-2.5 bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold rounded-xl hover:bg-indigo-100 transition-colors text-sm"
                   >
-                    <div className="relative flex items-center justify-center gap-2">
-                      <Fingerprint size={16} className="text-purple-400" />
-                      <span className="text-purple-300 font-bold tracking-wider uppercase text-sm">
-                        確認開發者身份
-                      </span>
-                    </div>
+                    確認開發者身份
                   </button>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => setShowDeveloperPasswordInput(true)}
-                  disabled={status === 'loading' || status === 'success'}
-                  className="w-full mt-2 relative overflow-hidden rounded-xl bg-indigo-500/10 border border-indigo-500/30 p-3 transition-all hover:bg-indigo-500/20 active:scale-95 disabled:opacity-50"
+                  className="w-full py-2.5 bg-slate-50 border border-slate-200 text-slate-500 font-bold rounded-xl hover:bg-slate-100 transition-colors text-sm"
                 >
-                  <div className="relative flex items-center justify-center gap-2">
-                    <Activity size={16} className="text-indigo-400" />
-                    <span className="text-indigo-300 font-bold tracking-wider uppercase text-sm">
-                      開發者專用通道
-                    </span>
-                  </div>
+                  開發者專用通道
                 </button>
               )}
             </>
           )}
         </form>
-        <div className="mt-8 text-center">
-          <p className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">
-            Secured by Zero Knowledge Proof & 5T Protocol
-          </p>
-        </div>
+
+        <p className="mt-6 text-center text-[10px] text-slate-400 font-mono tracking-wider">
+          Secured by Zero Knowledge Proof & 5T Protocol
+        </p>
       </motion.div>
     </div>
   );

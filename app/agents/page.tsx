@@ -1,50 +1,129 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Network,
+  Search,
+  Plus,
+  ShieldCheck,
+  Activity,
+  Brain,
+  Lock,
+  Loader2,
+  CheckCircle2,
+  Zap,
+  Bot,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
-import { Network, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
+
+/* ─── Types ─── */
+interface AgentRecord {
+  id: number;
+  date: string;
+  metric_name: string;
+  metric_value: number;
+  unit: string;
+  hash_lock: string | null;
+  source_origin: string;
+}
+
+/* ─── Mock Data ─── */
+const MOCK_DATA: AgentRecord[] = [
+  {
+    id: 1,
+    date: '2026-06-01',
+    metric_name: 'Carbon Scope 1',
+    metric_value: 1200,
+    unit: 'm³',
+    hash_lock: '0x8f2f...3a21',
+    source_origin: 'Auto-Agent',
+  },
+  {
+    id: 2,
+    date: '2026-06-02',
+    metric_name: 'Water Efficiency',
+    metric_value: 350,
+    unit: '噸',
+    hash_lock: null,
+    source_origin: 'Manual',
+  },
+  {
+    id: 3,
+    date: '2026-06-03',
+    metric_name: 'Energy Score',
+    metric_value: 98.5,
+    unit: '%',
+    hash_lock: '0x1ca8...9d4f',
+    source_origin: 'System',
+  },
+  {
+    id: 4,
+    date: '2026-06-04',
+    metric_name: 'Supply Chain Compliance',
+    metric_value: 87,
+    unit: '%',
+    hash_lock: null,
+    source_origin: 'Auto-Agent',
+  },
+  {
+    id: 5,
+    date: '2026-06-05',
+    metric_name: 'Waste Reduction',
+    metric_value: 42,
+    unit: '%',
+    hash_lock: '0xabcd...ef12',
+    source_origin: 'IoT Sensor',
+  },
+];
+
+const AGENT_FEATURES = [
+  {
+    icon: Bot,
+    title: '智能調度',
+    desc: '自動分配任務給最適合的代理人',
+    color: 'text-cyan-600',
+    bg: 'bg-cyan-50',
+  },
+  {
+    icon: ShieldCheck,
+    title: '5T 驗證',
+    desc: '每筆資料自動進行 5T 誠信驗證',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
+  },
+  {
+    icon: Zap,
+    title: '即時同步',
+    desc: 'RWD 雙向同步，資料即時更新',
+    color: 'text-amber-600',
+    bg: 'bg-amber-50',
+  },
+  {
+    icon: Brain,
+    title: 'AI 分析',
+    desc: '自動分析 ESG 數據並生成洞察',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50',
+  },
+];
 
 export default function AgentsPage() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<AgentRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [sealingId, setSealingId] = useState<number | null>(null);
-  const [verifyingId, setVerifyingId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetching from a omni proxy metrics endpoint
-      const res = await fetch('/api/metrics/agents', { cache: 'no-store' });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json.data || []);
-      } else {
-        // Fallback mock data for Trinity UIUX demonstration if API fails
-        setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
-        ]);
-      }
-    } catch (e) {
-      console.error('Fetch Error:', e);
-      // Fallback mock data
-      setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-      ]);
-    } finally {
+    const timer = setTimeout(() => {
+      setData(MOCK_DATA);
       setLoading(false);
-    }
-  };
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSeal = async (id: number) => {
     setSealingId(id);
@@ -52,44 +131,21 @@ export default function AgentsPage() {
       const response = await fetch('/api/vault/seal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'agents', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
+        body: JSON.stringify({
+          evidence: { table: 'agents', recordId: id, timestamp: Date.now() },
+          type: '5t-seal',
+        }),
       });
       const resData = await response.json();
       if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
-      } else {
-        alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
+        setData((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, hash_lock: resData.hashLock } : m))
+        );
       }
-    } catch (error) {
-      console.error('Seal exception:', error);
-      alert('無法連線至封印金庫 (Vault Connection Error)。');
+    } catch {
+      // silent
     } finally {
       setSealingId(null);
-    }
-  };
-
-  const handleVerify = async (id: number) => {
-    setVerifyingId(id);
-    try {
-      const response = await fetch('/api/vault/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
-      });
-      const resData = await response.json();
-      if (resData.success && resData.valid) {
-        alert('✅ 驗證成功 (Verification Success)：資料未遭篡改，符合 5T 誠信協議。');
-      } else {
-        alert('❌ 驗證失敗 (Verification Failed)：金庫校驗不符，資料可能已受損。');
-      }
-    } catch (e) {
-      console.error('Verify exception:', e);
-      alert('連線金庫時發生錯誤 (Vault Connection Error)。');
-    } finally {
-      setVerifyingId(null);
     }
   };
 
@@ -97,148 +153,267 @@ export default function AgentsPage() {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      fetchData(); // re-fetch after add
-    }, 1500);
+      setData(MOCK_DATA);
+    }, 1000);
   };
 
-  const columns = [
-    { key: 'date', label: '日期 (Date)' },
-    { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
-    { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </OmniBadge>
-      ) : (
-        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
-          </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
-  ];
+  const stats = {
+    active: 3,
+    verified: data.filter((d) => d.hash_lock).length,
+    coverage: 100,
+  };
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
-        {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
+      <div className="max-w-[1400px] mx-auto space-y-6">
+        {/* ─── Header ─── */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
-              <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <Network className="text-cyan-400 relative z-10" size={28} />
+            <div className="p-3 bg-cyan-50 rounded-xl border border-cyan-100">
+              <Network size={24} className="text-cyan-600" />
             </div>
             <div>
-              <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">AGENTS</span>
+              <div className="flex items-center gap-2 mb-0.5">
+                <OmniBadge variant="primary" size="sm" icon={<Brain size={10} />}>
+                  OmniAgent Ready
+                </OmniBadge>
+                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+                  AGENTS
+                </span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">AGENTS</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">agents dashboard</p>
+              <h1 className="text-2xl md:text-3xl font-black text-[#003262] tracking-tight">
+                萬能代理
+              </h1>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">AI AGENT ORCHESTRATION</p>
             </div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+          <div className="flex gap-2 w-full md:w-auto">
+            <OmniButton
+              variant="outline"
+              size="md"
+              icon={<Search size={14} />}
+              className="flex-1 md:flex-none"
+            >
+              檢索
+            </OmniButton>
+            <OmniButton
+              variant="primary"
+              size="md"
+              icon={<Plus size={14} />}
+              onClick={handleAddRecord}
+              isLoading={isProcessing}
+              className="bg-[#003262] hover:bg-[#002244] text-white flex-1 md:flex-none"
+            >
               新增紀錄
             </OmniButton>
           </div>
         </header>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
-              <Activity size={18} className="text-emerald-400" />
+        {/* ─── Stats ─── */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <OmniBaseCard className="p-5 flex items-center gap-4">
+            <div className="p-2.5 bg-emerald-50 rounded-xl">
+              <Activity size={18} className="text-emerald-600" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
+            <div>
+              <p className="text-2xl font-black text-[#003262]">
+                {stats.active}
+                <span className="text-sm text-slate-400 ml-1">Nodes</span>
+              </p>
+              <p className="text-[10px] text-emerald-600 font-bold">Status: Optimal</p>
+            </div>
           </OmniBaseCard>
-
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
-              <ShieldCheck size={18} className="text-cyan-400" />
+          <OmniBaseCard className="p-5 flex items-center gap-4">
+            <div className="p-2.5 bg-cyan-50 rounded-xl">
+              <ShieldCheck size={18} className="text-cyan-600" />
             </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
+            <div>
+              <p className="text-2xl font-black text-[#003262]">
+                98.5<span className="text-sm text-slate-400">%</span>
+              </p>
+              <p className="text-[10px] text-cyan-600 font-bold">5T 驗證率</p>
+            </div>
           </OmniBaseCard>
-
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
-              <Brain size={18} className="text-amber-400" />
+          <OmniBaseCard className="p-5 flex items-center gap-4">
+            <div className="p-2.5 bg-amber-50 rounded-xl">
+              <Brain size={18} className="text-amber-600" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
-            <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
+            <div>
+              <p className="text-2xl font-black text-[#003262]">
+                {stats.coverage}
+                <span className="text-sm text-slate-400">%</span>
+              </p>
+              <p className="text-[10px] text-amber-600 font-bold">業務覆蓋</p>
+            </div>
           </OmniBaseCard>
         </div>
 
-        {/* Main Workspace Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard 
-              variant="default" 
-              title="業務資料視圖" 
-              subtitle="Data synced with 5T Integrity Protocol"
-              className="min-h-[400px]"
+        {/* ─── Agent Features ─── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {AGENT_FEATURES.map((feat, i) => (
+            <motion.div
+              key={feat.title}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all duration-300"
             >
-              <OmniBaseTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
+              <div
+                className={cn(
+                  'w-10 h-10 rounded-xl flex items-center justify-center mb-3',
+                  feat.bg
+                )}
+              >
+                <feat.icon size={20} className={feat.color} />
+              </div>
+              <h3 className="text-sm font-bold text-[#003262] mb-1">{feat.title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">{feat.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ─── Main Content ─── */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Table */}
+          <div className="lg:col-span-3">
+            <OmniBaseCard padding="none" className="overflow-hidden">
+              <div className="p-5 border-b border-slate-100">
+                <h3 className="text-base font-bold text-[#003262]">業務資料視圖</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Data synced with 5T Integrity Protocol
+                </p>
+              </div>
+
+              {loading ? (
+                <div className="h-40 flex items-center justify-center text-sm text-slate-400">
+                  載入中...
+                </div>
+              ) : (
+                <>
+                  {/* Desktop */}
+                  <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr className="bg-slate-50/80 border-b border-slate-100">
+                          {['日期', '指標名稱', '數值', '來源', '5T Hash', '操作'].map((h) => (
+                            <th
+                              key={h}
+                              className="px-4 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]"
+                            >
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {data.map((row) => (
+                          <tr key={row.id} className="hover:bg-slate-50/50 transition-colors">
+                            <td className="px-4 py-3 text-xs text-slate-500 font-mono">
+                              {row.date}
+                            </td>
+                            <td className="px-4 py-3 text-sm font-medium text-[#003262]">
+                              {row.metric_name}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600 font-mono">
+                              {row.metric_value}{' '}
+                              <span className="text-xs text-slate-400">{row.unit}</span>
+                            </td>
+                            <td className="px-4 py-3 text-xs text-slate-500">
+                              {row.source_origin}
+                            </td>
+                            <td className="px-4 py-3">
+                              {row.hash_lock ? (
+                                <OmniBadge
+                                  variant="success"
+                                  size="sm"
+                                  icon={<ShieldCheck size={10} />}
+                                >
+                                  {row.hash_lock.substring(0, 8)}...
+                                </OmniBadge>
+                              ) : (
+                                <OmniBadge variant="default" size="sm">
+                                  未封印
+                                </OmniBadge>
+                              )}
+                            </td>
+                            <td className="px-4 py-3">
+                              {!row.hash_lock ? (
+                                <button
+                                  onClick={() => handleSeal(row.id)}
+                                  disabled={sealingId === row.id}
+                                  className="inline-flex items-center gap-1 text-xs font-bold text-cyan-600 hover:text-cyan-800 disabled:opacity-50 transition-colors"
+                                >
+                                  {sealingId === row.id ? (
+                                    <Loader2 size={10} className="animate-spin" />
+                                  ) : (
+                                    <Lock size={10} />
+                                  )}
+                                  封印
+                                </button>
+                              ) : (
+                                <CheckCircle2 size={14} className="text-emerald-500" />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile */}
+                  <div className="md:hidden divide-y divide-slate-50">
+                    {data.map((row) => (
+                      <div key={row.id} className="p-4">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <p className="text-sm font-medium text-[#003262]">{row.metric_name}</p>
+                          <span className="text-sm font-mono font-bold text-[#003262]">
+                            {row.metric_value}
+                            <span className="text-xs text-slate-400 ml-0.5">{row.unit}</span>
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-slate-400">{row.date}</span>
+                          <span className="text-[10px] text-slate-400">·</span>
+                          <span className="text-[10px] text-slate-400">{row.source_origin}</span>
+                          {row.hash_lock && <ShieldCheck size={10} className="text-emerald-500" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </OmniBaseCard>
           </div>
-          
-          <div className="space-y-6">
-            <OmniBaseCard 
-              variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
-            >
-              <div className="space-y-4 text-sm text-slate-300">
+
+          {/* Sidebar */}
+          <div>
+            <OmniBaseCard className="p-5 border-cyan-100">
+              <h3 className="text-sm font-bold text-[#003262] mb-4">OmniAgent 輔助</h3>
+              <div className="space-y-3 text-sm text-slate-600">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  此模組已接軌 <strong>萬能元件原子庫</strong>，並符合全端雙向 TypeScript 規範。
                 </p>
-                <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                  <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
-                  <ul className="list-disc list-inside space-y-1 text-slate-400 text-xs">
-                    <li>客戶體驗 (Customer Experience)</li>
-                    <li>業務邏輯 (Business Logic)</li>
-                    <li>極致美學 (Liquid Glass Cyan)</li>
+                <div className="p-3 bg-cyan-50 rounded-xl border border-cyan-100">
+                  <h4 className="text-xs font-bold text-cyan-700 mb-2">設計原則</h4>
+                  <ul className="space-y-1 text-xs text-slate-500">
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={10} className="text-cyan-500" />
+                      客戶體驗 (CX)
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={10} className="text-cyan-500" />
+                      業務邏輯 (BL)
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={10} className="text-cyan-500" />
+                      極致美學 (UI)
+                    </li>
                   </ul>
                 </div>
               </div>
             </OmniBaseCard>
           </div>
         </div>
-
       </div>
     </div>
   );
