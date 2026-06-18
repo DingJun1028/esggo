@@ -1,244 +1,481 @@
-# 🌌 ESGGO 善向永續 | OmniAgent 萬能系統
+# 🌌 ESGGO 善向永續 | OmniAgent 萬能平台
 
-> **Platform:** ESGGO 善向永續 V1.5.0 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY | **AI Model:** google/gemma-3-27b-it:free
+> **Platform:** ESGGO 善向永續 V2.0 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** SACRED TRINITY ♾️
 
-[![Render Deployment](https://img.shields.io/badge/Render-Deployed-brightgreen)](https://dashboard.render.com)
-[![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-blue)](#-5t誠信協議-5t-integrity-protocol)
-[![Wiki](https://img.shields.io/badge/Wiki-OmniSystem-green)](docs/wiki/OMNI_SYSTEM.md)
-[![VPS Agent](https://img.shields.io/badge/VPS-Ready-blue)]()
-[![Tests](https://img.shields.io/badge/Tests-111%2F113-yellow)]()
-
-## 📚 Wiki 導航
-
-- [OmniSystem MECE 架構](docs/wiki/OMNI_SYSTEM.md) - 24 類別定義
-- [萬能系列組件](docs/wiki/OMNI_SERIES.md) - Memory, Knowledge, Runes, Notes...
-- [終極矩陣](docs/wiki/OMNI_COMPONENT_MATRIX.md) - 功能導覽地圖
-- [行動版設計](docs/wiki/MOBILE_NAVIGATION.md) - RWD 響應式設計
-
-## 0. 🚀 系統願景 (Mission)
-
-ESGGO 是一個有機統合的治理實體，致力於提供數位誠信與 **5T 協議** 的基礎設施。透過 **OmniAgent** 全域編排與 **Gemma 4** 智能心核，將生硬的 ESG 數據轉化為可感知的流動藝術與不可篡改的信任證據。
+[![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen)](#)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org)
+[![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-gold)](#5t-誠信協議)
+[![Tests](https://img.shields.io/badge/Tests-111%2F113-yellow)](#測試)
+[![License](https://img.shields.io/badge/License-MIT-green)](#)
 
 ---
 
-> ESGGO 善向永續 V1.5.0 | 主題：5 種顏色主題（green, blue, earth, sunset, cyan） | 頁面：App Router 180 頁 | VPS：四端點就緒
+## 📚 文件導航 (Documentation Hub)
+
+| 文件                                               | 說明                              |
+| -------------------------------------------------- | --------------------------------- |
+| [OMNI_GUIDE.md](./OMNI_GUIDE.md)                   | 萬能法典 v4.5，系統哲學與架構聖典 |
+| [ROADMAP.md](./ROADMAP.md)                         | 四階段全域演化路線圖              |
+| [ADR_Index.md](./ADR_Index.md)                     | 架構決策紀錄 (ADR) 總索引         |
+| [GEMINI.md](./GEMINI.md)                           | OmniCore 憲章，治理法典           |
+| [BEST_PRACTICES.md](./BEST_PRACTICES.md)           | 工程最佳實踐規範                  |
+| [TECHNICAL_INTEGRITY.md](./TECHNICAL_INTEGRITY.md) | 技術誠信規範                      |
+| [API_SPECIFICATION.md](./API_SPECIFICATION.md)     | OpenAPI 規格文件                  |
+| [docs/QUICK_START.md](./docs/QUICK_START.md)       | 快速入門指南                      |
+| [CONTRIBUTING.md](./CONTRIBUTING.md)               | 貢獻者指南                        |
 
 ---
 
-## 🛠️ 核心功能特色 (System Features)
+## 🎯 系統願景 (Mission)
 
-### 📊 全域治理面板 (Sovereign Dashboard)
+ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建立 ESG 治理基礎，降低永續報告成本，透過 **5T 誠信協議** 建立數據的可追溯信任鏈，並以 AI 大幅提升分析與撰寫效率。
 
-- **液態玻璃 UI**: 採用 `Liquid Glass` 設計哲學，結合 `Bento Grid` 佈局，提供極高資訊密度的視覺體驗。
-- **即時數據監控**: 整合 `JES (Energy Flow Conflict)` 監控，實時分析能源流與碳排放衝突。
-
-### 🛡️ 5T 誠信協議 (5T Integrity Protocol)
-
-1. **Tangible (具體)**: 數據可感知、具體化，透過萬能組件展現。
-2. **Traceable (溯源)**: 每一筆數據皆夾帶 `source_origin` 與完整 `flow_path`。
-3. **Trackable (追蹤)**: 完整生命週期日誌， request_id 全程追蹤。
-4. **Transparent (透明)**: 算法透明，杜絕 AI 幻覺，具備 `Formula` 驗算面板。
-5. **Trustworthy (信賴)**: 主權封印，不可篡改，整合 **ZKP (零知識證明)** 密封技術。
-
-### ✍️ SustainWrite™ 專家寫作
-
-- **遞迴專家擴張**: 針對 GRI/CBAM 章節進行自動化深度寫作，確保內容達到專家級別。
-- **因果刻印**: 所有生成的內容皆具備密碼學綁定證明。
+**核心信念：** 「上善若水，善向永續。知識即資產，服務即教學。」
 
 ---
 
-## 🤖 代理蜂群 (Agent Swarm & Summoning)
+## 🏗️ 技術架構 (Tech Stack)
 
-系統由多位具備獨特天賦的代理人協同運作。
-
-### 1. 召喚 G4 (Gemma 3 - Thinking Mode)
-
-- **特色**: 系統的最強大腦。具備「思考模式 (Thinking Mode)」，在回答前進行複雜邏輂與多步推理。
-- **定位**: 處理高度模糊的指令、深度多模態分析與跨領域策略制定。
-- **咒語**: `OmniAgent, 切換至 G4 模式。執行全域邏輯推演。`
-
-### 1.1 召喚 Mistral (Mistral Small 3.1 24B - Default)
-
-- **特色**: 預設 AI 模型，專業 ESG 分析。
-- **定位**: 處理 ESG 报告、法規分析與永續策略。
-- **模型鏈**: Local (llava-phi3:latest) → OpenRouter (mistralai/mistral-small-3.1-24b:free) → Mock
-
-### 1.2 召喚 Vision (Llava-Phi3 - Image Analysis)
-
-- **特色**: 視覺分析模型，支援圖片描述與 ESG 圖表識別。
-- **定位**: 處理圖片問題、圖表識別、視覺數據分析。
-- **模型**: `llava-phi3:latest` (本地 Ollama)
-
-### 1.3 召喚 Gemma3 (Gemma 3 27B - Free)
-
-- **特色**: v1.5.0 預設 AI 模型，免費版 Gemma 3。
-- **定位**: 全域智能分析、對話與策略制定。
-- **模型**: `google/gemma-3-27b-it:free`
-
-### 2. 系統指揮官 OmniAgent
-
-- **特色**: 資深全端架構師人格。負責全域編排、代理蜂群調度與任務執行。
-- **定位**: 系統的中樞大腦，負責協調「三位一體」的運行。
-- **喚回協議**: 如果身分模糊，輸入：`"OmniAgent, 執行全域記憶掃描。讀取 .agents/omni-agent/AGENTS.md。"`
-
-### 3. AI 修復師 OmniJules (Google Jules Core)
-
-- **特色**: 具備「萬能修復」被動天賦。專注於代碼修補、文件優化與自動化 Debug。
-- **定位**: 系統的守護者，負責維持技術誠信（Technical Integrity）。
-
-### 4. 領域專家 Swarm
-
-- **ESG Researcher**: 網頁檢索與情資收集。
-- **ESG Auditor**: 5T 合規性驗證與 ZKP 密封。
-- **ESG Strategist**: 敘事流優化與 GRI 標準對齊。
-
-### 5. VPS 部署代理 (VPS Agent)
-
-- **責任**: 負責所有伺服器相關事務，包含部署、監控與維護。
-- **配置**: `.agents/vps-agent/`
-- **服務端點**: Port 3000 (API), Port 3001 (UI), Port 8642 (Gateway)
+| 層級         | 技術                                        |
+| ------------ | ------------------------------------------- |
+| **框架**     | Next.js 16 (App Router) + React 18          |
+| **語言**     | TypeScript 5.3（嚴格模式）                  |
+| **樣式**     | Tailwind CSS 4 + Liquid Glass Design        |
+| **AI SDK**   | Vercel AI SDK 6 + Google Genkit 1.37        |
+| **資料庫**   | Supabase (PostgreSQL + RLS) + Firebase      |
+| **資料連接** | Firebase Data Connect + GraphQL Yoga        |
+| **狀態管理** | Zustand + TanStack Query v4                 |
+| **即時通訊** | Socket.IO + GraphQL WebSocket               |
+| **安全**     | ZKP (snarkjs) + SHA-256 Hash Lock           |
+| **測試**     | Vitest + Playwright (VRT) + Testing Library |
+| **CI/CD**    | GitHub Actions + Vercel + Docker            |
+| **監控**     | New Relic + OpenTelemetry                   |
 
 ---
 
-## 🌐 VPS 直連與管理 (Oracle Cloud Access)
+## 🛠️ 核心功能模組 (Feature Modules)
 
-本平台使用頂級 Oracle Cloud ARM64 伺服器 (Ubuntu 24.04) 作為生產運行環境：
+### 📊 治理面板 (Governance Dashboard) — `/dashboard`
 
-- **Host**: `161.118.248.180` (SSH Port: `22`)
-- **Default User**: `root` (可設定為免密碼的金鑰 `vps_esggo` 登入)
-- **反向代理 Gateway 入口 (Nginx Port 80)**：`http://161.118.248.180/omniagent-gateway/status`
-- **直連 Gateway (Port 8642)**：`http://161.118.248.180:8642/status` (API Key: `hermes_gold_2026`)
+- **Liquid Glass UI** + Bento Grid 佈局，高資訊密度視覺體驗
+- 即時 ESG 績效指標與碳排放監控
+- JES (能源衝突) 感測器整合
 
-### 📦 Nginx 與安全反向代理一鍵配置
+### 🛡️ 5T 誠信協議 (5T Integrity Protocol) — `/5t-dashboard`
 
-我們已在 `vps/` 目錄下封裝了自動化 Nginx 管理工具，讓 Gateway 服務（WebSocket、SSE 串流）能完美運行於 Nginx 安全防護後。
+1. **Tangible (具體)** — 數據可感知，萬能組件展現
+2. **Traceable (溯源)** — `source_origin` 鏈式日誌，完整 flow_path
+3. **Trackable (追蹤)** — 全生命週期事件儲存，request_id 追蹤
+4. **Transparent (透明)** — 算法公開，Formula 驗算面板
+5. **Trustworthy (信賴)** — ZKP + SHA-256 Hash Lock 雙重封印
 
-#### 1. 自動化 Nginx 架構配置 (`vps/nginx-esggo.conf`)
+### ✍️ SustainWrite™ 永續撰寫 — `/sustain-write`
 
-- 包含 Next.js (Port 3000) 及 OmniAgent Gateway (Port 8642) 的合流代理。
-- 自動配置 `proxy_buffering off` 支援 **AI SSE 實時打字流輸出**。
-- 開啟 WebSockets 協定升級，保障代理人廣播匯流排通訊。
+- **Tiptap 3** 富文本編輯器，支援 GRI/ISSB 章節框架
+- 遞迴專家擴張，單章節 5,000+ 字 AI 撰寫
+- CBAM 碳排放公式精密計算與自動嵌入
 
-#### 2. 一鍵自動化 Nginx 安裝與重載 (`vps/setup-nginx.sh`)
+### 📦 5T 證據金庫 (Evidence Vault) — `/vault`
 
-在 VPS 終端機執行以下命令，即可全自動配置 Nginx：
+- ZKP 零知識證明文件封印
+- OCR 掃描上傳，PDF/圖片自動識別
+- Supabase RLS 行級安全保護
+
+### 🔬 重大性矩陣 (Materiality Matrix) — `/materiality`
+
+- GRI 重大性議題衝突矩陣評估
+- 利害關係人調查整合
+- 熱力圖可視化輸出
+
+### 🌍 碳計算器 (CBAM Calculator) — `/cbam-calculator`
+
+- Scope 1 / 2 / 3 排放精密計算
+- 歐盟 CBAM 邊境稅款估算
+- 減碳路徑模擬（SBTi 1.5°C 對齊）
+
+### 🤖 OmniAgent AI 助手 — `/omni-agent`
+
+- 多模型路由：Gemma 3 27B / Mistral 24B / Llava-Phi3
+- SSE 即時串流輸出
+- ESG 領域 RAG 增強檢索
+
+### 🏭 供應鏈透明化 — `/supply-chain`
+
+- 端到端供應商 ESG 合規追蹤
+- 風險評級與預警
+
+### 📡 情資中心 (Intelligence Hub) — `/intelligence`
+
+- 外部法規與政策動態抓取
+- 今日永續觀察者日報 AI 生成
+- 5T Hash Lock 鏈上校驗
+
+### 📝 OmniNotes 萬能筆記 — `/omni-notes`
+
+- Markdown 筆記與 5T 任務管理雙向同步
+- 跨組件數據流橋接
+
+### 🔔 通知中心 — `/notifications`
+
+- 收件匣（全部/未讀/緊急）篩選與搜尋
+- Email 模板管理（開啟率/點擊率統計）
+- 多渠道設定（Email/推播/SMS/Slack）
+- 時程設定（即時/每日/每週/召回）
+
+### 🎓 永續學院 — `/academy`
+
+- 課程管理與認證考試
+- 互動學習與卡牌遊戲化機制
+
+### 🏘️ 社群村落 — `/village`
+
+- 社交連結與 UGC 內容
+
+### 🔗 同盟樞紐 (Alliance Hub) — `/alliance`
+
+- L-Hub AI 代理蜂群即時通訊
+- 外部合作夥伴 ESG 數據交換
+
+### 📋 GRI 報告生成 — `/gri`
+
+- 28+ 個 GRI 專家模板
+- 一鍵生成 200+ 頁永續報告
+- PDF / Word 多格式導出
+
+### 🔒 ZKP 區塊鏈封印 — `/zkp-blockchain`
+
+- Pedersen Commitment 同態加密
+- 不可篡改審計軌跡
+
+### 🗺️ 系統地圖 — `/map`
+
+- MECE 全端組成樣貌可視化
+- 功能依存關係圖譜
+
+---
+
+## 🤖 代理蜂群 (Agent Swarm)
+
+| 代理             | 定位         | 能力                             |
+| ---------------- | ------------ | -------------------------------- |
+| **OmniAgent**    | 系統指揮官   | 全域編排、蜂群調度、任務執行     |
+| **Hermes**       | 自主開發代理 | 程式碼生成、Git 提交、自動部署   |
+| **G4 (Gemma 3)** | 思考引擎     | 複雜推理、多模態分析             |
+| **Mistral 24B**  | ESG 分析師   | 法規分析、報告撰寫               |
+| **Llava-Phi3**   | 視覺代理     | 圖表識別、圖片 ESG 分析          |
+| **OmniJules**    | 自癒守護者   | Bug 修復、架構重構、萬能果因協議 |
+| **ESG Swarm**    | 領域專家群   | 研究員 / 稽核員 / 策略師         |
+
+---
+
+## 🌐 部署環境 (Deployment)
+
+### 本地開發
 
 ```bash
-cd /var/www/esggo/vps
-chmod +x setup-nginx.sh
-sudo ./setup-nginx.sh
+# 安裝依賴
+pnpm install
+
+# 啟動開發伺服器
+pnpm run dev          # Next.js on :3001
+# 或使用統一控制腳本
+.\ctl.ps1 start       # Windows PowerShell
 ```
 
-### 💻 PM2 與服務管理指令
+### VPS (Oracle Cloud ARM64)
+
+- **Host**: `161.118.248.180` | SSH Port: `22`
+- **Nginx 反向代理**: `http://161.118.248.180/`
+- **Gateway**: Port `8642` (API Key: `hermes_gold_2026`)
 
 ```bash
-# 連結 VPS
+# PM2 服務管理
 ssh root@161.118.248.180
-
-# 監控 PM2 所有服務狀態 (esggo + omniagent-gateway)
 pm2 status
-
-# 檢看即時日誌
 pm2 logs esggo
-pm2 logs omniagent-gateway
-
-# 重啟 AI 閘網與前端主程式
 pm2 restart esggo omniagent-gateway
 ```
 
----
-
-## 🏆 系統完整性與測試審計 (Technical Integrity & Tests)
-
-本平台實施嚴格的 **5T 誠信協議**（可溯源、透明、可感知、可信任、可追蹤）。所有程式碼變更皆須通過全自動測試。
-
-- **單元與整合測試狀態**：🟡 **111/113 通過** (2 預存在位)
-- **測試統計**：`32` 個測試檔案，共 `111` 個 Test Cases 通過。
-- **一鍵執行本機誠信自檢**：
-  ```bash
-  npm run test
-  npm run typecheck
-  npm run lint
-  ```
-
-### 📊 111 項全系統功能導覽與技術合規矩陣 (111 Tested Capabilities & 5T Compliance Matrix)
-
-本專案全數通過的 **118 項測試功能** 代表著平台在五大技術維度（5T 誠信協議）下的核心能力。以下為平台主要功能的導覽與對應之自動化測試清單：
-
-| #     | 平台核心模組 (Platform Modules)                            | 測試能力與功能細節 (Tested Capabilities)                                                                                                                 | 測試檔案對應 (Test Files Location)                                                                           | 5T 誠信維度對齊 (5T Dimensions)                |
-| ----- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
-| **1** | **5T 誠信與安全金庫**<br>_(5T Integrity & Vault)_          | - 零知識證明 (ZKP) 密碼學防篡改雜湊鎖<br>- SHA-256 數位簽章與哈希密封技術<br>- RLS (行級安全) 權限阻斷校驗<br>- 實證單據上傳 (OmniEvidenceUploader) 封印 | `lib/crypto-proof.test.ts`<br>`app/api/crypto/simulator/route.test.ts`<br>`lib/omni-core/integrity.test.ts`  | **Trustworthy (信賴)**<br>**Traceable (溯源)** |
-| **2** | **SustainWrite™ 專家寫作**<br>_(SustainWrite Engine)_      | - GRI / CBAM 永續編織專家模板配對<br>- 編輯器 (Tiptap) 原子狀態與倒退/重做操作<br>- AI 筆記融入與即時打字流編織<br>- 筆記章節專屬釘選 (Pinning) 狀態     | `useSustainWriteStore.test.ts`<br>`components/ChapterEditor.test.tsx`<br>`tests/contract/esg-report.test.ts` | **Tangible (具體)**<br>**Transparent (透明)**  |
-| **3** | **商情與外部情資感知**<br>_(Intelligence Hub)_             | - 外部環境監測、政策與法規動態抓取<br>- 今日永續觀察者日報 (Daily Observer Report) AI 生成<br>- 5T Hash Lock 鏈上雜湊校驗                                | `app/api/social/insights/route.test.ts`<br>`app/api/omni-agent-api/schedule/route.test.ts`                   | **Trackable (追蹤)**<br>**Transparent (透明)** |
-| **4** | **雙重大宗性與碳排核算**<br>_(Materiality & CBAM)_         | - GRI 大宗性衝突矩陣評估算法<br>- 範疇一、二、三 CBAM 碳排放公式精密計算<br>- 行動交辦與數位孿生模擬                                                     | `lib/esg/carbon-calculator.test.ts`<br>`tests/test-pdf.test.ts`                                              | **Tangible (具體)**<br>**Transparent (透明)**  |
-| **5** | **自癒守護者與代理蜂群**<br>_(Autonomous Healing & Swarm)_ | - 啟發式故障自我修復 (Heuristic Healing) 診斷<br>- 連線中斷時的 Simulation 模擬降級保護<br>- 智慧筆記 (OmniNotes) 跨組件數據流橋接                       | `lib/omni-core/healer.test.ts`<br>`lib/omni-space/global-healing.test.ts`<br>`tests/jes-monitor.test.ts`     | **Traceable (溯源)**<br>**Trackable (追蹤)**   |
-| **6** | **系統底層與全遙測日誌**<br>_(Core Logging & Telemetry)_   | - 跨平台雙向 TypeScript 類型漂移校驗<br>- 全遙測 (Telemetry) 動作、點擊與配置儲存<br>- 多維度關聯知識圖譜與時序日誌                                      | `OmniLoggerService.test.ts`<br>`app/actions/test-actions.test.ts`<br>`lib/memory-graph-engine.test.ts`       | **Trackable (追蹤)**<br>**Traceable (溯源)**   |
-
----
-
-## 💻 OmniCLI 指令集 (Command Center)
-
-我們提供了統一的控制入口 `./ctl.sh`：
+### Vercel (Preview / Production)
 
 ```bash
-./ctl.sh start      # 啟動 Next.js 與 AI 網關
-./ctl.sh ready      # 執行全自動生產就緒檢查 (ci, tsc, test, lint, build)
-./ctl.sh status     # 檢查系統誠信狀態
-./ctl.sh render     # 代理 Render CLI 指令 (如: services, deploys)
+vercel deploy --prod
+```
+
+### Docker
+
+```bash
+docker build -t esggo .
+docker compose up -d
 ```
 
 ---
 
-## 🔌 API 端點 | API Endpoints
+## 💻 控制指令 (OmniCLI)
 
-| 端點                   | 方法 | 功能     |
-| ---------------------- | ---- | -------- |
-| `/api/omni-notes`      | POST | 筆記同步 |
-| `/api/omni-agent/chat` | POST | AI 對話  |
-| `/api/system/health`   | GET  | 系統健康 |
+### Windows PowerShell (`.\ctl.ps1`)
+
+```powershell
+.\ctl.ps1 start    # 啟動 Next.js + OmniAgent Gateway
+.\ctl.ps1 stop     # 停止所有服務
+.\ctl.ps1 restart  # 重啟服務
+.\ctl.ps1 status   # 查看服務狀態
+.\ctl.ps1 logs     # 查看即時日誌
+```
+
+### NPM Scripts
+
+```bash
+pnpm run dev              # 開發伺服器
+pnpm run build            # 生產建置
+pnpm run test             # 執行測試 (Vitest)
+pnpm run typecheck        # TypeScript 型別檢查
+pnpm run lint             # ESLint 檢查
+pnpm run test:vrt         # Playwright 視覺迴歸測試
+
+# Supabase 資料表初始化
+pnpm run omni:setup       # 初始化所有資料表
+pnpm run omni:setup:vault # 初始化 Evidence Vault
+pnpm run omni:setup:intel # 初始化 Intelligence 資料表
+pnpm run omni:scan        # 掃描系統功能節點
+```
+
+---
+
+## 🔌 API 端點 (API Endpoints)
+
+| 端點                          | 方法     | 功能               |
+| ----------------------------- | -------- | ------------------ |
+| `/api/omni-agent/chat`        | POST     | AI 對話 (SSE 串流) |
+| `/api/omni-notes`             | POST/GET | OmniNotes 同步     |
+| `/api/nexus/agent`            | POST     | OmniNexus 閘道     |
+| `/api/sustain-write/generate` | POST     | 報告生成           |
+| `/api/cbam`                   | POST     | CBAM 碳計算        |
+| `/api/vault/indicators`       | POST     | 數據串接 + OCR     |
+| `/api/gri`                    | GET      | GRI 標準查詢       |
+| `/api/matrix`                 | GET      | 矩陀路由查詢       |
+| `/api/system/health`          | GET      | 系統健康檢查       |
+| `/api/crypto/simulator`       | POST     | ZKP 密碼學模擬     |
 
 ### 快速測試
 
 ```bash
-# 筆記同步
+# 健康檢查
+curl http://localhost:3000/api/system/health
+
+# AI 對話
+curl -X POST http://localhost:3000/api/omni-agent/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"分析台灣 ESG 趨勢"}'
+
+# OmniNotes 同步
 curl -X POST http://localhost:3000/api/omni-notes \
   -H "Content-Type: application/json" \
-  -d '{"action":"sync","note":{"id":"test","type":"knowledge","content":"ESG永續發展 #永續"}}'
+  -d '{"action":"sync","note":{"id":"test","type":"knowledge","content":"ESG #永續"}}'
 ```
 
 ---
 
-## 🎨 設計美學 (Liquid Glass Aesthetics)
+## 🎨 設計系統 (Design System)
 
-- **核心色彩**: Berkeley Blue (`#003262`) & California Gold (`#FDB515`)。
-- **材料學**: 液態玻璃 (Liquid Glass)、賽博全息 (Cyberpunk Hologram)。
-- **組件庫**: 位於 `components/omni/`，遵循「參照原則」，每個組件皆是誠信節點。
+### Liquid Glass 美學
 
----
+- **哲學**: 「上善若水」— 清澈、包容、流動
+- **主色**: Aqua 青 `#63a6b0` + 永恆金 `#ffd700`
+- **背景**: `#F0F2F5` | 文字: `#262626`
+- **動效**: ease-in-out 200ms，Skeleton Screen 載入
 
-## 📜 萬能法典 (OmniCore Constitution)
+### 5 種主題
 
-本系統開發嚴格遵循 `./GEMINI.md` 所載之憲章：
+`green` · `blue` · `earth` · `sunset` · `cyan`
 
-- **Intentional Simplicity**: 表層簡約，底層強大。
-- **End-to-End Type Safety**: 前後端與資料契約共享 Schema。
-- **Trust by Design**: 每一物件皆具備溯源性。
+### 字體
 
----
+`Inter, PingFang TC, Microsoft JhengHei`
 
-## 📦 GitHub Actions CI/CD 更新
+### 組件庫
 
-本專案所有 CI/CD 工作流程已升級至 Node.js 24 相容版本，詳情見 [docs/ci-update-log.md](./docs/ci-update-log.md)。
-
-**核心變更**：
-
-- 升級至 Node.js 24 相容 Action 版本（`actions/checkout@v5`, `actions/setup-node@v5`）
-- 新增 `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` 環境變數，確保未來相容性
-- 修正 Git 安全性設定（`safe.directory`）及依賴安裝容錯機制
-- 強化 Governance Check 中的 ADR 檢查流程
+位於 `components/omni/` — 遵循 Omni 命名空間，每個組件皆為 5T 誠信節點。
 
 ---
 
+## 🧪 測試與品質 (Testing & Quality)
+
+```bash
+# 一鍵誠信自檢
+pnpm run typecheck && pnpm run lint && pnpm run test
+```
+
+| 指標                | 狀態              |
+| ------------------- | ----------------- |
+| 單元/整合測試       | 🟡 111/113 通過   |
+| 測試檔案            | 32 個             |
+| TypeScript 嚴格模式 | ✅ 啟用           |
+| ESLint              | ✅ 啟用           |
+| Playwright VRT      | ✅ 視覺基線已建立 |
+| Storybook           | ✅ 組件文件       |
+| Husky Pre-commit    | ✅ lint-staged    |
+
+### 核心測試覆蓋
+
+| 模組                | 測試檔案                                | 5T 維度     |
+| ------------------- | --------------------------------------- | ----------- |
+| ZKP 密碼學封印      | `lib/crypto-proof.test.ts`              | Trustworthy |
+| SustainWrite 狀態機 | `useSustainWriteStore.test.ts`          | Tangible    |
+| 情資 API            | `app/api/social/insights/route.test.ts` | Trackable   |
+| 碳計算器            | `lib/esg/carbon-calculator.test.ts`     | Transparent |
+| 自癒守護者          | `lib/omni-core/healer.test.ts`          | Traceable   |
+| OmniLogger          | `OmniLoggerService.test.ts`             | Trackable   |
+
 ---
 
-_Generated & Sealed by OmniAgent G4 | 2026-06-16_
+## 📁 目錄結構 (Project Structure)
+
+```
+esggo/
+├── app/                    # Next.js App Router (90+ 頁面)
+│   ├── api/               # API Routes
+│   ├── dashboard/         # 治理面板
+│   ├── sustain-write/     # SustainWrite™ 編輯器
+│   ├── vault/             # 證據金庫
+│   ├── omni-agent/        # AI 助手
+│   ├── notifications/     # 通知中心
+│   ├── academy/           # 永續學院
+│   ├── village/           # 社群村落
+│   └── ...                # 80+ 更多頁面
+├── components/
+│   ├── omni/              # Omni 萬能組件庫
+│   ├── brand/             # 品牌組件 (BrandButton, etc.)
+│   ├── core/              # 核心組件
+│   └── ui/                # 基礎 UI (shadcn)
+├── lib/
+│   ├── omni-core/         # 核心引擎 (healer, integrity)
+│   ├── omni-space/        # 空間引擎 (event-store)
+│   ├── esg/               # ESG 計算庫
+│   └── supabase/          # Supabase 客戶端
+├── omniagent-gateway/     # OmniAgent Express Gateway
+├── supabase/              # Supabase 遷移腳本
+├── scripts/               # 資料表初始化腳本
+├── .agents/               # 代理配置 (skills, prompts)
+├── adr/                   # 架構決策紀錄
+├── docs/                  # 文件資料夾
+├── tests/                 # 整合測試
+├── ctl.ps1                # Windows 控制腳本
+├── Dockerfile             # Docker 配置
+├── docker-compose.yml     # 本地 Docker 環境
+├── vercel.json            # Vercel 部署配置
+├── render.yaml            # Render 部署配置
+└── next.config.ts         # Next.js 配置
+```
+
+---
+
+## 🗺️ 演化路線圖 (Roadmap)
+
+| 階段                       | 狀態        | 核心目標                            |
+| -------------------------- | ----------- | ----------------------------------- |
+| **Phase 1** 創世與誠信基石 | ✅ 已達成   | 5T 協議底盤、SustainWrite、證據金庫 |
+| **Phase 2** 主權與規模化   | 🔵 執行中   | 深度刻印、自癒引擎、NCBDB 感測器    |
+| **Phase 3** 生態與鏈路連通 | 🟣 即將啟動 | VerifyLink™、供應鏈、蜂群市場       |
+| **Phase 4** 無限進化與奇點 | 🔴 轉寫潛能 | 液態現實 UI 3.0、自生長架構         |
+
+---
+
+## ⚙️ 環境設定 (Environment Setup)
+
+### 必要環境變數
+
+參考 `.env.example`：
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+
+# AI Models
+OPENROUTER_API_KEY=
+GOOGLE_AI_API_KEY=
+
+# OmniAgent Gateway
+OMNIAGENT_API_KEY=hermes_gold_2026
+OMNIAGENT_GATEWAY_URL=http://localhost:8642
+
+# New Relic (Monitoring)
+NEW_RELIC_LICENSE_KEY=
+```
+
+---
+
+## 🔐 安全架構 (Security)
+
+- **RLS**: Supabase Row Level Security 全面啟用
+- **ZKP**: 零知識證明，審計數據不可篡改
+- **Hash Lock**: SHA-256 封印所有 5T 資產原子
+- **JWT**: jsonwebtoken 身份驗證
+- **XSS**: xss 庫全域過濾
+- **Rate Limit**: express-rate-limit + Helmet
+- **CLI 注入防護**: spawn() 陣列參數，禁止 exec() 字串拼接
+
+---
+
+## 🏛️ 治理法典 (OmniCore Constitution)
+
+本系統開發嚴格遵循 `./GEMINI.md` OmniCore 憲章：
+
+- **Intentional Simplicity**: 表層簡約，底層強大
+- **End-to-End Type Safety**: 前後端與資料契約共享 Zod Schema
+- **Trust by Design**: 每一物件皆具備 UUID + Timestamp + Hash 溯源
+- **Adaptive Governance**: ADR 版本化變更管理
+
+### 命名空間規範
+
+- UI 組件統一使用 `Omni` 前綴（萬能命名空間）
+- 基礎結構採用 `Base` 後綴（如 `OmniBaseCard`）
+- 5T 協議組件保持神聖不可侵犯性
+
+---
+
+## 📦 CI/CD 管線
+
+```yaml
+# GitHub Actions 工作流程
+- checkout@v5
+- setup-node@v5 (Node.js 24)
+- pnpm install
+- typecheck → lint → test → build
+- deploy (Vercel / Render / Docker)
+```
+
+- **Node.js**: 24（已升級所有 Actions）
+- **套件管理**: pnpm（workspace 支援）
+- **Pre-commit**: Husky + lint-staged
+
+---
+
+## 🤝 貢獻指南 (Contributing)
+
+1. Fork 此專案
+2. 建立功能分支 `git checkout -b feat/your-feature`
+3. 遵循 ADR 規範記錄架構決策
+4. 確保測試通過 `pnpm run test`
+5. 提交 PR，描述 5T 維度影響
+
+詳見 [CONTRIBUTING.md](./CONTRIBUTING.md)
+
+---
+
+## 📜 授權 (License)
+
+MIT License — © 2026 ESGGO 善向永續 | Powered by OmniAgent × JunAiKey
+
+---
+
+_🌊 善向永續，以終為始，始終如一。_
+
+_Generated & Sealed by OmniAgent | 2026-06-18 | System Status: TRANSCENDED ♾️_
