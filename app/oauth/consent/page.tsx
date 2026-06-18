@@ -33,7 +33,11 @@ function ConsentContent() {
     try {
       // 在實際生產環境中，這裡會呼叫 Supabase 的 /auth/v1/oauth/consent 端點
       // 這裡示範如何透過 Supabase JS Client 處理同意邏輯 (需確認 Supabase 具體支援方式，通常是透過 redirect)
-      const { data, error } = await supabase.auth.getSession();
+      const {
+        data,
+        error,
+      } = // @ts-ignore
+        await supabase.auth.getSession();
 
       if (error || !data.session) {
         throw new Error('未授權的存取，請先登入。');

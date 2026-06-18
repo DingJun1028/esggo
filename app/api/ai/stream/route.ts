@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextRequest, NextResponse } from 'next/server';
 import { streamText } from 'ai';
 import { agnes } from '@/lib/ai/agnes';

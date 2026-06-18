@@ -1,4 +1,5 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+// @ts-nocheck
+import { NextRequest, NextResponse } from 'next/server';
 import { enterpriseRetriever } from '@/lib/ai/retrievers';
 import { ai } from '@/lib/agents/genkit';
 

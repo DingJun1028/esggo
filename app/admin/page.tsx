@@ -34,6 +34,7 @@ import {
   X,
   Copy,
   Zap,
+  Plus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
