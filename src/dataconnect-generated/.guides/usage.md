@@ -12,16 +12,22 @@ Here are all of the hooks that get generated:
 
 ```ts
 import {
+  useUpsertUser,
+  useCreateTask,
+  useUpdateTask,
   useListTasks,
   useListUsers,
   useListUserTasks,
   useGetTaskById,
   useSearchTask,
-  useUpsertUser,
-  useCreateTask,
-  useUpdateTask,
 } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
+
+const { data, isPending, isSuccess, isError, error } = useUpsertUser(upsertUserVars);
+
+const { data, isPending, isSuccess, isError, error } = useCreateTask(createTaskVars);
+
+const { data, isPending, isSuccess, isError, error } = useUpdateTask(updateTaskVars);
 
 const { data, isPending, isSuccess, isError, error } = useListTasks();
 
@@ -32,12 +38,6 @@ const { data, isPending, isSuccess, isError, error } = useListUserTasks();
 const { data, isPending, isSuccess, isError, error } = useGetTaskById(getTaskByIdVars);
 
 const { data, isPending, isSuccess, isError, error } = useSearchTask(searchTaskVars);
-
-const { data, isPending, isSuccess, isError, error } = useUpsertUser(upsertUserVars);
-
-const { data, isPending, isSuccess, isError, error } = useCreateTask(createTaskVars);
-
-const { data, isPending, isSuccess, isError, error } = useUpdateTask(updateTaskVars);
 ```
 
 Here's an example from a different generated SDK:
@@ -77,15 +77,24 @@ Here's an example of how to use it with the first 5 operations:
 
 ```js
 import {
+  upsertUser,
+  createTask,
+  updateTask,
   listTasks,
   listUsers,
   listUserTasks,
   getTaskById,
   searchTask,
-  upsertUser,
-  createTask,
-  updateTask,
 } from '@dataconnect/generated';
+
+// Operation UpsertUser:  For variables, look at type UpsertUserVars in ../index.d.ts
+const { data } = await UpsertUser(dataConnect, upsertUserVars);
+
+// Operation CreateTask:  For variables, look at type CreateTaskVars in ../index.d.ts
+const { data } = await CreateTask(dataConnect, createTaskVars);
+
+// Operation UpdateTask:  For variables, look at type UpdateTaskVars in ../index.d.ts
+const { data } = await UpdateTask(dataConnect, updateTaskVars);
 
 // Operation ListTasks:
 const { data } = await ListTasks(dataConnect);
@@ -101,13 +110,4 @@ const { data } = await GetTaskById(dataConnect, getTaskByIdVars);
 
 // Operation SearchTask:  For variables, look at type SearchTaskVars in ../index.d.ts
 const { data } = await SearchTask(dataConnect, searchTaskVars);
-
-// Operation UpsertUser:  For variables, look at type UpsertUserVars in ../index.d.ts
-const { data } = await UpsertUser(dataConnect, upsertUserVars);
-
-// Operation CreateTask:  For variables, look at type CreateTaskVars in ../index.d.ts
-const { data } = await CreateTask(dataConnect, createTaskVars);
-
-// Operation UpdateTask:  For variables, look at type UpdateTaskVars in ../index.d.ts
-const { data } = await UpdateTask(dataConnect, updateTaskVars);
 ```
