@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   Bot,
   Send,
   Mic,
@@ -52,7 +53,7 @@ interface SubAgent {
   name: string;
   role: string;
   status: 'active' | 'idle' | 'error';
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   lastAction: string;
   tasksCompleted: number;
 }

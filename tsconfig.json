@@ -27,7 +27,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
-    "types": ["node"],
+    "types": ["node", "react", "react-dom"],
     "paths": {
       "@/*": [
         "./src/*",
@@ -39,7 +39,8 @@
         "./*"
       ],
       "@dataconnect/generated": ["./dataconnect/generated/index.ts"],
-      "playwright": ["./node_modules/playwright/index.d.ts"]
+      "playwright": ["./node_modules/playwright/index.d.ts"],
+      "framer-motion": ["./node_modules/framer-motion/dist/index.d.ts"]
     },
     "allowJs": true,
     "noEmit": true,

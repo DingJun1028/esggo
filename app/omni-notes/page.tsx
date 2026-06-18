@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   StickyNote,
   Plus,
   Search,
@@ -116,7 +117,7 @@ function formatRelativeTime(timestamp: number): string {
 
 function NoteTypeIcon({ type, size = 16 }: { type: NoteType; size?: number }) {
   const info = getTypeInfo(type);
-  const Icon = info.icon as React.ComponentType<{ size?: number; className?: string }>;
+  const Icon = info.icon as LucideIcon;
   return (
     <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center shrink-0', info.bg)}>
       <Icon size={size} className={info.color} />

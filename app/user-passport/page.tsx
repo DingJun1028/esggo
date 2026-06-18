@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
+  LucideIcon,
   User,
   Award,
   TrendingUp,
@@ -29,7 +30,7 @@ interface AwakeningPillar {
   nameEn: string;
   score: number;
   maxScore: number;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   description: string;
 }
