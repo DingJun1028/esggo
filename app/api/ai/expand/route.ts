@@ -9,8 +9,8 @@ const API_KEYS = [
   process.env.AGNES_API_2,
   process.env.AGNES_API_3,
   process.env.AGNES_API,
-  process.env.OMNI_TOKEN
-].filter(k => k && k.trim() !== '') as string[];
+  process.env.OMNI_TOKEN,
+].filter((k) => k && k.trim() !== '') as string[];
 
 let currentKeyIndex = 0;
 
@@ -45,21 +45,35 @@ export async function POST(req: Request) {
       請協助擴寫以下章節內容。若為全新內容，請建構完整的章節骨架與充實的內文。
       
       【附加指示】：
-      ${prompt || '無特定指示。請主動展開多維度面向（例如：政策規劃、執行計畫、成效數據、未來中長期目標），進行深度擴充。'}
+      ${
+        prompt ||
+        '無特定指示。請主動展開多維度面向（例如：政策規劃、執行計畫、成效數據、未來中長期目標），進行深度擴充。'
+      }
       
       【現有內容】：
       ${content || '(尚未有內容，請依據上述高標準從頭開始撰寫具備豐富層次感的初稿)'}
     `;
 
     if (API_KEYS.length === 0) {
-      throw new Error("系統錯誤：尚未配置任何有效的 Gemini API 密鑰");
+      console.warn('[AI Expand] 未配置任何 API Key，使用模擬回應');
+      return NextResponse.json(
+        {
+          success: false,
+          error: '尚未配置任何有效的 API 金鑰，請先在整合中心設定 API Key',
+          needsSetup: true,
+        },
+        { status: 401 }
+      );
     }
 
     let lastError: any = null;
 
     for (let attempt = 0; attempt < API_KEYS.length; attempt++) {
       const apiKey = API_KEYS[currentKeyIndex];
-      const agnes = createOpenAI({ baseURL: 'https://apihub.agnes-ai.com/v1', apiKey: process.env.AGNES_API || process.env.AGNES_API_KEY });
+      const agnes = createOpenAI({
+        baseURL: 'https://apihub.agnes-ai.com/v1',
+        apiKey: process.env.AGNES_API || process.env.AGNES_API_KEY,
+      });
 
       try {
         const result = await streamText({
@@ -71,11 +85,10 @@ export async function POST(req: Request) {
 
         // If streamText succeeds, return the stream response
         return result.toTextStreamResponse();
-
       } catch (error: any) {
         lastError = error;
         const errorMsg = error?.message || error?.toString() || '';
-        const isQuotaExhausted = 
+        const isQuotaExhausted =
           error?.status === 429 ||
           errorMsg.includes('429') ||
           errorMsg.includes('quota') ||
@@ -87,13 +100,12 @@ export async function POST(req: Request) {
           currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
           continue; // Try next key
         }
-        
+
         throw error; // Not a quota error, or exhausted all keys
       }
     }
 
     throw lastError || new Error('所有備用的 API Keys 均已耗盡');
-
   } catch (error: any) {
     console.error('SustainWrite API Error:', error);
     return NextResponse.json(
