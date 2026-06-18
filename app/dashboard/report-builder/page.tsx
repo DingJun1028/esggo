@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import dynamic from 'next/dynamic';
+const OmniBaseCard = dynamic(() => import('@/components/ui/omni/OmniBaseCard'), { ssr: false });
+const OmniBadge = dynamic(() => import('@/components/ui/omni/OmniBadge'), { ssr: false });
 import { FileText, Cpu, CheckCircle2, ShieldCheck, FileKey, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

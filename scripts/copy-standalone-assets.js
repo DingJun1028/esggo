@@ -1,15 +1,32 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function copyWithRetry(src, dest, retries = 5, delay = 500) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      fs.copyFileSync(src, dest);
+      return;
+    } catch (e) {
+      if (e.code === 'EBUSY' && i < retries - 1) {
+        await sleep(delay * (i + 1));
+        continue;
+      }
+      throw e;
+    }
+  }
+}
 
 function copyFolderRecursiveSync(source, target) {
   if (!fs.existsSync(source)) return;
 
-  // Create target directory if it doesn't exist
   if (!fs.existsSync(target)) {
     fs.mkdirSync(target, { recursive: true });
   }
 
-  // Copy all files and folders
   const files = fs.readdirSync(source);
   for (const file of files) {
     const curSource = path.join(source, file);
@@ -23,13 +40,12 @@ function copyFolderRecursiveSync(source, target) {
   }
 }
 
-const rootDir = path.join(__dirname, '..');
+const rootDir = path.join(process.cwd());
 const standaloneDir = path.join(rootDir, '.next', 'standalone');
 
 if (fs.existsSync(standaloneDir)) {
   console.log('✨ Found Next.js standalone directory. Copying assets...');
   
-  // Copy public folder
   const publicSrc = path.join(rootDir, 'public');
   const publicDest = path.join(standaloneDir, 'public');
   if (fs.existsSync(publicSrc)) {
@@ -37,7 +53,6 @@ if (fs.existsSync(standaloneDir)) {
     copyFolderRecursiveSync(publicSrc, publicDest);
   }
 
-  // Copy .next/static folder
   const staticSrc = path.join(rootDir, '.next', 'static');
   const staticDest = path.join(standaloneDir, '.next', 'static');
   if (fs.existsSync(staticSrc)) {
