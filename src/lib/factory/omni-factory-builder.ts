@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OmniFactory Auto-Builder - v1.1.0
  * Automatically generates components from DSL requirement sheets

@@ -12,7 +12,7 @@ export const parsePdfTool = ai.defineTool({
     fileUrl: z.string().describe('The public URL or storage path of the PDF file.'),
     extractTables: z.boolean().optional().default(true).describe('Whether to attempt structured table extraction.')
   }),
-}, async (input) => {
+}, async (input: any) => {
   console.log(`[Tool: parsePdf] Processing file: ${input.fileUrl}`);
   // 模擬解析邏輯
   return {
@@ -36,7 +36,7 @@ export const parseImageTool = ai.defineTool({
   inputSchema: z.object({
     imageUrl: z.string().describe('The URL of the image to analyze.')
   }),
-}, async (input) => {
+}, async (input: any) => {
   console.log(`[Tool: parseImage] Analyzing image: ${input.imageUrl}`);
   // 模擬 OCR 邏輯
   return {

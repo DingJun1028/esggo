@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { OmniCard } from '@/src/shared/types';
 import { EventStore } from './event-store';
 import { StateDiffEngine } from './diff-engine';

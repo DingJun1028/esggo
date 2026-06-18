@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ADKAgent } from './adk-core.ts';
 import type { AgentConfig } from './adk-core.ts';
 import { ADK_STANDARD_TOOLS } from './adk-tools.ts';

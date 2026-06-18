@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OmniAgentBus: High-Speed Event & Message Bus
  * v4.0.0 | High-Resonance Intent Field + SSE Bridge

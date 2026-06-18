@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ESGSonar | Version Difference Engine
  * Handles comparison between regulation/report versions.

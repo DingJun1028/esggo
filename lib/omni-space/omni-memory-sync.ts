@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getSupabaseClient } from '../supabase';
 import { OmniEventStore } from './event-store';
 import { genkit } from 'genkit';

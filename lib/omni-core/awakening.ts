@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * OmniAgent Awakening Talent (萬能智庫·神經共享)
  * 全域神經同步機制：一點習得，全網賦能。

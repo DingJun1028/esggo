@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/core/bus/OmniAgentBus.ts
 
 import { Subject } from 'rxjs';

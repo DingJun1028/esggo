@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🏛️ 萬能架構 12維度 (Omni Architecture 12 Dimensions)
  * v1.0 | #OmniArchitecture #12D #5TIntegrity

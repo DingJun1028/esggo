@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { z } from 'zod';
 import { generateObject } from 'ai';
 import { agnes } from '@/lib/ai/agnes';

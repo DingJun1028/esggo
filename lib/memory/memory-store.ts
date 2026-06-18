@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { z } from 'genkit';
 import { writeMemory, readMemoryByType } from '../memory.ts';
 

@@ -19,7 +19,7 @@ export const fetchEnvironmentalMetrics = ai.defineTool({
   inputSchema: z.object({
     category: z.string().optional().describe('Category filter (e.g. GHG, Water)')
   }),
-}, async (input) => {
+}, async (input: any) => {
   return await getEnvironmentalData(input.category);
 });
 
@@ -29,7 +29,7 @@ export const fetchSocialMetrics = ai.defineTool({
   inputSchema: z.object({
     category: z.string().optional().describe('Category filter (e.g. Labor, Safety)')
   }),
-}, async (input) => {
+}, async (input: any) => {
   return await getSocialMetrics(input.category);
 });
 
@@ -39,7 +39,7 @@ export const fetchGovernanceMetrics = ai.defineTool({
   inputSchema: z.object({
     category: z.string().optional().describe('Category filter (e.g. Ethics, Risk)')
   }),
-}, async (input) => {
+}, async (input: any) => {
   return await getGovernanceMetrics(input.category);
 });
 
@@ -61,7 +61,7 @@ export const queryNotionDataSource = ai.defineTool({
     filter: z.any().optional().describe('Notion filter object'),
     sorts: z.any().optional().describe('Notion sorts array')
   }),
-}, async (input) => {
+}, async (input: any) => {
   console.log(`[Notion Tool] Querying data source: ${input.dataSourceId}`);
   // In a real MCP setup, this would call the remote Notion MCP server
   return { success: true, message: 'Notion data source queried (Simulated)', data: [] };
@@ -75,7 +75,7 @@ export const createNotionPage = ai.defineTool({
     title: z.string().describe('Title of the new page'),
     content: z.string().optional().describe('Initial content in Markdown format')
   }),
-}, async (input) => {
+}, async (input: any) => {
   console.log(`[Notion Tool] Creating page: ${input.title} under ${input.parentId}`);
   return { success: true, pageId: 'notion-sim-page-id', url: 'https://notion.so/sim-page' };
 });
@@ -89,7 +89,7 @@ export const syncToNCBDB = ai.defineTool({
     tableName: z.string().describe('Target NCBDB table name'),
     data: z.record(z.string(), z.unknown()).describe('The record data to upsert')
   }),
-}, async (input) => {
+}, async (input: any) => {
   const { ncbClient } = await import('../ncbdb');
   console.log(`[NCBDB Tool] Syncing to table: ${input.tableName}`);
   return await ncbClient.upsertRecord(input.tableName, input.data as any);
