@@ -294,7 +294,7 @@ export default function LandingPage() {
             用戶怎麼說
           </span>
         </SectionTitle>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[
             {
               quote: '這真的幫我省了 2 週！',
@@ -319,6 +319,14 @@ export default function LandingPage() {
               avatar: '🏭',
               rating: 5,
               highlight: '15 分鐘',
+            },
+            {
+              quote: '這個證明太值錢了！投資人看到 ZKP 證明後，立刻決定投資我們。',
+              author: '李技術長',
+              role: '某科技公司 CTO',
+              avatar: '🔐',
+              rating: 5,
+              highlight: '獲得投資',
             },
           ].map((testimonial, i) => (
             <motion.div
