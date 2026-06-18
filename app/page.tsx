@@ -17,6 +17,8 @@ import {
   TrendingUp,
   Globe,
   Sparkles,
+  MessageSquare,
+  Star,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
