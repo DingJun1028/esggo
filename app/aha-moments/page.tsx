@@ -45,7 +45,7 @@ interface AhaMoment {
   quote: string;
   quoteAuthor: string;
   impact: string;
-  metrics: { label: string; value: string }[];
+  metrics: { label: string; value: string; trend?: string }[];
   features: string[];
   userSegment: string;
 }

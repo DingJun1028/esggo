@@ -1,4 +1,5 @@
 'use client';
+import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';

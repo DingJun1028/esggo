@@ -46,6 +46,7 @@ interface Partner {
 
 interface CollaborationArea {
   id: string;
+  subtitle?: string;
   title: string;
   description: string;
   icon: LucideIcon;

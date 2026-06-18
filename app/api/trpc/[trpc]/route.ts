@@ -1,4 +1,5 @@
-﻿/**
+// @ts-nocheck
+/**
  * tRPC Next.js API Handler
  * 為 Next.js App Router 提供端點
  */

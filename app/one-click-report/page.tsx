@@ -55,7 +55,7 @@ const REPORT_SECTIONS: ReportSection[] = [
   { id: 'sec-01', name: '組織概況', status: 'completed', wordCount: 2500, progress: 100 },
   { id: 'sec-02', name: '重大主題分析', status: 'completed', wordCount: 3200, progress: 100 },
   { id: 'sec-03', name: '經濟面績效', status: 'completed', wordCount: 1800, progress: 100 },
-  { id: 'sec-04', name: '環境面績效', status: 'generating', wordCount: 0, progress: 65 },
+  { id: 'sec-04', name: '環境面績效', status: 'pending', wordCount: 0, progress: 65 },
   { id: 'sec-05', name: '社會面績效', status: 'pending', wordCount: 0, progress: 0 },
   { id: 'sec-06', name: '治理面績效', status: 'pending', wordCount: 0, progress: 0 },
   { id: 'sec-07', name: '附錄與索引', status: 'pending', wordCount: 0, progress: 0 },
@@ -69,7 +69,7 @@ const GRI_INDICATORS: GRIIndicator[] = [
   { id: 'gri-005', code: 'GRI 3-2', title: '重大主題清單', status: 'pass', score: 90 },
   { id: 'gri-006', code: 'GRI 201-1', title: '直接經濟價值創造與分配', status: 'pass', score: 85 },
   { id: 'gri-007', code: 'GRI 302-1', title: '組織內部能源消耗量', status: 'pass', score: 92 },
-  { id: 'gri-008', code: 'GRI 305-1', title: '直接溫室氣體排放', status: 'generating', score: 0 },
+  { id: 'gri-008', code: 'GRI 305-1', title: '直接溫室氣體排放', status: 'pending', score: 0 },
   { id: 'gri-009', code: 'GRI 305-2', title: '能源間接溫室氣體排放', status: 'pending', score: 0 },
   { id: 'gri-010', code: 'GRI 401-1', title: '新進員工離職率', status: 'pending', score: 0 },
   { id: 'gri-011', code: 'GRI 403-1', title: '職業安全衛生管理系統', status: 'pending', score: 0 },
@@ -229,7 +229,7 @@ function PipelineStep({ step, index }: { step: (typeof GENERATION_PIPELINE)[0]; 
     processing: { color: 'text-blue-500', bg: 'bg-blue-50', icon: RefreshCw },
     pending: { color: 'text-slate-400', bg: 'bg-slate-50', icon: Clock },
   };
-  const config = statusConfig[step.status];
+  const config = statusConfig[step.status as keyof typeof statusConfig];
   const StatusIcon = config.icon;
 
   return (
