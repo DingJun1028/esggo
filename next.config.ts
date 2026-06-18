@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   // Explicitly set the output file tracing root to the current directory
   // to help Next.js correctly infer the project root in dynamic deployment environments.
-  outputFileTracingRoot: path.join(__dirname, './'),
+  outputFileTracingRoot: /*turbopackIgnore: true*/ path.join(__dirname, './'),
   serverExternalPackages: [
     'genkit',
     'sharp',

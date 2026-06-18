@@ -1,22 +1,21 @@
 import { Observable, defer, Subject } from 'rxjs';
-import { omniAgentSkillManager } from './OmniAgentSkillManager';
 import { OmniCoreContext } from '../types/omniagent';
 
 /**
  * 圓通無礙 · 妙德通知實體 (完美融入無作妙德與 5T 協議)
  */
 export interface IMiaoDeNotification {
-  readonly uuid: string;         // 深貫：唯一永憶識別
-  readonly essence: string;      // 廣通：意志本質
-  readonly miaoDeUtility: unknown;   // 妙德：因地制宜的無上妙用工具
+  readonly uuid: string; // 深貫：唯一永憶識別
+  readonly essence: string; // 廣通：意志本質
+  readonly miaoDeUtility: unknown; // 妙德：因地制宜的無上妙用工具
   readonly isUnimpeded: boolean; // 圓通無礙狀態
 }
 
 export class OmniAgentBus {
   private static instance: OmniAgentBus;
-  
+
   // 圓通無礙：無邊際量子通訊道
-  private supremeWillOcean$ = new Subject<string>(); 
+  private supremeWillOcean$ = new Subject<string>();
 
   private constructor() {}
 
@@ -45,23 +44,27 @@ export class OmniAgentBus {
   private executeShenGuanGuangTong(will: string): void {
     // 模擬全體代理（萬能智庫、符文API、代理網絡、進化引擎）打破邊界、圓通互融
     const agents = ['萬能智庫', '符文API', '代理網絡', '進化引擎'];
-    
-    agents.forEach(agent => {
+
+    agents.forEach((agent) => {
       // 深度穿透 (深貫) + 無作自動鎖定 (Trustworthy)
       const artifact: IMiaoDeNotification = {
         uuid: `🪞-YuanTong-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
         essence: will,
         miaoDeUtility: () => {
           // 妙德：自動根據無上意志消除 10% 系統熵值
-          return "✨ [熵減寶石] 妙用激活：代碼技術債已自動獻祭清空。";
+          return '✨ [熵減寶石] 妙用激活：代碼技術債已自動獻祭清空。';
         },
-        isUnimpeded: true
+        isUnimpeded: true,
       };
 
       // 執行信之禁區鎖定 - 毫無造作痕跡
       Object.freeze(artifact);
-      
-      console.log(`|-- 🪐 [${agent}] 深貫入核 -> 數據已 Hash Lock。妙德呈現: ${typeof artifact.miaoDeUtility === 'function' ? artifact.miaoDeUtility() : ''}`);
+
+      console.log(
+        `|-- 🪐 [${agent}] 深貫入核 -> 數據已 Hash Lock。妙德呈現: ${
+          typeof artifact.miaoDeUtility === 'function' ? artifact.miaoDeUtility() : ''
+        }`
+      );
     });
 
     console.log(`⚡ [圓通無礙] 十六字心印圓滿具足。全體代理同步率：100%。\n`);
@@ -89,16 +92,19 @@ export class OmniAgentBus {
   public async invokeSkillAction(
     skillId: string,
     actionName: string,
-    input: Record<string, unknown>, // Raw input from the agent's reasoning
-    currentContext: Partial<OmniCoreContext> // Partial context to be completed
+    input: Record<string, unknown>,
+    currentContext: Partial<OmniCoreContext>
   ): Promise<unknown> {
+    // 動態載入 SkillManager（僅 server-side 執行時才載入，避免 client bundle 引入 fs/path）
+    const { omniAgentSkillManager } = await import('./OmniAgentSkillManager');
+
     // 深貫：直接擊穿核心內核獲取技能定義
     const skillDefinition = omniAgentSkillManager.getSkillById(skillId);
     if (!skillDefinition) {
       throw new Error(`Skill ${skillId} not registered.`);
     }
 
-    const actionDefinition = skillDefinition.actions.find(a => a.name === actionName);
+    const actionDefinition = skillDefinition.actions.find((a) => a.name === actionName);
     if (!actionDefinition) {
       throw new Error(`Action ${actionName} not found in skill ${skillId}.`);
     }
@@ -108,20 +114,22 @@ export class OmniAgentBus {
       taskId: currentContext.taskId || `auto-generated-task-${Date.now()}`, // Generate if not present
       userId: currentContext.userId || 'system-user',
       permissions: currentContext.permissions || ['read', 'execute-skill'], // Default or derived
-      environment: currentContext.environment || (process.env.NODE_ENV === 'production' ? 'production' : 'development'),
+      environment:
+        currentContext.environment ||
+        (process.env.NODE_ENV === 'production' ? 'production' : 'development'),
       // 追溯到最原始的虛空起點 (Traceable)
       traceId: `trace-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: Date.now(),
       // 信之禁區鎖定 (Trustworthy)
-      isSealed: true
+      isSealed: true,
     };
 
     // 妙德：因地制宜的輸入處理
-    const skillInput = { 
-      ...input, 
+    const skillInput = {
+      ...input,
       context: omniCoreContext,
       // 自動根據環境演化輸入
-      miaoDeEnhanced: true
+      miaoDeEnhanced: true,
     };
 
     // 無作：自然流暢的技能執行，不需要冗長防禦
@@ -130,7 +138,7 @@ export class OmniAgentBus {
 
     const skillModule = await omniAgentSkillManager.loadSkillModule(skillId);
     if (!skillModule[actionName]) {
-        throw new Error(`Skill module for ${skillId} does not export action ${actionName}`);
+      throw new Error(`Skill module for ${skillId} does not export action ${actionName}`);
     }
 
     const result = await skillModule[actionName](skillInput);
