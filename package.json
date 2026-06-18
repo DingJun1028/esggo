@@ -28,7 +28,7 @@
     "test:vrt": "playwright test --project=visual"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.82",
+    "@ai-sdk/google": "^3.0.83",
     "@ai-sdk/openai": "^3.0.71",
     "@apollo/client": "^4.2.2",
     "@base-ui/react": "^1.5.0",
