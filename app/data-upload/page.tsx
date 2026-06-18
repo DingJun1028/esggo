@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   Upload,
   FileSpreadsheet,
   FileText,
@@ -55,7 +56,7 @@ interface DataInsight {
   title: string;
   description: string;
   severity: 'info' | 'warning' | 'critical';
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   value?: string;
 }

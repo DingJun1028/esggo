@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  LucideIcon,
   ShieldCheck,
   CheckCircle2,
   Lock,
@@ -32,7 +33,7 @@ interface VerificationStep {
   title: string;
   subtitle: string;
   description: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
   bgColor: string;
   status: 'completed' | 'processing' | 'pending';
@@ -43,7 +44,7 @@ interface TrustIndicator {
   id: string;
   label: string;
   value: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color: string;
 }
 
