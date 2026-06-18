@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import './globals.css';
 import ClientLayout from './ClientLayout';
-import { AuthProvider } from '@/components/AuthProvider';
 import { omniAgentAwakening } from '@/lib/omni-core/awakening';
 
 omniAgentAwakening;
@@ -74,9 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body suppressHydrationWarning>
         <Suspense fallback={<LoadingFallback />}>
-          <AuthProvider>
-            <ClientLayout>{children}</ClientLayout>
-          </AuthProvider>
+          <ClientLayout>{children}</ClientLayout>
         </Suspense>
       </body>
     </html>
