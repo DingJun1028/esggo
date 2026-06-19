@@ -63,12 +63,8 @@ export default function ResponsiveDrawer({
             className={cn('fixed inset-0   z-50', overlayClassName)}
             onClick={onClose}
           />
-          <motion.aside
+          <aside
             ref={drawerRef}
-            initial={{ x: side === 'left' ? '-100%' : '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: side === 'left' ? '-100%' : '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className={cn(
               'fixed top-0 bottom-0 z-50 h-full   border-r border-white/20 shadow-2xl',
               side === 'left' ? 'left-0' : 'right-0',
@@ -90,7 +86,7 @@ export default function ResponsiveDrawer({
               </header>
             )}
             <div className="p-4 overflow-y-auto h-full">{children}</div>
-          </motion.aside>
+          </aside>
         </>
       )}
     </AnimatePresence>
