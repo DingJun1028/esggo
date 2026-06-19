@@ -1,4 +1,0 @@
-{
-  "body": "請參閱 review.md 檔案的完整檢閱內容（包含阻斷 / 高 / 中 / 低 優先項），建議以 REQUEST_CHANGES 提交。若要把完整文字放到 JSON，請使用 review.md 的內容作為 body 值。",
-  "event": "REQUEST_CHANGES"
-}

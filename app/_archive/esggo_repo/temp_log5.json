@@ -1,3 +1,0 @@
-{
-  "text": "執行追蹤記錄 (Post-Execution Trace) 已確實寫入 OmniVault。我們剛才在背景執行的 `npm run build` 測試也完美通過，這代表我們目前的 Next.js 系統結構非常穩固（Exit code: 0，無任何錯誤）。\n\n關於您提到的「**下一步建構完整的'APP'**」，請問您的具體目標是哪一個方向呢？\n\n1. **整合全域主控台 (App Dashboard Integration)**：將我們做過的所有模組（SustainWrite、OmniNexus 儀表板、數據庫等）全部串接進入統一的 `AppShell` 導覽列，形成一個可順暢切換、資料連貫的完整後台應用程式？\n2. **對接真實後端與資料庫 (Supabase / Auth)**：將目前的展示資料替換，正式引入 Supabase 的身分驗證 (登入/註冊) 以及 5T 協議的 PostgreSQL 實體資料庫儲存？\n3. **雲端部署上線 (Cloud Deployment)**：將目前的完整系統，打包並部署至雲端環境（例如 Cloud Run 或 Vercel），讓它成為一個公開可訪問的真實產品？\n<truncated 222 bytes>"
-}

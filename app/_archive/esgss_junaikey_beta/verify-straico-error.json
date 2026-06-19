@@ -1,7 +1,0 @@
-{
-  "message": "External API error from Straico: Request failed with status code 422",
-  "details": {
-    "service": "Straico"
-  },
-  "config": {}
-}

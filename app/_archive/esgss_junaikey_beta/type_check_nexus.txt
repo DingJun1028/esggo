@@ -1,2 +1,0 @@
-src/services/OmniNexus.ts(27,13): error TS2353: Object literal may only specify known properties, and 'read' does not exist in type 'Omit<NexusEvent, "read">'.
-src/services/OmniNexus.ts(92,13): error TS2353: Object literal may only specify known properties, and 'read' does not exist in type 'Omit<NexusEvent, "read">'.

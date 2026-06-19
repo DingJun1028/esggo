@@ -1,4 +1,0 @@
-A newer version of MCP: v2025-11-25 is available. Please use MCP_v20251125 to use the latest features.
-[Runner] Mission Failed: Error: Session not found: nexus-session-001
-    at wt.runAsync (C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\my-agent\node_modules\@google\adk\src\runner\runner.ts:112:15)
-    at async runMission (C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\my-agent\agent.ts:118:30)

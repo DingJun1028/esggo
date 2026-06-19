@@ -1,8 +1,0 @@
-connectorId: example
-generate:
-  javascriptSdk:
-    - outputDir: ..\..\shan-xiang-tech\src\dataconnect-generated
-      package: '@dataconnect/generated'
-      packageJsonDir: ..\..\shan-xiang-tech
-      react: false
-      angular: false

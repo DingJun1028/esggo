@@ -1,1 +1,0 @@
-export const executeQuery = () => {}; export const executeMutation = () => {}; export const useQuery = () => ({data: null, isLoading: false}); export const useMutation = () => [() => {}, {isLoading: false}];

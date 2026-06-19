@@ -1,9 +1,0 @@
-node_modules
-.next
-dist
-build
-.DS_Store
-*.log
-.env*
-!.env.example
-dataconnect/.dataconnect/
