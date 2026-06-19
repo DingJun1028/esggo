@@ -1,0 +1,680 @@
+@import "tailwindcss";
+
+/* --- Omni-HEP Theme Variables --- */
+:root {
+  color-scheme: light;
+
+  /* --- Stitch/Pencil Global Light Theme --- */
+  --theme-bg: #F8FAFC;
+  /* slate-50 */
+  --theme-surface: #FFFFFF;
+  --theme-surface-2: #F1F5F9;
+  /* slate-100 */
+  --theme-primary: #63a6b0;
+  /* Aqua 青 */
+  --theme-primary-muted: rgba(99, 166, 176, 0.1);
+  --theme-accent: #ffd700;
+  /* 永恆金 */
+  --theme-glass-border: rgba(99, 166, 176, 0.2);
+  --theme-glass-bg: rgba(255, 255, 255, 0.85);
+  --theme-text-main: #0f172a;
+  /* slate-900 */
+  --theme-text-sub: #334155;
+  /* slate-700 */
+  --theme-text-muted: #64748b;
+  /* slate-500 */
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F8FAFC;
+  --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --theme-invert: 0;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Inter", "Noto Sans TC", sans-serif;
+  --font-mono: 'JetBrains Mono', 'Noto Sans Mono', monospace;
+
+  /* Legacy utility mappings - Now pointing to Apple-inspired defaults */
+  --color-omni-bg: var(--theme-bg);
+  --color-omni-surface: var(--theme-surface);
+  --color-omni-surface-2: var(--theme-surface-2);
+  --color-omni-primary: var(--theme-primary);
+  --color-omni-primary-muted: var(--theme-primary-muted);
+  --color-omni-accent: var(--theme-accent);
+  --color-omni-glass-border: var(--theme-glass-border);
+  --color-omni-glass-bg: var(--theme-glass-bg);
+  --color-omni-text-main: var(--theme-text-main);
+  --color-omni-text-sub: var(--theme-text-sub);
+  --color-omni-text-muted: var(--theme-text-muted);
+  --color-omni-card-bg: var(--theme-card-bg);
+  --color-omni-card-bg-2: var(--theme-card-bg-2);
+  --color-omni-shadow: var(--theme-shadow);
+  --color-omni-invert: var(--theme-invert);
+}
+
+/* Animations */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateX(300%);
+    opacity: 0.3;
+  }
+}
+
+/* Theme Overrides */
+[data-theme="solar"],
+.theme-solar {
+  color-scheme: light;
+  --theme-bg: #FFFFFF;
+  --theme-surface: #F8FAFC;
+  --theme-surface-2: #F1F5F9;
+  --theme-primary: #00A3A3;
+  --theme-accent: #D4AF37;
+  --theme-glass-bg: rgba(255, 255, 255, 0.85);
+  --theme-text-main: #1E293B;
+  --theme-text-sub: #475569;
+}
+
+[data-theme="aqua"],
+.theme-aqua {
+  color-scheme: dark;
+  --theme-bg: #050C14;
+  --theme-surface: #0d1a26;
+  --theme-surface-2: #112233;
+  --theme-primary: #63a6b0;
+  --theme-accent: #FFD700;
+  --theme-glass-bg: rgba(5, 12, 20, 0.85);
+  --theme-text-main: #F8FAFC;
+  --theme-text-sub: #CBD5E1;
+}
+
+[data-theme="aqua-light"],
+.theme-aqua-light {
+  color-scheme: light;
+  --theme-bg: #F8FAFC;
+  --theme-surface: #FFFFFF;
+  --theme-surface-2: #F1F5F9;
+  --theme-primary: #63a6b0;
+  --theme-accent: #ffd700;
+  --theme-glass-bg: rgba(255, 255, 255, 0.7);
+  --theme-glass-border: rgba(99, 166, 176, 0.3);
+  --theme-text-main: #0F172A;
+  --theme-text-sub: #475569;
+  --theme-text-muted: #94A3B8;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F8FAFC;
+  --theme-shadow: 0 10px 40px -10px rgba(99, 166, 176, 0.15);
+}
+
+/* Unique Theme Specializations */
+
+/* ═══════════════════════════════════════════════════════════════
+   🏛️ 粗獷主義版 (Nordic Brutalist) — 原始力量感模式
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="nordic"],
+.theme-nordic {
+  color-scheme: light;
+
+  --theme-bg: #FFFFFF;
+  --theme-surface: #E5E7EB;
+  /* Gray 200 */
+  --theme-surface-2: #D1D5DB;
+  /* Gray 300 */
+  --theme-primary: #63a6b0;
+  /* 品牌 Aqua 青，高飽和 */
+  --theme-primary-muted: rgba(99, 166, 176, 0.1);
+  --theme-accent: #000000;
+  /* 粗獷主義以黑色為強調 */
+  --theme-glass-border: #000000;
+  /* 實心黑邊 */
+  --theme-glass-bg: #FFFFFF;
+  --theme-text-main: #000000;
+  --theme-text-sub: #111827;
+  --theme-text-muted: #4B5563;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F3F4F6;
+  --theme-shadow: 6px 6px 0px #000000;
+  /* 強烈硬陰影 */
+  --theme-invert: 0;
+
+  --aqua: #63a6b0;
+  --aqua-glow: none;
+  /* 粗獷主義不使用發光效果 */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   📟 終端極簡版 (Terminal Minimal) — 黑客與數據純粹模式
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="terminal"],
+.theme-terminal {
+  color-scheme: dark;
+
+  --theme-bg: #0A0A0A;
+  --theme-surface: #1A1A1A;
+  --theme-surface-2: #262626;
+  --theme-primary: #00FF41;
+  /* Matrix Green */
+  --theme-primary-muted: rgba(0, 255, 65, 0.05);
+  --theme-accent: #00FF41;
+  --theme-glass-border: #00FF41;
+  --theme-glass-bg: #0A0A0A;
+  --theme-text-main: #00FF41;
+  --theme-text-sub: #00CC33;
+  --theme-text-muted: #00661a;
+  --theme-card-bg: #0A0A0A;
+  --theme-card-bg-2: #141414;
+  --theme-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+  --theme-invert: 0;
+
+  --aqua: #00FF41;
+  --aqua-glow: 0 0 10px rgba(0, 255, 65, 0.5);
+
+  /* 強制等寬字體 */
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* 🎨 瑞士表現版 (Swiss Expressive) — 大膽排版與高反差
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="swiss"],
+.theme-swiss {
+  color-scheme: light;
+
+  --theme-bg: #FFFFFF;
+  --theme-surface: #F3F3F3;
+  --theme-surface-2: #E5E5E5;
+  --theme-primary: #FF0000;
+  /* 經典瑞士紅 */
+  --theme-primary-muted: rgba(255, 0, 0, 0.05);
+  --theme-accent: #000000;
+  --theme-glass-border: #000000;
+  --theme-glass-bg: #FFFFFF;
+  --theme-text-main: #000000;
+  --theme-text-sub: #000000;
+  --theme-text-muted: #666666;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #FFFFFF;
+  --theme-shadow: none;
+  /* 瑞士風格不強調立體感 */
+  --theme-invert: 0;
+
+  --aqua: #FF0000;
+  --aqua-glow: none;
+
+  font-family: 'Inter', 'Helvetica', sans-serif !important;
+}
+
+/* 🍎 蘋果極簡版 (Apple Cupertino) — 極簡、毛玻璃、精緻
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="apple"],
+.theme-apple {
+  color-scheme: light;
+
+  --theme-bg: #FBFBFB;
+  --theme-surface: #FFFFFF;
+  --theme-surface-2: #F2F2F7;
+  --theme-primary: #0071E3;
+  /* Apple Blue */
+  --theme-primary-muted: rgba(0, 113, 227, 0.05);
+  --theme-accent: #1D1D1F;
+  --theme-glass-border: rgba(0, 0, 0, 0.1);
+  --theme-glass-bg: rgba(255, 255, 255, 0.7);
+  --theme-text-main: #1D1D1F;
+  --theme-text-sub: #424245;
+  --theme-text-muted: #86868B;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F5F5F7;
+  --theme-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --theme-invert: 0;
+
+  --aqua: #0071E3;
+  --aqua-glow: 0 0 15px rgba(0, 113, 227, 0.3);
+
+  /* Apple 系統字體感 */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif !important;
+}
+
+/* 🌐 谷歌活力版 (Google Material) — Material You、圓潤、多彩
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="google"],
+.theme-google {
+  color-scheme: light;
+
+  --theme-bg: #F8F9FA;
+  --theme-surface: #FFFFFF;
+  --theme-surface-2: #EEF3FC;
+  /* 淡淡的 Google Blue 混合 */
+  --theme-primary: #1A73E8;
+  /* Google Blue */
+  --theme-primary-muted: rgba(26, 115, 232, 0.08);
+  --theme-accent: #EA4335;
+  /* Google Red */
+  --theme-glass-border: rgba(0, 0, 0, 0.05);
+  --theme-glass-bg: #FFFFFF;
+  --theme-text-main: #202124;
+  --theme-text-sub: #5F6368;
+  --theme-text-muted: #70757A;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F1F3F4;
+  --theme-shadow: 0 1px 2px 0 rgba(60, 64, 67, .3), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  --theme-invert: 0;
+
+  --aqua: #1A73E8;
+  --aqua-glow: none;
+
+  font-family: "Google Sans", "Product Sans", Roboto, Arial, sans-serif !important;
+}
+
+/* Animation utilities */
+.animate-liquid-ripple {
+  animation: ripple 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite linear;
+}
+
+/* Glass effect */
+.glass {
+  background: var(--theme-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--theme-glass-border);
+}
+
+/* Omni card */
+.omni-card {
+  background: var(--theme-card-bg);
+  border: 2px solid var(--theme-glass-border);
+  /* 稍微加厚 border 以適配 Brutalist */
+  border-radius: 12px;
+  box-shadow: var(--theme-shadow);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.omni-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--theme-shadow-x, 6px) + 2px) calc(var(--theme-shadow-y, 6px) + 2px) 0px var(--theme-accent, #000);
+  border-color: var(--theme-primary);
+}
+
+/* 針對 Nordic 主題微調 */
+[data-theme="nordic"] .omni-card {
+  border-radius: 0;
+  /* 粗獷主義通常使用直角 */
+  border-width: 3px;
+}
+
+/* 針對 Swiss 主題微調 */
+[data-theme="swiss"] .omni-card {
+  border-radius: 0;
+  border-width: 4px;
+  border-color: #000000;
+  padding: 2rem;
+}
+
+/* 針對 Apple 主題微調 */
+[data-theme="apple"] .omni-card {
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+/* 針對 Google 主題微調 */
+[data-theme="google"] .omni-card {
+  border-radius: 28px;
+  border: none;
+  background-color: var(--theme-surface);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+[data-theme="google"] .omni-card:hover {
+  box-shadow: 0 4px 12px rgba(60, 64, 67, .15);
+}
+
+/* Glow text */
+.glow-text {
+  text-shadow: 0 0 10px var(--theme-primary), 0 0 20px var(--theme-primary);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-primary-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary);
+}
+
+
+/* Selection */
+::selection {
+  background: var(--theme-primary-muted);
+  color: var(--theme-primary);
+}
+
+/* --- Liquid Glass State Visuals --- */
+.state-transfer-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(100, 200, 255, 0.4) 0%, transparent 60%);
+  transform: translate(-50%, -50%) scale(0);
+  animation: liquid-ripple 1.5s ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.state-update-crystallize {
+  border-color: rgba(100, 255, 150, 0.4) !important;
+  box-shadow:
+    0 8px 32px 0 rgba(31, 135, 100, 0.2),
+    inset 0 0 15px rgba(100, 255, 150, 0.2) !important;
+  animation: crystallize-flash 0.8s forwards;
+}
+
+@keyframes liquid-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes crystallize-flash {
+  0% {
+    filter: brightness(1);
+    backdrop-filter: blur(16px);
+  }
+
+  50% {
+    filter: brightness(1.5);
+    backdrop-filter: blur(24px);
+  }
+
+  100% {
+    filter: brightness(1);
+    backdrop-filter: blur(16px);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+/* 🧪 LiquidGlass & AuraPulse Enhancements */
+.liquid-glass {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.01) 50%,
+      var(--theme-primary-muted) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--theme-glass-border);
+  box-shadow:
+    0 8px 32px 0 var(--theme-shadow),
+    inset 0 0 10px var(--theme-primary-muted);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.liquid-glass:hover {
+  border-color: var(--theme-primary);
+  box-shadow:
+    0 12px 48px var(--theme-primary-muted),
+    inset 0 0 20px var(--theme-primary-muted);
+  transform: translateY(-4px) scale(1.005);
+  /* Slightly less scale for more premium feel */
+}
+
+/* 💎 5T Sealing & Prism Refraction */
+.sealed-5t {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--theme-accent) !important;
+  background: var(--theme-glass-bg) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(0.8) !important;
+  box-shadow: 0 0 40px var(--theme-accent) !important;
+}
+
+.sealed-5t::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 180deg at 50% 50%,
+      transparent 0deg,
+      var(--theme-accent) 120deg,
+      transparent 240deg);
+  animation: rotate-seal 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate-seal {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 🧬 MECE 24 Service Grid */
+.mece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 8px;
+}
+
+@media (max-width: 640px) {
+  .mece-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.service-card-aura {
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.service-card-aura:hover {
+  transform: translateY(-8px);
+  filter: drop-shadow(0 0 15px var(--theme-primary-muted));
+}
+
+.aura-pulse {
+  position: relative;
+  z-index: 1;
+}
+
+.aura-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--theme-primary), var(--theme-accent), var(--theme-primary));
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: aura-gradient 3s linear infinite;
+}
+
+.aura-pulse:hover::after {
+  opacity: 0.6;
+}
+
+@keyframes aura-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ESGSonar 主題 - ESG 法規監測系統專用
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 深色主題 */
+[data-theme="esg-sonar-dark"],
+.theme-esg-sonar-dark {
+  color-scheme: dark;
+  
+  --esg-bg: #050C14;
+  --esg-surface: #0d1a26;
+  --esg-surface-2: #112233;
+  --esg-primary: #63a6b0;
+  --esg-primary-muted: rgba(99, 166, 176, 0.15);
+  --esg-accent: #FFD700;
+  --esg-glass-bg: rgba(13, 26, 38, 0.85);
+  --esg-glass-border: rgba(99, 166, 176, 0.3);
+  --esg-text-main: #F8FAFC;
+  --esg-text-sub: #CBD5E1;
+  --esg-text-muted: #64748b;
+  --esg-card-bg: #0d1a26;
+  --esg-card-bg-2: #112233;
+  --esg-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --esg-success: #10B981;
+  --esg-warning: #F59E0B;
+  --esg-error: #EF4444;
+  --esg-info: #3B82F6;
+}
+
+/* 淺色主題 */
+[data-theme="esg-sonar-light"],
+.theme-esg-sonar-light {
+  color-scheme: light;
+  
+  --esg-bg: #F8FAFC;
+  --esg-surface: #FFFFFF;
+  --esg-surface-2: #F1F5F9;
+  --esg-primary: #0d7380;
+  --esg-primary-muted: rgba(13, 115, 128, 0.1);
+  --esg-accent: #D97706;
+  --esg-glass-bg: rgba(255, 255, 255, 0.85);
+  --esg-glass-border: rgba(13, 115, 128, 0.2);
+  --esg-text-main: #0F172A;
+  --esg-text-sub: #475569;
+  --esg-text-muted: #94A3B8;
+  --esg-card-bg: #FFFFFF;
+  --esg-card-bg-2: #F8FAFC;
+  --esg-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --esg-success: #059669;
+  --esg-warning: #D97706;
+  --esg-error: #DC2626;
+  --esg-info: #2563EB;
+}
+
+/* ESGSonar 液態玻璃效果 */
+.esg-glass {
+  background: var(--esg-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--esg-glass-border);
+}
+
+/* ESGSonar 卡片 */
+.esg-card {
+  background: var(--esg-card-bg);
+  border: 1px solid var(--esg-glass-border);
+  border-radius: 12px;
+  box-shadow: var(--esg-shadow);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.esg-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 0 8px 24px var(--esg-primary-muted);
+  border-color: var(--esg-primary);
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .esg-card {
+    border-radius: 8px;
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-02-13T20:08:44.978Z",
+  "tests": [
+    {
+      "name": "health",
+      "status": 200,
+      "success": true,
+      "body": {
+        "success": true,
+        "data": {
+          "status": "online",
+          "service": "JunAiKey Neural Core",
+          "version": "10.0.0-universe",
+          "timestamp": "2026-02-13T20:08:45.009Z",
+          "protocol": "5T compliant (4 Yes + 1 No)",
+          "database": "unhealthy",
+          "redis": {
+            "connected": true,
+            "mode": "standard (redis)",
+            "store": "Redis",
+            "keys": 2,
+            "details": {
+              "memory": "879.58K"
+            }
+          },
+          "redis_status": {
+            "connected": true,
+            "mode": "standard (redis)",
+            "store": "Redis",
+            "keys": 2,
+            "details": {
+              "memory": "879.58K"
+            }
+          },
+          "workers": "active",
+          "heartbeat": "unknown"
+        }
+      }
+    },
+    {
+      "name": "sync",
+      "status": 200,
+      "success": true,
+      "body": {
+        "success": true,
+        "timestamp": 1771013325019
+      }
+    },
+    {
+      "name": "awaken",
+      "status": 200,
+      "success": true,
+      "body": {
+        "success": true,
+        "message": "Awakening Achieved: Non-Action Victory Recorded",
+        "rewards": {
+          "xp": 9999,
+          "item": "Essence of Void"
+        }
+      }
+    },
+    {
+      "name": "mystery",
+      "status": 200,
+      "success": true,
+      "body": {
+        "success": true,
+        "data": {
+          "id": "mystery-1771013325385",
+          "name": "The Unseen Hand",
+          "type": "special",
+          "rarity": "legendary",
+          "description": "Actions without action. Progress without movement."
+        }
+      }
+    }
+  ]
+}

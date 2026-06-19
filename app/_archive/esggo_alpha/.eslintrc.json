@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "ignorePatterns": [
+    "src/dataconnect-generated/**",
+    "node_modules/**",
+    ".next/**",
+    "dist/**",
+    "build/**"
+  ]
+}

@@ -1,0 +1,123 @@
+# npm audit report
+
+@tootallnate/once  <3.0.1
+@tootallnate/once vulnerable to Incorrect Control Flow Scoping - https://github.com/advisories/GHSA-vpq2-c234-7xj6
+No fix available
+node_modules/@tootallnate/once
+  http-proxy-agent  4.0.1 - 5.0.0
+  Depends on vulnerable versions of @tootallnate/once
+  node_modules/http-proxy-agent
+    teeny-request  3.9.1 - 10.1.0
+    Depends on vulnerable versions of http-proxy-agent
+    Depends on vulnerable versions of uuid
+    node_modules/teeny-request
+      @google-cloud/common  0.32.1 - 5.0.2
+      Depends on vulnerable versions of retry-request
+      Depends on vulnerable versions of teeny-request
+      node_modules/@google-cloud/common
+        @google-cloud/logging  >=0.8.0
+        Depends on vulnerable versions of @google-cloud/common
+        Depends on vulnerable versions of eventid
+        Depends on vulnerable versions of uuid
+        node_modules/@google-cloud/logging
+          @google-cloud/logging-winston  >=4.1.2
+          Depends on vulnerable versions of @google-cloud/logging
+          node_modules/@google-cloud/logging-winston
+            @genkit-ai/google-cloud  *
+            Depends on vulnerable versions of @google-cloud/logging-winston
+            Depends on vulnerable versions of @google-cloud/opentelemetry-cloud-monitoring-exporter
+            Depends on vulnerable versions of genkit
+            node_modules/@genkit-ai/google-cloud
+      @google-cloud/storage  2.2.0 - 2.5.0 || >=5.19.0
+      Depends on vulnerable versions of retry-request
+      Depends on vulnerable versions of teeny-request
+      Depends on vulnerable versions of uuid
+      node_modules/@google-cloud/storage
+        firebase-admin  >=10.2.0
+        Depends on vulnerable versions of @google-cloud/firestore
+        Depends on vulnerable versions of @google-cloud/storage
+        Depends on vulnerable versions of uuid
+        node_modules/firebase-admin
+          @genkit-ai/firebase  *
+          Depends on vulnerable versions of @genkit-ai/google-cloud
+          Depends on vulnerable versions of @google-cloud/firestore
+          Depends on vulnerable versions of firebase-admin
+          Depends on vulnerable versions of genkit
+          node_modules/@genkit-ai/firebase
+            @genkit-ai/core  >=1.17.0-rc.0
+            Depends on vulnerable versions of @genkit-ai/firebase
+            node_modules/@genkit-ai/core
+              @genkit-ai/ai  >=0.6.0-dev.1
+              Depends on vulnerable versions of @genkit-ai/core
+              Depends on vulnerable versions of uuid
+              node_modules/@genkit-ai/ai
+                genkit  <=0.5.0-rc.12 || 0.6.0-dev.2 - 1.0.0-rc.19 || >=1.0.4
+                Depends on vulnerable versions of @genkit-ai/ai
+                Depends on vulnerable versions of @genkit-ai/core
+                Depends on vulnerable versions of uuid
+                node_modules/genkit
+                  @genkit-ai/google-genai  *
+                  Depends on vulnerable versions of genkit
+                  node_modules/@genkit-ai/google-genai
+      retry-request  7.0.0 - 7.0.2
+      Depends on vulnerable versions of teeny-request
+      node_modules/retry-request
+        google-gax  4.0.5-experimental - 4.6.1
+        Depends on vulnerable versions of retry-request
+        Depends on vulnerable versions of uuid
+        node_modules/google-gax
+          @google-cloud/firestore  7.5.0-pre.0 || 7.6.0 - 7.11.6
+          Depends on vulnerable versions of google-gax
+          node_modules/@google-cloud/firestore
+
+postcss  <8.5.10
+Severity: moderate
+PostCSS has XSS via Unescaped </style> in its CSS Stringify Output - https://github.com/advisories/GHSA-qx2v-qp2m-jg93
+fix available via `npm audit fix --force`
+Will install next@9.3.3, which is a breaking change
+node_modules/next/node_modules/postcss
+  next  >=9.3.4-canary.0
+  Depends on vulnerable versions of postcss
+  node_modules/next
+
+uuid  <14.0.0
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+No fix available
+node_modules/@genkit-ai/google-genai/node_modules/uuid
+node_modules/@google-cloud/logging/node_modules/uuid
+node_modules/@google-cloud/storage/node_modules/uuid
+node_modules/eventid/node_modules/uuid
+node_modules/firebase-admin/node_modules/uuid
+node_modules/google-gax/node_modules/uuid
+node_modules/googleapis-common/node_modules/uuid
+node_modules/gtoken/node_modules/uuid
+node_modules/teeny-request/node_modules/uuid
+node_modules/uuid
+  eventid  *
+  Depends on vulnerable versions of uuid
+  node_modules/eventid
+  gaxios  6.4.0 - 6.7.1
+  Depends on vulnerable versions of uuid
+  node_modules/@genkit-ai/google-genai/node_modules/gaxios
+  node_modules/gtoken/node_modules/gaxios
+  googleapis-common  <=7.2.0
+  Depends on vulnerable versions of uuid
+  node_modules/googleapis-common
+    googleapis  33.0.0 - 149.0.0
+    Depends on vulnerable versions of googleapis-common
+    node_modules/googleapis
+      @google-cloud/opentelemetry-cloud-monitoring-exporter  *
+      Depends on vulnerable versions of googleapis
+      node_modules/@google-cloud/opentelemetry-cloud-monitoring-exporter
+
+25 vulnerabilities (2 low, 23 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.

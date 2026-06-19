@@ -1,0 +1,53 @@
+import { useEffect, useState } from 'react';
+import type { AgentStep } from '@/lib/agent/v3-shared';
+
+export default function AgentExecutionViewer({ taskId }: { taskId: string }) {
+  const [steps, setSteps] = useState<AgentStep[]>([]);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    // 建立 EventSource 連線
+    const eventSource = new EventSource(`/api/agent/stream?taskId=${taskId}`);
+
+    eventSource.onmessage = (event) => {
+      // 這裡如果資料毀損，可以考慮套用 Zod 驗證：AgentStepSchema.parse(JSON.parse(event.data))
+      const newStep = JSON.parse(event.data) as AgentStep;
+      
+      setSteps((prev) => [...prev, newStep]);
+
+      // 當收到完成或錯誤狀態時，主動關閉連線，避免瀏覽器無限重連
+      if (newStep.status === 'SUCCESS' || newStep.status === 'ERROR') {
+        eventSource.close();
+        setIsFinished(true);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('SSE 連線發生錯誤:', error);
+      eventSource.close();
+      setIsFinished(true);
+    };
+
+    // 元件卸載時清理連線
+    return () => {
+      eventSource.close();
+    };
+  }, [taskId]);
+
+  return (
+    <div className="p-4 bg-gray-900 text-green-400 font-mono rounded-lg">
+      <h3 className="text-white mb-2">Agent Execution Log</h3>
+      <ul className="space-y-2">
+        {steps.map((step) => (
+          <li key={step.id}>
+            <span className="text-gray-400">[{step.timestamp.split('T')[1].slice(0, 8)}]</span>{' '}
+            <span className="text-blue-400">[{step.status}]</span>{' '}
+            <span className="font-bold text-purple-400">{step.agentName}:</span>{' '}
+            {step.message}
+          </li>
+        ))}
+      </ul>
+      {isFinished && <div className="mt-4 text-gray-500">-- 執行序結束 --</div>}
+    </div>
+  );
+}

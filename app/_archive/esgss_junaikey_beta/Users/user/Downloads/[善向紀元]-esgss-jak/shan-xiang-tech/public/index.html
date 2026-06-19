@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>善向技術 - AI 代理學習平台 [內部識別代號]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .courses-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .course-platform {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .course-body {
+            padding: 20px;
+        }
+
+        .course-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .course-highlights {
+            margin-bottom: 15px;
+        }
+
+        .highlight-item {
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .course-footer {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        .course-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .course-link:hover {
+            background: #5a6fd8;
+        }
+
+        .learning-paths {
+            margin-bottom: 50px;
+        }
+
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .path-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .path-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .path-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .path-duration {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .path-courses {
+            list-style: none;
+        }
+
+        .path-courses li {
+            padding: 5px 0;
+            border-left: 3px solid #667eea;
+            padding-left: 15px;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .footer-section p, .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .paths-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 頁首 -->
+        <header class="header">
+            <h1 class="logo">🌟 善向技術</h1>
+            <p class="tagline">AI 代理學習平台 [內部識別代號] - 2026 年人工智慧代理建構指南</p>
+        </header>
+
+        <!-- 統計數據 -->
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-number">9</div>
+                <div class="stat-label">免費課程</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">40+</div>
+                <div class="stat-label">小時學習內容</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">實作可能性</div>
+            </div>
+        </section>
+
+        <!-- 課程列表 -->
+        <section class="courses-section">
+            <h2 class="section-title">🧠 2026 年 AI 代理免費課程</h2>
+            <div class="courses-grid" id="courses-grid">
+                <!-- 課程卡片將通過 JavaScript 動態生成 -->
+            </div>
+        </section>
+
+        <!-- 學習路徑 -->
+        <section class="learning-paths">
+            <h2 class="section-title">🎯 學習路徑</h2>
+            <div class="paths-grid" id="paths-grid">
+                <!-- 學習路徑將通過 JavaScript 動態生成 -->
+            </div>
+        </section>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>關於善向技術</h3>
+                    <p>專門針對人工智慧代理學習和實作的綜合平台，致力於普及 AI 代理技術知識。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>學習資源</h3>
+                    <p><a href="#courses">課程列表</a></p>
+                    <p><a href="#paths">學習路徑</a></p>
+                    <p><a href="#examples">實作範例</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>聯絡我們</h3>
+                    <p><a href="mailto:tech@shan-xiang.com">tech@shan-xiang.com</a></p>
+                    <p><a href="https://github.com/shan-xiang-tech">GitHub</a></p>
+                    <p><a href="https://community.shan-xiang.com">社群論壇</a></p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 善向技術團隊。版權所有。</p>
+                <p>讓我們一起探索 AI 代理的無限可能！🚀</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 課程數據
+        const courses = [
+            {
+                id: 'crewai-multiagent',
+                title: '使用 crewAI 建構多 AI 智能體系統',
+                platform: 'DeepLearning.AI',
+                instructor: 'João Moura',
+                duration: '2 小時 14 分鐘',
+                level: '中級',
+                category: '多代理系統',
+                description: '學習如何使用 crewAI 框架建構協作型多智能體系統，掌握智能體團隊協作和角色委派技巧。',
+                highlights: ['crewAI 框架核心概念', '多智能體協作模式', '角色委派和任務分配'],
+                url: 'https://learn.deeplearning.ai/courses/multi-ai-agent-systems-with-crewai',
+                tags: ['crewAI', '多代理', '協作']
+            },
+            {
+                id: 'prompt-engineering-aws',
+                title: '提示工程基礎（AWS）',
+                platform: 'SkillBuilder.AWS',
+                instructor: '亞馬遜團隊',
+                duration: '3 小時 50 分鐘',
+                level: '初學者',
+                category: '提示工程',
+                description: '掌握提示設計、上下文管理和工具使用的基本原理，為建立可靠的 LLM 代理打下堅實基礎。',
+                highlights: ['提示設計原則', '上下文管理技巧', '工具使用最佳實務'],
+                url: 'https://explore.skillbuilder.aws/learn/course/3/play/1/introduction-to-prompt-engineering',
+                tags: ['提示工程', 'AWS', 'LLM']
+            },
+            {
+                id: 'langgraph-intro',
+                title: 'LangGraph 簡介',
+                platform: 'Academy.LangChain.com',
+                instructor: 'Harrison Chase',
+                duration: '5 小時 58 分鐘',
+                level: '中級',
+                category: '工作流程編排',
+                description: '深入學習 LangGraph，這是一個基於圖的編排框架，用於建立複雜的代理工作流程。',
+                highlights: ['圖基編排概念', '複雜工作流程設計', '實踐練習'],
+                url: 'https://academy.langchain.com/courses/introduction-to-langgraph',
+                tags: ['LangGraph', '工作流程', '編排']
+            },
+            {
+                id: 'llm-agents-mooc',
+                title: '大型語言模型代理 MOOC',
+                platform: 'LLMAgents-Learning.org',
+                instructor: 'Dawn Song',
+                duration: '4 小時 4 分鐘',
+                level: '進階',
+                category: '代理架構',
+                description: '結構化介紹代理架構、決策循環和多代理協作，適合學術學習者和研究人員。',
+                highlights: ['代理架構設計', '決策循環機制', '多代理協作'],
+                url: 'https://llmagents-learning.org/',
+                tags: ['MOOC', '代理架構', '學術']
+            },
+            {
+                id: 'ai-agents-langgraph',
+                title: 'LangGraph 中的 AI 代理',
+                platform: 'DeepLearning.AI',
+                instructor: 'Harrison Chase',
+                duration: '1 小時 32 分鐘',
+                level: '中高級',
+                category: '代理實作',
+                description: '專注於使用記憶體、工具和回饋循環實現 LangGraph 代理，適合 LangChain 用戶。',
+                highlights: ['記憶體管理', '工具整合', '回饋循環設計'],
+                url: 'https://learn.deeplearning.ai/courses/ai-agents-in-langgraph',
+                tags: ['LangGraph', '記憶體', '工具']
+            },
+            {
+                id: 'multimodal-agents',
+                title: '使用多模態模型建構 AI 智能體',
+                platform: 'Learn.Nvidia.com',
+                instructor: 'Nvidia',
+                duration: '7 小時 10 分鐘',
+                level: '高級',
+                category: '多模態代理',
+                description: '學習如何建立能夠處理文字、圖像和音訊的智能體，涵蓋多模態模型的整合和部署。',
+                highlights: ['多模態數據處理', '圖像和音訊整合', '模型部署'],
+                url: 'https://learn.nvidia.com/courses/building-ai-agents-with-multimodal-models',
+                tags: ['多模態', 'Nvidia', '圖像處理']
+            },
+            {
+                id: 'autogen-patterns',
+                title: '使用 AutoGen 建構 AI 智能體設計模式',
+                platform: 'DeepLearning.AI',
+                instructor: '王馳',
+                duration: '1 小時 25 分鐘',
+                level: '中高級',
+                category: '設計模式',
+                description: '探索使用 AutoGen 建構智能體的可重複使用設計模式，包括角色提示、重試循環和任務規劃。',
+                highlights: ['AutoGen 設計模式', '角色提示技巧', '任務規劃'],
+                url: 'https://learn.deeplearning.ai/courses/building-agentic-rag-with-autogen',
+                tags: ['AutoGen', '設計模式', '角色提示']
+            },
+            {
+                id: 'llm-memory',
+                title: 'LLM 作為作業系統：智能體記憶',
+                platform: 'DeepLearning.AI',
+                instructor: 'Charles Packer',
+                duration: '1 小時 22 分鐘',
+                level: '中級',
+                category: '記憶體管理',
+                description: '學習如何在智能體中實現短期記憶和長期記憶，涵蓋向量儲存、情景記憶和結構化狀態檔案。',
+                highlights: ['短期記憶實現', '長期記憶策略', '向量儲存'],
+                url: 'https://learn.deeplearning.ai/courses/llms-as-operating-systems',
+                tags: ['記憶體', '向量儲存', '狀態管理']
+            },
+            {
+                id: 'llamaindex-rag',
+                title: '使用 LlamaIndex 建構智慧型 RAG',
+                platform: 'DeepLearning.AI',
+                instructor: 'Jerry Liu',
+                duration: '44 分鐘',
+                level: '中級',
+                category: 'RAG 代理',
+                description: '學習如何使用 LlamaIndex 將檢索增強生成 (RAG) 與智慧工作流程結合，適合搜尋和知識庫智能體。',
+                highlights: ['RAG 技術原理', 'LlamaIndex 整合', '知識庫代理'],
+                url: 'https://learn.deeplearning.ai/courses/building-llm-applications-with-llamaindex',
+                tags: ['LlamaIndex', 'RAG', '檢索增強']
+            }
+        ];
+
+        // 學習路徑數據
+        const learningPaths = [
+            {
+                id: 'beginner',
+                title: '初學者路徑',
+                description: '適合 AI 代理初學者',
+                duration: '4-6 周',
+                courses: [
+                    'prompt-engineering-aws',
+                    'langgraph-intro'
+                ]
+            },
+            {
+                id: 'intermediate',
+                title: '中級路徑',
+                description: '掌握多代理系統和進階框架',
+                duration: '6-8 周',
+                courses: [
+                    'crewai-multiagent',
+                    'autogen-patterns'
+                ]
+            },
+            {
+                id: 'advanced',
+                title: '高級路徑',
+                description: '企業級應用和多模態代理',
+                duration: '8-12 周',
+                courses: [
+                    'multimodal-agents',
+                    'llamaindex-rag'
+                ]
+            }
+        ];
+
+        // 渲染課程卡片
+        function renderCourses() {
+            const grid = document.getElementById('courses-grid');
+
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.className = 'course-card';
+
+                card.innerHTML = `
+                    <div class="course-header">
+                        <div class="course-platform">${course.platform}</div>
+                        <div class="course-title">${course.title}</div>
+                        <div class="course-meta">
+                            <span>${course.level}</span>
+                            <span>${course.duration}</span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-description">${course.description}</div>
+                        <div class="course-highlights">
+                            ${course.highlights.map(highlight =>
+                                `<span class="highlight-item">${highlight}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <a href="${course.url}" class="course-link" target="_blank">開始學習</a>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // 渲染學習路徑
+        function renderLearningPaths() {
+            const grid = document.getElementById('paths-grid');
+
+            learningPaths.forEach(path => {
+                const card = document.createElement('div');
+                card.className = 'path-card';
+
+                const courseItems = path.courses.map(courseId => {
+                    const course = courses.find(c => c.id === courseId);
+                    return course ? `<li>${course.title}</li>` : '';
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="path-title">${path.title}</div>
+                    <div class="path-description">${path.description}</div>
+                    <div class="path-duration">建議時長：${path.duration}</div>
+                    <ul class="path-courses">
+                        ${courseItems}
+                    </ul>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCourses();
+            renderLearningPaths();
+        });
+    </script>
+</body>
+</html>

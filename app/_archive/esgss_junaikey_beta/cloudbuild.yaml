@@ -1,0 +1,73 @@
+steps:
+  # Step 1: 構建 Docker Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia.gcr.io/$PROJECT_ID/esg-dashboard:$COMMIT_SHA'
+      - '-t'
+      - 'asia.gcr.io/$PROJECT_ID/esg-dashboard:latest'
+      - '-f'
+      - 'Dockerfile'
+      - '.'
+    id: 'build-image'
+
+  # Step 2: 推送到 Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia.gcr.io/$PROJECT_ID/esg-dashboard:$COMMIT_SHA'
+    id: 'push-image'
+    waitFor: ['build-image']
+
+  # Step 3: 部署到 Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'esg-dashboard'
+      - '--image=asia.gcr.io/$PROJECT_ID/esg-dashboard:$COMMIT_SHA'
+      - '--region=asia-east1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      # IAM 配置 - 使用預設服務帳戶以提高可攜性
+      # - '--service-account=esg-dashboard-runner@junaikey-genesis.iam.gserviceaccount.com'
+      # 資源配置
+      - '--memory=2Gi' # Increased to prevent OOM
+      - '--cpu=2'      # Increased for better startup performance
+      - '--no-cpu-throttling' # Prevent startup CPU throttling
+      - '--concurrency=80'
+      - '--timeout=600s' # Increased timeout for slow tsx startup
+      # Scaling 配置（生產級關鍵）
+      - '--min-instances=0' # Reduced to 0 to prevent quota exhaustion
+      - '--max-instances=10'
+      # Secret Manager 整合（如果需要）
+      # - '--set-secrets=API_KEY=api-key:latest,DB_PASSWORD=db-password:latest'
+      # 標籤
+      - '--labels=env=production,version=$SHORT_SHA,managed-by=cloud-build'
+    id: 'deploy-cloudrun'
+    waitFor: ['push-image']
+
+# 同時推送到 Container Registry 和 Artifact Registry
+images:
+  - 'asia.gcr.io/$PROJECT_ID/esg-dashboard:$COMMIT_SHA'
+  - 'asia.gcr.io/$PROJECT_ID/esg-dashboard:latest'
+
+# 構建超時時間
+timeout: '1200s'
+
+# 構建選項
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+# 日誌設置 - 移除 hardcoded bucket 以避免跨專案權限錯誤
+# logsBucket: 'gs://junaikey-genesis-build-logs'
+
+# 替換變數（可選）
+substitutions:
+  _REGION: 'asia-east1'
+  _SERVICE_NAME: 'esg-dashboard'
+  _MIN_INSTANCES: '1'
+  _MAX_INSTANCES: '10'

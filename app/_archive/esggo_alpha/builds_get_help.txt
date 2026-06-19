@@ -1,0 +1,21 @@
+Usage: firebase [options]
+
+Options:
+  -V, --version                        output the version number
+  -P, --project <alias_or_project_id>  the Firebase project to use for this
+                                       command
+  --account <email>                    the Google account to use for
+                                       authorization
+  -j, --json                           output JSON instead of text, also
+                                       triggers non-interactive mode
+  --token <token>                      DEPRECATED - will be removed in a future
+                                       major version - supply an auth token for
+                                       this command
+  --non-interactive                    error out of the command instead of
+                                       waiting for prompts
+  -i, --interactive                    force prompts to be displayed
+  --debug                              print verbose debug output and keep a
+                                       debug log file
+  -c, --config <path>                  path to the firebase.json file to use
+                                       for configuration
+  -h, --help                           display help for command

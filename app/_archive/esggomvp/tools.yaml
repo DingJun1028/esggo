@@ -1,0 +1,37 @@
+sources:
+  - kind: sources
+    name: nocodebackend
+    type: postgres
+    host: ${NCB_HOST:localhost}
+    port: ${NCB_PORT:5432}
+    database: ${NCB_DATABASE:esg_go_mvp}
+    user: ${NCB_USER:postgres}
+    password: ${NCB_PASSWORD:changeme}
+
+tools:
+  - kind: tools
+    name: query-nocodb
+    type: postgres-sql
+    source: nocodebackend
+    description: Query from NoCodeBackend database
+    parameters:
+      - name: query
+        type: string
+        description: SQL query to execute
+    statement: $1
+
+toolsets:
+  - kind: toolsets
+    name: default
+    tools:
+      - query-nocodb
+
+prompts:
+  - kind: prompts
+    name: analyze_data
+    description: Analyze data from NoCodeBackend
+    messages:
+      - content: "Please analyze the following data from NoCodeBackend and provide insights:\n\n{{.data}}"
+    arguments:
+      - name: data
+        description: The data to analyze

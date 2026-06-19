@@ -1,0 +1,50 @@
+{
+  "status": "success",
+  "result": [
+    {
+      "name": "projects/esg-sunshine/locations/asia-east1/backends/esggo-backend",
+      "createTime": "2026-04-21T07:56:08.688523022Z",
+      "updateTime": "2026-04-22T01:50:53.696802Z",
+      "uri": "esggo-backend--esg-sunshine.asia-east1.hosted.app",
+      "managedResources": [
+        {
+          "runService": {
+            "service": "projects/950159032447/locations/asia-east1/services/esggo-backend"
+          }
+        }
+      ],
+      "codebase": {
+        "repository": "projects/esg-sunshine/locations/asia-east1/connections/apphosting-github-conn-0qc1jkh/gitRepositoryLinks/DingJun1028-esggoV1.0"
+      },
+      "uid": "6116caa6-9860-4539-9b96-2ae847a55919",
+      "etag": "YGd4YHfnUumVRtzYte65XT-tUMDHPt_kptY357uN4Lw",
+      "reconciling": false,
+      "servingLocality": "GLOBAL_ACCESS",
+      "serviceAccount": "firebase-app-hosting-compute@esg-sunshine.iam.gserviceaccount.com",
+      "appId": "1:950159032447:web:715032f46eef11fdecff4a"
+    },
+    {
+      "name": "projects/esg-sunshine/locations/asia-east1/backends/esggo",
+      "createTime": "2026-04-25T16:25:46.538663918Z",
+      "updateTime": "2026-04-26T12:17:34.389980Z",
+      "uri": "esggo--esg-sunshine.asia-east1.hosted.app",
+      "managedResources": [
+        {
+          "runService": {
+            "service": "projects/950159032447/locations/asia-east1/services/esggo-024269dd"
+          }
+        }
+      ],
+      "codebase": {
+        "repository": "projects/esg-sunshine/locations/asia-east1/connections/apphosting-github-conn-0qc1jkh/gitRepositoryLinks/DingJun1028-esggo_alpha",
+        "rootDirectory": "/"
+      },
+      "uid": "08ab8c4d-70c6-4425-bf71-3d4ca0b1b989",
+      "etag": "ZsAzNCIX7ppgsZcXPzPVVUqihwTv1aFpOoZa5JDJXb8",
+      "reconciling": false,
+      "servingLocality": "GLOBAL_ACCESS",
+      "serviceAccount": "firebase-app-hosting-compute@esg-sunshine.iam.gserviceaccount.com",
+      "appId": "1:950159032447:web:76783e65267ab3a5ecff4a"
+    }
+  ]
+}

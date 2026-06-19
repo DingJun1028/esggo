@@ -1,0 +1,30 @@
++ Service esg-dashboard in region asia-east1
+commit-sha:0cb68f42080a9b9ace5ea52d79cd5ee01442bca3 env:production gcb-build-id:0aa21de3-ca57-45d6-9dca-eaada011cbf1 gcb-trigger-id:0151be1f-d5d3-4c60-a6db-1057a9202b9e gcb-trigger-region:global managed-by:gemini-cli version:6e1d2c8
+ 
+URL:     https://esg-dashboard-1080502198465.asia-east1.run.app
+Ingress: all
+Traffic:
+  100% LATEST (currently esg-dashboard-00024-276)
+ 
+Scaling: Auto (Min: 0, Max: 10)
+ 
+Last updated on 2026-01-15T01:21:30.856721Z by dingjunhong1028@gmail.com:
+  Revision esg-dashboard-00024-276
+  commit-sha:0cb68f42080a9b9ace5ea52d79cd5ee01442bca3 env:production gcb-build-id:0aa21de3-ca57-45d6-9dca-eaada011cbf1 gcb-trigger-id:0151be1f-d5d3-4c60-a6db-1057a9202b9e gcb-trigger-region:global managed-by:gemini-cli version:6e1d2c8
+  Container None
+    Image:           gcr.io/junaikey-genesis/esg-dashboard:6e1d2c8
+    Port:            8080
+    Memory:          1Gi
+    CPU:             1
+    Startup Probe:
+      TCP every 240s
+      Port:          8080
+      Initial delay: 0s
+      Timeout:       240s
+      Failure threshold: 1
+      Type:          Default
+  Service account:   esg-dashboard-runner@junaikey-genesis.iam.gserviceaccount.com
+  Concurrency:       80
+  Min instances:     1
+  Max instances:     10
+  Timeout:           30s

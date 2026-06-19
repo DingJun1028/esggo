@@ -1,0 +1,572 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `AuditLog` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  auditLog_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: AuditLog_Data!
+  ): AuditLog_KeyOutput! @fdc_generated(from: "AuditLog", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `DashboardMetric` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  dashboardMetric_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: DashboardMetric_Data!
+  ): DashboardMetric_KeyOutput! @fdc_generated(from: "DashboardMetric", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Evidence` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  evidence_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Evidence_Data!
+  ): Evidence_KeyOutput! @fdc_generated(from: "Evidence", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `OcrReviewItem` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  ocrReviewItem_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: OcrReviewItem_Data!
+  ): OcrReviewItem_KeyOutput! @fdc_generated(from: "OcrReviewItem", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `AuditLog` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  auditLog_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [AuditLog_Data!]!
+  ): [AuditLog_KeyOutput!]! @fdc_generated(from: "AuditLog", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `DashboardMetric` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  dashboardMetric_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [DashboardMetric_Data!]!
+  ): [DashboardMetric_KeyOutput!]! @fdc_generated(from: "DashboardMetric", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Evidence` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  evidence_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Evidence_Data!]!
+  ): [Evidence_KeyOutput!]! @fdc_generated(from: "Evidence", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `OcrReviewItem` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  ocrReviewItem_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [OcrReviewItem_Data!]!
+  ): [OcrReviewItem_KeyOutput!]! @fdc_generated(from: "OcrReviewItem", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `AuditLog` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AuditLog`.
+  """
+  auditLog_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: AuditLog_Data!
+  ): AuditLog_KeyOutput! @fdc_generated(from: "AuditLog", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `DashboardMetric` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `DashboardMetric`.
+  """
+  dashboardMetric_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: DashboardMetric_Data!
+  ): DashboardMetric_KeyOutput! @fdc_generated(from: "DashboardMetric", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Evidence` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Evidence`.
+  """
+  evidence_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Evidence_Data!
+  ): Evidence_KeyOutput! @fdc_generated(from: "Evidence", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `OcrReviewItem` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `OcrReviewItem`.
+  """
+  ocrReviewItem_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: OcrReviewItem_Data!
+  ): OcrReviewItem_KeyOutput! @fdc_generated(from: "OcrReviewItem", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `AuditLog` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AuditLog`.
+  """
+  auditLog_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [AuditLog_Data!]!
+  ): [AuditLog_KeyOutput!]! @fdc_generated(from: "AuditLog", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `DashboardMetric` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `DashboardMetric`.
+  """
+  dashboardMetric_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [DashboardMetric_Data!]!
+  ): [DashboardMetric_KeyOutput!]! @fdc_generated(from: "DashboardMetric", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Evidence` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Evidence`.
+  """
+  evidence_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Evidence_Data!]!
+  ): [Evidence_KeyOutput!]! @fdc_generated(from: "Evidence", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `OcrReviewItem` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `OcrReviewItem`.
+  """
+  ocrReviewItem_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [OcrReviewItem_Data!]!
+  ): [OcrReviewItem_KeyOutput!]! @fdc_generated(from: "OcrReviewItem", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `AuditLog` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `AuditLog` or `null` if not found.
+  """
+  auditLog_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: AuditLog_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AuditLog_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: AuditLog_Data!
+  ): AuditLog_KeyOutput @fdc_generated(from: "AuditLog", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `DashboardMetric` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `DashboardMetric` or `null` if not found.
+  """
+  dashboardMetric_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: DashboardMetric_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DashboardMetric_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: DashboardMetric_Data!
+  ): DashboardMetric_KeyOutput @fdc_generated(from: "DashboardMetric", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Evidence` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Evidence` or `null` if not found.
+  """
+  evidence_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Evidence_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Evidence_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Evidence_Data!
+  ): Evidence_KeyOutput @fdc_generated(from: "Evidence", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `OcrReviewItem` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `OcrReviewItem` or `null` if not found.
+  """
+  ocrReviewItem_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: OcrReviewItem_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OcrReviewItem_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: OcrReviewItem_Data!
+  ): OcrReviewItem_KeyOutput @fdc_generated(from: "OcrReviewItem", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
+  """
+  user_update(
+    """
+    The unique ID of the object.
+    """
+    id: String
+
+    """
+    ✨ `_expr` server value variant of `id` (The unique ID of the object.)
+    """
+    id_expr: String_Expr
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: User_Data!
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `AuditLog` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  auditLog_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: AuditLog_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: AuditLog_Data!
+  ): Int! @fdc_generated(from: "AuditLog", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `DashboardMetric` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  dashboardMetric_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: DashboardMetric_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: DashboardMetric_Data!
+  ): Int! @fdc_generated(from: "DashboardMetric", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Evidence` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  evidence_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Evidence_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Evidence_Data!
+  ): Int! @fdc_generated(from: "Evidence", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `OcrReviewItem` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  ocrReviewItem_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: OcrReviewItem_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: OcrReviewItem_Data!
+  ): Int! @fdc_generated(from: "OcrReviewItem", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  user_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: User_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: User_Data!
+  ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `AuditLog` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  auditLog_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: AuditLog_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AuditLog_FirstRow
+  ): AuditLog_KeyOutput @fdc_generated(from: "AuditLog", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `DashboardMetric` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  dashboardMetric_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: DashboardMetric_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DashboardMetric_FirstRow
+  ): DashboardMetric_KeyOutput @fdc_generated(from: "DashboardMetric", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Evidence` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  evidence_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Evidence_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Evidence_FirstRow
+  ): Evidence_KeyOutput @fdc_generated(from: "Evidence", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `OcrReviewItem` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  ocrReviewItem_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: OcrReviewItem_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OcrReviewItem_FirstRow
+  ): OcrReviewItem_KeyOutput @fdc_generated(from: "OcrReviewItem", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  user_delete(
+    """
+    The unique ID of the object.
+    """
+    id: String
+
+    """
+    ✨ `_expr` server value variant of `id` (The unique ID of the object.)
+    """
+    id_expr: String_Expr
+
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `AuditLog` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  auditLog_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: AuditLog_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "AuditLog", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `DashboardMetric` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  dashboardMetric_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: DashboardMetric_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "DashboardMetric", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Evidence` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  evidence_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Evidence_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Evidence", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `OcrReviewItem` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  ocrReviewItem_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: OcrReviewItem_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "OcrReviewItem", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  user_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: User_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
+}

@@ -1,0 +1,120 @@
+/**
+ * Two-Way Binding Component Styles
+ * ?ôÂ??∏Ê?Á∂ÅÂ?ÁµÑ‰ª∂Ê®??
+ */
+
+/* ============================================================================
+   Two-Way Binding ?∫Á?Ê®??
+   ============================================================================ */
+
+.two-way-binding {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ëº∏ÂÖ•È°ûÂ? */
+.two-way-binding--text,
+.two-way-binding--number,
+.two-way-binding--email,
+.two-way-binding--password,
+.two-way-binding--textarea {
+  /* Ê®????MUI TextField ?ïÁ? */
+}
+
+.two-way-binding--select {
+  /* Ê®????MUI Select ?ïÁ? */
+}
+
+.two-way-binding--checkbox,
+.two-way-binding--switch {
+  /* Ê®????MUI Checkbox/Switch ?ïÁ? */
+}
+
+.two-way-binding--slider {
+  /* Ê®????MUI Slider ?ïÁ? */
+}
+
+/* ============================================================================
+   Form Ê®??
+   ============================================================================ */
+
+.two-way-binding-form {
+  width: 100%;
+}
+
+/* ============================================================================
+   ?øÊ?ÂºèË®≠Ë®?   ============================================================================ */
+
+@media (max-width: 600px) {
+  .two-way-binding-form {
+    gap: 16px;
+  }
+}
+
+/* ============================================================================
+   Ê∑±Ëâ≤Ê®°Â?
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  .two-way-binding {
+    /* Ê∑±Ëâ≤Ê®°Â?Ê®????MUI ‰∏ªÈ??ïÁ? */
+  }
+}
+
+/* ============================================================================
+   ?°È?Á§ôÊîØ??   ============================================================================ */
+
+.two-way-binding:focus-within {
+  outline: 2px solid #00FFFF;
+  outline-offset: 2px;
+}
+
+/* ?µÁõ§Â∞éËà™ */
+.two-way-binding input:focus-visible,
+.two-way-binding textarea:focus-visible,
+.two-way-binding select:focus-visible {
+  outline: 2px solid #00FFFF;
+  outline-offset: 2px;
+}
+
+/* È´òÂ?ÊØîÂ∫¶Ê®°Â? */
+@media (prefers-contrast: high) {
+  .two-way-binding {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================================
+   Ê∏õÂ??ïÁï´?èÂ•Ω
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .two-way-binding,
+  .two-way-binding-form {
+    transition: none;
+  }
+
+  .two-way-binding input,
+  .two-way-binding textarea,
+  .two-way-binding select {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   ?ìÂç∞Ê®??
+   ============================================================================ */
+
+@media print {
+  .two-way-binding {
+    border: 1px solid #000;
+    background: none;
+  }
+
+  .two-way-binding input,
+  .two-way-binding textarea,
+  .two-way-binding select {
+    border: 1px solid #000;
+  }
+}
+

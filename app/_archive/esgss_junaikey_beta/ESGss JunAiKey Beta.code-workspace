@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"geminicodeassist.project": "esg-sunshine",
+		"MutableAI.upsell": false,
+		"editor.tabCompletion": "on",
+		"diffEditor.codeLens": true
+	}
+}

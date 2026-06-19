@@ -1,0 +1,14 @@
+(node:7388) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+[1m[37m===[39m Deploying to 'esg-sunshine'...[22m
+
+[36m[1mi [22m[39m deploying [1mapphosting[22m
+[36m[1mi  apphosting:[22m[39m Found backend(s) esggo-frontend
+[36m[1mi  apphosting:[22m[39m Zipped source for backend esggo-frontend
+[36m[1mi  apphosting:[22m[39m Uploading source for backend esggo-frontend...
+[36m[1mi  apphosting:[22m[39m Uploaded at gs://firebaseapphosting-sources-950159032447-us-east4/esggo-frontend--7388-LTo7CNIh1x4m-.zip
+[36m[1mi  apphosting:[22m[39m You may also track the rollout(s) at:
+	https://console.firebase.google.com/project/esg-sunshine/apphosting
+- Starting rollout(s) for backend(s) esggo-frontend; this may take a few minutes. It's safe to exit now.
+

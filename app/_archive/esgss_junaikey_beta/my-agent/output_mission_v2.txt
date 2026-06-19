@@ -1,0 +1,9 @@
+--- 💡 Omni Intelligence Agent Starting ---
+[Status] 5T Plugin: Active
+[Status] Intelligence Forge: v2.0.26 Ready
+[32m[ADK INFO]:[0m Plugin 'omni_5t_plugin' registered.
+[Runner] Starting manual mission (runAsync)...
+[32m[ADK INFO]:[0m event:  {"invocationId":"e-000d3a96-17a7-4e8a-86d0-d117e8cac75f","author":"user","actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{},"requestedToolConfirmations":{}},"content":{"parts":[{"text":"請提取 https://example.com/esg 的資訊並進行提純。"}]},"id":"fSQ71pZM","longRunningToolIds":[],"timestamp":1771114002305}
+[💡5T-Transparent] Calling Model: gemini-2.0-flash
+[32m[ADK INFO]:[0m Sending out request, model: gemini-2.0-flash, backend: GEMINI_API, stream: false
+[Runner] Mission Accomplished.

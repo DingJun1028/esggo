@@ -1,0 +1,13 @@
+FAIL __tests__/ai-actions.test.ts
+  ● Test suite failed to run
+
+    error TS5011: The common source directory of 'tsconfig.json' is './__tests__'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+      Visit https://aka.ms/ts6 for migration information.
+    error TS5107: Option 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+      Visit https://aka.ms/ts6 for migration information.
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.371 s
+Ran all test suites.

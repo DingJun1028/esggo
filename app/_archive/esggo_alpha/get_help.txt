@@ -1,0 +1,6 @@
+Usage: firebase apphosting:backends:get [options] <backend>
+
+print info about a Firebase App Hosting backend
+
+Options:
+  -h, --help  display help for command

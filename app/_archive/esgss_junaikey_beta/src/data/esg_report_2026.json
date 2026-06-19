@@ -1,0 +1,96 @@
+{
+  "report_metadata": {
+    "title": "2026 Cyber-ESG 永續報告書",
+    "master_uuid": "MASTER-UUID-2026-UNIV-MEM-STRICT",
+    "timestamp": 1768416000,
+    "version": "1.0.0-FINAL",
+    "logic_protocol": "4可1不可 (4+1 Protocol)"
+  },
+  "chapters": [
+    {
+      "id": "CH1",
+      "title": "環境治理",
+      "uuid": "UNIV-ESG-2026-CH1-B882-9451-AF62",
+      "data_hash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9e41",
+      "evidence_path": "vault://ch1/emissions-v1.json",
+      "metrics": [
+        {
+          "label": "範疇一：直接排放",
+          "value": 1240.5,
+          "unit": "tCO2e",
+          "status": "Traceable"
+        },
+        {
+          "label": "再生能源使用率",
+          "value": 42.8,
+          "unit": "%",
+          "status": "Calculable"
+        }
+      ]
+    },
+    {
+      "id": "CH2",
+      "title": "社會責任",
+      "uuid": "UNIV-ESG-2026-CH2-S443-1288-DE90",
+      "data_hash": "sha256:a92c4d872146f61036894576313274291114948719263f036739097746961f02",
+      "previous_hash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9e41",
+      "metrics": [
+        {
+          "label": "女性管理職比例",
+          "value": 38.5,
+          "unit": "%",
+          "status": "Traceable"
+        },
+        {
+          "label": "薪資性別差距",
+          "value": "0.95:1",
+          "unit": "Ratio",
+          "status": "Calculable"
+        }
+      ]
+    },
+    {
+      "id": "CH3",
+      "title": "供應鏈與責任採購",
+      "uuid": "UNIV-ESG-2026-CH3-C771-5529-FE12",
+      "data_hash": "sha256:d33e1124634287895045336332115668e2197123348123237593223011116b89",
+      "previous_hash": "sha256:a92c4d872146f61036894576313274291114948719263f036739097746961f02",
+      "metrics": [
+        {
+          "label": "在地採購比例",
+          "value": 72.4,
+          "unit": "%",
+          "status": "Traceable"
+        },
+        {
+          "label": "供應商 ESG 簽署率",
+          "value": 100,
+          "unit": "%",
+          "status": "Trackable"
+        }
+      ]
+    },
+    {
+      "id": "CH4",
+      "title": "公司治理",
+      "uuid": "UNIV-ESG-2026-CH4-G119-7732-EE44",
+      "data_hash": "sha256:e88f220310239458231023840213840921384012983412039841209384120c31",
+      "previous_hash": "sha256:d33e1124634287895045336332115668e2197123348123237593223011116b89",
+      "metrics": [
+        {
+          "label": "董事會出席率",
+          "value": 98.5,
+          "unit": "%",
+          "status": "Traceable"
+        },
+        {
+          "label": "反貪腐訓練覆蓋率",
+          "value": 100,
+          "unit": "%",
+          "status": "Trackable"
+        }
+      ]
+    }
+  ],
+  "root_signature": "SIG-428-GOLD-MASTER-LOCK"
+}

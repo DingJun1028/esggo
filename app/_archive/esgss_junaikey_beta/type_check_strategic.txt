@@ -1,0 +1,4 @@
+src/App.tsx(90,27): error TS2339: Property 'startMissionLoop' does not exist on type 'typeof OmniLegionCoordinator'.
+src/App.tsx(94,29): error TS2339: Property 'stopMissionLoop' does not exist on type 'typeof OmniLegionCoordinator'.
+src/services/StrategicIntelligence.ts(91,13): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.

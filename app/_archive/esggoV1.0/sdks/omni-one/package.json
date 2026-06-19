@@ -1,0 +1,16 @@
+{
+  "name": "omni-one",
+  "version": "1.0.0",
+  "description": "Omni Core System",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@google/genai": "^0.1.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
+

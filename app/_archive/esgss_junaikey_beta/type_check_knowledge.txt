@@ -1,0 +1,3 @@
+src/omni/infrastructure/knowledge/OmniKnowledge.ts(1,42): error TS2307: Cannot find module '../../../../types/Omni-entity.types' or its corresponding type declarations.
+src/omni/infrastructure/knowledge/OmniKnowledge.ts(2,56): error TS2307: Cannot find module '../../../../types/knowledge' or its corresponding type declarations.
+src/omni/infrastructure/knowledge/OmniKnowledge.ts(3,41): error TS2307: Cannot find module '../../../../services/omniLogger' or its corresponding type declarations.

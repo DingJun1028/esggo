@@ -1,0 +1,49 @@
+# Deep-Sea Marine Research Vessel Technical Dashboard
+
+## Top Bar
+- Vessel Name: **RV ABYSSAL EXPLORER**
+- Depth: **___ m**
+- Coordinates: **___° ___' N, ___° ___' E**
+- Mission Timer: **___ hrs**
+- Connectivity Indicators:
+  - Satellite 📡 (Status: ___)
+  - Acoustic Modem 🎚️ (Status: ___)
+  - ROV Tether 🎮 (Status: ___)
+
+## Left Panel – Navigation & Sonar
+- **Multibeam Sonar** (scrolling waterfall)
+- **Side‑Scan Sonar** (Port / Starboard)
+- **Sub‑Bottom Profiler**
+- **Current Position** on Bathymetric Map (with waypoints)
+- **Heading**, **SOG**, **Speed Through Water**
+
+## Center Panel – ROV/AUV Control
+- **Live Video Feed** (Main Camera / Manipulator Cam)
+- **ROV Telemetry**:
+  - Depth, Heading, Altitude, Tether Tension
+  - Thruster Status (4‑Thruster Layout)
+- **Manipulator Arm** (7‑DOF)
+  - Gripper Force Feedback
+- **Tool Skid** (Samplers, Sensors, Corers)
+- **Auto‑Station Keeping / DP** status
+
+## Right Panel – Environmental & Science
+- **CTD Profile** (real‑time graph)
+- **Dissolved O₂, pH, Turbidity, Methane**
+- **Water Column Backscatter**
+- **Sample Log**:
+  - Niskin Bottles, Push Cores, Bioboxes, Rock Boxes, eDNA Sampler
+- **Sensor Readings** (temp, salinity, pressure)
+
+## Bottom Panel – Systems Monitoring
+- **Power Distribution** (Main Bus, Battery SOC, Generator)
+- **Propulsion** (Azimuth Thrusters RPM, Tunnel Thrusters)
+- **Ballast & Trim** (Tank Levels, Trim Angle)
+- **Communications** (VSAT, Acoustic SNR, UHF/VHF)
+- **Life Support** (O₂, CO₂, Hull Integrity)
+- **Alarm Banner** (Red/Amber/Green status)
+
+## Styling
+- **Theme:** Dark bridge (#0a0f1a) with cyan/teal accents, amber warnings, red criticals, green normals.
+- **Fonts:** Monospace for numeric data; technical grid lines; subtle glow on active elements.
+- **Contrast:** Optimized for low‑light bridge conditions.

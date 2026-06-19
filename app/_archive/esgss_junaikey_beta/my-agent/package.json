@@ -1,0 +1,21 @@
+{
+    "name": "my-agent",
+    "version": "1.0.0",
+    "description": "My First ADK Agent",
+    "main": "agent.ts",
+    "type": "module",
+    "scripts": {
+        "start": "adk run agent.ts",
+        "dev": "adk dev agent.ts"
+    },
+    "dependencies": {
+        "@google/adk": "^0.2.5",
+        "@toolbox-sdk/adk": "^0.2.1",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@google/adk-devtools": "^0.2.5",
+        "tsx": "^4.7.0",
+        "typescript": "^5.0.0"
+    }
+}

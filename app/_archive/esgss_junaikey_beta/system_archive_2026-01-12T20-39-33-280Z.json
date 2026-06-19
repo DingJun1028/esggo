@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "timestamp": "2026-01-12T20-39-33-280Z",
+    "version": "5.0.0-beta",
+    "environment": "development"
+  },
+  "stats": {
+    "agentCount": 1,
+    "economyKeys": 1,
+    "partnerKeys": 0,
+    "systemKeys": 1
+  },
+  "data": {
+    "agents": [
+      {
+        "id": "agent_demo_1",
+        "name": "Demo Agent",
+        "status": "ACTIVE"
+      }
+    ],
+    "economy": {
+      "market_cap": {
+        "value": 1000000,
+        "currency": "GSC"
+      }
+    },
+    "partners": {},
+    "system": {
+      "config_v1": {
+        "theme": "dark",
+        "mode": "pro"
+      }
+    }
+  }
+}

@@ -1,0 +1,848 @@
+---
+insertId: 1o9t4e8e3cgr4
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Factivity
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  authenticationInfo:
+    principalEmail: service-950159032447@gcp-sa-firebaseapphosting.iam.gserviceaccount.com
+  authorizationInfo:
+  - granted: true
+    permission: run.services.create
+    permissionType: ADMIN_WRITE
+    resource: projects/950159032447/locations/asia-east1/services/esggo
+    resourceAttributes: {}
+  - granted: true
+    permission: run.services.create
+    permissionType: ADMIN_WRITE
+    resource: projects/950159032447/locations/asia-east1/services/esggo
+    resourceAttributes:
+      name: projects/950159032447/locations/asia-east1/services/esggo
+      service: run.googleapis.com/
+      type: run.googleapis.com/Service
+  methodName: google.cloud.run.v2.Services.CreateService
+  request:
+    '@type': type.googleapis.com/google.cloud.run.v2.CreateServiceRequest
+    parent: projects/950159032447/locations/asia-east1
+    service:
+      template:
+        containers:
+        - image: us-docker.pkg.dev/cloudrun/container/hello:latest
+        serviceAccount: firebase-app-hosting-compute@esg-sunshine.iam.gserviceaccount.com
+  requestMetadata:
+    callerIp: private
+    callerSuppliedUserAgent: stubby_client
+    destinationAttributes: {}
+    requestAttributes:
+      auth: {}
+      time: '2026-04-25T16:36:08.004270Z'
+  resourceLocation:
+    currentLocations:
+    - asia-east1
+  resourceName: projects/950159032447/locations/asia-east1/services/esggo
+  serviceName: run.googleapis.com
+  status:
+    code: 6
+    message: Resource 'esggo' already exists.
+receiveTimestamp: '2026-04-25T16:36:08.035190491Z'
+resource:
+  labels:
+    configuration_name: ''
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: ''
+    service_name: esggo
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T16:36:07.500932Z'
+---
+httpRequest:
+  latency: 0.023081340s
+  protocol: HTTP/1.1
+  referer: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '781'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/favicon.ico
+  responseSize: '3156'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84d70001393756e1709e
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:43.259348080Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: 1314ad109234be8b
+timestamp: '2026-04-25T09:09:43.055069Z'
+trace: projects/esg-sunshine/traces/72693aba172c157dcf924387cf1e3c95
+---
+httpRequest:
+  latency: 0.069303529s
+  protocol: HTTP/1.1
+  referer: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '781'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/favicon.ico
+  responseSize: '3157'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84d6000a85025dde41ff
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:42.928647391Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: da55c4f075930125
+timestamp: '2026-04-25T09:09:42.617355Z'
+trace: projects/esg-sunshine/traces/2d5e3373bd873eb6b0831b37a8f63d36
+---
+httpRequest:
+  latency: 0.057730017s
+  protocol: HTTP/1.1
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '1083'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  responseSize: '3239'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84d6000541f03641e009
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:42.601137304Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: 02c2753cb35a9435
+timestamp: '2026-04-25T09:09:42.284392Z'
+trace: projects/esg-sunshine/traces/307c172555652aa5a41b36c5e451ab32
+---
+httpRequest:
+  latency: 0.025506248s
+  protocol: HTTP/1.1
+  referer: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '774'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/favicon.ico
+  responseSize: '3158'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84d50005d60b0182db8c
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:41.597420619Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: 5989e5d35deaa07a
+timestamp: '2026-04-25T09:09:41.354580Z'
+trace: projects/esg-sunshine/traces/3c4ee5df6d507826b0831b37a8f6324e
+---
+httpRequest:
+  latency: 0.026159271s
+  protocol: HTTP/1.1
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '846'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  responseSize: '3241'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84d40003f161ccdb24d4
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:40.263906493Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: 879f4557ad516154
+timestamp: '2026-04-25T09:09:40.229969Z'
+trace: projects/esg-sunshine/traces/ebc2575946140af7b0831b37a8f63b4f
+traceSampled: true
+---
+httpRequest:
+  latency: 0.039889035s
+  protocol: HTTP/1.1
+  referer: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '780'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/favicon.ico
+  responseSize: '3158'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84b400017296a7e8351f
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:08.429234896Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: ba5bb42832525ba7
+timestamp: '2026-04-25T09:09:08.052680Z'
+trace: projects/esg-sunshine/traces/6544d61f6488bcef83862a993e735bf3
+---
+httpRequest:
+  latency: 0.042101098s
+  protocol: HTTP/1.1
+  referer: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '774'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/favicon.ico
+  responseSize: '3156'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84af000748dc79268876
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:03.768085022Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: 37604caf17ec7efb
+timestamp: '2026-04-25T09:09:03.433010Z'
+trace: projects/esg-sunshine/traces/9ef083c6951db1d62c32f072bc99d084
+---
+httpRequest:
+  latency: 0.242148020s
+  protocol: HTTP/1.1
+  remoteIp: 1.160.217.223
+  requestMethod: GET
+  requestSize: '1081'
+  requestUrl: https://esg-go-alpha-mz5y5kmdqq-de.a.run.app/
+  responseSize: '3239'
+  serverIp: 34.143.79.2
+  status: 500
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+    like Gecko) Chrome/147.0.0.0 Safari/537.36
+insertId: 69ec84ae000baa5944eeba7c
+labels:
+  instanceId: 008c15ff0850a130769c2af3ed414be9674ba407bf367e9124e28a15b60bf541b3cff1caac95cc69a8b8649f52b365ede2cdeba3cd45967e8eec2534d75bc69339e8032dd18759da3349154be6c0
+logName: projects/esg-sunshine/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2026-04-25T09:09:02.770562635Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00006-2sj
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+spanId: 00bf4a379e12db23
+timestamp: '2026-04-25T09:09:02.513603Z'
+trace: projects/esg-sunshine/traces/4a2bef158f5ba1035eb0a1ba146da2b3
+traceSampled: true
+---
+insertId: -9d8vczd3vzc
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Fsystem_event
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  methodName: /Services.ReplaceService
+  resourceName: namespaces/esg-sunshine/services/esg-go-alpha
+  response:
+    '@type': type.googleapis.com/google.cloud.run.v1.Service
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/ingress: all
+        run.googleapis.com/ingress-status: all
+        run.googleapis.com/maxScale: '20'
+        run.googleapis.com/operation-id: a953c019-84dd-4a54-9bc5-8ac31adf8185
+        run.googleapis.com/urls: '["https://esg-go-alpha-950159032447.asia-east1.run.app"]'
+        serving.knative.dev/creator: dingjunhong1028@gmail.com
+        serving.knative.dev/lastModifier: dingjunhong1028@gmail.com
+      creationTimestamp: '2026-04-25T08:26:01.278577Z'
+      generation: 3
+      labels:
+        cloud.googleapis.com/location: asia-east1
+      name: esg-go-alpha
+      namespace: '950159032447'
+      resourceVersion: AAZQRLKp8q0
+      selfLink: /apis/serving.knative.dev/v1/namespaces/950159032447/services/esg-go-alpha
+      uid: 8cd8dcf1-6197-457f-8029-4fdfd6d98650
+    spec:
+      template:
+        metadata:
+          annotations:
+            autoscaling.knative.dev/maxScale: '20'
+            run.googleapis.com/client-name: gcloud
+            run.googleapis.com/client-version: 551.0.0
+            run.googleapis.com/startup-cpu-boost: 'true'
+          labels:
+            client.knative.dev/nonce: cxfomstqqp
+            run.googleapis.com/startupProbeType: Default
+        spec:
+          containerConcurrency: 80
+          containers:
+          - image: gcr.io/esg-sunshine/esg-go-alpha
+            ports:
+            - containerPort: 8080
+              name: http1
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+            startupProbe:
+              failureThreshold: 1
+              periodSeconds: 240
+              tcpSocket:
+                port: 8080
+              timeoutSeconds: 240
+          serviceAccountName: 950159032447-compute@developer.gserviceaccount.com
+          timeoutSeconds: 300
+      traffic:
+      - latestRevision: true
+        percent: 100
+    status:
+      conditions:
+      - lastTransitionTime: '2026-04-25T08:30:45.744301Z'
+        message: Revision 'esg-go-alpha-00003-ngw' is not ready and cannot serve traffic.
+          Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        reason: RevisionFailed
+        status: 'False'
+        type: Ready
+      - lastTransitionTime: '2026-04-25T08:30:45.655350Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: ConfigurationsReady
+      - lastTransitionTime: '2026-04-25T08:30:45.657315Z'
+        message: Revision 'esg-go-alpha-00003-ngw' is not ready and cannot serve traffic.
+          Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        reason: RevisionFailed
+        status: 'False'
+        type: RoutesReady
+      latestCreatedRevisionName: esg-go-alpha-00003-ngw
+      observedGeneration: 3
+  serviceName: run.googleapis.com
+  status:
+    code: 5
+    message: "Ready condition status changed to False for Service esg-go-alpha with\
+      \ message: Revision 'esg-go-alpha-00003-ngw' is not ready and cannot serve traffic.\
+      \ Image 'gcr.io/esg-sunshine/esg-go-alpha' not found."
+receiveTimestamp: '2026-04-25T08:30:46.390624433Z'
+resource:
+  labels:
+    configuration_name: ''
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: ''
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T08:30:45.764967Z'
+---
+insertId: n2yg7ye175oe
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Fsystem_event
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  methodName: /Services.ReplaceService
+  resourceName: namespaces/esg-sunshine/revisions/esg-go-alpha-00003-ngw
+  response:
+    '@type': type.googleapis.com/google.cloud.run.v1.Revision
+    apiVersion: serving.knative.dev/v1
+    kind: Revision
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '20'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/operation-id: a953c019-84dd-4a54-9bc5-8ac31adf8185
+        run.googleapis.com/startup-cpu-boost: 'true'
+        serving.knative.dev/creator: dingjunhong1028@gmail.com
+      creationTimestamp: '2026-04-25T08:30:45.248628Z'
+      generation: 1
+      labels:
+        client.knative.dev/nonce: cxfomstqqp
+        cloud.googleapis.com/location: asia-east1
+        run.googleapis.com/startupProbeType: Default
+        serving.knative.dev/configuration: esg-go-alpha
+        serving.knative.dev/configurationGeneration: '3'
+        serving.knative.dev/service: esg-go-alpha
+        serving.knative.dev/serviceUid: 8cd8dcf1-6197-457f-8029-4fdfd6d98650
+      name: esg-go-alpha-00003-ngw
+      namespace: '950159032447'
+      ownerReferences:
+      - apiVersion: serving.knative.dev/v1
+        blockOwnerDeletion: true
+        controller: true
+        kind: Configuration
+        name: esg-go-alpha
+        uid: 0dda46b8-8d75-443b-888b-09525149e08a
+      resourceVersion: AAZQRLKn42k
+      selfLink: /apis/serving.knative.dev/v1/namespaces/950159032447/revisions/esg-go-alpha-00003-ngw
+      uid: 261fa6cb-2919-4290-a696-1abe82c6df68
+    spec:
+      containerConcurrency: 80
+      containers:
+      - image: gcr.io/esg-sunshine/esg-go-alpha
+        name: esg-go-alpha-1
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      serviceAccountName: 950159032447-compute@developer.gserviceaccount.com
+      timeoutSeconds: 300
+    status:
+      conditions:
+      - lastTransitionTime: '2026-04-25T08:30:45.609321Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: Ready
+      logUrl: https://console.cloud.google.com/logs/viewer?project=esg-sunshine&resource=cloud_run_revision/service_name/esg-go-alpha/revision_name/esg-go-alpha-00003-ngw&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22esg-go-alpha%22%0Aresource.labels.revision_name%3D%22esg-go-alpha-00003-ngw%22
+      observedGeneration: 1
+  serviceName: run.googleapis.com
+  status:
+    code: 5
+    message: "Ready condition status changed to False for Revision esg-go-alpha-00003-ngw\
+      \ with message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found."
+receiveTimestamp: '2026-04-25T08:30:46.605589095Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00003-ngw
+    service_name: ''
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T08:30:45.622119Z'
+---
+insertId: -9d8vczd3vc6
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Fsystem_event
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  methodName: /Services.ReplaceService
+  resourceName: namespaces/esg-sunshine/services/esg-go-alpha
+  response:
+    '@type': type.googleapis.com/google.cloud.run.v1.Service
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/ingress: all
+        run.googleapis.com/ingress-status: all
+        run.googleapis.com/maxScale: '20'
+        run.googleapis.com/operation-id: 7f06ec8a-5dc2-4630-8d06-df3527a23123
+        run.googleapis.com/urls: '["https://esg-go-alpha-950159032447.asia-east1.run.app"]'
+        serving.knative.dev/creator: dingjunhong1028@gmail.com
+        serving.knative.dev/lastModifier: dingjunhong1028@gmail.com
+      creationTimestamp: '2026-04-25T08:26:01.278577Z'
+      generation: 2
+      labels:
+        cloud.googleapis.com/location: asia-east1
+      name: esg-go-alpha
+      namespace: '950159032447'
+      resourceVersion: AAZQRKMx2uI
+      selfLink: /apis/serving.knative.dev/v1/namespaces/950159032447/services/esg-go-alpha
+      uid: 8cd8dcf1-6197-457f-8029-4fdfd6d98650
+    spec:
+      template:
+        metadata:
+          annotations:
+            autoscaling.knative.dev/maxScale: '20'
+            run.googleapis.com/client-name: gcloud
+            run.googleapis.com/client-version: 551.0.0
+            run.googleapis.com/startup-cpu-boost: 'true'
+          labels:
+            client.knative.dev/nonce: cixmnrltln
+            run.googleapis.com/startupProbeType: Default
+        spec:
+          containerConcurrency: 80
+          containers:
+          - image: gcr.io/esg-sunshine/esg-go-alpha
+            ports:
+            - containerPort: 8080
+              name: http1
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+            startupProbe:
+              failureThreshold: 1
+              periodSeconds: 240
+              tcpSocket:
+                port: 8080
+              timeoutSeconds: 240
+          serviceAccountName: 950159032447-compute@developer.gserviceaccount.com
+          timeoutSeconds: 300
+      traffic:
+      - latestRevision: true
+        percent: 100
+    status:
+      conditions:
+      - lastTransitionTime: '2026-04-25T08:26:26.178138Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: Ready
+      - lastTransitionTime: '2026-04-25T08:26:26.178138Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: ConfigurationsReady
+      - lastTransitionTime: '2026-04-25T08:26:25.657388Z'
+        message: Deploying Revision.
+        status: Unknown
+        type: RoutesReady
+      latestCreatedRevisionName: esg-go-alpha-00002-lzm
+      observedGeneration: 2
+  serviceName: run.googleapis.com
+  status:
+    code: 5
+    message: "Ready condition status changed to False for Service esg-go-alpha with\
+      \ message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found."
+receiveTimestamp: '2026-04-25T08:26:27.050590872Z'
+resource:
+  labels:
+    configuration_name: ''
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: ''
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T08:26:26.232204Z'
+---
+insertId: -lwzchoe1apay
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Fsystem_event
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  methodName: /Services.ReplaceService
+  resourceName: namespaces/esg-sunshine/revisions/esg-go-alpha-00002-lzm
+  response:
+    '@type': type.googleapis.com/google.cloud.run.v1.Revision
+    apiVersion: serving.knative.dev/v1
+    kind: Revision
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '20'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/operation-id: 7f06ec8a-5dc2-4630-8d06-df3527a23123
+        run.googleapis.com/startup-cpu-boost: 'true'
+        serving.knative.dev/creator: dingjunhong1028@gmail.com
+      creationTimestamp: '2026-04-25T08:26:25.654446Z'
+      generation: 1
+      labels:
+        client.knative.dev/nonce: cixmnrltln
+        cloud.googleapis.com/location: asia-east1
+        run.googleapis.com/startupProbeType: Default
+        serving.knative.dev/configuration: esg-go-alpha
+        serving.knative.dev/configurationGeneration: '2'
+        serving.knative.dev/service: esg-go-alpha
+        serving.knative.dev/serviceUid: 8cd8dcf1-6197-457f-8029-4fdfd6d98650
+      name: esg-go-alpha-00002-lzm
+      namespace: '950159032447'
+      ownerReferences:
+      - apiVersion: serving.knative.dev/v1
+        blockOwnerDeletion: true
+        controller: true
+        kind: Configuration
+        name: esg-go-alpha
+        uid: 0dda46b8-8d75-443b-888b-09525149e08a
+      resourceVersion: AAZQRKMwz5s
+      selfLink: /apis/serving.knative.dev/v1/namespaces/950159032447/revisions/esg-go-alpha-00002-lzm
+      uid: 811a2c46-960a-4d3b-ba90-78fc310a91dc
+    spec:
+      containerConcurrency: 80
+      containers:
+      - image: gcr.io/esg-sunshine/esg-go-alpha
+        name: esg-go-alpha-1
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      serviceAccountName: 950159032447-compute@developer.gserviceaccount.com
+      timeoutSeconds: 300
+    status:
+      conditions:
+      - lastTransitionTime: '2026-04-25T08:26:26.147227Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: Ready
+      logUrl: https://console.cloud.google.com/logs/viewer?project=esg-sunshine&resource=cloud_run_revision/service_name/esg-go-alpha/revision_name/esg-go-alpha-00002-lzm&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22esg-go-alpha%22%0Aresource.labels.revision_name%3D%22esg-go-alpha-00002-lzm%22
+      observedGeneration: 1
+  serviceName: run.googleapis.com
+  status:
+    code: 5
+    message: "Ready condition status changed to False for Revision esg-go-alpha-00002-lzm\
+      \ with message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found."
+receiveTimestamp: '2026-04-25T08:26:26.719292459Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00002-lzm
+    service_name: ''
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T08:26:26.156553Z'
+---
+insertId: -95izv5d3gd2
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Fsystem_event
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  methodName: /Services.CreateService
+  resourceName: namespaces/esg-sunshine/services/esg-go-alpha
+  response:
+    '@type': type.googleapis.com/google.cloud.run.v1.Service
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/ingress: all
+        run.googleapis.com/maxScale: '20'
+        run.googleapis.com/operation-id: 57f08679-1ee8-406a-903c-b765a042f7f4
+        run.googleapis.com/urls: '["https://esg-go-alpha-950159032447.asia-east1.run.app"]'
+        serving.knative.dev/creator: dingjunhong1028@gmail.com
+        serving.knative.dev/lastModifier: dingjunhong1028@gmail.com
+      creationTimestamp: '2026-04-25T08:26:01.278577Z'
+      generation: 1
+      labels:
+        cloud.googleapis.com/location: asia-east1
+      name: esg-go-alpha
+      namespace: '950159032447'
+      resourceVersion: AAZQRKHErzs
+      selfLink: /apis/serving.knative.dev/v1/namespaces/950159032447/services/esg-go-alpha
+      uid: 8cd8dcf1-6197-457f-8029-4fdfd6d98650
+    spec:
+      template:
+        metadata:
+          annotations:
+            run.googleapis.com/client-name: gcloud
+            run.googleapis.com/client-version: 551.0.0
+            run.googleapis.com/startup-cpu-boost: 'true'
+          labels:
+            client.knative.dev/nonce: tqmebdgjeh
+            run.googleapis.com/startupProbeType: Default
+        spec:
+          containerConcurrency: 80
+          containers:
+          - image: gcr.io/esg-sunshine/esg-go-alpha
+            ports:
+            - containerPort: 8080
+              name: http1
+            resources:
+              limits:
+                cpu: 1000m
+                memory: 512Mi
+            startupProbe:
+              failureThreshold: 1
+              periodSeconds: 240
+              tcpSocket:
+                port: 8080
+              timeoutSeconds: 240
+          serviceAccountName: 950159032447-compute@developer.gserviceaccount.com
+          timeoutSeconds: 300
+      traffic:
+      - latestRevision: true
+        percent: 100
+    status:
+      conditions:
+      - lastTransitionTime: '2026-04-25T08:26:02.064823Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: Ready
+      - lastTransitionTime: '2026-04-25T08:26:02.064823Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: ConfigurationsReady
+      - lastTransitionTime: '2026-04-25T08:26:01.526040Z'
+        message: Creating Service.
+        status: Unknown
+        type: RoutesReady
+      latestCreatedRevisionName: esg-go-alpha-00001-664
+      observedGeneration: 1
+  serviceName: run.googleapis.com
+  status:
+    code: 5
+    message: "Ready condition status changed to False for Service esg-go-alpha with\
+      \ message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found."
+receiveTimestamp: '2026-04-25T08:26:02.490075956Z'
+resource:
+  labels:
+    configuration_name: ''
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: ''
+    service_name: esg-go-alpha
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T08:26:02.299074Z'
+---
+insertId: n2yg7ye17502
+logName: projects/esg-sunshine/logs/cloudaudit.googleapis.com%2Fsystem_event
+protoPayload:
+  '@type': type.googleapis.com/google.cloud.audit.AuditLog
+  methodName: /Services.CreateService
+  resourceName: namespaces/esg-sunshine/revisions/esg-go-alpha-00001-664
+  response:
+    '@type': type.googleapis.com/google.cloud.run.v1.Revision
+    apiVersion: serving.knative.dev/v1
+    kind: Revision
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/operation-id: 57f08679-1ee8-406a-903c-b765a042f7f4
+        run.googleapis.com/startup-cpu-boost: 'true'
+        serving.knative.dev/creator: dingjunhong1028@gmail.com
+      creationTimestamp: '2026-04-25T08:26:01.539300Z'
+      generation: 1
+      labels:
+        client.knative.dev/nonce: tqmebdgjeh
+        cloud.googleapis.com/location: asia-east1
+        run.googleapis.com/startupProbeType: Default
+        serving.knative.dev/configuration: esg-go-alpha
+        serving.knative.dev/configurationGeneration: '1'
+        serving.knative.dev/service: esg-go-alpha
+        serving.knative.dev/serviceUid: 8cd8dcf1-6197-457f-8029-4fdfd6d98650
+      name: esg-go-alpha-00001-664
+      namespace: '950159032447'
+      ownerReferences:
+      - apiVersion: serving.knative.dev/v1
+        blockOwnerDeletion: true
+        controller: true
+        kind: Configuration
+        name: esg-go-alpha
+        uid: 0dda46b8-8d75-443b-888b-09525149e08a
+      resourceVersion: AAZQRKHAvu8
+      selfLink: /apis/serving.knative.dev/v1/namespaces/950159032447/revisions/esg-go-alpha-00001-664
+      uid: 5a4f8048-39f7-46cc-b05e-dac82a621367
+    spec:
+      containerConcurrency: 80
+      containers:
+      - image: gcr.io/esg-sunshine/esg-go-alpha
+        name: esg-go-alpha-1
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 1
+          periodSeconds: 240
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 240
+      serviceAccountName: 950159032447-compute@developer.gserviceaccount.com
+      timeoutSeconds: 300
+    status:
+      conditions:
+      - lastTransitionTime: '2026-04-25T08:26:02.025711Z'
+        message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found.
+        status: 'False'
+        type: Ready
+      logUrl: https://console.cloud.google.com/logs/viewer?project=esg-sunshine&resource=cloud_run_revision/service_name/esg-go-alpha/revision_name/esg-go-alpha-00001-664&advancedFilter=resource.type%3D%22cloud_run_revision%22%0Aresource.labels.service_name%3D%22esg-go-alpha%22%0Aresource.labels.revision_name%3D%22esg-go-alpha-00001-664%22
+      observedGeneration: 1
+  serviceName: run.googleapis.com
+  status:
+    code: 5
+    message: "Ready condition status changed to False for Revision esg-go-alpha-00001-664\
+      \ with message: Image 'gcr.io/esg-sunshine/esg-go-alpha' not found."
+receiveTimestamp: '2026-04-25T08:26:02.261707752Z'
+resource:
+  labels:
+    configuration_name: esg-go-alpha
+    location: asia-east1
+    project_id: esg-sunshine
+    revision_name: esg-go-alpha-00001-664
+    service_name: ''
+  type: cloud_run_revision
+severity: ERROR
+timestamp: '2026-04-25T08:26:02.036300Z'

@@ -1,0 +1,89 @@
+# GitHub Issue Triage & PR Digest for JunAiKey
+
+> Streamline your development workflow by using Continue CLI and the GitHub MCP to manage technical debt and maintain change awareness.
+
+<Card title="What You'll Build" icon="github">
+  An AI-powered assistant that summarizes project trajectory by analyzing issue density and PR
+  velocity.
+</Card>
+
+## Overview
+
+The JunAiKey project is a complex multi-subsystem repository. Tracking cross-component dependencies across issues and PRs is critical for maintaining system integrity.
+
+---
+
+## Triage Workflows
+
+### 📋 Semantic Issue Clustering
+
+Use natural language to find themes across your issue tracker.
+
+**Prompt:**
+
+```bash
+"Group all open issues in this repo by subsystem (e.g., frontend, server, junaikey).
+Identify which subsystem has the most high-priority blockers."
+```
+
+### ⚡ Automated Triage Checklist
+
+Generate a checklist for yourself or your team based on recently created issues.
+
+**Prompt:**
+
+```bash
+"Review the last 5 issues created. For each, generate a 'Triage Assessment'
+that includes:
+1. Potential root cause file.
+2. Difficulty estimate (1-10).
+3. Required labels."
+```
+
+---
+
+## PR Management & Change Awareness
+
+### 🌊 PR Digest
+
+Stay updated on what has changed in the last week without reading every diff.
+
+**Prompt:**
+
+```bash
+"Summarize all PRs merged in the last 7 days. Focus on changes to the
+core `AICoordinationService` and its impact on security workflows."
+```
+
+### 📝 Release Note Generation
+
+Generate high-quality change logs from your merged work.
+
+**Prompt:**
+
+```bash
+"Generate release notes for PRs merged since the last release.
+Group them into: 🏗️ Architecture, 🔒 Security, and 🐛 Bug Fixes."
+```
+
+---
+
+## Automated Reporting
+
+Enable the GitHub Action `.github/workflows/github-mcp-reports.yml` to receive:
+
+- **Weekly Reports**: Every Monday at 13:00 UTC.
+- **PR Context**: Automated comments on new PRs summarizing related issues.
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="View Workflow" icon="code-branch" href="/.github/workflows/github-mcp-reports.yml">
+    Inspect the automation logic.
+  </Card>
+  <Card title="GitHub Marketplace" icon="shop" href="https://github.com/marketplace">
+    Explore more GitHub Actions for your repo.
+  </Card>
+</CardGroup>

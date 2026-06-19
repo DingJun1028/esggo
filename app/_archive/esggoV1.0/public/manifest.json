@@ -1,0 +1,39 @@
+{
+    "name": "Omni ESG GO Terminal",
+    "short_name": "ESG GO",
+    "description": "Enterprise-grade ESG Alignment Terminal powered by 5T Protocol.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0F172A",
+    "theme_color": "#0F172A",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Certification Alignment",
+            "url": "/alignment",
+            "icons": [{ "src": "/favicon.ico", "sizes": "64x64" }]
+        },
+        {
+            "name": "Supply Chain Radar",
+            "url": "/monitoring",
+            "icons": [{ "src": "/favicon.ico", "sizes": "64x64" }]
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+A newer version of MCP: v2025-11-25 is available. Please use MCP_v20251125 to use the latest features.
+C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\my-agent\node_modules\@google\adk\src\runner\in_memory_runner.ts:17
+    agent,
+    ^
+
+TypeError: Cannot destructure property 'agent' of 'undefined' as it is undefined.
+    at new wt (C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\my-agent\node_modules\@google\adk\src\runner\in_memory_runner.ts:17:5)
+    at <anonymous> (C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\my-agent\agent.ts:104:20)
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.0

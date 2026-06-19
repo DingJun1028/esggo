@@ -1,0 +1,5 @@
+--- 💡 Omni Intelligence Agent Starting ---
+[Status] 5T Plugin: Active
+[Status] Intelligence Forge: v2.0.26 Ready
+[32m[ADK INFO]:[0m Plugin 'omni_5t_plugin' registered.
+[Runner] Starting manual mission (runAsync)...

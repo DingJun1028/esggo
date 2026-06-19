@@ -1,0 +1,226 @@
+/**
+ * 人力資源與職場多樣性 JSON Schema
+ * mod-soc-dei-0001 | /omni/diversity-inclusion
+ * Human Capital & DEI Report
+ */
+
+export const HUMAN_CAPITAL_SCHEMA = {
+    id: 'rep-hr-001',
+    version: '1.0.5',
+    title: '人力資源與職場多樣性',
+    title_en: 'Human Capital & DEI Report',
+    standard: 'GRI 401, GRI 405, ISO 30414',
+    sections: [
+        {
+            id: 'section-headcount',
+            title: '員工人數與結構',
+            title_en: 'Headcount & Structure',
+            fields: [
+                {
+                    id: 'total_employees',
+                    label: '員工總數',
+                    label_en: 'Total Employees',
+                    type: 'number',
+                    required: true,
+                    unit: '人',
+                },
+                {
+                    id: 'full_time_employees',
+                    label: '正職員工人數',
+                    label_en: 'Full-Time Employees',
+                    type: 'number',
+                    required: true,
+                    unit: '人',
+                },
+                {
+                    id: 'part_time_employees',
+                    label: '兼職員工人數',
+                    label_en: 'Part-Time Employees',
+                    type: 'number',
+                    required: false,
+                    unit: '人',
+                },
+                {
+                    id: 'contractor_count',
+                    label: '約僱/合約人員人數',
+                    label_en: 'Contractors',
+                    type: 'number',
+                    required: false,
+                    unit: '人',
+                },
+            ],
+        },
+        {
+            id: 'section-gender',
+            title: '性別多元化',
+            title_en: 'Gender Diversity',
+            fields: [
+                {
+                    id: 'female_employees',
+                    label: '女性員工人數',
+                    label_en: 'Female Employees',
+                    type: 'number',
+                    required: true,
+                    unit: '人',
+                },
+                {
+                    id: 'male_employees',
+                    label: '男性員工人數',
+                    label_en: 'Male Employees',
+                    type: 'number',
+                    required: true,
+                    unit: '人',
+                },
+                {
+                    id: 'female_manager_pct',
+                    label: '女性管理職佔比 (%)',
+                    label_en: 'Female Manager Percentage (%)',
+                    type: 'number',
+                    required: false,
+                    unit: '%',
+                },
+                {
+                    id: 'female_board_pct',
+                    label: '女性董事佔比 (%)',
+                    label_en: 'Female Board Members (%)',
+                    type: 'number',
+                    required: false,
+                    unit: '%',
+                },
+            ],
+        },
+        {
+            id: 'section-age',
+            title: '年齡分佈',
+            title_en: 'Age Distribution',
+            fields: [
+                {
+                    id: 'age_under30',
+                    label: '30歲以下員工人數',
+                    label_en: 'Employees Under 30',
+                    type: 'number',
+                    required: false,
+                    unit: '人',
+                },
+                {
+                    id: 'age_30to50',
+                    label: '30-50歲員工人數',
+                    label_en: 'Employees Age 30-50',
+                    type: 'number',
+                    required: false,
+                    unit: '人',
+                },
+                {
+                    id: 'age_over50',
+                    label: '50歲以上員工人數',
+                    label_en: 'Employees Over 50',
+                    type: 'number',
+                    required: false,
+                    unit: '人',
+                },
+            ],
+        },
+        {
+            id: 'section-training',
+            title: '人才培訓與發展',
+            title_en: 'Training & Development',
+            fields: [
+                {
+                    id: 'training_hours_total',
+                    label: '培訓總時數',
+                    label_en: 'Total Training Hours',
+                    type: 'number',
+                    required: true,
+                    unit: '小時',
+                },
+                {
+                    id: 'training_hours_per_capita',
+                    label: '人均培訓時數',
+                    label_en: 'Training Hours Per Employee',
+                    type: 'number',
+                    required: true,
+                    unit: '小時/人',
+                    computed: true,
+                },
+                {
+                    id: 'training_investment',
+                    label: '培訓投入費用',
+                    label_en: 'Training Investment',
+                    type: 'number',
+                    required: false,
+                    unit: '千元',
+                },
+            ],
+        },
+        {
+            id: 'section-ohs',
+            title: '職業安全衛生',
+            title_en: 'Occupational Health & Safety',
+            fields: [
+                {
+                    id: 'ohs_injury_rate',
+                    label: '職業傷害率 (每百萬工時)',
+                    label_en: 'Injury Rate (per million hours)',
+                    type: 'number',
+                    required: true,
+                    unit: '次/百萬工時',
+                },
+                {
+                    id: 'ohs_lost_day_rate',
+                    label: '失去工作日率',
+                    label_en: 'Lost Day Rate',
+                    type: 'number',
+                    required: false,
+                    unit: '天/百萬工時',
+                },
+                {
+                    id: 'ohs_fatalities',
+                    label: '工安死亡事故次數',
+                    label_en: 'Fatalities',
+                    type: 'number',
+                    required: true,
+                    unit: '次',
+                },
+            ],
+        },
+        {
+            id: 'section-turnover',
+            title: '人員流動',
+            title_en: 'Employee Turnover',
+            fields: [
+                {
+                    id: 'new_hires_count',
+                    label: '新進員工人數',
+                    label_en: 'New Hires',
+                    type: 'number',
+                    required: false,
+                    unit: '人',
+                },
+                {
+                    id: 'voluntary_turnover_rate',
+                    label: '自願離職率 (%)',
+                    label_en: 'Voluntary Turnover Rate (%)',
+                    type: 'number',
+                    required: true,
+                    unit: '%',
+                },
+                {
+                    id: 'parental_leave_return_rate',
+                    label: '育嬰留任率 (%)',
+                    label_en: 'Parental Leave Return Rate (%)',
+                    type: 'number',
+                    required: false,
+                    unit: '%',
+                },
+            ],
+        },
+    ],
+    framework_mapping: {
+        gri: ['GRI 401-1', 'GRI 401-3', 'GRI 403-9', 'GRI 404-1', 'GRI 405-1'],
+        tcfd: [],
+        sdg: ['SDG 3 良好健康', 'SDG 4 優質教育', 'SDG 5 性別平等', 'SDG 8 尊嚴就業'],
+        sasb: ['HC-MS-330a.1', 'HC-MS-330a.2'],
+    },
+} as const;
+
+export type HumanCapitalSchema = typeof HUMAN_CAPITAL_SCHEMA;

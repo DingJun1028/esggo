@@ -1,0 +1,763 @@
+C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\lib\third_party\google\cloud\__init__.py:20: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+----------------------------- REMOTE BUILD OUTPUT ------------------------------
+starting build "2829d241-a183-4c4c-a378-324174ec3717"
+FETCHSOURCE
+Fetching storage object: gs://firebaseapphosting-sources-950159032447-us-east4/esggo-frontend--16056-lBDiUL3m3p48-.zip#1777128579282598
+Copying gs://firebaseapphosting-sources-950159032447-us-east4/esggo-frontend--16056-lBDiUL3m3p48-.zip#1777128579282598...
+/ [0 files][    0.0 B/  1.2 MiB]                                                
+/ [1 files][  1.2 MiB/  1.2 MiB]
+Operation completed over 1 objects/1.2 MiB.
+Archive:  /tmp/source-archive.zip
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_anthropic.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_chrome.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_firebase_ai.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_google_genai.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_mcp.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_middleware.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_openai.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/genkit_shelf.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/references/schemantic.md
+  inflating: /workspace/.agents/skills/developing-genkit-dart/SKILL.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/references/flows-and-http.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/references/generation.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/references/getting-started.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/references/prompts.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/references/providers.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/references/tools.md
+  inflating: /workspace/.agents/skills/developing-genkit-go/SKILL.md
+  inflating: /workspace/.agents/skills/developing-genkit-js/references/best-practices.md
+  inflating: /workspace/.agents/skills/developing-genkit-js/references/common-errors.md
+  inflating: /workspace/.agents/skills/developing-genkit-js/references/docs-and-cli.md
+  inflating: /workspace/.agents/skills/developing-genkit-js/references/examples.md
+  inflating: /workspace/.agents/skills/developing-genkit-js/references/setup.md
+  inflating: /workspace/.agents/skills/developing-genkit-js/SKILL.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/common-errors.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/dev-workflow.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/dotprompt.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/evals.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/examples.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/fastapi.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/references/setup.md
+  inflating: /workspace/.agents/skills/developing-genkit-python/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-ai-logic/references/usage_patterns_web.md
+  inflating: /workspace/.agents/skills/firebase-ai-logic/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-app-hosting-basics/references/cli_commands.md
+  inflating: /workspace/.agents/skills/firebase-app-hosting-basics/references/configuration.md
+  inflating: /workspace/.agents/skills/firebase-app-hosting-basics/references/emulation.md
+  inflating: /workspace/.agents/skills/firebase-app-hosting-basics/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-auth-basics/references/client_sdk_web.md
+  inflating: /workspace/.agents/skills/firebase-auth-basics/references/security_rules.md
+  inflating: /workspace/.agents/skills/firebase-auth-basics/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/firebase-cli-guide.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/firebase-service-init.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/local-env-setup.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/refresh/antigravity.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/refresh/claude.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/refresh/other-agents.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/refresh/gemini-cli.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/setup/antigravity.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/setup/claude_code.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/setup/cursor.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/setup/gemini_cli.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/setup/github_copilot.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/setup/other_agents.md
+  inflating: /workspace/.agents/skills/firebase-basics/references/web_setup.md
+  inflating: /workspace/.agents/skills/firebase-basics/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/examples.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/advanced.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/config.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/native_sql.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/operations.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/schema.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/sdks.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/reference/security.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-data-connect/templates.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/references/data_model.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/references/indexes.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/references/python_sdk_usage.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/references/security_rules.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/references/provisioning.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/references/web_sdk_usage.md
+  inflating: /workspace/.agents/skills/firebase-firestore-enterprise-native-mode/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-firestore-standard/references/indexes.md
+  inflating: /workspace/.agents/skills/firebase-firestore-standard/references/provisioning.md
+  inflating: /workspace/.agents/skills/firebase-firestore-standard/references/security_rules.md
+  inflating: /workspace/.agents/skills/firebase-firestore-standard/references/web_sdk_usage.md
+  inflating: /workspace/.agents/skills/firebase-firestore-standard/SKILL.md
+  inflating: /workspace/.agents/skills/firebase-hosting-basics/references/configuration.md
+  inflating: /workspace/.agents/skills/firebase-hosting-basics/references/deploying.md
+  inflating: /workspace/.agents/skills/firebase-hosting-basics/SKILL.md
+  inflating: /workspace/.agents/skills/firestore-security-rules-auditor/SKILL.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_anthropic.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_chrome.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_firebase_ai.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_google_genai.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_mcp.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_middleware.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_shelf.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/genkit_openai.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/references/schemantic.md
+  inflating: /workspace/.claude/skills/developing-genkit-dart/SKILL.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/references/flows-and-http.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/references/generation.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/references/getting-started.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/references/prompts.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/references/providers.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/references/tools.md
+  inflating: /workspace/.claude/skills/developing-genkit-go/SKILL.md
+  inflating: /workspace/.claude/skills/developing-genkit-js/references/best-practices.md
+  inflating: /workspace/.claude/skills/developing-genkit-js/references/docs-and-cli.md
+  inflating: /workspace/.claude/skills/developing-genkit-js/references/examples.md
+  inflating: /workspace/.claude/skills/developing-genkit-js/references/common-errors.md
+  inflating: /workspace/.claude/skills/developing-genkit-js/references/setup.md
+  inflating: /workspace/.claude/skills/developing-genkit-js/SKILL.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/common-errors.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/dev-workflow.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/dotprompt.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/examples.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/fastapi.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/evals.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/references/setup.md
+  inflating: /workspace/.claude/skills/developing-genkit-python/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-ai-logic/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-ai-logic/references/usage_patterns_web.md
+  inflating: /workspace/.claude/skills/firebase-app-hosting-basics/references/cli_commands.md
+  inflating: /workspace/.claude/skills/firebase-app-hosting-basics/references/configuration.md
+  inflating: /workspace/.claude/skills/firebase-app-hosting-basics/references/emulation.md
+  inflating: /workspace/.claude/skills/firebase-app-hosting-basics/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-auth-basics/references/client_sdk_web.md
+  inflating: /workspace/.claude/skills/firebase-auth-basics/references/security_rules.md
+  inflating: /workspace/.claude/skills/firebase-auth-basics/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/firebase-cli-guide.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/firebase-service-init.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/local-env-setup.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/refresh/antigravity.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/refresh/claude.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/refresh/gemini-cli.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/refresh/other-agents.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/setup/antigravity.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/setup/cursor.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/setup/claude_code.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/setup/gemini_cli.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/setup/other_agents.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/setup/github_copilot.md
+  inflating: /workspace/.claude/skills/firebase-basics/references/web_setup.md
+  inflating: /workspace/.claude/skills/firebase-basics/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/examples.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/advanced.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/config.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/native_sql.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/operations.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/schema.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/sdks.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/reference/security.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-data-connect/templates.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/references/data_model.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/references/indexes.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/references/provisioning.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/references/python_sdk_usage.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/references/security_rules.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/references/web_sdk_usage.md
+  inflating: /workspace/.claude/skills/firebase-firestore-enterprise-native-mode/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-firestore-standard/references/indexes.md
+  inflating: /workspace/.claude/skills/firebase-firestore-standard/references/security_rules.md
+  inflating: /workspace/.claude/skills/firebase-firestore-standard/references/provisioning.md
+  inflating: /workspace/.claude/skills/firebase-firestore-standard/references/web_sdk_usage.md
+  inflating: /workspace/.claude/skills/firebase-firestore-standard/SKILL.md
+  inflating: /workspace/.claude/skills/firebase-hosting-basics/references/configuration.md
+  inflating: /workspace/.claude/skills/firebase-hosting-basics/references/deploying.md
+  inflating: /workspace/.claude/skills/firebase-hosting-basics/SKILL.md
+  inflating: /workspace/.claude/skills/firestore-security-rules-auditor/SKILL.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_anthropic.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_chrome.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_firebase_ai.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_google_genai.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_mcp.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_middleware.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_openai.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/genkit_shelf.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/references/schemantic.md
+  inflating: /workspace/.continue/skills/developing-genkit-dart/SKILL.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/references/flows-and-http.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/references/generation.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/references/getting-started.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/references/prompts.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/references/providers.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/references/tools.md
+  inflating: /workspace/.continue/skills/developing-genkit-go/SKILL.md
+  inflating: /workspace/.continue/skills/developing-genkit-js/references/best-practices.md
+  inflating: /workspace/.continue/skills/developing-genkit-js/references/common-errors.md
+  inflating: /workspace/.continue/skills/developing-genkit-js/references/docs-and-cli.md
+  inflating: /workspace/.continue/skills/developing-genkit-js/references/setup.md
+  inflating: /workspace/.continue/skills/developing-genkit-js/references/examples.md
+  inflating: /workspace/.continue/skills/developing-genkit-js/SKILL.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/common-errors.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/dotprompt.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/dev-workflow.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/evals.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/examples.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/fastapi.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/references/setup.md
+  inflating: /workspace/.continue/skills/developing-genkit-python/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-ai-logic/references/usage_patterns_web.md
+  inflating: /workspace/.continue/skills/firebase-ai-logic/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-app-hosting-basics/references/cli_commands.md
+  inflating: /workspace/.continue/skills/firebase-app-hosting-basics/references/configuration.md
+  inflating: /workspace/.continue/skills/firebase-app-hosting-basics/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-auth-basics/references/client_sdk_web.md
+  inflating: /workspace/.continue/skills/firebase-app-hosting-basics/references/emulation.md
+  inflating: /workspace/.continue/skills/firebase-auth-basics/references/security_rules.md
+  inflating: /workspace/.continue/skills/firebase-auth-basics/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/firebase-cli-guide.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/firebase-service-init.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/local-env-setup.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/refresh/claude.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/refresh/antigravity.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/refresh/gemini-cli.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/refresh/other-agents.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/setup/antigravity.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/setup/claude_code.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/setup/cursor.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/setup/gemini_cli.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/setup/github_copilot.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/setup/other_agents.md
+  inflating: /workspace/.continue/skills/firebase-basics/references/web_setup.md
+  inflating: /workspace/.continue/skills/firebase-basics/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/examples.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/advanced.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/config.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/native_sql.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/operations.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/schema.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/sdks.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/reference/security.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-data-connect/templates.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/references/data_model.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/references/indexes.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/references/provisioning.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/references/python_sdk_usage.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/references/security_rules.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/references/web_sdk_usage.md
+  inflating: /workspace/.continue/skills/firebase-firestore-enterprise-native-mode/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-firestore-standard/references/indexes.md
+  inflating: /workspace/.continue/skills/firebase-firestore-standard/references/provisioning.md
+  inflating: /workspace/.continue/skills/firebase-firestore-standard/references/security_rules.md
+  inflating: /workspace/.continue/skills/firebase-firestore-standard/references/web_sdk_usage.md
+  inflating: /workspace/.continue/skills/firebase-firestore-standard/SKILL.md
+  inflating: /workspace/.continue/skills/firebase-hosting-basics/references/deploying.md
+  inflating: /workspace/.continue/skills/firebase-hosting-basics/references/configuration.md
+  inflating: /workspace/.continue/skills/firebase-hosting-basics/SKILL.md
+  inflating: /workspace/.continue/skills/firestore-security-rules-auditor/SKILL.md
+  inflating: /workspace/.dockerignore
+  inflating: /workspace/.firebase/.graphqlrc
+  inflating: /workspace/.firebaserc
+  inflating: /workspace/.gemini/extensions/firebase/contexts/FIREBASE-BASE.md
+  inflating: /workspace/.gemini/extensions/firebase/FIREBASE.md
+  inflating: /workspace/.gemini/extensions/firebase/gemini-extension.json
+  inflating: /workspace/.gitignore
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_anthropic.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_chrome.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_firebase_ai.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_google_genai.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_mcp.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_middleware.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_openai.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/genkit_shelf.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/references/schemantic.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/references/flows-and-http.md
+  inflating: /workspace/.kiro/skills/developing-genkit-dart/SKILL.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/references/generation.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/references/getting-started.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/references/prompts.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/references/providers.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/references/tools.md
+  inflating: /workspace/.kiro/skills/developing-genkit-go/SKILL.md
+  inflating: /workspace/.kiro/skills/developing-genkit-js/references/common-errors.md
+  inflating: /workspace/.kiro/skills/developing-genkit-js/references/best-practices.md
+  inflating: /workspace/.kiro/skills/developing-genkit-js/references/docs-and-cli.md
+  inflating: /workspace/.kiro/skills/developing-genkit-js/references/setup.md
+  inflating: /workspace/.kiro/skills/developing-genkit-js/references/examples.md
+  inflating: /workspace/.kiro/skills/developing-genkit-js/SKILL.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/common-errors.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/dev-workflow.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/dotprompt.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/evals.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/examples.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/fastapi.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/references/setup.md
+  inflating: /workspace/.kiro/skills/developing-genkit-python/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-ai-logic/references/usage_patterns_web.md
+  inflating: /workspace/.kiro/skills/firebase-ai-logic/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-app-hosting-basics/references/configuration.md
+  inflating: /workspace/.kiro/skills/firebase-app-hosting-basics/references/cli_commands.md
+  inflating: /workspace/.kiro/skills/firebase-app-hosting-basics/references/emulation.md
+  inflating: /workspace/.kiro/skills/firebase-app-hosting-basics/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-auth-basics/references/client_sdk_web.md
+  inflating: /workspace/.kiro/skills/firebase-auth-basics/references/security_rules.md
+  inflating: /workspace/.kiro/skills/firebase-auth-basics/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/firebase-cli-guide.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/firebase-service-init.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/local-env-setup.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/refresh/antigravity.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/refresh/claude.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/refresh/gemini-cli.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/setup/antigravity.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/refresh/other-agents.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/setup/claude_code.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/setup/cursor.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/setup/gemini_cli.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/setup/github_copilot.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/setup/other_agents.md
+  inflating: /workspace/.kiro/skills/firebase-basics/references/web_setup.md
+  inflating: /workspace/.kiro/skills/firebase-basics/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/examples.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/advanced.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/config.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/native_sql.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/operations.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/schema.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/sdks.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/reference/security.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-data-connect/templates.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/references/data_model.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/references/indexes.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/references/provisioning.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/references/python_sdk_usage.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/references/security_rules.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/references/web_sdk_usage.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-enterprise-native-mode/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-standard/references/indexes.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-standard/references/provisioning.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-standard/references/security_rules.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-standard/references/web_sdk_usage.md
+  inflating: /workspace/.kiro/skills/firebase-firestore-standard/SKILL.md
+  inflating: /workspace/.kiro/skills/firebase-hosting-basics/references/configuration.md
+  inflating: /workspace/.kiro/skills/firebase-hosting-basics/references/deploying.md
+  inflating: /workspace/.kiro/skills/firebase-hosting-basics/SKILL.md
+  inflating: /workspace/app/actions.ts
+  inflating: /workspace/.kiro/skills/firestore-security-rules-auditor/SKILL.md
+  inflating: /workspace/app/globals.css
+  inflating: /workspace/app/layout.tsx
+  inflating: /workspace/app/not-found.tsx
+  inflating: /workspace/app/page.tsx
+  inflating: /workspace/apphosting_deploy.txt
+  inflating: /workspace/apphosting_deploy2.txt
+  inflating: /workspace/build_error.txt
+  inflating: /workspace/build_error_2.txt
+  inflating: /workspace/build_error_3.txt
+  inflating: /workspace/build_log.txt
+  inflating: /workspace/build_log_2.txt
+  inflating: /workspace/build_log_3.txt
+  inflating: /workspace/build_log_4.txt
+  inflating: /workspace/build_log_5.txt
+  inflating: /workspace/build_verification.txt
+  inflating: /workspace/cloud_build.txt
+  inflating: /workspace/components/features/sustain-write/sub-components/chart-assistant-modal.tsx
+  inflating: /workspace/components/features/sustain-write/sub-components/compliance-guard-sidebar.tsx
+  inflating: /workspace/components/features/sustain-write/sub-components/co-write-modal.tsx
+  inflating: /workspace/components/features/sustain-write/sub-components/linked-source-indicator.tsx
+  inflating: /workspace/components/features/sustain-write/sustain-write-components.tsx
+  inflating: /workspace/components/features/sustain-write/sub-components/version-history-modal.tsx
+  inflating: /workspace/components/layout/firebase-provider.tsx
+  inflating: /workspace/components/layout/sidebar.tsx
+  inflating: /workspace/components/layout/spirit-modal.tsx
+  inflating: /workspace/components/ui/badge.tsx
+  inflating: /workspace/components/ui/glass-card.tsx
+  inflating: /workspace/components/spirit-persona-card.tsx
+  inflating: /workspace/components/views/advisory-view.tsx
+  inflating: /workspace/components/views/ai-chat-view.tsx
+  inflating: /workspace/components/views/compliance-tracker-view.tsx
+  inflating: /workspace/components/views/dashboard-view.tsx
+  inflating: /workspace/components/views/evidence-search-view.tsx
+  inflating: /workspace/components/views/evidence-vault-view.tsx
+  inflating: /workspace/components/views/integration-view.tsx
+  inflating: /workspace/components/views/intelligence-view.tsx
+  inflating: /workspace/components/views/ncbdb-view.tsx
+  inflating: /workspace/components/views/ocr-view.tsx
+  inflating: /workspace/components/views/omni-protocol-showcase.tsx
+  inflating: /workspace/components/views/omni-src-view.tsx
+  inflating: /workspace/components/views/profile-view.tsx
+  inflating: /workspace/components/views/sustain-library-view.tsx
+  inflating: /workspace/components/views/sustain-write-view.tsx
+  inflating: /workspace/components/views/template-library-view.tsx
+  inflating: /workspace/dataconnect/.dataconnect/schema/main/implicit.gql
+  inflating: /workspace/dataconnect/.dataconnect/schema/main/input.gql
+  inflating: /workspace/dataconnect/.dataconnect/schema/main/mutation.gql
+  inflating: /workspace/dataconnect/.dataconnect/schema/main/query.gql
+  inflating: /workspace/dataconnect/.dataconnect/schema/main/relation.gql
+  inflating: /workspace/dataconnect/.dataconnect/schema/prelude.gql
+  inflating: /workspace/dataconnect/dataconnect.yaml
+  inflating: /workspace/dataconnect/example/connector.yaml
+  inflating: /workspace/dataconnect/example/queries.gql
+  inflating: /workspace/dataconnect/schema/schema.gql
+  inflating: /workspace/dataconnect/seed_data.gql
+  inflating: /workspace/dc_deploy.txt
+  inflating: /workspace/dc_deploy2.txt
+  inflating: /workspace/declarations.d.ts
+  inflating: /workspace/Dockerfile
+  inflating: /workspace/esggo_alpha_log.txt
+  inflating: /workspace/firebase-applet-config.json
+  inflating: /workspace/firebase-blueprint.json
+  inflating: /workspace/firebase.json
+  inflating: /workspace/firestore.rules
+  inflating: /workspace/hooks/use-mobile.ts
+  inflating: /workspace/lib/constants.ts
+  inflating: /workspace/lib/config/constants.ts
+  inflating: /workspace/lib/context/app-context.tsx
+  inflating: /workspace/lib/core/index.ts
+  inflating: /workspace/lib/core/spirits.ts
+  inflating: /workspace/lib/firebase.ts
+  inflating: /workspace/lib/gcp/gcp-client.ts
+  inflating: /workspace/lib/gcp.ts
+  inflating: /workspace/lib/i18n.ts
+  inflating: /workspace/lib/utils/logger.ts
+  inflating: /workspace/lib/utils.ts
+  inflating: /workspace/next-env.d.ts
+  inflating: /workspace/metadata.json
+  inflating: /workspace/next.config.mjs
+  inflating: /workspace/package-lock.json
+  inflating: /workspace/package.json
+  inflating: /workspace/postcss.config.mjs
+  inflating: /workspace/public/index.html
+  inflating: /workspace/README.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_anthropic.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_chrome.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_firebase_ai.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_google_genai.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_mcp.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_middleware.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_openai.md
+  inflating: /workspace/skills/developing-genkit-dart/references/schemantic.md
+  inflating: /workspace/skills/developing-genkit-dart/references/genkit_shelf.md
+  inflating: /workspace/skills/developing-genkit-dart/SKILL.md
+  inflating: /workspace/skills/developing-genkit-go/references/flows-and-http.md
+  inflating: /workspace/skills/developing-genkit-go/references/generation.md
+  inflating: /workspace/skills/developing-genkit-go/references/getting-started.md
+  inflating: /workspace/skills/developing-genkit-go/references/prompts.md
+  inflating: /workspace/skills/developing-genkit-go/references/providers.md
+  inflating: /workspace/skills/developing-genkit-go/SKILL.md
+  inflating: /workspace/skills/developing-genkit-go/references/tools.md
+  inflating: /workspace/skills/developing-genkit-js/references/best-practices.md
+  inflating: /workspace/skills/developing-genkit-js/references/docs-and-cli.md
+  inflating: /workspace/skills/developing-genkit-js/references/examples.md
+  inflating: /workspace/skills/developing-genkit-js/references/common-errors.md
+  inflating: /workspace/skills/developing-genkit-js/references/setup.md
+  inflating: /workspace/skills/developing-genkit-js/SKILL.md
+  inflating: /workspace/skills/developing-genkit-python/references/common-errors.md
+  inflating: /workspace/skills/developing-genkit-python/references/dev-workflow.md
+  inflating: /workspace/skills/developing-genkit-python/references/dotprompt.md
+  inflating: /workspace/skills/developing-genkit-python/references/evals.md
+  inflating: /workspace/skills/developing-genkit-python/references/fastapi.md
+  inflating: /workspace/skills/developing-genkit-python/references/examples.md
+  inflating: /workspace/skills/developing-genkit-python/references/setup.md
+  inflating: /workspace/skills/developing-genkit-python/SKILL.md
+  inflating: /workspace/skills/firebase-ai-logic/references/usage_patterns_web.md
+  inflating: /workspace/skills/firebase-ai-logic/SKILL.md
+  inflating: /workspace/skills/firebase-app-hosting-basics/references/cli_commands.md
+  inflating: /workspace/skills/firebase-app-hosting-basics/references/emulation.md
+  inflating: /workspace/skills/firebase-app-hosting-basics/references/configuration.md
+  inflating: /workspace/skills/firebase-app-hosting-basics/SKILL.md
+  inflating: /workspace/skills/firebase-auth-basics/references/client_sdk_web.md
+  inflating: /workspace/skills/firebase-auth-basics/references/security_rules.md
+  inflating: /workspace/skills/firebase-auth-basics/SKILL.md
+  inflating: /workspace/skills/firebase-basics/references/firebase-cli-guide.md
+  inflating: /workspace/skills/firebase-basics/references/firebase-service-init.md
+  inflating: /workspace/skills/firebase-basics/references/local-env-setup.md
+  inflating: /workspace/skills/firebase-basics/references/refresh/antigravity.md
+  inflating: /workspace/skills/firebase-basics/references/refresh/claude.md
+  inflating: /workspace/skills/firebase-basics/references/refresh/gemini-cli.md
+  inflating: /workspace/skills/firebase-basics/references/refresh/other-agents.md
+  inflating: /workspace/skills/firebase-basics/references/setup/claude_code.md
+  inflating: /workspace/skills/firebase-basics/references/setup/antigravity.md
+  inflating: /workspace/skills/firebase-basics/references/setup/gemini_cli.md
+  inflating: /workspace/skills/firebase-basics/references/setup/cursor.md
+  inflating: /workspace/skills/firebase-basics/references/setup/github_copilot.md
+  inflating: /workspace/skills/firebase-basics/references/setup/other_agents.md
+  inflating: /workspace/skills/firebase-basics/references/web_setup.md
+  inflating: /workspace/skills/firebase-basics/SKILL.md
+  inflating: /workspace/skills/firebase-data-connect/examples.md
+  inflating: /workspace/skills/firebase-data-connect/reference/config.md
+  inflating: /workspace/skills/firebase-data-connect/reference/advanced.md
+  inflating: /workspace/skills/firebase-data-connect/reference/native_sql.md
+  inflating: /workspace/skills/firebase-data-connect/reference/operations.md
+  inflating: /workspace/skills/firebase-data-connect/reference/sdks.md
+  inflating: /workspace/skills/firebase-data-connect/reference/schema.md
+  inflating: /workspace/skills/firebase-data-connect/reference/security.md
+  inflating: /workspace/skills/firebase-data-connect/SKILL.md
+  inflating: /workspace/skills/firebase-data-connect/templates.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/references/data_model.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/references/indexes.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/references/python_sdk_usage.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/references/provisioning.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/references/security_rules.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/references/web_sdk_usage.md
+  inflating: /workspace/skills/firebase-firestore-enterprise-native-mode/SKILL.md
+  inflating: /workspace/skills/firebase-firestore-standard/references/indexes.md
+  inflating: /workspace/skills/firebase-firestore-standard/references/provisioning.md
+  inflating: /workspace/skills/firebase-firestore-standard/references/security_rules.md
+  inflating: /workspace/skills/firebase-firestore-standard/references/web_sdk_usage.md
+  inflating: /workspace/skills/firebase-firestore-standard/SKILL.md
+  inflating: /workspace/skills/firebase-hosting-basics/references/deploying.md
+  inflating: /workspace/skills/firebase-hosting-basics/references/configuration.md
+  inflating: /workspace/skills/firebase-hosting-basics/SKILL.md
+  inflating: /workspace/skills/firestore-security-rules-auditor/SKILL.md
+  inflating: /workspace/skills-lock.json
+  inflating: /workspace/src/dataconnect-generated/.guides/config.json
+  inflating: /workspace/src/dataconnect-generated/.guides/setup.md
+  inflating: /workspace/src/dataconnect-generated/.guides/usage.md
+  inflating: /workspace/src/dataconnect-generated/esm/index.esm.js
+  inflating: /workspace/src/dataconnect-generated/esm/package.json
+  inflating: /workspace/src/dataconnect-generated/index.d.ts
+  inflating: /workspace/src/dataconnect-generated/index.cjs.js
+  inflating: /workspace/src/dataconnect-generated/package.json
+  inflating: /workspace/src/dataconnect-generated/react/esm/index.esm.js
+  inflating: /workspace/src/dataconnect-generated/react/esm/package.json
+  inflating: /workspace/src/dataconnect-generated/react/index.cjs.js
+  inflating: /workspace/src/dataconnect-generated/react/index.d.ts
+  inflating: /workspace/src/dataconnect-generated/react/package.json
+  inflating: /workspace/src/dataconnect-generated/react/README.md
+  inflating: /workspace/src/dataconnect-generated/README.md
+  inflating: /workspace/types/index.ts
+  inflating: /workspace/tsconfig.json
+  inflating: /workspace/tsconfig.tsbuildinfo
+  inflating: /workspace/typescript_errors.txt
+BUILD
+Starting Step #0 - "ubuntu"
+Step #0 - "ubuntu": Already have image (with digest): gcr.io/cloud-builders/gcloud
+Finished Step #0 - "ubuntu"
+Starting Step #1 - "preparer"
+Step #1 - "preparer": Pulling image: us-east4-docker.pkg.dev/serverless-runtimes/utilities/preparer:base_20260226_18_04_RC00
+Step #1 - "preparer": base_20260226_18_04_RC00: Pulling from serverless-runtimes/utilities/preparer
+Step #1 - "preparer": ec754079ef19: Pulling fs layer
+Step #1 - "preparer": ec754079ef19: Download complete
+Step #1 - "preparer": ec754079ef19: Pull complete
+Step #1 - "preparer": Digest: sha256:cc6a7fbe7cf88f3e56b9c3a94ea83714507a4f6ffcc0c27d1824fe1133f33aa0
+Step #1 - "preparer": Status: Downloaded newer image for us-east4-docker.pkg.dev/serverless-runtimes/utilities/preparer:base_20260226_18_04_RC00
+Step #1 - "preparer": us-east4-docker.pkg.dev/serverless-runtimes/utilities/preparer:base_20260226_18_04_RC00
+Step #1 - "preparer": 2026/04/25 14:49:53 FIREBASE_CONFIG has no availability specified, applying the default of 'BUILD' and 'RUNTIME'
+Step #1 - "preparer": 2026/04/25 14:49:53 Final app hosting schema:
+Step #1 - "preparer": env:
+Step #1 - "preparer": - variable: FIREBASE_CONFIG
+Step #1 - "preparer":   value: '{"databaseURL":"","projectId":"esg-sunshine","storageBucket":"esg-sunshine.firebasestorage.app"}'
+Step #1 - "preparer":   availability:
+Step #1 - "preparer":   - BUILD
+Step #1 - "preparer":   - RUNTIME
+Step #1 - "preparer":   source: Firebase System
+Step #1 - "preparer": - variable: FIREBASE_WEBAPP_CONFIG
+Step #1 - "preparer":   value: '{"apiKey":"AIzaSyDi_T2RmomrsqhUNxZ98SzT53ZM7qj4MBw","appId":"1:950159032447:web:152a9af906749ee3ecff4a","authDomain":"esg-sunshine.firebaseapp.com","databaseURL":"","messagingSenderId":"950159032447","projectId":"esg-sunshine","storageBucket":"esg-sunshine.firebasestorage.app"}'
+Step #1 - "preparer":   availability:
+Step #1 - "preparer":   - BUILD
+Step #1 - "preparer":   source: Firebase System
+Step #1 - "preparer":
+Step #1 - "preparer": 2026/04/25 14:49:53 Final app hosting schema:
+Step #1 - "preparer": env:
+Step #1 - "preparer": - variable: FIREBASE_CONFIG
+Step #1 - "preparer":   value: '{"databaseURL":"","projectId":"esg-sunshine","storageBucket":"esg-sunshine.firebasestorage.app"}'
+Step #1 - "preparer":   availability:
+Step #1 - "preparer":   - BUILD
+Step #1 - "preparer":   - RUNTIME
+Step #1 - "preparer":   source: Firebase System
+Step #1 - "preparer": - variable: FIREBASE_WEBAPP_CONFIG
+Step #1 - "preparer":   value: '{"apiKey":"AIzaSyDi_T2RmomrsqhUNxZ98SzT53ZM7qj4MBw","appId":"1:950159032447:web:152a9af906749ee3ecff4a","authDomain":"esg-sunshine.firebaseapp.com","databaseURL":"","messagingSenderId":"950159032447","projectId":"esg-sunshine","storageBucket":"esg-sunshine.firebasestorage.app"}'
+Step #1 - "preparer":   availability:
+Step #1 - "preparer":   - BUILD
+Step #1 - "preparer":   source: Firebase System
+Step #1 - "preparer":
+Finished Step #1 - "preparer"
+Starting Step #2 - "pre-buildpack"
+Step #2 - "pre-buildpack": Pulling image: us-east4-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20260414_RC00_lightweight
+Step #2 - "pre-buildpack": nodejs_20260414_RC00_lightweight: Pulling from serverless-runtimes/google-22-full/builder/nodejs
+Step #2 - "pre-buildpack": 70792468e643: Already exists
+Step #2 - "pre-buildpack": 9174e796c391: Already exists
+Step #2 - "pre-buildpack": ee64996bf436: Already exists
+Step #2 - "pre-buildpack": a2e36cfc8715: Pulling fs layer
+Step #2 - "pre-buildpack": 7b73ea3bc7a0: Pulling fs layer
+Step #2 - "pre-buildpack": fcc9024d1365: Pulling fs layer
+Step #2 - "pre-buildpack": 83a616838a6a: Pulling fs layer
+Step #2 - "pre-buildpack": 21b7eaf3838c: Pulling fs layer
+Step #2 - "pre-buildpack": efcb0284b17c: Pulling fs layer
+Step #2 - "pre-buildpack": a3ff78f24474: Pulling fs layer
+Step #2 - "pre-buildpack": fe0a88c014e5: Pulling fs layer
+Step #2 - "pre-buildpack": bf9f17fe63e1: Pulling fs layer
+Step #2 - "pre-buildpack": 141edec40997: Pulling fs layer
+Step #2 - "pre-buildpack": 78613c92ea9e: Pulling fs layer
+Step #2 - "pre-buildpack": 34ce8ba30961: Pulling fs layer
+Step #2 - "pre-buildpack": e6178d2c0976: Pulling fs layer
+Step #2 - "pre-buildpack": 4f4fb700ef54: Pulling fs layer
+Step #2 - "pre-buildpack": a3ff78f24474: Waiting
+Step #2 - "pre-buildpack": fe0a88c014e5: Waiting
+Step #2 - "pre-buildpack": bf9f17fe63e1: Waiting
+Step #2 - "pre-buildpack": 78613c92ea9e: Waiting
+Step #2 - "pre-buildpack": 34ce8ba30961: Waiting
+Step #2 - "pre-buildpack": e6178d2c0976: Waiting
+Step #2 - "pre-buildpack": 4f4fb700ef54: Waiting
+Step #2 - "pre-buildpack": 141edec40997: Waiting
+Step #2 - "pre-buildpack": a2e36cfc8715: Verifying Checksum
+Step #2 - "pre-buildpack": a2e36cfc8715: Download complete
+Step #2 - "pre-buildpack": fcc9024d1365: Verifying Checksum
+Step #2 - "pre-buildpack": 7b73ea3bc7a0: Verifying Checksum
+Step #2 - "pre-buildpack": 7b73ea3bc7a0: Download complete
+Step #2 - "pre-buildpack": fcc9024d1365: Download complete
+Step #2 - "pre-buildpack": 83a616838a6a: Verifying Checksum
+Step #2 - "pre-buildpack": 83a616838a6a: Download complete
+Step #2 - "pre-buildpack": fe0a88c014e5: Verifying Checksum
+Step #2 - "pre-buildpack": fe0a88c014e5: Download complete
+Step #2 - "pre-buildpack": 21b7eaf3838c: Verifying Checksum
+Step #2 - "pre-buildpack": 21b7eaf3838c: Download complete
+Step #2 - "pre-buildpack": efcb0284b17c: Verifying Checksum
+Step #2 - "pre-buildpack": efcb0284b17c: Download complete
+Step #2 - "pre-buildpack": a2e36cfc8715: Pull complete
+Step #2 - "pre-buildpack": 141edec40997: Download complete
+Step #2 - "pre-buildpack": 78613c92ea9e: Verifying Checksum
+Step #2 - "pre-buildpack": 78613c92ea9e: Download complete
+Step #2 - "pre-buildpack": 34ce8ba30961: Verifying Checksum
+Step #2 - "pre-buildpack": 34ce8ba30961: Download complete
+Step #2 - "pre-buildpack": e6178d2c0976: Verifying Checksum
+Step #2 - "pre-buildpack": e6178d2c0976: Download complete
+Step #2 - "pre-buildpack": a3ff78f24474: Verifying Checksum
+Step #2 - "pre-buildpack": a3ff78f24474: Download complete
+Step #2 - "pre-buildpack": 7b73ea3bc7a0: Pull complete
+Step #2 - "pre-buildpack": bf9f17fe63e1: Verifying Checksum
+Step #2 - "pre-buildpack": bf9f17fe63e1: Download complete
+Step #2 - "pre-buildpack": 4f4fb700ef54: Verifying Checksum
+Step #2 - "pre-buildpack": 4f4fb700ef54: Download complete
+Step #2 - "pre-buildpack": fcc9024d1365: Pull complete
+Step #2 - "pre-buildpack": 83a616838a6a: Pull complete
+Step #2 - "pre-buildpack": 21b7eaf3838c: Pull complete
+Step #2 - "pre-buildpack": efcb0284b17c: Pull complete
+Step #2 - "pre-buildpack": a3ff78f24474: Pull complete
+Step #2 - "pre-buildpack": fe0a88c014e5: Pull complete
+Step #2 - "pre-buildpack": bf9f17fe63e1: Pull complete
+Step #2 - "pre-buildpack": 141edec40997: Pull complete
+Step #2 - "pre-buildpack": 78613c92ea9e: Pull complete
+Step #2 - "pre-buildpack": 34ce8ba30961: Pull complete
+Step #2 - "pre-buildpack": e6178d2c0976: Pull complete
+Step #2 - "pre-buildpack": 4f4fb700ef54: Pull complete
+Step #2 - "pre-buildpack": Digest: sha256:739052836b95d0b416c32f2af0197ac3d4529841d19377da1c7d2350e89de317
+Step #2 - "pre-buildpack": Status: Downloaded newer image for us-east4-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20260414_RC00_lightweight
+Step #2 - "pre-buildpack": us-east4-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20260414_RC00_lightweight
+Step #2 - "pre-buildpack": Preparing directory /layers
+Step #2 - "pre-buildpack": Preparing directory /workspace
+Step #2 - "pre-buildpack": Preparing directory /builder/home
+Step #2 - "pre-buildpack": Preparing directory /builder/outputs
+Step #2 - "pre-buildpack": Preparing directory /platform/env
+Step #2 - "pre-buildpack": Passing build environment variable X_GOOGLE_TARGET_PLATFORM to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable APPHOSTINGYAML_FILEPATH to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable FIREBASE_OUTPUT_BUNDLE_DIR to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable FIREBASE_APP_HOSTING to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable NEXTJS_ADAPTER_VERSION to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable ANGULAR_ADAPTER_VERSION to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable GOOGLE_BUILDABLE to buildpacks
+Step #2 - "pre-buildpack": Passing build environment variable BUILDER_OUTPUT to buildpacks
+Finished Step #2 - "pre-buildpack"
+Starting Step #3 - "build"
+Step #3 - "build": Already have image (with digest): us-east4-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20260414_RC00_lightweight
+Step #3 - "build": [33;1mWarning: [0mNo cached data will be used, no cache specified.
+Step #3 - "build": [36m===> ANALYZING[0m
+Step #3 - "build": Image with name "us-east4-docker.pkg.dev/esg-sunshine/firebaseapphosting-images/esggo-frontend:build-2026-04-25-002" not found
+Step #3 - "build": [36m===> DETECTING[0m
+Step #3 - "build": target distro name/version labels not found, reading /etc/os-release file
+Step #3 - "build": 4 of 6 buildpacks participating
+Step #3 - "build": google.nodejs.runtime        1.0.0
+Step #3 - "build": google.nodejs.firebasenextjs 0.0.1
+Step #3 - "build": google.nodejs.npm            1.1.1
+Step #3 - "build": google.nodejs.firebasebundle 0.0.1
+Step #3 - "build": [36m===> RESTORING[0m
+Step #3 - "build": [36m===> BUILDING[0m
+Step #3 - "build": target distro name/version labels not found, reading /etc/os-release file
+Step #3 - "build": === Node.js - Runtime Using Runner (google.nodejs.runtime@1.0.0) ===
+Step #3 - "build": Nodejs version not specified, using the latest available Nodejs runtime for the stack "ubuntu2204"
+Step #3 - "build": 2026/04/25 14:50:00 [DEBUG] GET https://dl.google.com/runtimes/ubuntu2204/nodejs/version.json
+Step #3 - "build": Adding image label google.runtime-version: nodejs22
+Step #3 - "build": 2026/04/25 14:50:00 [DEBUG] GET https://dl.google.com/runtimes/ubuntu2204/nodejs/version.json
+Step #3 - "build": ***** CACHE MISS: "nodejs"
+Step #3 - "build": Installing Node.js v22.22.2.
+Step #3 - "build": 2026/04/25 14:50:00 [DEBUG] GET https://dl.google.com/runtimes/ubuntu2204/nodejs/nodejs-22.22.2.tar.gz
+Step #3 - "build": Installing the heapsize.sh exec.d script.
+Step #3 - "build": === Node.js - Firebasenextjs Using Runner (google.nodejs.firebasenextjs@0.0.1) ===
+Step #3 - "build": Using NEXTJS_ADAPTER_VERSION: "14.0.21"
+Step #3 - "build": ***** CACHE MISS: "npm_modules"
+Step #3 - "build": Installing nextjs adaptor 14.0.21
+Step #3 - "build": === Node.js - Npm Using Runner (google.nodejs.npm@1.1.1) ===
+Step #3 - "build": ***** CACHE MISS: "npm_modules"
+Step #3 - "build": Installing application dependencies.
+Step #3 - "build": --------------------------------------------------------------------------------
+Step #3 - "build": Running "npm ci --quiet --no-fund --no-audit (NODE_ENV=development)"
+Step #3 - "build": npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+Step #3 - "build": npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Step #3 - "build": npm warn deprecated next@15.1.9: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
+Step #3 - "build":
+Step #3 - "build": added 757 packages in 31s
+Step #3 - "build": Done "npm ci --quiet --no-fund --no-audit (NODE_ENV=development)" (30.797348878s)
+Step #3 - "build": --------------------------------------------------------------------------------
+Step #3 - "build": Running "npm exec --prefix /layers/google.nodejs.firebasenextjs/npm_modules apphosting-adapter-nextjs-build"
+Step #3 - "build": Overriding Next Config to add configs optmized for Firebase App Hosting
+Step #3 - "build": Successfully created next.config.mjs with Firebase App Hosting overrides
+Step #3 - "build":
+Step #3 - "build": > esg-go-info-one@8.1.0 build
+Step #3 - "build": > next build
+Step #3 - "build":
+Step #3 - "build":    ? Next.js 15.1.9
+Step #3 - "build":
+Step #3 - "build":    Creating an optimized production build ...
+Step #3 - "build":  ? Compiled with warnings
+Step #3 - "build":
+Step #3 - "build": ./node_modules/@opentelemetry/sdk-node/build/src/TracerProviderWithEnvExporter.js
+Step #3 - "build": Module not found: Can't resolve '@opentelemetry/exporter-jaeger' in '/workspace/node_modules/@opentelemetry/sdk-node/build/src'
+Step #3 - "build":
+Step #3 - "build": Import trace for requested module:
+Step #3 - "build": ./node_modules/@opentelemetry/sdk-node/build/src/TracerProviderWithEnvExporter.js
+Step #3 - "build": ./node_modules/@opentelemetry/sdk-node/build/src/sdk.js
+Step #3 - "build": ./node_modules/@opentelemetry/sdk-node/build/src/index.js
+Step #3 - "build": ./node_modules/@genkit-ai/core/lib/tracing/node-telemetry-provider.js
+Step #3 - "build": ./node_modules/@genkit-ai/core/lib/node.js
+Step #3 - "build": ./node_modules/genkit/lib/common.js
+Step #3 - "build": ./node_modules/genkit/lib/index.mjs
+Step #3 - "build": ./app/actions.ts
+Step #3 - "build":
+Step #3 - "build":    Linting and checking validity of types ...
+Step #3 - "build": Failed to compile.
+Step #3 - "build":
+Step #3 - "build": ./lib/context/app-context.tsx:343:40
+Step #3 - "build": Type error: Argument of type '{ id: string; titleZh: string; titleEn: string; descriptionZh: string; descriptionEn: string; iconName: string; color: string; details: string[]; }' is not assignable to parameter of type 'UpsertIntelligenceModuleVariables'.
+Step #3 - "build":   Types of property 'details' are incompatible.
+Step #3 - "build":     Type 'string[]' is not assignable to type 'string'.
+Step #3 - "build":
+Step #3 - "build": [0m [90m 341 |[39m         [36mif[39m (result[33m.[39mdata[33m.[39mintelligenceModules[33m.[39mlength [33m===[39m [35m0[39m) {[0m
+Step #3 - "build": [0m [90m 342 |[39m           [33mINITIAL_INTELLIGENCE_MODULES[39m[33m.[39mforEach(m [33m=>[39m {[0m
+Step #3 - "build": [0m[31m[1m>[22m[39m[90m 343 |[39m             upsertIntelligenceModuleDC(m)[33m;[39m[0m
+Step #3 - "build": [0m [90m     |[39m                                        [31m[1m^[22m[39m[0m
+Step #3 - "build": [0m [90m 344 |[39m           })[33m;[39m[0m
+Step #3 - "build": [0m [90m 345 |[39m         } [36melse[39m {[0m
+Step #3 - "build": [0m [90m 346 |[39m           setIntelligenceModules(result[33m.[39mdata[33m.[39mintelligenceModules)[33m;[39m[0m
+Step #3 - "build": Next.js build worker exited with code: 1 and signal: null
+Step #3 - "build": Restoring original next config in project root
+Step #3 - "build": /layers/google.nodejs.firebasenextjs/npm_modules/node_modules/@apphosting/common/dist/index.js:64
+Step #3 - "build":                 reject(new Error(`Build process exited with error code ${code}.`));
+Step #3 - "build":                        ^
+Step #3 - "build":
+Step #3 - "build": Error: Build process exited with error code 1.
+Step #3 - "build":     at ChildProcess.<anonymous> (/layers/google.nodejs.firebasenextjs/npm_modules/node_modules/@apphosting/common/dist/index.js:64:24)
+Step #3 - "build":     at ChildProcess.emit (node:events:519:28)
+Step #3 - "build":     at ChildProcess._handle.onexit (node:internal/child_process:293:12)
+Step #3 - "build":
+Step #3 - "build": Node.js v22.22.2
+Step #3 - "build": Done "npm exec --prefix /layers/google.nodejs.firebasenextjs/npm_m..." (1m3.07075404s)
+Step #3 - "build": --------------------------------------------------------------------------------
+Step #3 - "build": failed to build: (error ID: 0496a68a):
+Step #3 - "build": {"reason":"Failed Framework Build","code":"fah/failed-framework-build","userFacingMessage":"Your application failed to run the framework build command 'npm exec --prefix /layers/google.nodejs.firebasenextjs/npm_modules apphosting-adapter-nextjs-build' successfully. Please check the raw log to address the error and confirm that your application builds locally before redeploying.","rawLog":"(error ID: d0a693a9):\nOverriding Next Config to add configs optmized for Firebase App Hosting\nSuccessfully created next.config.mjs with Firebase App Hosting overrides\n\n\u003e esg-go-info-one@8.1.0 build\n\u003e next build\n\n   ? Next.js 15.1.9\n\n   Creating an optimized production build ...\n ? Compiled with warnings\n\n./node_modules/@opentelemetry/sdk-node/build/src/TracerProviderWithEnvExporter.js\nModule not found: Can't resolve '@opentelemetry/exporter-jaeger' in '/workspace/node_modules/@opentelemetry/sdk-node/build/src'\n\nImport trace for requested module:\n./node_modules/@opentelemetry/sdk-node/build/src/TracerProviderWithEnvExporter.js\n./node_modules/@opentelemetry/sdk-node/build/src/sdk.js\n./node_modules/@opentelemetry/sdk-node/build/src/index.js\n./node_modules/@genkit-ai/core/lib/tracing/node-telemetry-provider.js\n./node_modules/@genkit-ai/core/lib/node.js\n./node_modules/genkit/lib/common.js\n./node_modules/genkit/lib/index.mjs\n./app/actions.ts\n\n   Linting and checking validity of types ...\nFailed to compile.\n\n./lib/context/app-context.tsx:343:40\nType error: Argument of type '{ id: string; titleZh: string; titleEn: string; descriptionZh: string; descriptionEn: string; iconName: string; color: string; details: string[]; }' is not assignable to parameter of type 'UpsertIntelligenceModuleVariables'.\n  Types of property 'details' are incompatible.\n    Type 'string[]' is not assignable to type 'string'.\n\n\u001b[0m \u001b[90m 341 |\u001b[39m         \u001b[36mif\u001b[39m (result\u001b[33m.\u001b[39mdata\u001b[33m.\u001b[39mintelligenceModules\u001b[33m.\u001b[39mlength \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m) {\u001b[0m\n\u001b[0m \u001b[90m 342 |\u001b[39m           \u001b[33mINITIAL_INTELLIGENCE_MODULES\u001b[39m\u001b[33m.\u001b[39mforEach(m \u001b[33m=\u003e\u001b[39m {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m\u003e\u001b[22m\u001b[39m\u001b[90m 343 |\u001b[39m             upsertIntelligenceModuleDC(m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     |\u001b[39m                                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 344 |\u001b[39m           })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 345 |\u001b[39m         } \u001b[36melse\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 346 |\u001b[39m           setIntelligenceModules(result\u001b[33m.\u001b[39mdata\u001b[33m.\u001b[39mintelligenceModules)\u001b[33m;\u001b[39m\u001b[0m\nNext.js build worker exited with code: 1 and signal: null\nRestoring original next config in project root\n/layers/google.nodejs.firebasenextjs/npm_modules/node_modules/@apphosting/common/dist/index.js:64\n                reject(new Error(`Build process exited with error code ${code}.`));\n                       ^\n\nError: Build process exited with error code 1.\n    at ChildProcess.\u003canonymous\u003e (/layers/google.nodejs.firebasenextjs/npm_modules/node_modules/@apphosting/common/dist/index.js:64:24)\n    at ChildProcess.emit (node:events:519:28)\n    at ChildProcess._handle.onexit (node:internal/child_process:293:12)\n\nNode.js v22.22.2","isUserAttributed":true}
+Step #3 - "build": [31;1mERROR: [0mfailed to build: exit status 1
+Finished Step #3 - "build"
+ERROR
+ERROR: build step 3 "us-east4-docker.pkg.dev/serverless-runtimes/google-22-full/builder/nodejs:nodejs_20260414_RC00_lightweight" failed: step exited with non-zero status: 51
+--------------------------------------------------------------------------------

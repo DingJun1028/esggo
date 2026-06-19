@@ -1,0 +1,48 @@
+global:
+  scrape_interval: 15s # How often to scrape targets
+  evaluation_interval: 15s # How often to evaluate rules
+  external_labels:
+    cluster: 'infoone-production'
+    environment: 'production'
+
+# Alertmanager configuration (optional, can be added later)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - localhost:9093
+
+# Rule files (for alerting rules)
+rule_files:
+  # - "alerts/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # InfoOne Backend API
+  - job_name: 'infoone-backend'
+    static_configs:
+      - targets: ['host.docker.internal:5005']  # Port where your backend runs
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: '/metrics'
+
+  # Node Exporter (system metrics - optional, install separately)
+  # - job_name: 'node-exporter'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']
+
+  # Redis Exporter (Redis metrics - optional, install separately)
+  # - job_name: 'redis-exporter'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+
+  # PostgreSQL Exporter (database metrics - optional, install separately)
+  # - job_name: 'postgres-exporter'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
