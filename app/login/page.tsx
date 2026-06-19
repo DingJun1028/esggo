@@ -222,10 +222,7 @@ export default function LoginPage() {
         <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-100/20 rounded-full" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      <div
         className="z-10 w-full max-w-md p-8 rounded-3xl border border-slate-100 shadow-xl relative"
       >
         <Script
@@ -285,14 +282,12 @@ export default function LoginPage() {
           </div>
 
           {status === 'error' && errorMessage && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+            <div
               className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm"
             >
               <AlertCircle size={16} className="shrink-0" />
               <p>{errorMessage}</p>
-            </motion.div>
+            </div>
           )}
 
           <button
@@ -357,7 +352,7 @@ export default function LoginPage() {
         <p className="mt-6 text-center text-[10px] text-slate-400 font-mono tracking-wider">
           Secured by Zero Knowledge Proof & 5T Protocol
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
