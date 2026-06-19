@@ -761,6 +761,94 @@ export class OmniAgentBus {
       trigger: 'lock:engaged',
       handler: async (payload) => ({ unlocked: (payload as any)?.target, method: 'omni' }),
     });
+
+    // ── Memory Shard Skills ──────────────────────────────────────────
+    // Auto-extract shard from conversation events
+    this.registerSkill({
+      id: 'memory-extractor', name: '記憶萃取器',
+      description: 'Auto-extract memory shards from significant events',
+      trigger: 'skill:executed',
+      autonomy: true, cooldown: 60000,
+      handler: async (payload) => {
+        const { skillId, result, executionTime } = payload as any;
+        if (!skillId || !result) return;
+        try {
+          const { extractMemoryShard } = await import('../agent/memory-shards');
+          const conversationLog = `Skill: ${skillId}\nResult: ${JSON.stringify(result)}\nExecution Time: ${executionTime}ms`;
+          const shard = await extractMemoryShard(conversationLog, 'auto_extract', skillId);
+          await this.publish('memory:shard_extracted', { shardId: shard.id, title: shard.title });
+          return { extracted: true, shardId: shard.id };
+        } catch (e: any) {
+          console.warn('[MemoryExtractor] Failed:', e.message);
+          return { extracted: false, error: e.message };
+        }
+      },
+    });
+
+    // Synthesize ultimates when enough shards exist
+    this.registerSkill({
+      id: 'memory-synthesizer', name: '奧義合成器',
+      description: 'Synthesize skill ultimates from accumulated shards',
+      trigger: 'memory:shard_extracted',
+      autonomy: true, cooldown: 300000,
+      handler: async () => {
+        try {
+          const { retrieveMemoryShards, synthesizeSkillUltimate } = await import('../agent/memory-shards');
+          const { shards } = await retrieveMemoryShards({ limit: 10, orderBy: 'importance_score', orderDirection: 'desc' });
+          if (shards.length < 2) return { synthesized: false, reason: 'Not enough shards' };
+          // Pick shards with similar tags
+          const tagGroups: Record<string, typeof shards> = {};
+          for (const shard of shards) {
+            for (const tag of shard.tags.slice(0, 3)) {
+              if (!tagGroups[tag]) tagGroups[tag] = [];
+              tagGroups[tag].push(shard);
+            }
+          }
+          for (const [tag, group] of Object.entries(tagGroups)) {
+            if (group.length >= 2) {
+              const ultimate = await synthesizeSkillUltimate(group.slice(0, 5));
+              await this.publish('memory:ultimate_synthesized', { ultimateId: ultimate.id, skillName: ultimate.skillName });
+              return { synthesized: true, ultimateId: ultimate.id, skillName: ultimate.skillName };
+            }
+          }
+          return { synthesized: false, reason: 'No related shards found' };
+        } catch (e: any) {
+          console.warn('[MemorySynthesizer] Failed:', e.message);
+          return { synthesized: false, error: e.message };
+        }
+      },
+    });
+
+    // ESG Intelligence Crawler - Daily crawl from top 30 ESG sources
+    this.registerSkill({
+      id: 'esg-intelligence-crawler', name: 'ESG 情報爬取器',
+      description: 'Daily crawl from top 30 ESG intelligence sources, extract and synthesize memory shards',
+      trigger: 'system:autonomy:tick',
+      autonomy: true, cooldown: 86400000, // Once per day
+      handler: async () => {
+        try {
+          const { getESGCrawler } = await import('../services/firecrawl-esg-crawler');
+          const crawler = getESGCrawler();
+          console.log('[ESG Crawler] 開始每日 ESG 情報爬取...');
+
+          const { shards, crawlResults } = await crawler.crawlAndExtractShards();
+          const successCount = crawlResults.filter(r => r.success).length;
+
+          await this.publish('esg:crawl_complete', {
+            totalSources: crawlResults.length,
+            successCount,
+            failCount: crawlResults.length - successCount,
+            newShards: shards.length,
+          });
+
+          console.log(`[ESG Crawler] 完成: ${successCount}/${crawlResults.length} 成功, ${shards.length} 新碎片`);
+          return { crawled: true, sources: successCount, shards: shards.length };
+        } catch (e: any) {
+          console.warn('[ESG Crawler] Failed:', e.message);
+          return { crawled: false, error: e.message };
+        }
+      },
+    });
   }
 }
 
