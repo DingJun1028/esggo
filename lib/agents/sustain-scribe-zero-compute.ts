@@ -48,9 +48,8 @@ export class SustainWriteZeroComputeEngine {
     console.log(`[SustainWrite: Zero-Compute] 🏭 啟動 ${reportYear} 年度報告生成 (${EXPERT_CHAPTERS.length} 章節, 目標 24 萬字)`);
 
     // 1. 全域通知：通知所有 Agent 開始同步
-    await omniAgentBus.broadcastGlobalNotification(
-      `SustainWrite 零算力引擎啟動，正在編製 ${reportYear} 企業永續報告書 (GRI & CSRD 合規架構)`,
-      { action: 'REPORT_GENERATION_STARTED', companyId, chapters: EXPERT_CHAPTERS.length }
+    omniAgentBus.broadcastGlobalNotification(
+      `SustainWrite 零算力引擎啟動，正在編製 ${reportYear} 企業永續報告書 (GRI & CSRD 合規架構) - 行動: REPORT_GENERATION_STARTED, 公司: ${companyId}, 章節數: ${EXPERT_CHAPTERS.length}`
     );
 
     const generatedChapters = [];
@@ -90,8 +89,7 @@ export class SustainWriteZeroComputeEngine {
     console.log(`[SustainWrite: Zero-Compute] ✅ 全卷生成完畢。總計 ${EXPERT_CHAPTERS.length} 章，共約 ${totalWords} 字（字元）。`);
 
     await omniAgentBus.broadcastGlobalNotification(
-      `SustainWrite 永續報告生成完畢，總字數達 ${totalWords}，已全數通過 ZKP 封印。`,
-      { action: 'REPORT_GENERATION_COMPLETED', totalWords, chapters: generatedChapters }
+      `SustainWrite 永續報告生成完畢，總字數達 ${totalWords}，已全數通過 ZKP 封印。`
     );
 
     return { totalWords, chapters: generatedChapters };
