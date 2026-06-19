@@ -2,6 +2,21 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import xss from 'xss';
+
+const myXss = new xss.FilterXSS({
+  whiteList: {
+    ...xss.whiteList,
+    p: ['class'],
+    strong: ['class'],
+    code: ['class'],
+    li: ['class'],
+    td: ['class'],
+    span: ['class'],
+    div: ['class'],
+  },
+});
+
 import {
   Globe,
   Search,
@@ -353,7 +368,7 @@ export default function IntelligencePage() {
                 {report.content && (
                   <div
                     className="prose prose-sm max-w-none text-slate-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: report.content }}
+                    dangerouslySetInnerHTML={{ __html: myXss.process(report.content) }}
                   />
                 )}
                 {report.loading && report.content && (
