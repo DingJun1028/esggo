@@ -15,6 +15,9 @@ export default function OmniAgentFloatingAgent() {
   const { rs, status: rsStatus } = useOmniResonance();
   const [input, setInput] = useState('');
 
+  const handleDragStart = () => setIsDragging(true);
+  const handleDragEnd = () => setTimeout(() => setIsDragging(false), 150);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -35,15 +38,7 @@ export default function OmniAgentFloatingAgent() {
   }, [isOpen]);
 
   return (
-    <div
-      drag
-      dragMomentum={false}
-      onDragStart={() => setIsDragging(true)}
-      onDragEnd={(e, info) => {
-        setTimeout(() => setIsDragging(false), 150);
-      }}
-      className="fixed bottom-10 right-10 z-[10000] flex flex-col items-end"
-    >
+    <div className="fixed bottom-10 right-10 z-[10000] flex flex-col items-end">
       
         {isOpen && (
           <div
@@ -171,7 +166,6 @@ export default function OmniAgentFloatingAgent() {
       
 
       <button
-        whileTap={{ scale: 0.95 }}
         onClick={() => {
           if (!isDragging) setIsOpen(!isOpen);
         }}

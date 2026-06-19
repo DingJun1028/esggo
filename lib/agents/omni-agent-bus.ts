@@ -51,7 +51,7 @@ export class OmniAgentBus {
     // Placeholder for broadcast hook registration
   }
 
-  executeCelestialCommand(_cmd: string): Promise<string> {
+  executeCelestialCommand(_cmd: string, _context?: any): Promise<string> {
     return Promise.resolve('Celestial command executed');
   }
 
@@ -64,6 +64,10 @@ export class OmniAgentBus {
       clearInterval(this.autonomyTimer);
       this.autonomyTimer = null;
     }
+  }
+
+  broadcastGlobalNotification(_payload: any): void {
+    // Placeholder for global notification broadcast
   }
 }
 

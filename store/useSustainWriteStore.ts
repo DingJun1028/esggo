@@ -489,6 +489,12 @@ export const useSustainWriteStore = create<SustainWriteState>()(
         }));
       },
 
+      setRagContext: (chapterId, context) => {
+        set((s) => ({
+          ragContexts: { ...s.ragContexts, [chapterId]: context }
+        }));
+      },
+
       getWordCount: (chapterId) => {
         const content = get().generatedContent[chapterId] || '';
         return content.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length;
