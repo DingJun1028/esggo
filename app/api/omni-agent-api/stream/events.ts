@@ -1,4 +1,4 @@
-// @ts-nocheck
+// 5T End-to-End Type Safety Enforced
 /**
  * OmniAgentBus SSE Event Buffer
  * v2.0.0 | Production-Ready
@@ -22,13 +22,13 @@ const EVENT_BUFFER_MAX = 500;
 const DEDUP_WINDOW_MS = 5000;
 
 export const eventBuffer: BusEvent[] = [];
-export const subscribers: Set<(event: BusEvent) => void> = new Set();
+export const subscribers: ((event: BusEvent) => void)[] = [];
 
 // Event type statistics
-const eventStats: Map<string, number> = new Map();
+const eventStats: Record<string, number> = {};
 
 // Deduplication
-const recentEventKeys: Map<string, number> = new Map();
+const recentEventKeys: Record<string, number> = {};
 
 function getEventKey(event: string, payload: Record<string, unknown>): string {
   // Create a dedup key from event type + relevant payload fields
@@ -41,16 +41,16 @@ export function pushBusEvent(event: string, payload: Record<string, unknown>) {
 
   // Deduplication check
   const dedupKey = getEventKey(event, payload);
-  const lastSeen = recentEventKeys.get(dedupKey) || 0;
+  const lastSeen = recentEventKeys[dedupKey] || 0;
   if (now - lastSeen < DEDUP_WINDOW_MS) {
     return; // Skip duplicate
   }
-  recentEventKeys.set(dedupKey, now);
+  recentEventKeys[dedupKey] = now;
 
   // Cleanup old dedup entries
-  for (const [key, timestamp] of recentEventKeys) {
-    if (now - timestamp > DEDUP_WINDOW_MS) {
-      recentEventKeys.delete(key);
+  for (const key of Object.keys(recentEventKeys)) {
+    if (now - recentEventKeys[key] > DEDUP_WINDOW_MS) {
+      delete recentEventKeys[key];
     }
   }
 
@@ -68,7 +68,7 @@ export function pushBusEvent(event: string, payload: Record<string, unknown>) {
   }
 
   // Update stats
-  eventStats.set(event, (eventStats.get(event) || 0) + 1);
+  eventStats[event] = (eventStats[event] || 0) + 1;
 
   // Notify subscribers
   for (const cb of subscribers) {
@@ -81,11 +81,11 @@ export function pushBusEvent(event: string, payload: Record<string, unknown>) {
 }
 
 export function getEventStats(): Record<string, number> {
-  return Object.fromEntries(eventStats);
+  return { ...eventStats };
 }
 
 export function getSubscriberCount(): number {
-  return subscribers.size;
+  return subscribers.length;
 }
 
 export function getBufferUtilization(): { current: number; max: number; percent: number } {

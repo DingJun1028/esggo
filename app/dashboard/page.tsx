@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils';
 import OmniKpiCard from '@/components/omni/OmniKpiCard';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniPremiumCard } from '@/components/ui/omni/OmniPremiumCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 
@@ -279,9 +280,9 @@ export default function DashboardPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
             >
-              <div
+              <OmniPremiumCard
                 className={cn(
-                  'bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all duration-300',
+                  'p-5 flex flex-col',
                   getAccentBorderStyle(kpi.accentBorder)
                 )}
               >
@@ -309,8 +310,10 @@ export default function DashboardPage() {
                   <span className="text-2xl font-black text-[#003262]">{kpi.value}</span>
                   <span className="text-sm text-slate-400">{kpi.unit}</span>
                 </div>
-                <Protocol5TStrip status={kpi.fiveTStatus} />
-              </div>
+                <div className="mt-auto pt-2">
+                  <Protocol5TStrip status={kpi.fiveTStatus} />
+                </div>
+              </OmniPremiumCard>
             </motion.div>
           ))}
         </div>
