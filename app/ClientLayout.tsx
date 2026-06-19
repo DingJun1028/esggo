@@ -82,7 +82,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
     return (
       <>
         <ToastContainer />
-        <OmniCommandPalette />
+        {/* <OmniCommandPalette /> */}
         {children}
       </>
     );
@@ -104,7 +104,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
       <AppShellV2>
         {children}
         <ToastContainer />
-        <OmniCommandPalette />
+        {/* <OmniCommandPalette /> */}
       </AppShellV2>
     );
   }

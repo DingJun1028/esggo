@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   // Explicitly set the output file tracing root to the current directory
   // to help Next.js correctly infer the project root in dynamic deployment environments.
   outputFileTracingRoot: /*turbopackIgnore: true*/ path.join(__dirname, './'),
+  transpilePackages: ['framer-motion'],
   serverExternalPackages: [
     'genkit',
     'sharp',
