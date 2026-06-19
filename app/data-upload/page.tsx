@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Upload,
@@ -282,11 +282,8 @@ function FileUploadCard({ file, onRemove }: { file: UploadedFile; onRemove: () =
   const StatusIcon = config.icon;
 
   return (
-    <motion.div
+    <div
       layout
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: -100 }}
       className={cn(
         'bg-white rounded-xl border p-4 transition-all',
         file.status === 'error' ? 'border-rose-200' : 'border-slate-100'
@@ -334,8 +331,7 @@ function FileUploadCard({ file, onRemove }: { file: UploadedFile; onRemove: () =
       {/* Progress Bar */}
       {(file.status === 'uploading' || file.status === 'processing') && (
         <div className="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
+          <div
             animate={{ width: `${file.progress}%` }}
             className={cn(
               'h-full rounded-full',
@@ -366,7 +362,7 @@ function FileUploadCard({ file, onRemove }: { file: UploadedFile; onRemove: () =
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -380,9 +376,7 @@ function InsightCard({ insight }: { insight: DataInsight }) {
   const sc = severityConfig[insight.severity];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={cn('bg-white rounded-xl border p-4 hover:shadow-md transition-all', sc.border)}
     >
       <div className="flex items-start gap-3">
@@ -399,7 +393,7 @@ function InsightCard({ insight }: { insight: DataInsight }) {
           <p className="text-[11px] text-slate-500 leading-relaxed">{insight.description}</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -411,10 +405,8 @@ function EmissionsChart({ data }: { data: AnalysisResult }) {
       <div className="flex items-end gap-1 h-32">
         {data.trends.map((trend, i) => (
           <div key={i} className="flex-1 flex flex-col items-center gap-1">
-            <motion.div
-              initial={{ height: 0 }}
+            <div
               animate={{ height: `${(trend.value / maxEmission) * 100}%` }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
               className="w-full bg-gradient-to-t from-cyan-500 to-cyan-400 rounded-t-md min-h-[4px]"
             />
             <span className="text-[8px] text-slate-400">{trend.month.slice(5)}</span>
@@ -443,11 +435,9 @@ function ScopeBreakdown({ data }: { data: AnalysisResult }) {
       {/* Stacked Bar */}
       <div className="h-6 rounded-full overflow-hidden flex bg-slate-100">
         {scopes.map((scope) => (
-          <motion.div
+          <div
             key={scope.label}
-            initial={{ width: 0 }}
             animate={{ width: `${(scope.value / total) * 100}%` }}
-            transition={{ duration: 0.8 }}
             className={cn('h-full', scope.color)}
           />
         ))}
@@ -640,7 +630,7 @@ export default function DataUploadPage() {
                     </OmniButton>
                   )}
                 </div>
-                <AnimatePresence>
+                
                   {files.map((file) => (
                     <FileUploadCard
                       key={file.id}
@@ -648,7 +638,7 @@ export default function DataUploadPage() {
                       onRemove={() => handleRemoveFile(file.id)}
                     />
                   ))}
-                </AnimatePresence>
+                
               </div>
             )}
 
@@ -747,11 +737,8 @@ export default function DataUploadPage() {
                   ].map((stat, i) => {
                     const Icon = stat.icon;
                     return (
-                      <motion.div
+                      <div
                         key={stat.label}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.08 }}
                         className="bg-white rounded-xl border border-slate-100 p-4"
                       >
                         <div className="flex items-center justify-between mb-2">
@@ -772,7 +759,7 @@ export default function DataUploadPage() {
                           <span className="text-sm text-slate-400 ml-1">{stat.unit}</span>
                         </p>
                         <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </div>
@@ -808,10 +795,8 @@ export default function DataUploadPage() {
                         <span className="text-xs font-bold text-slate-400 w-4">{i + 1}</span>
                         <span className="text-xs text-slate-600 w-24 truncate">{emitter.name}</span>
                         <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
+                          <div
                             animate={{ width: `${emitter.percentage}%` }}
-                            transition={{ delay: i * 0.1, duration: 0.5 }}
                             className="h-full rounded-full bg-gradient-to-r from-rose-500 to-amber-500"
                           />
                         </div>

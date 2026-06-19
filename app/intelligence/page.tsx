@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   Globe,
   Search,
@@ -311,7 +311,7 @@ export default function IntelligencePage() {
 
         {/* ─── Report Card ─── */}
         {report.visible && (
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+          <div>
             <OmniBaseCard className="border-cyan-100 overflow-hidden">
               <div className="h-1 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400" />
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-5 border-b border-slate-100">
@@ -361,7 +361,7 @@ export default function IntelligencePage() {
                 )}
               </div>
             </OmniBaseCard>
-          </motion.div>
+          </div>
         )}
 
         {/* ─── Intelligence Table ─── */}

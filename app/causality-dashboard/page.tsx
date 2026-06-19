@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+
 import { Network, Search, Hash, Lock, Activity, RefreshCw } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -67,24 +67,20 @@ export default function CausalityDashboard() {
             ) : (
               <div className="space-y-6 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-cyan-400/0 before:via-cyan-400/50 before:to-cyan-400/0">
                 {nodes.map((node, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.6, delay: i * 0.2, type: 'spring', bounce: 0.4 }}
+                  <div
                     key={node.id} 
                     className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group"
                   >
-                    <motion.div 
+                    <div 
                       whileHover={{ scale: 1.1, rotate: 180 }}
-                      transition={{ duration: 0.3 }}
                       className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-gradient-to-br from-cyan-400 to-berkeley-blue text-white shadow-[0_0_15px_rgba(6,182,212,0.5)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 cursor-pointer"
                     >
                       {node.type === 'source' && <Activity size={20} />}
                       {node.type === 'metric' && <Hash size={20} />}
                       {node.type === 'report' && <Search size={20} />}
                       {node.type === 'seal' && <Lock size={20} className="text-california-gold drop-shadow-md" />}
-                    </motion.div>
-                    <motion.div 
+                    </div>
+                    <div 
                       whileHover={{ scale: 1.02, x: i % 2 === 0 ? 10 : -10 }}
                       className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-6 rounded-2xl bg-white/40 backdrop-blur-md shadow-glass border border-cyan-500/20 hover:border-cyan-400/60 transition-all cursor-pointer relative overflow-hidden"
                     >
@@ -100,8 +96,8 @@ export default function CausalityDashboard() {
                         <Lock size={12} className="text-cyan-500" /> 
                         {node.hash}
                       </div>
-                    </motion.div>
-                  </motion.div>
+                    </div>
+                  </div>
                 ))}
               </div>
             )}

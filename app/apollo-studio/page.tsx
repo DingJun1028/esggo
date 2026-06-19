@@ -237,8 +237,9 @@ export default function ApolloStudioPage() {
       });
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
-    } catch (e: unknown) {
-      setResult(JSON.stringify({ error: e.message }, null, 2));
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error.message : String(error);
+      setResult(JSON.stringify({ error: err }, null, 2));
     } finally {
       setLoading(false);
     }

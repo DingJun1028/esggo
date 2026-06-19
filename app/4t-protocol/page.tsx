@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// framer-motion 已移除，改用原生 CSS transition 避免 SSR 崩潰
 import {
   LucideIcon,
   ShieldCheck,
@@ -212,11 +212,10 @@ function DimensionCard({
 }) {
   const Icon = dimension.icon;
 
+  // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
+      style={{ transition: 'all 0.4s ease' }}
       className="bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg transition-all"
     >
       <button onClick={onToggle} className="w-full p-5 text-left">
@@ -266,47 +265,40 @@ function DimensionCard({
         </div>
       </button>
 
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="px-5 pb-5 border-t border-slate-50 pt-4">
-              <p className="text-sm text-slate-500 leading-relaxed mb-4">{dimension.description}</p>
-              <div className="space-y-2">
-                <p className="text-[10px] font-bold text-slate-400 uppercase">驗證項目</p>
-                {dimension.checks.map((check, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
-                    <span className="text-xs text-slate-600">{check}</span>
-                  </div>
-                ))}
+      {/* 使用條件渲染取代 AnimatePresence，避免 SSR 崩潰 */}
+      {isExpanded && (
+        <div className="overflow-hidden" style={{ transition: 'all 0.3s ease' }}>
+          <div className="px-5 pb-5 border-t border-slate-50 pt-4">
+            <p className="text-sm text-slate-500 leading-relaxed mb-4">{dimension.description}</p>
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold text-slate-400 uppercase">驗證項目</p>
+              {dimension.checks.map((check, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
+                  <span className="text-xs text-slate-600">{check}</span>
+                </div>
+              ))}
+            </div>
+            {/* Score Bar */}
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] text-slate-400">評分</span>
+                <span className="text-[10px] font-bold text-[#003262]">
+                  {dimension.score}/100
+                </span>
               </div>
-              {/* Score Bar */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] text-slate-400">評分</span>
-                  <span className="text-[10px] font-bold text-[#003262]">
-                    {dimension.score}/100
-                  </span>
-                </div>
-                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${dimension.score}%` }}
-                    transition={{ duration: 0.8 }}
-                    className={cn('h-full rounded-full', dimension.color.replace('text-', 'bg-'))}
-                  />
-                </div>
+              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                {/* 使用原生 div 取代 motion.div，避免 SSR 崩潰 */}
+                <div
+                  style={{ width: `${dimension.score}%`, transition: 'width 0.8s ease' }}
+                  className={cn('h-full rounded-full', dimension.color.replace('text-', 'bg-'))}
+                />
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -390,17 +382,16 @@ export default function FourTProtocolPage() {
           ].map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              /* 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰 */
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
+                style={{ transition: 'all 0.4s ease' }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -456,15 +447,12 @@ export default function FourTProtocolPage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <AnimatePresence mode="wait">
-              {activeTab === 'dimensions' && (
-                <motion.div
-                  key="dimensions"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-4"
-                >
+            {/* 使用條件渲染取代 AnimatePresence，避免 SSR 崩潰 */}
+            {activeTab === 'dimensions' && (
+              <div
+                style={{ transition: 'all 0.4s ease' }}
+                className="space-y-4"
+              >
                   <div>
                     <h2 className="text-lg font-bold text-[#003262] mb-1">五維度驗證</h2>
                     <p className="text-xs text-slate-400">每個維度都有獨立的驗證邏輯與評分</p>
@@ -478,15 +466,12 @@ export default function FourTProtocolPage() {
                       onToggle={() => setExpandedDim(expandedDim === dim.id ? null : dim.id)}
                     />
                   ))}
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'process' && (
-                <motion.div
+                <div
                   key="process"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                 >
                   <OmniBaseCard className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -505,15 +490,12 @@ export default function FourTProtocolPage() {
                       </div>
                     </div>
                   </OmniBaseCard>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'compliance' && (
-                <motion.div
+                <div
                   key="compliance"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                   className="space-y-4"
                 >
                   <div>
@@ -536,10 +518,8 @@ export default function FourTProtocolPage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
+                          <div
                             animate={{ width: `${framework.score}%` }}
-                            transition={{ duration: 0.8 }}
                             className={cn(
                               'h-full rounded-full',
                               framework.score >= 80
@@ -556,9 +536,9 @@ export default function FourTProtocolPage() {
                       </div>
                     </OmniBaseCard>
                   ))}
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
           </div>
 
           {/* Right Sidebar */}

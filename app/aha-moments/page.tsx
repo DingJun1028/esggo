@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Lightbulb,
@@ -227,10 +227,7 @@ function AhaMomentCard({
   const Icon = moment.icon;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
       className="relative"
     >
       {/* Timeline Line */}
@@ -288,12 +285,9 @@ function AhaMomentCard({
           </div>
         </button>
 
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+            <div
               className="overflow-hidden"
             >
               <div className="bg-white rounded-b-2xl border border-t-0 border-slate-100 p-5 -mt-2 space-y-4">
@@ -337,11 +331,11 @@ function AhaMomentCard({
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -377,18 +371,15 @@ export default function AhaMomentsPage() {
           {JOURNEY_STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
                 <p className="text-[9px] text-slate-300 mt-0.5">{stat.description}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>

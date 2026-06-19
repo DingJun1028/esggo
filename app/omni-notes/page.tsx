@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   StickyNote,
@@ -156,11 +156,8 @@ function NoteCard({
   };
 
   return (
-    <motion.div
+    <div
       layout
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
       className={cn(
         'bg-white rounded-xl border p-4 hover:shadow-md transition-all duration-200 group',
         isPinned ? 'border-amber-200 bg-amber-50/30' : 'border-slate-100'
@@ -218,7 +215,7 @@ function NoteCard({
           <Trash2 size={14} />
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -285,9 +282,7 @@ function NoteEditor({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={cn("bg-white rounded-2xl border shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[600px]", isDark ? "border-slate-800 bg-[#0f172a]" : "border-slate-100")}
     >
       {/* LEFT COLUMN: Markdown Editor */}
@@ -461,7 +456,7 @@ function NoteEditor({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -696,13 +691,10 @@ export default function OmniNotesPage() {
         </OmniBaseCard>
 
         {/* ─── Content Area ─── */}
-        <AnimatePresence mode="wait">
+        
           {viewMode === 'editor' ? (
-            <motion.div
+            <div
               key="editor"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
             >
               <NoteEditor
                 note={editingNote}
@@ -712,13 +704,10 @@ export default function OmniNotesPage() {
                   setViewMode('list');
                 }}
               />
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
+            <div
               key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
             >
               {filteredNotes.length === 0 ? (
                 <div className="py-16 text-center">
@@ -746,9 +735,9 @@ export default function OmniNotesPage() {
                   ))}
                 </div>
               )}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
 
         {/* ─── Integration Info ─── */}
         <OmniBaseCard className="border-cyan-100 bg-cyan-50/30">

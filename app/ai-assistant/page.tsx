@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Bot,
@@ -155,9 +155,7 @@ function ChatBubble({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={cn('flex gap-3 my-4', isUser ? 'flex-row-reverse' : 'flex-row')}
     >
       {/* Avatar */}
@@ -233,14 +231,14 @@ function ChatBubble({
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function QuickActionCard({ action, onClick }: { action: QuickAction; onClick: () => void }) {
   const Icon = action.icon;
   return (
-    <motion.button
+    <button
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
@@ -255,7 +253,7 @@ function QuickActionCard({ action, onClick }: { action: QuickAction; onClick: ()
       </div>
       <h4 className="text-sm font-bold text-[#003262] mb-1">{action.label}</h4>
       <p className="text-[10px] text-slate-400 line-clamp-2">{action.prompt}</p>
-    </motion.button>
+    </button>
   );
 }
 
@@ -470,18 +468,15 @@ export default function AIAssistantPage() {
               </div>
 
               {/* Context Panel */}
-              <AnimatePresence>
+              
                 {showContext && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
+                  <div
                     className="overflow-hidden"
                   >
                     <ContextPanel contexts={contexts} />
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
+              
 
               {/* Input Area */}
               <div className="p-4 border-t border-slate-100">

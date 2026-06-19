@@ -18,6 +18,7 @@ export default [
       "components/UserList.js",
       "lib/page.js",
       "User.js",
+      "vscode-acp/**",
     ],
   },
   {

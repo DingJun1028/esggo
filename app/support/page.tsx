@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   MessageSquare,
   Send,
@@ -109,9 +109,7 @@ function ChatBubble({ message }: { message: ChatMessage }) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={cn('flex gap-2 my-3', isUser ? 'flex-row-reverse' : 'flex-row')}
     >
       <div
@@ -146,7 +144,7 @@ function ChatBubble({ message }: { message: ChatMessage }) {
           })}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -292,12 +290,9 @@ export default function SupportChatPage() {
         </header>
 
         {/* ─── Chat Area ─── */}
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+            <div
               className="bg-white rounded-2xl border border-slate-100 overflow-hidden"
             >
               {/* Messages */}
@@ -337,12 +332,9 @@ export default function SupportChatPage() {
                     className={cn('transition-transform', showFAQ && 'rotate-90')}
                   />
                 </button>
-                <AnimatePresence>
+                
                   {showFAQ && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
+                    <div
                       className="overflow-hidden"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
@@ -362,9 +354,9 @@ export default function SupportChatPage() {
                           </button>
                         ))}
                       </div>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
+                
               </div>
 
               {/* Input */}
@@ -397,9 +389,9 @@ export default function SupportChatPage() {
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
 
         {/* ─── Contact Options ─── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -428,7 +420,7 @@ export default function SupportChatPage() {
           ].map((option) => {
             const Icon = option.icon;
             return (
-              <motion.button
+              <button
                 key={option.title}
                 whileHover={{ y: -2 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-left hover:shadow-md transition-all"
@@ -437,7 +429,7 @@ export default function SupportChatPage() {
                 <h4 className="text-sm font-bold text-[#003262]">{option.title}</h4>
                 <p className="text-xs text-slate-500 mt-0.5">{option.desc}</p>
                 <p className="text-[10px] text-slate-300 mt-0.5">{option.sub}</p>
-              </motion.button>
+              </button>
             );
           })}
         </div>

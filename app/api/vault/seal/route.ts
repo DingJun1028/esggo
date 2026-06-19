@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       hashLock,
       sourceOrigin,
       timestamp: rawSealData.timestamp
-    }).catch(console.warn);
+    });
 
     return NextResponse.json({
       success: true,

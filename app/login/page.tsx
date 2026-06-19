@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { Lock, Mail, ArrowRight, Fingerprint, ShieldCheck } from 'lucide-react';
 
 export default function LoginPage() {
@@ -49,9 +48,7 @@ export default function LoginPage() {
         <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-100/30 rounded-full" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
         className="z-10 w-full max-w-md"
       >
         {/* Logo */}
@@ -120,7 +117,7 @@ export default function LoginPage() {
         <p className="mt-4 text-center text-[10px] text-slate-400 font-mono">
           Secured by 5T Protocol · 真善美信通
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }

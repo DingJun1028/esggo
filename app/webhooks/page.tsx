@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Zap,
   Globe,
@@ -220,10 +220,8 @@ function WebhookCard({
   const StatusIcon = config.icon;
 
   return (
-    <motion.div
+    <div
       layout
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
       className={cn(
         'bg-white rounded-xl border p-4 hover:shadow-md transition-all',
         webhook.status === 'error'
@@ -324,7 +322,7 @@ function WebhookCard({
           <button className="text-cyan-600 hover:text-cyan-800 font-medium">查看日誌</button>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -395,12 +393,9 @@ function LogRow({ log }: { log: WebhookLog }) {
         )}
       </button>
 
-      <AnimatePresence>
+      
         {expanded && log.payload && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+          <div
             className="overflow-hidden"
           >
             <div className="px-2 pb-3">
@@ -416,9 +411,9 @@ function LogRow({ log }: { log: WebhookLog }) {
                 </pre>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }
@@ -679,19 +674,13 @@ export default function WebhooksPage() {
         )}
 
         {/* ─── Create Modal ─── */}
-        <AnimatePresence>
+        
           {showCreateModal && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
               onClick={() => setShowCreateModal(false)}
             >
-              <motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
+              <div
                 className="bg-white rounded-2xl p-6 w-full max-w-lg"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -756,10 +745,10 @@ export default function WebhooksPage() {
                     </OmniButton>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );

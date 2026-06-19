@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   FileText,
@@ -195,7 +195,7 @@ const GENERATION_STEPS: GenerationStep[] = [
 function TemplateCard({ template, onSelect }: { template: ReportTemplate; onSelect: () => void }) {
   const Icon = template.icon;
   return (
-    <motion.div
+    <div
       whileHover={{ y: -4, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       className="bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all cursor-pointer group"
@@ -238,7 +238,7 @@ function TemplateCard({ template, onSelect }: { template: ReportTemplate; onSele
           </span>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -254,7 +254,7 @@ function ProjectCard({ project }: { project: ReportProject }) {
   const StatusIcon = config.icon;
 
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2 }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
@@ -283,10 +283,8 @@ function ProjectCard({ project }: { project: ReportProject }) {
           <span className="font-mono font-bold text-[#003262]">{project.progress}%</span>
         </div>
         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
+          <div
             animate={{ width: `${project.progress}%` }}
-            transition={{ duration: 0.8 }}
             className={cn(
               'h-full rounded-full',
               project.status === 'completed'
@@ -347,7 +345,7 @@ function ProjectCard({ project }: { project: ReportProject }) {
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -488,11 +486,8 @@ export default function ReportBuilderPage() {
           ].map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
                 className="bg-white rounded-xl border border-slate-100 p-4"
               >
                 <div className="flex items-center justify-between mb-2">
@@ -503,7 +498,7 @@ export default function ReportBuilderPage() {
                 </div>
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -564,9 +559,7 @@ export default function ReportBuilderPage() {
             </div>
 
             {selectedTemplate && (
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
+              <div
                 className="mt-6 bg-white rounded-2xl border border-slate-100 p-6"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -602,7 +595,7 @@ export default function ReportBuilderPage() {
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
         )}

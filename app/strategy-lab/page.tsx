@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Zap, Brain, Shield, Sparkles, Send, Target, Rocket, Lock, 
   RefreshCw, Bot, TrendingUp, ChevronRight, BarChart3, 
@@ -144,15 +144,13 @@ export default function StrategyLabPage() {
         hidden: activeMode !== 'consensus',
         component: (
           <div className="h-full">
-            <AnimatePresence mode="wait">
+            
               {result ? (
-                <motion.div key="result" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
+                <div key="result" className="space-y-6">
                    <Card className="p-8 bg-white/40 backdrop-blur-sm border-white/60 shadow-sm overflow-hidden">
                       <ConsensusVisualizer result={result} />
                    </Card>
-                   <motion.div 
-                     initial={{ y: 20, opacity: 0 }}
-                     animate={{ y: 0, opacity: 1 }}
+                   <div
                      className="p-8 bg-berkeley-blue rounded-[3rem] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden"
                    >
                       <div className="flex items-center gap-6 relative z-10">
@@ -170,10 +168,10 @@ export default function StrategyLabPage() {
                       <div className="absolute top-1/2 right-0 -translate-y-1/2 opacity-[0.03] pointer-events-none">
                          <Shield size={240} className="text-white" />
                       </div>
-                   </motion.div>
-                </motion.div>
+                   </div>
+                </div>
               ) : isEvaluating ? (
-                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full min-h-[500px] border border-slate-100 rounded-[3rem] bg-white/60 backdrop-blur-md flex flex-col items-center justify-center p-12 text-center shadow-inner">
+                <div key="loading" className="h-full min-h-[500px] border border-slate-100 rounded-[3rem] bg-white/60 backdrop-blur-md flex flex-col items-center justify-center p-12 text-center shadow-inner">
                    <div className="relative">
                       <div className="w-28 h-28 rounded-full border-4 border-berkeley-blue/20 border-t-berkeley-blue animate-spin" />
                       <Brain size={48} className="absolute inset-0 m-auto text-berkeley-blue animate-pulse" />
@@ -183,7 +181,7 @@ export default function StrategyLabPage() {
                        <p className="text-[11px] font-bold text-slate-500 flex items-center justify-center gap-3"><BrandStatusDot status="active" pulse /> Z0-Auditor 正在檢查法規合規性...</p>
                        <p className="text-[11px] font-bold text-slate-500 flex items-center justify-center gap-3"><BrandStatusDot status="active" pulse /> H1-Diplomat 正在模擬社會影響力...</p>
                    </div>
-                </motion.div>
+                </div>
               ) : (
                 <div className="h-full min-h-[500px] border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center bg-slate-50/50 text-slate-300 p-12 text-center group hover:border-berkeley-blue/20 transition-all">
                    <div className="w-24 h-24 rounded-[2.5rem] bg-slate-100 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
@@ -193,7 +191,7 @@ export default function StrategyLabPage() {
                    <p className="text-[12px] mt-4 max-w-xs leading-relaxed font-medium text-slate-400/80">請在左側輸入您的企業願景，啟動 AI 自主治理流程。OmniAgent 將匯集所有專家的共識權重。</p>
                 </div>
               )}
-            </AnimatePresence>
+            
           </div>
         )
       },

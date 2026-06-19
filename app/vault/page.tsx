@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   FileText,
   Lock,
@@ -376,7 +376,7 @@ export default function VaultPage() {
               const statusConfig = getStatusConfig(record.status);
               const StatusIcon = statusConfig.icon;
               return (
-                <motion.div
+                <div
                   key={record.id}
                   layout
                   className="bg-white rounded-xl border border-slate-100 p-4"
@@ -422,7 +422,7 @@ export default function VaultPage() {
                     </div>
                     <span className="text-[10px] text-slate-400">{record.createdAt}</span>
                   </div>
-                </motion.div>
+                </div>
               );
             })
           )}

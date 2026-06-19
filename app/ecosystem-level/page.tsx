@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Globe,
   Zap,
@@ -188,10 +188,7 @@ function FeatureCard({
 }) {
   const Icon = feature.icon;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
       className="bg-white rounded-2xl border border-slate-100 p-6 hover:shadow-lg transition-all"
     >
       <div className="flex items-center gap-3 mb-4">
@@ -222,7 +219,7 @@ function FeatureCard({
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -234,10 +231,7 @@ function MilestoneItem({
   index: number;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.08 }}
+    <div
       className="flex items-start gap-3"
     >
       <div className="flex flex-col items-center">
@@ -262,7 +256,7 @@ function MilestoneItem({
         <h4 className="text-xs font-bold text-[#003262]">{milestone.title}</h4>
         <p className="text-[10px] text-slate-400">{milestone.description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -352,18 +346,15 @@ export default function EcosystemLevelPage() {
           {ECOSYSTEM_STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
                 <p className="text-[9px] text-slate-300 mt-0.5">{stat.description}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -414,13 +405,10 @@ export default function EcosystemLevelPage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <AnimatePresence mode="wait">
+            
               {activeTab === 'features' && (
-                <motion.div
+                <div
                   key="features"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                   className="space-y-4"
                 >
                   <div>
@@ -432,15 +420,12 @@ export default function EcosystemLevelPage() {
                       <FeatureCard key={feature.id} feature={feature} index={i} />
                     ))}
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'timeline' && (
-                <motion.div
+                <div
                   key="timeline"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                 >
                   <OmniBaseCard className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -453,15 +438,12 @@ export default function EcosystemLevelPage() {
                       ))}
                     </div>
                   </OmniBaseCard>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'comparison' && (
-                <motion.div
+                <div
                   key="comparison"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                 >
                   <OmniBaseCard className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -485,9 +467,9 @@ export default function EcosystemLevelPage() {
                       ))}
                     </div>
                   </OmniBaseCard>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
           </div>
 
           {/* Right Sidebar */}

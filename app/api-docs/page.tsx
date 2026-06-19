@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Globe,
   Code,
@@ -195,12 +195,9 @@ function EndpointCard({ endpoint }: { endpoint: APIEndpoint }) {
         )}
       </button>
 
-      <AnimatePresence>
+      
         {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+          <div
             className="overflow-hidden"
           >
             <div className="p-4 pt-0 border-t border-slate-50 space-y-4">
@@ -256,9 +253,9 @@ function EndpointCard({ endpoint }: { endpoint: APIEndpoint }) {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </OmniBaseCard>
   );
 }
@@ -414,7 +411,7 @@ export default function APIDocsPage() {
           ].map((resource) => {
             const Icon = resource.icon;
             return (
-              <motion.button
+              <button
                 key={resource.title}
                 whileHover={{ y: -2 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-left hover:shadow-md transition-all"
@@ -422,7 +419,7 @@ export default function APIDocsPage() {
                 <Icon size={20} className={cn('mb-2', resource.color)} />
                 <h4 className="text-sm font-bold text-[#003262]">{resource.title}</h4>
                 <p className="text-[10px] text-slate-400 mt-0.5">{resource.desc}</p>
-              </motion.button>
+              </button>
             );
           })}
         </div>

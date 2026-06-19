@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   Leaf,
   Droplets,
@@ -274,11 +274,8 @@ export default function DashboardPage() {
         {/* ─── KPI Cards ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {KPI_CARDS.map((kpi, i) => (
-            <motion.div
+            <div
               key={kpi.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
             >
               <OmniPremiumCard
                 className={cn(
@@ -314,7 +311,7 @@ export default function DashboardPage() {
                   <Protocol5TStrip status={kpi.fiveTStatus} />
                 </div>
               </OmniPremiumCard>
-            </motion.div>
+            </div>
           ))}
         </div>
 

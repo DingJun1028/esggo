@@ -1,6 +1,6 @@
 // components/FloatingKey.tsx
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// 已移除 framer-motion 以避免 SSR 崩潰，改用 CSS transition
 import { v4 as uuidv4 } from 'uuid'; // 假設使用 uuid 庫
 
 // 萬能元件心核規範
@@ -30,35 +30,30 @@ const FloatingKey: React.FC = () => {
   return (
     <>
       {/* 浮動功能鍵 - 液態玻璃質感 */}
-      <motion.button
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        whileTap={{ scale: 0.9 }}
+      <button
+        style={{ transition: 'all 0.4s ease' }}
         className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-blue-500/30 -md border border-white/20 shadow-lg flex items-center justify-center text-white z-50"
         onClick={() => setIsOpen(!isOpen)}
       >
         ⚛️
-      </motion.button>
+      </button>
 
       {/* 數據監控面板 */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-28 right-8 w-80 p-6 rounded-2xl bg-slate-900/80 border border-blue-500/30 shadow-2xl z-50 text-xs text-blue-100 font-mono"
-          >
-            <h3 className="text-sm font-bold mb-2">OmniAgent 心核狀態</h3>
-            <div className="space-y-1">
-              <p>UUID: {core.uuid.slice(0, 8)}...</p>
-              <p>Hash: {getHashSignature()}</p>
-              <p>
-                Status: <span className="text-green-400">Object.frozen</span>
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div
+          style={{ transition: 'all 0.4s ease' }}
+          className="fixed bottom-28 right-8 w-80 p-6 rounded-2xl bg-slate-900/80 border border-blue-500/30 shadow-2xl z-50 text-xs text-blue-100 font-mono"
+        >
+          <h3 className="text-sm font-bold mb-2">OmniAgent 心核狀態</h3>
+          <div className="space-y-1">
+            <p>UUID: {core.uuid.slice(0, 8)}...</p>
+            <p>Hash: {getHashSignature()}</p>
+            <p>
+              Status: <span className="text-green-400">Object.frozen</span>
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 };

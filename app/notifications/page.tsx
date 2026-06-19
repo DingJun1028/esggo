@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Bell,
   Mail,
@@ -235,11 +235,8 @@ function NotificationCard({
   };
 
   return (
-    <motion.div
+    <div
       layout
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: -100 }}
       className={cn(
         'bg-white rounded-xl border p-4 transition-all hover:shadow-md',
         !notification.read ? 'border-cyan-200 bg-cyan-50/20' : 'border-slate-100'
@@ -303,13 +300,13 @@ function NotificationCard({
           <X size={14} className="text-slate-300" />
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function EmailTemplateCard({ template }: { template: EmailTemplate }) {
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2 }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
@@ -353,7 +350,7 @@ function EmailTemplateCard({ template }: { template: EmailTemplate }) {
           <span>最後發送: {new Date(template.lastSent).toLocaleDateString('zh-TW')}</span>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -518,7 +515,7 @@ export default function NotificationsPage() {
             </div>
 
             {/* Notification List */}
-            <AnimatePresence>
+            
               {filteredNotifications.length > 0 ? (
                 <div className="space-y-3">
                   {filteredNotifications.map((notification) => (
@@ -536,7 +533,7 @@ export default function NotificationsPage() {
                   <p className="text-sm text-slate-400">沒有符合條件的通知</p>
                 </div>
               )}
-            </AnimatePresence>
+            
           </div>
         )}
 

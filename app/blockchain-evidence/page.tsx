@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Link,
@@ -195,9 +195,7 @@ function BlockRecordCard({ record }: { record: BlockRecord }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={cn(
         'bg-white rounded-xl border p-4 transition-all',
         record.status === 'confirmed' ? 'border-slate-100' : 'border-amber-200 bg-amber-50/30'
@@ -271,7 +269,7 @@ function BlockRecordCard({ record }: { record: BlockRecord }) {
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -323,12 +321,9 @@ function AnchoringStepCard({
             )}
           </div>
         </button>
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+            <div
               className="overflow-hidden"
             >
               <div className="bg-white rounded-b-xl border border-t-0 border-slate-100 p-4 -mt-2">
@@ -342,9 +337,9 @@ function AnchoringStepCard({
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );
@@ -404,17 +399,14 @@ export default function BlockchainEvidencePage() {
           ].map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -470,13 +462,10 @@ export default function BlockchainEvidencePage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <AnimatePresence mode="wait">
+            
               {activeTab === 'blocks' && (
-                <motion.div
+                <div
                   key="blocks"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                   className="space-y-4"
                 >
                   <div className="flex items-center justify-between">
@@ -496,15 +485,12 @@ export default function BlockchainEvidencePage() {
                   {BLOCKCHAIN_RECORDS.map((record) => (
                     <BlockRecordCard key={record.id} record={record} />
                   ))}
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'process' && (
-                <motion.div
+                <div
                   key="process"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                 >
                   <OmniBaseCard className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -531,15 +517,12 @@ export default function BlockchainEvidencePage() {
                       </div>
                     </div>
                   </OmniBaseCard>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'specs' && (
-                <motion.div
+                <div
                   key="specs"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                   className="space-y-4"
                 >
                   <div>
@@ -555,9 +538,9 @@ export default function BlockchainEvidencePage() {
                       </OmniBaseCard>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
           </div>
 
           {/* Right Sidebar */}

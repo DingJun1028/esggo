@@ -2,7 +2,7 @@
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   LucideIcon,
   User,
@@ -232,20 +232,17 @@ function AwakeningRadar() {
         })}
 
         {/* Data Area */}
-        <motion.path
+        <path
           d={pathData}
           fill="rgba(6, 182, 212, 0.15)"
           stroke="#06B6D4"
           strokeWidth={2}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
           style={{ transformOrigin: `${center}px ${center}px` }}
         />
 
         {/* Data Points */}
         {points.map((p, i) => (
-          <motion.circle
+          <circle
             key={i}
             cx={p.x}
             cy={p.y}
@@ -253,9 +250,6 @@ function AwakeningRadar() {
             fill="#06B6D4"
             stroke="#FFFFFF"
             strokeWidth={2}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 + i * 0.1 }}
             className="breathing-glow"
           />
         ))}
@@ -321,7 +315,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
   const config = rarityConfig[achievement.rarity];
 
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2, scale: 1.02 }}
       className={cn(
         'rounded-xl border p-4 transition-all relative overflow-hidden',
@@ -359,7 +353,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
           </p>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -454,11 +448,8 @@ export default function UserPassportPage() {
 
             <div className="space-y-4">
               {AWAKENING_PILLARS.map((pillar, i) => (
-                <motion.div
+                <div
                   key={pillar.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
                   className="bg-white rounded-xl border border-slate-100 p-4"
                 >
                   <div className="flex items-center gap-3 mb-2">
@@ -481,14 +472,12 @@ export default function UserPassportPage() {
                     </div>
                   </div>
                   <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
+                    <div
                       animate={{ width: `${pillar.score}%` }}
-                      transition={{ duration: 0.8, delay: 0.3 + i * 0.1 }}
                       className={cn('h-full rounded-full', pillar.color.replace('text-', 'bg-'))}
                     />
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -532,11 +521,8 @@ export default function UserPassportPage() {
                 const Icon = metric.icon;
                 const isPositive = metric.trend && metric.trend > 0;
                 return (
-                  <motion.div
+                  <div
                     key={metric.label}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.08 }}
                     className="bg-white rounded-xl border border-slate-100 p-4"
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -559,7 +545,7 @@ export default function UserPassportPage() {
                       )}
                     </p>
                     <p className="text-[10px] text-slate-400 font-medium mt-0.5">{metric.label}</p>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>

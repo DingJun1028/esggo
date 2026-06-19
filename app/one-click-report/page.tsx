@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   FileText,
   Zap,
@@ -151,10 +151,8 @@ function SectionRow({ section }: { section: ReportSection }) {
         </div>
         {section.status !== 'pending' && (
           <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
+            <div
               animate={{ width: `${section.progress}%` }}
-              transition={{ duration: 0.8 }}
               className={cn(
                 'h-full rounded-full',
                 section.status === 'completed' ? 'bg-emerald-500' : 'bg-blue-500'
@@ -349,17 +347,14 @@ export default function OneClickReportPage() {
           ].map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={18} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -539,19 +534,13 @@ export default function OneClickReportPage() {
         </div>
 
         {/* ─── Preview Modal ─── */}
-        <AnimatePresence>
+        
           {showPreview && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
               onClick={() => setShowPreview(false)}
             >
-              <motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
+              <div
                 className="bg-white rounded-2xl p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -606,10 +595,10 @@ export default function OneClickReportPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );

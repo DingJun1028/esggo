@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Trophy, Users, Calendar, ClipboardCheck, Star,
   ArrowRight, ExternalLink, ChevronDown, ChevronRight,
@@ -142,9 +142,7 @@ export default function GreenTechCompetition() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-12">
         {/* ─── Hero Section ──────────────────────────────────── */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <section
           className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-600 p-8 sm:p-12 text-white shadow-2xl"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_70%)]" />
@@ -189,13 +187,10 @@ export default function GreenTechCompetition() {
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* ─── Stats Row ──────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+        <div
           className="grid grid-cols-2 sm:grid-cols-4 gap-4"
         >
           {[
@@ -216,13 +211,10 @@ export default function GreenTechCompetition() {
               </div>
             </BrandCard>
           ))}
-        </motion.div>
+        </div>
 
         {/* ─── Participating Companies ────────────────────────── */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+        <section
         >
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -240,11 +232,8 @@ export default function GreenTechCompetition() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {COMPANIES.map((company, i) => (
-              <motion.div
+              <div
                 key={company.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.03 }}
                 className="group relative bg-white/80 backdrop-blur-sm rounded-2xl border border-emerald-100/60 p-5 hover:shadow-lg hover:border-emerald-200 transition-all cursor-pointer"
               >
                 <div className="space-y-2">
@@ -259,16 +248,13 @@ export default function GreenTechCompetition() {
                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                   <ChevronRight size={14} className="text-emerald-400" />
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.section>
+        </section>
 
         {/* ─── Timeline ──────────────────────────────────────── */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+        <section
         >
           <h2 className="text-xl font-black text-emerald-900 mb-6">
             {lang === 'zh' ? '競賽時程' : 'Timeline'}
@@ -277,11 +263,8 @@ export default function GreenTechCompetition() {
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-emerald-200 via-emerald-300 to-teal-200 hidden sm:block" />
             <div className="space-y-4">
               {TIMELINE.map((item, i) => (
-                <motion.div
+                <div
                   key={item.phase}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
                   className="relative flex items-start gap-5 bg-white/70 backdrop-blur-sm rounded-2xl border border-emerald-100/50 p-5 hover:shadow-md transition-all"
                 >
                   <div className={cn(
@@ -297,17 +280,14 @@ export default function GreenTechCompetition() {
                   <div className="hidden sm:flex items-center">
                     <ChevronRight size={16} className="text-slate-300" />
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* ─── About Section ─────────────────────────────────── */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+        <section
         >
           <div className="grid md:grid-cols-2 gap-6">
             <BrandCard className="p-8 bg-white/70 backdrop-blur-sm border-emerald-100/50">
@@ -350,13 +330,10 @@ export default function GreenTechCompetition() {
               </div>
             </BrandCard>
           </div>
-        </motion.section>
+        </section>
 
         {/* ─── CTA ───────────────────────────────────────────── */}
-        <motion.section
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
+        <section
           className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-600 p-10 sm:p-14 text-white text-center shadow-2xl"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.1),transparent_60%)]" />
@@ -379,7 +356,7 @@ export default function GreenTechCompetition() {
               </BrandButton>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* ─── Footer ────────────────────────────────────────── */}
         <footer className="pt-8 pb-12 border-t border-emerald-100/50">

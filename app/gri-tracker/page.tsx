@@ -9,7 +9,7 @@ import {
   BrandButton, BrandBadge, BrandCard, BrandTable, BrandTabs, BrandStatusDot, BrandProgress, StandardPage, BrandCardHeader 
 } from '../../components/brand';
 import { UniversalPageConfig } from '../../lib/page-config';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { ComplianceEngine, GRIComplianceNode } from '../../lib/omni-core/compliance-engine';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -232,14 +232,11 @@ export default function GRITrackerPage() {
     <>
       <StandardPage config={pageConfig} />
       
-      <AnimatePresence>
+      
         {selected && (
           <div className="fixed inset-0 z-100 flex items-center justify-center p-6 lg:p-12">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setSelected(null)} />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }} 
-              animate={{ opacity: 1, scale: 1, y: 0 }} 
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl" onClick={() => setSelected(null)} />
+            <div
               className="relative bg-white/95 backdrop-blur-2xl rounded-[40px] border border-white shadow-extreme p-10 lg:p-14 max-w-2xl w-full overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px] -mr-32 -mt-32" />
@@ -302,10 +299,10 @@ export default function GRITrackerPage() {
                  <BrandButton variant="ghost" className="rounded-xl h-12" onClick={() => setSelected(null)}>關閉視窗</BrandButton>
                  <BrandButton variant="primary" className="rounded-2xl h-14 px-10 shadow-xl" onClick={() => window.location.href='/editor'}>前往撰寫編輯器 <ArrowUpRight size={16} className="ml-2" /></BrandButton>
               </footer>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
+      
     </>
   );
 }

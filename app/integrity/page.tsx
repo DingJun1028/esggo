@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { ShieldCheck, Fingerprint, Database, Cpu, Lock, CheckCircle, Terminal } from 'lucide-react';
 
 // ============================================================================
@@ -119,12 +119,10 @@ export default function IntegrityPage() {
             >
               {isGenerating ? (
                 <span className="flex items-center justify-center gap-2">
-                  <motion.div 
-                    animate={{ rotate: 360 }} 
-                    transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                  <div
                   >
                     <Cpu className="w-5 h-5" />
-                  </motion.div>
+                  </div>
                   運算中... (ZKP Generating)
                 </span>
               ) : (
@@ -137,11 +135,9 @@ export default function IntegrityPage() {
           </div>
 
           {/* Visualization / Animation Area */}
-          <AnimatePresence>
+          
             {proofData && (
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+              <div
                 className="bg-gradient-to-br from-[#002014] to-[#111111] border border-[#52C41A]/30 rounded-xl p-6 shadow-2xl relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-4">
@@ -157,9 +153,9 @@ export default function IntegrityPage() {
                   <p><span className="text-gray-500">Public Signal:</span> <br/>{JSON.stringify(proofData.public_signal)}</p>
                   <p><span className="text-gray-500">Proof [pi_a]:</span> <br/>{proofData.zkp_proof.pi_a.join(", ")}</p>
                 </div>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          
         </div>
 
         {/* Right Column: Audit Trail */}
@@ -180,24 +176,19 @@ export default function IntegrityPage() {
                 <div className="text-gray-600 italic">等待操作指令...</div>
               )}
               {auditLogs.map((log, i) => (
-                <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
+                <div
                   key={i} 
                   className={`${log.includes('✅') || log.includes('成功') ? 'text-[#52C41A]' : log.includes('異常') ? 'text-red-400' : 'text-gray-300'}`}
                 >
                   {log}
-                </motion.div>
+                </div>
               ))}
               {isGenerating && (
-                <motion.div 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: [0, 1, 0] }} 
-                  transition={{ repeat: Infinity, duration: 1 }}
+                <div
                   className="text-[#FDB515]"
                 >
                   _
-                </motion.div>
+                </div>
               )}
               <div ref={logEndRef} />
             </div>
