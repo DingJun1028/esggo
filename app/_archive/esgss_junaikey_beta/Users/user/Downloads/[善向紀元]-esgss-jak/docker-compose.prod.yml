@@ -1,0 +1,146 @@
+version: '3.8'
+
+services:
+  esg-dashboard:
+    image: ghcr.io/${GITHUB_REPOSITORY}:latest
+    container_name: esg-dashboard
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=https://api.esg-dashboard.com
+      - VITE_ENVIRONMENT=production
+    volumes:
+      - nginx_logs:/var/log/nginx
+      - nginx_cache:/tmp/nginx_cache
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - esg-api
+    networks:
+      - esg-prod-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  esg-api:
+    image: node:18-alpine
+    container_name: esg-api
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://esg_user:${DB_PASSWORD}@esg-db:5432/esg_dashboard
+      - REDIS_URL=redis://esg-redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+      - API_SECRET=${API_SECRET}
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    command: sh -c "npm install --production && npm start"
+    depends_on:
+      - esg-db
+      - esg-redis
+    networks:
+      - esg-prod-network
+    restart: unless-stopped
+
+  esg-db:
+    image: postgres:15-alpine
+    container_name: esg-db
+    environment:
+      - POSTGRES_DB=esg_dashboard
+      - POSTGRES_USER=esg_user
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - prod_postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./backup:/backup
+    ports:
+      - "5432:5432"
+    networks:
+      - esg-prod-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U esg_user -d esg_dashboard"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  esg-redis:
+    image: redis:7-alpine
+    container_name: esg-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - prod_redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - esg-prod-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # 監控服務
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: esg-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - esg-prod-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: esg-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - esg-prod-network
+    restart: unless-stopped
+
+volumes:
+  prod_postgres_data:
+    driver: local
+  prod_redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  nginx_logs:
+    driver: local
+  nginx_cache:
+    driver: local
+
+networks:
+  esg-prod-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16

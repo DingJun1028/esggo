@@ -1,0 +1,43 @@
+{
+    // 使用 IntelliSense 以得知可用的屬性。
+    // 暫留以檢視現有屬性的描述。
+    // 如需詳細資訊，請瀏覽: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Deploy Cloud Function",
+            "type": "cloudcode.cloudfunctions",
+            "request": "launch",
+            "functionName": "esggo_alpha",
+            "gen": "GEN_2",
+            "runtime": "nodejs20",
+            "entryPoint": "helloWorld",
+            "testInput": "",
+            "revision": "",
+            "region": "asia-east1"
+        },
+        {
+            "name": "Next.js: debug server-side",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev"
+        },
+        {
+            "name": "Next.js: debug client-side",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000"
+        },
+        {
+            "name": "Next.js: debug full stack",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev",
+            "serverReadyAction": {
+                "pattern": "- Local:.+(https?://.+)",
+                "uriFormat": "%s",
+                "action": "debugWithChrome"
+            }
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+node.exe : A newer ve
+rsion of MCP: v2025-1
+1-25 is available. Pl
+ease use MCP_v2025112
+5 to use the latest f
+eatures.
+位於 線路:1 字元:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Program Files\nodejs
+/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (A newer   
+  version...atest    
+ features.:Strin    g
+) [], RemoteExc    ep
+tion
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 

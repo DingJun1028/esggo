@@ -1,0 +1,355 @@
+[
+  {
+    "file": "src/omni/core/OmniChing.ts",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 2717,
+    "lines": 70,
+    "corruptedLines": [
+      6,
+      8,
+      24,
+      43
+    ],
+    "problematicContent": [
+      {
+        "line": 8,
+        "content": " * [?�質] ?�慧決�??�萬?��?變�??��?，基?�「�?經」�??�、�??�、簡?��??��?"
+      }
+    ]
+  },
+  {
+    "file": "src/omni/core/OmniClue.ts",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 1860,
+    "lines": 61,
+    "corruptedLines": [
+      5,
+      7,
+      16,
+      21,
+      52,
+      56
+    ],
+    "problematicContent": [
+      {
+        "line": 5,
+        "content": " * ?�� OmniClue (奧�?線索)"
+      },
+      {
+        "line": 7,
+        "content": " * [?�質] ?�佳實�?· ?��??�示 · ?�慧導�?"
+      },
+      {
+        "line": 21,
+        "content": "    philosophy: \"?�佳實踐�??��?程�?�?,"
+      }
+    ]
+  },
+  {
+    "file": "src/omni/core/OmniOrb.ts",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 2665,
+    "lines": 75,
+    "corruptedLines": [
+      5,
+      7,
+      28,
+      31,
+      49,
+      52,
+      57,
+      67
+    ],
+    "problematicContent": [
+      {
+        "line": 5,
+        "content": " * ?�� OmniOrb (奧�?法�? / ?�能法�?)"
+      },
+      {
+        "line": 7,
+        "content": " * [?�質] ?�通無�?· 上�?下�? · ?�縫?��? (突破後�?首�??�為?�萬?��?"
+      },
+      {
+        "line": 31,
+        "content": "    axiom: \"上�?下�?，無縫接�?"
+      },
+      {
+        "line": 49,
+        "content": "     * [TC] 觀測�?宙�??��?紀??5T ?��?流�???"
+      },
+      {
+        "line": 57,
+        "content": "     * [TC] ???三�?一體�?點�?確�??��??��?流�???"
+      },
+      {
+        "line": 67,
+        "content": "     * [TC] 將奧秘�??�顯?�為?��??��???(突破?�萬?��?????"
+      }
+    ]
+  },
+  {
+    "file": "src/adk/agents/OmniMasterAgent.ts",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 5871,
+    "lines": 159,
+    "corruptedLines": [
+      4,
+      24,
+      48,
+      63,
+      66,
+      81,
+      98,
+      110,
+      119,
+      140,
+      157
+    ],
+    "problematicContent": [
+      {
+        "line": 4,
+        "content": " * [?�質] 統�??��??�??ADK 工具?�MECE ?��??��???MCP ?�主權代??"
+      },
+      {
+        "line": 63,
+        "content": "            '奧�??�環之�? ??統�??�??ADK 工具??4 ??MECE ?��??��???MCP ?�主權代?��? +"
+      },
+      {
+        "line": 66,
+        "content": "        philosophy: '?��??�然，系統�??��?上�??�水，�??�永續�?,"
+      }
+    ]
+  },
+  {
+    "file": "src/config/antigravity-routes-utf8.tsx",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 4844,
+    "lines": 185,
+    "corruptedLines": [
+      16,
+      33,
+      40,
+      42,
+      51,
+      53,
+      62,
+      64,
+      73,
+      75,
+      84,
+      86,
+      95,
+      97,
+      106,
+      108,
+      117,
+      119,
+      128,
+      130,
+      139,
+      141,
+      150,
+      154,
+      161,
+      168,
+      174,
+      181
+    ],
+    "problematicContent": []
+  },
+  {
+    "file": "src/pages/OmniSensePage.tsx",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 42854,
+    "lines": 602,
+    "corruptedLines": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      119,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      165,
+      166,
+      205,
+      219,
+      246,
+      247,
+      248,
+      282,
+      291,
+      299,
+      308,
+      312,
+      319,
+      323,
+      344,
+      354,
+      372,
+      374,
+      399,
+      409,
+      422,
+      427,
+      429,
+      434,
+      449,
+      457,
+      468,
+      479,
+      511,
+      542,
+      544
+    ],
+    "problematicContent": [
+      {
+        "line": 29,
+        "content": "    { name: \"?��?�?(Midnight Blue)\", hex: \"#001F3F\", desc: \"?�景?�石，穩定�?覺熵?? },"
+      },
+      {
+        "line": 138,
+        "content": "      ?��?�???��??�典?��??�容??"
+      },
+      {
+        "line": 140,
+        "content": "      ?��?安全?��?級為 ${aiAnalysis.securityRating}??"
+      },
+      {
+        "line": 141,
+        "content": "      視覺?�值辨識�??�為 ${aiAnalysis.aestheticEntropy}??"
+      },
+      {
+        "line": 142,
+        "content": "      ?��?總�?�?{aiAnalysis.summary}??"
+      },
+      {
+        "line": 143,
+        "content": "      ?��??�建議�??��?${aiAnalysis.complianceNotes.join('??)}??"
+      },
+      {
+        "line": 144,
+        "content": "      ?�後�?天使?��?引�?${aiAnalysis.futureGuidance}??"
+      },
+      {
+        "line": 145,
+        "content": "      �??完畢??"
+      },
+      {
+        "line": 166,
+        "content": "                        systemInstruction: { parts: [{ text: \"你是?��??�核?��?，�??��?業台????�者口?��?體中?��?答。�??��?簡短精確?? }] }"
+      },
+      {
+        "line": 219,
+        "content": "                        systemInstruction: { parts: [{ text: \"精通數?��?天使?�。輸?��?體中??JSON?? }] }"
+      },
+      {
+        "line": 282,
+        "content": "                                                <span className=\"font-black tracking-[0.2em] text-sm uppercase block\">?�"
+      },
+      {
+        "line": 291,
+        "content": "                                                <Fingerprint className=\"w-4 h-4 text-cyan-500\" /> 永憶?��??��? (UUID)"
+      },
+      {
+        "line": 299,
+        "content": "                                                <label className=\"text-[10px] text-slate-500 uppercase tracking-[0.4em]\""
+      },
+      {
+        "line": 308,
+        "content": "                                                <div className=\"text-[10px] text-slate-500 uppercase font-bold tracking-"
+      },
+      {
+        "line": 312,
+        "content": "                                                <div className=\"text-[10px] text-slate-500 uppercase font-bold tracking-"
+      },
+      {
+        "line": 319,
+        "content": "                                            <Camera className=\"w-6 h-6\" /> ?��??�典辨�??��?"
+      },
+      {
+        "line": 323,
+        "content": "                                            ???�造數?�能?��?�?"
+      },
+      {
+        "line": 344,
+        "content": "                                                    <span className=\"text-xs font-black text-white tracking-widest upper"
+      },
+      {
+        "line": 354,
+        "content": "                                            <p className=\"text-sm font-light italic tracking-widest\">等�??��?神�??��??�騰.."
+      },
+      {
+        "line": 372,
+        "content": "                                                ?��??��?話系�?<span className=\"text-[10px] bg-cyan-500/20 text-cyan-400 px"
+      },
+      {
+        "line": 374,
+        "content": "                                            <p className=\"text-xs text-slate-500 font-light italic\">�?��??��?��?波長，隨?��?"
+      },
+      {
+        "line": 399,
+        "content": "                                            <FileText className=\"text-cyan-400 w-12 h-12\" /> ?��??��??�典?��?"
+      },
+      {
+        "line": 409,
+        "content": "                                                    <span className=\"text-xs font-black text-cyan-100 block group-hover:"
+      },
+      {
+        "line": 434,
+        "content": "                                                    <ScrollText className=\"w-7 h-7 text-cyan-500\" /> ?��?建議?��?證路�?"
+      },
+      {
+        "line": 449,
+        "content": "                                                    <h4 className=\"text-sm font-bold text-cyan-400 mb-3 uppercase tracki"
+      },
+      {
+        "line": 457,
+        "content": "                                        <div className=\"flex flex-col items-center justify-center py-40 text-slate-800\">"
+      },
+      {
+        "line": 468,
+        "content": "                                            <h3 className=\"font-black text-sm uppercase tracking-widest\">??溯�??��??��?</"
+      },
+      {
+        "line": 479,
+        "content": "                                                <p className=\"text-xs leading-relaxed italic font-light\">?�可以�??��??�麥?�"
+      },
+      {
+        "line": 542,
+        "content": "                                <h2 className=\"text-5xl font-black text-white italic tracking-tighter\">AQUA <span classN"
+      },
+      {
+        "line": 544,
+        "content": "                                    ?��??�在?�極?��?純淨?��?覺熵減�??�放棄細節，而是?��?神�?比�??�闢?��??��?官空?�。�?"
+      }
+    ]
+  },
+  {
+    "file": "src/scripts/verify_eternal_convergence.ts",
+    "encoding": "UTF-8",
+    "bom": false,
+    "size": 9728,
+    "lines": 77,
+    "corruptedLines": [],
+    "problematicContent": [
+      {
+        "line": 55,
+        "content": "        const wisdom = await omniChing.consult('How to attain perpetual永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永永"
+      }
+    ]
+  }
+]

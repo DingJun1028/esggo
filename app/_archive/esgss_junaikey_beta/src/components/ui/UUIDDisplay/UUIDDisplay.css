@@ -1,0 +1,160 @@
+/**
+ * UUID Display Component Styles
+ * UUID È°ØÁ§∫ÁµÑ‰ª∂Ê®??
+ */
+
+/* ============================================================================
+   UUID Display ?∫Á?Ê®??
+   ============================================================================ */
+
+.uuid-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  user-select: none;
+}
+
+/* È°ØÁ§∫Ê®°Â? */
+.uuid-display--full {
+  padding: 8px 12px;
+}
+
+.uuid-display--short {
+  padding: 6px 10px;
+}
+
+.uuid-display--compact {
+  padding: 4px 8px;
+  gap: 4px;
+}
+
+/* ============================================================================
+   UUID Card Ê®??
+   ============================================================================ */
+
+.uuid-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.uuid-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00FFFF, #26A69A, #00FFFF);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+}
+
+/* ============================================================================
+   UUID List Ê®??
+   ============================================================================ */
+
+.uuid-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ============================================================================
+   ?øÊ?ÂºèË®≠Ë®?   ============================================================================ */
+
+@media (max-width: 600px) {
+  .uuid-display--full {
+    padding: 6px 10px;
+  }
+
+  .uuid-display--short {
+    padding: 4px 8px;
+  }
+
+  .uuid-card {
+    padding: 16px;
+  }
+}
+
+/* ============================================================================
+   Ê∑±Ëâ≤Ê®°Â?
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  .uuid-card {
+    background: rgba(30, 30, 30, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .uuid-list > div {
+    background: rgba(30, 30, 30, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .uuid-list > div:hover {
+    background: rgba(30, 30, 30, 0.8);
+  }
+}
+
+/* ============================================================================
+   ?°È?Á§ôÊîØ??   ============================================================================ */
+
+.uuid-display:focus-within {
+  outline: 2px solid #00FFFF;
+  outline-offset: 2px;
+}
+
+/* ?µÁõ§Â∞éËà™ */
+.uuid-display button:focus-visible {
+  outline: 2px solid #00FFFF;
+  outline-offset: 2px;
+}
+
+/* È´òÂ?ÊØîÂ∫¶Ê®°Â? */
+@media (prefers-contrast: high) {
+  .uuid-display {
+    border-width: 2px;
+  }
+
+  .uuid-card {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================================
+   Ê∏õÂ??ïÁï´?èÂ•Ω
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .uuid-card::before {
+    animation: none;
+  }
+
+  .uuid-display,
+  .uuid-card,
+  .uuid-list > div {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   ?ìÂç∞Ê®??
+   ============================================================================ */
+
+@media print {
+  .uuid-display {
+    border: 1px solid #000;
+    background: none;
+  }
+
+  .uuid-card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .uuid-display button {
+    display: none;
+  }
+}
+

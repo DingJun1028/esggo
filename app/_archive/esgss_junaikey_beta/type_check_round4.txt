@@ -1,0 +1,5 @@
+src/services/historicalDataAnalysis.ts(900,33): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(125,19): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(126,28): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(126,46): error TS2532: Object is possibly 'undefined'.
+src/services/scalability.ts(434,12): error TS2532: Object is possibly 'undefined'.

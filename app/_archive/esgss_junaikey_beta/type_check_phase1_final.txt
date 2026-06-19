@@ -1,0 +1,68 @@
+
+> esgss-universal-system@0.1.0-beta type-check
+> tsc --noEmit
+
+src/components/SkillMatrix.tsx(105,29): error TS2322: Type '"default" | "outline"' is not assignable to type '"primary" | "secondary" | "outline" | "ghost" | "danger" | undefined'.
+  Type '"default"' is not assignable to type '"primary" | "secondary" | "outline" | "ghost" | "danger" | undefined'.
+src/components/SkillMatrix.tsx(177,53): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: { [s: string]: number; } | ArrayLike<number>): [string, number][]', gave the following error.
+    Argument of type 'Partial<RpgAttributes> | undefined' is not assignable to parameter of type '{ [s: string]: number; } | ArrayLike<number>'.
+      Type 'undefined' is not assignable to type '{ [s: string]: number; } | ArrayLike<number>'.
+  Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+    Argument of type 'Partial<RpgAttributes> | undefined' is not assignable to parameter of type '{}'.
+      Type 'undefined' is not assignable to type '{}'.
+src/components/ui/Popover.tsx(36,17): error TS2571: Object is of type 'unknown'.
+src/components/WorldMap.tsx(157,26): error TS2532: Object is possibly 'undefined'.
+src/core/OmniProxy.tsx(32,43): error TS2345: Argument of type '(props: P, ref: React.ForwardedRef<any>) => JSX.Element' is not assignable to parameter of type 'ForwardRefRenderFunction<any, PropsWithoutRef<P>>'.
+  Types of parameters 'props' and 'props' are incompatible.
+    Type 'PropsWithoutRef<P>' is not assignable to type 'P'.
+      'PropsWithoutRef<P>' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'object'.
+        Type 'object' is not assignable to type 'P'.
+          'object' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint 'object'.
+src/data/esg-omnipotent-data.ts(2,26): error TS2305: Module '"../types/esg"' has no exported member 'OmniCrystal'.
+src/data/rpg-data.ts(202,5): error TS2739: Type '{ intelligence: number; creativity: number; empathy: number; resilience: number; precision: number; speed: number; }' is missing the following properties from type 'RpgAttributes': ecoAwareness, ethicalBias, computePower
+src/hooks/useAgentRpg.ts(203,13): error TS2322: Type 'number' is not assignable to type 'Date | DateTime | undefined'.
+src/hooks/useAgentRpg.ts(231,13): error TS2322: Type 'number' is not assignable to type 'Date | DateTime | undefined'.
+src/hooks/useLegion.ts(65,37): error TS2339: Property 'processMissionTick' does not exist on type 'typeof LegionEngine'.
+src/omni/infrastructure/core/OmniCoreEngine.ts(68,22): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'OmniKey'.
+src/omni/infrastructure/core/OmniCoreEngine.ts(87,19): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'OmniKey'.
+src/services/esgPredictor.ts(63,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/services/esgPredictor.ts(236,55): error TS2532: Object is possibly 'undefined'.
+src/services/esgPredictor.ts(284,31): error TS2532: Object is possibly 'undefined'.
+src/services/esgPredictor.ts(336,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/services/esgPredictor.ts(348,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/services/EventEngine.ts(60,20): error TS18048: 'base' is possibly 'undefined'.
+src/services/EventEngine.ts(61,26): error TS18048: 'base' is possibly 'undefined'.
+src/services/EventEngine.ts(62,23): error TS18048: 'base' is possibly 'undefined'.
+src/services/EventEngine.ts(63,23): error TS18048: 'base' is possibly 'undefined'.
+src/services/EventEngine.ts(66,24): error TS18048: 'base' is possibly 'undefined'.
+src/services/EventEngine.ts(68,23): error TS18048: 'base' is possibly 'undefined'.
+src/services/historicalDataAnalysis.ts(760,10): error TS2532: Object is possibly 'undefined'.
+src/services/historicalDataAnalysis.ts(760,30): error TS2532: Object is possibly 'undefined'.
+src/services/historicalDataAnalysis.ts(900,33): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(121,60): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(125,19): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(126,28): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(126,46): error TS2532: Object is possibly 'undefined'.
+src/services/omniAdminService.ts(137,9): error TS2322: Type '{ timestamp: string; level: string | undefined; message: string | undefined; source: string | undefined; }[]' is not assignable to type '{ timestamp: string; level: string; message: string; source: string; }[]'.
+  Type '{ timestamp: string; level: string | undefined; message: string | undefined; source: string | undefined; }' is not assignable to type '{ timestamp: string; level: string; message: string; source: string; }'.
+    Types of property 'level' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+src/services/OmniSustainableGrowth.ts(20,14): error TS2304: Cannot find name 'ImpactMetrics'.
+src/services/OmniSustainableGrowth.ts(51,24): error TS2304: Cannot find name 'ImpactMetrics'.
+src/services/OmniSustainableGrowth.ts(70,75): error TS2304: Cannot find name 'ImpactMetrics'.
+src/services/OmniSynthesizer.ts(1,20): error TS2307: Cannot find module '@faker-js/faker' or its corresponding type declarations.
+src/services/realTimeDataSync.ts(336,11): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/services/realTimeDataSync.ts(337,36): error TS18048: 'task.startTime' is possibly 'undefined'.
+src/services/scalability.ts(433,5): error TS2532: Object is possibly 'undefined'.
+src/services/scalability.ts(434,12): error TS2532: Object is possibly 'undefined'.
+src/services/securityService.ts(919,37): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/services/ServiceRegistry.ts(355,9): error TS2532: Object is possibly 'undefined'.
+src/services/stakeholderService.ts(247,56): error TS18048: 'filters.startDate' is possibly 'undefined'.
+src/services/stakeholderService.ts(250,56): error TS18048: 'filters.endDate' is possibly 'undefined'.

@@ -1,0 +1,71 @@
+# Example queries for ESGGO app.
+
+# @auth() directives control who can call each operation.
+# Anyone should be able to list all tasks, so the auth level is set to PUBLIC
+query ListTasks @auth(level: PUBLIC, insecureReason: "Anyone can list all tasks.") {
+  tasks {
+    id
+    title
+    status
+    priority
+    completed
+  }
+}
+
+# List all users, only admins should be able to list all users, so we use NO_ACCESS
+query ListUsers @auth(level: NO_ACCESS) {
+  users {
+    id
+    displayName
+    email
+  }
+}
+
+# Logged in users can list all their tasks
+# Since the query uses the uid of the current authenticated user, we set auth level to USER
+query ListUserTasks @auth(level: USER) {
+  user(key: { id_expr: "auth.uid" }) {
+    id
+    displayName
+    email
+    # <field>_on_<foreign_key_field> makes it easy to grab info from another table
+    # Here, we use it to grab all the tasks written by the user.
+    tasks: tasks_on_user {
+      id
+      title
+      status
+      priority
+      completed
+    }
+  }
+}
+
+# Get task by id
+query GetTaskById($id: UUID!) @auth(level: PUBLIC, insecureReason: "Anyone can get a task by id.") {
+  task(id: $id) {
+    id
+    title
+    status
+    priority
+    completed
+    user {
+      id
+      displayName
+    }
+  }
+}
+
+# Search for tasks
+query SearchTask($titleInput: String, $status: String) @auth(level: PUBLIC, insecureReason: "Anyone can search for tasks.") {
+  tasks(
+    where: {
+      _and: [{ status: { eq: $status } }, { title: { contains: $titleInput } }]
+    }
+  ) {
+    id
+    title
+    status
+    priority
+    completed
+  }
+}

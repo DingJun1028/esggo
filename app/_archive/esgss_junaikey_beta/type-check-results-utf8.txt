@@ -1,0 +1,6 @@
+
+> sustain-forward-esg-allinone@8.2.0-sentient-tangible type-check
+> tsc --noEmit
+
+server/src/services/UnifiedAdvancementService.ts(604,64): error TS1002: Unterminated string literal.
+server/src/services/UnifiedAdvancementService.ts(605,9): error TS1005: ',' expected.

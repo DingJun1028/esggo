@@ -1,0 +1,21 @@
+{
+  "name": "@esggo/types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for the ESGGO monorepo.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "esggo",
+    "types",
+    "shared",
+    "typescript"
+  ],
+  "author": "OmniAgent",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

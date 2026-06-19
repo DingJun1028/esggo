@@ -1,12 +1,7 @@
 'use client';
+
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
-
-/**
- * ESG GO | Unified Auth Context
- * Fully Migrated to Supabase (Data/RLS/Auth)
- * Monitors Platform System Health
- */
 
 export type SystemStatus = 'online' | 'degraded' | 'offline';
 
@@ -38,74 +33,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [companyId, setCompanyId] = useState('default');
   const [systemStatus, setSystemStatus] = useState<SystemStatus>('online');
 
-  // Using @supabase/ssr for browser client
-  // Memoize the client to avoid re-creating on every render
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const supabaseKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    '';
-
-  const supabase = React.useMemo(() => {
-    if (!supabaseUrl || !supabaseKey) return null;
-    try {
-      return createBrowserClient(supabaseUrl, supabaseKey);
-    } catch {
-      return null;
-    }
-  }, [supabaseUrl, supabaseKey]);
-
   useEffect(() => {
-    // 1. Monitor Browser Network Connectivity
-    const updateOnlineStatus = () => setSystemStatus(navigator.onLine ? 'online' : 'offline');
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
+    const hasSupabase = !!(supabaseUrl && supabaseKey && !supabaseUrl.includes('placeholder'));
 
-    // 2. Initial Local Sync & Demo Data Fallback
+    // Always try localStorage first (works in browser)
+    let localUser: any = null;
     try {
       const local = localStorage.getItem('omni_user');
       if (local && local !== 'undefined') {
-        const parsed = JSON.parse(local);
-        if (parsed?.company_id) setCompanyId(parsed.company_id);
+        localUser = JSON.parse(local);
       }
-    } catch (e) {
-      console.warn('[Auth] Local parse fail, cleared');
-      localStorage.removeItem('omni_user');
+    } catch {
+      // ignore
     }
 
-    // 3. Supabase Auth Session listener
+    if (!hasSupabase) {
+      // Demo mode — use localStorage or default
+      if (localUser) {
+        setUser({
+          id: localUser.id || 'dev_user',
+          email: localUser.email || 'demo@esggo.com',
+          role: localUser.role || 'superadmin',
+          ...localUser,
+        });
+        setCompanyId(localUser.company_id || 'esg-sunshine');
+      } else {
+        setUser({ id: 'demo_user', email: 'demo@esggo.com', role: 'superadmin' });
+        setCompanyId('esg-sunshine');
+      }
+      setSystemStatus('online');
+      setLoading(false);
+      return;
+    }
+
+    // Supabase mode
+    const supabase = createBrowserClient(supabaseUrl, supabaseKey);
+
     const initSession = async () => {
       try {
-        if (!supabase) {
-          console.warn('[Auth] Supabase client 未初始化，使用 demo 模式');
-          setSystemStatus('degraded');
-          // Fallback: read from localStorage
-          try {
-            const localUser = localStorage.getItem('omni_user');
-            if (localUser && localUser !== 'undefined') {
-              const parsed = JSON.parse(localUser);
-              setUser({
-                email: parsed?.email || 'dev@esggo.com',
-                id: parsed?.id || 'dev_user',
-                role: parsed?.role || 'superadmin',
-                ...parsed,
-              });
-              setCompanyId(parsed?.company_id || 'default');
-            }
-          } catch (e) {
-            console.warn('[Auth] localStorage parse error', e);
-          }
-          setLoading(false);
-          return;
-        }
-
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {
-          console.warn('[Supabase Auth] Session fetch error', error.message);
+          console.warn('[Supabase Auth] Session error', error.message);
           setSystemStatus('degraded');
         }
 
@@ -117,32 +88,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             ...session.user.user_metadata,
           });
           setSystemStatus('online');
+        } else if (localUser) {
+          setUser({
+            id: localUser.id || 'dev_user',
+            email: localUser.email || 'demo@esggo.com',
+            role: localUser.role || 'superadmin',
+            ...localUser,
+          });
+          setCompanyId(localUser.company_id || 'esg-sunshine');
         } else {
-          // Demo fallback logic if no user session
-          const localUser = localStorage.getItem('omni_user');
-          if (localUser && localUser !== 'undefined') {
-            try {
-              const parsed = JSON.parse(localUser);
-              setCompanyId(parsed?.company_id || 'default');
-              setUser({
-                email: parsed?.email || 'dev@esggo.com',
-                id: parsed?.id || 'dev_user',
-                role: parsed?.role || 'superadmin',
-                ...parsed,
-              });
-            } catch (e) {
-              setCompanyId('default');
-              setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
-            }
-          } else {
-            setCompanyId('default');
-            setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
-          }
+          setUser({ id: 'demo_user', email: 'demo@esggo.com', role: 'superadmin' });
+          setCompanyId('esg-sunshine');
         }
       } catch (err) {
         console.error('[Auth Init] Failed', err);
         setSystemStatus('degraded');
-        setLoading(false);
+        if (localUser) {
+          setUser({ id: localUser.id || 'dev_user', email: localUser.email || 'demo@esggo.com', ...localUser });
+        }
       } finally {
         setLoading(false);
       }
@@ -150,15 +113,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initSession();
 
-    // 只有在 supabase 有效時才監聽 auth state change
-    if (!supabase?.auth) {
-      return () => {
-        window.removeEventListener('online', updateOnlineStatus);
-        window.removeEventListener('offline', updateOnlineStatus);
-      };
-    }
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser({
           id: session.user.id,
@@ -167,17 +122,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           ...session.user.user_metadata,
         });
         setSystemStatus('online');
-      } else {
-        setUser({ email: 'dev@esggo.com', id: 'dev_user', role: 'superadmin' });
       }
     });
 
     return () => {
       authListener.subscription.unsubscribe();
-      window.removeEventListener('online', updateOnlineStatus);
-      window.removeEventListener('offline', updateOnlineStatus);
     };
-  }, [supabase]);
+  }, []);
 
   const value = {
     user,

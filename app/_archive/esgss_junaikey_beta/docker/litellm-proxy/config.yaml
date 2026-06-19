@@ -1,0 +1,126 @@
+# LiteLLM Proxy Configuration
+# ==================================================
+# Unified AI Gateway for ESGss x JunAiKey Beta
+# Supports 100+ LLM providers with automatic fallback
+# ==================================================
+
+model_list:
+  # ============================================
+  # Primary Models
+  # ============================================
+
+  # OpenAI GPT-4o (Primary)
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: gpt-4o-mini
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY
+
+  # Anthropic Claude (Fallback)
+  - model_name: claude-sonnet
+    litellm_params:
+      model: anthropic/claude-sonnet-4-20250514
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  - model_name: claude-haiku
+    litellm_params:
+      model: anthropic/claude-3-5-haiku-20241022
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # Google Gemini (Cost-effective)
+  - model_name: gemini-flash
+    litellm_params:
+      model: gemini/gemini-2.0-flash
+      api_key: os.environ/GOOGLE_API_KEY
+
+  # Local Ollama (Free/Offline)
+  - model_name: local-llm
+    litellm_params:
+      model: ollama/llama3.2
+      api_base: http://localhost:11434
+
+  # ============================================
+  # Embedding Models
+  # ============================================
+
+  - model_name: text-embedding-3-small
+    litellm_params:
+      model: openai/text-embedding-3-small
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: text-embedding-3-large
+    litellm_params:
+      model: openai/text-embedding-3-large
+      api_key: os.environ/OPENAI_API_KEY
+
+# ============================================
+# Router Settings (Load Balancing & Fallback)
+# ============================================
+router_settings:
+  routing_strategy: 'latency-based-routing'
+  num_retries: 3
+  timeout: 60
+  allowed_fails: 2
+  cooldown_time: 30
+
+  # Model Group for automatic fallback
+  model_group_alias:
+    default-chat: ['gpt-4o', 'claude-sonnet', 'gemini-flash']
+    fast-chat: ['gpt-4o-mini', 'claude-haiku', 'gemini-flash']
+    local-chat: ['local-llm']
+
+# ============================================
+# General Settings
+# ============================================
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/LITELLM_DATABASE_URL
+
+  # Logging
+  json_logs: true
+  store_model_in_db: true
+
+  # Budget & Limits
+  max_budget: 100.0 # $100 default monthly budget
+  budget_duration: 'monthly'
+
+# ============================================
+# Caching (Optional - uses Redis if available)
+# ============================================
+litellm_settings:
+  cache: true
+  cache_params:
+    type: 'local' # Change to "redis" for production
+    ttl: 3600
+
+# ============================================
+# MCP Servers Configuration
+# ============================================
+mcp_servers:
+  - server_label: 'esg_data'
+    description: 'ESG Data Commons MCP Server'
+    url: 'http://esg-mcp-server:8080'
+
+  - server_label: 'github'
+    description: 'GitHub integration for code analysis'
+    command: 'npx'
+    args: ['-y', '@modelcontextprotocol/server-github']
+    transport: 'stdio'
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: os.environ/GITHUB_TOKEN
+
+# ============================================
+# A2A Agents Configuration
+# ============================================
+a2a_agents:
+  - agent_name: 'esg-analyzer'
+    description: 'ESG Data Analysis Agent'
+    agent_url: 'http://esg-agent:10001'
+
+  - agent_name: 'report-writer'
+    description: 'Sustainability Report Writing Agent'
+    agent_url: 'http://report-agent:10002'

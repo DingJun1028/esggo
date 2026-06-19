@@ -1,0 +1,408 @@
+src/components/ESG/AI?訾??澈.tsx(36,19): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(36,22): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(36,23): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(37,4): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(37,5): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(37,15): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(38,4): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(38,5): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(38,6): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(38,18): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(38,18): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(38,23): error TS1002: Unterminated string literal.
+src/components/ESG/AI?訾??澈.tsx(40,3): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(40,4): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(40,5): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(40,9): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(41,4): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(41,5): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(41,7): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(44,21): error TS1005: '{' expected.
+src/components/ESG/AI?訾??澈.tsx(44,22): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(44,23): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(45,14): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(46,17): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(47,33): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(48,33): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(52,16): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(52,18): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(52,20): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,14): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,15): error TS1181: Array element destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(58,20): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(58,22): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,25): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,26): error TS1181: Array element destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(58,41): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,44): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,45): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(58,48): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(60,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(60,9): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(60,13): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(60,23): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(61,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(61,9): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(61,10): error TS1136: Property assignment expected.
+src/components/ESG/AI?訾??澈.tsx(61,17): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(62,7): error TS1136: Property assignment expected.
+src/components/ESG/AI?訾??澈.tsx(63,7): error TS1136: Property assignment expected.
+src/components/ESG/AI?訾??澈.tsx(63,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(63,9): error TS1136: Property assignment expected.
+src/components/ESG/AI?訾??澈.tsx(63,13): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(64,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(64,9): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(64,10): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(65,5): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(66,3): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(66,4): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(67,12): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(67,13): error TS1181: Array element destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(67,20): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(67,23): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(67,24): error TS1181: Array element destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(68,10): error TS1181: Array element destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(68,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(68,12): error TS1181: Array element destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(68,14): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(68,18): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(68,20): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(68,21): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(69,13): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(69,15): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(69,20): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(69,24): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(69,26): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(69,44): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(69,45): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(76,11): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(76,16): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(76,46): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(86,9): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(94,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(94,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(94,12): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(96,9): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(96,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(96,12): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(96,13): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(96,15): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(96,16): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(97,12): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(97,13): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(97,23): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(99,11): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(99,13): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(99,15): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(99,18): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(99,21): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(99,22): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(99,24): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(100,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(100,9): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(100,33): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(101,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(101,9): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(101,10): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(101,19): error TS1002: Unterminated string literal.
+src/components/ESG/AI?訾??澈.tsx(102,14): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(102,15): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(103,7): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(103,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(103,9): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(103,13): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(104,8): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(104,9): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(104,10): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(105,5): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(107,9): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(107,12): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(107,13): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(107,33): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(107,38): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(107,39): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(108,10): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(108,11): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(108,18): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(109,9): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(109,10): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(109,17): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(109,18): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(113,15): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(113,16): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(113,17): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(113,18): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(113,21): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(113,24): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(113,25): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(113,27): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(114,10): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(114,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(114,13): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(114,15): error TS1180: Property destructuring pattern expected.
+src/components/ESG/AI?訾??澈.tsx(115,10): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(115,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(115,12): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(116,9): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(116,14): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(116,18): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(116,19): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(116,20): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(116,21): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(116,22): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(116,26): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(116,27): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(116,28): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(116,30): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(117,9): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(117,10): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(117,11): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(117,15): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(118,10): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(118,11): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(118,12): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(119,7): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(119,8): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(120,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(120,14): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(120,15): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(120,38): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(120,39): error TS1137: Expression or comma expected.
+src/components/ESG/AI?訾??澈.tsx(121,11): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(121,12): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(121,20): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(122,5): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(122,6): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(122,12): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(123,3): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(125,9): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(125,11): error TS1005: ',' expected.
+src/components/ESG/AI?訾??澈.tsx(125,13): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(125,14): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(125,15): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(125,16): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(125,17): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(125,19): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(125,21): error TS1134: Variable declaration expected.
+src/components/ESG/AI?訾??澈.tsx(131,28): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(131,35): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(131,42): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(131,45): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,55): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(131,57): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(131,69): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,71): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,80): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,81): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,82): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,83): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,88): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(131,117): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,118): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(131,196): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,197): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(131,205): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,206): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(131,208): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,209): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,210): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(131,214): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,215): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(131,217): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,218): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(131,219): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(135,27): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(135,37): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(135,41): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(135,44): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,62): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(135,64): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(135,87): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(135,88): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,90): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,93): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,94): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(135,103): error TS1005: ')' expected.
+src/components/ESG/AI?訾??澈.tsx(135,105): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(135,111): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,112): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,113): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,120): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,127): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(135,128): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,130): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,131): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(135,134): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,137): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,138): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,139): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,140): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(135,141): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,142): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(135,144): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,145): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(135,148): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,152): error TS1005: ':' expected.
+src/components/ESG/AI?訾??澈.tsx(135,194): error TS1128: Declaration or statement expected.
+src/components/ESG/AI?訾??澈.tsx(135,195): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,196): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(135,198): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,199): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,201): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,208): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(135,213): error TS1127: Invalid character.
+src/components/ESG/AI?訾??澈.tsx(160,21): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(160,73): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(166,21): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(171,21): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(171,52): error TS1109: Expression expected.
+src/components/ESG/AI?訾??澈.tsx(253,19): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(253,24): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(255,24): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(255,31): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+src/components/ESG/AI?訾??澈.tsx(255,34): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(255,45): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(258,23): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(258,27): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(258,31): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(258,39): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(258,46): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/AI?訾??澈.tsx(258,64): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(258,79): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(258,88): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(269,23): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(269,27): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(269,38): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(269,53): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(269,78): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(277,25): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(277,40): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(277,44): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(277,50): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(309,19): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(309,25): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(309,49): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(315,24): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(315,34): error TS1005: ';' expected.
+src/components/ESG/AI?訾??澈.tsx(326,1): error TS1160: Unterminated template literal.
+src/components/ESG/ESGSunshineJAK.tsx(29,12): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(29,17): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(29,44): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(29,46): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/ESGSunshineJAK.tsx(30,11): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(30,12): error TS1003: Identifier expected.
+src/components/ESG/ESGSunshineJAK.tsx(30,14): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(30,15): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(30,16): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(30,18): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(30,20): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/ESGSunshineJAK.tsx(30,37): error TS1002: Unterminated string literal.
+src/components/ESG/ESGSunshineJAK.tsx(32,11): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(32,12): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(32,16): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(32,18): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(33,12): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(33,14): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(33,16): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(33,19): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(33,21): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/ESGSunshineJAK.tsx(35,12): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(35,17): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(35,24): error TS1005: ':' expected.
+src/components/ESG/ESGSunshineJAK.tsx(35,32): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(35,34): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/ESGSunshineJAK.tsx(35,51): error TS1002: Unterminated string literal.
+src/components/ESG/ESGSunshineJAK.tsx(39,7): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(39,8): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(39,10): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(39,11): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(39,13): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(40,3): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(41,11): error TS1002: Unterminated string literal.
+src/components/ESG/ESGSunshineJAK.tsx(42,11): error TS1002: Unterminated string literal.
+src/components/ESG/ESGSunshineJAK.tsx(43,11): error TS1002: Unterminated string literal.
+src/components/ESG/ESGSunshineJAK.tsx(49,13): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(49,14): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(49,16): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(49,28): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(49,29): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(49,30): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(49,40): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(49,41): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(49,45): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(49,47): error TS1002: Unterminated string literal.
+src/components/ESG/ESGSunshineJAK.tsx(55,7): error TS1134: Variable declaration expected.
+src/components/ESG/ESGSunshineJAK.tsx(55,8): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(55,9): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(55,10): error TS1134: Variable declaration expected.
+src/components/ESG/ESGSunshineJAK.tsx(55,11): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(55,12): error TS1134: Variable declaration expected.
+src/components/ESG/ESGSunshineJAK.tsx(55,13): error TS1134: Variable declaration expected.
+src/components/ESG/ESGSunshineJAK.tsx(55,20): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(55,23): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(56,4): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(56,5): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(56,6): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(56,14): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(57,3): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(57,4): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(57,14): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(58,3): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(58,4): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(58,14): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(59,4): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(59,5): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(59,6): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(59,14): error TS1005: ',' expected.
+src/components/ESG/ESGSunshineJAK.tsx(60,3): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(60,4): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(60,5): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(60,7): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(61,11): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(61,23): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,1): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,2): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,4): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,10): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(62,11): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,12): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,14): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,15): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(62,19): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,20): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(62,25): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(62,26): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(62,27): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,29): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,30): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(62,31): error TS1136: Property assignment expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,42): error TS1005: ')' expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,43): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(62,45): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,67): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(87,68): error TS1127: Invalid character.
+src/components/ESG/ESGSunshineJAK.tsx(87,69): error TS1003: Identifier expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,71): error TS1003: Identifier expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,91): error TS1005: ')' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,93): error TS1434: Unexpected keyword or identifier.
+src/components/ESG/ESGSunshineJAK.tsx(87,111): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+src/components/ESG/ESGSunshineJAK.tsx(87,115): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,119): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,134): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,151): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,166): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,179): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(87,187): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+src/components/ESG/ESGSunshineJAK.tsx(212,49): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(212,60): error TS1443: Module declaration names may only use ' or " quoted strings.
+src/components/ESG/ESGSunshineJAK.tsx(434,38): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(434,45): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(434,58): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(434,66): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(434,78): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(434,93): error TS1005: ';' expected.
+src/components/ESG/ESGSunshineJAK.tsx(435,23): error TS1128: Declaration or statement expected.
+src/components/ESG/ESGSunshineJAK.tsx(435,31): error TS1109: Expression expected.
+src/components/ESG/ESGSunshineJAK.tsx(438,21): error TS1005: ':' expected.
+src/components/ESG/ESGSunshineJAK.tsx(496,1): error TS1160: Unterminated template literal.

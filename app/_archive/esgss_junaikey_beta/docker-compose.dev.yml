@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  esg-dashboard-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: esg-dashboard:dev
+    container_name: esg-dashboard-dev
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=https://dev-api.esg-dashboard.com
+      - VITE_ENVIRONMENT=development
+    volumes:
+      - nginx_logs:/var/log/nginx
+      - nginx_cache:/tmp/nginx_cache
+    depends_on:
+      - esg-api-dev
+    networks:
+      - esg-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  esg-api-dev:
+    image: node:18-alpine
+    container_name: esg-api-dev
+    working_dir: /app
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DATABASE_URL=postgresql://esg_user:esg_password@esg-db-dev:5432/esg_dashboard_dev
+      - REDIS_URL=redis://esg-redis-dev:6379
+      - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret}
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - esg-db-dev
+      - esg-redis-dev
+    networks:
+      - esg-dev-network
+    restart: unless-stopped
+
+  esg-db-dev:
+    image: postgres:15-alpine
+    container_name: esg-db-dev
+    environment:
+      - POSTGRES_DB=esg_dashboard_dev
+      - POSTGRES_USER=esg_user
+      - POSTGRES_PASSWORD=esg_password
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - '5433:5432'
+    networks:
+      - esg-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U esg_user -d esg_dashboard_dev']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  esg-redis-dev:
+    image: redis:7-alpine
+    container_name: esg-redis-dev
+    command: redis-server --appendonly yes --requirepass dev_esg_redis_password
+    volumes:
+      - dev_redis_data:/data
+    ports:
+      - '6380:6379'
+    networks:
+      - esg-dev-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  dev_postgres_data:
+    driver: local
+  dev_redis_data:
+    driver: local
+  nginx_logs:
+    driver: local
+  nginx_cache:
+    driver: local
+
+networks:
+  esg-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

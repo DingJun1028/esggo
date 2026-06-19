@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  # 奧秘元件心核 (Strategist)
+  core_strategist:
+    image: esgss/jun-ai-key-v6:latest
+    environment:
+      - MODE=WANGDAO_STRATEGIST
+      - REDIS_CLUSTER_URL=redis://redis_cluster:6379
+      - BLOCKCHAIN_NODE=https://mainnet.esgss.io
+    depends_on:
+      - redis_cluster
+
+  # 萬有之眼 (Oracle) - 法律監控
+  agent_oracle:
+    image: esgss/oracle-v6:latest
+    environment:
+      - AI_ENGINE=GEMINI_PRO_1.5
+      - SCAN_FREQUENCY=600 # 10分鐘掃描一次全球法規
+    depends_on:
+      - redis_cluster
+
+  # 流量工匠 (Optimizer) - 價值轉換
+  agent_optimizer:
+    image: esgss/optimizer-v6:latest
+    depends_on:
+      - redis_cluster
+
+  # 真理之盾 (Auditor)
+  agent_auditor:
+    image: esgss/auditor-v6:latest
+    depends_on:
+      - redis_cluster
+
+  # Redis 集群 (用於代理人神經同步)
+  redis_cluster:
+    image: redis:7.0-alpine
+    command: [ 'redis-server', '--appendonly', 'yes' ]
+
+networks:
+  default:
+    name: esgss-genesis-network

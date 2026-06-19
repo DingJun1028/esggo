@@ -1,0 +1,1 @@
+components/features/sustain-write/sustain-write-components.tsx(891,9): error TS2739: Type '{ status: string; mark: string; protocol: string; timestamp: string; }' is missing the following properties from type '{ hashId: string; signer: string; timestamp: string; status: string; }': hashId, signer

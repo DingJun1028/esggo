@@ -1,0 +1,64 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "..",
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "allowJs": true,
+    "baseUrl": "..",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@core/*": [
+        "src/0-core/*"
+      ],
+      "@domain/*": [
+        "src/0-domain/*"
+      ],
+      "@infra/*": [
+        "src/2-infra/*"
+      ],
+      "@interface/*": [
+        "src/3-interface/*"
+      ],
+      "@services/*": [
+        "src/services/*"
+      ],
+      "@omni/*": [
+        "src/omni/*"
+      ]
+    }
+  },
+  "include": [
+    "server.ts",
+    "types/**/*",
+    "api/**/*",
+    "controllers/**/*",
+    "services/**/*",
+    "routes/**/*",
+    "utils/**/*",
+    "db/**/*",
+    "workers/**/*",
+    "../shared/**/*",
+    "../src/omni/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "../src/**/*.test.ts",
+    "dist"
+  ]
+}

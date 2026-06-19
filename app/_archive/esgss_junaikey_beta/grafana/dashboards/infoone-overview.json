@@ -1,0 +1,268 @@
+{
+    "dashboard": {
+        "id": null,
+        "uid": "infoone-overview",
+        "title": "InfoOne System Overview",
+        "tags": [
+            "infoone",
+            "overview",
+            "system"
+        ],
+        "timezone": "browser",
+        "schemaVersion": 27,
+        "version": 0,
+        "refresh": "10s",
+        "panels": [
+            {
+                "id": 1,
+                "gridPos": {
+                    "x": 0,
+                    "y": 0,
+                    "w": 6,
+                    "h": 4
+                },
+                "type": "stat",
+                "title": "Total HTTP Requests",
+                "targets": [
+                    {
+                        "expr": "sum(rate(infoone_http_requests_total[5m]))",
+                        "refId": "A"
+                    }
+                ],
+                "options": {
+                    "graphMode": "area",
+                    "colorMode": "value",
+                    "textMode": "auto"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "reqps"
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "gridPos": {
+                    "x": 6,
+                    "y": 0,
+                    "w": 6,
+                    "h": 4
+                },
+                "type": "stat",
+                "title": "Request Error Rate",
+                "targets": [
+                    {
+                        "expr": "sum(rate(infoone_http_request_errors_total[5m])) / sum(rate(infoone_http_requests_total[5m])) * 100",
+                        "refId": "A"
+                    }
+                ],
+                "options": {
+                    "graphMode": "area",
+                    "colorMode": "value",
+                    "textMode": "auto"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "percent",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "value": 0,
+                                    "color": "green"
+                                },
+                                {
+                                    "value": 1,
+                                    "color": "yellow"
+                                },
+                                {
+                                    "value": 5,
+                                    "color": "red"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "gridPos": {
+                    "x": 12,
+                    "y": 0,
+                    "w": 6,
+                    "h": 4
+                },
+                "type": "stat",
+                "title": "Cache Hit Rate",
+                "targets": [
+                    {
+                        "expr": "sum(rate(infoone_cache_hits_total[5m])) / (sum(rate(infoone_cache_hits_total[5m])) + sum(rate(infoone_cache_misses_total[5m]))) * 100",
+                        "refId": "A"
+                    }
+                ],
+                "options": {
+                    "graphMode": "area",
+                    "colorMode": "value",
+                    "textMode": "auto"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "percent",
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "value": 0,
+                                    "color": "red"
+                                },
+                                {
+                                    "value": 50,
+                                    "color": "yellow"
+                                },
+                                {
+                                    "value": 80,
+                                    "color": "green"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            {
+                "id": 4,
+                "gridPos": {
+                    "x": 18,
+                    "y": 0,
+                    "w": 6,
+                    "h": 4
+                },
+                "type": "stat",
+                "title": "Active Users",
+                "targets": [
+                    {
+                        "expr": "infoone_active_users_total",
+                        "refId": "A"
+                    }
+                ],
+                "options": {
+                    "graphMode": "area",
+                    "colorMode": "value",
+                    "textMode": "auto"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "short"
+                    }
+                }
+            },
+            {
+                "id": 5,
+                "gridPos": {
+                    "x": 0,
+                    "y": 4,
+                    "w": 12,
+                    "h": 8
+                },
+                "type": "graph",
+                "title": "HTTP Request Duration (p95)",
+                "targets": [
+                    {
+                        "expr": "histogram_quantile(0.95, sum(rate(infoone_http_request_duration_seconds_bucket[5m])) by (le, method))",
+                        "refId": "A",
+                        "legendFormat": "{{ method }}"
+                    }
+                ],
+                "yaxes": [
+                    {
+                        "format": "s",
+                        "label": "Duration"
+                    },
+                    {
+                        "format": "short"
+                    }
+                ]
+            },
+            {
+                "id": 6,
+                "gridPos": {
+                    "x": 12,
+                    "y": 4,
+                    "w": 12,
+                    "h": 8
+                },
+                "type": "graph",
+                "title": "Database Query Duration",
+                "targets": [
+                    {
+                        "expr": "histogram_quantile(0.95, sum(rate(infoone_db_query_duration_seconds_bucket[5m])) by (le, operation))",
+                        "refId": "A",
+                        "legendFormat": "{{ operation }}"
+                    }
+                ],
+                "yaxes": [
+                    {
+                        "format": "s",
+                        "label": "Duration"
+                    },
+                    {
+                        "format": "short"
+                    }
+                ]
+            },
+            {
+                "id": 7,
+                "gridPos": {
+                    "x": 0,
+                    "y": 12,
+                    "w": 12,
+                    "h": 8
+                },
+                "type": "graph",
+                "title": "ESG Assessment Activity",
+                "targets": [
+                    {
+                        "expr": "rate(infoone_esg_assessments_completed_total[5m])",
+                        "refId": "A",
+                        "legendFormat": "{{ assessment_type }}"
+                    }
+                ],
+                "yaxes": [
+                    {
+                        "format": "reqps",
+                        "label": "Assessments/sec"
+                    },
+                    {
+                        "format": "short"
+                    }
+                ]
+            },
+            {
+                "id": 8,
+                "gridPos": {
+                    "x": 12,
+                    "y": 12,
+                    "w": 12,
+                    "h": 8
+                },
+                "type": "graph",
+                "title": "AI Chat Requests by Agent",
+                "targets": [
+                    {
+                        "expr": "rate(infoone_ai_chat_requests_total[5m])",
+                        "refId": "A",
+                        "legendFormat": "{{ agent }}"
+                    }
+                ],
+                "yaxes": [
+                    {
+                        "format": "reqps",
+                        "label": "Requests/sec"
+                    },
+                    {
+                        "format": "short"
+                    }
+                ]
+            }
+        ]
+    }
+}

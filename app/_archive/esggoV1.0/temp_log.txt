@@ -1,0 +1,7 @@
+### Execution Trace:
+- Viewed: app/api/genkit/route.ts, components/views/guide-view.tsx
+- Ran: PowerShell to verify compile and logs
+- Modified: app/api/genkit/route.ts
+
+### Outcome:
+Found that the frontend components send `flowName` in the JSON body but the backend route `/api/genkit` expected `action`. Updated the backend route to accept `action || flowName` so the routes match. Fix completed and tested.

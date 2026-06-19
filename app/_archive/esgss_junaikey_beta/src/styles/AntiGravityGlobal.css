@@ -1,0 +1,719 @@
+/**
+ * Anti-gravity Design System - Global Styles
+ * 反重力設計系統 - 全局樣式
+ * 
+ * 導入所有 Anti-gravity 設計令牌和樣式
+ */
+
+/* ============================================================================
+   導入 Anti-gravity 設計令牌樣式
+   ============================================================================ */
+
+@import '../core/design-tokens/AntiGravityStyles.css';
+
+/* ============================================================================
+   全局 CSS 變量
+   ============================================================================ */
+
+:root {
+  /* 色彩變量 */
+  --ag-primary: #00FFFF;
+  --ag-primary-light: #8FC4D1;
+  --ag-primary-dark: #4A8291;
+  --ag-secondary: #26A69A;
+  --ag-accent: #FFA726;
+  --ag-success: #4CAF50;
+  --ag-warning: #FF9800;
+  --ag-error: #F44336;
+  --ag-info: #2196F3;
+
+  /* 背景色 */
+  --ag-bg-default: #F8FAFC;
+  --ag-bg-paper: #FFFFFF;
+  --ag-bg-elevated: #FFFFFF;
+
+  /* 文字色 */
+  --ag-text-primary: #212121;
+  --ag-text-secondary: #616161;
+  --ag-text-tertiary: #9E9E9E;
+  --ag-text-disabled: #BDBDBD;
+  --ag-text-inverse: #FFFFFF;
+
+  /* 間距 */
+  --ag-spacing-0: 0px;
+  --ag-spacing-0-5: 4px;
+  --ag-spacing-1: 8px;
+  --ag-spacing-1-5: 12px;
+  --ag-spacing-2: 16px;
+  --ag-spacing-3: 24px;
+  --ag-spacing-4: 32px;
+  --ag-spacing-5: 40px;
+  --ag-spacing-6: 48px;
+  --ag-spacing-8: 64px;
+  --ag-spacing-10: 80px;
+  --ag-spacing-12: 96px;
+
+  /* 圓角 */
+  --ag-radius-sm: 4px;
+  --ag-radius-md: 8px;
+  --ag-radius-lg: 12px;
+  --ag-radius-xl: 16px;
+  --ag-radius-2xl: 24px;
+  --ag-radius-3xl: 32px;
+  --ag-radius-full: 9999px;
+
+  /* 陰影 */
+  --ag-shadow-float-sm: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  --ag-shadow-float-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+  --ag-shadow-float-lg: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ag-shadow-float-xl: 0 16px 48px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+
+  /* 動畫 */
+  --ag-duration-instant: 50ms;
+  --ag-duration-fast: 150ms;
+  --ag-duration-normal: 250ms;
+  --ag-duration-slow: 350ms;
+  --ag-duration-slower: 500ms;
+  --ag-duration-slowest: 700ms;
+
+  --ag-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ag-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ag-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ag-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Z-Index */
+  --ag-z-dropdown: 1000;
+  --ag-z-sticky: 1020;
+  --ag-z-fixed: 1030;
+  --ag-z-modal-backdrop: 1040;
+  --ag-z-modal: 1050;
+  --ag-z-popover: 1060;
+  --ag-z-tooltip: 1070;
+  --ag-z-notification: 1080;
+  --ag-z-overlay: 9999;
+}
+
+/* ============================================================================
+   深色模式變量
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ag-bg-default: #0A0F19;
+    --ag-bg-paper: #1E1E1E;
+    --ag-bg-elevated: #2A2A2A;
+
+    --ag-text-primary: #FFFFFF;
+    --ag-text-secondary: #B0B0B0;
+    --ag-text-tertiary: #757575;
+    --ag-text-disabled: #424242;
+    --ag-text-inverse: #212121;
+  }
+}
+
+/* ============================================================================
+   全局基礎樣式
+   ============================================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans TC', 'Microsoft JhengHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--ag-bg-default);
+  color: var(--ag-text-primary);
+  line-height: 1.5;
+  transition: background-color var(--ag-duration-normal) var(--ag-ease-out),
+    color var(--ag-duration-normal) var(--ag-ease-out);
+}
+
+/* ============================================================================
+   滾動條樣式
+   ============================================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,255,255, 0.3);
+  border-radius: 4px;
+  transition: background var(--ag-duration-fast) var(--ag-ease-out);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,255,255, 0.5);
+}
+
+/* 深色模式滾動條 */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0,255,255, 0.4);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,255,255, 0.6);
+  }
+}
+
+/* ============================================================================
+   選擇文本樣式
+   ============================================================================ */
+
+::selection {
+  background: rgba(0,255,255, 0.3);
+  color: var(--ag-text-primary);
+}
+
+::-moz-selection {
+  background: rgba(0,255,255, 0.3);
+  color: var(--ag-text-primary);
+}
+
+/* ============================================================================
+   焦點樣式
+   ============================================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--ag-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   鏈接樣式
+   ============================================================================ */
+
+a {
+  color: var(--ag-primary);
+  text-decoration: none;
+  transition: color var(--ag-duration-fast) var(--ag-ease-out);
+}
+
+a:hover {
+  color: var(--ag-primary-light);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--ag-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================================
+   按鈕樣式
+   ============================================================================ */
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--ag-duration-fast) var(--ag-ease-out);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================================================
+   輸入框樣式
+   ============================================================================ */
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  transition: all var(--ag-duration-fast) var(--ag-ease-out);
+}
+
+/* ============================================================================
+   圖片樣式
+   ============================================================================ */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================================================
+   代碼樣式
+   ============================================================================ */
+
+code,
+pre {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+}
+
+code {
+  padding: 2px 6px;
+  background: rgba(0,255,255, 0.1);
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+pre {
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+/* ============================================================================
+   表格樣式
+   ============================================================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--ag-spacing-3);
+}
+
+th,
+td {
+  padding: var(--ag-spacing-2);
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+th {
+  font-weight: 600;
+  color: var(--ag-text-secondary);
+}
+
+/* 深色模式表格 */
+@media (prefers-color-scheme: dark) {
+
+  th,
+  td {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ============================================================================
+   引用樣式
+   ============================================================================ */
+
+blockquote {
+  margin: var(--ag-spacing-3) 0;
+  padding: var(--ag-spacing-2) var(--ag-spacing-3);
+  border-left: 4px solid var(--ag-primary);
+  background: rgba(0,255,255, 0.05);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+
+/* ============================================================================
+   分隔線樣式
+   ============================================================================ */
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+  margin: var(--ag-spacing-4) 0;
+}
+
+/* 深色模式分隔線 */
+@media (prefers-color-scheme: dark) {
+  hr {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  }
+}
+
+/* ============================================================================
+   工具類
+   ============================================================================ */
+
+/* 文字對齊 */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* 文字顏色 */
+.text-primary {
+  color: var(--ag-text-primary);
+}
+
+.text-secondary {
+  color: var(--ag-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--ag-text-tertiary);
+}
+
+.text-success {
+  color: var(--ag-success);
+}
+
+.text-warning {
+  color: var(--ag-warning);
+}
+
+.text-error {
+  color: var(--ag-error);
+}
+
+.text-info {
+  color: var(--ag-info);
+}
+
+/* 背景色 */
+.bg-primary {
+  background-color: var(--ag-primary);
+}
+
+.bg-secondary {
+  background-color: var(--ag-secondary);
+}
+
+.bg-success {
+  background-color: var(--ag-success);
+}
+
+.bg-warning {
+  background-color: var(--ag-warning);
+}
+
+.bg-error {
+  background-color: var(--ag-error);
+}
+
+.bg-info {
+  background-color: var(--ag-info);
+}
+
+/* 間距 */
+.m-0 {
+  margin: 0;
+}
+
+.m-1 {
+  margin: var(--ag-spacing-1);
+}
+
+.m-2 {
+  margin: var(--ag-spacing-2);
+}
+
+.m-3 {
+  margin: var(--ag-spacing-3);
+}
+
+.m-4 {
+  margin: var(--ag-spacing-4);
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-1 {
+  padding: var(--ag-spacing-1);
+}
+
+.p-2 {
+  padding: var(--ag-spacing-2);
+}
+
+.p-3 {
+  padding: var(--ag-spacing-3);
+}
+
+.p-4 {
+  padding: var(--ag-spacing-4);
+}
+
+/* 圓角 */
+.rounded-sm {
+  border-radius: var(--ag-radius-sm);
+}
+
+.rounded-md {
+  border-radius: var(--ag-radius-md);
+}
+
+.rounded-lg {
+  border-radius: var(--ag-radius-lg);
+}
+
+.rounded-xl {
+  border-radius: var(--ag-radius-xl);
+}
+
+.rounded-full {
+  border-radius: var(--ag-radius-full);
+}
+
+/* 陰影 */
+.shadow-float-sm {
+  box-shadow: var(--ag-shadow-float-sm);
+}
+
+.shadow-float-md {
+  box-shadow: var(--ag-shadow-float-md);
+}
+
+.shadow-float-lg {
+  box-shadow: var(--ag-shadow-float-lg);
+}
+
+.shadow-float-xl {
+  box-shadow: var(--ag-shadow-float-xl);
+}
+
+/* 浮動效果 */
+.float-gentle {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+.float-medium {
+  animation: float-medium 2s ease-in-out infinite;
+}
+
+.float-strong {
+  animation: float-strong 1.5s ease-in-out infinite;
+}
+
+/* 脈衝效果 */
+.pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+.pulse-medium {
+  animation: pulse-medium 1.5s ease-in-out infinite;
+}
+
+.pulse-strong {
+  animation: pulse-strong 1s ease-in-out infinite;
+}
+
+/* 發光效果 */
+.glow-primary {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.glow-pulse {
+  animation: glow-pulse 1.5s ease-in-out infinite;
+}
+
+/* 淡入效果 */
+.fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
+}
+
+.fade-in-down {
+  animation: fade-in-down 0.4s ease-out;
+}
+
+/* 縮放效果 */
+.scale-in {
+  animation: scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-out {
+  animation: scale-out 0.3s cubic-bezier(0.36, 0, 0.66, -0.56);
+}
+
+/* 彈跳效果 */
+.bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.bounce-out {
+  animation: bounce-out 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 搖擺效果 */
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* 波浪效果 */
+.wave {
+  animation: wave 2.5s ease-in-out infinite;
+}
+
+/* 懸停提升效果 */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ag-shadow-float-lg);
+}
+
+/* 懸停發光效果 */
+.hover-glow {
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(0,255,255, 0.4);
+}
+
+/* 懸停縮放效果 */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* 玻璃態效果 */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 浮動卡片效果 */
+.floating-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: var(--ag-shadow-float-md);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--ag-shadow-float-xl);
+}
+
+/* 深色模式玻璃態和浮動卡片 */
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(30, 30, 30, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .floating-card {
+    background: rgba(30, 30, 30, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ============================================================================
+   打印樣式
+   ============================================================================ */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+
+  .floating-card,
+  .glass {
+    box-shadow: none;
+    border: 1px solid #000;
+    background: white;
+  }
+}
+
+/* ============================================================================
+   無障礙跳過連結
+   ============================================================================ */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--ag-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: var(--ag-z-overlay);
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================================================
+   骨架屏效果
+   ============================================================================ */
+
+.skeleton {
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.06) 25%,
+      rgba(0, 0, 0, 0.12) 50%,
+      rgba(0, 0, 0, 0.06) 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: 4px;
+}
+
+/* 深色模式骨架屏 */
+@media (prefers-color-scheme: dark) {
+  .skeleton {
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.06) 25%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0.06) 75%);
+  }
+}

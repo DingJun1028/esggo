@@ -1,0 +1,117 @@
+/* Optical Dashboard Styles */
+
+.optical-dashboard {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Optical Border Effect */
+.optical-border {
+  position: relative;
+}
+
+.optical-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #06b6d4, #8b5cf6, #ec4899, #06b6d4);
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: optical-glow 3s ease infinite;
+  filter: blur(8px);
+}
+
+@keyframes optical-glow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Hexagon Pattern */
+.hexagon-pattern {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Bagua Pattern */
+.bagua-pattern {
+  clip-path: polygon(50% 0%, 85% 15%, 100% 50%, 85% 85%, 50% 100%, 15% 85%, 0% 50%, 15% 15%);
+}
+
+/* Optical Scan Line Effect */
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+  animation: scan-line 3s linear infinite;
+  pointer-events: none;
+}
+
+/* Holographic Effect */
+.holographic {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.1) 0%,
+    rgba(139, 92, 246, 0.1) 50%,
+    rgba(236, 72, 153, 0.1) 100%
+  );
+  background-size: 200% 200%;
+  animation: holographic-shift 5s ease infinite;
+}
+
+@keyframes holographic-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Pulse Effect */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(6, 182, 212, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+.optical-dashboard::-webkit-scrollbar {
+  width: 8px;
+}
+
+.optical-dashboard::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.optical-dashboard::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #06b6d4, #8b5cf6);
+  border-radius: 4px;
+}
+
+.optical-dashboard::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #0891b2, #7c3aed);
+}

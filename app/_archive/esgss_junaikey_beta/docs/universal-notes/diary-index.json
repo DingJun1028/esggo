@@ -1,0 +1,752 @@
+{
+  "最新建置編號": 50,
+  "日記列表": [
+    {
+      "diaryId": "516abf2d-4447-40c3-a9b5-83f2d66c2bfe",
+      "timestamp": "2026-02-21T06:41:36.895Z",
+      "buildNumber": 43,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b8f6d0db95dcf888749a3bee99d3f49779f5132f",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-21_06-41-36_build-diary.md"
+    },
+    {
+      "diaryId": "f187c035-34b2-43bf-a280-8c401871d62f",
+      "timestamp": "2026-02-20T11:48:04.743Z",
+      "buildNumber": 42,
+      "BuildStatus": "success",
+      "GitCommitInfo": "5e8dfcfbac39a432abfd0cfd02a8cf4382582f8e",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-20_11-48-04_build-diary.md"
+    },
+    {
+      "diaryId": "a1b570f5-ea06-4921-9654-e699036cdcec",
+      "timestamp": "2026-02-20T11:47:35.496Z",
+      "buildNumber": 41,
+      "BuildStatus": "success",
+      "GitCommitInfo": "5e8dfcfbac39a432abfd0cfd02a8cf4382582f8e",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-20_11-47-35_build-diary.md"
+    },
+    {
+      "diaryId": "79093cc3-2b2f-4365-a0fa-bbcbfa875b57",
+      "timestamp": "2026-02-20T08:50:43.492Z",
+      "buildNumber": 40,
+      "BuildStatus": "success",
+      "GitCommitInfo": "5e8dfcfbac39a432abfd0cfd02a8cf4382582f8e",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-20_08-50-43_build-diary.md"
+    },
+    {
+      "diaryId": "38e57df2-2d52-4867-9459-5c3daa76c0f3",
+      "timestamp": "2026-02-20T07:29:51.034Z",
+      "buildNumber": 39,
+      "BuildStatus": "success",
+      "GitCommitInfo": "f900b22c100696906e149e90eb1cc34641a41365",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-20_07-29-51_build-diary.md"
+    },
+    {
+      "diaryId": "124570e9-f4c3-4e5c-8980-4eaa8b6d786f",
+      "timestamp": "2026-02-20T07:22:09.738Z",
+      "buildNumber": 38,
+      "BuildStatus": "success",
+      "GitCommitInfo": "f900b22c100696906e149e90eb1cc34641a41365",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-20_07-22-09_build-diary.md"
+    },
+    {
+      "diaryId": "b29d619a-f78f-49c3-a16f-1f46866f1288",
+      "timestamp": "2026-02-19T04:39:42.551Z",
+      "buildNumber": 37,
+      "BuildStatus": "success",
+      "GitCommitInfo": "afad65268e6b9466ce57dd5a657d137a00a1e97a",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-19_04-39-42_build-diary.md"
+    },
+    {
+      "diaryId": "858a6a12-503a-4acf-bc05-3f29e90fba99",
+      "timestamp": "2026-02-18T02:53:59.173Z",
+      "buildNumber": 36,
+      "BuildStatus": "success",
+      "GitCommitInfo": "bb394f909ed8370125acc7c9e41b8457f03fc3e1",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-18_02-53-59_build-diary.md"
+    },
+    {
+      "diaryId": "407df05a-f7e0-4196-a555-6dd35d1aa837",
+      "timestamp": "2026-02-15T01:57:26.731Z",
+      "buildNumber": 35,
+      "BuildStatus": "success",
+      "GitCommitInfo": "82b22494069791c41b5f3cbfdef995e86a282559",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-15_01-57-26_build-diary.md"
+    },
+    {
+      "diaryId": "ea86443a-e6dc-44ca-b763-014bec172eb1",
+      "timestamp": "2026-02-13T15:29:21.150Z",
+      "buildNumber": 34,
+      "BuildStatus": "success",
+      "GitCommitInfo": "380b03aefc74243b99a47b716092e93a733488d7",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-13_15-29-21_build-diary.md"
+    },
+    {
+      "diaryId": "9b31eb89-9900-4007-b7de-44e5876fd8f6",
+      "timestamp": "2026-02-13T04:38:45.345Z",
+      "buildNumber": 33,
+      "BuildStatus": "success",
+      "GitCommitInfo": "c4fcdfd041830cd60bc44d5764923e1ab6beb610",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-13_04-38-45_build-diary.md"
+    },
+    {
+      "diaryId": "ca88bf75-97b2-4b86-a685-25dc533741cb",
+      "timestamp": "2026-02-12T08:23:22.938Z",
+      "buildNumber": 32,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b606c44e0c6fa73d63be2480874cca65b4caa3bf",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-12_08-23-22_build-diary.md"
+    },
+    {
+      "diaryId": "1b516535-70bc-4110-ae9d-bd14ef7411ef",
+      "timestamp": "2026-02-12T08:19:58.115Z",
+      "buildNumber": 31,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b606c44e0c6fa73d63be2480874cca65b4caa3bf",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-12_08-19-58_build-diary.md"
+    },
+    {
+      "diaryId": "1bf1804f-2469-43d8-818f-6186d26f71b4",
+      "timestamp": "2026-02-12T08:17:39.411Z",
+      "buildNumber": 30,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b606c44e0c6fa73d63be2480874cca65b4caa3bf",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-12_08-17-39_build-diary.md"
+    },
+    {
+      "diaryId": "be27971f-ab5c-4479-8477-b452dc124387",
+      "timestamp": "2026-02-12T08:02:07.096Z",
+      "buildNumber": 29,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b606c44e0c6fa73d63be2480874cca65b4caa3bf",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-12_08-02-07_build-diary.md"
+    },
+    {
+      "diaryId": "eb43f2b0-cec2-457a-97a0-758a9ea5d262",
+      "timestamp": "2026-02-12T07:51:29.580Z",
+      "buildNumber": 28,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b606c44e0c6fa73d63be2480874cca65b4caa3bf",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-12_07-51-29_build-diary.md"
+    },
+    {
+      "diaryId": "c06a6d66-61cc-4bd2-abf2-308f651c9de3",
+      "timestamp": "2026-02-12T07:48:45.835Z",
+      "buildNumber": 27,
+      "BuildStatus": "success",
+      "GitCommitInfo": "b606c44e0c6fa73d63be2480874cca65b4caa3bf",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-12_07-48-45_build-diary.md"
+    },
+    {
+      "diaryId": "eebca63c-6f48-480a-92b5-f07d5cc9025e",
+      "timestamp": "2026-02-10T03:31:38.269Z",
+      "buildNumber": 26,
+      "BuildStatus": "success",
+      "GitCommitInfo": "fbb683044500bbc1328927e96891a1464bf2a1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-10_03-31-38_build-diary.md"
+    },
+    {
+      "diaryId": "57ef9e5d-1db8-47d2-ad4c-abc5fcae8843",
+      "timestamp": "2026-02-10T03:21:03.838Z",
+      "buildNumber": 25,
+      "BuildStatus": "success",
+      "GitCommitInfo": "fbb683044500bbc1328927e96891a1464bf2a1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-10_03-21-03_build-diary.md"
+    },
+    {
+      "diaryId": "1110d9ea-f3a8-4299-a9d0-9d1e14bfbbb7",
+      "timestamp": "2026-02-10T03:20:40.285Z",
+      "buildNumber": 24,
+      "BuildStatus": "success",
+      "GitCommitInfo": "fbb683044500bbc1328927e96891a1464bf2a1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-10_03-20-40_build-diary.md"
+    },
+    {
+      "diaryId": "76d61475-9f8b-4ac9-945b-4423825f79ce",
+      "timestamp": "2026-02-09T09:19:35.355Z",
+      "buildNumber": 23,
+      "BuildStatus": "success",
+      "GitCommitInfo": "d64c6871f551d6e9ff302ed7a8d2fd457f9e4d66",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-09_09-19-35_build-diary.md"
+    },
+    {
+      "diaryId": "a212178a-1df5-49a9-a003-b7cd778c6a45",
+      "timestamp": "2026-02-06T06:36:22.135Z",
+      "buildNumber": 22,
+      "BuildStatus": "success",
+      "GitCommitInfo": "1ea8e4378252999476bb3e5bde92461bc94e9a3f",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_06-36-22_build-diary.md"
+    },
+    {
+      "diaryId": "0af47c37-8bda-45ad-940f-62c192b23eb7",
+      "timestamp": "2026-02-06T05:33:25.371Z",
+      "buildNumber": 21,
+      "BuildStatus": "success",
+      "GitCommitInfo": "0928b325f97a00eb5b95c057cebaed9bc4b6d023",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_05-33-25_build-diary.md"
+    },
+    {
+      "diaryId": "b67be10b-3564-4916-970d-c119234aa259",
+      "timestamp": "2026-02-06T05:16:44.858Z",
+      "buildNumber": 20,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_05-16-44_build-diary.md"
+    },
+    {
+      "diaryId": "27c4138e-6ebe-4ee9-ab85-0706fca95d3b",
+      "timestamp": "2026-02-06T05:13:55.300Z",
+      "buildNumber": 19,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_05-13-55_build-diary.md"
+    },
+    {
+      "diaryId": "bd2cf26a-5aef-4766-a2cc-cb912b82db5a",
+      "timestamp": "2026-02-06T05:11:45.686Z",
+      "buildNumber": 18,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_05-11-45_build-diary.md"
+    },
+    {
+      "diaryId": "94391d13-ead9-4459-9955-a458341af914",
+      "timestamp": "2026-02-06T05:08:55.949Z",
+      "buildNumber": 17,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_05-08-55_build-diary.md"
+    },
+    {
+      "diaryId": "595ca257-b30d-4238-998f-d2ee33ebc33f",
+      "timestamp": "2026-02-06T04:51:12.595Z",
+      "buildNumber": 16,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_04-51-12_build-diary.md"
+    },
+    {
+      "diaryId": "7405f632-e9bb-4e2c-bc29-074d823b4028",
+      "timestamp": "2026-02-06T04:40:24.527Z",
+      "buildNumber": 15,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_04-40-24_build-diary.md"
+    },
+    {
+      "diaryId": "1481cfdb-769b-4d68-a991-2620a6b9fa16",
+      "timestamp": "2026-02-06T01:59:00.227Z",
+      "buildNumber": 14,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_01-59-00_build-diary.md"
+    },
+    {
+      "diaryId": "18d30e83-cb6f-4c52-919c-ddc785580620",
+      "timestamp": "2026-02-06T01:58:05.845Z",
+      "buildNumber": 13,
+      "BuildStatus": "success",
+      "GitCommitInfo": "01d579c340ac1a6fa3c409581d3df18a68ec46b0",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-06_01-58-05_build-diary.md"
+    },
+    {
+      "diaryId": "537ab14e-b92b-4326-93fc-f30f3b14c74b",
+      "timestamp": "2026-02-05T10:30:12.449Z",
+      "buildNumber": 12,
+      "BuildStatus": "success",
+      "GitCommitInfo": "75549ac6edeb114a04c4aa819fd6574d22766405",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-05_10-30-12_build-diary.md"
+    },
+    {
+      "diaryId": "24e65c69-d34d-4d3e-be46-00bf28f861db",
+      "timestamp": "2026-02-05T09:56:21.273Z",
+      "buildNumber": 11,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-05_09-56-21_build-diary.md"
+    },
+    {
+      "diaryId": "e3e11771-3bcd-44bd-826c-c7f0c2e5f702",
+      "timestamp": "2026-02-05T00:15:53.887Z",
+      "buildNumber": 10,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-05_00-15-53_build-diary.md"
+    },
+    {
+      "diaryId": "4b63a0a0-dd30-471e-86d9-a1eb8cd8faf5",
+      "timestamp": "2026-02-05T00:04:05.578Z",
+      "buildNumber": 9,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-05_00-04-05_build-diary.md"
+    },
+    {
+      "diaryId": "560bcab7-f380-41d2-8c2c-5549f779bc78",
+      "timestamp": "2026-02-04T23:41:51.994Z",
+      "buildNumber": 8,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-04_23-41-51_build-diary.md"
+    },
+    {
+      "diaryId": "38996e89-fded-43c7-8cd7-1ad49c152838",
+      "timestamp": "2026-02-04T23:35:08.719Z",
+      "buildNumber": 7,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-04_23-35-08_build-diary.md"
+    },
+    {
+      "diaryId": "a5bd59d6-5d50-429e-93e7-138c6438f16a",
+      "timestamp": "2026-02-04T23:18:11.264Z",
+      "buildNumber": 6,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-04_23-18-11_build-diary.md"
+    },
+    {
+      "diaryId": "788cd8dd-3dd9-4d3d-a4f9-60396f7e7a86",
+      "timestamp": "2026-02-04T12:38:17.263Z",
+      "buildNumber": 5,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-04_12-38-17_build-diary.md"
+    },
+    {
+      "diaryId": "b9c548db-825e-4b1f-80b6-eba46bd69a37",
+      "timestamp": "2026-02-04T02:03:32.171Z",
+      "buildNumber": 4,
+      "BuildStatus": "success",
+      "GitCommitInfo": "ada38984b5af429bdb4cc2e364eb474bcb43c1ed",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-04_02-03-32_build-diary.md"
+    },
+    {
+      "diaryId": "ed75f831-8742-46a1-a2ed-0a7ac6725dc2",
+      "timestamp": "2026-02-02T08:27:39.918Z",
+      "buildNumber": 3,
+      "BuildStatus": "success",
+      "GitCommitInfo": "68da985037512323dd435eb12e8f9585ebb2d1fe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_08-27-39_build-diary.md"
+    },
+    {
+      "diaryId": "599ba3fb-d471-438a-b9fe-9e186ab6090e",
+      "timestamp": "2026-02-02T07:39:32.754Z",
+      "buildNumber": 2,
+      "BuildStatus": "success",
+      "GitCommitInfo": "68da985037512323dd435eb12e8f9585ebb2d1fe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_07-39-32_build-diary.md"
+    },
+    {
+      "diaryId": "3355eba0-ee4a-4b08-9db9-76cff06859af",
+      "timestamp": "2026-02-02T07:20:52.433Z",
+      "buildNumber": 1,
+      "BuildStatus": "success",
+      "GitCommitInfo": "68da985037512323dd435eb12e8f9585ebb2d1fe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_07-20-52_build-diary.md"
+    },
+    {
+      "日記編號": "74af9beb-b243-4bd7-a079-e717e78ea6ca",
+      "時間戳記": "2026-02-02T07:13:41.312Z",
+      "建置編號": 50,
+      "建置狀態": "success",
+      "Git提交": "68da985037512323dd435eb12e8f9585ebb2d1fe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_07-13-41_build-diary.md"
+    },
+    {
+      "日記編號": "085cee73-cefd-45fb-84e7-fd7234903d8d",
+      "時間戳記": "2026-02-02T06:42:23.100Z",
+      "建置編號": 49,
+      "建置狀態": "success",
+      "Git提交": "68da985037512323dd435eb12e8f9585ebb2d1fe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_06-42-23_build-diary.md"
+    },
+    {
+      "日記編號": "b2f086b4-8c1a-4d8a-afc8-79ff8747836e",
+      "時間戳記": "2026-02-02T06:37:00.714Z",
+      "建置編號": 48,
+      "建置狀態": "success",
+      "Git提交": "68da985037512323dd435eb12e8f9585ebb2d1fe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_06-37-00_build-diary.md"
+    },
+    {
+      "日記編號": "535e48d0-e900-4f34-98da-ed34200647ce",
+      "時間戳記": "2026-02-02T06:24:08.351Z",
+      "建置編號": 47,
+      "建置狀態": "success",
+      "Git提交": "e4772ae088a03c4c3f084fef017e81e88a125dfe",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_06-24-08_build-diary.md"
+    },
+    {
+      "日記編號": "40e54fe1-3e2c-4063-9be8-f4c53f636b80",
+      "時間戳記": "2026-02-02T05:54:37.827Z",
+      "建置編號": 46,
+      "建置狀態": "success",
+      "Git提交": "ee5be90966c3a175094e633ca752d41932907668",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_05-54-37_build-diary.md"
+    },
+    {
+      "日記編號": "f65e08b8-77e3-4711-9d23-b5a229e4d857",
+      "時間戳記": "2026-02-02T05:53:32.176Z",
+      "建置編號": 45,
+      "建置狀態": "success",
+      "Git提交": "ee5be90966c3a175094e633ca752d41932907668",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-02_05-53-32_build-diary.md"
+    },
+    {
+      "日記編號": "26e61f59-0fab-40cd-8851-5f4e8f120bf7",
+      "時間戳記": "2026-02-01T09:40:09.660Z",
+      "建置編號": 44,
+      "建置狀態": "success",
+      "Git提交": "ee5be90966c3a175094e633ca752d41932907668",
+      "檔案路徑": "/docs/universal-notes/2026/02/2026-02-01_09-40-09_build-diary.md"
+    },
+    {
+      "日記編號": "845da207-2eb0-4df3-b611-c3513569f26c",
+      "時間戳記": "2026-01-30T17:09:20.172Z",
+      "建置編號": 43,
+      "建置狀態": "success",
+      "Git提交": "71272ff2c6a26edc1ffc5b745771e2bbb38e24f8",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-30_17-09-20_build-diary.md"
+    },
+    {
+      "日記編號": "3ab67b57-39b0-4971-a88d-35d88cee0b77",
+      "時間戳記": "2026-01-30T15:56:25.247Z",
+      "建置編號": 42,
+      "建置狀態": "success",
+      "Git提交": "b59d29a56fc75933179a6095a06dcf3ac37862d5",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-30_15-56-25_build-diary.md"
+    },
+    {
+      "日記編號": "c642b5d0-5bee-4da1-859f-91ba7b167037",
+      "時間戳記": "2026-01-29T09:01:31.509Z",
+      "建置編號": 41,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_09-01-31_build-diary.md"
+    },
+    {
+      "日記編號": "0cb601e7-44bf-43af-8c71-5abb8d3f4fea",
+      "時間戳記": "2026-01-29T09:00:52.316Z",
+      "建置編號": 40,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_09-00-52_build-diary.md"
+    },
+    {
+      "日記編號": "6f2d52b2-840b-42c8-a381-5015328ed248",
+      "時間戳記": "2026-01-29T08:57:15.233Z",
+      "建置編號": 39,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-57-15_build-diary.md"
+    },
+    {
+      "日記編號": "df31e9bc-a730-4555-914b-b12e1eb7804d",
+      "時間戳記": "2026-01-29T08:55:29.198Z",
+      "建置編號": 38,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-55-29_build-diary.md"
+    },
+    {
+      "日記編號": "1edabe0a-f95b-4e47-864a-ee8ccef8ccbf",
+      "時間戳記": "2026-01-29T08:51:56.694Z",
+      "建置編號": 37,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-51-56_build-diary.md"
+    },
+    {
+      "日記編號": "e148d80b-2451-4006-919f-b5749b8ee6a3",
+      "時間戳記": "2026-01-29T08:43:08.434Z",
+      "建置編號": 36,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-43-08_build-diary.md"
+    },
+    {
+      "日記編號": "960955b1-55e1-4ec7-aa5b-d0e622ed3111",
+      "時間戳記": "2026-01-29T08:37:04.378Z",
+      "建置編號": 35,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-37-04_build-diary.md"
+    },
+    {
+      "日記編號": "e21ea6cb-705b-4a7c-93b4-bdbe84ea0899",
+      "時間戳記": "2026-01-29T08:33:39.276Z",
+      "建置編號": 34,
+      "建置狀態": "success",
+      "Git提交": "9f6233d8cd459e8af3932a68a39185d13c2898de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-33-39_build-diary.md"
+    },
+    {
+      "日記編號": "f982ed83-2a23-4112-93c3-66f2950ee352",
+      "時間戳記": "2026-01-29T08:28:42.553Z",
+      "建置編號": 33,
+      "建置狀態": "success",
+      "Git提交": "eb6fc1a1fa640912399d5eefb451f3c1b7f589b4",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-28-42_build-diary.md"
+    },
+    {
+      "日記編號": "89882353-ac27-4fe3-b9aa-5020cd186ac3",
+      "時間戳記": "2026-01-29T08:28:15.360Z",
+      "建置編號": 32,
+      "建置狀態": "success",
+      "Git提交": "eb6fc1a1fa640912399d5eefb451f3c1b7f589b4",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-29_08-28-15_build-diary.md"
+    },
+    {
+      "日記編號": "b86df2ce-fc1a-4905-9997-c6940e8384b7",
+      "時間戳記": "2026-01-28T18:39:13.330Z",
+      "建置編號": 31,
+      "建置狀態": "success",
+      "Git提交": "f213e90a36c0d7b183693d2c215066ff84f5aa2f",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-28_18-39-13_build-diary.md"
+    },
+    {
+      "日記編號": "6085f756-8ede-40d3-9ee0-94f22b9b464e",
+      "時間戳記": "2026-01-28T08:43:04.899Z",
+      "建置編號": 30,
+      "建置狀態": "success",
+      "Git提交": "0e477467ea90e1d57789755df8066c841c5401de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-28_08-43-04_build-diary.md"
+    },
+    {
+      "日記編號": "8e6b8b6e-d484-44a5-bb30-55c2efc45601",
+      "時間戳記": "2026-01-28T08:34:56.047Z",
+      "建置編號": 29,
+      "建置狀態": "success",
+      "Git提交": "0e477467ea90e1d57789755df8066c841c5401de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-28_08-34-56_build-diary.md"
+    },
+    {
+      "日記編號": "560b7658-a608-4551-8f6e-d06203765409",
+      "時間戳記": "2026-01-28T08:26:54.775Z",
+      "建置編號": 28,
+      "建置狀態": "success",
+      "Git提交": "0e477467ea90e1d57789755df8066c841c5401de",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-28_08-26-54_build-diary.md"
+    },
+    {
+      "日記編號": "a486e9fa-67d3-438f-811d-03929b121a0b",
+      "時間戳記": "2026-01-27T15:25:04.092Z",
+      "建置編號": 27,
+      "建置狀態": "success",
+      "Git提交": "e8e46d7884a1a377cd976abb24a2159d19dad863",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_15-25-04_build-diary.md"
+    },
+    {
+      "日記編號": "c10c248b-9380-4b76-a234-f12183bbc1b7",
+      "時間戳記": "2026-01-27T05:50:45.789Z",
+      "建置編號": 26,
+      "建置狀態": "success",
+      "Git提交": "92afb76be21ea2e8475cd86f06d463a73717f247",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_05-50-45_build-diary.md"
+    },
+    {
+      "日記編號": "040b9180-8780-47ac-850f-6698142950d5",
+      "時間戳記": "2026-01-27T03:47:57.525Z",
+      "建置編號": 25,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_03-47-57_build-diary.md"
+    },
+    {
+      "日記編號": "690aed0e-dede-4acf-a250-b0b64d773f6c",
+      "時間戳記": "2026-01-27T03:37:10.920Z",
+      "建置編號": 24,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_03-37-10_build-diary.md"
+    },
+    {
+      "日記編號": "4f1d811a-af8c-4c5b-ac50-ac71a03dc77d",
+      "時間戳記": "2026-01-27T03:31:14.192Z",
+      "建置編號": 23,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_03-31-14_build-diary.md"
+    },
+    {
+      "日記編號": "1dad2ca2-4953-425d-8296-001ecc9eeb64",
+      "時間戳記": "2026-01-27T03:16:46.474Z",
+      "建置編號": 22,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_03-16-46_build-diary.md"
+    },
+    {
+      "日記編號": "2de2e5dd-74ba-4a7c-9c1d-8febd9f916e9",
+      "時間戳記": "2026-01-27T02:52:45.937Z",
+      "建置編號": 21,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_02-52-45_build-diary.md"
+    },
+    {
+      "日記編號": "2163d2bd-4ba9-4e61-97ed-876357058faa",
+      "時間戳記": "2026-01-27T02:29:09.282Z",
+      "建置編號": 20,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_02-29-09_build-diary.md"
+    },
+    {
+      "日記編號": "e4eb5aff-d1fe-4a71-a82b-2c25a8a5f537",
+      "時間戳記": "2026-01-27T01:30:04.632Z",
+      "建置編號": 19,
+      "建置狀態": "success",
+      "Git提交": "1e158a76dd8a9bfa48ac4a53c5f94b40a2ce8296",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-27_01-30-04_build-diary.md"
+    },
+    {
+      "日記編號": "3f4c8e05-1712-4d1f-ac20-da343511efce",
+      "時間戳記": "2026-01-25T19:14:40.041Z",
+      "建置編號": 18,
+      "建置狀態": "success",
+      "Git提交": "5b0a38d94a9e6a9f3d4d31ef9c66ef2ff273c9d4",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-25_19-14-40_build-diary.md"
+    },
+    {
+      "日記編號": "3f80dacc-a07c-45bd-a9da-c153710c9e34",
+      "時間戳記": "2026-01-24T14:24:57.164Z",
+      "建置編號": 17,
+      "建置狀態": "success",
+      "Git提交": "793e1b19c41e00ebdb802adcb2f403fca24bad55",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-24_14-24-57_build-diary.md"
+    },
+    {
+      "日記編號": "26927b43-1652-4a7f-bc9e-96309755c84c",
+      "時間戳記": "2026-01-24T14:20:02.329Z",
+      "建置編號": 16,
+      "建置狀態": "success",
+      "Git提交": "793e1b19c41e00ebdb802adcb2f403fca24bad55",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-24_14-20-02_build-diary.md"
+    },
+    {
+      "日記編號": "f5a40ecf-b60c-4ac5-9e8d-8773efa0812a",
+      "時間戳記": "2026-01-24T14:15:54.573Z",
+      "建置編號": 15,
+      "建置狀態": "success",
+      "Git提交": "793e1b19c41e00ebdb802adcb2f403fca24bad55",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-24_14-15-54_build-diary.md"
+    },
+    {
+      "日記編號": "6e018eb8-7980-49f6-805f-c21731c6ff89",
+      "時間戳記": "2026-01-24T09:11:24.872Z",
+      "建置編號": 14,
+      "建置狀態": "success",
+      "Git提交": "f8f7eeabacfce227f334a5ef71048b89c87f780e",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-24_09-11-24_build-diary.md"
+    },
+    {
+      "日記編號": "56343908-9b62-4ad0-b679-1cdda3639e9f",
+      "時間戳記": "2026-01-24T08:41:07.005Z",
+      "建置編號": 13,
+      "建置狀態": "success",
+      "Git提交": "f8f7eeabacfce227f334a5ef71048b89c87f780e",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-24_08-41-07_build-diary.md"
+    },
+    {
+      "日記編號": "3e62d222-c3f0-4b51-9a0e-b5b3b8f671c8",
+      "時間戳記": "2026-01-21T03:04:57.183Z",
+      "建置編號": 12,
+      "建置狀態": "success",
+      "Git提交": "6bedce51b3332ce8fc66915bea8b2fd965be1db5",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-21_03-04-57_build-diary.md"
+    },
+    {
+      "日記編號": "e7ed382e-a122-40cc-a921-efa0da77317e",
+      "時間戳記": "2026-01-20T11:55:45.825Z",
+      "建置編號": 11,
+      "建置狀態": "success",
+      "Git提交": "2fb39830a0c6d847a435f4efe57f07de4536d561",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-20_11-55-45_build-diary.md"
+    },
+    {
+      "日記編號": "9dc77875-ae9f-442c-b358-569803dd0b01",
+      "時間戳記": "2026-01-20T10:05:40.165Z",
+      "建置編號": 10,
+      "建置狀態": "success",
+      "Git提交": "0b31391f89cf2904520371d03115eaa73d8084b8",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-20_10-05-40_build-diary.md"
+    },
+    {
+      "日記編號": "756f13de-2e38-4906-ae88-72b21d2a7a7a",
+      "時間戳記": "2026-01-17T17:20:07.870Z",
+      "建置編號": 9,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_17-20-07_build-diary.md"
+    },
+    {
+      "日記編號": "b1dd4084-a8ed-4904-ba1d-60a0d10dad8e",
+      "時間戳記": "2026-01-17T16:19:35.440Z",
+      "建置編號": 8,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_16-19-35_build-diary.md"
+    },
+    {
+      "日記編號": "70384401-f8b1-4bda-8474-a43d14f7b9c0",
+      "時間戳記": "2026-01-17T14:52:34.241Z",
+      "建置編號": 7,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_14-52-34_build-diary.md"
+    },
+    {
+      "日記編號": "5428d6fa-850d-4aa1-9976-d90685929c12",
+      "時間戳記": "2026-01-17T14:47:43.933Z",
+      "建置編號": 6,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_14-47-43_build-diary.md"
+    },
+    {
+      "日記編號": "06c4ef2c-9ebc-430a-a0aa-135e0d752d36",
+      "時間戳記": "2026-01-17T14:38:56.211Z",
+      "建置編號": 5,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_14-38-56_build-diary.md"
+    },
+    {
+      "日記編號": "9684d739-a225-47cb-a086-644e5b58e338",
+      "時間戳記": "2026-01-17T14:37:25.859Z",
+      "建置編號": 4,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_14-37-25_build-diary.md"
+    },
+    {
+      "日記編號": "6acd5e30-9242-4a92-a59b-6a576eebb16d",
+      "時間戳記": "2026-01-17T14:35:30.247Z",
+      "建置編號": 3,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_14-35-30_build-diary.md"
+    },
+    {
+      "日記編號": "1090cfa1-0d65-4ddf-9ec6-578fe2c52de5",
+      "時間戳記": "2026-01-17T14:32:49.018Z",
+      "建置編號": 2,
+      "建置狀態": "success",
+      "Git提交": "2208df98c35123a058e1fe82fc622330faf2c321",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_14-32-49_build-diary.md"
+    },
+    {
+      "日記編號": "5879c25a-a4ab-4559-9754-e4c447e7eac4",
+      "時間戳記": "2026-01-17T04:42:00.498Z",
+      "建置編號": 1,
+      "建置狀態": "success",
+      "Git提交": "792f6e97d1459b75e77dcd24b3503a9307e5e073",
+      "檔案路徑": "/docs/universal-notes/2026/01/2026-01-17_04-42-00_build-diary.md"
+    }
+  ],
+  "版本": "1.0.0",
+  "說明": "奧秘筆記系統 - 開發者日記索引檔案",
+  "最新buildNumber": 43
+}

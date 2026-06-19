@@ -1,0 +1,143 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "frame",
+      "id": "document",
+      "x": 0,
+      "y": 0,
+      "name": "Diffusion Canvas",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#0B1117",
+      "layout": "none",
+      "children": [
+        {
+          "type": "prompt",
+          "id": "y2Mby",
+          "x": 428.66270407388447,
+          "y": 757.9455077560536,
+          "width": 250,
+          "height": 219
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Np4yl",
+      "x": 0,
+      "y": 0,
+      "name": "Key to the Lock Verification",
+      "width": 375,
+      "height": 812,
+      "fill": "#0B1117",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "6TNYQ",
+          "name": "Liquid Glass BG",
+          "width": "fill_container",
+          "height": "fill_container",
+          "fill": "linear-gradient(135deg, #0B1117 0%, #1A2632 100%)",
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "0tsYx",
+              "x": 37.5,
+              "y": 156,
+              "name": "Glass Overlay",
+              "width": 300,
+              "height": 500,
+              "fill": "rgba(99, 162, 176, 0.1)",
+              "cornerRadius": [
+                24,
+                0,
+                0,
+                0
+              ],
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "VcU9U",
+                  "x": 110,
+                  "y": 100,
+                  "name": "Truth Singularity",
+                  "fill": "#FFFFFF",
+                  "width": 80,
+                  "height": 80
+                },
+                {
+                  "type": "ellipse",
+                  "id": "wfbQA",
+                  "x": 90,
+                  "y": 80,
+                  "name": "Diffusion Ripple 1",
+                  "fill": "transparent",
+                  "width": 120,
+                  "height": 120
+                },
+                {
+                  "type": "ellipse",
+                  "id": "cE42A",
+                  "x": 70,
+                  "y": 60,
+                  "name": "Diffusion Ripple 2",
+                  "fill": "transparent",
+                  "width": 160,
+                  "height": 160
+                },
+                {
+                  "type": "text",
+                  "id": "RKlEq",
+                  "x": 60,
+                  "y": 300,
+                  "name": "title",
+                  "fill": "#FFFFFF",
+                  "content": "OmniInfoOne Verification",
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "Bold"
+                },
+                {
+                  "type": "text",
+                  "id": "azm6Q",
+                  "x": 80,
+                  "y": 330,
+                  "name": "desc",
+                  "fill": "rgba(255, 255, 255, 0.7)",
+                  "content": "Inside-out Truth Alignment",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "HfaGH",
+                  "x": 100,
+                  "y": 400,
+                  "name": "status",
+                  "fill": "#63A2B0",
+                  "content": "Status: RESONATING",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "SemiBold"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "Theme": [
+      "Default",
+      "Variant-1",
+      "Variant-2"
+    ]
+  }
+}

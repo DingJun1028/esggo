@@ -1,0 +1,527 @@
+[
+  {
+    "id": "C01",
+    "name": "全能元件心核 (Omni-Component Core)",
+    "partner": "ESGss Core",
+    "type": "System Core",
+    "rarity": "LEGEND",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 7,
+      "intelligence": 10,
+      "benevolence": 6,
+      "courage": 3,
+      "temperance": 5,
+      "harmony": 8
+    },
+    "attributes": {
+      "ATK": 3,
+      "DEF": 7,
+      "MP": 10,
+      "HP": 6
+    },
+    "description": "System Heart. Data integrity anchor.",
+    "ability": {
+      "name": "PROTOCOL_4T1_IMMUNITY",
+      "effect": "Immune to negative statuses from non-Trustworthy sources."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": true
+    }
+  },
+  {
+    "id": "C02",
+    "name": "ESG 數位分身 (ESG Digital Twin)",
+    "partner": "ESGss Core",
+    "type": "Digital Asset",
+    "rarity": "EPIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 5,
+      "intelligence": 9,
+      "benevolence": 5,
+      "courage": 4,
+      "temperance": 5,
+      "harmony": 6
+    },
+    "attributes": {
+      "ATK": 4,
+      "DEF": 5,
+      "MP": 9,
+      "HP": 5
+    },
+    "description": "Virtual simulation of ESG impacts.",
+    "ability": {
+      "name": "PREDICTIVE_SIMULATION",
+      "effect": "Preview top 3 cards of opponent's deck."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "C03",
+    "name": "4T 驗證傳送門 (4T Verification Portal)",
+    "partner": "ESGss Core",
+    "type": "Governance Protocol",
+    "rarity": "EPIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 8,
+      "intelligence": 7,
+      "benevolence": 6,
+      "courage": 2,
+      "temperance": 6,
+      "harmony": 7
+    },
+    "attributes": {
+      "ATK": 2,
+      "DEF": 8,
+      "MP": 7,
+      "HP": 6
+    },
+    "description": "Third-party verification gateway.",
+    "ability": {
+      "name": "TRUTH_GATEKEEPING",
+      "effect": "Opponent cards with Integrity < 5 have no ability."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "C04",
+    "name": "策略導航儀 (Strategy Navigator)",
+    "partner": "ESGss Core",
+    "type": "Tool",
+    "rarity": "BASIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 3,
+      "intelligence": 6,
+      "benevolence": 4,
+      "courage": 4,
+      "temperance": 3,
+      "harmony": 3
+    },
+    "attributes": {
+      "ATK": 4,
+      "DEF": 3,
+      "MP": 6,
+      "HP": 4
+    },
+    "description": "Optimizes transformation paths.",
+    "ability": {
+      "name": "PATH_OPTIMIZATION",
+      "effect": "Next card played costs -2 MP."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": false,
+      "transparent": false,
+      "tangible": false,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "C05",
+    "name": "誠信標章·起源 (Genesis Trust Badge)",
+    "partner": "ESGss Core",
+    "type": "Badge",
+    "rarity": "BASIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 6,
+      "intelligence": 4,
+      "benevolence": 4,
+      "courage": 1,
+      "temperance": 3,
+      "harmony": 3
+    },
+    "attributes": {
+      "ATK": 1,
+      "DEF": 6,
+      "MP": 4,
+      "HP": 4
+    },
+    "description": "The seed of digital integrity.",
+    "ability": {
+      "name": "CRYSTALLIZE_SACRIFICE",
+      "effect": "Sacrifice to promote a card to Trustworthy."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": false,
+      "transparent": false,
+      "tangible": false,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "S06",
+    "name": "可靠度驗證盾 (Reliability Verification Shield)",
+    "partner": "San Wei Tech",
+    "type": "Verification Tool",
+    "rarity": "LEGEND",
+    "deck": "Outward",
+    "meridian": "OUTWARD_DU",
+    "virtues": {
+      "integrity": 10,
+      "intelligence": 5,
+      "benevolence": 9,
+      "courage": 2,
+      "temperance": 8,
+      "harmony": 5
+    },
+    "attributes": {
+      "ATK": 2,
+      "DEF": 10,
+      "MP": 5,
+      "HP": 9
+    },
+    "description": "Physical proof of product resilience.",
+    "ability": {
+      "name": "SCIENTIFIC_PROOF_RECOIL",
+      "effect": "Reflect 50% damage if Traceable."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": true
+    }
+  },
+  {
+    "id": "S07",
+    "name": "振動模擬矩陣 (Vibration Simulation Matrix)",
+    "partner": "San Wei Tech",
+    "type": "Test Bed",
+    "rarity": "EPIC",
+    "deck": "Outward",
+    "meridian": "OUTWARD_DU",
+    "virtues": {
+      "integrity": 8,
+      "intelligence": 6,
+      "benevolence": 5,
+      "courage": 6,
+      "temperance": 7,
+      "harmony": 5
+    },
+    "attributes": {
+      "ATK": 6,
+      "DEF": 8,
+      "MP": 6,
+      "HP": 5
+    },
+    "description": "Stress testing for environmental resilience.",
+    "ability": {
+      "name": "ENVIRONMENTAL_STRESS",
+      "effect": "Reduce all opponent cards' DEF by 2."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "S08",
+    "name": "ISO 驗證鏈 (ISO Verification Chain)",
+    "partner": "San Wei Tech",
+    "type": "Protocol",
+    "rarity": "EPIC",
+    "deck": "Outward",
+    "meridian": "OUTWARD_DU",
+    "virtues": {
+      "integrity": 9,
+      "intelligence": 5,
+      "benevolence": 7,
+      "courage": 3,
+      "temperance": 6,
+      "harmony": 5
+    },
+    "attributes": {
+      "ATK": 3,
+      "DEF": 9,
+      "MP": 5,
+      "HP": 7
+    },
+    "description": "Compliance verification chain.",
+    "ability": {
+      "name": "COMPLIANCE_LOCK",
+      "effect": "Lock 1 opponent card (cannot attack)."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "S09",
+    "name": "應力測試場 (Stress Test Field)",
+    "partner": "San Wei Tech",
+    "type": "Facility",
+    "rarity": "BASIC",
+    "deck": "Outward",
+    "meridian": "OUTWARD_DU",
+    "virtues": {
+      "integrity": 6,
+      "intelligence": 4,
+      "benevolence": 4,
+      "courage": 4,
+      "temperance": 5,
+      "harmony": 4
+    },
+    "attributes": {
+      "ATK": 4,
+      "DEF": 6,
+      "MP": 4,
+      "HP": 4
+    },
+    "description": "Limit testing facility.",
+    "ability": {
+      "name": "RESILIENCE_BOOST",
+      "effect": "Boost all friendly DU cards DEF by 1."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": false,
+      "transparent": false,
+      "tangible": false,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "S10",
+    "name": "科學觀測鏡 (Scientific Scope)",
+    "partner": "San Wei Tech",
+    "type": "Tool",
+    "rarity": "BASIC",
+    "deck": "Outward",
+    "meridian": "OUTWARD_DU",
+    "virtues": {
+      "integrity": 5,
+      "intelligence": 8,
+      "benevolence": 3,
+      "courage": 1,
+      "temperance": 4,
+      "harmony": 2
+    },
+    "attributes": {
+      "ATK": 1,
+      "DEF": 5,
+      "MP": 8,
+      "HP": 3
+    },
+    "description": "Precision measurement tool.",
+    "ability": {
+      "name": "DATA_PENETRATION",
+      "effect": "Ignore opponent 'Hidden' status."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": false,
+      "transparent": false,
+      "tangible": false,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "L11",
+    "name": "永續敘事導師 (Sustainability Narrator)",
+    "partner": "Language Steps",
+    "type": "Role",
+    "rarity": "LEGEND",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 6,
+      "intelligence": 8,
+      "benevolence": 10,
+      "courage": 2,
+      "temperance": 5,
+      "harmony": 9
+    },
+    "attributes": {
+      "ATK": 2,
+      "DEF": 6,
+      "MP": 8,
+      "HP": 10
+    },
+    "description": "Translates data into empathy.",
+    "ability": {
+      "name": "EMPATHIC_DIALOGUE",
+      "effect": "End of turn: Heal all friendly cards by 2 HP."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": true
+    }
+  },
+  {
+    "id": "L12",
+    "name": "雙語轉譯指南 (Bilingual Translation Guide)",
+    "partner": "Language Steps",
+    "type": "Guide",
+    "rarity": "EPIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 4,
+      "intelligence": 9,
+      "benevolence": 5,
+      "courage": 3,
+      "temperance": 4,
+      "harmony": 8
+    },
+    "attributes": {
+      "ATK": 3,
+      "DEF": 4,
+      "MP": 9,
+      "HP": 5
+    },
+    "description": "Bridge to international standards.",
+    "ability": {
+      "name": "LANGUAGE_BRIDGE",
+      "effect": "Reduce MP cost for all friendly cards by 1."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "L13",
+    "name": "共識工作坊 (Consensus Workshop)",
+    "partner": "Language Steps",
+    "type": "Event",
+    "rarity": "EPIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 3,
+      "intelligence": 7,
+      "benevolence": 6,
+      "courage": 4,
+      "temperance": 3,
+      "harmony": 8
+    },
+    "attributes": {
+      "ATK": 4,
+      "DEF": 3,
+      "MP": 7,
+      "HP": 6
+    },
+    "description": "Building organizational alignment.",
+    "ability": {
+      "name": "KNOWLEDGE_EMPOWERMENT",
+      "effect": "Boost 1 random friendly card MP by 2."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": true,
+      "transparent": true,
+      "tangible": true,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "L14",
+    "name": "利害關係人橋樑 (Stakeholder Bridge)",
+    "partner": "Language Steps",
+    "type": "Infrastructure",
+    "rarity": "BASIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 6,
+      "intelligence": 5,
+      "benevolence": 7,
+      "courage": 2,
+      "temperance": 4,
+      "harmony": 6
+    },
+    "attributes": {
+      "ATK": 2,
+      "DEF": 6,
+      "MP": 5,
+      "HP": 7
+    },
+    "description": "Two-way dialogue channel.",
+    "ability": {
+      "name": "FEEDBACK_EFFECT",
+      "effect": "When attacked, attacker loses 1 HP."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": false,
+      "transparent": false,
+      "tangible": false,
+      "trustworthy": false
+    }
+  },
+  {
+    "id": "L15",
+    "name": "永續發展種子 (Sustainability Seed)",
+    "partner": "Language Steps",
+    "type": "Asset",
+    "rarity": "BASIC",
+    "deck": "Inward",
+    "meridian": "INWARD_REN",
+    "virtues": {
+      "integrity": 4,
+      "intelligence": 3,
+      "benevolence": 5,
+      "courage": 1,
+      "temperance": 2,
+      "harmony": 4
+    },
+    "attributes": {
+      "ATK": 1,
+      "DEF": 4,
+      "MP": 3,
+      "HP": 5
+    },
+    "description": "Seed of sustainable development.",
+    "ability": {
+      "name": "GROWTH_POTENTIAL",
+      "effect": "Gain +1 to all stats each turn."
+    },
+    "verification_status": {
+      "traceable": true,
+      "trackable": false,
+      "transparent": false,
+      "tangible": false,
+      "trustworthy": false
+    }
+  }
+]

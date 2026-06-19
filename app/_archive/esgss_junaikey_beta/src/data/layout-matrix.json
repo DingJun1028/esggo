@@ -1,0 +1,29 @@
+{
+  "layout_protocol": {
+    "version": "v1.0.0",
+    "uuid": "LAYOUT-MATRIX-2026-001",
+    "grid_system": "4x2-Density-Grid",
+    "constraints": {
+      "card_aspect_ratio": "0.66",
+      "max_content_height": "480px",
+      "overflow_strategy": "clamp-and-tooltip"
+    }
+  },
+  "ui_blueprint": [
+    {
+      "slot_id": "main-character-display",
+      "component_type": "IESCardCore",
+      "styling_locked": {
+        "width": "100%",
+        "height": "fixed",
+        "padding": "16px",
+        "font_scaling": "strict"
+      },
+      "vibe_injectable": {
+        "theme_color": "var(--card-theme)",
+        "blur_intensity": "10px",
+        "background_overlay": "linear-gradient(to bottom, transparent, rgba(0,0,0,0.8))"
+      }
+    }
+  ]
+}

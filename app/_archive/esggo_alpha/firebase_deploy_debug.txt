@@ -1,0 +1,4 @@
+(node:24720) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+Error: Cannot understand what targets to deploy/serve. No targets in firebase.json match '--only hosting'. If you are using PowerShell make sure you place quotes around any comma-separated lists (ex: --only "functions,firestore").

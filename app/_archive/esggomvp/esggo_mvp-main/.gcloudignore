@@ -1,0 +1,18 @@
+.git
+.gitignore
+.vscode
+node_modules
+.next
+dist
+*.log
+frontend/node_modules
+frontend/.next
+frontend/dist
+src_old_app_backup
+tests
+scripts
+C:\Project (Back Up)\esggo_MVP\esggo_mvp\frontend\build_error.log
+C:\Project (Back Up)\esggo_MVP\esggo_mvp\local_build_debug.log
+C:\Project (Back Up)\esggo_MVP\esggo_mvp\standalone_check.log
+C:\Project (Back Up)\esggo_MVP\esggo_mvp\final_build_verify.log
+C:\Project (Back Up)\esggo_MVP\esggo_mvp\frontend\local_build_debug.log

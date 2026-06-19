@@ -1,0 +1,2 @@
+src/hooks/useAgentRpg.ts(29,30): error TS2304: Cannot find name 'useMemo'.
+src/hooks/useAgentRpg.ts(271,25): error TS2304: Cannot find name 'useMemo'.

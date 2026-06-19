@@ -1,0 +1,403 @@
+@import "tailwindcss";
+
+/* --- Omni-HEP Theme Variables --- */
+:root {
+  color-scheme: light;
+
+  /* --- Stitch/Pencil Global Light Theme (ESG GO Sustainability Edition) --- */
+  --theme-bg: #FFFFFF;
+  --theme-surface: #F8F9FA;
+  --theme-surface-2: #F1F3F5;
+  --theme-primary: #009E9D;
+  --theme-primary-end: #00C2A8;
+  --theme-primary-muted: rgba(0, 158, 157, 0.05);
+  --theme-accent: #D4AF37; /* Eternal Gold Matte */
+  --theme-glass-border: rgba(0, 0, 0, 0.05);
+  --theme-glass-bg: rgba(255, 255, 255, 0.6);
+  --theme-text-main: #333333;
+  --theme-text-sub: #475569;
+  --theme-text-muted: #94A3B8;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F8F9FA;
+  --theme-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  --theme-invert: 0;
+
+  /* Semantic Colors - High Contrast Matte */
+  --color-lethal: #FF4D6D;
+  --color-critical: #FFB703;
+  --color-optimal: #219EBC;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Noto Sans TC", sans-serif;
+  --font-mono: 'JetBrains Mono', 'Noto Sans Mono', monospace;
+
+  /* Mapping to legacy/utility tokens */
+  --color-omni-bg: var(--theme-bg);
+  --color-omni-surface: var(--theme-surface);
+  --color-omni-surface-2: var(--theme-surface-2);
+  --color-omni-primary: var(--theme-primary);
+  --color-omni-primary-muted: var(--theme-primary-muted);
+  --color-omni-accent: var(--theme-accent);
+  --color-omni-glass-border: var(--theme-glass-border);
+  --color-omni-glass-bg: var(--theme-glass-bg);
+  --color-omni-text-main: var(--theme-text-main);
+  --color-omni-text-sub: var(--theme-text-sub);
+  --color-omni-text-muted: var(--theme-text-muted);
+  --color-omni-card-bg: var(--theme-card-bg);
+  --color-omni-card-bg-2: var(--theme-card-bg-2);
+  --color-omni-shadow: var(--theme-shadow);
+  --color-omni-invert: var(--theme-invert);
+}
+
+/* Animations - Immediate & Crisp (150-200ms) */
+:root {
+  --anim-speed: 200ms;
+  --anim-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Theme Overrides - Redefined for ESG GO Matte Aesthetic */
+[data-theme="aqua"],
+.theme-aqua {
+  color-scheme: dark;
+  --theme-bg: #0A0F14;
+  --theme-surface: #121921;
+  --theme-surface-2: #1A242E;
+  --theme-primary: #00C2A8;
+  --theme-accent: #D4AF37;
+  --theme-glass-bg: rgba(10, 15, 20, 0.8);
+  --theme-text-main: #F8FAFC;
+  --theme-text-sub: #CBD5E1;
+}
+
+[data-theme="aqua-light"],
+.theme-aqua-light {
+  color-scheme: light;
+  --theme-bg: #FFFFFF;
+  --theme-surface: #F8F9FA;
+  --theme-primary: #009E9D;
+  --theme-accent: #D4AF37;
+  --theme-glass-bg: rgba(255, 255, 255, 0.6);
+  --theme-glass-border: rgba(0, 0, 0, 0.05);
+}
+
+/* Unique Theme Specializations */
+
+/* ═══════════════════════════════════════════════════════════════
+   🏛️ 粗獷主義版 (Nordic Brutalist) — 原始力量感模式
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="nordic"],
+.theme-nordic {
+  color-scheme: light;
+
+  --theme-bg: #FFFFFF;
+  --theme-surface: #E5E7EB;
+  /* Gray 200 */
+  --theme-surface-2: #D1D5DB;
+  /* Gray 300 */
+  --theme-primary: #63a6b0;
+  /* 品牌 Aqua 青，高飽和 */
+  --theme-primary-muted: rgba(99, 166, 176, 0.1);
+  --theme-accent: #000000;
+  /* 粗獷主義以黑色為強調 */
+  --theme-glass-border: #000000;
+  /* 實心黑邊 */
+  --theme-glass-bg: #FFFFFF;
+  --theme-text-main: #000000;
+  --theme-text-sub: #111827;
+  --theme-text-muted: #4B5563;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F3F4F6;
+  --theme-shadow: 6px 6px 0px #000000;
+  /* 強烈硬陰影 */
+  --theme-invert: 0;
+
+  --aqua: #63a6b0;
+  --aqua-glow: none;
+  /* 粗獷主義不使用發光效果 */
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   📟 終端極簡版 (Terminal Minimal) — 黑客與數據純粹模式
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="terminal"],
+.theme-terminal {
+  color-scheme: dark;
+
+  --theme-bg: #0A0A0A;
+  --theme-surface: #1A1A1A;
+  --theme-surface-2: #262626;
+  --theme-primary: #00FF41;
+  /* Matrix Green */
+  --theme-primary-muted: rgba(0, 255, 65, 0.05);
+  --theme-accent: #00FF41;
+  --theme-glass-border: #00FF41;
+  --theme-glass-bg: #0A0A0A;
+  --theme-text-main: #00FF41;
+  --theme-text-sub: #00CC33;
+  --theme-text-muted: #00661a;
+  --theme-card-bg: #0A0A0A;
+  --theme-card-bg-2: #141414;
+  --theme-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+  --theme-invert: 0;
+
+  --aqua: #00FF41;
+  --aqua-glow: 0 0 10px rgba(0, 255, 65, 0.5);
+
+  /* 強制等寬字體 */
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+/* 🎨 瑞士表現版 (Swiss Expressive) — 大膽排版與高反差
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="swiss"],
+.theme-swiss {
+  color-scheme: light;
+
+  --theme-bg: #FFFFFF;
+  --theme-surface: #F3F3F3;
+  --theme-surface-2: #E5E5E5;
+  --theme-primary: #FF0000;
+  /* 經典瑞士紅 */
+  --theme-primary-muted: rgba(255, 0, 0, 0.05);
+  --theme-accent: #000000;
+  --theme-glass-border: #000000;
+  --theme-glass-bg: #FFFFFF;
+  --theme-text-main: #000000;
+  --theme-text-sub: #000000;
+  --theme-text-muted: #666666;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #FFFFFF;
+  --theme-shadow: none;
+  /* 瑞士風格不強調立體感 */
+  --theme-invert: 0;
+
+  --aqua: #FF0000;
+  --aqua-glow: none;
+
+  font-family: 'Inter', 'Helvetica', sans-serif !important;
+}
+
+/* 🍎 蘋果極簡版 (Apple Cupertino) — 極簡、毛玻璃、精緻
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="apple"],
+.theme-apple {
+  color-scheme: light;
+
+  --theme-bg: #FBFBFB;
+  --theme-surface: #FFFFFF;
+  --theme-surface-2: #F2F2F7;
+  --theme-primary: #0071E3;
+  /* Apple Blue */
+  --theme-primary-muted: rgba(0, 113, 227, 0.05);
+  --theme-accent: #1D1D1F;
+  --theme-glass-border: rgba(0, 0, 0, 0.1);
+  --theme-glass-bg: rgba(255, 255, 255, 0.7);
+  --theme-text-main: #1D1D1F;
+  --theme-text-sub: #424245;
+  --theme-text-muted: #86868B;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-2: #F5F5F7;
+  --theme-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --theme-invert: 0;
+
+  --aqua: #0071E3;
+  --aqua-glow: 0 0 15px rgba(0, 113, 227, 0.3);
+
+  /* Apple 系統字體感 */
+  /* Apple 系統字體感 */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif !important;
+}
+
+/* Animation utilities - Crisp & Professional */
+.animate-liquid-ripple {
+  animation: ripple var(--anim-speed) var(--anim-ease) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Glass effect - Defined by physical blur, no high-glow edges */
+.glass {
+  background: var(--theme-glass-bg);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid var(--theme-glass-border);
+}
+
+/* Omni card - Refined for High-End Professional Matte Layout */
+.omni-card {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-glass-border);
+  border-radius: 8px;
+  box-shadow: var(--theme-shadow);
+  transition: all var(--anim-speed) var(--anim-ease);
+  position: relative;
+}
+
+.omni-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: var(--theme-primary);
+}
+
+/* Teal Gradient Button Internal Utility */
+.btn-teal-gradient {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-end));
+  color: white;
+  border: none;
+  transition: all var(--anim-speed) ease;
+}
+
+.btn-teal-gradient:active {
+  filter: brightness(0.9);
+  transform: translateY(1px);
+}
+
+/* 🧪 LiquidGlass & AuraPulse Enhancements - Matte Edition */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--theme-shadow);
+  transition: all var(--anim-speed) var(--anim-ease);
+}
+
+.liquid-glass:hover {
+  border-color: rgba(0, 158, 157, 0.2);
+  transform: translateY(-1px);
+}
+
+/* 💎 5T Sealing & Prism Refraction - Matte Edition */
+.sealed-5t {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--theme-accent) !important;
+  background: var(--theme-surface) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* 🧬 MECE 24 Service Grid */
+.mece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.data-matrix-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* Selection */
+::selection {
+  background: var(--theme-primary-muted);
+  color: var(--theme-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-primary-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary);
+}
+te-seal {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 🧬 MECE 24 Service Grid */
+.mece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 8px;
+}
+
+@media (max-width: 640px) {
+  .mece-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.service-card-aura {
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.service-card-aura:hover {
+  transform: translateY(-8px);
+  filter: drop-shadow(0 0 15px var(--theme-primary-muted));
+}
+
+.aura-pulse {
+  position: relative;
+  z-index: 1;
+}
+
+.aura-pulse::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--theme-primary), var(--theme-accent), var(--theme-primary));
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: aura-gradient 3s linear infinite;
+}
+
+.aura-pulse:hover::after {
+  opacity: 0.6;
+}
+
+@keyframes aura-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

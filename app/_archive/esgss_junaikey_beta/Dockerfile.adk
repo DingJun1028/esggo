@@ -1,0 +1,47 @@
+# === Build Stage ===
+FROM node:24-slim AS builder
+WORKDIR /app
+
+# Install build dependencies
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+# Copy source code
+COPY . .
+
+# Build the project (includes TypeScript compilation)
+# We need the compiled JS for the A2A Server
+RUN npx tsc
+
+# === Production Stage ===
+FROM node:24-slim
+WORKDIR /app
+
+# Install curl for healthchecks and production-only dependencies
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+COPY package*.json ./
+RUN npm install --production --legacy-peer-deps
+
+# Copy compiled files from builder
+# A2AServer.ts is at src/services/agents/A2AServer.ts -> dist/services/agents/A2AServer.js
+COPY --from=builder /app/dist ./dist
+# We also need the adk scripts and tools in dist
+# And the reports directory if it exists or needs to be created
+RUN mkdir -p src/adk/reports && chown -R node:node /app
+
+# Environment Variables
+ENV NODE_ENV=production
+ENV PORT=4000
+
+# Switch to non-root user
+USER node
+
+# Expose the lab API port
+EXPOSE 4000
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:4000/.well-known/agent.json || exit 1
+
+# Start the A2A Server
+CMD ["node", "dist/services/agents/A2AServer.js"]

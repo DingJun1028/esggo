@@ -1,0 +1,164 @@
+
+> esg-sunshine-junaikey-backend@7.0.0-sentient build
+> tsc
+
+routes/evidence.ts(209,34): error TS2339: Property 'name' does not exist on type '{ id: string; email?: string | undefined; role?: string | undefined; }'.
+routes/evidence.ts(210,34): error TS2339: Property 'department' does not exist on type '{ id: string; email?: string | undefined; role?: string | undefined; }'.
+routes/evidence.ts(223,38): error TS2339: Property 'companyId' does not exist on type '{ id: string; email?: string | undefined; role?: string | undefined; }'.
+routes/evidence.ts(253,13): error TS2322: Type 'EvidenceLockResult' is not assignable to type 'null'.
+routes/healthCheck.ts(134,34): error TS2339: Property 'overallScore' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(135,42): error TS2339: Property 'dimensionScores' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(136,45): error TS2339: Property 'dimensionScores' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(137,38): error TS2339: Property 'dimensionScores' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(139,41): error TS2339: Property 'recommendations' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(140,50): error TS2339: Property 'estimatedWorkload' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(142,40): error TS2339: Property 'metadata' does not exist on type 'L1AssessmentResult'.
+routes/healthCheck.ts(143,39): error TS2339: Property 'metadata' does not exist on type 'L1AssessmentResult'.
+routes/qaScore.ts(14,15): error TS2305: Module '"../../src/types/esg-go/qa-score.types.js"' has no exported member 'ReportData'.
+routes/qaScore.ts(113,33): error TS2339: Property 'grade' does not exist on type 'QAScoreResult'.
+routes/qaScore.ts(118,56): error TS2339: Property 'trustworthy' does not exist on type 'QAScoreDimensions'.
+routes/qaScore.ts(123,42): error TS2339: Property 'isCertifiable' does not exist on type 'QAScoreResult'.
+routes/qaScore.ts(124,54): error TS2339: Property 'certificationRequirements' does not exist on type 'QAScoreResult'.
+routes/qaScore.ts(126,49): error TS2339: Property 'timestamp' does not exist on type 'QAScoreResult'.
+routes/taskRoutes.ts(49,27): error TS2339: Property 'userId' does not exist on type '{ id: string; email?: string | undefined; role?: string | undefined; }'.
+routes/taskRoutes.ts(63,18): error TS18048: 'req.user' is possibly 'undefined'.
+routes/taskRoutes.ts(63,27): error TS2339: Property 'userId' does not exist on type '{ id: string; email?: string | undefined; role?: string | undefined; }'.
+services/AITableSyncService.ts(261,39): error TS2552: Cannot find name 'aiTableService'. Did you mean 'AITableSyncService'?
+services/AITableSyncService.ts(266,39): error TS2552: Cannot find name 'aiTableService'. Did you mean 'AITableSyncService'?
+services/AITableSyncService.ts(324,39): error TS2552: Cannot find name 'aiTableService'. Did you mean 'AITableSyncService'?
+services/AITableSyncService.ts(329,39): error TS2552: Cannot find name 'aiTableService'. Did you mean 'AITableSyncService'?
+services/AITableSyncService.ts(387,39): error TS2552: Cannot find name 'aiTableService'. Did you mean 'AITableSyncService'?
+services/AITableSyncService.ts(392,39): error TS2552: Cannot find name 'aiTableService'. Did you mean 'AITableSyncService'?
+services/amice.ts(103,74): error TS2339: Property 'finalOutput' does not exist on type '{ taskId: string; status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED"; goal: string; message: string; }'.
+services/arvoAgent.ts(107,3): error TS2564: Property 'execution_results' has no initializer and is not definitely assigned in the constructor.
+services/arvoAgent.ts(211,35): error TS2339: Property 'finalOutput' does not exist on type '{ taskId: string; status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED"; goal: string; message: string; }'.
+services/arvoAgent.ts(212,80): error TS2339: Property 'plan' does not exist on type '{ taskId: string; status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "FAILED"; goal: string; message: string; }'.
+services/arvoAgent.ts(213,57): error TS2353: Object literal may only specify known properties, and 'result' does not exist in type 'ARVOAction'.
+services/arvoAgent.ts(234,11): error TS2322: Type 'any[]' is not assignable to type 'string'.
+services/arvoAgent.ts(261,9): error TS2739: Type '{ skill: string; status: string; result?: unknown; error?: string | undefined; }[]' is missing the following properties from type '{ analysis: unknown; reasoning: unknown; verification: unknown; actions: unknown; response: unknown; }': analysis, reasoning, verification, actions, response
+services/arvoAgent.ts(307,58): error TS2339: Property 'length' does not exist on type 'never'.
+services/arvoAgent.ts(309,20): error TS2339: Property 'forEach' does not exist on type 'never'.
+services/BoostSpaceSyncService.ts(12,26): error TS2307: Cannot find module '../config/supabase.js' or its corresponding type declarations.
+services/BoostSpaceSyncService.ts(243,25): error TS2561: Object literal may only specify known properties, but 'localValue' does not exist in type 'ConflictData'. Did you mean to write 'local_value'?
+services/BoostSpaceSyncService.ts(260,21): error TS2740: Type 'ConflictData[]' is missing the following properties from type 'ConflictData': field, local_value, remote_value, local_updated_at, and 2 more.
+services/EmissionFactorDatabase.ts(51,21): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/EmissionFactorDatabase.ts(74,23): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/EmissionFactorDatabase.ts(92,22): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/EmissionFactorDatabase.ts(253,21): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/EmissionFactorDatabase.ts(299,21): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/GovernanceComplianceEngine.ts(86,21): error TS2345: Argument of type '"GOVERNANCE"' is not assignable to parameter of type 'LogCategory'.
+services/GovernanceComplianceEngine.ts(130,21): error TS2345: Argument of type '"GOVERNANCE"' is not assignable to parameter of type 'LogCategory'.
+services/GovernanceComplianceEngine.ts(208,21): error TS2345: Argument of type '"GOVERNANCE"' is not assignable to parameter of type 'LogCategory'.
+services/L1AssessmentService.ts(44,75): error TS2339: Property 'estimatedHours' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(50,13): error TS2353: Object literal may only specify known properties, and 'overallScore' does not exist in type 'L1AssessmentResult'.
+services/L1AssessmentService.ts(141,30): error TS2339: Property 'hasBoardESGOversight' does not exist on type 'GovernanceQuickCheck'.
+services/L1AssessmentService.ts(143,17): error TS2353: Object literal may only specify known properties, and 'dimension' does not exist in type 'Gap'.
+services/L1AssessmentService.ts(154,30): error TS2339: Property 'hasEthicsPolicy' does not exist on type 'GovernanceQuickCheck'.
+services/L1AssessmentService.ts(156,17): error TS2353: Object literal may only specify known properties, and 'dimension' does not exist in type 'Gap'.
+services/L1AssessmentService.ts(168,33): error TS2339: Property 'hasCarbonInventory' does not exist on type 'EnvironmentalQuickCheck'.
+services/L1AssessmentService.ts(170,17): error TS2353: Object literal may only specify known properties, and 'dimension' does not exist in type 'Gap'.
+services/L1AssessmentService.ts(181,33): error TS2339: Property 'hasEnergyManagement' does not exist on type 'EnvironmentalQuickCheck'.
+services/L1AssessmentService.ts(183,17): error TS2353: Object literal may only specify known properties, and 'dimension' does not exist in type 'Gap'.
+services/L1AssessmentService.ts(195,26): error TS2551: Property 'hasEmployeeSatisfaction' does not exist on type 'SocialQuickCheck'. Did you mean 'tracksEmployeeSatisfaction'?
+services/L1AssessmentService.ts(197,17): error TS2353: Object literal may only specify known properties, and 'dimension' does not exist in type 'Gap'.
+services/L1AssessmentService.ts(208,26): error TS2551: Property 'hasOccupationalHealth' does not exist on type 'SocialQuickCheck'. Did you mean 'hasOccupationalSafety'?
+services/L1AssessmentService.ts(210,17): error TS2353: Object literal may only specify known properties, and 'dimension' does not exist in type 'Gap'.
+services/L1AssessmentService.ts(223,19): error TS2339: Property 'priority' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(223,34): error TS2339: Property 'priority' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(223,53): error TS2339: Property 'priority' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(223,66): error TS2339: Property 'priority' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(224,22): error TS2339: Property 'estimatedHours' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(224,41): error TS2339: Property 'estimatedHours' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(246,30): error TS2339: Property 'dimension' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(246,65): error TS2339: Property 'item' does not exist on type 'Gap'.
+services/L1AssessmentService.ts(250,30): error TS2339: Property 'dimension' does not exist on type 'Gap'.
+services/MCPService.ts(101,37): error TS18046: 'error' is of type 'unknown'.
+services/MCPService.ts(136,42): error TS18046: 'error' is of type 'unknown'.
+services/ocrService.ts(19,23): error TS2345: Argument of type '"OCR"' is not assignable to parameter of type 'LogCategory'.
+services/ocrService.ts(23,26): error TS2345: Argument of type '"OCR"' is not assignable to parameter of type 'LogCategory'.
+services/ocrService.ts(66,23): error TS2345: Argument of type '"OCR"' is not assignable to parameter of type 'LogCategory'.
+services/ocrService.ts(69,24): error TS2345: Argument of type '"OCR"' is not assignable to parameter of type 'LogCategory'.
+services/ocrService.ts(113,9): error TS2345: Argument of type '"OCR"' is not assignable to parameter of type 'LogCategory'.
+services/ocrService.ts(114,44): error TS18046: 'e' is of type 'unknown'.
+services/OmniAgent.ts(419,24): error TS2304: Cannot find name 'createOmniGateway'.
+services/OmniGateway.ts(526,25): error TS2741: Property 'retryable' is missing in type '{ code: string; message: string; }' but required in type 'OmniError'.
+services/OmniMonitor.ts(252,60): error TS2345: Argument of type 'MonitorStatus' is not assignable to parameter of type '"DEGRADED" | "HEALTHY" | "DOWN"'.
+  Type '"UNKNOWN"' is not assignable to type '"DEGRADED" | "HEALTHY" | "DOWN"'.
+services/OmniMonitor.ts(302,13): error TS2741: Property 'requestCount' is missing in type '{ name: string; status: "DOWN"; latency: number; lastCheck: number; errorRate: number; details: { error: string; }; }' but required in type 'ServiceHealth'.
+services/OmniQueue.ts(219,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+services/OmniQueue.ts(228,48): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+services/PredictiveGovernanceService.ts(50,28): error TS2554: Expected 2-3 arguments, but got 1.
+services/QAScoreCalculatorService.ts(13,5): error TS2305: Module '"../../src/types/esg-go/qa-score.types.js"' has no exported member 'ReportData'.
+services/QAScoreCalculatorService.ts(42,13): error TS2353: Object literal may only specify known properties, and 'trustworthy' does not exist in type 'QAScoreDimensions'.
+services/QAScoreCalculatorService.ts(76,13): error TS2353: Object literal may only specify known properties, and 'grade' does not exist in type 'QAScoreResult'.
+services/QAScoreCalculatorService.ts(252,24): error TS2339: Property 'trustworthy' does not exist on type 'QAScoreDimensions'.
+services/QAScoreCalculatorService.ts(254,17): error TS2322: Type '"trustworthy"' is not assignable to type 'keyof QAScoreDimensions'.
+services/QAScoreCalculatorService.ts(258,49): error TS2339: Property 'trustworthy' does not exist on type 'QAScoreDimensions'.
+services/QAScoreCalculatorService.ts(299,24): error TS2339: Property 'trustworthy' does not exist on type 'QAScoreDimensions'.
+services/QAScoreCalculatorService.ts(300,61): error TS2339: Property 'trustworthy' does not exist on type 'QAScoreDimensions'.
+services/QAScoreCalculatorService.ts(313,31): error TS2339: Property 'timestamp' does not exist on type 'QAScoreResult'.
+services/QuantumTrustAnchorService.ts(52,59): error TS18048: 'core.evidence.trustworthy' is possibly 'undefined'.
+services/rag.ts(177,26): error TS2554: Expected 0-1 arguments, but got 2.
+services/RiskMitigationActionSuite.ts(54,41): error TS18048: 'riskCore.evidence.tangible' is possibly 'undefined'.
+services/SSOTCarbonInventoryService.ts(104,21): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/SSOTCarbonInventoryService.ts(126,21): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/SSOTCarbonInventoryService.ts(231,23): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+services/SSOTCarbonInventoryService.ts(241,24): error TS2345: Argument of type '"ESG"' is not assignable to parameter of type 'LogCategory'.
+src/routes/integrationRoutes.ts(15,51): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/services/ocrService.ts(124,51): error TS18046: 'error' is of type 'unknown'.
+utils/validators.ts(70,4): error TS2339: Property 'trim' does not exist on type 'ZodUnion<[ZodString, ZodString]>'.
+utils/validators.ts(250,39): error TS2559: Type '{ strict?: boolean | undefined; }' has no properties in common with type 'ParseContext<$ZodIssue>'.
+utils/validators.ts(258,23): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+../src/1-service/OmniOrchestrator.ts(5,51): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../2-infra/logging/OmniLogger.js'?
+../src/1-service/VectorEmbeddingService.ts(1,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../2-infra/logging/OmniLogger.js'?
+../src/config/DocumentRegistry.ts(7,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../types/DocumentChecklist.js'?
+../src/core/CircuitBreaker.ts(1,41): error TS2307: Cannot find module '@/omni/infrastructure/logging/OmniLogger' or its corresponding type declarations.
+../src/core/EternalPalaceConnection.ts(7,81): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+../src/core/EternalPalaceConnection.ts(9,54): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+../src/core/EternalPalaceConnection.ts(10,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../services/omniLogger.js'?
+../src/core/mesh/MeshNodeDiscoveryService.ts(1,41): error TS2307: Cannot find module '@/omni/infrastructure/logging/OmniLogger' or its corresponding type declarations.
+../src/core/mesh/MeshNodeDiscoveryService.ts(2,94): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './MeshProtocol.js'?
+../src/core/mesh/MeshNodeDiscoveryService.ts(3,35): error TS2307: Cannot find module '@/core/security/QuantumEncryption' or its corresponding type declarations.
+../src/omni/core/OmniEvolution.ts(129,48): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../services/SnykService.js'?
+../src/omni/core/OmniEvolution.ts(144,53): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../services/reportingService.js'?
+../src/omni/core/OmniI18nEngine.ts(49,5): error TS2741: Property ''ko-KR'' is missing in type '{ 'en-US': string; 'zh-TW': string; }' but required in type 'ILocalizedString'.
+../src/omni/protocols/UltimateAwakeningProtocol.ts(15,31): error TS2307: Cannot find module '@/types/omni.js' or its corresponding type declarations.
+../src/omni/services/OmniAvatarOrchestrator.ts(23,8): error TS2307: Cannot find module '@/types.js' or its corresponding type declarations.
+../src/omni/services/OmniAvatarOrchestrator.ts(24,26): error TS2307: Cannot find module '@/types.js' or its corresponding type declarations.
+../src/omni/services/OmniEsgManager.ts(9,29): error TS2307: Cannot find module '@/omni/interaction/visuals/OmniEsgCell.js' or its corresponding type declarations.
+../src/omni/services/OmniEsgManager.ts(17,8): error TS2307: Cannot find module '@/types.js' or its corresponding type declarations.
+../src/omni/services/OmniEsgManager.ts(24,8): error TS2307: Cannot find module '@/types.js' or its corresponding type declarations.
+../src/omni/services/OmniEsgManager.ts(241,46): error TS2307: Cannot find module '@/omni/services/OmniEvolutionEngine' or its corresponding type declarations.
+../src/services/agentService.ts(14,8): error TS2307: Cannot find module '../types.js' or its corresponding type declarations.
+../src/services/ai/KnowledgeSanctuaryService.ts(2,22): error TS2305: Module '"@/utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/services/api/csrfService.ts(36,9): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+../src/services/EcosystemPulseService.ts(2,10): error TS2305: Module '"../utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/services/GeminiIntegrationService.ts(2,10): error TS2305: Module '"@/utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/services/OmniAvatarOrchestrator.ts(23,8): error TS2307: Cannot find module '../types/agency.js' or its corresponding type declarations.
+../src/services/OmniAvatarOrchestrator.ts(24,26): error TS2307: Cannot find module '../types/omni.js' or its corresponding type declarations.
+../src/services/OmniMindService.ts(2,10): error TS2305: Module '"@/utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/services/OmniResonanceCore.ts(21,10): error TS2724: '"./OmniSyncService.js"' has no exported member named 'omniSyncService'. Did you mean 'OmniSyncService'?
+../src/services/OmniResonanceCore.ts(21,27): error TS2614: Module '"./OmniSyncService.js"' has no exported member 'OmniSyncEventType'. Did you mean to use 'import OmniSyncEventType from "./OmniSyncService.js"' instead?
+../src/services/OmniSwarmInterface.ts(3,10): error TS2305: Module '"@/utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/services/OmniSyncService.ts(190,22): error TS2454: Variable 'result' is used before being assigned.
+../src/services/OmniSyncService.ts(203,22): error TS2454: Variable 'result' is used before being assigned.
+../src/services/OmniSyncService.ts(793,72): error TS2345: Argument of type 'Record<string, unknown> | undefined' is not assignable to parameter of type 'Record<string, unknown>'.
+  Type 'undefined' is not assignable to type 'Record<string, unknown>'.
+../src/services/SentientNebulaService.ts(2,10): error TS2305: Module '"@/utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/services/StewardshipService.ts(2,10): error TS2305: Module '"../utils/OmniLogger.js"' has no exported member 'LogCategory'.
+../src/types/esg-go/l1-mvd.types.ts(98,43): error TS2345: Argument of type 'GovernanceQuickCheck' is not assignable to parameter of type 'Record<string, boolean>'.
+  Index signature for type 'string' is missing in type 'GovernanceQuickCheck'.
+../src/types/esg-go/l1-mvd.types.ts(99,43): error TS2345: Argument of type 'EnvironmentalQuickCheck' is not assignable to parameter of type 'Record<string, boolean>'.
+  Index signature for type 'string' is missing in type 'EnvironmentalQuickCheck'.
+../src/types/esg-go/l1-mvd.types.ts(100,43): error TS2345: Argument of type 'SocialQuickCheck' is not assignable to parameter of type 'Record<string, boolean>'.
+  Index signature for type 'string' is missing in type 'SocialQuickCheck'.
+../src/types/knowledge.ts(1,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../0-domain/contracts/IComponentCore.js'?
+../src/types/omni-mechanics.ts(2,46): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './aiPartner.js'?
+../src/types/omni-mechanics.ts(3,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './core-mechanics.js'?
+../src/types/omni-mechanics.ts(4,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../0-domain/contracts/IComponentCore.js'?
+../src/utils/OmniLogger.ts(2,15): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../omni/infrastructure/logging/OmniLogger.js'?
+../src/utils/OmniLogger.ts(3,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../omni/infrastructure/logging/OmniLogger.js'?
+../src/utils/PerformanceMonitor.ts(7,41): error TS2307: Cannot find module '@/omni/infrastructure/logging/OmniLogger' or its corresponding type declarations.

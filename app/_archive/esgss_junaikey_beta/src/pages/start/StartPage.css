@@ -1,0 +1,275 @@
+/**
+ * Start Page Styles
+ * 開始頁面樣式
+ * Anti-gravity Design System
+ */
+
+/* ============================================================================
+   頁面容器
+   ============================================================================ */
+
+.start-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================================
+   Header
+   ============================================================================ */
+
+.start-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-content {
+  animation: fade-in-down 0.8s ease-out;
+}
+
+.back-button {
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  transform: translateX(-4px);
+}
+
+/* ============================================================================
+   Main Content
+   ============================================================================ */
+
+.start-content {
+  flex: 1;
+  padding: 40px 20px;
+}
+
+/* ============================================================================
+   Welcome Section
+   ============================================================================ */
+
+.welcome-section {
+  padding: 40px 0;
+  animation: fade-in-up 1s ease-out;
+}
+
+.welcome-title {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.welcome-subtitle {
+  animation: fade-in-up 1s ease-out 0.3s both;
+}
+
+.uuid-display {
+  animation: fade-in-up 1s ease-out 0.6s both;
+  margin-top: 24px;
+}
+
+/* ============================================================================
+   Dashboard Cards
+   ============================================================================ */
+
+.dashboard-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: float-gentle 6s ease-in-out infinite;
+  animation-delay: calc(var(--index) * 0.15s);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0,255,255, 0.3);
+}
+
+.dashboard-card:active {
+  transform: translateY(-4px) scale(0.98);
+}
+
+/* ============================================================================
+   Footer
+   ============================================================================ */
+
+.start-footer {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 20px 0;
+}
+
+/* ============================================================================
+   動畫效果
+   ============================================================================ */
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   響應式調整
+   ============================================================================ */
+
+@media (max-width: 600px) {
+  .start-header {
+    padding: 15px 0;
+  }
+
+  .start-content {
+    padding: 20px;
+  }
+
+  .welcome-section {
+    padding: 20px 0;
+  }
+
+  .start-footer {
+    padding: 15px 0;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* ============================================================================
+   深色模式支持
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  .start-page {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+
+  .start-header {
+    background: rgba(30, 30, 30, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .dashboard-card {
+    background: rgba(40, 40, 40, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .start-footer {
+    background: rgba(30, 30, 30, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ============================================================================
+   可訪問性
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-title,
+  .welcome-subtitle,
+  .uuid-display,
+  .dashboard-card,
+  .header-content {
+    animation: none;
+  }
+
+  .dashboard-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   打印樣式
+   ============================================================================ */
+
+@media print {
+  .start-page {
+    background: white;
+  }
+
+  .start-header,
+  .start-content,
+  .start-footer {
+    background: white;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .dashboard-card {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* ============================================================================
+   高對比度模式
+   ============================================================================ */
+
+@media (prefers-contrast: high) {
+  .dashboard-card {
+    border-width: 2px;
+    box-shadow: none;
+  }
+
+  .back-button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================================================
+   焦點狀態
+   ============================================================================ */
+
+.dashboard-card:focus-visible {
+  outline: 2px solid rgba(0,255,255, 0.6);
+  outline-offset: 2px;
+}
+
+.back-button:focus-visible {
+  outline: 2px solid rgba(0,255,255, 0.6);
+  outline-offset: 2px;
+}

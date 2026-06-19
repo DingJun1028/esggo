@@ -1,0 +1,66 @@
+# 敹恍?嚗憓撱箄???瘚?
+
+## 5 ??敹恍???
+
+### Windows ?啣??典惇
+
+```powershell
+# 1. ???芸???蝵桅???
+.\quick-start.ps1
+
+### 6. ???隡箸???
+
+```bash
+# ??整合??? (?垢 + 敺垢)
+npm run dev
+```
+
+### 7. AI 頛??辣 (Opencode & Continue)
+
+?祇??格?虫蝙??`opencode-ai` ??**Continue Autocomplete** ?撈隞亦??雿喟?隞?Ⅳ鋆??AI ???擃???
+
+- [Continue Autocomplete 摰???](./docs/guides/continue-autocomplete.mdx)
+
+```bash
+# 雿輻 NPM 摰? Opencode
+npm i -g opencode-ai
+
+# 雿輻 Curl 摰? (Linux/MacOS 撠)
+OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash
+```
+
+### Linux/Mac ?啣??典惇
+
+```bash
+# 1. 鞈虫?甈?銝阡?銵??
+chmod +x quick-start.sh
+./quick-start.sh
+
+# 2. ?????隞?
+npm run start:all
+```
+
+## 撽??????
+
+- ?垢?: http://localhost:3000
+- 敺垢?? API: http://localhost:3001
+- 系統?亙熒瑼Ｘ蝡舫?: http://localhost:3001/api/health
+
+## 皜祈岫整合??
+
+```bash
+npm run test:esg-rag
+```
+
+## 整合??
+
+?典隞亙??誑銝?瑼誑?脣?整合蝝啁?嚗?
+
+- [受信驗證??](./README_OMNIPOTENT.md)
+- [??啣??典惇??](./DEPLOYMENT.md)
+- [API 閰喟敦??瑼(./docs/API.md)
+
+---
+
+**ESGss x JunAiKey** - ??驗算嚗蝭偶蝥?潦?
+
