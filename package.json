@@ -14,6 +14,8 @@
     "dev:ui": "next dev -p 3001",
     "lint": "eslint .",
     "test": "vitest",
+    "test:auth": "vitest run tests/auth.test.ts",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "omni:setup": "npx tsx scripts/setup_all_tables.ts",
     "omni:setup:dry": "npx tsx scripts/setup_all_tables.ts --dry-run",
