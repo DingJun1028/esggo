@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { ShieldAlert, Zap } from 'lucide-react';
 
 /**
@@ -108,19 +108,14 @@ export default function OmniJulesPassiveGuard() {
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <AnimatePresence>
+return (
+    <>
       {healingAlert && (
-        <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 50, scale: 0.9 }}
+        <div
           className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 bg-slate-900/90 border border-red-500/50 rounded-2xl p-4 shadow-[0_0_30px_rgba(245,34,45,0.3)]"
         >
           <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 relative overflow-hidden">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+            <div
               className="absolute inset-0 border-2 border-transparent border-t-red-500 rounded-full"
             />
             <ShieldAlert size={20} />
@@ -137,8 +132,8 @@ export default function OmniJulesPassiveGuard() {
               <span>攔截視覺亂碼，果因修復中...</span>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }

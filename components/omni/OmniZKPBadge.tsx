@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useColorDropStream } from '@/lib/hooks/useColorDropStream';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { ShieldCheck, ShieldAlert } from 'lucide-react';
 
 export function OmniZKPBadge() {
@@ -12,12 +12,9 @@ export function OmniZKPBadge() {
   const visualState = getVisualState(latestEvent?.event_type || '');
 
   return (
-    <motion.div 
+    <div 
       className={`relative overflow-hidden rounded-full px-4 py-2 flex items-center gap-3 backdrop-blur-md border ${visualState.borderColor}`}
       style={{ backgroundColor: visualState.bgColor, boxShadow: visualState.glowColor }}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
     >
       {/* Live Indicator */}
       <div className="relative flex h-3 w-3">
@@ -31,19 +28,16 @@ export function OmniZKPBadge() {
         <span className="text-xs font-bold text-white tracking-wider uppercase">
           {visualState.label}
         </span>
-        <AnimatePresence mode="popLayout">
+        
           {latestEvent && (
-            <motion.span 
+            <span 
               key={latestEvent.id}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
               className="text-[10px] text-cyan-200/80 font-mono"
             >
               ZKP: {latestEvent.payload?.zkp_hash?.substring(0, 16)}...
-            </motion.span>
+            </span>
           )}
-        </AnimatePresence>
+        
       </div>
 
       <div className="ml-2">
@@ -53,6 +47,6 @@ export function OmniZKPBadge() {
           <ShieldCheck className={`w-5 h-5 ${isLive ? 'text-cyan-400' : 'text-gray-400'}`} />
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

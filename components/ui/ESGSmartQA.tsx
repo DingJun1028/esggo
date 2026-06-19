@@ -12,7 +12,7 @@ import {
   ShieldCheck,
   Lock,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 import { OmniThinkingChain } from '@/components/omni/OmniThinkingChain';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
@@ -263,10 +263,8 @@ export const ESGSmartQA = () => {
         )}
 
         {messages.map((msg) => (
-          <motion.div
+          <div
             key={msg.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
             className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
           >
             <div
@@ -368,13 +366,11 @@ export const ESGSmartQA = () => {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
         ))}
 
         {isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <div
             className="flex gap-3 max-w-[90%]"
           >
             <div className="p-2 rounded-full h-fit bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -383,7 +379,7 @@ export const ESGSmartQA = () => {
             <div className="flex-1 min-w-0">
               <OmniThinkingChain isThinking={isLoading} title="檢索向量知識庫與推理中..." />
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
 

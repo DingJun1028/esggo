@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { 
   Network, FileText, Shield, UserCheck, 
   Database, GitBranch, ArrowRight, Activity 
@@ -42,10 +42,7 @@ export function MemoryGraphVisualizer({ graph, title = '永續記憶因果圖譜
           const Config = NODE_CONFIG[node.type];
           return (
             <React.Fragment key={node.id}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.2 }}
+              <div
                 className="relative z-10 group shrink-0"
               >
                 <div className="flex flex-col items-center gap-3 w-32 sm:w-40 text-center">
@@ -70,19 +67,16 @@ export function MemoryGraphVisualizer({ graph, title = '永續記憶因果圖譜
                 {node.type === 'EVIDENCE' && (
                   <div className="absolute inset-0 bg-blue-400/20 rounded-full animate-ping -z-10 scale-125 sm:scale-150 blur-xl opacity-30" />
                 )}
-              </motion.div>
+              </div>
 
               {/* Edge Arrow */}
               {i < graph.nodes.length - 1 && (
-                <motion.div 
-                  initial={{ opacity: 0, scaleX: 0 }}
-                  animate={{ opacity: 1, scaleX: 1 }}
-                  transition={{ delay: i * 0.2 + 0.1 }}
+                <div
                   className="flex items-center text-slate-200 shrink-0"
                 >
                   <ArrowRight size={16} className="animate-pulse sm:w-5 sm:h-5" />
                   <div className="h-px w-6 sm:w-8 bg-gradient-to-r from-slate-200 to-transparent" />
-                </motion.div>
+                </div>
               )}
             </React.Fragment>
           );

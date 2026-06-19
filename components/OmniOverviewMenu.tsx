@@ -17,7 +17,7 @@
  */
 // components/OmniOverviewMenu.tsx
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { X, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '../lib/utils';
@@ -36,21 +36,14 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
 
   const allNavGroups = [...SaaS_NAVIGATION, ...IT_OPS_NAVIGATION];
 
-  return (
-    <AnimatePresence>
+return (
+    <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <div
           className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
           onClick={onClose}
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 50 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 50 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+          <div
             className={cn(
               'relative w-full max-w-lg max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl',
               isDark ? 'bg-slate-900 border border-white/10' : 'bg-white border border-slate-200'
@@ -122,11 +115,11 @@ const OmniOverviewMenu: React.FC<OmniOverviewMenuProps> = ({ isOpen, onClose }) 
                   </div>
                 </div>
               ))}
-            </div>
-          </motion.div>
-        </motion.div>
+</div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

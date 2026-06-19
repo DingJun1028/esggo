@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { Target, Users, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { BrandCard, BrandBadge } from '../brand';
 import { ResonanceResult } from '../../lib/governance-engine';
@@ -50,8 +50,7 @@ export function ResonanceMatrix({ results }: Props) {
                     Internal
                   </div>
                   <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
+                    <div
                       animate={{ width: `${(r.internalPriority / 5) * 100}%` }}
                       className="h-full bg-blue-600"
                     />
@@ -63,8 +62,7 @@ export function ResonanceMatrix({ results }: Props) {
                     Stakeholder
                   </div>
                   <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
+                    <div
                       animate={{ width: `${(r.stakeholderPriority / 5) * 100}%` }}
                       className="h-full bg-purple-600"
                     />
@@ -125,11 +123,8 @@ export function ResonanceMatrix({ results }: Props) {
             </span>
 
             {results.map((r, i) => (
-              <motion.div
+              <div
                 key={r.topicId}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1 }}
                 style={{
                   left: `${(r.internalPriority / 5) * 80 + 10}%`,
                   bottom: `${(r.stakeholderPriority / 5) * 80 + 10}%`,
@@ -150,7 +145,7 @@ export function ResonanceMatrix({ results }: Props) {
                     {r.label}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

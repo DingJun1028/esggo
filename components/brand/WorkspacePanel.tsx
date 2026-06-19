@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   X,
   FileText,
@@ -63,8 +63,8 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
     { id: 'history', label: '治理日誌', icon: <History size={14} /> },
   ];
 
-  return (
-    <AnimatePresence>
+return (
+    <>
       {isOpen && (
         <aside className="fixed right-0 top-0 bottom-0 w-full max-w-[90%] sm:max-w-[450px] lg:max-w-[560px] bg-white border-l border-slate-100 shadow-2xl z-50 flex flex-col">
           {/* Header */}
@@ -355,8 +355,8 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
               <Cpu size={16} className="mr-2" /> 啟動全域協作模式
             </BrandButton>
           </div>
-        </aside>
+</aside>
       )}
-    </AnimatePresence>
+    </>
   );
 }

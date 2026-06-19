@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Bot,
   Activity,
@@ -68,25 +68,17 @@ export function OmniAgentPulse() {
 
   return (
     <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      <motion.div
+      <div
         drag
         dragConstraints={constraintsRef}
         dragElastic={0.1}
         dragMomentum={false}
-        initial={{
-          x: typeof window !== 'undefined' ? window.innerWidth - 380 : 800,
-          y: typeof window !== 'undefined' ? window.innerHeight - 280 : 500,
-        }}
         className="absolute pointer-events-auto shadow-2xl flex flex-col"
       >
-        <AnimatePresence mode="wait">
+        
           {isExpanded ? (
-            <motion.div
+            <div
               key="expanded"
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 25, mass: 0.8 }}
               className="w-[340px] bg-slate-950/70 border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.2)] ring-1 ring-cyan-500/20"
             >
               {/* Liquid Gloss Highlight */}
@@ -195,19 +187,16 @@ export function OmniAgentPulse() {
                 </form>
 
                 {/* Live Output Box */}
-                <AnimatePresence>
+                
                   {executionResult && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -5 }}
+                    <div
                       className="p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-[10px] font-mono text-yellow-300 flex items-start gap-1.5"
                     >
                       <Sparkles size={12} className="mt-0.5 shrink-0" />
                       <span>{executionResult}</span>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
+                
 
                 {/* Real-time Metrics */}
                 <div className="grid grid-cols-2 gap-2">
@@ -253,14 +242,10 @@ export function OmniAgentPulse() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
+            <div
               key="collapsed"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsExpanded(true)}
               role="button"
@@ -301,10 +286,10 @@ export function OmniAgentPulse() {
                   {connectionStatus}
                 </span>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
-      </motion.div>
+        
+      </div>
     </div>
   );
 }

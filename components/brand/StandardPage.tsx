@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { OmniPageConfig } from '../../lib/page-config';
 import { BrandButton, BrandCard, BrandBadge, BrandStatusDot } from './index';
 import { fadeIn, staggerContainer, slideIn } from '../../lib/animations';
@@ -15,15 +15,13 @@ export default function StandardPage({ config, children }: StandardPageProps) {
   const activeKpis = config.kpis?.slice(0, 6) ?? [];
 
   return (
-    <motion.div
+    <div
       className="page-container pb-12 relative z-10"
       initial="initial"
       animate="animate"
-      variants={staggerContainer}
     >
       {/* ─── Sovereign Header Bar (Layer 1: Structure) ────────────────── */}
-      <motion.header
-        variants={fadeIn}
+      <header
         className="flex items-center justify-between mb-8 p-4 rounded-[2rem] border border-white/80 shadow-premium"
       >
         <div className="flex items-center gap-6 min-w-0">
@@ -97,16 +95,15 @@ export default function StandardPage({ config, children }: StandardPageProps) {
             </BrandButton>
           ))}
         </div>
-      </motion.header>
+      </header>
 
       {/* ─── Liquid KPI Matrix (Layer 2: Hologram) ────────────────────── */}
       {activeKpis.length > 0 && (
-        <motion.div
-          variants={fadeIn}
+        <div
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-10"
         >
           {activeKpis.map((k, idx) => (
-            <motion.div key={k.key} variants={slideIn} custom={idx}>
+            <div key={k.key}>
               <BrandCard variant="glass" hover padding="sm" className="group">
                 <div className="flex items-center justify-between mb-4">
                   <div
@@ -149,16 +146,16 @@ export default function StandardPage({ config, children }: StandardPageProps) {
                   </div>
                 </div>
               </BrandCard>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       )}
 
       {/* ─── Dynamic Workspace Layer ─────────────────────────────────── */}
       {children && (
-        <motion.div variants={fadeIn} className="mb-10">
+        <div className="mb-10">
           {children}
-        </motion.div>
+        </div>
       )}
 
       {/* ─── Sovereign Bento Sections (Layer 1: Structure) ────────────── */}
@@ -166,10 +163,8 @@ export default function StandardPage({ config, children }: StandardPageProps) {
         {config.sections
           .filter((s) => !s.hidden)
           .map((section, idx) => (
-            <motion.div
+            <div
               key={section.id}
-              variants={slideIn}
-              custom={idx + 2}
               className={cn('col-span-12', section.columns ? `lg:col-span-${section.columns}` : '')}
             >
               <BrandCard
@@ -215,9 +210,9 @@ export default function StandardPage({ config, children }: StandardPageProps) {
                 {/* Dynamic Content Body */}
                 <div className="flex-1 p-8 overflow-auto no-scrollbar">{section.component}</div>
               </BrandCard>
-            </motion.div>
+            </div>
           ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

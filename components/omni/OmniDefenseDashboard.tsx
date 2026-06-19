@@ -3,7 +3,7 @@
 import React from 'react';
 import { useColorDropStream } from '@/lib/hooks/useColorDropStream';
 import { OmniZKPBadge } from './OmniZKPBadge';
-import { motion } from 'framer-motion';
+
 import { Activity, Shield, Database, FastForward } from 'lucide-react';
 
 export function OmniDefenseDashboard() {
@@ -79,11 +79,8 @@ export function OmniDefenseDashboard() {
             const vs = getVisualState(evt.event_type);
             const borderColor = vs.borderColor?.replace('border-', '') || 'rgba(255,255,255,0.1)';
             return (
-              <motion.div
+              <div
                 key={evt.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
                 className="p-3 rounded-lg border -md flex flex-col gap-2"
                 style={{ backgroundColor: vs.bgColor, borderColor: borderColor }}
               >
@@ -113,7 +110,7 @@ export function OmniDefenseDashboard() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
           {events.length === 0 && (

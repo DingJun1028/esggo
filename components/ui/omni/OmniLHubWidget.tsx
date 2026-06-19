@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Sparkles, Terminal, Cpu } from 'lucide-react';
 import { OmniBaseCard } from './OmniBaseCard';
 
@@ -79,29 +79,25 @@ export const OmniLHubWidget: React.FC<OmniLHubWidgetProps> = ({
       </div>
 
       <div className="space-y-4 relative z-10 font-mono text-sm">
-        <AnimatePresence>
+        
           {displayedInsights.map((insight, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
               className="flex items-start gap-3 text-slate-300"
             >
               <Terminal size={14} className="text-cyan-500 mt-1 flex-shrink-0" />
               <span className="leading-relaxed">{insight}</span>
-            </motion.div>
+            </div>
           ))}
-        </AnimatePresence>
+        
 
         {isProcessing && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <div
             className="flex items-center gap-3 text-cyan-500/50"
           >
             <Sparkles size={14} className="animate-spin" />
             <span>Analyzing evidence vault data...</span>
-          </motion.div>
+          </div>
         )}
       </div>
     </OmniBaseCard>

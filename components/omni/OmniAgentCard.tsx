@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Sparkles, Brain, GitBranch, Zap, Layers, Crown, ChevronLeft } from 'lucide-react';
 
 const defaultVoiceLines = [
@@ -138,9 +138,7 @@ export function OmniAgentCard({
 
         {/* Character Placeholder */}
         <div className="relative z-10 h-full flex items-center justify-center py-8">
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          <div
             className="text-center"
           >
             <div
@@ -164,7 +162,7 @@ export function OmniAgentCard({
             <div className="text-xs mt-1 font-mono opacity-50" style={{ color: colors.text.muted }}>
               [ Hologram Render ]
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Labels */}
@@ -339,10 +337,8 @@ export function OmniAgentCard({
                   className="flex-1 h-1.5 rounded-full overflow-hidden"
                   style={{ backgroundColor: colors.bg.hover }}
                 >
-                  <motion.div
-                    initial={{ width: 0 }}
+                  <div
                     animate={{ width: `${stat.value}%` }}
-                    transition={{ duration: 1.5, delay: 0.2, ease: 'easeOut' }}
                     className="h-full shadow-[0_0_10px_rgba(85,199,255,0.8)]"
                     style={{
                       background: `linear-gradient(to right, ${colors.accent.cyan}, ${colors.accent.blue})`,
@@ -370,9 +366,8 @@ export function OmniAgentCard({
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {skills.map((skill) => (
-              <motion.div
+              <div
                 key={skill.nameEN}
-                whileHover={{ scale: 1.03, y: -2 }}
                 className="rounded-xl p-3 border hover:shadow-[0_0_15px_rgba(85,199,255,0.2)] transition-all cursor-pointer"
                 style={{
                   backgroundColor: `${colors.bg.card}cc`,
@@ -394,13 +389,12 @@ export function OmniAgentCard({
                 <div className="text-[10px] font-bold" style={{ color: colors.text.secondary }}>
                   {skill.nameZH}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* Ultimate Card */}
-          <motion.div
-            whileHover={{ scale: 1.01 }}
+          <div
             className="rounded-xl p-4 border-2 relative overflow-hidden shadow-[0_0_20px_rgba(155,124,255,0.15)]"
             style={{
               background: `linear-gradient(135deg, ${colors.accent.purple}15, ${colors.accent.cyan}10)`,
@@ -460,7 +454,7 @@ export function OmniAgentCard({
                 100%
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Footer Section */}
@@ -476,18 +470,15 @@ export function OmniAgentCard({
             >
               Voice Line
             </div>
-            <AnimatePresence mode="wait">
-              <motion.div
+            
+              <div
                 key={currentVoiceLine}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -5 }}
                 className="text-xs font-bold leading-relaxed h-[2.5rem]"
                 style={{ color: colors.text.primary }}
               >
                 {voiceLines[currentVoiceLine]}
-              </motion.div>
-            </AnimatePresence>
+              </div>
+            
             <div className="flex gap-1.5 mt-2">
               {voiceLines.map((_, i) => (
                 <div

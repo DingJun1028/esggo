@@ -1,6 +1,6 @@
 ﻿'use client';
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import { Send, Square, Paperclip, Mic, Bot, ChevronUp, Sparkles, Zap, ShieldCheck } from 'lucide-react';
 import { BrandBadge } from './index';
 
@@ -19,9 +19,7 @@ export default function ComposerFooter() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 px-6 pb-6 pointer-events-none lg:left-[var(--sidebar-width)] transition-all duration-500">
-      <motion.div 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+      <div
         className={`max-w-4xl mx-auto glass-panel border border-white/20 shadow-extreme rounded-[32px] p-2 pointer-events-auto transition-all duration-500 ${isFocused ? 'ring-4 ring-blue-500/5 -translate-y-2' : ''}`}
       >
         <div className="flex flex-col">
@@ -86,7 +84,7 @@ export default function ComposerFooter() {
              </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { ShieldCheck, Hash, Lock, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -19,14 +19,10 @@ export default function IntegritySeal({
 }: IntegritySealProps) {
   return (
     <div className={cn('relative group', className)}>
-      <AnimatePresence mode="wait">
+      
         {isSealed ? (
-          <motion.div
+          <div
             key="sealed"
-            initial={{ scale: 0.8, opacity: 0, rotateY: 90 }}
-            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-            exit={{ scale: 0.8, opacity: 0, rotateY: -90 }}
-            transition={{ type: 'spring', damping: 12, stiffness: 100 }}
             className="flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-[2rem] shadow-[0_0_30px_rgba(16,185,129,0.15)] relative overflow-hidden"
           >
             {/* Luminous Glow */}
@@ -57,13 +53,10 @@ export default function IntegritySeal({
                 {timestamp || new Date().toLocaleDateString()}
               </p>
             </div>
-          </motion.div>
+          </div>
         ) : (
-          <motion.div
+          <div
             key="open"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             className="flex items-center gap-4 bg-slate-100/50 border border-dashed border-slate-300 p-4 rounded-[2rem] grayscale opacity-60"
           >
             <div className="w-12 h-12 rounded-2xl bg-slate-200 text-slate-400 flex items-center justify-center">
@@ -77,19 +70,17 @@ export default function IntegritySeal({
                 Awaiting 5T Finalization...
               </p>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
       {/* Decorative Particle (Hologram Effect) */}
       {isSealed && (
-        <motion.div
+        <div
           className="absolute -top-2 -right-2 text-emerald-400"
-          animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
         >
           <Zap size={16} fill="currentColor" />
-        </motion.div>
+        </div>
       )}
     </div>
   );

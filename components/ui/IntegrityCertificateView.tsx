@@ -4,7 +4,6 @@ import React from 'react';
 import { Shield, CheckCircle2, Download, ExternalLink, Award, FileCheck, Map, Landmark } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandButton, BrandT5Strip } from '../brand';
 import { IntegrityCertificate } from '../../lib/proof-export';
-import { motion } from 'framer-motion';
 
 interface Props {
   certificate: IntegrityCertificate;

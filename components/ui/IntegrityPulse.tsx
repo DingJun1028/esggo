@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Shield, Zap, Activity, CheckCircle2, Lock, Database } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandStatusDot } from '../brand';
 import { cn } from '../../lib/utils';
@@ -57,10 +57,7 @@ export function IntegrityPulse() {
           <div className="relative">
             <Activity size={18} className="text-primary-400" />
             {isPulsing && (
-              <motion.div
-                initial={{ scale: 0.5, opacity: 1 }}
-                animate={{ scale: 3, opacity: 0 }}
-                transition={{ duration: 1.5, ease: 'easeOut' }}
+              <div
                 className="absolute inset-0 bg-primary-400 rounded-full -z-10"
               />
             )}
@@ -80,25 +77,19 @@ export function IntegrityPulse() {
       <div className="flex-1 p-4 sm:p-5 relative overflow-hidden flex flex-col justify-center items-center min-h-[160px] sm:min-h-[180px]">
         {/* Animated Background Radar */}
         <div className="absolute inset-0 flex items-center justify-center opacity-10">
-          <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.3, 0.1] }}
-            transition={{ duration: 4, repeat: Infinity }}
+          <div
             className="w-32 h-32 sm:w-48 sm:h-48 border border-white rounded-full"
           />
-          <motion.div
-            animate={{ scale: [1, 1.5, 1], opacity: [0.05, 0.2, 0.05] }}
-            transition={{ duration: 6, repeat: Infinity, delay: 1 }}
+          <div
             className="w-32 h-32 sm:w-48 sm:h-48 border border-white rounded-full"
           />
         </div>
 
         <div className="relative z-10 text-center space-y-3 sm:space-y-4 w-full">
-          <AnimatePresence mode="popLayout">
+          
             {events.length > 0 ? (
-              <motion.div
+              <div
                 key={events[0].id}
-                initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
                 className="space-y-1.5 sm:space-y-2"
               >
                 <div className="flex justify-center gap-2">
@@ -121,7 +112,7 @@ export function IntegrityPulse() {
                 <p className="text-[8px] sm:text-[9px] font-mono text-white/40">
                   Timestamp: {events[0].timestamp}
                 </p>
-              </motion.div>
+              </div>
             ) : (
               <div className="space-y-2 opacity-20">
                 <Shield size={28} className="mx-auto sm:w-8 sm:h-8" />
@@ -130,7 +121,7 @@ export function IntegrityPulse() {
                 </p>
               </div>
             )}
-          </AnimatePresence>
+          
         </div>
       </div>
 
