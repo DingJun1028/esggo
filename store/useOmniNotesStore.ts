@@ -82,8 +82,7 @@ export const useOmniNotesStore = create<OmniNotesState>()(
 
             addTasks: (newTasks) => {
                 set((state) => {
-                    const existingTaskIds = new Set(state.tasks.map(t => t.id));
-                    const uniqueNewTasks = newTasks.filter(t => !existingTaskIds.has(t.id));
+                    const uniqueNewTasks = newTasks.filter(t => !state.tasks.some(st => st.id === t.id));
                     return { tasks: [...state.tasks, ...uniqueNewTasks] };
                 });
             },

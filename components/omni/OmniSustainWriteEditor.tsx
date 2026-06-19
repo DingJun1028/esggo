@@ -3,7 +3,8 @@
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
-import React, { useEffect, useImperativeHandle, forwardRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, forwardRef, useState, useRef } from 'react';
+import { useSustainWriteVerification } from '@/hooks/useSustainWriteVerification';
 import {
   Bold,
   Italic,
@@ -285,25 +286,36 @@ const AIBubbleMenu = ({ editor }: { editor: Editor }) => {
 const OmniSustainWriteEditor = forwardRef<OmniSustainWriteEditorRef, OmniSustainWriteEditorProps>(
   ({ value, onChange, editable = true, documentId = 'default' }, ref) => {
     const [hashLock, setHashLock] = useState<string>('0000000000000000');
+    const { verifyText, result, isVerifying } = useSustainWriteVerification(value);
+
+    const hashLockTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const editor = useEditor({
       extensions: [StarterKit],
       content: value,
       editable: editable,
-      onUpdate: async ({ editor }) => {
+      onUpdate: ({ editor }) => {
         const html = editor.getHTML();
         onChange(html);
 
-        // 5T Graceful Degradation: 本地草稿保存
-        try {
-          localStorage.setItem(`omni_draft_${documentId}`, html);
-        } catch (e) {
-          console.warn('Failed to save draft to localStorage', e);
+        // Debounce expensive operations to prevent UI freezing
+        if (hashLockTimeoutRef.current) {
+          clearTimeout(hashLockTimeoutRef.current);
         }
+        hashLockTimeoutRef.current = setTimeout(async () => {
+          // 5T Graceful Degradation: 本地草稿保存
+          try {
+            localStorage.setItem(`omni_draft_${documentId}`, html);
+          } catch (e) {
+            console.warn('Failed to save draft to localStorage', e);
+          }
 
-        // 5T Trustworthy: 即時計算 Hash Lock
-        const newHash = await generateHashLock(editor.getText());
-        setHashLock(newHash);
+          // 5T Trustworthy: 即時計算 Hash Lock
+          const textContent = editor.getText();
+          const newHash = await generateHashLock(textContent);
+          setHashLock(newHash);
+          verifyText(textContent);
+        }, 1000);
       },
       editorProps: {
         attributes: {
@@ -324,9 +336,11 @@ const OmniSustainWriteEditor = forwardRef<OmniSustainWriteEditorRef, OmniSustain
     useEffect(() => {
       // 初始載入時計算 Hash
       if (editor && value) {
-        generateHashLock(editor.getText()).then(setHashLock);
+        const textContent = editor.getText();
+        generateHashLock(textContent).then(setHashLock);
+        verifyText(textContent);
       }
-    }, [editor, value]);
+    }, [editor, value, verifyText]);
 
     useEffect(() => {
       if (editor && editor.getHTML() !== value) {
@@ -350,8 +364,16 @@ const OmniSustainWriteEditor = forwardRef<OmniSustainWriteEditorRef, OmniSustain
 
         {/* 5T Protocol: Trustworthy Hash Lock Badge */}
         <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-slate-100/80 dark:bg-slate-800/80 text-[10px] text-slate-500 dark:text-slate-400 font-mono rounded-md border border-slate-200/50 dark:border-slate-700/50 opacity-50 group-hover:opacity-100 transition-opacity">
-          <Lock size={10} className="text-cyan-600 dark:text-cyan-400" />
-          <span>5T-LOCK:{hashLock}</span>
+          {isVerifying ? <RefreshCcw size={10} className="animate-spin text-cyan-500" /> : <Lock size={10} className={result.isTrustworthy ? "text-emerald-500" : "text-amber-500"} />}
+          <span>5T-LOCK:{result.hashLock || hashLock} | Score:{result.score}</span>
+        </div>
+
+        {/* Print-only Verification Seal */}
+        <div className="hidden print:block mt-8 p-4 border-2 border-slate-800 rounded-lg">
+          <h3 className="font-bold text-lg mb-2">ESGGO 5T Protocol Verification Seal</h3>
+          <p className="text-sm"><strong>Status:</strong> {result.isTrustworthy ? 'Verified (Trustworthy)' : 'Draft (Incomplete)'}</p>
+          <p className="text-sm font-mono"><strong>Hash-Lock (ZKP):</strong> {result.hashLock || hashLock}</p>
+          <p className="text-sm"><strong>GRI Coverage Score:</strong> {result.score}/100</p>
         </div>
       </div>
     );
