@@ -71,3 +71,10 @@ render.json
 
 # Archived old folders (too large for Vercel deploy)
 app/_archive/
+
+# PDF.js (huge, not needed for deploy)
+pdfjs-6.0.227-legacy-dist/
+public/pdfjs_extracted/
+lib/web/cmaps/
+lib/web/images/
+public/lib/
