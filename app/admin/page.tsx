@@ -391,11 +391,12 @@ function RoleCard({ role }: { role: RolePermission }) {
   );
 }
 
-function APIKeyRow({ apiKey }: { apiKey: APIKey }) {
+function APIKeyRow({ apiKey, disabled }: { apiKey: APIKey; disabled?: boolean }) {
   const [showKey, setShowKey] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
+    if (disabled) return;
     navigator.clipboard.writeText(apiKey.key);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -405,7 +406,8 @@ function APIKeyRow({ apiKey }: { apiKey: APIKey }) {
     <div
       className={cn(
         'bg-white rounded-xl border p-4 transition-all',
-        apiKey.status === 'revoked' ? 'border-rose-200 opacity-60' : 'border-slate-100'
+        apiKey.status === 'revoked' ? 'border-rose-200 opacity-60' : 'border-slate-100',
+        disabled && 'opacity-70'
       )}
     >
       <div className="flex items-center justify-between mb-2">
@@ -415,17 +417,35 @@ function APIKeyRow({ apiKey }: { apiKey: APIKey }) {
           <OmniBadge variant={apiKey.status === 'active' ? 'success' : 'error'} size="xs">
             {apiKey.status === 'active' ? '啟用' : '已撤銷'}
           </OmniBadge>
+          {disabled && (
+            <span className="text-[9px] font-bold px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded">
+              暫停
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={handleCopy} className="p-1 hover:bg-slate-50 rounded transition-colors">
+          <button
+            onClick={handleCopy}
+            disabled={disabled}
+            className={cn(
+              'p-1 rounded transition-colors',
+              disabled ? 'cursor-not-allowed opacity-40' : 'hover:bg-slate-50'
+            )}
+          >
             {copied ? (
               <CheckCircle2 size={12} className="text-emerald-500" />
             ) : (
               <Copy size={12} className="text-slate-400" />
             )}
           </button>
-          <button className="p-1 hover:bg-rose-50 rounded transition-colors">
-            <Trash2 size={12} className="text-slate-400 hover:text-rose-500" />
+          <button
+            disabled={disabled}
+            className={cn(
+              'p-1 rounded transition-colors',
+              disabled ? 'cursor-not-allowed opacity-40' : 'hover:bg-rose-50'
+            )}
+          >
+            <Trash2 size={12} className={disabled ? 'text-slate-300' : 'text-slate-400 hover:text-rose-500'} />
           </button>
         </div>
       </div>
@@ -660,18 +680,28 @@ export default function AdminBackendPage() {
                 <h3 className="text-base font-bold text-[#003262]">API 金鑰管理</h3>
                 <p className="text-xs text-slate-400">管理 API 金鑰與存取權限</p>
               </div>
-              <OmniButton
-                variant="primary"
-                size="sm"
-                icon={<Plus size={14} />}
-                className="bg-[#003262] hover:bg-[#002244] text-white"
-              >
-                產生金鑰
-              </OmniButton>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold px-2 py-1 bg-amber-50 text-amber-600 rounded-full border border-amber-200">
+                  ⏸ 暫停使用
+                </span>
+              </div>
+            </div>
+            {/* 暫停提示 */}
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-bold text-amber-700">金鑰更換功能暫時下架</p>
+                  <p className="text-xs text-amber-600 mt-1">
+                    金鑰輪轉與更換功能正在維護中。現有金鑰仍可正常使用，但暫停新增、更換與撤銷操作。
+                    如有緊急需求，請聯繫系統管理員。
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {API_KEYS.map((apiKey) => (
-                <APIKeyRow key={apiKey.id} apiKey={apiKey} />
+                <APIKeyRow key={apiKey.id} apiKey={apiKey} disabled />
               ))}
             </div>
           </div>
