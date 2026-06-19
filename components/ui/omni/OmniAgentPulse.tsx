@@ -29,7 +29,6 @@ export function OmniAgentPulse() {
       message: 'OmniAgent Pulse 核心已啟動',
     },
   ]);
-  const dragControls = useDragControls();
 
   // Subscribe to OmniAgentBus
   useEffect(() => {
@@ -84,10 +83,6 @@ export function OmniAgentPulse() {
 
   return (
     <div
-      drag
-      dragControls={dragControls}
-      dragMomentum={false}
-      dragElastic={0.1}
       className={cn(
         'fixed z-50 bottom-6 right-6 flex flex-col items-end gap-2',
         'font-sans selection:bg-cyan-500/30'
@@ -149,12 +144,10 @@ export function OmniAgentPulse() {
 
       {/* 懸浮按鈕 (Drag Handle) */}
       <div
-        onPointerDown={(e) => dragControls.start(e)}
-        whileTap={{ scale: 0.95 }}
         onClick={() => !isExpanded && setIsExpanded(true)}
         className={cn(
-          'w-14 h-14 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing',
-          'bg-gradient-to-br from-cyan-500/20 to-blue-600/20 -md',
+          'w-14 h-14 rounded-full flex items-center justify-center cursor-pointer',
+          'bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border-md',
           'border border-cyan-400/30 shadow-[0_0_20px_rgba(6,182,212,0.3)]',
           'relative group overflow-hidden'
         )}

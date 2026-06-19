@@ -19,6 +19,11 @@ export default function ReportPage() {
 
   const load = async () => {
     setLoading(true);
+    if (!supabase) {
+      setEvidence([]);
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase.from('evidence_vault').select('*').eq('status', 'verified');
     setEvidence(data || []);
     setLoading(false);

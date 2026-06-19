@@ -2,19 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 
-import xss from 'xss';
 import { BookOpen, ShieldCheck, Terminal, Cpu, Search, ChevronRight, Activity, Zap, Database } from 'lucide-react';
-
-const myXss = new xss.FilterXSS({
-  whiteList: {
-    ...xss.whiteList,
-    strong: ['class'],
-    code: ['class'],
-    p: ['class'],
-    li: ['class'],
-    td: ['class']
-  }
-});
 import { BrandCard, BrandBadge, BrandStatusDot } from '@/components/brand';
 
 interface Section {
@@ -97,6 +85,8 @@ ${page.acceptance_5t || ''}
     : null;
 
   // 🌟 輕量且高質感的 Markdown 渲染器 (無需額外安裝套件)
+  const escapeHtml = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
   const renderMarkdown = (text: string) => {
     return text.split('\n\n').map((block, i) => {
       if (!block.trim()) return null;
@@ -123,8 +113,8 @@ ${page.acceptance_5t || ''}
                 {rows.slice(1).map((row, rowIndex) => (
                   <tr key={rowIndex} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
                     {row.split('|').filter(Boolean).map((cell, j) => {
-                      const formattedCell = cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>').replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>');
-                      return <td key={j} className="p-4 text-slate-300" dangerouslySetInnerHTML={{ __html: myXss.process(formattedCell) }} />;
+                      const formattedCell = escapeHtml(cell.trim()).replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>').replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>');
+                      return <td key={j} className="p-4 text-slate-300" dangerouslySetInnerHTML={{ __html: formattedCell }} />;
                     })}
                   </tr>
                 ))}
@@ -139,8 +129,8 @@ ${page.acceptance_5t || ''}
         return (
           <ul key={i} className="list-disc list-inside space-y-2 my-4 text-slate-300 marker:text-cyan-500 leading-relaxed">
             {block.split('\n').filter(l => l.startsWith('- ')).map((item, j) => {
-              const formattedItem = item.replace('- ', '').replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>').replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>');
-              return <li key={j} dangerouslySetInnerHTML={{ __html: myXss.process(formattedItem) }} />;
+              const formattedItem = escapeHtml(item.replace('- ', '')).replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>').replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>');
+              return <li key={j} dangerouslySetInnerHTML={{ __html: formattedItem }} />;
             })}
           </ul>
         );
@@ -160,11 +150,11 @@ ${page.acceptance_5t || ''}
       }
 
       // 處理 Paragraph (段落)
-      const formattedText = block
+      const formattedText = escapeHtml(block)
         .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
         .replace(/`(.*?)`/g, '<code class="text-indigo-300 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20">$1</code>');
 
-      return <p key={i} className="text-slate-300 leading-relaxed mb-4 text-[15px]" dangerouslySetInnerHTML={{ __html: myXss.process(formattedText) }} />;
+      return <p key={i} className="text-slate-300 leading-relaxed mb-4 text-[15px]" dangerouslySetInnerHTML={{ __html: formattedText }} />;
     });
   };
 

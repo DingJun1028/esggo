@@ -102,7 +102,12 @@ const applyPractice = async (practice: AiRecommendation) => {
     showToast(`正在套用：${practice.title}...`, 'info');
     try {
       // 1. Seal the decision with IntegrityService (Best Practice!)
-      await integrityService.sealData('Best_Practice_Application', practice, {
+      await integrityService.sealData('Best_Practice_Application', {
+        title: practice.title,
+        description: practice.description,
+        category: practice.category,
+        gri: practice.gri
+      }, {
         user: 'Admin',
         dept: 'ESG Committee',
         gri: practice.gri
