@@ -2,6 +2,7 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
+import pdfParse from 'pdf-parse';
 
 const program = new Command();
 
