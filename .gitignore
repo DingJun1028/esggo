@@ -41,10 +41,7 @@ users.json
 # Windows artifacts
 nul
 
-# Data Connect Generated (Optional: keep if you want type safety in CI without firebase login)
-# src/dataconnect-generated/
-
-# MCP server configs (may contain API keys / secrets)
+# MCP server configs
 .mcp/
 
 # Service account keys
@@ -71,3 +68,6 @@ render.json
 .env.fallback
 *.bak
 .env.production
+
+# Archived old folders (too large for Vercel deploy)
+app/_archive/
