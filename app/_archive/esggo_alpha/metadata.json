@@ -1,8 +1,0 @@
-{
-  "name": "ESG GO | 臺北市中小企業永續治理平台",
-  "description": "運用 AI 多代理人與零知識證明重塑 ESG 數位治理。專為臺北市 SMEs 設計，整合 Gemini 2.0 與 5T 協議，應對 ISSA 5000 確信挑戰。",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
-}

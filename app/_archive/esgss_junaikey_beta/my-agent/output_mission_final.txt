@@ -1,6 +1,0 @@
---- 💡 Omni Intelligence Agent Starting ---
-[Status] 5T Plugin: Active
-[Status] Intelligence Forge: v2.0.26 Ready
-[32m[ADK INFO]:[0m Plugin 'omni_5t_plugin' registered.
-[Runner] Starting manual mission (runAsync)...
-[32m[ADK INFO]:[0m event:  {"invocationId":"e-77ab9f67-3615-4c5c-9d2b-506aea0e5965","author":"user","actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{},"requestedToolConfirmations":{}},"content":{"parts":[{"text":"請提取 https://example.com/esg 的資訊並進行提純。"}]},"id":"Y6VyiQ0r","longRunningToolIds":[],"timestamp":1771113964045}

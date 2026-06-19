@@ -1,1 +1,0 @@
-import{r as e}from"./vendor-EOarmDJT.js";const t=()=>(e.useEffect(()=>(console.log("[AutoAiReplyAgent] Initialized (placeholder)"),()=>{console.log("[AutoAiReplyAgent] Cleanup")}),[]),null);export{t as AutoAiReplyAgent};

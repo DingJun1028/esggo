@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "env": {
-    "VITE_APP_ENV": "production",
-    "VITE_APP_NAME": "ESGss x JunAiKey System",
-    "VITE_APP_VERSION": "0.1.0-beta"
-  }
-}

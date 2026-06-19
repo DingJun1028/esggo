@@ -1,5 +1,0 @@
-- [ ] 最佳實踐完善補缺：實作 OMNI ESG 核心與 SaaS 旅程架構 (Omni ESG Core & SaaS Journey)
-    - [ ] 實作 `FloatingFunctionKey428` 全局導航中樞 (4 大支柱, 雙棲狀態, 8 方符文)
-    - [ ] 實作 `DynamicFormEngine` 動態表單生成引擎 (Schema-Driven)
-    - [ ] 強化 `IComponentCore` 與雙向 TypeScript (Zod 雙向校驗引擎 `jules-validator.ts`)
-    - [ ] 確保液態玻璃 (Liquid Glass) UI 的高階呈現與動態反饋

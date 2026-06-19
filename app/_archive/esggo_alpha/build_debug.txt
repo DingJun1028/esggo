@@ -1,4 +1,0 @@
-   ▲ Next.js 15.5.15
-
-   Creating an optimized production build ...
-uncaughtException [TypeError: Cannot read properties of undefined (reading 'length')]

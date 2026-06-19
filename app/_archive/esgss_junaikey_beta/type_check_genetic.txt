@@ -1,2 +1,0 @@
-src/hooks/useGeneticEngine.ts(46,15): error TS2451: Cannot redeclare block-scoped variable 'relatedConcepts'.
-src/hooks/useGeneticEngine.ts(47,15): error TS2451: Cannot redeclare block-scoped variable 'relatedConcepts'.
