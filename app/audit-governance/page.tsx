@@ -2,72 +2,202 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  ShieldCheck, CheckCircle, AlertTriangle, XCircle,
-  Layers, Zap, Eye, Code, Smartphone, Accessibility,
-  ArrowUpRight, BookOpen, Target, Clipboard, BarChart3,
-  ChevronDown, ChevronRight, Info, Download,
+  ShieldCheck,
+  CheckCircle,
+  AlertTriangle,
+  XCircle,
+  Layers,
+  Zap,
+  Eye,
+  Code,
+  Smartphone,
+  Accessibility,
+  ArrowUpRight,
+  BookOpen,
+  Target,
+  Clipboard,
+  BarChart3,
+  ChevronDown,
+  ChevronRight,
+  Info,
+  Download,
 } from 'lucide-react';
 import {
-  AUDIT_RULES, PAGE_REGISTRY, calculateAuditScore, getScoreColor, getScoreLabel,
+  AUDIT_RULES,
+  PAGE_REGISTRY,
+  calculateAuditScore,
+  getScoreColor,
+  getScoreLabel,
   type AuditCategory,
 } from '../../lib/governance-audit';
 
-const CATEGORY_META: Record<AuditCategory, { label: string; icon: React.ReactNode; color: string; desc: string }> = {
-  visual:        { label: '視覺治理',   icon: <Eye size={18}/>,           color: '#3B7EA1', desc: '字體、間距、顏色、元件尺寸一致性' },
-  interaction:   { label: '互動完整',   icon: <Zap size={18}/>,           color: '#22c55e', desc: '按鈕狀態、表單驗證、載入、成功、錯誤回饋' },
-  structure:     { label: '結構正確',   icon: <Layers size={18}/>,        color: '#FDB515', desc: '資訊架構、頁面模板、主任務明確性' },
-  engineering:   { label: '工程規範',   icon: <Code size={18}/>,          color: '#ef4444', desc: '共用元件、TypeScript 型別、Suspense 邊界' },
-  accessibility: { label: '無障礙標準', icon: <Accessibility size={18}/>, color: '#8b5cf6', desc: 'ARIA 標籤、色彩對比、鍵盤操作' },
-  rwd:           { label: 'RWD 響應式', icon: <Smartphone size={18}/>,    color: '#f97316', desc: '手機/平板/桌面/寬螢幕四層斷點' },
+const CATEGORY_META: Record<
+  AuditCategory,
+  { label: string; icon: React.ReactNode; color: string; desc: string }
+> = {
+  visual: {
+    label: '視覺治理',
+    icon: <Eye size={18} />,
+    color: '#3B7EA1',
+    desc: '字體、間距、顏色、元件尺寸一致性',
+  },
+  interaction: {
+    label: '互動完整',
+    icon: <Zap size={18} />,
+    color: '#22c55e',
+    desc: '按鈕狀態、表單驗證、載入、成功、錯誤回饋',
+  },
+  structure: {
+    label: '結構正確',
+    icon: <Layers size={18} />,
+    color: '#FDB515',
+    desc: '資訊架構、頁面模板、主任務明確性',
+  },
+  engineering: {
+    label: '工程規範',
+    icon: <Code size={18} />,
+    color: '#ef4444',
+    desc: '共用元件、TypeScript 型別、Suspense 邊界',
+  },
+  accessibility: {
+    label: '無障礙標準',
+    icon: <Accessibility size={18} />,
+    color: '#8b5cf6',
+    desc: 'ARIA 標籤、色彩對比、鍵盤操作',
+  },
+  rwd: {
+    label: 'RWD 響應式',
+    icon: <Smartphone size={18} />,
+    color: '#f97316',
+    desc: '手機/平板/桌面/寬螢幕四層斷點',
+  },
 };
 
 const TEMPLATE_TYPES = [
-  { type: 'dashboard', label: 'Dashboard', desc: '總覽 · 指標 · 快速操作', rules: ['每頁最多 8 個 KPI 卡', '主要警示必須突出', '快捷操作不搶焦點'] },
-  { type: 'list',      label: 'List',      desc: '清單 · 篩選 · 操作',     rules: ['篩選器不可超過 5 項', '欄位不可超過 6 列', '列操作必須一致'] },
-  { type: 'detail',    label: 'Detail',    desc: '單筆 · 區塊 · 附件',     rules: ['核心資訊在首屏', '區塊排序固定', '狀態標示固定位置'] },
-  { type: 'form',      label: 'Form',      desc: '建立 · 編輯 · 驗證',     rules: ['必填欄位明確標示', '驗證即時回饋', '提交後有狀態反饋'] },
-  { type: 'report',    label: 'Report',    desc: '報表 · 圖表 · 匯出',     rules: ['資訊密度受控', '圖文關係清楚', '匯出版一致'] },
+  {
+    type: 'dashboard',
+    label: 'Dashboard',
+    desc: '總覽 · 指標 · 快速操作',
+    rules: ['每頁最多 8 個 KPI 卡', '主要警示必須突出', '快捷操作不搶焦點'],
+  },
+  {
+    type: 'list',
+    label: 'List',
+    desc: '清單 · 篩選 · 操作',
+    rules: ['篩選器不可超過 5 項', '欄位不可超過 6 列', '列操作必須一致'],
+  },
+  {
+    type: 'detail',
+    label: 'Detail',
+    desc: '單筆 · 區塊 · 附件',
+    rules: ['核心資訊在首屏', '區塊排序固定', '狀態標示固定位置'],
+  },
+  {
+    type: 'form',
+    label: 'Form',
+    desc: '建立 · 編輯 · 驗證',
+    rules: ['必填欄位明確標示', '驗證即時回饋', '提交後有狀態反饋'],
+  },
+  {
+    type: 'report',
+    label: 'Report',
+    desc: '報表 · 圖表 · 匯出',
+    rules: ['資訊密度受控', '圖文關係清楚', '匯出版一致'],
+  },
 ];
 
 const PRINCIPLES = [
-  { icon: '①', title: '一致性 > 局部炫技', desc: '相同類型的資訊必須採用一致設計，不允許破壞整體認知秩序' },
-  { icon: '②', title: '可理解性 > 裝飾性', desc: '使用者必須在 5 秒內理解頁面用途，裝飾妨礙辨識即為錯誤設計' },
-  { icon: '③', title: '主任務 > 次要資訊', desc: '每頁只能有一個核心 CTA，不允許多個競爭性按鈕搶奪注意力' },
-  { icon: '④', title: '模板化 > 自由拼接', desc: '新頁面必須優先套用既有模板，版型自由度越高崩壞機率越高' },
-  { icon: '⑤', title: '狀態完整 > 靜態美觀', desc: '元件缺少 loading / error / empty 等狀態不得視為完成' },
-  { icon: '⑥', title: '工程可實作 > 抽象概念', desc: '設計必須可被 TypeScript 型別與元件介面具體落實' },
+  {
+    icon: '①',
+    title: '一致性 > 局部炫技',
+    desc: '相同類型的資訊必須採用一致設計，不允許破壞整體認知秩序',
+  },
+  {
+    icon: '②',
+    title: '可理解性 > 裝飾性',
+    desc: '使用者必須在 5 秒內理解頁面用途，裝飾妨礙辨識即為錯誤設計',
+  },
+  {
+    icon: '③',
+    title: '主任務 > 次要資訊',
+    desc: '每頁只能有一個核心 CTA，不允許多個競爭性按鈕搶奪注意力',
+  },
+  {
+    icon: '④',
+    title: '模板化 > 自由拼接',
+    desc: '新頁面必須優先套用既有模板，版型自由度越高崩壞機率越高',
+  },
+  {
+    icon: '⑤',
+    title: '狀態完整 > 靜態美觀',
+    desc: '元件缺少 loading / error / empty 等狀態不得視為完成',
+  },
+  {
+    icon: '⑥',
+    title: '工程可實作 > 抽象概念',
+    desc: '設計必須可被 TypeScript 型別與元件介面具體落實',
+  },
 ];
 
 const CHECKLIST_PHASES = [
   {
     phase: '設計前',
-    icon: <Target size={16}/>,
+    icon: <Target size={16} />,
     color: '#3B7EA1',
-    items: ['是否已定義使用者與主任務', '是否已有對應模板可套用', '是否沿用既有元件', '是否已有狀態清單', '是否已定義成功與失敗情境'],
+    items: [
+      '是否已定義使用者與主任務',
+      '是否已有對應模板可套用',
+      '是否沿用既有元件',
+      '是否已有狀態清單',
+      '是否已定義成功與失敗情境',
+    ],
   },
   {
     phase: '設計稿',
-    icon: <Eye size={16}/>,
+    icon: <Eye size={16} />,
     color: '#22c55e',
-    items: ['是否符合 token 規範', '是否符合模板規範', '是否有明確視覺層級', '是否補齊所有互動狀態', '是否檢查響應式結果'],
+    items: [
+      '是否符合 token 規範',
+      '是否符合模板規範',
+      '是否有明確視覺層級',
+      '是否補齊所有互動狀態',
+      '是否檢查響應式結果',
+    ],
   },
   {
     phase: '開發前',
-    icon: <Code size={16}/>,
+    icon: <Code size={16} />,
     color: '#FDB515',
-    items: ['是否已有元件規格可實作', '是否有 TypeScript 型別規劃', 'API 回傳狀態是否對應 UI', '是否有異常流程處理'],
+    items: [
+      '是否已有元件規格可實作',
+      '是否有 TypeScript 型別規劃',
+      'API 回傳狀態是否對應 UI',
+      '是否有異常流程處理',
+    ],
   },
   {
     phase: '開發驗收',
-    icon: <CheckCircle size={16}/>,
+    icon: <CheckCircle size={16} />,
     color: '#8b5cf6',
-    items: ['是否與設計稿一致', '是否使用共用元件', '是否存在硬編樣式', '是否補齊 loading/error/empty', '是否完成跨裝置檢查'],
+    items: [
+      '是否與設計稿一致',
+      '是否使用共用元件',
+      '是否存在硬編樣式',
+      '是否補齊 loading/error/empty',
+      '是否完成跨裝置檢查',
+    ],
   },
   {
     phase: '上線前',
-    icon: <ShieldCheck size={16}/>,
+    icon: <ShieldCheck size={16} />,
     color: '#ef4444',
-    items: ['主要流程是否可順利完成', '首屏是否可理解', 'CTA 是否明確', '異常是否可恢復', '是否有區塊造成誤解'],
+    items: [
+      '主要流程是否可順利完成',
+      '首屏是否可理解',
+      'CTA 是否明確',
+      '異常是否可恢復',
+      '是否有區塊造成誤解',
+    ],
   },
 ];
 
@@ -85,16 +215,18 @@ const WARNING_SIGNS = [
 ];
 
 export default function AuditGovernancePage() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'rules' | 'templates' | 'checklist'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'rules' | 'templates' | 'checklist'>(
+    'overview'
+  );
   const [expandedCat, setExpandedCat] = useState<AuditCategory | null>('visual');
 
-  const rulesCountByCat = Object.keys(CATEGORY_META).map(cat => ({
+  const rulesCountByCat = Object.keys(CATEGORY_META).map((cat) => ({
     cat: cat as AuditCategory,
-    count: AUDIT_RULES.filter(r => r.category === cat).length,
+    count: AUDIT_RULES.filter((r) => r.category === cat).length,
   }));
 
-  const criticalCount = AUDIT_RULES.filter(r => r.priority === 'critical').length;
-  const highCount     = AUDIT_RULES.filter(r => r.priority === 'high').length;
+  const criticalCount = AUDIT_RULES.filter((r) => r.priority === 'critical').length;
+  const highCount = AUDIT_RULES.filter((r) => r.priority === 'high').length;
 
   return (
     <div className="page-container">
@@ -110,10 +242,18 @@ export default function AuditGovernancePage() {
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="h2" style={{ color: '#fff' }}>UIUX 防崩壞治理規範</h1>
+                <h1 className="h2" style={{ color: '#fff' }}>
+                  UIUX 防崩壞治理規範
+                </h1>
                 <span className="badge badge-gold badge-sm">v1.0</span>
               </div>
-              <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+              <p
+                style={{
+                  color: 'rgba(255,255,255,0.75)',
+                  fontSize: '0.875rem',
+                  marginTop: '0.25rem',
+                }}
+              >
                 Anti-Collapse Governance Specification · ESG GO 善向永續
               </p>
             </div>
@@ -128,10 +268,14 @@ export default function AuditGovernancePage() {
             { v: highCount, l: '高優先', c: '#93c5fd' },
             { v: PAGE_REGISTRY.length, l: '登錄頁面', c: '#86efac' },
             { v: TEMPLATE_TYPES.length, l: '頁面模板', c: '#d8b4fe' },
-          ].map(s => (
+          ].map((s) => (
             <div key={s.l} className="text-center">
-              <p className="text-2xl font-bold" style={{ color: s.c }}>{s.v}</p>
-              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>{s.l}</p>
+              <p className="text-2xl font-bold" style={{ color: s.c }}>
+                {s.v}
+              </p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                {s.l}
+              </p>
             </div>
           ))}
         </div>
@@ -139,12 +283,14 @@ export default function AuditGovernancePage() {
 
       {/* Tabs */}
       <div className="tabs-list mb-6" role="tablist">
-        {([
-          { id: 'overview',   label: '治理總覽',   icon: <BarChart3 size={14}/> },
-          { id: 'rules',      label: '稽核規則',   icon: <ShieldCheck size={14}/> },
-          { id: 'templates',  label: '頁面模板',   icon: <Layers size={14}/> },
-          { id: 'checklist',  label: '驗收清單',   icon: <Clipboard size={14}/> },
-        ] as const).map(t => (
+        {(
+          [
+            { id: 'overview', label: '治理總覽', icon: <BarChart3 size={14} /> },
+            { id: 'rules', label: '稽核規則', icon: <ShieldCheck size={14} /> },
+            { id: 'templates', label: '頁面模板', icon: <Layers size={14} /> },
+            { id: 'checklist', label: '驗收清單', icon: <Clipboard size={14} /> },
+          ] as const
+        ).map((t) => (
           <button
             key={t.id}
             role="tab"
@@ -152,7 +298,8 @@ export default function AuditGovernancePage() {
             onClick={() => setActiveTab(t.id)}
             className={`tab-item ${activeTab === t.id ? 'active' : ''}`}
           >
-            {t.icon}{t.label}
+            {t.icon}
+            {t.label}
           </button>
         ))}
       </div>
@@ -202,7 +349,7 @@ export default function AuditGovernancePage() {
             </div>
             <div className="bento-grid">
               {Object.entries(CATEGORY_META).map(([cat, meta]) => {
-                const count = rulesCountByCat.find(r => r.cat === cat)?.count ?? 0;
+                const count = rulesCountByCat.find((r) => r.cat === cat)?.count ?? 0;
                 return (
                   <div key={cat} className="card card-body bento-4">
                     <div className="flex items-center gap-3 mb-3">
@@ -213,13 +360,20 @@ export default function AuditGovernancePage() {
                         {meta.icon}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                        <p
+                          className="text-sm font-semibold"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
                           {meta.label}
                         </p>
-                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{count} 條規則</p>
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                          {count} 條規則
+                        </p>
                       </div>
                     </div>
-                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{meta.desc}</p>
+                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                      {meta.desc}
+                    </p>
                   </div>
                 );
               })}
@@ -242,10 +396,18 @@ export default function AuditGovernancePage() {
                     <div
                       key={i}
                       className="bento-6 flex items-start gap-2 py-2"
-                      style={{ borderBottom: i < WARNING_SIGNS.length - 2 ? '1px solid var(--border-default)' : 'none' }}
+                      style={{
+                        borderBottom:
+                          i < WARNING_SIGNS.length - 2 ? '1px solid var(--border-default)' : 'none',
+                      }}
                     >
-                      <XCircle size={14} style={{ color: '#ef4444', flexShrink: 0, marginTop: 1 }} />
-                      <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{w}</span>
+                      <XCircle
+                        size={14}
+                        style={{ color: '#ef4444', flexShrink: 0, marginTop: 1 }}
+                      />
+                      <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                        {w}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -259,20 +421,20 @@ export default function AuditGovernancePage() {
       {activeTab === 'rules' && (
         <div className="space-y-4">
           {Object.entries(CATEGORY_META).map(([cat, meta]) => {
-            const rules = AUDIT_RULES.filter(r => r.category === cat as AuditCategory);
+            const rules = AUDIT_RULES.filter((r) => r.category === (cat as AuditCategory));
             const isOpen = expandedCat === cat;
-            
-  const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
-    title: 'Audit Governance',
-    sub: 'Audit Governance Management'
-  };
 
-  return (
+            const p = {
+              id: `ESG-${__dirname.substring(0, 3).toUpperCase()}`,
+              title: 'Audit Governance',
+              sub: 'Audit Governance Management',
+            };
+
+            return (
               <div key={cat} className="card overflow-hidden">
                 <button
                   className="card-header w-full text-left hover:bg-slate-50 transition-colors"
-                  onClick={() => setExpandedCat(isOpen ? null : cat as AuditCategory)}
+                  onClick={() => setExpandedCat(isOpen ? null : (cat as AuditCategory))}
                   aria-expanded={isOpen}
                 >
                   <div className="flex items-center gap-3">
@@ -286,7 +448,9 @@ export default function AuditGovernancePage() {
                       <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
                         {meta.label}
                       </p>
-                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{meta.desc}</p>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                        {meta.desc}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -299,18 +463,20 @@ export default function AuditGovernancePage() {
                         borderColor: `${meta.color}30`,
                       }}
                     >
-                      {rules.filter(r => r.priority === 'critical').length} 必要
+                      {rules.filter((r) => r.priority === 'critical').length} 必要
                     </span>
-                    {isOpen
-                      ? <ChevronDown size={14} style={{ color: 'var(--text-muted)' }} />
-                      : <ChevronRight size={14} style={{ color: 'var(--text-muted)' }} />}
+                    {isOpen ? (
+                      <ChevronDown size={14} style={{ color: 'var(--text-muted)' }} />
+                    ) : (
+                      <ChevronRight size={14} style={{ color: 'var(--text-muted)' }} />
+                    )}
                   </div>
                 </button>
 
                 {isOpen && (
                   <div className="card-body" style={{ paddingTop: '0.75rem' }}>
                     <div className="space-y-2">
-                      {rules.map(rule => (
+                      {rules.map((rule) => (
                         <div
                           key={rule.id}
                           className="flex items-start gap-3 p-3 rounded-lg"
@@ -327,20 +493,31 @@ export default function AuditGovernancePage() {
                           </span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                              <p
+                                className="text-sm font-medium"
+                                style={{ color: 'var(--text-primary)' }}
+                              >
                                 {rule.title}
                               </p>
                               <span
                                 className="badge badge-sm"
                                 style={{
                                   background:
-                                    rule.priority === 'critical' ? '#fee2e2' :
-                                    rule.priority === 'high' ? '#fef3c7' :
-                                    rule.priority === 'medium' ? '#dbeafe' : '#f1f5f9',
+                                    rule.priority === 'critical'
+                                      ? '#fee2e2'
+                                      : rule.priority === 'high'
+                                        ? '#fef3c7'
+                                        : rule.priority === 'medium'
+                                          ? '#dbeafe'
+                                          : '#f1f5f9',
                                   color:
-                                    rule.priority === 'critical' ? '#991b1b' :
-                                    rule.priority === 'high' ? '#92400e' :
-                                    rule.priority === 'medium' ? '#1d4ed8' : '#64748b',
+                                    rule.priority === 'critical'
+                                      ? '#991b1b'
+                                      : rule.priority === 'high'
+                                        ? '#92400e'
+                                        : rule.priority === 'medium'
+                                          ? '#1d4ed8'
+                                          : '#64748b',
                                   borderColor: 'transparent',
                                 }}
                               >
@@ -366,23 +543,35 @@ export default function AuditGovernancePage() {
       {activeTab === 'templates' && (
         <div className="space-y-6">
           <div className="bento-grid">
-            {TEMPLATE_TYPES.map(t => (
+            {TEMPLATE_TYPES.map((t) => (
               <div key={t.type} className="card card-body bento-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <span className="badge badge-blue badge-sm mb-1">{t.type}</span>
-                    <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{t.label} 模板</p>
-                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.desc}</p>
+                    <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                      {t.label} 模板
+                    </p>
+                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                      {t.desc}
+                    </p>
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+                  <p
+                    className="text-[10px] font-semibold uppercase tracking-wide"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
                     禁止事項
                   </p>
                   {t.rules.map((r, i) => (
                     <div key={i} className="flex items-start gap-1.5">
-                      <XCircle size={11} style={{ color: '#ef4444', flexShrink: 0, marginTop: 2 }} />
-                      <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{r}</span>
+                      <XCircle
+                        size={11}
+                        style={{ color: '#ef4444', flexShrink: 0, marginTop: 2 }}
+                      />
+                      <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                        {r}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -410,15 +599,20 @@ export default function AuditGovernancePage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {PAGE_REGISTRY.map(p => (
+                  {PAGE_REGISTRY.map((p) => (
                     <tr key={p.id}>
                       <td>
-                        <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                        <span
+                          className="text-sm font-medium"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
                           {p.name}
                         </span>
                       </td>
                       <td>
-                        <span className="mono text-xs" style={{ color: 'var(--text-muted)' }}>{p.path}</span>
+                        <span className="mono text-xs" style={{ color: 'var(--text-muted)' }}>
+                          {p.path}
+                        </span>
                       </td>
                       <td>
                         <span className="badge badge-default badge-sm">{p.template}</span>
@@ -430,10 +624,18 @@ export default function AuditGovernancePage() {
                         <span
                           className="badge badge-sm"
                           style={{
-                            background: p.priority === 'core' ? '#EBF2FA' :
-                                        p.priority === 'high' ? '#fef3c7' : '#f1f5f9',
-                            color: p.priority === 'core' ? '#003262' :
-                                   p.priority === 'high' ? '#92400e' : '#64748b',
+                            background:
+                              p.priority === 'core'
+                                ? '#EBF2FA'
+                                : p.priority === 'high'
+                                  ? '#fef3c7'
+                                  : '#f1f5f9',
+                            color:
+                              p.priority === 'core'
+                                ? '#003262'
+                                : p.priority === 'high'
+                                  ? '#92400e'
+                                  : '#64748b',
                             borderColor: 'transparent',
                           }}
                         >
@@ -452,10 +654,7 @@ export default function AuditGovernancePage() {
       {/* ── Checklist Tab ─────────────────────────────────── */}
       {activeTab === 'checklist' && (
         <div className="space-y-4">
-          <div
-            className="alert alert-info"
-            role="note"
-          >
+          <div className="alert alert-info" role="note">
             <Info size={16} style={{ flexShrink: 0 }} />
             <p className="text-sm">
               每個開發週期的每個頁面都必須完成以下五個階段的檢查，缺少任何一個階段視為
@@ -500,7 +699,9 @@ export default function AuditGovernancePage() {
                           style={{ accentColor: phase.color, flexShrink: 0 }}
                           aria-label={item}
                         />
-                        <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{item}</span>
+                        <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          {item}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -523,7 +724,7 @@ export default function AuditGovernancePage() {
                 { role: '前端', resp: '依共用元件與 TypeScript 型別實作，不可硬編樣式' },
                 { role: '後端', resp: '提供穩定的資料結構、狀態枚舉與異常回應' },
                 { role: '驗收', resp: '依本規範逐項檢查，不以主觀審美為唯一判準' },
-              ].map(r => (
+              ].map((r) => (
                 <div key={r.role} className="flex items-start gap-2">
                   <span
                     className="text-[10px] font-bold px-2 py-0.5 rounded flex-shrink-0"
@@ -531,7 +732,9 @@ export default function AuditGovernancePage() {
                   >
                     {r.role}
                   </span>
-                  <span className="text-xs" style={{ color: '#005DAA' }}>{r.resp}</span>
+                  <span className="text-xs" style={{ color: '#005DAA' }}>
+                    {r.resp}
+                  </span>
                 </div>
               ))}
             </div>

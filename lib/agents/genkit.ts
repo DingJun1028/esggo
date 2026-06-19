@@ -10,4 +10,4 @@ export const ai = geminiApiKey
   ? genkit({
       plugins: [googleAI({ apiKey: geminiApiKey })],
     })
-  : (null as any);
+  : genkit({ plugins: [] });

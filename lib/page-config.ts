@@ -75,3 +75,4 @@ export const T5_LABELS: Record<T5Level, { label: string; desc: string; color: st
   T4: { label: 'Transparent', desc: '算法透明、無 AI 幻覺', color: '#EF4444' },
   T5: { label: 'Trustworthy', desc: '主權封印、不可篡改', color: '#8B5CF6' },
 };
+export type UniversalPageConfig = OmniPageConfig;
