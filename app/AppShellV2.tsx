@@ -320,14 +320,11 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
       )}
     >
       {/* ─── DESKTOP SIDEBAR ─── */}
-      <motion.aside
-        initial={false}
-        animate={{
-          width: sidebarCollapsed ? 80 : 288,
-          transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-        }}
+      <aside
+        style={{ width: sidebarCollapsed ? 80 : 288 }}
         className={cn(
-          'hidden md:flex flex-col h-full relative z-50 border-r transition-all duration-500  shadow-2xl',
+          'hidden md:flex flex-col h-full relative z-50 border-r shadow-2xl',
+          'transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
           isDark ? 'bg-[#003262]/80 border-white/10' : ' border-slate-200/50'
         )}
       >
@@ -498,7 +495,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             hoverBgClassName={isDark ? 'hover:bg-white/5' : 'hover:bg-slate-100'}
           />
         </div>
-      </motion.aside>
+      </aside>
 
       {/* ─── MAIN CONTENT AREA ─── */}
       <div className="flex-1 flex flex-col min-w-0 relative h-full">
