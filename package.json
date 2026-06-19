@@ -41,8 +41,6 @@
     "@ai-sdk/openai": "^3.0.71",
     "@apollo/client": "^4.2.2",
     "@base-ui/react": "^1.5.0",
-    "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
-    "@dataconnect/generated": "file:src/dataconnect-generated",
     "@genkit-ai/firebase": "^1.37.0",
     "@genkit-ai/google-genai": "^1.37.0",
     "@genkit-ai/googleai": "^1.28.0",

@@ -10,10 +10,10 @@ export const metadata = {
 
 export default async function WikiPage() {
   const url = `https://app.nocodebackend.com/api/public-data/wiki_pages?Instance=${process.env.NCB_INSTANCE}wiki`;
-  
+
   let pages = [];
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { next: { revalidate: 60 } });
     if (res.ok) {
       const data = await res.json();
       pages = data.data || [];
@@ -24,7 +24,5 @@ export default async function WikiPage() {
     console.error('Error fetching wiki pages:', err);
   }
 
-  return (
-    <WikiClientPage pages={pages} />
-  );
+  return <WikiClientPage pages={pages} />;
 }

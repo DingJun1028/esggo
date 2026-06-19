@@ -20,12 +20,6 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@types/react@18.3.31)(date-fns@4.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@dataconnect/admin-generated':
-        specifier: file:src/dataconnect-admin-generated
-        version: file:src/dataconnect-admin-generated(firebase-admin@13.10.0)
-      '@dataconnect/generated':
-        specifier: file:src/dataconnect-generated
-        version: file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)
       '@genkit-ai/firebase':
         specifier: ^1.37.0
         version: 1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0)(genkit@1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0))
@@ -1108,19 +1102,6 @@ packages:
 
   '@dabh/diagnostics@2.0.8':
     resolution: {integrity: sha512-R4MSXTVnuMzGD7bzHdW2ZhhdPC/igELENcq5IjEverBvq5hn1SXCWcsi6eSsdWP0/Ur+SItRRjAktmdoX/8R/Q==}
-
-  '@dataconnect/admin-generated@file:src/dataconnect-admin-generated':
-    resolution: {directory: src/dataconnect-admin-generated, type: directory}
-    engines: {node: ' >=18.0'}
-    peerDependencies:
-      firebase-admin: ^13.4.0
-
-  '@dataconnect/generated@file:src/dataconnect-generated':
-    resolution: {directory: src/dataconnect-generated, type: directory}
-    engines: {node: ' >=18.0'}
-    peerDependencies:
-      '@tanstack-query-firebase/react': ^2.0.0
-      firebase: ^12.11.0
 
   '@datadog/pprof@5.15.0':
     resolution: {integrity: sha512-ODGC3pE+NHo+rz74bWyOyFeC5GgvqA6Xzk0wIBGs8W3v+A14I5Q+Pmc7EC8etk5gE8t0hGYYwA5ymSGCljov+Q==}
@@ -3420,12 +3401,6 @@ packages:
 
   '@tailwindcss/postcss@4.3.1':
     resolution: {integrity: sha512-dNJuNbdEJT/SWRuXTYP1WSamelsz3ztkUsdtWQPjrexysrTpaEPM40P/71knXiXLYEojqPOEGitVLLpPMS5T6A==}
-
-  '@tanstack-query-firebase/react@2.1.1':
-    resolution: {integrity: sha512-1hOEcfxLgorg0TwadBJeeEvoD7P4JMCJLhdO1doUQWZRs83WmwTlBJGv8GiO1y2KWaKjQh+JdgsuYCqG2dPXcA==}
-    peerDependencies:
-      '@tanstack/react-query': ^5
-      firebase: ^11.3.0 || ^12.0.0
 
   '@tanstack/query-core@4.44.0':
     resolution: {integrity: sha512-swSgb7OiPRR3UuIL7NuDrZNSMGmQD+wdtHxPD7j60SvBEnxbXurl5XOirtGEX2gm2hbK6mC8kMV1I+uO3l0UOw==}
@@ -11087,15 +11062,6 @@ snapshots:
       enabled: 2.0.0
       kuler: 2.0.0
 
-  '@dataconnect/admin-generated@file:src/dataconnect-admin-generated(firebase-admin@13.10.0)':
-    dependencies:
-      firebase-admin: 13.10.0
-
-  '@dataconnect/generated@file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)':
-    dependencies:
-      '@tanstack-query-firebase/react': 2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0)
-      firebase: 12.15.0
-
   '@datadog/pprof@5.15.0':
     dependencies:
       node-gyp-build: 4.8.4
@@ -13897,11 +13863,6 @@ snapshots:
       '@tailwindcss/oxide': 4.3.1
       postcss: 8.5.15
       tailwindcss: 4.3.1
-
-  '@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0)':
-    dependencies:
-      '@tanstack/react-query': 4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1)
-      firebase: 12.15.0
 
   '@tanstack/query-core@4.44.0': {}
 
