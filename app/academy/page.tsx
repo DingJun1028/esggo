@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// framer-motion 已移除，改用原生 CSS transition 避免 SSR 崩潰
 import {
   GraduationCap,
   BookOpen,
@@ -183,10 +183,10 @@ const CATEGORY_CONFIG = {
 function CourseCard({ course }: { course: Course }) {
   const catConfig = CATEGORY_CONFIG[course.category];
 
+  // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
+    <div
+      style={{ transition: 'all 0.4s ease' }}
       className={cn(
         'bg-white rounded-2xl border overflow-hidden hover:shadow-lg transition-all cursor-pointer group relative',
         course.locked ? 'border-slate-200 opacity-75' : 'border-slate-100'
@@ -230,9 +230,9 @@ function CourseCard({ course }: { course: Course }) {
               <span className="font-mono font-bold text-[#003262]">{course.progress}%</span>
             </div>
             <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${course.progress}%` }}
+              {/* 使用原生 div 取代 motion.div，避免 SSR 崩潰 */}
+              <div
+                style={{ width: `${course.progress}%`, transition: 'width 0.8s ease' }}
                 className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500"
               />
             </div>
@@ -266,14 +266,15 @@ function CourseCard({ course }: { course: Course }) {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function LearningPathCard({ path }: { path: LearningPath }) {
+  // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
-    <motion.div
-      whileHover={{ y: -2 }}
+    <div
+      style={{ transition: 'all 0.4s ease' }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all cursor-pointer"
     >
       <div className="flex items-center gap-3 mb-3">
@@ -293,7 +294,7 @@ function LearningPathCard({ path }: { path: LearningPath }) {
           {path.totalDuration}
         </span>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

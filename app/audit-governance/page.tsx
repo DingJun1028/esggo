@@ -263,7 +263,7 @@ export default function AuditGovernancePage() {
             const isOpen = expandedCat === cat;
             
   const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    id: `ESG-AUD`,
     title: 'Audit Governance',
     sub: 'Audit Governance Management'
   };

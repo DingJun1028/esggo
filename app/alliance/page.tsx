@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// framer-motion 已移除，改用原生 CSS transition 避免 SSR 崩潰
 import {
   LucideIcon,
   Users,
@@ -263,10 +263,10 @@ function PartnerCard({ partner }: { partner: Partner }) {
   };
   const type = typeConfig[partner.type];
 
+  // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
+      style={{ transition: 'all 0.4s ease' }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
       <div className="flex items-start gap-3 mb-3">
@@ -307,17 +307,16 @@ function PartnerCard({ partner }: { partner: Partner }) {
           </span>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function AreaCard({ area, index }: { area: CollaborationArea; index: number }) {
   const Icon = area.icon;
+  // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
+      style={{ transition: 'all 0.4s ease' }}
       className="bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all"
     >
       <div className="flex items-center gap-3 mb-3">
@@ -346,7 +345,7 @@ function AreaCard({ area, index }: { area: CollaborationArea; index: number }) {
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -411,18 +410,17 @@ export default function AllianceCollaborationPage() {
           {ALLIANCE_STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              /* 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰 */
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
+                style={{ transition: 'all 0.4s ease' }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
                 <p className="text-[9px] text-slate-300 mt-0.5">{stat.description}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -526,15 +524,12 @@ export default function AllianceCollaborationPage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <AnimatePresence mode="wait">
-              {activeTab === 'partners' && (
-                <motion.div
-                  key="partners"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-4"
-                >
+            {/* 使用條件渲染取代 AnimatePresence，避免 SSR 崩潰 */}
+            {activeTab === 'partners' && (
+              <div
+                style={{ transition: 'all 0.4s ease' }}
+                className="space-y-4"
+              >
                   <div className="flex items-center justify-between">
                     <h2 className="text-lg font-bold text-[#003262]">合作夥伴</h2>
                     <div className="relative">
@@ -556,17 +551,14 @@ export default function AllianceCollaborationPage() {
                       <PartnerCard key={partner.id} partner={partner} />
                     ))}
                   </div>
-                </motion.div>
-              )}
+              </div>
+            )}
 
-              {activeTab === 'areas' && (
-                <motion.div
-                  key="areas"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-4"
-                >
+            {activeTab === 'areas' && (
+              <div
+                style={{ transition: 'all 0.4s ease' }}
+                className="space-y-4"
+              >
                   <div>
                     <h2 className="text-lg font-bold text-[#003262] mb-1">協作領域</h2>
                     <p className="text-xs text-slate-400">與合作夥伴的共同協作領域</p>
@@ -576,16 +568,13 @@ export default function AllianceCollaborationPage() {
                       <AreaCard key={area.id} area={area} index={i} />
                     ))}
                   </div>
-                </motion.div>
-              )}
+              </div>
+            )}
 
-              {activeTab === 'flow' && (
-                <motion.div
-                  key="flow"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
+            {activeTab === 'flow' && (
+              <div
+                style={{ transition: 'all 0.4s ease' }}
+              >
                   <OmniBaseCard className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Handshake size={14} className="text-emerald-500" />
@@ -597,9 +586,8 @@ export default function AllianceCollaborationPage() {
                       ))}
                     </div>
                   </OmniBaseCard>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              </div>
+            )}
           </div>
 
           {/* Right Sidebar */}

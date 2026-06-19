@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   LucideIcon,
   TrendingUp,
@@ -178,10 +178,7 @@ const COMPARISON_DATA = [
 function LevelCard({ level, index }: { level: LevelData; index: number }) {
   const Icon = level.icon;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.15 }}
+    <div
       className={cn(
         'bg-white rounded-2xl border-2 p-6 hover:shadow-lg transition-all',
         level.borderColor
@@ -246,7 +243,7 @@ function LevelCard({ level, index }: { level: LevelData; index: number }) {
           </span>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -258,10 +255,7 @@ function MilestoneItem({
   index: number;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.08 }}
+    <div
       className="flex items-start gap-3"
     >
       <div className="flex flex-col items-center">
@@ -286,7 +280,7 @@ function MilestoneItem({
         <h4 className="text-xs font-bold text-[#003262]">{milestone.title}</h4>
         <p className="text-[10px] text-slate-400">{milestone.description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

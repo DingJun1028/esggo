@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   TrendingUp,
@@ -227,10 +227,7 @@ function JourneyStepCard({
   const progress = Math.round((completedSubSteps / step.subSteps.length) * 100);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
       className="relative"
     >
       {/* Timeline Line */}
@@ -288,22 +285,17 @@ function JourneyStepCard({
 
           {/* Progress Bar */}
           <div className="mt-3 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
+            <div
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
               className={cn('h-full rounded-full', step.color.replace('text-', 'bg-'))}
             />
           </div>
         </button>
 
         {/* Expanded Content */}
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+            <div
               className="overflow-hidden"
             >
               <div className="bg-white rounded-b-2xl border border-t-0 border-slate-100 p-5 -mt-2 space-y-4">
@@ -369,11 +361,11 @@ function JourneyStepCard({
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -411,18 +403,15 @@ export default function ValuePathPage() {
           {VALUE_METRICS.map((metric, i) => {
             const Icon = metric.icon;
             return (
-              <motion.div
+              <div
                 key={metric.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center hover:shadow-md transition-all"
               >
                 <Icon size={24} className={cn('mx-auto mb-2', metric.color)} />
                 <p className="text-2xl font-black text-[#003262]">{metric.value}</p>
                 <p className="text-xs text-slate-500 font-medium">{metric.label}</p>
                 <p className="text-[9px] text-slate-400 mt-0.5">{metric.description}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>

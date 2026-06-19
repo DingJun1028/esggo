@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Zap,
@@ -160,10 +160,7 @@ function ProcessingStepCard({
   const Icon = step.icon;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08 }}
+    <div
       className="relative"
     >
       {index < PROCESSING_STEPS.length - 1 && (
@@ -208,12 +205,9 @@ function ProcessingStepCard({
           </div>
         </button>
 
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+            <div
               className="overflow-hidden"
             >
               <div className="bg-white rounded-b-2xl border border-t-0 border-slate-100 p-4 -mt-2">
@@ -227,11 +221,11 @@ function ProcessingStepCard({
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -243,10 +237,8 @@ function QualityBar({ metric }: { metric: DataQualityMetric }) {
         <span className="text-xs font-bold text-[#003262]">{metric.value}%</span>
       </div>
       <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
+        <div
           animate={{ width: `${metric.value}%` }}
-          transition={{ duration: 0.8 }}
           className={cn('h-full rounded-full', metric.color)}
         />
       </div>
@@ -311,17 +303,14 @@ export default function AutoDataProcessingPage() {
           {PROCESSING_STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>

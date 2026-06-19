@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Search, Brain, Library, ExternalLink, Zap, Network, ChevronRight } from 'lucide-react';
 
 export default function ThinkTankPage() {
@@ -46,14 +46,12 @@ export default function ThinkTankPage() {
     <div className="p-8 max-w-6xl mx-auto min-h-screen">
       {/* 標題與簡介 */}
       <div className="mb-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 mb-6"
         >
           <Brain size={16} />
           <span className="text-xs font-bold tracking-widest uppercase">OmniMemory Sanctuary</span>
-        </motion.div>
+        </div>
         <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-cyan-300 mb-4 tracking-tight">
           萬能智庫檢索中心
         </h1>
@@ -64,10 +62,7 @@ export default function ThinkTankPage() {
       </div>
 
       {/* 搜尋列 */}
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.1 }}
+      <div
         className="relative max-w-3xl mx-auto mb-12"
       >
         <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-70"></div>
@@ -103,15 +98,12 @@ export default function ThinkTankPage() {
             )}
           </button>
         </form>
-      </motion.div>
+      </div>
 
       {/* 檢索狀態指示器 */}
-      <AnimatePresence>
+      
         {loading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="flex flex-col items-center justify-center py-12 gap-6"
           >
             <div className="relative w-24 h-24 flex items-center justify-center">
@@ -122,29 +114,25 @@ export default function ThinkTankPage() {
             <div className="text-cyan-400 font-medium tracking-widest text-sm animate-pulse">
               OMNINEXUS 正在遍歷知識節點...
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
       {/* 錯誤訊息 */}
-      <AnimatePresence>
+      
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
             className="max-w-3xl mx-auto bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-center font-medium"
           >
             {error}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
       {/* 搜尋結果 */}
-      <AnimatePresence>
+      
         {!loading && searched && results.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
             className="max-w-4xl mx-auto space-y-6"
           >
             <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
@@ -157,11 +145,8 @@ export default function ThinkTankPage() {
 
             <div className="grid gap-4">
               {results.map((item, idx) => (
-                <motion.div
+                <div
                   key={idx}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.1 }}
                   className="group relative bg-[#020617]/40 -md border border-white/5 rounded-2xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
                 >
                   <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
@@ -192,24 +177,22 @@ export default function ThinkTankPage() {
                       <ExternalLink size={16} />
                     </button>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
         {!loading && searched && results.length === 0 && !error && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <div
             className="text-center py-20 text-slate-500"
           >
             <Library size={48} className="mx-auto mb-4 opacity-50" />
             <p className="text-lg font-medium">智庫中未找到與此查詢高度相關的記憶資產。</p>
             <p className="text-sm mt-2">嘗試使用不同的關鍵字，或交由 OmniAgent 進行推理。</p>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }

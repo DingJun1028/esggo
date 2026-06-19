@@ -8,7 +8,7 @@ import {
 import { 
   BrandCard, BrandBadge, BrandButton, BrandInput, BrandStatusDot, BrandProgress 
 } from '../../components/brand';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { sha256, verifyZKPProof } from '../../lib/crypto-proof';
 import { DiffEngine, DiffResult } from '../../lib/sonar/core/diff-engine';
 
@@ -124,9 +124,9 @@ export default function AuditorPortal() {
         </BrandCard>
 
         {/* Results Area */}
-        <AnimatePresence>
+        
           {result && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}>
+            <div>
                {result.status === 'AUTHENTIC' ? (
                  <div className="space-y-8">
                     {/* Success Banner */}
@@ -211,9 +211,9 @@ export default function AuditorPortal() {
                     </div>
                  </BrandCard>
                )}
-            </motion.div>
+            </div>
           )}
-         </AnimatePresence>
+         
         </>
         )}
 
@@ -253,9 +253,9 @@ export default function AuditorPortal() {
             </BrandCard>
 
             {/* Diff Results */}
-            <AnimatePresence>
+            
               {diffResult && (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="space-y-6">
+                <div className="space-y-6">
                   {/* ESG Tags */}
                   {diffResult.esgTags && diffResult.esgTags.length > 0 && (
                     <div className="flex items-center gap-3">
@@ -300,9 +300,9 @@ export default function AuditorPortal() {
                       </div>
                     </BrandCard>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
         </>
         )}
 

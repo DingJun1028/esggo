@@ -7,7 +7,6 @@ import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { ShieldCheck, Lock, Activity, Bot, ArrowRight, XCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 function ConsentContent() {
   const searchParams = useSearchParams();
@@ -78,9 +77,7 @@ function ConsentContent() {
     <div className="min-h-screen bg-void-stark text-white flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-void-stark to-void-stark pointer-events-none" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
+      <div
         className="max-w-md w-full relative z-10"
       >
         <OmniBaseCard variant="glow" className="p-8 md:p-10 border-cyan-500/30">
@@ -145,10 +142,7 @@ function ConsentContent() {
                 <Bot size={48} className="text-cyan-core animate-bounce" />
                 <p className="text-sm font-bold text-white/80">正在建立加密授權通道...</p>
                 <div className="w-48 h-1 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: '100%' }}
-                    transition={{ duration: 2, ease: 'linear' }}
+                  <div
                     className="h-full bg-cyan-core"
                   />
                 </div>
@@ -189,7 +183,7 @@ function ConsentContent() {
             </p>
           </div>
         </OmniBaseCard>
-      </motion.div>
+      </div>
     </div>
   );
 }

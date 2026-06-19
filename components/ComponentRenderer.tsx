@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+// 已移除 framer-motion 以避免 SSR 崩潰，改用 CSS transition
 import { BrandCard, BrandButton, BrandBadge, BrandStatusDot } from '@/components/brand';
 import * as LucideIcons from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -94,10 +94,9 @@ export function ComponentRenderer({ zone, className }: ComponentRendererProps) {
         const atom = atoms.find(a => a.name === tool.ui_component && a.is_active);
         
         return (
-          <motion.div 
+          <div
             key={tool.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            style={{ transition: 'all 0.4s ease' }}
             className="group"
           >
             <BrandCard 
@@ -149,7 +148,7 @@ export function ComponentRenderer({ zone, className }: ComponentRendererProps) {
                 </BrandButton>
               </div>
             </BrandCard>
-          </motion.div>
+          </div>
         );
       })}
     </div>

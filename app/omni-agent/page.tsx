@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Bot,
@@ -178,10 +178,8 @@ function StatBar({ label, value, rank }: { label: string; value: number; rank: s
         {rank}
       </span>
       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
+        <div
           animate={{ width: `${value}%` }}
-          transition={{ duration: 1, delay: 0.2 }}
           className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
         />
       </div>
@@ -193,10 +191,8 @@ function StatBar({ label, value, rank }: { label: string; value: number; rank: s
 function SubAgentCard({ agent }: { agent: SubAgent }) {
   const Icon = agent.icon;
   return (
-    <motion.div
+    <div
       layout
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
       <div className="flex items-start gap-3">
@@ -220,16 +216,14 @@ function SubAgentCard({ agent }: { agent: SubAgent }) {
           <p className="text-[9px] text-slate-400 font-bold uppercase">Tasks</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function ChatBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user';
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className={cn('flex gap-3', isUser ? 'flex-row-reverse' : 'flex-row')}
     >
       <div
@@ -261,7 +255,7 @@ function ChatBubble({ message }: { message: ChatMessage }) {
           })}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -380,17 +374,14 @@ export default function OmniAgentPage() {
 
             {/* Voice Line */}
             <div className="hidden lg:block max-w-xs">
-              <AnimatePresence mode="wait">
-                <motion.p
+              
+                <p
                   key={currentVoiceLine}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
                   className="text-sm text-slate-500 italic text-right"
                 >
                   {VOICE_LINES[currentVoiceLine]}
-                </motion.p>
-              </AnimatePresence>
+                </p>
+              
             </div>
           </div>
         </header>
@@ -419,13 +410,10 @@ export default function OmniAgentPage() {
         </div>
 
         {/* ─── Content Area ─── */}
-        <AnimatePresence mode="wait">
+        
           {activeTab === 'chat' && (
-            <motion.div
+            <div
               key="chat"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
               className="grid grid-cols-1 lg:grid-cols-3 gap-6"
             >
               {/* Chat Area */}
@@ -534,30 +522,24 @@ export default function OmniAgentPage() {
                   </div>
                 </OmniBaseCard>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {activeTab === 'agents' && (
-            <motion.div
+            <div
               key="agents"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {SUB_AGENTS.map((agent) => (
                   <SubAgentCard key={agent.id} agent={agent} />
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {activeTab === 'stats' && (
-            <motion.div
+            <div
               key="stats"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               <OmniBaseCard className="p-6">
@@ -625,9 +607,9 @@ export default function OmniAgentPage() {
                   </p>
                 </div>
               </OmniBaseCard>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Shield,
   Activity,
@@ -142,9 +142,7 @@ export default function DashboardContent() {
 
       <div className="relative z-10 max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="flex justify-between items-end"
         >
           <div>
@@ -166,17 +164,16 @@ export default function DashboardContent() {
               </span>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Bento Grid */}
-        <motion.div
-          variants={staggerContainer}
+        <div
           initial="initial"
           animate="animate"
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {/* Global Compliance Beacon */}
-          <motion.div variants={scaleIn} className="md:col-span-1">
+          <div className="md:col-span-1">
             <Card className="h-full border border-slate-200 rounded-3xl overflow-hidden shadow-xl relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <CardContent className="p-8 flex flex-col h-full relative z-10">
@@ -199,10 +196,10 @@ export default function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* Governance Loop Monitor (Radar/Stats) */}
-          <motion.div variants={fadeIn} className="md:col-span-2">
+          <div className="md:col-span-2">
             <Card className="h-full border border-slate-200 rounded-3xl shadow-xl">
               <CardContent className="p-8 flex flex-col h-full">
                 <div className="flex justify-between items-center mb-6">
@@ -271,11 +268,10 @@ export default function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* Active Agents */}
-          <motion.div
-            variants={fadeIn}
+          <div
             className="md:col-span-3 mt-4 -md rounded-3xl p-6 border border-slate-200/60 shadow-sm"
           >
             <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-6 gap-4">
@@ -324,36 +320,28 @@ export default function DashboardContent() {
                 <div className="w-full flex items-center justify-center text-slate-400 font-mono text-sm animate-pulse">
                   Synchronizing with OmniCore...
                 </div>
-              ) : (
-                <AnimatePresence mode="popLayout">
-                  {filteredAgents.map((agent) => (
-                    <motion.div
-                      key={agent.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.2 }}
-                      className="shrink-0"
-                    >
-                      <OmniAgentCard {...agent} />
-                    </motion.div>
-                  ))}
-                  {filteredAgents.length === 0 && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="w-full flex items-center justify-center text-slate-400 text-sm"
-                    >
-                      No agents found with the selected filter.
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+) : (
+                filteredAgents.map((agent) => (
+                  <div
+                    key={agent.id}
+                    className="shrink-0"
+                  >
+                    <OmniAgentCard {...agent} />
+                  </div>
+                ))
+              )}
+{filteredAgents.length === 0 && !isLoadingAgents && (
+                <div
+                  className="w-full flex items-center justify-center text-slate-400 text-sm"
+                >
+                  No agents found with the selected filter.
+                </div>
               )}
             </div>
-          </motion.div>
+          </div>
 
           {/* OmniAgent Activity Stream */}
-          <motion.div variants={slideInRight} className="md:col-span-2">
+          <div className="md:col-span-2">
             <Card className="h-full bg-slate-900/95 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
               <CardContent className="p-8">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
@@ -383,10 +371,10 @@ export default function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* Quick Action Hub */}
-          <motion.div variants={fadeIn} className="md:col-span-1">
+          <div className="md:col-span-1">
             <Card className="h-full border border-slate-200 rounded-3xl shadow-xl">
               <CardContent className="p-8 flex flex-col h-full">
                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
@@ -447,8 +435,8 @@ export default function DashboardContent() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   );

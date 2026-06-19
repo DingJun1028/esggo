@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { OmniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus, OmniAgentBus } from '@/lib/agents/omni-agent-bus';
 import { synthesizeSkillUltimate, MemoryShard } from '@/lib/agent/memory-shards';
 import { createClient } from '@supabase/supabase-js';
 
@@ -13,10 +13,12 @@ const getSupabaseAdmin = () => {
   );
 };
 
+// Static bus instance for autonomy
+const bus = omniAgentBus;
+
 export async function POST(req: Request) {
   try {
     const { action, intervalMs } = await req.json();
-    const bus = OmniAgentBus.getInstance();
 
     if (action === 'start') {
       const ms = intervalMs || 60000;
@@ -44,8 +46,12 @@ export async function POST(req: Request) {
         title: s.title,
         description: s.description,
         tags: s.tags,
-        extractedCodeSnippets: s.extracted_code_snippets,
-        timestamp: s.timestamp
+        extractedCodeSnippets: s.extracted_code_snippets ?? [],
+        entropyLevel: s.entropy_level ?? 50,
+        importanceScore: s.importance_score ?? 0.5,
+        timestamp: s.timestamp,
+        sourceType: s.source_type ?? 'auto_extract',
+        usageCount: s.usage_count ?? 0
       }));
 
       // 2. 觸發技能奧義合成

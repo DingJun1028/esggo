@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   Link,
@@ -243,9 +243,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
   const risk = riskConfig[supplier.riskLevel];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
       <div className="flex items-start justify-between mb-3">
@@ -284,7 +282,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
           <p className="text-[8px] text-slate-400">最後稽核</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -336,12 +334,9 @@ function IntegrationStepCard({
             )}
           </div>
         </button>
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+            <div
               className="overflow-hidden"
             >
               <div className="bg-white rounded-b-xl border border-t-0 border-slate-100 p-4 -mt-2">
@@ -355,9 +350,9 @@ function IntegrationStepCard({
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );
@@ -410,18 +405,15 @@ export default function SupplyChainIntegrationPage() {
           {INTEGRATION_STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <motion.div
+              <div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', stat.color)} />
                 <p className="text-xl font-black text-[#003262]">{stat.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{stat.label}</p>
                 <p className="text-[9px] text-slate-300 mt-0.5">{stat.description}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -514,13 +506,10 @@ export default function SupplyChainIntegrationPage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <AnimatePresence mode="wait">
+            
               {activeTab === 'suppliers' && (
-                <motion.div
+                <div
                   key="suppliers"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                   className="space-y-4"
                 >
                   <div className="flex items-center justify-between">
@@ -546,15 +535,12 @@ export default function SupplyChainIntegrationPage() {
                       <SupplierCard key={supplier.id} supplier={supplier} />
                     ))}
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'integration' && (
-                <motion.div
+                <div
                   key="integration"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                 >
                   <OmniBaseCard className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -575,15 +561,12 @@ export default function SupplyChainIntegrationPage() {
                       ))}
                     </div>
                   </OmniBaseCard>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'risk' && (
-                <motion.div
+                <div
                   key="risk"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
                   className="space-y-4"
                 >
                   <OmniBaseCard className="p-5">
@@ -596,10 +579,8 @@ export default function SupplyChainIntegrationPage() {
                         <div key={risk.level} className="flex items-center gap-3">
                           <span className="text-xs text-slate-600 w-16">{risk.level}</span>
                           <div className="flex-1 h-4 bg-slate-100 rounded-full overflow-hidden">
-                            <motion.div
-                              initial={{ width: 0 }}
+                            <div
                               animate={{ width: `${risk.percentage}%` }}
-                              transition={{ duration: 0.8 }}
                               className={cn('h-full rounded-full', risk.color)}
                             />
                           </div>
@@ -636,9 +617,9 @@ export default function SupplyChainIntegrationPage() {
                       ))}
                     </div>
                   </OmniBaseCard>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
           </div>
 
           {/* Right Sidebar */}

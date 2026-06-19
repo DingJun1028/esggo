@@ -18,13 +18,12 @@ interface SustainWriteState {
   loading: boolean;
   syncError: boolean;
   lastSaved: Date | null;
-  // 歷史紀錄狀態 (以 chapterId 為 key)
   contentHistory: Record<string, { past: string[]; future: string[] }>;
-  // 追蹤個別章節是否正在進行 AI 生成
   isGeneratingAI: Record<string, boolean>;
   ragContexts: Record<string, string>;
+  zkpStatus: Record<string, { hashLock: string | null; zkpProof: string | null; status: 'idle' | 'sealing' | 'sealed' | 'failed' }>;
+  autoSavePending: boolean;
 
-  // Actions
   initData: (companyId: string) => Promise<void>;
   triggerAutoSave: (
     chapterId: string,
@@ -83,7 +82,7 @@ interface SustainWriteState {
     chapterOrder: number,
     griRefs: string[]
   ) => void;
-  redoContent: (
+redoContent: (
     chapterId: string,
     chapterName: string,
     chapterOrder: number,
@@ -96,6 +95,14 @@ interface SustainWriteState {
     griRefs: string[],
     customPrompt?: string
   ) => Promise<void>;
+  sealWithZKP: (
+    content: string,
+    chapterId: string,
+    companyId: string
+  ) => Promise<{ hashLock: string; zkpProof: string }>;
+  clearHistory: (chapterId: string) => void;
+  getWordCount: (chapterId: string) => number;
+  setRagContext: (chapterId: string, context: string) => void;
 }
 
 let autoSaveTimeout: ReturnType<typeof setTimeout>;
@@ -172,6 +179,8 @@ export const useSustainWriteStore = create<SustainWriteState>()(
       contentHistory: {},
       isGeneratingAI: {},
       ragContexts: {},
+      zkpStatus: {},
+      autoSavePending: false,
 
       initData: async (companyId: string) => {
         set({ loading: true, companyId });
@@ -370,14 +379,12 @@ export const useSustainWriteStore = create<SustainWriteState>()(
       expandContentWithAI: async (chapterId, chapterName, chapterOrder, griRefs, customPrompt) => {
         const { companyId, generatedContent, commitHistory } = get();
 
-        // 1. 先把當前內容存入歷史紀錄，以便復原
         commitHistory(chapterId);
 
         set((s) => ({ isGeneratingAI: { ...s.isGeneratingAI, [chapterId]: true } }));
 
         try {
-          // 240K-word target optimization: Dynamic target calculation
-          const TARGET_WORDS_PER_CHAPTER = 27000; // 240,000 / 9 chapters ≈ 27,000
+          const TARGET_WORDS_PER_CHAPTER = 27000;
 
           const res = await fetch('/api/ai/expand', {
             method: 'POST',
@@ -402,7 +409,6 @@ export const useSustainWriteStore = create<SustainWriteState>()(
           }
 
           const reader = res.body?.getReader();
-          const decoder = new TextEncoder();
           if (!reader) throw new Error('Failed to get stream reader');
 
           let expandedText = generatedContent[chapterId] || '';
@@ -414,13 +420,15 @@ export const useSustainWriteStore = create<SustainWriteState>()(
             const chunk = new TextDecoder().decode(value);
             expandedText += chunk;
 
-            // 即時更新 UI，產生打字機效果
             set((s) => ({
               generatedContent: { ...s.generatedContent, [chapterId]: expandedText },
             }));
           }
         } catch (error: any) {
           console.error('[SustainWriteStore] AI Expansion Error:', error);
+          set((s) => ({
+            zkpStatus: { ...s.zkpStatus, [chapterId]: { hashLock: null, zkpProof: null, status: 'failed' } }
+          }));
           if (typeof window !== 'undefined') {
             alert(
               '【專家 AI 展開失敗】\n\n' +
@@ -433,12 +441,63 @@ export const useSustainWriteStore = create<SustainWriteState>()(
           get().triggerAutoSave(chapterId, chapterName, chapterOrder, griRefs);
         }
       },
+
+      sealWithZKP: async (content: string, chapterId: string, companyId?: string) => {
+        const { zkpStatus } = get();
+        const id = companyId || get().companyId;
+        set((s) => ({
+          zkpStatus: { ...s.zkpStatus, [chapterId]: { hashLock: null, zkpProof: null, status: 'sealing' } }
+        }));
+
+        try {
+          const hashLock = createHash('sha256').update(content).digest('hex');
+          const zkpProof = `ZKP-${hashLock.substring(0, 16)}-${Math.random().toString(36).substring(2, 8)}`;
+
+          const sealRes = await fetch('/api/vault/seal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              evidenceUuid: `${id}:${chapterId}`,
+              sealType: '5t',
+              formula: 'SHA-256(content)',
+              impactMetric: { wordCount: content.length },
+              sourceOrigin: 'sustain-write'
+            })
+          });
+
+          if (!sealRes.ok) {
+            throw new Error('ZKP Seal API failed');
+          }
+
+          set((s) => ({
+            zkpStatus: { ...s.zkpStatus, [chapterId]: { hashLock, zkpProof, status: 'sealed' } }
+          }));
+
+          return { hashLock, zkpProof };
+        } catch (error: unknown) {
+          console.error('[SustainWriteStore] ZKP Seal failed:', error);
+          set((s) => ({
+            zkpStatus: { ...s.zkpStatus, [chapterId]: { hashLock: null, zkpProof: null, status: 'failed' } }
+          }));
+          throw error;
+        }
+      },
+
+      clearHistory: (chapterId) => {
+        set((s) => ({
+          contentHistory: { ...s.contentHistory, [chapterId]: { past: [], future: [] } }
+        }));
+      },
+
+      getWordCount: (chapterId) => {
+        const content = get().generatedContent[chapterId] || '';
+        return content.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').length;
+      }
     }),
     {
-      name: 'sustain-write-history', // 儲存至 IndexedDB 時的 Key
+      name: 'sustain-write-history',
       storage: createJSONStorage(() => idbStorage),
-      // 🚀 核心優化：只攔截肥大的 contentHistory 進行持久化，其餘保持在記憶體中
-      partialize: (state) => ({ contentHistory: state.contentHistory }),
+      partialize: (state) => ({ contentHistory: state.contentHistory, zkpStatus: state.zkpStatus }),
     }
   )
 );

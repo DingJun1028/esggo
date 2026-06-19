@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Layers, Box, Cpu, Fingerprint, ShieldCheck, Activity, Eye, Compass, Zap, 
   Layout, Menu, ChevronLeft, ChevronRight, Sun, Moon, Smartphone, Monitor,
@@ -38,7 +38,7 @@ export default function AtomicRegistryPage() {
       <div className="fixed top-[10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
       <div className="fixed bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
 
-      <motion.div
+      <div
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -81,7 +81,7 @@ export default function AtomicRegistryPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* AppShellV2 Preview Card */}
-            <motion.div variants={itemVariants}>
+            <div variants={itemVariants}>
               <BrandCard variant="hologram" padding="lg" className="h-full border-indigo-500/20 overflow-hidden relative">
                 <div className="absolute top-0 right-0 p-4">
                    <BrandBadge variant="outline">Organism: AppShellV2</BrandBadge>
@@ -115,10 +115,10 @@ export default function AtomicRegistryPage() {
                   </div>
                 </div>
               </BrandCard>
-            </motion.div>
+            </div>
 
             {/* Mobile Optimization Preview */}
-            <motion.div variants={itemVariants}>
+            <div variants={itemVariants}>
               <BrandCard variant="glass" padding="lg" className="h-full border-emerald-500/20">
                 <div className="absolute top-0 right-0 p-4">
                    <BrandBadge variant="outline">Pattern: Mobile Pulse</BrandBadge>
@@ -152,7 +152,7 @@ export default function AtomicRegistryPage() {
                   </div>
                 </div>
               </BrandCard>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -169,7 +169,7 @@ export default function AtomicRegistryPage() {
               { t: 'Trustworthy', desc: '不可篡改封印', icon: ShieldCheck, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
               { t: 'Transferful', desc: '全生命週期追蹤', icon: Activity, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
             ].map((item, i) => (
-              <motion.div key={i} variants={itemVariants} className={`p-6 rounded-[2rem] border ${item.border} ${item.bg} flex flex-col items-center text-center gap-4 backdrop-blur-xl shadow-xl hover:scale-105 transition-transform cursor-pointer group`}>
+              <div key={i} variants={itemVariants} className={`p-6 rounded-[2rem] border ${item.border} ${item.bg} flex flex-col items-center text-center gap-4 backdrop-blur-xl shadow-xl hover:scale-105 transition-transform cursor-pointer group`}>
                 <div className="p-4 rounded-2xl bg-current/5 group-hover:bg-current/10 transition-colors">
                   <item.icon size={32} className={item.color} />
                 </div>
@@ -177,7 +177,7 @@ export default function AtomicRegistryPage() {
                   <div className={`font-black text-sm uppercase tracking-[0.2em] ${item.color}`}>{item.t}</div>
                   <div className="text-[10px] opacity-50 mt-2 font-bold uppercase tracking-widest">{item.desc}</div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
@@ -214,7 +214,7 @@ export default function AtomicRegistryPage() {
         </section>
 
         {/* ─── 終極整合 ────────────────────────────── */}
-        <motion.div variants={itemVariants} className="pt-12">
+        <div variants={itemVariants} className="pt-12">
           <BrandCard variant="hologram" padding="lg" className="border-cyan-500/20 text-center relative overflow-hidden rounded-[3rem]">
             <div className="absolute inset-0 cyber-grid opacity-10 pointer-events-none" />
             <div className="relative z-10 space-y-8 py-10">
@@ -239,9 +239,9 @@ export default function AtomicRegistryPage() {
               </div>
             </div>
           </BrandCard>
-        </motion.div>
+        </div>
 
-      </motion.div>
+      </div>
 
       {/* Global CSS for Atomic Page */}
       <style jsx global>{`

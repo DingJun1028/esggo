@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion } from 'framer-motion';
+// 已移除 framer-motion 以避免 SSR 崩潰，改用 CSS transition
 import { Bot, X, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -26,7 +26,6 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
   const [initialPulseRect, setInitialPulseRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
-    // Load state from localStorage on mount
     const savedVisibility = localStorage.getItem('omniagent_pulse_visible');
     if (savedVisibility !== null) setIsVisible(JSON.parse(savedVisibility));
 
@@ -56,20 +55,18 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
     localStorage.setItem('omniagent_pulse_minimized', JSON.stringify(isMinimized));
   }, [isMinimized]);
 
-  // Measure initial position of the pulse component for delta calculation
   useEffect(() => {
     const measureInitialPulsePosition = () => {
       if (pulseRef.current) {
         setInitialPulseRect(pulseRef.current.getBoundingClientRect());
       }
     };
-    measureInitialPulsePosition(); // Measure on mount
-    window.addEventListener('resize', measureInitialPulsePosition); // Re-measure on resize
+    measureInitialPulsePosition();
+    window.addEventListener('resize', measureInitialPulsePosition);
     return () => window.removeEventListener('resize', measureInitialPulsePosition);
   }, []);
 
   const handleDragEnd = (_: any, info: any) => {
-    // Only update position if not minimized
     if (!isMinimized) {
       const newPosition = { x: info.offset.x + position.x, y: info.offset.y + position.y };
       setPosition(newPosition);
@@ -77,7 +74,6 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
   };
 
   const toggleVisibility = () => {
-    // When close button is pressed, minimize instead of fully hiding
     setIsMinimized(true);
   };
 
@@ -87,34 +83,28 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
     else setCurrentSize('sm');
   };
 
-  if (!isVisible && !isMinimized) return null; // Only fully disappear if both not visible and not minimized
+  if (!isVisible && !isMinimized) return null;
 
-  // Calculate minimizedTarget dynamically using logoPosition and initialPulseRect
   const calculatedMinimizedTarget = useMemo(() => {
     if (!logoPosition || !initialPulseRect) {
-      // Fallback or wait if positions are not available yet
-      return { x: 0, y: 0, scale: 0.3 }; // Default to no movement, just scale
+      return { x: 0, y: 0, scale: 0.3 };
     }
 
-    // Calculate center of logo
     const logoCenterX = logoPosition.x + logoPosition.width / 2;
     const logoCenterY = logoPosition.y + logoPosition.height / 2;
 
-    // Calculate center of initial (non-minimized) OmniAgent Pulse in viewport coordinates
-    // The initialPulseRect provides the rect of the component when it first renders at bottom-12 right-12 with x:0, y:0
     const initialPulseCenterX = initialPulseRect.x + initialPulseRect.width / 2;
     const initialPulseCenterY = initialPulseRect.y + initialPulseRect.height / 2;
 
-    // Calculate the required translation (delta) to move current center to logo center
     const translateX = logoCenterX - initialPulseCenterX;
     const translateY = logoCenterY - initialPulseCenterY;
 
     return {
       x: translateX,
       y: translateY,
-      scale: 0.3, // Scale down to 30%
+      scale: 0.3,
     };
-  }, [logoPosition, initialPulseRect]); // Recalculate if these change
+  }, [logoPosition, initialPulseRect]);
 
   useEffect(() => {
     const handleRestore = () => {
@@ -138,35 +128,27 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
   };
 
   return (
-    <motion.div
+    <div
       ref={pulseRef}
-      drag={!isMinimized}
-      dragMomentum={false}
-      onDragEnd={handleDragEnd}
-      animate={isMinimized ? calculatedMinimizedTarget : { scale: 1 }} // Remove x/y here, let framer motion handle drag internally
       style={
         !isMinimized && position.x !== 0 && position.y !== 0
-          ? { x: position.x, y: position.y }
-          : undefined
-      } // Only set initial style position once, don't bind to animate
-      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+          ? { x: position.x, y: position.y, transition: 'all 0.4s ease' }
+          : { transition: 'all 0.4s ease' }
+      }
       className={cn(
         'hidden md:flex fixed z-[60] group',
         isMinimized ? 'cursor-pointer' : 'bottom-12 right-12'
       )}
-      onTap={() => {
-        if (isMinimized) setIsMinimized(false);
-      }}
     >
-      <motion.div
-        whileHover={{ scale: 1.05, y: -5 }}
+      <div
+        style={{ transition: 'all 0.4s ease' }}
         className={cn(
-          'rounded-[2.5rem] border  shadow-2xl flex items-center transition-all duration-500',
+          'rounded-[2.5rem] border shadow-2xl flex items-center transition-all duration-500',
           sizeClasses[currentSize],
           isDark
             ? 'bg-[#003262]/60 border-[#FDB515]/30 shadow-[#FDB515]/5'
             : ' border-[#003262]/20 shadow-xl',
-          isMinimized && 'p-0 rounded-full w-10 h-10 flex items-center justify-center' // Styles for minimized state
+          isMinimized && 'p-0 rounded-full w-10 h-10 flex items-center justify-center'
         )}
       >
         {isMinimized ? (
@@ -215,8 +197,8 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
               </span>
               <div className="flex items-center gap-3 mt-1.5">
                 <div className="h-1.5 w-32 bg-slate-200/20 rounded-full overflow-hidden">
-                  <motion.div
-                    animate={{ width: '92.4%' }}
+                  <div
+                    style={{ width: '92.4%', transition: 'all 0.4s ease' }}
                     className="h-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
                   />
                 </div>
@@ -225,7 +207,7 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
             </div>
           </>
         )}
-        {!isMinimized && ( // Hide controls when minimized
+        {!isMinimized && (
           <div className="absolute -top-3 -right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               onClick={cycleSize}
@@ -241,7 +223,7 @@ export default function OmniAgentPulseFloating({ logoPosition }: OmniAgentPulseF
             </button>
           </div>
         )}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

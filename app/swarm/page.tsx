@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Network,
   Activity,
@@ -198,14 +198,12 @@ export default function SwarmPage() {
       {/* 標題區 */}
       <div className="mb-10 flex items-center justify-between">
         <div>
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+          <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 mb-4"
           >
             <Network size={16} />
             <span className="text-xs font-bold tracking-widest uppercase">OmniAgent Swarm</span>
-          </motion.div>
+          </div>
           <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-300 mb-2 tracking-tight">
             蜂群指揮中心
           </h1>
@@ -355,13 +353,10 @@ export default function SwarmPage() {
           </div>
 
           <div className="flex-1 overflow-y-auto pr-2 space-y-4">
-            <AnimatePresence>
+            
               {logs.map((log) => (
-                <motion.div
+                <div
                   key={log.id}
-                  initial={{ opacity: 0, x: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
                   className={`flex items-start gap-4 p-4 rounded-xl border bg-black/40 ${
                     log.status === 'healing' ? 'border-red-500/30' : 'border-white/5'
                   }`}
@@ -392,9 +387,9 @@ export default function SwarmPage() {
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
+            
           </div>
         </div>
       </div>

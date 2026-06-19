@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   FileText,
@@ -228,10 +228,7 @@ function StepCard({
   const Icon = step.icon;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08 }}
+    <div
       className="relative"
     >
       {/* Timeline Line */}
@@ -281,12 +278,9 @@ function StepCard({
           </div>
         </button>
 
-        <AnimatePresence>
+        
           {isExpanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
+            <div
               className="overflow-hidden"
             >
               <div className="bg-white rounded-b-2xl border border-t-0 border-slate-100 p-4 -mt-2">
@@ -309,18 +303,18 @@ function StepCard({
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function TemplateCard({ template }: { template: ReportTemplate }) {
   const Icon = template.icon;
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2 }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
@@ -346,7 +340,7 @@ function TemplateCard({ template }: { template: ReportTemplate }) {
           </span>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -391,18 +385,15 @@ export default function ReportGenerationPage() {
           {IMPACT_METRICS.map((metric, i) => {
             const Icon = metric.icon;
             return (
-              <motion.div
+              <div
                 key={metric.label}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
                 className="bg-white rounded-xl border border-slate-100 p-4 text-center"
               >
                 <Icon size={20} className={cn('mx-auto mb-2', metric.color)} />
                 <p className="text-xl font-black text-[#003262]">{metric.value}</p>
                 <p className="text-[10px] text-slate-400 font-medium">{metric.label}</p>
                 <p className="text-[9px] text-slate-300 mt-0.5">{metric.description}</p>
-              </motion.div>
+              </div>
             );
           })}
         </div>
