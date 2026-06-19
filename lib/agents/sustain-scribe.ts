@@ -39,7 +39,7 @@ export class SustainWriteScribe {
     
     // Concurrency limiter to prevent 429 Too Many Requests on massive API load
     const limit = pLimit(5);
-    const tasksToRun: (() => Promise<{ subTitle: string, hash: string, content: string }>)[] = [];
+    const tasksToRun: (() => Promise<{ subTitle: string, hash: string, content: string, sectionTitle: string }>)[] = [];
 
     // 2. 多重遞迴擴充 (Multi-level Recursive Content Generation)
     for (const section of outline) {
@@ -54,7 +54,7 @@ export class SustainWriteScribe {
                 omniAgentBus.publish('AGENT_TASK', { agent: 'SustainScribe', task: `Drafting Micro: ${topic.title}` });
                 const content = await this.generateExpertParagraph(title, section.title, subsection.title + ' - ' + topic.title, topic.focus, context, depth);
                 const segmentHash = createHash('sha256').update(content).digest('hex');
-                return { subTitle: topic.title, hash: segmentHash, content: `### ${subsection.title}\n#### ${topic.title}\n\n${content}\n\n` };
+                return { subTitle: topic.title, hash: segmentHash, content: `### ${subsection.title}\n#### ${topic.title}\n\n${content}\n\n`, sectionTitle: section.title };
              }));
           }
         } else {
@@ -62,43 +62,27 @@ export class SustainWriteScribe {
              omniAgentBus.publish('AGENT_TASK', { agent: 'SustainScribe', task: `Drafting: ${subsection.title}` });
              const content = await this.generateExpertParagraph(title, section.title, subsection.title, subsection.focus, context, depth);
              const segmentHash = createHash('sha256').update(content).digest('hex');
-             return { subTitle: subsection.title, hash: segmentHash, content: `### ${subsection.title}\n\n${content}\n\n` };
+             return { subTitle: subsection.title, hash: segmentHash, content: `### ${subsection.title}\n\n${content}\n\n`, sectionTitle: section.title };
           }));
         }
       }
     }
 
     console.log(`[SustainWrite] 開始並發執行 ${tasksToRun.length} 個擴充任務 (Max Concurrency: 5)`);
+    // Promise.all preserves the exact insertion order of the tasksToRun array
     const completedSegments = await Promise.all(tasksToRun.map(t => t()));
 
-    // Reconstruct full content in order
-    // Wait, the order might be scrambled by Promise.all, but we pushed them in order.
-    // Promise.all preserves the order of the input array.
-    let currentSectionTitle = "";
-    let segmentIndex = 0;
-    
-    for (const section of outline) {
-      fullContent += `## ${section.title}\n\n`;
-      for (const subsection of section.subsections) {
-        if (depth === 4) {
-          // We assume we know how many topics were generated, but to be simple, 
-          // we should just map the completedSegments array sequentially.
-        }
-      }
-    }
-    
-    // Simpler reconstruction: Just append sequentially since Promise.all results are ordered identically to tasksToRun array.
+    // Reconstruct full content in absolute deterministic order (Traceable / Trust)
     fullContent = `# ${title}\n> 依據 ${griReference} 準則編製\n\n`;
-    for (const section of outline) {
-      fullContent += `## ${section.title}\n\n`;
-      for (const subsection of section.subsections) {
-        // Find matching segments
-        const matched = completedSegments.filter(s => s.content.includes(`### ${subsection.title}\n`));
-        for (const m of matched) {
-           fullContent += m.content;
-           results.push({ subTitle: m.subTitle, hash: m.hash });
-        }
+    let currentSectionTitle = "";
+
+    for (const m of completedSegments) {
+      if (m.sectionTitle !== currentSectionTitle) {
+        fullContent += `## ${m.sectionTitle}\n\n`;
+        currentSectionTitle = m.sectionTitle;
       }
+      fullContent += m.content;
+      results.push({ subTitle: m.subTitle, hash: m.hash });
     }
 
     // 3. 全章節終態封印 (Final Chapter Sealing)

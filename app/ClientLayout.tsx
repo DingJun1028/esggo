@@ -78,7 +78,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
     pathname === '/terminal' ||
     pathname === '/' ||
     pathname === '/esggo-omnipencil' ||
-    pathname === '/test-triple-v2'
+    pathname.startsWith('/test-')
   ) {
     return (
       <>
