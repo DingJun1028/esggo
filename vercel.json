@@ -1,6 +1,7 @@
 {
   "$schema": "https://vercel.com/docs/build-output-api/v3/primitives",
   "version": 2,
+  "outputDirectory": ".vercel/output",
   "builds": [
     {
       "src": "package.json",
@@ -11,13 +12,7 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
       "headers": {
         "Access-Control-Allow-Origin": "*"
       }
