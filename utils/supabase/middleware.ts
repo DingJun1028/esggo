@@ -29,9 +29,14 @@ export async function updateSession(request: NextRequest) {
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
 
-  const isBypass = request.cookies.get('omni_user_bypass')?.value === 'true';
+  // 5T Security: Validate bypass strictly (Traceable / Trust)
+  // Only allow bypass in development environment
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isBypass = request.cookies.get('omni_user_bypass')?.value === 'true' && isDevelopment;
+
   const isPublicRoute =
     request.nextUrl.pathname === '/login' || 
     request.nextUrl.pathname === '/signup' || 
@@ -40,6 +45,17 @@ export async function updateSession(request: NextRequest) {
   const isPlaceholder =
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+
+  // 5T Traceable: If there's an auth error (e.g. invalid JWT), clear corrupted session
+  if (error && !isBypass && !isPublicRoute && !isPlaceholder) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    const redirectResponse = NextResponse.redirect(url);
+    // Clear potentially corrupted session cookies
+    redirectResponse.cookies.delete('sb-access-token');
+    redirectResponse.cookies.delete('sb-refresh-token');
+    return redirectResponse;
+  }
 
   if (!user && !isBypass && !isPublicRoute && !isPlaceholder) {
     // no user, potentially respond by redirecting the user to the login page
