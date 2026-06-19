@@ -117,24 +117,17 @@ export default function OmniCommandPalette() {
   );
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <>
           {/* 背景模糊遮罩 (Liquid Glass) - 加深以凸顯主體 */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className="fixed inset-0 z-[9999] bg-slate-900/60 -md"
             onClick={() => setIsOpen(false)}
           />
 
           {/* 面板主體 - 強化 Liquid Glass 2.0 漸層與邊框反光 (深色版) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          <div
             className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-2xl z-[10000]"
           >
             <div className="relative mx-4 sm:mx-0">
@@ -252,9 +245,9 @@ export default function OmniCommandPalette() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }

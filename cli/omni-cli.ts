@@ -187,10 +187,20 @@ program
   .command('shatter')
   .description('［連發技能 第一段］碎裂數據源')
   .argument('<source>', '數據源路徑 (PDF/Excel)')
-  .action((source) => {
-    console.log(chalk.red.bold(`\n💥 執行數據碎裂：${source}`));
-    console.log(chalk.white('正在移除冗餘行銷詞彙，拆解為最小 Hash 記憶碎片...'));
-    console.log(chalk.green('✔ 碎裂完成。下一步請執行「oa cast <章節號碼>」。'));
-  });
+    .action(async (source) => {
+        console.log(chalk.red.bold(`\n💥 執行數據碎裂：${source}`));
+        // 讀取 PDF 並抽取文字
+        const fs = await import('fs');
+        const data = fs.readFileSync(source);
+        const pdfData = await pdfParse(data);
+        let text = pdfData.text;
+        // 簡易冗餘詞彙過濾 (範例關鍵字列表，可自行擴充)
+        const redundant = [/\b行銷\b/gi, /\b免費\b/gi, /\b限時\b/gi, /\b優惠\b/gi];
+        redundant.forEach(rx => { text = text.replace(rx, ''); });
+        console.log(chalk.white('已讀取 PDF 並過濾冗餘詞彙。'));
+        console.log(chalk.white('內容預覽 (前 200 字):'));
+        console.log(chalk.gray(text.slice(0,200)));
+        console.log(chalk.green('✔ 碎裂完成。下一步請執行「oa cast <章節號碼>」。'));
+    });
 
 program.parse(process.argv);
