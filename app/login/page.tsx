@@ -169,10 +169,10 @@ export default function LoginPage() {
     setStatus('loading');
     setErrorMessage('');
 
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
-    ) {
+    const supabaseUrl =
+      typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_SUPABASE_URL : undefined;
+
+    if (!supabaseUrl || supabaseUrl.includes('placeholder')) {
       document.cookie = 'omni_user_bypass=true; path=/; max-age=31536000; SameSite=Strict';
       localStorage.setItem(
         'omni_user',
@@ -222,9 +222,7 @@ export default function LoginPage() {
         <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-amber-100/20 rounded-full" />
       </div>
 
-      <div
-        className="z-10 w-full max-w-md p-8 rounded-3xl border border-slate-100 shadow-xl relative"
-      >
+      <div className="z-10 w-full max-w-md p-8 rounded-3xl border border-slate-100 shadow-xl relative">
         <Script
           src="https://accounts.google.com/gsi/client"
           strategy="afterInteractive"
@@ -282,9 +280,7 @@ export default function LoginPage() {
           </div>
 
           {status === 'error' && errorMessage && (
-            <div
-              className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm"
-            >
+            <div className="flex items-center gap-2 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-sm">
               <AlertCircle size={16} className="shrink-0" />
               <p>{errorMessage}</p>
             </div>
