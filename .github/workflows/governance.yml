@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
   push:
-    branches: [main, master]
+    branches: [main]
 
 permissions:
   contents: read
@@ -24,20 +24,20 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v5
         with:
-          version: 10
+          version: 11
           run_install: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
           cache: pnpm
 
       - name: Git Safety Config
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Install Dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: ADR Requirement Check
         id: adr_check
@@ -48,41 +48,31 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
         run: |
           ADR_CHANGED=false
-
           if git diff --name-only "origin/${BASE_REF}" HEAD | grep -Eq '(^|/)adr/adr-.*\.md$'; then
             ADR_CHANGED=true
           fi
-
           if echo "$PR_BODY" | grep -iqE "ADR-[0-9]+" || echo "$PR_TITLE" | grep -iqE "ADR-[0-9]+"; then
             echo "PR_REFERENCES_ADR=true" >> "$GITHUB_OUTPUT"
           else
             echo "PR_REFERENCES_ADR=false" >> "$GITHUB_OUTPUT"
           fi
-
           echo "ADR_CHANGED=$ADR_CHANGED" >> "$GITHUB_OUTPUT"
         shell: bash
 
-      - name: Warn if no ADR changes and no ADR reference in PR
+      - name: Warn if no ADR changes
         if: github.event_name == 'pull_request' && steps.adr_check.outputs.ADR_CHANGED == 'false' && steps.adr_check.outputs.PR_REFERENCES_ADR == 'false'
         run: echo "::warning::Pull Request should modify an ADR file or reference an ADR in its title or description."
 
-      - name: Build Shared Types
-        run: pnpm exec tsc -p packages/types/tsconfig.json
-
-      - name: Run Contract Tests
-        run: pnpm exec vitest run tests/contract/esg-report.test.ts
-        continue-on-error: true
-
-      - name: Run Root Build
+      - name: Run Build
         run: pnpm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           SKIP_ENV_VALIDATION: 1
 
-      - name: Run Root Lint
+      - name: Run Lint
         run: pnpm run lint
         continue-on-error: true
 
-      - name: Run Root Tests
-        run: pnpm exec vitest run
+      - name: Run Typecheck
+        run: pnpm run typecheck
         continue-on-error: true

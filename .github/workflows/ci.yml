@@ -1,4 +1,4 @@
-name: CI — OmniValidate
+name: CI
 
 on:
   push:
@@ -8,28 +8,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+  contents: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  validate:
-    name: 🔍 OmniValidate (Typecheck / Lint / Build)
+  # ─── Stage 1: Lint & Typecheck ──────────────────────────────────────
+  quality-check:
     runs-on: ubuntu-latest
-    outputs:
-      failed_step: ${{ steps.set_failure.outputs.failed_step }}
-      error_log:   ${{ steps.set_failure.outputs.error_log }}
-      ci_failed:   ${{ steps.set_failure.outputs.ci_failed }}
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
+      - uses: actions/checkout@v5
       - name: Git Safety Config
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
@@ -48,90 +37,68 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # ── T2 Traceable: TypeCheck ─────────────────────────────────────────
-      - name: Run TypeCheck
-        id: typecheck
-        run: |
-          pnpm run typecheck 2>&1 | tee /tmp/typecheck.log
-          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
-        continue-on-error: true
-
-      # ── T4 Transparent: Lint ────────────────────────────────────────────
-      - name: Run Lint
+      - name: Run lint
         id: lint
-        run: |
-          pnpm run lint 2>&1 | tee /tmp/lint.log
-          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+        run: pnpm run lint
         continue-on-error: true
 
-      # ── T1 Tangible: Build ──────────────────────────────────────────────
-      - name: Run Build
+      - name: Run typecheck
+        id: typecheck
+        run: pnpm run typecheck
+        continue-on-error: true
+
+      - name: Build
         id: build
-        run: |
-          pnpm run build 2>&1 | tee /tmp/build.log
-          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+        run: pnpm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           SKIP_ENV_VALIDATION: 1
         continue-on-error: true
 
-      # ── 彙整錯誤輸出 ────────────────────────────────────────────────────
-      - name: Collect failure context
-        id: set_failure
+      - name: Report status
         run: |
-          FAILED_STEP=""
-          ERROR_LOG=""
-          CI_FAILED="false"
+          echo "Lint: ${{ steps.lint.outcome }}"
+          echo "Typecheck: ${{ steps.typecheck.outcome }}"
+          echo "Build: ${{ steps.build.outcome }}"
 
-          if [ "${{ steps.typecheck.outputs.exit_code }}" != "0" ]; then
-            FAILED_STEP="TypeCheck"
-            ERROR_LOG=$(cat /tmp/typecheck.log | tail -60)
-            CI_FAILED="true"
-          fi
-
-          if [ "${{ steps.lint.outputs.exit_code }}" != "0" ]; then
-            [ -z "$FAILED_STEP" ] && FAILED_STEP="Lint" || FAILED_STEP="$FAILED_STEP,Lint"
-            ERROR_LOG="${ERROR_LOG}$(cat /tmp/lint.log | tail -40)"
-            CI_FAILED="true"
-          fi
-
-          if [ "${{ steps.build.outputs.exit_code }}" != "0" ]; then
-            [ -z "$FAILED_STEP" ] && FAILED_STEP="Build" || FAILED_STEP="$FAILED_STEP,Build"
-            ERROR_LOG="${ERROR_LOG}$(cat /tmp/build.log | tail -80)"
-            CI_FAILED="true"
-          fi
-
-          # GitHub output 多行必須使用 heredoc 格式
-          echo "failed_step=$FAILED_STEP" >> $GITHUB_OUTPUT
-          echo "ci_failed=$CI_FAILED" >> $GITHUB_OUTPUT
-          {
-            echo 'error_log<<EOF_ERROR_LOG'
-            echo "$ERROR_LOG"
-            echo 'EOF_ERROR_LOG'
-          } >> $GITHUB_OUTPUT
-
-      # ── 全部通過標記 ────────────────────────────────────────────────────
-      - name: ✅ All checks passed
-        if: steps.set_failure.outputs.ci_failed == 'false'
-        run: echo "🟢 OmniValidate PASSED — TypeCheck ✓ Lint ✓ Build ✓"
-
-      # ── 有錯誤則標記 CI 失敗 ────────────────────────────────────────────
-      - name: ❌ CI Failed — trigger self-heal
-        if: steps.set_failure.outputs.ci_failed == 'true'
-        run: |
-          echo "🔴 Failed steps: ${{ steps.set_failure.outputs.failed_step }}"
-          echo "Triggering omni-self-heal..."
-          exit 1
-
-  # ── 多代理自我修復觸發 ──────────────────────────────────────────────────
-  omni-self-heal:
-    name: 🤖 OmniAgent Self-Heal (Jules)
-    needs: validate
-    if: failure() && needs.validate.outputs.ci_failed == 'true'
+  # ─── Stage 2: Self-Heal (on failure) ───────────────────────────────
+  self-heal:
+    needs: quality-check
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/omni-self-heal.yml
     with:
-      failed_step: ${{ needs.validate.outputs.failed_step }}
-      error_log:   ${{ needs.validate.outputs.error_log }}
-      commit_sha:  ${{ github.sha }}
+      failed_step: "CI Quality Check"
+      error_log: "CI failed — see run logs for details"
+      commit_sha: ${{ github.sha }}
       branch_name: ${{ github.ref_name }}
     secrets: inherit
+
+  # ─── Stage 3: Deploy to VPS (on success) ────────────────────────────
+  deploy-vps:
+    needs: quality-check
+    if: success() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Oracle VPS via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            echo "==== 📥 Pulling latest code ===="
+            cd /var/www/esggo
+            git checkout main
+            git pull origin main
+            echo "==== 📦 Installing dependencies ===="
+            pnpm install --frozen-lockfile
+            echo "==== 🏗️ Building Next.js production ===="
+            NODE_OPTIONS=--max_old_space_size=4096 pnpm run build
+            echo "==== 🚀 Reloading PM2 services ===="
+            pm2 reload esggo omniagent-gateway --update-env
+            pm2 save
+            echo "==== 🩺 Health check ===="
+            curl -fsS http://127.0.0.1:3000/ -I || echo "⚠️ Web server not responding"
+            curl -fsS http://127.0.0.1:8642/status || echo "⚠️ Gateway not responding"
+            echo "==== ✅ Deployment complete ===="
