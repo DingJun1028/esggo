@@ -1,3 +1,0 @@
-## 2024-03-02 - [React.memo in Large Grids]
-**Learning:** `ReportsCenterMain` dynamically maps `ReportCard` in large grids, relying heavily on client-side state for search and filtering. The React dev tools and flame graphs previously showed heavy re-renders in these list components due to lack of memoization, a common Next.js/React anti-pattern when rendering complex styled cards like `ReportCard`.
-**Action:** When working on grid layouts with complex or stylized cards (`motion.div`, `LiquidGlassContainer`), always wrap the individual item component with `React.memo` to skip rendering items whose props have not changed.

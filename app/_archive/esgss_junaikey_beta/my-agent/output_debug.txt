@@ -1,5 +1,0 @@
-[Debug] import.meta.url: file:///C:/Project/esgss_junaikey_beta/esgss_junaikey_beta/my-agent/agent.ts
-[Debug] process.argv[1]: C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\my-agent\agent.ts
---- 💡 Omni Intelligence Agent Starting ---
-[Status] 5T Plugin: Active
-[Status] Intelligence Forge: v2.0.26 Ready

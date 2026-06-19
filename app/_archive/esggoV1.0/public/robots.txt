@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://esggo-backend--esg-sunshine.asia-east1.hosted.app/sitemap.xml

@@ -1,4 +1,0 @@
-
-> sustain-forward-esg-allinone@8.2.0-sentient-tangible type-check
-> tsc --noEmit
-

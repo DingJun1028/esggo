@@ -1,5 +1,0 @@
-{
-  "name": "InfoOne v8.1: ESG 萬能永續智核",
-  "description": "基於真善美 5T 協議的永續知識服務平台，整合 JunAiKey 根因分析引擎與 Evidence Vault 數據存證系統。",
-  "requestFramePermissions": ["microphone", "camera", "geolocation"]
-}
