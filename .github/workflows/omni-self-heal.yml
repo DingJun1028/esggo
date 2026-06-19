@@ -1,0 +1,249 @@
+name: 🤖 OmniAgent Self-Heal
+
+# 被 ci.yml 透過 workflow_call 觸發，不直接對外暴露
+on:
+  workflow_call:
+    inputs:
+      failed_step:
+        description: '失敗的步驟名稱（TypeCheck / Lint / Build）'
+        required: true
+        type: string
+      error_log:
+        description: '錯誤日誌原文'
+        required: true
+        type: string
+      commit_sha:
+        description: '觸發 CI 的 Commit SHA'
+        required: true
+        type: string
+      branch_name:
+        description: '觸發 CI 的來源分支'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # Jules 因果引擎身份設定
+  JULES_ROLE: "自我修復代理 (Jules Karma Engine)"
+
+jobs:
+  self-heal:
+    name: 🔧 Jules — 分析錯誤 & 生成修復
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Step 1: Checkout ─────────────────────────────────────────────────
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Git Safety Config
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      # ── Step 2: 環境設置 ──────────────────────────────────────────────────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 11
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── Step 3: 觀果（捕獲完整錯誤快照）───────────────────────────────────
+      - name: 📸 Capture error snapshot
+        id: snapshot
+        run: |
+          HEAL_BRANCH="fix/auto-heal-${{ github.run_id }}"
+          echo "heal_branch=$HEAL_BRANCH" >> $GITHUB_OUTPUT
+
+          # 寫入錯誤日誌至檔案供 Gemini CLI 讀取
+          mkdir -p /tmp/omni-heal
+          cat > /tmp/omni-heal/error.txt << 'OMNI_ERR_EOF'
+          ${{ inputs.error_log }}
+          OMNI_ERR_EOF
+
+          echo "🔴 Failed Step(s): ${{ inputs.failed_step }}"
+          echo "📌 Commit: ${{ inputs.commit_sha }}"
+          echo "🌿 Branch: ${{ inputs.branch_name }}"
+
+      # ── Step 4: 如果是 Lint 錯誤，嘗試自動修復 ───────────────────────────
+      - name: 🔩 Auto-fix Lint errors (if applicable)
+        id: lint_fix
+        if: contains(inputs.failed_step, 'Lint')
+        run: |
+          pnpm run lint --fix 2>&1 | tee /tmp/omni-heal/lint-fix.log || true
+          # 確認是否有修改
+          if git diff --quiet; then
+            echo "lint_fixed=false" >> $GITHUB_OUTPUT
+          else
+            echo "lint_fixed=true" >> $GITHUB_OUTPUT
+            echo "🟡 Lint auto-fix applied $(git diff --stat)"
+          fi
+
+      # ── Step 5: Gemini CLI 分析（Jules 因果引擎）────────────────────────
+      - name: 🤖 Jules AI Analysis — Root Cause & Fix Proposal
+        id: ai_analysis
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          # 確認 Gemini CLI 可用
+          if ! command -v gemini &> /dev/null; then
+            npm install -g @google/gemini-cli 2>/dev/null || true
+          fi
+
+          # 建立 Jules 修復提示詞
+          cat > /tmp/omni-heal/jules-prompt.md << 'PROMPT_EOF'
+          你是 ESGGO OmniAgent 系統的 Jules 因果修復引擎 (Karma Engine)。
+          你的任務是分析 GitHub CI 的失敗日誌，找出根本原因，並提出最精確的修復方案。
+
+          **失敗的 CI 步驟**: ${{ inputs.failed_step }}
+          **觸發 Commit**: ${{ inputs.commit_sha }}
+
+          **錯誤日誌**:
+          $(cat /tmp/omni-heal/error.txt)
+
+          請按以下格式輸出你的分析（直接輸出 Markdown，不要有任何多餘的前言）：
+
+          ## 🔴 根本原因 (Root Cause)
+          [簡潔說明錯誤的根本成因，1-3 句話]
+
+          ## 🛠️ 修復方案 (Fix Proposal)
+          [具體說明需要修改哪些檔案的哪些部分，提供 diff 格式的代碼片段]
+
+          ## ✅ 驗收標準 (DoD)
+          [修復後應通過哪些驗證，確認問題已解決]
+          PROMPT_EOF
+
+          # 執行 Gemini CLI 分析
+          if [ -n "$GEMINI_API_KEY" ]; then
+            gemini -p "$(cat /tmp/omni-heal/jules-prompt.md)" \
+              --model gemini-2.0-flash \
+              > /tmp/omni-heal/ai-analysis.md 2>/tmp/omni-heal/ai-error.log || \
+            echo "## AI 分析暫時不可用\n請人工查看錯誤日誌。" > /tmp/omni-heal/ai-analysis.md
+          else
+            echo "## ⚠️ GEMINI_API_KEY 未設定\n請在 GitHub Secrets 中設定 GEMINI_API_KEY。" \
+              > /tmp/omni-heal/ai-analysis.md
+          fi
+
+          cat /tmp/omni-heal/ai-analysis.md
+
+      # ── Step 6: 建立修復分支 & Commit ────────────────────────────────────
+      - name: 🌿 Create fix branch & commit
+        id: git_fix
+        run: |
+          HEAL_BRANCH="${{ steps.snapshot.outputs.heal_branch }}"
+          git config user.name  "OmniAgent[bot]"
+          git config user.email "omni-agent@esggo.ai"
+
+          git checkout -b "$HEAL_BRANCH"
+
+          # 如果 lint fix 有修改，加入 commit
+          if [ "${{ steps.lint_fix.outputs.lint_fixed }}" == "true" ]; then
+            git add -A
+            git commit -m "fix(ci): auto-heal lint errors via Jules [run-${{ github.run_id }}]
+
+          Failed steps: ${{ inputs.failed_step }}
+          Commit: ${{ inputs.commit_sha }}
+          Healed by: OmniAgent Jules Karma Engine
+
+          🤖 Auto-generated fix — please review before merging."
+            echo "has_commit=true" >> $GITHUB_OUTPUT
+          else
+            # 即使沒有自動修復，也建立一個空 commit 記錄分析結果
+            git commit --allow-empty -m "ci(heal): Jules analysis report [run-${{ github.run_id }}]
+
+          Failed steps: ${{ inputs.failed_step }}
+          Note: Manual fix required — see PR description for AI analysis."
+            echo "has_commit=true" >> $GITHUB_OUTPUT
+          fi
+
+          git push origin "$HEAL_BRANCH"
+
+      # ── Step 7: 開 Pull Request ───────────────────────────────────────────
+      - name: 📬 Open Self-Heal Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HEAL_BRANCH="${{ steps.snapshot.outputs.heal_branch }}"
+          AI_ANALYSIS=$(cat /tmp/omni-heal/ai-analysis.md 2>/dev/null || echo "分析結果不可用")
+          LINT_FIXED="${{ steps.lint_fix.outputs.lint_fixed }}"
+
+          if [ "$LINT_FIXED" == "true" ]; then
+            FIX_STATUS="✅ Lint 錯誤已自動修復"
+          else
+            FIX_STATUS="⚠️ 需要人工介入修復（詳見 AI 分析）"
+          fi
+
+          gh pr create \
+            --base "${{ inputs.branch_name }}" \
+            --head "$HEAL_BRANCH" \
+            --title "🤖 [Auto-Heal] Fix ${{ inputs.failed_step }} — run #${{ github.run_id }}" \
+            --body "## 🔴 CI 自動修復報告 (OmniCI Self-Heal)
+
+          | 項目 | 內容 |
+          |------|------|
+          | **失敗步驟** | \`${{ inputs.failed_step }}\` |
+          | **觸發 Commit** | \`${{ inputs.commit_sha }}\` |
+          | **來源分支** | \`${{ inputs.branch_name }}\` |
+          | **修復狀態** | $FIX_STATUS |
+          | **修復代理** | Jules Karma Engine (OmniAgent) |
+
+          ---
+
+          $AI_ANALYSIS
+
+          ---
+
+          ## 🔵 5T 合規聲明
+          - **T2 Traceable**: 此 PR 可追溯至 CI Run #${{ github.run_id }}
+          - **T3 Trackable**: 完整錯誤日誌已附於下方
+          - **T4 Transparent**: AI 分析邏輯透明，人類可驗算
+          - **T5 Trustworthy**: 需要人工 review 後方可 merge（人類最終把關）
+
+          ---
+
+          <details>
+          <summary>📋 原始錯誤日誌（點擊展開）</summary>
+
+          \`\`\`
+          ${{ inputs.error_log }}
+          \`\`\`
+
+          </details>
+
+          > 🤖 此 PR 由 OmniAgent Jules 自動生成。請審閱後決定是否 merge。" \
+            --label "auto-heal,ci-fix,needs-review" || \
+          echo "::warning::PR 建立失敗，可能是分支保護規則或 label 不存在。請手動查看分支：$HEAL_BRANCH"
+
+      # ── Step 8: 在原始 Commit 留下診斷摘要 ──────────────────────────────
+      - name: 💬 Post diagnostic summary
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          AI_ANALYSIS=$(cat /tmp/omni-heal/ai-analysis.md 2>/dev/null | head -20 || echo "分析結果不可用")
+          gh pr comment ${{ github.event.pull_request.number }} --body \
+            "## 🤖 OmniAgent Jules — CI 自動修復已啟動
+
+          **失敗步驟**: \`${{ inputs.failed_step }}\`
+
+          修復分支已建立：\`${{ steps.snapshot.outputs.heal_branch }}\`
+
+          **AI 快速摘要：**
+          $AI_ANALYSIS
+
+          👉 請查看自動修復 PR 以獲取完整分析報告。" || true
