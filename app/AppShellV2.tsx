@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+// 已移除 framer-motion 以避免 SSR 崩潰
 import {
   LayoutDashboard,
   FileText,
@@ -430,10 +430,10 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                         {IconMapper[item.icon] || <LayoutDashboard size={20} />}
                       </div>
 
+                      {/* 將 motion.div 替換為原生 div，使用 CSS transition 取代 framer-motion 動畫 */}
                       {!sidebarCollapsed && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
+                        <div
+                          style={{ transition: 'opacity 0.4s ease' }}
                           className="flex flex-col flex-1 min-w-0"
                         >
                           <span className="text-[13px] font-black tracking-tight truncate">
@@ -442,20 +442,20 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                           <span className="text-[9px] font-bold opacity-40 uppercase tracking-widest truncate">
                             {item.sub}
                           </span>
-                        </motion.div>
+                        </div>
                       )}
 
-                      {/* Active Indicator Dot */}
+                      {/* Active Indicator Dot — 將 motion.div 替換為原生 div */}
                       {isActive && (
-                        <motion.div layoutId="activeDot" className="absolute right-3">
+                        <div className="absolute right-3">
                           <BrandStatusDot
-                            status="active" // Could still be 'active' for semantic meaning
-                            size="xs" // w-1.5 h-1.5
-                            colorClassName="bg-[#FDB515]" // Restore gold color
-                            shadowClassName="shadow-[0_0_8px_#FDB515]" // Restore shadow
-                            dotOnly={true} // Render only the dot, no label container
+                            status="active"
+                            size="xs"
+                            colorClassName="bg-[#FDB515]"
+                            shadowClassName="shadow-[0_0_8px_#FDB515]"
+                            dotOnly={true}
                           />
-                        </motion.div>
+                        </div>
                       )}
                     </Link>
                   );
@@ -500,101 +500,97 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
       {/* ─── MAIN CONTENT AREA ─── */}
       <div className="flex-1 flex flex-col min-w-0 relative h-full">
         {/* ─── DESKTOP TOPBAR ─── */}
-        <AnimatePresence>
-          {!topbarCollapsed && (
-            <motion.header
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 80, opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className={cn(
-                'hidden md:flex items-center justify-between px-10 border-b relative z-40  transition-colors',
-                isDark ? 'bg-slate-950/60 border-white/5' : ' border-slate-200/50'
-              )}
-            >
-              <div className="flex items-center gap-6">
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('restore-omni-pulse'))}
-                  className="flex items-center gap-3 px-4 py-2 bg-slate-900/5 hover:bg-slate-900/10 dark:hover: rounded-full border border-slate-900/5 transition-colors cursor-pointer"
-                  title="喚醒萬能精靈 (Restore OmniAgent Pulse)"
-                >
-                  <BrandStatusDot
-                    status="active"
-                    pulse={true}
-                    size="md"
-                    shadowClassName="shadow-[0_0_12px_#10b981]"
-                    dotOnly={true}
+        {/* 將 AnimatePresence + motion.header 替換為條件渲染 + 原生 header，使用 CSS transition 取代 framer-motion 動畫 */}
+        {!topbarCollapsed && (
+          <header
+            style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+            className={cn(
+              'hidden md:flex items-center justify-between px-10 border-b relative z-40 transition-colors',
+              isDark ? 'bg-slate-950/60 border-white/5' : ' border-slate-200/50'
+            )}
+          >
+            <div className="flex items-center gap-6">
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('restore-omni-pulse'))}
+                className="flex items-center gap-3 px-4 py-2 bg-slate-900/5 hover:bg-slate-900/10 dark:hover: rounded-full border border-slate-900/5 transition-colors cursor-pointer"
+                title="喚醒萬能精靈 (Restore OmniAgent Pulse)"
+              >
+                <BrandStatusDot
+                  status="active"
+                  pulse={true}
+                  size="md"
+                  shadowClassName="shadow-[0_0_12px_#10b981]"
+                  dotOnly={true}
+                />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">
+                  OmniSync_Operational
+                </span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-4">
+              {/* Search Trigger (Global Search CMD+K) */}
+              <GlobalSearch />
+
+              {/* Theme Switcher */}
+              <AppThemeSwitcher />
+
+              {/* Favorite Toggle Button */}
+              <BrandButton
+                onClick={toggleFavorite}
+                variant="ghost"
+                icon={
+                  <Star
+                    size={18}
+                    className={cn(
+                      isFavorited ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400'
+                    )}
                   />
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60">
-                    OmniSync_Operational
-                  </span>
-                </button>
-              </div>
+                }
+                className={cn(
+                  'p-2.5 rounded-xl border transition-all flex items-center justify-center',
+                  isDark
+                    ? ' border-white/10 text-slate-400'
+                    : 'bg-slate-50 border-slate-200 text-slate-500'
+                )}
+                title={isFavorited ? '移出我的最愛' : '加入我的最愛'}
+              />
 
-              <div className="flex items-center gap-4">
-                {/* Search Trigger (Global Search CMD+K) */}
-                <GlobalSearch />
-
-                {/* Theme Switcher */}
-                <AppThemeSwitcher />
-
-                {/* Favorite Toggle Button */}
+              {/* Notifications */}
+              <div className="relative">
                 <BrandButton
-                  onClick={toggleFavorite}
                   variant="ghost"
-                  icon={
-                    <Star
-                      size={18}
-                      className={cn(
-                        isFavorited ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400'
-                      )}
-                    />
-                  }
+                  icon={<Bell size={18} />}
                   className={cn(
                     'p-2.5 rounded-xl border transition-all flex items-center justify-center',
                     isDark
                       ? ' border-white/10 text-slate-400'
                       : 'bg-slate-50 border-slate-200 text-slate-500'
                   )}
-                  title={isFavorited ? '移出我的最愛' : '加入我的最愛'}
                 />
+                <div className="absolute top-2 right-2 w-2 h-2 bg-[#FDB515] rounded-full border-2 border-white shadow-sm" />
+              </div>
 
-                {/* Notifications */}
-                <div className="relative">
-                  <BrandButton
-                    variant="ghost"
-                    icon={<Bell size={18} />}
-                    className={cn(
-                      'p-2.5 rounded-xl border transition-all flex items-center justify-center',
-                      isDark
-                        ? ' border-white/10 text-slate-400'
-                        : 'bg-slate-50 border-slate-200 text-slate-500'
-                    )}
-                  />
-                  <div className="absolute top-2 right-2 w-2 h-2 bg-[#FDB515] rounded-full border-2 border-white shadow-sm" />
+              {/* User Profile */}
+              <div
+                className={cn(
+                  'flex items-center gap-3 pl-6 border-l ml-2',
+                  isDark ? 'border-white/10' : 'border-slate-200'
+                )}
+              >
+                <div className="w-10 h-10 rounded-2xl bg-[#003262] flex items-center justify-center text-[#FDB515] font-black shadow-lg border-2 border-white/20">
+                  A
                 </div>
-
-                {/* User Profile */}
-                <div
-                  className={cn(
-                    'flex items-center gap-3 pl-6 border-l ml-2',
-                    isDark ? 'border-white/10' : 'border-slate-200'
-                  )}
-                >
-                  <div className="w-10 h-10 rounded-2xl bg-[#003262] flex items-center justify-center text-[#FDB515] font-black shadow-lg border-2 border-white/20">
-                    A
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-black tracking-tight">DingJun</span>
-                    <span className="text-[9px] font-bold opacity-40 uppercase tracking-widest">
-                      Administrator
-                    </span>
-                  </div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-black tracking-tight">DingJun</span>
+                  <span className="text-[9px] font-bold opacity-40 uppercase tracking-widest">
+                    Administrator
+                  </span>
                 </div>
               </div>
-            </motion.header>
-          )}
-        </AnimatePresence>
+            </div>
+          </header>
+        )}
 
         {/* Topbar Collapse Handle (Desktop) */}
         <button
@@ -665,18 +661,14 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
 
         {/* ─── MAIN SCROLLABLE CONTENT ─── */}
         <main className="flex-1 overflow-y-auto no-scrollbar scroll-smooth relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={pathname + (isDark ? 'dark' : 'light')}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="min-h-full p-4 md:p-10 lg:p-14 pb-32 md:pb-14 max-w-[1920px] mx-auto relative z-10"
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+          {/* 將 AnimatePresence + motion.div 替換為條件渲染 + 原生 div，使用 CSS transition 取代 framer-motion 動畫 */}
+          <div
+            key={pathname + (isDark ? 'dark' : 'light')}
+            style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+            className="min-h-full p-4 md:p-10 lg:p-14 pb-32 md:pb-14 max-w-[1920px] mx-auto relative z-10"
+          >
+            {children}
+          </div>
 
           {/* Background Decorative Blobs Removed for Cleanliness */}
         </main>
@@ -688,49 +680,42 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             isDark ? 'bg-slate-950/90 border-white/5' : 'bg-white/90 border-slate-300'
           )}
         >
-          {/* FAB Pop-up Menu */}
-          <AnimatePresence>
-            {showFabMenu && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setShowFabMenu(false)}
-                  className="fixed inset-0 z-[-1] -top-[100vh]"
-                />
-                <motion.div
-                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 50, scale: 0.9 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                  className={cn(
-                    'absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col gap-3 p-4 rounded-3xl shadow-2xl border w-64',
-                    isDark ? 'bg-slate-900 border-white/10' : 'bg-white border-slate-200'
-                  )}
-                >
-                  <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#FDB515]/10 text-left transition-colors">
-                    <div className="bg-[#FDB515]/20 p-2 rounded-xl text-[#FDB515]">
-                      <Plus size={20} />
-                    </div>
-                    <span className="font-bold text-sm">新增紀錄</span>
-                  </button>
-                  <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-cyan-500/10 text-left transition-colors">
-                    <div className="bg-cyan-500/20 p-2 rounded-xl text-cyan-500">
-                      <MessageSquare size={20} />
-                    </div>
-                    <span className="font-bold text-sm">快速留言</span>
-                  </button>
-                  <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-blue-500/10 text-left transition-colors">
-                    <div className="bg-blue-500/20 p-2 rounded-xl text-blue-500">
-                      <Save size={20} />
-                    </div>
-                    <span className="font-bold text-sm">SustainWrite 儲存</span>
-                  </button>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+          {/* FAB Pop-up Menu — 將 AnimatePresence + motion.div 替換為條件渲染 + 原生 div */}
+          {showFabMenu && (
+            <>
+              <div
+                style={{ transition: 'opacity 0.4s ease' }}
+                onClick={() => setShowFabMenu(false)}
+                className="fixed inset-0 z-[-1] -top-[100vh]"
+              />
+              <div
+                style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                className={cn(
+                  'absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col gap-3 p-4 rounded-3xl shadow-2xl border w-64',
+                  isDark ? 'bg-slate-900 border-white/10' : 'bg-white border-slate-200'
+                )}
+              >
+                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#FDB515]/10 text-left transition-colors">
+                  <div className="bg-[#FDB515]/20 p-2 rounded-xl text-[#FDB515]">
+                    <Plus size={20} />
+                  </div>
+                  <span className="font-bold text-sm">新增紀錄</span>
+                </button>
+                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-cyan-500/10 text-left transition-colors">
+                  <div className="bg-cyan-500/20 p-2 rounded-xl text-cyan-500">
+                    <MessageSquare size={20} />
+                  </div>
+                  <span className="font-bold text-sm">快速留言</span>
+                </button>
+                <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-blue-500/10 text-left transition-colors">
+                  <div className="bg-blue-500/20 p-2 rounded-xl text-blue-500">
+                    <Save size={20} />
+                  </div>
+                  <span className="font-bold text-sm">SustainWrite 儲存</span>
+                </button>
+              </div>
+            </>
+          )}
 
           <div className="flex items-center justify-between w-full max-w-sm gap-2 py-3 px-2">
             {mobileBottomItems.map((item, idx) => {
@@ -759,9 +744,10 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                       isActive ? 'scale-105' : 'opacity-40'
                     )}
                   >
+                    {/* 將 motion.div 替換為原生 div，使用 CSS transition 取代 framer-motion 動畫 */}
                     {isActive && (
-                      <motion.div
-                        layoutId="mobileActiveBg"
+                      <div
+                        style={{ transition: 'all 0.4s ease' }}
                         className="absolute inset-0 bg-[#FDB515]/10 rounded-3xl border border-[#FDB515]/20"
                       />
                     )}
