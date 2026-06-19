@@ -1,0 +1,28 @@
+{
+    "name": "celestial-server",
+    "version": "1.0.0",
+    "description": "ESGss Universal Heart Core Backend",
+    "main": "dist/server.js",
+    "scripts": {
+        "dev": "tsx watch src/server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "pg": "^8.11.3",
+        "pgvector": "^0.1.5",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.17",
+        "@types/cors": "^2.8.13",
+        "@types/node": "^20.5.0",
+        "@types/pg": "^8.10.2",
+        "@types/uuid": "^9.0.7",
+        "tsx": "^4.7.0",
+        "typescript": "^5.2.2"
+    }
+}

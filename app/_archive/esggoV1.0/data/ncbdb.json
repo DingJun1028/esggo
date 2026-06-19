@@ -1,0 +1,29 @@
+{
+  "documents": [],
+  "evidenceVault": [
+    {
+      "id": "ext_ERP_1775112973349",
+      "description": "ERP Source Data: Electricity Consumption (2026-Q1)",
+      "publicTrack": {
+        "maskedValue": "USER_ID_MASK_31323",
+        "zkProof": "zkp_L2_3132353433302e35",
+        "level": "L2",
+        "timestamp": 1775112973349
+      },
+      "privateTrack": "eyJzeXN0ZW0iOiJFUlAiLCJpbmRpY2F0b3IiOiJFbGVjdHJpY2l0eSBDb25zdW1wdGlvbiIsInZhbHVlIjoxMjU0MzAuNSwidW5pdCI6ImtXaCIsInBlcmlvZCI6IjIwMjYtUTEiLCJ0aW1lc3RhbXAiOjE3NzQ2ODA5NzIxNDF9",
+      "hashLock": "hl_7a6b705f4c325f33"
+    },
+    {
+      "id": "ext_HR_1775112974364",
+      "description": "HR Source Data: Avg Training Hours (2026-Q1)",
+      "publicTrack": {
+        "maskedValue": "HASH_MjQuNQ==",
+        "zkProof": "zkp_L3_32342e352d313737",
+        "level": "L3",
+        "timestamp": 1775112974364
+      },
+      "privateTrack": "eyJzeXN0ZW0iOiJIUiIsImluZGljYXRvciI6IkF2ZyBUcmFpbmluZyBIb3VycyIsInZhbHVlIjoyNC41LCJ1bml0IjoiaG91cnMvZW1wbG95ZWUiLCJwZXJpb2QiOiIyMDI2LVExIiwidGltZXN0YW1wIjoxNzc0NDIxNzcyMTQxfQ==",
+      "hashLock": "hl_7a6b705f4c335f33"
+    }
+  ]
+}

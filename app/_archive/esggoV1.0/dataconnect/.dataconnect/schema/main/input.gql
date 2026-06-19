@@ -1,0 +1,1777 @@
+"""
+✨ `AuditLog_KeyOutput` returns the primary key fields of table type `AuditLog`.
+
+It has the same format as `AuditLog_Key`, but is only used as mutation return value.
+"""
+scalar AuditLog_KeyOutput
+"""
+✨ `DashboardMetric_KeyOutput` returns the primary key fields of table type `DashboardMetric`.
+
+It has the same format as `DashboardMetric_Key`, but is only used as mutation return value.
+"""
+scalar DashboardMetric_KeyOutput
+"""
+✨ `Evidence_KeyOutput` returns the primary key fields of table type `Evidence`.
+
+It has the same format as `Evidence_Key`, but is only used as mutation return value.
+"""
+scalar Evidence_KeyOutput
+"""
+✨ `OcrReviewItem_KeyOutput` returns the primary key fields of table type `OcrReviewItem`.
+
+It has the same format as `OcrReviewItem_Key`, but is only used as mutation return value.
+"""
+scalar OcrReviewItem_KeyOutput
+"""
+✨ `User_KeyOutput` returns the primary key fields of table type `User`.
+
+It has the same format as `User_Key`, but is only used as mutation return value.
+"""
+scalar User_KeyOutput
+"""
+✨ Generated data input type for table 'AuditLog'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input AuditLog_Data {
+  """
+  ✨ Generated from Field `AuditLog`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `AuditLog`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditLog`.`nodeId` of type `String!`
+  """
+  nodeId: String
+  """
+  ✨ `_expr` server value variant of `nodeId` (✨ Generated from Field `AuditLog`.`nodeId` of type `String!`)
+  """
+  nodeId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditLog`.`proof` of type `String!`
+  """
+  proof: String
+  """
+  ✨ `_expr` server value variant of `proof` (✨ Generated from Field `AuditLog`.`proof` of type `String!`)
+  """
+  proof_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditLog`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `AuditLog`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditLog`.`tenantId` of type `String!`
+  """
+  tenantId: String
+  """
+  ✨ `_expr` server value variant of `tenantId` (✨ Generated from Field `AuditLog`.`tenantId` of type `String!`)
+  """
+  tenantId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `timestamp` (✨ Generated from Field `AuditLog`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `timestamp` (✨ Generated from Field `AuditLog`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `timestamp` (✨ Generated from Field `AuditLog`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AuditLog`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `AuditLog`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'AuditLog'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input AuditLog_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [AuditLog_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: AuditLog_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [AuditLog_Filter!]
+  """
+  ✨ Generated from Field `AuditLog`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`nodeId` of type `String!`
+  """
+  nodeId: String_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`proof` of type `String!`
+  """
+  proof: String_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`tenantId` of type `String!`
+  """
+  tenantId: String_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`userId` of type `String!`
+  """
+  userId: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'AuditLog'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input AuditLog_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [AuditLog_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: AuditLog_Filter
+}
+"""
+✨ Generated having input type for table 'AuditLog'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input AuditLog_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [AuditLog_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: AuditLog_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [AuditLog_Having!]
+  """
+  ✨ Generated from Field `AuditLog`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`nodeId_count` of type `Int!`
+  """
+  nodeId_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`proof_count` of type `Int!`
+  """
+  proof_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'AuditLog'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input AuditLog_Key {
+  """
+  ✨ Generated from Field `AuditLog`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `AuditLog`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'AuditLog'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input AuditLog_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: AuditLog_Filter
+}
+"""
+✨ Generated order input type for table 'AuditLog'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input AuditLog_Order {
+  """
+  ✨ Generated from Field `AuditLog`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`nodeId` of type `String!`
+  """
+  nodeId: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`proof` of type `String!`
+  """
+  proof: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`tenantId` of type `String!`
+  """
+  tenantId: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`nodeId_count` of type `Int!`
+  """
+  nodeId_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`proof_count` of type `Int!`
+  """
+  proof_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `AuditLog`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'DashboardMetric'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input DashboardMetric_Data {
+  """
+  ✨ Generated from Field `DashboardMetric`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `DashboardMetric`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `DashboardMetric`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange` of type `Float!`
+  """
+  percentageChange: Float
+  """
+  ✨ `_expr` server value variant of `percentageChange` (✨ Generated from Field `DashboardMetric`.`percentageChange` of type `Float!`)
+  """
+  percentageChange_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `percentageChange` (✨ Generated from Field `DashboardMetric`.`percentageChange` of type `Float!`)
+  """
+  percentageChange_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`tenantId` of type `String!`
+  """
+  tenantId: String
+  """
+  ✨ `_expr` server value variant of `tenantId` (✨ Generated from Field `DashboardMetric`.`tenantId` of type `String!`)
+  """
+  tenantId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `timestamp` (✨ Generated from Field `DashboardMetric`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `timestamp` (✨ Generated from Field `DashboardMetric`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `timestamp` (✨ Generated from Field `DashboardMetric`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `DashboardMetric`.`title` of type `String!`)
+  """
+  title_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`trend` of type `String!`
+  """
+  trend: String
+  """
+  ✨ `_expr` server value variant of `trend` (✨ Generated from Field `DashboardMetric`.`trend` of type `String!`)
+  """
+  trend_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`unit` of type `String!`
+  """
+  unit: String
+  """
+  ✨ `_expr` server value variant of `unit` (✨ Generated from Field `DashboardMetric`.`unit` of type `String!`)
+  """
+  unit_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `DashboardMetric`.`value` of type `Float!`
+  """
+  value: Float
+  """
+  ✨ `_expr` server value variant of `value` (✨ Generated from Field `DashboardMetric`.`value` of type `Float!`)
+  """
+  value_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `value` (✨ Generated from Field `DashboardMetric`.`value` of type `Float!`)
+  """
+  value_update: [Float_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'DashboardMetric'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input DashboardMetric_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [DashboardMetric_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: DashboardMetric_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [DashboardMetric_Filter!]
+  """
+  ✨ Generated from Field `DashboardMetric`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`userId` of type `String!`
+  """
+  userId: String_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange` of type `Float!`
+  """
+  percentageChange: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`tenantId` of type `String!`
+  """
+  tenantId: String_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`title` of type `String!`
+  """
+  title: String_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`trend` of type `String!`
+  """
+  trend: String_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`unit` of type `String!`
+  """
+  unit: String_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`value` of type `Float!`
+  """
+  value: Float_Filter
+}
+"""
+✨ Generated first-row input type for table 'DashboardMetric'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input DashboardMetric_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [DashboardMetric_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: DashboardMetric_Filter
+}
+"""
+✨ Generated having input type for table 'DashboardMetric'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input DashboardMetric_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [DashboardMetric_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: DashboardMetric_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [DashboardMetric_Having!]
+  """
+  ✨ Generated from Field `DashboardMetric`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_count` of type `Int!`
+  """
+  percentageChange_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`title_count` of type `Int!`
+  """
+  title_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`trend_count` of type `Int!`
+  """
+  trend_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`unit_count` of type `Int!`
+  """
+  unit_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_count` of type `Int!`
+  """
+  value_count: Int_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_sum` of type `Float`
+  """
+  percentageChange_sum: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_sum` of type `Float`
+  """
+  value_sum: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_avg` of type `Float`
+  """
+  percentageChange_avg: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_avg` of type `Float`
+  """
+  value_avg: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_min` of type `Float`
+  """
+  percentageChange_min: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_min` of type `Float`
+  """
+  value_min: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_max` of type `Float`
+  """
+  percentageChange_max: Float_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_max` of type `Float`
+  """
+  value_max: Float_Filter
+}
+"""
+✨ Generated key input type for table 'DashboardMetric'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input DashboardMetric_Key {
+  """
+  ✨ Generated from Field `DashboardMetric`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `DashboardMetric`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'DashboardMetric'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input DashboardMetric_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: DashboardMetric_Filter
+}
+"""
+✨ Generated order input type for table 'DashboardMetric'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input DashboardMetric_Order {
+  """
+  ✨ Generated from Field `DashboardMetric`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange` of type `Float!`
+  """
+  percentageChange: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`tenantId` of type `String!`
+  """
+  tenantId: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`title` of type `String!`
+  """
+  title: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`trend` of type `String!`
+  """
+  trend: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`unit` of type `String!`
+  """
+  unit: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`value` of type `Float!`
+  """
+  value: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_count` of type `Int!`
+  """
+  percentageChange_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`title_count` of type `Int!`
+  """
+  title_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`trend_count` of type `Int!`
+  """
+  trend_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`unit_count` of type `Int!`
+  """
+  unit_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_count` of type `Int!`
+  """
+  value_count: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_sum` of type `Float`
+  """
+  percentageChange_sum: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_sum` of type `Float`
+  """
+  value_sum: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_avg` of type `Float`
+  """
+  percentageChange_avg: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_avg` of type `Float`
+  """
+  value_avg: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_min` of type `Float`
+  """
+  percentageChange_min: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_min` of type `Float`
+  """
+  value_min: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`percentageChange_max` of type `Float`
+  """
+  percentageChange_max: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: OrderDirection
+  """
+  ✨ Generated from Field `DashboardMetric`.`value_max` of type `Float`
+  """
+  value_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Evidence'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Evidence_Data {
+  """
+  ✨ Generated from Field `Evidence`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Evidence`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `Evidence`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore` of type `Float!`
+  """
+  confidenceScore: Float
+  """
+  ✨ `_expr` server value variant of `confidenceScore` (✨ Generated from Field `Evidence`.`confidenceScore` of type `Float!`)
+  """
+  confidenceScore_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `confidenceScore` (✨ Generated from Field `Evidence`.`confidenceScore` of type `Float!`)
+  """
+  confidenceScore_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`content` of type `String!`
+  """
+  content: String
+  """
+  ✨ `_expr` server value variant of `content` (✨ Generated from Field `Evidence`.`content` of type `String!`)
+  """
+  content_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`source` of type `String!`
+  """
+  source: String
+  """
+  ✨ `_expr` server value variant of `source` (✨ Generated from Field `Evidence`.`source` of type `String!`)
+  """
+  source_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`tenantId` of type `String!`
+  """
+  tenantId: String
+  """
+  ✨ `_expr` server value variant of `tenantId` (✨ Generated from Field `Evidence`.`tenantId` of type `String!`)
+  """
+  tenantId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `timestamp` (✨ Generated from Field `Evidence`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `timestamp` (✨ Generated from Field `Evidence`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `timestamp` (✨ Generated from Field `Evidence`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`title` of type `String!`
+  """
+  title: String
+  """
+  ✨ `_expr` server value variant of `title` (✨ Generated from Field `Evidence`.`title` of type `String!`)
+  """
+  title_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Evidence`.`verified` of type `Boolean!`
+  """
+  verified: Boolean
+  """
+  ✨ `_expr` server value variant of `verified` (✨ Generated from Field `Evidence`.`verified` of type `Boolean!`)
+  """
+  verified_expr: Boolean_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Evidence'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Evidence_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Evidence_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Evidence_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Evidence_Filter!]
+  """
+  ✨ Generated from Field `Evidence`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Evidence`.`userId` of type `String!`
+  """
+  userId: String_Filter
+  """
+  ✨ Generated from Field `Evidence`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore` of type `Float!`
+  """
+  confidenceScore: Float_Filter
+  """
+  ✨ Generated from Field `Evidence`.`content` of type `String!`
+  """
+  content: String_Filter
+  """
+  ✨ Generated from Field `Evidence`.`source` of type `String!`
+  """
+  source: String_Filter
+  """
+  ✨ Generated from Field `Evidence`.`tenantId` of type `String!`
+  """
+  tenantId: String_Filter
+  """
+  ✨ Generated from Field `Evidence`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp_Filter
+  """
+  ✨ Generated from Field `Evidence`.`title` of type `String!`
+  """
+  title: String_Filter
+  """
+  ✨ Generated from Field `Evidence`.`verified` of type `Boolean!`
+  """
+  verified: Boolean_Filter
+}
+"""
+✨ Generated first-row input type for table 'Evidence'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Evidence_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Evidence_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Evidence_Filter
+}
+"""
+✨ Generated having input type for table 'Evidence'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Evidence_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Evidence_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Evidence_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Evidence_Having!]
+  """
+  ✨ Generated from Field `Evidence`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_count` of type `Int!`
+  """
+  confidenceScore_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`content_count` of type `Int!`
+  """
+  content_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`source_count` of type `Int!`
+  """
+  source_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`title_count` of type `Int!`
+  """
+  title_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`verified_count` of type `Int!`
+  """
+  verified_count: Int_Filter
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_sum` of type `Float`
+  """
+  confidenceScore_sum: Float_Filter
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_avg` of type `Float`
+  """
+  confidenceScore_avg: Float_Filter
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_min` of type `Float`
+  """
+  confidenceScore_min: Float_Filter
+  """
+  ✨ Generated from Field `Evidence`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_max` of type `Float`
+  """
+  confidenceScore_max: Float_Filter
+  """
+  ✨ Generated from Field `Evidence`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Evidence'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Evidence_Key {
+  """
+  ✨ Generated from Field `Evidence`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Evidence`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Evidence'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Evidence_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Evidence_Filter
+}
+"""
+✨ Generated order input type for table 'Evidence'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Evidence_Order {
+  """
+  ✨ Generated from Field `Evidence`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore` of type `Float!`
+  """
+  confidenceScore: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`content` of type `String!`
+  """
+  content: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`source` of type `String!`
+  """
+  source: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`tenantId` of type `String!`
+  """
+  tenantId: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`title` of type `String!`
+  """
+  title: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`verified` of type `Boolean!`
+  """
+  verified: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_count` of type `Int!`
+  """
+  confidenceScore_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`content_count` of type `Int!`
+  """
+  content_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`source_count` of type `Int!`
+  """
+  source_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`title_count` of type `Int!`
+  """
+  title_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`verified_count` of type `Int!`
+  """
+  verified_count: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_sum` of type `Float`
+  """
+  confidenceScore_sum: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_avg` of type `Float`
+  """
+  confidenceScore_avg: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_min` of type `Float`
+  """
+  confidenceScore_min: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`confidenceScore_max` of type `Float`
+  """
+  confidenceScore_max: OrderDirection
+  """
+  ✨ Generated from Field `Evidence`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'OcrReviewItem'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input OcrReviewItem_Data {
+  """
+  ✨ Generated from Field `OcrReviewItem`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `OcrReviewItem`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `OcrReviewItem`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore` of type `Float!`
+  """
+  confidenceScore: Float
+  """
+  ✨ `_expr` server value variant of `confidenceScore` (✨ Generated from Field `OcrReviewItem`.`confidenceScore` of type `Float!`)
+  """
+  confidenceScore_expr: Float_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `confidenceScore` (✨ Generated from Field `OcrReviewItem`.`confidenceScore` of type `Float!`)
+  """
+  confidenceScore_update: [Float_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`extractedValue` of type `String!`
+  """
+  extractedValue: String
+  """
+  ✨ `_expr` server value variant of `extractedValue` (✨ Generated from Field `OcrReviewItem`.`extractedValue` of type `String!`)
+  """
+  extractedValue_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`fieldLabel` of type `String!`
+  """
+  fieldLabel: String
+  """
+  ✨ `_expr` server value variant of `fieldLabel` (✨ Generated from Field `OcrReviewItem`.`fieldLabel` of type `String!`)
+  """
+  fieldLabel_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`originalSource` of type `String`
+  """
+  originalSource: String
+  """
+  ✨ `_expr` server value variant of `originalSource` (✨ Generated from Field `OcrReviewItem`.`originalSource` of type `String`)
+  """
+  originalSource_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `OcrReviewItem`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`tenantId` of type `String!`
+  """
+  tenantId: String
+  """
+  ✨ `_expr` server value variant of `tenantId` (✨ Generated from Field `OcrReviewItem`.`tenantId` of type `String!`)
+  """
+  tenantId_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp
+  """
+  ✨ `_expr` server value variant of `timestamp` (✨ Generated from Field `OcrReviewItem`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `timestamp` (✨ Generated from Field `OcrReviewItem`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `timestamp` (✨ Generated from Field `OcrReviewItem`.`timestamp` of type `Timestamp!`)
+  """
+  timestamp_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `OcrReviewItem`.`unit` of type `String!`
+  """
+  unit: String
+  """
+  ✨ `_expr` server value variant of `unit` (✨ Generated from Field `OcrReviewItem`.`unit` of type `String!`)
+  """
+  unit_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'OcrReviewItem'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input OcrReviewItem_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [OcrReviewItem_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: OcrReviewItem_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [OcrReviewItem_Filter!]
+  """
+  ✨ Generated from Field `OcrReviewItem`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`userId` of type `String!`
+  """
+  userId: String_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore` of type `Float!`
+  """
+  confidenceScore: Float_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`extractedValue` of type `String!`
+  """
+  extractedValue: String_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`fieldLabel` of type `String!`
+  """
+  fieldLabel: String_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`originalSource` of type `String`
+  """
+  originalSource: String_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`tenantId` of type `String!`
+  """
+  tenantId: String_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: Timestamp_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`unit` of type `String!`
+  """
+  unit: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'OcrReviewItem'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input OcrReviewItem_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [OcrReviewItem_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: OcrReviewItem_Filter
+}
+"""
+✨ Generated having input type for table 'OcrReviewItem'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input OcrReviewItem_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [OcrReviewItem_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: OcrReviewItem_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [OcrReviewItem_Having!]
+  """
+  ✨ Generated from Field `OcrReviewItem`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_count` of type `Int!`
+  """
+  confidenceScore_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`extractedValue_count` of type `Int!`
+  """
+  extractedValue_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`fieldLabel_count` of type `Int!`
+  """
+  fieldLabel_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`originalSource_count` of type `Int!`
+  """
+  originalSource_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`unit_count` of type `Int!`
+  """
+  unit_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_sum` of type `Float`
+  """
+  confidenceScore_sum: Float_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_avg` of type `Float`
+  """
+  confidenceScore_avg: Float_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_min` of type `Float`
+  """
+  confidenceScore_min: Float_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_max` of type `Float`
+  """
+  confidenceScore_max: Float_Filter
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'OcrReviewItem'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input OcrReviewItem_Key {
+  """
+  ✨ Generated from Field `OcrReviewItem`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `OcrReviewItem`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'OcrReviewItem'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input OcrReviewItem_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: OcrReviewItem_Filter
+}
+"""
+✨ Generated order input type for table 'OcrReviewItem'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input OcrReviewItem_Order {
+  """
+  ✨ Generated from Field `OcrReviewItem`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore` of type `Float!`
+  """
+  confidenceScore: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`extractedValue` of type `String!`
+  """
+  extractedValue: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`fieldLabel` of type `String!`
+  """
+  fieldLabel: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`originalSource` of type `String`
+  """
+  originalSource: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`tenantId` of type `String!`
+  """
+  tenantId: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp` of type `Timestamp!`
+  """
+  timestamp: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`unit` of type `String!`
+  """
+  unit: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_count` of type `Int!`
+  """
+  confidenceScore_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`extractedValue_count` of type `Int!`
+  """
+  extractedValue_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`fieldLabel_count` of type `Int!`
+  """
+  fieldLabel_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`originalSource_count` of type `Int!`
+  """
+  originalSource_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp_count` of type `Int!`
+  """
+  timestamp_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`unit_count` of type `Int!`
+  """
+  unit_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_sum` of type `Float`
+  """
+  confidenceScore_sum: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_avg` of type `Float`
+  """
+  confidenceScore_avg: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_min` of type `Float`
+  """
+  confidenceScore_min: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp_min` of type `Timestamp`
+  """
+  timestamp_min: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`confidenceScore_max` of type `Float`
+  """
+  confidenceScore_max: OrderDirection
+  """
+  ✨ Generated from Field `OcrReviewItem`.`timestamp_max` of type `Timestamp`
+  """
+  timestamp_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'User'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input User_Data {
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: String
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `String!`)
+  """
+  id_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String`
+  """
+  displayName: String
+  """
+  ✨ `_expr` server value variant of `displayName` (✨ Generated from Field `User`.`displayName` of type `String`)
+  """
+  displayName_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`email` of type `String`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `User`.`email` of type `String`)
+  """
+  email_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`tenantId` of type `String!`
+  """
+  tenantId: String
+  """
+  ✨ `_expr` server value variant of `tenantId` (✨ Generated from Field `User`.`tenantId` of type `String!`)
+  """
+  tenantId_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [User_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: User_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [User_Filter!]
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: String_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String`
+  """
+  displayName: String_Filter
+  """
+  ✨ Generated from Field `User`.`email` of type `String`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `User`.`tenantId` of type `String!`
+  """
+  tenantId: String_Filter
+  """
+  ✨ Generated from Field `User`.`dashboardMetrics_on_user` of type `[DashboardMetric!]!`
+  """
+  dashboardMetrics_on_user: DashboardMetric_ListFilter
+  """
+  ✨ Generated from Field `User`.`evidences_on_user` of type `[Evidence!]!`
+  """
+  evidences_on_user: Evidence_ListFilter
+  """
+  ✨ Generated from Field `User`.`ocrReviewItems_on_user` of type `[OcrReviewItem!]!`
+  """
+  ocrReviewItems_on_user: OcrReviewItem_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'User'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input User_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [User_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: User_Filter
+}
+"""
+✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [User_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: User_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [User_Having!]
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input User_Key {
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: String
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `String!`)
+  """
+  id_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input User_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: User_Filter
+}
+"""
+✨ Generated order input type for table 'User'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input User_Order {
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String`
+  """
+  displayName: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email` of type `String`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `User`.`tenantId` of type `String!`
+  """
+  tenantId: OrderDirection
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`tenantId_count` of type `Int!`
+  """
+  tenantId_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+}

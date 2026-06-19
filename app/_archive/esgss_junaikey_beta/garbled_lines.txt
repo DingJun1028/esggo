@@ -1,0 +1,118 @@
+﻿===L4===
+ * [?�質] �?24 ??MECE ?��?橋接??MCP 工具?�適?�層
+===L87===
+// ?�?�?� MECE Service Descriptors (24 items, key services exposed) ?�?�
+===L155===
+        description: '?��?引�?：�?源數?�交?��?證�?幻覺檢測 (Cross-validate data from multiple sources)',
+===L161===
+        description: '風險評估?��?ESG 風險識別?��??��??�警 (Identify, quantify, and alert ESG risks)',
+===L167===
+        description: 'ESG 評�?計�??��?多維度環�?社�?/治�?評�? (Calculate multi-dimensional E/S/G scores)',
+===L173===
+        description: '演�?引�?：�?織永續�??��??�度評估 (Assess organization sustainability maturity evolution)',
+===L179===
+        description: '?�值�??��??��?ESG ?�值�??��??�利?�相?�者�?�?(Analyze ESG value chain)',
+===L185===
+        description: '?��??�步?��?：�?塊�??��??��?不可篡改證�???(Blockchain timestamp & immutable evidence chain)',
+===L199===
+        description: '??�?OmniKey: Unlock the System Evolution Cycle (Awaken -> Analyze -> Execute).',
+===L213===
+        description: '?�� Nourish: Inject knowledge to grow a cultivation target (Agent, Asset, or Chapter).',
+===L228===
+        description: '?��? Prune: Stabilize logic and reduce entropy of a cultivation target.',
+===L255===
+        description: '??�?Assemble: Start or continue building a sovereign structure or service.',
+===L284===
+        description: '??�?Finalize: Deploy and manifest a construction site as a Sovereign Asset.',
+===L297===
+        description: '?�� Synthesize: Connect disparate knowledge domains to increase cognitive depth.',
+===L352===
+        description: '?��? Stabilize: Perform a global consistency check on the Knowledge Base.',
+===L402===
+        description: '?�� Collect: Harvest a sentient asset into the user portfolio.',
+===L430===
+        description: '?��? Consult: Seek wisdom resolution and universal guidance (OmniChing).',
+===L471===
+        description: '?�� OmniConcept: Define a new Abstract Idea / Schema.',
+===L485===
+        description: '?�� OmniOrb: Tap into the Global Event Bus / Universal Interface.',
+===L498===
+        description: '?�� OmniClue: Get a "Next Step" hint (Performance Guidance).',
+===L511===
+        description: '?�� OmniCrew: Dispatch a task to the Agentic Workforce (Autonomous Action).',
+===L525===
+        description: '?�� OmniCastle: Fortify System Structure or Validate Integrity.',
+===L538===
+        description: '?�� OmniCase: Open a Sovereign Container (Project/Context).',
+===L578===
+        description: '?�� OmniCanvas: Render a Sovereign Workshop/Surface (Creative).',
+===L604===
+        description: '?�� OmniClass: Start a Sovereign Session (Unit/Interaction).',
+===L645===
+        description: '??�?OmniCreation: Spark a Sovereign Creation (Factory/Studio).',
+===L674===
+        description: '?�� OmniContact: Register a new identity.',
+===L710===
+        description: '?��? OmniConvince: Propose a Decision for Consensus (Governance).',
+===L738===
+        description: '?��? OmniConflict: Report a System/Data Conflict (Governance).',
+===L780===
+        description: '?���?OmniCoordinator: Coordinate tasks across multiple participants.',
+===L794===
+        description: '?��? OmniConfig: Set a Sovereign configuration parameter.',
+===L808===
+        description: '??�?OmniConstitution: Verify system status against the Sovereign Decree.',
+===L818===
+        description: '?�� OmniCompress: Compress system state into a portable .omni format.',
+===L831===
+        description: '?�� OmniComponent: Assemble a Sovereign Block (Part/Module).',
+===L845===
+        description: '?�� OmniCostume: Wear a Sovereign Attire/Skin.',
+===L859===
+        description: '??�?OmniCustom: Adapt Sovereign Settings/Customization.',
+===L873===
+        description: '?�� OmniChip: Process/Compute Sovereign Logic.',
+===L887===
+        description: '?�� OmniChat: Initiate a Sovereign Dialogue (Cognitive).',
+===L916===
+        description: '?�� OmniContact: Register a Sovereign Identity.',
+===L931===
+        description: '??�?OmniCommunity: Sovereign Usage of Group/Society.',
+===L945===
+        description: '?�� OmniChance: Sovereign Usage of Probability/Luck.',
+===L957===
+        description: '?��? OmniCloud: Sovereign Usage of Cloud/Network.',
+===L971===
+        description: '??�?OmniClimax: Reach a Milestone Peak (Excellence).',
+===L999===
+        description: '??�?OmniChant: Sovereign Usage of Mantra/Vibration.',
+===L1013===
+        description: '?���?OmniConversation: Sovereign Usage of Dialogue.',
+===L1055===
+        description: '??�?OmniCategory: Classify a Sovereign Item (Cognitive).',
+===L1069===
+        description: '??�?OmniCenter: Pulse/Align Sovereign Hub (Heart/Core).',
+===L1083===
+        description: '?�� OmniCapture: Snap/Record Sovereign Input (Sensor/Eye).',
+===L1111===
+        description: '?�� OmniCost: Measure/Record Sovereign Value (Expense/Ledger).',
+===L1140===
+        description: '?�� OmniCloset: Access Sovereign Storage (Wardrobe/Cache).',
+===L1195===
+        description: '??�?OmniBase: Deploy/Anchor/Check Sovereign Foundation.',
+===L1208===
+        description: '??�?OmniCommander: Issue a Strategic Directive (Agency).',
+===L1221===
+// ?�?�?� Service Executor Interface ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+===L1226===
+// ?�?�?� Default Service Executor ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+===L1754===
+// ?�?�?� OmniMeceToolset ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+===L1778===
+    // ?�?�?� Private: Create Registration ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+===L1786===
+                query: { type: 'string', description: '?�詢?�數 (query parameter)' },
+===L1787===
+                data: { type: 'object', description: '?��??��? (additional data)' },
+===L1825===
+// ?�?�?� Singleton Export ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�

@@ -1,0 +1,23 @@
+src/components/WorldMap.tsx(157,26): error TS2532: Object is possibly 'undefined'.
+src/data/esg-omnipotent-data.ts(73,46): error TS2353: Object literal may only specify known properties, and 'type' does not exist in type 'OmniCrystal'.
+src/data/esg-omnipotent-data.ts(74,45): error TS2353: Object literal may only specify known properties, and 'type' does not exist in type 'OmniCrystal'.
+src/data/esg-omnipotent-data.ts(75,42): error TS2353: Object literal may only specify known properties, and 'type' does not exist in type 'OmniCrystal'.
+src/services/historicalDataAnalysis.ts(760,10): error TS2532: Object is possibly 'undefined'.
+src/services/historicalDataAnalysis.ts(760,30): error TS2532: Object is possibly 'undefined'.
+src/services/historicalDataAnalysis.ts(900,33): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(121,60): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(125,19): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(126,28): error TS2532: Object is possibly 'undefined'.
+src/services/jun-ai-key-integration.ts(126,46): error TS2532: Object is possibly 'undefined'.
+src/services/omniAdminService.ts(137,9): error TS2322: Type '{ timestamp: string; level: string | undefined; message: string | undefined; source: string | undefined; }[]' is not assignable to type '{ timestamp: string; level: string; message: string; source: string; }[]'.
+  Type '{ timestamp: string; level: string | undefined; message: string | undefined; source: string | undefined; }' is not assignable to type '{ timestamp: string; level: string; message: string; source: string; }'.
+    Types of property 'level' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+src/services/scalability.ts(433,5): error TS2532: Object is possibly 'undefined'.
+src/services/scalability.ts(434,12): error TS2532: Object is possibly 'undefined'.
+src/services/securityService.ts(919,37): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/services/ServiceRegistry.ts(355,9): error TS2532: Object is possibly 'undefined'.
+src/services/stakeholderService.ts(247,56): error TS18048: 'filters.startDate' is possibly 'undefined'.
+src/services/stakeholderService.ts(250,56): error TS18048: 'filters.endDate' is possibly 'undefined'.

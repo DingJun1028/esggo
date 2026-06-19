@@ -1,0 +1,2 @@
+A newer version of MCP: v2025-11-25 is available. Please use MCP_v20251125 to use the latest features.
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.

@@ -1,0 +1,9 @@
+{
+  "name": "[善向紀元] ESGss JAK",
+  "description": "The v16.1 AIOS Kernel powered by JunAiKey. Advanced AI Hypercube Protocol.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

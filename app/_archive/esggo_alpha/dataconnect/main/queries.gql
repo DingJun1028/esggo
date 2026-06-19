@@ -1,0 +1,265 @@
+query ListAllTasks @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  tasks {
+    id
+    title
+    description
+    completed
+    createdAt
+  }
+}
+
+query GetTaskById($id: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  task(key: {id: $id}) {
+    id
+    title
+    description
+    completed
+    createdAt
+  }
+}
+
+mutation CreateTask($title: String!, $description: String, $createdAt: Timestamp!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  task: task_insert(data: {
+    title: $title,
+    description: $description,
+    completed: false,
+    createdAt: $createdAt
+  })
+}
+
+mutation DeleteTask($id: UUID!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  task: task_delete(key: {id: $id})
+}
+
+mutation UpdateTaskStatus($id: UUID!, $completed: Boolean!) @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  task: task_update(key: {id: $id}, data: {
+    completed: $completed
+  })
+}
+
+query ListAuditRecords @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  auditRecords {
+    id
+    title
+    dataType
+    source
+    category
+    standard
+    description
+    contentHash
+    zkpStatus
+    createdAt
+    metadata
+    proofSignature
+    verifierKey
+    algorithm
+    salt
+    proofJson
+  }
+}
+
+mutation CreateAuditRecord($title: String!, $dataType: String!, $source: String!, $category: String, $standard: String, $description: String, $contentHash: String!, $zkpStatus: String!, $createdAt: Timestamp!, $metadata: String, $proofSignature: String, $verifierKey: String, $algorithm: String, $salt: String, $proofJson: String) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  auditRecord: auditRecord_insert(data: {
+    title: $title,
+    dataType: $dataType,
+    source: $source,
+    category: $category,
+    standard: $standard,
+    description: $description,
+    contentHash: $contentHash,
+    zkpStatus: $zkpStatus,
+    createdAt: $createdAt,
+    metadata: $metadata,
+    proofSignature: $proofSignature,
+    verifierKey: $verifierKey,
+    algorithm: $algorithm,
+    salt: $salt,
+    proofJson: $proofJson
+  })
+}
+
+mutation UpdateAuditRecord($id: UUID!, $title: String, $dataType: String, $source: String, $category: String, $standard: String, $description: String, $contentHash: String, $zkpStatus: String, $metadata: String, $proofSignature: String, $verifierKey: String, $algorithm: String, $salt: String, $proofJson: String) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  auditRecord: auditRecord_update(key: {id: $id}, data: {
+    title: $title,
+    dataType: $dataType,
+    source: $source,
+    category: $category,
+    standard: $standard,
+    description: $description,
+    contentHash: $contentHash,
+    zkpStatus: $zkpStatus,
+    metadata: $metadata,
+    proofSignature: $proofSignature,
+    verifierKey: $verifierKey,
+    algorithm: $algorithm,
+    salt: $salt,
+    proofJson: $proofJson
+  })
+}
+
+mutation DeleteAuditRecord($id: UUID!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  auditRecord: auditRecord_delete(key: {id: $id})
+}
+
+query ListIntelligenceModules @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  intelligenceModules {
+    id
+    titleZh
+    titleEn
+    descriptionZh
+    descriptionEn
+    iconName
+    color
+    details
+  }
+}
+
+mutation UpsertIntelligenceModule($id: String!, $titleZh: String!, $titleEn: String!, $descriptionZh: String!, $descriptionEn: String!, $iconName: String!, $color: String!, $details: String) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  intelligenceModule: intelligenceModule_upsert(data: {
+    id: $id,
+    titleZh: $titleZh,
+    titleEn: $titleEn,
+    descriptionZh: $descriptionZh,
+    descriptionEn: $descriptionEn,
+    iconName: $iconName,
+    color: $color,
+    details: $details
+  })
+}
+
+query ListIntelligenceSources @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  intelligenceSources {
+    id
+    category
+    name
+    type
+    status
+  }
+}
+
+mutation UpsertIntelligenceSource($id: UUID, $category: String!, $name: String!, $type: String!, $status: String!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  intelligenceSource: intelligenceSource_upsert(data: {
+    id: $id,
+    category: $category,
+    name: $name,
+    type: $type,
+    status: $status
+  })
+}
+
+query ListReports @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  reports {
+    id
+    templateId
+    title
+    language
+    progress
+    status
+    createdAt
+    lastSavedAt
+    company {
+      id
+      name
+    }
+  }
+}
+
+query GetReportById($id: UUID!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  report(key: {id: $id}) {
+    id
+    templateId
+    title
+    language
+    progress
+    status
+    createdAt
+    lastSavedAt
+    company {
+      id
+      name
+    }
+  }
+}
+
+mutation UpsertReport($id: UUID, $companyId: UUID!, $templateId: String!, $title: String!, $language: String!, $progress: Int!, $status: String!, $createdAt: Timestamp!, $lastSavedAt: Timestamp) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  report: report_upsert(data: {
+    id: $id,
+    companyId: $companyId,
+    templateId: $templateId,
+    title: $title,
+    language: $language,
+    progress: $progress,
+    status: $status,
+    createdAt: $createdAt,
+    lastSavedAt: $lastSavedAt
+  })
+}
+
+mutation UpsertReportSection($id: UUID, $reportId: UUID!, $sectionId: String!, $title: String!, $content: String, $isDone: Boolean!, $lastUpdated: Timestamp!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  reportSection: reportSection_upsert(data: {
+    id: $id,
+    reportId: $reportId,
+    sectionId: $sectionId,
+    title: $title,
+    content: $content,
+    isDone: $isDone,
+    lastUpdated: $lastUpdated
+  })
+}
+
+query GetReportSections($reportId: UUID!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  reportSections(where: {reportId: {eq: $reportId}}) {
+    id
+    sectionId
+    title
+    content
+    isDone
+    lastUpdated
+  }
+}
+
+query ListCompanyMetric($companyId: UUID!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  companyMetrics(where: {companyId: {eq: $companyId}}, orderBy: [{updatedAt: DESC}], limit: 1) {
+    id
+    readinessScore
+    complianceRate
+    riskLevel
+    efficiencyRate
+    trustScore
+    updatedAt
+  }
+}
+
+mutation UpsertCompanyMetric($id: UUID, $companyId: UUID!, $readinessScore: Float!, $complianceRate: Float!, $riskLevel: Float!, $efficiencyRate: Float!, $trustScore: Float!, $updatedAt: Timestamp!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  companyMetric_upsert(data: {
+    id: $id,
+    companyId: $companyId,
+    readinessScore: $readinessScore,
+    complianceRate: $complianceRate,
+    riskLevel: $riskLevel,
+    efficiencyRate: $efficiencyRate,
+    trustScore: $trustScore,
+    updatedAt: $updatedAt
+  })
+}
+
+query ListIntelligenceSignals @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  intelligenceSignals(orderBy: [{timestamp: DESC}]) {
+    id
+    title
+    content
+    severity
+    timestamp
+    sourceId
+  }
+}
+
+mutation UpsertIntelligenceSignal($id: UUID, $title: String!, $content: String!, $severity: String!, $timestamp: Timestamp!) @auth(level: USER, insecureReason: "Safe for logged in users.") {
+  intelligenceSignal: intelligenceSignal_upsert(data: {
+    id: $id,
+    title: $title,
+    content: $content,
+    severity: $severity,
+    timestamp: $timestamp
+  })
+}

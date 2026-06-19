@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/* 
+ * ESG GO Global Design System (Tailwind v4 Optimized)
+ * Fixed: Removed invalid @apply usage causing compilation crash.
+ */
+
+@theme {
+  --font-sans: var(--font-space-grotesk), "Microsoft JhengHei", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: var(--font-newsreader), serif;
+  --font-display: var(--font-newsreader), serif;
+  --font-body: var(--font-space-grotesk), sans-serif;
+  --font-label: var(--font-space-grotesk), sans-serif;
+
+  /* Premium Light - Editorial Palette (Refined) */
+  --color-background: #FBFBF9; /* Ivory Paper */
+  --color-surface: #FBFBF9;
+  --color-on-background: #1C1917; /* Stone 900 */
+  --color-on-surface: #1C1917;
+  --color-on-surface-variant: #57534E; /* Stone 600 */
+
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #F5F5F4; /* Stone 100 */
+  --color-surface-container: #E7E5E4; /* Stone 200 */
+  --color-surface-container-high: #D6D3D1; /* Stone 300 */
+  --color-surface-container-highest: #A8A29E; /* Stone 400 */
+
+  --color-primary: #004D40; /* Deep Teal */
+  --color-on-primary: #FFFFFF;
+  --color-primary-container: #E0F2F1;
+  --color-on-primary-container: #004D40;
+
+  --color-secondary: #78350F; /* Amber 900 for contrast */
+  --color-secondary-container: #FEF3C7;
+  --color-on-secondary-container: #78350F;
+
+  --color-outline: #D6D3D1;
+  --color-outline-variant: #E7E5E4;
+
+  --color-primary-teal-start: #004D40;
+  --color-primary-teal-end: #0D9488;
+  
+  --color-stitch-primary: var(--color-primary);
+  --color-stitch-text: var(--color-on-surface);
+  --color-stitch-text-muted: var(--color-on-surface-variant);
+  --color-stitch-border: var(--color-outline-variant);
+  --color-stitch-bg: var(--color-background);
+}
+
+@layer base {
+  :root {
+    --heading-step-0: clamp(1.25rem, 5vw, 1.5rem);
+    --heading-step-1: clamp(1.5rem, 6vw, 2rem);
+    --heading-step-2: clamp(2rem, 8vw, 3rem);
+    --heading-step-3: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  html {
+    @apply antialiased scroll-smooth;
+    font-size: 16px;
+  }
+
+  body {
+    @apply bg-background text-on-surface font-sans leading-relaxed tracking-tight;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01", "tnum", "lnum";
+  }
+
+  h1 { @apply font-headline font-bold text-[length:var(--heading-step-3)] leading-none tracking-tighter mb-6; }
+  h2 { @apply font-headline font-bold text-[length:var(--heading-step-2)] leading-tight tracking-tight mb-4; }
+  h3 { @apply font-headline font-semibold text-[length:var(--heading-step-1)] leading-snug tracking-tight mb-3; }
+  
+  p { @apply mb-4 text-on-surface-variant max-w-[70ch]; }
+}
+
+@layer utilities {
+  .stitch-glass {
+    @apply backdrop-blur-[16px] bg-white/70 border border-black/5 shadow-sm;
+  }
+
+  .editorial-glass {
+    @apply backdrop-blur-[24px] bg-[var(--color-surface-container)]/80 border border-[var(--color-outline-variant)] shadow-[0_8px_32px_rgba(0,0,0,0.04)];
+  }
+
+  /* Fixed snappy-transition with correct CSS properties */
+  .snappy-transition {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition-duration: 300ms;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* PWA & Mobile Optimization */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .touch-none {
+    touch-action: none;
+  }
+  .no-tap {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .editorial-shadow {
+    box-shadow: 0 40px 40px rgba(26, 28, 27, 0.04);
+  }
+
+  .sovereign-dark {
+    --color-background: #05070A;
+    --color-surface: #0A0C10;
+    --color-on-background: #FFFFFF;
+    --color-on-surface: #F0F0F0;
+    --color-outline: rgba(255, 255, 255, 0.1);
+  }
+
+  .surface-container {
+    background-color: var(--color-surface-container);
+  }
+}

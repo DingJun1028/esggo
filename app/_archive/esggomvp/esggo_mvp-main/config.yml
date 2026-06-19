@@ -1,0 +1,8 @@
+url: http://localhost:3001
+tunnel: celestial-think-tank
+credentials-file: .cloudflared/celestial-think-tank.json
+
+ingress:
+  - hostname: thinktank.esgss.ai
+    service: http://localhost:3001
+  - service: http_status:404

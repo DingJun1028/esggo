@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "result": [
+    {
+      "projectId": "esg-sunshine",
+      "projectNumber": "950159032447",
+      "displayName": "ESG Sunshine",
+      "name": "projects/esg-sunshine",
+      "resources": {
+        "hostingSite": "esg-sunshine"
+      },
+      "state": "ACTIVE",
+      "etag": "1_fbcc94ed-a7ea-4b7e-9a45-b7bc0f8e5868"
+    },
+    {
+      "projectId": "junaikey-genesis",
+      "projectNumber": "1080502198465",
+      "displayName": "JunAiKey Genesis",
+      "name": "projects/junaikey-genesis",
+      "resources": {
+        "hostingSite": "junaikey-genesis"
+      },
+      "state": "ACTIVE",
+      "etag": "1_2200f51e-0063-4844-806e-0d2f4edab980"
+    },
+    {
+      "projectId": "studio-7131213386-82818",
+      "projectNumber": "185905940149",
+      "displayName": "Firebase app",
+      "name": "projects/studio-7131213386-82818",
+      "resources": {
+        "hostingSite": "studio-7131213386-82818"
+      },
+      "state": "ACTIVE",
+      "etag": "1_e920b5c1-361c-4026-84f9-c55578dedce3"
+    }
+  ]
+}

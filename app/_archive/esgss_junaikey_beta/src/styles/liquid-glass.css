@@ -1,0 +1,417 @@
+/**
+ * @esgss/jun-ai-ceremony
+ * 液態玻璃 UI 樣式
+ * 
+ * Antigravity 反重力開發框架
+ * W4 聖典執行手冊 - UI 視覺規範
+ */
+
+/* CSS 變數定義 */
+:root {
+  /* 液態玻璃核心色板 */
+  --aqua-cyan: #63a6b0;
+  --aqua-cyan-light: rgba(99, 166, 176, 0.3);
+  --aqua-cyan-dark: rgba(46, 109, 117, 0.8);
+  --glass-bg: rgba(99, 166, 176, 0.08);
+  --glass-bg-strong: rgba(99, 166, 176, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-highlight: rgba(255, 255, 255, 0.3);
+
+  /* 量子共鳴色彩 */
+  --quantum-gold: #d4af37;
+  --quantum-amber: #ffbf00;
+  --quantum-ethereal: rgba(212, 175, 55, 0.4);
+
+  /* 自癒場域色彩 */
+  --healing-green: #4ade80;
+  --healing-teal: #2dd4bf;
+  --healing-aqua: rgba(74, 222, 128, 0.3);
+
+  /* 陰影與光效 */
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --glass-glow: 0 0 40px rgba(99, 166, 176, 0.2);
+  --inner-glow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+/* 液態玻璃基礎樣式 */
+.liquid-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
+}
+
+/* 強化版液態玻璃 */
+.liquid-glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid var(--glass-border-highlight);
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow), var(--glass-glow);
+}
+
+/* 反重力浮動動畫 */
+@keyframes anti-gravity-float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  75% {
+    transform: translateY(-4px) rotate(-0.3deg);
+  }
+}
+
+.anti-gravity-float {
+  animation: anti-gravity-float 4s ease-in-out infinite;
+}
+
+/* 量子呼吸動畫 */
+@keyframes quantum-breath {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.quantum-breath {
+  animation: quantum-breath 3s ease-in-out infinite;
+}
+
+/* 量子閃頻動畫 */
+@keyframes quantum-flash {
+  0% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+
+  10% {
+    opacity: 1;
+    filter: brightness(2) hue-rotate(30deg);
+  }
+
+  20% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+
+  30% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+
+  40% {
+    opacity: 1;
+    filter: brightness(2) hue-rotate(-30deg);
+  }
+
+  50% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+
+  100% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+.quantum-flash {
+  animation: quantum-flash 2s ease-in-out infinite;
+}
+
+/* 量子流光效果 */
+@keyframes quantum-stream {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.quantum-stream {
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(99, 166, 176, 0.4),
+      rgba(212, 175, 55, 0.3),
+      rgba(99, 166, 176, 0.4),
+      transparent);
+  background-size: 200% 100%;
+  animation: quantum-stream 3s linear infinite;
+}
+
+/* 粒子匯聚動畫 */
+@keyframes particle-converge {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.particle-converge {
+  animation: particle-converge 2s ease-out infinite;
+}
+
+/* 自癒場域脈衝 */
+@keyframes healing-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
+    border-color: rgba(74, 222, 128, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(74, 222, 128, 0.4);
+    border-color: rgba(74, 222, 128, 0.6);
+  }
+}
+
+.healing-field {
+  animation: healing-pulse 2s ease-in-out infinite;
+}
+
+/* 四象限匯聚動畫 */
+@keyframes quadrant-merge {
+  0% {
+    transform: translateX(-50px) translateY(-50px) rotate(-45deg);
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+.quadrant-merge {
+  animation: quadrant-merge 3s ease-in-out infinite;
+}
+
+/* 玻璃邊緣光效 */
+.glass-edge-light {
+  position: relative;
+}
+
+.glass-edge-light::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg,
+      transparent,
+      rgba(99, 166, 176, 0.5),
+      rgba(212, 175, 55, 0.5),
+      rgba(99, 166, 176, 0.5),
+      transparent);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-edge-light:hover::before {
+  opacity: 1;
+}
+
+/* 量子糾纏效果 */
+@keyframes entanglement-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.entanglement-spin {
+  animation: entanglement-spin 4s linear infinite;
+}
+
+/* 數據注入閃爍效果 */
+@keyframes data-inject {
+  0% {
+    opacity: 0;
+    text-shadow: none;
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  100% {
+    opacity: 0;
+    text-shadow: none;
+  }
+}
+
+.data-inject {
+  animation: data-inject 1.5s ease-in-out infinite;
+}
+
+/* 勛章卡漸層背景 */
+.medal-gradient {
+  background: linear-gradient(135deg,
+      rgba(99, 166, 176, 0.1) 0%,
+      rgba(212, 175, 55, 0.1) 50%,
+      rgba(99, 166, 176, 0.1) 100%);
+}
+
+/* 熵減動畫效果 */
+@keyframes entropy-reduction {
+  0% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+
+  50% {
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+.entropy-reduction {
+  animation: entropy-reduction 2s ease-in-out infinite;
+}
+
+/* 共鳴波動畫 */
+@keyframes resonance-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.resonance-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.resonance-wave::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle,
+      rgba(212, 175, 55, 0.3) 0%,
+      transparent 70%);
+  animation: resonance-wave 2s ease-out infinite;
+}
+
+/* 響應式優化 (Responsive Optimization) - [協議] 階段 14 */
+@media (max-width: 768px) {
+  .liquid-glass {
+    border-radius: 16px;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+  }
+
+  .liquid-glass-strong {
+    border-radius: 18px;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  /* 反重力動畫調整：減少行動端震幅以防眩暈 */
+  @keyframes anti-gravity-float-mobile {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  .anti-gravity-float {
+    animation: anti-gravity-float-mobile 5s ease-in-out infinite;
+  }
+
+  /* 佈局輔助類 (Layout Helpers) */
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .mobile-full {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+
+  .mobile-gap-4 {
+    gap: 1rem !important;
+  }
+
+  /* Onboarding 特殊處理 */
+  .onboarding-container {
+    padding: 1.5rem !important;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+
+  .onboarding-option-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

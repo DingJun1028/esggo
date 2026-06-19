@@ -1,0 +1,10 @@
+services:
+  pgprotocol:
+    image: pgprotocol
+    build:
+      context: node_modules/pg-protocol
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000

@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #FCFCFD;
+    color: #1A1C1E;
+    font-family: var(--font-inter), ui-sans-serif, system-ui;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(179, 100%, 31%, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(192, 70%, 43%, 0.05) 0px, transparent 50%);
+  }
+
+  ::selection {
+    background-color: rgba(0, 158, 157, 0.2);
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/70 border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+  }
+
+  .glass-premium {
+    @apply backdrop-blur-2xl bg-white/40 border border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.05)];
+  }
+
+  .card-hover {
+    @apply transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:border-emerald-200/50;
+  }
+
+  .glow-emerald {
+    @apply shadow-[0_0_20px_rgba(16,185,129,0.15)];
+  }
+  
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  .text-gradient-emerald {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, var(--color-emerald-600), var(--color-teal-500));
+  }
+  .bg-mesh {
+    background-color: #FCFCFD;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(179, 100%, 31%, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(192, 70%, 43%, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(160, 84%, 39%, 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(200, 95%, 45%, 0.05) 0px, transparent 50%);
+    background-size: 100% 100%;
+    animation: mesh 20s infinite ease-in-out;
+  }
+}
+
+@keyframes mesh {
+  0%, 100% { background-position: 0% 0%, 100% 100%, 100% 0%, 0% 100%; }
+  25% { background-position: 10% 10%, 90% 90%, 90% 10%, 10% 90%; }
+  50% { background-position: 20% 20%, 80% 80%, 80% 20%, 20% 80%; }
+  75% { background-position: 10% 10%, 90% 90%, 90% 10%, 10% 90%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.98); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(14, 165, 233, 0.5), transparent);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.8);
+  animation: scan 3s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Markdown Styling */
+.markdown-content {
+  color: #334155;
+  line-height: 1.7;
+}
+
+.markdown-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content p {
+  margin-bottom: 1.25rem;
+}
+
+.markdown-content ul, .markdown-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #e2e8f0;
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: #64748b;
+  margin: 1.5rem 0;
+}
+
+.markdown-content code {
+  background-color: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  color: #0f172a;
+}

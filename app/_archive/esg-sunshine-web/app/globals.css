@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Lexend:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-surface text-neutral-800 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    line-height: 1.6;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center font-semibold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/20;
+    @apply bg-gradient-to-r from-primary to-emerald-light hover:from-primary-dark hover:to-primary text-white shadow-medium hover:shadow-strong transform hover:-translate-y-1 hover:scale-105;
+    @apply px-8 py-4 text-base;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center font-semibold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-secondary/20;
+    @apply bg-gradient-to-r from-secondary to-sunshine-gold hover:from-secondary-dark hover:to-secondary text-white shadow-medium hover:shadow-strong transform hover:-translate-y-1 hover:scale-105;
+    @apply px-8 py-4 text-base;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center font-semibold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/20;
+    @apply bg-transparent hover:bg-primary text-primary hover:text-white border-2 border-primary shadow-soft hover:shadow-medium transform hover:-translate-y-1;
+    @apply px-8 py-4 text-base;
+  }
+
+  .btn-large {
+    @apply px-12 py-6 text-lg rounded-3xl;
+  }
+
+  .btn-small {
+    @apply px-6 py-3 text-sm rounded-xl;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl shadow-card border border-neutral-100 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-2;
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer hover:border-primary/20 hover:bg-gradient-to-br hover:from-white hover:to-primary/5;
+  }
+
+  .icon-wrapper {
+    @apply w-16 h-16 rounded-2xl flex items-center justify-center shadow-medium transition-all duration-300 hover:scale-110 hover:shadow-strong;
+  }
+
+  .section-padding {
+    @apply px-5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20;
+  }
+
+  .section-spacing {
+    @apply py-20 lg:py-32;
+  }
+
+  .container-base {
+    @apply max-w-7xl mx-auto w-full;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+  }
+
+  .animate-loading-bar {
+    animation: loadingBar 2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes loadingBar {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+}
+
+/* 滾動條樣式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #10b981, #34d399);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #059669, #10b981);
+}
+
+/* 選取文字樣式 */
+::selection {
+  background: rgba(16, 185, 129, 0.2);
+  color: #065f46;
+}
+
+/* 聚焦樣式 */
+.focus-visible {
+  @apply outline-none ring-4 ring-primary/20;
+}
+
+/* 平滑動畫性能優化 */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.animate-element {
+  will-change: transform;
+}

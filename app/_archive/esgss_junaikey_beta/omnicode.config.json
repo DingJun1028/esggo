@@ -1,0 +1,87 @@
+{
+  "$schema": "./omnicode.schema.json",
+  "name": "OmniCode-InfoOne",
+  "version": "1.0.0",
+  "description": "OmniCode 雙向人工智能圓通無礙心電感應區 - 全平台整合",
+  "platforms": {
+    "frontend": {
+      "path": "src",
+      "framework": "react",
+      "type": "web"
+    },
+    "backend": {
+      "path": "server",
+      "framework": "express",
+      "type": "api"
+    },
+    "api": {
+      "path": "api",
+      "type": "service"
+    },
+    "mcp": {
+      "path": "mcp-servers",
+      "servers": ["omni-notes", "universal-notes", "google-stitch"]
+    },
+    "openclaw": {
+      "path": "openclaw",
+      "type": "gateway"
+    },
+    "knowledge": {
+      "path": "src/omni",
+      "core": "OmniCodex"
+    }
+  },
+  "integrations": {
+    "opencode": {
+      "apiUrl": "https://api.opencode.ai",
+      "features": ["tui", "mcp", "session", "web"]
+    },
+    "openclaw": {
+      "gateway": "ws://localhost:19001/gateway/v1",
+      "http": "http://localhost:19001"
+    },
+    "omnicircle": {
+      "enabled": true,
+      "mcpServers": ["omni-notes", "universal-notes"]
+    },
+    "omnicodex": {
+      "enabled": true,
+      "knowledgePath": "src/omni/core/OmniCodex.ts"
+    }
+  },
+  "commands": {
+    "dev:all": "npm run dev",
+    "dev:frontend": "npm run dev:ui",
+    "dev:backend": "npm run dev:server",
+    "omni:start": "npm run omni:start",
+    "omni:status": "npm run omni:status"
+  },
+  "shortcuts": {
+    "quickLaunch": "ctrl+escape",
+    "newSession": "ctrl+shift+escape",
+    "fileReference": "alt+ctrl+k"
+  },
+  "features": {
+    "tangible": {
+      "impactMetric": true,
+      "visualization": true
+    },
+    "traceable": {
+      "sourceOrigin": true,
+      "evidence": true
+    },
+    "trackable": {
+      "lifecycle": true,
+      "dataFlow": true
+    },
+    "transparent": {
+      "formulas": true,
+      "isoStandards": ["ISO-14064-1"]
+    },
+    "trustworthy": {
+      "hashLock": true,
+      "immutable": false,
+      "status": "Trustworthy"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+C:\Project\esgss_junaikey_beta\esgss_junaikey_beta\server\crewai\.venv\Lib\site-packages\pydantic\_internal\_generate_schema.py:937: UserWarning: Mixing V1 models and V2 models (or constructs, like `TypeAdapter`) is not supported. Please upgrade `CrewAgentExecutor` to V2.
+  warnings.warn(

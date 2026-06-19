@@ -1,0 +1,23 @@
+src/AppNew.tsx(8,43): error TS1261: Already included file name 'C:/Project/ESGss JunAiKey Beta/src/components/auth/?冽隤?.tsx' differs from file name 'C:/Project/ESGss JunAiKey Beta/src/components/Auth/?冽隤?.tsx' only in casing.
+  The file is in the program because:
+    Imported via './components/auth/?冽隤?' from file 'C:/Project/ESGss JunAiKey Beta/src/AppNew.tsx'
+    Matched by include pattern 'src/**/*.tsx' in 'C:/Project/ESGss JunAiKey Beta/tsconfig.json'
+src/AppNew.tsx(9,22): error TS1261: Already included file name 'C:/Project/ESGss JunAiKey Beta/src/components/admin/?祈敺.tsx' differs from file name 'C:/Project/ESGss JunAiKey Beta/src/components/Admin/?祈敺.tsx' only in casing.
+  The file is in the program because:
+    Imported via './components/admin/?祈敺' from file 'C:/Project/ESGss JunAiKey Beta/src/AppNew.tsx'
+    Matched by include pattern 'src/**/*.tsx' in 'C:/Project/ESGss JunAiKey Beta/tsconfig.json'
+src/components/dashboard/AgentForge.tsx(2,31): error TS2307: Cannot find module '@/components/common/ErrorBoundary' or its corresponding type declarations.
+src/components/dashboard/index.ts(71,15): error TS1261: Already included file name 'C:/Project/ESGss JunAiKey Beta/src/components/auth/LoginPage.tsx' differs from file name 'C:/Project/ESGss JunAiKey Beta/src/components/Auth/LoginPage.tsx' only in casing.
+  The file is in the program because:
+    Imported via '../auth/LoginPage' from file 'C:/Project/ESGss JunAiKey Beta/src/components/dashboard/index.ts'
+    Matched by include pattern 'src/**/*.tsx' in 'C:/Project/ESGss JunAiKey Beta/tsconfig.json'
+src/components/dashboard/shell/JunAiKeyImpactShell.tsx(12,32): error TS1149: File name 'C:/Project/ESGss JunAiKey Beta/src/components/admin/OmniAdminPanel.tsx' differs from already included file name 'C:/Project/ESGss JunAiKey Beta/src/components/Admin/OmniAdminPanel.tsx' only in casing.
+  The file is in the program because:
+    Matched by include pattern 'src/**/*.tsx' in 'C:/Project/ESGss JunAiKey Beta/tsconfig.json'
+    Imported via '../../admin/OmniAdminPanel' from file 'C:/Project/ESGss JunAiKey Beta/src/components/dashboard/shell/JunAiKeyImpactShell.tsx'
+src/components/ESG/AI?訾??澈.tsx(32,34): error TS2307: Cannot find module '@store/useOmniResonance' or its corresponding type declarations.
+src/components/ESG/ESGSunshineJAK.tsx(28,34): error TS2307: Cannot find module '@store/useOmniResonance' or its corresponding type declarations.
+src/components/OmniAvatarGallery.tsx(3,31): error TS2307: Cannot find module '@/components/common/ErrorBoundary' or its corresponding type declarations.
+src/components/OmniAwakeningModule.tsx(10,34): error TS2307: Cannot find module '@store/useOmniResonance' or its corresponding type declarations.
+src/components/OmniImpactDashboard.tsx(12,34): error TS2307: Cannot find module '@store/useOmniResonance' or its corresponding type declarations.
+src/omni/interaction/control/OmniDashboard.tsx(27,31): error TS2307: Cannot find module '@/components/common/ErrorBoundary' or its corresponding type declarations.

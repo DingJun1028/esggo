@@ -1,0 +1,58 @@
+name: GitHub MCP Reports
+
+on:
+  schedule:
+    - cron: '0 13 * * 1' # Mondays 13:00 UTC
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+
+jobs:
+  gh-intelligence:
+    runs-on: ubuntu-latest
+    env:
+      CONTINUE_API_KEY: ${{ secrets.CONTINUE_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Continue CLI
+        run: npm i -g @continuedev/cli
+
+      - name: Weekly Triage Summary
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          echo "📊 Generating weekly intelligence report..."
+          cn --agent continuedev/github-project-manager-agent \
+             -p "List open issues updated in the last 14 days. Cluster them by priority and subsystem. Propose top 5 actions with deep links." \
+             --auto > weekly-report.md
+
+          # Optional: You could use 'gh issue create' to post this as a persistent report
+
+      - name: Post PR Context
+        if: github.event_name == 'pull_request'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "📝 Analyzing PR context..."
+          CONTEXT=$(cn --agent continuedev/github-project-manager-agent \
+            -p "Summarize context for PR #${PR_NUMBER}: find related open issues, potential regressions in similar past PRs, and test suggestions. Concise summary." \
+            --auto)
+
+          cat > pr_comment.md <<EOF
+          ## 🤖 AI Workflow Context
+
+          $CONTEXT
+
+          ---
+          *Context generated via GitHub MCP + Continue CLI*
+          EOF
+
+          gh pr comment ${PR_NUMBER} --body-file pr_comment.md

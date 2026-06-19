@@ -1,0 +1,39 @@
+
+> frontend@0.1.0 build
+> next build
+
+??Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Project\esggomvp\esggo_mvp\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Project\esggomvp\esggo_mvp\frontend\package-lock.json
+
+??Next.js 16.1.6 (Turbopack)
+
+??The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+??Compiled successfully in 7.2s
+  Running TypeScript ...
+  Collecting page data using 15 workers ...
+?? [RedisCache] REDIS_URL not found. Falling back to memory-only mode (No persistent caching).
+  Generating static pages using 15 workers (0/61) ...
+  Generating static pages using 15 workers (15/61) 
+?? [RedisCache] REDIS_URL not found. Falling back to memory-only mode (No persistent caching).
+  Generating static pages using 15 workers (30/61) 
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+  Generating static pages using 15 workers (45/61) 
+Error occurred prerendering page "/synthesis/dashboard". Read more: https://nextjs.org/docs/messages/prerender-error
+TypeError: Cannot read properties of undefined (reading 'split')
+    at $ (C:\Project\esggomvp\esggo_mvp\frontend\.next\server\chunks\ssr\frontend_14ef4d12._.js:4:33473) {
+  digest: '3372956968'
+}
+Export encountered an error on /synthesis/dashboard/page: /synthesis/dashboard, exiting the build.
+漼?Next.js build worker exited with code: 1 and signal: null

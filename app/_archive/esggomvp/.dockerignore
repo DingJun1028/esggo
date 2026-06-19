@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.env.local
+build_log.txt
+build_error.log
+dist
+Dockerfile
+.dockerignore
+.gcloudignore
+scripts
+src_old_app_backup
+tests

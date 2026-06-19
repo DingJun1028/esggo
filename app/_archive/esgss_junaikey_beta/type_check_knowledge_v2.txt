@@ -1,0 +1,1 @@
+src/omni/infrastructure/knowledge/OmniKnowledge.ts(1,42): error TS2307: Cannot find module '../../../types/Omni-entity.types' or its corresponding type declarations.

@@ -1,0 +1,60 @@
+# GraphQL schema defining the data models for the ESG GO Platform
+# These types map directly to PostgreSQL tables via Data Connect
+
+type User @table(name: "app_user") {
+  id: String! @default(expr: "auth.uid")
+  tenantId: String! @default(value: "default")
+  displayName: String
+  email: String
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type Evidence @table {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String!
+  tenantId: String! @default(value: "default")
+  user: User!
+  title: String!
+  content: String!
+  source: String!
+  timestamp: Timestamp! @default(expr: "request.time")
+  confidenceScore: Float!
+  verified: Boolean! @default(value: false)
+}
+
+type DashboardMetric @table {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String!
+  tenantId: String! @default(value: "default")
+  user: User!
+  title: String!
+  value: Float!
+  unit: String!
+  trend: String!
+  percentageChange: Float!
+  timestamp: Timestamp! @default(expr: "request.time")
+}
+
+type OcrReviewItem @table {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String!
+  tenantId: String! @default(value: "default")
+  user: User!
+  fieldLabel: String!
+  extractedValue: String!
+  unit: String!
+  confidenceScore: Float!
+  status: String!
+  originalSource: String
+  timestamp: Timestamp! @default(expr: "request.time")
+}
+
+type AuditLog @table {
+  id: UUID! @default(expr: "uuidV4()")
+  tenantId: String!
+  userId: String!
+  nodeId: String!
+  proof: String!
+  status: String!
+  timestamp: Timestamp! @default(expr: "request.time")
+}

@@ -1,0 +1,374 @@
+name: ESG Dashboard CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+
+env:
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # 測試與品質檢查
+  test-and-lint:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run TypeScript type check
+      run: npx tsc --noEmit
+
+    - name: Run ESLint
+      run: npx eslint . --ext .ts,.tsx --max-warnings 0
+      continue-on-error: false
+
+    - name: Run tests
+      run: npm run test:run
+
+    - name: Run test coverage
+      run: npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/coverage-final.json
+        fail_ci_if_error: false
+
+  # 安全掃描
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run npm audit
+      run: npm audit --audit-level moderate
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --file=package.json
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # 建構與部署到開發環境
+  build-and-deploy-dev:
+    name: Build & Deploy (Dev)
+    runs-on: ubuntu-latest
+    needs: [test-and-lint, security-scan]
+    if: github.ref == 'refs/heads/develop'
+    timeout-minutes: 20
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+      env:
+        VITE_API_URL: ${{ secrets.DEV_API_URL }}
+        VITE_ENVIRONMENT: development
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=dev-{{sha}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
+
+    - name: Deploy to development environment
+      run: |
+        echo "Deploying to development environment..."
+        # 獲取最新的映像標籤
+        IMAGE_TAG=$(echo ${{ steps.meta.outputs.tags }} | cut -d',' -f1)
+
+        # 創建部署腳本
+        cat > deploy-dev.sh << EOF
+        #!/bin/bash
+        set -e
+
+        echo "Starting deployment to DEV environment..."
+
+        # 拉取最新的映像
+        docker pull $IMAGE_TAG
+
+        # 停止舊容器
+        docker-compose -f docker-compose.dev.yml down || true
+
+        # 更新映像標籤
+        sed -i "s|image:.*|image: $IMAGE_TAG|g" docker-compose.dev.yml
+
+        # 啟動新服務
+        docker-compose -f docker-compose.dev.yml up -d
+
+        # 等待服務啟動
+        sleep 30
+
+        # 健康檢查
+        curl -f http://localhost:80/health || (echo "Health check failed" && exit 1)
+
+        # 清理舊映像
+        docker image prune -f
+
+        echo "DEV deployment completed successfully!"
+        EOF
+
+        chmod +x deploy-dev.sh
+
+  # 建構與部署到生產環境
+  build-and-deploy-prod:
+    name: Build & Deploy (Prod)
+    runs-on: ubuntu-latest
+    needs: [test-and-lint, security-scan]
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+      env:
+        VITE_API_URL: ${{ secrets.PROD_API_URL }}
+        VITE_ENVIRONMENT: production
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest
+          type=raw,value=v{{date 'YYYYMMDD'}}-{{sha}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
+
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment..."
+        # 獲取最新的映像標籤
+        IMAGE_TAG=$(echo ${{ steps.meta.outputs.tags }} | cut -d',' -f1)
+
+        # 創建生產部署腳本
+        cat > deploy-prod.sh << EOF
+        #!/bin/bash
+        set -e
+
+        echo "Starting deployment to PROD environment..."
+
+        # 備份當前運行狀態
+        docker tag \$(docker-compose -f docker-compose.prod.yml ps -q esg-dashboard) esg-dashboard:backup-\$(date +%Y%m%d_%H%M%S) || true
+
+        # 拉取最新的映像
+        docker pull $IMAGE_TAG
+
+        # 藍綠部署：啟動新版本服務
+        sed -i "s|image:.*|image: $IMAGE_TAG|g" docker-compose.prod.yml
+        docker-compose -f docker-compose.prod.yml up -d esg-dashboard-new || docker-compose -f docker-compose.prod.yml up -d esg-dashboard
+
+        # 等待新服務啟動
+        sleep 60
+
+        # 健康檢查新服務
+        NEW_CONTAINER=\$(docker-compose -f docker-compose.prod.yml ps -q esg-dashboard-new || docker-compose -f docker-compose.prod.yml ps -q esg-dashboard)
+        docker exec \$NEW_CONTAINER curl -f http://localhost/health || (echo "New service health check failed" && exit 1)
+
+        # 切換流量到新服務
+        # 如果使用負載平衡器，這裡需要更新配置
+
+        # 停止舊服務
+        docker-compose -f docker-compose.prod.yml up -d esg-dashboard
+        docker-compose -f docker-compose.prod.yml stop esg-dashboard-old || true
+        docker-compose -f docker-compose.prod.yml rm -f esg-dashboard-old || true
+
+        # 清理舊映像（保留最近3個）
+        docker images --format "table {{.Repository}}:{{.Tag}}\t{{.CreatedAt}}" | grep esg-dashboard | sort -k2 -r | tail -n +4 | awk '{print \$1}' | xargs -r docker rmi || true
+
+        echo "PROD deployment completed successfully!"
+        EOF
+
+        chmod +x deploy-prod.sh
+
+  # 效能測試
+  performance-test:
+    name: Performance Test
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy-dev]
+    if: github.ref == 'refs/heads/develop'
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build for performance testing
+      run: npm run build
+
+    - name: Run Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        urls: |
+          http://localhost:5173
+        configPath: .lighthouserc.js
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+  # 清理資源
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [build-and-deploy-dev, build-and-deploy-prod]
+
+    steps:
+    - name: Cleanup old container images
+      run: |
+        echo "Cleaning up old container images..."
+        # 清理舊的Docker映像以節省儲存空間
+
+  # 通知
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [test-and-lint, security-scan, build-and-deploy-dev, build-and-deploy-prod, performance-test]
+
+    steps:
+    - name: Send Slack notification
+      uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: ${{ job.status }}
+        channel: '#esg-dashboard-ci'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
