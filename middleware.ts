@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { updateSession } from '@/utils/supabase/middleware';
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 const CANARY_PERCENTAGE = 100;
 const THEMES = ['esggo', 'default'] as const;
@@ -10,19 +9,13 @@ function getTheme(request: NextRequest): Theme {
   const url = request.nextUrl.clone();
   const path = url.pathname;
 
-  if (path.startsWith('/canary/esggo')) {
-    return 'esggo';
-  }
+  if (path.startsWith('/canary/esggo')) return 'esggo';
 
   const cookieTheme = request.cookies.get('theme-preference')?.value as Theme | null;
-  if (cookieTheme && THEMES.includes(cookieTheme)) {
-    return cookieTheme;
-  }
+  if (cookieTheme && THEMES.includes(cookieTheme)) return cookieTheme;
 
   const forceTheme = request.nextUrl.searchParams.get('theme') as Theme | null;
-  if (forceTheme && THEMES.includes(forceTheme)) {
-    return forceTheme;
-  }
+  if (forceTheme && THEMES.includes(forceTheme)) return forceTheme;
 
   const hash = Array.from(path).reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const isCanary = hash % 100 < CANARY_PERCENTAGE;
@@ -38,13 +31,89 @@ function setThemeCookie(response: NextResponse, theme: Theme): void {
 }
 
 /**
- * ESG GO | System Middleware v1.4
- * Focus: Security Headers, Performance, Auth Redirects, Theme Canary Routing
+ * ESG GO | System Middleware v1.5
+ *
+ * Auth modes:
+ * - Supabase mode: When NEXT_PUBLIC_SUPABASE_URL is configured (not placeholder)
+ * - Demo mode: When Supabase is not configured, allows omni_demo_session cookie
  */
 export async function middleware(request: NextRequest) {
-  const response = await updateSession(request);
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+  const isPlaceholder =
+    supabaseUrl.includes('placeholder') ||
+    supabaseKey.includes('placeholder') ||
+    !supabaseUrl ||
+    !supabaseKey;
+
+  const isDemoMode = isPlaceholder;
+  const hasDemoSession = request.cookies.get('omni_demo_session')?.value === 'true';
+
+  const supabase = createServerClient(
+    supabaseUrl || 'https://placeholder.supabase.co',
+    supabaseKey || 'placeholder-key',
+    {
+      cookies: {
+        getAll() { return request.cookies.getAll(); },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
+  const { data: { user }, error } = await supabase.auth.getUser();
+
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isBypass = request.cookies.get('omni_user_bypass')?.value === 'true' && isDevelopment;
+
+  const isPublicRoute =
+    request.nextUrl.pathname === '/login' ||
+    request.nextUrl.pathname === '/signup' ||
+    request.nextUrl.pathname.startsWith('/test-') ||
+    request.nextUrl.pathname.startsWith('/api/');
+
+  // 5T Traceable: clear corrupted session on auth error
+  if (error && !isBypass && !isPublicRoute && !isDemoMode) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    const redirectResponse = NextResponse.redirect(url);
+    redirectResponse.cookies.delete('sb-access-token');
+    redirectResponse.cookies.delete('sb-refresh-token');
+    return redirectResponse;
+  }
+
+  // Auth gate: Supabase mode → redirect to login if no user
+  if (!user && !isBypass && !isPublicRoute && !isDemoMode) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
+
+  // Auth gate: Demo mode → redirect to login if no demo session
+  if (isDemoMode && !hasDemoSession && !isPublicRoute && !isBypass) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    return NextResponse.redirect(url);
+  }
+
+  // Logged-in users on login/signup → redirect to dashboard
+  if ((user || hasDemoSession || isBypass) &&
+      (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') &&
+      !isDevelopment) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/dashboard';
+    return NextResponse.redirect(url);
+  }
+
   const theme = getTheme(request);
-  setThemeCookie(response, theme);
+  setThemeCookie(supabaseResponse, theme);
 
   const securityHeaders = {
     'Content-Security-Policy':
@@ -57,23 +126,13 @@ export async function middleware(request: NextRequest) {
   };
 
   Object.entries(securityHeaders).forEach(([key, value]) => {
-    response.headers.set(key, value);
+    supabaseResponse.headers.set(key, value);
   });
+  supabaseResponse.headers.set('x-theme', theme);
 
-  response.headers.set('x-theme', theme);
-
-  return response;
+  return supabaseResponse;
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
