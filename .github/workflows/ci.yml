@@ -1,4 +1,4 @@
-name: CI — OmniValidate
+name: CI
 
 on:
   push:
@@ -8,9 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+  contents: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -26,11 +24,7 @@ jobs:
       error_log:   ${{ steps.collect.outputs.error_log }}
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
+      - uses: actions/checkout@v5
       - name: Git Safety Config
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
