@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   Network,
   Search,
@@ -251,11 +251,8 @@ export default function AgentsPage() {
         {/* ─── Agent Features ─── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {AGENT_FEATURES.map((feat, i) => (
-            <motion.div
+            <div
               key={feat.title}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
               className="bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all duration-300"
             >
               <div
@@ -268,7 +265,7 @@ export default function AgentsPage() {
               </div>
               <h3 className="text-sm font-bold text-[#003262] mb-1">{feat.title}</h3>
               <p className="text-xs text-slate-500 leading-relaxed">{feat.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
 

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// 已移除 framer-motion 以避免 SSR 崩潰，改用 CSS transition
 import {
   Terminal,
   Shield,
@@ -212,45 +212,42 @@ export default function GenesisConsole() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-            <AnimatePresence initial={false}>
-              {logs.map((log) => (
-                <motion.div
-                  key={log.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="flex gap-4 group"
-                >
-                  <span className="text-[10px] text-slate-600 font-mono shrink-0 pt-0.5">
-                    [{log.timestamp}]
-                  </span>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          'text-[10px] font-black uppercase px-1.5 py-0.5 rounded',
-                          log.agent === 'OmniAgent'
-                            ? 'bg-cyan-500/10 text-cyan-400'
-                            : ' text-slate-400'
-                        )}
-                      >
-                        {log.agent}
-                      </span>
-                      {log.type === 'command' && (
-                        <Zap size={10} className="text-amber-400 animate-pulse" />
-                      )}
-                    </div>
-                    <p
+            {logs.map((log) => (
+              <div
+                key={log.id}
+                style={{ transition: 'all 0.4s ease' }}
+                className="flex gap-4 group"
+              >
+                <span className="text-[10px] text-slate-600 font-mono shrink-0 pt-0.5">
+                  [{log.timestamp}]
+                </span>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span
                       className={cn(
-                        'text-xs leading-relaxed',
-                        log.type === 'command' ? 'text-white font-black' : 'text-slate-300'
+                        'text-[10px] font-black uppercase px-1.5 py-0.5 rounded',
+                        log.agent === 'OmniAgent'
+                          ? 'bg-cyan-500/10 text-cyan-400'
+                          : ' text-slate-400'
                       )}
                     >
-                      {log.message}
-                    </p>
+                      {log.agent}
+                    </span>
+                    {log.type === 'command' && (
+                      <Zap size={10} className="text-amber-400 animate-pulse" />
+                    )}
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  <p
+                    className={cn(
+                      'text-xs leading-relaxed',
+                      log.type === 'command' ? 'text-white font-black' : 'text-slate-300'
+                    )}
+                  >
+                    {log.message}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="p-4 border-t border-white/5 flex items-center gap-4 z-10">

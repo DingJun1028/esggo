@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   LucideIcon,
   Globe,
@@ -233,10 +233,8 @@ function RiskMap() {
 
       {/* Risk Nodes */}
       {RISK_NODES.map((node) => (
-        <motion.div
+        <div
           key={node.id}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
           className="absolute"
           style={{ left: `${node.x}%`, top: `${node.y}%`, transform: 'translate(-50%, -50%)' }}
         >
@@ -261,7 +259,7 @@ function RiskMap() {
               <p className="text-[9px] text-slate-400">{node.details.co2} tCO₂e</p>
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
 
       {/* Legend */}
@@ -367,7 +365,7 @@ function PestelWheel() {
 
       {/* Factor Detail Panel */}
       {activeFactor && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
+        <div className="mt-4">
           {PESTEL_FACTORS.filter((f) => f.id === activeFactor).map((factor) => (
             <OmniBaseCard key={factor.id} className="p-4">
               <div className="flex items-center gap-3 mb-3">
@@ -407,7 +405,7 @@ function PestelWheel() {
               </div>
             </OmniBaseCard>
           ))}
-        </motion.div>
+        </div>
       )}
     </div>
   );
@@ -443,7 +441,7 @@ function RiskAlertCard({ node }: { node: RiskNode }) {
   const config = riskConfig[node.risk];
 
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2 }}
       className={cn('bg-white rounded-xl border p-4 transition-all', config.border)}
     >
@@ -492,7 +490,7 @@ function RiskAlertCard({ node }: { node: RiskNode }) {
       <div className="mt-3 pt-2 border-t border-slate-50 text-[9px] text-slate-400">
         最後稽核: {node.details.lastAudit}
       </div>
-    </motion.div>
+    </div>
   );
 }
 

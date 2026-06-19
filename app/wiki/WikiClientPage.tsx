@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+
 import xss from 'xss';
 import { BookOpen, ShieldCheck, Terminal, Cpu, Search, ChevronRight, Activity, Zap, Database } from 'lucide-react';
 
@@ -223,7 +223,7 @@ ${page.acceptance_5t || ''}
 
         {activeSection && (
           <div className="flex-1 overflow-y-auto custom-scrollbar p-8 md:p-16 relative z-10">
-            <motion.div key={activeSection.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-4xl mx-auto">
+            <div key={activeSection.id} className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <BrandBadge variant="outline" className="text-cyan-400 border-cyan-500/30">
                   Chapter {sections.findIndex(s => s.id === activeSection.id) + 1}
@@ -237,7 +237,7 @@ ${page.acceptance_5t || ''}
               <div className="prose prose-invert max-w-none">
                 {renderMarkdown(activeSection.content)}
               </div>
-            </motion.div>
+            </div>
           </div>
         )}
       </main>

@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic';
 const OmniBaseCard = dynamic(() => import('@/components/ui/omni/OmniBaseCard'), { ssr: false });
 const OmniBadge = dynamic(() => import('@/components/ui/omni/OmniBadge'), { ssr: false });
 import { FileText, Cpu, CheckCircle2, ShieldCheck, FileKey, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ReportBuilderUI() {
   const [loading, setLoading] = useState(false);
@@ -130,25 +129,20 @@ export default function ReportBuilderUI() {
             </button>
           </div>
 
-          <AnimatePresence>
+          
             {errorMsg && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
+              <div
                 className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm font-medium"
               >
                 {errorMsg}
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          
         </OmniBaseCard>
 
-        <AnimatePresence>
+        
           {reportDoc && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+            <div
               className="space-y-6"
             >
               <div className="flex items-center gap-4 flex-wrap">
@@ -178,9 +172,9 @@ export default function ReportBuilderUI() {
                   {reportDoc}
                 </div>
               </OmniBaseCard>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );

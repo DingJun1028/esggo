@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+// framer-motion 已移除，改用原生 CSS transition 避免 SSR 崩潰
 import { ShieldCheck, CheckCircle2, AlertTriangle, TrendingUp, Activity, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FIVE_T_PROTOCOL, FOUR_PLUS_ONE, type FiveTGateCode } from '@/shared/constants/protocol';
@@ -116,11 +116,10 @@ function GateCard({ status, index }: { status: GateStatus; index: number }) {
   const gate = FIVE_T_PROTOCOL[status.gate];
   const isPassed = status.passed;
 
+  // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
+    <div
+      style={{ transition: 'all 0.4s ease' }}
     >
       <OmniPremiumCard
         className={cn(
@@ -185,7 +184,7 @@ function GateCard({ status, index }: { status: GateStatus; index: number }) {
           </div>
         </div>
       </OmniPremiumCard>
-    </motion.div>
+    </div>
   );
 }
 
@@ -348,11 +347,10 @@ export default function FiveTDashboardPage() {
               const isPassed = gateStatus?.passed ?? false;
               const gate = FIVE_T_PROTOCOL[gateStatus?.gate ?? 'T1'];
               return (
-                <motion.div
+                /* 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰 */
+                <div
                   key={key}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
+                  style={{ transition: 'all 0.4s ease' }}
                   className={cn(
                     'bg-white rounded-2xl border p-5 text-center relative overflow-hidden',
                     isPassed ? 'border-slate-100' : 'border-amber-200 bg-amber-50/30'
@@ -390,7 +388,7 @@ export default function FiveTDashboardPage() {
                       {isPassed ? '✓ 已通過' : '⚠ 待改善'}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>

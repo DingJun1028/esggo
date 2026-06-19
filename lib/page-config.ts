@@ -38,32 +38,34 @@ export interface PageSection {
 }
 
 export interface OmniPageConfig {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon?: React.ReactNode;
-  griReference?: string;
-  activeT5Tags: T5Level[];
+   id: string;
+   title: string;
+   subtitle: string;
+   icon?: React.ReactNode;
+   griReference?: string;
+   activeT5Tags: T5Level[];
 
-  // High-level UI Slots
-  primaryActions?: PageAction[];
-  kpis?: PageKpi[];
+   // High-level UI Slots
+   primaryActions?: PageAction[];
+   kpis?: PageKpi[];
 
-  // Content Structure
-  sections: PageSection[];
+   // Content Structure
+   sections: PageSection[];
 
-  // Feature Toggles
-  features?: {
-    useSelectionHouse?: boolean;
-    useProvenance?: boolean;
-    useVoiceInput?: boolean;
-    useAuditLog?: boolean;
-  };
+   // Feature Toggles
+   features?: {
+     useSelectionHouse?: boolean;
+     useProvenance?: boolean;
+     useVoiceInput?: boolean;
+     useAuditLog?: boolean;
+   };
 
-  // Branding Overrides
-  theme?: 'esggo' | 'berkeley' | 'dark-navy' | 'minimal-blue';
-  isOXModule?: boolean;
-}
+   // Branding Overrides
+   theme?: 'esggo' | 'berkeley' | 'dark-navy' | 'minimal-blue';
+   isOXModule?: boolean;
+ }
+
+ export type UniversalPageConfig = OmniPageConfig;
 
 /**
  * Standard mapping for 5T Integrity Descriptions

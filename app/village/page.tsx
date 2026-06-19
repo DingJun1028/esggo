@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import {
   Users,
   MessageSquare,
@@ -176,9 +176,7 @@ function PostCard({ post }: { post: CommunityPost }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className="bg-white rounded-xl border border-slate-100 p-5 hover:shadow-md transition-all"
     >
       {/* Author */}
@@ -237,13 +235,13 @@ function PostCard({ post }: { post: CommunityPost }) {
           <Share2 size={14} className="text-slate-400" />
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function MemberCard({ member }: { member: CommunityMember }) {
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2 }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
@@ -268,7 +266,7 @@ function MemberCard({ member }: { member: CommunityMember }) {
         </div>
         <span className="text-[10px] font-mono font-bold text-[#003262]">{member.points} pts</span>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

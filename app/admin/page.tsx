@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   LucideIcon,
   LayoutDashboard,
@@ -263,10 +263,7 @@ function MetricCard({ metric, index }: { metric: SystemMetric; index: number }) 
   const Icon = metric.icon;
   const isPositive = metric.trend && metric.trend > 0;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
+    <div
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
       <div className="flex items-center justify-between mb-3">
@@ -289,7 +286,7 @@ function MetricCard({ metric, index }: { metric: SystemMetric; index: number }) 
         {metric.unit && <span className="text-sm text-slate-400 ml-1">{metric.unit}</span>}
       </p>
       <p className="text-[10px] text-slate-400 font-medium mt-0.5">{metric.label}</p>
-    </motion.div>
+    </div>
   );
 }
 
@@ -352,7 +349,7 @@ function UserRow({ user }: { user: UserRecord }) {
 
 function RoleCard({ role }: { role: RolePermission }) {
   return (
-    <motion.div
+    <div
       whileHover={{ y: -2 }}
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
@@ -387,7 +384,7 @@ function RoleCard({ role }: { role: RolePermission }) {
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 

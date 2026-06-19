@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Grid3X3, ShieldCheck, Activity, Lock, Globe, 
   ChevronRight, Info, AlertTriangle, CheckCircle2,
@@ -145,7 +145,7 @@ export default function EndToEndMatrixPage() {
                           const isActive = hoveredCell?.stage === stage && hoveredCell?.gate === gate;
                           return (
                             <td key={gate} className="p-0">
-                              <motion.div
+                              <div
                                 whileHover={{ scale: 1.05, y: -4 }}
                                 onHoverStart={() => setHoveredCell({ stage, gate, details: cell! })}
                                 onHoverEnd={() => setHoveredCell(null)}
@@ -163,10 +163,8 @@ export default function EndToEndMatrixPage() {
                                   <div className="flex flex-col items-end">
                                     <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest">{cell?.status}</p>
                                     <div className="w-8 h-1 bg-slate-50 rounded-full mt-1 overflow-hidden">
-                                       <motion.div 
+                                       <div 
                                          className="h-full bg-blue-500"
-                                         initial={{ width: 0 }}
-                                         animate={{ width: cell?.status === 'LOCKED' ? '100%' : '60%' }}
                                        />
                                     </div>
                                   </div>
@@ -179,14 +177,12 @@ export default function EndToEndMatrixPage() {
                                 </p>
 
                                 {isActive && (
-                                  <motion.div 
+                                  <div 
                                     layoutId="cursor-glow"
                                     className="absolute inset-0 rounded-[2.5rem] bg-blue-500/5 pointer-events-none"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
                                   />
                                 )}
-                              </motion.div>
+                              </div>
                             </td>
                           );
                         })}
@@ -254,9 +250,7 @@ export default function EndToEndMatrixPage() {
              <div className="absolute -bottom-20 -right-20 opacity-5 rotate-12">
                 <Grid3X3 size={400} />
              </div>
-             <motion.div 
-               animate={{ y: [0, -10, 0] }}
-               transition={{ duration: 4, repeat: Infinity }}
+             <div
                className="absolute top-1/2 left-0 w-1 h-32 bg-gradient-to-b from-transparent via-[#FDB515]/30 to-transparent" 
              />
           </BrandCard>
@@ -270,11 +264,8 @@ export default function EndToEndMatrixPage() {
           <BrandCard padding="lg" className="h-full border-none shadow-premium bg-white/40 backdrop-blur-xl rounded-[3rem]">
              <div className="space-y-5">
                 {data?.auditTrail.map((log, i) => (
-                  <motion.div 
-                    key={i} 
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
+                  <div 
+                    key={i}
                     className="flex items-center justify-between p-6 bg-white/80 rounded-[2rem] border border-slate-50 group hover:border-[#003262]/20 hover:shadow-xl transition-all cursor-default"
                   >
                      <div className="flex items-center gap-6">
@@ -295,7 +286,7 @@ export default function EndToEndMatrixPage() {
                           {new Date(log.timestamp).toLocaleTimeString()}
                         </p>
                      </div>
-                  </motion.div>
+                  </div>
                 ))}
                 
                 {data?.auditTrail.length === 0 && (

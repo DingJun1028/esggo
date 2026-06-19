@@ -15,7 +15,6 @@ import {
   Globe,
   ArrowRight,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export default function SoulPage() {
   return (

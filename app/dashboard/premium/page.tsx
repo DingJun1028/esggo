@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { 
   Leaf, Users, ShieldCheck, BarChart3, 
   Activity, Database, Zap, Cpu, ArrowRight 
@@ -42,14 +42,12 @@ const DashboardContent = () => {
       {/* Header Section */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-[var(--at-border)]">
         <div className="space-y-3">
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--at-accent)]/10 text-[var(--at-accent)] text-[10px] font-black uppercase tracking-[0.2em] border border-[var(--at-accent)]/20"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--at-accent)] animate-pulse" />
             Live Governance Node
-          </motion.div>
+          </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[var(--at-text-main)]">
             善向永續 <span className="text-transparent bg-clip-text bg-gradient-to-br from-[var(--at-accent)] to-indigo-500">ESG GO</span>
           </h1>
@@ -68,14 +66,13 @@ const DashboardContent = () => {
       </header>
 
       {/* Bento Grid */}
-      <motion.section 
-        variants={container}
+      <section
         initial="hidden"
         animate="show"
         className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-auto md:h-[600px]"
       >
         {/* Environment - Large Card */}
-        <motion.div variants={item} className="md:col-span-2 md:row-span-2 group">
+        <div className="md:col-span-2 md:row-span-2 group">
           <AtomicCard hoverEffect="glow" glassIntensity="medium" className="h-full flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-8">
@@ -108,10 +105,10 @@ const DashboardContent = () => {
                </AtomicButton>
             </div>
           </AtomicCard>
-        </motion.div>
+        </div>
 
         {/* Social - Medium Card */}
-        <motion.div variants={item} className="md:col-span-2 group">
+        <div className="md:col-span-2 group">
           <AtomicCard hoverEffect="lift" glassIntensity="medium" padding="md" className="h-full flex flex-col justify-between">
             <div className="flex justify-between items-start">
               <div className="space-y-2">
@@ -128,19 +125,16 @@ const DashboardContent = () => {
                  <span className="text-blue-500">75%</span>
                </div>
                <div className="h-2 w-full bg-[var(--at-border)] rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: '75%' }}
-                    transition={{ duration: 1, delay: 0.5 }}
+                  <div
                     className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" 
                   />
                </div>
             </div>
           </AtomicCard>
-        </motion.div>
+        </div>
 
         {/* Governance - Medium Card */}
-        <motion.div variants={item} className="group">
+        <div className="group">
            <AtomicCard hoverEffect="lift" glassIntensity="medium" padding="md" className="h-full flex flex-col justify-between relative overflow-hidden">
              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
                 <ShieldCheck size={120} />
@@ -156,10 +150,10 @@ const DashboardContent = () => {
              </div>
              <p className="text-4xl font-black mt-4 text-[var(--at-text-main)] relative z-10">A+</p>
            </AtomicCard>
-        </motion.div>
+        </div>
 
         {/* AI Agent Status - Small Card */}
-        <motion.div variants={item} className="group">
+        <div className="group">
            <AtomicCard hoverEffect="glow" glassIntensity="medium" padding="md" className="h-full flex flex-col items-center justify-center text-center space-y-4">
              <div className="relative">
                 <div className="absolute inset-0 bg-[var(--at-accent)] blur-xl opacity-30 animate-pulse rounded-full" />
@@ -172,14 +166,11 @@ const DashboardContent = () => {
                <p className="text-[9px] text-[var(--at-text-sub)] uppercase tracking-widest mt-1">SustainWrite Active</p>
              </div>
            </AtomicCard>
-        </motion.div>
-      </motion.section>
+        </div>
+      </section>
 
       {/* 5T Integrity Pulse Visualizer */}
-      <motion.section 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+      <section
         className="space-y-4 pt-8"
       >
         <div className="flex items-center justify-between px-2">
@@ -192,7 +183,7 @@ const DashboardContent = () => {
           </span>
         </div>
         <CausalityVisualizer evidence={latestEvidence} />
-      </motion.section>
+      </section>
 
       {/* Footer Meta */}
       <footer className="pt-12 mt-12 border-t border-[var(--at-border)] flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black text-[var(--at-text-sub)] uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-opacity">

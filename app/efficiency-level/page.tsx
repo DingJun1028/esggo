@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import 'framer-motion';
+
 import {
   LucideIcon,
   Zap,
@@ -20,7 +20,7 @@ import {
   ChevronRight,
   RefreshCw,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
@@ -196,10 +196,7 @@ const USER_QUOTES = [
 function MetricCard({ metric, index }: { metric: EfficiencyMetric; index: number }) {
   const Icon = metric.icon;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
       className="bg-white rounded-2xl border border-slate-100 p-5 hover:shadow-lg transition-all"
     >
       <div className="flex items-center gap-3 mb-4">
@@ -227,17 +224,14 @@ function MetricCard({ metric, index }: { metric: EfficiencyMetric; index: number
           <p className="text-sm font-black text-blue-700">{metric.improvement}</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function MilestoneCard({ milestone, index }: { milestone: DayMilestone; index: number }) {
   const Icon = milestone.icon;
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.08 }}
+    <div
       className="flex items-start gap-4"
     >
       <div className="flex flex-col items-center">
@@ -264,7 +258,7 @@ function MilestoneCard({ milestone, index }: { milestone: DayMilestone; index: n
         <h4 className="text-sm font-bold text-[#003262] mb-0.5">{milestone.title}</h4>
         <p className="text-[11px] text-slate-400">{milestone.description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

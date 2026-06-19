@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Trophy, Star, BookOpen, Layout, Globe, Shield, 
   ArrowUpRight, Search, Filter, Download, Zap, Sparkles,
@@ -63,7 +63,7 @@ export default function BestPracticeHubPage() {
   const [searchQuery, setSearchSearchQuery] = useState('');
   const [selectedPractice, setSelectedPractice] = useState<any>(null);
   const [loadingAi, setLoadingAi] = useState(false);
-  const [aiRecommendations, setAiRecommendations] = useState<unknown[]>([]);
+  const [aiRecommendations, setAiRecommendations] = useState<AiRecommendation[]>([]);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'info' | 'error' } | null>(null);
 
   const showToast = useCallback((msg: string, type: 'success' | 'info' | 'error' = 'success') => {
@@ -91,14 +91,14 @@ export default function BestPracticeHubPage() {
     }
   };
 
-  const applyPractice = async (practice: unknown) => {
+const applyPractice = async (practice: AiRecommendation) => {
     showToast(`正在套用：${practice.title}...`, 'info');
     try {
       // 1. Seal the decision with IntegrityService (Best Practice!)
-      await integrityService.sealData('Best_Practice_Application', practice, { 
-        user: 'Admin', 
+      await integrityService.sealData('Best_Practice_Application', practice, {
+        user: 'Admin',
         dept: 'ESG Committee',
-        gri: practice.gri 
+        gri: practice.gri
       });
 
       // 2. Add as a task (Simulated)
@@ -165,12 +165,9 @@ export default function BestPracticeHubPage() {
              </div>
 
              {/* AI Recommendations Section */}
-             <AnimatePresence>
+             
                 {aiRecommendations.length > 0 && activeTab === 'benchmarks' && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
+                  <div
                     className="p-8 bg-blue-50/50 rounded-[2.5rem] border border-blue-200/30 space-y-6"
                   >
                      <div className="flex items-center justify-between">
@@ -196,9 +193,9 @@ export default function BestPracticeHubPage() {
                            </BrandCard>
                         ))}
                      </div>
-                  </motion.div>
+                  </div>
                 )}
-             </AnimatePresence>
+             
 
              {/* Tab Content: Benchmarks */}
              {activeTab === 'benchmarks' && (
@@ -312,7 +309,7 @@ export default function BestPracticeHubPage() {
       <StandardPage config={pageConfig} />
 
       {/* Detail Modal for Benchmarks */}
-      <AnimatePresence>
+      
         {selectedPractice && (
           <BrandModal 
             open={!!selectedPractice} 
@@ -380,15 +377,12 @@ export default function BestPracticeHubPage() {
             </div>
           </BrandModal>
         )}
-      </AnimatePresence>
+      
 
       {/* Toast Notification */}
-      <AnimatePresence>
+      
         {toast && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+          <div
             className={`fixed bottom-8 right-8 z-[100] p-4 rounded-2xl shadow-2xl flex items-center gap-3 min-w-[300px] border backdrop-blur-md ${
               toast.type === 'success' ? 'bg-emerald-500/90 text-white border-emerald-400/50' : 
               toast.type === 'error' ? 'bg-red-500/90 text-white border-red-400/50' :
@@ -397,9 +391,9 @@ export default function BestPracticeHubPage() {
           >
             {toast.type === 'success' ? <CheckCircle2 size={20}/> : toast.type === 'error' ? <Zap size={20}/> : <Bot size={20} className="animate-pulse"/>}
             <p className="text-xs font-black tracking-tight">{toast.msg}</p>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }
