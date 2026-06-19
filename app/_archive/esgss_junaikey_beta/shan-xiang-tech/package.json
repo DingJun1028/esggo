@@ -25,13 +25,13 @@
   "license": "MIT",
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",
-    "axios": "^1.7.4",
+    "axios": "^1.16.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^5.2.1",
     "lowdb": "^6.0.1",
-    "markdown-it": "^13.0.2",
-    "uuid": "^9.0.1"
+    "markdown-it": "^14.2.0",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "eslint": "^8.55.0",
