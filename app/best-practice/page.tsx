@@ -2,17 +2,24 @@
 
 import React, { useState, useCallback } from 'react';
 
-import { 
-  Trophy, Star, BookOpen, Layout, Globe, Shield, 
+import {
+  Trophy, Star, BookOpen, Layout, Globe, Shield,
   ArrowUpRight, Search, Filter, Download, Zap, Sparkles,
   CheckCircle2, Landmark, Target, Award, Eye, FileText,
   Bookmark, Share2, MessageSquare, ChevronRight, List, Bot,
   Loader2, Plus
 } from 'lucide-react';
-import { 
-  BrandCard, BrandButton, BrandBadge, BrandTabs, BrandStatusDot, 
+import {
+  BrandCard, BrandButton, BrandBadge, BrandTabs, BrandStatusDot,
   BrandTable, StandardPage, BrandCardHeader, BrandModal
 } from '../../components/brand';
+
+interface AiRecommendation {
+  title: string;
+  description: string;
+  gri: string;
+  category: string;
+}
 import { UniversalPageConfig } from '../../lib/page-config';
 import { STANDARDS } from '../../lib/standards-data';
 import { integrityService } from '../../lib/services/integrity-service';
@@ -299,7 +306,7 @@ const applyPractice = async (practice: AiRecommendation) => {
 
   
   const p = {
-    id: `ESG-${dirName.substring(0,3).toUpperCase()}`,
+    id: `ESG-BPR`,
     title: 'Best Practice',
     sub: 'Best Practice Management'
   };
