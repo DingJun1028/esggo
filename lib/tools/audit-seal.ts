@@ -8,14 +8,15 @@ export const auditSealTool = ai.defineTool({
   description: 'Validate evidence hash lock and record audit trail.',
   inputSchema: z.object({
     evidenceId: z.string(),
+    expectedHash: z.string().optional(),
   }),
-}, async ({ evidenceId }: any) => {
+}, async ({ evidenceId, expectedHash }: any) => {
   const evidence = (await getEvidenceFiles()).find((e: any) => e.id === evidenceId);
   const startTime = Date.now();
   
   if (!evidence) return { status: 'not_found' };
   
-  const valid = evidence.hash_lock === evidence.hash_lock;
+  const valid = expectedHash ? evidence.hash_lock === expectedHash : !!evidence.hash_lock;
   if (!valid) return { status: 'invalid' };
   
   // Record telemetry for successful seal
@@ -42,8 +43,9 @@ export const auditSealValidationTool = ai.defineTool({
   inputSchema: z.object({
     evidenceId: z.string(),
     action: z.enum(['verify', 'reject']),
+    expectedHash: z.string().optional(),
   }),
-}, async ({ evidenceId, action }: any) => {
+}, async ({ evidenceId, action, expectedHash }: any) => {
   const startTime = Date.now();
   const evidence = (await getEvidenceFiles()).find((e: any) => e.id === evidenceId);
   
@@ -63,7 +65,7 @@ export const auditSealValidationTool = ai.defineTool({
 
   let result;
   if (action === 'verify') {
-    const valid = evidence.hash_lock === evidence.hash_lock;
+    const valid = expectedHash ? evidence.hash_lock === expectedHash : !!evidence.hash_lock;
     if (!valid) {
       result = { status: 'invalid' };
     } else {
