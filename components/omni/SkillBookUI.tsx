@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Sparkles, BookOpen, Layers, Zap } from 'lucide-react';
 import { MemoryShard, SkillUltimate } from '@/lib/agent/memory-shards';
 
@@ -103,13 +103,10 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
               </tr>
             </thead>
             <tbody>
-              <AnimatePresence>
+              
                 {shards.map((shard, idx) => (
-                  <motion.tr
+                  <tr
                     key={shard.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: idx * 0.1 }}
                     className="border-b border-cyan-800/20 hover:bg-cyan-900/20 transition-colors group"
                   >
                     <td className="p-3">
@@ -148,9 +145,9 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
                         0x{shard.id.replace(/-/g, '').substring(0, 16)}...
                       </div>
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))}
-              </AnimatePresence>
+              
             </tbody>
           </table>
           {shards.length === 0 && (
@@ -167,8 +164,7 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
 
         {/* Synthesis Action */}
         <div className="flex justify-center pt-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
+          <button
             whileTap={{ scale: 0.95 }}
             onClick={handleSynthesize}
             disabled={shards.length < 2 || isSynthesizing || !!ultimate}
@@ -184,15 +180,13 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
               <Zap className="w-5 h-5" />
             )}
             領悟完整技能奧義
-          </motion.button>
+          </button>
         </div>
 
         {/* Ultimate Skill Display */}
-        <AnimatePresence>
+        
           {ultimate && (
-            <motion.div
-              initial={{ opacity: 0, y: 30, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
+            <div
               className="mt-6 p-6 rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 to-slate-900/60 shadow-[0_0_30px_rgba(16,185,129,0.2)] overflow-hidden relative"
             >
               <div className="absolute top-0 right-0 p-4 opacity-10">
@@ -224,9 +218,9 @@ Agent: "好的，我為您覆寫了 app/api/omni-table/route.ts，使用了 fetc
                   </ul>
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </div>
     </div>
   );

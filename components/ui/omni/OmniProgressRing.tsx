@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { cn } from '@/lib/utils';
 
 export interface OmniProgressRingProps {
@@ -49,7 +49,7 @@ export function OmniProgressRing({
         />
         
         {/* Progress */}
-        <motion.circle
+        <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -57,25 +57,19 @@ export function OmniProgressRing({
           stroke={color}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
-          strokeDasharray={circumference}
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }} // Custom spring-like ease
+          strokeDasharray={circumference} // Custom spring-like ease
           className="transition-colors duration-300"
         />
       </svg>
 
       {/* Center Label */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <motion.span 
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+        <span
           className="text-2xl font-black tracking-tight"
           style={{ color: '#003262' }} // Berkeley Blue
         >
           {percentage}%
-        </motion.span>
+        </span>
         {title && (
           <span className="text-[9px] text-slate-400 font-bold uppercase mt-0.5 tracking-wider">
             {title}

@@ -41,17 +41,22 @@ export async function POST(req: Request) {
       }
 
       // 將 DB 的 snake_case 轉回 camelCase 介面
-      const mappedShards: MemoryShard[] = shards.map(s => ({
+      const mappedShards: MemoryShard[] = shards.map((s: any) => ({
         id: s.id,
-        title: s.title,
-        description: s.description,
-        tags: s.tags,
+        title: s.title ?? '',
+        description: s.description ?? '',
+        tags: s.tags ?? [],
         extractedCodeSnippets: s.extracted_code_snippets ?? [],
         entropyLevel: s.entropy_level ?? 50,
         importanceScore: s.importance_score ?? 0.5,
-        timestamp: s.timestamp,
+        timestamp: s.timestamp ?? Date.now(),
         sourceType: s.source_type ?? 'auto_extract',
-        usageCount: s.usage_count ?? 0
+        sourceId: s.source_id,
+        usageCount: s.usage_count ?? 0,
+        lastUsedAt: s.last_used_at,
+        createdAt: s.created_at ?? new Date().toISOString(),
+        updatedAt: s.updated_at ?? new Date().toISOString(),
+        metadata: s.metadata ?? {}
       }));
 
       // 2. 觸發技能奧義合成

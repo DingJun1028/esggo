@@ -7,10 +7,10 @@ type AgentEventCallback = (data: any) => void;
 
 export class OmniAgentBus {
   private subscribers: Map<string, AgentEventCallback[]> = new Map();
-  private _uptime: number = 0;
   private _startTime: number = Date.now();
   private _errorCount: number = 0;
   private _totalEvents: number = 0;
+  private autonomyTimer: NodeJS.Timeout | null = null;
 
   publish(event: string, data: any): void {
     this._totalEvents++;
@@ -47,8 +47,23 @@ export class OmniAgentBus {
     };
   }
 
-  registerBroadcastHook(): void {
+  registerBroadcastHook(_callback?: (event: string, payload: any) => void): void {
     // Placeholder for broadcast hook registration
+  }
+
+  executeCelestialCommand(_cmd: string): Promise<string> {
+    return Promise.resolve('Celestial command executed');
+  }
+
+  startAutonomy(_intervalMs: number): void {
+    console.log(`[Autonomy] Started with interval`);
+  }
+
+  stopAutonomy(): void {
+    if (this.autonomyTimer) {
+      clearInterval(this.autonomyTimer);
+      this.autonomyTimer = null;
+    }
   }
 }
 

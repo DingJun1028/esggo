@@ -6,7 +6,6 @@ import { Badge } from './Badge';
 import { Button } from './Button';
 import { Shield, CheckCircle2, XCircle, Search, Database, Cpu, Zap, Fingerprint } from 'lucide-react';
 import { verifySnarkJSProof, ZKPRangeProof, ZKPVerifyResult } from '../../lib/crypto-proof';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface Props {
   proof: ZKPRangeProof;
@@ -124,11 +123,9 @@ export function ZKPRangeProofVisualizer({ proof, title = 'ZKP 隱私區間驗證
         </div>
 
         {/* Verification Steps */}
-        <AnimatePresence>
+        
           {result && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+            <div
               className="space-y-2 pt-2 border-t border-slate-100 overflow-hidden"
             >
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">驗證路徑 (Audit Trail)</p>
@@ -166,9 +163,9 @@ export function ZKPRangeProofVisualizer({ proof, title = 'ZKP 隱私區間驗證
               <div className="text-[9px] text-center text-slate-400 font-mono">
                 Total Verification Time: {result.timeTaken}ms | 5T v1.1.0
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        
       </CardContent>
     </Card>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import { ShieldCheck, Lock, Fingerprint, Activity } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -79,14 +79,8 @@ export default function OmniAuthOmni() {
             </span>
           </div>
           <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden border border-white/5">
-            <motion.div
-              initial={{ width: '0%' }}
-              animate={{
-                width:
-                  status === 'authenticating' ? '40%' : status === 'verifying_5T' ? '80%' : '100%',
-              }}
+            <div
               className={`h-full ${status === 'success' ? 'bg-emerald-400' : 'bg-cyan-400'}`}
-              transition={{ duration: 0.5 }}
             />
           </div>
         </div>

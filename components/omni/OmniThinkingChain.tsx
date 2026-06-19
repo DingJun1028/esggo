@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Brain,
   Zap,
@@ -208,10 +208,7 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -12 }}
-      animate={{ opacity: isPending ? 0.35 : 1, x: 0 }}
-      transition={{ delay: index * 0.04, duration: 0.3 }}
+    <div
       style={{ marginLeft: indent }}
       className="relative"
     >
@@ -238,23 +235,19 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
           {isDone ? (
             <CheckCircle size={14} className="text-emerald-400" />
           ) : isFailed ? (
-            <motion.div animate={{ x: [-2, 2, -2, 2, 0] }} transition={{ duration: 0.4 }}>
+            <div>
               <Icon size={14} className={iconColor} />
-            </motion.div>
+            </div>
           ) : isFallback ? (
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            <div
             >
               <Icon size={14} className={iconColor} />
-            </motion.div>
+            </div>
           ) : isActive ? (
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            <div
             >
               <Icon size={14} className={iconColor} />
-            </motion.div>
+            </div>
           ) : (
             <Circle size={10} className="text-white/20" />
           )}
@@ -295,12 +288,9 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
             </span>
           </div>
 
-          <AnimatePresence>
+          
             {(isActive || isDone || isFailed || isFallback) && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
+              <p
                 className={`text-[10px] leading-relaxed font-mono ${
                   isDone
                     ? 'text-white/30'
@@ -312,15 +302,13 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
                 }`}
               >
                 {step.detail}
-              </motion.p>
+              </p>
             )}
-          </AnimatePresence>
+          
 
           {/* Active typing cursor */}
           {(isActive || isFallback) && (
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.6, repeat: Infinity }}
+            <span
               className={`inline-block w-1 h-3 ml-1 rounded-sm ${iconColor.replace(
                 'text-',
                 'bg-'
@@ -332,7 +320,7 @@ const ThinkingNode = ({ step, index }: { step: ThinkingStep; index: number }) =>
         {/* Done tick line */}
         {isDone && <ChevronRight size={12} className="text-white/15 flex-shrink-0 mt-1" />}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -342,11 +330,9 @@ const RadarRing = ({ active }: { active: boolean }) => (
     {active && (
       <>
         {[0, 1, 2].map((i) => (
-          <motion.div
+          <div
             key={i}
             className="absolute inset-0 rounded-full border border-violet-400/30"
-            animate={{ scale: [1, 1.8 + i * 0.4], opacity: [0.6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.4, ease: 'easeOut' }}
           />
         ))}
       </>
@@ -474,11 +460,7 @@ export function OmniThinkingChain({
   const cfg = PHASE_CONFIG[currentPhase] || PHASE_CONFIG.seal;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -8, scale: 0.97 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+    <div
       className={`rounded-3xl overflow-hidden border border-white/8 bg-slate-950/70 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.07)] ${
         compact ? 'max-w-sm' : 'w-full'
       }`}
@@ -495,9 +477,7 @@ export function OmniThinkingChain({
               {done ? 'COMPLETE' : cfg.label}
             </span>
             {!done && (
-              <motion.div
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 1.2, repeat: Infinity }}
+              <div
                 className="flex gap-0.5"
               >
                 {[0, 1, 2].map((i) => (
@@ -506,7 +486,7 @@ export function OmniThinkingChain({
                     className={`w-1 h-1 rounded-full ${cfg.color.replace('text-', 'bg-')}`}
                   />
                 ))}
-              </motion.div>
+              </div>
             )}
           </div>
           <p className="text-xs font-bold text-white/70 truncate">{title}</p>
@@ -525,14 +505,13 @@ export function OmniThinkingChain({
           </span>
         </div>
         <div className="h-1 rounded-full overflow-hidden">
-          <motion.div
+          <div
             className={`h-full rounded-full ${
               done
                 ? 'bg-emerald-400'
                 : `bg-gradient-to-r from-violet-500 to-${cfg.color.split('-')[1]}-400`
             }`}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
             style={{
               background: done
                 ? '#34d399'
@@ -565,15 +544,13 @@ export function OmniThinkingChain({
           OmniAgent · OmniAgent Core · 5T Protocol
         </span>
         {done && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+          <span
             className="text-[9px] font-black text-emerald-400 font-mono"
           >
             ✓ SEALED
-          </motion.span>
+          </span>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

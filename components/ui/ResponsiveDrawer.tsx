@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -52,14 +52,11 @@ export default function ResponsiveDrawer({
     }
   }, [isOpen]);
 
-  return (
-    <AnimatePresence>
+return (
+    <>
       {isOpen && (
         <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             className={cn('fixed inset-0   z-50', overlayClassName)}
             onClick={onClose}
           />
@@ -89,6 +86,6 @@ export default function ResponsiveDrawer({
           </aside>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }

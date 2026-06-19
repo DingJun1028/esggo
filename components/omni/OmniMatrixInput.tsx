@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Send, Sparkles, BrainCircuit, Activity, Bot, Database, Zap } from 'lucide-react';
 
 const SIX_FORMS = [
@@ -82,12 +82,9 @@ export default function OmniMatrixInput({ collapsed = false }: { collapsed?: boo
       </div>
 
       {/* Six Forms Visualizer (Only visible when running) */}
-      <AnimatePresence>
+      
         {status === 'running' && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+          <div
             className="flex justify-between px-3 py-3 border-b border-white/5"
           >
             {SIX_FORMS.map((form, idx) => {
@@ -116,9 +113,9 @@ export default function OmniMatrixInput({ collapsed = false }: { collapsed?: boo
                 </div>
               );
             })}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
       {/* Input Area */}
       <form onSubmit={handleSubmit} className="p-2 relative">
@@ -140,11 +137,9 @@ export default function OmniMatrixInput({ collapsed = false }: { collapsed?: boo
       </form>
 
       {/* Result Display */}
-      <AnimatePresence>
+      
         {(status === 'success' || status === 'error') && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div
             className={`px-3 py-2 text-xs border-t ${
               status === 'success'
                 ? 'bg-green-500/10 border-green-500/20 text-green-400'
@@ -175,9 +170,9 @@ export default function OmniMatrixInput({ collapsed = false }: { collapsed?: boo
               </div>
             )}
             {status === 'error' && <div className="mt-1 opacity-80">{result}</div>}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }

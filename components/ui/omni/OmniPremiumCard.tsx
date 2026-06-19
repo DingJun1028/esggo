@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
+
 import { cn } from '@/lib/utils';
 
 export interface OmniPremiumCardProps extends HTMLMotionProps<"div"> {
@@ -18,9 +18,8 @@ export function OmniPremiumCard({
   ...props
 }: OmniPremiumCardProps) {
   return (
-    <motion.div
+    <div
       whileHover={interactive ? { y: -4, scale: 1.01 } : {}}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       className={cn(
         'relative bg-white rounded-2xl p-6 transition-all duration-300',
         'border border-slate-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]',
@@ -36,6 +35,6 @@ export function OmniPremiumCard({
       <div className="relative z-10 w-full h-full">
         {children}
       </div>
-    </motion.div>
+    </div>
   );
 }

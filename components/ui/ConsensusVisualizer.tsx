@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { 
   Users, Bot, CheckCircle2, XCircle, AlertCircle, 
   Zap, Shield, MessageSquare, ArrowRight 
@@ -34,8 +34,8 @@ export function ConsensusVisualizer({ result }: Props) {
                 <div className="text-4xl font-black font-mono tracking-tighter">{result.consensusScore}%</div>
              </div>
              {/* Swarm Animation Rings */}
-             <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: 'linear' }} className="absolute inset-0 border-2 border-dashed border-white/20 rounded-full scale-125" />
-             <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} className="absolute inset-0 border border-white/10 rounded-full scale-150" />
+             <div className="absolute inset-0 border-2 border-dashed border-white/20 rounded-full scale-125" />
+             <div className="absolute inset-0 border border-white/10 rounded-full scale-150" />
           </div>
 
           <div>
@@ -52,11 +52,8 @@ export function ConsensusVisualizer({ result }: Props) {
         {result.opinions.map((opinion, idx) => {
           const Meta = VOTE_META[opinion.vote];
           return (
-            <motion.div
+            <div
               key={opinion.agentId}
-              initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.1 }}
             >
               <BrandCard padding="md" className="h-full hover:border-blue-200 transition-all flex flex-col gap-4">
                 <div className="flex justify-between items-start">
@@ -81,7 +78,7 @@ export function ConsensusVisualizer({ result }: Props) {
                    </p>
                 </div>
               </BrandCard>
-            </motion.div>
+            </div>
           );
         })}
       </div>

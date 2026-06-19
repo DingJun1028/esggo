@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import Protocol5TStrip from './Protocol5TStrip';
 
 export interface OmniKpiCardProps {
@@ -28,9 +28,7 @@ export default function OmniKpiCard({
   const isPositive = trend && trend >= 0;
 
   return (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.01 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    <div
       className={`relative p-6 rounded-2xl bg-white border border-slate-100 overflow-hidden group shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       {/* Background Glow */}
@@ -91,6 +89,6 @@ export default function OmniKpiCard({
         </div>
         <Protocol5TStrip status={fiveTStatus} showLabels={false} />
       </div>
-    </motion.div>
+    </div>
   );
 }

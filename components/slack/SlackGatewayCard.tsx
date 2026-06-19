@@ -11,7 +11,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   MessageSquare,
   Send,
@@ -174,22 +174,17 @@ SLACK_HOME_CHANNEL=C...`}</pre>
       )}
 
       {/* ── 推播記錄 ─────────────────────────── */}
-      <AnimatePresence>
+      
         {pushLog.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+          <div
             className="space-y-1.5"
           >
             <p className="text-xs text-slate-500 font-mono uppercase tracking-widest mb-2">
               Recent Pushes
             </p>
             {pushLog.map((log) => (
-              <motion.div
+              <div
                 key={log.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
                 className="flex items-center justify-between text-xs rounded-lg px-3 py-2 border border-white/5"
               >
                 <div className="flex items-center gap-2 overflow-hidden">
@@ -202,11 +197,11 @@ SLACK_HOME_CHANNEL=C...`}</pre>
                   <span className="text-cyan-400 font-mono font-bold shrink-0">{log.score}分</span>
                 </div>
                 <span className="text-slate-600 shrink-0 ml-2">{log.time}</span>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
       {/* ── Footer 快捷指令提示 ───────────────── */}
       <div className="border-t border-white/5 pt-4 flex flex-wrap gap-2">

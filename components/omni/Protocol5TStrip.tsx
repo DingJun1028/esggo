@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { FIVE_T_PROTOCOL, type FiveTGateCode } from '@/shared/constants/protocol';
 
 export interface Protocol5TStripProps {
@@ -53,10 +53,8 @@ export default function Protocol5TStrip({
 
       {/* Progress Bar */}
       <div className={`relative ${s.bar} w-full bg-slate-100 rounded-full overflow-hidden`}>
-        <motion.div
-          initial={{ width: 0 }}
+        <div
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 1, ease: 'easeOut' }}
           className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 via-emerald-500 to-amber-500 rounded-full"
         />
       </div>

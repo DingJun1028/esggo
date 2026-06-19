@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Globe,
   Users,
@@ -143,8 +143,7 @@ export default function OmniAllianceHub() {
           </h3>
           <div className="space-y-3">
             {nodes.map((node) => (
-              <motion.div
-                whileHover={{ scale: 1.02 }}
+              <div
                 key={node.id}
                 onClick={() => setActiveNode(node.id)}
                 className={`p-4 rounded-2xl border cursor-pointer transition-all ${
@@ -167,7 +166,7 @@ export default function OmniAllianceHub() {
                   </span>
                   <span className="text-blue-400 font-mono">TS: {node.trustScore}</span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -177,13 +176,10 @@ export default function OmniAllianceHub() {
           <div className="flex-1 rounded-3xl border border-white/10 p-6 flex flex-col items-center justify-center relative min-h-[300px]">
             <div className="absolute inset-0 cyber-grid opacity-30 pointer-events-none rounded-3xl" />
 
-            <AnimatePresence mode="wait">
+            
               {!activeNode ? (
-                <motion.div
+                <div
                   key="empty"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
                   className="flex flex-col items-center"
                 >
                   <Activity size={48} className="text-blue-500/30 mb-4 animate-pulse" />
@@ -193,13 +189,10 @@ export default function OmniAllianceHub() {
                   <p className="text-xs text-slate-500 mt-2">
                     Select a node to view causal relationships
                   </p>
-                </motion.div>
+                </div>
               ) : (
-                <motion.div
+                <div
                   key="report"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
                   className="w-full h-full flex flex-col z-10"
                 >
                   <div className="flex items-center gap-3 mb-6">
@@ -233,9 +226,9 @@ export default function OmniAllianceHub() {
                       <p>Ready to verify {activeNodeData?.name}</p>
                     </div>
                   )}
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
           </div>
 
           <div className="h-24 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-2xl border border-blue-500/20 flex flex-col md:flex-row items-center justify-between px-8 gap-4 py-4 md:py-0">

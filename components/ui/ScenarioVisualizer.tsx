@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+
 import { TrendingDown, TrendingUp, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
 import { BrandCard, BrandBadge, BrandProgress } from '../brand';
 import { ProjectionResult } from '../../lib/digital-twin-engine';
@@ -47,8 +47,7 @@ export function ScenarioVisualizer({ result }: Props) {
                   <span>{Math.round(original).toLocaleString()}</span>
                 </div>
                 <div className="h-1.5 bg-slate-50 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }} 
+                  <div 
                     animate={{ width: `${(projected / (original * 1.5)) * 100}%` }} 
                     className={cn("h-full", isReduction ? "bg-emerald-500" : "bg-red-500")} 
                   />
@@ -80,7 +79,7 @@ export function ScenarioVisualizer({ result }: Props) {
                   <p className="text-[10px] text-red-500 font-medium">⚠️ {val.violations[0]}</p>
                 )}
                 <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
-                  <motion.div initial={{ width: 0 }} animate={{ width: `${val.score}%` }} className={cn("h-full", val.score > 80 ? "bg-emerald-500" : "bg-blue-500")} />
+                  <div animate={{ width: `${val.score}%` }} className={cn("h-full", val.score > 80 ? "bg-emerald-500" : "bg-blue-500")} />
                 </div>
               </div>
             </div>
