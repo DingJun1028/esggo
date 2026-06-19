@@ -147,9 +147,8 @@ export const useSustainWriteStore = create<SustainWriteState>()(
                     chapter_order: chapterOrder, gri_references: griRefs
                 };
 
-                try { localStorage.setItem(localKey, JSON.stringify(draftPayload)); } catch (e) { }
-
                 autoSaveTimeout = setTimeout(() => {
+                    try { localStorage.setItem(localKey, JSON.stringify(draftPayload)); } catch (e) { }
                     saveSustainWriteSection(draftPayload)
                         .then(() => {
                             set({ lastSaved: new Date(), syncError: false });
