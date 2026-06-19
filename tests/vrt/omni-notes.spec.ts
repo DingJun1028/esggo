@@ -22,7 +22,7 @@ test.describe('OmniNotes Workspace (5T Protocol)', () => {
     await page.goto('/omni-notes');
     
     // Fill the markdown editor with a checklist
-    const textarea = page.locator('textarea[placeholder*="Markdown"]');
+    const textarea = page.locator('textarea[placeholder*="Markdown"], textarea[placeholder*="Markdown"]');
     await textarea.fill('# E2E Test Note\n\n- [ ] E2E Trackable Task 1\n- [x] E2E Done Task 2\n');
     
     // Click Extract Tasks

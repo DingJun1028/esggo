@@ -1,0 +1,41 @@
+'use client';
+
+import React from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
+import { cn } from '@/lib/utils';
+
+export interface OmniPremiumCardProps extends HTMLMotionProps<"div"> {
+  children: React.ReactNode;
+  interactive?: boolean;
+  active?: boolean;
+}
+
+export function OmniPremiumCard({
+  children,
+  className,
+  interactive = true,
+  active = false,
+  ...props
+}: OmniPremiumCardProps) {
+  return (
+    <motion.div
+      whileHover={interactive ? { y: -4, scale: 1.01 } : {}}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      className={cn(
+        'relative bg-white rounded-2xl p-6 transition-all duration-300',
+        'border border-slate-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]',
+        interactive && 'cursor-pointer hover:shadow-[0_12px_30px_-6px_rgba(0,0,0,0.08)] hover:border-slate-200',
+        active && 'ring-2 ring-[#003262] ring-offset-2 border-transparent',
+        className
+      )}
+      {...props}
+    >
+      {/* Subtle top highlight to give a premium 3D feel without dark mode glassy effects */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80" />
+      
+      <div className="relative z-10 w-full h-full">
+        {children}
+      </div>
+    </motion.div>
+  );
+}

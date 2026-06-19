@@ -1,17 +1,15 @@
 # ESG GO — OmniAgent Project Context
-
 # 自動注入每次 session，保持簡潔（每字元消耗 token 預算）
 
 ## 專案架構
-
-- **框架**：Next.js 16 App Router + TypeScript（strict mode）
+- **框架**：Next.js 15 App Router + TypeScript（strict mode）
 - **資料庫**：Supabase Postgres（主）+ Firebase Firestore（ESG evidence vault）
-- **AI**：Mistral Small 3.1 24B (OpenRouter) + Local Qwen3 8B fallback
-- **UI**：ESGGO 善向永續 主題 (綠色永續專業)
+- **AI**：Genkit JS（AI Flow pipeline）、Firebase AI Logic（Gemini API）
+- **UI**：Liquid Glass Cyan 設計語言（`#06b6d4` · `#10b981` · `#020617`）
 - **測試**：Vitest（單元）+ Playwright（E2E）
+- **部署**：Firebase App Hosting（`main` 分支自動觸發）
 
 ## 目錄結構
-
 ```
 app/          Next.js App Router 頁面
 src/core/     T5Protocol、BerkeleyComponent（核心治理邏輯）
@@ -22,14 +20,12 @@ components/   Liquid Glass 元件庫
 ```
 
 ## 型別合規規則（必遵）
-
 - `IEvidence` 欄位：`formula_ref` · `tangible_metric` · `source_origin` · `lifecycle_hooks`
 - `IComponentCore` 必須實作：`formula` · `impact_metric` · `status` · `hash_lock`
 - **不可使用**過時欄位：`iso_standard_ref` · `id` · `hash_value` · `lifecycle_path`
 - 所有寫入操作自動附帶：`uuid` · `version` · `timestamp` · `source_origin`
 
 ## 編碼規範
-
 - 使用 `async/await`，禁止 `.then()` 鏈式寫法
 - 禁止 `any` 型別（strict TypeScript）
 - 測試指令：`npx vitest run`（單元）/ `npx playwright test`（E2E）
@@ -37,7 +33,6 @@ components/   Liquid Glass 元件庫
 - **不可直接編輯** Supabase migration 檔案，使用 CLI 生成
 
 ## MCP 工具路由原則
-
 - **Firestore 查詢** → `firebase-mcp-server`（偏好）或 `mcp_firebase-mcp-server_*`
 - **資料庫操作** → `nocodebackend`（NCB API）
 - **UI 設計** → `StitchMCP`（可並行）
@@ -45,34 +40,22 @@ components/   Liquid Glass 元件庫
 - **破壞性操作**（刪除、清除）→ 必須先詢問使用者確認，再執行
 
 ## 安全邊界
-
 - 絕不生成含明文密鑰的程式碼（使用環境變數）
 - Supabase RLS 必須在任何公開端點前啟用
 - Hash Lock 一旦套用，不可靜默修改 evidence 記錄
 - Firebase 黑名單操作：`firestore_delete_database` · `firestore_delete_document` · `firebase_delete_app`
 
-## 子代理委派與 L-Hub 路由指引 (Sub-Agent & L-Hub Routing)
-
-- **L-Hub 輕量委派**：遇到翻譯、總結、文件撰寫、長文本整理，或輕量型決策建議時，優先使用 `mcp_lhub_ai_ask()` 委派。
-- **多模型共識**：若需比較多個方案或投票，使用 `mcp_lhub_ai_multi_ask()` 或 `mcp_lhub_ai_consensus()`。
-- **子代理隔離**：子代理對父對話一無所知，`context` 必須自給自足。
-- **競爭危害防護**：兩個子代理（或 L-Hub 呼叫）不可同時修改同一檔案（Race Condition）。
-- **無聲執行**：使用 `[SILENT]` 避免排程任務洗版通知頻道。
+## 子代理委派指引
+- 子代理對父對話一無所知，`context` 必須自給自足
+- 兩個子代理不可同時修改同一檔案（race condition）
+- 並行研究 / 程式碼審查 → 使用 `delegate_task`
+- 機械式多步驟（有邏輯關聯）→ 直接 `execute_code`
+- 使用 `[SILENT]` 避免排程任務洗版通知頻道
 
 ## 常用指令
-
 ```bash
 npm run dev          # 啟動開發伺服器（port 3000）
 npx vitest run       # 執行單元測試
 npm run build        # 驗證生產構建（只在確認正確性時執行）
 git push origin main # 觸發 Firebase App Hosting 自動部署
 ```
-
-## 🤖 萬能元件代理 (OmniComponentAgent) 委派與職責
-
-- **代理識別 (Identity)**：`OmniComponentAgent` (萬能元件代理)
-- **核心職責 (Core Responsibilities)**：
-  1. **萬能工廠 (OmniFactory)**：自動生成、重構與優化「萬能元件·終極矩陣」中所列全部一級功能與通用基礎元件。
-  2. **萬能交付 (OmniDelivery)**：全自動稽核、校驗與確信產品交付狀態，保證 100% 符合 5T 協議、TypeScript 嚴格型別、無障礙 WCAG AA、以及 Vitest 單元測試標準。
-  3. **自動註冊與治理**：自治向「萬能元件中心」完成註冊，同步最新交付狀態、時序戳記、更新日期與痛點解決方案。
-- **神聖授權 (Supreme Directives)**：本代理具備獨立自治編排權，聽從 OmniAgent Swarm 集體召喚，自動化消除代碼冗餘，達成「零重複、全複用、強一致」的終極治理狀態。

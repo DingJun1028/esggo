@@ -6,6 +6,8 @@ import { ShieldCheck, CheckCircle2, AlertTriangle, TrendingUp, Activity, Zap } f
 import { cn } from '@/lib/utils';
 import { FIVE_T_PROTOCOL, FOUR_PLUS_ONE, type FiveTGateCode } from '@/shared/constants/protocol';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniPremiumCard } from '@/components/ui/omni/OmniPremiumCard';
+import { OmniProgressRing } from '@/components/ui/omni/OmniProgressRing';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
 /* ─── Types ─── */
@@ -116,35 +118,23 @@ function GateCard({ status, index }: { status: GateStatus; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08 }}
-      className={cn(
-        'bg-white rounded-2xl border p-5 transition-all duration-300 relative overflow-hidden',
-        isPassed ? 'border-slate-100 hover:shadow-lg' : 'border-amber-200 bg-amber-50/30'
-      )}
+      transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
     >
-      {/* Breathing Glow Background */}
-      {isPassed && (
-        <div
-          className={cn(
-            'absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-20 blur-2xl',
-            gate.bgColor
-          )}
-          style={{ animation: 'breathingGlow 3s ease-in-out infinite' }}
-        />
-      )}
-
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
+      <OmniPremiumCard
+        className={cn(
+          'p-5 h-full flex flex-col justify-between',
+          !isPassed && 'border-amber-200 bg-amber-50/50'
+        )}
+      >
+        <div className="flex items-start justify-between mb-2">
           <div className="flex items-center gap-3">
-            {/* Gate Icon with Breathing Glow */}
             <div className="relative">
               <div
                 className={cn(
-                  'w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-lg',
-                  gate.bgColor,
-                  isPassed && 'breathing-glow'
+                  'w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-sm',
+                  gate.bgColor
                 )}
               >
                 {gate.zh}
@@ -158,48 +148,43 @@ function GateCard({ status, index }: { status: GateStatus; index: number }) {
             </div>
             <div>
               <h3 className="text-sm font-bold text-[#003262]">{gate.title}</h3>
-              <p className="text-[10px] text-slate-400">{gate.shortDesc}</p>
+              <p className="text-[10px] text-slate-400 font-mono">{gate.shortDesc}</p>
             </div>
           </div>
-          {isPassed ? (
-            <CheckCircle2 size={20} className="text-emerald-500" />
-          ) : (
-            <AlertTriangle size={20} className="text-amber-500" />
-          )}
         </div>
 
-        <p className="text-xs text-slate-500 leading-relaxed mb-4">{gate.fullDesc}</p>
+        <p className="text-xs text-slate-500 leading-relaxed my-4 flex-grow">{gate.fullDesc}</p>
 
-        <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <Activity size={12} className="text-slate-400" />
-            <span className="text-slate-400">證據數</span>
-            <span className="font-mono font-bold text-[#003262]">{status.evidenceCount}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <TrendingUp size={12} className="text-slate-400" />
-            <span className="text-slate-400">評分</span>
-            <span
-              className={cn(
-                'font-mono font-bold',
-                isPassed ? 'text-emerald-600' : 'text-amber-600'
+        <div className="flex items-end justify-between mt-auto">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Activity size={14} className="text-cyan-500" />
+              <span className="text-xs text-slate-400 font-medium">證據數量</span>
+              <span className="text-sm font-mono font-black text-[#003262] bg-slate-100 px-2 py-0.5 rounded-md">
+                {status.evidenceCount}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {isPassed ? (
+                <CheckCircle2 size={14} className="text-emerald-500" />
+              ) : (
+                <AlertTriangle size={14} className="text-amber-500" />
               )}
-            >
-              {status.score}%
-            </span>
+              <span className="text-xs font-bold" style={{ color: isPassed ? '#10b981' : '#f59e0b' }}>
+                {isPassed ? '門徑安全 (Secured)' : '需改善 (Warning)'}
+              </span>
+            </div>
+          </div>
+          
+          <div className="-mb-2 -mr-2">
+            <OmniProgressRing 
+              percentage={status.score} 
+              size={80} 
+              color={isPassed ? '#10b981' : '#f59e0b'} 
+            />
           </div>
         </div>
-
-        {/* Score Bar */}
-        <div className="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${status.score}%` }}
-            transition={{ duration: 0.8 }}
-            className={cn('h-full rounded-full', isPassed ? 'bg-emerald-500' : 'bg-amber-500')}
-          />
-        </div>
-      </div>
+      </OmniPremiumCard>
     </motion.div>
   );
 }
@@ -251,10 +236,10 @@ export default function FiveTDashboardPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6 relative overflow-hidden">
-          {/* Background Breathing Glow */}
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-cyan-100/30 rounded-full blur-3xl breathing-glow" />
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-amber-100/20 rounded-full blur-3xl breathing-glow-amber" />
+        <OmniPremiumCard className="p-6 md:p-8" interactive={false}>
+          {/* Background Ambient Glows */}
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-cyan-50/50 rounded-full blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-[#FDB515]/10 rounded-full blur-3xl" />
 
           <div className="relative z-10">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -308,7 +293,7 @@ export default function FiveTDashboardPage() {
               />
             </div>
           </div>
-        </header>
+        </OmniPremiumCard>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
