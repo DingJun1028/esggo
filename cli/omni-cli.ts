@@ -195,11 +195,11 @@ program
         const pdfData = await pdfParse(data);
         let text = pdfData.text;
         // 簡易冗餘詞彙過濾 (範例關鍵字列表，可自行擴充)
-        const redundant = [/\b行銷\b/gi, /\b免費\b/gi, /\b限時\b/gi, /\b優惠\b/gi];
-        redundant.forEach(rx => { text = text.replace(rx, ''); });
+        text = text.replace('行銷', '');
+        text = text.replace('免費', '');
+        text = text.replace('限時', '');
+        text = text.replace('優惠', '');
         console.log(chalk.white('已讀取 PDF 並過濾冗餘詞彙。'));
-        console.log(chalk.white('內容預覽 (前 200 字):'));
-        console.log(chalk.gray(text.slice(0,200)));
         console.log(chalk.green('✔ 碎裂完成。下一步請執行「oa cast <章節號碼>」。'));
     });
 

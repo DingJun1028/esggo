@@ -6,15 +6,19 @@
 
 # Test info
 
-- Name: triple-layer.spec.ts >> Triple Layer Ascension Visual Regression >> full page snapshot
-- Location: tests\vrt\triple-layer.spec.ts:4:3
+- Name: triple-layer.spec.ts >> Triple Layer Ascension Visual Regression >> Alliance Hub component snapshot
+- Location: tests\vrt\triple-layer.spec.ts:12:3
 
 # Error details
 
 ```
-TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: locator.waitFor: Test timeout of 30000ms exceeded.
 Call log:
-  - waiting for locator('text=Triple Layer Ascension Validation') to be visible
+  - waiting for locator('section').filter({ hasText: 'Alliance Hub' }) to be visible
 
 ```
 
@@ -57,8 +61,7 @@ Call log:
   3  | test.describe('Triple Layer Ascension Visual Regression', () => {
   4  |   test('full page snapshot', async ({ page }) => {
   5  |     await page.goto('http://localhost:3001/test-triple-v2');
-> 6  |     await page.waitForSelector('text=Triple Layer Ascension Validation', { timeout: 10000 });
-     |                ^ TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+  6  |     await page.waitForSelector('text=Triple Layer Ascension Validation', { timeout: 10000 });
   7  |     // Wait for the components to load
   8  |     await page.waitForTimeout(1000);
   9  |     expect(await page.screenshot({ fullPage: true })).toMatchSnapshot('triple-layer-full.png');
@@ -67,7 +70,8 @@ Call log:
   12 |   test('Alliance Hub component snapshot', async ({ page }) => {
   13 |     await page.goto('http://localhost:3001/test-triple-v2');
   14 |     const allianceHub = page.locator('section').filter({ hasText: 'Alliance Hub' });
-  15 |     await allianceHub.waitFor({ state: 'visible' });
+> 15 |     await allianceHub.waitFor({ state: 'visible' });
+     |                       ^ Error: locator.waitFor: Test timeout of 30000ms exceeded.
   16 |     expect(await allianceHub.screenshot()).toMatchSnapshot('alliance-hub.png');
   17 |   });
   18 | });

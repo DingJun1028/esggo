@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Triple Layer Ascension Visual Regression', () => {
   test('full page snapshot', async ({ page }) => {
-    await page.goto('http://localhost:3001/test-triple');
+    await page.goto('http://localhost:3001/test-triple-v2');
     await page.waitForSelector('text=Triple Layer Ascension Validation', { timeout: 10000 });
     // Wait for the components to load
     await page.waitForTimeout(1000);
@@ -10,7 +10,7 @@ test.describe('Triple Layer Ascension Visual Regression', () => {
   });
 
   test('Alliance Hub component snapshot', async ({ page }) => {
-    await page.goto('http://localhost:3001/test-triple');
+    await page.goto('http://localhost:3001/test-triple-v2');
     const allianceHub = page.locator('section').filter({ hasText: 'Alliance Hub' });
     await allianceHub.waitFor({ state: 'visible' });
     expect(await allianceHub.screenshot()).toMatchSnapshot('alliance-hub.png');
