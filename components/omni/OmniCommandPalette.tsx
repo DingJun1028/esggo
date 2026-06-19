@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Search, Command, Bot, Database, ShieldCheck, Zap, Library } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
