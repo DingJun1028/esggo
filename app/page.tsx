@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import {
   ShieldCheck,
   Lock,
@@ -68,7 +67,7 @@ const HIGHLIGHTS = [
   {
     icon: ShieldCheck,
     title: '5T 誠信協議',
-    desc: 'Tangible · Traceable · Trackable · Transparent · Trustworthy',
+    desc: 'Truth · Goodness · Beauty · Trust · Transferful',
     color: 'text-cyan-600',
     bg: 'bg-cyan-50',
     border: 'border-cyan-100',
@@ -118,51 +117,25 @@ const HIGHLIGHTS = [
 const QUICK_LINKS = [
   { href: '/dashboard', label: '儀表板', icon: BarChart3, color: 'from-cyan-500 to-blue-600' },
   { href: '/vault', label: '證據保管庫', icon: Lock, color: 'from-emerald-500 to-teal-600' },
-  {
-    href: '/dashboard/audit',
-    label: '稽核驗證',
-    icon: ShieldCheck,
-    color: 'from-indigo-500 to-purple-600',
-  },
+  { href: '/dashboard/audit', label: '稽核驗證', icon: ShieldCheck, color: 'from-indigo-500 to-purple-600' },
   { href: '/intelligence', label: '商情中心', icon: Globe, color: 'from-amber-500 to-orange-600' },
   { href: '/agents', label: '萬能代理', icon: Bot, color: 'from-rose-500 to-pink-600' },
-  {
-    href: '/sustain-write',
-    label: '永續撰寫',
-    icon: FileText,
-    color: 'from-violet-500 to-indigo-600',
-  },
+  { href: '/sustain-write', label: '永續撰寫', icon: FileText, color: 'from-violet-500 to-indigo-600' },
 ];
 
-/* ─── Components ─── */
-function SectionTitle({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <h2
-      className={cn('text-xl md:text-2xl font-black text-[#003262] tracking-tight mb-6', className)}
-    >
-      {children}
-    </h2>
-  );
-}
-
+/* ─── Main Page ─── */
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* ─── Hero Section ─── */}
       <section className="relative overflow-hidden">
-        {/* Background decoration */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-cyan-100/30 rounded-full" />
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-100/20 rounded-full" />
         </div>
 
         <div className="relative max-w-[1400px] mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <div className="text-center max-w-3xl mx-auto">
             {/* Status badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full mb-6">
               <span className="relative flex h-2 w-2">
@@ -229,47 +202,33 @@ export default function LandingPage() {
                 開始撰寫
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* ─── KPI Overview ─── */}
       <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
-        <SectionTitle>
-          <span className="flex items-center gap-2">
-            <TrendingUp size={24} className="text-cyan-500" />
-            永續數據概覽
-          </span>
-        </SectionTitle>
+        <h2 className="text-xl md:text-2xl font-black text-[#003262] tracking-tight mb-6 flex items-center gap-2">
+          <TrendingUp size={24} className="text-cyan-500" />
+          永續數據概覽
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {KPI_DATA.map((kpi, i) => (
-            <motion.div
-              key={kpi.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <OmniKpiCard {...kpi} />
-            </motion.div>
+          {KPI_DATA.map((kpi) => (
+            <OmniKpiCard key={kpi.title} {...kpi} />
           ))}
         </div>
       </section>
 
       {/* ─── Platform Highlights ─── */}
       <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
-        <SectionTitle>
-          <span className="flex items-center gap-2">
-            <Sparkles size={24} className="text-amber-500" />
-            平台亮點
-          </span>
-        </SectionTitle>
+        <h2 className="text-xl md:text-2xl font-black text-[#003262] tracking-tight mb-6 flex items-center gap-2">
+          <Sparkles size={24} className="text-amber-500" />
+          平台亮點
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {HIGHLIGHTS.map((item, i) => (
-            <motion.div
+          {HIGHLIGHTS.map((item) => (
+            <div
               key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.08 }}
               className={cn(
                 'p-6 rounded-2xl border bg-white hover:shadow-lg transition-all duration-300 group cursor-default',
                 item.border
@@ -285,19 +244,17 @@ export default function LandingPage() {
               </div>
               <h3 className="text-base font-bold text-[#003262] mb-1">{item.title}</h3>
               <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* ─── User Testimonials ─── */}
       <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
-        <SectionTitle>
-          <span className="flex items-center gap-2">
-            <MessageSquare size={24} className="text-amber-500" />
-            用戶怎麼說
-          </span>
-        </SectionTitle>
+        <h2 className="text-xl md:text-2xl font-black text-[#003262] tracking-tight mb-6 flex items-center gap-2">
+          <MessageSquare size={24} className="text-amber-500" />
+          用戶怎麼說
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[
             {
@@ -333,33 +290,23 @@ export default function LandingPage() {
               highlight: '獲得投資',
             },
           ].map((testimonial, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + i * 0.1 }}
               className="bg-white rounded-2xl border border-slate-100 p-6 hover:shadow-lg transition-all relative overflow-hidden"
             >
-              {/* Highlight Badge */}
               <div className="absolute top-4 right-4">
                 <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-50 text-amber-600 rounded-full">
                   {testimonial.highlight}
                 </span>
               </div>
-
-              {/* Rating */}
               <div className="flex items-center gap-0.5 mb-3">
                 {Array.from({ length: testimonial.rating }).map((_, j) => (
                   <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
                 ))}
               </div>
-
-              {/* Quote */}
               <p className="text-base text-slate-700 leading-relaxed mb-4 italic">
-                "{testimonial.quote}"
+                &ldquo;{testimonial.quote}&rdquo;
               </p>
-
-              {/* Author */}
               <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
                 <span className="text-2xl">{testimonial.avatar}</span>
                 <div>
@@ -367,23 +314,20 @@ export default function LandingPage() {
                   <p className="text-[10px] text-slate-400">{testimonial.role}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* ─── Quick Links ─── */}
       <section className="max-w-[1400px] mx-auto px-4 md:px-8 py-12">
-        <SectionTitle>快速入口</SectionTitle>
+        <h2 className="text-xl md:text-2xl font-black text-[#003262] tracking-tight mb-6">
+          快速入口
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {QUICK_LINKS.map((link, i) => (
+          {QUICK_LINKS.map((link) => (
             <Link key={link.href} href={link.href}>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 + i * 0.05 }}
-                className="flex flex-col items-center gap-3 p-5 bg-white rounded-2xl border border-slate-100 hover:border-slate-200 hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              >
+              <div className="flex flex-col items-center gap-3 p-5 bg-white rounded-2xl border border-slate-100 hover:border-slate-200 hover:shadow-lg transition-all duration-300 group cursor-pointer">
                 <div
                   className={cn(
                     'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center text-white',
@@ -395,7 +339,7 @@ export default function LandingPage() {
                 <span className="text-sm font-bold text-[#003262] group-hover:text-cyan-600 transition-colors">
                   {link.label}
                 </span>
-              </motion.div>
+              </div>
             </Link>
           ))}
         </div>

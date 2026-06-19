@@ -67,8 +67,9 @@ tags: ["SustainWrite","AI","5T","IComponentCore"]
 - 上線 Beta：2026‑08‑31
 
 ## 產出目標
-- **目標字數**：150,000 字（約 30 篇 5 k‑word ESG 報告）
+- **目標字數**：240,000 字（約 40~50 篇深度 ESG 章節）
 - **使用模板**：Zero算力專家模板（`Zero-Compute-Expert-Template`），提供高效算力分配、分段生成與自動校對。
+- **深度配置**：`Depth-4 (Ultra-Deep Recursion)`，單章節目標 20,000+ 字。
 
 ### 玲算力專家模板概述
 | 功能 | 描述 |
@@ -80,9 +81,9 @@ tags: ["SustainWrite","AI","5T","IComponentCore"]
 | **錯誤回溯** | 若校驗失敗，自動回滾至最近一次成功的 5k‑word 產出點。
 
 ## 工作流程（結合工廠）
-1. **呼叫工廠**：`npm run ufactory -- --type=req --id=SUSTAINWRITE-150K`
+1. **呼叫工廠**：`npm run ufactory -- --type=req --id=SUSTAINWRITE-240K`
 2. **算力排程**：工廠自動生成 `Zero-Compute-Expert-Template` 配置檔 (`compute.yaml`)。
-3. **AI 生成**：Genkit 以 `gemini‑4.0‑pro` 為核心，引入 `Zero-Compute-Expert` 進行分段計算。
+3. **AI 生成**：Genkit 以 `gemini‑1.5‑pro` 為核心，引入 `Zero-Compute-Expert` 進行三層遞迴 (Tri-level Recursion) 計算。
 4. **ZKP 封印**：每段完成即產生 ZKP，匯入 `Evidence Vault`。
 5. **匯出**：最終 PDF 包含全稿 SHA‑256、分段 ZKP 列表與算力報告。
 

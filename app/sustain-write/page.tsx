@@ -311,42 +311,56 @@ export default function SustainWritePage() {
   const handleExportReport = async () => {
     if (!activeTemplate) return;
     try {
-      const html2canvas = (await import('html2canvas')).default;
-      const { jsPDF } = await import('jspdf');
+      // For 240,000 words (250+ pages), html2canvas will exceed browser canvas limits and OOM.
+      // We use a native print window for safe, paginated, and vector-text PDF export.
+      const printWindow = window.open('', '_blank', 'width=800,height=900');
+      if (!printWindow) {
+        alert('請允許彈出視窗以匯出報告。');
+        return;
+      }
 
-      const printDiv = document.createElement('div');
-      printDiv.style.position = 'absolute';
-      printDiv.style.top = '-9999px';
-      printDiv.style.width = '800px';
-      printDiv.style.backgroundColor = '#ffffff';
-      printDiv.style.padding = '40px';
-      printDiv.style.color = '#000000';
-      printDiv.style.fontFamily = 'sans-serif';
-
-      let htmlContent = `<div style="text-align:center;margin-bottom:40px;"><h1 style="color:#06b6d4;">${activeTemplate.name}</h1><p>ESGGO OmniCore Verified Report</p></div>`;
+      let htmlContent = `
+        <html>
+        <head>
+          <title>${activeTemplate.name} - ESGGO報告</title>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 40px; color: #333; line-height: 1.6; }
+            h1 { color: #06b6d4; text-align: center; margin-bottom: 10px; }
+            .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-weight: bold; }
+            h2 { color: #003262; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-top: 40px; page-break-before: always; }
+            h2:first-of-type { page-break-before: auto; }
+            p { margin-bottom: 15px; text-align: justify; }
+            @media print {
+              body { padding: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>${activeTemplate.name}</h1>
+          <div class="subtitle">ESGGO OmniCore Verified Report</div>
+      `;
 
       activeTemplate.chapters.forEach((ch, idx) => {
         const chId = `chapter-${idx}`;
-        htmlContent += `<h2 style="color:#003262;border-bottom:1px solid #ccc;padding-bottom:10px;margin-top:30px;">${ch.title}</h2>`;
-        htmlContent += `<div style="line-height:1.6;font-size:14px;">${
-          generatedContent[chId] || '<p>(此章節尚無內容)</p>'
-        }</div>`;
+        htmlContent += `<h2>${ch.title}</h2>`;
+        htmlContent += `<div>${generatedContent[chId] || '<p>(此章節尚無內容)</p>'}</div>`;
       });
 
-      printDiv.innerHTML = htmlContent;
-      document.body.appendChild(printDiv);
+      htmlContent += `
+        </body>
+        </html>
+      `;
 
-      const canvas = await html2canvas(printDiv, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      printWindow.document.open();
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${activeTemplate.name}-ESGGO報告.pdf`);
-
-      document.body.removeChild(printDiv);
+      // Wait for resources to load then print
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+        // Optional: printWindow.close(); after printing
+      };
     } catch (e) {
       console.error('PDF Export Error:', e);
       alert('PDF 匯出失敗，請檢查日誌');
