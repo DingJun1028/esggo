@@ -33,7 +33,9 @@ export async function updateSession(request: NextRequest) {
 
   const isBypass = request.cookies.get('omni_user_bypass')?.value === 'true';
   const isPublicRoute =
-    request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup';
+    request.nextUrl.pathname === '/login' || 
+    request.nextUrl.pathname === '/signup' || 
+    request.nextUrl.pathname.startsWith('/test-');
 
   const isPlaceholder =
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
