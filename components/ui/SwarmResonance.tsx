@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Terminal, Cpu, Shield, Zap, Activity, Info } from 'lucide-react';
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 import { cn } from '@/lib/utils';
@@ -79,7 +79,7 @@ export function SwarmResonance() {
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 font-mono text-[10px] space-y-3 custom-scrollbar"
       >
-        <AnimatePresence initial={false}>
+        
           {logs.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-white/20 italic">
               <Info size={24} className="mb-2 opacity-20" />
@@ -87,10 +87,8 @@ export function SwarmResonance() {
             </div>
           ) : (
             logs.map((log) => (
-              <motion.div
+              <div
                 key={log.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
                 className="group border-l-2 border-white/5 pl-3 py-1 hover:border-cyan-500/50 transition-colors"
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -106,10 +104,10 @@ export function SwarmResonance() {
                 <div className="text-white/50 break-all leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
                   {typeof log.payload === 'string' ? log.payload : JSON.stringify(log.payload)}
                 </div>
-              </motion.div>
+              </div>
             ))
           )}
-        </AnimatePresence>
+        
       </div>
 
       <div className="px-4 py-2 border-t border-white/5 flex items-center justify-between">

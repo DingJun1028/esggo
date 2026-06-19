@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { createClient } from '@/utils/supabase/client';
 
 export interface VaultOmniTableRecord {
@@ -131,13 +131,10 @@ export default function VaultOmniTable({
             </tr>
           </thead>
           <tbody className="text-sm font-medium">
-            <AnimatePresence>
+            
               {liveRecords.map((record, index) => (
-                <motion.tr
+                <tr
                   key={record.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   onClick={() => setSelectedRecord(selectedRecord === record.id ? null : record.id)}
                   className={`border-b border-slate-800/50 hover:bg-slate-800/30 cursor-pointer transition-colors ${
                     selectedRecord === record.id ? 'bg-slate-800/50' : ''
@@ -185,7 +182,7 @@ export default function VaultOmniTable({
                       ))}
                     </div>
                   </td>
-                </motion.tr>
+                </tr>
               ))}
               {liveRecords.length === 0 && !isLoading && (
                 <tr>
@@ -197,7 +194,7 @@ export default function VaultOmniTable({
                   </td>
                 </tr>
               )}
-            </AnimatePresence>
+            
           </tbody>
         </table>
       </div>

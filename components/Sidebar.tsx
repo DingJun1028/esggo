@@ -54,7 +54,7 @@ import { useSaaS } from '../hooks/useSaaS';
 import { useAuth } from '../hooks/useAuth';
 import { useOmniAgentBus } from '../lib/omni-agent-bus';
 import { BrandBadge } from './brand';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { cn } from '../lib/utils';
 
 interface NavItem {
@@ -256,8 +256,7 @@ function SaaSStatusWidget() {
           <span className="text-[9px] font-black text-[#003262]">{pct}%</span>
         </div>
         <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
+          <div
             animate={{ width: `${pct}%` }}
             className="h-full bg-blue-600"
           />
@@ -317,17 +316,14 @@ export default function Sidebar({
 
   return (
     <>
-      <AnimatePresence>
+      
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={() => setMobileOpen?.(false)}
             className="fixed inset-0 bg-slate-900/60 z-[45] lg:hidden"
           />
         )}
-      </AnimatePresence>
+      
       <aside
         className={cn(
           `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-300 ease-in-out ${t.sidebar}`,

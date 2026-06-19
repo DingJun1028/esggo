@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const MOCK_GRI_RESULTS = [
   { id: 'GRI-201', title: '經濟績效 (Economic Performance)' },
@@ -56,13 +55,9 @@ export default function OmniSearchBar({
         {isSearching && <Loader2 size={12} className="animate-spin text-cyan-500" />}
       </div>
 
-      <AnimatePresence>
+      
         {isFocused && value && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.2 }}
+          <div
             style={{
               position: 'absolute', top: '100%', left: 0, width: '100%', marginTop: 8,
               background: 'var(--sidebar-bg)', border: '1px solid var(--sidebar-border)',
@@ -100,9 +95,9 @@ export default function OmniSearchBar({
                 無 GRI 指標匹配。將執行全站搜尋...
               </div>
             )}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
     </div>
   );
 }

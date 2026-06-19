@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { SACRED_GATES, ProtocolGateCode } from '@/src/shared/types';
-import { motion } from 'framer-motion';
 
 interface T5Item {
   code: ProtocolGateCode;
@@ -34,11 +33,10 @@ export default function BrandT5Strip({
         const active = item.active !== false;
         
         return (
-          <motion.div
+          <div
             key={item.code}
             initial={animate ? { opacity: 0, scale: 0.8 } : false}
             animate={animate ? { opacity: 1, scale: 1 } : false}
-            transition={{ delay: idx * 0.1 }}
             className={`
               inline-flex items-center gap-1.5 rounded-2xl font-black transition-all border-2
               ${compact ? 'text-[9px] px-2.5 py-0.5' : 'text-[10px] px-3.5 py-1.5'}
@@ -54,7 +52,7 @@ export default function BrandT5Strip({
             <div className={`w-1 h-1 rounded-full ${active ? '' : 'bg-slate-300'}`} style={{ backgroundColor: active ? config.color : undefined }} />
             <span>{config.labelZh}</span>
             {!compact && <span className="text-[8px] opacity-40 font-bold ml-0.5">{config.titleZh.split('(')[1]?.replace(')', '')}</span>}
-          </motion.div>
+          </div>
         );
       })}
     </div>

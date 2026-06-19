@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Brain,
   Zap,
@@ -110,7 +110,7 @@ function MissionCard({
   const status = progress?.status;
 
   return (
-    <motion.div whileHover={{ scale: 1.01 }} className="relative">
+    <div className="relative">
       <Card className="border-white/5 rounded-2xl overflow-hidden group hover:border-white/10 transition-all">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-3">
@@ -147,11 +147,9 @@ function MissionCard({
           {/* Progress bar */}
           {status === 'running' && (
             <div className="h-1 rounded-full overflow-hidden mb-3">
-              <motion.div
+              <div
                 className="h-full rounded-full"
                 style={{ background: mission.color }}
-                animate={{ width: ['5%', '70%', '90%'] }}
-                transition={{ duration: 8, ease: 'easeInOut' }}
               />
             </div>
           )}
@@ -185,7 +183,7 @@ function MissionCard({
           </Button>
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 }
 
@@ -215,13 +213,10 @@ function EventLog({ events }: { events: StreamEvent[] }) {
       className="space-y-2 max-h-[400px] overflow-y-auto pr-1"
       style={{ scrollbarWidth: 'thin' }}
     >
-      <AnimatePresence initial={false}>
+      
         {events.slice(0, 30).map((evt) => (
-          <motion.div
+          <div
             key={evt.id}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0 }}
             className="flex gap-3 py-2 border-b border-white/[0.03] last:border-0"
           >
             <span className="text-[9px] text-slate-600 font-mono shrink-0 pt-0.5 w-16">
@@ -244,9 +239,9 @@ function EventLog({ events }: { events: StreamEvent[] }) {
                 {JSON.stringify(evt.payload).substring(0, 120)}
               </p>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </AnimatePresence>
+      
       {events.length === 0 && (
         <p className="text-[10px] text-slate-600 text-center py-8">
           Awaiting events from OmniAgent Bus...

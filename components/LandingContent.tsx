@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+
 import {
   Globe,
   ArrowRight,
@@ -199,15 +199,13 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
       />
       <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none" />
 
-      <motion.div
-        variants={container}
+      <div
         initial="hidden"
         animate="show"
         className="relative z-10 max-w-6xl w-full flex flex-col items-center text-center space-y-16"
       >
         {/* ─── Layer 1: Structural Content ────────────────────────────── */}
-        <motion.div
-          variants={item}
+        <div
           className="flex flex-col items-center gap-8 p-10 md:p-16 bg-[#020617]/40 border border-white/10 rounded-[3rem] shadow-[0_0_80px_rgba(6,182,212,0.15)] relative overflow-hidden w-full max-w-5xl"
         >
           <div className="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70" />
@@ -278,10 +276,10 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
               [TEST] 手動觸發 (動態角色多層次輸出)
             </button>
           </div>
-        </motion.div>
+        </div>
 
         {/* ─── Layer 1.5: System Resonance & Causal Link (因果律拓樸圖) ─ */}
-        <motion.div variants={item} className="w-full relative z-10">
+        <div className="w-full relative z-10">
           <CausalTopologyGraph
             taskId={activeTaskId}
             executionId={executionId}
@@ -290,13 +288,11 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
             vaultStatus={vaultStatus}
             healingStatus={healingStatus}
           />
-        </motion.div>
+        </div>
 
         {/* ─── Layer 1.6: Healing Guardian Terminal ───────────────────── */}
         {healingLogs.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0, y: -10 }}
-            animate={{ opacity: 1, height: 'auto', y: 0 }}
+          <div
             className="w-full relative z-10 max-w-5xl mx-auto -mt-8"
           >
             <div className="bg-[#0f172a]/90 border border-indigo-500/30 rounded-2xl p-5 shadow-[0_0_30px_rgba(99,102,241,0.15)] font-mono text-sm text-left relative overflow-hidden">
@@ -315,25 +311,22 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
                   if (log.level === 'zkp') colorClass = 'text-emerald-400';
 
                   return (
-                    <motion.div
+                    <div
                       key={i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
                       className="flex gap-4"
                     >
                       <span className="text-slate-500 shrink-0">[{log.time}]</span>
                       <span className={colorClass}>{log.text}</span>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* ─── Layer 2: Hologram Interactions (Bento Grid) ────────────── */}
-        <motion.div
-          variants={item}
+        <div
           className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 w-full"
         >
           <Link href="/dashboard" className="group h-full">
@@ -431,38 +424,38 @@ export default function LandingContent({ trackerNode }: LandingContentProps) {
               </div>
             </BrandCard>
           </Link>
-        </motion.div>
+        </div>
 
         {/* ─── Layer 2.5: OmniBlue Data Mesh ──────────────────────────── */}
-        <motion.div variants={item} className="w-full">
+        <div className="w-full">
           <OmniBlueDashboard />
-        </motion.div>
+        </div>
 
         {/* ─── Layer 2.6: ESG Report Builder (萬能元件預覽) ───────────────── */}
-        <motion.div variants={item} className="w-full text-left mt-8">
+        <div className="w-full text-left mt-8">
           <ReportBuilder />
-        </motion.div>
+        </div>
 
         {/* ─── Layer 2.7: Apollo Studio AI Console ──────────────────────── */}
-        <motion.div variants={item} className="w-full text-left mt-12">
+        <div className="w-full text-left mt-12">
           <ApolloStudioConsole />
-        </motion.div>
+        </div>
 
         {/* ─── Layer 2.8: Omni Notes Tracker ──────────────────────── */}
         {trackerNode && (
-          <motion.div variants={item} className="w-full text-left mt-12">
+          <div className="w-full text-left mt-12">
             {trackerNode}
-          </motion.div>
+          </div>
         )}
 
-        <motion.div variants={item} className="pt-12 text-center">
+        <div className="pt-12 text-center">
           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-2xl border border-white/5">
             <span className="text-[10px] uppercase tracking-[0.4em] text-slate-500 font-black">
               OmniCore P0 Genesis Infrastructure // v8.5.5-Stable
             </span>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* ─── Layer 3: OmniAgent Floating Pulse ──────────────────────── */}
       <OmniAgentPulse />

@@ -11,7 +11,6 @@ import {
   Server,
   Laptop,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export default function OmniCodexViewer({
   isVpsBound,
@@ -85,27 +84,21 @@ export default function OmniCodexViewer({
             {/* 雙向同步光束 */}
             <div className="flex-1 flex flex-col items-center justify-center relative px-4 z-0">
               {isVpsBound ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                <div
                   className="w-full flex flex-col items-center"
                 >
                   <div className="relative w-full h-1 bg-emerald-500/20 rounded-full overflow-hidden">
-                    <motion.div
+                    <div
                       className="absolute inset-y-0 w-1/3 bg-emerald-400/80 blur-[2px]"
-                      animate={{ left: ['-50%', '150%'] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
                     />
-                    <motion.div
+                    <div
                       className="absolute inset-y-0 w-1/3 bg-cyan-400/80 blur-[2px]"
-                      animate={{ right: ['-50%', '150%'] }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
                     />
                   </div>
                   <div className="mt-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1">
                     <ArrowRightLeft size={12} /> 雙向同步中 (Bidirectional Sync)
                   </div>
-                </motion.div>
+                </div>
               ) : (
                 <div className="w-full border-t border-dashed border-slate-600/50 mt-1">
                   <div className="text-center mt-3 text-[10px] text-slate-500 font-bold uppercase tracking-widest">

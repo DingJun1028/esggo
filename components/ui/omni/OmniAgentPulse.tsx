@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useDragControls } from 'framer-motion';
+
 import {
   Brain,
   Activity,
@@ -83,7 +83,7 @@ export function OmniAgentPulse() {
   };
 
   return (
-    <motion.div
+    <div
       drag
       dragControls={dragControls}
       dragMomentum={false}
@@ -95,9 +95,7 @@ export function OmniAgentPulse() {
     >
       {/* 展開面板 */}
       {isExpanded && (
-        <motion.div
-          initial={{ opacity: 0, y: 10, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+        <div
           className="w-72 bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
@@ -146,13 +144,12 @@ export function OmniAgentPulse() {
               <p className="text-xs text-slate-500 text-center py-2">等待萬能心核事件中...</p>
             )}
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* 懸浮按鈕 (Drag Handle) */}
-      <motion.div
+      <div
         onPointerDown={(e) => dragControls.start(e)}
-        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => !isExpanded && setIsExpanded(true)}
         className={cn(
@@ -167,7 +164,7 @@ export function OmniAgentPulse() {
 
         {/* Status Indicator Dot */}
         <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

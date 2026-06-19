@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { Bot, X, Send, Maximize2, Minimize2, Sparkles, Activity, History, Zap } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -35,7 +35,7 @@ export default function OmniAgentFloatingAgent() {
   }, [isOpen]);
 
   return (
-    <motion.div
+    <div
       drag
       dragMomentum={false}
       onDragStart={() => setIsDragging(true)}
@@ -44,13 +44,9 @@ export default function OmniAgentFloatingAgent() {
       }}
       className="fixed bottom-10 right-10 z-[10000] flex flex-col items-end"
     >
-      <AnimatePresence>
+      
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 40 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+          <div
             className={cn(
               'mb-6 flex flex-col transition-all duration-500 origin-bottom-right',
               isMaximized
@@ -170,12 +166,11 @@ export default function OmniAgentFloatingAgent() {
                 </div>
               </footer>
             </Card>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      
 
-      <motion.button
-        whileHover={{ scale: 1.05 }}
+      <button
         whileTap={{ scale: 0.95 }}
         onClick={() => {
           if (!isDragging) setIsOpen(!isOpen);
@@ -187,20 +182,18 @@ export default function OmniAgentFloatingAgent() {
             : 'bg-berkeley-blue text-california-gold'
         )}
       >
-        <AnimatePresence mode="wait">
+        
           {isOpen ? <X key="x" size={32} /> : <Bot key="bot" size={36} className="animate-pulse" />}
-        </AnimatePresence>
+        
 
         {!isOpen && (
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
+          <span
             className="absolute -top-1 -right-1 w-6 h-6 bg-error rounded-xl border-2 border-white flex items-center justify-center text-[10px] font-black text-white shadow-lg"
           >
             !
-          </motion.span>
+          </span>
         )}
-      </motion.button>
-    </motion.div>
+      </button>
+    </div>
   );
 }

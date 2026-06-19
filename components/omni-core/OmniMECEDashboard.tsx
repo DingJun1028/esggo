@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+
 import { ShieldCheck, Target, Zap, Activity } from 'lucide-react';
 import {
   meceEngine,
@@ -59,10 +59,8 @@ export default function OmniMECEDashboard() {
               </p>
             ) : (
               logs.map((log, idx) => (
-                <motion.div
+                <div
                   key={`${log.timestamp}-${idx}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
                   className="p-3 border border-white/5 rounded-lg text-sm"
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -84,7 +82,7 @@ export default function OmniMECEDashboard() {
                       );
                     })}
                   </div>
-                </motion.div>
+                </div>
               ))
             )}
           </div>

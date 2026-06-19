@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+
 import { Activity, Cpu, Network, Zap, ShieldCheck } from 'lucide-react';
 
 export default function ApolloStudioConsole() {
@@ -104,9 +104,7 @@ export default function ApolloStudioConsole() {
         ) : (
           <div className="space-y-3">
             {logs.map((log: string, i: number) => (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
+              <div
                 key={i}
                 className={`flex items-start gap-3 ${
                   log.includes('✅') ? 'text-emerald-400' : 'text-indigo-300'
@@ -116,7 +114,7 @@ export default function ApolloStudioConsole() {
                   [{new Date().toLocaleTimeString('en-US', { hour12: false })}]
                 </span>
                 <span>{log}</span>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

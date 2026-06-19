@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+
 import { Upload, Database, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useSustainWriteStore } from '../store/useSustainWriteStore';
 
@@ -106,9 +106,7 @@ export function KnowledgeUploader({ onUploadSuccess }: KnowledgeUploaderProps) {
                 </div>
 
                 {uploadStatus.type !== 'idle' && (
-                    <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                    <div
                         className={`p-4 rounded-xl text-xs font-bold leading-relaxed border ${uploadStatus.type === 'success'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
                             : 'bg-red-50 text-red-700 border-red-100'
@@ -118,7 +116,7 @@ export function KnowledgeUploader({ onUploadSuccess }: KnowledgeUploaderProps) {
                             {uploadStatus.type === 'success' ? <CheckCircle size={14} /> : <AlertTriangle size={14} />}
                             {uploadStatus.message}
                         </div>
-                    </motion.div>
+                    </div>
                 )}
             </div>
         </div>

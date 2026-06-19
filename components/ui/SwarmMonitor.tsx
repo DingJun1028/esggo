@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   Users,
   Bot,
@@ -149,13 +149,10 @@ export function SwarmMonitor() {
           </div>
 
           <div className="space-y-2">
-            <AnimatePresence mode="popLayout">
+            
               {tasks.slice(0, 3).map((task) => (
-                <motion.div
+                <div
                   key={task.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 10 }}
                   className="p-3 rounded-xl border border-slate-100 flex items-center gap-3 group transition-all hover:bg-blue-50/50"
                 >
                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
@@ -181,9 +178,9 @@ export function SwarmMonitor() {
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                     <ArrowRight size={14} className="text-blue-400" />
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
+            
 
             {tasks.length === 0 && !loading && (
               <div className="py-8 text-center border-2 border-dashed border-slate-50 rounded-xl">
@@ -210,9 +207,7 @@ export function SwarmMonitor() {
                 42.8<span className="text-xs ml-0.5 opacity-60">%</span>
               </span>
               <div className="flex-1 h-1.5 rounded-full overflow-hidden mb-1.5">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: '42.8%' }}
+                <div
                   className="h-full bg-primary-400"
                 />
               </div>

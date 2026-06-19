@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   ShieldCheck,
   History,
@@ -80,11 +80,9 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
       {/* Liquid Interaction Table Body */}
       <div className="flex flex-col gap-3">
         {filteredData.map((row) => (
-          <motion.div
+          <div
             key={row.id}
             layout
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
             className={`group rounded-2xl border transition-all duration-300 \${
               row.status === 'Void' 
                 ? 'bg-slate-900/50 border-slate-800' 
@@ -144,12 +142,9 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
             </div>
 
             {/* Expandable Trace Details */}
-            <AnimatePresence>
+            
               {expandedId === row.id && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
+                <div
                   className="overflow-hidden border-t border-slate-800/50"
                 >
                   <div className="p-5 bg-[#0a0f1d]/80 flex flex-col gap-4 rounded-b-2xl border-t border-white/5">
@@ -199,10 +194,10 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
-          </motion.div>
+            
+          </div>
         ))}
         {filteredData.length === 0 && (
           <div className="py-12 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">

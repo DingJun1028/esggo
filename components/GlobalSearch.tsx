@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Loader2, FileText, ExternalLink, Command } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { useSustainWriteStore } from '../store/useSustainWriteStore';
 import { cn } from '../lib/utils';
 
@@ -69,23 +69,17 @@ export function GlobalSearch() {
         </div>
       </button>
 
-      <AnimatePresence>
+      
         {isOpen && (
           <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4">
             {/* 背景遮罩 */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+            <div
               onClick={() => setIsOpen(false)}
               className="absolute inset-0 bg-slate-900/40"
             />
 
             {/* 搜尋視窗 */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            <div
               className="relative w-full max-w-2xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden flex flex-col"
               ref={searchRef}
             >
@@ -170,10 +164,10 @@ export function GlobalSearch() {
                   Powered by OmniCore RAG
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         )}
-      </AnimatePresence>
+      
     </>
   );
 }

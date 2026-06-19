@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { CheckCircle, AlertTriangle, XCircle, Info, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useToast, type ToastVariant } from './toast-provider';

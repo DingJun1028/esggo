@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   X,
   Settings2,
@@ -101,18 +101,12 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-8">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+      <div
         className="absolute inset-0 bg-slate-900/40"
         onClick={onClose}
       />
 
-      <motion.div
-        initial={{ scale: 0.98, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.98, opacity: 0, y: 20 }}
+      <div
         className="relative rounded-[3rem] border border-white/60 max-w-6xl w-full h-[90vh] flex flex-col overflow-hidden"
       >
         {/* Header Alignment */}
@@ -197,7 +191,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                     </span>
                   </div>
                   <div className="h-1.5 w-full rounded-full overflow-hidden">
-                    <motion.div
+                    <div
                       animate={{ width: `${rs * 100}%` }}
                       className="h-full bg-california-gold"
                     />
@@ -221,12 +215,10 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
 
           {/* Main Display Matrix */}
           <main className="flex-1 overflow-y-auto p-12 no-scrollbar relative">
-            <AnimatePresence mode="wait">
+            
               {activeTab === 'kernel' && (
-                <motion.div
+                <div
                   key="kernel"
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
                   className="space-y-10"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -243,7 +235,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                           負責深度儲存與歷史記憶，確保數據 DNA 的穩固與聖典對齊。
                         </p>
                         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                          <motion.div
+                          <div
                             animate={{ width: `${streamStatus.ren}%` }}
                             className="h-full bg-berkeley-blue"
                           />
@@ -265,7 +257,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                           負責即時執行與動態反饋，執行數據抓取與現世干預。
                         </p>
                         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                          <motion.div
+                          <div
                             animate={{ width: `${streamStatus.du}%` }}
                             className="h-full bg-california-gold"
                           />
@@ -323,14 +315,12 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                       ))}
                     </div>
                   </section>
-                </motion.div>
+                </div>
               )}
 
               {activeTab === 'trust' && (
-                <motion.div
+                <div
                   key="trust"
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
                   className="space-y-10"
                 >
                   <div className="flex items-center justify-between px-2">
@@ -479,9 +469,9 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                       </div>
                     </section>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
+            
           </main>
         </div>
 
@@ -511,7 +501,7 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
             Close_Control_Center
           </Button>
         </footer>
-      </motion.div>
+      </div>
     </div>
   );
 }
