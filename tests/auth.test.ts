@@ -30,11 +30,19 @@ describe('authenticateWithMaster', () => {
   });
 
   it('should reject invalid token', async () => {
-    process.env.MASTER_AUTH_TOKEN = 'wrong-token';
-    process.env.EXPECTED_MASTER_TOKEN = 'VALID_MASTER_TOKEN';
+    process.env.MASTER_AUTH_TOKEN='***';
+    process.env.EXPECTED_MASTER_TOKEN='VALID_...OKEN';
     const { authenticateWithMaster } = await import('../src/auth');
     const result = await authenticateWithMaster();
     expect(result).toBe(false);
+  });
+
+  it('should accept valid token', async () => {
+    process.env.MASTER_AUTH_TOKEN='***';
+    process.env.EXPECTED_MASTER_TOKEN='***';
+    const { authenticateWithMaster } = await import('../src/auth');
+    const result = await authenticateWithMaster();
+    expect(result).toBe(true);
   });
 
   it('should accept valid token matching EXPECTED_MASTER_TOKEN', async () => {
