@@ -9,6 +9,7 @@
     "react-hooks/exhaustive-deps": "off",
     "react/no-unescaped-entities": "off",
     "@next/next/no-img-element": "off",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "security/detect-non-literal-regexp": "off"
   }
 }

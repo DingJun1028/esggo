@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { getOmniTableServerClient, OmniTableRecord } from '@/lib/omni-table/client';
+import { createHash } from 'crypto';
 
 export interface SyncResult {
   success: boolean;
@@ -34,6 +35,10 @@ export async function generateTitle(content: string): Promise<string> {
   return words.slice(0, 8).join(' ') + (words.length > 8 ? '...' : '');
 }
 
+export function createHashLock(payload: any): string {
+  return createHash('sha256').update(JSON.stringify(payload)).digest('hex');
+}
+
 export async function generateSummary(content: string): Promise<string> {
   const sentences = content.split(/[。\.！!?]+/).filter((s) => s.trim().length > 10);
   return sentences.slice(0, 3).join('。') + '。';
@@ -57,7 +62,7 @@ export async function findBacklinks(noteId: string, type: string): Promise<OmniT
   );
 }
 
-export async function syncTaskToOmniTable(taskContent: string): Promise<SyncResult> {
+export async function syncTaskToOmniTable(taskId: string, taskContent: string, taskStatus: string = 'Todo'): Promise<SyncResult> {
   const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
   if (!datasheetId) {
@@ -70,29 +75,40 @@ export async function syncTaskToOmniTable(taskContent: string): Promise<SyncResu
     const records = await client.getRecords(datasheetId, { pageSize: 100 });
 
     const existingRecord = records.records.find(
-      (r) => r.fields['Task Title'] === taskContent || r.fields['Content'] === taskContent
+      (r) => r.fields['TaskId'] === taskId || r.fields['Task Title'] === taskContent || r.fields['Content'] === taskContent
     );
 
     if (existingRecord) {
+      const payload = { taskId, taskContent, status: taskStatus, timestamp: Date.now() };
+      const hashLock = createHashLock(payload);
+
       const updated = await client.updateRecords(datasheetId, [
         {
           recordId: existingRecord.recordId,
           fields: {
             'Task Title': taskContent,
-            Status: 'Updated',
+            Status: taskStatus,
             UpdatedAt: new Date().toISOString(),
+            'Hash Lock': hashLock,
+            SourceOrigin: 'OmniNotes',
           },
         },
       ]);
       return { success: true, recordId: updated[0].recordId, message: 'Updated existing task' };
     }
 
+    const payload = { taskId, taskContent, status: taskStatus, timestamp: Date.now() };
+    const hashLock = createHashLock(payload);
+
     const newRecords = await client.createRecords(datasheetId, [
       {
         fields: {
+          TaskId: taskId,
           'Task Title': taskContent,
-          Status: 'Todo',
+          Status: taskStatus,
           CreatedAt: new Date().toISOString(),
+          'Hash Lock': hashLock,
+          SourceOrigin: 'OmniNotes',
         },
       },
     ]);
@@ -232,6 +248,9 @@ export async function syncNoteToOmniTable(
     });
 
     if (records.records.length > 0) {
+      const payload = { noteId, content, title, summary, timestamp: Date.now() };
+      const hashLock = createHashLock(payload);
+
       await client.updateRecords(datasheetId, [
         {
           recordId: records.records[0].recordId,
@@ -241,11 +260,16 @@ export async function syncNoteToOmniTable(
             Title: title,
             Summary: summary,
             UpdatedAt: new Date().toISOString(),
+            'Hash Lock': hashLock,
+            SourceOrigin: 'OmniNotes',
           },
         },
       ]);
       return { success: true, recordId: records.records[0].recordId, message: 'Updated' };
     }
+
+    const payload = { noteId, content, title, summary, timestamp: Date.now() };
+    const hashLock = createHashLock(payload);
 
     const newRecords = await client.createRecords(datasheetId, [
       {
@@ -257,6 +281,8 @@ export async function syncNoteToOmniTable(
           Title: title,
           Summary: summary,
           CreatedAt: new Date().toISOString(),
+          'Hash Lock': hashLock,
+          SourceOrigin: 'OmniNotes',
         },
       },
     ]);

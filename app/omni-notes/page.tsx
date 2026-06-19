@@ -29,12 +29,19 @@ import {
   PinOff,
   Copy,
   Check,
+  ListTodo,
+  Server,
+  Activity,
+  ShieldCheck,
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { useOmniNotesStore, type NoteType, type OmniNote } from '@/store/useOmniNotesStore';
+import { useOmniNotesStore, type NoteType, type OmniNote, type TaskStatus } from '@/store/useOmniNotesStore';
+import { useTheme } from '@/contexts/ThemeContext';
 
 /* ─── Types ─── */
 interface NoteFormData {
@@ -224,10 +231,14 @@ function NoteEditor({
   onSave: (data: NoteFormData) => void;
   onCancel: () => void;
 }) {
-  const [content, setContent] = useState(note?.content || '');
+  const [content, setContent] = useState(note?.content || '# 新筆記\n\n- [ ] 這裡是一個任務\n');
   const [type, setType] = useState<NoteType>(note?.type || 'log');
   const [date, setDate] = useState(note?.date || new Date().toISOString().split('T')[0]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { tasks, addTasks, syncTasks, isSyncing } = useOmniNotesStore();
+  const [syncLog, setSyncLog] = useState<string[]>(['>> SYSTEM STANDBY']);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   useEffect(() => {
     textareaRef.current?.focus();
@@ -238,86 +249,216 @@ function NoteEditor({
     onSave({ content: content.trim(), type, date });
   };
 
+  const handleExtractTasks = () => {
+    const regex = /- \[( |x)\] (.*)/g;
+    let match;
+    const newTasks = [];
+    while ((match = regex.exec(content)) !== null) {
+      newTasks.push({
+        id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        title: match[2],
+        status: (match[1] === 'x' ? 'Done' : 'Todo') as TaskStatus,
+        synced: false,
+        noteId: note?.id,
+      });
+    }
+
+    if (newTasks.length > 0) {
+      addTasks(newTasks);
+      setSyncLog((prev) => [
+        `>> EXTRACTED ${newTasks.length} TASKS FROM MARKDOWN`,
+        ...prev.slice(0, 4),
+      ]);
+    } else {
+      setSyncLog((prev) => ['>> NO TASKS FOUND IN MARKDOWN', ...prev.slice(0, 4)]);
+    }
+  };
+
+  const handleSyncToOmniTable = async () => {
+    setSyncLog((prev) => ['>> INITIATING OMNITABLE DATASHEET SYNC...', ...prev.slice(0, 4)]);
+    await syncTasks();
+    setSyncLog((prev) => [
+      `>> SYNC COMPLETED`,
+      `>> HASH LOCK VERIFIED (5T PROTOCOL)`,
+      ...prev.slice(0, 3),
+    ]);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl border border-slate-100 shadow-lg overflow-hidden"
+      className={cn("bg-white rounded-2xl border shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[600px]", isDark ? "border-slate-800 bg-[#0f172a]" : "border-slate-100")}
     >
-      {/* Editor Header */}
-      <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Edit3 size={18} className="text-[#003262]" />
-          <span className="text-sm font-bold text-[#003262]">{note ? '編輯筆記' : '新增筆記'}</span>
+      {/* LEFT COLUMN: Markdown Editor */}
+      <div className="flex-1 flex flex-col border-r border-slate-100 dark:border-slate-800">
+        {/* Editor Header */}
+        <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div className="flex flex-wrap gap-2 items-center">
+            <Edit3 size={18} className={isDark ? "text-cyan-400" : "text-[#003262]"} />
+            <span className={cn("text-sm font-bold", isDark ? "text-slate-200" : "text-[#003262]")}>
+              {note ? '編輯筆記' : '新增筆記'}
+            </span>
+            <div className="mx-2 h-4 w-px bg-slate-200 dark:bg-slate-700"></div>
+            {NOTE_TYPES.map((t) => {
+              const Icon = t.icon;
+              return (
+                <button
+                  key={t.value}
+                  onClick={() => setType(t.value)}
+                  className={cn(
+                    'inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold transition-all',
+                    type === t.value
+                      ? cn(t.bg, t.color, 'ring-1', `ring-current`)
+                      : 'bg-slate-50 text-slate-500 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-400'
+                  )}
+                >
+                  <Icon size={10} />
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExtractTasks}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider transition-all flex items-center gap-1.5',
+                isDark
+                  ? 'bg-[#0F172A] hover:bg-[#1E293B] text-[#34D399] border border-gray-800'
+                  : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200'
+              )}
+            >
+              <Plus className="w-3.5 h-3.5" /> 提取任務
+            </button>
+            <button
+              onClick={onCancel}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            >
+              <X size={16} />
+            </button>
+          </div>
         </div>
-        <button
-          onClick={onCancel}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
-        >
-          <X size={16} />
-        </button>
-      </div>
 
-      {/* Type Selector */}
-      <div className="px-5 py-3 border-b border-slate-50">
-        <div className="flex flex-wrap gap-2">
-          {NOTE_TYPES.map((t) => {
-            const Icon = t.icon;
-            return (
-              <button
-                key={t.value}
-                onClick={() => setType(t.value)}
-                className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all',
-                  type === t.value
-                    ? cn(t.bg, t.color, 'ring-1', `ring-current`)
-                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
-                )}
-              >
-                <Icon size={12} />
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-5">
-        <textarea
-          ref={textareaRef}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="輸入筆記內容..."
-          rows={8}
-          className="w-full resize-none text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none leading-relaxed"
-        />
-      </div>
-
-      {/* Footer */}
-      <div className="px-5 py-3 border-t border-slate-50 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Calendar size={14} className="text-slate-400" />
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+        {/* Content Area (Split Pane) */}
+        <div className="flex-1 flex flex-col md:flex-row">
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="輸入 Markdown 內容..."
+            className={cn(
+              'flex-1 p-5 resize-none focus:outline-none font-mono text-sm leading-relaxed transition-colors duration-500',
+              isDark ? 'bg-[#020617] text-gray-300 placeholder-gray-600' : 'bg-transparent text-gray-700 placeholder-gray-400'
+            )}
           />
-        </div>
-        <div className="flex items-center gap-2">
-          <OmniButton variant="ghost" size="sm" onClick={onCancel}>
-            取消
-          </OmniButton>
-          <OmniButton
-            variant="primary"
-            size="sm"
-            onClick={handleSubmit}
-            disabled={!content.trim()}
-            icon={<Save size={14} />}
+          <div
+            className={cn(
+              'flex-1 p-5 border-t md:border-t-0 md:border-l transition-colors duration-500 overflow-y-auto prose prose-sm max-w-none',
+              isDark ? 'border-gray-800 prose-invert bg-[#0f172a]' : 'border-gray-100 bg-slate-50/50'
+            )}
           >
-            {note ? '更新' : '儲存'}
-          </OmniButton>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Calendar size={14} className="text-slate-400" />
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className={cn("text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-cyan-500/30", isDark ? "bg-slate-800 text-slate-300 border-slate-700" : "bg-slate-50 text-slate-500 border border-slate-200")}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <OmniButton variant="ghost" size="sm" onClick={onCancel}>
+              取消
+            </OmniButton>
+            <OmniButton
+              variant="primary"
+              size="sm"
+              onClick={handleSubmit}
+              disabled={!content.trim()}
+              icon={<Save size={14} />}
+            >
+              {note ? '更新' : '儲存'}
+            </OmniButton>
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT COLUMN: Task Matrix */}
+      <div className={cn("w-full md:w-[320px] flex flex-col p-4 gap-4", isDark ? "bg-[#0f172a]" : "bg-white")}>
+        {/* Terminal Trace Box */}
+        <div className={cn('h-[120px] rounded-xl border flex flex-col p-3 overflow-hidden relative', isDark ? 'bg-[#020617] border-gray-800' : 'bg-slate-50 border-slate-200')}>
+          <div className="flex items-center gap-2 mb-2 opacity-80">
+            <Server className={cn('w-4 h-4', isDark ? 'text-amber-400' : 'text-amber-600')} />
+            <span className={cn('text-[10px] font-bold tracking-wider uppercase', isDark ? 'text-gray-400' : 'text-gray-500')}>
+              OmniTable Matrix
+            </span>
+          </div>
+          <div className="flex-1 flex flex-col gap-1 overflow-y-auto font-mono text-[9px]">
+            {syncLog.map((log, i) => (
+              <div key={i} className={cn('truncate', i === 0 ? (isDark ? 'text-cyan-400' : 'text-cyan-600') : (isDark ? 'text-gray-500' : 'text-gray-400'))}>
+                {log}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Task Board */}
+        <div className={cn('flex-1 rounded-xl border flex flex-col overflow-hidden', isDark ? 'bg-[#111827] border-gray-800' : 'bg-white border-slate-200')}>
+          <div className="h-12 px-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <ListTodo className={cn('w-4 h-4', isDark ? 'text-[#C084FC]' : 'text-[#9333EA]')} />
+              <span className={cn('text-sm font-bold', isDark ? 'text-gray-100' : 'text-gray-900')}>
+                任務看板
+              </span>
+            </div>
+            <button
+              onClick={handleSyncToOmniTable}
+              disabled={isSyncing}
+              className={cn(
+                'px-2 py-1 rounded-md text-[10px] font-bold tracking-wider flex items-center gap-1',
+                isDark ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-cyan-50 text-cyan-700 border border-cyan-200',
+                isSyncing && 'opacity-50 cursor-not-allowed'
+              )}
+            >
+              <RefreshCw className={cn('w-3 h-3', isSyncing && 'animate-spin')} /> SYNC
+            </button>
+          </div>
+          
+          <div className="flex-1 p-3 overflow-y-auto flex flex-col gap-2">
+            {tasks.length === 0 ? (
+              <div className="m-auto text-center opacity-50">
+                <ShieldCheck className="w-6 h-6 mx-auto mb-2" />
+                <p className="text-[10px]">無追蹤任務</p>
+              </div>
+            ) : (
+              tasks.map((task) => (
+                <div key={task.id} className={cn('p-2.5 rounded-lg border flex flex-col gap-1.5', isDark ? 'bg-[#0F172A] border-gray-800' : 'bg-slate-50 border-slate-200')}>
+                  <div className="flex items-start justify-between gap-2">
+                    <span className={cn('text-xs font-medium leading-snug', isDark ? 'text-gray-200' : 'text-gray-800')}>
+                      {task.title}
+                    </span>
+                    {task.synced ? (
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    ) : (
+                      <Activity className="w-3.5 h-3.5 text-amber-500 shrink-0 animate-pulse" />
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className={cn('px-1.5 py-0.5 rounded text-[9px] font-bold uppercase', task.status === 'Done' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-blue-500/10 text-blue-500')}>
+                      {task.status}
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
