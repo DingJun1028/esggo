@@ -1,4 +1,4 @@
-// @ts-nocheck
+// 5T End-to-End Type Safety Enforced
 import { getOmniTableServerClient, OmniTableRecord } from '@/lib/omni-table/client';
 import { createHash } from 'crypto';
 
@@ -46,7 +46,7 @@ export async function generateSummary(content: string): Promise<string> {
 
 export async function extractLabels(content: string): Promise<string[]> {
   const labelMatches = content.match(/#(\w+)/g);
-  return labelMatches ? [...new Set(labelMatches.map((l) => l.slice(1)))] : [];
+  return labelMatches ? labelMatches.map((l) => l.slice(1)).filter((v, i, a) => a.indexOf(v) === i) : [];
 }
 
 export async function findBacklinks(noteId: string, type: string): Promise<OmniTableRecord[]> {
@@ -238,7 +238,7 @@ export async function syncNoteToOmniTable(
   try {
     const client = getOmniTableServerClient();
     const autoLabels = await extractLabels(content);
-    const allLabels = [...new Set([...(labels || []), ...autoLabels])];
+    const allLabels = [...(labels || []), ...autoLabels].filter((v, i, a) => a.indexOf(v) === i);
     const title = await generateTitle(content);
     const summary = await generateSummary(content);
 
