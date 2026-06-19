@@ -66,13 +66,7 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.aside
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed right-0 top-0 bottom-0 w-full max-w-[90%] sm:max-w-[450px] lg:max-w-[560px] bg-white border-l border-slate-100 shadow-2xl z-50 flex flex-col"
-        >
+        <aside className="fixed right-0 top-0 bottom-0 w-full max-w-[90%] sm:max-w-[450px] lg:max-w-[560px] bg-white border-l border-slate-100 shadow-2xl z-50 flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-50 -md sticky top-0 z-10">
             <div className="flex items-center gap-3">
@@ -361,7 +355,7 @@ export default function WorkspacePanel({ isOpen, onClose }: WorkspacePanelProps)
               <Cpu size={16} className="mr-2" /> 啟動全域協作模式
             </BrandButton>
           </div>
-        </motion.aside>
+        </aside>
       )}
     </AnimatePresence>
   );
