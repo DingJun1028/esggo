@@ -79,6 +79,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (!supabase) {
           console.warn('[Auth] Supabase client 未初始化，使用 demo 模式');
           setSystemStatus('degraded');
+          // Fallback: read from localStorage
+          try {
+            const localUser = localStorage.getItem('omni_user');
+            if (localUser && localUser !== 'undefined') {
+              const parsed = JSON.parse(localUser);
+              setUser({
+                email: parsed?.email || 'dev@esggo.com',
+                id: parsed?.id || 'dev_user',
+                role: parsed?.role || 'superadmin',
+                ...parsed,
+              });
+              setCompanyId(parsed?.company_id || 'default');
+            }
+          } catch (e) {
+            console.warn('[Auth] localStorage parse error', e);
+          }
           setLoading(false);
           return;
         }
