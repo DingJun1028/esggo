@@ -8,7 +8,7 @@ test.describe('OmniNotes Workspace (5T Protocol)', () => {
     await page.goto('/omni-notes', { waitUntil: 'networkidle' });
     
     // Expect the page to have the Editor and Task Board
-    await expect(page.locator('text=Omni Editor')).toBeVisible();
+    await expect(page.locator('text=萬能筆記')).toBeVisible();
     await expect(page.locator('text=任務看板')).toBeVisible();
 
     // Verify visual snapshot
@@ -39,7 +39,7 @@ test.describe('OmniNotes Workspace (5T Protocol)', () => {
     // Click Sync
     const syncBtn = page.locator('button:has-text("SYNC")');
     await syncBtn.click();
-
+    
     // Verify sync terminal logs success and 5T Hash Lock
     await expect(page.locator('text=SYNC COMPLETED')).toBeVisible();
     await expect(page.locator('text=HASH LOCK VERIFIED (5T PROTOCOL)')).toBeVisible();

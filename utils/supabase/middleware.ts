@@ -64,7 +64,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if ((user || isBypass) && isPublicRoute) {
+  if ((user || isBypass) && isPublicRoute && !isDevelopment) {
     const url = request.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);
