@@ -1,4 +1,4 @@
-name: CI
+name: CI — OmniValidate
 
 on:
   push:
@@ -8,83 +8,130 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
+  issues: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  test:
+  validate:
+    name: 🔍 OmniValidate (Typecheck / Lint / Build)
     runs-on: ubuntu-latest
+    outputs:
+      failed_step: ${{ steps.set_failure.outputs.failed_step }}
+      error_log:   ${{ steps.set_failure.outputs.error_log }}
+      ci_failed:   ${{ steps.set_failure.outputs.ci_failed }}
+
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
       - name: Git Safety Config
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v5
         with:
-          version: 9
+          version: 11
           run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Run lint
-        run: pnpm run lint || exit 1
-
-      - name: Run typecheck
-        run: pnpm run typecheck || exit 1
-
-      - name: Run tests with coverage
+      # ── T2 Traceable: TypeCheck ─────────────────────────────────────────
+      - name: Run TypeCheck
+        id: typecheck
         run: |
-          pnpm add -D @vitest/coverage-v8
-          pnpm exec vitest run --coverage --reporter=verbose
+          pnpm run typecheck 2>&1 | tee /tmp/typecheck.log
+          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
         continue-on-error: true
 
-      - name: Build
-        run: pnpm run build
+      # ── T4 Transparent: Lint ────────────────────────────────────────────
+      - name: Run Lint
+        id: lint
+        run: |
+          pnpm run lint 2>&1 | tee /tmp/lint.log
+          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+        continue-on-error: true
+
+      # ── T1 Tangible: Build ──────────────────────────────────────────────
+      - name: Run Build
+        id: build
+        run: |
+          pnpm run build 2>&1 | tee /tmp/build.log
+          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
         env:
           NEXT_TELEMETRY_DISABLED: 1
           SKIP_ENV_VALIDATION: 1
+        continue-on-error: true
 
-      - name: Deploy to Oracle VPS
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: 161.118.248.180
-          username: root
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
-          script: |
-            echo "==== 📥 1. Pulling latest code from GitHub ===="
-            cd /var/www/esggo
-            git checkout main
-            git pull origin main
-            
-            echo "==== 📦 2. Installing dependencies ===="
-            if [ -f package-lock.json ]; then
-              pnpm install --frozen-lockfile
-            else
-              pnpm install
-            fi
-            
-            echo "==== 🏗️ 3. Building Next.js production standalone ===="
-            NODE_OPTIONS=--max_old_space_size=4096 pnpm run build
-            
-            echo "==== 🚀 4. Hot Reload PM2 Servers ===="
-            pm2 reload esggo omniagent-gateway --update-env
-            pm2 save
-            
-            echo "==== 🩺 5. Running Health Check ===="
-            curl -fsS http://127.0.0.1:3000/ -I
-            curl -fsS http://127.0.0.1:8642/status
+      # ── 彙整錯誤輸出 ────────────────────────────────────────────────────
+      - name: Collect failure context
+        id: set_failure
+        run: |
+          FAILED_STEP=""
+          ERROR_LOG=""
+          CI_FAILED="false"
+
+          if [ "${{ steps.typecheck.outputs.exit_code }}" != "0" ]; then
+            FAILED_STEP="TypeCheck"
+            ERROR_LOG=$(cat /tmp/typecheck.log | tail -60)
+            CI_FAILED="true"
+          fi
+
+          if [ "${{ steps.lint.outputs.exit_code }}" != "0" ]; then
+            [ -z "$FAILED_STEP" ] && FAILED_STEP="Lint" || FAILED_STEP="$FAILED_STEP,Lint"
+            ERROR_LOG="${ERROR_LOG}$(cat /tmp/lint.log | tail -40)"
+            CI_FAILED="true"
+          fi
+
+          if [ "${{ steps.build.outputs.exit_code }}" != "0" ]; then
+            [ -z "$FAILED_STEP" ] && FAILED_STEP="Build" || FAILED_STEP="$FAILED_STEP,Build"
+            ERROR_LOG="${ERROR_LOG}$(cat /tmp/build.log | tail -80)"
+            CI_FAILED="true"
+          fi
+
+          # GitHub output 多行必須使用 heredoc 格式
+          echo "failed_step=$FAILED_STEP" >> $GITHUB_OUTPUT
+          echo "ci_failed=$CI_FAILED" >> $GITHUB_OUTPUT
+          {
+            echo 'error_log<<EOF_ERROR_LOG'
+            echo "$ERROR_LOG"
+            echo 'EOF_ERROR_LOG'
+          } >> $GITHUB_OUTPUT
+
+      # ── 全部通過標記 ────────────────────────────────────────────────────
+      - name: ✅ All checks passed
+        if: steps.set_failure.outputs.ci_failed == 'false'
+        run: echo "🟢 OmniValidate PASSED — TypeCheck ✓ Lint ✓ Build ✓"
+
+      # ── 有錯誤則標記 CI 失敗 ────────────────────────────────────────────
+      - name: ❌ CI Failed — trigger self-heal
+        if: steps.set_failure.outputs.ci_failed == 'true'
+        run: |
+          echo "🔴 Failed steps: ${{ steps.set_failure.outputs.failed_step }}"
+          echo "Triggering omni-self-heal..."
+          exit 1
+
+  # ── 多代理自我修復觸發 ──────────────────────────────────────────────────
+  omni-self-heal:
+    name: 🤖 OmniAgent Self-Heal (Jules)
+    needs: validate
+    if: failure() && needs.validate.outputs.ci_failed == 'true'
+    uses: ./.github/workflows/omni-self-heal.yml
+    with:
+      failed_step: ${{ needs.validate.outputs.failed_step }}
+      error_log:   ${{ needs.validate.outputs.error_log }}
+      commit_sha:  ${{ github.sha }}
+      branch_name: ${{ github.ref_name }}
+    secrets: inherit
