@@ -60,7 +60,7 @@ function decodeJwtPayload(token: string): Record<string, any> | null {
  */
 function getEffectiveExpiry(masterAuthToken?: string): number {
   const envExpiry = Number(process.env.MASTER_TOKEN_EXPIRY_SECONDS);
-  if (!isNaN(envExpiry) && envExpiry > 0) return envExpiry;
+  if (!isNaN(envExpiry) && envExpiry >= 0) return envExpiry;
 
   // Try to extract from JWT exp
   if (masterAuthToken) {
@@ -107,7 +107,7 @@ async function validateWithExternalProvider(token: string): Promise<{ valid: boo
  */
 export function readAuthorizedStatus(): boolean {
   if (!authContext.isAuthorized) return false;
-  if (authContext.tokenExpiryTime !== null && Date.now() > authContext.tokenExpiryTime) {
+  if (authContext.tokenExpiryTime !== null && Date.now() >= authContext.tokenExpiryTime) {
     clearAuthContext();
     console.log('[auth] Token expired, context cleared.');
     return false;
