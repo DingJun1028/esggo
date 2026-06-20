@@ -359,7 +359,12 @@ export default function ReadingRoomPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <Button variant="outline" icon={<Search size={16} />} className="flex-1 md:flex-none">
+            <Button
+              variant="outline"
+              icon={<Search size={16} />}
+              onClick={() => document.getElementById('rr-search')?.focus()}
+              className="flex-1 md:flex-none"
+            >
               檢索
             </Button>
             <Button
