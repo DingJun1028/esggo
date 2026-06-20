@@ -1,4 +1,6 @@
 // @ts-nocheck
+'use client';
+
 /**
  * 顧客旅程中心（Customer Journey Center）
  * 
