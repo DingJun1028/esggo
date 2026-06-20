@@ -1,5 +1,7 @@
 "use client";
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
@@ -32,6 +34,9 @@ export interface OmniSustainWriteEditorRef {
 }
 
 interface OmniSustainWriteEditorProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
  value: string;
  onChange: (value: string) => void;
  editable?: boolean;

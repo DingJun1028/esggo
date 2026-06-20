@@ -1,8 +1,8 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 import { Leaf, Wind, Recycle, TrendingDown, Zap, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/db/supabase';
 
@@ -78,7 +78,7 @@ export default function EnvironmentalMetricsPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="default" size="sm" icon={<Leaf size={12}/>} className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">E-Metrics</OmniBadge>
+                <Badge variant="default" size="sm" icon={<Leaf size={12}/>} className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">E-Metrics</Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">ENV-001</span>
                 {loading && <Loader2 className="w-3 h-3 text-emerald-500 animate-spin" />}
               </div>
@@ -90,7 +90,7 @@ export default function EnvironmentalMetricsPage() {
 
         {/* Environmental Dashboard Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-emerald-500/30">
+          <Card variant="glass" className="p-6 transition-all duration-300 hover:border-emerald-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
               <Wind size={18} className="text-emerald-400" /> 碳排放量 (Scope 1+2)
             </h3>
@@ -98,22 +98,22 @@ export default function EnvironmentalMetricsPage() {
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
               <TrendingDown size={14} className="text-emerald-500" /> 較去年降低 5.4%
             </p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-teal-500/30">
+          <Card variant="glass" className="p-6 transition-all duration-300 hover:border-teal-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
               <Zap size={18} className="text-teal-400" /> 總能源消耗</h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.energyConsumption.toLocaleString()} <span className="text-lg font-normal text-slate-500">kWh</span></div>
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2">目前綠電佔比 42%</p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6 transition-all duration-300 hover:border-green-500/30">
+          <Card variant="glass" className="p-6 transition-all duration-300 hover:border-green-500/30">
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
               <Recycle size={18} className="text-green-400" /> 廢棄物回收率
             </h3>
             <div className="text-3xl font-black text-white mb-2">{metrics.recyclingRate.toFixed(1)}%</div>
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2">年度目標: 2026年達 90%</p>
-          </OmniBaseCard>
+          </Card>
         </div>
 
       </div>

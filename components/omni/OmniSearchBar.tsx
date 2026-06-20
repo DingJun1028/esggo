@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 

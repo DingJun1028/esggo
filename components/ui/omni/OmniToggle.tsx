@@ -1,8 +1,13 @@
 'use client';
+
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/cn';
 
 export interface OmniToggleProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'onChange'> {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;

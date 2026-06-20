@@ -26,9 +26,9 @@ import {
   Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface LevelData {
@@ -191,9 +191,9 @@ function LevelCard({ level, index }: { level: LevelData; index: number }) {
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-bold text-[#003262]">{level.name}</h3>
-            <OmniBadge variant="primary" size="xs">
+            <Badge variant="primary" size="xs">
               Level {level.level}
-            </OmniBadge>
+            </Badge>
           </div>
           <p className="text-[10px] text-slate-400">
             {level.subtitle} · {level.period}
@@ -434,7 +434,7 @@ export default function ValueLevelsPage() {
         {/* ─── Level Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               {activeLevel === 'level2' ? (
                 <div>
                   <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -460,13 +460,13 @@ export default function ValueLevelsPage() {
                   </div>
                 </div>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Level Comparison */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">等級比較</h3>
               <div className="space-y-1">
                 <div className="grid grid-cols-4 gap-2 pb-2 border-b border-slate-100">
@@ -479,10 +479,10 @@ export default function ValueLevelsPage() {
                   <ComparisonRow key={i} data={data} />
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Next Level */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">下一等級</h3>
               <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
                 <div className="flex items-center gap-2 mb-2">
@@ -490,36 +490,36 @@ export default function ValueLevelsPage() {
                   <span className="text-sm font-bold text-amber-700">Level 4: 生態擴展</span>
                 </div>
                 <p className="text-[11px] text-slate-500 mb-3">供應鏈整合、碳交易、國際認證</p>
-                <OmniButton
+                <Button
                   variant="outline"
                   size="sm"
                   className="w-full border-amber-300 text-amber-700 hover:bg-amber-100"
                 >
                   了解更多
-                </OmniButton>
+                </Button>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備升級到更高價值等級？</h3>
           <p className="text-xs text-slate-400 mb-4">從效率提升開始，逐步建立專業增值與信任體系</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Rocket size={16} />}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               開始升級
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

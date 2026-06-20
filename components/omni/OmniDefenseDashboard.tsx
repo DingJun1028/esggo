@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { useColorDropStream } from '@/lib/hooks/useColorDropStream';
 import { OmniZKPBadge } from './OmniZKPBadge';

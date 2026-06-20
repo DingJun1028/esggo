@@ -28,17 +28,18 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "types": ["node", "react", "react-dom"],
-    "paths": {
-      "@/*": [
-        "./src/*",
-        "./lib/*",
-        "./packages/*",
-        "./app/*",
-        "./components/*",
-        "./hooks/*",
-        "./*"
-      ],
-      "@dataconnect/generated": ["./dataconnect/generated/index.ts"],
+"paths": {
+       "@/*": [
+         "./src/*",
+         "./lib/*",
+         "./packages/*",
+         "./app/*",
+         "./components/*",
+         "./hooks/*",
+         "./*"
+       ],
+       "@esggo/types": ["./packages/types/src/index.ts"],
+       "@dataconnect/generated": ["./dataconnect/generated/index.ts"],
       "playwright": ["./node_modules/playwright/index.d.ts"],
       "framer-motion": ["./node_modules/framer-motion/dist/index.d.ts"]
     },

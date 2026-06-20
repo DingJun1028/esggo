@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 import { Building2, User, Save, ShieldCheck, Mail, Phone, MapPin, Hash, CheckCircle2 } from 'lucide-react';
 
 export default function ProfilePage() {
@@ -61,7 +61,7 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton 
+            <Button 
               variant="primary" 
               icon={<Save size={16}/>} 
               onClick={handleSave} 
@@ -69,7 +69,7 @@ export default function ProfilePage() {
               className="flex-1 md:flex-none !bg-teal-600 hover:!bg-teal-700"
             >
               儲存並同步至報告庫
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
@@ -83,7 +83,7 @@ export default function ProfilePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* 企業資訊區塊 */}
-          <OmniBaseCard variant="default" className="p-6">
+          <Card variant="default" className="p-6">
             <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
               <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
                 <Building2 size={20} />
@@ -149,10 +149,10 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
-          </OmniBaseCard>
+          </Card>
 
           {/* 報告聯絡人區塊 */}
-          <OmniBaseCard variant="default" className="p-6">
+          <Card variant="default" className="p-6">
             <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
               <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
                 <User size={20} />
@@ -206,7 +206,7 @@ export default function ProfilePage() {
               <ShieldCheck className="inline-block text-teal-600 mr-2" size={16}/>
               此處輸入的個人資料將受到 <strong>ESGGO 5T 隱私遮蔽協議</strong> 與 <strong>台灣個人資料保護法</strong> 保護。在匯出報告時，我們會自動依據您的隱私設定進行適當的遮蔽 (ZKP 處理)。
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
       </div>

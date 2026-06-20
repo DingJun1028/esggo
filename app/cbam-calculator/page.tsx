@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
 import {
   Calculator,
@@ -198,13 +198,13 @@ export default function CbamCalculatorPage() {
       label: '5T Hash Lock',
       render: (val: any) =>
         val ? (
-          <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+          <Badge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
             {val.substring(0, 8)}...
-          </OmniBadge>
+          </Badge>
         ) : (
-          <OmniBadge variant="default" size="sm">
+          <Badge variant="default" size="sm">
             未封印
-          </OmniBadge>
+          </Badge>
         ),
     },
     {
@@ -251,9 +251,9 @@ export default function CbamCalculatorPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12} />}>
+                <Badge variant="primary" size="sm" icon={<Brain size={12} />}>
                   OmniAgent Ready
-                </OmniBadge>
+                </Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                   CBAM-CALCULATOR
                 </span>
@@ -267,14 +267,14 @@ export default function CbamCalculatorPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton
+            <Button
               variant="outline"
               icon={<Search size={16} />}
               className="flex-1 md:flex-none"
             >
               檢索
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="primary"
               icon={<Plus size={16} />}
               onClick={handleAddRecord}
@@ -282,13 +282,13 @@ export default function CbamCalculatorPage() {
               className="flex-1 md:flex-none"
             >
               新增紀錄
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
+          <Card variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">納管出口批次</span>
               <Scale size={18} className="text-amber-400" />
@@ -297,9 +297,9 @@ export default function CbamCalculatorPage() {
               12<span className="text-lg text-slate-500 ml-2 font-normal">Batches</span>
             </div>
             <p className="text-xs text-amber-400/80 font-mono">Status: Q3 Declaration</p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
+          <Card variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
@@ -308,9 +308,9 @@ export default function CbamCalculatorPage() {
               98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
             </div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
+          <Card variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">潛在財務衝擊</span>
               <Euro size={18} className="text-rose-400" />
@@ -319,24 +319,24 @@ export default function CbamCalculatorPage() {
               72.5<span className="text-lg text-slate-500 ml-2 font-normal">k €</span>
             </div>
             <p className="text-xs text-rose-400/80 font-mono">Estimated Liability</p>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard
+            <Card
               variant="default"
               title="業務資料視圖"
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
               <OmniBaseTable columns={columns} data={data} loading={loading} />
-            </OmniBaseCard>
+            </Card>
           </div>
 
           <div className="space-y-6">
-            <OmniBaseCard
+            <Card
               variant="glow"
               title="OmniAgent 合規參謀"
               subtitle="CBAM Declaration Advisor"
@@ -354,14 +354,14 @@ export default function CbamCalculatorPage() {
                     的憑證成本。請準備好碳費繳納證明，交由系統自動產製申報書。
                   </p>
                 </div>
-                <OmniButton
+                <Button
                   variant="outline"
                   className="w-full mt-4 border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400"
                 >
                   一鍵生成歐盟申報 XML
-                </OmniButton>
+                </Button>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
       </div>

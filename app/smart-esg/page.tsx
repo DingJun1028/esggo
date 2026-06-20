@@ -29,9 +29,9 @@ import {
   Star,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
+import { Button } from '@/components/ui/v2/Button';
 
 /* ─── Types ─── */
 interface AICapability {
@@ -315,9 +315,9 @@ function OpportunityCard({ opportunity, index }: { opportunity: OpportunityPoint
 
       {/* Meta */}
       <div className="flex items-center gap-3 mb-4">
-        <OmniBadge variant="secondary" size="xs" className={diffConfig.color}>
+        <Badge variant="secondary" size="xs" className={diffConfig.color}>
           {diffConfig.label}
-        </OmniBadge>
+        </Badge>
         <span className="text-[10px] text-slate-400 flex items-center gap-1">
           <Target size={10} /> 實施週期: {opportunity.timeframe}
         </span>
@@ -470,7 +470,7 @@ export default function SmartESGPage() {
             </div>
 
             {/* Summary */}
-            <OmniBaseCard className="p-5 bg-gradient-to-r from-emerald-50 to-cyan-50 border-emerald-200">
+            <Card className="p-5 bg-gradient-to-r from-emerald-50 to-cyan-50 border-emerald-200">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-emerald-100 rounded-xl">
                   <TrendingUp size={24} className="text-emerald-600" />
@@ -479,16 +479,16 @@ export default function SmartESGPage() {
                   <h3 className="text-base font-bold text-[#003262]">總減排潛力：73%</h3>
                   <p className="text-xs text-slate-500">實施所有建議後，預計可減少 73% 的碳排放</p>
                 </div>
-                <OmniButton
+                <Button
                   variant="primary"
                   size="sm"
                   icon={<Play size={14} />}
                   className="bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                   開始實施
-                </OmniButton>
+                </Button>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
@@ -526,23 +526,23 @@ export default function SmartESGPage() {
         )}
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗智能 ESG？</h3>
           <p className="text-xs text-slate-400 mb-4">上傳您的數據，讓 AI 為您發現減排機會</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Upload size={16} />}
               className="bg-[#003262] hover:bg-[#002244] text-white"
             >
               上傳數據
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

@@ -23,9 +23,9 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface VerificationStep {
@@ -307,7 +307,7 @@ export default function FourTVerificationPage() {
         </div>
 
         {/* ─── Before/After Comparison ─── */}
-        <OmniBaseCard className="p-6">
+        <Card className="p-6">
           <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
             <Zap size={16} className="text-amber-500" />
             使用前 vs 使用後
@@ -371,7 +371,7 @@ export default function FourTVerificationPage() {
               </div>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
@@ -449,17 +449,17 @@ export default function FourTVerificationPage() {
               {TRUST_INDICATORS.map((indicator) => {
                 const Icon = indicator.icon;
                 return (
-                  <OmniBaseCard key={indicator.id} className="p-4 text-center">
+                  <Card key={indicator.id} className="p-4 text-center">
                     <Icon size={24} className={cn('mx-auto mb-2', indicator.color)} />
                     <p className="text-xl font-black text-[#003262]">{indicator.value}</p>
                     <p className="text-[10px] text-slate-400 font-medium">{indicator.label}</p>
-                  </OmniBaseCard>
+                  </Card>
                 );
               })}
             </div>
 
             {/* Hash Lock Visualization */}
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Lock size={14} className="text-amber-500" />
                 Hash Lock 封印狀態
@@ -488,7 +488,7 @@ export default function FourTVerificationPage() {
                   <span className="text-emerald-400">Trustworthy (通)</span>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
@@ -500,7 +500,7 @@ export default function FourTVerificationPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <ShieldCheck size={14} className="text-emerald-500" />
                   信任度提升
@@ -518,9 +518,9 @@ export default function FourTVerificationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <Zap size={14} className="text-cyan-500" />
                   效率提升
@@ -538,9 +538,9 @@ export default function FourTVerificationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <Award size={14} className="text-amber-500" />
                   商業價值
@@ -558,9 +558,9 @@ export default function FourTVerificationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <FileText size={14} className="text-violet-500" />
                   合規效益
@@ -578,29 +578,29 @@ export default function FourTVerificationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
             </div>
           </div>
         )}
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗 4T 驗證？</h3>
           <p className="text-xs text-slate-400 mb-4">上傳您的數據，讓 AI 自動執行 5T 協議驗證</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<ShieldCheck size={16} />}
               className="bg-[#003262] hover:bg-[#002244] text-white"
             >
               開始驗證
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

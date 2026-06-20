@@ -28,9 +28,9 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
+import { Button } from '@/components/ui/v2/Button';
 
 /* ─── Types ─── */
 interface AhaMoment {
@@ -403,7 +403,7 @@ export default function AhaMomentsPage() {
         </div>
 
         {/* ─── Design Principles ─── */}
-        <OmniBaseCard className="p-6">
+        <Card className="p-6">
           <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
             <Target size={16} className="text-cyan-500" />
             Aha Moment 設計原則
@@ -452,26 +452,26 @@ export default function AhaMomentsPage() {
               );
             })}
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗您的 Aha Moment？</h3>
           <p className="text-xs text-slate-400 mb-4">註冊即可在 Day 3 體驗首次 AI 洞察的驚喜</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Rocket size={16} />}
               className="bg-[#003262] hover:bg-[#002244] text-white"
             >
               立即開始
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

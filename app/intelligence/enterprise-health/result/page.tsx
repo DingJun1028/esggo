@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { 
   Stethoscope, 
   ArrowLeft, 
@@ -95,22 +95,22 @@ export default function EnterpriseHealthResultPage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+                <Badge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
                   Diagnostic Complete
-                </OmniBadge>
+                </Badge>
               </div>
               <h1 className="text-3xl font-black text-[#003262] tracking-tight">企業 ESG 診斷報告</h1>
               <p className="text-sm text-slate-400 mt-1">根據您的填寫結果，系統已為您生成專屬分析與改善路徑。</p>
             </div>
           </div>
-          <OmniButton variant="ghost" onClick={() => router.push('/intelligence')} className="text-slate-500">
+          <Button variant="ghost" onClick={() => router.push('/intelligence')} className="text-slate-500">
             <ArrowLeft size={16} className="mr-2" /> 返回商情中心
-          </OmniButton>
+          </Button>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Score Card */}
-          <OmniBaseCard className="p-8 flex flex-col items-center justify-center text-center space-y-4 border-t-4 border-t-cyan-500 shadow-md bg-white">
+          <Card className="p-8 flex flex-col items-center justify-center text-center space-y-4 border-t-4 border-t-cyan-500 shadow-md bg-white">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">ESG 成熟度總分</h3>
             <div className="relative">
               <svg className="w-32 h-32 transform -rotate-90">
@@ -131,10 +131,10 @@ export default function EnterpriseHealthResultPage() {
             <p className="text-sm font-bold text-slate-600">
               {score >= 80 ? '領先群標竿' : score >= 60 ? '穩健發展中' : '起步奠基期'}
             </p>
-          </OmniBaseCard>
+          </Card>
 
           {/* Key Findings */}
-          <OmniBaseCard className="md:col-span-2 p-8 space-y-6 shadow-md bg-white">
+          <Card className="md:col-span-2 p-8 space-y-6 shadow-md bg-white">
             <h3 className="text-lg font-black text-[#003262] flex items-center gap-2">
               <TrendingUp size={18} className="text-cyan-600" /> 核心發現與洞察
             </h3>
@@ -154,11 +154,11 @@ export default function EnterpriseHealthResultPage() {
                 <p className="text-sm text-rose-700 leading-relaxed">缺乏系統化的溫室氣體盤查數據，數據收集仍依賴人工，有高度合規風險。</p>
               </div>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* 90-Day Roadmap */}
-        <OmniBaseCard className="p-0 overflow-hidden shadow-lg border-0 bg-white">
+        <Card className="p-0 overflow-hidden shadow-lg border-0 bg-white">
           <div className="p-6 md:p-8 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
             <div>
               <h3 className="text-xl font-black text-[#003262] flex items-center gap-2 mb-1">
@@ -167,22 +167,22 @@ export default function EnterpriseHealthResultPage() {
               <p className="text-sm text-slate-500">系統已根據您的弱項，為您規劃未來三個月的具體行動方案。</p>
             </div>
             {!exportComplete ? (
-              <OmniButton 
+              <Button 
                 variant="primary" 
                 onClick={handleExportToTasks} 
                 isLoading={isExporting}
                 className="bg-[#003262] hover:bg-[#002244] shrink-0"
               >
                 <UploadCloud size={16} className="mr-2" /> 匯入任務中心 (NCB)
-              </OmniButton>
+              </Button>
             ) : (
-              <OmniButton 
+              <Button 
                 variant="outline" 
                 onClick={() => router.push('/omni-notes')}
                 className="border-emerald-500 text-emerald-600 hover:bg-emerald-50 shrink-0 font-bold"
               >
                 <ListTodo size={16} className="mr-2" /> 前往任務看板
-              </OmniButton>
+              </Button>
             )}
           </div>
           
@@ -251,7 +251,7 @@ export default function EnterpriseHealthResultPage() {
 
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
       </div>
     </div>

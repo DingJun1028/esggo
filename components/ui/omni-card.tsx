@@ -1,7 +1,11 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { OmniCard } from '@/src/shared/types';
 
 interface OmniCardProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   card: OmniCard;
   className?: string;
 }

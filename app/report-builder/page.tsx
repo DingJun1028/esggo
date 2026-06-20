@@ -32,9 +32,9 @@ import {
   Loader2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface ReportTemplate {
@@ -208,9 +208,9 @@ function TemplateCard({ template, onSelect }: { template: ReportTemplate; onSele
         >
           <Icon size={20} className={template.color} />
         </div>
-        <OmniBadge variant="secondary" size="xs">
+        <Badge variant="secondary" size="xs">
           {template.framework}
-        </OmniBadge>
+        </Badge>
       </div>
       <h3 className="text-base font-bold text-[#003262] mb-1">{template.name}</h3>
       <p className="text-xs text-slate-400 mb-3 line-clamp-2">{template.description}</p>
@@ -352,7 +352,7 @@ function ProjectCard({ project }: { project: ReportProject }) {
 
 function GenerationPanel({ steps }: { steps: GenerationStep[] }) {
   return (
-    <OmniBaseCard className="p-5">
+    <Card className="p-5">
       <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
         <Sparkles size={16} className="text-amber-500" />
         生成進度
@@ -407,7 +407,7 @@ function GenerationPanel({ steps }: { steps: GenerationStep[] }) {
           </div>
         ))}
       </div>
-    </OmniBaseCard>
+    </Card>
   );
 }
 
@@ -444,17 +444,17 @@ export default function ReportBuilderPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <OmniButton variant="outline" size="sm" icon={<History size={14} />}>
+              <Button variant="outline" size="sm" icon={<History size={14} />}>
                 歷史記錄
-              </OmniButton>
-              <OmniButton
+              </Button>
+              <Button
                 variant="primary"
                 size="sm"
                 icon={<Plus size={14} />}
                 className="bg-[#003262] hover:bg-[#002244] text-white"
               >
                 新增報告
-              </OmniButton>
+              </Button>
             </div>
           </div>
         </header>
@@ -575,7 +575,7 @@ export default function ReportBuilderPage() {
                       <p className="text-xs text-slate-400">{selectedTemplate.description}</p>
                     </div>
                   </div>
-                  <OmniButton
+                  <Button
                     variant="primary"
                     size="md"
                     icon={<Sparkles size={14} />}
@@ -583,7 +583,7 @@ export default function ReportBuilderPage() {
                     className="bg-[#003262] hover:bg-[#002244] text-white"
                   >
                     開始生成
-                  </OmniButton>
+                  </Button>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {selectedTemplate.sections.map((section) => (
@@ -625,7 +625,7 @@ export default function ReportBuilderPage() {
         {activeTab === 'generate' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                   <FileText size={16} className="text-amber-500" />
                   {selectedTemplate?.name || '報告預覽'}
@@ -646,7 +646,7 @@ export default function ReportBuilderPage() {
                     </div>
                   )}
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
             <div>
               <GenerationPanel steps={GENERATION_STEPS} />

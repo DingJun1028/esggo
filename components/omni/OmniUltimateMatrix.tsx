@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import {
@@ -22,6 +24,9 @@ import {
 } from 'lucide-react';
 
 interface MatrixNodeProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   id: string;
   name: string;
   description: string;

@@ -1,8 +1,12 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 
 import Protocol5TStrip from './Protocol5TStrip';
 
 export interface OmniKpiCardProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   title: string;
   value: string | number;
   unit?: string;

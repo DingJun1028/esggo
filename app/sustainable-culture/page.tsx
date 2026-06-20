@@ -25,9 +25,9 @@ import {
   Recycle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Data ─── */
 const CULTURE_ELEMENTS = [
@@ -355,7 +355,7 @@ export default function SustainableCulturePage() {
                 <div
                   key="roadmap"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Target size={14} className="text-rose-500" />
                       文化轉型路線圖
@@ -365,7 +365,7 @@ export default function SustainableCulturePage() {
                         <RoadmapPhase key={i} phase={phase} index={i} />
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
 
@@ -380,7 +380,7 @@ export default function SustainableCulturePage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {GREEN_ACTIONS.map((action, i) => (
-                      <OmniBaseCard key={i} className="p-4">
+                      <Card key={i} className="p-4">
                         <div className="flex items-center gap-3">
                           <span className="text-2xl">{action.icon}</span>
                           <div>
@@ -388,7 +388,7 @@ export default function SustainableCulturePage() {
                             <p className="text-xs text-emerald-600 font-medium">{action.impact}</p>
                           </div>
                         </div>
-                      </OmniBaseCard>
+                      </Card>
                     ))}
                   </div>
                 </div>
@@ -399,17 +399,17 @@ export default function SustainableCulturePage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Culture Score */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 border-rose-200">
+            <Card className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 border-rose-200">
               <div className="text-center">
                 <Heart size={32} className="mx-auto mb-2 text-rose-600" />
                 <p className="text-3xl font-black text-[#003262]">92</p>
                 <p className="text-xs text-slate-500 font-medium">永續文化評分</p>
                 <p className="text-[9px] text-slate-400 mt-1">基於 4 大要素綜合評估</p>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Employee Quotes */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">員工心聲</h3>
               <div className="space-y-3">
                 {EMPLOYEE_QUOTES.map((quote, i) => (
@@ -425,22 +425,22 @@ export default function SustainableCulturePage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* CTA */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 border-rose-200">
+            <Card className="p-4 bg-gradient-to-br from-rose-50 to-pink-50 border-rose-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">建立永續文化</h3>
               <p className="text-[11px] text-slate-500 mb-3">
                 從價值觀重塑開始，打造永續發展企業文化
               </p>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-rose-600 hover:bg-rose-700 text-white"
               >
                 開始文化轉型
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
           </div>
         </div>
       </div>

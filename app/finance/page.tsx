@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
 import { PieChart, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, X } from 'lucide-react';
 
@@ -110,11 +110,11 @@ export default function FinancePage() {
     { key: 'source_origin', label: '來源 (Source)' },
     { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
       val ? (
-        <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
+        <Badge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
           {val.substring(0, 8)}...
-        </OmniBadge>
+        </Badge>
       ) : (
-        <OmniBadge variant="default" size="sm">未封印</OmniBadge>
+        <Badge variant="default" size="sm">未封印</Badge>
       )
     ) },
     { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
@@ -154,7 +154,7 @@ export default function FinancePage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</OmniBadge>
+                <Badge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">FINANCE</span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">FINANCE</h1>
@@ -162,47 +162,47 @@ export default function FinancePage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</OmniButton>
-            <OmniButton variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+            <Button variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</Button>
+            <Button variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
               新增紀錄
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
+          <Card variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
             <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
+          <Card variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
             <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6 space-y-4">
+          <Card variant="glass" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
             </div>
             <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
             <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <OmniBaseCard 
+            <Card 
               variant="default" 
               title="業務資料視圖" 
               subtitle="Data synced with 5T Integrity Protocol"
@@ -213,11 +213,11 @@ export default function FinancePage() {
                 data={data}
                 loading={loading}
               />
-            </OmniBaseCard>
+            </Card>
           </div>
           
           <div className="space-y-6">
-            <OmniBaseCard 
+            <Card 
               variant="glow" 
               title="OmniAgent 輔助" 
               subtitle="AI 智能上下文"
@@ -235,7 +235,7 @@ export default function FinancePage() {
                   </ul>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
 

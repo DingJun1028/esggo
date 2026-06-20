@@ -2,10 +2,10 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useESGAtoms } from '@/lib/supabase/hooks';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Button } from '@/components/ui/v2/Button';
 import {
   Landmark,
   Plus,
@@ -25,7 +25,7 @@ import {
 
 // === Jules Karma Protocol: Performance Optimization with React.memo ===
 const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorClass }: any) => (
-  <OmniBaseCard
+  <Card
     variant="default"
     className="p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] dark:bg-slate-900/40 -md border border-slate-200/50 dark:border-white/10 group"
   >
@@ -46,7 +46,7 @@ const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorCla
       </span>
       <span className="text-sm font-medium text-slate-500 dark:text-slate-500">{unit}</span>
     </div>
-  </OmniBaseCard>
+  </Card>
 ));
 MetricCard.displayName = 'MetricCard';
 
@@ -174,22 +174,22 @@ const SupplierCAPModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           {/* Action Area */}
           <div className="flex justify-end pt-4 border-t border-white/10">
             {step === 6 ? (
-              <OmniButton
+              <Button
                 variant="primary"
                 icon={<FileCheck size={16} />}
                 onClick={onClose}
                 className="!bg-emerald-600 hover:!bg-emerald-500 w-full md:w-auto shadow-[0_0_15px_rgba(16,185,129,0.4)]"
               >
                 下載並分派 CAP (PDF)
-              </OmniButton>
+              </Button>
             ) : (
-              <OmniButton
+              <Button
                 variant="outline"
                 disabled
                 className="w-full md:w-auto opacity-50 cursor-not-allowed"
               >
                 生成中...
-              </OmniButton>
+              </Button>
             )}
           </div>
         </div>
@@ -478,15 +478,15 @@ export default function GovernanceDashboard() {
               </div>
             </div>
             <div className="flex gap-3 w-full md:w-auto flex-wrap">
-              <OmniButton
+              <Button
                 variant="outline"
                 icon={<ShieldCheck size={16} />}
                 onClick={() => setIsHealthModalOpen(true)}
                 className="bg-emerald-500/10 border-emerald-500/30 hover:bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
               >
                 一鍵企業體檢
-              </OmniButton>
-              <OmniButton
+              </Button>
+              <Button
                 variant="outline"
                 icon={<Download size={16} />}
                 onClick={handleExport}
@@ -494,15 +494,15 @@ export default function GovernanceDashboard() {
                 className="border-white/10 hover: text-slate-200"
               >
                 匯出治理報告
-              </OmniButton>
-              <OmniButton
+              </Button>
+              <Button
                 variant="primary"
                 icon={<Plus size={16} />}
                 className="!bg-amber-600 hover:!bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
                 onClick={handleAddRecord}
               >
                 自動載入紀錄
-              </OmniButton>
+              </Button>
             </div>
           </header>
 
@@ -542,7 +542,7 @@ export default function GovernanceDashboard() {
           {/* Main Workspace Area */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
-              <OmniBaseCard
+              <Card
                 variant="default"
                 className="p-0 overflow-hidden border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
               >
@@ -609,14 +609,14 @@ export default function GovernanceDashboard() {
                     </tbody>
                   </table>
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
 
             <div className="space-y-6">
               {/* Dynamic Risk Radar / Warning Card */}
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
-                <OmniBaseCard
+                <Card
                   variant="default"
                   className="relative p-6 border border-red-500/30 shadow-2xl"
                 >
@@ -659,7 +659,7 @@ export default function GovernanceDashboard() {
                           </li>
                         </ul>
                       </div>
-                      <OmniButton
+                      <Button
                         variant="primary"
                         onClick={() => {
                           setIsCapModalOpen(true);
@@ -668,10 +668,10 @@ export default function GovernanceDashboard() {
                         className="w-full mt-6 !bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 shadow-[0_0_15px_rgba(239,68,68,0.4)] border-none text-white font-bold tracking-widest text-xs py-3"
                       >
                         生成供應商改善計畫 (CAP)
-                      </OmniButton>
+                      </Button>
                     </div>
                   </div>
-                </OmniBaseCard>
+                </Card>
               </div>
 
               <div className="pt-2 opacity-90 hover:opacity-100 transition-opacity">

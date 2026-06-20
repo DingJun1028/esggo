@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import OmniHeader from '@/components/omni/OmniHeader';
 import {
   Eye,
@@ -698,7 +698,7 @@ export default function OmniMapPage() {
           {/* Right Column: Node Detailed Specifications & Healing Overdrive (4 Cols) */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             {/* 1. Node Info Card */}
-            <OmniBaseCard
+            <Card
               variant="glass"
               className="p-6 border-cyan-400/25 bg-gradient-to-b from-slate-950 to-cyan-950/20 relative overflow-hidden shadow-2xl flex-1 flex flex-col justify-between"
             >
@@ -859,7 +859,7 @@ export default function OmniMapPage() {
                 <span>OMNIMAP_ENGINE_V2</span>
                 <span className="text-cyan-500/80">ALIGNED_5T</span>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
       </div>

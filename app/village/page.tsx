@@ -25,9 +25,9 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
+import { Button } from '@/components/ui/v2/Button';
 
 /* ─── Types ─── */
 interface CommunityPost {
@@ -335,7 +335,7 @@ export default function VillagePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
               {/* New Post */}
-              <OmniBaseCard className="p-4">
+              <Card className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#003262] flex items-center justify-center text-white text-sm font-bold">
                     U
@@ -345,16 +345,16 @@ export default function VillagePage() {
                     placeholder="分享你的 ESG 經驗..."
                     className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
                   />
-                  <OmniButton
+                  <Button
                     variant="primary"
                     size="sm"
                     icon={<Plus size={14} />}
                     className="bg-[#003262] hover:bg-[#002244] text-white"
                   >
                     發布
-                  </OmniButton>
+                  </Button>
                 </div>
-              </OmniBaseCard>
+              </Card>
 
               {/* Posts */}
               {POSTS.map((post) => (
@@ -364,7 +364,7 @@ export default function VillagePage() {
 
             {/* Sidebar */}
             <div className="space-y-4">
-              <OmniBaseCard className="p-4">
+              <Card className="p-4">
                 <h3 className="text-sm font-bold text-[#003262] mb-3">熱門標籤</h3>
                 <div className="flex flex-wrap gap-2">
                   {[
@@ -385,9 +385,9 @@ export default function VillagePage() {
                     </button>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-4">
+              <Card className="p-4">
                 <h3 className="text-sm font-bold text-[#003262] mb-3">推薦成員</h3>
                 <div className="space-y-2">
                   {MEMBERS.slice(0, 3).map((member) => (
@@ -403,7 +403,7 @@ export default function VillagePage() {
                     </div>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
           </div>
         )}
@@ -417,7 +417,7 @@ export default function VillagePage() {
         )}
 
         {activeTab === 'leaderboard' && (
-          <OmniBaseCard className="p-5">
+          <Card className="p-5">
             <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
               <Award size={16} className="text-amber-500" />
               學習積分排行榜
@@ -471,7 +471,7 @@ export default function VillagePage() {
                 </div>
               ))}
             </div>
-          </OmniBaseCard>
+          </Card>
         )}
       </div>
     </div>

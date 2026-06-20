@@ -1,4 +1,6 @@
 'use client';
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect } from 'react';
 
 import { Bot, X, Send, Maximize2, Minimize2, Sparkles, Activity, History, Zap } from 'lucide-react';

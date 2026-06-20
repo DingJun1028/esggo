@@ -25,9 +25,9 @@ import {
   LineChart,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Data ─── */
 const TRUST_PILLARS = [
@@ -255,9 +255,9 @@ function CaseStudyCard({ study, index }: { study: (typeof CASE_STUDIES)[0]; inde
           <p className="text-[10px] text-slate-400">{study.industry}</p>
         </div>
         <div className="ml-auto">
-          <OmniBadge variant="success" size="sm">
+          <Badge variant="success" size="sm">
             {study.result}
-          </OmniBadge>
+          </Badge>
         </div>
       </div>
       <p className="text-xs text-slate-500 leading-relaxed mb-4">{study.description}</p>
@@ -337,7 +337,7 @@ export default function InvestorTrustPage() {
         </div>
 
         {/* ─── Investor Benefits ─── */}
-        <OmniBaseCard className="p-6">
+        <Card className="p-6">
           <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
             <TrendingUp size={16} className="text-emerald-500" />
             投資人核心效益
@@ -357,7 +357,7 @@ export default function InvestorTrustPage() {
               );
             })}
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
@@ -451,7 +451,7 @@ export default function InvestorTrustPage() {
               <h2 className="text-lg font-bold text-[#003262] mb-1">信任建立流程</h2>
               <p className="text-xs text-slate-400">從數據上傳到投資人信任的完整流程</p>
             </div>
-            <OmniBaseCard className="p-6">
+            <Card className="p-6">
               <div className="space-y-6">
                 {[
                   {
@@ -515,30 +515,30 @@ export default function InvestorTrustPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備建立投資人信任？</h3>
           <p className="text-xs text-slate-400 mb-4">
             使用 ESGGO 的 5T 驗證與 ZKP 證明，讓投資人放心投資
           </p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<ShieldCheck size={16} />}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               開始建立信任
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

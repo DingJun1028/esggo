@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 import { Users, HeartHandshake, BookOpen, TrendingUp, ShieldCheck, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/db/supabase';
 
@@ -81,14 +81,14 @@ export default function SocialMetricsPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge
+                <Badge
                   variant="default"
                   size="sm"
                   icon={<HeartHandshake size={12} />}
                   className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30"
                 >
                   S-Metrics
-                </OmniBadge>
+                </Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                   SOC-001
                 </span>
@@ -106,7 +106,7 @@ export default function SocialMetricsPage() {
 
         {/* Social Dashboard Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 transition-all duration-300 hover:border-indigo-500/30"
           >
@@ -120,9 +120,9 @@ export default function SocialMetricsPage() {
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
               <TrendingUp size={14} className="text-indigo-500" /> 較去年提升 2.1%
             </p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 transition-all duration-300 hover:border-blue-500/30"
           >
@@ -134,9 +134,9 @@ export default function SocialMetricsPage() {
               <span className="text-lg font-normal text-slate-500">%</span>
             </div>
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2">管理階層佔比 38%</p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 transition-all duration-300 hover:border-purple-500/30"
           >
@@ -148,7 +148,7 @@ export default function SocialMetricsPage() {
               <span className="text-lg font-normal text-slate-500">小時/人</span>
             </div>
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2">年度目標: 50 小時</p>
-          </OmniBaseCard>
+          </Card>
         </div>
       </div>
     </div>

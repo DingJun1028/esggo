@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useRef } from 'react';
 
 import {

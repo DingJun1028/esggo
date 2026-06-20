@@ -164,7 +164,7 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     taskType: 'system_ops',
     description:
       '使用 OmniAgent Agent 的 Google Workspace Skill 進行 Gmail, Calendar, Drive 等辦公自動化整合',
-    allowedDataScopes: ['google_workspace_auth', 'emails', 'calendar_events'],
+    allowedDataScopes: ['google_workspace_auth', 'emails', 'calendar_events', 'drive_files'],
     outputArtifactType: 'system_config_draft',
     requiresHumanReview: false,
     riskLevel: 'medium',

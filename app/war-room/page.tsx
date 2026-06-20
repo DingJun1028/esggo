@@ -23,7 +23,7 @@ import {
   Info,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 
 /* ─── Types ─── */
 interface RiskNode {
@@ -368,7 +368,7 @@ function PestelWheel() {
       {activeFactor && (
         <div className="mt-4">
           {PESTEL_FACTORS.filter((f) => f.id === activeFactor).map((factor) => (
-            <OmniBaseCard key={factor.id} className="p-4">
+            <Card key={factor.id} className="p-4">
               <div className="flex items-center gap-3 mb-3">
                 <div className="p-2 bg-cyan-50 rounded-lg">
                   <factor.icon size={16} className="text-cyan-600" />
@@ -404,7 +404,7 @@ function PestelWheel() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           ))}
         </div>
       )}
@@ -562,16 +562,16 @@ export default function WarRoomPage() {
         {activeTab === 'map' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                   <Globe size={16} className="text-orange-500" />
                   供應鏈風險地圖
                 </h3>
                 <RiskMap />
-              </OmniBaseCard>
+              </Card>
             </div>
             <div className="space-y-4">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3">風險摘要</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {(['critical', 'high', 'medium', 'low'] as const).map((level) => {
@@ -584,8 +584,8 @@ export default function WarRoomPage() {
                     );
                   })}
                 </div>
-              </OmniBaseCard>
-              <OmniBaseCard className="p-5">
+              </Card>
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3">關鍵指標</h3>
                 <div className="space-y-3">
                   {[
@@ -622,22 +622,22 @@ export default function WarRoomPage() {
                     </div>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
           </div>
         )}
 
         {activeTab === 'pestel' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <Target size={16} className="text-orange-500" />
                 PESTEL 風險輪盤
               </h3>
               <p className="text-xs text-slate-400 mb-4">點擊各因素查看详细風險分析</p>
               <PestelWheel />
-            </OmniBaseCard>
-            <OmniBaseCard className="p-5">
+            </Card>
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4">因素總覽</h3>
               <div className="space-y-3">
                 {PESTEL_FACTORS.map((factor) => (
@@ -672,7 +672,7 @@ export default function WarRoomPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 

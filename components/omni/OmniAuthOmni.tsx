@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState } from 'react';
 
 import { ShieldCheck, Lock, Fingerprint, Activity } from 'lucide-react';

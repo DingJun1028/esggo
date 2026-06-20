@@ -1,0 +1,15 @@
+{
+  "name": "@esggo/server",
+  "version": "1.0.0",
+  "description": "Server package for ESGGO monorepo",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@esggo/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

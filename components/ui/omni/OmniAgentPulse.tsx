@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect } from 'react';
 
 import {
