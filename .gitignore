@@ -82,3 +82,5 @@ public/pdfjs_extracted/
 lib/web/cmaps/
 lib/web/images/
 public/lib/
+esg-sunshine-*.json
+.gcp-sa-key.json
