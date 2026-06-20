@@ -1,8 +1,11 @@
-// app/api/auth/google-signin/route.ts
 import { NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
+import { SignJWT } from 'jose';
 
 const client = new OAuth2Client(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'omnicore_default_secret_key_please_change'
+);
 
 export async function POST(request: Request) {
   try {
@@ -22,12 +25,30 @@ export async function POST(request: Request) {
     // 提取用戶核心識別數據
     const { sub: googleId, email, name, picture } = payload;
     
-    // [此處編寫您的業務邏輯]：例如查詢/建立資料庫用戶、核發 Session JWT 等
-    
-    return NextResponse.json({ 
+    // 簽署專屬的 Session JWT
+    const sessionJwt = await new SignJWT({ googleId, email, name, picture })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('7d')
+      .sign(JWT_SECRET);
+      
+    const response = NextResponse.json({ 
       success: true, 
       user: { googleId, email, name, picture } 
     });
+
+    // 寫入 HTTP-Only Cookie
+    response.cookies.set({
+      name: 'omni_session',
+      value: sessionJwt,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Google One Tap 驗證失敗:', error);

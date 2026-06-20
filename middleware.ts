@@ -72,6 +72,7 @@ export async function middleware(request: NextRequest) {
 
   const isDevelopment = process.env.NODE_ENV === 'development';
   const isBypass = request.cookies.get('omni_user_bypass')?.value === 'true' && isDevelopment;
+  const hasOmniSession = request.cookies.has('omni_session');
 
   const isPublicRoute =
     request.nextUrl.pathname === '/login' ||
@@ -96,15 +97,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Auth gate: Demo mode → redirect to login if no demo session
-  if (isDemoMode && !hasDemoSession && !isPublicRoute && !isBypass) {
+  // Auth gate: Demo mode → redirect to login if no demo session & no omni_session
+  if (isDemoMode && !hasDemoSession && !hasOmniSession && !isPublicRoute && !isBypass) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
   // Logged-in users on login/signup → redirect to dashboard
-  if ((user || hasDemoSession || isBypass) &&
+  if ((user || hasDemoSession || hasOmniSession || isBypass) &&
       (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') &&
       !isDevelopment) {
     const url = request.nextUrl.clone();
