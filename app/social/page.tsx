@@ -125,10 +125,10 @@ export default function SocialDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-800/50 dark:bg-void-stark text-slate-800 dark:text-slate-100 dark:text-slate-200 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-800/50  text-slate-800 dark:text-slate-100 dark:text-slate-700 p-4 md:p-8 font-sans">
       <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200 dark:border-white/10">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200 dark:border-slate-200">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center border border-indigo-200 shadow-sm">
               <Users className="text-indigo-600" size={28} />
@@ -207,7 +207,7 @@ export default function SocialDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
             <Card variant="default" className="p-0 overflow-hidden">
-              <div className="p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-white dark:bg-slate-900/50">
+              <div className="p-6 border-b border-slate-100 dark:border-slate-200 flex justify-between items-center bg-white dark:bg-slate-900/50">
                 <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
                   社會影響力指標清冊
                 </h2>
@@ -229,7 +229,7 @@ export default function SocialDashboard() {
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-white/10 text-xs uppercase text-slate-500 dark:text-slate-400">
+                  <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-200 text-xs uppercase text-slate-500 dark:text-slate-400">
                     <tr>
                       <th className="px-6 py-4 font-bold">指標類別</th>
                       <th className="px-6 py-4 font-bold">具體指標 (GRI 對應)</th>

@@ -4,7 +4,18 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-import { Lock, Mail, ArrowRight, Fingerprint, ShieldCheck, AlertCircle, CheckCircle2, Loader2, Eye, EyeOff } from 'lucide-react';
+import {
+  Lock,
+  Mail,
+  ArrowRight,
+  Fingerprint,
+  ShieldCheck,
+  AlertCircle,
+  CheckCircle2,
+  Loader2,
+  Eye,
+  EyeOff,
+} from 'lucide-react';
 
 type AuthMode = 'checking' | 'supabase' | 'demo';
 type LoginField = 'email' | 'password';
@@ -21,7 +32,8 @@ const SUPABASE_ERROR_MAP: Record<string, string> = {
   'Invalid email': 'Email 格式不正確',
   'Password should be at least 6 characters': '密碼至少需要 6 個字元',
   'Unable to validate email address: invalid format': 'Email 格式不正確',
-  'For security purposes, you can only request this once every 60 seconds': '請稍後再試（60 秒限制）',
+  'For security purposes, you can only request this once every 60 seconds':
+    '請稍後再試（60 秒限制）',
   'signup is disabled': '目前不開放註冊',
   'rate limit exceeded': '請求過於頻繁，請稍後再試',
 };
@@ -54,7 +66,10 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [fieldErrors, setFieldErrors] = useState<FieldError>({});
-  const [touched, setTouched] = useState<Record<LoginField, boolean>>({ email: false, password: false });
+  const [touched, setTouched] = useState<Record<LoginField, boolean>>({
+    email: false,
+    password: false,
+  });
   const [mode, setMode] = useState<AuthMode>('checking');
   const router = useRouter();
   const logoClickCount = useRef(0);
@@ -64,17 +79,22 @@ export default function LoginPage() {
   const handleLogoClick = () => {
     logoClickCount.current += 1;
     if (logoClickTimer.current) clearTimeout(logoClickTimer.current);
-    logoClickTimer.current = setTimeout(() => { logoClickCount.current = 0; }, 3000);
+    logoClickTimer.current = setTimeout(() => {
+      logoClickCount.current = 0;
+    }, 3000);
     if (logoClickCount.current >= 5) {
       logoClickCount.current = 0;
       // 設定超級管理員 session
-      localStorage.setItem('omni_user', JSON.stringify({
-        email: 'admin@esggo.com',
-        company_id: 'esg-sunshine',
-        id: 'superadmin_001',
-        role: 'superadmin',
-        admin: true,
-      }));
+      localStorage.setItem(
+        'omni_user',
+        JSON.stringify({
+          email: 'admin@esggo.com',
+          company_id: 'esg-sunshine',
+          id: 'superadmin_001',
+          role: 'superadmin',
+          admin: true,
+        })
+      );
       document.cookie = 'omni_demo_session=true; path=/; max-age=86400; SameSite=Lax';
       router.push('/dashboard');
       router.refresh();
@@ -99,33 +119,46 @@ export default function LoginPage() {
     if (mode === 'supabase') {
       const supabase = createClient();
       supabase.auth.getSession().then(({ data }) => {
-        if (data.session) { router.push('/dashboard'); router.refresh(); }
+        if (data.session) {
+          router.push('/dashboard');
+          router.refresh();
+        }
       });
     } else if (mode === 'demo') {
-      if (localStorage.getItem('omni_user')) { router.push('/dashboard'); router.refresh(); }
+      if (localStorage.getItem('omni_user')) {
+        router.push('/dashboard');
+        router.refresh();
+      }
     }
   }, [mode, router]);
 
   // 即時欄位驗證
-  const validateField = useCallback((field: LoginField, value: string) => {
-    const error = field === 'email' ? validateEmail(value) : validatePassword(value, mode === 'supabase');
-    setFieldErrors(prev => ({ ...prev, [field]: error }));
-    return !error;
-  }, [mode]);
+  const validateField = useCallback(
+    (field: LoginField, value: string) => {
+      const error =
+        field === 'email' ? validateEmail(value) : validatePassword(value, mode === 'supabase');
+      setFieldErrors((prev) => ({ ...prev, [field]: error }));
+      return !error;
+    },
+    [mode]
+  );
 
   const handleBlur = (field: LoginField) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
+    setTouched((prev) => ({ ...prev, [field]: true }));
     validateField(field, field === 'email' ? email : password);
   };
 
   const enterDemo = () => {
-    localStorage.setItem('omni_user', JSON.stringify({
-      email: 'demo@esggo.com',
-      company_id: 'esg-sunshine',
-      id: 'demo_user_001',
-      role: 'superadmin',
-      demo: true,
-    }));
+    localStorage.setItem(
+      'omni_user',
+      JSON.stringify({
+        email: 'demo@esggo.com',
+        company_id: 'esg-sunshine',
+        id: 'demo_user_001',
+        role: 'superadmin',
+        demo: true,
+      })
+    );
     document.cookie = 'omni_demo_session=true; path=/; max-age=86400; SameSite=Lax';
     router.push('/dashboard');
     router.refresh();
@@ -151,18 +184,24 @@ export default function LoginPage() {
     setStatus('loading');
 
     if (mode === 'demo') {
-      await new Promise(r => setTimeout(r, 400));
-      localStorage.setItem('omni_user', JSON.stringify({
-        email: email.trim(),
-        company_id: 'esg-sunshine',
-        id: 'demo_user_' + Date.now(),
-        role: 'superadmin',
-        demo: true,
-      }));
+      await new Promise((r) => setTimeout(r, 400));
+      localStorage.setItem(
+        'omni_user',
+        JSON.stringify({
+          email: email.trim(),
+          company_id: 'esg-sunshine',
+          id: 'demo_user_' + Date.now(),
+          role: 'superadmin',
+          demo: true,
+        })
+      );
       document.cookie = 'omni_demo_session=true; path=/; max-age=86400; SameSite=Lax';
       setStatus('success');
       setSuccessMsg('展示登入成功！正在跳轉...');
-      setTimeout(() => { router.push('/dashboard'); router.refresh(); }, 800);
+      setTimeout(() => {
+        router.push('/dashboard');
+        router.refresh();
+      }, 800);
       return;
     }
 
@@ -183,13 +222,19 @@ export default function LoginPage() {
       if (data.user) {
         setStatus('success');
         setSuccessMsg('登入成功！正在跳轉...');
-        localStorage.setItem('omni_user', JSON.stringify({
-          email: data.user.email,
-          id: data.user.id,
-          role: data.user.role || 'authenticated',
-          company_id: data.user.user_metadata?.company_id || 'default',
-        }));
-        setTimeout(() => { router.push('/dashboard'); router.refresh(); }, 800);
+        localStorage.setItem(
+          'omni_user',
+          JSON.stringify({
+            email: data.user.email,
+            id: data.user.id,
+            role: data.user.role || 'authenticated',
+            company_id: data.user.user_metadata?.company_id || 'default',
+          })
+        );
+        setTimeout(() => {
+          router.push('/dashboard');
+          router.refresh();
+        }, 800);
       }
     } catch (err: any) {
       setStatus('error');
@@ -261,11 +306,14 @@ export default function LoginPage() {
             {/* Email */}
             <div>
               <div className="relative">
-                <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Mail
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                />
                 <input
                   type="email"
                   value={email}
-                  onChange={e => {
+                  onChange={(e) => {
                     setEmail(e.target.value);
                     if (touched.email) validateField('email', e.target.value);
                   }}
@@ -290,11 +338,14 @@ export default function LoginPage() {
             {/* Password */}
             <div>
               <div className="relative">
-                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Lock
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={e => {
+                  onChange={(e) => {
                     setPassword(e.target.value);
                     if (touched.password) validateField('password', e.target.value);
                   }}
@@ -351,8 +402,10 @@ export default function LoginPage() {
                   <Loader2 size={14} className="animate-spin" />
                   登入中...
                 </>
+              ) : mode === 'supabase' ? (
+                'Secure Login'
               ) : (
-                mode === 'supabase' ? 'Secure Login' : '展示登入'
+                '展示登入'
               )}
             </button>
           </form>

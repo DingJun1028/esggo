@@ -317,7 +317,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
       className={cn(
         'flex h-screen overflow-hidden transition-all duration-700 font-sans relative',
         isDark
-          ? 'bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-200'
+          ? 'bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-700'
           : 'bg-[#FAF9F6] text-[#003262]'
       )}
     >
@@ -327,14 +327,14 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         className={cn(
           'hidden md:flex flex-col h-full relative z-50 border-r shadow-2xl',
           'transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
-          isDark ? 'bg-[#003262]/80 border-white/10' : ' border-slate-200/50'
+          isDark ? 'bg-[#003262]/80 border-slate-200' : ' border-slate-200/50'
         )}
       >
         {/* Logo Section */}
         <div
           className={cn(
             'px-6 py-4 min-h-[96px] flex items-center gap-4 overflow-hidden border-b transition-colors',
-            isDark ? 'border-white/5' : 'border-slate-100'
+            isDark ? 'border-slate-200' : 'border-slate-100'
           )}
         >
           <div className="flex justify-center w-full" ref={logoRef}>
@@ -471,7 +471,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         <div
           className={cn(
             'p-4 border-t transition-colors flex flex-col gap-2',
-            isDark ? 'border-white/5' : 'border-slate-100'
+            isDark ? 'border-slate-200' : 'border-slate-100'
           )}
         >
           {!sidebarCollapsed && (
@@ -508,7 +508,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
             className={cn(
               'hidden md:flex items-center justify-between px-10 border-b relative z-40 transition-colors',
-              isDark ? 'bg-slate-950/60 border-white/5' : ' border-slate-200/50'
+              isDark ? 'bg-slate-950/60 border-slate-200' : ' border-slate-200/50'
             )}
           >
             <div className="flex items-center gap-6">
@@ -555,7 +555,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                 className={cn(
                   'p-2.5 rounded-xl border transition-all flex items-center justify-center',
                   isDark
-                    ? ' border-white/10 text-slate-400'
+                    ? ' border-slate-200 text-slate-400'
                     : 'bg-slate-50 border-slate-200 text-slate-500'
                 )}
                 title={isFavorited ? '移出我的最愛' : '加入我的最愛'}
@@ -569,7 +569,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                   className={cn(
                     'p-2.5 rounded-xl border transition-all flex items-center justify-center',
                     isDark
-                      ? ' border-white/10 text-slate-400'
+                      ? ' border-slate-200 text-slate-400'
                       : 'bg-slate-50 border-slate-200 text-slate-500'
                   )}
                 />
@@ -580,7 +580,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               <div
                 className={cn(
                   'flex items-center gap-3 pl-6 border-l ml-2',
-                  isDark ? 'border-white/10' : 'border-slate-200'
+                  isDark ? 'border-slate-200' : 'border-slate-200'
                 )}
               >
                 <div className="w-10 h-10 rounded-2xl bg-[#003262] flex items-center justify-center text-[#FDB515] font-black shadow-lg border-2 border-white/20">
@@ -602,7 +602,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           onClick={handleTopbarToggle}
           className={cn(
             'hidden md:flex absolute top-0 left-1/2 -translate-x-1/2 z-[100] px-8 py-1 rounded-b-2xl border transition-all duration-500 group overflow-hidden shadow-lg',
-            isDark ? 'bg-slate-900 border-white/10' : 'bg-white border-slate-200',
+            isDark ? 'bg-slate-900 border-slate-200' : 'bg-white border-slate-200',
             topbarCollapsed ? 'translate-y-0' : 'translate-y-[80px]'
           )}
         >
@@ -623,7 +623,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         <div
           className={cn(
             'md:hidden h-16 flex items-center px-4 border-b z-40 sticky top-0  shadow-sm transition-colors',
-            isDark ? 'bg-slate-950/90 border-white/5' : ' border-slate-300'
+            isDark ? 'bg-slate-950/90 border-slate-200' : ' border-slate-300'
           )}
         >
           <div className="flex items-center gap-3 overflow-x-scroll no-scrollbar py-2 w-full pr-4">
@@ -650,7 +650,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                 isFavorited
                   ? 'bg-yellow-500/10 border-yellow-500/20'
                   : isDark
-                  ? ' border-white/10'
+                  ? ' border-slate-200'
                   : 'bg-white border-slate-300'
               )}
             />
@@ -686,7 +686,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
         <div
           className={cn(
             'md:hidden h-24 fixed bottom-0 left-0 right-0 z-[100] border-t flex justify-center px-4 -[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transition-colors',
-            isDark ? 'bg-slate-950/90 border-white/5' : 'bg-white/90 border-slate-300'
+            isDark ? 'bg-slate-950/90 border-slate-200' : 'bg-white/90 border-slate-300'
           )}
         >
           {/* FAB Pop-up Menu — 將 AnimatePresence + motion.div 替換為條件渲染 + 原生 div */}
@@ -701,7 +701,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                 style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
                 className={cn(
                   'absolute bottom-28 left-1/2 -translate-x-1/2 flex flex-col gap-3 p-4 rounded-3xl shadow-2xl border w-64',
-                  isDark ? 'bg-slate-900 border-white/10' : 'bg-white border-slate-200'
+                  isDark ? 'bg-slate-900 border-slate-200' : 'bg-white border-slate-200'
                 )}
               >
                 <button className="flex items-center gap-3 p-3 rounded-2xl hover:bg-[#FDB515]/10 text-left transition-colors">

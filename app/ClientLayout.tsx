@@ -11,7 +11,10 @@ import AppShellV2 from './AppShellV2';
 import { DebugPanel } from '../lib/debug-platform';
 
 // Error boundary to prevent AppShellV2 crashes from breaking the whole page
-class ErrorBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { hasError: boolean }> {
+class ErrorBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
+  { hasError: boolean }
+> {
   constructor(props: { children: ReactNode; fallback: ReactNode }) {
     super(props);
     this.state = { hasError: false };

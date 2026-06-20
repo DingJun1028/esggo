@@ -225,13 +225,7 @@ export default function IntelligencePage() {
   };
 
   return (
-    <div
-      className={`min-h-screen p-4 md:p-8 transition-colors duration-500 ${
-        omniTheme === 'omnicore'
-          ? 'bg-[var(--theme-base)] text-[var(--theme-text)]'
-          : 'bg-[#F8FAFC]'
-      }`}
-    >
+    <div className={`min-h-screen p-4 md:p-8 transition-colors duration-500 ${'bg-[#F8FAFC]'}`}>
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -480,10 +474,7 @@ export default function IntelligencePage() {
                           <td className="px-4 py-3 text-xs text-slate-500">{row.source_origin}</td>
                           <td className="px-4 py-3">
                             {row.hash_lock ? (
-                              <Badge
-                                variant="success"
-                                size="sm"
-                              >
+                              <Badge variant="success" size="sm">
                                 <ShieldCheck size={10} className="mr-1" />
                                 {row.hash_lock.substring(0, 8)}...
                               </Badge>

@@ -4,8 +4,20 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  ShieldCheck, Lock, Bot, BarChart3, FileText, Zap, ArrowRight,
-  TrendingUp, Sparkles, MessageSquare, Star, Leaf, Globe, Play
+  ShieldCheck,
+  Lock,
+  Bot,
+  BarChart3,
+  FileText,
+  Zap,
+  ArrowRight,
+  TrendingUp,
+  Sparkles,
+  MessageSquare,
+  Star,
+  Leaf,
+  Globe,
+  Play,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
@@ -15,19 +27,87 @@ import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
 /* ─── Data ─── */
 const KPI_DATA = [
-  { title: '碳排放量', value: '1,284', unit: 'tCO₂e', trend: -5.2, trendLabel: 'vs last quarter', fiveTStatus: [true, true, true, true, true], dataSource: 'EPA Database' },
-  { title: '治理評分', value: '92', unit: '/100', trend: 3.1, trendLabel: 'vs last audit', fiveTStatus: [true, true, true, true, false], dataSource: 'Internal Audit' },
-  { title: '供應鏈合規', value: '87', unit: '%', trend: -1.8, trendLabel: 'vs last month', fiveTStatus: [true, true, true, false, false], dataSource: 'SCM System' },
-  { title: '水資源效率', value: '98.5', unit: '%', trend: 2.4, trendLabel: 'vs last year', fiveTStatus: [true, true, true, true, true], dataSource: 'Water Management' },
+  {
+    title: '碳排放量',
+    value: '1,284',
+    unit: 'tCO₂e',
+    trend: -5.2,
+    trendLabel: 'vs last quarter',
+    fiveTStatus: [true, true, true, true, true],
+    dataSource: 'EPA Database',
+  },
+  {
+    title: '治理評分',
+    value: '92',
+    unit: '/100',
+    trend: 3.1,
+    trendLabel: 'vs last audit',
+    fiveTStatus: [true, true, true, true, false],
+    dataSource: 'Internal Audit',
+  },
+  {
+    title: '供應鏈合規',
+    value: '87',
+    unit: '%',
+    trend: -1.8,
+    trendLabel: 'vs last month',
+    fiveTStatus: [true, true, true, false, false],
+    dataSource: 'SCM System',
+  },
+  {
+    title: '水資源效率',
+    value: '98.5',
+    unit: '%',
+    trend: 2.4,
+    trendLabel: 'vs last year',
+    fiveTStatus: [true, true, true, true, true],
+    dataSource: 'Water Management',
+  },
 ];
 
 const HIGHLIGHTS = [
-  { icon: ShieldCheck, title: '5T 誠信協議', desc: 'Truth · Goodness · Beauty · Trust · Transferful', color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  { icon: Lock, title: 'ZKP + SHA-256 數位封印', desc: '零知識證明 + 雜湊鏈不可篡改', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  { icon: Bot, title: 'Omni-Agent 智能調度', desc: '多代理人協作自動化管理', color: 'text-indigo-600', bg: 'bg-indigo-50' },
-  { icon: BarChart3, title: '即時數據儀表板', desc: 'RWD 雙向同步 TypeScript', color: 'text-amber-600', bg: 'bg-amber-50' },
-  { icon: FileText, title: 'AI 永續報告撰寫', desc: '全息編織自動生成 GRI 報告', color: 'text-rose-600', bg: 'bg-rose-50' },
-  { icon: Zap, title: '區塊鏈溯源', desc: '端到端供應鏈透明化', color: 'text-violet-600', bg: 'bg-violet-50' },
+  {
+    icon: ShieldCheck,
+    title: '5T 誠信協議',
+    desc: 'Truth · Goodness · Beauty · Trust · Transferful',
+    color: 'text-cyan-600',
+    bg: 'bg-cyan-50',
+  },
+  {
+    icon: Lock,
+    title: 'ZKP + SHA-256 數位封印',
+    desc: '零知識證明 + 雜湊鏈不可篡改',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
+  },
+  {
+    icon: Bot,
+    title: 'Omni-Agent 智能調度',
+    desc: '多代理人協作自動化管理',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50',
+  },
+  {
+    icon: BarChart3,
+    title: '即時數據儀表板',
+    desc: 'RWD 雙向同步 TypeScript',
+    color: 'text-amber-600',
+    bg: 'bg-amber-50',
+  },
+  {
+    icon: FileText,
+    title: 'AI 永續報告撰寫',
+    desc: '全息編織自動生成 GRI 報告',
+    color: 'text-rose-600',
+    bg: 'bg-rose-50',
+  },
+  {
+    icon: Zap,
+    title: '區塊鏈溯源',
+    desc: '端到端供應鏈透明化',
+    color: 'text-violet-600',
+    bg: 'bg-violet-50',
+  },
 ];
 
 const QUICK_LINKS = [
@@ -40,10 +120,34 @@ const QUICK_LINKS = [
 ];
 
 const TESTIMONIALS = [
-  { quote: '這真的幫我省了 2 週！', author: '王顧問', role: '永續顧問', avatar: '📊', highlight: '節省 2 週' },
-  { quote: '原來 ESG 可以這麼智能！AI 幫我找到了從未注意到的碳排熱點。', author: '林永續', role: '某製造業 CSO', avatar: '🌱', highlight: '智能洞察' },
-  { quote: '15 分鐘完成過去 3 個月的工作，而且品質更好！', author: '陳廠長', role: '製造業廠長', avatar: '🏭', highlight: '15 分鐘' },
-  { quote: '這個證明太值錢了！投資人看到 ZKP 證明後，立刻決定投資我們。', author: '李技術長', role: '某科技公司 CTO', avatar: '🔐', highlight: '獲得投資' },
+  {
+    quote: '這真的幫我省了 2 週！',
+    author: '王顧問',
+    role: '永續顧問',
+    avatar: '📊',
+    highlight: '節省 2 週',
+  },
+  {
+    quote: '原來 ESG 可以這麼智能！AI 幫我找到了從未注意到的碳排熱點。',
+    author: '林永續',
+    role: '某製造業 CSO',
+    avatar: '🌱',
+    highlight: '智能洞察',
+  },
+  {
+    quote: '15 分鐘完成過去 3 個月的工作，而且品質更好！',
+    author: '陳廠長',
+    role: '製造業廠長',
+    avatar: '🏭',
+    highlight: '15 分鐘',
+  },
+  {
+    quote: '這個證明太值錢了！投資人看到 ZKP 證明後，立刻決定投資我們。',
+    author: '李技術長',
+    role: '某科技公司 CTO',
+    avatar: '🔐',
+    highlight: '獲得投資',
+  },
 ];
 
 /* ─── Main Page ─── */
@@ -54,9 +158,14 @@ export default function LandingPage() {
   useEffect(() => {
     // Fetch live stats
     fetch('/api/system/health')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => {
-        if (d) setLiveStats({ agents: d.activeAgents || 7, memories: d.codexEntries || 32, verified: d.verifiedCount || 156 });
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d)
+          setLiveStats({
+            agents: d.activeAgents || 7,
+            memories: d.codexEntries || 32,
+            verified: d.verifiedCount || 156,
+          });
       })
       .catch(() => {});
   }, []);
@@ -71,7 +180,9 @@ export default function LandingPage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            <span className="text-xs font-semibold text-emerald-700 tracking-wider uppercase">System Online</span>
+            <span className="text-xs font-semibold text-emerald-700 tracking-wider uppercase">
+              System Online
+            </span>
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-neutral-900 tracking-tight leading-tight mb-4">
@@ -114,7 +225,7 @@ export default function LandingPage() {
               { label: '活躍代理', value: liveStats.agents, icon: Bot },
               { label: '記憶碎片', value: liveStats.memories, icon: Sparkles },
               { label: '已驗證', value: liveStats.verified, icon: ShieldCheck },
-            ].map(stat => (
+            ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-1.5 text-xs text-neutral-500">
                 <stat.icon size={10} />
                 <span className="font-mono font-bold text-neutral-700">{stat.value}</span>
@@ -179,7 +290,12 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {HIGHLIGHTS.map((item) => (
             <Card key={item.title} variant="outlined" padding="md" hover>
-              <div className={cn('w-10 h-10 rounded-lg flex items-center justify-center mb-3', item.bg)}>
+              <div
+                className={cn(
+                  'w-10 h-10 rounded-lg flex items-center justify-center mb-3',
+                  item.bg
+                )}
+              >
                 <item.icon size={20} className={item.color} />
               </div>
               <h3 className="text-sm font-bold text-neutral-900 mb-1">{item.title}</h3>
@@ -199,7 +315,7 @@ export default function LandingPage() {
           {TESTIMONIALS.map((t, i) => (
             <Card key={i} variant="default" padding="md" hover>
               <div className="flex items-center gap-0.5 mb-3">
-                {[1,2,3,4,5].map((s) => (
+                {[1, 2, 3, 4, 5].map((s) => (
                   <Star key={s} size={12} className="text-amber-400 fill-amber-400" />
                 ))}
               </div>

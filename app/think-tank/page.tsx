@@ -46,9 +46,7 @@ export default function ThinkTankPage() {
     <div className="p-8 max-w-6xl mx-auto min-h-screen">
       {/* 標題與簡介 */}
       <div className="mb-10 text-center">
-        <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 mb-6"
-        >
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 mb-6">
           <Brain size={16} />
           <span className="text-xs font-bold tracking-widest uppercase">OmniMemory Sanctuary</span>
         </div>
@@ -62,13 +60,11 @@ export default function ThinkTankPage() {
       </div>
 
       {/* 搜尋列 */}
-      <div
-        className="relative max-w-3xl mx-auto mb-12"
-      >
+      <div className="relative max-w-3xl mx-auto mb-12">
         <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-70"></div>
         <form
           onSubmit={handleSearch}
-          className="relative bg-[#020617]/70 border border-white/10 rounded-2xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+          className="relative bg-[#020617]/70 border border-slate-200 rounded-2xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
         >
           <div className="pl-4 pr-2 text-cyan-400/50">
             <Search size={24} />
@@ -101,98 +97,87 @@ export default function ThinkTankPage() {
       </div>
 
       {/* 檢索狀態指示器 */}
-      
-        {loading && (
-          <div
-            className="flex flex-col items-center justify-center py-12 gap-6"
-          >
-            <div className="relative w-24 h-24 flex items-center justify-center">
-              <div className="absolute inset-0 border-t-2 border-cyan-500 rounded-full animate-spin"></div>
-              <div className="absolute inset-2 border-r-2 border-indigo-500 rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
-              <Network size={32} className="text-cyan-400 animate-pulse" />
-            </div>
-            <div className="text-cyan-400 font-medium tracking-widest text-sm animate-pulse">
-              OMNINEXUS 正在遍歷知識節點...
-            </div>
+
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-12 gap-6">
+          <div className="relative w-24 h-24 flex items-center justify-center">
+            <div className="absolute inset-0 border-t-2 border-cyan-500 rounded-full animate-spin"></div>
+            <div className="absolute inset-2 border-r-2 border-indigo-500 rounded-full animate-[spin_1.5s_linear_infinite_reverse]"></div>
+            <Network size={32} className="text-cyan-400 animate-pulse" />
           </div>
-        )}
-      
+          <div className="text-cyan-400 font-medium tracking-widest text-sm animate-pulse">
+            OMNINEXUS 正在遍歷知識節點...
+          </div>
+        </div>
+      )}
 
       {/* 錯誤訊息 */}
-      
-        {error && (
-          <div
-            className="max-w-3xl mx-auto bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-center font-medium"
-          >
-            {error}
-          </div>
-        )}
-      
+
+      {error && (
+        <div className="max-w-3xl mx-auto bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl text-center font-medium">
+          {error}
+        </div>
+      )}
 
       {/* 搜尋結果 */}
-      
-        {!loading && searched && results.length > 0 && (
-          <div
-            className="max-w-4xl mx-auto space-y-6"
-          >
-            <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
-              <Library size={20} className="text-slate-400" />
-              <h2 className="text-lg font-semibold text-slate-200">
-                檢索結果{' '}
-                <span className="text-cyan-400 text-sm ml-2">({results.length} 筆關聯節點)</span>
-              </h2>
-            </div>
 
-            <div className="grid gap-4">
-              {results.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="group relative bg-[#020617]/40 -md border border-white/5 rounded-2xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
-                >
-                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
+      {!loading && searched && results.length > 0 && (
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="flex items-center gap-3 border-b border-slate-200 pb-4 mb-6">
+            <Library size={20} className="text-slate-400" />
+            <h2 className="text-lg font-semibold text-slate-700">
+              檢索結果{' '}
+              <span className="text-cyan-400 text-sm ml-2">({results.length} 筆關聯節點)</span>
+            </h2>
+          </div>
 
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="px-2.5 py-1 bg-cyan-500/10 text-cyan-400 text-[10px] font-black uppercase tracking-wider rounded border border-cyan-500/20">
-                          {item.metadata?.domain || 'Knowledge Node'}
-                        </span>
-                        <span className="text-xs text-slate-500 font-medium">
-                          信心指數: {((item.score || 0.9) * 100).toFixed(1)}%
-                        </span>
-                      </div>
+          <div className="grid gap-4">
+            {results.map((item, idx) => (
+              <div
+                key={idx}
+                className="group relative bg-[#020617]/40 -md border border-slate-200 rounded-2xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
+              >
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
 
-                      <h3 className="text-xl font-bold text-slate-200 mb-3 group-hover:text-cyan-300 transition-colors">
-                        {item.metadata?.title || '未命名知識節點'}
-                      </h3>
-
-                      <p className="text-sm text-slate-400 leading-relaxed">
-                        {item.content?.length > 200
-                          ? item.content.substring(0, 200) + '...'
-                          : item.content}
-                      </p>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-2.5 py-1 bg-cyan-500/10 text-cyan-400 text-[10px] font-black uppercase tracking-wider rounded border border-cyan-500/20">
+                        {item.metadata?.domain || 'Knowledge Node'}
+                      </span>
+                      <span className="text-xs text-slate-500 font-medium">
+                        信心指數: {((item.score || 0.9) * 100).toFixed(1)}%
+                      </span>
                     </div>
 
-                    <button className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
-                      <ExternalLink size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+                    <h3 className="text-xl font-bold text-slate-700 mb-3 group-hover:text-cyan-300 transition-colors">
+                      {item.metadata?.title || '未命名知識節點'}
+                    </h3>
 
-        {!loading && searched && results.length === 0 && !error && (
-          <div
-            className="text-center py-20 text-slate-500"
-          >
-            <Library size={48} className="mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">智庫中未找到與此查詢高度相關的記憶資產。</p>
-            <p className="text-sm mt-2">嘗試使用不同的關鍵字，或交由 OmniAgent 進行推理。</p>
+                    <p className="text-sm text-slate-400 leading-relaxed">
+                      {item.content?.length > 200
+                        ? item.content.substring(0, 200) + '...'
+                        : item.content}
+                    </p>
+                  </div>
+
+                  <button className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors shrink-0">
+                    <ExternalLink size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
-      
+        </div>
+      )}
+
+      {!loading && searched && results.length === 0 && !error && (
+        <div className="text-center py-20 text-slate-500">
+          <Library size={48} className="mx-auto mb-4 opacity-50" />
+          <p className="text-lg font-medium">智庫中未找到與此查詢高度相關的記憶資產。</p>
+          <p className="text-sm mt-2">嘗試使用不同的關鍵字，或交由 OmniAgent 進行推理。</p>
+        </div>
+      )}
     </div>
   );
 }

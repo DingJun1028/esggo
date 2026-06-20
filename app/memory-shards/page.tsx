@@ -2,8 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Search, Plus, Filter, Tag, Clock, Zap, Brain, Trash2, Edit3,
-  ChevronRight, Star, Activity, Database, Layers, Sparkles, X
+  Search,
+  Plus,
+  Filter,
+  Tag,
+  Clock,
+  Zap,
+  Brain,
+  Trash2,
+  Edit3,
+  ChevronRight,
+  Star,
+  Activity,
+  Database,
+  Layers,
+  Sparkles,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -65,32 +79,42 @@ export default function MemoryShardsPage() {
     }
   };
 
-  const filteredShards = shards.filter(s => {
-    const matchesSearch = !searchQuery ||
+  const filteredShards = shards.filter((s) => {
+    const matchesSearch =
+      !searchQuery ||
       s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesTag = !selectedTag || s.tags.includes(selectedTag);
     return matchesSearch && matchesTag;
   });
 
-  const allTags = Array.from(new Set(shards.flatMap(s => s.tags)));
+  const allTags = Array.from(new Set(shards.flatMap((s) => s.tags)));
 
   const getMasteryColor = (level: string) => {
     switch (level) {
-      case 'Master': return 'text-amber-600 bg-amber-50 border-amber-200';
-      case 'Expert': return 'text-emerald-600 bg-emerald-50 border-emerald-200';
-      case 'Adept': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-slate-600 bg-slate-50 border-slate-200';
+      case 'Master':
+        return 'text-amber-600 bg-amber-50 border-amber-200';
+      case 'Expert':
+        return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+      case 'Adept':
+        return 'text-blue-600 bg-blue-50 border-blue-200';
+      default:
+        return 'text-slate-600 bg-slate-50 border-slate-200';
     }
   };
 
   const getSourceTypeIcon = (type: string) => {
     switch (type) {
-      case 'conversation': return <Activity size={14} />;
-      case 'error_log': return <Zap size={14} />;
-      case 'code_review': return <Database size={14} />;
-      case 'web_crawl': return <Layers size={14} />;
-      default: return <Brain size={14} />;
+      case 'conversation':
+        return <Activity size={14} />;
+      case 'error_log':
+        return <Zap size={14} />;
+      case 'code_review':
+        return <Database size={14} />;
+      case 'web_crawl':
+        return <Layers size={14} />;
+      default:
+        return <Brain size={14} />;
     }
   };
 
@@ -123,11 +147,31 @@ export default function MemoryShardsPage() {
           {/* Tabs */}
           <div className="flex gap-2">
             {[
-              { id: 'shards' as TabType, label: '記憶碎片', icon: <Database size={14} />, count: shards.length },
-              { id: 'ultimates' as TabType, label: '技能奧義', icon: <Sparkles size={14} />, count: ultimates.length },
-              { id: 'stats' as TabType, label: '統計分析', icon: <Activity size={14} />, count: null },
-              { id: 'relations' as TabType, label: '碎片關聯', icon: <Layers size={14} />, count: null },
-            ].map(tab => (
+              {
+                id: 'shards' as TabType,
+                label: '記憶碎片',
+                icon: <Database size={14} />,
+                count: shards.length,
+              },
+              {
+                id: 'ultimates' as TabType,
+                label: '技能奧義',
+                icon: <Sparkles size={14} />,
+                count: ultimates.length,
+              },
+              {
+                id: 'stats' as TabType,
+                label: '統計分析',
+                icon: <Activity size={14} />,
+                count: null,
+              },
+              {
+                id: 'relations' as TabType,
+                label: '碎片關聯',
+                icon: <Layers size={14} />,
+                count: null,
+              },
+            ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -141,10 +185,12 @@ export default function MemoryShardsPage() {
                 {tab.icon}
                 {tab.label}
                 {tab.count !== null && (
-                  <span className={cn(
-                    'text-[10px] px-1.5 py-0.5 rounded-full',
-                    activeTab === tab.id ? 'bg-white/20' : 'bg-slate-200'
-                  )}>
+                  <span
+                    className={cn(
+                      'text-[10px] px-1.5 py-0.5 rounded-full',
+                      activeTab === tab.id ? 'bg-white/20' : 'bg-slate-200'
+                    )}
+                  >
                     {tab.count}
                   </span>
                 )}
@@ -157,7 +203,10 @@ export default function MemoryShardsPage() {
         {activeTab === 'shards' && (
           <div className="flex gap-4 items-center">
             <div className="flex-1 relative">
-              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search
+                size={18}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+              />
               <input
                 type="text"
                 value={searchQuery}
@@ -167,7 +216,7 @@ export default function MemoryShardsPage() {
               />
             </div>
             <div className="flex gap-2 flex-wrap">
-              {allTags.slice(0, 8).map(tag => (
+              {allTags.slice(0, 8).map((tag) => (
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
@@ -194,7 +243,7 @@ export default function MemoryShardsPage() {
           </div>
         ) : activeTab === 'shards' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredShards.map(shard => (
+            {filteredShards.map((shard) => (
               <div
                 key={shard.id}
                 onClick={() => setSelectedShard(shard)}
@@ -210,12 +259,16 @@ export default function MemoryShardsPage() {
                     </span>
                   </div>
                   {shard.entropyLevel !== undefined && (
-                    <span className={cn(
-                      'text-[10px] font-bold px-2 py-0.5 rounded-full',
-                      shard.entropyLevel < 30 ? 'bg-emerald-50 text-emerald-600' :
-                      shard.entropyLevel < 70 ? 'bg-amber-50 text-amber-600' :
-                      'bg-red-50 text-red-600'
-                    )}>
+                    <span
+                      className={cn(
+                        'text-[10px] font-bold px-2 py-0.5 rounded-full',
+                        shard.entropyLevel < 30
+                          ? 'bg-emerald-50 text-emerald-600'
+                          : shard.entropyLevel < 70
+                          ? 'bg-amber-50 text-amber-600'
+                          : 'bg-red-50 text-red-600'
+                      )}
+                    >
                       熵 {shard.entropyLevel}
                     </span>
                   )}
@@ -223,13 +276,14 @@ export default function MemoryShardsPage() {
                 <h3 className="text-sm font-bold text-[#003262] mb-2 group-hover:text-violet-600 transition-colors">
                   {shard.title}
                 </h3>
-                <p className="text-xs text-slate-500 line-clamp-2 mb-3">
-                  {shard.description}
-                </p>
+                <p className="text-xs text-slate-500 line-clamp-2 mb-3">{shard.description}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex gap-1 flex-wrap">
-                    {shard.tags.slice(0, 3).map(tag => (
-                      <span key={tag} className="text-[9px] px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded">
+                    {shard.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[9px] px-1.5 py-0.5 bg-slate-50 text-slate-500 rounded"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -248,15 +302,17 @@ export default function MemoryShardsPage() {
             ))}
             {filteredShards.length === 0 && (
               <div className="col-span-full bg-white rounded-2xl border border-slate-100 p-12 text-center">
-                <Brain size={48} className="mx-auto mb-4 text-slate-200" />
+                <Brain size={48} className="mx-auto mb-4 text-slate-700" />
                 <p className="text-sm text-slate-400">尚無記憶碎片</p>
-                <p className="text-xs text-slate-300 mt-1">開始對話或執行任務後，系統會自動萃取記憶碎片</p>
+                <p className="text-xs text-slate-300 mt-1">
+                  開始對話或執行任務後，系統會自動萃取記憶碎片
+                </p>
               </div>
             )}
           </div>
         ) : activeTab === 'ultimates' ? (
           <div className="space-y-4">
-            {ultimates.map(ultimate => (
+            {ultimates.map((ultimate) => (
               <div
                 key={ultimate.id}
                 className="bg-white rounded-xl border border-slate-100 p-6 hover:shadow-lg hover:border-amber-200 transition-all"
@@ -269,10 +325,12 @@ export default function MemoryShardsPage() {
                     <div>
                       <h3 className="text-lg font-black text-[#003262]">{ultimate.skillName}</h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className={cn(
-                          'text-[10px] font-bold px-2 py-0.5 rounded-full border',
-                          getMasteryColor(ultimate.masteryLevel)
-                        )}>
+                        <span
+                          className={cn(
+                            'text-[10px] font-bold px-2 py-0.5 rounded-full border',
+                            getMasteryColor(ultimate.masteryLevel)
+                          )}
+                        >
                           {ultimate.masteryLevel}
                         </span>
                         {ultimate.voidDimension && (
@@ -285,13 +343,18 @@ export default function MemoryShardsPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-slate-400">來源碎片</p>
-                    <p className="text-sm font-bold text-[#003262]">{ultimate.sourceShards.length}</p>
+                    <p className="text-sm font-bold text-[#003262]">
+                      {ultimate.sourceShards.length}
+                    </p>
                   </div>
                 </div>
                 <p className="text-sm text-slate-600 mb-4">{ultimate.synthesis}</p>
                 <div className="flex flex-wrap gap-2">
                   {ultimate.corePrinciples.map((principle, i) => (
-                    <span key={i} className="text-xs px-3 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-100">
+                    <span
+                      key={i}
+                      className="text-xs px-3 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-100"
+                    >
                       {principle}
                     </span>
                   ))}
@@ -300,22 +363,54 @@ export default function MemoryShardsPage() {
             ))}
             {ultimates.length === 0 && (
               <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center">
-                <Sparkles size={48} className="mx-auto mb-4 text-slate-200" />
+                <Sparkles size={48} className="mx-auto mb-4 text-slate-700" />
                 <p className="text-sm text-slate-400">尚無技能奧義</p>
-                <p className="text-xs text-slate-300 mt-1">收集 2 個以上記憶碎片後，系統會自動合成技能奧義</p>
+                <p className="text-xs text-slate-300 mt-1">
+                  收集 2 個以上記憶碎片後，系統會自動合成技能奧義
+                </p>
               </div>
             )}
           </div>
         ) : activeTab === 'stats' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: '總碎片數', value: shards.length, icon: <Database size={20} />, color: 'from-violet-500 to-purple-600' },
-              { label: '技能奧義', value: ultimates.length, icon: <Sparkles size={20} />, color: 'from-amber-400 to-orange-500' },
-              { label: '平均熵值', value: shards.length > 0 ? Math.round(shards.reduce((sum, s) => sum + (s.entropyLevel || 50), 0) / shards.length) : 0, icon: <Activity size={20} />, color: 'from-emerald-500 to-teal-600' },
-              { label: '總使用次數', value: shards.reduce((sum, s) => sum + s.usageCount, 0), icon: <Star size={20} />, color: 'from-blue-500 to-indigo-600' },
+              {
+                label: '總碎片數',
+                value: shards.length,
+                icon: <Database size={20} />,
+                color: 'from-violet-500 to-purple-600',
+              },
+              {
+                label: '技能奧義',
+                value: ultimates.length,
+                icon: <Sparkles size={20} />,
+                color: 'from-amber-400 to-orange-500',
+              },
+              {
+                label: '平均熵值',
+                value:
+                  shards.length > 0
+                    ? Math.round(
+                        shards.reduce((sum, s) => sum + (s.entropyLevel || 50), 0) / shards.length
+                      )
+                    : 0,
+                icon: <Activity size={20} />,
+                color: 'from-emerald-500 to-teal-600',
+              },
+              {
+                label: '總使用次數',
+                value: shards.reduce((sum, s) => sum + s.usageCount, 0),
+                icon: <Star size={20} />,
+                color: 'from-blue-500 to-indigo-600',
+              },
             ].map((stat, i) => (
               <div key={i} className="bg-white rounded-xl border border-slate-100 p-6">
-                <div className={cn('w-10 h-10 rounded-xl bg-gradient-to-br flex items-center justify-center text-white mb-3', stat.color)}>
+                <div
+                  className={cn(
+                    'w-10 h-10 rounded-xl bg-gradient-to-br flex items-center justify-center text-white mb-3',
+                    stat.color
+                  )}
+                >
                   {stat.icon}
                 </div>
                 <p className="text-2xl font-black text-[#003262]">{stat.value}</p>
@@ -325,7 +420,7 @@ export default function MemoryShardsPage() {
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-slate-100 p-12 text-center">
-            <Layers size={48} className="mx-auto mb-4 text-slate-200" />
+            <Layers size={48} className="mx-auto mb-4 text-slate-700" />
             <p className="text-sm text-slate-400">碎片關聯圖</p>
             <p className="text-xs text-slate-300 mt-1">開發中...</p>
           </div>
@@ -343,25 +438,35 @@ export default function MemoryShardsPage() {
                   {selectedShard.sourceType} · {new Date(selectedShard.createdAt).toLocaleString()}
                 </p>
               </div>
-              <button onClick={() => setSelectedShard(null)} className="p-2 hover:bg-slate-50 rounded-lg">
+              <button
+                onClick={() => setSelectedShard(null)}
+                className="p-2 hover:bg-slate-50 rounded-lg"
+              >
                 <X size={20} className="text-slate-400" />
               </button>
             </div>
             <p className="text-sm text-slate-600 mb-4">{selectedShard.description}</p>
             <div className="flex flex-wrap gap-2 mb-4">
-              {selectedShard.tags.map(tag => (
-                <span key={tag} className="text-xs px-3 py-1 bg-violet-50 text-violet-700 rounded-full border border-violet-100">
+              {selectedShard.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs px-3 py-1 bg-violet-50 text-violet-700 rounded-full border border-violet-100"
+                >
                   {tag}
                 </span>
               ))}
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-slate-50 rounded-lg p-3 text-center">
-                <p className="text-lg font-black text-[#003262]">{selectedShard.entropyLevel || 'N/A'}</p>
+                <p className="text-lg font-black text-[#003262]">
+                  {selectedShard.entropyLevel || 'N/A'}
+                </p>
                 <p className="text-[10px] text-slate-400">熵值</p>
               </div>
               <div className="bg-slate-50 rounded-lg p-3 text-center">
-                <p className="text-lg font-black text-[#003262]">{selectedShard.importanceScore?.toFixed(2) || 'N/A'}</p>
+                <p className="text-lg font-black text-[#003262]">
+                  {selectedShard.importanceScore?.toFixed(2) || 'N/A'}
+                </p>
                 <p className="text-[10px] text-slate-400">重要性</p>
               </div>
               <div className="bg-slate-50 rounded-lg p-3 text-center">

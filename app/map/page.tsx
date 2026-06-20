@@ -477,7 +477,7 @@ export default function OmniMapPage() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-200 relative overflow-hidden selection:bg-cyan-500/30">
+    <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-700 relative overflow-hidden selection:bg-cyan-500/30">
       {/* Absolute background cosmos glows */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[130px] rounded-full pointer-events-none" />
@@ -491,7 +491,7 @@ export default function OmniMapPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: SVG Star Orbit Map (8 Cols) */}
-          <div className="lg:col-span-8 bg-slate-950/40 -md border border-white/5 rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
+          <div className="lg:col-span-8 bg-slate-950/40 -md border border-slate-200 rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
             {/* Hologram Circle Frame */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,6,23,0.9))] pointer-events-none z-10" />
 
@@ -700,11 +700,11 @@ export default function OmniMapPage() {
           <div className="lg:col-span-4 flex flex-col gap-6">
             {/* 1. Node Info Card */}
             <Card
-              variant="glass"
+              variant="default"
               className="p-6 border-cyan-400/25 bg-gradient-to-b from-slate-950 to-cyan-950/20 relative overflow-hidden shadow-2xl flex-1 flex flex-col justify-between"
             >
               {/* Top Bumper */}
-              <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
+              <div className="flex justify-between items-center border-b border-slate-200 pb-4 mb-4">
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -723,19 +723,19 @@ export default function OmniMapPage() {
                   <h3 className="text-2xl font-black text-white flex items-center gap-2">
                     {selectedNode.name}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-white/5">
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-200">
                     {selectedNode.description}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="p-2.5 rounded-lg bg-slate-900/40 border border-white/5 flex flex-col gap-1">
+                  <div className="p-2.5 rounded-lg bg-slate-900/40 border border-slate-200 flex flex-col gap-1">
                     <span className="text-slate-500 font-bold flex items-center gap-1 text-[10px]">
                       <Layers size={10} className="text-cyan-400" /> 架構類別
                     </span>
                     <span className="text-slate-300 font-semibold">{selectedNode.category}</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-slate-900/40 border border-white/5 flex flex-col gap-1">
+                  <div className="p-2.5 rounded-lg bg-slate-900/40 border border-slate-200 flex flex-col gap-1">
                     <span className="text-slate-500 font-bold flex items-center gap-1 text-[10px]">
                       <Calendar size={10} className="text-cyan-400" /> 更新日期
                     </span>
@@ -745,7 +745,7 @@ export default function OmniMapPage() {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-900/40 border border-white/5 flex items-center justify-between">
+                <div className="p-3 rounded-lg bg-slate-900/40 border border-slate-200 flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-400 flex items-center gap-1">
                     <Zap size={12} className="text-cyan-400" /> 註冊狀態
                   </span>
@@ -766,7 +766,7 @@ export default function OmniMapPage() {
                     type="button"
                     onClick={handleDriftScan}
                     disabled={laserScan}
-                    className="py-2.5 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    className="py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-200 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                   >
                     <Search size={12} />
                     誠信探測
@@ -787,8 +787,8 @@ export default function OmniMapPage() {
                 </div>
 
                 {/* Simulated Log Terminal */}
-                <div className="space-y-1 border border-white/5 p-3 rounded-lg font-mono text-[9px] text-emerald-400/90 shadow-inner">
-                  <div className="flex justify-between border-b border-white/5 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[8px]">
+                <div className="space-y-1 border border-slate-200 p-3 rounded-lg font-mono text-[9px] text-emerald-400/90 shadow-inner">
+                  <div className="flex justify-between border-b border-slate-200 pb-1 mb-1 text-slate-500 font-bold uppercase tracking-wider text-[8px]">
                     <span>誠信與自癒日誌</span>
                     <span className="animate-pulse text-emerald-500">● ONLINE</span>
                   </div>
@@ -801,7 +801,7 @@ export default function OmniMapPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2 pt-2 border-t border-white/10">
+                <div className="space-y-2 pt-2 border-t border-slate-200">
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
                       <FileCode size={10} className="text-cyan-400" /> 交付項目 (Deliverables)
@@ -810,7 +810,7 @@ export default function OmniMapPage() {
                       {selectedNode.deliverables.map((d, idx) => (
                         <span
                           key={idx}
-                          className="text-[9px] font-mono border border-white/5 text-slate-300 px-1.5 py-0.5 rounded"
+                          className="text-[9px] font-mono border border-slate-200 text-slate-300 px-1.5 py-0.5 rounded"
                         >
                           {d}
                         </span>
@@ -856,7 +856,7 @@ export default function OmniMapPage() {
               </div>
 
               {/* Glowing Footer Bumper */}
-              <div className="mt-4 pt-3 border-t border-white/5 flex justify-between items-center text-[9px] font-mono text-slate-500">
+              <div className="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center text-[9px] font-mono text-slate-500">
                 <span>OMNIMAP_ENGINE_V2</span>
                 <span className="text-cyan-500/80">ALIGNED_5T</span>
               </div>

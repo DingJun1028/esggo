@@ -71,10 +71,10 @@ export default function SocialMetricsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-indigo-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-blue-600/20 flex items-center justify-center border border-indigo-500/30 shadow-[0_0_30px_rgba(99,102,241,0.15)] relative">
               <Users className="text-indigo-400 relative z-10" size={28} />
@@ -107,7 +107,7 @@ export default function SocialMetricsPage() {
         {/* Social Dashboard Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card
-            variant="glass"
+            variant="default"
             className="p-6 transition-all duration-300 hover:border-indigo-500/30"
           >
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
@@ -117,13 +117,13 @@ export default function SocialMetricsPage() {
               {metrics.retentionRate.toFixed(1)}
               <span className="text-lg font-normal text-slate-500">%</span>
             </div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
+            <p className="text-sm text-slate-400 border-t border-slate-200 pt-2 flex items-center gap-1">
               <TrendingUp size={14} className="text-indigo-500" /> 較去年提升 2.1%
             </p>
           </Card>
 
           <Card
-            variant="glass"
+            variant="default"
             className="p-6 transition-all duration-300 hover:border-blue-500/30"
           >
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
@@ -133,11 +133,13 @@ export default function SocialMetricsPage() {
               {metrics.diversityRatio.toFixed(1)}
               <span className="text-lg font-normal text-slate-500">%</span>
             </div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">管理階層佔比 38%</p>
+            <p className="text-sm text-slate-400 border-t border-slate-200 pt-2">
+              管理階層佔比 38%
+            </p>
           </Card>
 
           <Card
-            variant="glass"
+            variant="default"
             className="p-6 transition-all duration-300 hover:border-purple-500/30"
           >
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
@@ -147,7 +149,9 @@ export default function SocialMetricsPage() {
               {metrics.trainingHours.toFixed(1)}{' '}
               <span className="text-lg font-normal text-slate-500">小時/人</span>
             </div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">年度目標: 50 小時</p>
+            <p className="text-sm text-slate-400 border-t border-slate-200 pt-2">
+              年度目標: 50 小時
+            </p>
           </Card>
         </div>
       </div>

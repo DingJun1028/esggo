@@ -255,9 +255,7 @@ function MilestoneItem({
   index: number;
 }) {
   return (
-    <div
-      className="flex items-start gap-3"
-    >
+    <div className="flex items-start gap-3">
       <div className="flex flex-col items-center">
         <div
           className={cn(

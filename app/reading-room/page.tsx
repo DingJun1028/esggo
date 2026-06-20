@@ -26,15 +26,20 @@ export default function ReadingRoomPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [sealingId, setSealingId] = useState<number | null>(null);
   const [verifyingId, setVerifyingId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchData();
+    fetchData(activeCategory, searchQuery);
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (category?: string | null, query?: string) => {
     setLoading(true);
     try {
-      const res = await fetch('/api/reading-room/documents?t=' + Date.now(), { cache: 'no-store' });
+      let url = '/api/reading-room/documents?t=' + Date.now();
+      if (category) url += `&category=${encodeURIComponent(category)}`;
+      if (query) url += `&q=${encodeURIComponent(query)}`;
+      const res = await fetch(url, { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
         const docs = (json.documents || []).map((doc: any) => ({
@@ -182,7 +187,7 @@ export default function ReadingRoomPage() {
           <button
             onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
             disabled={verifyingId === row.id}
-            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-700 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
             {row.hash_lock ? '驗證 5T' : '編輯'}
@@ -193,14 +198,14 @@ export default function ReadingRoomPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
-              <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <BookOpen className="text-cyan-400 relative z-10" size={28} />
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center border border-blue-100 shadow-sm relative group">
+              <div className="absolute inset-0 bg-blue-100 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <BookOpen className="text-blue-600 relative z-10" size={28} />
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
@@ -211,8 +216,8 @@ export default function ReadingRoomPage() {
                   READING-ROOM
                 </span>
               </div>
-              <h1 className="text-4xl font-black text-white tracking-tight">永續閱覽室</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">
+              <h1 className="text-4xl font-black text-slate-900 tracking-tight">永續閱覽室</h1>
+              <p className="text-slate-500 font-mono text-sm tracking-widest uppercase mt-2">
                 SUSTAINABILITY READING ROOM
               </p>
             </div>
@@ -235,34 +240,34 @@ export default function ReadingRoomPage() {
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">收錄文獻</span>
               <BookOpen size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">
+            <div className="text-4xl font-black text-slate-900">
               124<span className="text-lg text-slate-500 ml-2 font-normal">Docs</span>
             </div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Indexed</p>
           </Card>
 
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
-            <div className="text-4xl font-black text-white">
+            <div className="text-4xl font-black text-slate-900">
               98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
             </div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </Card>
 
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">知識庫向量數</span>
               <Database size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">
+            <div className="text-4xl font-black text-slate-900">
               8,452<span className="text-lg text-slate-500 ml-2 font-normal">Chunks</span>
             </div>
             <p className="text-xs text-amber-400/80 font-mono">OmniVector Syncing</p>
@@ -283,7 +288,7 @@ export default function ReadingRoomPage() {
           </div>
 
           <div className="space-y-6">
-            <Card variant="glow" title="永續知識大腦" subtitle="ESGSmartQA (RAG Powered)">
+            <Card variant="default" title="永續知識大腦" subtitle="ESGSmartQA (RAG Powered)">
               <div className="space-y-4 text-sm text-slate-300">
                 <p className="mb-4">
                   您可以直接在下方詢問關於 TCFD、CBAM、或者上傳的 ESG 報告書內容。
