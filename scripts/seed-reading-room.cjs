@@ -17,7 +17,7 @@ const getAnonKey = () => {
   return match ? match[1].trim() : null;
 };
 
-const SUPABASE_URL = getSupabaseUrl();
+const SUPABASE_URL = 'https://yhwfmavnhaivvgzeuklx.supabase.co';
 const ANON_KEY = getAnonKey();
 
 if (!SUPABASE_URL || !ANON_KEY) {
