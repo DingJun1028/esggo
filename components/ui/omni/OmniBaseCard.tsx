@@ -2,6 +2,8 @@ import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/utils';
 import { useThemeStore } from '../../../lib/theme-store';
+import { OmniHeartSeal } from './OmniHeartSeal';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniBaseCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -15,9 +17,11 @@ export interface OmniBaseCardProps extends Omit<React.HTMLAttributes<HTMLDivElem
 
 export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
   (
-    { className, padding = 'md', variant = 'default', title, subtitle, children, ...props },
+    { className, padding = 'md', variant = 'default', title, subtitle, omniHeart: initialHeart, children, ...props },
     ref
   ) => {
+    const omniHeart = useOmniResonance(initialHeart);
+    
     const paddings = {
       none: 'p-0',
       sm: 'p-4',
@@ -49,15 +53,23 @@ export const OmniBaseCard = React.forwardRef<HTMLDivElement, OmniBaseCardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-2xl transition-all duration-normal',
+          'rounded-2xl transition-all duration-normal relative',
           omniTheme === 'omnicore' ? 'text-[var(--theme-text)]' : '',
           variants[variant],
           paddings[padding],
+          omniHeart && omniHeart.resonanceState === 1.0 
+            ? 'ring-2 ring-[#ffd700]/50 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-gradient-to-br from-white to-[#ffd700]/5' 
+            : omniHeart ? 'ring-1 ring-[#63a6b0]/30 shadow-[0_0_15px_rgba(99,166,176,0.1)] bg-gradient-to-br from-white to-[#63a6b0]/5' : '',
           className
         )}
         {...props}
       >
-        {(title || subtitle) && <OmniBaseCardHeader title={title} subtitle={subtitle} />}
+        {omniHeart && (
+          <div className="absolute top-4 right-4 z-10">
+            <OmniHeartSeal omniHeart={omniHeart} />
+          </div>
+        )}
+        {(title || subtitle) && <OmniBaseCardHeader title={title} subtitle={subtitle} omniHeart={omniHeart} />}
         {children}
       </div>
     );
@@ -69,17 +81,20 @@ export function OmniBaseCardHeader({
   title,
   subtitle,
   action,
+  omniHeart,
   className,
 }: {
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   action?: React.ReactNode;
+  omniHeart?: OmniComponentHeart;
   className?: string;
 }) {
   return (
     <div
       className={cn(
         'flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4',
+        omniHeart ? 'pr-24' : '', // make room for absolute seal
         className
       )}
     >

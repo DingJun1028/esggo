@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   icon?: ReactNode;
@@ -20,7 +20,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]',
         {
           'bg-neutral-900 text-white hover:bg-neutral-800 focus:ring-neutral-500': variant === 'primary',
-          'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200 focus:ring-neutral-300': variant === 'secondary',
+          'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border border-neutral-200 focus:ring-neutral-300': variant === 'secondary' || variant === 'outline',
           'bg-transparent text-neutral-600 hover:bg-neutral-50 focus:ring-neutral-200': variant === 'ghost',
           'bg-red-500 text-white hover:bg-red-600 focus:ring-red-300': variant === 'danger',
         },
