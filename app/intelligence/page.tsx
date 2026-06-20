@@ -18,7 +18,10 @@ import {
   FileText,
   Sparkles,
   Send,
+  Stethoscope,
+  ArrowRight,
 } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
@@ -308,6 +311,44 @@ export default function IntelligencePage() {
             </div>
           </OmniBaseCard>
         </div>
+
+        {/* ─── Enterprise Health Check Portal ─── */}
+        <OmniBaseCard className="relative overflow-hidden border-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-blue-800 opacity-95" />
+          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/10 to-transparent transform skew-x-[-20deg]" />
+          
+          <div className="relative p-8 flex flex-col md:flex-row items-center justify-between gap-6 z-10 text-white">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                <Stethoscope size={32} className="text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/20 text-white tracking-widest uppercase">
+                    New Feature
+                  </span>
+                  <span className="text-xs text-white/80 font-mono">15-Question Wizard</span>
+                </div>
+                <h2 className="text-2xl font-black tracking-tight mb-1">企業 ESG 健檢中心</h2>
+                <p className="text-sm text-white/80 max-w-lg leading-relaxed">
+                  不知道從何開始？透過 15 題漸進式診斷嚮導，系統將為您自動產生專屬的 90 天改善路徑圖，並一鍵無縫匯入 NCB 任務中心。
+                </p>
+              </div>
+            </div>
+            <div className="w-full md:w-auto">
+              <Link href="/intelligence/enterprise-health">
+                <OmniButton
+                  variant="secondary"
+                  size="lg"
+                  className="w-full md:w-auto bg-white text-blue-900 hover:bg-slate-100 font-bold tracking-wider"
+                >
+                  立即開始健檢 <ArrowRight size={16} className="ml-2" />
+                </OmniButton>
+              </Link>
+            </div>
+          </div>
+        </OmniBaseCard>
 
         {/* ─── Report Card ─── */}
         {report.visible && (

@@ -1,5 +1,5 @@
-// 5T End-to-End Type Safety Enforced
 import { getOmniTableServerClient, OmniTableRecord } from '@/lib/omni-table/client';
+import { ncbClient } from '@/lib/ncbdb';
 import { createHash } from 'crypto';
 
 export interface SyncResult {
@@ -65,57 +65,120 @@ export async function findBacklinks(noteId: string, type: string): Promise<OmniT
 export async function syncTaskToOmniTable(taskId: string, taskContent: string, taskStatus: string = 'Todo'): Promise<SyncResult> {
   const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
+  let omniResult: SyncResult = { success: false, message: 'OmniTable sync skipped' };
+
   if (!datasheetId) {
-    console.warn('[OmniNotes Service] OMNITABLE_TASKS_DATASHEET_ID is not set. Skipping sync.');
-    return { success: true, message: 'Skipped (no datasheet ID)' };
+    console.warn('[OmniNotes Service] OMNITABLE_TASKS_DATASHEET_ID is not set. Skipping OmniTable sync.');
+  } else {
+    try {
+      const client = getOmniTableServerClient();
+      const records = await client.getRecords(datasheetId, { pageSize: 100 });
+
+      const existingRecord = records.records.find(
+        (r) => r.fields['TaskId'] === taskId || r.fields['Task Title'] === taskContent || r.fields['Content'] === taskContent
+      );
+
+      if (existingRecord) {
+        const payload = { taskId, taskContent, status: taskStatus, timestamp: Date.now() };
+        const hashLock = createHashLock(payload);
+
+        const updated = await client.updateRecords(datasheetId, [
+          {
+            recordId: existingRecord.recordId,
+            fields: {
+              'Task Title': taskContent,
+              Status: taskStatus,
+              UpdatedAt: new Date().toISOString(),
+              'Hash Lock': hashLock,
+              SourceOrigin: 'OmniNotes',
+            },
+          },
+        ]);
+        omniResult = { success: true, recordId: updated[0].recordId, message: 'Updated existing task in OmniTable' };
+      } else {
+        const payload = { taskId, taskContent, status: taskStatus, timestamp: Date.now() };
+        const hashLock = createHashLock(payload);
+
+        const newRecords = await client.createRecords(datasheetId, [
+          {
+            fields: {
+              TaskId: taskId,
+              'Task Title': taskContent,
+              Status: taskStatus,
+              CreatedAt: new Date().toISOString(),
+              'Hash Lock': hashLock,
+              SourceOrigin: 'OmniNotes',
+            },
+          },
+        ]);
+        omniResult = { success: true, recordId: newRecords[0].recordId, message: 'Created new task in OmniTable' };
+      }
+    } catch (error) {
+      console.error(`[OmniNotes Service] Failed to sync task to OmniTable:`, error);
+      omniResult = { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
   }
 
+  // Dual Sync to NCB
+  const ncbResult = await syncTaskToNCB(taskId, taskContent, taskStatus);
+
+  return {
+    success: omniResult.success || ncbResult.success,
+    message: `OmniTable: ${omniResult.message} | NCB: ${ncbResult.message}`,
+  };
+}
+
+export async function syncTaskToNCB(taskId: string, taskContent: string, taskStatus: string): Promise<SyncResult> {
   try {
-    const client = getOmniTableServerClient();
-    const records = await client.getRecords(datasheetId, { pageSize: 100 });
-
-    const existingRecord = records.records.find(
-      (r) => r.fields['TaskId'] === taskId || r.fields['Task Title'] === taskContent || r.fields['Content'] === taskContent
-    );
-
-    if (existingRecord) {
-      const payload = { taskId, taskContent, status: taskStatus, timestamp: Date.now() };
-      const hashLock = createHashLock(payload);
-
-      const updated = await client.updateRecords(datasheetId, [
-        {
-          recordId: existingRecord.recordId,
-          fields: {
-            'Task Title': taskContent,
-            Status: taskStatus,
-            UpdatedAt: new Date().toISOString(),
-            'Hash Lock': hashLock,
-            SourceOrigin: 'OmniNotes',
-          },
-        },
-      ]);
-      return { success: true, recordId: updated[0].recordId, message: 'Updated existing task' };
+    const tableName = 'Tasks';
+    const payload = {
+      Id: taskId,
+      Title: taskContent,
+      Status: taskStatus,
+      UpdatedAt: new Date().toISOString(),
+      SourceOrigin: 'OmniNotes',
+    };
+    
+    // Attempt to query first
+    const existing = await ncbClient.queryRecords<{ Id: string }>(tableName, { where: `(Id,eq,${taskId})` });
+    
+    let res;
+    if (existing.success && existing.data && existing.data.length > 0) {
+      // Update
+      const recordId = existing.data[0].Id;
+      res = await ncbClient.updateRecord(tableName, recordId, payload);
+    } else {
+      // Insert
+      res = await ncbClient.upsertRecord(tableName, { ...payload, CreatedAt: new Date().toISOString() });
     }
 
-    const payload = { taskId, taskContent, status: taskStatus, timestamp: Date.now() };
-    const hashLock = createHashLock(payload);
-
-    const newRecords = await client.createRecords(datasheetId, [
-      {
-        fields: {
-          TaskId: taskId,
-          'Task Title': taskContent,
-          Status: taskStatus,
-          CreatedAt: new Date().toISOString(),
-          'Hash Lock': hashLock,
-          SourceOrigin: 'OmniNotes',
-        },
-      },
-    ]);
-    return { success: true, recordId: newRecords[0].recordId, message: 'Created new task' };
+    if (res.success) {
+      return { success: true, message: 'Successfully synced to NCB' };
+    } else {
+      return { success: false, message: res.error || 'Failed to sync to NCB' };
+    }
   } catch (error) {
-    console.error(`[OmniNotes Service] Failed to sync task:`, error);
+    console.error(`[OmniNotes Service] Failed to sync task to NCB:`, error);
     return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+
+export async function fetchTasksFromNCB(): Promise<any[]> {
+  try {
+    const res = await ncbClient.listRecords<any>('Tasks');
+    if (res.success && res.data) {
+      return res.data.map(item => ({
+        id: item.Id,
+        title: item.Title || item.TaskTitle || item.taskContent || 'Untitled Task',
+        status: item.Status || 'Todo',
+        synced: true,
+        source: 'ncb',
+      }));
+    }
+    return [];
+  } catch (error) {
+    console.error(`[OmniNotes Service] Failed to fetch tasks from NCB:`, error);
+    return [];
   }
 }
 

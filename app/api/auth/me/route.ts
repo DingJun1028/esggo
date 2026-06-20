@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
-
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'omnicore_default_secret_key_please_change'
-);
+import { firebaseAdmin } from '@/lib/firebase-admin';
 
 export async function GET() {
   const cookieStore = cookies();
@@ -20,9 +16,24 @@ export async function GET() {
   }
 
   try {
-    const { payload } = await jwtVerify(sessionToken, JWT_SECRET);
-    return NextResponse.json({ user: payload });
+    if (!firebaseAdmin) {
+      console.error('Firebase Admin not initialized');
+      return NextResponse.json({ user: null }, { status: 500 });
+    }
+
+    const decodedClaims = await firebaseAdmin.auth().verifySessionCookie(sessionToken, true);
+    
+    // Map Firebase claims to our user object structure
+    const user = {
+      id: decodedClaims.uid,
+      email: decodedClaims.email,
+      name: decodedClaims.name || decodedClaims.email?.split('@')[0],
+      picture: decodedClaims.picture,
+    };
+
+    return NextResponse.json({ user });
   } catch (err) {
+    console.error('Session verification failed:', err);
     return NextResponse.json({ user: null }, { status: 401 });
   }
 }

@@ -66,10 +66,26 @@ export class NCBDBClient {
   }
 
   /**
+   * Update a record in an NCBDB table
+   */
+  async updateRecord(tableName: string, recordId: string, data: Record<string, unknown>): Promise<NCBDBResponse> {
+    console.log(`[NCBDB] Updating record ${recordId} in ${tableName}...`);
+    return await this.request(`/${tableName}/${recordId}`, 'PATCH', data);
+  }
+
+  /**
    * List records from an NCBDB table
    */
   async listRecords<T>(tableName: string): Promise<NCBDBResponse<T[]>> {
     return await this.request<T[]>(`/${tableName}`, 'GET');
+  }
+
+  /**
+   * Query records with query parameters
+   */
+  async queryRecords<T>(tableName: string, queryParams: Record<string, string>): Promise<NCBDBResponse<T[]>> {
+    const params = new URLSearchParams(queryParams).toString();
+    return await this.request<T[]>(`/${tableName}?${params}`, 'GET');
   }
 }
 
