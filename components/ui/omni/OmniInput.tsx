@@ -1,7 +1,7 @@
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useId } from 'react';
 import { cn } from '../../../lib/utils';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Lock } from 'lucide-react';
 
 export interface OmniInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -14,16 +14,17 @@ export interface OmniInputProps extends React.InputHTMLAttributes<HTMLInputEleme
 }
 
 export const OmniInput = React.forwardRef<HTMLInputElement, OmniInputProps>(
-  ({ className, label, error, icon, fullWidth = true, id, ...props }, ref) => {
+  ({ className, label, error, icon, fullWidth = true, id, omniHeart, ...props }, ref) => {
     const generatedId = useId();
     const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
 
     return (
-      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '')}>
+      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '', omniHeart ? 'relative group' : '')}>
         {label && (
-          <label htmlFor={inputId} className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label htmlFor={inputId} className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
             {label}
+            {omniHeart && <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />}
           </label>
         )}
         <div className="relative">
@@ -45,6 +46,8 @@ export const OmniInput = React.forwardRef<HTMLInputElement, OmniInputProps>(
               'pr-3',
               error
                 ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500'
+                : omniHeart
+                ? 'border-[#63a6b0]/50 focus:border-[#63a6b0] focus:ring-1 focus:ring-[#63a6b0] focus:shadow-[0_0_10px_rgba(99,166,176,0.2)]'
                 : 'border-[var(--theme-border)] focus:border-[var(--theme-primary)] focus:ring-1 focus:ring-[var(--theme-primary)]',
               'focus:outline-none',
               className
@@ -66,6 +69,9 @@ export const OmniInput = React.forwardRef<HTMLInputElement, OmniInputProps>(
 OmniInput.displayName = 'OmniInput';
 
 export interface OmniSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   label?: string;
   error?: string;
   fullWidth?: boolean;
@@ -73,16 +79,17 @@ export interface OmniSelectProps extends React.SelectHTMLAttributes<HTMLSelectEl
 }
 
 export const OmniSelect = React.forwardRef<HTMLSelectElement, OmniSelectProps>(
-  ({ className, label, error, fullWidth = true, id, children, ...props }, ref) => {
+  ({ className, label, error, fullWidth = true, id, children, omniHeart, ...props }, ref) => {
     const generatedId = useId();
     const selectId = id || generatedId;
     const errorId = `${selectId}-error`;
 
     return (
-      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '')}>
+      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '', omniHeart ? 'relative group' : '')}>
         {label && (
-          <label htmlFor={selectId} className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label htmlFor={selectId} className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
             {label}
+            {omniHeart && <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />}
           </label>
         )}
         <select
@@ -96,6 +103,8 @@ export const OmniSelect = React.forwardRef<HTMLSelectElement, OmniSelectProps>(
             'px-3 pr-10',
             error
               ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500'
+              : omniHeart
+              ? 'border-[#63a6b0]/50 focus:border-[#63a6b0] focus:ring-1 focus:ring-[#63a6b0] focus:shadow-[0_0_10px_rgba(99,166,176,0.2)]'
               : 'border-[var(--theme-border)] focus:border-[var(--theme-primary)] focus:ring-1 focus:ring-[var(--theme-primary)]',
             'focus:outline-none appearance-none',
             className
@@ -118,22 +127,26 @@ export const OmniSelect = React.forwardRef<HTMLSelectElement, OmniSelectProps>(
 OmniSelect.displayName = 'OmniSelect';
 
 export interface OmniTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   label?: string;
   error?: string;
   fullWidth?: boolean;
 }
 
 export const OmniTextarea = React.forwardRef<HTMLTextAreaElement, OmniTextareaProps>(
-  ({ className, label, error, fullWidth = true, id, ...props }, ref) => {
+  ({ className, label, error, fullWidth = true, id, omniHeart, ...props }, ref) => {
     const generatedId = useId();
     const textareaId = id || generatedId;
     const errorId = `${textareaId}-error`;
 
     return (
-      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '')}>
+      <div className={cn('flex flex-col gap-1.5', fullWidth ? 'w-full' : '', omniHeart ? 'relative group' : '')}>
         {label && (
-          <label htmlFor={textareaId} className="text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
+          <label htmlFor={textareaId} className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--theme-text-muted)]">
             {label}
+            {omniHeart && <Lock size={10} className="text-[#63a6b0]" aria-label="5T Secured Input" />}
           </label>
         )}
         <textarea
@@ -148,6 +161,8 @@ export const OmniTextarea = React.forwardRef<HTMLTextAreaElement, OmniTextareaPr
             'px-3 py-2',
             error
               ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500'
+              : omniHeart
+              ? 'border-[#63a6b0]/50 focus:border-[#63a6b0] focus:ring-1 focus:ring-[#63a6b0] focus:shadow-[0_0_10px_rgba(99,166,176,0.2)]'
               : 'border-[var(--theme-border)] focus:border-[var(--theme-primary)] focus:ring-1 focus:ring-[var(--theme-primary)]',
             'focus:outline-none resize-y',
             className
