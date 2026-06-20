@@ -63,6 +63,13 @@ interface IComponentCore {
 }
 ```
 
+### OmniCore 5T 介面織入 (UI Transcendence)
+
+為徹底實踐 5T 協議的「美 (Tasteful) - 可感知」維度，系統已透過 Jules Karma Engine 啟動「萬能至尊對齊 (Universal to Omni Alignment)」，全面捨棄舊版的 `v2` UI 組件。
+現行前端架構全面升級為 `OmniBaseCard`、`OmniBaseTable` 等液態玻璃 (Liquid Glass) 核心元件。這些元件皆原生地與 `IComponentCore` 的狀態綁定。
+
+當數據點進入 `Trustworthy` 狀態並產生 Hash Lock 或是 ZKP 證明時，`OmniCore` 元件將動態觸發 `omniHeart` 視覺共鳴，以金色 (Golden Sync) 或青色 (Cyan Trust) 光譜反映數據的防竄改級別，讓稽核員與管理層能「一眼即見」數據的絕對誠信。
+
 ---
 
 ## 3. 零知識證明 (ZKP) 隱私保護架構
