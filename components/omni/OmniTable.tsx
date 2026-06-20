@@ -36,7 +36,7 @@ interface OmniTableProps {
   onSealAction?: (id: string) => Promise<void>;
 }
 
-export function OmniTable({ data, onSealAction }: OmniTableProps) {
+export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
   const [filter, setFilter] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [processing, setProcessing] = useState<string | null>(null);
