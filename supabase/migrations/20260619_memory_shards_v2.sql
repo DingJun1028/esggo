@@ -3,6 +3,57 @@
 -- OmniMemory Shards & Skill Ultimates
 -- ============================================================
 
+-- 0. 確保舊表有新增的冪等列（從舊版 migration 升級時需要）
+DO $$
+BEGIN
+    -- omni_memory_shards 新列
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'omni_memory_shards') THEN
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'entropy_level') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN entropy_level INTEGER CHECK (entropy_level >= 0 AND entropy_level <= 100);
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'source_type') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN source_type TEXT NOT NULL DEFAULT 'conversation' CHECK (source_type IN ('conversation', 'error_log', 'code_review', 'web_crawl', 'manual', 'auto_extract'));
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'source_id') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN source_id TEXT;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'importance_score') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN importance_score NUMERIC(3,2) DEFAULT 0.5 CHECK (importance_score >= 0 AND importance_score <= 1);
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'usage_count') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN usage_count INTEGER NOT NULL DEFAULT 0;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'last_used_at') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN last_used_at TIMESTAMPTZ;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'updated_at') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'metadata') THEN
+            ALTER TABLE public.omni_memory_shards ADD COLUMN metadata JSONB DEFAULT '{}'::jsonb;
+        END IF;
+    END IF;
+
+    -- omni_skill_ultimates 新列
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'omni_skill_ultimates') THEN
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_skill_ultimates' AND column_name = 'void_dimension') THEN
+            ALTER TABLE public.omni_skill_ultimates ADD COLUMN void_dimension TEXT CHECK (void_dimension IN ('Structural Void', 'Logical Void', 'Stateful Void', 'Unified'));
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_skill_ultimates' AND column_name = 'application_count') THEN
+            ALTER TABLE public.omni_skill_ultimates ADD COLUMN application_count INTEGER NOT NULL DEFAULT 0;
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_skill_ultimates' AND column_name = 'success_rate') THEN
+            ALTER TABLE public.omni_skill_ultimates ADD COLUMN success_rate NUMERIC(3,2) DEFAULT 0.5 CHECK (success_rate >= 0 AND success_rate <= 1);
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_skill_ultimates' AND column_name = 'updated_at') THEN
+            ALTER TABLE public.omni_skill_ultimates ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_skill_ultimates' AND column_name = 'metadata') THEN
+            ALTER TABLE public.omni_skill_ultimates ADD COLUMN metadata JSONB DEFAULT '{}'::jsonb;
+        END IF;
+    END IF;
+END $$;
+
 -- 1. 記憶碎片資料表
 CREATE TABLE IF NOT EXISTS public.omni_memory_shards (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -59,8 +110,15 @@ CREATE TABLE IF NOT EXISTS public.omni_shard_usage_log (
 
 -- 5. 索引
 CREATE INDEX IF NOT EXISTS idx_shards_tags ON public.omni_memory_shards USING GIN(tags);
-CREATE INDEX IF NOT EXISTS idx_shards_source_type ON public.omni_memory_shards(source_type);
-CREATE INDEX IF NOT EXISTS idx_shards_importance ON public.omni_memory_shards(importance_score DESC);
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'source_type') THEN
+        CREATE INDEX IF NOT EXISTS idx_shards_source_type ON public.omni_memory_shards(source_type);
+    END IF;
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'omni_memory_shards' AND column_name = 'importance_score') THEN
+        CREATE INDEX IF NOT EXISTS idx_shards_importance ON public.omni_memory_shards(importance_score DESC);
+    END IF;
+END $$;
 CREATE INDEX IF NOT EXISTS idx_shards_created ON public.omni_memory_shards(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_ultimates_mastery ON public.omni_skill_ultimates(mastery_level);
 CREATE INDEX IF NOT EXISTS idx_ultimates_name ON public.omni_skill_ultimates(skill_name);
