@@ -7,6 +7,7 @@ import { OmniForm, FormField } from '../../../components/ui/omni/OmniForm';
 import { OmniChart } from '../../../components/ui/omni/OmniChart';
 import { OmniStatusDot } from '../../../components/ui/omni/OmniStatusDot';
 import { OmniBadge } from '../../../components/ui/omni/OmniBadge';
+import { OmniBaseCard } from '../../../components/ui/omni/OmniBaseCard';
 import { supabase } from '@/lib/db/supabase';
 
 export default function MetricsPage() {
@@ -232,6 +233,26 @@ export default function MetricsPage() {
     target: Number(m.target_value) || 0,
   }));
 
+  const allSealed = metrics.length > 0 && metrics.every((m) => m.hash_lock);
+  const commonHeart = {
+    omniSignature: allSealed ? 'ZKP-GOLDEN-SYNC' : 'PENDING-SEAL-SYNC',
+    omniClass: 'OmniGeneral' as const,
+    coreContext: {
+      actor: 'system',
+      timestamp: Date.now(),
+      requestId: 'metrics-req',
+      environment: 'production' as const,
+    },
+    resonanceState: allSealed ? 1.0 : 0.5,
+    fiveTState: {
+      tangible: true,
+      traceable: true,
+      trackable: true,
+      transparent: true,
+      trustworthy: allSealed,
+    },
+  };
+
   return (
     <div className="p-8 space-y-8 animate-fade-in text-[var(--theme-text)] min-h-screen bg-[var(--theme-base)]">
       <div className="flex justify-between items-center">
@@ -249,70 +270,54 @@ export default function MetricsPage() {
       </div>
 
       {showAddForm && (
-        <div className="p-6 border border-[var(--theme-border)] rounded-xl bg-[var(--theme-surface)]/50 -md animate-fade-in">
-          <h2 className="text-lg font-semibold mb-4 text-[var(--theme-secondary)]">
-            Create New Metric
-          </h2>
+        <OmniBaseCard
+          variant="glass"
+          title="Create New Metric"
+          subtitle="Add a new ESG record with 5T tracking"
+          className="mb-8"
+        >
           <OmniForm
             fields={formFields}
             onSubmit={handleAddMetric}
             onCancel={() => setShowAddForm(false)}
             initialValues={{ reporting_year: new Date().getFullYear(), category: 'ENVIRONMENTAL' }}
+            omniHeart={commonHeart}
           />
-        </div>
+        </OmniBaseCard>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="lg:col-span-2">
-          <h3 className="text-sm tracking-widest text-[var(--theme-text-muted)] mb-4 uppercase font-bold">
-            Metrics Data Table (5T Protocol Enabled)
-          </h3>
+        <OmniBaseCard 
+          className="lg:col-span-2" 
+          variant="glow"
+          title="Metrics Data Table (5T Protocol Enabled)"
+          subtitle="Real-time synchronized data ledger"
+        >
           {loading ? (
             <div className="p-12 text-center text-[var(--theme-text-muted)]">
               Loading metrics...
             </div>
           ) : (
-            <OmniBaseTable columns={columns} data={metrics} />
+            <OmniBaseTable columns={columns} data={metrics} omniHeart={commonHeart} />
           )}
-        </div>
+        </OmniBaseCard>
 
-        <div className="lg:col-span-2 space-y-8">
-          <div>
-            <h3 className="text-sm tracking-widest text-[var(--theme-text-muted)] mb-4 uppercase font-bold">
-              Metrics Progress Overview
-            </h3>
-            <OmniChart
-              omniHeart={{
-                omniSignature: metrics.every(m => m.hash_lock) 
-                  ? 'ZKP-CHART-GOLDEN-SYNC' 
-                  : 'PENDING-SEAL-SYNC',
-                omniClass: 'OmniGeneral',
-                coreContext: {
-                  actor: 'system',
-                  timestamp: Date.now(),
-                  requestId: 'chart-req',
-                  environment: 'production'
-                },
-                resonanceState: metrics.length > 0 && metrics.every(m => m.hash_lock) ? 1.0 : 0.5,
-                fiveTState: {
-                  tangible: true,
-                  traceable: true,
-                  trackable: true,
-                  transparent: true,
-                  trustworthy: metrics.length > 0 && metrics.every(m => m.hash_lock)
-                }
-              }}
-              type="bar"
-              data={chartData}
-              xAxisKey="name"
-              series={[
-                { key: 'value', color: 'var(--theme-primary)', name: 'Current Value' },
-                { key: 'target', color: 'var(--theme-secondary)', name: 'Target Value' },
-              ]}
-              height={300}
-            />
-          </div>
-        </div>
+        <OmniBaseCard 
+          className="lg:col-span-2"
+          title="Metrics Progress Overview"
+        >
+          <OmniChart
+            omniHeart={commonHeart}
+            type="bar"
+            data={chartData}
+            xAxisKey="name"
+            series={[
+              { key: 'value', color: 'var(--theme-primary)', name: 'Current Value' },
+              { key: 'target', color: 'var(--theme-secondary)', name: 'Target Value' },
+            ]}
+            height={300}
+          />
+        </OmniBaseCard>
       </div>
     </div>
   );

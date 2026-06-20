@@ -1,6 +1,7 @@
 import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/utils';
+import { ShieldCheck } from 'lucide-react';
 
 export interface OmniBaseTableColumn<T> {
   key: string;
@@ -13,6 +14,7 @@ export interface OmniBaseTableProps<T> extends React.HTMLAttributes<HTMLTableEle
   data: T[];
   compact?: boolean;
   loading?: boolean;
+  omniHeart?: OmniComponentHeart;
 }
 
 export function OmniBaseTable<T extends { id?: string | number }>({ 
@@ -21,10 +23,27 @@ export function OmniBaseTable<T extends { id?: string | number }>({
   compact = false,
   loading = false,
   className,
+  omniHeart,
   ...props
 }: OmniBaseTableProps<T>) {
   return (
-    <div className="w-full overflow-x-auto rounded-lg border border-[var(--theme-border)] bg-[var(--theme-base)]">
+    <div className={cn(
+      "w-full overflow-x-auto rounded-lg border transition-all duration-500 relative",
+      omniHeart ? (
+        omniHeart.resonanceState === 1.0 
+          ? "border-[#ffd700]/30 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-[#ffd700]/5" 
+          : "border-[#63a6b0]/30 shadow-[0_0_20px_rgba(99,166,176,0.1)] bg-[#63a6b0]/5"
+      ) : "border-[var(--theme-border)] bg-[var(--theme-base)]",
+      className
+    )}>
+      {omniHeart && (
+        <div className="absolute top-0 right-0 px-3 py-1 bg-[var(--theme-surface)] border-b border-l border-[var(--theme-border)] rounded-bl-lg text-[10px] font-mono flex items-center gap-1 z-10">
+          <ShieldCheck size={12} className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"} />
+          <span className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"}>
+            OMNI-CORE 5T SECURED
+          </span>
+        </div>
+      )}
       <table className={cn("w-full text-left border-collapse", className)} {...props}>
         <thead>
           <tr className="bg-[var(--theme-surface)] border-b border-[var(--theme-border)]">
