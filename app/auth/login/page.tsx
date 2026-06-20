@@ -109,18 +109,21 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
-    // NCB Social Login flow: 
-    // Typically involves redirecting to the provider URL which sets cookies and returns.
-    // Assuming /api/auth/sign-in/google proxy handles the redirect or provides URL.
     setLoading(true);
     setError(null);
     try {
+      if (isDemoMode) {
+        console.log('[Auth] Demo Mode Active. Google Developer Bypass.');
+        localStorage.setItem('omni_user', JSON.stringify({ email: 'google.admin@esggo.com', id: 'demo_google_user', role: 'admin', company_id: 'default', name: 'Google Admin' }));
+        await new Promise(r => setTimeout(r, 1000));
+        router.push('/dashboard');
+        return;
+      }
+      
       // For now, redirecting to a generic unimplemented endpoint until Google is fully set up in NCB.
-      // window.location.href = '/api/auth/sign-in/google';
-      setError('Google 登入尚未完全配置，請聯絡管理員 (Google Auth not fully configured)');
+      window.location.href = '/api/auth/sign-in/google';
     } catch (err: unknown) {
       setError('Google 登入失敗');
-    } finally {
       setLoading(false);
     }
   }
@@ -241,7 +244,7 @@ export default function LoginPage() {
                  </form>
                )}
 
-               {(providers?.google?.enabled || false) && (
+               {true && (
                  <div className="mt-10 pt-10 border-t border-slate-50 space-y-6">
                     <div className="relative">
                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-50"></div></div>
