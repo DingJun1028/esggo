@@ -3,12 +3,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { OmniBaseTable, OmniBaseTableColumn } from '../../../components/ui/omni/OmniBaseTable';
-import { OmniButton } from '../../../components/ui/omni/OmniButton';
+import { Button } from '@/components/ui/v2/Button';
 import { OmniForm, FormField } from '../../../components/ui/omni/OmniForm';
 import { OmniChart } from '../../../components/ui/omni/OmniChart';
 import { OmniStatusDot } from '../../../components/ui/omni/OmniStatusDot';
-import { OmniBadge } from '../../../components/ui/omni/OmniBadge';
-import { OmniBaseCard } from '../../../components/ui/omni/OmniBaseCard';
+import { Badge } from '@/components/ui/v2/Input';
+import { Card } from '@/components/ui/v2/Card';
 import { supabase } from '@/lib/db/supabase';
 import { useThemeStore } from '../../../lib/theme-store';
 
@@ -158,11 +158,11 @@ export default function MetricsPage() {
       key: 'lifecycle_stage',
       label: 'Stage',
       render: (val) => (
-        <OmniBadge
+        <Badge
           variant={val === 'PUBLISHED' ? 'primary' : val === 'REVIEW' ? 'secondary' : 'outline'}
         >
           {val || 'DRAFT'}
-        </OmniBadge>
+        </Badge>
       ),
     },
     {
@@ -195,14 +195,14 @@ export default function MetricsPage() {
         ) : (
           <div className="flex items-center space-x-3">
             <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
-            <OmniButton
+            <Button
               variant="outline"
               size="sm"
               onClick={() => handleSeal(row.id)}
               disabled={processingId === row.id}
             >
               {processingId === row.id ? 'Sealing...' : 'Seal (ZKP)'}
-            </OmniButton>
+            </Button>
           </div>
         ),
     },
@@ -271,13 +271,13 @@ export default function MetricsPage() {
             OmniBaseTable 與 OmniForm 綁定 NCB 資料庫，實作 CRUD 操作。
           </p>
         </div>
-        <OmniButton onClick={() => setShowAddForm(!showAddForm)}>
+        <Button onClick={() => setShowAddForm(!showAddForm)}>
           {showAddForm ? 'Cancel' : 'Add Metric'}
-        </OmniButton>
+        </Button>
       </div>
 
       {showAddForm && (
-        <OmniBaseCard
+        <Card
           variant="glass"
           title="Create New Metric"
           subtitle="Add a new ESG record with 5T tracking"
@@ -290,11 +290,11 @@ export default function MetricsPage() {
             initialValues={{ reporting_year: new Date().getFullYear(), category: 'ENVIRONMENTAL' }}
             omniHeart={commonHeart}
           />
-        </OmniBaseCard>
+        </Card>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <OmniBaseCard 
+        <Card 
           className="lg:col-span-2" 
           variant="glow"
           title="Metrics Data Table (5T Protocol Enabled)"
@@ -307,9 +307,9 @@ export default function MetricsPage() {
           ) : (
             <OmniBaseTable columns={columns} data={metrics} omniHeart={commonHeart} />
           )}
-        </OmniBaseCard>
+        </Card>
 
-        <OmniBaseCard 
+        <Card 
           className="lg:col-span-2"
           title="Metrics Progress Overview"
         >
@@ -324,7 +324,7 @@ export default function MetricsPage() {
             ]}
             height={300}
           />
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );
