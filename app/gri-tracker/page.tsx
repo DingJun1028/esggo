@@ -188,7 +188,7 @@ export default function GRITrackerPage() {
              </div>
              
              <Card padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
-                <BrandTable 
+                <Card 
                   loading={loading}
                   columns={[
                     { label: '狀態', key: 'status' },
@@ -199,7 +199,7 @@ export default function GRITrackerPage() {
                     { label: '操作', key: 'actions' }
                   ]}
                   data={filtered.map(i => ({
-                    status: <BrandStatusDot status={i.status === 'completed' ? 'active' : i.status === 'pending' ? 'pending' : 'warning'} pulse={i.status === 'in_progress'} />,
+                    status: <Badge status={i.status === 'completed' ? 'active' : i.status === 'pending' ? 'pending' : 'warning'} pulse={i.status === 'in_progress'} />,
                     code: <span className="font-mono text-xs font-black text-[#003262]">{i.code}</span>,
                     name: (
                       <div className="flex flex-col">
@@ -231,7 +231,7 @@ export default function GRITrackerPage() {
 
   return (
     <>
-      <StandardPage config={pageConfig} />
+      <Card config={pageConfig} />
       
       
         {selected && (
@@ -277,7 +277,7 @@ export default function GRITrackerPage() {
                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Integrity Status</h4>
                        <div className={`p-6 rounded-[28px] border transition-all ${selected.isSealed ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-amber-50 border-amber-100 text-amber-800'}`}>
                           <div className="flex items-center gap-3 mb-2">
-                             <BrandStatusDot status={selected.isSealed ? 'active' : 'warning'} pulse size="sm" />
+                             <Badge status={selected.isSealed ? 'active' : 'warning'} pulse size="sm" />
                              <span className="text-[12px] font-black uppercase tracking-widest">{selected.isSealed ? 'SEALED' : 'OPEN'}</span>
                           </div>
                           <p className="text-[10px] opacity-70 font-medium leading-relaxed">
