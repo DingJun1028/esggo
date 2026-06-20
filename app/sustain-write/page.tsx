@@ -353,7 +353,7 @@ export default function SustainWritePage() {
           ch.title,
           i + 1,
           ch.requiredIndicators,
-          `你是一個專業的 ESG 永續報告編撰系統。請根據以下藍圖要求：\n${ch.contentBlueprint}\n\n並且融合以下 5T 實證數據：\n[${contextDataStr}]\n\n為本章節撰寫專業、正式且詳細的永續報告內容。避免過多的前言，直接進入正題，使用 HTML 段落 (<p>, <ul>, <li> 等) 進行排版。`
+          `你是一個專業的 ESG 永續報告編撰系統。請根據以下藍圖要求：\n${ch.contentBlueprint}\n\n並且融合以下 5T 實證數據：\n[${contextDataStr}]\n\n為本章節撰寫專業、正式且詳細的永續報告內容。\n\n**重要指示：如果發現任何「尚未連結數據」或缺失的指標，請不要留空或道歉，請直接為使用者撰寫符合產業標準的「預設內容、最佳實踐範本或常見答案選項」，讓使用者可以直接參考、填空或修改。永遠先提供優質的版型給使用者。**\n\n避免過多的前言，直接進入正題，使用 HTML 段落 (<p>, <ul>, <li> 等) 進行排版。`
         );
 
         setWeavingProgress(Math.floor(((i + 1) / activeTemplate.chapters.length) * 100));
@@ -658,6 +658,44 @@ export default function SustainWritePage() {
                     </div>
                   )}
 
+                  <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
+                    <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                      <Database className="text-cyan-600" size={20} />
+                      永續撰寫單據需求一覽表
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {activeRequiredIndicators.map((ind) => {
+                        const vData = vaultIndicators.find((v) => v.id === ind);
+                        const isReady = vData && vData.val !== 'N/A' && vData.status === 'verified';
+                        return (
+                          <div
+                            key={ind}
+                            className={cn(
+                              'p-3 rounded-xl border flex items-start gap-3 transition-colors',
+                              isReady
+                                ? 'bg-emerald-50 border-emerald-200'
+                                : 'bg-slate-50 border-slate-200'
+                            )}
+                          >
+                            {isReady ? (
+                              <CheckCircle2 className="text-emerald-500 mt-0.5 shrink-0" size={16} />
+                            ) : (
+                              <div className="w-4 h-4 rounded-full border-2 border-slate-300 mt-0.5 shrink-0" />
+                            )}
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold text-slate-700 font-mono">
+                                {ind}
+                              </div>
+                              <div className="text-[10px] text-slate-500 truncate" title={vData?.name || '資料讀取中...'}>
+                                {vData?.name || '資料讀取中...'}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {activeTemplate.chapters.map((chapter, i) => (
                       <OmniPremiumCard
@@ -677,15 +715,37 @@ export default function SustainWritePage() {
                         <p className="text-xs text-slate-400 leading-relaxed mb-3">
                           {chapter.desc}
                         </p>
-                        <div className="flex gap-2">
-                          {chapter.requiredIndicators.map((ind) => (
-                            <span
-                              key={ind}
-                              className="text-[10px] font-mono text-cyan-500/60 bg-cyan-950/40 px-1.5 py-0.5 rounded"
-                            >
-                              {ind}
-                            </span>
-                          ))}
+                        <div className="space-y-2 mt-4 pt-4 border-t border-slate-100/10">
+                          <div className="text-[10px] font-bold text-slate-500">待收齊單據：</div>
+                          <div className="flex flex-col gap-1.5">
+                            {chapter.requiredIndicators.map((ind) => {
+                              const vData = vaultIndicators.find((v) => v.id === ind);
+                              const isReady =
+                                vData && vData.val !== 'N/A' && vData.status === 'verified';
+                              if (isReady) return null;
+                              return (
+                                <div
+                                  key={ind}
+                                  className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-2 py-1.5 rounded border border-amber-200/50"
+                                >
+                                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                                  <span className="font-mono font-bold shrink-0">{ind}</span>
+                                  <span className="truncate text-[10px]">
+                                    {vData?.name || '讀取中...'}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                            {chapter.requiredIndicators.every((ind) => {
+                              const vData = vaultIndicators.find((v) => v.id === ind);
+                              return vData && vData.val !== 'N/A' && vData.status === 'verified';
+                            }) && (
+                              <div className="flex items-center gap-2 text-xs text-emerald-600 bg-emerald-50 px-2 py-1.5 rounded border border-emerald-200/50">
+                                <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
+                                <span>所有單據皆已收齊就緒</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </OmniPremiumCard>
                     ))}
@@ -712,15 +772,35 @@ export default function SustainWritePage() {
                         )}
                       >
                         <div className="font-bold truncate">{ch.title}</div>
-                        <div className="text-[10px] text-slate-500 mt-1 flex gap-1 flex-wrap">
-                          {ch.requiredIndicators.map((r) => (
-                            <span
-                              key={r}
-                              className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 border border-slate-200/40"
-                            >
-                              {r}
-                            </span>
-                          ))}
+                        <div className="text-[10px] text-slate-500 mt-2 flex flex-col gap-1">
+                          {ch.requiredIndicators.map((r) => {
+                            const vData = vaultIndicators.find((v) => v.id === r);
+                            const isReady =
+                              vData && vData.val !== 'N/A' && vData.status === 'verified';
+                            if (isReady) return null;
+                            return (
+                              <div
+                                key={r}
+                                className="flex items-center gap-1.5 text-amber-600 bg-amber-50/80 px-1.5 py-1 rounded border border-amber-200/50"
+                                title={vData?.name || r}
+                              >
+                                <span className="font-bold truncate max-w-[140px]">
+                                  {vData?.name || r}
+                                </span>
+                                <span className="text-[8px] border border-amber-300 px-1 rounded ml-auto shrink-0 bg-amber-100">
+                                  待收齊
+                                </span>
+                              </div>
+                            );
+                          })}
+                          {ch.requiredIndicators.every((r) => {
+                            const vData = vaultIndicators.find((v) => v.id === r);
+                            return vData && vData.val !== 'N/A' && vData.status === 'verified';
+                          }) && (
+                            <div className="text-emerald-600 flex items-center gap-1 font-bold mt-1">
+                              <CheckCircle2 size={10} /> 單據齊全
+                            </div>
+                          )}
                         </div>
                       </button>
                     ))}
@@ -786,7 +866,7 @@ export default function SustainWritePage() {
                                   currentChapterName,
                                   currentChapterOrder,
                                   currentGriRefs,
-                                  `請深入擴寫此段落，並嚴格根據以下 5T Vault 實證數據進行具體的量化論述：[${contextDataStr}]。確保語氣符合企業永續報告書之正式性與 GRI 準則。`
+                                  `請深入擴寫此段落，並嚴格根據以下 5T Vault 實證數據進行具體的量化論述：[${contextDataStr}]。\n\n**重要指示：如果發現有「尚未連結數據」的指標，請自動為使用者撰寫符合產業標準的「預設內容、最佳實踐範本或常見答案選項」，讓使用者有明確的版型可以參考修改，絕不要留白或僅提示缺漏。**\n\n確保語氣符合企業永續報告書之正式性與 GRI 準則。`
                                 );
                               }}
                               isLoading={isGeneratingAI[currentChapterId]}
