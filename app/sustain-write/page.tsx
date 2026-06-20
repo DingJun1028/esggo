@@ -42,6 +42,7 @@ import { useOmniNotesStore } from '@/store/useOmniNotesStore';
 import AppThemeSwitcher from '@/components/AppThemeSwitcher';
 import { logUserActivity } from '@/lib/telemetry';
 import { usePreferencesStore } from '@/usePreferencesStore';
+import { useThemeStore } from '@/lib/theme-store';
 
 const TRAITS_POOL = [
   '製造業',
@@ -56,6 +57,7 @@ const TRAITS_POOL = [
 ];
 
 export default function SustainWritePage() {
+  const { omniTheme } = useThemeStore();
   const [isWeaving, setIsWeaving] = useState(false);
   const [weavingProgress, setWeavingProgress] = useState(0);
   const [activeTab, setActiveTab] = useState<'blueprint' | 'data' | 'preview'>('blueprint');
@@ -436,7 +438,13 @@ export default function SustainWritePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal">
+    <div
+      className={`min-h-screen p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal ${
+        omniTheme === 'omnicore'
+          ? 'bg-[var(--theme-base)] text-[var(--theme-text)]'
+          : 'bg-[#F8FAFC] text-slate-800'
+      }`}
+    >
       {uploaderTarget && (
         <OmniEvidenceUploader
           onClose={() => setUploaderTarget(null)}
@@ -634,11 +642,7 @@ export default function SustainWritePage() {
                         <div>
                           <h3 className="text-cyan-300 font-bold flex items-center gap-2">
                             {activeTemplate.name}
-                            <Badge
-                              variant="success"
-                              size="sm"
-                              icon={<CheckCircle2 size={12} />}
-                            >
+                            <Badge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>
                               AI Selected
                             </Badge>
                           </h3>
@@ -678,7 +682,10 @@ export default function SustainWritePage() {
                             )}
                           >
                             {isReady ? (
-                              <CheckCircle2 className="text-emerald-500 mt-0.5 shrink-0" size={16} />
+                              <CheckCircle2
+                                className="text-emerald-500 mt-0.5 shrink-0"
+                                size={16}
+                              />
                             ) : (
                               <div className="w-4 h-4 rounded-full border-2 border-slate-300 mt-0.5 shrink-0" />
                             )}
@@ -686,7 +693,10 @@ export default function SustainWritePage() {
                               <div className="text-xs font-bold text-slate-700 font-mono">
                                 {ind}
                               </div>
-                              <div className="text-[10px] text-slate-500 truncate" title={vData?.name || '資料讀取中...'}>
+                              <div
+                                className="text-[10px] text-slate-500 truncate"
+                                title={vData?.name || '資料讀取中...'}
+                              >
                                 {vData?.name || '資料讀取中...'}
                               </div>
                             </div>
@@ -698,7 +708,8 @@ export default function SustainWritePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {activeTemplate.chapters.map((chapter, i) => (
-                      <Card variant="elevated"
+                      <Card
+                        variant="elevated"
                         key={i}
                         variant="glass"
                         className="hover:border-cyan-500/50 transition-colors group cursor-pointer"
@@ -1237,7 +1248,8 @@ export default function SustainWritePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {vaultIndicators.map((item, idx) => {
                         return (
-                          <Card variant="elevated"
+                          <Card
+                            variant="elevated"
                             key={idx}
                             variant="glass"
                             className="hover:border-cyan-500/30 transition-all hover:shadow-[0_4px_20px_rgba(6,182,212,0.1)]"
@@ -1321,7 +1333,8 @@ export default function SustainWritePage() {
           {/* Sidebar */}
           {showAuditSidebar && (
             <div className="space-y-6">
-              <Card variant="elevated"
+              <Card
+                variant="elevated"
                 variant="glow"
                 title="ESG 實境之眼"
                 subtitle="Eye of Sustainability Reality"

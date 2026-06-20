@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
+import { useThemeStore } from '@/lib/theme-store';
 
 /* ─── Types ─── */
 interface IntelligenceRecord {
@@ -113,6 +114,7 @@ function getSentimentConfig(sentiment: IntelligenceRecord['sentiment']) {
 }
 
 export default function IntelligencePage() {
+  const { omniTheme } = useThemeStore();
   const [data, setData] = useState<IntelligenceRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -223,7 +225,13 @@ export default function IntelligencePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
+    <div
+      className={`min-h-screen p-4 md:p-8 transition-colors duration-500 ${
+        omniTheme === 'omnicore'
+          ? 'bg-[var(--theme-base)] text-[var(--theme-text)]'
+          : 'bg-[#F8FAFC]'
+      }`}
+    >
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -317,7 +325,7 @@ export default function IntelligencePage() {
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-blue-800 opacity-95" />
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
           <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/10 to-transparent transform skew-x-[-20deg]" />
-          
+
           <div className="relative p-8 flex flex-col md:flex-row items-center justify-between gap-6 z-10 text-white">
             <div className="flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
@@ -332,7 +340,8 @@ export default function IntelligencePage() {
                 </div>
                 <h2 className="text-2xl font-black tracking-tight mb-1">企業 ESG 健檢中心</h2>
                 <p className="text-sm text-white/80 max-w-lg leading-relaxed">
-                  不知道從何開始？透過 15 題漸進式診斷嚮導，系統將為您自動產生專屬的 90 天改善路徑圖，並一鍵無縫匯入 NCB 任務中心。
+                  不知道從何開始？透過 15 題漸進式診斷嚮導，系統將為您自動產生專屬的 90
+                  天改善路徑圖，並一鍵無縫匯入 NCB 任務中心。
                 </p>
               </div>
             </div>
@@ -470,11 +479,7 @@ export default function IntelligencePage() {
                           <td className="px-4 py-3 text-xs text-slate-500">{row.source_origin}</td>
                           <td className="px-4 py-3">
                             {row.hash_lock ? (
-                              <Badge
-                                variant="success"
-                                size="sm"
-                                icon={<ShieldCheck size={10} />}
-                              >
+                              <Badge variant="success" size="sm" icon={<ShieldCheck size={10} />}>
                                 {row.hash_lock.substring(0, 8)}...
                               </Badge>
                             ) : (
