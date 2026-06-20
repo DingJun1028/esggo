@@ -7,7 +7,7 @@
   "bin": {
     "oa": "./cli/omni-cli.ts"
   },
-  "scripts": {
+"scripts": {
     "build": "next build",
     "build:vercel": "NEXT_PUBLIC_APP_VERSION=$(node -p \"require('./package.json').version\") next build && node scripts/copy-standalone-assets.js",
     "start": "node -r dotenv/config .next/standalone/server.js",
@@ -30,14 +30,15 @@
     "omni:setup:swarm": "npx tsx scripts/setup_swarm_consensus_table.ts",
     "omni:scan": "npx tsx scripts/fnns-scanner.ts",
     "list-stitch-projects": "npx tsx scripts/list-stitch-projects.ts",
-    "prepare": "node -e \"try { require('child_process').execSync('husky') } catch (e) {}\"",
+    "prepare": "node -e \"try { require('child_process').execSync('husky') } catch (e) {}\",
     "test:vrt": "playwright test --project=visual",
     "oa": "npx tsx cli/omni-cli.ts",
     "oa:help": "npx tsx cli/omni-cli.ts --help",
     "oa:summon": "node --env-file=.env --import tsx cli/omni-cli.ts summon",
     "oa:summon:vps": "node --env-file=.env --import tsx cli/omni-cli.ts summon --vps",
     "oa:status": "node --env-file=.env --import tsx cli/omni-cli.ts status",
-    "oa:heal": "node --env-file=.env --import tsx cli/omni-cli.ts flash-heal"
+    "oa:heal": "node --env-file=.env --import tsx cli/omni-cli.ts flash-heal",
+    "migrate:any-to-unknown": "npx ts-node scripts/any-to-unknown.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.83",

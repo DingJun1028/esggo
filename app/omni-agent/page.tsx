@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Bot, Send, Loader2, CheckCircle2, AlertCircle, Mic, MicOff,
-  DatabaseZap, Activity, Network, Cpu, Memory as MemoryIcon,
+  DatabaseZap, Activity, Network, Cpu, MemoryStick,
   RefreshCw, Trash2, Copy, Check, ChevronDown, ChevronUp,
   Brain, Zap, Target, Layers, Image, FileText, Save,
   Terminal, MessageSquare, Volume2, VolumeX, Download
@@ -863,7 +863,7 @@ export default function OmniAgentPage() {
                 { label: '資料庫', value: health?.dbStatus || 'unknown', icon: DatabaseZap, color: health?.dbStatus === 'connected' ? 'success' : 'error' },
                 { label: '延遲', value: `${health?.dbLatency || 0}ms`, icon: Activity, color: 'info' },
                 { label: '活躍代理', value: `${health?.activeAgents || 0}`, icon: Bot, color: 'success' },
-                { label: '記憶條目', value: `${health?.codexEntries || 0}`, icon: MemoryIcon, color: 'info' },
+                { label: '記憶條目', value: `${health?.codexEntries || 0}`, icon: MemoryStick, color: 'info' },
               ].map(item => (
                 <Card key={item.label} variant="default" padding="sm">
                   <div className="flex items-center gap-2">
