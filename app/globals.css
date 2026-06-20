@@ -645,3 +645,82 @@
   --theme-text-muted: #93c5fd;
   --theme-border: rgba(59, 130, 246, 0.2);
 }
+
+/* =============================================================
+   NEW MODERN UI STYLE v15.0 - Clean, Minimal, Professional
+   ============================================================= */
+
+@layer components {
+  /* Card - Clean Minimal */
+  .card-clean {
+    @apply bg-white rounded-xl border border-neutral-200 p-6;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: all 200ms ease;
+  }
+  .card-clean:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+    border-color: #CBD5E1;
+  }
+
+  /* Button - Refined */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-lg;
+    @apply bg-berkeley-blue text-white font-semibold text-sm;
+    @apply hover:bg-berkeley-dark active:scale-[0.98];
+    @apply transition-all duration-150;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-lg;
+    @apply bg-neutral-100 text-neutral-700 font-semibold text-sm;
+    @apply hover:bg-neutral-200 active:scale-[0.98];
+    @apply transition-all duration-150 border border-neutral-200;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-lg;
+    @apply bg-transparent text-neutral-600 font-semibold text-sm;
+    @apply hover:bg-neutral-50 active:scale-[0.98];
+    @apply transition-all duration-150;
+  }
+
+  /* Input - Clean */
+  .input-clean {
+    @apply w-full px-4 py-2.5 rounded-lg border border-neutral-200;
+    @apply bg-white text-neutral-900 text-sm placeholder:text-neutral-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue;
+    @apply transition-all duration-150;
+  }
+
+  /* Badge - Minimal */
+  .badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium; }
+  .badge-success { @apply bg-emerald-50 text-emerald-700; }
+  .badge-warning { @apply bg-amber-50 text-amber-700; }
+  .badge-error { @apply bg-red-50 text-red-700; }
+  .badge-info { @apply bg-blue-50 text-blue-700; }
+  .badge-neutral { @apply bg-neutral-100 text-neutral-600; }
+
+  /* Sidebar Nav - Clean */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium;
+    @apply text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900;
+    @apply transition-all duration-150;
+  }
+  .nav-item-active {
+    @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium;
+    @apply bg-berkeley-blue text-white;
+  }
+
+  /* Section Header */
+  .section-header { @apply text-xs font-bold text-neutral-400 uppercase tracking-widest mb-3; }
+
+  /* Divider */
+  .divider { @apply border-t border-neutral-100 my-4; }
+}
+
+/* Scrollbar - Minimal */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* Selection */
+::selection { background: rgba(0, 50, 98, 0.1); }
