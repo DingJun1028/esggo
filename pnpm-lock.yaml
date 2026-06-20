@@ -26,6 +26,9 @@ importers:
       '@dataconnect/generated':
         specifier: file:src/dataconnect-generated
         version: file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)
+      '@esggo/types':
+        specifier: workspace:*
+        version: link:packages/types
       '@genkit-ai/firebase':
         specifier: ^1.37.0
         version: 1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0)(genkit@1.37.0(@google-cloud/firestore@7.11.6)(firebase-admin@13.10.0)(firebase@12.15.0))
@@ -366,6 +369,52 @@ importers:
       vitest:
         specifier: ^4.1.8
         version: 4.1.9(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1(@noble/hashes@1.8.0))(vite@8.0.16(@types/node@25.9.3)(esbuild@0.18.20)(jiti@2.7.0)(terser@5.48.0)(tsx@4.22.4)(yaml@2.9.0))
+
+  packages/client:
+    dependencies:
+      '@esggo/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+
+  packages/server:
+    dependencies:
+      '@esggo/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+
+  packages/shared-ui:
+    dependencies:
+      '@esggo/types':
+        specifier: workspace:*
+        version: link:../types
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
+
+  packages/types:
+    dependencies:
+      zod:
+        specifier: ^3.22.4
+        version: 3.25.76
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.9.3
 
 packages:
 

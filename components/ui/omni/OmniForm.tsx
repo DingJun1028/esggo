@@ -1,8 +1,9 @@
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState } from 'react';
 import { cn } from '../../../lib/utils';
-import { OmniInput } from './OmniInput';
+import { OmniInput, OmniSelect, OmniTextarea } from './OmniInput';
 import { OmniButton } from './OmniButton';
+import { ShieldCheck } from 'lucide-react';
 
 export interface FormField {
   name: string;
@@ -31,7 +32,8 @@ export function OmniForm({
   onCancel,
   initialValues = {},
   submitLabel = 'Submit',
-  className
+  className,
+  omniHeart
 }: OmniFormProps) {
   const [formData, setFormData] = useState<Record<string, any>>(initialValues as Record<string, any>);
 
@@ -45,7 +47,24 @@ export function OmniForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={cn("space-y-6", className)}>
+    <div className={cn(
+      "relative rounded-xl transition-all duration-500",
+      omniHeart ? (
+        omniHeart.resonanceState === 1.0 
+          ? "border border-[#ffd700]/30 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-[#ffd700]/5 p-6" 
+          : "border border-[#63a6b0]/30 shadow-[0_0_20px_rgba(99,166,176,0.1)] bg-[#63a6b0]/5 p-6"
+      ) : "",
+      className
+    )}>
+      {omniHeart && (
+        <div className="absolute top-0 right-0 px-3 py-1 bg-[var(--theme-surface)] border-b border-l border-[var(--theme-border)] rounded-bl-lg text-[10px] font-mono flex items-center gap-1">
+          <ShieldCheck size={12} className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"} />
+          <span className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"}>
+            OMNI-CORE 5T SECURED
+          </span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className={cn("space-y-6", !omniHeart && className)}>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {fields.map((field) => (
           <div key={field.name} className={cn("space-y-2", field.type === 'textarea' ? "md:col-span-2" : "")}>
@@ -55,25 +74,25 @@ export function OmniForm({
             </label>
             
             {field.type === 'textarea' ? (
-              <textarea
+              <OmniTextarea
                 value={formData[field.name] || ''}
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
                 required={field.required}
-                className="w-full min-h-[100px] px-3 py-2 bg-[var(--theme-surface)] border border-[var(--theme-border)] rounded-md text-[var(--theme-text)] focus:outline-none focus:ring-1 focus:ring-[var(--theme-primary)] transition-all resize-y"
+                omniHeart={omniHeart}
               />
             ) : field.type === 'enum' ? (
-              <select
+              <OmniSelect
                 value={formData[field.name] || ''}
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 required={field.required}
-                className="w-full px-3 py-2 bg-[var(--theme-surface)] border border-[var(--theme-border)] rounded-md text-[var(--theme-text)] focus:outline-none focus:ring-1 focus:ring-[var(--theme-primary)] transition-all"
+                omniHeart={omniHeart}
               >
                 <option value="">Select...</option>
                 {field.options?.map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
-              </select>
+              </OmniSelect>
             ) : (
               <OmniInput
                 type={field.type}
@@ -81,22 +100,38 @@ export function OmniForm({
                 onChange={(e) => handleChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
                 required={field.required}
+                omniHeart={omniHeart}
               />
             )}
           </div>
         ))}
       </div>
       
-      <div className="flex justify-end space-x-4 pt-4 border-t border-[var(--theme-border)]">
-        {onCancel && (
-          <OmniButton type="button" variant="outline" onClick={onCancel}>
-            Cancel
+      <div className="flex justify-between items-center pt-4 border-t border-[var(--theme-border)]">
+        <div className="flex-1">
+          {omniHeart && omniHeart.fiveTState && (
+            <div className="flex items-center space-x-2 text-[10px] font-mono opacity-80">
+              <span className="text-[var(--theme-text-muted)]">5T:</span>
+              <span className={omniHeart.fiveTState.tangible ? 'text-[#63a6b0]' : 'text-slate-500'}>Tan</span>
+              <span className={omniHeart.fiveTState.traceable ? 'text-[#63a6b0]' : 'text-slate-500'}>Tra</span>
+              <span className={omniHeart.fiveTState.trackable ? 'text-[#63a6b0]' : 'text-slate-500'}>Trk</span>
+              <span className={omniHeart.fiveTState.transparent ? 'text-[#63a6b0]' : 'text-slate-500'}>Trp</span>
+              <span className={omniHeart.fiveTState.trustworthy ? 'text-[#ffd700] font-bold' : 'text-slate-500'}>Tru</span>
+            </div>
+          )}
+        </div>
+        <div className="flex space-x-4">
+          {onCancel && (
+            <OmniButton type="button" variant="outline" onClick={onCancel}>
+              Cancel
+            </OmniButton>
+          )}
+          <OmniButton type="submit" variant="primary">
+            {submitLabel}
           </OmniButton>
-        )}
-        <OmniButton type="submit" variant="primary">
-          {submitLabel}
-        </OmniButton>
+        </div>
       </div>
     </form>
+  </div>
   );
 }
