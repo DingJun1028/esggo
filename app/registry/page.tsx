@@ -5,8 +5,10 @@ import { Layers, Database, Sparkles, BrainCircuit, Activity, Server } from 'luci
 import { AtomicCard } from '@/lib/design-system/AtomicCard';
 import { AtomicBadge } from '@/lib/design-system/AtomicBadge';
 import { AtomicButton } from '@/lib/design-system/AtomicButton';
+import { useThemeStore } from '@/lib/theme-store';
 
 export default function RegistryDashboard() {
+  const { omniTheme } = useThemeStore();
   const [activeTab, setActiveTab] = useState<'registry' | 'memory'>('registry');
   const [components, setComponents] = useState<any[]>([]);
   const [shards, setShards] = useState<any[]>([]);
@@ -54,17 +56,21 @@ export default function RegistryDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-[#020617] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#06b6d4]/10 via-[#020617] to-[#020617] text-slate-200 p-6 md:p-12 font-sans selection:bg-[#06b6d4]/30">
+    <div className={`min-h-screen w-full transition-colors duration-700 p-6 md:p-12 font-sans ${
+      omniTheme === 'omnicore'
+        ? 'bg-[#020617] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#06b6d4]/10 via-[#020617] to-[#020617] text-slate-200 selection:bg-[#06b6d4]/30'
+        : 'bg-[#F8FAFC] text-slate-800 selection:bg-cyan-500/30'
+    }`}>
       
-      <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-white/10 pb-6 mb-8">
+      <header className={`max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b pb-6 mb-8 ${omniTheme === 'omnicore' ? 'border-white/10' : 'border-slate-200'}`}>
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-widest flex items-center gap-3 uppercase font-mono">
-            <Server className="w-8 h-8 text-[#06b6d4]" /> OmniCore Vault
+          <h1 className={`text-2xl font-bold tracking-widest flex items-center gap-3 uppercase font-mono ${omniTheme === 'omnicore' ? 'text-white' : 'text-slate-900'}`}>
+            <Server className={`w-8 h-8 ${omniTheme === 'omnicore' ? 'text-[#06b6d4]' : 'text-slate-700'}`} /> OmniCore Vault
           </h1>
-          <p className="text-sm text-slate-400 mt-2 font-mono">Real-time telemetry of synced assets on Supabase</p>
+          <p className={`text-sm mt-2 font-mono ${omniTheme === 'omnicore' ? 'text-slate-400' : 'text-slate-500'}`}>Real-time telemetry of synced assets on Supabase</p>
         </div>
         
-        <div className="flex bg-black/40 border border-white/10 p-1 rounded-lg">
+        <div className={`flex p-1 rounded-lg border ${omniTheme === 'omnicore' ? 'bg-black/40 border-white/10' : 'bg-white border-slate-200 shadow-sm'}`}>
           <button 
             onClick={() => setActiveTab('registry')}
             className={`px-4 py-2 rounded flex items-center gap-2 text-sm font-bold font-mono transition-colors ${activeTab === 'registry' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'text-slate-400 hover:text-white'}`}
@@ -104,9 +110,9 @@ export default function RegistryDashboard() {
                     <div className="col-span-full text-center py-12 text-slate-500 font-mono">No atomic components synced yet.</div>
                   ) : (
                     components.map((atom, idx) => (
-                      <AtomicCard key={idx} glassIntensity="medium" hoverEffect="glow" padding="md" className="flex flex-col gap-4">
+                      <AtomicCard key={idx} glassIntensity="medium" hoverEffect="glow" padding="md" className={`flex flex-col gap-4 ${omniTheme === 'v2' ? 'bg-white border-slate-200 shadow-sm' : ''}`}>
                         <div className="flex justify-between items-start">
-                          <span className="font-bold text-white font-mono flex items-center gap-2 text-sm">
+                          <span className={`font-bold font-mono flex items-center gap-2 text-sm ${omniTheme === 'omnicore' ? 'text-white' : 'text-slate-800'}`}>
                             <span className="w-2 h-2 rounded-full bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
                             {atom.atom_id || atom.atomId}
                           </span>
@@ -114,18 +120,18 @@ export default function RegistryDashboard() {
                             {atom.status || atom.core?.status || 'Experimental'}
                           </AtomicBadge>
                         </div>
-                        <div className="space-y-2 text-xs font-mono text-slate-400 bg-black/30 p-3 rounded border border-white/5">
+                        <div className={`space-y-2 text-xs font-mono p-3 rounded border ${omniTheme === 'omnicore' ? 'text-slate-400 bg-black/30 border-white/5' : 'text-slate-600 bg-slate-50 border-slate-200'}`}>
                           <div className="flex justify-between">
-                            <span className="text-slate-500">TYPE</span>
-                            <span className="text-slate-200">{atom.type}</span>
+                            <span className={omniTheme === 'omnicore' ? "text-slate-500" : "text-slate-400"}>TYPE</span>
+                            <span className={omniTheme === 'omnicore' ? "text-slate-200" : "text-slate-700"}>{atom.type}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-slate-500">VERSION</span>
-                            <span className="text-slate-200">{atom.version}</span>
+                            <span className={omniTheme === 'omnicore' ? "text-slate-500" : "text-slate-400"}>VERSION</span>
+                            <span className={omniTheme === 'omnicore' ? "text-slate-200" : "text-slate-700"}>{atom.version}</span>
                           </div>
-                          <div className="pt-2 mt-2 border-t border-white/5 flex flex-col gap-1">
-                            <span className="text-slate-500">INTENT</span>
-                            <span className="text-[#06b6d4] truncate" title={atom.intent || atom.reference?.intent}>{atom.intent || atom.reference?.intent}</span>
+                          <div className={`pt-2 mt-2 border-t flex flex-col gap-1 ${omniTheme === 'omnicore' ? 'border-white/5' : 'border-slate-200'}`}>
+                            <span className={omniTheme === 'omnicore' ? "text-slate-500" : "text-slate-400"}>INTENT</span>
+                            <span className={`truncate ${omniTheme === 'omnicore' ? 'text-[#06b6d4]' : 'text-slate-700'}`} title={atom.intent || atom.reference?.intent}>{atom.intent || atom.reference?.intent}</span>
                           </div>
                         </div>
                       </AtomicCard>
