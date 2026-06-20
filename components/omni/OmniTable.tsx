@@ -63,6 +63,26 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
 
   return (
     <div className="space-y-4">
+      {omniHeart && (
+        <div className="flex items-center justify-between px-4 py-2 bg-[#0f172a] border border-[#ffd700]/30 rounded-xl shadow-[0_0_15px_rgba(255,215,0,0.1)]">
+          <div className="flex items-center gap-2">
+            <ShieldCheck size={16} className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"} />
+            <span className={`text-xs font-bold tracking-widest ${omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"}`}>
+              OMNI-CORE 5T SECURED
+            </span>
+          </div>
+          {omniHeart.fiveTState && (
+            <div className="flex gap-2 text-[10px] font-mono opacity-80">
+              <span className={omniHeart.fiveTState.tangible ? 'text-[#63a6b0]' : 'text-slate-600'}>Tan</span>
+              <span className={omniHeart.fiveTState.traceable ? 'text-[#63a6b0]' : 'text-slate-600'}>Tra</span>
+              <span className={omniHeart.fiveTState.trackable ? 'text-[#63a6b0]' : 'text-slate-600'}>Trk</span>
+              <span className={omniHeart.fiveTState.transparent ? 'text-[#63a6b0]' : 'text-slate-600'}>Trp</span>
+              <span className={omniHeart.fiveTState.trustworthy ? 'text-[#ffd700]' : 'text-slate-600'}>Tru</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Table Toolbar */}
       <div className="flex justify-between items-center bg-[#0f172a] p-4 rounded-2xl border border-slate-800">
         <div className="relative w-64">
@@ -72,7 +92,7 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
             placeholder="搜尋資料來源、單據、Hash..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-[#63a6b0]/50 focus:ring-1 focus:ring-[#63a6b0]/50 transition-all"
           />
         </div>
         <div className="flex gap-2">
@@ -88,10 +108,12 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
           <div
             key={row.id}
             layout
-            className={`group rounded-2xl border transition-all duration-300 \${
+            className={`group rounded-2xl border transition-all duration-300 ${
               row.status === 'Void' 
                 ? 'bg-slate-900/50 border-slate-800' 
-                : 'bg-black/40 border-cyan-500/10 hover:border-cyan-500/30 hover:bg-black/60 shadow-[0_0_20px_rgba(6,182,212,0)] hover:shadow-[0_0_20px_rgba(6,182,212,0.1)]'
+                : row.zkp_sealed
+                ? 'bg-[#ffd700]/5 border-[#ffd700]/20 hover:border-[#ffd700]/40 hover:bg-[#ffd700]/10 shadow-[0_0_15px_rgba(255,215,0,0.05)] hover:shadow-[0_0_20px_rgba(255,215,0,0.15)]'
+                : 'bg-black/40 border-[#63a6b0]/10 hover:border-[#63a6b0]/30 hover:bg-[#63a6b0]/5 shadow-[0_0_20px_rgba(99,166,176,0)] hover:shadow-[0_0_20px_rgba(99,166,176,0.1)]'
             }`}
           >
             {/* Main Row */}
@@ -101,7 +123,13 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
             >
               <div className="flex items-center gap-4 w-1/3">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center \${row.status === 'Void' ? 'bg-slate-800 text-slate-500' : 'bg-cyan-500/20 text-cyan-400'}`}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                    row.status === 'Void' 
+                      ? 'bg-slate-800 text-slate-500' 
+                      : row.zkp_sealed 
+                      ? 'bg-[#ffd700]/20 text-[#ffd700]' 
+                      : 'bg-[#63a6b0]/20 text-[#63a6b0]'
+                  }`}
                 >
                   <Database size={20} />
                 </div>
@@ -117,9 +145,9 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
 
               <div className="w-1/4 flex gap-2 items-center">
                 {row.zkp_sealed ? (
-                  <OmniBadge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
-                    ZKP Sealed
-                  </OmniBadge>
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-[#ffd700]/10 border border-[#ffd700]/20 text-[#ffd700] text-xs font-medium">
+                    <ShieldCheck size={12} /> ZKP Sealed
+                  </div>
                 ) : (
                   <OmniBadge variant="warning" size="sm" icon={<AlertTriangle size={12} />}>
                     Unsealed
@@ -139,7 +167,7 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                     handleSeal(row.id);
                   }}
                   disabled={row.zkp_sealed || processing === row.id || row.status === 'Void'}
-                  className="px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 disabled:opacity-50 transition-colors"
+                  className="px-3 py-1.5 text-xs font-medium rounded-lg bg-[#ffd700]/10 text-[#ffd700] hover:bg-[#ffd700]/20 border border-[#ffd700]/20 disabled:opacity-50 disabled:border-transparent disabled:bg-slate-800 disabled:text-slate-500 transition-colors"
                 >
                   {processing === row.id ? 'Sealing...' : 'Approve'}
                 </button>
@@ -158,11 +186,11 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                         <h4 className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">
                           公式透明度
                         </h4>
-                        <div className="text-sm text-emerald-400 flex items-center gap-2 font-mono bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
+                        <div className={`text-sm flex items-center gap-2 font-mono p-2 rounded-lg border ${row.formula_visibility ? 'bg-[#63a6b0]/10 border-[#63a6b0]/20 text-[#63a6b0]' : 'bg-amber-500/10 border-amber-500/20 text-amber-400'}`}>
                           {row.formula_visibility ? (
                             <CheckCircle size={14} />
                           ) : (
-                            <AlertTriangle size={14} className="text-amber-400" />
+                            <AlertTriangle size={14} />
                           )}
                           {row.formula_visibility ? 'ISO-14064 公開可驗證' : 'OPAQUE'}
                         </div>
@@ -190,7 +218,7 @@ export function OmniTable({ data, onSealAction }: OmniTableProps) {
                                 }\n此功能將展示原始單據與 5T 驗證路徑。`
                               );
                             }}
-                            className="flex items-center justify-center gap-2 px-3 py-1.5 mt-1 bg-indigo-500/10 hover:bg-indigo-500/30 text-indigo-400 text-xs font-bold rounded-lg border border-indigo-500/20 transition-all"
+                            className="flex items-center justify-center gap-2 px-3 py-1.5 mt-1 bg-[#63a6b0]/10 hover:bg-[#63a6b0]/30 text-[#63a6b0] text-xs font-bold rounded-lg border border-[#63a6b0]/20 transition-all"
                           >
                             <Search size={12} />
                             溯源反查 (Trace Origin)
