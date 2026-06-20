@@ -16,12 +16,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY || process.env.AGNES_API;
     if (!apiKey) {
-      return NextResponse.json(
-        { error: 'OPENROUTER_API_KEY is not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'OPENROUTER_API_KEY is not configured' }, { status: 500 });
     }
 
     // Decode base64 audio to Buffer (handle data:audio/webm;base64, prefix)
@@ -40,7 +37,7 @@ export async function POST(req: Request) {
     const response = await fetch(`${OPENROUTER_BASE_URL}/audio/transcriptions`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
         'X-Title': 'ESGGO OmniAgent',
       },
@@ -64,9 +61,6 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     console.error('Voice recognition error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }
