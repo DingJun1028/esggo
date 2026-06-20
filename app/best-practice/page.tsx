@@ -149,7 +149,7 @@ const applyPractice = async (practice: AiRecommendation) => {
         title: '資源導航',
         columns: 12,
         component: (
-          <BrandTabs 
+          <Card 
             activeTab={activeTab}
             onTabChange={(t) => setActiveTab(t as any)}
             tabs={[
@@ -319,7 +319,7 @@ const applyPractice = async (practice: AiRecommendation) => {
 
   return (
     <div className="relative">
-      <StandardPage config={pageConfig} />
+      <Card config={pageConfig} />
 
       {/* Detail Modal for Benchmarks */}
       

@@ -31,6 +31,7 @@ import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
+import { useThemeStore } from '@/lib/theme-store';
 
 /* ─── Types ─── */
 interface Course {
@@ -182,21 +183,28 @@ const CATEGORY_CONFIG = {
 
 function CourseCard({ course }: { course: Course }) {
   const catConfig = CATEGORY_CONFIG[course.category];
+  const { omniTheme } = useThemeStore();
 
   // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
     <div
       style={{ transition: 'all 0.4s ease' }}
       className={cn(
-        'bg-white rounded-2xl border overflow-hidden hover:shadow-lg transition-all cursor-pointer group relative',
-        course.locked ? 'border-slate-200 opacity-75' : 'border-slate-100'
+        'rounded-2xl border overflow-hidden hover:shadow-lg transition-all cursor-pointer group relative',
+        course.locked ? 'opacity-75' : '',
+        omniTheme === 'omnicore'
+          ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_15px_rgba(0,0,0,0.3)]'
+          : 'bg-white border-slate-100',
+        course.locked && omniTheme !== 'omnicore' && 'border-slate-200'
       )}
     >
       {/* Thumbnail */}
       <div
         className={cn(
           'h-32 flex items-center justify-center text-5xl relative',
-          course.locked ? 'bg-slate-100' : 'bg-gradient-to-br from-cyan-50 to-blue-50'
+          course.locked 
+            ? (omniTheme === 'omnicore' ? 'bg-white/5' : 'bg-slate-100')
+            : (omniTheme === 'omnicore' ? 'bg-gradient-to-br from-cyan-900/30 to-blue-900/30' : 'bg-gradient-to-br from-cyan-50 to-blue-50')
         )}
       >
         {course.thumbnail}
@@ -219,8 +227,8 @@ function CourseCard({ course }: { course: Course }) {
 
       {/* Content */}
       <div className="p-4">
-        <h3 className="text-sm font-bold text-[#003262] mb-1 line-clamp-1">{course.title}</h3>
-        <p className="text-[10px] text-slate-400 line-clamp-2 mb-3">{course.description}</p>
+        <h3 className={cn("text-sm font-bold mb-1 line-clamp-1", omniTheme === 'omnicore' ? 'text-cyan-400' : 'text-[#003262]')}>{course.title}</h3>
+        <p className={cn("text-[10px] line-clamp-2 mb-3", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>{course.description}</p>
 
         {/* Progress */}
         {course.progress !== undefined && (
@@ -271,19 +279,26 @@ function CourseCard({ course }: { course: Course }) {
 }
 
 function LearningPathCard({ path }: { path: LearningPath }) {
+  const { omniTheme } = useThemeStore();
+
   // 使用原生 div + CSS transition 取代 motion.div，避免 SSR 崩潰
   return (
     <div
       style={{ transition: 'all 0.4s ease' }}
-      className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all cursor-pointer"
+      className={cn(
+        "rounded-xl border p-4 hover:shadow-md transition-all cursor-pointer",
+        omniTheme === 'omnicore'
+          ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_15px_rgba(0,0,0,0.3)]'
+          : 'bg-white border-slate-100'
+      )}
     >
       <div className="flex items-center gap-3 mb-3">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center text-2xl">
           {path.badge}
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-bold text-[#003262]">{path.name}</h4>
-          <p className="text-[10px] text-slate-400">{path.description}</p>
+          <h4 className={cn("text-sm font-bold", omniTheme === 'omnicore' ? 'text-cyan-400' : 'text-[#003262]')}>{path.name}</h4>
+          <p className={cn("text-[10px]", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>{path.description}</p>
         </div>
         <ChevronRight size={16} className="text-slate-300" />
       </div>
@@ -300,6 +315,7 @@ function LearningPathCard({ path }: { path: LearningPath }) {
 
 /* ─── Main Page ─── */
 export default function AcademyPage() {
+  const { omniTheme } = useThemeStore();
   const [activeTab, setActiveTab] = useState<'courses' | 'paths' | 'my-learning'>('courses');
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -319,10 +335,18 @@ export default function AcademyPage() {
   const completedCourses = COURSES.filter((c) => c.completed);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
+    <div className={cn(
+      "min-h-screen p-4 md:p-8 transition-colors duration-500",
+      omniTheme === 'omnicore' ? 'bg-[var(--theme-base)] text-[var(--theme-text)]' : 'bg-[#F8FAFC]'
+    )}>
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6 relative overflow-hidden">
+        <header className={cn(
+          "rounded-2xl border p-6 relative overflow-hidden transition-colors",
+          omniTheme === 'omnicore' 
+            ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_25px_rgba(0,0,0,0.5)]' 
+            : 'bg-white border-slate-100'
+        )}>
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-50 rounded-full blur-3xl breathing-glow-emerald" />
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -330,8 +354,8 @@ export default function AcademyPage() {
                 <GraduationCap size={28} className="text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-black text-[#003262] tracking-tight">善向永續學院</h1>
-                <p className="text-xs text-slate-400 font-mono mt-0.5">
+                <h1 className={cn("text-2xl font-black tracking-tight", omniTheme === 'omnicore' ? 'text-cyan-400 drop-shadow-[0_0_10px_rgba(99,166,176,0.8)]' : 'text-[#003262]')}>善向永續學院</h1>
+                <p className={cn("text-xs font-mono mt-0.5", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>
                   Academy · 互動學習 · 柏克萊認證
                 </p>
               </div>
@@ -362,14 +386,14 @@ export default function AcademyPage() {
             { id: 'paths' as const, label: '學習路徑', icon: Target, count: LEARNING_PATHS.length },
             { id: 'my-learning' as const, label: '我的學習', icon: Award, count: myCourses.length },
           ].map((tab) => (
-            <button
+              <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
                 'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all',
                 activeTab === tab.id
-                  ? 'bg-[#003262] text-white shadow-md'
-                  : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
+                  ? (omniTheme === 'omnicore' ? 'bg-cyan-900 text-cyan-50 shadow-[0_0_15px_rgba(99,166,176,0.6)]' : 'bg-[#003262] text-white shadow-md')
+                  : (omniTheme === 'omnicore' ? 'bg-[var(--theme-surface)] text-[var(--theme-text-muted)] border-[var(--theme-border)] hover:bg-white/5' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50')
               )}
             >
               <tab.icon size={16} />
@@ -401,7 +425,12 @@ export default function AcademyPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="搜尋課程或標籤..."
-                  className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
+                  className={cn(
+                    "w-full pl-9 pr-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30 transition-colors",
+                    omniTheme === 'omnicore' 
+                      ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] text-white placeholder-slate-500' 
+                      : 'bg-white border-slate-200 text-slate-900'
+                  )}
                 />
               </div>
               <div className="flex gap-2">
@@ -447,8 +476,8 @@ export default function AcademyPage() {
         {activeTab === 'paths' && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-base font-bold text-[#003262] mb-1">學習路徑</h3>
-              <p className="text-xs text-slate-400">按照推薦路徑學習，獲得專業認證</p>
+              <h3 className={cn("text-base font-bold mb-1", omniTheme === 'omnicore' ? 'text-cyan-400' : 'text-[#003262]')}>學習路徑</h3>
+              <p className={cn("text-xs", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>按照推薦路徑學習，獲得專業認證</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {LEARNING_PATHS.map((path) => (

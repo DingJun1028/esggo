@@ -80,7 +80,7 @@ export default function ReportPage() {
         columns: 12 as const,
         component: (
           <Card padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
-             <BrandTable 
+             <Card 
                loading={loading} 
                columns={[
                  { label: '選擇', key: 'select' }, 
@@ -99,5 +99,5 @@ export default function ReportPage() {
     ]
   };
 
-  return <StandardPage config={pageConfig} />;
+  return <Card config={pageConfig} />;
 }
