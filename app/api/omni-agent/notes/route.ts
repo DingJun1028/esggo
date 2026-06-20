@@ -15,10 +15,11 @@ function getSupabase() {
 }
 
 function getModel() {
-  if (process.env.OPENROUTER_API_KEY) {
+  const apiKey = process.env.OPENROUTER_API_KEY || process.env.AGNES_API;
+  if (apiKey) {
     const openrouter = createOpenAI({
       baseURL: OPENROUTER_BASE_URL,
-      apiKey: process.env.OPENROUTER_API_KEY,
+      apiKey: apiKey,
     });
     return openrouter(process.env.OPENROUTER_MODEL || DEFAULT_OPENROUTER_MODEL);
   }
@@ -40,10 +41,7 @@ export async function POST(req: Request) {
 
     const model = getModel();
     if (!model) {
-      return NextResponse.json(
-        { error: 'OPENROUTER_API_KEY is not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'OPENROUTER_API_KEY is not configured' }, { status: 500 });
     }
 
     // Format messages for the AI
@@ -66,14 +64,19 @@ export async function POST(req: Request) {
 }
 
 用繁體中文回答，只輸出 JSON，不要其他文字。`,
-      prompt: `對話記錄：\n${conversationText}\n\n${title ? `建議標題：${title}\n` : ''}請整理成結構化筆記。`,
+      prompt: `對話記錄：\n${conversationText}\n\n${
+        title ? `建議標題：${title}\n` : ''
+      }請整理成結構化筆記。`,
       maxTokens: 2000,
     });
 
     // Parse AI response
     let noteData;
     try {
-      const cleaned = result.text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      const cleaned = result.text
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim();
       noteData = JSON.parse(cleaned);
     } catch {
       // Fallback: use raw text as content
@@ -129,10 +132,7 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     console.error('Notes creation error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -142,7 +142,10 @@ export async function GET() {
     const supabase = getSupabase();
     if (!supabase) {
       return NextResponse.json(
-        { error: 'Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.' },
+        {
+          error:
+            'Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        },
         { status: 500 }
       );
     }
@@ -166,9 +169,6 @@ export async function GET() {
     });
   } catch (error: any) {
     console.error('Notes list error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }

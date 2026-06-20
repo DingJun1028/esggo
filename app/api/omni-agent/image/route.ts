@@ -10,18 +10,12 @@ export async function POST(req: Request) {
     const { prompt, model, width = 512, height = 512 } = await req.json();
 
     if (!prompt) {
-      return NextResponse.json(
-        { error: 'Missing required field: prompt' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required field: prompt' }, { status: 400 });
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY || process.env.AGNES_API;
     if (!apiKey) {
-      return NextResponse.json(
-        { error: 'OPENROUTER_API_KEY is not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'OPENROUTER_API_KEY is not configured' }, { status: 500 });
     }
 
     const imageModel = model || 'stabilityai/stable-diffusion-3.5-large';
@@ -29,7 +23,7 @@ export async function POST(req: Request) {
     const response = await fetch(`${OPENROUTER_BASE_URL}/images/generations`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
         'X-Title': 'ESGGO OmniAgent',
@@ -56,9 +50,10 @@ export async function POST(req: Request) {
     // Handle different response formats
     let imageUrl = '';
     if (data.data && data.data[0]) {
-      imageUrl = data.data[0].url || data.data[0].b64_json
-        ? `data:image/png;base64,${data.data[0].b64_json}`
-        : data.data[0].url;
+      imageUrl =
+        data.data[0].url || data.data[0].b64_json
+          ? `data:image/png;base64,${data.data[0].b64_json}`
+          : data.data[0].url;
     } else if (data.images && data.images[0]) {
       imageUrl = data.images[0].url || data.images[0];
     }
@@ -77,9 +72,6 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     console.error('Image generation error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }
