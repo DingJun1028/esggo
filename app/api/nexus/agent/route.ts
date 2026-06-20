@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateHashLock } from '@/lib/hash-lock';
 import { writeAuditLog } from '@/lib/audit-logger';
+import supabaseAdmin from '@/lib/supabaseAdmin';
 
 export interface NexusResponse {
   success: boolean;
@@ -100,12 +101,36 @@ export async function POST(req: NextRequest) {
           lastSync: new Date().toISOString(),
         };
         break;
-      case 'seal_5t_proof':
+      case 'seal_5t_proof': {
         // 使用 hash-lock 封印
         const seal = generateHashLock(args.proof);
-        result = { atomId: args.atomId, seal: seal.hash, salt: seal.salt, status: 'Trustworthy' };
+        
+        let atomId = args.atomId || crypto.randomUUID();
+        let writeStatus = 'Fallback (Memory)';
+
+        // 嘗試寫入 Supabase esg_atoms
+        if (supabaseAdmin) {
+          try {
+            const { error: dbError } = await supabaseAdmin.from('esg_atoms').insert({
+              uuid: atomId,
+              hash_lock: seal.hash,
+              status: 'Trustworthy',
+              evidence: args.proof || {}
+            });
+            if (dbError) {
+              console.warn('[OmniNexus API] Supabase 寫入失敗，降級為 Memory 模式:', dbError.message);
+            } else {
+              writeStatus = 'Persisted (Supabase)';
+            }
+          } catch (e) {
+            console.warn('[OmniNexus API] Supabase 寫入例外:', e);
+          }
+        }
+
+        result = { atomId, seal: seal.hash, salt: seal.salt, status: 'Trustworthy', writeStatus };
         trustScore = 100; // Locked proof gets max trust
         break;
+      }
       case 'ask_jules':
         result = {
           response: `[Jules] Evaluated context. Root cause identified for: ${args.prompt}`,
