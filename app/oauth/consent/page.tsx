@@ -74,17 +74,15 @@ function ConsentContent() {
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-void-stark to-void-stark pointer-events-none" />
 
-      <div
-        className="max-w-md w-full relative z-10"
-      >
-        <Card variant="glow" className="p-8 md:p-10 border-cyan-500/30">
+      <div className="max-w-md w-full relative z-10">
+        <Card variant="default" className="p-8 md:p-10 border-cyan-500/30">
           <div className="flex flex-col items-center text-center space-y-6">
             <div className="flex justify-center mb-4 relative">
               <div className="absolute inset-0 bg-cyan-core/20 blur-xl rounded-full" />
-              <div className="w-20 h-20 bg-void-stark border-2 border-cyan-500/50 rounded-[2rem] flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+              <div className="w-20 h-20 bg-[#F8FAFC] border-2 border-cyan-500/50 rounded-[2rem] flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
                 <ShieldCheck size={40} className="text-cyan-core" />
               </div>
             </div>
@@ -102,7 +100,7 @@ function ConsentContent() {
 
             {status === 'pending' && (
               <>
-                <div className="w-full border border-white/10 rounded-2xl p-4 text-left space-y-3">
+                <div className="w-full border border-slate-200 rounded-2xl p-4 text-left space-y-3">
                   <h3 className="text-[10px] font-black uppercase text-white/40 tracking-widest">
                     要求權限範圍 (Scopes)
                   </h3>
@@ -142,9 +140,7 @@ function ConsentContent() {
                 <Bot size={48} className="text-cyan-core animate-bounce" />
                 <p className="text-sm font-bold text-white/80">正在建立加密授權通道...</p>
                 <div className="w-48 h-1 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-cyan-core"
-                  />
+                  <div className="h-full bg-cyan-core" />
                 </div>
               </div>
             )}
@@ -177,7 +173,7 @@ function ConsentContent() {
             )}
           </div>
 
-          <div className="mt-8 text-center border-t border-white/5 pt-4">
+          <div className="mt-8 text-center border-t border-slate-200 pt-4">
             <p className="text-[9px] text-white/20 uppercase tracking-widest font-mono">
               Secured by Supabase Row Level Security
             </p>
@@ -192,7 +188,7 @@ export default function OAuthConsentPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-void-stark flex items-center justify-center text-white/50 font-mono text-sm">
+        <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center text-white/50 font-mono text-sm">
           Loading Sacred Auth Protocol...
         </div>
       }

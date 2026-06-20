@@ -27,7 +27,7 @@ import {
 const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorClass }: any) => (
   <Card
     variant="default"
-    className="p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] dark:bg-slate-900/40 -md border border-slate-200/50 dark:border-white/10 group"
+    className="p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] dark:bg-slate-900/40 -md border border-slate-200/50 dark:border-slate-200 group"
   >
     <div className="flex justify-between items-start mb-4">
       <div className={`p-3 rounded-xl ${colorClass} group-hover:scale-110 transition-transform`}>
@@ -92,7 +92,7 @@ const SupplierCAPModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <div className="bg-[#0f172a] border border-cyan-500/30 rounded-2xl w-full max-w-2xl shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden flex flex-col relative">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500"></div>
 
-        <div className="p-6 border-b border-white/10 flex justify-between items-center">
+        <div className="p-6 border-b border-slate-200 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-cyan-950 rounded-lg border border-cyan-500/30">
               <Cpu className="text-cyan-400" size={20} />
@@ -172,7 +172,7 @@ const SupplierCAPModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           </div>
 
           {/* Action Area */}
-          <div className="flex justify-end pt-4 border-t border-white/10">
+          <div className="flex justify-end pt-4 border-t border-slate-200">
             {step === 6 ? (
               <Button
                 variant="primary"
@@ -249,7 +249,7 @@ const EnterpriseHealthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
       <div className="bg-[#0f172a] border border-emerald-500/30 rounded-2xl w-full max-w-3xl shadow-[0_0_50px_rgba(16,185,129,0.15)] overflow-hidden flex flex-col relative">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500"></div>
 
-        <div className="p-6 border-b border-white/10 flex justify-between items-center">
+        <div className="p-6 border-b border-slate-200 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-emerald-950 rounded-lg border border-emerald-500/30 animate-pulse">
               <ShieldCheck className="text-emerald-400" size={20} />
@@ -292,7 +292,7 @@ const EnterpriseHealthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 </div>
               </div>
 
-              <div className="border border-white/10 rounded-xl p-4">
+              <div className="border border-slate-200 rounded-xl p-4">
                 <h4 className="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
                   <ShieldAlert size={16} className="text-red-400" /> 偵測到缺口 (Gaps)
                 </h4>
@@ -300,7 +300,7 @@ const EnterpriseHealthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
                   {result.gaps?.map((gap: any, i: number) => (
                     <li
                       key={i}
-                      className="flex items-start gap-3 text-xs p-3 rounded-lg border border-white/5"
+                      className="flex items-start gap-3 text-xs p-3 rounded-lg border border-slate-200"
                     >
                       <span
                         className={
@@ -431,7 +431,7 @@ export default function GovernanceDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 overflow-hidden flex flex-col font-mono relative selection:bg-cyan-500/30 selection:text-white">
+    <div className="min-h-screen bg-[#020617] text-slate-700 overflow-hidden flex flex-col font-mono relative selection:bg-cyan-500/30 selection:text-white">
       {/* Liquid Glass Background Effects */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div
@@ -491,7 +491,7 @@ export default function GovernanceDashboard() {
                 icon={<Download size={16} />}
                 onClick={handleExport}
                 isLoading={isProcessing}
-                className="border-white/10 hover: text-slate-200"
+                className="border-slate-200 hover: text-slate-700"
               >
                 匯出治理報告
               </Button>
@@ -544,16 +544,16 @@ export default function GovernanceDashboard() {
             <div className="lg:col-span-2 space-y-6">
               <Card
                 variant="default"
-                className="p-0 overflow-hidden border border-white/5 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                className="p-0 overflow-hidden border border-slate-200 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
               >
-                <div className="p-6 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="p-6 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                     <h2 className="text-lg font-bold text-slate-100 tracking-wider">
                       治理核心指標清冊
                     </h2>
                   </div>
-                  <div className="flex flex-wrap gap-1 border border-white/5 rounded-lg p-1">
+                  <div className="flex flex-wrap gap-1 border border-slate-200 rounded-lg p-1">
                     {['All', '董事會與高管', '商業道德', '資訊安全', '風險管理'].map((tab) => (
                       <button
                         key={tab}
@@ -561,7 +561,7 @@ export default function GovernanceDashboard() {
                         className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${
                           activeTab === tab
                             ? 'bg-amber-500/20 border border-amber-500/30 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.1)]'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                            : 'text-slate-400 hover:text-slate-700 hover:bg-white/5'
                         }`}
                       >
                         {tab}
@@ -571,7 +571,7 @@ export default function GovernanceDashboard() {
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                    <thead className="border-b border-white/5 text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                    <thead className="border-b border-slate-200 text-[10px] uppercase tracking-widest text-slate-500 font-bold">
                       <tr>
                         <th className="px-6 py-4">治理面向</th>
                         <th className="px-6 py-4">指標描述</th>
@@ -586,7 +586,7 @@ export default function GovernanceDashboard() {
                           <td className="px-6 py-4 text-xs font-bold text-slate-300">
                             {row.category}
                           </td>
-                          <td className="px-6 py-4 text-sm text-slate-200">{row.metric}</td>
+                          <td className="px-6 py-4 text-sm text-slate-700">{row.metric}</td>
                           <td className="px-6 py-4 text-sm font-black text-cyan-400 text-right font-mono group-hover:scale-110 transition-transform origin-right">
                             {row.value}
                           </td>

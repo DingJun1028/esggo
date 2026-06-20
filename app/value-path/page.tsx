@@ -228,9 +228,7 @@ function JourneyStepCard({
   const progress = Math.round((completedSubSteps / step.subSteps.length) * 100);
 
   return (
-    <div
-      className="relative"
-    >
+    <div className="relative">
       {/* Timeline Line */}
       {index < JOURNEY_STEPS.length - 1 && (
         <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-slate-100 z-0" />
@@ -294,77 +292,74 @@ function JourneyStepCard({
         </button>
 
         {/* Expanded Content */}
-        
-          {isExpanded && (
-            <div
-              className="overflow-hidden"
-            >
-              <div className="bg-white rounded-b-2xl border border-t-0 border-slate-100 p-5 -mt-2 space-y-4">
-                {/* Sub Steps */}
-                <div>
-                  <h4 className="text-xs font-bold text-slate-600 mb-2">執行步驟</h4>
-                  <div className="space-y-2">
-                    {step.subSteps.map((sub, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        {sub.completed ? (
-                          <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
-                        ) : (
-                          <Circle size={14} className="text-slate-300 shrink-0" />
+
+        {isExpanded && (
+          <div className="overflow-hidden">
+            <div className="bg-white rounded-b-2xl border border-t-0 border-slate-100 p-5 -mt-2 space-y-4">
+              {/* Sub Steps */}
+              <div>
+                <h4 className="text-xs font-bold text-slate-600 mb-2">執行步驟</h4>
+                <div className="space-y-2">
+                  {step.subSteps.map((sub, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      {sub.completed ? (
+                        <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />
+                      ) : (
+                        <Circle size={14} className="text-slate-300 shrink-0" />
+                      )}
+                      <span
+                        className={cn(
+                          'text-xs',
+                          sub.completed ? 'text-slate-600' : 'text-slate-400'
                         )}
+                      >
+                        {sub.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Outcomes */}
+              <div>
+                <h4 className="text-xs font-bold text-slate-600 mb-2">預期成果</h4>
+                <div className="flex flex-wrap gap-2">
+                  {step.outcomes.map((outcome) => (
+                    <span
+                      key={outcome}
+                      className="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full font-medium"
+                    >
+                      ✓ {outcome}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Metrics */}
+              <div>
+                <h4 className="text-xs font-bold text-slate-600 mb-2">關鍵指標</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {step.metrics.map((metric) => (
+                    <div key={metric.label} className="bg-slate-50 rounded-lg p-2">
+                      <p className="text-sm font-black text-[#003262]">{metric.value}</p>
+                      <p className="text-[9px] text-slate-400">{metric.label}</p>
+                      {metric.trend && (
                         <span
                           className={cn(
-                            'text-xs',
-                            sub.completed ? 'text-slate-600' : 'text-slate-400'
+                            'text-[9px] font-bold',
+                            metric.trend.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'
                           )}
                         >
-                          {sub.name}
+                          {metric.trend}
                         </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Outcomes */}
-                <div>
-                  <h4 className="text-xs font-bold text-slate-600 mb-2">預期成果</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {step.outcomes.map((outcome) => (
-                      <span
-                        key={outcome}
-                        className="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full font-medium"
-                      >
-                        ✓ {outcome}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Metrics */}
-                <div>
-                  <h4 className="text-xs font-bold text-slate-600 mb-2">關鍵指標</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {step.metrics.map((metric) => (
-                      <div key={metric.label} className="bg-slate-50 rounded-lg p-2">
-                        <p className="text-sm font-black text-[#003262]">{metric.value}</p>
-                        <p className="text-[9px] text-slate-400">{metric.label}</p>
-                        {metric.trend && (
-                          <span
-                            className={cn(
-                              'text-[9px] font-bold',
-                              metric.trend.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'
-                            )}
-                          >
-                            {metric.trend}
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          )}
-        
+          </div>
+        )}
       </div>
     </div>
   );

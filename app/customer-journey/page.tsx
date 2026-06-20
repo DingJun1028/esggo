@@ -3,30 +3,30 @@
 
 /**
  * 顧客旅程中心（Customer Journey Center）
- * 
+ *
  * 按照顧客使用流程排列所有頁面：
- * 
+ *
  * 1. 探索與認識（Awareness）
  *    - 首頁、關於、平台版本
- * 
+ *
  * 2. 評估與入門（Evaluation）
  *    - 演示、教學、指南、學院
- * 
+ *
  * 3. 開始使用（Onboarding）
  *    - 登入、註冊、API 設定
- * 
+ *
  * 4. 核心功能（Core Experience）
  *    - 儀表板、數據分析、報告
- * 
+ *
  * 5. 進階功能（Advanced）
  *    - 子代理、AI 平台、數位分身
- * 
+ *
  * 6. 協作與生態（Collaboration）
  *    - 利害關係人、顧問、社群
- * 
+ *
  * 7. 管理與設定（Management）
  *    - 個人資料、通知、系統狀態
- * 
+ *
  * 8. 價值與成長（Value & Growth）
  *    - 價值階梯、訂閱、永續學院
  */
@@ -34,11 +34,34 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  Home, Search, BookOpen, LogIn, LayoutDashboard, Bot,
-  Users, Settings, TrendingUp, Shield, Zap, Globe,
-  FileText, BarChart3, Lock, Key, Eye, Play,
-  GraduationCap, Award, Heart, Sparkles, ArrowRight,
-  ChevronRight, Star, CheckCircle2, Target, Layers
+  Home,
+  Search,
+  BookOpen,
+  LogIn,
+  LayoutDashboard,
+  Bot,
+  Users,
+  Settings,
+  TrendingUp,
+  Shield,
+  Zap,
+  Globe,
+  FileText,
+  BarChart3,
+  Lock,
+  Key,
+  Eye,
+  Play,
+  GraduationCap,
+  Award,
+  Heart,
+  Sparkles,
+  ArrowRight,
+  ChevronRight,
+  Star,
+  CheckCircle2,
+  Target,
+  Layers,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
@@ -74,7 +97,13 @@ const JOURNEY_STAGES: JourneyStage[] = [
     description: '了解 ESGGO 平台，探索永續治理的可能性',
     pages: [
       { name: '首頁', path: '/', description: '平台入口 · 即時數據預覽', icon: Home },
-      { name: '平台版本', path: '/platform-versions', description: '所有模組版本資訊', icon: Layers, isNew: true },
+      {
+        name: '平台版本',
+        path: '/platform-versions',
+        description: '所有模組版本資訊',
+        icon: Layers,
+        isNew: true,
+      },
       { name: '搜尋', path: '/search', description: '全站智慧搜尋', icon: Search },
     ],
   },
@@ -117,17 +146,52 @@ const JOURNEY_STAGES: JourneyStage[] = [
     description: '數據分析、報告撰寫、合規檢查',
     pages: [
       { name: '儀表板', path: '/dashboard', description: '永續數據儀表板', icon: LayoutDashboard },
-      { name: '環境數據', path: '/dashboard/metrics/environmental', description: '環境指標分析', icon: BarChart3 },
-      { name: '社會數據', path: '/dashboard/metrics/social', description: '社會指標分析', icon: Users },
-      { name: '治理數據', path: '/dashboard/metrics/governance', description: '治理指標分析', icon: Shield },
+      {
+        name: '環境數據',
+        path: '/dashboard/metrics/environmental',
+        description: '環境指標分析',
+        icon: BarChart3,
+      },
+      {
+        name: '社會數據',
+        path: '/dashboard/metrics/social',
+        description: '社會指標分析',
+        icon: Users,
+      },
+      {
+        name: '治理數據',
+        path: '/dashboard/metrics/governance',
+        description: '治理指標分析',
+        icon: Shield,
+      },
       { name: '報告撰寫', path: '/sustain-write', description: 'AI 永續報告撰寫', icon: FileText },
       { name: '報告產生', path: '/report', description: '自動報告產生', icon: FileText },
-      { name: '報告建構器', path: '/dashboard/report-builder', description: '互動式報告建構', icon: Layers },
-      { name: '合規檢查', path: '/compliance-check', description: '合規性檢查', icon: CheckCircle2 },
+      {
+        name: '報告建構器',
+        path: '/dashboard/report-builder',
+        description: '互動式報告建構',
+        icon: Layers,
+      },
+      {
+        name: '合規檢查',
+        path: '/compliance-check',
+        description: '合規性檢查',
+        icon: CheckCircle2,
+      },
       { name: '稽核驗證', path: '/audit-verify', description: '數據稽核驗證', icon: Shield },
       { name: '稽核日誌', path: '/audit-log', description: '操作稽核日誌', icon: FileText },
-      { name: '文件清單', path: '/document-checklist', description: '合規文件清單', icon: FileText },
-      { name: 'CBAM 計算機', path: '/cbam-calculator', description: 'CBAM 碳關稅計算', icon: BarChart3 },
+      {
+        name: '文件清單',
+        path: '/document-checklist',
+        description: '合規文件清單',
+        icon: FileText,
+      },
+      {
+        name: 'CBAM 計算機',
+        path: '/cbam-calculator',
+        description: 'CBAM 碳關稅計算',
+        icon: BarChart3,
+      },
       { name: 'GRI 追蹤', path: '/gri-tracker', description: 'GRI 標準追蹤', icon: Target },
       { name: '重大性分析', path: '/materiality', description: '重大性矩陣分析', icon: Target },
       { name: '財務', path: '/finance', description: '永續財務分析', icon: BarChart3 },
@@ -141,13 +205,24 @@ const JOURNEY_STAGES: JourneyStage[] = [
     color: 'from-rose-500 to-pink-500',
     description: 'AI 代理、數位分身、智能分析',
     pages: [
-      { name: 'OmniAgent', path: '/omni-agent', description: 'AI 代理控制台', icon: Bot, isNew: true },
+      {
+        name: 'OmniAgent',
+        path: '/omni-agent',
+        description: 'AI 代理控制台',
+        icon: Bot,
+        isNew: true,
+      },
       { name: '子代理管理', path: '/agents', description: '子代理管理', icon: Bot },
       { name: 'AI 平台', path: '/ai-platform', description: 'AI 模型平台', icon: Sparkles },
       { name: '數位分身', path: '/digital-twin', description: '企業數位分身', icon: Globe },
       { name: '智能分析', path: '/intelligence', description: 'AI 智能分析', icon: Sparkles },
       { name: '矩陣', path: '/matrix', description: 'ESG 矩陣分析', icon: Layers },
-      { name: 'Apollo 工作室', path: '/apollo-studio', description: 'GraphQL 工作室', icon: Sparkles },
+      {
+        name: 'Apollo 工作室',
+        path: '/apollo-studio',
+        description: 'GraphQL 工作室',
+        icon: Sparkles,
+      },
     ],
   },
   {
@@ -159,7 +234,12 @@ const JOURNEY_STAGES: JourneyStage[] = [
     description: '利害關係人、顧問、社群協作',
     pages: [
       { name: '利害關係人', path: '/stakeholders', description: '利害關係人管理', icon: Users },
-      { name: '利害關係人調查', path: '/stakeholder-survey', description: '調查問卷', icon: FileText },
+      {
+        name: '利害關係人調查',
+        path: '/stakeholder-survey',
+        description: '調查問卷',
+        icon: FileText,
+      },
       { name: '顧問', path: '/advisors', description: 'ESG 顧問', icon: Users },
       { name: '諮詢', path: '/advisory', description: '專業諮詢', icon: Users },
       { name: '社群', path: '/social', description: '社群互動', icon: Heart },
@@ -200,10 +280,34 @@ const JOURNEY_STAGES: JourneyStage[] = [
     color: 'from-yellow-500 to-amber-500',
     description: '價值階梯、訂閱升級、永續成長',
     pages: [
-      { name: '價值階梯', path: '/value-ladder', description: '價值階梯', icon: TrendingUp, isPro: true },
-      { name: '價值等級', path: '/value-levels', description: '價值等級', icon: TrendingUp, isPro: true },
-      { name: '價值路徑', path: '/value-path', description: '價值路徑', icon: TrendingUp, isPro: true },
-      { name: '高級訂閱', path: '/dashboard/premium', description: 'Premium 功能', icon: Star, isPro: true },
+      {
+        name: '價值階梯',
+        path: '/value-ladder',
+        description: '價值階梯',
+        icon: TrendingUp,
+        isPro: true,
+      },
+      {
+        name: '價值等級',
+        path: '/value-levels',
+        description: '價值等級',
+        icon: TrendingUp,
+        isPro: true,
+      },
+      {
+        name: '價值路徑',
+        path: '/value-path',
+        description: '價值路徑',
+        icon: TrendingUp,
+        isPro: true,
+      },
+      {
+        name: '高級訂閱',
+        path: '/dashboard/premium',
+        description: 'Premium 功能',
+        icon: Star,
+        isPro: true,
+      },
       { name: '路線圖', path: '/roadmap', description: '產品路線圖', icon: Target },
       { name: '演練', path: '/walkthrough', description: '互動式演練', icon: Play },
       { name: '靈魂', path: '/soul', description: '平台靈魂', icon: Heart },
@@ -225,9 +329,7 @@ export default function CustomerJourneyCenterPage() {
             <Target size={16} />
             顧客旅程中心
           </div>
-          <h1 className="text-3xl font-black text-neutral-900">
-            Customer Journey Center
-          </h1>
+          <h1 className="text-3xl font-black text-neutral-900">Customer Journey Center</h1>
           <p className="text-base text-neutral-500 max-w-2xl mx-auto">
             以客戶需求為同心圓中心，從探索到價值成長的完整旅程
           </p>
@@ -251,14 +353,21 @@ export default function CustomerJourneyCenterPage() {
             <div key={stage.id} className="space-y-4">
               {/* Stage Header */}
               <div className="flex items-center gap-4">
-                <div className={cn('w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center text-white', stage.color)}>
+                <div
+                  className={cn(
+                    'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center text-white',
+                    stage.color
+                  )}
+                >
                   <Icon size={24} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-lg font-bold text-neutral-900">{stage.name}</h2>
                     <span className="text-xs text-neutral-400">{stage.subtitle}</span>
-                    <Badge variant="neutral" size="sm">{stage.pages.length}</Badge>
+                    <Badge variant="neutral" size="sm">
+                      {stage.pages.length}
+                    </Badge>
                   </div>
                   <p className="text-sm text-neutral-500">{stage.description}</p>
                 </div>
@@ -266,7 +375,7 @@ export default function CustomerJourneyCenterPage() {
 
               {/* Pages Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 ml-16">
-                {stage.pages.map(page => {
+                {stage.pages.map((page) => {
                   const PageIcon = page.icon;
                   return (
                     <Link key={page.path} href={page.path}>
@@ -277,11 +386,23 @@ export default function CustomerJourneyCenterPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1">
-                              <h3 className="text-xs font-bold text-neutral-900 truncate">{page.name}</h3>
-                              {page.isNew && <Badge variant="info" size="sm">New</Badge>}
-                              {page.isPro && <Badge variant="warning" size="sm">Pro</Badge>}
+                              <h3 className="text-xs font-bold text-neutral-900 truncate">
+                                {page.name}
+                              </h3>
+                              {page.isNew && (
+                                <Badge variant="info" size="sm">
+                                  New
+                                </Badge>
+                              )}
+                              {page.isPro && (
+                                <Badge variant="warning" size="sm">
+                                  Pro
+                                </Badge>
+                              )}
                             </div>
-                            <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-2">{page.description}</p>
+                            <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-2">
+                              {page.description}
+                            </p>
                           </div>
                         </div>
                       </Card>
@@ -303,9 +424,7 @@ export default function CustomerJourneyCenterPage() {
         {/* ─── Footer ─── */}
         <Card variant="outlined" padding="md">
           <div className="text-center space-y-2 py-2">
-            <p className="text-sm font-medium text-neutral-700">
-              以客戶需求為同心圓中心
-            </p>
+            <p className="text-sm font-medium text-neutral-700">以客戶需求為同心圓中心</p>
             <p className="text-[10px] text-neutral-400">
               從探索到價值成長的完整顧客旅程 · 共 {totalPages} 個頁面
             </p>

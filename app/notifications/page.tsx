@@ -516,25 +516,24 @@ export default function NotificationsPage() {
             </div>
 
             {/* Notification List */}
-            
-              {filteredNotifications.length > 0 ? (
-                <div className="space-y-3">
-                  {filteredNotifications.map((notification) => (
-                    <NotificationCard
-                      key={notification.id}
-                      notification={notification}
-                      onRead={() => handleRead(notification.id)}
-                      onDelete={() => handleDelete(notification.id)}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <MailOpen size={48} className="mx-auto mb-4 text-slate-200" />
-                  <p className="text-sm text-slate-400">沒有符合條件的通知</p>
-                </div>
-              )}
-            
+
+            {filteredNotifications.length > 0 ? (
+              <div className="space-y-3">
+                {filteredNotifications.map((notification) => (
+                  <NotificationCard
+                    key={notification.id}
+                    notification={notification}
+                    onRead={() => handleRead(notification.id)}
+                    onDelete={() => handleDelete(notification.id)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <MailOpen size={48} className="mx-auto mb-4 text-slate-700" />
+                <p className="text-sm text-slate-400">沒有符合條件的通知</p>
+              </div>
+            )}
           </div>
         )}
 

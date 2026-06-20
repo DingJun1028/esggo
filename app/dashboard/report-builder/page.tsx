@@ -55,10 +55,10 @@ export default function ReportBuilderUI() {
   };
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-teal-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-teal-500/30">
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500/20 to-emerald-600/20 flex items-center justify-center border border-teal-500/30 shadow-[0_0_30px_rgba(20,184,166,0.15)] relative">
               <FileText className="text-teal-400 relative z-10" size={28} />
@@ -92,10 +92,7 @@ export default function ReportBuilderUI() {
           數據全自動編譯成符合國際標準的永續報告書，全程保障資料隱私。
         </p>
 
-        <Card
-          variant="glass"
-          className="p-8 border-teal-500/20 relative overflow-hidden group"
-        >
+        <Card variant="default" className="p-8 border-teal-500/20 relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 to-transparent pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center justify-between">
@@ -129,22 +126,15 @@ export default function ReportBuilderUI() {
             </button>
           </div>
 
-
           {errorMsg && (
-            <div
-              className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm font-medium"
-            >
+            <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm font-medium">
               {errorMsg}
             </div>
           )}
-
         </Card>
 
-
         {reportDoc && (
-          <div
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             <div className="flex items-center gap-4 flex-wrap">
               <Badge
                 variant="success"
@@ -162,8 +152,8 @@ export default function ReportBuilderUI() {
               </Badge>
             </div>
 
-            <Card variant="glass" className="overflow-hidden">
-              <div className="p-4 border-b border-white/5">
+            <Card variant="default" className="overflow-hidden">
+              <div className="p-4 border-b border-slate-200">
                 <h3 className="text-sm font-bold text-slate-300 font-mono">
                   報告結果預覽 (Document Preview)
                 </h3>
@@ -174,7 +164,6 @@ export default function ReportBuilderUI() {
             </Card>
           </div>
         )}
-
       </div>
     </div>
   );

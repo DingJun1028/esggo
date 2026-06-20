@@ -194,7 +194,7 @@ export default function WalkthroughPage() {
           <button
             onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
             disabled={verifyingId === row.id}
-            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-700 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
             {row.hash_lock ? '驗證 5T' : '編輯'}
@@ -205,10 +205,10 @@ export default function WalkthroughPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
               <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -248,7 +248,7 @@ export default function WalkthroughPage() {
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
@@ -259,7 +259,7 @@ export default function WalkthroughPage() {
             <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
           </Card>
 
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
@@ -270,7 +270,7 @@ export default function WalkthroughPage() {
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </Card>
 
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
@@ -296,7 +296,7 @@ export default function WalkthroughPage() {
           </div>
 
           <div className="space-y-6">
-            <Card variant="glow" title="OmniAgent 輔助" subtitle="AI 智能上下文">
+            <Card variant="default" title="OmniAgent 輔助" subtitle="AI 智能上下文">
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
                   此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript
