@@ -23,7 +23,6 @@ import {
   Download,
   X,
 } from 'lucide-react';
-import { Modal } from '@/components/ui/v2/Modal';
 
 export default function ReadingRoomPage() {
   const [data, setData] = useState<any[]>([]);
@@ -602,6 +601,128 @@ export default function ReadingRoomPage() {
           </div>
         </div>
       </div>
+
+      {showAddModal && (
+        <Modal
+          open={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          title="新增閱覽室紀錄"
+          subtitle="新增一筆 ESG 文獻至永續閱覽室"
+          size="lg"
+        >
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">文件 ID *</label>
+              <input
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.id}
+                onChange={(e) => setNewRecord({ ...newRecord, id: e.target.value })}
+                placeholder="例如: std-gri-305"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">標題 *</label>
+              <input
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.title}
+                onChange={(e) => setNewRecord({ ...newRecord, title: e.target.value })}
+                placeholder="文獻名稱"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">描述</label>
+              <textarea
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.description}
+                onChange={(e) => setNewRecord({ ...newRecord, description: e.target.value })}
+                placeholder="文獻描述"
+                rows={3}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">類別</label>
+                <select
+                  className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                  value={newRecord.category}
+                  onChange={(e) => setNewRecord({ ...newRecord, category: e.target.value })}
+                >
+                  <option value="standard">standard</option>
+                  <option value="regulation">regulation</option>
+                  <option value="industry-report">industry-report</option>
+                  <option value="case-study">case-study</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">ESG 類別</label>
+                <select
+                  className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                  value={newRecord.esg_category}
+                  onChange={(e) => setNewRecord({ ...newRecord, esg_category: e.target.value })}
+                >
+                  <option value="">--</option>
+                  <option value="Governance">Governance</option>
+                  <option value="Environmental">Environmental</option>
+                  <option value="Social">Social</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">檔案 URL</label>
+              <input
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.file_url}
+                onChange={(e) => setNewRecord({ ...newRecord, file_url: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">GRI Reference</label>
+              <input
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.gri_reference}
+                onChange={(e) => setNewRecord({ ...newRecord, gri_reference: e.target.value })}
+                placeholder="例如: GRI 305"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">來源 URL (Source)</label>
+              <input
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.source}
+                onChange={(e) => setNewRecord({ ...newRecord, source: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">標籤（逗號分隔）</label>
+              <input
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.tags}
+                onChange={(e) => setNewRecord({ ...newRecord, tags: e.target.value })}
+                placeholder="GRI, Emissions, Taiwan"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">發佈日期</label>
+              <input
+                type="date"
+                className="w-full px-4 py-2.5 rounded-lg border border-neutral-200 bg-white text-neutral-900 text-sm focus:outline-none focus:ring-2 focus:ring-berkeley-blue/20 focus:border-berkeley-blue"
+                value={newRecord.published_date}
+                onChange={(e) => setNewRecord({ ...newRecord, published_date: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="p-5 border-t border-neutral-100 bg-neutral-50/50 rounded-b-2xl flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => setShowAddModal(false)} disabled={isProcessing}>
+              取消
+            </Button>
+            <Button variant="primary" onClick={handleCreateRecord} isLoading={isProcessing}>
+              確認建立
+            </Button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

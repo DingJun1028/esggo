@@ -3,6 +3,7 @@ import React from 'react';
 import { cn } from '../../../lib/utils';
 import { ShieldCheck } from 'lucide-react';
 import { useThemeStore } from '../../../lib/theme-store';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniBaseTableColumn<T> {
   key: string;
@@ -24,28 +25,34 @@ export function OmniBaseTable<T extends { id?: string | number }>({
   compact = false,
   loading = false,
   className,
-  omniHeart,
+  omniHeart: initialHeart,
   ...props
 }: OmniBaseTableProps<T>) {
   const { omniTheme } = useThemeStore();
+  const omniHeart = useOmniResonance(initialHeart);
 
   return (
     <div className={cn(
       "w-full overflow-x-auto rounded-lg transition-all duration-500 relative",
-      omniTheme === 'omnicore'
-        ? (omniHeart 
-            ? (omniHeart.resonanceState === 1.0 
-                ? "border border-[#ffd700]/30 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-[#ffd700]/5" 
-                : "border border-[#63a6b0]/30 shadow-[0_0_20px_rgba(99,166,176,0.1)] bg-[#63a6b0]/5")
-            : "border border-[var(--theme-border)] bg-[var(--theme-base)]")
-        : "border border-slate-200 bg-white shadow-sm", // V2 Utility Mode
+      omniHeart 
+        ? (omniHeart.resonanceState === 1.0 
+            ? "border-2 border-[#ffd700]/30 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-white" 
+            : "border-2 border-[#63a6b0]/30 shadow-[0_0_20px_rgba(99,166,176,0.1)] bg-white")
+        : (omniTheme === 'omnicore' 
+            ? "border border-[var(--theme-border)] bg-[var(--theme-base)]"
+            : "border border-slate-200 bg-white shadow-sm"),
       className
     )}>
       {omniHeart && (
-        <div className="absolute top-0 right-0 px-3 py-1 bg-[var(--theme-surface)] border-b border-l border-[var(--theme-border)] rounded-bl-lg text-[10px] font-mono flex items-center gap-1 z-10">
+        <div className={cn(
+          "absolute top-0 right-0 px-3 py-1 border-b border-l rounded-bl-lg text-[10px] font-mono flex items-center gap-1.5 z-10",
+          omniHeart.resonanceState === 1.0 
+            ? "bg-[#ffd700]/10 border-[#ffd700]/30 text-[#ffd700]" 
+            : "bg-[#63a6b0]/10 border-[#63a6b0]/30 text-[#63a6b0]"
+        )}>
           <ShieldCheck size={12} className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"} />
-          <span className={omniHeart.resonanceState === 1.0 ? "text-[#ffd700]" : "text-[#63a6b0]"}>
-            OMNI-CORE 5T SECURED
+          <span>
+            {omniHeart.omniSignature ? `${omniHeart.omniSignature.substring(0, 6)}... 5T SECURED` : "OMNI-CORE 5T SECURED"}
           </span>
         </div>
       )}
