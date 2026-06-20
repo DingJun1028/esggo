@@ -19,10 +19,10 @@ import {
   Database,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { BrandStatusDot } from '@/components/brand';
+import { Button } from '@/components/ui/v2/Button';
+import { Card, CardContent } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
+import { StatusDot } from '@/components/ui/v2/StatusDot';
 
 interface LogEntry {
   id: string;

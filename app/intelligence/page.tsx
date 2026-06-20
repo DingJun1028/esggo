@@ -27,7 +27,17 @@ import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
-import { useThemeStore } from '@/lib/theme-store';
+import {
+  Globe,
+  Search,
+  Plus,
+  ShieldCheck,
+  Activity,
+  Brain,
+  Lock,
+  Loader2,
+  RefreshCw,
+} from 'lucide-react';
 
 /* ─── Types ─── */
 interface IntelligenceRecord {
@@ -115,7 +125,6 @@ function getSentimentConfig(sentiment: IntelligenceRecord['sentiment']) {
 }
 
 export default function IntelligencePage() {
-  const { omniTheme } = useThemeStore();
   const [data, setData] = useState<IntelligenceRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -324,7 +333,7 @@ export default function IntelligencePage() {
 
           <div className="relative p-8 flex flex-col md:flex-row items-center justify-between gap-6 z-10 text-white">
             <div className="flex items-center gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+              <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center border border-white/30">
                 <Stethoscope size={32} className="text-white" />
               </div>
               <div>

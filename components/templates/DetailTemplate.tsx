@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 import { cn } from '@/lib/utils';
 
 /**

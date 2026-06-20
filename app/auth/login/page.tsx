@@ -224,10 +224,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <Card
-          padding="lg"
-          className="bg-white/90 backdrop-blur-[40px] border-white shadow-extreme rounded-[48px] p-10"
-        >
+        <Card padding="lg" className="bg-white border border-neutral-200 shadow-sm rounded-2xl p-8">
           <div className="mb-10 text-center">
             <h2 className="text-2xl font-black text-[#003262] tracking-tight">身分驗證中心</h2>
             <p className="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">

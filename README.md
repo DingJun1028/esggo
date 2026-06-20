@@ -13,11 +13,11 @@
 
 ## 📚 文件導航 (Documentation Hub)
 
-| 文件 | 說明 |
-|------|------|
-| [skills/oa/README.md](./skills/oa/README.md) | OA 技能組索引 |
-| [ROADMAP.md](./ROADMAP.md) | 四階段全域演化路線圖 |
-| [ADR_Index.md](./ADR_Index.md) | 架構決策紀錄 (ADR) 總索引 |
+| 文件                                         | 說明                      |
+| -------------------------------------------- | ------------------------- |
+| [skills/oa/README.md](./skills/oa/README.md) | OA 技能組索引             |
+| [ROADMAP.md](./ROADMAP.md)                   | 四階段全域演化路線圖      |
+| [ADR_Index.md](./ADR_Index.md)               | 架構決策紀錄 (ADR) 總索引 |
 
 ---
 
@@ -31,61 +31,68 @@ ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建�
 
 ## 🏗️ 技術架構 (Tech Stack)
 
-| 層級 | 技術 |
-|------|------|
-| **框架** | Next.js 16 (App Router) + React 18 |
-| **語言** | TypeScript 5.3（嚴格模式） |
-| **樣式** | Tailwind CSS 4（亮色主題） |
-| **AI SDK** | Google Generative AI + Vercel AI SDK |
-| **資料庫** | Supabase (PostgreSQL + RLS) + Firebase |
-| **狀態管理** | Zustand |
-| **部署** | Vercel (Production) |
-| **設計** | 亮色主題 / Berkeley Blue #003262 / Gold #FDB515 |
+| 層級         | 技術                                           |
+| ------------ | ---------------------------------------------- |
+| **框架**     | Next.js 16 (App Router) + React 18             |
+| **語言**     | TypeScript 5.3（嚴格模式）                     |
+| **樣式**     | Tailwind CSS 4（亮色主題）                     |
+| **AI SDK**   | Google Generative AI + Vercel AI SDK           |
+| **資料庫**   | Supabase (PostgreSQL + RLS) + Firebase         |
+| **狀態管理** | Zustand + OmniAgentBus (心核連動)              |
+| **部署**     | Vercel (Production)                            |
+| **設計**     | 亮色主題 / Aqua #63a6b0 / Eternal Gold #ffd700 |
 
 ---
 
 ## 🛠️ 核心功能模組 (Feature Modules)
 
 ### 📊 治理面板 — `/dashboard`
+
 - 即時 ESG 績效指標監控
 - KPI 卡片顯示（碳排放、治理評分、供應鏈合規、水資源效率）
 
 ### 🛡️ 5T 誠信協議 `/5t-dashboard`
 
-| 編號 | 中文 | 英文 | 定義 |
-|------|------|------|------|
-| T1 | 真 | Truth | 可感知/具體化 |
-| T2 | 善 | Goodness | 可溯源 |
-| T3 | 美 | Beauty | 可追蹤 |
-| T4 | 信 | Trust | 不可篡改 |
-| T5 | 通 | Transferful | 可透明驗算 |
+| 編號 | 中文 | 英文        | 定義                     |
+| ---- | ---- | ----------- | ------------------------ |
+| T1   | 真   | Truth       | 可感知/具體化 (視覺連動) |
+| T2   | 善   | Goodness    | 可溯源 (source_origin)   |
+| T3   | 美   | Beauty      | 可追蹤 (Lifecycle Hook)  |
+| T4   | 信   | Trust       | 不可篡改 (ZKP Hash Lock) |
+| T5   | 通   | Transferful | 可透明驗算               |
 
 > ⚠️ 舊版英文命名（Tangible/Traceable/Trackable/Transparent/Trustworthy）已棄用。
 
 ### ✍️ SustainWrite™ 永續撰寫 — `/sustain-write`
+
 - Tiptap 富文本編輯器，支援 GRI/ISSB 章節框架
 - AI 輔助撰寫
 
 ### 📦 證據金庫 — `/vault`
+
 - ZKP 零知識證明文件封印
 - 5T 協議驗證
 
 ### 📈 價值階梯 — `/value-levels`
+
 - Level 1 (Day 1-14) 效率提升
 - Level 2 (Day 15-30) 專業價值
 - Level 3 (Month 2) 信任建立
 - Level 4 生態系統擴展
 
 ### 🔗 聯盟協作 — `/alliance`
+
 - 供應鏈夥伴管理
 - 聯合稽核
 - 減排計劃
 
 ### 🔐 ZKP 區塊鏈封印 — `/zkp-blockchain`
+
 - 不可篡改審計軌跡
 - 區塊記錄
 
 ### 🤖 OmniAgent 控制台 — `/omni-agent`
+
 - AI 助手對話介面
 - 系統狀態監控
 - 快速指令
@@ -94,10 +101,10 @@ ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建�
 
 ## 🌐 部署環境 (Production)
 
-| 環境 | URL |
-|------|-----|
-| Production | https://esggo.vercel.app |
-| GitHub | https://github.com/DingJun1028/esggo |
+| 環境             | URL                                   |
+| ---------------- | ------------------------------------- |
+| Production       | https://esggo.vercel.app              |
+| GitHub           | https://github.com/DingJun1028/esggo  |
 | Vercel Dashboard | https://vercel.com/esg-sunshine/esggo |
 
 ---
@@ -131,20 +138,22 @@ vercel deploy --prod --force
 
 ### 色彩系統
 
-| 用途 | 色值 |
-|------|------|
-| 主色 | `#003262` (Berkeley Blue) |
-| 強調色 | `#FDB515` (Gold) |
-| 背景 | `#F8FAFC` |
-| 卡片 | `#FFFFFF` |
+| 用途   | 色值                     |
+| ------ | ------------------------ |
+| 主色   | `#63a6b0` (Aqua)         |
+| 強調色 | `#ffd700` (Eternal Gold) |
+| 背景   | `#F0F2F5`                |
+| 卡片   | `#FFFFFF`                |
 
 ### 禁止樣式
+
 - ❌ 深色主題 (`dark:` 前綴)
 - ❌ 毛玻璃效果 (`backdrop-blur-*`)
 - ❌ 深色背景 (`bg-black`, `bg-slate-900`)
 - ❌ `framer-motion`（已移除，避免 Next.js 16 相容問題）
 
 ### 允许樣式
+
 - ✅ 淡色背景 + `border-slate-100`
 - ✅ 柔和陰影 (`shadow-sm`, `shadow-md`)
 - ✅ 圓角 (`rounded-xl`, `rounded-2xl`)
@@ -192,12 +201,12 @@ esggo/
 
 ## 🗺️ 演化路線圖
 
-| 階段 | 狀態 | 核心目標 |
-|------|------|----------|
-| **Phase 1** 創世與誠信基石 | ✅ 已完成 | 5T 協議、SustainWrite、證據金庫 |
-| **Phase 2** 主權與規模化 | 🔵 執行中 | 深度刻印、自癒引擎 |
-| **Phase 3** 生態與鏈路連通 | 🟣 即將啟動 | 供應鏈、蜂群市場 |
-| **Phase 4** 無限進化 | 🔴 未來 | 液態現實 UI、自生長架構 |
+| 階段                       | 狀態      | 核心目標                                                 |
+| -------------------------- | --------- | -------------------------------------------------------- |
+| **Phase 1** 創世與誠信基石 | ✅ 已完成 | 5T 協議、SustainWrite、證據金庫                          |
+| **Phase 2** 主權與規模化   | ✅ 已完成 | 深度刻印、自癒引擎、萬能元件心核連動 (Eternal Awakening) |
+| **Phase 3** 生態與鏈路連通 | 🔵 執行中 | 供應鏈、蜂群市場                                         |
+| **Phase 4** 無限進化       | 🔴 未來   | 液態現實 UI、自生長架構                                  |
 
 ---
 
@@ -209,4 +218,4 @@ MIT License — © 2026 ESGGO 善向永續 | Powered by OmniAgent × JunAiKey
 
 _🌊 善向永續，以終為始，無始無終，始終如一。_
 
-_Generated & Sealed by OmniAgent | 2026-06-19 | System Status: TRANSCENDED ♾️_
+_Generated & Sealed by OmniAgent | 2026-06-20 | System Status: TRANSCENDED ♾️_
