@@ -1,227 +1,88 @@
--- Seed reading_room_documents with official ESG documents and source URLs
--- Sources: standards-data.ts, scraper.ts, data-sources-data.ts
+-- =============================================================================
+-- Reading Room Documents Seed Data
+-- 在 Supabase SQL Editor 中執行此檔案
+-- =============================================================================
 
-INSERT INTO public.reading_room_documents (id, title, description, category, file_url, gri_reference, esg_category, tags, source, published_date, created_at)
-VALUES
-(
-  'std-gri-2021',
-  'GRI 2021 Universal Standards',
-  'GRI 通用準則為所有組織提供關於一般揭露（組織資訊、活動、治理等）的基礎框架，是 GRI 標準的核心基礎。',
-  'standard',
-  'https://www.globalreporting.org/standards/media/1001/gri-101-biodiversity-2024.pdf',
-  'GRI 2',
-  'Governance',
-  ARRAY['GRI', 'Universal Standards', 'Governance', 'Organization'],
-  'https://www.globalreporting.org/standards/',
-  '2023-01-01',
-  NOW()
-),
-(
-  'std-gri-305',
-  'GRI 305: Emissions 2016',
-  '規範組織對溫室氣體排放的揭露要求，涵蓋直接排放（範疇一）、能源間接排放（範疇二）及其他間接排放（範疇三）。',
-  'standard',
-  'https://www.globalreporting.org/standards/media/1012/gri-305-emissions-2016.pdf',
-  'GRI 305',
-  'Environmental',
-  ARRAY['GRI', 'Emissions', 'Scope 1', 'Scope 2', 'Scope 3', 'GHG'],
-  'https://www.globalreporting.org/standards/media/1012/gri-305-emissions-2016.pdf',
-  '2016-07-01',
-  NOW()
-),
-(
-  'std-gri-302',
-  'GRI 302: Energy 2016',
-  '規範組織對能源消耗、能源強度及再生能源使用情況的揭露要求。',
-  'standard',
-  'https://www.globalreporting.org/standards/media/1009/gri-302-energy-2016.pdf',
-  'GRI 302',
-  'Environmental',
-  ARRAY['GRI', 'Energy', 'Renewable Energy', 'Consumption'],
-  'https://www.globalreporting.org/standards/media/1009/gri-302-energy-2016.pdf',
-  '2016-07-01',
-  NOW()
-),
-(
-  'std-tcfd',
-  'TCFD Recommendations',
-  'TCFD 建議企業依據「治理」、「策略」、「風險管理」及「指標與目標」四大支柱揭露氣候相關財務風險與機會。',
-  'standard',
-  NULL,
-  NULL,
-  'Governance',
-  ARRAY['TCFD', 'Climate', 'Risk', 'Disclosure'],
-  'https://www.fsb-tcfd.org/',
-  '2017-06-29',
-  NOW()
-),
-(
-  'std-issb-s1',
-  'IFRS S1 General Requirements for Disclosure of Sustainability-related Financial Information',
-  'IFRS S1 規定企業應揭露對其在短、中、長期產生重大影響之永續相關風險和機會的相關資訊。',
-  'standard',
-  NULL,
-  NULL,
-  'Governance',
-  ARRAY['ISSB', 'IFRS S1', 'Sustainability', 'Financial Disclosure'],
-  'https://www.ifrs.org/issued-standards/ifrs-sustainability-disclosure-standards/',
-  '2024-01-01',
-  NOW()
-),
-(
-  'std-issb-s2',
-  'IFRS S2 Climate-related Disclosures',
-  'IFRS S2 專注於氣候相關風險和機會的揭露，建立在 TCFD 框架之上，並要求額外的量化指標揭露。',
-  'standard',
-  NULL,
-  NULL,
-  'Environmental',
-  ARRAY['ISSB', 'IFRS S2', 'Climate', 'GHG', 'Emissions'],
-  'https://www.ifrs.org/issued-standards/ifrs-sustainability-disclosure-standards/ifrs-s2-climate-related-disclosures/',
-  '2024-01-01',
-  NOW()
-),
-(
-  'std-iso-14064',
-  'ISO 14064-1:2018 Greenhouse gases',
-  '提供組織層級溫室氣體排放和移除的量化及報告規範，是溫室氣體盤查最重要的國際標準。',
-  'standard',
-  NULL,
-  NULL,
-  'Environmental',
-  ARRAY['ISO', 'GHG', 'Inventory', 'Verification'],
-  'https://www.iso.org/standard/66453.html',
-  '2018-12-01',
-  NOW()
-),
-(
-  'std-iso-14001',
-  'ISO 14001:2015 Environmental management systems',
-  'ISO 14001 規定環境管理系統的要求，協助組織提升環境績效、履行合規義務及達成環境目標。',
-  'standard',
-  NULL,
-  NULL,
-  'Environmental',
-  ARRAY['ISO', 'EMS', 'Environmental Management'],
-  'https://www.iso.org/iso-14001-environmental-management.html',
-  '2015-09-15',
-  NOW()
-),
-(
-  'std-tw-fsc',
-  '金管會上市（櫃）公司永續發展路徑圖',
-  '金管會規定台灣上市上櫃公司分階段提升 ESG 揭露標準，要求依 GRI 準則編製永續報告書，並逐步導入 IFRS S1/S2。',
-  'regulation',
-  NULL,
-  NULL,
-  'Governance',
-  ARRAY['台灣法規', '金管會', 'ESG', '永續報告'],
-  'https://www.fsc.gov.tw',
-  '2023-01-01',
-  NOW()
-),
-(
-  'reg-eu-csrd',
-  'Corporate Sustainability Reporting Directive / European Sustainability Reporting Standards',
-  'CSRD 是歐盟最新的永續報告法規，要求企業依 ESRS 揭露 ESG 資訊，引入「雙重重大性」原則。',
-  'regulation',
-  NULL,
-  NULL,
-  'Governance',
-  ARRAY['EU', 'CSRD', 'ESRS', 'Double Materiality'],
-  'https://finance.ec.europa.eu/capital-markets-union-and-financial-markets/company-reporting-and-auditing/company-reporting/corporate-sustainability-reporting_en',
-  '2024-01-01',
-  NOW()
-),
-(
-  'reg-eu-cbam',
-  'EU 2023/956: CBAM Implementing Regulation',
-  'CBAM 對進入歐盟的高碳商品（鋼鐵、鋁、水泥、化肥、電力、氫氣）課徵碳關稅，台灣出口商須建立碳足跡追蹤與申報機制。',
-  'regulation',
-  'https://eur-lex.europa.eu/eli/reg/2023/956',
-  NULL,
-  'Environmental',
-  ARRAY['EU', 'CBAM', 'Carbon Border', 'Regulation'],
-  'https://eur-lex.europa.eu/eli/reg/2023/956',
-  '2023-05-16',
-  NOW()
-),
-(
-  'std-gri-biodiversity-2024',
-  'GRI 101: Biodiversity 2024',
-  'Major update to biodiversity reporting standards.',
-  'standard',
-  'https://www.globalreporting.org/standards/media/1001/gri-101-biodiversity-2024.pdf',
-  'GRI 101',
-  'Environmental',
-  ARRAY['GRI', 'Biodiversity', 'Nature'],
-  'https://www.globalreporting.org/',
-  '2024-01-25',
-  NOW()
-),
-(
-  'std-sasb-tech',
-  'SASB Technology & Communications Software & IT Services',
-  '針對軟體與 IT 服務產業的永續會計標準，重點揭露能源管理、資安隱私、勞工實踐及創新管理等議題。',
-  'standard',
-  NULL,
-  NULL,
-  'Social',
-  ARRAY['SASB', 'Technology', 'Software', 'IT Services'],
-  'https://sasb.org/standards/technology-communications/',
-  '2018-10-04',
-  NOW()
-),
-(
-  'bench-global-2021',
-  'Global Benchmark: Microsoft Carbon Negative by 2030',
-  'International exemplar: Microsoft committed to be carbon negative by 2030 and remove all carbon emitted since 1975 by 2050.',
-  'case-study',
-  NULL,
-  NULL,
-  'Environmental',
-  ARRAY['International', 'Benchmark', 'Carbon Negative', 'Technology'],
-  'https://www.microsoft.com/en-us/sustainability/',
-  '2021-01-01',
-  NOW()
-),
-(
-  'bench-global-2022',
-  'Global Benchmark: Ørsted Transformation to Renewable Energy',
-  'International exemplar: Ørsted transformed from fossil fuel to the worlds largest offshore wind developer.',
-  'case-study',
-  NULL,
-  NULL,
-  'Environmental',
-  ARRAY['International', 'Benchmark', 'Renewable Energy', 'Offshore Wind', 'SBTi'],
-  'https://orsted.com/en/Sustainability',
-  '2022-01-01',
-  NOW()
-),
-(
-  'bench-tw-2023',
-  'Taiwan Benchmark: TSMC Renewable Energy & Supply Chain Decarbonization',
-  'Taiwan leading enterprise: TSMC committed to net-zero operations by 2050 and renewable energy usage exceeded 40% in 2023.',
-  'case-study',
-  NULL,
-  NULL,
-  'Environmental',
-  ARRAY['Taiwan', 'Benchmark', 'TSMC', 'Renewable Energy', 'Net-Zero', 'Supply Chain'],
-  'https://www.tsmc.com',
-  '2023-01-01',
-  NOW()
-),
-(
-  'bench-tw-2024',
-  'Taiwan Benchmark: Cathay Financial Holdings ESG Integration',
-  'Taiwan leading enterprise: Cathay Financial Holdings integrates ESG into investment decisions and insurance products.',
-  'case-study',
-  NULL,
-  NULL,
-  'Governance',
-  ARRAY['Taiwan', 'Benchmark', 'Cathay', 'Financial', 'ESG Integration'],
-  'https://www.cathayholdings.com',
-  '2024-01-01',
-  NOW()
-)
+-- 確保表格存在
+CREATE TABLE IF NOT EXISTS public.reading_room_documents (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  category TEXT NOT NULL DEFAULT 'standard',
+  file_url TEXT,
+  gri_reference TEXT,
+  esg_category TEXT,
+  tags TEXT[] DEFAULT '{}',
+  source TEXT,
+  published_date DATE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 確保 RLS 已啟用
+ALTER TABLE public.reading_room_documents ENABLE ROW LEVEL SECURITY;
+
+-- 建立政策（如果不存在）
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'reading_room_documents' AND policyname = 'Everyone can read') THEN
+    CREATE POLICY "Everyone can read" ON public.reading_room_documents FOR SELECT USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'reading_room_documents' AND policyname = 'Service role can manage') THEN
+    CREATE POLICY "Service role can manage" ON public.reading_room_documents FOR ALL USING (true);
+  END IF;
+END $$;
+
+-- 建立索引
+CREATE INDEX IF NOT EXISTS idx_rr_documents_category ON public.reading_room_documents(category);
+CREATE INDEX IF NOT EXISTS idx_rr_documents_esg ON public.reading_room_documents(esg_category);
+
+-- =============================================================================
+-- 插入文件資料
+-- =============================================================================
+
+INSERT INTO public.reading_room_documents (id, title, description, category, file_url, gri_reference, esg_category, tags, source, published_date) VALUES
+-- Standards
+('std-gri-2021', 'GRI 2021 Universal Standards', 'GRI 通用準則為所有組織提供關於一般揭露的基礎框架。', 'standard', NULL, 'GRI 2', 'Governance', ARRAY['GRI','Universal Standards','Governance'], 'https://www.globalreporting.org/standards/', '2023-01-01'),
+('std-gri-305', 'GRI 305: Emissions 2016', '規範組織對溫室氣體排放的揭露要求，涵蓋範疇一、二、三。', 'standard', NULL, 'GRI 305', 'Environmental', ARRAY['GRI','Emissions','Scope 1','Scope 2','Scope 3','GHG'], 'https://www.globalreporting.org/standards/', '2016-07-01'),
+('std-gri-302', 'GRI 302: Energy 2016', '規範組織對能源消耗、能源強度及再生能源使用情況的揭露要求。', 'standard', NULL, 'GRI 302', 'Environmental', ARRAY['GRI','Energy','Renewable Energy'], 'https://www.globalreporting.org/standards/', '2016-07-01'),
+('std-gri-401', 'GRI 401: Employment 2016', '規範組織對員工僱用、勞資關係、職業健康與安全的揭露要求。', 'standard', NULL, 'GRI 401', 'Social', ARRAY['GRI','Employment','Labor','Health','Safety'], 'https://www.globalreporting.org/standards/', '2016-07-01'),
+('std-gri-403', 'GRI 403: Occupational Health and Safety 2018', '規範組織對職業健康與安全管理體系、工作者參與、訓練的揭露要求。', 'standard', NULL, 'GRI 403', 'Social', ARRAY['GRI','Health','Safety','Workers','Training'], 'https://www.globalreporting.org/standards/', '2018-12-01'),
+('std-gri-405', 'GRI 405: Diversity and Equal Opportunity 2016', '規範組織對多元化與平等機會的揭露要求。', 'standard', NULL, 'GRI 405', 'Social', ARRAY['GRI','Diversity','Equal Opportunity','Gender','Board'], 'https://www.globalreporting.org/standards/', '2016-07-01'),
+('std-gri-413', 'GRI 413: Local Communities 2016', '規範組織對當地社區影響的揭露要求。', 'standard', NULL, 'GRI 413', 'Social', ARRAY['GRI','Local Communities','Impact Assessment'], 'https://www.globalreporting.org/standards/', '2016-07-01'),
+('std-gri-418', 'GRI 418: Customer Privacy 2016', '規範組織對客戶隱私與個人資料保護的揭露要求。', 'standard', NULL, 'GRI 418', 'Social', ARRAY['GRI','Customer Privacy','Data Protection','GDPR'], 'https://www.globalreporting.org/standards/', '2016-07-01'),
+('std-tcfd', 'TCFD Recommendations', 'TCFD 建議企業依據四大支柱揭露氣候相關財務風險與機會。', 'standard', NULL, NULL, 'Governance', ARRAY['TCFD','Climate','Risk','Disclosure'], 'https://www.fsb-tcfd.org/', '2017-06-29'),
+('std-issb-s1', 'IFRS S1 General Requirements', 'IFRS S1 規定企業應揭露永續相關風險和機會的相關資訊。', 'standard', NULL, NULL, 'Governance', ARRAY['ISSB','IFRS S1','Sustainability'], 'https://www.ifrs.org/', '2024-01-01'),
+('std-issb-s2', 'IFRS S2 Climate-related Disclosures', 'IFRS S2 專注於氣候相關風險和機會的揭露。', 'standard', NULL, NULL, 'Environmental', ARRAY['ISSB','IFRS S2','Climate','GHG'], 'https://www.ifrs.org/', '2024-01-01'),
+('std-iso-14064', 'ISO 14064-1:2018 Greenhouse gases', '提供組織層級溫室氣體排放和移除的量化及報告規範。', 'standard', NULL, NULL, 'Environmental', ARRAY['ISO','GHG','Inventory','Verification'], 'https://www.iso.org/standard/66453.html', '2018-12-01'),
+('std-iso-14001', 'ISO 14001:2015 EMS', 'ISO 14001 規定環境管理系統的要求。', 'standard', NULL, NULL, 'Environmental', ARRAY['ISO','EMS','Environmental Management'], 'https://www.iso.org/', '2015-09-15'),
+('std-iso-45001', 'ISO 45001:2018 Occupational health and safety', 'ISO 45001 規定職業健康與安全管理系統的要求。', 'standard', NULL, NULL, 'Social', ARRAY['ISO','Health','Safety','Workers'], 'https://www.iso.org/standard/63787.html', '2018-03-01'),
+('std-gri-biodiversity-2024', 'GRI 101: Biodiversity 2024', '生物多樣性報告標準重大更新。', 'standard', 'https://www.globalreporting.org/standards/media/1001/gri-101-biodiversity-2024.pdf', 'GRI 101', 'Environmental', ARRAY['GRI','Biodiversity','Nature','TNFD'], 'https://www.globalreporting.org/', '2024-01-25'),
+('std-sasb-tech', 'SASB Technology & Communications', '針對軟體與 IT 服務產業的永續會計標準。', 'standard', NULL, NULL, 'Social', ARRAY['SASB','Technology','Software','IT Services'], 'https://sasb.org/', '2018-10-04'),
+('std-sasb-finance', 'SASB Financials - Commercial Banks', '針對商業銀行業的永續會計標準。', 'standard', NULL, NULL, 'Governance', ARRAY['SASB','Financials','Banking','Risk Management'], 'https://sasb.org/', '2018-10-04'),
+
+-- Regulations
+('reg-tw-fsc', '金管會永續發展路徑圖', '金管會規定台灣上市上櫃公司分階段提升 ESG 揭露標準。', 'regulation', NULL, NULL, 'Governance', ARRAY['台灣法規','金管會','ESG','永續報告'], 'https://www.fsc.gov.tw', '2023-01-01'),
+('reg-tw-climate-change', '氣候變遷因應法', '台灣氣候變遷因應法規定溫室氣體減量目標、碳費徵收機制。', 'regulation', NULL, NULL, 'Environmental', ARRAY['台灣法規','氣候變遷','碳費','減量'], 'https://law.moj.gov.tw/', '2023-02-15'),
+('reg-tw-csr', '上市上櫃公司永續發展實務守則', '台灣證交所與櫃買中心共同制定之永續發展實務守則。', 'regulation', NULL, NULL, 'Governance', ARRAY['台灣法規','CSR','永續治理','揭露'], 'https://www.twse.com.tw/', '2022-01-01'),
+('reg-eu-csrd', 'CSRD / ESRS', 'CSRD 是歐盟最新的永續報告法規，引入雙重重大性原則。', 'regulation', NULL, NULL, 'Governance', ARRAY['EU','CSRD','ESRS','Double Materiality'], 'https://finance.ec.europa.eu/', '2024-01-01'),
+('reg-eu-cbam', 'EU CBAM Implementing Regulation', 'CBAM 對進入歐盟的高碳商品課徵碳關稅。', 'regulation', 'https://eur-lex.europa.eu/eli/reg/2023/956', NULL, 'Environmental', ARRAY['EU','CBAM','Carbon Border','Regulation'], 'https://eur-lex.europa.eu/eli/reg/2023/956', '2023-05-16'),
+('reg-eu-taxonomy', 'EU Taxonomy Regulation', '歐盟分類法規定六項環境目標，要求企業揭露符合永續分類法之比例。', 'regulation', NULL, NULL, 'Environmental', ARRAY['EU','Taxonomy','Green Finance','Disclosure'], 'https://finance.ec.europa.eu/', '2021-07-01'),
+('reg-us-sec-climate', 'SEC Climate Disclosure Rule', '美國證券交易委員會要求上市公司揭露氣候相關風險與溫室氣體排放。', 'regulation', NULL, NULL, 'Governance', ARRAY['US','SEC','Climate','Disclosure','GHG'], 'https://www.sec.gov/', '2024-03-01'),
+
+-- Case Studies
+('bench-global-2021', 'Microsoft Carbon Negative by 2030', 'Microsoft committed to be carbon negative by 2030.', 'case-study', NULL, NULL, 'Environmental', ARRAY['International','Benchmark','Carbon Negative','Technology'], 'https://www.microsoft.com/', '2021-01-01'),
+('bench-global-2022', 'Ørsted Renewable Energy Transformation', 'Ørsted transformed to largest offshore wind developer.', 'case-study', NULL, NULL, 'Environmental', ARRAY['International','Benchmark','Renewable Energy','Offshore Wind','SBTi'], 'https://orsted.com/', '2022-01-01'),
+('bench-global-2023', 'IKEA Circular Economy', 'IKEA committed to becoming climate positive by 2030.', 'case-study', NULL, NULL, 'Environmental', ARRAY['International','Benchmark','Circular Economy','Retail'], 'https://www.ikea.com/', '2023-01-01'),
+('bench-global-2024', 'Uniqlo Sustainable Supply Chain', 'Uniqlo leads in textile sustainability with recycling programs.', 'case-study', NULL, NULL, 'Social', ARRAY['International','Benchmark','Textile','Supply Chain','Recycling'], 'https://www.uniqlo.com/', '2024-01-01'),
+('bench-tw-2023', 'TSMC Renewable Energy', 'TSMC committed to net-zero operations by 2050.', 'case-study', NULL, NULL, 'Environmental', ARRAY['Taiwan','Benchmark','TSMC','Renewable Energy','Net-Zero'], 'https://www.tsmc.com', '2023-01-01'),
+('bench-tw-2024', 'Cathay Financial ESG Integration', 'Cathay Financial integrates ESG into investment decisions.', 'case-study', NULL, NULL, 'Governance', ARRAY['Taiwan','Benchmark','Cathay','Financial','ESG Integration'], 'https://www.cathayholdings.com', '2024-01-01'),
+('bench-tw-2025', 'ASE Technology Water Stewardship', 'ASE Technology achieved water neutrality at major facilities.', 'case-study', NULL, NULL, 'Environmental', ARRAY['Taiwan','Benchmark','ASE','Water Stewardship','Semiconductor'], 'https://www.aseglobal.com', '2025-01-01')
+
 ON CONFLICT (id) DO NOTHING;
+
+-- 驗證插入結果
+SELECT esg_category, COUNT(*) as count
+FROM public.reading_room_documents
+GROUP BY esg_category
+ORDER BY esg_category;
