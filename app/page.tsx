@@ -172,7 +172,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* ─── Hero ─── */}
-      <section className="relative overflow-hidden">
+      <section aria-label="main content" className="relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center">
           {/* Status badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full mb-8">
@@ -253,7 +253,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── KPI Overview ─── */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      <section aria-label="main content" className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
           <TrendingUp size={20} className="text-cyan-500" />
           永續數據概覽
@@ -282,7 +282,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Platform Highlights ─── */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      <section aria-label="main content" className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
           <Sparkles size={20} className="text-amber-500" />
           平台亮點
@@ -306,7 +306,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Testimonials ─── */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      <section aria-label="main content" className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
           <MessageSquare size={20} className="text-amber-500" />
           用戶怎麼說
@@ -335,7 +335,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── Quick Links ─── */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      <section aria-label="main content" className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="text-xl font-bold text-neutral-900 mb-6">快速入口</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {QUICK_LINKS.map((link) => (

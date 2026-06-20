@@ -98,7 +98,7 @@ export default function RegistryDashboard() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto">
+      <main role="main" className="max-w-6xl mx-auto">
         {loading ? (
           <div className="h-64 flex flex-col justify-center items-center gap-4">
             <Activity className="w-8 h-8 text-[#06b6d4] animate-pulse" />
