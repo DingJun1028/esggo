@@ -79,7 +79,7 @@ INSERT INTO public.reading_room_documents (id, title, description, category, fil
 ('bench-global-2024', 'Uniqlo Sustainable Supply Chain', 'Uniqlo leads in textile sustainability with recycling programs.', 'case-study', NULL, NULL, 'Social', ARRAY['International','Benchmark','Retail','Textile','Supply Chain','Recycling','Responsible Sourcing'], 'https://www.uniqlo.com', '2025-01-01', 'zkp-mock-o3aiygdz'),
 ('bench-tw-2023', 'TSMC Renewable Energy', 'TSMC committed to net-zero operations by 2050.', 'case-study', NULL, NULL, 'Environmental', ARRAY['Taiwan','Benchmark','TSMC','Renewable Energy','Net-Zero'], 'https://www.tsmc.com', '2023-01-01', 'zkp-mock-k3nx0f9v'),
 ('bench-tw-2024', 'Cathay Financial ESG Integration', 'Cathay Financial integrates ESG into investment decisions.', 'case-study', NULL, NULL, 'Governance', ARRAY['Taiwan','Benchmark','Cathay','Financial','ESG Integration'], 'https://www.cathayholdings.com', '2024-01-01', 'zkp-mock-dra0m61f'),
-('bench-tw-2025', 'ASE Technology Water Stewardship', 'ASE Technology achieved water neutrality at major facilities.', 'case-study', NULL, NULL, 'Environmental', ARRAY['Taiwan','Benchmark','ASE','Water Stewardship','Semiconductor'], 'https://www.aseglobal.com', '2025-01-01', 'zkp-mock-j3puc70e'),
+('bench-tw-2025', 'ASE Technology Water Stewardship', 'ASE Technology achieved water neutrality at major facilities.', 'case-study', NULL, NULL, 'Environmental', ARRAY['Taiwan','Benchmark','ASE','Water Stewardship','Semiconductor'], 'https://www.aseglobal.com', '2025-01-01', 'zkp-mock-j3puc70e')
 
 ON CONFLICT (id) DO NOTHING;
 

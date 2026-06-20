@@ -416,7 +416,7 @@ export default function GRITrackerPage() {
             </header>
 
             <div className="grid grid-cols-2 gap-8 mb-12 relative z-10">
-              <section className="space-y-6">
+              <section aria-label="main content" className="space-y-6">
                 <div className="space-y-3">
                   <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
                     <Sparkles size={12} /> Governance Evidence
@@ -446,7 +446,7 @@ export default function GRITrackerPage() {
                 </div>
               </section>
 
-              <section className="space-y-8">
+              <section aria-label="main content" className="space-y-8">
                 <div className="space-y-3">
                   <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
                     Integrity Status
