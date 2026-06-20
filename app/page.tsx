@@ -358,6 +358,9 @@ export default function LandingPage() {
             <p className="text-xs text-slate-400">
               v8.5.2-Alpha · Berkeley Haas × TSISDA · 5T 誠信協議驅動
             </p>
+            <p className="text-[10px] text-slate-300 font-mono">
+              Build: {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.substring(0, 7) || process.env.NEXT_PUBLIC_APP_VERSION || 'local'}
+            </p>
           </div>
         </div>
       </footer>
