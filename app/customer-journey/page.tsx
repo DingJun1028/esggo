@@ -93,7 +93,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '探索與認識',
     subtitle: 'Awareness',
     icon: Eye,
-    color: 'from-blue-500 to-cyan-500',
+    color: ' ',
     description: '了解 ESGGO 平台，探索永續治理的可能性',
     pages: [
       { name: '首頁', path: '/', description: '平台入口 · 即時數據預覽', icon: Home },
@@ -112,7 +112,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '評估與入門',
     subtitle: 'Evaluation',
     icon: BookOpen,
-    color: 'from-emerald-500 to-teal-500',
+    color: ' ',
     description: '學習 ESG 知識，評估平台功能',
     pages: [
       { name: '學院', path: '/academy', description: 'ESG 學習中心', icon: GraduationCap },
@@ -128,7 +128,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '開始使用',
     subtitle: 'Onboarding',
     icon: LogIn,
-    color: 'from-violet-500 to-purple-500',
+    color: ' ',
     description: '建立帳號，設定平台',
     pages: [
       { name: '登入', path: '/login', description: '帳號登入 · 萬能元鑰', icon: LogIn },
@@ -142,7 +142,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '核心功能',
     subtitle: 'Core Experience',
     icon: LayoutDashboard,
-    color: 'from-amber-500 to-orange-500',
+    color: ' ',
     description: '數據分析、報告撰寫、合規檢查',
     pages: [
       { name: '儀表板', path: '/dashboard', description: '永續數據儀表板', icon: LayoutDashboard },
@@ -202,7 +202,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '進階功能',
     subtitle: 'Advanced',
     icon: Bot,
-    color: 'from-rose-500 to-pink-500',
+    color: ' ',
     description: 'AI 代理、數位分身、智能分析',
     pages: [
       {
@@ -230,7 +230,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '協作與生態',
     subtitle: 'Collaboration',
     icon: Users,
-    color: 'from-cyan-500 to-blue-500',
+    color: ' ',
     description: '利害關係人、顧問、社群協作',
     pages: [
       { name: '利害關係人', path: '/stakeholders', description: '利害關係人管理', icon: Users },
@@ -255,7 +255,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '管理與設定',
     subtitle: 'Management',
     icon: Settings,
-    color: 'from-neutral-500 to-neutral-600',
+    color: ' ',
     description: '個人資料、通知、系統管理',
     pages: [
       { name: '個人資料', path: '/profile', description: '個人設定', icon: Settings },
@@ -277,7 +277,7 @@ const JOURNEY_STAGES: JourneyStage[] = [
     name: '價值與成長',
     subtitle: 'Value & Growth',
     icon: TrendingUp,
-    color: 'from-yellow-500 to-amber-500',
+    color: ' ',
     description: '價值階梯、訂閱升級、永續成長',
     pages: [
       {
@@ -355,7 +355,7 @@ export default function CustomerJourneyCenterPage() {
               <div className="flex items-center gap-4">
                 <div
                   className={cn(
-                    'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center text-white',
+                    'w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center text-white',
                     stage.color
                   )}
                 >

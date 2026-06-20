@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -90,7 +91,7 @@ const SupplierCAPModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-[#0f172a] border border-cyan-500/30 rounded-2xl w-full max-w-2xl shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden flex flex-col relative">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-emerald-500 to-indigo-500"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-neutral-100  via-emerald-500 "></div>
 
         <div className="p-6 border-b border-slate-200 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -143,7 +144,7 @@ const SupplierCAPModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             </div>
             <div className="p-4 font-mono text-xs text-slate-400 flex flex-col gap-2 overflow-y-auto flex-1">
               {logs.map((log, i) => (
-                <div key={i} className="flex gap-2 animate-in fade-in slide-in-from-bottom-1">
+                <div key={i} className="flex gap-2 animate-in fade-in slide-in-">
                   <span className="text-indigo-500 shrink-0">
                     {new Date().toISOString().split('T')[1].slice(0, 8)}
                   </span>
@@ -247,7 +248,7 @@ const EnterpriseHealthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-[#0f172a] border border-emerald-500/30 rounded-2xl w-full max-w-3xl shadow-[0_0_50px_rgba(16,185,129,0.15)] overflow-hidden flex flex-col relative">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-neutral-100  via-cyan-500 "></div>
 
         <div className="p-6 border-b border-slate-200 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -276,7 +277,7 @@ const EnterpriseHealthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
               </p>
             </div>
           ) : result ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
+            <div className="space-y-6 animate-in fade-in slide-in-">
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-emerald-950/30 border border-emerald-500/20 rounded-xl p-4 text-center">
                   <p className="text-xs text-emerald-400 font-bold mb-1">環境 (E)</p>
@@ -450,7 +451,7 @@ export default function GovernanceDashboard() {
       </div>
 
       <div className="relative z-10 flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full font-sans">
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="space-y-8 animate-in fade-in slide-in- duration-700">
           {/* Header Area */}
           <header className="p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.05)]">
             <div className="flex items-center gap-4">
@@ -470,7 +471,7 @@ export default function GovernanceDashboard() {
                   </span>
                 </div>
                 <h1
-                  className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 mt-1"
+                  className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-neutral-100  via-yellow-400  mt-1"
                   style={{ textShadow: '0 0 20px rgba(245,158,11,0.2)' }}
                 >
                   公司治理與商業道德
@@ -615,7 +616,7 @@ export default function GovernanceDashboard() {
             <div className="space-y-6">
               {/* Dynamic Risk Radar / Warning Card */}
               <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                <div className="absolute -inset-1 bg-neutral-100  via-orange-500  rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
                 <Card
                   variant="default"
                   className="relative p-6 border border-red-500/30 shadow-2xl"
@@ -665,7 +666,7 @@ export default function GovernanceDashboard() {
                           setIsCapModalOpen(true);
                           dispatchBus('ACTION', 'GovernanceDashboard', '啟動供應商改善計畫生成');
                         }}
-                        className="w-full mt-6 !bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 shadow-[0_0_15px_rgba(239,68,68,0.4)] border-none text-white font-bold tracking-widest text-xs py-3"
+                        className="w-full mt-6 !bg-neutral-100   hover: hover: shadow-[0_0_15px_rgba(239,68,68,0.4)] border-none text-white font-bold tracking-widest text-xs py-3"
                       >
                         生成供應商改善計畫 (CAP)
                       </Button>

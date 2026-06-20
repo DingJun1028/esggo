@@ -187,7 +187,7 @@ export default function LandingPage() {
 
           <h1 className="text-4xl md:text-6xl font-black text-neutral-900 tracking-tight leading-tight mb-4">
             ESGGO
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">
+            <span className="block text-neutral-900">
               善向永續系統
             </span>
           </h1>

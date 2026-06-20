@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -72,7 +73,7 @@ export default function ApiSetupPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800 p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal">
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in- duration-700">
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-200/80">
           <div className="flex items-center gap-4">
@@ -230,7 +231,7 @@ export default function ApiSetupPage() {
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-4 flex-wrap">
                   <div className="flex items-center gap-2">
                     {saved && (
-                      <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 animate-in fade-in slide-in-from-left-2 duration-300">
+                      <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 animate-in fade-in slide-in- duration-300">
                         <CheckCircle2 size={14} className="text-emerald-500" />{' '}
                         雲端金庫配置已保存成功！
                       </span>

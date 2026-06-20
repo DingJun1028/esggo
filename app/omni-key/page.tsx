@@ -45,20 +45,20 @@ const LEVEL_CONFIG = {
     name: '探索者',
     icon: '🔍',
     color: 'neutral',
-    gradient: 'from-neutral-500 to-neutral-600',
+    gradient: ' ',
   },
-  pro: { name: '創造者', icon: '⚡', color: 'info', gradient: 'from-blue-500 to-cyan-500' },
+  pro: { name: '創造者', icon: '⚡', color: 'info', gradient: ' ' },
   enterprise: {
     name: '領導者',
     icon: '👑',
     color: 'warning',
-    gradient: 'from-amber-500 to-orange-500',
+    gradient: ' ',
   },
   omniverse: {
     name: '無限',
     icon: '🌌',
     color: 'success',
-    gradient: 'from-violet-500 to-purple-500',
+    gradient: ' ',
   },
 };
 
@@ -228,7 +228,7 @@ export default function OmniKeyPage() {
                     <div className="flex items-center gap-3">
                       <div
                         className={cn(
-                          'w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-gradient-to-br',
+                          'w-10 h-10 rounded-lg flex items-center justify-center text-lg bg-neutral-100',
                           levelConfig.gradient
                         )}
                       >

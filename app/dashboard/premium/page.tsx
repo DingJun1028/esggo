@@ -60,7 +60,7 @@ const DashboardContent = () => {
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-[var(--at-text-main)]">
             善向永續{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-[var(--at-accent)] to-indigo-500">
+            <span className="text-neutral-900 bg-neutral-100 from-[var(--at-accent)] ">
               ESG GO
             </span>
           </h1>
@@ -171,7 +171,7 @@ const DashboardContent = () => {
                 <span className="text-blue-500">75%</span>
               </div>
               <div className="h-2 w-full bg-[var(--at-border)] rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" />
+                <div className="h-full bg-neutral-100   rounded-full" />
               </div>
             </div>
           </AtomicCard>

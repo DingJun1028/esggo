@@ -449,7 +449,7 @@ export default function SustainWritePage() {
           }}
         />
       )}
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in- duration-700">
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-200/80">
           <div className="flex items-center gap-4">
@@ -572,7 +572,7 @@ export default function SustainWritePage() {
 
         {isWeaving && (
           <div className="p-6 bg-cyan-950/40 border border-cyan-500/30 rounded-2xl space-y-4 animate-pulse relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+            <div className="absolute inset-0 bg-neutral-100 from-transparent via-cyan-500/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
             <div className="flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
                 <Cpu className="text-cyan-400 animate-spin-slow" size={24} />
@@ -761,7 +761,7 @@ export default function SustainWritePage() {
               )}
 
               {activeTab === 'preview' && (
-                <div className="flex flex-col lg:flex-row gap-4 animate-in fade-in slide-in-from-bottom-4">
+                <div className="flex flex-col lg:flex-row gap-4 animate-in fade-in slide-in-">
                   {/* Left Sidebar: Chapter List */}
                   <div className="w-full lg:w-64 flex-shrink-0 space-y-2">
                     <h3 className="text-cyan-600 font-bold mb-3 px-2 flex items-center gap-2">
@@ -815,7 +815,7 @@ export default function SustainWritePage() {
 
                   {/* Right: Editor */}
                   <div className="flex-1 p-6 bg-white border border-slate-200/60 text-slate-850 rounded-2xl shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-cyan-500" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-neutral-100  " />
                     <div className="max-w-4xl mx-auto space-y-4">
                       <div className="flex flex-wrap md:flex-nowrap justify-between items-center pb-4 border-b border-slate-100 mt-2 gap-4">
                         <h2 className="text-xl font-bold text-[#003262] flex items-center gap-2 whitespace-nowrap">
@@ -1202,7 +1202,7 @@ export default function SustainWritePage() {
               )}
 
               {activeTab === 'data' && (
-                <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+                <div className="space-y-4 animate-in slide-in- duration-500">
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/50 p-5 rounded-xl border border-slate-200 shadow-inner">
                     <div className="flex items-center gap-4">
                       <div className="p-3 bg-cyan-950/50 rounded-lg text-cyan-400 border border-cyan-500/20">
