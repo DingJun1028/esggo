@@ -11,18 +11,18 @@ export async function GET(req: NextRequest) {
   const baseUrl = req.nextUrl.origin;
 
   if (error) {
-    return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=${error}`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?hermes_error=${error}`);
   }
 
   if (!code) {
-    return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=missing_code`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?hermes_error=missing_code`);
   }
 
   const GOOGLE_CLIENT_ID = process.env.GOOGLE_WORKSPACE_CLIENT_ID;
   const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_WORKSPACE_CLIENT_SECRET;
 
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
-    return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=missing_config`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?hermes_error=missing_config`);
   }
 
   try {
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     const data = await res.json();
     if (!res.ok) {
       console.error('Token exchange failed:', data);
-      return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=token_exchange_failed`);
+      return NextResponse.redirect(`${baseUrl}/dashboard?hermes_error=token_exchange_failed`);
     }
 
     // Securely store the credentials to Supabase Vault
@@ -56,10 +56,10 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.redirect(
-      `${baseUrl}/omni-skills?hermes_success=google_workspace_connected`
+      `${baseUrl}/dashboard?hermes_success=google_workspace_connected`
     );
   } catch (err) {
     console.error('OAuth Callback error:', err);
-    return NextResponse.redirect(`${baseUrl}/omni-skills?hermes_error=internal_server_error`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?hermes_error=internal_server_error`);
   }
 }

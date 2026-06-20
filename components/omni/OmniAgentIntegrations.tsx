@@ -24,19 +24,19 @@ export default function OmniAgentIntegrations() {
   const [calendarResult, setCalendarResult] = useState<any>(null);
 
   useEffect(() => {
-    const omniAgentSuccess = searchParams?.get('omni_agent_success');
-    const omniAgentError = searchParams?.get('omni_agent_error');
+    const hermesSuccess = searchParams?.get('hermes_success');
+    const hermesError = searchParams?.get('hermes_error');
 
-    if (omniAgentSuccess === 'google_workspace_connected') {
+    if (hermesSuccess === 'google_workspace_connected') {
       setStatus('connected');
-    } else if (omniAgentError) {
+    } else if (hermesError) {
       setStatus('error');
-      setErrorMessage(omniAgentError);
+      setErrorMessage(hermesError);
     }
 
     const checkStatus = async () => {
       try {
-        const res = await fetch('/api/omni-agent/google/status');
+        const res = await fetch('/api/hermes/google/status');
         const data = await res.json();
 
         if (data.connected) {
@@ -44,12 +44,12 @@ export default function OmniAgentIntegrations() {
           if (data.email) {
             setConnectedEmail(data.email);
           }
-        } else if (!omniAgentSuccess && !omniAgentError) {
+        } else if (!hermesSuccess && !hermesError) {
           setStatus('idle');
         }
       } catch (err) {
-        console.error('Failed to check OmniAgent status', err);
-        if (!omniAgentSuccess && !omniAgentError) {
+        console.error('Failed to check Hermes status', err);
+        if (!hermesSuccess && !hermesError) {
           setStatus('idle');
         }
       }
@@ -59,8 +59,7 @@ export default function OmniAgentIntegrations() {
   }, [searchParams]);
 
   const handleConnect = () => {
-    // Redirect to our backend OAuth initialization endpoint
-    window.location.href = '/api/omni-agent/google/oauth';
+    window.location.href = '/api/hermes/google/oauth';
   };
 
   const runEmailScan = async () => {
@@ -74,7 +73,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'email_processing',
           title: 'OmniAgent 郵件自動掃描',
           description: '連線 Google Workspace 進行 ESG 信件智能篩選與歸檔。',
-          skillKey: 'omni_agent_email_archival',
+          skillKey: 'hermes_email_archival',
           actorId: connectedEmail || 'system',
         }),
       });
@@ -103,7 +102,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'calendar_scheduling',
           title: 'OmniAgent 行事曆排程同步',
           description: '連線 Google Calendar 提取近期 ESG 關鍵會議，並建立前置自動化準備作業。',
-          skillKey: 'omni_agent_calendar_agent',
+          skillKey: 'hermes_calendar_agent',
           actorId: connectedEmail || 'system',
         }),
       });
@@ -244,7 +243,7 @@ export default function OmniAgentIntegrations() {
           />
           <div className="p-6">
             <p className="text-sm text-slate-500">
-              Outlook, Teams, Excel 整合正在開發中。未來將提供與 Google Workspace 對等的自動化能力。
+              Outlook, Teams, Excel 整化正在開發中。未來將提供與 Google Workspace 對等的自動化能力。
             </p>
           </div>
         </BrandCard>
