@@ -129,5 +129,53 @@ export const OmniMemoryService = {
       console.error('Failed to log shard usage:', error);
       throw error;
     }
+  },
+
+  /**
+   * 透過 RAG 向量相似度搜尋記憶碎片
+   */
+  async searchMemory(query: string, match_threshold = 0.7, match_count = 5): Promise<MemoryShard[]> {
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    if (!OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY is not configured');
+    }
+
+    // 1. Generate embedding for the search query
+    const response = await fetch('https://api.openai.com/v1/embeddings', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'text-embedding-3-small',
+        input: query,
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('[OmniMemory] OpenAI API Error:', errText);
+      throw new Error('Failed to generate query embedding');
+    }
+
+    const embedData = await response.json();
+    const query_embedding = embedData.data[0].embedding;
+
+    // 2. Perform vector similarity search using RPC
+    const supabase = createClient();
+    // @ts-ignore: Supabase DB types missing
+    const { data: results, error: searchError } = await supabase.rpc('match_omni_memory', {
+      query_embedding,
+      match_threshold,
+      match_count,
+    });
+
+    if (searchError) {
+      console.error('[OmniMemory] DB Search Error:', searchError);
+      throw new Error('Failed to search memory vectors');
+    }
+
+    return results as MemoryShard[];
   }
 };
