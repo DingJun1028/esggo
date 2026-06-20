@@ -11,6 +11,7 @@ import { Badge, SectionHeader } from '@/components/ui/v2/Input';
 import { Card, CardHeader, CardTitle } from '@/components/ui/v2/Card';
 import { supabase } from '@/lib/db/supabase';
 import { useThemeStore } from '../../../lib/theme-store';
+import { OmniAgentBus } from '../../../lib/omni/OmniAgentBus';
 
 export default function MetricsPage() {
   const { omniTheme } = useThemeStore();
@@ -120,6 +121,10 @@ export default function MetricsPage() {
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
+      
+      // Emit full resonance to Omni UI swarm
+      OmniAgentBus.emit('OMNI_RESONANCE', 'metrics-page', { resonance: 1.0 });
+      
       // fetchMetrics is called via realtime subscription
     } catch (e) {
       console.error('Sealing failed:', e);
@@ -140,6 +145,10 @@ export default function MetricsPage() {
       // Simulate verification delay
       await new Promise((r) => setTimeout(r, 600));
       setVerificationResult({ id, valid: true });
+      
+      // Emit full resonance to Omni UI swarm
+      OmniAgentBus.emit('OMNI_RESONANCE', 'metrics-page', { resonance: 1.0 });
+      
       setTimeout(() => setVerificationResult(null), 3000);
     } catch (e) {
       console.error('Verification failed:', e);
