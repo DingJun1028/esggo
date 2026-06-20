@@ -1,15 +1,13 @@
-// @ts-nocheck
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// @ts-nocheck
-import { Table, TableColumn } from '@/components/ui/v2/Table';
 import { Button } from '@/components/ui/v2/Button';
 import { OmniForm, FormField } from '../../../components/ui/omni/OmniForm';
 import { OmniChart } from '../../../components/ui/omni/OmniChart';
-import { StatusDot } from '@/components/ui/v2/StatusDot';
-import { Badge } from '@/components/ui/v2/Input';
-import { Card } from '@/components/ui/v2/Card';
+import { OmniBaseTable, OmniBaseTableColumn } from '../../../components/ui/omni/OmniBaseTable';
+import { OmniStatusDot } from '../../../components/ui/omni/OmniStatusDot';
+import { Badge, SectionHeader } from '@/components/ui/v2/Input';
+import { Card, CardHeader, CardTitle } from '@/components/ui/v2/Card';
 import { supabase } from '@/lib/db/supabase';
 import { useThemeStore } from '../../../lib/theme-store';
 
@@ -159,9 +157,7 @@ export default function MetricsPage() {
       key: 'lifecycle_stage',
       label: 'Stage',
       render: (val) => (
-        <Badge
-          variant={val === 'PUBLISHED' ? 'primary' : val === 'REVIEW' ? 'secondary' : 'outline'}
-        >
+        <Badge variant={val === 'PUBLISHED' ? 'success' : val === 'REVIEW' ? 'warning' : 'neutral'}>
           {val || 'DRAFT'}
         </Badge>
       ),
@@ -197,7 +193,7 @@ export default function MetricsPage() {
           <div className="flex items-center space-x-3">
             <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
             <Button
-              variant="outline"
+              variant="secondary"
               size="sm"
               onClick={() => handleSeal(row.id)}
               disabled={processingId === row.id}
@@ -274,12 +270,11 @@ export default function MetricsPage() {
       </div>
 
       {showAddForm && (
-        <Card
-          variant="default"
-          title="Create New Metric"
-          subtitle="Add a new ESG record with 5T tracking"
-          className="mb-8"
-        >
+        <Card variant="default" className="mb-8">
+          <SectionHeader
+            title="Create New Metric"
+            subtitle="Add a new ESG record with 5T tracking"
+          />
           <OmniForm
             fields={formFields}
             onSubmit={handleAddMetric}
@@ -291,12 +286,11 @@ export default function MetricsPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card
-          className="lg:col-span-2"
-          variant="default"
-          title="Metrics Data Table (5T Protocol Enabled)"
-          subtitle="Real-time synchronized data ledger"
-        >
+        <Card className="lg:col-span-2" variant="default">
+          <SectionHeader
+            title="Metrics Data Table (5T Protocol Enabled)"
+            subtitle="Real-time synchronized data ledger"
+          />
           {loading ? (
             <div className="p-12 text-center text-[var(--theme-text-muted)]">
               Loading metrics...
@@ -306,7 +300,8 @@ export default function MetricsPage() {
           )}
         </Card>
 
-        <Card className="lg:col-span-2" title="Metrics Progress Overview">
+        <Card className="lg:col-span-2">
+          <SectionHeader title="Metrics Progress Overview" />
           <OmniChart
             omniHeart={commonHeart}
             type="bar"
