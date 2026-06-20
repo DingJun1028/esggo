@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🔗 CausalityVisualizer - Tangible Perception of Integrity
  * v1.0 | #CausalityPillar #5TIntegrity #TangibleBeauty

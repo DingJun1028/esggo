@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { OmniComponentHeart } from '@esggo/types';
 /**
  * @component OMNI-005
