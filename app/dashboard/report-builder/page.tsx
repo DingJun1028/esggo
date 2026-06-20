@@ -3,8 +3,8 @@
 
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-const OmniBaseCard = dynamic(() => import('@/components/ui/omni/OmniBaseCard'), { ssr: false });
-const OmniBadge = dynamic(() => import('@/components/ui/omni/OmniBadge'), { ssr: false });
+const Card = dynamic(() => import('@/components/ui/v2/Card'), { ssr: false });
+const Badge = dynamic(() => import('@/components/ui/v2/Input'), { ssr: false });
 import { FileText, Cpu, CheckCircle2, ShieldCheck, FileKey, Loader2 } from 'lucide-react';
 
 export default function ReportBuilderUI() {
