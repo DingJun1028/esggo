@@ -22,12 +22,27 @@ import {
 
 export default function ReadingRoomPage() {
   const [data, setData] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [sealingId, setSealingId] = useState<number | null>(null);
-  const [verifyingId, setVerifyingId] = useState<number | null>(null);
+  const [sealingId, setSealingId] = useState<string | null>(null);
+  const [verifyingId, setVerifyingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  const loadStats = async (category?: string | null) => {
+    try {
+      let url = '/api/reading-room/stats?t=' + Date.now();
+      if (category) url += `&category=${encodeURIComponent(category)}`;
+      const res = await fetch(url, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        setStats(json.stats);
+      }
+    } catch (e) {
+      console.error('Stats fetch error:', e);
+    }
+  };
 
   const loadDocs = async (category?: string | null, query?: string) => {
     setLoading(true);
@@ -64,8 +79,13 @@ export default function ReadingRoomPage() {
     }
   };
 
+  const refreshAll = async (cat?: string | null, q?: string) => {
+    await loadDocs(cat, q);
+    await loadStats(cat);
+  };
+
   useEffect(() => {
-    loadDocs(activeCategory, searchQuery);
+    refreshAll(activeCategory, searchQuery);
   }, [activeCategory, searchQuery]);
 
   const handleSeal = async (id: string) => {
@@ -142,6 +162,48 @@ export default function ReadingRoomPage() {
     { key: 'industry-report', label: '年鑑' },
     { key: 'case-study', label: '標竿案例' },
   ];
+
+  function StatCard({
+    title,
+    value,
+    unit,
+    icon,
+    iconColor,
+    formula,
+    formulaDetail,
+  }: {
+    title: string;
+    value: any;
+    unit: string;
+    icon: React.ReactNode;
+    iconColor: string;
+    formula: string;
+    formulaDetail: string;
+  }) {
+    const [showFormula, setShowFormula] = useState(false);
+    return (
+      <div
+        className="relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+        onMouseEnter={() => setShowFormula(true)}
+        onMouseLeave={() => setShowFormula(false)}
+      >
+        <div className="flex items-center justify-between text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-widest">{title}</span>
+          <span className={iconColor}>{icon}</span>
+        </div>
+        <div className="mt-2 flex items-baseline gap-1">
+          <span className="text-3xl font-black text-slate-900">{value}</span>
+          <span className="text-sm text-slate-500">{unit}</span>
+        </div>
+        {showFormula && (
+          <div className="mt-3 rounded-lg border border-slate-100 bg-slate-50 p-2.5 text-[10px] text-slate-600 leading-relaxed">
+            <div className="font-mono font-bold text-slate-800">{formula}</div>
+            <div className="mt-1 text-slate-500">{formulaDetail}</div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const columns = [
     { key: 'date', label: '日期' },
@@ -342,39 +404,43 @@ export default function ReadingRoomPage() {
         </div>
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card variant="default" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">收錄文獻</span>
-              <BookOpen size={18} className="text-emerald-400" />
-            </div>
-            <div className="text-4xl font-black text-slate-900">
-              124<span className="text-lg text-slate-500 ml-2 font-normal">Docs</span>
-            </div>
-            <p className="text-xs text-emerald-400/80 font-mono">Status: Indexed</p>
-          </Card>
-
-          <Card variant="default" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
-              <ShieldCheck size={18} className="text-cyan-400" />
-            </div>
-            <div className="text-4xl font-black text-slate-900">
-              98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
-            </div>
-            <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
-          </Card>
-
-          <Card variant="default" className="p-6 space-y-4">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-sm font-bold uppercase tracking-widest">知識庫向量數</span>
-              <Database size={18} className="text-amber-400" />
-            </div>
-            <div className="text-4xl font-black text-slate-900">
-              8,452<span className="text-lg text-slate-500 ml-2 font-normal">Chunks</span>
-            </div>
-            <p className="text-xs text-amber-400/80 font-mono">OmniVector Syncing</p>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StatCard
+            title="收錄文獻"
+            value={stats?.totalDocs ?? '-'}
+            unit="Docs"
+            icon={<BookOpen size={18} />}
+            iconColor="text-emerald-500"
+            formula="總收錄數 = SELECT COUNT(*) FROM reading_room_documents"
+            formulaDetail="直接計算資料庫表格中的文件總筆數"
+          />
+          <StatCard
+            title="已索引"
+            value={stats?.indexedDocs ?? '-'}
+            unit="筆"
+            icon={<ShieldCheck size={18} />}
+            iconColor="text-cyan-500"
+            formula="已索引 = Σ[file_url IS NOT NULL]"
+            formulaDetail="逐筆判斷 file_url 是否存在，存在則視為已索引"
+          />
+          <StatCard
+            title="索引率"
+            value={stats?.sealRate ?? '-'}
+            unit="%"
+            icon={<Activity size={18} />}
+            iconColor="text-blue-500"
+            formula="索引率 = (已索引 / 總收錄數) × 100%"
+            formulaDetail="分母為全部文件數，分子為具 file_url 的文件數，四捨五入至小數點 1 位"
+          />
+          <StatCard
+            title="待處理"
+            value={stats?.pendingDocs ?? '-'}
+            unit="筆"
+            icon={<Database size={18} />}
+            iconColor="text-amber-500"
+            formula="待處理 = 總收錄數 - 已索引"
+            formulaDetail="尚未設定 file_url 或 file_url 為空的文件"
+          />
         </div>
 
         {/* Main Workspace Area */}

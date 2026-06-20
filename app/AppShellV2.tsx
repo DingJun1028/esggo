@@ -92,11 +92,25 @@ import OmniAgentPulseFloating from '../components/core/OmniAgentPulseFloating';
 import { BrandLogo } from '../components/brand/BrandLogo';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../hooks/useAuth';
-import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config/navigation';
+import { NAV_STAGES, ALL_NAV_ITEMS } from '../config/navigation';
 import { GlobalSearch } from '../components/GlobalSearch';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
 import OmniOverviewMenu from '../components/OmniOverviewMenu';
 import OmniThemeSwitcher from '../components/omni/OmniThemeSwitcher';
+
+// Adapt NAV_STAGES to the internal navigation format
+const SaaS_NAVIGATION = NAV_STAGES.map((stage) => ({
+  groupId: stage.id,
+  groupTitle: `${stage.name} (${stage.subtitle})`,
+  items: stage.items.map((item) => ({
+    id: item.path,
+    title: item.name,
+    path: item.path,
+    icon: item.icon,
+    sub: stage.subtitle,
+  })),
+}));
+const IT_OPS_NAVIGATION: any[] = [];
 
 // Icon Mapper for Dynamic Navigation
 export const IconMapper: Record<string, React.ReactNode> = {
@@ -429,7 +443,11 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
                           isActive ? 'scale-110' : 'group-hover:scale-110'
                         )}
                       >
-                        {IconMapper[item.icon] || <LayoutDashboard size={20} />}
+                        {item.icon ? (
+                          React.createElement(item.icon as any, { size: 20 })
+                        ) : (
+                          <LayoutDashboard size={20} />
+                        )}
                       </div>
 
                       {/* 將 motion.div 替換為原生 div，使用 CSS transition 取代 framer-motion 動畫 */}
