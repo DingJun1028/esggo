@@ -29,9 +29,11 @@ import {
   Hash,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
+import { OmniCard } from '@/components/omni/OmniCard';
+import { RecordLifecycleStatus, AttentionStatus } from '@/shared-types/status';
 
 /* ─── Types ─── */
 interface ZKPStep {
@@ -453,7 +455,7 @@ export default function ZKPBlockchainPage() {
             </div>
 
             {/* Tab Content */}
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               {activeTab === 'steps' && (
                 <div>
                   <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
@@ -505,15 +507,15 @@ export default function ZKPBlockchainPage() {
                   </div>
                 </div>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Generate Button */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">快速操作</h3>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="md"
                 icon={
@@ -528,38 +530,61 @@ export default function ZKPBlockchainPage() {
                 className="w-full bg-violet-600 hover:bg-violet-700 text-white"
               >
                 {isGenerating ? '生成中...' : '生成 ZKP 證明'}
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
 
-            {/* Current Proof */}
-            <OmniBaseCard className="p-4">
-              <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
-                <Fingerprint size={14} className="text-violet-500" />
-                當前證明
-              </h3>
-              <div className="bg-slate-900 rounded-lg p-3 font-mono text-[10px] space-y-1">
+            {/* Current Proof - OmniCard 5T Representation */}
+            <OmniCard
+              title="當前證明 (Current Proof)"
+              uuid="zkp-democore-2026-001"
+              componentVersion="8.5.0-Alpha"
+              timestamp={Date.now()}
+              status={RecordLifecycleStatus.Active}
+              attention={AttentionStatus.Normal}
+              evidence={{
+                source_origin: 'ZKP_SNARK_ENGINE_v2',
+                timestamp: Date.now(),
+                flow_path: ['Data Preprocessing', 'Circuit Compilation', 'Proof Gen', 'Verification', 'Blockchain Anchor'],
+                hash: '0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+              }}
+              omniHeart={{
+                omniSignature: '0x7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+                resonanceState: 1.0,
+                omniClass: 'OmniMemory',
+                coreContext: {
+                  requestId: 'req-zkp-1001',
+                  timestamp: Date.now(),
+                  actor: 'System-Auditor-AI',
+                  environment: 'production',
+                },
+                fiveTState: {
+                  tangible: true,
+                  traceable: true,
+                  trackable: true,
+                  transparent: true,
+                  trustworthy: true,
+                },
+              }}
+            >
+              <div className="p-3 font-mono text-[10px] space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span>
+                  <span className="text-emerald-400 font-bold">✓</span>
                   <span className="text-slate-400">Status:</span>
-                  <span className="text-emerald-400">Valid</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-400">Proof:</span>
-                  <span className="text-cyan-400 break-all">0x7f83...9069</span>
+                  <span className="text-emerald-400 font-bold">Valid & Sealed</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-slate-400">Block:</span>
-                  <span className="text-amber-400">#18,234,567</span>
+                  <span className="text-amber-500 font-bold">#18,234,567</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-slate-400">Time:</span>
-                  <span className="text-violet-400">2.3s</span>
+                  <span className="text-violet-500 font-bold">2.3s</span>
                 </div>
               </div>
-            </OmniBaseCard>
+            </OmniCard>
 
             {/* Security Level */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <ShieldCheck size={14} className="text-emerald-500" />
                 安全等級
@@ -585,28 +610,28 @@ export default function ZKPBlockchainPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗 ZKP 證明？</h3>
           <p className="text-xs text-slate-400 mb-4">上傳您的數據，生成不可篡改的零知識證明</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Lock size={16} />}
               className="bg-violet-600 hover:bg-violet-700 text-white"
             >
               開始生成
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="secondary" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

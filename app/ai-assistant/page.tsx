@@ -34,7 +34,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 
 /* ─── Types ─── */
 interface ChatMessage {
@@ -458,7 +458,7 @@ export default function AIAssistantPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Chat Area */}
           <div className="lg:col-span-3">
-            <OmniBaseCard className="flex flex-col h-[calc(100vh-280px)] min-h-[500px]">
+            <Card className="flex flex-col h-[calc(100vh-280px)] min-h-[500px]">
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-1">
                 {messages.map((msg) => (
@@ -512,12 +512,12 @@ export default function AIAssistantPage() {
                   回應時間 &lt; 3s · 5T 協議保護 · 零幻覺保證
                 </p>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Sidebar - Quick Actions */}
           <div className="space-y-4">
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Sparkles size={14} className="text-amber-500" />
                 快速操作
@@ -541,9 +541,9 @@ export default function AIAssistantPage() {
                   </button>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Brain size={14} className="text-violet-500" />
                 模型狀態
@@ -563,9 +563,9 @@ export default function AIAssistantPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Clock size={14} className="text-blue-500" />
                 最近對話
@@ -585,7 +585,7 @@ export default function AIAssistantPage() {
                   </button>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
       </div>

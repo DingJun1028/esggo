@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 import OmniSustainWriteEditor, {
   OmniSustainWriteEditorRef,
 } from '@/components/omni/OmniSustainWriteEditor';
@@ -254,7 +254,7 @@ export default function EditorPage() {
           </div>
         </div>
 
-        <OmniBaseCard
+        <Card
           variant="glass"
           className="p-3 flex flex-col gap-1 border-slate-200 dark:border-white/5 max-h-[60vh] overflow-y-auto custom-scrollbar dark:"
         >
@@ -287,9 +287,9 @@ export default function EditorPage() {
               )}
             </button>
           ))}
-        </OmniBaseCard>
+        </Card>
 
-        <OmniBaseCard variant="glow" className="p-4 mt-auto">
+        <Card variant="glow" className="p-4 mt-auto">
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck size={16} className="text-emerald-400" />
             <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
@@ -302,7 +302,7 @@ export default function EditorPage() {
           <p className="text-[10px] text-slate-500 font-mono">
             Last Saved: {lastSaved ? lastSaved.toLocaleTimeString() : 'N/A'}
           </p>
-        </OmniBaseCard>
+        </Card>
       </div>
 
       {/* Main Workspace Area */}
@@ -375,10 +375,10 @@ export default function EditorPage() {
               </button>
             </div>
 
-            <OmniButton variant="outline" icon={<Save size={14} />} onClick={handleSave}>
+            <Button variant="outline" icon={<Save size={14} />} onClick={handleSave}>
               保存草稿
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="primary"
               icon={
                 isGenerating ? <Loader2 className="animate-spin" size={14} /> : <Wand2 size={14} />
@@ -387,12 +387,12 @@ export default function EditorPage() {
               isLoading={isGenerating}
             >
               專家 AI 展開 (Scribe)
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
         {/* AI Control Panel (Optional Custom Prompt) */}
-        <OmniBaseCard
+        <Card
           variant="glass"
           className="p-4 border-slate-200 dark:border-white/10 shadow-sm dark:shadow-lg dark:"
         >
@@ -404,10 +404,10 @@ export default function EditorPage() {
             onChange={(e) => setCustomPrompt(e.target.value)}
             disabled={isGenerating}
           />
-        </OmniBaseCard>
+        </Card>
 
         {/* TipTap Editor Surface */}
-        <OmniBaseCard
+        <Card
           variant="glass"
           className="flex-1 flex flex-col overflow-hidden border-slate-200 dark:border-white/10 relative p-1 shadow-md dark:shadow-2xl dark:"
         >
@@ -422,7 +422,7 @@ export default function EditorPage() {
               editable={!isGenerating}
             />
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

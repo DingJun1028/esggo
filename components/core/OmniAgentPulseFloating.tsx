@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 // 已移除 framer-motion 以避免 SSR 崩潰，改用 CSS transition
 import { Bot, X, Maximize2, Minimize2 } from 'lucide-react';
@@ -10,6 +12,9 @@ import BrandStatusDot from '../brand/BrandStatusDot';
 type PulseSize = 'sm' | 'md' | 'lg';
 
 interface OmniAgentPulseFloatingProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   logoPosition: { x: number; y: number; width: number; height: number } | null;
 }
 

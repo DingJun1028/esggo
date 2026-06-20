@@ -66,7 +66,7 @@ export default function OmniDemoPage() {
       <section>
         <h2 className="text-xl font-bold mb-4 text-blue-400">2. OmniKpiCard</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <OmniKpiCard
+          <Card
             title="碳排放量"
             value="1,284"
             unit="tCO₂e"
@@ -75,7 +75,7 @@ export default function OmniDemoPage() {
             fiveTStatus={[true, true, true, true, true]}
             dataSource="EPA Database"
           />
-          <OmniKpiCard
+          <Card
             title="治理評分"
             value="92"
             unit="/100"
@@ -84,7 +84,7 @@ export default function OmniDemoPage() {
             fiveTStatus={[true, true, true, true, false]}
             dataSource="Internal Audit"
           />
-          <OmniKpiCard
+          <Card
             title="供應鏈合規"
             value="87"
             unit="%"

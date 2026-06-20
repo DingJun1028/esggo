@@ -1,8 +1,12 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useId } from 'react';
 import { cn } from '../../../lib/utils';
 import { AlertCircle } from 'lucide-react';
 
 export interface OmniInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   label?: string;
   error?: string;
   icon?: React.ReactNode;

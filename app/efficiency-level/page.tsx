@@ -22,9 +22,9 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface EfficiencyMetric {
@@ -329,9 +329,9 @@ export default function EfficiencyLevelPage() {
                   <h1 className="text-2xl font-black text-[#003262] tracking-tight">
                     Level 1: 效率提升
                   </h1>
-                  <OmniBadge variant="primary" size="sm">
+                  <Badge variant="primary" size="sm">
                     Day 1-14
-                  </OmniBadge>
+                  </Badge>
                 </div>
                 <p className="text-xs text-slate-400 font-mono">
                   Efficiency Boost · 從 4 週縮短到 14 天
@@ -403,7 +403,7 @@ export default function EfficiencyLevelPage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               {activeTab === 'metrics' && (
                 <div>
                   <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -467,23 +467,23 @@ export default function EfficiencyLevelPage() {
                   </div>
                 </div>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Total Savings */}
-            <OmniBaseCard className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+            <Card className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
               <div className="text-center">
                 <Clock size={32} className="mx-auto mb-2 text-blue-600" />
                 <p className="text-3xl font-black text-[#003262]">80 hrs</p>
                 <p className="text-xs text-slate-500 font-medium">總節省時間</p>
                 <p className="text-[10px] text-slate-400 mt-1">相當於 2 週工作日</p>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* User Quotes */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">用戶回饋</h3>
               <div className="space-y-3">
                 {USER_QUOTES.map((quote, i) => (
@@ -499,10 +499,10 @@ export default function EfficiencyLevelPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Next Level */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">下一等級</h3>
               <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
                 <div className="flex items-center gap-2 mb-2">
@@ -512,36 +512,36 @@ export default function EfficiencyLevelPage() {
                 <p className="text-[11px] text-slate-500 mb-3">
                   5T 驗證通過、ZKP 證明生成、區塊鏈錨定
                 </p>
-                <OmniButton
+                <Button
                   variant="outline"
                   size="sm"
                   className="w-full border-amber-300 text-amber-700 hover:bg-amber-100"
                 >
                   了解更多
-                </OmniButton>
+                </Button>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗效率提升？</h3>
           <p className="text-xs text-slate-400 mb-4">註冊即可在 14 天內完成過去 4 週的工作</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Zap size={16} />}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               免費開始
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

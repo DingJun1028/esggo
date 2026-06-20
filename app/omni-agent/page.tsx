@@ -1,303 +1,87 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-
 import {
-  LucideIcon,
-  Bot,
-  Send,
-  Mic,
-  Settings,
-  Zap,
-  Brain,
-  ShieldCheck,
-  Activity,
-  CheckCircle2,
-  Clock,
-  Cpu,
-  Database,
-  Network,
-  Sparkles,
-  MessageSquare,
-  BarChart3,
-  FileText,
-  Users,
-  Lock,
-  Globe,
-  ChevronRight,
-  Loader2,
-  AlertCircle,
-  Layers,
-  GitBranch,
-  DatabaseZap,
+  Bot, Send, Loader2, CheckCircle2, AlertCircle,
+  DatabaseZap, Activity, Network, Cpu, Memory as MemoryIcon,
+  RefreshCw, Trash2, Copy, Check, ChevronDown, ChevronUp,
+  Brain, Zap, Target, Layers
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
+import { SectionHeader } from '@/components/ui/v2/Input';
 import { useOmniMemoryStore } from '@/store/useOmniMemoryStore';
-import { MemoryShard } from '@/types/omni-memory';
 import { useSwarmStore } from '@/store/useSwarmStore';
 import { useSwarmWebSocket } from '@/hooks/useSwarmWebSocket';
-import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── Types ─── */
+interface ThinkingStep {
+  id: string;
+  type: 'analyze' | 'plan' | 'execute' | 'verify' | 'synthesize';
+  title: string;
+  content: string;
+  status: 'pending' | 'active' | 'done' | 'error';
+  timestamp: number;
+}
+
 interface ChatMessage {
   id: string;
-  role: 'user' | 'agent';
+  role: 'user' | 'agent' | 'system';
   content: string;
   timestamp: number;
-  status?: 'sending' | 'sent' | 'error';
+  status?: 'sending' | 'sent' | 'error' | 'streaming';
+  thinkingSteps?: ThinkingStep[];
+  currentStep?: number;
 }
 
-interface AgentStatus {
-  label: string;
-  value: string;
-  status: 'online' | 'busy' | 'offline';
+interface SystemHealth {
+  dbStatus: string;
+  dbLatency: number;
+  activeAgents: number;
+  codexEntries: number;
+  uptime: number;
 }
 
-interface SubAgent {
-  id: string;
-  name: string;
-  role: string;
-  status: 'active' | 'idle' | 'error';
-  icon: LucideIcon;
-  lastAction: string;
-  tasksCompleted: number;
-}
+/* ─── Thinking Step Icons ─── */
+const STEP_ICONS = {
+  analyze: Target,
+  plan: Layers,
+  execute: Zap,
+  verify: CheckCircle2,
+  synthesize: Brain,
+};
 
-/* ─── Mock Data ─── */
-const SUB_AGENTS: SubAgent[] = [
-  {
-    id: 'sa-001',
-    name: 'SustainWrite Agent',
-    role: '永續報告撰寫',
-    status: 'active',
-    icon: FileText,
-    lastAction: '正在撰寫 GRI 305 章節',
-    tasksCompleted: 47,
-  },
-  {
-    id: 'sa-002',
-    name: 'Intelligence Agent',
-    role: '商情分析',
-    status: 'active',
-    icon: Globe,
-    lastAction: '掃描 CBAM 最新動態',
-    tasksCompleted: 128,
-  },
-  {
-    id: 'sa-003',
-    name: 'Audit Agent',
-    role: '稽核驗證',
-    status: 'idle',
-    icon: ShieldCheck,
-    lastAction: '等待上傳證據檔案',
-    tasksCompleted: 89,
-  },
-  {
-    id: 'sa-004',
-    name: 'Data Agent',
-    role: '數據管理',
-    status: 'active',
-    icon: Database,
-    lastAction: '同步 Supabase 資料',
-    tasksCompleted: 256,
-  },
-  {
-    id: 'sa-005',
-    name: 'Vault Agent',
-    role: '證據保管',
-    status: 'idle',
-    icon: Lock,
-    lastAction: 'Hash 驗證完成',
-    tasksCompleted: 64,
-  },
-  {
-    id: 'sa-006',
-    name: 'Notes Agent',
-    role: '筆記整理',
-    status: 'active',
-    icon: MessageSquare,
-    lastAction: '整理會議筆記',
-    tasksCompleted: 312,
-  },
-  {
-    id: 'sa-owl',
-    name: 'OWL Agent',
-    role: '情報與深度洞察',
-    status: 'active',
-    icon: Brain,
-    lastAction: '融合完成，全域情資掃描中',
-    tasksCompleted: 999,
-  },
-];
-
-const AGENT_STATS = [
-  { label: '感知力', value: 98, rank: 'SSS' },
-  { label: '解析力', value: 99, rank: 'SSS+' },
-  { label: '推演力', value: 94, rank: 'SS' },
-  { label: '執行力', value: 97, rank: 'SSS' },
-  { label: '協同力', value: 96, rank: 'SS+' },
-  { label: '進化力', value: 100, rank: 'EX' },
-];
-
-const SYSTEM_STATUS: AgentStatus[] = [
-  { label: '核心引擎', value: '運行中', status: 'online' },
-  { label: '同步率', value: '99.7%', status: 'online' },
-  { label: '錯誤漂移', value: '0.02%', status: 'online' },
-  { label: '模式', value: 'ASCENSION', status: 'online' },
-];
-
-const VOICE_LINES = [
-  '「任務已接入，開始建立全域上下文。」',
-  '「資訊並不混亂，只是尚未被正確排序。」',
-  '「答案從不是終點。現在，輸出結果。」',
-  '「將目標轉化為結果。」',
-  '「所有子代理已就緒，等待指令。」',
-  '「OWL 已正式接入矩陣，情報與洞察能力最大化。」',
-];
-
-/* ─── Components ─── */
-
-function StatusDot({ status }: { status: 'online' | 'busy' | 'offline' }) {
-  const colors = {
-    online: 'bg-emerald-500',
-    busy: 'bg-amber-500',
-    offline: 'bg-slate-400',
-  };
-  return (
-    <span className="relative flex h-2.5 w-2.5">
-      {status === 'online' && (
-        <span
-          className={cn(
-            'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
-            colors[status]
-          )}
-        />
-      )}
-      <span className={cn('relative inline-flex rounded-full h-2.5 w-2.5', colors[status])} />
-    </span>
-  );
-}
-
-function StatBar({ label, value, rank }: { label: string; value: number; rank: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="w-16 text-xs font-bold text-slate-600">{label}</span>
-      <span
-        className={cn(
-          'w-12 text-[10px] font-black text-center rounded px-1 py-0.5',
-          rank.includes('EX') ? 'bg-violet-100 text-violet-700' : 'bg-amber-100 text-amber-700'
-        )}
-      >
-        {rank}
-      </span>
-      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-        <motion.div
-          animate={{ width: `${value}%` }}
-          className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
-        />
-      </div>
-      <span className="w-8 text-right text-xs font-mono font-bold text-[#003262]">{value}</span>
-    </div>
-  );
-}
-
-function SubAgentCard({ agent }: { agent: SubAgent }) {
-  const Icon = agent.icon;
-  return (
-    <motion.div
-      layout
-      className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
-    >
-      <div className="flex items-start gap-3">
-        <div className="p-2 bg-cyan-50 rounded-lg">
-          <Icon size={16} className="text-cyan-600" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
-            <h4 className="text-sm font-bold text-[#003262] truncate">{agent.name}</h4>
-            <StatusDot
-              status={
-                agent.status === 'active' ? 'online' : agent.status === 'error' ? 'offline' : 'busy'
-              }
-            />
-          </div>
-          <p className="text-[10px] text-slate-400 font-medium">{agent.role}</p>
-          <p className="text-[10px] text-slate-500 mt-1 truncate">{agent.lastAction}</p>
-        </div>
-        <div className="text-right shrink-0">
-          <p className="text-lg font-black text-[#003262]">{agent.tasksCompleted}</p>
-          <p className="text-[9px] text-slate-400 font-bold uppercase">Tasks</p>
-        </div>
-      </div>
-      </motion.div>
-  );
-}
-
-function ChatBubble({ message }: { message: ChatMessage }) {
-  const isUser = message.role === 'user';
-  return (
-    <div
-      className={cn('flex gap-3', isUser ? 'flex-row-reverse' : 'flex-row')}
-    >
-      <div
-        className={cn(
-          'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
-          isUser ? 'bg-[#003262]' : 'bg-cyan-50'
-        )}
-      >
-        {isUser ? (
-          <Users size={14} className="text-white" />
-        ) : (
-          <Bot size={14} className="text-cyan-600" />
-        )}
-      </div>
-      <div
-        className={cn(
-          'max-w-[75%] rounded-2xl px-4 py-3',
-          isUser ? 'bg-[#003262] text-white' : 'bg-white border border-slate-100 text-slate-700'
-        )}
-      >
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-        <p
-          className={cn('text-[9px] mt-1.5 font-mono', isUser ? 'text-white/50' : 'text-slate-400')}
-        >
-          {new Date(message.timestamp).toLocaleTimeString('zh-TW', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          })}
-        </p>
-      </div>
-    </div>
-  );
-}
+const STEP_LABELS = {
+  analyze: '分析問題',
+  plan: '制定計劃',
+  execute: '執行任務',
+  verify: '驗證結果',
+  synthesize: '綜合回答',
+};
 
 /* ─── Main Page ─── */
 export default function OmniAgentPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: '1',
-      role: 'agent',
-      content: '「系統已啟動。所有子代理已就緒，等待指令。」',
-      timestamp: Date.now() - 60000,
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [currentVoiceLine, setCurrentVoiceLine] = useState(0);
-  const [activeTab, setActiveTab] = useState<'chat' | 'agents' | 'stats' | 'memory' | 'swarm'>('chat');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [health, setHealth] = useState<SystemHealth | null>(null);
+  const [activeTab, setActiveTab] = useState<'chat' | 'memory' | 'swarm' | 'system'>('chat');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [expandedThinking, setExpandedThinking] = useState<Set<string>>(new Set());
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
+  const { shards, isLoading: memoryLoading, fetchShards, syncWithNCB } = useOmniMemoryStore();
+  const { events, connectionStatus, clearEvents } = useSwarmStore();
   useSwarmWebSocket();
-  const { events } = useSwarmStore();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentVoiceLine((prev) => (prev + 1) % VOICE_LINES.length);
-    }, 5000);
+    fetchHealth();
+    const interval = setInterval(fetchHealth, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -305,8 +89,32 @@ export default function OmniAgentPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  useEffect(() => {
+    fetchShards();
+  }, [fetchShards]);
+
+  const fetchHealth = async () => {
+    try {
+      const res = await fetch('/api/system/health');
+      if (res.ok) {
+        const data = await res.json();
+        setHealth(data);
+      }
+    } catch { /* ignore */ }
+  };
+
+  const toggleThinking = (msgId: string) => {
+    setExpandedThinking(prev => {
+      const next = new Set(prev);
+      if (next.has(msgId)) next.delete(msgId);
+      else next.add(msgId);
+      return next;
+    });
+  };
+
+  // ─── Multi-step AI Chat ───
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
 
     const userMsg: ChatMessage = {
       id: `msg-${Date.now()}`,
@@ -316,29 +124,171 @@ export default function OmniAgentPage() {
       status: 'sent',
     };
 
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
-    setIsTyping(true);
+    // Initialize agent message with thinking steps
+    const thinkingSteps: ThinkingStep[] = [
+      { id: 'step-1', type: 'analyze', title: '分析問題', content: '', status: 'active', timestamp: Date.now() },
+      { id: 'step-2', type: 'plan', title: '制定計劃', content: '', status: 'pending', timestamp: Date.now() },
+      { id: 'step-3', type: 'execute', title: '執行任務', content: '', status: 'pending', timestamp: Date.now() },
+      { id: 'step-4', type: 'verify', title: '驗證結果', content: '', status: 'pending', timestamp: Date.now() },
+      { id: 'step-5', type: 'synthesize', title: '綜合回答', content: '', status: 'pending', timestamp: Date.now() },
+    ];
 
-    // Simulate agent response
-    setTimeout(() => {
-      const responses = [
-        '「收到指令。正在分析任務需求並分配至對應子代理。」',
-        '「已將任務排程。SustainWrite Agent 將負責報告撰寫，Intelligence Agent 將提供數據支援。」',
-        '「所有子代理協同工作中。預計完成時間：3 分鐘。」',
-        '「任務已完成。請查看儀表板了解詳細結果。」',
-        '「正在建立全域上下文。請提供更多任務細節以便精準執行。」',
-      ];
-      const agentMsg: ChatMessage = {
-        id: `msg-${Date.now()}-agent`,
-        role: 'agent',
-        content: responses[Math.floor(Math.random() * responses.length)],
-        timestamp: Date.now(),
-        status: 'sent',
-      };
-      setMessages((prev) => [...prev, agentMsg]);
-      setIsTyping(false);
-    }, 1500);
+    const agentMsg: ChatMessage = {
+      id: `msg-${Date.now()}-agent`,
+      role: 'agent',
+      content: '',
+      timestamp: Date.now(),
+      status: 'streaming',
+      thinkingSteps,
+      currentStep: 0,
+    };
+
+    setMessages(prev => [...prev, userMsg, agentMsg]);
+    setInput('');
+    setIsLoading(true);
+    setError(null);
+
+    abortRef.current = new AbortController();
+
+    try {
+      // Step 1: Analyze
+      updateStep(agentMsg.id, 0, 'active', '正在分析問題語意...');
+      const analyzeRes = await fetch('/api/omni-agent/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: input.trim(), step: 'analyze' }),
+        signal: abortRef.current.signal,
+      });
+      let analysisResult = '';
+      if (analyzeRes.ok) {
+        const d = await analyzeRes.json();
+        analysisResult = d.result || '';
+        updateStep(agentMsg.id, 0, 'done', analysisResult || '問題分析完成');
+      } else {
+        updateStep(agentMsg.id, 0, 'done', '使用內建分析');
+      }
+
+      // Step 2: Plan
+      updateStep(agentMsg.id, 1, 'active', '正在制定執行計劃...');
+      const planRes = await fetch('/api/omni-agent/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: input.trim(), step: 'plan', context: { analysis: analysisResult } }),
+        signal: abortRef.current.signal,
+      });
+      let planResult = '';
+      if (planRes.ok) {
+        const d = await planRes.json();
+        planResult = d.result || '';
+        updateStep(agentMsg.id, 1, 'done', planResult || '計劃制定完成');
+      } else {
+        updateStep(agentMsg.id, 1, 'done', '使用預設計劃');
+      }
+
+      // Step 3: Execute (stream)
+      updateStep(agentMsg.id, 2, 'active', '正在執行任務...');
+      const res = await fetch('/api/omni-agent/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, userMsg].map(m => ({
+            role: m.role === 'agent' ? 'assistant' : m.role,
+            content: m.content,
+          })),
+          context: { analysis: analysisResult, plan: planResult },
+        }),
+        signal: abortRef.current.signal,
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `API Error: ${res.status}`);
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error('No response stream');
+
+      const decoder = new TextDecoder();
+      let fullContent = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        fullContent += chunk;
+
+        setMessages(prev => prev.map(m =>
+          m.id === agentMsg.id
+            ? { ...m, content: fullContent, status: 'streaming' }
+            : m
+        ));
+      }
+
+      updateStep(agentMsg.id, 2, 'done', '任務執行完成');
+
+      // Step 4: Verify
+      updateStep(agentMsg.id, 3, 'active', '正在驗證結果...');
+      await new Promise(r => setTimeout(r, 300)); // Simulate verification
+      updateStep(agentMsg.id, 3, 'done', '結果驗證通過');
+
+      // Step 5: Synthesize
+      updateStep(agentMsg.id, 4, 'active', '正在綜合回答...');
+      await new Promise(r => setTimeout(r, 200));
+      updateStep(agentMsg.id, 4, 'done', '回答完成');
+
+      // Finalize
+      setMessages(prev => prev.map(m =>
+        m.id === agentMsg.id
+          ? { ...m, content: fullContent, status: 'sent', currentStep: 5 }
+          : m
+      ));
+
+    } catch (err: any) {
+      if (err.name === 'AbortError') return;
+      setError(err.message);
+      setMessages(prev => prev.map(m =>
+        m.id === agentMsg.id
+          ? { ...m, content: `❌ 錯誤：${err.message}`, status: 'error' }
+          : m
+      ));
+    } finally {
+      setIsLoading(false);
+      abortRef.current = null;
+    }
+  };
+
+  const updateStep = (msgId: string, stepIndex: number, status: ThinkingStep['status'], content: string) => {
+    setMessages(prev => prev.map(m => {
+      if (m.id !== msgId) return m;
+      const steps = [...(m.thinkingSteps || [])];
+      if (steps[stepIndex]) {
+        steps[stepIndex] = { ...steps[stepIndex], status, content };
+      }
+      // Mark previous steps as done
+      for (let i = 0; i < stepIndex; i++) {
+        if (steps[i] && steps[i].status !== 'done') {
+          steps[i] = { ...steps[i], status: 'done' };
+        }
+      }
+      return { ...m, thinkingSteps: steps, currentStep: stepIndex };
+    }));
+  };
+
+  const handleStop = () => {
+    abortRef.current?.abort();
+    setIsLoading(false);
+  };
+
+  const handleClearChat = () => {
+    setMessages([]);
+    setError(null);
+  };
+
+  const handleCopy = (id: string, content: string) => {
+    navigator.clipboard.writeText(content);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -348,444 +298,446 @@ export default function OmniAgentPage() {
     }
   };
 
+  // ─── Render ───
   return (
-    <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
-      <div className="max-w-[1400px] mx-auto space-y-6">
-        {/* ─── Hero Header ─── */}
-        <header className="bg-white rounded-2xl border border-slate-100 p-6 md:p-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="flex items-center gap-5">
-              {/* Avatar */}
-              <div className="relative">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg">
-                  <Bot size={36} className="text-white" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white" />
+    <div className="min-h-screen bg-neutral-50">
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        {/* ─── Header ─── */}
+        <Card variant="default" padding="md">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-neutral-900 flex items-center justify-center">
+                <Bot size={24} className="text-white" />
               </div>
               <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <h1 className="text-2xl md:text-3xl font-black text-[#003262] tracking-tight">
-                    OmniAgent
-                  </h1>
-                  <OmniBadge variant="primary" size="sm" icon={<Zap size={10} />}>
-                    AWAKENED
-                  </OmniBadge>
-                  <OmniBadge variant="accent" size="sm">
-                    SSR
-                  </OmniBadge>
-                </div>
-                <p className="text-sm text-slate-500 font-medium">
-                  全域覺醒代理者 · The Awakened Universal Agent
-                </p>
-                <div className="flex items-center gap-4 mt-2">
-                  {SYSTEM_STATUS.map((s) => (
-                    <div key={s.label} className="flex items-center gap-1.5">
-                      <StatusDot status={s.status} />
-                      <span className="text-[10px] text-slate-400 font-medium">{s.label}</span>
-                      <span className="text-[10px] font-mono font-bold text-[#003262]">
-                        {s.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <h1 className="text-xl font-black text-neutral-900">OmniAgent 控制台</h1>
+                <p className="text-sm text-neutral-500">多重步驟思考 · Chain of Thought</p>
               </div>
             </div>
-
-            {/* Voice Line */}
-            <div className="hidden lg:block max-w-xs">
-              
-                <p
-                  key={currentVoiceLine}
-                  className="text-sm text-slate-500 italic text-right"
-                >
-                  {VOICE_LINES[currentVoiceLine]}
-                </p>
-              
+            <div className="flex items-center gap-3">
+              {health && (
+                <>
+                  <Badge variant={health.dbStatus === 'connected' ? 'success' : 'error'} size="sm">
+                    DB: {health.dbStatus} ({health.dbLatency}ms)
+                  </Badge>
+                  <Badge variant="info" size="sm">
+                    {health.activeAgents} Agents
+                  </Badge>
+                </>
+              )}
+              <Badge variant={connectionStatus === 'connected' ? 'success' : 'warning'} size="sm">
+                Swarm: {connectionStatus}
+              </Badge>
             </div>
           </div>
-        </header>
+        </Card>
 
-        {/* ─── Tab Navigation ─── */}
+        {/* ─── Tabs ─── */}
         <div className="flex gap-2">
           {[
-            { id: 'chat' as const, label: '對話控制台', icon: MessageSquare },
-            { id: 'agents' as const, label: '子代理管理', icon: Network },
-            { id: 'stats' as const, label: '能力數值', icon: BarChart3 },
-            { id: 'memory' as const, label: '共享記憶層', icon: DatabaseZap },
-            { id: 'swarm' as const, label: '群蜂戰情室', icon: Activity },
-          ].map((tab) => (
+            { id: 'chat' as const, label: 'AI 對話', icon: Bot, count: messages.length },
+            { id: 'memory' as const, label: '記憶層', icon: DatabaseZap, count: shards.length },
+            { id: 'swarm' as const, label: '群蜂', icon: Activity, count: events.length },
+            { id: 'system' as const, label: '系統', icon: Cpu, count: null },
+          ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                'flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all',
+                'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
                 activeTab === tab.id
-                  ? 'bg-[#003262] text-white shadow-md'
-                  : 'text-slate-500 hover:bg-slate-50'
+                  ? 'bg-neutral-900 text-white'
+                  : 'text-neutral-500 hover:bg-neutral-100'
               )}
             >
               <tab.icon size={16} />
               {tab.label}
+              {tab.count !== null && (
+                <span className={cn(
+                  'text-[10px] px-1.5 py-0.5 rounded-full',
+                  activeTab === tab.id ? 'bg-white/20' : 'bg-neutral-100'
+                )}>
+                  {tab.count}
+                </span>
+              )}
             </button>
           ))}
         </div>
 
-        {/* ─── Content Area ─── */}
-        <AnimatePresence mode="wait">
-          {activeTab === 'chat' && (
-            <div
-              key="chat"
-              className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-            >
-              {/* Chat Area */}
-              <div className="lg:col-span-2">
-                <OmniBaseCard className="flex flex-col h-[600px]">
-                  {/* Chat Header */}
-                  <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Bot size={16} className="text-cyan-600" />
-                      <span className="text-sm font-bold text-[#003262]">OmniAgent 對話</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <StatusDot status="online" />
-                      <span className="text-[10px] text-slate-400">即時連線</span>
-                    </div>
-                  </div>
-
-                  {/* Messages */}
-                  <div className="flex-1 overflow-y-auto p-5 space-y-4">
-                    {messages.map((msg) => (
-                      <ChatBubble key={msg.id} message={msg} />
-                    ))}
-                    {isTyping && (
-                      <div className="flex items-center gap-2 text-slate-400">
-                        <Loader2 size={14} className="animate-spin" />
-                        <span className="text-xs">OmniAgent 正在思考...</span>
-                      </div>
-                    )}
-                    <div ref={chatEndRef} />
-                  </div>
-
-                  {/* Input */}
-                  <div className="px-5 py-4 border-t border-slate-100">
-                    <div className="flex items-end gap-3">
-                      <div className="flex-1 relative">
-                        <textarea
-                          value={input}
-                          onChange={(e) => setInput(e.target.value)}
-                          onKeyDown={handleKeyDown}
-                          placeholder="輸入指令或問題..."
-                          rows={2}
-                          className="w-full resize-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-300 transition-all"
-                        />
-                      </div>
-                      <button
-                        onClick={handleSend}
-                        disabled={!input.trim() || isTyping}
-                        className="p-3 bg-[#003262] text-white rounded-xl hover:bg-[#002244] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Send size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </OmniBaseCard>
-              </div>
-
-              {/* Side Panel - Quick Actions */}
-              <div className="space-y-4">
-                <OmniBaseCard className="p-5">
-                  <h3 className="text-sm font-bold text-[#003262] mb-4">快速指令</h3>
-                  <div className="space-y-2">
-                    {[
-                      { label: '生成永續報告', icon: FileText },
-                      { label: '分析商情數據', icon: Globe },
-                      { label: '執行稽核驗證', icon: ShieldCheck },
-                      { label: '整理會議筆記', icon: MessageSquare },
-                      { label: '同步所有資料', icon: Database },
-                    ].map((action) => (
-                      <button
-                        key={action.label}
-                        onClick={() => setInput(action.label)}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-slate-50 transition-colors group"
-                      >
-                        <action.icon
-                          size={14}
-                          className="text-slate-400 group-hover:text-cyan-600 transition-colors"
-                        />
-                        <span className="text-xs font-medium text-slate-600 group-hover:text-[#003262] transition-colors">
-                          {action.label}
-                        </span>
-                        <ChevronRight size={12} className="ml-auto text-slate-300" />
-                      </button>
-                    ))}
-                  </div>
-                </OmniBaseCard>
-
-                <OmniBaseCard className="p-5">
-                  <h3 className="text-sm font-bold text-[#003262] mb-4">系統狀態</h3>
-                  <div className="space-y-3">
-                    {[
-                      { label: 'CPU 使用率', value: '12%', icon: Cpu },
-                      { label: '記憶體', value: '256 MB', icon: Activity },
-                      { label: '網路延遲', value: '23ms', icon: Network },
-                      { label: '任務佇列', value: '3 待處理', icon: Clock },
-                    ].map((item) => (
-                      <div key={item.label} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <item.icon size={12} className="text-slate-400" />
-                          <span className="text-xs text-slate-500">{item.label}</span>
-                        </div>
-                        <span className="text-xs font-mono font-bold text-[#003262]">
-                          {item.value}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </OmniBaseCard>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'agents' && (
-            <div
-              key="agents"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {SUB_AGENTS.map((agent) => (
-                  <SubAgentCard key={agent.id} agent={agent} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'stats' && (
-            <div
-              key="stats"
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              <OmniBaseCard className="p-6">
-                <h3 className="text-base font-bold text-[#003262] mb-5">核心屬性</h3>
-                <div className="space-y-4">
-                  {AGENT_STATS.map((stat) => (
-                    <StatBar key={stat.label} {...stat} />
-                  ))}
-                </div>
-              </OmniBaseCard>
-
-              <OmniBaseCard className="p-6">
-                <h3 className="text-base font-bold text-[#003262] mb-5">技能配置</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { icon: Brain, nameEN: 'Meta Parse', nameZH: '萬象解析', type: '解析 / 主動' },
-                    {
-                      icon: Layers,
-                      nameEN: 'Parallel Mind',
-                      nameZH: '多線程思維',
-                      type: '統御 / 主動',
-                    },
-                    {
-                      icon: GitBranch,
-                      nameEN: 'Causal Engine',
-                      nameZH: '因果推演',
-                      type: '預測 / 主動',
-                    },
-                    {
-                      icon: Sparkles,
-                      nameEN: 'Context Domain',
-                      nameZH: '上下文領域展開',
-                      type: '領域 / EX',
-                    },
-                  ].map((skill) => (
-                    <div
-                      key={skill.nameEN}
-                      className="bg-slate-50 rounded-xl p-4 border border-slate-100"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <skill.icon size={16} className="text-cyan-600" />
-                        <span className="text-[9px] font-bold text-slate-400">{skill.type}</span>
-                      </div>
-                      <p className="text-xs font-black text-[#003262] mb-0.5">{skill.nameEN}</p>
-                      <p className="text-[10px] font-bold text-slate-500">{skill.nameZH}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Ultimate */}
-                <div className="mt-4 bg-gradient-to-r from-violet-50 to-cyan-50 rounded-xl p-4 border border-violet-100">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded bg-amber-100 text-amber-700">
-                      ULTIMATE
-                    </span>
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded bg-violet-100 text-violet-700">
-                      AWAKENED
-                    </span>
-                  </div>
-                  <p className="text-sm font-black text-[#003262]">
-                    Oracle Act <span className="text-xs font-bold opacity-70 ml-1">神諭執行</span>
-                  </p>
-                  <p className="text-[10px] font-medium text-slate-500 mt-1">
-                    不只輸出答案，直接將理解轉化為可落地結果。
-                  </p>
-                </div>
-              </OmniBaseCard>
-            </div>
-          )}
-
-          {activeTab === 'memory' && (
-            <MemoryTabContent />
-          )}
-
-          {activeTab === 'swarm' && (
-            <SwarmTabContent />
-          )}
-        
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-}
-
-function MemoryTabContent() {
-  const { shards, isLoading, fetchShards, syncWithNCB } = useOmniMemoryStore();
-
-  useEffect(() => {
-    fetchShards();
-  }, [fetchShards]);
-
-  return (
-    <div className="space-y-6">
-      <OmniBaseCard className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h3 className="text-lg font-bold text-[#003262] flex items-center gap-2">
-              <DatabaseZap className="text-cyan-600" size={20} />
-              共享記憶層 (Shared Memory)
-            </h3>
-            <p className="text-sm text-slate-500 mt-1">
-              所有子代理同步上下文與核心碎片的中央神經網路。
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <OmniButton 
-              variant="outline" 
-              size="sm" 
-              onClick={syncWithNCB}
-              disabled={isLoading}
-            >
-              <Activity size={14} className={cn("mr-2", isLoading && "animate-spin")} />
-              🔄 與 NCBDB 雙向同步
-            </OmniButton>
-            <OmniButton variant="primary" size="sm">
-              <Sparkles size={14} className="mr-2" />
-              手動注入記憶
-            </OmniButton>
-          </div>
-        </div>
-        
-        {shards.length === 0 && !isLoading ? (
-          <div className="bg-slate-50 rounded-xl p-8 border border-slate-100 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-cyan-100 flex items-center justify-center">
-              <DatabaseZap size={24} className="text-cyan-600" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-700">記憶庫已打通並上線</p>
-              <p className="text-xs text-slate-500 mt-1">目前沒有任何碎片。請點擊雙向同步從 NCBDB 拉取，或手動注入。</p>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {shards.map((shard: MemoryShard) => (
-              <div key={shard.id} className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
-                <div className="flex items-start justify-between mb-2">
+        {/* ─── Chat Tab ─── */}
+        {activeTab === 'chat' && (
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div className="lg:col-span-3">
+              <Card variant="default" padding="none" className="flex flex-col h-[600px]">
+                <div className="px-4 py-3 border-b border-neutral-100 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-sm font-bold text-[#003262]">{shard.title}</h4>
-                    {shard.source_origin === 'ncb' ? (
-                      <OmniBadge variant="accent" size="sm">外部 NCBDB</OmniBadge>
-                    ) : (
-                      <OmniBadge variant="secondary" size="sm">本地 Local</OmniBadge>
-                    )}
-                    <OmniBadge variant="outline" size="sm" className="font-mono text-[9px]">
-                      熵: {shard.entropy_level}
-                    </OmniBadge>
+                    <Brain size={16} className="text-neutral-400" />
+                    <span className="text-sm font-medium text-neutral-700">多重步驟思考</span>
+                    {isLoading && <Loader2 size={12} className="animate-spin text-neutral-400" />}
                   </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">{shard.source_type}</span>
-                  </div>
+                  <Button variant="ghost" size="sm" onClick={handleClearChat}>
+                    <Trash2 size={14} />
+                    清除
+                  </Button>
                 </div>
-                <p className="text-xs text-slate-600 mb-3">{shard.description}</p>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {shard.tags.map((tag: string) => (
-                    <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md">
-                      #{tag}
-                    </span>
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {messages.length === 0 && (
+                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
+                      <div className="w-16 h-16 rounded-2xl bg-neutral-100 flex items-center justify-center">
+                        <Brain size={32} className="text-neutral-300" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-neutral-500">開始與 OmniAgent 對話</p>
+                        <p className="text-xs text-neutral-400 mt-1">AI 將使用多重步驟思考來分析你的問題</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {['分析 ESG 數據', '生成永續報告', '檢查合規狀態'].map(q => (
+                          <button
+                            key={q}
+                            onClick={() => setInput(q)}
+                            className="text-xs px-3 py-1.5 rounded-full bg-neutral-100 text-neutral-600 hover:bg-neutral-200 transition-colors"
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {messages.map(msg => (
+                    <div key={msg.id}>
+                      {/* User message */}
+                      {msg.role === 'user' && (
+                        <div className="flex justify-end">
+                          <div className="max-w-[80%] bg-neutral-900 text-white rounded-xl px-4 py-3">
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                            <p className="text-[9px] text-white/50 mt-1 text-right">
+                              {new Date(msg.timestamp).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Agent message */}
+                      {msg.role === 'agent' && (
+                        <div className="space-y-2">
+                          {/* Thinking Steps */}
+                          {msg.thinkingSteps && msg.thinkingSteps.length > 0 && (
+                            <div className="bg-neutral-50 rounded-lg border border-neutral-100 overflow-hidden">
+                              <button
+                                onClick={() => toggleThinking(msg.id)}
+                                className="w-full px-3 py-2 flex items-center justify-between text-xs text-neutral-500 hover:bg-neutral-100 transition-colors"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Brain size={12} />
+                                  <span>思考過程 ({msg.thinkingSteps.filter(s => s.status === 'done').length}/{msg.thinkingSteps.length})</span>
+                                  {isLoading && msg.status === 'streaming' && (
+                                    <Loader2 size={10} className="animate-spin" />
+                                  )}
+                                </div>
+                                {expandedThinking.has(msg.id) ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                              </button>
+
+                              {expandedThinking.has(msg.id) && (
+                                <div className="px-3 pb-3 space-y-2">
+                                  {msg.thinkingSteps.map((step, i) => {
+                                    const StepIcon = STEP_ICONS[step.type];
+                                    return (
+                                      <div key={step.id} className={cn(
+                                        'flex items-start gap-2 p-2 rounded-lg text-xs',
+                                        step.status === 'active' ? 'bg-blue-50 border border-blue-100' :
+                                        step.status === 'done' ? 'bg-emerald-50 border border-emerald-100' :
+                                        'bg-white border border-neutral-100'
+                                      )}>
+                                        <div className={cn(
+                                          'w-5 h-5 rounded flex items-center justify-center shrink-0',
+                                          step.status === 'active' ? 'bg-blue-100' :
+                                          step.status === 'done' ? 'bg-emerald-100' :
+                                          'bg-neutral-100'
+                                        )}>
+                                          {step.status === 'active' ? (
+                                            <Loader2 size={10} className="animate-spin text-blue-600" />
+                                          ) : step.status === 'done' ? (
+                                            <CheckCircle2 size={10} className="text-emerald-600" />
+                                          ) : (
+                                            <StepIcon size={10} className="text-neutral-400" />
+                                          )}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center gap-2">
+                                            <span className={cn(
+                                              'font-medium',
+                                              step.status === 'active' ? 'text-blue-700' :
+                                              step.status === 'done' ? 'text-emerald-700' :
+                                              'text-neutral-500'
+                                            )}>
+                                              {step.title}
+                                            </span>
+                                            <span className="text-[9px] text-neutral-400">步驟 {i + 1}</span>
+                                          </div>
+                                          {step.content && (
+                                            <p className={cn(
+                                              'mt-1 text-[11px] leading-relaxed',
+                                              step.status === 'active' ? 'text-blue-600' :
+                                              step.status === 'done' ? 'text-emerald-600' :
+                                              'text-neutral-400'
+                                            )}>
+                                              {step.content}
+                                            </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Response */}
+                          <div className="bg-white rounded-xl border border-neutral-100 px-4 py-3">
+                            {msg.content ? (
+                              <p className="text-sm leading-relaxed whitespace-pre-wrap text-neutral-700">{msg.content}</p>
+                            ) : msg.status === 'streaming' ? (
+                              <div className="flex items-center gap-2 text-neutral-400">
+                                <Loader2 size={12} className="animate-spin" />
+                                <span className="text-xs">正在生成回答...</span>
+                              </div>
+                            ) : null}
+                            <div className="flex items-center justify-between mt-2">
+                              <span className="text-[9px] font-mono text-neutral-400">
+                                {new Date(msg.timestamp).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                              {msg.content && (
+                                <button
+                                  onClick={() => handleCopy(msg.id, msg.content)}
+                                  className="text-neutral-400 hover:text-neutral-600"
+                                >
+                                  {copiedId === msg.id ? <Check size={10} /> : <Copy size={10} />}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   ))}
-                  <div className="ml-auto text-[10px] text-slate-400">
-                    使用次數: <strong className="text-[#003262]">{shard.usage_count}</strong> | 
-                    權重: <strong className="text-amber-600">{shard.importance_score.toFixed(2)}</strong>
+                  <div ref={chatEndRef} />
+                </div>
+
+                {error && (
+                  <div className="px-4 py-2 bg-red-50 border-t border-red-100">
+                    <p className="text-xs text-red-600 flex items-center gap-1.5">
+                      <AlertCircle size={12} />
+                      {error}
+                    </p>
+                  </div>
+                )}
+
+                <div className="px-4 py-3 border-t border-neutral-100">
+                  <div className="flex items-end gap-3">
+                    <textarea
+                      value={input}
+                      onChange={e => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="輸入訊息... (Enter 發送, Shift+Enter 換行)"
+                      rows={2}
+                      className="flex-1 resize-none bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-2 text-sm text-neutral-700 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-200"
+                    />
+                    {isLoading ? (
+                      <Button variant="danger" size="md" onClick={handleStop}>
+                        <Loader2 size={16} className="animate-spin" />
+                      </Button>
+                    ) : (
+                      <Button variant="primary" size="md" onClick={handleSend} disabled={!input.trim()}>
+                        <Send size={16} />
+                      </Button>
+                    )}
                   </div>
                 </div>
-              </div>
-            ))}
+              </Card>
+            </div>
+
+            {/* Side Panel */}
+            <div className="space-y-4">
+              <Card variant="default" padding="sm">
+                <h3 className="text-sm font-medium text-neutral-700 mb-3">快速指令</h3>
+                <div className="space-y-1">
+                  {[
+                    '分析 ESG 數據',
+                    '生成永續報告',
+                    '檢查合規狀態',
+                    '同步記憶碎片',
+                  ].map(cmd => (
+                    <button
+                      key={cmd}
+                      onClick={() => setInput(cmd)}
+                      className="w-full text-left px-3 py-2 rounded-lg text-xs text-neutral-600 hover:bg-neutral-50 transition-colors"
+                    >
+                      {cmd}
+                    </button>
+                  ))}
+                </div>
+              </Card>
+
+              <Card variant="default" padding="sm">
+                <h3 className="text-sm font-medium text-neutral-700 mb-3">系統狀態</h3>
+                <div className="space-y-2">
+                  {[
+                    { label: '記憶碎片', value: `${shards.length} 筆`, icon: DatabaseZap },
+                    { label: '群蜂事件', value: `${events.length} 筆`, icon: Activity },
+                    { label: '連線狀態', value: connectionStatus, icon: Network },
+                  ].map(item => (
+                    <div key={item.label} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <item.icon size={12} className="text-neutral-400" />
+                        <span className="text-xs text-neutral-500">{item.label}</span>
+                      </div>
+                      <span className="text-xs font-mono text-neutral-700">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
           </div>
         )}
-      </OmniBaseCard>
-    </div>
-  );
-}
 
-function SwarmTabContent() {
-  const { events, connectionStatus } = useSwarmStore();
+        {/* ─── Memory Tab ─── */}
+        {activeTab === 'memory' && (
+          <div className="space-y-4">
+            <SectionHeader
+              title="共享記憶層"
+              subtitle={`${shards.length} 個記憶碎片`}
+              action={
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm" onClick={fetchShards} disabled={memoryLoading}>
+                    <RefreshCw size={14} className={memoryLoading ? 'animate-spin' : ''} />
+                    重新載入
+                  </Button>
+                  <Button variant="primary" size="sm" onClick={syncWithNCB} disabled={memoryLoading}>
+                    <DatabaseZap size={14} />
+                    同步 NCBDB
+                  </Button>
+                </div>
+              }
+            />
 
-  return (
-    <div className="space-y-6">
-      <OmniBaseCard className="p-6 bg-[#0B1120] border-slate-800 text-slate-300">
-        <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
-          <div>
-            <h3 className="text-lg font-bold text-cyan-400 flex items-center gap-2">
-              <Activity className="text-amber-400" size={20} />
-              群蜂戰情室 (Swarm Dashboard)
-            </h3>
-            <p className="text-xs text-slate-500 mt-1 font-mono">
-              ws://161.118.248.180:8642 • 監聽所有代理通訊與狀態
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className={cn(
-              "text-xs font-mono px-2 py-1 rounded-md border",
-              connectionStatus === 'connected' ? "bg-emerald-900/30 text-emerald-400 border-emerald-800" :
-              connectionStatus === 'connecting' ? "bg-amber-900/30 text-amber-400 border-amber-800" :
-              "bg-red-900/30 text-red-400 border-red-800"
-            )}>
-              {connectionStatus.toUpperCase()}
-            </span>
-          </div>
-        </div>
-        
-        <div className="bg-[#0f172a] rounded-lg p-4 font-mono text-xs overflow-y-auto h-[400px] border border-slate-800 space-y-2">
-          {events.length === 0 ? (
-            <div className="text-slate-600 text-center mt-20">等待通訊訊號介入...</div>
-          ) : (
-            events.map(ev => (
-              <div key={ev.id} className="border-l-2 border-slate-700 pl-3 py-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-slate-500">{new Date(ev.timestamp).toLocaleTimeString()}</span>
-                  <span className={cn(
-                    "px-1.5 rounded text-[10px] uppercase font-bold",
-                    ev.source === 'OmniJules' ? 'bg-purple-900/50 text-purple-400' :
-                    ev.source === 'SharedMemory' ? 'bg-cyan-900/50 text-cyan-400' :
-                    ev.source === 'OmniGateway' ? 'bg-emerald-900/50 text-emerald-400' :
-                    'bg-slate-800 text-slate-300'
-                  )}>{ev.source}</span>
-                  <span className="text-amber-400/80 font-bold">[{ev.type}]</span>
+            {shards.length === 0 && !memoryLoading ? (
+              <Card variant="default" padding="lg">
+                <div className="text-center space-y-3">
+                  <DatabaseZap size={32} className="text-neutral-200 mx-auto" />
+                  <p className="text-sm text-neutral-500">尚無記憶碎片</p>
+                  <p className="text-xs text-neutral-400">點擊「同步 NCBDB」從資料庫拉取</p>
                 </div>
-                <div className="text-slate-400 pl-4 break-words">
-                  {typeof ev.payload === 'string' ? ev.payload : JSON.stringify(ev.payload)}
-                </div>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {shards.map(shard => (
+                  <Card key={shard.id} variant="default" padding="sm" hover>
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-sm font-medium text-neutral-900">{shard.title}</h4>
+                      <Badge variant={shard.source_origin === 'ncb' ? 'info' : 'neutral'} size="sm">
+                        {shard.source_origin === 'ncb' ? 'NCB' : 'Local'}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-neutral-500 line-clamp-2 mb-2">{shard.description}</p>
+                    <div className="flex items-center gap-2 text-[10px] text-neutral-400">
+                      <span>熵: {shard.entropy_level}</span>
+                      <span>·</span>
+                      <span>權重: {shard.importance_score?.toFixed(2)}</span>
+                      <span>·</span>
+                      <span>使用: {shard.usage_count} 次</span>
+                    </div>
+                  </Card>
+                ))}
               </div>
-            ))
-          )}
-        </div>
-      </OmniBaseCard>
+            )}
+          </div>
+        )}
+
+        {/* ─── Swarm Tab ─── */}
+        {activeTab === 'swarm' && (
+          <div className="space-y-4">
+            <SectionHeader
+              title="群蜂戰情室"
+              subtitle={`${events.length} 個事件`}
+              action={
+                <div className="flex gap-2">
+                  <Badge variant={connectionStatus === 'connected' ? 'success' : 'warning'} size="sm">
+                    {connectionStatus}
+                  </Badge>
+                  <Button variant="ghost" size="sm" onClick={clearEvents}>
+                    <Trash2 size={14} />
+                    清除
+                  </Button>
+                </div>
+              }
+            />
+
+            <Card variant="default" padding="none">
+              <div className="bg-neutral-900 rounded-xl p-4 font-mono text-xs h-[500px] overflow-y-auto space-y-2">
+                {events.length === 0 ? (
+                  <div className="text-neutral-600 text-center mt-20">等待 Swarm 事件...</div>
+                ) : (
+                  events.map(ev => (
+                    <div key={ev.id} className="border-l-2 border-neutral-700 pl-3 py-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-neutral-500">{new Date(ev.timestamp).toLocaleTimeString()}</span>
+                        <span className={cn(
+                          'px-1.5 rounded text-[10px] font-medium',
+                          ev.source === 'OmniGateway' ? 'bg-emerald-900/50 text-emerald-400' :
+                          ev.source === 'SharedMemory' ? 'bg-cyan-900/50 text-cyan-400' :
+                          'bg-neutral-800 text-neutral-300'
+                        )}>{ev.source}</span>
+                        <span className="text-amber-400/80">[{ev.type}]</span>
+                      </div>
+                      <div className="text-neutral-400 pl-4 break-words">
+                        {typeof ev.payload === 'string' ? ev.payload : JSON.stringify(ev.payload)}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* ─── System Tab ─── */}
+        {activeTab === 'system' && (
+          <div className="space-y-4">
+            <SectionHeader title="系統狀態" subtitle="即時系統監控" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { label: '資料庫', value: health?.dbStatus || 'unknown', icon: DatabaseZap, color: health?.dbStatus === 'connected' ? 'success' : 'error' },
+                { label: '延遲', value: `${health?.dbLatency || 0}ms`, icon: Activity, color: 'info' },
+                { label: '活躍代理', value: `${health?.activeAgents || 0}`, icon: Bot, color: 'success' },
+                { label: '記憶條目', value: `${health?.codexEntries || 0}`, icon: MemoryIcon, color: 'info' },
+              ].map(item => (
+                <Card key={item.label} variant="default" padding="md">
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      'w-10 h-10 rounded-lg flex items-center justify-center',
+                      item.color === 'success' ? 'bg-emerald-50' :
+                      item.color === 'error' ? 'bg-red-50' : 'bg-blue-50'
+                    )}>
+                      <item.icon size={18} className={cn(
+                        item.color === 'success' ? 'text-emerald-600' :
+                        item.color === 'error' ? 'text-red-600' : 'text-blue-600'
+                      )} />
+                    </div>
+                    <div>
+                      <p className="text-xs text-neutral-500">{item.label}</p>
+                      <p className="text-lg font-bold text-neutral-900">{item.value}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

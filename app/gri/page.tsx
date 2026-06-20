@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 import { BookOpen, Search, ExternalLink, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GRI_CHAPTERS } from '@/lib/esg/gri-expert-templates-store';
@@ -101,7 +101,7 @@ export default function GRIStandardPage() {
         {/* Category Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {griCategories.map((cat) => (
-            <OmniBaseCard
+            <Card
               key={cat.id}
               variant="glass"
               className="p-4 hover:shadow-lg transition-all cursor-pointer"
@@ -115,14 +115,14 @@ export default function GRIStandardPage() {
                 <span className="font-bold text-slate-800">{cat.label}</span>
               </div>
               <p className="text-xs text-slate-500 font-mono">{cat.range}</p>
-            </OmniBaseCard>
+            </Card>
           ))}
         </div>
 
         {/* Chapters Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredChapters.map((chapter) => (
-            <OmniBaseCard
+            <Card
               key={chapter.id}
               variant="glass"
               className="p-5 hover:border-cyan-500/30 transition-all group cursor-pointer"
@@ -142,22 +142,22 @@ export default function GRIStandardPage() {
                 可套用 {chapter.templateIds.length} 個專家模板
               </p>
               <div className="flex gap-2">
-                <OmniButton
+                <Button
                   variant="outline"
                   size="sm"
                   className="flex-1 text-[10px] h-7 border-cyan-300 text-cyan-600 hover:bg-cyan-50"
                 >
                   <ExternalLink size={10} className="mr-1" /> 查看詳情
-                </OmniButton>
-                <OmniButton
+                </Button>
+                <Button
                   variant="ghost"
                   size="sm"
                   className="flex-1 text-[10px] h-7 text-slate-600 hover:bg-slate-100"
                 >
                   <Download size={10} className="mr-1" /> 下載範本
-                </OmniButton>
+                </Button>
               </div>
-            </OmniBaseCard>
+            </Card>
           ))}
         </div>
       </div>

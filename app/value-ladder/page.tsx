@@ -26,9 +26,9 @@ import {
   Rocket,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface ValueTier {
@@ -257,13 +257,13 @@ function TierCard({ tier, index }: { tier: ValueTier; index: number }) {
       {/* User Count */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-100">
         <span className="text-[10px] text-slate-400">{tier.userCount} 用戶</span>
-        <OmniButton
+        <Button
           variant={isPopular ? 'primary' : 'outline'}
           size="sm"
           className={isPopular ? 'bg-blue-600 hover:bg-blue-700 text-white' : ''}
         >
           {tier.cta}
-        </OmniButton>
+        </Button>
       </div>
     </div>
   );
@@ -392,13 +392,13 @@ export default function ValueLadderPage() {
               <h2 className="text-lg font-bold text-[#003262] mb-1">價值實現流程</h2>
               <p className="text-xs text-slate-400">從註冊到獲得投資人的完整價值鏈</p>
             </div>
-            <OmniBaseCard className="p-6">
+            <Card className="p-6">
               <div className="space-y-2">
                 {VALUE_FLOW.map((step, i) => (
                   <FlowStep key={i} step={step} index={i} />
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
@@ -410,7 +410,7 @@ export default function ValueLadderPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                   <DollarSign size={14} className="text-emerald-500" />
                   成本比較
@@ -433,9 +433,9 @@ export default function ValueLadderPage() {
                     </div>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                   <TrendingUp size={14} className="text-blue-500" />
                   價值增長
@@ -462,29 +462,29 @@ export default function ValueLadderPage() {
                     </div>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
           </div>
         )}
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備開始你的價值階梯？</h3>
           <p className="text-xs text-slate-400 mb-4">從免費開始，逐步升級，實現 ESG 目標</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Rocket size={16} />}
               className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               免費開始
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

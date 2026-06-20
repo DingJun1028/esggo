@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 import { ShieldCheck, Globe } from 'lucide-react';
 
 export default function TripleLayerV2Page() {
@@ -26,7 +26,7 @@ export default function TripleLayerV2Page() {
 
         {/* Alliance Hub Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <OmniBaseCard variant="glass" className="p-6">
+          <Card variant="glass" className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <Globe size={20} className="text-emerald-600" />
               <h2 className="text-lg font-bold text-[#003262]">Alliance Hub</h2>
@@ -45,9 +45,9 @@ export default function TripleLayerV2Page() {
                 <span className="font-mono text-emerald-600">5T VERIFIED</span>
               </div>
             </div>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glass" className="p-6">
+          <Card variant="glass" className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <ShieldCheck size={20} className="text-cyan-600" />
               <h2 className="text-lg font-bold text-[#003262]">5T Verification Matrix</h2>
@@ -65,7 +65,7 @@ export default function TripleLayerV2Page() {
                 </div>
               ))}
             </div>
-          </OmniBaseCard>
+          </Card>
         </section>
       </div>
     </div>

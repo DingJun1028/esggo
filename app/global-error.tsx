@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react';
 import { ShieldCheck, AlertTriangle } from 'lucide-react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 
 export default function GlobalError({
   error,
@@ -20,7 +20,7 @@ export default function GlobalError({
   return (
     <html>
       <body className="bg-slate-50 min-h-screen flex items-center justify-center font-sans p-4">
-        <OmniBaseCard variant="default" className="max-w-lg w-full p-8 text-center space-y-6">
+        <Card variant="default" className="max-w-lg w-full p-8 text-center space-y-6">
           <div className="mx-auto w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center">
             <AlertTriangle size={32} />
           </div>
@@ -39,21 +39,21 @@ export default function GlobalError({
           </div>
 
           <div className="flex justify-center gap-4 pt-4">
-            <OmniButton 
+            <Button 
               variant="outline" 
               onClick={() => window.location.href = '/'}
             >
               返回主控台
-            </OmniButton>
-            <OmniButton 
+            </Button>
+            <Button 
               variant="primary" 
               icon={<ShieldCheck size={16} />}
               onClick={() => reset()}
             >
               嘗試自動修復 (Auto-Heal)
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </body>
     </html>
   );

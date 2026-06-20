@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck, Stethoscope } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -97,7 +97,7 @@ export default function EnterpriseHealthWizardPage() {
         </div>
 
         {/* Question Card */}
-        <OmniBaseCard className="p-8 md:p-12 border-0 shadow-lg relative overflow-hidden bg-white">
+        <Card className="p-8 md:p-12 border-0 shadow-lg relative overflow-hidden bg-white">
           <div className="absolute top-0 right-0 p-8 opacity-5">
             <ShieldCheck size={120} />
           </div>
@@ -142,15 +142,15 @@ export default function EnterpriseHealthWizardPage() {
               })}
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* Navigation */}
         <div className="flex items-center justify-between pt-4">
-          <OmniButton variant="ghost" onClick={handlePrev} className="text-slate-500 hover:text-slate-800 font-bold">
+          <Button variant="ghost" onClick={handlePrev} className="text-slate-500 hover:text-slate-800 font-bold">
             <ArrowLeft size={16} className="mr-2" /> {currentStep === 0 ? '返回商情中心' : '上一題'}
-          </OmniButton>
+          </Button>
           
-          <OmniButton 
+          <Button 
             variant="primary" 
             size="lg" 
             onClick={handleNext} 
@@ -159,7 +159,7 @@ export default function EnterpriseHealthWizardPage() {
             className="bg-[#003262] hover:bg-[#002244] min-w-[140px] tracking-widest"
           >
             {currentStep === QUESTIONS.length - 1 ? '完成診斷' : '下一題'} {!isSubmitting && <ArrowRight size={16} className="ml-2" />}
-          </OmniButton>
+          </Button>
         </div>
 
       </div>

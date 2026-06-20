@@ -31,9 +31,9 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface WebhookEndpoint {
@@ -524,7 +524,7 @@ export default function WebhooksPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-[#003262]">Webhook 端點</h3>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 icon={<Plus size={14} />}
@@ -532,7 +532,7 @@ export default function WebhooksPage() {
                 className="bg-[#003262] hover:bg-[#002244] text-white"
               >
                 新增端點
-              </OmniButton>
+              </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {endpoints.map((webhook) => (
@@ -548,7 +548,7 @@ export default function WebhooksPage() {
         )}
 
         {activeTab === 'logs' && (
-          <OmniBaseCard className="p-5">
+          <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-base font-bold text-[#003262] flex items-center gap-2">
                 <Activity size={16} className="text-amber-500" />
@@ -576,7 +576,7 @@ export default function WebhooksPage() {
                 <LogRow key={log.id} log={log} />
               ))}
             </div>
-          </OmniBaseCard>
+          </Card>
         )}
 
         {activeTab === 'events' && (
@@ -600,7 +600,7 @@ export default function WebhooksPage() {
 
         {activeTab === 'settings' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <ShieldCheck size={16} className="text-emerald-500" />
                 安全設定
@@ -637,9 +637,9 @@ export default function WebhooksPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <BarChart3 size={16} className="text-blue-500" />
                 推送統計
@@ -670,7 +670,7 @@ export default function WebhooksPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
@@ -729,21 +729,21 @@ export default function WebhooksPage() {
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 pt-2">
-                    <OmniButton
+                    <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setShowCreateModal(false)}
                     >
                       取消
-                    </OmniButton>
-                    <OmniButton
+                    </Button>
+                    <Button
                       variant="primary"
                       size="sm"
                       icon={<Plus size={14} />}
                       className="bg-[#003262] hover:bg-[#002244] text-white"
                     >
                       建立端點
-                    </OmniButton>
+                    </Button>
                   </div>
                 </div>
               </div>

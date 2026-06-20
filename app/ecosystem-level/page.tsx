@@ -28,9 +28,9 @@ import {
   Recycle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Data ─── */
 const ECOSYSTEM_FEATURES = [
@@ -324,9 +324,9 @@ export default function EcosystemLevelPage() {
                   <h1 className="text-2xl font-black text-[#003262] tracking-tight">
                     Level 4: 生態協同
                   </h1>
-                  <OmniBadge variant="success" size="sm">
+                  <Badge variant="success" size="sm">
                     Month 3+
-                  </OmniBadge>
+                  </Badge>
                 </div>
                 <p className="text-xs text-slate-400 font-mono">
                   Ecosystem Collaboration · 供應鏈整合 · 碳交易 · 國際認證
@@ -427,7 +427,7 @@ export default function EcosystemLevelPage() {
                 <div
                   key="timeline"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Clock size={14} className="text-emerald-500" />
                       Month 3 里程碑
@@ -437,7 +437,7 @@ export default function EcosystemLevelPage() {
                         <MilestoneItem key={i} milestone={milestone} index={i} />
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
 
@@ -445,7 +445,7 @@ export default function EcosystemLevelPage() {
                 <div
                   key="comparison"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <BarChart3 size={14} className="text-blue-500" />
                       全等級比較
@@ -466,7 +466,7 @@ export default function EcosystemLevelPage() {
                         <ComparisonRow key={i} data={data} />
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
             
@@ -475,7 +475,7 @@ export default function EcosystemLevelPage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Partner Logos */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">合作夥伴</h3>
               <div className="grid grid-cols-3 gap-2">
                 {PARTNER_LOGOS.map((partner) => (
@@ -486,10 +486,10 @@ export default function EcosystemLevelPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Level Progress */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">等級進度</h3>
               <div className="space-y-3">
                 {[
@@ -514,43 +514,43 @@ export default function EcosystemLevelPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* CTA */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200">
+            <Card className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">升級到 Level 4</h3>
               <p className="text-[11px] text-slate-500 mb-3">
                 整合供應鏈、開始碳交易、獲得國際認證
               </p>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
               >
                 開始升級
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
           </div>
         </div>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備建立 ESG 生態系統？</h3>
           <p className="text-xs text-slate-400 mb-4">從 Level 1 開始，逐步升級到生態協同</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Globe size={16} />}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               開始生態協同
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import OmniAgentCard from './OmniAgentCard';
 import { Shield, Activity, FileText } from 'lucide-react';

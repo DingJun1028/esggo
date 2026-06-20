@@ -32,9 +32,9 @@ import {
   MailOpen,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface NotificationItem {
@@ -316,7 +316,7 @@ function EmailTemplateCard({ template }: { template: EmailTemplate }) {
           <h4 className="text-sm font-bold text-[#003262] truncate">{template.name}</h4>
           <p className="text-[10px] text-slate-400 mt-0.5 truncate">{template.subject}</p>
         </div>
-        <OmniBadge
+        <Badge
           variant={
             template.status === 'active'
               ? 'success'
@@ -327,7 +327,7 @@ function EmailTemplateCard({ template }: { template: EmailTemplate }) {
           size="xs"
         >
           {template.status === 'active' ? '啟用' : template.status === 'paused' ? '暫停' : '草稿'}
-        </OmniBadge>
+        </Badge>
       </div>
 
       <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
@@ -545,14 +545,14 @@ export default function NotificationsPage() {
                 <h3 className="text-base font-bold text-[#003262]">郵件模板</h3>
                 <p className="text-xs text-slate-400">管理自動化郵件通知模板</p>
               </div>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 icon={<Plus size={14} />}
                 className="bg-[#003262] hover:bg-[#002244] text-white"
               >
                 新增模板
-              </OmniButton>
+              </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {EMAIL_TEMPLATES.map((template) => (
@@ -564,7 +564,7 @@ export default function NotificationsPage() {
 
         {activeTab === 'settings' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <Bell size={16} className="text-cyan-500" />
                 通知管道
@@ -627,9 +627,9 @@ export default function NotificationsPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <Clock size={16} className="text-amber-500" />
                 通知時機
@@ -665,9 +665,9 @@ export default function NotificationsPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
-            <OmniBaseCard className="p-5 md:col-span-2">
+            <Card className="p-5 md:col-span-2">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <ShieldCheck size={16} className="text-emerald-500" />
                 通知統計
@@ -689,7 +689,7 @@ export default function NotificationsPage() {
                   );
                 })}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
       </div>

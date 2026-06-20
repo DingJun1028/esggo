@@ -30,9 +30,9 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
+import { Button } from '@/components/ui/v2/Button';
 
 /* ─── Types ─── */
 interface ReportStep {
@@ -325,9 +325,9 @@ function TemplateCard({ template }: { template: ReportTemplate }) {
         </div>
         <div>
           <h4 className="text-sm font-bold text-[#003262]">{template.name}</h4>
-          <OmniBadge variant="secondary" size="xs">
+          <Badge variant="secondary" size="xs">
             {template.framework}
-          </OmniBadge>
+          </Badge>
         </div>
       </div>
       <p className="text-[10px] text-slate-400 mb-3">{template.description}</p>
@@ -400,7 +400,7 @@ export default function ReportGenerationPage() {
         </div>
 
         {/* ─── Before/After Comparison ─── */}
-        <OmniBaseCard className="p-6">
+        <Card className="p-6">
           <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
             <Zap size={16} className="text-amber-500" />
             使用前 vs 使用後
@@ -466,7 +466,7 @@ export default function ReportGenerationPage() {
               </div>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
@@ -555,7 +555,7 @@ export default function ReportGenerationPage() {
 
             {/* Impact Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <Lightbulb size={14} className="text-amber-500" />
                   效率提升
@@ -573,9 +573,9 @@ export default function ReportGenerationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <TrendingUp size={14} className="text-emerald-500" />
                   品質提升
@@ -593,9 +593,9 @@ export default function ReportGenerationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <Target size={14} className="text-blue-500" />
                   成本節省
@@ -613,9 +613,9 @@ export default function ReportGenerationPage() {
                     </li>
                   ))}
                 </ul>
-              </OmniBaseCard>
+              </Card>
 
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                   <Users size={14} className="text-violet-500" />
                   用戶回饋
@@ -632,29 +632,29 @@ export default function ReportGenerationPage() {
                     </div>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
           </div>
         )}
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗 15 分鐘生成報告？</h3>
           <p className="text-xs text-slate-400 mb-4">上傳您的數據，讓 AI 為您生成專業永續報告</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<FileText size={16} />}
               className="bg-[#003262] hover:bg-[#002244] text-white"
             >
               開始生成報告
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

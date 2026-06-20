@@ -28,9 +28,9 @@ import {
   Search,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface Partner {
@@ -280,7 +280,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
           </div>
           <p className="text-[10px] text-slate-400">{partner.description}</p>
         </div>
-        <OmniBadge
+        <Badge
           variant={
             partner.status === 'active'
               ? 'success'
@@ -291,7 +291,7 @@ function PartnerCard({ partner }: { partner: Partner }) {
           size="xs"
         >
           {partner.status === 'active' ? '活躍' : partner.status === 'pending' ? '待定' : '已邀請'}
-        </OmniBadge>
+        </Badge>
       </div>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-1">
@@ -427,7 +427,7 @@ export default function AllianceCollaborationPage() {
 
         {/* ─── Summary ─── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <OmniBaseCard className="p-4">
+          <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-emerald-50 rounded-lg">
                 <Users size={18} className="text-emerald-600" />
@@ -439,8 +439,8 @@ export default function AllianceCollaborationPage() {
                 <p className="text-[10px] text-slate-400">活躍夥伴</p>
               </div>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4">
+          </Card>
+          <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-50 rounded-lg">
                 <Star size={18} className="text-blue-600" />
@@ -450,8 +450,8 @@ export default function AllianceCollaborationPage() {
                 <p className="text-[10px] text-slate-400">平均 ESG 評分</p>
               </div>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4">
+          </Card>
+          <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-violet-50 rounded-lg">
                 <Globe size={18} className="text-violet-600" />
@@ -461,7 +461,7 @@ export default function AllianceCollaborationPage() {
                 <p className="text-[10px] text-slate-400">夥伴類型</p>
               </div>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Partner Types ─── */}
@@ -575,7 +575,7 @@ export default function AllianceCollaborationPage() {
               <div
                 style={{ transition: 'all 0.4s ease' }}
               >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Handshake size={14} className="text-emerald-500" />
                       協作流程
@@ -585,7 +585,7 @@ export default function AllianceCollaborationPage() {
                         <FlowStep key={i} step={step} index={i} />
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
               </div>
             )}
           </div>
@@ -593,7 +593,7 @@ export default function AllianceCollaborationPage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Partner Distribution */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">夥伴分佈</h3>
               <div className="space-y-2">
                 {PARTNER_TYPES.map((type) => (
@@ -614,10 +614,10 @@ export default function AllianceCollaborationPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Recent Activities */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">近期活動</h3>
               <div className="space-y-2">
                 {[
@@ -635,22 +635,22 @@ export default function AllianceCollaborationPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* CTA */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200">
+            <Card className="p-4 bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">邀請合作夥伴</h3>
               <p className="text-[11px] text-slate-500 mb-3">
                 邀請供應鏈夥伴加入聯盟，共同推動永續發展
               </p>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
               >
                 發送邀請
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
           </div>
         </div>
       </div>

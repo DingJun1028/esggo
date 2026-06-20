@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { logUserActivity } from '@/lib/telemetry';
 import {
   Settings,
@@ -97,14 +97,14 @@ export default function ApiSetupPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <OmniButton
+            <Button
               variant="outline"
               icon={<RefreshCcw size={16} />}
               onClick={handleResetDefaults}
               className="bg-white hover:bg-slate-50 text-slate-700 border-slate-200 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2 cursor-pointer"
             >
               還原預設
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
@@ -236,14 +236,14 @@ export default function ApiSetupPage() {
                       </span>
                     )}
                   </div>
-                  <OmniButton
+                  <Button
                     type="submit"
                     variant="primary"
                     isLoading={loading}
                     className="w-full md:w-auto bg-[#63a6b0] hover:bg-[#528d96] text-white border-none shadow-sm flex items-center gap-2 rounded-xl h-11 px-6 transition-all font-bold cursor-pointer"
                   >
                     {loading ? '安全刻印中...' : '儲存配置'}
-                  </OmniButton>
+                  </Button>
                 </div>
               </form>
             </div>

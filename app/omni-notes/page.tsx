@@ -37,9 +37,9 @@ import {
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { useOmniNotesStore, type NoteType, type OmniNote, type TaskStatus } from '@/store/useOmniNotesStore';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -167,14 +167,14 @@ function NoteCard({
         <NoteTypeIcon type={note.type} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <OmniBadge variant="secondary" size="xs">
+            <Badge variant="secondary" size="xs">
               {info.label}
-            </OmniBadge>
+            </Badge>
             <span className="text-[10px] text-slate-400">{formatRelativeTime(note.createdAt)}</span>
             {note.source !== 'local' && (
-              <OmniBadge variant="outline" size="xs">
+              <Badge variant="outline" size="xs">
                 {note.source}
-              </OmniBadge>
+              </Badge>
             )}
           </div>
           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap line-clamp-3">
@@ -377,10 +377,10 @@ function NoteEditor({
             />
           </div>
           <div className="flex items-center gap-2">
-            <OmniButton variant="ghost" size="sm" onClick={onCancel}>
+            <Button variant="ghost" size="sm" onClick={onCancel}>
               取消
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="primary"
               size="sm"
               onClick={handleSubmit}
@@ -388,7 +388,7 @@ function NoteEditor({
               icon={<Save size={14} />}
             >
               {note ? '更新' : '儲存'}
-            </OmniButton>
+            </Button>
           </div>
         </div>
       </div>
@@ -420,9 +420,9 @@ function NoteEditor({
               <span className={cn('text-sm font-bold', isDark ? 'text-gray-100' : 'text-gray-900')}>
                 任務看板
               </span>
-              <OmniBadge variant="outline" size="xs" className="ml-1">
+              <Badge variant="outline" size="xs" className="ml-1">
                 {tasks.length} 筆
-              </OmniBadge>
+              </Badge>
             </div>
             <button
               onClick={handleSyncToOmniTable}
@@ -605,7 +605,7 @@ export default function OmniNotesPage() {
                 同步中...
               </div>
             )}
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Plus size={14} />}
@@ -616,13 +616,13 @@ export default function OmniNotesPage() {
               className="bg-[#003262] hover:bg-[#002244] text-white"
             >
               新增筆記
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
         {/* ─── Stats ─── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <OmniBaseCard className="p-4 flex items-center gap-3">
+          <Card className="p-4 flex items-center gap-3">
             <div className="p-2 bg-blue-50 rounded-lg">
               <FileText size={16} className="text-blue-600" />
             </div>
@@ -632,8 +632,8 @@ export default function OmniNotesPage() {
                 總筆記
               </p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4 flex items-center gap-3">
+          </Card>
+          <Card className="p-4 flex items-center gap-3">
             <div className="p-2 bg-emerald-50 rounded-lg">
               <Calendar size={16} className="text-emerald-600" />
             </div>
@@ -641,8 +641,8 @@ export default function OmniNotesPage() {
               <p className="text-xl font-black text-[#003262]">{stats.today}</p>
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">今日</p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4 flex items-center gap-3">
+          </Card>
+          <Card className="p-4 flex items-center gap-3">
             <div className="p-2 bg-amber-50 rounded-lg">
               <CheckSquare size={16} className="text-amber-600" />
             </div>
@@ -650,8 +650,8 @@ export default function OmniNotesPage() {
               <p className="text-xl font-black text-[#003262]">{stats.tasks}</p>
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">任務</p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4 flex items-center gap-3">
+          </Card>
+          <Card className="p-4 flex items-center gap-3">
             <div className="p-2 bg-rose-50 rounded-lg">
               <Pin size={16} className="text-rose-600" />
             </div>
@@ -659,11 +659,11 @@ export default function OmniNotesPage() {
               <p className="text-xl font-black text-[#003262]">{stats.pinned}</p>
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">置頂</p>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Search & Filter ─── */}
-        <OmniBaseCard padding="md">
+        <Card padding="md">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
             {/* Search */}
             <div className="relative flex-1">
@@ -711,7 +711,7 @@ export default function OmniNotesPage() {
               </select>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Content Area ─── */}
         
@@ -763,7 +763,7 @@ export default function OmniNotesPage() {
         
 
         {/* ─── Integration Info ─── */}
-        <OmniBaseCard className="border-cyan-100 bg-cyan-50/30">
+        <Card className="border-cyan-100 bg-cyan-50/30">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-cyan-100 rounded-lg">
@@ -784,7 +784,7 @@ export default function OmniNotesPage() {
               <span>OmniTable Sync</span>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

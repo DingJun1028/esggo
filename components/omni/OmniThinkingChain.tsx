@@ -28,6 +28,9 @@ export interface ThinkingStep {
 }
 
 interface OmniThinkingChainProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   isThinking: boolean;
   steps?: ThinkingStep[];
   title?: string;

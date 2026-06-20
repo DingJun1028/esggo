@@ -3,9 +3,9 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { ShieldCheck, Lock, Activity, Bot, ArrowRight, XCircle } from 'lucide-react';
 
 function ConsentContent() {
@@ -80,7 +80,7 @@ function ConsentContent() {
       <div
         className="max-w-md w-full relative z-10"
       >
-        <OmniBaseCard variant="glow" className="p-8 md:p-10 border-cyan-500/30">
+        <Card variant="glow" className="p-8 md:p-10 border-cyan-500/30">
           <div className="flex flex-col items-center text-center space-y-6">
             <div className="flex justify-center mb-4 relative">
               <div className="absolute inset-0 bg-cyan-core/20 blur-xl rounded-full" />
@@ -90,9 +90,9 @@ function ConsentContent() {
             </div>
 
             <div className="space-y-2">
-              <OmniBadge variant="success" className="mb-2">
+              <Badge variant="success" className="mb-2">
                 OAuth 2.1 授權
-              </OmniBadge>
+              </Badge>
               <h1 className="text-2xl font-black tracking-tight">授權存取請求</h1>
               <p className="text-sm text-white/60 leading-relaxed">
                 <strong className="text-white">OmniAgent (MCP)</strong> 想要存取您的 ESGGO 帳號與 5T
@@ -127,12 +127,12 @@ function ConsentContent() {
                 </div>
 
                 <div className="flex gap-4 w-full pt-4">
-                  <OmniButton variant="secondary" onClick={handleDeny} className="flex-1 py-4">
+                  <Button variant="secondary" onClick={handleDeny} className="flex-1 py-4">
                     拒絕
-                  </OmniButton>
-                  <OmniButton variant="primary" onClick={handleApprove} className="flex-1 py-4">
+                  </Button>
+                  <Button variant="primary" onClick={handleApprove} className="flex-1 py-4">
                     允許存取
-                  </OmniButton>
+                  </Button>
                 </div>
               </>
             )}
@@ -170,9 +170,9 @@ function ConsentContent() {
                 </div>
                 <h3 className="text-xl font-bold text-rose-400">授權失敗</h3>
                 <p className="text-xs text-rose-300/70">{errorMsg}</p>
-                <OmniButton variant="secondary" onClick={() => window.close()} className="mt-4">
+                <Button variant="secondary" onClick={() => window.close()} className="mt-4">
                   關閉視窗
-                </OmniButton>
+                </Button>
               </div>
             )}
           </div>
@@ -182,7 +182,7 @@ function ConsentContent() {
               Secured by Supabase Row Level Security
             </p>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

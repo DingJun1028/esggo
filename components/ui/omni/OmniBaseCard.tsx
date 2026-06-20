@@ -1,7 +1,11 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/utils';
 
 export interface OmniBaseCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   padding?: 'none' | 'sm' | 'md' | 'lg';
   variant?: 'default' | 'glass' | 'outline' | 'glow' | 'bordered';
   title?: React.ReactNode;

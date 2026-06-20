@@ -28,9 +28,9 @@ import {
   Eye,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface Course {
@@ -211,9 +211,9 @@ function CourseCard({ course }: { course: Course }) {
           </div>
         )}
         <div className="absolute top-2 left-2">
-          <OmniBadge variant="secondary" size="xs">
+          <Badge variant="secondary" size="xs">
             {catConfig.label}
-          </OmniBadge>
+          </Badge>
         </div>
       </div>
 
@@ -462,7 +462,7 @@ export default function AcademyPage() {
           <div className="space-y-6">
             {/* Progress Overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-cyan-50 rounded-lg">
                     <BarChart3 size={16} className="text-cyan-600" />
@@ -472,8 +472,8 @@ export default function AcademyPage() {
                     <p className="text-[10px] text-slate-400">進行中課程</p>
                   </div>
                 </div>
-              </OmniBaseCard>
-              <OmniBaseCard className="p-5">
+              </Card>
+              <Card className="p-5">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-emerald-50 rounded-lg">
                     <Award size={16} className="text-emerald-600" />
@@ -483,8 +483,8 @@ export default function AcademyPage() {
                     <p className="text-[10px] text-slate-400">已完成課程</p>
                   </div>
                 </div>
-              </OmniBaseCard>
-              <OmniBaseCard className="p-5">
+              </Card>
+              <Card className="p-5">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-amber-50 rounded-lg">
                     <Zap size={16} className="text-amber-600" />
@@ -494,7 +494,7 @@ export default function AcademyPage() {
                     <p className="text-[10px] text-slate-400">學習積分</p>
                   </div>
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
 
             {/* My Courses */}

@@ -1,4 +1,6 @@
 'use client';
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useCallback } from 'react';
 import { cn } from '../../../lib/cn';
 import { Database, RefreshCw, Plus, Trash2, Edit2 } from 'lucide-react';
@@ -22,6 +24,9 @@ export interface OmniDBCredentials {
 }
 
 export interface OmniDBProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   source?: 'supabase' | 'ncbdb' | 'mysql' | 'postgres';
   records?: OmniDBRecord[];
   onRefresh?: () => void;

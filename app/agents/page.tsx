@@ -16,9 +16,9 @@ import {
   Bot,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface AgentRecord {
@@ -174,9 +174,9 @@ export default function AgentsPage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-0.5">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={10} />}>
+                <Badge variant="primary" size="sm" icon={<Brain size={10} />}>
                   OmniAgent Ready
-                </OmniBadge>
+                </Badge>
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
                   AGENTS
                 </span>
@@ -188,15 +188,15 @@ export default function AgentsPage() {
             </div>
           </div>
           <div className="flex gap-2 w-full md:w-auto">
-            <OmniButton
+            <Button
               variant="outline"
               size="md"
               icon={<Search size={14} />}
               className="flex-1 md:flex-none"
             >
               檢索
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="primary"
               size="md"
               icon={<Plus size={14} />}
@@ -205,13 +205,13 @@ export default function AgentsPage() {
               className="bg-[#003262] hover:bg-[#002244] text-white flex-1 md:flex-none"
             >
               新增紀錄
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
         {/* ─── Stats ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-2.5 bg-emerald-50 rounded-xl">
               <Activity size={18} className="text-emerald-600" />
             </div>
@@ -222,8 +222,8 @@ export default function AgentsPage() {
               </p>
               <p className="text-[10px] text-emerald-600 font-bold">Status: Optimal</p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          </Card>
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-2.5 bg-cyan-50 rounded-xl">
               <ShieldCheck size={18} className="text-cyan-600" />
             </div>
@@ -233,8 +233,8 @@ export default function AgentsPage() {
               </p>
               <p className="text-[10px] text-cyan-600 font-bold">5T 驗證率</p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          </Card>
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-2.5 bg-amber-50 rounded-xl">
               <Brain size={18} className="text-amber-600" />
             </div>
@@ -245,7 +245,7 @@ export default function AgentsPage() {
               </p>
               <p className="text-[10px] text-amber-600 font-bold">業務覆蓋</p>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Agent Features ─── */}
@@ -273,7 +273,7 @@ export default function AgentsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Table */}
           <div className="lg:col-span-3">
-            <OmniBaseCard padding="none" className="overflow-hidden">
+            <Card padding="none" className="overflow-hidden">
               <div className="p-5 border-b border-slate-100">
                 <h3 className="text-base font-bold text-[#003262]">業務資料視圖</h3>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -320,17 +320,17 @@ export default function AgentsPage() {
                             </td>
                             <td className="px-4 py-3">
                               {row.hash_lock ? (
-                                <OmniBadge
+                                <Badge
                                   variant="success"
                                   size="sm"
                                   icon={<ShieldCheck size={10} />}
                                 >
                                   {row.hash_lock.substring(0, 8)}...
-                                </OmniBadge>
+                                </Badge>
                               ) : (
-                                <OmniBadge variant="default" size="sm">
+                                <Badge variant="default" size="sm">
                                   未封印
-                                </OmniBadge>
+                                </Badge>
                               )}
                             </td>
                             <td className="px-4 py-3">
@@ -379,12 +379,12 @@ export default function AgentsPage() {
                   </div>
                 </>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Sidebar */}
           <div>
-            <OmniBaseCard className="p-5 border-cyan-100">
+            <Card className="p-5 border-cyan-100">
               <h3 className="text-sm font-bold text-[#003262] mb-4">OmniAgent 輔助</h3>
               <div className="space-y-3 text-sm text-slate-600">
                 <p>
@@ -408,7 +408,7 @@ export default function AgentsPage() {
                   </ul>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
       </div>

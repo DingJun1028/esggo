@@ -23,9 +23,9 @@ import {
   Search,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface BlockRecord {
@@ -220,9 +220,9 @@ function BlockRecordCard({ record }: { record: BlockRecord }) {
               <span className="text-xs font-bold text-[#003262]">
                 Block #{record.blockNumber.toLocaleString()}
               </span>
-              <OmniBadge variant={record.status === 'confirmed' ? 'success' : 'warning'} size="xs">
+              <Badge variant={record.status === 'confirmed' ? 'success' : 'warning'} size="xs">
                 {record.status === 'confirmed' ? '已確認' : '確認中'}
-              </OmniBadge>
+              </Badge>
             </div>
             <span className="text-[10px] text-slate-400">
               {new Date(record.timestamp).toLocaleString('zh-TW', {
@@ -492,7 +492,7 @@ export default function BlockchainEvidencePage() {
                 <div
                   key="process"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Link size={14} className="text-cyan-500" />
                       區塊鏈錨定流程
@@ -516,7 +516,7 @@ export default function BlockchainEvidencePage() {
                         <span className="text-sm font-black text-[#003262]">~15 秒</span>
                       </div>
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
 
@@ -531,11 +531,11 @@ export default function BlockchainEvidencePage() {
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {BLOCKCHAIN_SPECS.map((spec) => (
-                      <OmniBaseCard key={spec.label} className="p-4 text-center">
+                      <Card key={spec.label} className="p-4 text-center">
                         <p className="text-[10px] text-slate-400 font-medium">{spec.label}</p>
                         <p className="text-lg font-black text-[#003262] mt-1">{spec.value}</p>
                         <p className="text-[9px] text-slate-400 mt-0.5">{spec.description}</p>
-                      </OmniBaseCard>
+                      </Card>
                     ))}
                   </div>
                 </div>
@@ -546,7 +546,7 @@ export default function BlockchainEvidencePage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Trust Features */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">信任特性</h3>
               <div className="space-y-3">
                 {TRUST_FEATURES.map((feature) => {
@@ -562,10 +562,10 @@ export default function BlockchainEvidencePage() {
                   );
                 })}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Verify Button */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
+            <Card className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">驗證區塊鏈記錄</h3>
               <p className="text-[11px] text-slate-500 mb-3">輸入雜湊值驗證數據是否在區塊鏈上</p>
               <input
@@ -573,17 +573,17 @@ export default function BlockchainEvidencePage() {
                 placeholder="0x..."
                 className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-mono mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
               />
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
               >
                 驗證
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
 
             {/* Explorer Link */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">區塊鏈瀏覽器</h3>
               <p className="text-[11px] text-slate-400 mb-3">在區塊鏈瀏覽器上查看完整交易記錄</p>
               <a
@@ -592,7 +592,7 @@ export default function BlockchainEvidencePage() {
               >
                 <ExternalLink size={12} />在 Etherscan 上查看
               </a>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
       </div>

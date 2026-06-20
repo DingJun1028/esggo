@@ -2,9 +2,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniPremiumCard } from '@/components/ui/omni/OmniPremiumCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import {
   BookOpen,
   Sparkles,
@@ -478,7 +478,7 @@ export default function SustainWritePage() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
-            <OmniButton
+            <Button
               variant="outline"
               icon={<ShieldCheck size={16} />}
               onClick={() => {
@@ -493,25 +493,25 @@ export default function SustainWritePage() {
               )}
             >
               {showAuditSidebar ? '隱藏實境審計' : '顯示實境審計'}
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="outline"
               icon={<RefreshCcw size={16} />}
               className="flex-1 md:flex-none border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2"
             >
               重置引擎
-            </OmniButton>
+            </Button>
             {activeTemplate && activeTab === 'preview' && (
-              <OmniButton
+              <Button
                 variant="outline"
                 icon={<AlignLeft size={16} />}
                 onClick={handleExportReport}
                 className="flex-1 md:flex-none bg-white hover:bg-slate-50 text-emerald-600 border-slate-200 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2"
               >
                 匯出報告 (HTML)
-              </OmniButton>
+              </Button>
             )}
-            <OmniButton
+            <Button
               variant="primary"
               icon={<Layers size={16} />}
               onClick={handleWeave}
@@ -520,7 +520,7 @@ export default function SustainWritePage() {
               className="flex-1 md:flex-none bg-[#003262] hover:bg-[#002244] text-white border-none shadow-sm shadow-blue-900/20 flex items-center gap-2 rounded-xl h-10 px-4 transition-all"
             >
               啟動全息編織
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
@@ -554,7 +554,7 @@ export default function SustainWritePage() {
               ))}
             </div>
 
-            <OmniButton
+            <Button
               variant="primary"
               icon={<Sparkles size={16} />}
               onClick={handleAiAnalysis}
@@ -562,7 +562,7 @@ export default function SustainWritePage() {
               isLoading={isAiAnalyzing}
             >
               {isAiAnalyzing ? 'AI 神經突觸配對中...' : '執行 AI 模板配對'}
-            </OmniButton>
+            </Button>
           </div>
         )}
 
@@ -634,13 +634,13 @@ export default function SustainWritePage() {
                         <div>
                           <h3 className="text-cyan-300 font-bold flex items-center gap-2">
                             {activeTemplate.name}
-                            <OmniBadge
+                            <Badge
                               variant="success"
                               size="sm"
                               icon={<CheckCircle2 size={12} />}
                             >
                               AI Selected
-                            </OmniBadge>
+                            </Badge>
                           </h3>
                           <p className="text-sm text-cyan-500/80 mt-1">
                             {activeTemplate.aiSelectionPrompt}
@@ -698,7 +698,7 @@ export default function SustainWritePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {activeTemplate.chapters.map((chapter, i) => (
-                      <OmniPremiumCard
+                      <Card variant="elevated"
                         key={i}
                         variant="glass"
                         className="hover:border-cyan-500/50 transition-colors group cursor-pointer"
@@ -707,9 +707,9 @@ export default function SustainWritePage() {
                           <div className="p-2 rounded-lg bg-slate-800 text-slate-300 group-hover:bg-cyan-900/50 group-hover:text-cyan-400 transition-colors">
                             <AlignLeft size={20} />
                           </div>
-                          <OmniBadge variant="primary" size="sm">
+                          <Badge variant="primary" size="sm">
                             READY
-                          </OmniBadge>
+                          </Badge>
                         </div>
                         <h3 className="font-bold text-white mb-2">{chapter.title}</h3>
                         <p className="text-xs text-slate-400 leading-relaxed mb-3">
@@ -747,7 +747,7 @@ export default function SustainWritePage() {
                             )}
                           </div>
                         </div>
-                      </OmniPremiumCard>
+                      </Card>
                     ))}
                   </div>
                 </div>
@@ -817,7 +817,7 @@ export default function SustainWritePage() {
                         </h2>
                         <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
                           <div className="flex gap-1 mr-2 border-r border-slate-200 pr-3">
-                            <OmniButton
+                            <Button
                               variant="outline"
                               size="sm"
                               icon={<Undo2 size={16} />}
@@ -831,7 +831,7 @@ export default function SustainWritePage() {
                               }
                               disabled={!(contentHistory[currentChapterId]?.past?.length > 0)}
                             />
-                            <OmniButton
+                            <Button
                               variant="outline"
                               size="sm"
                               icon={<Redo2 size={16} />}
@@ -845,7 +845,7 @@ export default function SustainWritePage() {
                               }
                               disabled={!(contentHistory[currentChapterId]?.future?.length > 0)}
                             />
-                            <OmniButton
+                            <Button
                               variant="outline"
                               size="sm"
                               icon={<Wand2 size={16} />}
@@ -873,12 +873,12 @@ export default function SustainWritePage() {
                               className="text-amber-500 border-amber-200 hover:bg-amber-50"
                             >
                               AI 智能擴寫 (RAG)
-                            </OmniButton>
+                            </Button>
                           </div>
-                          <OmniButton variant="outline" size="sm" onClick={handleSaveDraft}>
+                          <Button variant="outline" size="sm" onClick={handleSaveDraft}>
                             儲存草稿
-                          </OmniButton>
-                          <OmniButton
+                          </Button>
+                          <Button
                             variant="primary"
                             size="sm"
                             className="bg-cyan-600 hover:bg-cyan-700 border-none whitespace-nowrap"
@@ -886,7 +886,7 @@ export default function SustainWritePage() {
                             isLoading={isPublishing}
                           >
                             {publishedHash ? '重新發布' : '發布章節'}
-                          </OmniButton>
+                          </Button>
                         </div>
                       </div>
 
@@ -1214,14 +1214,14 @@ export default function SustainWritePage() {
                         </p>
                       </div>
                     </div>
-                    <OmniButton
+                    <Button
                       variant="outline"
                       size="sm"
                       icon={<ShieldCheck size={14} />}
                       className="w-full md:w-auto border-cyan-500/30 text-cyan-400 hover:bg-cyan-950/30"
                     >
                       驗證全庫 Hash
-                    </OmniButton>
+                    </Button>
                   </div>
 
                   {isFetchingVault ? (
@@ -1237,7 +1237,7 @@ export default function SustainWritePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {vaultIndicators.map((item, idx) => {
                         return (
-                          <OmniPremiumCard
+                          <Card variant="elevated"
                             key={idx}
                             variant="glass"
                             className="hover:border-cyan-500/30 transition-all hover:shadow-[0_4px_20px_rgba(6,182,212,0.1)]"
@@ -1246,12 +1246,12 @@ export default function SustainWritePage() {
                               <span className="text-xs font-mono text-cyan-400 bg-cyan-950/30 px-2 py-1 rounded-md border border-cyan-500/20">
                                 {item.id}
                               </span>
-                              <OmniBadge
+                              <Badge
                                 variant={item.status === 'verified' ? 'success' : 'outline'}
                                 size="sm"
                               >
                                 {item.status === 'verified' ? '5T VERIFIED' : 'PENDING'}
-                              </OmniBadge>
+                              </Badge>
                             </div>
                             <h4 className="text-sm text-slate-200 font-medium mb-1">{item.name}</h4>
                             <p className="text-xl font-mono text-white font-black mb-4 tracking-tight">
@@ -1285,30 +1285,30 @@ export default function SustainWritePage() {
                                 </span>
                               </div>
                               <div className="flex gap-2">
-                                <OmniButton
+                                <Button
                                   variant="outline"
                                   size="sm"
                                   className="flex-1 text-[10px] h-7 border-slate-700 hover:bg-slate-800 text-slate-300"
                                 >
                                   瀏覽智庫
-                                </OmniButton>
+                                </Button>
                                 {uploadedEvidences[item.id] ? (
                                   <div className="flex-1 text-[10px] h-7 flex items-center justify-center gap-1 bg-emerald-950/50 text-emerald-400 rounded-md border border-emerald-500/30 font-bold">
                                     <CheckCircle2 size={12} /> 單據已封印
                                   </div>
                                 ) : (
-                                  <OmniButton
+                                  <Button
                                     variant="primary"
                                     size="sm"
                                     className="flex-1 text-[10px] h-7 bg-cyan-900/50 hover:bg-cyan-800 border-cyan-700/50 text-cyan-300"
                                     onClick={() => setUploaderTarget(item.id)}
                                   >
                                     上傳單據
-                                  </OmniButton>
+                                  </Button>
                                 )}
                               </div>
                             </div>
-                          </OmniPremiumCard>
+                          </Card>
                         );
                       })}
                     </div>
@@ -1321,7 +1321,7 @@ export default function SustainWritePage() {
           {/* Sidebar */}
           {showAuditSidebar && (
             <div className="space-y-6">
-              <OmniPremiumCard
+              <Card variant="elevated"
                 variant="glow"
                 title="ESG 實境之眼"
                 subtitle="Eye of Sustainability Reality"
@@ -1348,7 +1348,7 @@ export default function SustainWritePage() {
                     </div>
                   </div>
                 </div>
-              </OmniPremiumCard>
+              </Card>
 
               <ShieldOfAbsoluteTruth
                 contentId="sustain-write-draft"

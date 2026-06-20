@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 import { FlaskConical, Globe, TrendingUp, Search } from 'lucide-react';
 
 export default function ComparativeLabPage() {
@@ -32,9 +32,9 @@ export default function ComparativeLabPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge variant="warning" size="sm" icon={<TrendingUp size={12} />}>
+                <Badge variant="warning" size="sm" icon={<TrendingUp size={12} />}>
                   Trend Analysis Active
-                </OmniBadge>
+                </Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                   COMPARATIVE-LAB
                 </span>
@@ -50,7 +50,7 @@ export default function ComparativeLabPage() {
         {/* Comparison Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {regions.map((region) => (
-            <OmniBaseCard
+            <Card
               key={region.name}
               variant="glass"
               title={region.name}
@@ -74,11 +74,11 @@ export default function ComparativeLabPage() {
                   </p>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
           ))}
         </div>
 
-        <OmniBaseCard variant="glow" title="國際 ESG 情勢深度對比">
+        <Card variant="glow" title="國際 ESG 情勢深度對比">
           <div className="aspect-video rounded-xl border border-white/5 p-6 relative overflow-hidden group flex flex-col justify-end">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/5 via-transparent to-transparent opacity-50 pointer-events-none" />
 
@@ -120,7 +120,7 @@ export default function ComparativeLabPage() {
               <span>Q4 '24</span>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

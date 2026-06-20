@@ -1,9 +1,13 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useEffect, useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 
 export interface OmniModalProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   isOpen: boolean;
   onClose: () => void;
   title?: string;

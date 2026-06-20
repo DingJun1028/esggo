@@ -24,9 +24,9 @@ import {
   Star,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 import { FIVE_T_PROTOCOL, FOUR_PLUS_ONE } from '@/shared/constants/protocol';
 
@@ -240,7 +240,7 @@ function DimensionCard({
           <div className="text-right shrink-0">
             <div className="flex items-center gap-2">
               <span className="text-xl font-black text-[#003262]">{dimension.score}</span>
-              <OmniBadge
+              <Badge
                 variant={
                   dimension.status === 'pass'
                     ? 'success'
@@ -255,7 +255,7 @@ function DimensionCard({
                   : dimension.status === 'fail'
                   ? '未通過'
                   : '待補強'}
-              </OmniBadge>
+              </Badge>
             </div>
           </div>
           {isExpanded ? (
@@ -474,7 +474,7 @@ export default function FourTProtocolPage() {
                 <div
                   key="process"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Zap size={14} className="text-cyan-500" />
                       驗證流程
@@ -490,7 +490,7 @@ export default function FourTProtocolPage() {
                         <span className="text-sm font-black text-[#003262]">2.3 秒</span>
                       </div>
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
 
@@ -504,18 +504,18 @@ export default function FourTProtocolPage() {
                     <p className="text-xs text-slate-400">4T 協議與國際 ESG 框架的對齊狀態</p>
                   </div>
                   {COMPLIANCE_FRAMEWORKS.map((framework, i) => (
-                    <OmniBaseCard key={framework.name} className="p-4">
+                    <Card key={framework.name} className="p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h4 className="text-sm font-bold text-[#003262]">{framework.name}</h4>
                           <p className="text-[10px] text-slate-400">{framework.description}</p>
                         </div>
-                        <OmniBadge
+                        <Badge
                           variant={framework.status === 'aligned' ? 'success' : 'warning'}
                           size="sm"
                         >
                           {framework.status === 'aligned' ? '已對齊' : '進行中'}
-                        </OmniBadge>
+                        </Badge>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
@@ -535,7 +535,7 @@ export default function FourTProtocolPage() {
                           {framework.score}%
                         </span>
                       </div>
-                    </OmniBaseCard>
+                    </Card>
                   ))}
                 </div>
               )}
@@ -545,7 +545,7 @@ export default function FourTProtocolPage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* 4+1 State */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Target size={14} className="text-emerald-500" />
                 4可1不可狀態
@@ -568,10 +568,10 @@ export default function FourTProtocolPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Quick Info */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Info size={14} className="text-blue-500" />
                 快速資訊
@@ -594,22 +594,22 @@ export default function FourTProtocolPage() {
                   <span className="font-bold text-[#003262]">Ethereum L2</span>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* CTA */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
+            <Card className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50 border-cyan-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">開始 4T 驗證</h3>
               <p className="text-[11px] text-slate-500 mb-3">
                 上傳您的 ESG 數據，體驗 4T 協議自動驗證
               </p>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
               >
                 開始驗證
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
           </div>
         </div>
       </div>

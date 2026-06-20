@@ -11,6 +11,7 @@ export type AgentTaskType =
   | 'ai_ops'
   | 'email_processing'
   | 'calendar_scheduling'
+  | 'file_processing'
   | 'carbon_calculation'
   | 'supplier_assessment';
 
@@ -41,6 +42,7 @@ export type ArtifactType =
   | 'ai_flow_blueprint'
   | 'email_archival_log'
   | 'calendar_schedule_log'
+  | 'drive_archival_log'
   | 'emission_calculation_result'
   | 'supplier_risk_profile';
 

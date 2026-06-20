@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { OmniInput } from './OmniInput';
@@ -13,6 +14,9 @@ export interface FormField {
 }
 
 export interface OmniFormProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   fields: FormField[];
   onSubmit: (data: unknown) => void;
   onCancel?: () => void;
