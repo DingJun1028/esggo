@@ -2,9 +2,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
-const OmniBaseCard = dynamic(() => import('@/components/ui/omni/OmniBaseCard'), { ssr: false });
-const OmniBadge = dynamic(() => import('@/components/ui/omni/OmniBadge'), { ssr: false });
+import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { FileText, Cpu, CheckCircle2, ShieldCheck, FileKey, Loader2 } from 'lucide-react';
 
 export default function ReportBuilderUI() {
@@ -65,14 +64,14 @@ export default function ReportBuilderUI() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <Badge
-                  variant="default"
+                <OmniBadge
+                  variant="outline"
                   size="sm"
                   icon={<Cpu size={12} />}
                   className="bg-teal-500/20 text-teal-300 border-teal-500/30"
                 >
                   Zero-Compute Engine
-                </Badge>
+                </OmniBadge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                   SWRITE-GEN
                 </span>
@@ -92,9 +91,15 @@ export default function ReportBuilderUI() {
           數據全自動編譯成符合國際標準的永續報告書，全程保障資料隱私。
         </p>
 
-        <Card
+        <OmniBaseCard
           variant="glass"
           className="p-8 border-teal-500/20 relative overflow-hidden group"
+          omniHeart={{
+            omniSignature: 'SWRITE-ENGINE',
+            omniClass: 'OmniGeneral',
+            resonanceState: loading ? 0.5 : 1.0,
+            fiveTState: { tangible: true, traceable: true, trackable: true, transparent: true, trustworthy: true }
+          }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 to-transparent pointer-events-none" />
 
@@ -138,7 +143,7 @@ export default function ReportBuilderUI() {
               </div>
             )}
           
-        </Card>
+        </OmniBaseCard>
 
         
           {reportDoc && (
@@ -146,23 +151,28 @@ export default function ReportBuilderUI() {
               className="space-y-6"
             >
               <div className="flex items-center gap-4 flex-wrap">
-                <Badge
+                <OmniBadge
                   variant="success"
                   icon={<CheckCircle2 size={12} />}
                   className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                 >
                   成功生成 {chapters?.length || 0} 個章節
-                </Badge>
-                <Badge
+                </OmniBadge>
+                <OmniBadge
                   variant="outline"
                   icon={<ShieldCheck size={12} />}
                   className="border-cyan-500/30 text-cyan-400"
                 >
                   Tri-Sync 異地備援完成
-                </Badge>
+                </OmniBadge>
               </div>
 
-              <Card variant="glass" className="overflow-hidden">
+              <OmniBaseCard variant="glass" className="overflow-hidden" omniHeart={{
+                omniSignature: 'ZKP-GOLDEN-SYNC',
+                omniClass: 'OmniGeneral',
+                resonanceState: 1.0,
+                fiveTState: { tangible: true, traceable: true, trackable: true, transparent: true, trustworthy: true }
+              }}>
                 <div className="p-4 border-b border-white/5">
                   <h3 className="text-sm font-bold text-slate-300 font-mono">
                     報告結果預覽 (Document Preview)
@@ -171,7 +181,7 @@ export default function ReportBuilderUI() {
                 <div className="p-8 h-[600px] overflow-y-auto font-serif prose prose-invert prose-slate max-w-none whitespace-pre-wrap selection:bg-teal-500/30 text-slate-300">
                   {reportDoc}
                 </div>
-              </Card>
+              </OmniBaseCard>
             </div>
           )}
         
