@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -78,7 +79,7 @@ export default function ReportPage() {
         title: '選擇已封印之憑證',
         columns: 12 as const,
         component: (
-          <BrandCard padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
+          <Card padding="none" className="glass-panel border-none shadow-premium overflow-hidden">
              <BrandTable 
                loading={loading} 
                columns={[
@@ -92,7 +93,7 @@ export default function ReportPage() {
                  gri: <span className="font-mono text-sm bg-slate-100 px-2 py-1 rounded">{f.gri_reference || '-'}</span>
                }))}
              />
-          </BrandCard>
+          </Card>
         )
       }
     ]

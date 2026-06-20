@@ -121,9 +121,9 @@ export default function EndToEndMatrixPage() {
                         <th key={gate} className="p-4 text-center">
                           <div className="flex flex-col items-center gap-2">
                              <div className="w-2 h-2 rounded-full bg-[#FDB515]" />
-                             <BrandBadge variant="outline" size="xs" className="px-5 py-2.5 rounded-2xl border-slate-100 bg-white shadow-sm text-[#003262] font-black tracking-widest uppercase">
+                             <Badge variant="outline" size="xs" className="px-5 py-2.5 rounded-2xl border-slate-100 bg-white shadow-sm text-[#003262] font-black tracking-widest uppercase">
                                {gate}
-                             </BrandBadge>
+                             </Badge>
                           </div>
                         </th>
                       ))}
@@ -201,7 +201,7 @@ export default function EndToEndMatrixPage() {
         title: '熵減煉金術：混沌中開闢秩序之關鍵',
         columns: 4,
         component: (
-          <BrandCard padding="lg" className="h-full bg-[#003262] text-white border-none shadow-2xl relative overflow-hidden rounded-[3rem]">
+          <Card padding="lg" className="h-full bg-[#003262] text-white border-none shadow-2xl relative overflow-hidden rounded-[3rem]">
              <div className="relative z-10 space-y-8">
                 <div className="flex items-center gap-4">
                    <div className="w-14 h-14 rounded-3xl bg-[#FDB515] flex items-center justify-center shadow-lg shadow-amber-500/20">
@@ -244,9 +244,9 @@ export default function EndToEndMatrixPage() {
                    </div>
                 </div>
 
-                <BrandButton variant="primary" fullWidth className="bg-[#FDB515] hover:bg-amber-400 h-16 rounded-[1.5rem] font-black text-[#003262] text-xs shadow-xl transition-all active:scale-95">
+                <Button variant="primary" fullWidth className="bg-[#FDB515] hover:bg-amber-400 h-16 rounded-[1.5rem] font-black text-[#003262] text-xs shadow-xl transition-all active:scale-95">
                    啟動溯源真理驗證 (VERIFY TRUTH)
-                </BrandButton>
+                </Button>
              </div>
              <div className="absolute -bottom-20 -right-20 opacity-5 rotate-12">
                 <Grid3X3 size={400} />
@@ -254,7 +254,7 @@ export default function EndToEndMatrixPage() {
              <div
                className="absolute top-1/2 left-0 w-1 h-32 bg-gradient-to-b from-transparent via-[#FDB515]/30 to-transparent" 
              />
-          </BrandCard>
+          </Card>
         )
       },
       {
@@ -262,7 +262,7 @@ export default function EndToEndMatrixPage() {
         title: '溯源真理：數據之起始，不可磨滅之印記',
         columns: 8,
         component: (
-          <BrandCard padding="lg" className="h-full border-none shadow-premium bg-white/40 backdrop-blur-xl rounded-[3rem]">
+          <Card padding="lg" className="h-full border-none shadow-premium bg-white/40 backdrop-blur-xl rounded-[3rem]">
              <div className="space-y-5">
                 {data?.auditTrail.map((log, i) => (
                   <div 
@@ -274,7 +274,7 @@ export default function EndToEndMatrixPage() {
                         <div>
                            <div className="flex items-center gap-3 mb-1">
                               <p className="text-sm font-black text-[#003262]">{log.action}</p>
-                              <BrandBadge variant="info" size="xs" className="scale-75 origin-left">{log.gate}</BrandBadge>
+                              <Badge variant="info" size="xs" className="scale-75 origin-left">{log.gate}</Badge>
                            </div>
                            <p className="text-xs text-slate-500 font-medium leading-relaxed max-w-2xl">
                              {log.descriptionZh}
@@ -297,7 +297,7 @@ export default function EndToEndMatrixPage() {
                   </div>
                 )}
              </div>
-          </BrandCard>
+          </Card>
         )
       }
     ]
