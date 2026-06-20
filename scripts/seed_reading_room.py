@@ -2,7 +2,7 @@ import requests
 import json
 import re
 
-with open('.env', encoding='utf-8-sig') as f:
+with open('.env.local', encoding='utf-8-sig') as f:
     env = f.read()
 
 url = re.search(r'^NEXT_PUBLIC_SUPABASE_URL=(.*)$', env, re.M).group(1)
