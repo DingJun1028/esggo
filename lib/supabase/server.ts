@@ -13,7 +13,7 @@ export async function createServerClient() {
  
   return createSsrClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key',
     {
       cookies: {
         get(name: string) {
@@ -37,6 +37,24 @@ export async function createServerClient() {
             // user sessions.
           }
         },
+      },
+    }
+  );
+}
+
+/**
+ * 創建最高權限 (Service Role) Supabase 客戶端
+ * 警告：此客戶端將無視所有 RLS 規則，僅供內部安全服務或系統排程使用。
+ */
+export async function createAdminClient() {
+  return createSsrClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key',
+    {
+      cookies: {
+        get() { return undefined; },
+        set() {},
+        remove() {},
       },
     }
   );

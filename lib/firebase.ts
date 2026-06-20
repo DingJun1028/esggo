@@ -1,3 +1,8 @@
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'fake-api-key',
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'fake-auth-domain',
@@ -8,13 +13,13 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-ABCDEF',
 };
 
-export const isDemoMode = true;
+export const isDemoMode = process.env.FIRESTORE_DEMO_MODE === 'true';
 
-export const app = null;
+export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-export const db = null;
-export const auth = null;
-export const storage = null;
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
 export const dataConnect = null;
 
 export const initAnalytics = async () => null;

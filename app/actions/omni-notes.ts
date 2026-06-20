@@ -12,11 +12,16 @@ import {
   syncToPersonalDB,
   getDeviceSyncStatus,
   mergeWithOmniSystem,
+  fetchTasksFromNCB,
 } from '@/lib/services/omni-notes.service';
 
 export async function syncTaskAction(taskId: string, content: string, status: string = 'Todo'): Promise<SyncResult> {
   console.log(`[OmniNotes Action] Syncing task: ${taskId} with status ${status}`);
   return syncTaskToOmniTable(taskId, content, status);
+}
+
+export async function fetchTasksFromNCBAction() {
+  return fetchTasksFromNCB();
 }
 
 export async function syncNotesBatchAction(notes: NotePayload[]): Promise<SyncResult[]> {
