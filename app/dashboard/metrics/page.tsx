@@ -154,11 +154,11 @@ export default function MetricsPage() {
       key: 'lifecycle_stage',
       label: 'Stage',
       render: (val) => (
-        <Badge
+        <OmniBadge
           variant={val === 'PUBLISHED' ? 'primary' : val === 'REVIEW' ? 'secondary' : 'outline'}
         >
           {val || 'DRAFT'}
-        </Badge>
+        </OmniBadge>
       ),
     },
     {
@@ -191,14 +191,14 @@ export default function MetricsPage() {
         ) : (
           <div className="flex items-center space-x-3">
             <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
-            <Button
+            <OmniButton
               variant="outline"
               size="sm"
               onClick={() => handleSeal(row.id)}
               disabled={processingId === row.id}
             >
               {processingId === row.id ? 'Sealing...' : 'Seal (ZKP)'}
-            </Button>
+            </OmniButton>
           </div>
         ),
     },
@@ -243,9 +243,9 @@ export default function MetricsPage() {
             OmniBaseTable 與 OmniForm 綁定 NCB 資料庫，實作 CRUD 操作。
           </p>
         </div>
-        <Button onClick={() => setShowAddForm(!showAddForm)}>
+        <OmniButton onClick={() => setShowAddForm(!showAddForm)}>
           {showAddForm ? 'Cancel' : 'Add Metric'}
-        </Button>
+        </OmniButton>
       </div>
 
       {showAddForm && (
@@ -282,6 +282,26 @@ export default function MetricsPage() {
               Metrics Progress Overview
             </h3>
             <OmniChart
+              omniHeart={{
+                omniSignature: metrics.every(m => m.hash_lock) 
+                  ? 'ZKP-CHART-GOLDEN-SYNC' 
+                  : 'PENDING-SEAL-SYNC',
+                omniClass: 'OmniGeneral',
+                coreContext: {
+                  actor: 'system',
+                  timestamp: Date.now(),
+                  requestId: 'chart-req',
+                  environment: 'production'
+                },
+                resonanceState: metrics.length > 0 && metrics.every(m => m.hash_lock) ? 1.0 : 0.5,
+                fiveTState: {
+                  tangible: true,
+                  traceable: true,
+                  trackable: true,
+                  transparent: true,
+                  trustworthy: metrics.length > 0 && metrics.every(m => m.hash_lock)
+                }
+              }}
               type="bar"
               data={chartData}
               xAxisKey="name"
