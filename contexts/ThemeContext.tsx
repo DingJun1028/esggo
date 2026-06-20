@@ -8,13 +8,15 @@ interface ThemeContextType {
   flavor: AppFlavor;
   setMode: (mode: AppMode) => void;
   setFlavor: (flavor: AppFlavor) => void;
+  omniTheme: 'v2' | 'omnicore';
+  setOmniTheme: (theme: 'v2' | 'omnicore') => void;
   resolvedTheme: 'light' | 'dark'; // The actual computed theme (if system, it resolves to light or dark)
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const { mode, flavor, setMode, setFlavor } = useThemeStore();
+  const { mode, flavor, omniTheme, setMode, setFlavor, setOmniTheme } = useThemeStore();
   const [resolvedTheme, setResolvedTheme] = React.useState<'light' | 'dark'>('light');
 
   useEffect(() => {
@@ -44,6 +46,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Add the selected flavor class
     root.classList.add(`theme-${flavor}`);
 
+    // Set the OmniTheme dual engine state
+    root.setAttribute('data-omni-theme', omniTheme);
+
     // Listen for system theme changes if in system mode
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
@@ -60,10 +65,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [mode, flavor]);
+  }, [mode, flavor, omniTheme]);
 
   return (
-    <ThemeContext.Provider value={{ mode, flavor, setMode, setFlavor, resolvedTheme }}>
+    <ThemeContext.Provider value={{ mode, flavor, omniTheme, setMode, setFlavor, setOmniTheme, resolvedTheme }}>
       {children}
     </ThemeContext.Provider>
   );
