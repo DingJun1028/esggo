@@ -344,15 +344,15 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
         (task as any).prompt?.includes('305-2') || (task as any).prompt?.includes('範疇二')
           ? '305-2'
           : '305-1';
-      const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
+const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = `## 🌌 全域彙整永續報告 (GRI Standard)\n\n${draftContent}\n\n> 🕊️ **OmniCore 確信**：本章節由 5T 誠信組件自動生成，所有數據具備不可篡改性。`;
-} else if (task.taskType === 'email_processing') {
-       console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
+    } else if (task.taskType === 'email_processing') {
+      console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
 
-       const { getHermesCredentials } = await import('./hermes-store');
-       const creds = await getHermesCredentials(task.actorId);
+      const { getHermesCredentials } = await import('./hermes-store');
+      const creds = await getHermesCredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
       let emailResult = '';
@@ -360,27 +360,27 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
       console.log(`[OmniAgent] Simulated execution. Fetching recent emails...`);
       await new Promise((r) => setTimeout(r, 1200));
       console.log(`[Hermes Agent] Found 3 unread emails. Analyzing for ESG relevance...`);
-      emailResult = `### OmniAgent 郵件處理報告\n\n已掃描近期未讀郵件：\n\n1. **[供應商] 2024 年度碳排盤查清冊** \n   - 狀態：🏷️ 標記為 \`ESG/環境\`\n   - 動作：已將附件提取並存入 Evidence Vault。\n\n2. **本週行銷會議紀錄** \n   - 狀態：⏭️ 略過 (與 ESG 無直接相關)\n\n3. **[重要] 勞動部職業安全衛生檢查通知** \n   - 狀態：🚨 標記為 \`ESG/合規\`\n   - 動作：已觸發通知，轉發至法務與人資群組。\n\n> ✅ 郵件自動化分析與歸檔已完成。`;
+      emailResult = `### OmniAgent 郵件處理報告\n\n已掃描近期未讀郵件：\n\n1. **[供應商] 2024 年度碳排盤查清冊** \n   - 狀態：🏷️ 標記為 \`ESG/環境\`\n   - 動作：已將附件提取並存入 Evidence Vault。\n\n2. **本週行銷會議紀錄** \n   - 狀態：⏭️ 略過 (與 ESG 無直接相關)\n\n3. **[重要] 勞動部職業安全衛生檢查通知** \n   - 狀態：🚨 標記為 \`ESG/合視\`\n   - 動作：已觸發通知，轉發至法務與人資群組。\n\n> ✅ 郵件自動化分析與歸檔已完成。`;
 
-artifactData = generateMockArtifact(task, execution);
-       artifactData.content = emailResult;
-     } else if (task.taskType === 'calendar_scheduling') {
-       console.log(`[Hermes Agent] Connecting to Google Calendar for Task ${taskId}...`);
-       
-       const { getHermesCredentials } = await import('./hermes-store');
-       const creds = await getHermesCredentials(task.actorId);
+      artifactData = generateMockArtifact(task, execution);
+      artifactData.content = emailResult;
+    } else if (task.taskType === 'calendar_scheduling') {
+      console.log(`[Hermes Agent] Connecting to Google Calendar for Task ${taskId}...`);
 
-       await new Promise((r) => setTimeout(r, 1200));
-       let calendarResult = '';
+      const { getHermesCredentials } = await import('./hermes-store');
+      const creds = await getHermesCredentials(task.actorId);
 
-       console.log(`[Hermes Agent] Fetching upcoming calendar events...`);
-       await new Promise((r) => setTimeout(r, 1000));
-       
-       calendarResult = `### OmniAgent 行事曆同步報告\n\n已掃描近期 Google Calendar 事件：\n\n1. **[永續報告] ESG 數據校閘會議** \n   - 日期：2024-06-25 14:00-16:00\n   - 狀態：📅 已建立待辦事項，自動生成會議記錄模板\n\n2. **[稽核] 內部 ESG 合規稽核** \n   - 日期：2024-06-28 09:00-12:00\n   - 狀態：⏰ 已設定前置提醒，關聯稽核題庳\n\n3. **[訓練] ESG 雙證課程教師進度追蹤** \n   - 日期：2024-07-02 10:00-12:00\n   - 狀態：🔄 已推播至課程管理系統\n\n> ✅ 行事曆自動化同步已完成，所有 ESG 相關會議已同步至 OmniAgent 任務列表。`;
+      await new Promise((r) => setTimeout(r, 1200));
+      let calendarResult = '';
 
-       artifactData = generateMockArtifact(task, execution);
-       artifactData.content = calendarResult;
-     } else if (task.taskType === 'carbon_calculation') {
+      console.log(`[Hermes Agent] Fetching upcoming calendar events...`);
+      await new Promise((r) => setTimeout(r, 1000));
+
+      calendarResult = `### OmniAgent 行事曆同步報告\n\n已掃描近期 Google Calendar 事件：\n\n1. **[永續報告] ESG 數據校閘會議** \n   - 日期：2024-06-25 14:00-16:00\n   - 狀態：📅 已建立待辦事項，自動生成會議記錄模板\n\n2. **[稽核] 內部 ESG 合規稽核** \n   - 日期：2024-06-28 09:00-12:00\n   - 狀態：⏰ 已設定前置提醒，關聯稽核題庳\n\n3. **[訓練] ESG 雙證課程教師進度追蹤** \n   - 日期：2024-07-02 10:00-12:00\n   - 狀態：🔄 已推播至課程管理系統\n\n> ✅ 行事曆自動化同步已完成，所有 ESG 相關會議已同步至 OmniAgent 任務列表。`;
+
+      artifactData = generateMockArtifact(task, execution);
+      artifactData.content = calendarResult;
+    } else if (task.taskType === 'carbon_calculation') {
       console.log(`[Carbon Engine] Executing real ISO 14064-1 calculation for Task ${taskId}...`);
       broadcast('ANALYZING', 'CarbonEngine');
 
