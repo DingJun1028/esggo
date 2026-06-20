@@ -25,7 +25,7 @@ evidence: "docs\wiki\System-Core-Architecture.md"
 
 9. UI/UX 視覺與 RWD 基準 (Visual & RWD Baseline)
    桌面版佈局： 採用標準企業級 SaaS 的「左側固定導航欄 + 頂部全局操作區 + 右側主內容區」佈局。主內容區多採用 12 欄 Bento Grid 或左右雙欄佈局，確保資訊密度與可讀性。
-   核心液態玻璃元件 (OmniCore Alignment)： 系統已於 v8.5.2 透過 Jules Karma Engine 執行「萬能至尊對齊 (Universal to Omni Alignment)」，全面捨棄舊版 v2 組件。現行核心元件包含 `OmniBaseCard` (玻璃態卡片)、`OmniBaseTable` (5T 溯源表格)、`OmniButton` 與 `OmniBadge`。所有元件原生支援 `omniHeart` 屬性，能即時反映底層數據的 ZKP (零知識證明) 與 Hash Lock 狀態。
+   核心液態玻璃元件與萬能主題 (OmniCore & OmniTheme)： 系統已於 v8.5.2 透過 Jules Karma Engine 執行「萬能至尊對齊 (Universal to Omni Alignment)」。原有的 `v2` 組件並未廢除，而是正式編制於「萬能主題 (OmniTheme)」單元下，與全新的 OmniCore 液態玻璃元件 (`OmniBaseCard`, `OmniBaseTable` 等) 形成「兩套併行」的雙引擎架構。系統可依據企業需求，在實用主義介面 (V2) 與 5T 沉浸式溯源介面 (OmniCore) 間無縫切換。所有元件皆原生支援 `omniHeart` 屬性，反映底層數據的 ZKP 與 Hash Lock 狀態。
    行動端適配 (RWD)： < 768px 時，左側導航欄自動收合為「漢堡選單」，並將核心模組入口轉化為 Mobile Bottom Navigation (底部 Tab 欄)，方便單手操作。複雜表格自動轉化為「堆疊式資料卡片 (Stacked Cards)」或提供橫向滾動。所有輸入表單元素必須確保觸控友善，避免過小的點擊區域。
 
 10. 核心邏輯與 5T 協定 (Logic & 5T Protocol)
