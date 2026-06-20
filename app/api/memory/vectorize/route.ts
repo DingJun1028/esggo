@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // Setup Supabase Client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -43,7 +44,7 @@ Content: ${JSON.stringify(shard.content)}`;
     const response = await fetch('https://api.openai.com/v1/embeddings', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -62,20 +63,23 @@ Content: ${JSON.stringify(shard.content)}`;
     const embedding = embedData.data[0].embedding;
 
     // 4. Upsert into omni_memory_vectors
-    const { error: upsertError } = await supabase
-      .from('omni_memory_vectors')
-      .upsert({
+    const { error: upsertError } = await supabase.from('omni_memory_vectors').upsert(
+      {
         shard_id: shard_id,
         embedding: embedding,
-      }, { onConflict: 'shard_id' });
+      },
+      { onConflict: 'shard_id' }
+    );
 
     if (upsertError) {
       console.error('[Vectorize] DB Upsert Error:', upsertError);
       return NextResponse.json({ error: 'Failed to save vector to DB' }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, message: 'Vector generated and stored successfully' });
-
+    return NextResponse.json({
+      success: true,
+      message: 'Vector generated and stored successfully',
+    });
   } catch (error: any) {
     console.error('[Vectorize] General Error:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
