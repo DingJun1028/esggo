@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Output configuration for Firebase hosting
-  output: 'standalone',
+  // Output configuration — standalone only for local/Docker builds, not Vercel
+  ...(process.env.VERCEL ? {} : { output: 'standalone' }),
   // Explicitly set the output file tracing root to the current directory
   // to help Next.js correctly infer the project root in dynamic deployment environments.
   outputFileTracingRoot: /*turbopackIgnore: true*/ path.join(__dirname, './'),
