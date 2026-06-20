@@ -29,11 +29,14 @@ import {
   AlertCircle,
   Layers,
   GitBranch,
+  DatabaseZap,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { useOmniMemoryStore } from '@/store/useOmniMemoryStore';
+import { MemoryShard } from '@/types/omni-memory';
 
 /* ─── Types ─── */
 interface ChatMessage {
@@ -116,6 +119,15 @@ const SUB_AGENTS: SubAgent[] = [
     lastAction: '整理會議筆記',
     tasksCompleted: 312,
   },
+  {
+    id: 'sa-owl',
+    name: 'OWL Agent',
+    role: '情報與深度洞察',
+    status: 'active',
+    icon: Brain,
+    lastAction: '融合完成，全域情資掃描中',
+    tasksCompleted: 999,
+  },
 ];
 
 const AGENT_STATS = [
@@ -140,6 +152,7 @@ const VOICE_LINES = [
   '「答案從不是終點。現在，輸出結果。」',
   '「將目標轉化為結果。」',
   '「所有子代理已就緒，等待指令。」',
+  '「OWL 已正式接入矩陣，情報與洞察能力最大化。」',
 ];
 
 /* ─── Components ─── */
@@ -272,7 +285,7 @@ export default function OmniAgentPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [currentVoiceLine, setCurrentVoiceLine] = useState(0);
-  const [activeTab, setActiveTab] = useState<'chat' | 'agents' | 'stats'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'agents' | 'stats' | 'memory'>('chat');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -392,6 +405,7 @@ export default function OmniAgentPage() {
             { id: 'chat' as const, label: '對話控制台', icon: MessageSquare },
             { id: 'agents' as const, label: '子代理管理', icon: Network },
             { id: 'stats' as const, label: '能力數值', icon: BarChart3 },
+            { id: 'memory' as const, label: '共享記憶層', icon: DatabaseZap },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -609,8 +623,100 @@ export default function OmniAgentPage() {
               </OmniBaseCard>
             </div>
           )}
+
+          {activeTab === 'memory' && (
+            <MemoryTabContent />
+          )}
         
       </div>
+    </div>
+  );
+}
+
+function MemoryTabContent() {
+  const { shards, isLoading, fetchShards, syncWithNCB } = useOmniMemoryStore();
+
+  useEffect(() => {
+    fetchShards();
+  }, [fetchShards]);
+
+  return (
+    <div className="space-y-6">
+      <OmniBaseCard className="p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-lg font-bold text-[#003262] flex items-center gap-2">
+              <DatabaseZap className="text-cyan-600" size={20} />
+              共享記憶層 (Shared Memory)
+            </h3>
+            <p className="text-sm text-slate-500 mt-1">
+              所有子代理同步上下文與核心碎片的中央神經網路。
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <OmniButton 
+              variant="outline" 
+              size="sm" 
+              onClick={syncWithNCB}
+              disabled={isLoading}
+            >
+              <Activity size={14} className={cn("mr-2", isLoading && "animate-spin")} />
+              🔄 與 NCBDB 雙向同步
+            </OmniButton>
+            <OmniButton variant="primary" size="sm">
+              <Sparkles size={14} className="mr-2" />
+              手動注入記憶
+            </OmniButton>
+          </div>
+        </div>
+        
+        {shards.length === 0 && !isLoading ? (
+          <div className="bg-slate-50 rounded-xl p-8 border border-slate-100 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="w-16 h-16 rounded-full bg-cyan-100 flex items-center justify-center">
+              <DatabaseZap size={24} className="text-cyan-600" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-700">記憶庫已打通並上線</p>
+              <p className="text-xs text-slate-500 mt-1">目前沒有任何碎片。請點擊雙向同步從 NCBDB 拉取，或手動注入。</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {shards.map((shard: MemoryShard) => (
+              <div key={shard.id} className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-bold text-[#003262]">{shard.title}</h4>
+                    {shard.source_origin === 'ncb' ? (
+                      <OmniBadge variant="accent" size="sm">外部 NCBDB</OmniBadge>
+                    ) : (
+                      <OmniBadge variant="secondary" size="sm">本地 Local</OmniBadge>
+                    )}
+                    <OmniBadge variant="outline" size="sm" className="font-mono text-[9px]">
+                      熵: {shard.entropy_level}
+                    </OmniBadge>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase">{shard.source_type}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-600 mb-3">{shard.description}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {shard.tags.map((tag: string) => (
+                    <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md">
+                      #{tag}
+                    </span>
+                  ))}
+                  <div className="ml-auto text-[10px] text-slate-400">
+                    使用次數: <strong className="text-[#003262]">{shard.usage_count}</strong> | 
+                    權重: <strong className="text-amber-600">{shard.importance_score.toFixed(2)}</strong>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </OmniBaseCard>
     </div>
   );
 }
