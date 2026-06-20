@@ -61,7 +61,12 @@ export default function LoginPage() {
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
     const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-    const isPlaceholder = url.includes('placeholder') || key.includes('placeholder') || !url || !key;
+    const isPlaceholder =
+      !url ||
+      !key ||
+      url.includes('placeholder') ||
+      key.includes('placeholder') ||
+      url === 'https://placeholder.supabase.co';
     setMode(isPlaceholder ? 'demo' : 'supabase');
   }, []);
 
