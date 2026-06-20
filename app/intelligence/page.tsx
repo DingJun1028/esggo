@@ -241,7 +241,8 @@ export default function IntelligencePage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-0.5">
-                <Badge variant="primary" size="sm" icon={<Brain size={10} />}>
+                <Badge variant="info" size="sm">
+                  <Brain size={10} className="mr-1" />
                   OmniAgent Ready
                 </Badge>
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
@@ -262,18 +263,18 @@ export default function IntelligencePage() {
               size="md"
               icon={<Brain size={14} />}
               onClick={handleGenerateReport}
-              isLoading={report.loading}
+              loading={report.loading}
               disabled={data.length === 0 || report.loading}
               className="bg-[#003262] hover:bg-[#002244] text-white flex-1 md:flex-none"
             >
               生成今日日報
             </Button>
             <Button
-              variant="outline"
+              variant="secondary"
               size="md"
               icon={<Plus size={14} />}
               onClick={handleAddRecord}
-              isLoading={isProcessing}
+              loading={isProcessing}
               className="flex-1 md:flex-none"
             >
               新增紀錄
@@ -479,11 +480,15 @@ export default function IntelligencePage() {
                           <td className="px-4 py-3 text-xs text-slate-500">{row.source_origin}</td>
                           <td className="px-4 py-3">
                             {row.hash_lock ? (
-                              <Badge variant="success" size="sm" icon={<ShieldCheck size={10} />}>
+                              <Badge
+                                variant="success"
+                                size="sm"
+                              >
+                                <ShieldCheck size={10} className="mr-1" />
                                 {row.hash_lock.substring(0, 8)}...
                               </Badge>
                             ) : (
-                              <Badge variant="default" size="sm">
+                              <Badge variant="neutral" size="sm">
                                 未封印
                               </Badge>
                             )}
