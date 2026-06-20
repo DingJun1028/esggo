@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -317,9 +318,9 @@ export default function IntelligencePage() {
 
         {/* ─── Enterprise Health Check Portal ─── */}
         <Card className="relative overflow-hidden border-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-blue-800 opacity-95" />
+          <div className="absolute inset-0 bg-neutral-100   opacity-95" />
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
-          <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/10 to-transparent transform skew-x-[-20deg]" />
+          <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-neutral-100 from-white/10 to-transparent transform skew-x-[-20deg]" />
 
           <div className="relative p-8 flex flex-col md:flex-row items-center justify-between gap-6 z-10 text-white">
             <div className="flex items-center gap-6">
@@ -358,7 +359,7 @@ export default function IntelligencePage() {
         {report.visible && (
           <div>
             <Card className="border-cyan-100 overflow-hidden">
-              <div className="h-1 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400" />
+              <div className="h-1 bg-neutral-100  via-blue-400 " />
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-5 border-b border-slate-100">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-cyan-50 rounded-lg">

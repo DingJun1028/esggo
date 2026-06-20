@@ -391,7 +391,7 @@ export default function NotificationsPage() {
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg breathing-glow">
+                <div className="w-14 h-14 rounded-2xl bg-neutral-100   flex items-center justify-center shadow-lg breathing-glow">
                   <Bell size={24} className="text-white" />
                 </div>
                 {unreadCount > 0 && (

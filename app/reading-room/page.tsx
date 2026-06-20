@@ -18,7 +18,12 @@ import {
   Loader2,
   FileText,
   Database,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  X,
 } from 'lucide-react';
+import { Modal } from '@/components/ui/v2/Modal';
 
 export default function ReadingRoomPage() {
   const [data, setData] = useState<any[]>([]);
@@ -29,6 +34,7 @@ export default function ReadingRoomPage() {
   const [verifyingId, setVerifyingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const loadStats = async (category?: string | null) => {
     try {
@@ -44,10 +50,13 @@ export default function ReadingRoomPage() {
     }
   };
 
-  const loadDocs = async (category?: string | null, query?: string) => {
+  const [pagination, setPagination] = useState<{ totalPages: number; totalDocs: number } | null>(null);
+
+  const loadDocs = async (category?: string | null, query?: string, pageNum?: number) => {
     setLoading(true);
     try {
-      let url = '/api/reading-room/documents?t=' + Date.now();
+      const p = pageNum ?? 1;
+      let url = `/api/reading-room/documents?t=${Date.now()}&page=${p}&limit=20`;
       if (category) url += `&category=${encodeURIComponent(category)}`;
       if (query) url += `&q=${encodeURIComponent(query)}`;
       const res = await fetch(url, { cache: 'no-store' });
@@ -68,25 +77,40 @@ export default function ReadingRoomPage() {
           gri_reference: doc.gri_reference,
         }));
         setData(docs);
+        setPagination(json.pagination ?? null);
       } else {
         setData([]);
+        setPagination(null);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       setData([]);
+      setPagination(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const refreshAll = async (cat?: string | null, q?: string) => {
-    await loadDocs(cat, q);
+  const refreshAll = async (cat?: string | null, q?: string, p?: number) => {
+    await loadDocs(cat, q, p);
     await loadStats(cat);
   };
 
   useEffect(() => {
-    refreshAll(activeCategory, searchQuery);
-  }, [activeCategory, searchQuery]);
+    refreshAll(activeCategory, searchQuery, page);
+  }, [activeCategory, searchQuery, page]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPage(1);
+    loadDocs(activeCategory, searchQuery, 1);
+  };
+
+  const handleCategoryChange = (cat: string | null) => {
+    setActiveCategory(cat);
+    setPage(1);
+    loadDocs(cat, searchQuery, 1);
+  };
 
   const handleSeal = async (id: string) => {
     setSealingId(id as any);
@@ -138,22 +162,76 @@ export default function ReadingRoomPage() {
   };
 
   const handleAddRecord = () => {
+    setShowAddModal(true);
+  };
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newRecord, setNewRecord] = useState({ id: '', title: '', description: '', category: 'standard', file_url: '', gri_reference: '', esg_category: '', tags: '', source: '', published_date: '' });
+
+  const handleCreateRecord = async () => {
+    if (!newRecord.id || !newRecord.title) {
+      alert('請填寫 ID 與標題');
+      return;
+    }
     setIsProcessing(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/reading-room/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', ...newRecord, tags: newRecord.tags ? newRecord.tags.split(',').map((t) => t.trim()).filter(Boolean) : [] }),
+      });
+      const json = await res.json();
+      if (res.ok && json.document) {
+        setShowAddModal(false);
+        setNewRecord({ id: '', title: '', description: '', category: 'standard', file_url: '', gri_reference: '', esg_category: '', tags: '', source: '', published_date: '' });
+        refreshAll(activeCategory, searchQuery, 1);
+      } else {
+        alert('建立失敗: ' + (json.error ?? 'Unknown'));
+      }
+    } catch (e) {
+      console.error('Create error:', e);
+      alert('建立失敗，請稍後再試。');
+    } finally {
       setIsProcessing(false);
-      loadDocs(activeCategory, searchQuery);
-    }, 1500);
+    }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    loadDocs(activeCategory, searchQuery);
+  const handleExport = async (format: 'json' | 'csv') => {
+    try {
+      const res = await fetch('/api/reading-room/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'export', format, filter: { category: activeCategory ?? undefined, q: searchQuery || undefined } }),
+      });
+      if (res.ok) {
+        if (format === 'csv') {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reading-room-export.csv';
+          a.click();
+          window.URL.revokeObjectURL(url);
+        } else {
+          const json = await res.json();
+          const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'reading-room-export.json';
+          a.click();
+          window.URL.revokeObjectURL(url);
+        }
+      } else {
+        alert('匯出失敗');
+      }
+    } catch (e) {
+      console.error('Export error:', e);
+      alert('匯出失敗，請稍後再試。');
+    }
   };
 
-  const handleCategoryChange = (cat: string | null) => {
-    setActiveCategory(cat);
-    loadDocs(cat, searchQuery);
-  };
+
 
   const categories = [
     { key: null, label: '全部' },
@@ -335,7 +413,7 @@ export default function ReadingRoomPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-cyan-500/30">
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in- duration-700">
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
@@ -358,14 +436,30 @@ export default function ReadingRoomPage() {
               </p>
             </div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
             <Button
-              variant="outline"
+              variant="secondary"
               icon={<Search size={16} />}
               onClick={() => document.getElementById('rr-search')?.focus()}
               className="flex-1 md:flex-none"
             >
-              檢索
+               檢索
+            </Button>
+            <Button
+              variant="secondary"
+              icon={<Download size={16} />}
+              onClick={() => handleExport('csv')}
+              className="flex-1 md:flex-none"
+            >
+               CSV
+            </Button>
+            <Button
+              variant="secondary"
+              icon={<Download size={16} />}
+              onClick={() => handleExport('json')}
+              className="flex-1 md:flex-none"
+            >
+               JSON
             </Button>
             <Button
               variant="primary"
@@ -374,7 +468,7 @@ export default function ReadingRoomPage() {
               isLoading={isProcessing}
               className="flex-1 md:flex-none"
             >
-              新增紀錄
+               新增紀錄
             </Button>
           </div>
         </header>
@@ -458,6 +552,40 @@ export default function ReadingRoomPage() {
               className="min-h-[400px]"
             >
               <Table columns={columns} data={data} loading={loading} />
+              {pagination && pagination.totalPages > 1 && (
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
+                  <div className="text-xs text-neutral-500">
+                    第 {pagination.page} / {pagination.totalPages} 頁，共 {pagination.totalDocs} 筆
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      icon={<ChevronLeft size={14} />}
+                      disabled={pagination.page <= 1}
+                      onClick={() => {
+                        setPage(pagination.page - 1);
+                      }}
+                    >
+                       上一頁
+                    </Button>
+                    <span className="text-xs font-mono text-neutral-600 px-2">
+                      {pagination.page} / {pagination.totalPages}
+                    </span>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      icon={<ChevronRight size={14} />}
+                      disabled={pagination.page >= pagination.totalPages}
+                      onClick={() => {
+                        setPage(pagination.page + 1);
+                      }}
+                    >
+                       下一頁
+                    </Button>
+                  </div>
+                </div>
+              )}
             </Card>
           </div>
 

@@ -701,7 +701,7 @@ export default function OmniMapPage() {
             {/* 1. Node Info Card */}
             <Card
               variant="default"
-              className="p-6 border-cyan-400/25 bg-gradient-to-b from-slate-950 to-cyan-950/20 relative overflow-hidden shadow-2xl flex-1 flex flex-col justify-between"
+              className="p-6 border-cyan-400/25 bg-neutral-100  /20 relative overflow-hidden shadow-2xl flex-1 flex flex-col justify-between"
             >
               {/* Top Bumper */}
               <div className="flex justify-between items-center border-b border-slate-200 pb-4 mb-4">
