@@ -173,10 +173,10 @@ const LEARNING_PATHS: LearningPath[] = [
 ];
 
 const CATEGORY_CONFIG = {
-  beginner: { label: '初級', color: 'bg-emerald-50 text-emerald-600', icon: '🌱' },
-  intermediate: { label: '中級', color: 'bg-blue-50 text-blue-600', icon: '📈' },
-  advanced: { label: '高級', color: 'bg-violet-50 text-violet-600', icon: '🚀' },
-  certification: { label: '認證', color: 'bg-amber-50 text-amber-600', icon: '🏆' },
+  beginner: { label: '初級', color: 'bg-[#003262]/10 text-[#003262]', icon: '🌱' },
+  intermediate: { label: '中級', color: 'bg-[#FDB515]/20 text-[#003262]', icon: '📈' },
+  advanced: { label: '高級', color: 'bg-[#003262]/20 text-[#003262] font-bold', icon: '🚀' },
+  certification: { label: '認證', color: 'bg-[#FDB515] text-[#003262] font-black', icon: '🏆' },
 };
 
 /* ─── Components ─── */
@@ -202,9 +202,13 @@ function CourseCard({ course }: { course: Course }) {
       <div
         className={cn(
           'h-32 flex items-center justify-center text-5xl relative',
-          course.locked 
-            ? (omniTheme === 'omnicore' ? 'bg-white/5' : 'bg-slate-100')
-            : (omniTheme === 'omnicore' ? 'bg-gradient-to-br from-cyan-900/30 to-blue-900/30' : 'bg-gradient-to-br from-cyan-50 to-blue-50')
+          course.locked
+            ? omniTheme === 'omnicore'
+              ? 'bg-white/5'
+              : 'bg-slate-100'
+            : omniTheme === 'omnicore'
+            ? 'bg-gradient-to-br from-[#003262]/40 to-[#FDB515]/20'
+            : 'bg-gradient-to-br from-slate-50 to-[#FDB515]/10'
         )}
       >
         {course.thumbnail}
@@ -214,12 +218,12 @@ function CourseCard({ course }: { course: Course }) {
           </div>
         )}
         {course.completed && (
-          <div className="absolute top-2 right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-            <CheckCircle2 size={16} className="text-white" />
+          <div className="absolute top-2 right-2 w-8 h-8 bg-[#FDB515] rounded-full flex items-center justify-center shadow-sm">
+            <CheckCircle2 size={16} className="text-[#003262]" />
           </div>
         )}
         <div className="absolute top-2 left-2">
-          <Badge variant="secondary" size="xs">
+          <Badge variant="info" size="sm">
             {catConfig.label}
           </Badge>
         </div>
@@ -227,8 +231,22 @@ function CourseCard({ course }: { course: Course }) {
 
       {/* Content */}
       <div className="p-4">
-        <h3 className={cn("text-sm font-bold mb-1 line-clamp-1", omniTheme === 'omnicore' ? 'text-cyan-400' : 'text-[#003262]')}>{course.title}</h3>
-        <p className={cn("text-[10px] line-clamp-2 mb-3", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>{course.description}</p>
+        <h3
+          className={cn(
+            'text-sm font-bold mb-1 line-clamp-1',
+            omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+          )}
+        >
+          {course.title}
+        </h3>
+        <p
+          className={cn(
+            'text-[10px] line-clamp-2 mb-3',
+            omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400'
+          )}
+        >
+          {course.description}
+        </p>
 
         {/* Progress */}
         {course.progress !== undefined && (
@@ -241,7 +259,7 @@ function CourseCard({ course }: { course: Course }) {
               {/* 使用原生 div 取代 motion.div，避免 SSR 崩潰 */}
               <div
                 style={{ width: `${course.progress}%`, transition: 'width 0.8s ease' }}
-                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500"
+                className="h-full rounded-full bg-gradient-to-r from-[#003262] to-[#FDB515]"
               />
             </div>
           </div>
@@ -286,7 +304,7 @@ function LearningPathCard({ path }: { path: LearningPath }) {
     <div
       style={{ transition: 'all 0.4s ease' }}
       className={cn(
-        "rounded-xl border p-4 hover:shadow-md transition-all cursor-pointer",
+        'rounded-xl border p-4 hover:shadow-md transition-all cursor-pointer',
         omniTheme === 'omnicore'
           ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_15px_rgba(0,0,0,0.3)]'
           : 'bg-white border-slate-100'
@@ -297,8 +315,22 @@ function LearningPathCard({ path }: { path: LearningPath }) {
           {path.badge}
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className={cn("text-sm font-bold", omniTheme === 'omnicore' ? 'text-cyan-400' : 'text-[#003262]')}>{path.name}</h4>
-          <p className={cn("text-[10px]", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>{path.description}</p>
+          <h4
+            className={cn(
+              'text-sm font-bold',
+              omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+            )}
+          >
+            {path.name}
+          </h4>
+          <p
+            className={cn(
+              'text-[10px]',
+              omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400'
+            )}
+          >
+            {path.description}
+          </p>
         </div>
         <ChevronRight size={16} className="text-slate-300" />
       </div>
@@ -335,27 +367,47 @@ export default function AcademyPage() {
   const completedCourses = COURSES.filter((c) => c.completed);
 
   return (
-    <div className={cn(
-      "min-h-screen p-4 md:p-8 transition-colors duration-500",
-      omniTheme === 'omnicore' ? 'bg-[var(--theme-base)] text-[var(--theme-text)]' : 'bg-[#F8FAFC]'
-    )}>
+    <div
+      className={cn(
+        'min-h-screen p-4 md:p-8 transition-colors duration-500',
+        omniTheme === 'omnicore'
+          ? 'bg-[var(--theme-base)] text-[var(--theme-text)]'
+          : 'bg-[#F8FAFC]'
+      )}
+    >
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <header className={cn(
-          "rounded-2xl border p-6 relative overflow-hidden transition-colors",
-          omniTheme === 'omnicore' 
-            ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_25px_rgba(0,0,0,0.5)]' 
-            : 'bg-white border-slate-100'
-        )}>
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-50 rounded-full blur-3xl breathing-glow-emerald" />
+        <header
+          className={cn(
+            'rounded-2xl border p-6 relative overflow-hidden transition-colors',
+            omniTheme === 'omnicore'
+              ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_25px_rgba(0,0,0,0.5)]'
+              : 'bg-white border-slate-100'
+          )}
+        >
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#FDB515]/20 rounded-full blur-3xl " />
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg breathing-glow-emerald">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#003262] to-[#004A8F] flex items-center justify-center shadow-lg ">
                 <GraduationCap size={28} className="text-white" />
               </div>
               <div>
-                <h1 className={cn("text-2xl font-black tracking-tight", omniTheme === 'omnicore' ? 'text-cyan-400 drop-shadow-[0_0_10px_rgba(99,166,176,0.8)]' : 'text-[#003262]')}>善向永續學院</h1>
-                <p className={cn("text-xs font-mono mt-0.5", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>
+                <h1
+                  className={cn(
+                    'text-2xl font-black tracking-tight',
+                    omniTheme === 'omnicore'
+                      ? 'text-[#FDB515] drop-shadow-[0_0_10px_rgba(253,181,21,0.8)]'
+                      : 'text-[#003262]'
+                  )}
+                >
+                  善向永續學院
+                </h1>
+                <p
+                  className={cn(
+                    'text-xs font-mono mt-0.5',
+                    omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400'
+                  )}
+                >
                   Academy · 互動學習 · 柏克萊認證
                 </p>
               </div>
@@ -367,7 +419,7 @@ export default function AcademyPage() {
               </div>
               <div className="w-px h-10 bg-slate-100" />
               <div className="text-right">
-                <p className="text-2xl font-black text-emerald-600">{completedCourses.length}</p>
+                <p className="text-2xl font-black text-[#FDB515]">{completedCourses.length}</p>
                 <p className="text-[10px] text-slate-400 font-bold uppercase">已完成</p>
               </div>
               <div className="w-px h-10 bg-slate-100" />
@@ -386,14 +438,18 @@ export default function AcademyPage() {
             { id: 'paths' as const, label: '學習路徑', icon: Target, count: LEARNING_PATHS.length },
             { id: 'my-learning' as const, label: '我的學習', icon: Award, count: myCourses.length },
           ].map((tab) => (
-              <button
+            <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
                 'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all',
                 activeTab === tab.id
-                  ? (omniTheme === 'omnicore' ? 'bg-cyan-900 text-cyan-50 shadow-[0_0_15px_rgba(99,166,176,0.6)]' : 'bg-[#003262] text-white shadow-md')
-                  : (omniTheme === 'omnicore' ? 'bg-[var(--theme-surface)] text-[var(--theme-text-muted)] border-[var(--theme-border)] hover:bg-white/5' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50')
+                  ? omniTheme === 'omnicore'
+                    ? 'bg-[#FDB515] text-[#003262] shadow-[0_0_15px_rgba(253,181,21,0.6)]'
+                    : 'bg-[#003262] text-white shadow-md'
+                  : omniTheme === 'omnicore'
+                  ? 'bg-[var(--theme-surface)] text-[var(--theme-text-muted)] border-[var(--theme-border)] hover:bg-white/5'
+                  : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
               )}
             >
               <tab.icon size={16} />
@@ -426,9 +482,9 @@ export default function AcademyPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="搜尋課程或標籤..."
                   className={cn(
-                    "w-full pl-9 pr-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30 transition-colors",
-                    omniTheme === 'omnicore' 
-                      ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] text-white placeholder-slate-500' 
+                    'w-full pl-9 pr-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FDB515]/40 transition-colors',
+                    omniTheme === 'omnicore'
+                      ? 'bg-[var(--theme-surface)] border-[var(--theme-border)] text-white placeholder-slate-500'
                       : 'bg-white border-slate-200 text-slate-900'
                   )}
                 />
@@ -447,7 +503,11 @@ export default function AcademyPage() {
                     className={cn(
                       'px-3 py-1.5 rounded-lg text-xs font-bold transition-all',
                       filterCategory === cat.id
-                        ? 'bg-[#003262] text-white'
+                        ? omniTheme === 'omnicore'
+                          ? 'bg-[#FDB515] text-[#003262] shadow-[0_0_10px_rgba(253,181,21,0.5)]'
+                          : 'bg-[#003262] text-white'
+                        : omniTheme === 'omnicore'
+                        ? 'bg-[var(--theme-surface)] text-[var(--theme-text-muted)] border border-[var(--theme-border)] hover:bg-white/5'
                         : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
                     )}
                   >
@@ -476,8 +536,22 @@ export default function AcademyPage() {
         {activeTab === 'paths' && (
           <div className="space-y-4">
             <div>
-              <h3 className={cn("text-base font-bold mb-1", omniTheme === 'omnicore' ? 'text-cyan-400' : 'text-[#003262]')}>學習路徑</h3>
-              <p className={cn("text-xs", omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400')}>按照推薦路徑學習，獲得專業認證</p>
+              <h3
+                className={cn(
+                  'text-base font-bold mb-1',
+                  omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+                )}
+              >
+                學習路徑
+              </h3>
+              <p
+                className={cn(
+                  'text-xs',
+                  omniTheme === 'omnicore' ? 'text-[var(--theme-text-muted)]' : 'text-slate-400'
+                )}
+              >
+                按照推薦路徑學習，獲得專業認證
+              </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {LEARNING_PATHS.map((path) => (
@@ -491,36 +565,126 @@ export default function AcademyPage() {
           <div className="space-y-6">
             {/* Progress Overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="p-5">
+              <Card
+                className={cn(
+                  'p-5',
+                  omniTheme === 'omnicore' &&
+                    'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_15px_rgba(0,0,0,0.3)]'
+                )}
+              >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-cyan-50 rounded-lg">
-                    <BarChart3 size={16} className="text-cyan-600" />
+                  <div
+                    className={cn(
+                      'p-2 rounded-lg',
+                      omniTheme === 'omnicore' ? 'bg-[#FDB515]/30' : 'bg-[#003262]/10'
+                    )}
+                  >
+                    <BarChart3
+                      size={16}
+                      className={cn(omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]')}
+                    />
                   </div>
                   <div>
-                    <p className="text-xl font-black text-[#003262]">{myCourses.length}</p>
-                    <p className="text-[10px] text-slate-400">進行中課程</p>
+                    <p
+                      className={cn(
+                        'text-xl font-black',
+                        omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+                      )}
+                    >
+                      {myCourses.length}
+                    </p>
+                    <p
+                      className={cn(
+                        'text-[10px]',
+                        omniTheme === 'omnicore'
+                          ? 'text-[var(--theme-text-muted)]'
+                          : 'text-slate-400'
+                      )}
+                    >
+                      進行中課程
+                    </p>
                   </div>
                 </div>
               </Card>
-              <Card className="p-5">
+              <Card
+                className={cn(
+                  'p-5',
+                  omniTheme === 'omnicore' &&
+                    'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_15px_rgba(0,0,0,0.3)]'
+                )}
+              >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-emerald-50 rounded-lg">
-                    <Award size={16} className="text-emerald-600" />
+                  <div
+                    className={cn(
+                      'p-2 rounded-lg',
+                      omniTheme === 'omnicore' ? 'bg-[#FDB515]/20' : 'bg-[#FDB515]/20'
+                    )}
+                  >
+                    <Award
+                      size={16}
+                      className={cn(omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#FDB515]')}
+                    />
                   </div>
                   <div>
-                    <p className="text-xl font-black text-[#003262]">{completedCourses.length}</p>
-                    <p className="text-[10px] text-slate-400">已完成課程</p>
+                    <p
+                      className={cn(
+                        'text-xl font-black',
+                        omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+                      )}
+                    >
+                      {completedCourses.length}
+                    </p>
+                    <p
+                      className={cn(
+                        'text-[10px]',
+                        omniTheme === 'omnicore'
+                          ? 'text-[var(--theme-text-muted)]'
+                          : 'text-slate-400'
+                      )}
+                    >
+                      已完成課程
+                    </p>
                   </div>
                 </div>
               </Card>
-              <Card className="p-5">
+              <Card
+                className={cn(
+                  'p-5',
+                  omniTheme === 'omnicore' &&
+                    'bg-[var(--theme-surface)] border-[var(--theme-border)] shadow-[0_0_15px_rgba(0,0,0,0.3)]'
+                )}
+              >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-amber-50 rounded-lg">
-                    <Zap size={16} className="text-amber-600" />
+                  <div
+                    className={cn(
+                      'p-2 rounded-lg',
+                      omniTheme === 'omnicore' ? 'bg-[#FDB515]/20' : 'bg-[#FDB515]/20'
+                    )}
+                  >
+                    <Zap
+                      size={16}
+                      className={cn(omniTheme === 'omnicore' ? 'text-amber-400' : 'text-[#FDB515]')}
+                    />
                   </div>
                   <div>
-                    <p className="text-xl font-black text-[#003262]">1,250</p>
-                    <p className="text-[10px] text-slate-400">學習積分</p>
+                    <p
+                      className={cn(
+                        'text-xl font-black',
+                        omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+                      )}
+                    >
+                      1,250
+                    </p>
+                    <p
+                      className={cn(
+                        'text-[10px]',
+                        omniTheme === 'omnicore'
+                          ? 'text-[var(--theme-text-muted)]'
+                          : 'text-slate-400'
+                      )}
+                    >
+                      學習積分
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -528,7 +692,14 @@ export default function AcademyPage() {
 
             {/* My Courses */}
             <div>
-              <h3 className="text-base font-bold text-[#003262] mb-4">進行中的課程</h3>
+              <h3
+                className={cn(
+                  'text-base font-bold mb-4',
+                  omniTheme === 'omnicore' ? 'text-[#FDB515]' : 'text-[#003262]'
+                )}
+              >
+                進行中的課程
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {myCourses.map((course) => (
                   <CourseCard key={course.id} course={course} />
