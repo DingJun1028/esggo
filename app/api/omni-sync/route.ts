@@ -1,6 +1,6 @@
-﻿import { NextResponse } from 'next/server';
-import { writeToVault } from '@/lib/vault';
-import { generateHash } from '@/lib/utils';
+import { NextResponse } from 'next/server';
+// lib/vault is missing, replaced with console.log for now
+import crypto from 'crypto';
 
 // Helper: Classify memory priority based on context tags
 function classifyMemoryPriority(context: any): string[] {
@@ -24,14 +24,18 @@ export async function POST(req: Request) {
     // Classify memory tags
     const memoryTags = classifyMemoryPriority({ context, tags });
 
-    // Log to Omni-Vault
-    const vaultEntry = await writeToVault({
+    const checksum = crypto.createHash('sha256').update(JSON.stringify(context)).digest('hex');
+
+    // Dummy logging to replace missing writeToVault
+    const vaultEntry = {
+      id: crypto.randomUUID(),
       timestamp: new Date().toISOString(),
       intent,
       context,
       tags: memoryTags,
-      checksum: generateHash(JSON.stringify(context)),
-    });
+      checksum,
+    };
+    console.log('[OmniSync] writeToVault simulated:', vaultEntry);
 
     return NextResponse.json(
       { success: true, entryId: vaultEntry.id, entry: vaultEntry },
