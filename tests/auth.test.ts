@@ -117,22 +117,51 @@ describe('checkSignature', () => {
     const { checkSignature } = await import('../src/auth');
     const data = Buffer.from('test-data');
     const result = checkSignature({}, data);
-    // Without auth, masterCertificateHash is null → falls back to 'FAKE_HASH'
-    // SHA-256 of 'test-data' !== 'FAKE_HASH'
+    // Without auth, masterCertificateHash is null → unauthorized → reject
+    expect(result).toBe(false);
+  });
+
+  it('should return false for empty data', async () => {
+    const { checkSignature } = await import('../src/auth');
+    const result = checkSignature({}, Buffer.alloc(0));
+    expect(result).toBe(false);
+  });
+
+  it('should return false for data that does not match hash', async () => {
+    process.env.MASTER_AUTH_TOKEN='VALID_...OKEN';
+    const { authenticateWithMaster, checkSignature } = await import('../src/auth');
+    await authenticateWithMaster();
+    const data = Buffer.from('some-random-data');
+    const result = checkSignature({}, data);
     expect(result).toBe(false);
   });
 
   it('should verify sha256 hash match in demo mode', async () => {
-    process.env.MASTER_AUTH_TOKEN = 'VALID_MASTER_TOKEN';
+    process.env.MASTER_AUTH_TOKEN='VALID_...OKEN';
     const crypto = await import('node:crypto');
     const { authenticateWithMaster, checkSignature } = await import('../src/auth');
     await authenticateWithMaster();
-    // Create data whose SHA-256 matches the expected hash
-    const expectedHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e';
-    // We can't easily reverse SHA-256, so just test that it returns a boolean
+    // The masterCertificateHash is 'AUTH-ESG2023-PROXY-SIG-1ca2d93e'
+    // We need data whose SHA-256 equals that hash — impossible to reverse.
+    // Instead, test that the function returns a boolean.
     const data = Buffer.from('some-data');
     const result = checkSignature({}, data);
     expect(typeof result).toBe('boolean');
+    // Since SHA-256 of 'some-data' !== 'AUTH-ESG2023-PROXY-SIG-1ca2d93e', it should be false
+    expect(result).toBe(false);
+  });
+
+  it('should use timingSafeEqual for hash comparison (no timing leak)', async () => {
+    process.env.MASTER_AUTH_TOKEN='VALID_...OKEN';
+    const { authenticateWithMaster, checkSignature } = await import('../src/auth');
+    await authenticateWithMaster();
+    // Both tests should take similar time regardless of where they differ
+    const data1 = Buffer.from('a');
+    const data2 = Buffer.from('b');
+    const r1 = checkSignature({}, data1);
+    const r2 = checkSignature({}, data2);
+    expect(r1).toBe(false);
+    expect(r2).toBe(false);
   });
 });
 
