@@ -2,6 +2,7 @@
 import { generateText, streamText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
+import { OmniLogger } from '@/lib/omni-logger';
 
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 const DEFAULT_OPENROUTER_MODEL = 'mistralai/mistral-small-3.1-24b:free';

@@ -1,6 +1,6 @@
+'use client';
 import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
-'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -343,9 +343,9 @@ export function OmniAgentCard({
                   style={{ backgroundColor: colors.bg.hover }}
                 >
                   <div
-                    animate={{ width: `${stat.value}%` }}
-                    className="h-full shadow-[0_0_10px_rgba(85,199,255,0.8)]"
+                    className="h-full shadow-[0_0_10px_rgba(85,199,255,0.8)] transition-all duration-1000"
                     style={{
+                      width: `${stat.value}%`,
                       background: `linear-gradient(to right, ${colors.accent.cyan}, ${colors.accent.blue})`,
                     }}
                   />

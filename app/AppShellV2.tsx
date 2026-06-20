@@ -96,6 +96,7 @@ import { SaaS_NAVIGATION, IT_OPS_NAVIGATION, NavGroup, NavItem } from '../config
 import { GlobalSearch } from '../components/GlobalSearch';
 import AppThemeSwitcher from '../components/AppThemeSwitcher';
 import OmniOverviewMenu from '../components/OmniOverviewMenu';
+import OmniThemeSwitcher from '../components/omni/OmniThemeSwitcher';
 
 // Icon Mapper for Dynamic Navigation
 export const IconMapper: Record<string, React.ReactNode> = {
@@ -536,6 +537,9 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               {/* Theme Switcher */}
               <AppThemeSwitcher />
 
+              {/* OmniTheme Dual Engine Switcher */}
+              <OmniThemeSwitcher />
+
               {/* Favorite Toggle Button */}
               <BrandButton
                 onClick={toggleFavorite}
@@ -626,6 +630,10 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
             {/* Theme Toggle Mobile */}
             <div className="flex-shrink-0">
               <AppThemeSwitcher />
+            </div>
+
+            <div className="flex-shrink-0">
+              <OmniThemeSwitcher />
             </div>
 
             {/* Quick Actions Pills */}
