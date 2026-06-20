@@ -82,7 +82,7 @@ const DashboardContent = () => {
 
       {/* Bento Grid */}
       <section
-        initial="hidden"
+        aria-label="main content" initial="hidden"
         animate="show"
         className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-auto md:h-[600px]"
       >
@@ -233,7 +233,7 @@ const DashboardContent = () => {
       </section>
 
       {/* 5T Integrity Pulse Visualizer */}
-      <section className="space-y-4 pt-8">
+      <section aria-label="main content" className="space-y-4 pt-8">
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
             <Activity size={18} className="text-[var(--at-accent)] animate-pulse" />
