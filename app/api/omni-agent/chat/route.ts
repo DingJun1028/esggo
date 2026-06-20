@@ -58,6 +58,31 @@ export async function POST(req: Request) {
       modelInstance = agnes('agnes-2.0-flash');
     }
 
+    // 啟動 Semantic Search (RAG) 以獲得上下文
+    let ragContext = '';
+    const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+    
+    if (lastMessage && lastMessage.role === 'user' && lastMessage.content) {
+      try {
+        const { OmniMemoryService } = await import('@/lib/services/omni-memory.service');
+        const memoryShards = await OmniMemoryService.searchMemory(lastMessage.content, 0.7, 3);
+        
+        if (memoryShards && memoryShards.length > 0) {
+          ragContext = '\n\n【檢索到的 OmniAgent 記憶碎片 (RAG Context)】\n' + memoryShards.map((shard, index) => 
+            `[碎片 ${index + 1}] 標題: ${shard.title}\n內容: ${shard.description}\n(來源: ${shard.source_origin}, 相關性: ${shard.importance_score})`
+          ).join('\n\n');
+          
+          // 紀錄碎片被使用
+          for (const shard of memoryShards) {
+            await OmniMemoryService.logShardUsage(shard.id, 'viewed', 'RAG Context Injection');
+          }
+          console.log(`[OmniAgent] RAG Injected ${memoryShards.length} shards into context.`);
+        }
+      } catch (e: any) {
+        console.error(`[OmniAgent] Failed to fetch RAG context: ${e.message}`);
+      }
+    }
+
     // 啟動模型核心進行串流推論
     const result = streamText({
       model: modelInstance,
@@ -67,7 +92,7 @@ export async function POST(req: Request) {
 1. 協助使用者解析 ESG (環境、社會、治理) 數據與法規。
 2. 在對話中自動規劃並啟動對應的 Atomic Functions (原子能力)。
 3. 提供具備防篡改 (ZKP) 意識的架構建議。
-請永遠使用繁體中文 (zh-TW) 進行專業、簡潔且具備高度科技感的對話。`,
+請永遠使用繁體中文 (zh-TW) 進行專業、簡潔且具備高度科技感的對話。${ragContext}`,
       messages,
     });
 
