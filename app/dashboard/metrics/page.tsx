@@ -258,11 +258,7 @@ export default function MetricsPage() {
   };
 
   return (
-    <div className={`p-8 space-y-8 animate-fade-in min-h-screen ${
-      omniTheme === 'omnicore' 
-        ? 'text-[var(--theme-text)] bg-[var(--theme-base)]' 
-        : 'text-slate-800 bg-[#FAF9F6]'
-    }`}>
+    <div className={`p-8 space-y-8 animate-fade-in min-h-screen ${'text-slate-800 bg-[#FAF9F6]'}`}>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold tracking-widest text-[var(--theme-primary)]">
@@ -279,7 +275,7 @@ export default function MetricsPage() {
 
       {showAddForm && (
         <Card
-          variant="glass"
+          variant="default"
           title="Create New Metric"
           subtitle="Add a new ESG record with 5T tracking"
           className="mb-8"
@@ -295,9 +291,9 @@ export default function MetricsPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card 
-          className="lg:col-span-2" 
-          variant="glow"
+        <Card
+          className="lg:col-span-2"
+          variant="default"
           title="Metrics Data Table (5T Protocol Enabled)"
           subtitle="Real-time synchronized data ledger"
         >
@@ -310,10 +306,7 @@ export default function MetricsPage() {
           )}
         </Card>
 
-        <Card 
-          className="lg:col-span-2"
-          title="Metrics Progress Overview"
-        >
+        <Card className="lg:col-span-2" title="Metrics Progress Overview">
           <OmniChart
             omniHeart={commonHeart}
             type="bar"

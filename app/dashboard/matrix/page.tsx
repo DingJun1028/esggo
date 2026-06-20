@@ -34,13 +34,13 @@ export default function UltimateMatrixPage() {
   }, []);
 
   return (
-    <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-200 relative overflow-hidden">
+    <div className="min-h-screen p-4 md:p-8 w-full bg-[#020617] text-slate-700 relative overflow-hidden">
       {/* Background glow for Matrix Page */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/10 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-10 relative z-10">
-        <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
+        <header className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-200 pb-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
@@ -57,7 +57,7 @@ export default function UltimateMatrixPage() {
             </p>
           </div>
           <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-3 border border-white/10 px-4 py-2 rounded-lg -md">
+            <div className="flex items-center gap-3 border border-slate-200 px-4 py-2 rounded-lg -md">
               <span className="text-xs text-slate-400 font-mono">
                 {stats.totalComponents} Components
               </span>

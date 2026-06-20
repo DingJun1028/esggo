@@ -142,9 +142,7 @@ export default function DashboardContent() {
 
       <div className="relative z-10 max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <div
-          className="flex justify-between items-end"
-        >
+        <div className="flex justify-between items-end">
           <div>
             <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-600 tracking-tight">
               Sovereign Dashboard
@@ -167,11 +165,7 @@ export default function DashboardContent() {
         </div>
 
         {/* Bento Grid */}
-        <div
-          initial="initial"
-          animate="animate"
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
+        <div initial="initial" animate="animate" className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Global Compliance Beacon */}
           <div className="md:col-span-1">
             <Card className="h-full border border-slate-200 rounded-3xl overflow-hidden shadow-xl relative group">
@@ -271,9 +265,7 @@ export default function DashboardContent() {
           </div>
 
           {/* Active Agents */}
-          <div
-            className="md:col-span-3 mt-4 -md rounded-3xl p-6 border border-slate-200/60 shadow-sm"
-          >
+          <div className="md:col-span-3 mt-4 -md rounded-3xl p-6 border border-slate-200/60 shadow-sm">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-6 gap-4">
               <div>
                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] flex items-center gap-2 mb-1">
@@ -320,20 +312,15 @@ export default function DashboardContent() {
                 <div className="w-full flex items-center justify-center text-slate-400 font-mono text-sm animate-pulse">
                   Synchronizing with OmniCore...
                 </div>
-) : (
+              ) : (
                 filteredAgents.map((agent) => (
-                  <div
-                    key={agent.id}
-                    className="shrink-0"
-                  >
+                  <div key={agent.id} className="shrink-0">
                     <OmniAgentCard {...agent} />
                   </div>
                 ))
               )}
-{filteredAgents.length === 0 && !isLoadingAgents && (
-                <div
-                  className="w-full flex items-center justify-center text-slate-400 text-sm"
-                >
+              {filteredAgents.length === 0 && !isLoadingAgents && (
+                <div className="w-full flex items-center justify-center text-slate-400 text-sm">
                   No agents found with the selected filter.
                 </div>
               )}
@@ -361,7 +348,7 @@ export default function DashboardContent() {
                         {act.type === 'info' && <Zap size={16} className="text-cyan-400" />}
                       </div>
                       <div className="flex-1 space-y-1">
-                        <p className="text-sm font-bold text-slate-200">{act.action}</p>
+                        <p className="text-sm font-bold text-slate-700">{act.action}</p>
                         <p className="text-[10px] font-mono text-slate-500 flex items-center gap-2">
                           <span className="text-cyan-400">@{act.agent}</span> • {act.time}
                         </p>

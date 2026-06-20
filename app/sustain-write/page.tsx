@@ -439,11 +439,7 @@ export default function SustainWritePage() {
 
   return (
     <div
-      className={`min-h-screen p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal ${
-        omniTheme === 'omnicore'
-          ? 'bg-[var(--theme-base)] text-[var(--theme-text)]'
-          : 'bg-[#F8FAFC] text-slate-800'
-      }`}
+      className={`min-h-screen p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal ${'bg-[#F8FAFC] text-slate-800'}`}
     >
       {uploaderTarget && (
         <OmniEvidenceUploader
@@ -711,7 +707,7 @@ export default function SustainWritePage() {
                       <Card
                         variant="elevated"
                         key={i}
-                        variant="glass"
+                        variant="default"
                         className="hover:border-cyan-500/50 transition-colors group cursor-pointer"
                       >
                         <div className="flex justify-between items-start mb-4">
@@ -1066,7 +1062,7 @@ export default function SustainWritePage() {
 
                         if (sortedNotes.length === 0) {
                           return (
-                            <div className="text-center py-12 text-slate-500 border border-dashed border-white/5 rounded-xl">
+                            <div className="text-center py-12 text-slate-500 border border-dashed border-slate-200 rounded-xl">
                               <StickyNote
                                 size={24}
                                 className="mx-auto mb-2 opacity-20 text-slate-500"
@@ -1089,7 +1085,7 @@ export default function SustainWritePage() {
                                 ' border rounded-xl p-3 hover:border-cyan-500/25 transition-all group relative cursor-grab active:cursor-grabbing',
                                 isPinned
                                   ? 'border-cyan-500/35 bg-cyan-950/10 shadow-[0_0_15px_rgba(6,182,212,0.05)]'
-                                  : 'border-white/5'
+                                  : 'border-slate-200'
                               )}
                               title="可直接拖曳筆記內容至編輯器中任意位置"
                             >
@@ -1207,7 +1203,7 @@ export default function SustainWritePage() {
 
               {activeTab === 'data' && (
                 <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/50 p-5 rounded-xl border border-white/5 shadow-inner">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/50 p-5 rounded-xl border border-slate-200 shadow-inner">
                     <div className="flex items-center gap-4">
                       <div className="p-3 bg-cyan-950/50 rounded-lg text-cyan-400 border border-cyan-500/20">
                         <Database size={24} />
@@ -1251,7 +1247,7 @@ export default function SustainWritePage() {
                           <Card
                             variant="elevated"
                             key={idx}
-                            variant="glass"
+                            variant="default"
                             className="hover:border-cyan-500/30 transition-all hover:shadow-[0_4px_20px_rgba(6,182,212,0.1)]"
                           >
                             <div className="flex justify-between items-start mb-3">
@@ -1265,11 +1261,11 @@ export default function SustainWritePage() {
                                 {item.status === 'verified' ? '5T VERIFIED' : 'PENDING'}
                               </Badge>
                             </div>
-                            <h4 className="text-sm text-slate-200 font-medium mb-1">{item.name}</h4>
+                            <h4 className="text-sm text-slate-700 font-medium mb-1">{item.name}</h4>
                             <p className="text-xl font-mono text-white font-black mb-4 tracking-tight">
                               {item.val}
                             </p>
-                            <div className="flex justify-between items-center text-xs border-t border-white/5 pt-3">
+                            <div className="flex justify-between items-center text-xs border-t border-slate-200 pt-3">
                               <span className="text-slate-500 flex items-center gap-1">
                                 <Cpu size={10} /> Hash Lock
                               </span>
@@ -1284,7 +1280,7 @@ export default function SustainWritePage() {
                               </span>
                             </div>
                             {/* Evidence Receipt Collection Section (萬能智庫佐證庫) */}
-                            <div className="mt-3 pt-3 border-t border-white/5">
+                            <div className="mt-3 pt-3 border-t border-slate-200">
                               <div className="flex justify-between items-center mb-2">
                                 <span className="text-xs text-slate-400 flex items-center gap-1">
                                   <ShieldCheck size={12} className="text-cyan-500" />
@@ -1335,7 +1331,7 @@ export default function SustainWritePage() {
             <div className="space-y-6">
               <Card
                 variant="elevated"
-                variant="glow"
+                variant="default"
                 title="ESG 實境之眼"
                 subtitle="Eye of Sustainability Reality"
               >

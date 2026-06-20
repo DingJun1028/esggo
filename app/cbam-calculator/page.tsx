@@ -230,7 +230,7 @@ export default function CbamCalculatorPage() {
           <button
             onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
             disabled={verifyingId === row.id}
-            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-700 text-sm font-medium transition-colors disabled:opacity-50"
           >
             {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
             {row.hash_lock ? '驗證 5T' : '編輯'}
@@ -241,10 +241,10 @@ export default function CbamCalculatorPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] relative group">
               <div className="absolute inset-0 bg-cyan-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -268,11 +268,7 @@ export default function CbamCalculatorPage() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <Button
-              variant="outline"
-              icon={<Search size={16} />}
-              className="flex-1 md:flex-none"
-            >
+            <Button variant="outline" icon={<Search size={16} />} className="flex-1 md:flex-none">
               檢索
             </Button>
             <Button
@@ -289,7 +285,7 @@ export default function CbamCalculatorPage() {
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">納管出口批次</span>
               <Scale size={18} className="text-amber-400" />
@@ -300,7 +296,7 @@ export default function CbamCalculatorPage() {
             <p className="text-xs text-amber-400/80 font-mono">Status: Q3 Declaration</p>
           </Card>
 
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
@@ -311,7 +307,7 @@ export default function CbamCalculatorPage() {
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </Card>
 
-          <Card variant="glass" className="p-6 space-y-4">
+          <Card variant="default" className="p-6 space-y-4">
             <div className="flex items-center justify-between text-slate-400">
               <span className="text-sm font-bold uppercase tracking-widest">潛在財務衝擊</span>
               <Euro size={18} className="text-rose-400" />
@@ -337,11 +333,7 @@ export default function CbamCalculatorPage() {
           </div>
 
           <div className="space-y-6">
-            <Card
-              variant="glow"
-              title="OmniAgent 合規參謀"
-              subtitle="CBAM Declaration Advisor"
-            >
+            <Card variant="default" title="OmniAgent 合規參謀" subtitle="CBAM Declaration Advisor">
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
                   我們已根據歐盟最新 CBAM 申報準則 (EU 2023/956)，為您的出口產品重新計算了隱含碳排放

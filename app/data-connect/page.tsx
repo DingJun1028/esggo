@@ -20,7 +20,7 @@ export default function DataConnectDashboard() {
       const res = await fetch('/api/omni-agent-api/command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task: 'TRANSFER_TO_NCBDB' })
+        body: JSON.stringify({ task: 'TRANSFER_TO_NCBDB' }),
       });
       const data = await res.json();
       setSyncResult(data);
@@ -40,7 +40,7 @@ export default function DataConnectDashboard() {
     griReference: 'Data / oX',
     activeT5Tags: ['T1', 'T2', 'T5'],
     isOXModule: true,
-    
+
     sections: [
       {
         id: 'sync-hub',
@@ -53,36 +53,50 @@ export default function DataConnectDashboard() {
                 <div className="flex items-center gap-4 mb-4">
                   <Database size={24} className="text-emerald-500" />
                   <h3 className="text-xl font-black text-slate-800">Supabase (主庫)</h3>
-                  <Badge variant="verified" className="ml-auto">Connected</Badge>
+                  <Badge variant="verified" className="ml-auto">
+                    Connected
+                  </Badge>
                 </div>
-                <p className="text-sm text-slate-500 font-medium">儲存原始憑證、使用者身份、ZKP 紀錄與 5T 完整性簽章資料。</p>
+                <p className="text-sm text-slate-500 font-medium">
+                  儲存原始憑證、使用者身份、ZKP 紀錄與 5T 完整性簽章資料。
+                </p>
               </Card>
 
               <Card className="p-8 bg-white/60 shadow-glass border-t-4 border-t-blue-400">
                 <div className="flex items-center gap-4 mb-4">
                   <Server size={24} className="text-blue-500" />
                   <h3 className="text-xl font-black text-slate-800">NCBDB (代理分析庫)</h3>
-                  <Badge variant="verified" className="ml-auto">Connected</Badge>
+                  <Badge variant="verified" className="ml-auto">
+                    Connected
+                  </Badge>
                 </div>
-                <p className="text-sm text-slate-500 font-medium">Nocodebackend 視覺化資料庫，用於 Agent 取用、報表生成與外部 API 查詢。</p>
+                <p className="text-sm text-slate-500 font-medium">
+                  Nocodebackend 視覺化資料庫，用於 Agent 取用、報表生成與外部 API 查詢。
+                </p>
               </Card>
             </div>
 
             <Card className="p-8 bg-berkeley-blue text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
                 <h3 className="text-xl font-black mb-2">執行全區深度同步 (Global Deep Sync)</h3>
-                <p className="text-sm text-blue-100/70">將 Supabase 內的最新 ESG 報告與實證數據，完整對齊至 NCBDB 視覺化管理後台。</p>
+                <p className="text-sm text-blue-100/70">
+                  將 Supabase 內的最新 ESG 報告與實證數據，完整對齊至 NCBDB 視覺化管理後台。
+                </p>
               </div>
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 className="w-full md:w-auto h-14 px-8 rounded-xl bg-white text-berkeley-blue hover:bg-slate-100 font-black shadow-lg"
                 onClick={handleSync}
                 disabled={isSyncing}
               >
                 {isSyncing ? (
-                  <><RefreshCw size={20} className="mr-3 animate-spin" /> 同步中 (Syncing...)</>
+                  <>
+                    <RefreshCw size={20} className="mr-3 animate-spin" /> 同步中 (Syncing...)
+                  </>
                 ) : (
-                  <><RefreshCw size={20} className="mr-3" /> 啟動同步 (Start Sync)</>
+                  <>
+                    <RefreshCw size={20} className="mr-3" /> 啟動同步 (Start Sync)
+                  </>
                 )}
               </Button>
             </Card>
@@ -97,9 +111,9 @@ export default function DataConnectDashboard() {
               </Card>
             )}
           </div>
-        )
-      }
-    ]
+        ),
+      },
+    ],
   };
 
   return <StandardPage config={pageConfig} />;

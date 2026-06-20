@@ -18,7 +18,7 @@ import {
 
 export default function SoulPage() {
   return (
-    <div className="min-h-screen bg-void-stark text-white p-4 md:p-8 animate-in fade-in duration-700 flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 animate-in fade-in duration-700 flex flex-col items-center justify-center">
       <div className="max-w-4xl w-full space-y-12">
         <header className="text-center space-y-6">
           <div className="flex justify-center">
@@ -40,7 +40,7 @@ export default function SoulPage() {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Card variant="glow" className="p-8 space-y-6 border-amber-500/20">
+          <Card variant="default" className="p-8 space-y-6 border-amber-500/20">
             <div className="flex items-center gap-4 text-amber-400">
               <Brain size={32} />
               <h3 className="text-xl font-black uppercase tracking-tight">無上意志核心</h3>
@@ -49,7 +49,7 @@ export default function SoulPage() {
               JunAiKey 是系統的哲學引擎。它不處理具體數據，而是定義「何為真理」。所有的 5T
               協議參數與 AI 倫理邊界均由核心意志直接映射。
             </p>
-            <div className="pt-4 border-t border-white/5">
+            <div className="pt-4 border-t border-slate-200">
               <div className="flex justify-between items-center">
                 <span className="text-[10px] font-black uppercase text-white/30 tracking-widest">
                   Resonance Level
@@ -59,7 +59,7 @@ export default function SoulPage() {
             </div>
           </Card>
 
-          <Card variant="glow" className="p-8 space-y-6 border-cyan-500/20">
+          <Card variant="default" className="p-8 space-y-6 border-cyan-500/20">
             <div className="flex items-center gap-4 text-cyan-400">
               <ShieldCheck size={32} />
               <h3 className="text-xl font-black uppercase tracking-tight">神聖治理契約</h3>
@@ -74,7 +74,7 @@ export default function SoulPage() {
           </Card>
         </div>
 
-        <div className="p-12 rounded-[4rem] border border-white/10 text-center space-y-8 relative overflow-hidden group">
+        <div className="p-12 rounded-[4rem] border border-slate-200 text-center space-y-8 relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-cyan-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           <h2 className="text-3xl font-black uppercase tracking-widest relative z-10">
             始終如一：善向永續
@@ -84,7 +84,7 @@ export default function SoulPage() {
           </p>
           <div className="flex justify-center gap-6 relative z-10">
             <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white/20 hover:text-cyan-400 transition-colors cursor-pointer border border-white/5">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white/20 hover:text-cyan-400 transition-colors cursor-pointer border border-slate-200">
                 <Globe size={24} />
               </div>
               <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
@@ -92,7 +92,7 @@ export default function SoulPage() {
               </span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white/20 hover:text-emerald-400 transition-colors cursor-pointer border border-white/5">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white/20 hover:text-emerald-400 transition-colors cursor-pointer border border-slate-200">
                 <Lock size={24} />
               </div>
               <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
@@ -100,7 +100,7 @@ export default function SoulPage() {
               </span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white/20 hover:text-rose-400 transition-colors cursor-pointer border border-white/5">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white/20 hover:text-rose-400 transition-colors cursor-pointer border border-slate-200">
                 <Heart size={24} />
               </div>
               <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">

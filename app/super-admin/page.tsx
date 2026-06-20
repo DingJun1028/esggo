@@ -26,7 +26,7 @@ import {
 
 // Glassmorphism styling helpers
 const CARD_CLASS =
-  'bg-white/40 backdrop-blur-xl border border-white/50 shadow-sm hover:shadow-md transition-all duration-300';
+  'bg-white/40 backdrop-blur-xl border border-slate-2000 shadow-sm hover:shadow-md transition-all duration-300';
 
 export default function SuperAdminPanel() {
   const { user } = useAuth();

@@ -24,11 +24,12 @@ export default function GlobalError({
           <div className="mx-auto w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center">
             <AlertTriangle size={32} />
           </div>
-          
+
           <div>
             <h1 className="text-2xl font-black text-slate-800 mb-2">系統發生未預期錯誤</h1>
             <p className="text-slate-500 text-sm">
-              系統已自動觸發 5T 治理保護機制，您的資料安全無虞。OmniAgent 已記錄此錯誤以進行根因分析。
+              系統已自動觸發 5T 治理保護機制，您的資料安全無虞。OmniAgent
+              已記錄此錯誤以進行根因分析。
             </p>
           </div>
 
@@ -39,17 +40,10 @@ export default function GlobalError({
           </div>
 
           <div className="flex justify-center gap-4 pt-4">
-            <Button 
-              variant="outline" 
-              onClick={() => window.location.href = '/'}
-            >
+            <Button variant="outline" onClick={() => (window.location.href = '/')}>
               返回主控台
             </Button>
-            <Button 
-              variant="primary" 
-              icon={<ShieldCheck size={16} />}
-              onClick={() => reset()}
-            >
+            <Button variant="primary" icon={<ShieldCheck size={16} />} onClick={() => reset()}>
               嘗試自動修復 (Auto-Heal)
             </Button>
           </div>

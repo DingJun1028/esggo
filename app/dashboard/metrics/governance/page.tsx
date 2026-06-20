@@ -71,10 +71,10 @@ export default function GovernanceMetricsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-amber-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 p-4 md:p-8 selection:bg-amber-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Header */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 flex items-center justify-center border border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.15)] relative">
               <Scale className="text-amber-400 relative z-10" size={28} />
@@ -107,7 +107,7 @@ export default function GovernanceMetricsPage() {
         {/* Governance Dashboard Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card
-            variant="glass"
+            variant="default"
             className="p-6 transition-all duration-300 hover:border-amber-500/30"
           >
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
@@ -117,13 +117,13 @@ export default function GovernanceMetricsPage() {
               {metrics.boardIndependence.toFixed(1)}
               <span className="text-lg font-normal text-slate-500">%</span>
             </div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
+            <p className="text-sm text-slate-400 border-t border-slate-200 pt-2 flex items-center gap-1">
               <CheckCircle2 size={14} className="text-amber-500" /> 符合法規高標準要求
             </p>
           </Card>
 
           <Card
-            variant="glass"
+            variant="default"
             className="p-6 transition-all duration-300 hover:border-orange-500/30"
           >
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
@@ -133,13 +133,13 @@ export default function GovernanceMetricsPage() {
               {metrics.ethicsIncidents}{' '}
               <span className="text-lg font-normal text-slate-500">件</span>
             </div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2 text-emerald-400/80">
+            <p className="text-sm text-slate-400 border-t border-slate-200 pt-2 text-emerald-400/80">
               維持零違規優良紀錄
             </p>
           </Card>
 
           <Card
-            variant="glass"
+            variant="default"
             className="p-6 transition-all duration-300 hover:border-yellow-500/30"
           >
             <h3 className="font-bold text-slate-300 flex items-center gap-2 mb-4">
@@ -149,7 +149,7 @@ export default function GovernanceMetricsPage() {
               {metrics.policyCompliance.toFixed(1)}
               <span className="text-lg font-normal text-slate-500">%</span>
             </div>
-            <p className="text-sm text-slate-400 border-t border-white/5 pt-2">
+            <p className="text-sm text-slate-400 border-t border-slate-200 pt-2">
               全公司資安與合規考核
             </p>
           </Card>
