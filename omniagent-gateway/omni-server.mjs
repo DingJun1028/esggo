@@ -52,6 +52,8 @@ const SITE_NAME      = 'ESGGO OmniAgent Gateway';
 const DEFAULT_ALLOWED_ORIGINS = [
   SITE_URL,
   `http://${VPS_IP}`,
+  'https://esggo.vercel.app',
+  'https://esggo-original-esg-sunshine.vercel.app',
   `http://127.0.0.1:${process.env.NEXT_PUBLIC_APP_PORT || 3000}`,
   `http://localhost:${process.env.NEXT_PUBLIC_APP_PORT || 3000}`,
 ];
