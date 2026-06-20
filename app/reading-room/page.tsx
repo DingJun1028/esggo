@@ -7,7 +7,18 @@ import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
 import { Table } from '@/components/ui/v2/Table';
 import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
-import { BookOpen, Search, Plus, ShieldCheck, Activity, Brain, Lock, Loader2, FileText, Database } from 'lucide-react';
+import {
+  BookOpen,
+  Search,
+  Plus,
+  ShieldCheck,
+  Activity,
+  Brain,
+  Lock,
+  Loader2,
+  FileText,
+  Database,
+} from 'lucide-react';
 
 export default function ReadingRoomPage() {
   const [data, setData] = useState<any[]>([]);
@@ -23,26 +34,30 @@ export default function ReadingRoomPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetching from a omni proxy metrics endpoint
-      const res = await fetch('/api/metrics/reading-room', { cache: 'no-store' });
+      const res = await fetch('/api/reading-room/documents?t=' + Date.now(), { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
-        setData(json.data || []);
+        const docs = (json.documents || []).map((doc: any) => ({
+          id: doc.id,
+          date: doc.published_date || doc.created_at?.slice(0, 10),
+          doc_title: doc.title,
+          status: doc.file_url ? '已索引' : '待處理',
+          vectors: 0,
+          hash_lock: null,
+          source_origin: doc.source || 'System',
+          category: doc.category,
+          esg_category: doc.esg_category,
+          file_url: doc.file_url,
+          tags: doc.tags,
+          gri_reference: doc.gri_reference,
+        }));
+        setData(docs);
       } else {
-        // Fallback mock data for Reading Room
-        setData([
-          { id: 1, date: '2026-06-12', doc_title: '2026 ESG 永續報告草案', status: '已索引', vectors: 1250, hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-10', doc_title: '歐盟 CBAM 規範指南 v2.pdf', status: '處理中', vectors: 0, hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-05', doc_title: '供應鏈減碳宣導手冊', status: '已索引', vectors: 840, hash_lock: '0x1c...9d4f', source_origin: 'System' },
-        ]);
+        setData([]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
-      // Fallback mock data
-      setData([
-        { id: 1, date: '2026-06-12', doc_title: '2026 ESG 永續報告草案', status: '已索引', vectors: 1250, hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-10', doc_title: '歐盟 CBAM 規範指南 v2.pdf', status: '處理中', vectors: 0, hash_lock: null, source_origin: 'Manual' },
-      ]);
+      setData([]);
     } finally {
       setLoading(false);
     }
@@ -54,14 +69,16 @@ export default function ReadingRoomPage() {
       const response = await fetch('/api/vault/seal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'reading-room', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
+        body: JSON.stringify({
+          evidence: { table: 'reading-room', recordId: id, timestamp: Date.now() },
+          type: '5t-seal',
+        }),
       });
       const resData = await response.json();
       if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
+        setData((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, hash_lock: resData.hashLock } : m))
+        );
       } else {
         alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
@@ -79,7 +96,7 @@ export default function ReadingRoomPage() {
       const response = await fetch('/api/vault/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
+        body: JSON.stringify({ recordId: id, type: '5t-seal' }),
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
@@ -105,53 +122,79 @@ export default function ReadingRoomPage() {
 
   const columns = [
     { key: 'date', label: '上傳日期' },
-    { key: 'doc_title', label: '文獻名稱 (Document Title)', render: (val: any) => (
-      <span className="flex items-center gap-2"><FileText size={14} className="text-cyan-400"/> {val}</span>
-    ) },
-    { key: 'status', label: '知識庫狀態', render: (val: any) => (
-      <Badge variant={val === '已索引' ? 'success' : 'warning'} size="sm">{val}</Badge>
-    ) },
-    { key: 'vectors', label: '向量切塊 (Chunks)', render: (val: any) => (
-      <span className="font-mono text-xs text-slate-400">{val} 塊</span>
-    ) },
-    { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <Badge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
+    {
+      key: 'doc_title',
+      label: '文獻名稱 (Document Title)',
+      render: (val: any) => (
+        <span className="flex items-center gap-2">
+          <FileText size={14} className="text-cyan-400" /> {val}
+        </span>
+      ),
+    },
+    {
+      key: 'status',
+      label: '知識庫狀態',
+      render: (val: any) => (
+        <Badge variant={val === '已索引' ? 'success' : 'warning'} size="sm">
+          {val}
         </Badge>
-      ) : (
-        <Badge variant="default" size="sm">未封印</Badge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+      ),
+    },
+    {
+      key: 'vectors',
+      label: '向量切塊 (Chunks)',
+      render: (val: any) => <span className="font-mono text-xs text-slate-400">{val} 塊</span>,
+    },
+    { key: 'source_origin', label: '來源 (Source)' },
+    {
+      key: 'hash_lock',
+      label: '5T Hash Lock',
+      render: (val: any) =>
+        val ? (
+          <Badge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+            {val.substring(0, 8)}...
+          </Badge>
+        ) : (
+          <Badge variant="default" size="sm">
+            未封印
+          </Badge>
+        ),
+    },
+    {
+      key: 'action',
+      label: '操作 (Actions)',
+      render: (_: any, row: any) => (
+        <div className="flex items-center gap-3">
+          {!row.hash_lock && (
+            <button
+              onClick={() => handleSeal(row.id)}
+              disabled={sealingId === row.id}
+              className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+            >
+              {sealingId === row.id ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Lock size={14} />
+              )}
+              T5 封印
+            </button>
+          )}
+          <button
+            onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
+            disabled={verifyingId === row.id}
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
           >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
+            {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
+            {row.hash_lock ? '驗證 5T' : '編輯'}
           </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
           <div className="flex items-center gap-4">
@@ -161,16 +204,30 @@ export default function ReadingRoomPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <Badge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</Badge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">READING-ROOM</span>
+                <Badge variant="primary" size="sm" icon={<Brain size={12} />}>
+                  OmniAgent Ready
+                </Badge>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+                  READING-ROOM
+                </span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">永續閱覽室</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">SUSTAINABILITY READING ROOM</p>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">
+                SUSTAINABILITY READING ROOM
+              </p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <Button variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</Button>
-            <Button variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+            <Button variant="outline" icon={<Search size={16} />} className="flex-1 md:flex-none">
+              檢索
+            </Button>
+            <Button
+              variant="primary"
+              icon={<Plus size={16} />}
+              onClick={handleAddRecord}
+              isLoading={isProcessing}
+              className="flex-1 md:flex-none"
+            >
               新增紀錄
             </Button>
           </div>
@@ -183,7 +240,9 @@ export default function ReadingRoomPage() {
               <span className="text-sm font-bold uppercase tracking-widest">收錄文獻</span>
               <BookOpen size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">124<span className="text-lg text-slate-500 ml-2 font-normal">Docs</span></div>
+            <div className="text-4xl font-black text-white">
+              124<span className="text-lg text-slate-500 ml-2 font-normal">Docs</span>
+            </div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Indexed</p>
           </Card>
 
@@ -192,7 +251,9 @@ export default function ReadingRoomPage() {
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <div className="text-4xl font-black text-white">
+              98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
+            </div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </Card>
 
@@ -201,7 +262,9 @@ export default function ReadingRoomPage() {
               <span className="text-sm font-bold uppercase tracking-widest">知識庫向量數</span>
               <Database size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">8,452<span className="text-lg text-slate-500 ml-2 font-normal">Chunks</span></div>
+            <div className="text-4xl font-black text-white">
+              8,452<span className="text-lg text-slate-500 ml-2 font-normal">Chunks</span>
+            </div>
             <p className="text-xs text-amber-400/80 font-mono">OmniVector Syncing</p>
           </Card>
         </div>
@@ -209,26 +272,18 @@ export default function ReadingRoomPage() {
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <Card 
-              variant="default" 
-              title="業務資料視圖" 
+            <Card
+              variant="default"
+              title="業務資料視圖"
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
-              <Table 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
+              <Table columns={columns} data={data} loading={loading} />
             </Card>
           </div>
-          
+
           <div className="space-y-6">
-            <Card 
-              variant="glow" 
-              title="永續知識大腦" 
-              subtitle="ESGSmartQA (RAG Powered)"
-            >
+            <Card variant="glow" title="永續知識大腦" subtitle="ESGSmartQA (RAG Powered)">
               <div className="space-y-4 text-sm text-slate-300">
                 <p className="mb-4">
                   您可以直接在下方詢問關於 TCFD、CBAM、或者上傳的 ESG 報告書內容。
@@ -239,7 +294,6 @@ export default function ReadingRoomPage() {
             </Card>
           </div>
         </div>
-
       </div>
     </div>
   );
