@@ -5,8 +5,7 @@ import React, { useState } from 'react';
 import { ShieldCheck, CheckCircle2, AlertTriangle, TrendingUp, Activity, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FIVE_T_PROTOCOL, FOUR_PLUS_ONE, type FiveTGateCode } from '@/shared/constants/protocol';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniPremiumCard } from '@/components/ui/omni/OmniPremiumCard';
+import { Card } from '@/components/ui/v2/Card';
 import { OmniProgressRing } from '@/components/ui/omni/OmniProgressRing';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
@@ -121,7 +120,7 @@ function GateCard({ status, index }: { status: GateStatus; index: number }) {
     <div
       style={{ transition: 'all 0.4s ease' }}
     >
-      <OmniPremiumCard
+      <Card variant="elevated"
         className={cn(
           'p-5 h-full flex flex-col justify-between',
           !isPassed && 'border-amber-200 bg-amber-50/50'
@@ -183,7 +182,7 @@ function GateCard({ status, index }: { status: GateStatus; index: number }) {
             />
           </div>
         </div>
-      </OmniPremiumCard>
+      </Card>
     </div>
   );
 }
@@ -235,7 +234,7 @@ export default function FiveTDashboardPage() {
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* ─── Header ─── */}
-        <OmniPremiumCard className="p-6 md:p-8" interactive={false}>
+        <Card variant="elevated" className="p-6 md:p-8" interactive={false}>
           {/* Background Ambient Glows */}
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-cyan-50/50 rounded-full blur-3xl" />
           <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-[#FDB515]/10 rounded-full blur-3xl" />
@@ -292,7 +291,7 @@ export default function FiveTDashboardPage() {
               />
             </div>
           </div>
-        </OmniPremiumCard>
+        </Card>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
@@ -327,7 +326,7 @@ export default function FiveTDashboardPage() {
         )}
 
         {activeTab === 'events' && (
-          <OmniBaseCard className="p-5">
+          <Card className="p-5">
             <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
               <Activity size={16} className="text-cyan-500" />
               即時合規事件時間軸
@@ -337,7 +336,7 @@ export default function FiveTDashboardPage() {
                 <EventRow key={event.id} event={event} />
               ))}
             </div>
-          </OmniBaseCard>
+          </Card>
         )}
 
         {activeTab === '4plus1' && (

@@ -23,9 +23,9 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface IntelligenceRecord {
@@ -233,9 +233,9 @@ export default function IntelligencePage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-0.5">
-                <OmniBadge variant="primary" size="sm" icon={<Brain size={10} />}>
+                <Badge variant="primary" size="sm" icon={<Brain size={10} />}>
                   OmniAgent Ready
-                </OmniBadge>
+                </Badge>
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
                   INTELLIGENCE
                 </span>
@@ -249,7 +249,7 @@ export default function IntelligencePage() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Brain size={14} />}
@@ -259,8 +259,8 @@ export default function IntelligencePage() {
               className="bg-[#003262] hover:bg-[#002244] text-white flex-1 md:flex-none"
             >
               生成今日日報
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="outline"
               size="md"
               icon={<Plus size={14} />}
@@ -269,13 +269,13 @@ export default function IntelligencePage() {
               className="flex-1 md:flex-none"
             >
               新增紀錄
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
         {/* ─── Stats ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-2.5 bg-blue-50 rounded-xl">
               <TrendingUp size={18} className="text-blue-600" />
             </div>
@@ -285,8 +285,8 @@ export default function IntelligencePage() {
                 本日追蹤情報
               </p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          </Card>
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-2.5 bg-cyan-50 rounded-xl">
               <ShieldCheck size={18} className="text-cyan-600" />
             </div>
@@ -298,8 +298,8 @@ export default function IntelligencePage() {
                 5T 驗證率
               </p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          </Card>
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-2.5 bg-rose-50 rounded-xl">
               <AlertTriangle size={18} className="text-rose-600" />
             </div>
@@ -309,11 +309,11 @@ export default function IntelligencePage() {
                 高風險預警
               </p>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Enterprise Health Check Portal ─── */}
-        <OmniBaseCard className="relative overflow-hidden border-0">
+        <Card className="relative overflow-hidden border-0">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-blue-800 opacity-95" />
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
           <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/10 to-transparent transform skew-x-[-20deg]" />
@@ -338,22 +338,22 @@ export default function IntelligencePage() {
             </div>
             <div className="w-full md:w-auto">
               <Link href="/intelligence/enterprise-health">
-                <OmniButton
+                <Button
                   variant="secondary"
                   size="lg"
                   className="w-full md:w-auto bg-white text-blue-900 hover:bg-slate-100 font-bold tracking-wider"
                 >
                   立即開始健檢 <ArrowRight size={16} className="ml-2" />
-                </OmniButton>
+                </Button>
               </Link>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Report Card ─── */}
         {report.visible && (
           <div>
-            <OmniBaseCard className="border-cyan-100 overflow-hidden">
+            <Card className="border-cyan-100 overflow-hidden">
               <div className="h-1 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400" />
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-5 border-b border-slate-100">
                 <div className="flex items-center gap-3">
@@ -401,12 +401,12 @@ export default function IntelligencePage() {
                   <span className="inline-block w-1 h-4 bg-cyan-500 animate-pulse ml-0.5" />
                 )}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
         {/* ─── Intelligence Table ─── */}
-        <OmniBaseCard padding="none" className="overflow-hidden">
+        <Card padding="none" className="overflow-hidden">
           <div className="p-5 border-b border-slate-100">
             <h3 className="text-base font-bold text-[#003262]">外部情報觀測視圖</h3>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -470,17 +470,17 @@ export default function IntelligencePage() {
                           <td className="px-4 py-3 text-xs text-slate-500">{row.source_origin}</td>
                           <td className="px-4 py-3">
                             {row.hash_lock ? (
-                              <OmniBadge
+                              <Badge
                                 variant="success"
                                 size="sm"
                                 icon={<ShieldCheck size={10} />}
                               >
                                 {row.hash_lock.substring(0, 8)}...
-                              </OmniBadge>
+                              </Badge>
                             ) : (
-                              <OmniBadge variant="default" size="sm">
+                              <Badge variant="default" size="sm">
                                 未封印
-                              </OmniBadge>
+                              </Badge>
                             )}
                           </td>
                           <td className="px-4 py-3">
@@ -547,7 +547,7 @@ export default function IntelligencePage() {
               </div>
             </>
           )}
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

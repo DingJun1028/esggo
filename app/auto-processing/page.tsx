@@ -27,9 +27,9 @@ import {
   Layers,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface ProcessingStep {
@@ -284,7 +284,7 @@ export default function AutoDataProcessingPage() {
                 </p>
               </div>
             </div>
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={
@@ -295,7 +295,7 @@ export default function AutoDataProcessingPage() {
               className="bg-violet-600 hover:bg-violet-700 text-white"
             >
               {isProcessing ? '處理中...' : '開始處理'}
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
@@ -367,7 +367,7 @@ export default function AutoDataProcessingPage() {
         {/* ─── Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               {activeTab === 'pipeline' && (
                 <div>
                   <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
@@ -427,13 +427,13 @@ export default function AutoDataProcessingPage() {
                   </div>
                 </div>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Processing Status */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Database size={14} className="text-blue-500" />
                 處理狀態
@@ -456,10 +456,10 @@ export default function AutoDataProcessingPage() {
                   <span className="text-sm font-bold text-amber-600">23 筆</span>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Data Sources */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Layers size={14} className="text-violet-500" />
                 數據來源
@@ -478,10 +478,10 @@ export default function AutoDataProcessingPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Quick Actions */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">快速操作</h3>
               <div className="space-y-2">
                 {[
@@ -499,28 +499,28 @@ export default function AutoDataProcessingPage() {
                   </button>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備體驗自動化數據處理？</h3>
           <p className="text-xs text-slate-400 mb-4">上傳您的數據，讓 AI 自動處理、分析與驗證</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Upload size={16} />}
               className="bg-violet-600 hover:bg-violet-700 text-white"
             >
               上傳數據
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

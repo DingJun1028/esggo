@@ -16,9 +16,9 @@ import {
   Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface VaultRecord {
@@ -172,14 +172,14 @@ export default function VaultPage() {
             </h1>
             <p className="text-sm text-slate-400 mt-1">加密文件、佐證鎖檔、永久封存</p>
           </div>
-          <OmniButton variant="primary" size="md" icon={<FileText size={16} />}>
+          <Button variant="primary" size="md" icon={<FileText size={16} />}>
             上傳檔案
-          </OmniButton>
+          </Button>
         </header>
 
         {/* ─── Stats ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-3 bg-blue-50 rounded-xl">
               <FileText size={20} className="text-blue-600" />
             </div>
@@ -187,8 +187,8 @@ export default function VaultPage() {
               <p className="text-2xl font-black text-[#003262]">{stats.total}</p>
               <p className="text-xs text-slate-400 font-medium">總檔案數</p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          </Card>
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-3 bg-emerald-50 rounded-xl">
               <CheckCircle2 size={20} className="text-emerald-600" />
             </div>
@@ -196,8 +196,8 @@ export default function VaultPage() {
               <p className="text-2xl font-black text-[#003262]">{stats.verified}</p>
               <p className="text-xs text-slate-400 font-medium">已驗證</p>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-5 flex items-center gap-4">
+          </Card>
+          <Card className="p-5 flex items-center gap-4">
             <div className="p-3 bg-cyan-50 rounded-xl">
               <ShieldCheck size={20} className="text-cyan-600" />
             </div>
@@ -205,11 +205,11 @@ export default function VaultPage() {
               <p className="text-2xl font-black text-[#003262]">AES-256</p>
               <p className="text-xs text-slate-400 font-medium">加密等級</p>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Search & Filter ─── */}
-        <OmniBaseCard padding="md">
+        <Card padding="md">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
             {/* Search */}
             <div className="relative flex-1">
@@ -257,12 +257,12 @@ export default function VaultPage() {
               </select>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── File List ─── */}
         {/* Desktop: Table */}
         <div className="hidden md:block">
-          <OmniBaseCard padding="none" className="overflow-hidden">
+          <Card padding="none" className="overflow-hidden">
             {loading ? (
               <div className="h-48 flex items-center justify-center text-sm text-slate-400">
                 載入中...
@@ -299,9 +299,9 @@ export default function VaultPage() {
                           </div>
                         </td>
                         <td className="px-4 py-3">
-                          <OmniBadge variant="secondary" size="sm">
+                          <Badge variant="secondary" size="sm">
                             {record.category}
-                          </OmniBadge>
+                          </Badge>
                         </td>
                         <td className="px-4 py-3">
                           <span
@@ -358,7 +358,7 @@ export default function VaultPage() {
                 </tbody>
               </table>
             )}
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* Mobile: Card list */}
@@ -406,9 +406,9 @@ export default function VaultPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <OmniBadge variant="secondary" size="xs">
+                      <Badge variant="secondary" size="xs">
                         {record.category}
-                      </OmniBadge>
+                      </Badge>
                       <div className="flex gap-0.5">
                         {record.fiveTStatus.map((s, i) => (
                           <div

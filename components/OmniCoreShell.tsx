@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';

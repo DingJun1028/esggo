@@ -1,9 +1,13 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { firebaseAdmin } from '@/lib/firebase-admin';
+import { AuthUser, AuthUserSchema } from '@esggo/types';
 
-export async function GET() {
+type MeResponseData = {
+  user: AuthUser | null;
+};
+
+export async function GET(): Promise<NextResponse<MeResponseData>> {
   const cookieStore = cookies();
   const sessionToken = cookieStore.get('omni_session')?.value;
 
@@ -11,7 +15,8 @@ export async function GET() {
     // Fallback for demo bypass
     const isBypass = cookieStore.get('omni_user_bypass')?.value === 'true';
     if (isBypass) {
-      return NextResponse.json({ user: { name: 'Demo User (Bypass)' } });
+      const demoUser = AuthUserSchema.parse({ id: 'demo', name: 'Demo User (Bypass)' });
+      return NextResponse.json({ user: demoUser });
     }
     return NextResponse.json({ user: null }, { status: 401 });
   }
@@ -24,13 +29,13 @@ export async function GET() {
 
     const decodedClaims = await firebaseAdmin.auth().verifySessionCookie(sessionToken, true);
     
-    // Map Firebase claims to our user object structure
-    const user = {
+    // Map Firebase claims to our user object structure and validate via Zod
+    const user = AuthUserSchema.parse({
       id: decodedClaims.uid,
       email: decodedClaims.email,
       name: decodedClaims.name || decodedClaims.email?.split('@')[0],
       picture: decodedClaims.picture,
-    };
+    });
 
     return NextResponse.json({ user });
   } catch (err) {

@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
 'use client';
 
@@ -28,6 +29,9 @@ export interface OmniTableDataRow {
 }
 
 interface OmniTableProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   data: OmniTableDataRow[];
   onSealAction?: (id: string) => Promise<void>;
 }

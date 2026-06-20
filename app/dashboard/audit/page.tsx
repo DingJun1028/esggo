@@ -14,8 +14,8 @@ import {
   Lock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface AuditLog {
@@ -147,9 +147,9 @@ export default function AuditCenterPage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-0.5">
-                <OmniBadge variant="primary" size="sm" icon={<ShieldAlert size={10} />}>
+                <Badge variant="primary" size="sm" icon={<ShieldAlert size={10} />}>
                   5T-Verified
-                </OmniBadge>
+                </Badge>
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
                   AUDIT-001
                 </span>
@@ -166,31 +166,31 @@ export default function AuditCenterPage() {
 
         {/* ─── Stats Row ─── */}
         <div className="grid grid-cols-3 gap-4">
-          <OmniBaseCard className="p-4 text-center">
+          <Card className="p-4 text-center">
             <p className="text-2xl font-black text-[#003262]">{stats.total}</p>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">
               總稽核數
             </p>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4 text-center">
+          </Card>
+          <Card className="p-4 text-center">
             <p className="text-2xl font-black text-emerald-600">{stats.trustworthy}</p>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">
               已驗證
             </p>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4 text-center">
+          </Card>
+          <Card className="p-4 text-center">
             <p className="text-2xl font-black text-amber-600">{stats.pending}</p>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">
               待處理
             </p>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Main Content ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left: 5T Protocol Panel */}
           <div className="lg:col-span-1">
-            <OmniBaseCard className="p-5 border-indigo-100">
+            <Card className="p-5 border-indigo-100">
               <h3 className="font-bold text-[#003262] flex items-center gap-2 mb-4">
                 <Database size={16} className="text-indigo-500" />
                 5T Integrity Protocol
@@ -209,12 +209,12 @@ export default function AuditCenterPage() {
                   </li>
                 ))}
               </ul>
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Right: Audit Log Table */}
           <div className="lg:col-span-3">
-            <OmniBaseCard padding="none" className="overflow-hidden">
+            <Card padding="none" className="overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
                 <h3 className="font-bold text-[#003262] flex items-center gap-2">
                   <History size={16} className="text-slate-400" />
@@ -296,7 +296,7 @@ export default function AuditCenterPage() {
                   <p className="text-sm text-slate-400">目前尚無稽核紀錄</p>
                 </div>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
       </div>

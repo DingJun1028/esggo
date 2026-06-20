@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 /**
  * @component OMNI-005
  * @type Molecule
@@ -26,6 +27,9 @@ import { useTheme } from '../contexts/ThemeContext';
 import { IconMapper } from '../app/AppShellV2'; // Assuming IconMapper is exported from AppShellV2
 
 interface OmniOverviewMenuProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   isOpen: boolean;
   onClose: () => void;
 }

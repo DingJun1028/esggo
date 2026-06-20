@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 import { Bug, Activity, Shield, Cpu, Zap } from 'lucide-react';
 import { DebugPanel } from '@/lib/debug-platform';
 import { debugService } from '@/lib/debug-platform/DebugService';
@@ -45,7 +45,7 @@ export default function DebugPlatformPage() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <OmniBaseCard variant="glass" className="p-6">
+          <Card variant="glass" className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <Activity size={20} className="text-cyan-400" />
               <h2 className="text-lg font-bold text-white">服務狀態</h2>
@@ -68,27 +68,27 @@ export default function DebugPlatformPage() {
                 </span>
               </div>
             </div>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="default" className="p-6">
+          <Card variant="default" className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <Zap size={20} className="text-amber-400" />
               <h2 className="text-lg font-bold text-white">快速測試</h2>
             </div>
             <div className="space-y-3">
-              <OmniButton variant="outline" onClick={handleTestLog} className="w-full">
+              <Button variant="outline" onClick={handleTestLog} className="w-full">
                 生成測試日誌
-              </OmniButton>
-              <OmniButton variant="outline" onClick={handleTestSnapshot} className="w-full">
+              </Button>
+              <Button variant="outline" onClick={handleTestSnapshot} className="w-full">
                 建立狀態快照
-              </OmniButton>
-              <OmniButton variant="outline" onClick={() => debugService.clear()} className="w-full">
+              </Button>
+              <Button variant="outline" onClick={() => debugService.clear()} className="w-full">
                 清除所有記錄
-              </OmniButton>
+              </Button>
             </div>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard variant="glow" className="p-6">
+          <Card variant="glow" className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <Shield size={20} className="text-emerald-400" />
               <h2 className="text-lg font-bold text-white">5T 合規</h2>
@@ -115,10 +115,10 @@ export default function DebugPlatformPage() {
                 此除錯平台遵循 ESGGGO 5T 協議，確保所有除錯資料具備完整的溯源與不可篡改特性。
               </p>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
-        <OmniBaseCard variant="default" className="p-6">
+        <Card variant="default" className="p-6">
           <h2 className="text-xl font-bold text-white mb-4">API 端點</h2>
           <div className="space-y-2 font-mono text-xs">
             <p className="text-cyan-400">GET /api/debug-platform</p>
@@ -128,7 +128,7 @@ export default function DebugPlatformPage() {
             <p className="text-cyan-400">DELETE /api/debug-platform</p>
             <p className="text-slate-400 ml-4">清除所有除錯記錄</p>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
 
       <DebugPanel defaultOpen={true} />

@@ -2,10 +2,10 @@
 
 import React, { useState, useMemo } from 'react';
 import { useESGAtoms } from '@/lib/supabase/hooks';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 import { useOmniAgentBus } from '@/lib/omni-agent-bus';
 import { ESGSmartQA } from '@/components/ui/ESGSmartQA';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Button } from '@/components/ui/v2/Button';
 import {
   Leaf,
   Plus,
@@ -21,7 +21,7 @@ import {
 
 // === Jules Karma Protocol: Performance Optimization with React.memo ===
 const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorClass }: any) => (
-  <OmniBaseCard variant="default" className="p-6 transition-all hover:shadow-md">
+  <Card variant="default" className="p-6 transition-all hover:shadow-md">
     <div className="flex justify-between items-start mb-4">
       <div className={`p-3 rounded-xl ${colorClass}`}>
         <Icon size={24} />
@@ -39,7 +39,7 @@ const MetricCard = React.memo(({ title, value, unit, icon: Icon, trend, colorCla
       </span>
       <span className="text-sm font-medium text-slate-500 dark:text-slate-400">{unit}</span>
     </div>
-  </OmniBaseCard>
+  </Card>
 ));
 MetricCard.displayName = 'MetricCard';
 
@@ -156,22 +156,22 @@ export default function EnvironmentalDashboard() {
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <OmniButton
+            <Button
               variant="outline"
               icon={<Download size={16} />}
               onClick={handleExport}
               isLoading={isProcessing}
             >
               匯出盤查清冊
-            </OmniButton>
-            <OmniButton
+            </Button>
+            <Button
               variant="primary"
               icon={<Plus size={16} />}
               className="!bg-emerald-600 hover:!bg-emerald-700"
               onClick={handleAddRecord}
             >
               自動載入新紀錄
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
@@ -211,7 +211,7 @@ export default function EnvironmentalDashboard() {
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <OmniBaseCard variant="default" className="p-0 overflow-hidden">
+            <Card variant="default" className="p-0 overflow-hidden">
               <div className="p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-white dark:bg-slate-900/50">
                 <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
                   溫室氣體排放源清冊
@@ -285,11 +285,11 @@ export default function EnvironmentalDashboard() {
                   </tbody>
                 </table>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
 
           <div className="space-y-6">
-            <OmniBaseCard
+            <Card
               variant="default"
               className="p-6 bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-lg"
             >
@@ -312,14 +312,14 @@ export default function EnvironmentalDashboard() {
                     <li>導入 EMS 能源管理系統。</li>
                   </ul>
                 </div>
-                <OmniButton
+                <Button
                   variant="outline"
                   className="w-full mt-4 dark: border-white/20 hover: dark: text-white"
                 >
                   生成完整減碳規劃書
-                </OmniButton>
+                </Button>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             <div className="pt-2">
               <ESGSmartQA />

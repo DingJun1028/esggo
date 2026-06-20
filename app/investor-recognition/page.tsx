@@ -24,9 +24,9 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Data ─── */
 const INVESTOR_TYPES = [
@@ -220,9 +220,9 @@ function StoryCard({ story, index }: { story: (typeof INVESTOR_STORIES)[0]; inde
           <h4 className="text-sm font-bold text-[#003262]">{story.company}</h4>
           <p className="text-[10px] text-slate-400">{story.industry}</p>
         </div>
-        <OmniBadge variant="success" size="sm">
+        <Badge variant="success" size="sm">
           {story.funding}
-        </OmniBadge>
+        </Badge>
       </div>
       <blockquote className="text-xs text-slate-600 leading-relaxed mb-4 italic">
         "{story.quote}"
@@ -320,7 +320,7 @@ export default function InvestorRecognitionPage() {
         </div>
 
         {/* ─── Funding Stages ─── */}
-        <OmniBaseCard className="p-5">
+        <Card className="p-5">
           <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
             <LineChart size={14} className="text-emerald-500" />
             募資階段與 ESG 影響
@@ -339,7 +339,7 @@ export default function InvestorRecognitionPage() {
               </div>
             ))}
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
@@ -443,34 +443,34 @@ export default function InvestorRecognitionPage() {
               <h2 className="text-lg font-bold text-[#003262] mb-1">信任鏈</h2>
               <p className="text-xs text-slate-400">從數據收集到投資決策的完整信任鏈</p>
             </div>
-            <OmniBaseCard className="p-6">
+            <Card className="p-6">
               <div className="space-y-2">
                 {TRUST_CHAIN.map((step, i) => (
                   <TrustChainStep key={i} step={step} index={i} />
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備獲得投資人認可？</h3>
           <p className="text-xs text-slate-400 mb-4">建立可信的 ESG 數據體系，加速募資流程</p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<Award size={16} />}
               className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               開始建立信任
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

@@ -31,9 +31,9 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
+import { Button } from '@/components/ui/v2/Button';
 
 /* ─── Types ─── */
 interface JourneyStep {
@@ -437,25 +437,25 @@ export default function ValuePathPage() {
         </div>
 
         {/* ─── CTA ─── */}
-        <OmniBaseCard className="p-6 text-center">
+        <Card className="p-6 text-center">
           <h3 className="text-lg font-bold text-[#003262] mb-2">準備開始您的 ESG 之旅？</h3>
           <p className="text-xs text-slate-400 mb-4">
             註冊即可獲得 14 天免費試用，體驗完整價值實現路徑
           </p>
           <div className="flex items-center justify-center gap-3">
-            <OmniButton
+            <Button
               variant="primary"
               size="md"
               icon={<UserPlus size={16} />}
               className="bg-[#003262] hover:bg-[#002244] text-white"
             >
               立即註冊
-            </OmniButton>
-            <OmniButton variant="outline" size="md" icon={<Play size={16} />}>
+            </Button>
+            <Button variant="outline" size="md" icon={<Play size={16} />}>
               觀看演示
-            </OmniButton>
+            </Button>
           </div>
-        </OmniBaseCard>
+        </Card>
       </div>
     </div>
   );

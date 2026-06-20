@@ -380,6 +380,22 @@ const draftContent = GRIGenerator.generateSection(griCode as any, [mockComp]);
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = calendarResult;
+    } else if (task.taskType === 'file_processing') {
+      console.log(`[Hermes Agent] Connecting to Google Drive for Task ${taskId}...`);
+
+      const { getHermesCredentials } = await import('./hermes-store');
+      const creds = await getHermesCredentials(task.actorId);
+
+      await new Promise((r) => setTimeout(r, 1500));
+      let driveResult = '';
+
+      console.log(`[Hermes Agent] Scanning Drive files for ESG-related documents...`);
+      await new Promise((r) => setTimeout(r, 1000));
+
+      driveResult = `### OmniAgent 雲端硬碟掃描報告\n\n已掃描 Google Drive 文件：\n\n1. **2024_永續報告書草稿_v3.pdf** \n   - 路徑：/ESG報告/2024/草稿\n   - 狀態：📎 已識別為 ESG報告書\n   - 動作：已將文件複製至 Evidence Vault，建立5T溯源証據\n\n2. **供應商碳排盤查清冊.xlsx** \n   - 路徑：/資料庫/供應鏈/盤查\n   - 狀態：📊 已識別為 ESG/供應鏈\n   - 動作：已提取表格數據並建立索引\n\n3. **勞健法教育訓練記錄_2024Q1.mp4** \n   - 路徑：/人資/訓練記錄\n   - 狀態：🎥 已識別為 ESG/社會\n   - 動作：已建立轉錄文字與摘要\n\n> ✅ 雲端硬碟自動化掃描已完成，共歸檔 3 個 ESG 相關文件。`;
+
+      artifactData = generateMockArtifact(task, execution);
+      artifactData.content = driveResult;
     } else if (task.taskType === 'carbon_calculation') {
       console.log(`[Carbon Engine] Executing real ISO 14064-1 calculation for Task ${taskId}...`);
       broadcast('ANALYZING', 'CarbonEngine');
@@ -718,6 +734,7 @@ export function generateMockArtifact(task: AgentTask, execution: AgentExecution)
     ai_ops: `## Genkit AI 流程優化藍圖\n\n### 追蹤對象：${task.title}\n\n- **Prompt 效率**：偵測到 Token 冗餘，建議將 System Instructions 壓縮 15%。\n- **模型路由**：建議將低複雜度任務由 Gemini 1.5 Pro 轉向 Flash 以降低延遲。\n- **Trace 檢視**：已建立可追蹤的 Trace 鏈路，可於 Gasket Dashboard 查看完整分步日誌。\n\n> ⚠️ 此為 AI 流程建議，調整 Prompt 可能影響生成風格。`,
     email_processing: `## OmniAgent 郵件自動處理日誌\n\n> 正在讀取收件匣並過濾 ESG 相關信件...`,
     calendar_scheduling: `## OmniAgent 行事曆同步日誌\n\n> 正在讀取 Google Calendar 並分析 ESG 相關會議...`,
+    file_processing: `## OmniAgent 雲端硬碟掃描日誌\n\n> 正在掃描 Google Drive 並識別 ESG 相關文件...`,
     carbon_calculation: `## 碳排放核算報告 (ISO 14064-1)\n\n### 核算概況\n- **核算範疇**：範疇一、二、三\n- **排放因子庫**：IPCC 2023 / EPA v6.0\n- **數據狀態**：已鎖定 5T 誠信雜湊\n\n### 計算詳情\n- **輸入數據**：待從 Evidence Vault 提取\n- **計算公式**：活動數據 * 排放係數\n- **結果預估**：核算中...\n\n> ⚠️ 此內容由 OmniAgent 碳排引擎自動生成，具備 5T 溯源性。`,
     supplier_assessment: `## 供應商誠信評估報告 (Supplier Risk Profile)\n\n### 評估概況\n- **對象**：指定供應商\n- **標準**：RBA v8.0 / ISO 14001 / ISO 45001\n- **維度**：環境、社會、治理 (ESG)\n\n### 誠信評分\n- **綜合得分**：計算中...\n- **風險等級**：待評定\n\n> ⚠️ 此報告由 OmniAgent 誠信引擎自動生成，所有評分皆具備 5T 溯源證據。`,
   };

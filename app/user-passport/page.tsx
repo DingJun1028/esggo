@@ -23,7 +23,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
+import { Card } from '@/components/ui/v2/Card';
 
 /* ─── Types ─── */
 interface AwakeningPillar {
@@ -438,14 +438,14 @@ export default function UserPassportPage() {
         {/* ─── Content ─── */}
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <OmniBaseCard className="p-6">
+            <Card className="p-6">
               <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                 <Target size={16} className="text-cyan-500" />
                 覺醒雷達圖
               </h3>
               <p className="text-xs text-slate-400 mb-4">四大支柱評分（0-100）</p>
               <AwakeningRadar />
-            </OmniBaseCard>
+            </Card>
 
             <div className="space-y-4">
               {AWAKENING_PILLARS.map((pillar, i) => (
@@ -551,12 +551,12 @@ export default function UserPassportPage() {
               })}
             </div>
 
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4">5T 協議狀態</h3>
               <div className="max-w-lg">
                 <Protocol5TStrip status={[true, true, true, true, true]} showLabels size="lg" />
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
       </div>

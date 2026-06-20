@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
 'use client';
 
@@ -33,6 +34,9 @@ export interface AgentStat {
 }
 
 export interface OmniAgentCardProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   id?: string;
   name?: string;
   role?: string;

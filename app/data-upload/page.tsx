@@ -34,9 +34,9 @@ import {
   Plus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface UploadedFile {
@@ -620,7 +620,7 @@ export default function DataUploadPage() {
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-bold text-[#003262]">已上傳檔案</h3>
                   {completedFiles.length > 0 && (
-                    <OmniButton
+                    <Button
                       variant="primary"
                       size="sm"
                       icon={<Brain size={14} />}
@@ -628,7 +628,7 @@ export default function DataUploadPage() {
                       className="bg-[#003262] hover:bg-[#002244] text-white"
                     >
                       開始 AI 分析
-                    </OmniButton>
+                    </Button>
                   )}
                 </div>
                 
@@ -644,7 +644,7 @@ export default function DataUploadPage() {
             )}
 
             {/* Upload Tips */}
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Info size={14} className="text-cyan-500" />
                 上傳建議
@@ -685,7 +685,7 @@ export default function DataUploadPage() {
                   );
                 })}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 
@@ -693,13 +693,13 @@ export default function DataUploadPage() {
         {activeTab === 'results' && (
           <div className="space-y-6">
             {isAnalyzing ? (
-              <OmniBaseCard className="p-12 text-center">
+              <Card className="p-12 text-center">
                 <Loader2 size={48} className="text-cyan-500 animate-spin mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-[#003262] mb-2">AI 正在分析您的數據...</h3>
                 <p className="text-xs text-slate-400">
                   Gemini 2.0 正在處理 {totalRecords.toLocaleString()} 筆記錄
                 </p>
-              </OmniBaseCard>
+              </Card>
             ) : (
               <>
                 {/* Summary Cards */}
@@ -767,25 +767,25 @@ export default function DataUploadPage() {
 
                 {/* Charts */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <BarChart3 size={14} className="text-cyan-500" />
                       碳排放趨勢
                     </h3>
                     <EmissionsChart data={MOCK_ANALYSIS} />
-                  </OmniBaseCard>
+                  </Card>
 
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <PieChart size={14} className="text-violet-500" />
                       排放源分類
                     </h3>
                     <ScopeBreakdown data={MOCK_ANALYSIS} />
-                  </OmniBaseCard>
+                  </Card>
                 </div>
 
                 {/* Top Emitters */}
-                <OmniBaseCard className="p-5">
+                <Card className="p-5">
                   <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                     <Flame size={14} className="text-rose-500" />
                     主要排放源
@@ -810,7 +810,7 @@ export default function DataUploadPage() {
                       </div>
                     ))}
                   </div>
-                </OmniBaseCard>
+                </Card>
 
                 {/* AI Insights */}
                 <div>
@@ -826,7 +826,7 @@ export default function DataUploadPage() {
                 </div>
 
                 {/* Compliance */}
-                <OmniBaseCard className="p-5">
+                <Card className="p-5">
                   <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                     <ShieldCheck size={14} className="text-emerald-500" />
                     合規性檢查
@@ -846,7 +846,7 @@ export default function DataUploadPage() {
                       >
                         <p className="text-sm font-bold text-[#003262]">{item.framework}</p>
                         <p className="text-xl font-black text-[#003262] mt-1">{item.score}</p>
-                        <OmniBadge
+                        <Badge
                           variant={
                             item.status === 'pass'
                               ? 'success'
@@ -861,34 +861,34 @@ export default function DataUploadPage() {
                             : item.status === 'fail'
                             ? '未通過'
                             : '待補強'}
-                        </OmniBadge>
+                        </Badge>
                       </div>
                     ))}
                   </div>
-                </OmniBaseCard>
+                </Card>
 
                 {/* Actions */}
                 <div className="flex items-center justify-between">
-                  <OmniButton
+                  <Button
                     variant="outline"
                     size="sm"
                     icon={<Upload size={14} />}
                     onClick={() => setActiveTab('upload')}
                   >
                     上傳更多數據
-                  </OmniButton>
+                  </Button>
                   <div className="flex items-center gap-2">
-                    <OmniButton variant="outline" size="sm" icon={<Download size={14} />}>
+                    <Button variant="outline" size="sm" icon={<Download size={14} />}>
                       下載報告
-                    </OmniButton>
-                    <OmniButton
+                    </Button>
+                    <Button
                       variant="primary"
                       size="sm"
                       icon={<FileText size={14} />}
                       className="bg-[#003262] hover:bg-[#002244] text-white"
                     >
                       生成完整報告
-                    </OmniButton>
+                    </Button>
                   </div>
                 </div>
               </>

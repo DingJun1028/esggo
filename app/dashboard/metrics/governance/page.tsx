@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 import { Scale, Shield, FileCheck, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/db/supabase';
 
@@ -81,14 +81,14 @@ export default function GovernanceMetricsPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <OmniBadge
+                <Badge
                   variant="default"
                   size="sm"
                   icon={<Shield size={12} />}
                   className="bg-amber-500/20 text-amber-300 border-amber-500/30"
                 >
                   G-Metrics
-                </OmniBadge>
+                </Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                   GOV-001
                 </span>
@@ -106,7 +106,7 @@ export default function GovernanceMetricsPage() {
 
         {/* Governance Dashboard Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 transition-all duration-300 hover:border-amber-500/30"
           >
@@ -120,9 +120,9 @@ export default function GovernanceMetricsPage() {
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2 flex items-center gap-1">
               <CheckCircle2 size={14} className="text-amber-500" /> 符合法規高標準要求
             </p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 transition-all duration-300 hover:border-orange-500/30"
           >
@@ -136,9 +136,9 @@ export default function GovernanceMetricsPage() {
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2 text-emerald-400/80">
               維持零違規優良紀錄
             </p>
-          </OmniBaseCard>
+          </Card>
 
-          <OmniBaseCard
+          <Card
             variant="glass"
             className="p-6 transition-all duration-300 hover:border-yellow-500/30"
           >
@@ -152,7 +152,7 @@ export default function GovernanceMetricsPage() {
             <p className="text-sm text-slate-400 border-t border-white/5 pt-2">
               全公司資安與合規考核
             </p>
-          </OmniBaseCard>
+          </Card>
         </div>
       </div>
     </div>

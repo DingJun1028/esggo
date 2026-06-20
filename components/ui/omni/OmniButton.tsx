@@ -1,8 +1,12 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/utils';
 import { Loader2 } from 'lucide-react';
 
 export interface OmniButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg' | 'icon';
   loading?: boolean;

@@ -1,8 +1,13 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 
 export interface OmniHeaderProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   title: string;
   subtitle?: string;
   icon?: React.ReactNode;

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
 import { SectionHeader } from '@/components/ui/v2/Input';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
+import OmniAgentIntegrations from '@/components/omni/OmniAgentIntegrations';
 
 /* ─── Types ─── */
 interface OmniTableDataRow {
@@ -154,6 +155,9 @@ export default function DashboardPage() {
             ))}
           </div>
         </div>
+
+        {/* ─── OmniAgent Integrations ─── */}
+        <OmniAgentIntegrations />
 
         {/* ─── Data Ledger Table ─── */}
         <div>

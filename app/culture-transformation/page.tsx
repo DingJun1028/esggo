@@ -27,9 +27,9 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Data ─── */
 const CULTURE_PILLARS = [
@@ -307,9 +307,9 @@ export default function CultureTransformationPage() {
                   <h1 className="text-2xl font-black text-[#003262] tracking-tight">
                     Level 5: 文化轉型
                   </h1>
-                  <OmniBadge variant="warning" size="sm">
+                  <Badge variant="warning" size="sm">
                     Year 1+
-                  </OmniBadge>
+                  </Badge>
                 </div>
                 <p className="text-xs text-slate-400 font-mono">
                   Culture Transformation · 組織覺醒 · 影響力擴大
@@ -342,7 +342,7 @@ export default function CultureTransformationPage() {
         </div>
 
         {/* ─── Level Progress ─── */}
-        <OmniBaseCard className="p-5">
+        <Card className="p-5">
           <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
             <Target size={14} className="text-amber-500" />
             價值階梯進度
@@ -352,7 +352,7 @@ export default function CultureTransformationPage() {
               <LevelSummaryCard key={level.level} level={level} isActive={level.level === 'L5'} />
             ))}
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Tab Navigation ─── */}
         <div className="flex gap-2">
@@ -427,7 +427,7 @@ export default function CultureTransformationPage() {
                 <div
                   key="timeline"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Clock size={14} className="text-amber-500" />
                       Year 1 里程碑
@@ -437,7 +437,7 @@ export default function CultureTransformationPage() {
                         <MilestoneItem key={i} milestone={milestone} index={i} />
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
 
@@ -451,7 +451,7 @@ export default function CultureTransformationPage() {
                     <p className="text-xs text-slate-400">ESG 文化轉型對各利益相關者的影響</p>
                   </div>
                   {STAKEHOLDER_IMPACT.map((item, i) => (
-                    <OmniBaseCard key={i} className="p-4">
+                    <Card key={i} className="p-4">
                       <div className="flex items-center gap-4">
                         <span className="text-3xl">{item.icon}</span>
                         <div className="flex-1">
@@ -459,7 +459,7 @@ export default function CultureTransformationPage() {
                           <p className={cn('text-lg font-black', item.color)}>{item.impact}</p>
                         </div>
                       </div>
-                    </OmniBaseCard>
+                    </Card>
                   ))}
                 </div>
               )}
@@ -469,17 +469,17 @@ export default function CultureTransformationPage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Culture Score */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
+            <Card className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
               <div className="text-center">
                 <Heart size={32} className="mx-auto mb-2 text-amber-600" />
                 <p className="text-3xl font-black text-[#003262]">92</p>
                 <p className="text-xs text-slate-500 font-medium">文化轉型評分</p>
                 <p className="text-[9px] text-slate-400 mt-1">基於 4 大支柱綜合評估</p>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Quick Actions */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">快速操作</h3>
               <div className="space-y-2">
                 {[
@@ -497,22 +497,22 @@ export default function CultureTransformationPage() {
                   </button>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* CTA */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
+            <Card className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">開始文化轉型</h3>
               <p className="text-[11px] text-slate-500 mb-3">
                 將 ESG 融入企業 DNA，成為永續發展領導者
               </p>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white"
               >
                 開始轉型
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
           </div>
         </div>
       </div>

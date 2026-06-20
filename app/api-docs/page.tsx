@@ -24,8 +24,8 @@ import {
   Bell,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface APIEndpoint {
@@ -180,7 +180,7 @@ function EndpointCard({ endpoint }: { endpoint: APIEndpoint }) {
   };
 
   return (
-    <OmniBaseCard className="overflow-hidden">
+    <Card className="overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full p-4 text-left flex items-center gap-3 hover:bg-slate-50/50 transition-colors"
@@ -257,7 +257,7 @@ function EndpointCard({ endpoint }: { endpoint: APIEndpoint }) {
           </div>
         )}
       
-    </OmniBaseCard>
+    </Card>
   );
 }
 
@@ -296,18 +296,18 @@ export default function APIDocsPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <OmniBadge variant="success" size="sm" icon={<CheckCircle2 size={10} />}>
+              <Badge variant="success" size="sm" icon={<CheckCircle2 size={10} />}>
                 v1.0.0
-              </OmniBadge>
-              <OmniBadge variant="primary" size="sm" icon={<ShieldCheck size={10} />}>
+              </Badge>
+              <Badge variant="primary" size="sm" icon={<ShieldCheck size={10} />}>
                 5T 驗證
-              </OmniBadge>
+              </Badge>
             </div>
           </div>
         </header>
 
         {/* ─── Quick Start ─── */}
-        <OmniBaseCard className="p-5">
+        <Card className="p-5">
           <h3 className="text-base font-bold text-[#003262] mb-3 flex items-center gap-2">
             <Terminal size={16} className="text-blue-500" />
             快速開始
@@ -339,7 +339,7 @@ export default function APIDocsPage() {
               </code>
             </div>
           </div>
-        </OmniBaseCard>
+        </Card>
 
         {/* ─── Search & Filter ─── */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">

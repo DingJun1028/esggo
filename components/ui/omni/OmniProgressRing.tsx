@@ -1,10 +1,15 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 
 import { cn } from '@/lib/utils';
 
 export interface OmniProgressRingProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   percentage: number;
   size?: number;
   strokeWidth?: number;

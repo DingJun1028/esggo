@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useEffect, useState } from 'react';
 import VaultOmniTable, { VaultOmniTableRecord } from './VaultOmniTable';
 import { Database, Server } from 'lucide-react';

@@ -30,9 +30,9 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface ReportSection {
@@ -296,15 +296,15 @@ export default function OneClickReportPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <OmniButton
+              <Button
                 variant="outline"
                 size="sm"
                 icon={<Eye size={14} />}
                 onClick={() => setShowPreview(true)}
               >
                 預覽報告
-              </OmniButton>
-              <OmniButton
+              </Button>
+              <Button
                 variant="primary"
                 size="sm"
                 icon={<Zap size={14} />}
@@ -318,7 +318,7 @@ export default function OneClickReportPage() {
                   <Zap size={14} />
                 )}
                 {isGenerating ? '生成中...' : '一鍵生成'}
-              </OmniButton>
+              </Button>
             </div>
           </div>
         </header>
@@ -413,7 +413,7 @@ export default function OneClickReportPage() {
             </div>
 
             {/* Tab Content */}
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               {activeTab === 'sections' && (
                 <div>
                   <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
@@ -455,13 +455,13 @@ export default function OneClickReportPage() {
                   </div>
                 </div>
               )}
-            </OmniBaseCard>
+            </Card>
           </div>
 
           {/* Right: Actions & Preview */}
           <div className="space-y-4">
             {/* Quick Actions */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">快速操作</h3>
               <div className="space-y-2">
                 {[
@@ -479,10 +479,10 @@ export default function OneClickReportPage() {
                   </button>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Report Preview */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <Eye size={14} className="text-cyan-500" />
                 報告預覽
@@ -500,10 +500,10 @@ export default function OneClickReportPage() {
                   </div>
                 )}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* GRI Score */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3 flex items-center gap-2">
                 <ShieldCheck size={14} className="text-emerald-500" />
                 GRI 合規評分
@@ -530,7 +530,7 @@ export default function OneClickReportPage() {
                   <p className="text-[9px] text-slate-400">未通過</p>
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         </div>
 

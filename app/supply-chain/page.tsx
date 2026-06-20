@@ -29,9 +29,9 @@ import {
   DollarSign,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 
 /* ─── Types ─── */
 interface Supplier {
@@ -421,7 +421,7 @@ export default function SupplyChainIntegrationPage() {
 
         {/* ─── Summary Cards ─── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <OmniBaseCard className="p-4">
+          <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-50 rounded-lg">
                 <Factory size={18} className="text-blue-600" />
@@ -431,8 +431,8 @@ export default function SupplyChainIntegrationPage() {
                 <p className="text-[10px] text-slate-400">供應商總數</p>
               </div>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4">
+          </Card>
+          <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-emerald-50 rounded-lg">
                 <Star size={18} className="text-emerald-600" />
@@ -442,8 +442,8 @@ export default function SupplyChainIntegrationPage() {
                 <p className="text-[10px] text-slate-400">平均 ESG 評分</p>
               </div>
             </div>
-          </OmniBaseCard>
-          <OmniBaseCard className="p-4">
+          </Card>
+          <Card className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-violet-50 rounded-lg">
                 <Globe size={18} className="text-violet-600" />
@@ -453,7 +453,7 @@ export default function SupplyChainIntegrationPage() {
                 <p className="text-[10px] text-slate-400">總碳排放 (tCO₂e)</p>
               </div>
             </div>
-          </OmniBaseCard>
+          </Card>
         </div>
 
         {/* ─── Tab Navigation ─── */}
@@ -543,7 +543,7 @@ export default function SupplyChainIntegrationPage() {
                 <div
                   key="integration"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <Link size={14} className="text-blue-500" />
                       供應鏈整合流程
@@ -561,7 +561,7 @@ export default function SupplyChainIntegrationPage() {
                         />
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
 
@@ -570,7 +570,7 @@ export default function SupplyChainIntegrationPage() {
                   key="risk"
                   className="space-y-4"
                 >
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <AlertTriangle size={14} className="text-amber-500" />
                       風險分佈
@@ -594,9 +594,9 @@ export default function SupplyChainIntegrationPage() {
                         </div>
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
 
-                  <OmniBaseCard className="p-5">
+                  <Card className="p-5">
                     <h3 className="text-sm font-bold text-[#003262] mb-4 flex items-center gap-2">
                       <BarChart3 size={14} className="text-violet-500" />
                       類別分析
@@ -617,7 +617,7 @@ export default function SupplyChainIntegrationPage() {
                         </div>
                       ))}
                     </div>
-                  </OmniBaseCard>
+                  </Card>
                 </div>
               )}
             
@@ -626,7 +626,7 @@ export default function SupplyChainIntegrationPage() {
           {/* Right Sidebar */}
           <div className="space-y-4">
             {/* Verified Suppliers */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">驗證狀態</h3>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -642,10 +642,10 @@ export default function SupplyChainIntegrationPage() {
                   />
                 </div>
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* Top Performers */}
-            <OmniBaseCard className="p-4">
+            <Card className="p-4">
               <h3 className="text-sm font-bold text-[#003262] mb-3">表現最佳</h3>
               <div className="space-y-2">
                 {[...SUPPLIERS]
@@ -669,20 +669,20 @@ export default function SupplyChainIntegrationPage() {
                     </div>
                   ))}
               </div>
-            </OmniBaseCard>
+            </Card>
 
             {/* CTA */}
-            <OmniBaseCard className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+            <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
               <h3 className="text-sm font-bold text-[#003262] mb-2">開始整合供應鏈</h3>
               <p className="text-[11px] text-slate-500 mb-3">邀請供應商加入，實現 ESG 數據透明化</p>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
                 邀請供應商
-              </OmniButton>
-            </OmniBaseCard>
+              </Button>
+            </Card>
           </div>
         </div>
       </div>

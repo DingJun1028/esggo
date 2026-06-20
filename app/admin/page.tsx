@@ -38,10 +38,10 @@ import {
   Plus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
+import { Button } from '@/components/ui/v2/Button';
 
 /* ─── Types ─── */
 interface SystemMetric {
@@ -319,14 +319,14 @@ function UserRow({ user }: { user: UserRecord }) {
         <span className="text-xs text-slate-500">{user.org}</span>
       </td>
       <td className="px-4 py-3">
-        <OmniBadge
+        <Badge
           variant={
             user.status === 'active' ? 'success' : user.status === 'idle' ? 'warning' : 'error'
           }
           size="xs"
         >
           {sc.label}
-        </OmniBadge>
+        </Badge>
       </td>
       <td className="px-4 py-3">
         <span className="text-xs text-slate-400">{user.lastLogin}</span>
@@ -412,9 +412,9 @@ function APIKeyRow({ apiKey, disabled }: { apiKey: APIKey; disabled?: boolean })
         <div className="flex items-center gap-2">
           <Key size={14} className="text-slate-400" />
           <span className="text-sm font-bold text-[#003262]">{apiKey.name}</span>
-          <OmniBadge variant={apiKey.status === 'active' ? 'success' : 'error'} size="xs">
+          <Badge variant={apiKey.status === 'active' ? 'success' : 'error'} size="xs">
             {apiKey.status === 'active' ? '啟用' : '已撤銷'}
-          </OmniBadge>
+          </Badge>
           {disabled && (
             <span className="text-[9px] font-bold px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded">
               暫停
@@ -508,12 +508,12 @@ export default function AdminBackendPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <OmniBadge variant="success" size="sm" icon={<CheckCircle2 size={10} />}>
+              <Badge variant="success" size="sm" icon={<CheckCircle2 size={10} />}>
                 系統正常
-              </OmniBadge>
-              <OmniBadge variant="primary" size="sm" icon={<ShieldCheck size={10} />}>
+              </Badge>
+              <Badge variant="primary" size="sm" icon={<ShieldCheck size={10} />}>
                 5T 驗證
-              </OmniBadge>
+              </Badge>
             </div>
           </div>
         </header>
@@ -563,15 +563,15 @@ export default function AdminBackendPage() {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
-                <OmniBaseCard className="p-5">
+                <Card className="p-5">
                   <h3 className="text-base font-bold text-[#003262] mb-4 flex items-center gap-2">
                     <ShieldCheck size={16} className="text-cyan-500" />
                     5T 協議狀態
                   </h3>
                   <Protocol5TStrip status={FIVE_T_STATUS} showLabels size="lg" />
-                </OmniBaseCard>
+                </Card>
               </div>
-              <OmniBaseCard className="p-5">
+              <Card className="p-5">
                 <h3 className="text-base font-bold text-[#003262] mb-4">快速操作</h3>
                 <div className="space-y-2">
                   {[
@@ -590,13 +590,13 @@ export default function AdminBackendPage() {
                     </button>
                   ))}
                 </div>
-              </OmniBaseCard>
+              </Card>
             </div>
           </div>
         )}
 
         {activeTab === 'users' && (
-          <OmniBaseCard className="p-5">
+          <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-base font-bold text-[#003262]">用戶管理</h3>
               <div className="flex items-center gap-2">
@@ -613,14 +613,14 @@ export default function AdminBackendPage() {
                     className="pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
                   />
                 </div>
-                <OmniButton
+                <Button
                   variant="primary"
                   size="sm"
                   icon={<UserPlus size={14} />}
                   className="bg-[#003262] hover:bg-[#002244] text-white"
                 >
                   新增用戶
-                </OmniButton>
+                </Button>
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -644,7 +644,7 @@ export default function AdminBackendPage() {
                 </tbody>
               </table>
             </div>
-          </OmniBaseCard>
+          </Card>
         )}
 
         {activeTab === 'roles' && (
@@ -654,14 +654,14 @@ export default function AdminBackendPage() {
                 <h3 className="text-base font-bold text-[#003262]">角色與權限</h3>
                 <p className="text-xs text-slate-400">管理用戶角色與模組存取權限</p>
               </div>
-              <OmniButton
+              <Button
                 variant="primary"
                 size="sm"
                 icon={<Plus size={14} />}
                 className="bg-[#003262] hover:bg-[#002244] text-white"
               >
                 新增角色
-              </OmniButton>
+              </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {ROLES.map((role) => (
@@ -707,7 +707,7 @@ export default function AdminBackendPage() {
 
         {activeTab === 'system' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <OmniBaseCard className="p-5">
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4">系統設定</h3>
               <div className="space-y-4">
                 {[
@@ -735,8 +735,8 @@ export default function AdminBackendPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
-            <OmniBaseCard className="p-5">
+            </Card>
+            <Card className="p-5">
               <h3 className="text-base font-bold text-[#003262] mb-4">數據管理</h3>
               <div className="space-y-3">
                 {[
@@ -759,7 +759,7 @@ export default function AdminBackendPage() {
                   </div>
                 ))}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
       </div>

@@ -1,5 +1,7 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useEffect, useState } from 'react';
 
 import { ShieldAlert, Zap } from 'lucide-react';

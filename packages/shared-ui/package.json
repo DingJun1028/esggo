@@ -1,0 +1,17 @@
+{
+  "name": "@esggo/shared-ui",
+  "version": "1.0.0",
+  "description": "Shared UI components for ESGGO monorepo",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@esggo/types": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

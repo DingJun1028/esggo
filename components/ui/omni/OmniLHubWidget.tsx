@@ -1,11 +1,16 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect } from 'react';
 
 import { Sparkles, Terminal, Cpu } from 'lucide-react';
 import { OmniBaseCard } from './OmniBaseCard';
 
 interface OmniLHubWidgetProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   title?: string;
   insights: string[];
   isProcessing?: boolean;

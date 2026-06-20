@@ -22,6 +22,8 @@ export default function OmniAgentIntegrations() {
   const [scanResult, setScanResult] = useState<any>(null);
   const [isSyncingCalendar, setIsSyncingCalendar] = useState(false);
   const [calendarResult, setCalendarResult] = useState<any>(null);
+  const [isScanningDrive, setIsScanningDrive] = useState(false);
+  const [driveResult, setDriveResult] = useState<any>(null);
 
   useEffect(() => {
     const hermesSuccess = searchParams?.get('hermes_success');
@@ -120,6 +122,35 @@ export default function OmniAgentIntegrations() {
     }
   };
 
+  const runDriveScan = async () => {
+    setIsScanningDrive(true);
+    setDriveResult(null);
+    try {
+      const res = await fetch('/api/agent/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          taskType: 'file_processing',
+          title: 'OmniAgent 雲端硬碟掃描',
+          description: '連線 Google Drive 識別並歸檔 ESG 相關文件至 Evidence Vault。',
+          skillKey: 'hermes_drive_archival',
+          actorId: connectedEmail || 'system',
+        }),
+      });
+      const data = await res.json();
+      if (data.ok && data.artifact) {
+        setDriveResult(data.artifact);
+      } else {
+        alert('雲端硬碟掃描任務失敗：' + (data.error || '未回傳結果'));
+      }
+    } catch (err) {
+      console.error(err);
+      alert('發生預期外的錯誤。');
+    } finally {
+      setIsScanningDrive(false);
+    }
+  };
+
   return (
     <div className="space-y-6 fade-in">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -166,7 +197,7 @@ export default function OmniAgentIntegrations() {
                   <BrandButton
                     variant="primary"
                     onClick={runEmailScan}
-                    disabled={isScanning || isSyncingCalendar}
+                    disabled={isScanning || isSyncingCalendar || isScanningDrive}
                   >
                     {isScanning ? (
                       <span className="flex items-center gap-2">
@@ -181,7 +212,7 @@ export default function OmniAgentIntegrations() {
                   <BrandButton
                     variant="outline"
                     onClick={runCalendarSync}
-                    disabled={isScanning || isSyncingCalendar}
+                    disabled={isScanning || isSyncingCalendar || isScanningDrive}
                   >
                     {isSyncingCalendar ? (
                       <span className="flex items-center gap-2">
@@ -190,6 +221,21 @@ export default function OmniAgentIntegrations() {
                       </span>
                     ) : (
                       '同步 Calendar 排程'
+                    )}
+                  </BrandButton>
+
+                  <BrandButton
+                    variant="outline"
+                    onClick={runDriveScan}
+                    disabled={isScanning || isSyncingCalendar || isScanningDrive}
+                  >
+                    {isScanningDrive ? (
+                      <span className="flex items-center gap-2">
+                        <RefreshCw size={16} className="animate-spin" />
+                        掃描雲端硬碟中...
+                      </span>
+                    ) : (
+                      '掃描雲端硬碟'
                     )}
                   </BrandButton>
                 </div>
@@ -203,6 +249,12 @@ export default function OmniAgentIntegrations() {
                 {calendarResult && (
                   <div className="mt-4 p-4 bg-white rounded-lg border border-blue-100 shadow-sm text-slate-800 text-sm whitespace-pre-wrap">
                     {calendarResult.content}
+                  </div>
+                )}
+
+                {driveResult && (
+                  <div className="mt-4 p-4 bg-white rounded-lg border border-yellow-100 shadow-sm text-slate-800 text-sm whitespace-pre-wrap">
+                    {driveResult.content}
                   </div>
                 )}
               </div>

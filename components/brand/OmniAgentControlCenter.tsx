@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
 'use client';
 import React, { useState, useEffect } from 'react';
@@ -37,6 +38,9 @@ import { useOmniResonance } from '../../src/client/hooks/useOmniResonance';
 import { IComponentCore } from '../../src/shared/types';
 
 interface OmniAgentControlCenterProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   isOpen: boolean;
   onClose: () => void;
 }

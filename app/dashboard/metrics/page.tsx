@@ -154,11 +154,11 @@ export default function MetricsPage() {
       key: 'lifecycle_stage',
       label: 'Stage',
       render: (val) => (
-        <OmniBadge
+        <Badge
           variant={val === 'PUBLISHED' ? 'primary' : val === 'REVIEW' ? 'secondary' : 'outline'}
         >
           {val || 'DRAFT'}
-        </OmniBadge>
+        </Badge>
       ),
     },
     {
@@ -191,14 +191,14 @@ export default function MetricsPage() {
         ) : (
           <div className="flex items-center space-x-3">
             <span className="text-xs italic text-[var(--theme-text-muted)]">Unsealed</span>
-            <OmniButton
+            <Button
               variant="outline"
               size="sm"
               onClick={() => handleSeal(row.id)}
               disabled={processingId === row.id}
             >
               {processingId === row.id ? 'Sealing...' : 'Seal (ZKP)'}
-            </OmniButton>
+            </Button>
           </div>
         ),
     },
@@ -243,9 +243,9 @@ export default function MetricsPage() {
             OmniBaseTable 與 OmniForm 綁定 NCB 資料庫，實作 CRUD 操作。
           </p>
         </div>
-        <OmniButton onClick={() => setShowAddForm(!showAddForm)}>
+        <Button onClick={() => setShowAddForm(!showAddForm)}>
           {showAddForm ? 'Cancel' : 'Add Metric'}
-        </OmniButton>
+        </Button>
       </div>
 
       {showAddForm && (

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
-import { OmniButton } from '@/components/ui/omni/OmniButton';
-import { OmniBadge } from '@/components/ui/omni/OmniBadge';
+import { Card } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import { logUserActivity } from '@/lib/telemetry';
 import {
   Award,
@@ -300,7 +300,7 @@ export default function OmniComponentsPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <OmniButton
+            <Button
               variant="primary"
               icon={<Cpu size={16} />}
               onClick={handleTriggerFactory}
@@ -308,7 +308,7 @@ export default function OmniComponentsPage() {
               className="flex-1 md:flex-none bg-[#63a6b0] hover:bg-[#528d96] text-white border-none shadow-sm flex items-center gap-2 rounded-xl h-10 px-4 transition-all cursor-pointer"
             >
               啟動自動化工廠
-            </OmniButton>
+            </Button>
           </div>
         </header>
 
@@ -366,7 +366,7 @@ export default function OmniComponentsPage() {
         {/* OmniFactory Live Logs Monitor Console (工廠監控控制台) */}
         {(isGenerating || factoryLogs.length > 0) && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <OmniBaseCard
+            <Card
               variant="default"
               className="bg-white border border-slate-200/80 rounded-2xl shadow-md p-6 space-y-4 relative overflow-hidden"
             >
@@ -416,7 +416,7 @@ export default function OmniComponentsPage() {
                   </div>
                 )}
               </div>
-            </OmniBaseCard>
+            </Card>
           </div>
         )}
 

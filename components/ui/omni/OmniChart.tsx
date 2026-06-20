@@ -1,3 +1,4 @@
+import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import {
   ResponsiveContainer,
@@ -13,6 +14,9 @@ import {
 } from 'recharts';
 
 export interface OmniChartProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   data: any[];
   type?: 'area' | 'bar';
   xAxisKey: string;

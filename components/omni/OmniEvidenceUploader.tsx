@@ -1,10 +1,15 @@
 'use client';
 
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useCallback } from 'react';
 import { UploadCloud, File, CheckCircle, X, Loader2, ShieldCheck, Hash } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 
 interface OmniEvidenceUploaderProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+
   onClose?: () => void;
   onUploadSuccess?: (evidence: { name: string; url: string; hash: string }) => void;
 }

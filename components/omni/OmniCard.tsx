@@ -1,4 +1,6 @@
 'use client';
+
+import { OmniComponentHeart } from '@esggo/types';
 import React, { useState } from 'react';
 import { OmniCardProps } from './types';
 import { RecordLifecycleStatus, AttentionStatus } from '@/shared-types/status';
@@ -7,7 +9,12 @@ import { parseFnnsNodeName } from './fnns-utils';
 
 const CURRENT_SYSTEM_DESIGN_VERSION = '8.5.0-Alpha';
 
-export const OmniCard: React.FC<OmniCardProps> = ({
+interface Props extends OmniCardProps {
+  /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
+  omniHeart?: OmniComponentHeart;
+}
+
+export const OmniCard: React.FC<Props> = ({
   uuid,
   componentVersion,
   timestamp,
@@ -19,6 +26,7 @@ export const OmniCard: React.FC<OmniCardProps> = ({
   children,
   className = '',
   nodeName,
+  omniHeart,
 }) => {
   const [showLog, setShowLog] = useState(false);
   const [showFormula, setShowFormula] = useState(false);
@@ -40,6 +48,8 @@ export const OmniCard: React.FC<OmniCardProps> = ({
   // FNNS v4 Parser (Unified)
   const fnnsData = parseFnnsNodeName(nodeName);
 
+  const isResonant = omniHeart && omniHeart.resonanceState > 0.8;
+
   return (
     <div
       className={`
@@ -54,9 +64,11 @@ export const OmniCard: React.FC<OmniCardProps> = ({
         ${/* 信：核心禁區 - 日夜雙模冷晶防護態 */ ''}
         ${
           isHardLocked
-            ? 'dark:border-cyan-500/50 dark:shadow-[inset_0_0_15px_rgba(6,182,212,0.25)] dark:bg-cyan-950/30 light:border-cyan-600/60 light:shadow-[inset_0_0_15px_rgba(8,145,178,0.15)] light:bg-cyan-50/50'
+            ? 'dark:border-[#63a6b0]/50 dark:shadow-[inset_0_0_15px_rgba(99,166,176,0.25)] dark:bg-[#63a6b0]/20 light:border-[#63a6b0]/60 light:shadow-[inset_0_0_15px_rgba(99,166,176,0.15)] light:bg-[#63a6b0]/10'
             : attention === AttentionStatus.Critical
             ? 'border-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.1)]'
+            : isResonant
+            ? 'border-[#ffd700]/50 shadow-[0_0_20px_rgba(255,215,0,0.3)] ring-1 ring-[#ffd700]/20'
             : 'border-transparent'
         }
         ${className}
@@ -68,15 +80,15 @@ export const OmniCard: React.FC<OmniCardProps> = ({
           <span
             className={`w-2 h-2 rounded-full ${
               isHardLocked
-                ? 'bg-cyan-400 animate-pulse'
+                ? 'bg-[#63a6b0] animate-pulse'
                 : attention === AttentionStatus.Critical
                 ? 'bg-rose-500 animate-ping'
-                : 'bg-emerald-400'
+                : 'bg-[#ffd700]'
             }`}
           />
           {title}
           {fnnsData && (
-            <span className="ml-2 px-1.5 py-0.5 text-[9px] font-mono border rounded-md dark:border-cyan-500/40 dark:text-cyan-400 light:border-cyan-600/40 light:text-cyan-600">
+            <span className="ml-2 px-1.5 py-0.5 text-[9px] font-mono border rounded-md border-[#63a6b0]/40 text-[#63a6b0]">
               {fnnsData.id}
             </span>
           )}
@@ -88,7 +100,7 @@ export const OmniCard: React.FC<OmniCardProps> = ({
               setShowFormula(!showFormula);
               setShowLog(false);
             }}
-            className="px-2 py-0.5 rounded border transition-colors dark:text-emerald-400 dark:border-emerald-500/20 light:text-emerald-600 light:border-emerald-600/30"
+            className="px-2 py-0.5 rounded border transition-colors text-[#ffd700] border-[#ffd700]/30 hover:bg-[#ffd700]/10"
           >
             Formula
           </button>
@@ -97,13 +109,18 @@ export const OmniCard: React.FC<OmniCardProps> = ({
               setShowLog(!showLog);
               setShowFormula(false);
             }}
-            className="px-2 py-0.5 rounded border transition-colors dark:text-cyan-400 dark:border-cyan-500/20 light:text-cyan-600 light:border-cyan-600/30"
+            className="px-2 py-0.5 rounded border transition-colors text-[#63a6b0] border-[#63a6b0]/30 hover:bg-[#63a6b0]/10"
           >
             Trace
           </button>
           <span className="px-1 dark:text-slate-400 light:text-slate-500 rounded">
             v{componentVersion}
           </span>
+          {omniHeart?.omniSignature && (
+            <span className="ml-1.5 px-1.5 py-0.5 rounded border border-[#ffd700]/40 text-[#ffd700] bg-[#ffd700]/10 animate-pulse shadow-[0_0_5px_rgba(255,215,0,0.5)]">
+              ZKP:{omniHeart.omniSignature.substring(0, 6)}
+            </span>
+          )}
         </div>
       </div>
 
@@ -120,7 +137,7 @@ export const OmniCard: React.FC<OmniCardProps> = ({
       {showFormula && (
         <div className="absolute inset-0 p-5 font-mono text-[11px] z-20 flex flex-col justify-between animate-fade-in dark:bg-slate-950/95 dark:text-slate-300 light:bg-slate-50/95 light:text-slate-800">
           <div>
-            <div className="flex justify-between border-b pb-1 mb-3 dark:text-emerald-400 dark:border-white/10 light:text-emerald-600 light:border-slate-900/10">
+            <div className="flex justify-between border-b pb-1 mb-3 text-[#ffd700] dark:border-white/10 light:border-slate-900/10">
               <span>[📊 VERIFIABLE COMPLIANCE FORMULA]</span>
               <button onClick={() => setShowFormula(false)} className="hover:text-rose-500">
                 ✕
@@ -133,11 +150,11 @@ export const OmniCard: React.FC<OmniCardProps> = ({
               </code>
               <p>
                 <span className="opacity-60">STANDARD:</span>{' '}
-                <span className="font-bold text-cyan-500">[ISO-14064-1:2018]</span>
+                <span className="font-bold text-[#63a6b0]">[ISO-14064-1:2018]</span>
               </p>
             </div>
           </div>
-          <div className="text-[10px] text-emerald-500">✓ Zero-Hallucination Engine active.</div>
+          <div className="text-[10px] text-[#ffd700]">✓ Zero-Hallucination Engine active.</div>
         </div>
       )}
 
@@ -145,7 +162,7 @@ export const OmniCard: React.FC<OmniCardProps> = ({
       {showLog && (
         <div className="absolute inset-0 p-5 font-mono text-[11px] z-20 flex flex-col justify-between animate-fade-in dark:bg-slate-950/95 dark:text-slate-300 light:bg-slate-50/95 light:text-slate-800">
           <div>
-            <div className="flex justify-between border-b pb-1 mb-2 dark:text-cyan-400 dark:border-white/10 light:text-cyan-600 light:border-slate-900/10">
+            <div className="flex justify-between border-b pb-1 mb-2 text-[#63a6b0] dark:border-white/10 light:border-slate-900/10">
               <span>[⛓️ OMNISTITCH DATA TRACE]</span>
               <button onClick={() => setShowLog(false)} className="hover:text-rose-500">
                 ✕
@@ -159,14 +176,14 @@ export const OmniCard: React.FC<OmniCardProps> = ({
             </p>
             <div className="mt-2">
               <span className="opacity-60">IMPACT PATHWAY:</span>
-              <div className="pl-2 border-l border-cyan-500/30 mt-1 space-y-0.5 opacity-80">
+              <div className="pl-2 border-l border-[#63a6b0]/30 mt-1 space-y-0.5 opacity-80">
                 {evidence.flow_path.map((path, idx) => (
                   <div key={idx}>↳ {path}</div>
                 ))}
               </div>
             </div>
             {fnnsData && (
-              <div className="mt-3 p-2 rounded border border-cyan-500/20">
+              <div className="mt-3 p-2 rounded border border-[#63a6b0]/20">
                 <div className="opacity-60 mb-1">FNNS BINDING (UNIFIED v4):</div>
                 <div className="grid grid-cols-2 gap-1 opacity-80">
                   <div>
@@ -176,10 +193,10 @@ export const OmniCard: React.FC<OmniCardProps> = ({
                     Type: <span className="text-purple-400">{fnnsData.type}</span>
                   </div>
                   <div>
-                    Entity: <span className="text-cyan-400">{fnnsData.entity}</span>
+                    Entity: <span className="text-[#63a6b0]">{fnnsData.entity}</span>
                   </div>
                   <div>
-                    Action: <span className="text-emerald-400">{fnnsData.action}</span>
+                    Action: <span className="text-[#ffd700]">{fnnsData.action}</span>
                   </div>
                   <div className="col-span-2">
                     Protocol: <span className="text-rose-400">{fnnsData.protocol}</span>
@@ -187,9 +204,33 @@ export const OmniCard: React.FC<OmniCardProps> = ({
                 </div>
               </div>
             )}
+            {omniHeart && (
+              <div className="mt-3 p-2 rounded border border-[#ffd700]/20 bg-[#ffd700]/10">
+                <div className="opacity-80 mb-1 text-[#ffd700] flex items-center gap-2">
+                  <span>[⚡ OMNI-CORE 5T STATE]</span>
+                  {omniHeart.resonanceState === 1.0 && <span className="animate-pulse">✨</span>}
+                </div>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] opacity-80">
+                  <div className="col-span-2 text-[#63a6b0] truncate">SIG: {omniHeart.omniSignature}</div>
+                  <div>Class: <span className="text-purple-400">{omniHeart.omniClass}</span></div>
+                  <div>Actor: <span className="text-amber-400">{omniHeart.coreContext.actor}</span></div>
+                  <div>Resonance: <span className="text-[#ffd700]">{(omniHeart.resonanceState * 100).toFixed(0)}%</span></div>
+                  <div className="col-span-2 mt-1">
+                    <span className="opacity-60">5T MATRIX:</span>
+                    <span className="ml-2 space-x-1 text-[#ffd700]">
+                      <span>{omniHeart.fiveTState?.tangible ? '✓Tan' : '✗Tan'}</span>
+                      <span>{omniHeart.fiveTState?.traceable ? '✓Tra' : '✗Tra'}</span>
+                      <span>{omniHeart.fiveTState?.trackable ? '✓Trk' : '✗Trk'}</span>
+                      <span>{omniHeart.fiveTState?.transparent ? '✓Trp' : '✗Trp'}</span>
+                      <span>{omniHeart.fiveTState?.trustworthy ? '✓Tru' : '✗Tru'}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           {evidence.hash && (
-            <div className="text-[10px] text-cyan-500 truncate">SHA256: {evidence.hash}</div>
+            <div className="text-[10px] text-[#63a6b0] truncate">SHA256: {evidence.hash}</div>
           )}
         </div>
       )}
