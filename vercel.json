@@ -1,13 +1,6 @@
 {
   "$schema": "https://vercel.com/docs/build-output-api/v3/primitives",
   "version": 2,
-  "outputDirectory": ".vercel/output",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
   "routes": [
     {
       "src": "/api/(.*)",
