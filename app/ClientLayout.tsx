@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, Component, ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ChevronDown } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { AuthProvider, useAuth } from '../hooks/useAuth';
 import { ToastProvider, ToastContainer } from '../components/ui';
@@ -10,6 +9,21 @@ import OmniCommandPalette from '../components/omni/OmniCommandPalette';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import AppShellV2 from './AppShellV2';
 import { DebugPanel } from '../lib/debug-platform';
+
+// Error boundary to prevent AppShellV2 crashes from breaking the whole page
+class ErrorBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode; fallback: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    if (this.state.hasError) return this.props.fallback;
+    return this.props.children;
+  }
+}
 
 function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -23,8 +37,6 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!mounted || loading) return;
-
-    // Only redirect to login if clearly NOT authenticated AND not on public routes
     if (
       isAuthenticated === false &&
       pathname !== '/login' &&
@@ -40,8 +52,8 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   if (!mounted || loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC]">
-        <div className="w-8 h-8 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-screen bg-neutral-50">
+        <div className="w-8 h-8 border-4 border-neutral-200 border-t-neutral-900 rounded-full animate-spin" />
       </div>
     );
   }
@@ -64,18 +76,28 @@ function AppContent({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Authenticated routes — wrap in AppShellV2
+  // Authenticated routes — wrap in AppShellV2 with error boundary
   if (isAuthenticated) {
     return (
-      <AppShellV2>
-        {children}
-        <ToastContainer />
-        <OmniCommandPalette />
-      </AppShellV2>
+      <ErrorBoundary
+        fallback={
+          <div className="relative">
+            <ToastContainer />
+            <OmniCommandPalette />
+            {children}
+          </div>
+        }
+      >
+        <AppShellV2>
+          {children}
+          <ToastContainer />
+          <OmniCommandPalette />
+        </AppShellV2>
+      </ErrorBoundary>
     );
   }
 
-  // Fallback: show children without shell (for / when not authenticated)
+  // Fallback: show children without shell
   return (
     <div className="relative">
       <ToastContainer />
