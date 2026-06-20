@@ -40,6 +40,18 @@ export default function LoginPage() {
       }
     };
     fetchProviders();
+
+    // Dynamically load Google Identity Services
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    document.body.appendChild(script);
+    
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
   }, []);
 
   const handleLeafClick = () => {
@@ -66,7 +78,8 @@ export default function LoginPage() {
       
       if (isDemoMode) {
         console.log('[Auth] Demo Mode Active. Developer Bypass.');
-        localStorage.setItem('omni_user', JSON.stringify({ email, id: 'demo_user', role: 'admin', company_id: 'default' }));
+        document.cookie = "omni_user_bypass=true; path=/";
+        document.cookie = "omni_demo_session=true; path=/";
         router.push('/dashboard');
         return;
       }
@@ -84,13 +97,7 @@ export default function LoginPage() {
         throw new Error(data.message || data.error || '登入失敗 (Login Failed)');
       }
 
-      // Optionally store public info in local storage (session token is secure in cookie)
-      localStorage.setItem('omni_user', JSON.stringify({ 
-        email: data.user.email, 
-        id: data.user.id,
-        name: data.user.name,
-        role: 'authenticated' 
-      }));
+      // Session token is secure in HTTP-Only cookie, no need for localStorage
       
       router.push('/dashboard');
     } catch (err) {
@@ -104,9 +111,30 @@ export default function LoginPage() {
   async function handleDemoLogin() {
     setLoading(true);
     await new Promise(r => setTimeout(r, 1000));
-    localStorage.setItem('omni_user', JSON.stringify({ email: 'admin@esggo.com', id: 'dev_admin', role: 'admin', company_id: 'default' }));
+    document.cookie = "omni_user_bypass=true; path=/";
+    document.cookie = "omni_demo_session=true; path=/";
     router.push('/dashboard');
   }
+
+  const handleGoogleCredentialResponse = async (response: any) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/auth/google-signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Google 驗證失敗');
+      
+      // Secure HTTP-Only cookie is set by the backend, no localStorage needed
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Google 登入失敗');
+      setLoading(false);
+    }
+  };
 
   async function handleGoogleLogin() {
     setLoading(true);
@@ -114,16 +142,34 @@ export default function LoginPage() {
     try {
       if (isDemoMode) {
         console.log('[Auth] Demo Mode Active. Google Developer Bypass.');
-        localStorage.setItem('omni_user', JSON.stringify({ email: 'google.admin@esggo.com', id: 'demo_google_user', role: 'admin', company_id: 'default', name: 'Google Admin' }));
+        document.cookie = "omni_user_bypass=true; path=/";
+        document.cookie = "omni_demo_session=true; path=/";
         await new Promise(r => setTimeout(r, 1000));
         router.push('/dashboard');
         return;
       }
       
-      // For now, redirecting to a generic unimplemented endpoint until Google is fully set up in NCB.
-      window.location.href = '/api/auth/sign-in/google';
-    } catch (err: unknown) {
-      setError('Google 登入失敗');
+      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+      if (!clientId) {
+        throw new Error('未設定 NEXT_PUBLIC_GOOGLE_CLIENT_ID，無法進行真實驗證');
+      }
+
+      if ((window as any).google?.accounts?.id) {
+        (window as any).google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleGoogleCredentialResponse,
+        });
+        (window as any).google.accounts.id.prompt((notification: any) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            setError('Google 登入視窗被阻擋或取消，請允許彈出視窗。');
+            setLoading(false);
+          }
+        });
+      } else {
+        throw new Error('Google Identity Services 載入失敗');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Google 登入失敗');
       setLoading(false);
     }
   }
@@ -266,10 +312,14 @@ export default function LoginPage() {
            )}
         </BrandCard>
 
-        <p className="mt-10 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
-          &copy; {new Date().getFullYear()} ESG GO Enterprise Hub <br/>
-          Berkeley × TSISDA Digital Sovereignty Partner
-        </p>
+        <div className="mt-10 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
+          <p>&copy; {new Date().getFullYear()} ESG GO Enterprise Hub</p>
+          <p>Berkeley × TSISDA Digital Sovereignty Partner</p>
+          <p className="mt-2 text-[9px] opacity-60">
+            v{process.env.NEXT_PUBLIC_APP_VERSION || '1.5.0'} 
+            {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA ? ` • Build: ${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA.substring(0, 7)}` : ''}
+          </p>
+        </div>
       </div>
     </div>
   );
