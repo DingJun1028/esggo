@@ -79,24 +79,32 @@ export const OmniMemoryService = {
     };
 
     // @ts-ignore: Supabase DB types missing
-    const { data, error } = await (supabase.from('omni_memory_shards') as any)
+    const { data: dbData, error: dbError } = await (supabase.from('omni_memory_shards') as any)
       .insert([payload])
       .select()
       .single();
 
-    if (error) {
-      console.error('Failed to add memory shard:', error);
-      throw error;
-    }
+    if (dbError) throw dbError;
 
-    const parsedData = MemoryShardSchema.parse(data);
+    const parsedData = MemoryShardSchema.parse(dbData);
 
     // Push to NCBDB
     try {
       await ncbClient.upsertRecord('omni_memory_shards', parsedData);
     } catch (err) {
       console.warn('[OmniMemory] Failed to push shard to NCBDB:', err);
-      // We don't throw here to not block local execution
+    }
+
+    // Trigger Vectorization (RAG)
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      fetch(`${baseUrl}/api/memory/vectorize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shard_id: parsedData.id })
+      }).catch(e => console.error(`[OmniMemoryService] Vectorize trigger failed:`, e));
+    } catch (e) {
+      console.error(`[OmniMemoryService] Failed to initiate vectorization:`, e);
     }
 
     return parsedData;
