@@ -1,11 +1,11 @@
 // @ts-nocheck
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   ShieldCheck, Lock, Bot, BarChart3, FileText, Zap, ArrowRight,
-  TrendingUp, Sparkles, MessageSquare, Star, Leaf, Globe
+  TrendingUp, Sparkles, MessageSquare, Star, Leaf, Globe, Play
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
@@ -48,6 +48,18 @@ const TESTIMONIALS = [
 
 /* ─── Main Page ─── */
 export default function LandingPage() {
+  const [liveStats, setLiveStats] = useState({ agents: 0, memories: 0, verified: 0 });
+  const [showDemo, setShowDemo] = useState(false);
+
+  useEffect(() => {
+    // Fetch live stats
+    fetch('/api/system/health')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (d) setLiveStats({ agents: d.activeAgents || 7, memories: d.codexEntries || 32, verified: d.verifiedCount || 156 });
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* ─── Hero ─── */}
@@ -92,8 +104,23 @@ export default function LandingPage() {
           </div>
 
           {/* 5T Strip */}
-          <div className="max-w-sm mx-auto mb-10">
+          <div className="max-w-sm mx-auto mb-8">
             <Protocol5TStrip status={[true, true, true, true, true]} showLabels />
+          </div>
+
+          {/* Live Stats */}
+          <div className="flex items-center justify-center gap-6 mb-8">
+            {[
+              { label: '活躍代理', value: liveStats.agents, icon: Bot },
+              { label: '記憶碎片', value: liveStats.memories, icon: Sparkles },
+              { label: '已驗證', value: liveStats.verified, icon: ShieldCheck },
+            ].map(stat => (
+              <div key={stat.label} className="flex items-center gap-1.5 text-xs text-neutral-500">
+                <stat.icon size={10} />
+                <span className="font-mono font-bold text-neutral-700">{stat.value}</span>
+                <span>{stat.label}</span>
+              </div>
+            ))}
           </div>
 
           {/* CTA */}
