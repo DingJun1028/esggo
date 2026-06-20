@@ -217,10 +217,29 @@ export default function DashboardPage() {
   const [data, setData] = useState<OmniTableDataRow[]>(INITIAL_TABLE_DATA);
   const [loading, setLoading] = useState(true);
 
+  const [user, setUser] = useState<any>(null);
+
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
+    async function fetchUser() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        }
+      } catch (e) {
+        console.error('Failed to fetch user', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchUser();
   }, []);
+
+  const handleSignOut = async () => {
+    await fetch('/api/auth/signout', { method: 'POST' });
+    window.location.href = '/auth/login';
+  };
 
   const handleSeal = async (id: string) => {
     await new Promise((r) => setTimeout(r, 800));
@@ -254,7 +273,7 @@ export default function DashboardPage() {
               </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-black text-[#003262] tracking-tight">
-              全域數據金庫
+              {user?.name ? `歡迎回來，${user.name}` : '全域數據金庫'}
             </h1>
             <p className="text-sm text-slate-400 mt-1">
               OmniCore Data Routing & 5T Integrity Audit Workflow
@@ -267,6 +286,9 @@ export default function DashboardPage() {
             </div>
             <OmniButton variant="outline" size="sm" icon={<RefreshCw size={14} />}>
               同步
+            </OmniButton>
+            <OmniButton variant="outline" size="sm" onClick={handleSignOut} className="border-rose-200 text-rose-600 hover:bg-rose-50">
+              登出
             </OmniButton>
           </div>
         </header>
