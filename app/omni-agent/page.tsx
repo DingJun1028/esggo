@@ -37,6 +37,9 @@ import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 import { useOmniMemoryStore } from '@/store/useOmniMemoryStore';
 import { MemoryShard } from '@/types/omni-memory';
+import { useSwarmStore } from '@/store/useSwarmStore';
+import { useSwarmWebSocket } from '@/hooks/useSwarmWebSocket';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── Types ─── */
 interface ChatMessage {
@@ -191,7 +194,7 @@ function StatBar({ label, value, rank }: { label: string; value: number; rank: s
         {rank}
       </span>
       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-        <div
+        <motion.div
           animate={{ width: `${value}%` }}
           className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
         />
@@ -204,7 +207,7 @@ function StatBar({ label, value, rank }: { label: string; value: number; rank: s
 function SubAgentCard({ agent }: { agent: SubAgent }) {
   const Icon = agent.icon;
   return (
-    <div
+    <motion.div
       layout
       className="bg-white rounded-xl border border-slate-100 p-4 hover:shadow-md transition-all"
     >
@@ -229,7 +232,7 @@ function SubAgentCard({ agent }: { agent: SubAgent }) {
           <p className="text-[9px] text-slate-400 font-bold uppercase">Tasks</p>
         </div>
       </div>
-    </div>
+      </motion.div>
   );
 }
 
@@ -285,8 +288,11 @@ export default function OmniAgentPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [currentVoiceLine, setCurrentVoiceLine] = useState(0);
-  const [activeTab, setActiveTab] = useState<'chat' | 'agents' | 'stats' | 'memory'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'agents' | 'stats' | 'memory' | 'swarm'>('chat');
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useSwarmWebSocket();
+  const { events } = useSwarmStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -406,15 +412,16 @@ export default function OmniAgentPage() {
             { id: 'agents' as const, label: '子代理管理', icon: Network },
             { id: 'stats' as const, label: '能力數值', icon: BarChart3 },
             { id: 'memory' as const, label: '共享記憶層', icon: DatabaseZap },
+            { id: 'swarm' as const, label: '群蜂戰情室', icon: Activity },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                'flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all',
+                'flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all',
                 activeTab === tab.id
                   ? 'bg-[#003262] text-white shadow-md'
-                  : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'
+                  : 'text-slate-500 hover:bg-slate-50'
               )}
             >
               <tab.icon size={16} />
@@ -424,7 +431,7 @@ export default function OmniAgentPage() {
         </div>
 
         {/* ─── Content Area ─── */}
-        
+        <AnimatePresence mode="wait">
           {activeTab === 'chat' && (
             <div
               key="chat"
@@ -627,7 +634,12 @@ export default function OmniAgentPage() {
           {activeTab === 'memory' && (
             <MemoryTabContent />
           )}
+
+          {activeTab === 'swarm' && (
+            <SwarmTabContent />
+          )}
         
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -716,6 +728,63 @@ function MemoryTabContent() {
             ))}
           </div>
         )}
+      </OmniBaseCard>
+    </div>
+  );
+}
+
+function SwarmTabContent() {
+  const { events, connectionStatus } = useSwarmStore();
+
+  return (
+    <div className="space-y-6">
+      <OmniBaseCard className="p-6 bg-[#0B1120] border-slate-800 text-slate-300">
+        <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
+          <div>
+            <h3 className="text-lg font-bold text-cyan-400 flex items-center gap-2">
+              <Activity className="text-amber-400" size={20} />
+              群蜂戰情室 (Swarm Dashboard)
+            </h3>
+            <p className="text-xs text-slate-500 mt-1 font-mono">
+              ws://161.118.248.180:8642 • 監聽所有代理通訊與狀態
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={cn(
+              "text-xs font-mono px-2 py-1 rounded-md border",
+              connectionStatus === 'connected' ? "bg-emerald-900/30 text-emerald-400 border-emerald-800" :
+              connectionStatus === 'connecting' ? "bg-amber-900/30 text-amber-400 border-amber-800" :
+              "bg-red-900/30 text-red-400 border-red-800"
+            )}>
+              {connectionStatus.toUpperCase()}
+            </span>
+          </div>
+        </div>
+        
+        <div className="bg-[#0f172a] rounded-lg p-4 font-mono text-xs overflow-y-auto h-[400px] border border-slate-800 space-y-2">
+          {events.length === 0 ? (
+            <div className="text-slate-600 text-center mt-20">等待通訊訊號介入...</div>
+          ) : (
+            events.map(ev => (
+              <div key={ev.id} className="border-l-2 border-slate-700 pl-3 py-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-slate-500">{new Date(ev.timestamp).toLocaleTimeString()}</span>
+                  <span className={cn(
+                    "px-1.5 rounded text-[10px] uppercase font-bold",
+                    ev.source === 'OmniJules' ? 'bg-purple-900/50 text-purple-400' :
+                    ev.source === 'SharedMemory' ? 'bg-cyan-900/50 text-cyan-400' :
+                    ev.source === 'OmniGateway' ? 'bg-emerald-900/50 text-emerald-400' :
+                    'bg-slate-800 text-slate-300'
+                  )}>{ev.source}</span>
+                  <span className="text-amber-400/80 font-bold">[{ev.type}]</span>
+                </div>
+                <div className="text-slate-400 pl-4 break-words">
+                  {typeof ev.payload === 'string' ? ev.payload : JSON.stringify(ev.payload)}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </OmniBaseCard>
     </div>
   );
