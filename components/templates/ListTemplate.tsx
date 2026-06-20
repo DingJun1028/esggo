@@ -1,8 +1,7 @@
 'use client';
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
-import { cn } from '@/lib/utils';
+import { Card } from '@/components/ui/v2/Card';
+import { Badge } from '@/components/ui/v2/Input';
 
 /**
  * ListTemplate: Standard List View following Governance v1.0
@@ -30,7 +29,7 @@ export function ListTemplate<T>({
   renderRow,
   emptyState,
   pagination,
-  loading
+  loading,
 }: ListTemplateProps<T>) {
   return (
     <div className="flex flex-col gap-6 w-full fade-in">
@@ -48,13 +47,17 @@ export function ListTemplate<T>({
             {filterBar}
           </div>
         )}
-        
+
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-secondary border-b border-border-primary">
-                {columns.map(col => (
-                  <th key={col.key} className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-secondary" style={{ width: col.width }}>
+                {columns.map((col) => (
+                  <th
+                    key={col.key}
+                    className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-text-secondary"
+                    style={{ width: col.width }}
+                  >
                     {col.label}
                   </th>
                 ))}
@@ -64,7 +67,10 @@ export function ListTemplate<T>({
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td colSpan={columns.length} className="px-6 py-4 h-16 bg-surface-secondary/20" />
+                    <td
+                      colSpan={columns.length}
+                      className="px-6 py-4 h-16 bg-surface-secondary/20"
+                    />
                   </tr>
                 ))
               ) : data.length > 0 ? (
@@ -85,9 +91,7 @@ export function ListTemplate<T>({
         </div>
 
         {pagination && (
-          <div className="p-4 border-t border-border-primary flex justify-center">
-            {pagination}
-          </div>
+          <div className="p-4 border-t border-border-primary flex justify-center">{pagination}</div>
         )}
       </Card>
     </div>

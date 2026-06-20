@@ -35,31 +35,52 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = 'Input';
 
-export const Badge = forwardRef<HTMLSpanElement, { variant?: 'success' | 'warning' | 'error' | 'info' | 'neutral'; size?: 'sm' | 'md'; className?: string; children?: React.ReactNode }>(
-  ({ variant = 'neutral', size = 'sm', className, children, ...props }, ref) => (
-    <span
-      ref={ref}
-      className={cn(
-        'inline-flex items-center rounded-full font-medium',
-        {
-          'bg-emerald-50 text-emerald-700': variant === 'success',
-          'bg-amber-50 text-amber-700': variant === 'warning',
-          'bg-red-50 text-red-700': variant === 'error',
-          'bg-blue-50 text-blue-700': variant === 'info',
-          'bg-neutral-100 text-neutral-600': variant === 'neutral',
-        },
-        { 'px-2 py-0.5 text-xs': size === 'sm', 'px-2.5 py-0.5 text-sm': size === 'md' },
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </span>
-  )
-);
+export const Badge = forwardRef<
+  HTMLSpanElement,
+  {
+    variant?: 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'outline';
+    size?: 'sm' | 'md' | 'xs';
+    className?: string;
+    children?: React.ReactNode;
+  }
+>(({ variant = 'neutral', size = 'sm', className, children, ...props }, ref) => (
+  <span
+    ref={ref}
+    className={cn(
+      'inline-flex items-center rounded-full font-medium',
+      {
+        'bg-emerald-50 text-emerald-700': variant === 'success',
+        'bg-amber-50 text-amber-700': variant === 'warning',
+        'bg-red-50 text-red-700': variant === 'error',
+        'bg-blue-50 text-blue-700': variant === 'info',
+        'bg-neutral-100 text-neutral-600': variant === 'neutral',
+        'bg-transparent border border-slate-300 text-slate-700': variant === 'outline',
+      },
+      {
+        'px-2 py-0.5 text-[10px]': size === 'xs',
+        'px-2 py-0.5 text-xs': size === 'sm',
+        'px-2.5 py-0.5 text-sm': size === 'md',
+      },
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </span>
+));
 Badge.displayName = 'Badge';
 
-export const SectionHeader = ({ title, subtitle, action, className }: { title: string; subtitle?: string; action?: React.ReactNode; className?: string }) => (
+export const SectionHeader = ({
+  title,
+  subtitle,
+  action,
+  className,
+}: {
+  title: string;
+  subtitle?: string;
+  action?: React.ReactNode;
+  className?: string;
+}) => (
   <div className={cn('flex items-center justify-between mb-4', className)}>
     <div>
       <h2 className="text-lg font-bold text-neutral-900">{title}</h2>

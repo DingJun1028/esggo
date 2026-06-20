@@ -2,17 +2,26 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { HTMLAttributes, forwardRef } from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+interface CardProps extends HTMLMotionProps<'div'> {
   variant?: 'default' | 'elevated' | 'outlined';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   hover?: boolean;
+  title?: string;
+  subtitle?: string;
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', padding = 'md', hover = true, children, ...props }, ref) => (
-    <div
+    <motion.div
       ref={ref}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      whileHover={
+        hover ? { scale: 1.01, boxShadow: '0px 10px 30px rgba(99, 166, 176, 0.15)' } : undefined
+      }
       className={cn(
         'rounded-xl transition-all duration-200',
         {
@@ -21,13 +30,18 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           'bg-transparent border border-neutral-200': variant === 'outlined',
         },
         hover && 'hover:shadow-md hover:border-neutral-300',
-        { 'p-0': padding === 'none', 'p-4': padding === 'sm', 'p-6': padding === 'md', 'p-8': padding === 'lg' },
+        {
+          'p-0': padding === 'none',
+          'p-4': padding === 'sm',
+          'p-6': padding === 'md',
+          'p-8': padding === 'lg',
+        },
         className
       )}
       {...props}
     >
       {children}
-    </div>
+    </motion.div>
   )
 );
 Card.displayName = 'Card';
@@ -43,7 +57,11 @@ CardHeader.displayName = 'CardHeader';
 
 export const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
   ({ className, children, ...props }, ref) => (
-    <h3 ref={ref} className={cn('text-lg font-bold text-neutral-900 tracking-tight', className)} {...props}>
+    <h3
+      ref={ref}
+      className={cn('text-lg font-bold text-neutral-900 tracking-tight', className)}
+      {...props}
+    >
       {children}
     </h3>
   )
@@ -52,14 +70,20 @@ CardTitle.displayName = 'CardTitle';
 
 export const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => (
-    <div ref={ref} className={cn('relative', className)} {...props}>{children}</div>
+    <div ref={ref} className={cn('relative', className)} {...props}>
+      {children}
+    </div>
   )
 );
 CardContent.displayName = 'CardContent';
 
 export const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => (
-    <div ref={ref} className={cn('flex items-center gap-3 mt-4 pt-4 border-t border-neutral-100', className)} {...props}>
+    <div
+      ref={ref}
+      className={cn('flex items-center gap-3 mt-4 pt-4 border-t border-neutral-100', className)}
+      {...props}
+    >
       {children}
     </div>
   )

@@ -11,3 +11,5 @@ export { Modal, default as BrandModalCompat } from './Modal';
 export { Tabs } from './Tabs';
 export { StatusDot } from './StatusDot';
 export { Progress } from './Progress';
+export { FiveTStrip } from './FiveTStrip';
+export { OmniHeader } from './OmniHeader';

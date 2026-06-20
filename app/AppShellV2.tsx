@@ -94,7 +94,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../hooks/useAuth';
 import { NAV_STAGES, ALL_NAV_ITEMS } from '../config/navigation';
 import { GlobalSearch } from '../components/GlobalSearch';
-import AppThemeSwitcher from '../components/AppThemeSwitcher';
+import ThemeSwitcher from '../components/ThemeSwitcher';
 import OmniOverviewMenu from '../components/OmniOverviewMenu';
 import OmniThemeSwitcher from '../components/omni/OmniThemeSwitcher';
 
@@ -553,7 +553,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
               <GlobalSearch />
 
               {/* Theme Switcher */}
-              <AppThemeSwitcher />
+              <ThemeSwitcher />
 
               {/* OmniTheme Dual Engine Switcher */}
               <OmniThemeSwitcher />
@@ -647,7 +647,7 @@ export default function AppShellV2({ children }: { children: React.ReactNode }) 
           <div className="flex items-center gap-3 overflow-x-scroll no-scrollbar py-2 w-full pr-4">
             {/* Theme Toggle Mobile */}
             <div className="flex-shrink-0">
-              <AppThemeSwitcher />
+              <ThemeSwitcher />
             </div>
 
             <div className="flex-shrink-0">

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
-import OmniHeader from '@/components/omni/OmniHeader';
+import { OmniHeader } from '@/components/ui/v2/OmniHeader';
 import {
   Eye,
   Database,

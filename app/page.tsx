@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
-import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
+import { FiveTStrip } from '@/components/ui/v2/FiveTStrip';
 
 /* ─── Data ─── */
 const KPI_DATA = [
@@ -187,9 +187,7 @@ export default function LandingPage() {
 
           <h1 className="text-4xl md:text-6xl font-black text-neutral-900 tracking-tight leading-tight mb-4">
             ESGGO
-            <span className="block text-neutral-900">
-              善向永續系統
-            </span>
+            <span className="block text-neutral-900">善向永續系統</span>
           </h1>
 
           <p className="text-base md:text-lg text-neutral-500 max-w-xl mx-auto mb-10 leading-relaxed">
@@ -216,7 +214,7 @@ export default function LandingPage() {
 
           {/* 5T Strip */}
           <div className="max-w-sm mx-auto mb-8">
-            <Protocol5TStrip status={[true, true, true, true, true]} showLabels />
+            <FiveTStrip status={[true, true, true, true, true]} showLabels />
           </div>
 
           {/* Live Stats */}

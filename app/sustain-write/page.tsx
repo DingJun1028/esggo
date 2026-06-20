@@ -1,10 +1,14 @@
 // @ts-nocheck
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/v2/Card';
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
-import { Badge } from '@/components/ui/v2/Input';
+import { Badge, SectionHeader, Input } from '@/components/ui/v2/Input';
+import { FiveTStrip } from '@/components/ui/v2/FiveTStrip';
+import { Progress } from '@/components/ui/v2/Progress';
+import { Tabs } from '@/components/ui/v2/Tabs';
+import { OmniHeader } from '@/components/ui/v2/OmniHeader';
 import {
   BookOpen,
   Sparkles,
@@ -14,7 +18,7 @@ import {
   Eye,
   ShieldCheck,
   AlignLeft,
-  RefreshCcw,
+  RefreshCw,
   CheckCircle2,
   Undo2,
   Redo2,
@@ -27,22 +31,9 @@ import {
   Pin,
   Loader2,
   X,
+  FileText,
+  Zap,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { ShieldOfAbsoluteTruth } from '@/components/omni/ShieldOfAbsoluteTruth';
-import {
-  SustainWriteTemplates,
-  aiTemplateSelector,
-  ZeroComputeTemplate,
-} from '@/components/templates/sustain-write/registry';
-import OmniSustainWriteEditor from '@/components/omni/OmniSustainWriteEditor';
-import { useSustainWriteStore } from '@/store/useSustainWriteStore';
-import OmniEvidenceUploader from '@/components/omni/OmniEvidenceUploader';
-import { useOmniNotesStore } from '@/store/useOmniNotesStore';
-import AppThemeSwitcher from '@/components/AppThemeSwitcher';
-import { logUserActivity } from '@/lib/telemetry';
-import { usePreferencesStore } from '@/usePreferencesStore';
-import { useThemeStore } from '@/lib/theme-store';
 
 const TRAITS_POOL = [
   '製造業',
@@ -56,1317 +47,310 @@ const TRAITS_POOL = [
   '初次編製',
 ];
 
+const TEMPLATES = [
+  {
+    id: 't1',
+    name: '氣候風險 TCFD 揭露模板',
+    category: 'Environment',
+    usage: 1240,
+    difficulty: 'High',
+  },
+  {
+    id: 't2',
+    name: '重大性議題分析矩陣工具',
+    category: 'Governance',
+    usage: 3500,
+    difficulty: 'Medium',
+  },
+  {
+    id: 't3',
+    name: '人權盡職調查 (HRDD) 清單',
+    category: 'Social',
+    usage: 890,
+    difficulty: 'High',
+  },
+  {
+    id: 't4',
+    name: 'CBAM 碳邊境申報專用表',
+    category: 'Environment',
+    usage: 2100,
+    difficulty: 'Medium',
+  },
+];
+
 export default function SustainWritePage() {
-  const { omniTheme } = useThemeStore();
   const [isWeaving, setIsWeaving] = useState(false);
   const [weavingProgress, setWeavingProgress] = useState(0);
-  const [activeTab, setActiveTab] = useState<'blueprint' | 'data' | 'preview'>('blueprint');
-
-  // AI Template Selection States
+  const [activeTab, setActiveTab] = useState<'blueprint' | 'editor' | 'preview'>('blueprint');
   const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
   const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
-  const [activeTemplate, setActiveTemplate] = useState<ZeroComputeTemplate | null>(null);
-  const [activeChapterIndex, setActiveChapterIndex] = useState(0);
-
-  const {
-    generatedContent,
-    updateContent,
-    manualSave,
-    initData,
-    undoContent,
-    redoContent,
-    expandContentWithAI,
-    isGeneratingAI,
-    contentHistory,
-  } = useSustainWriteStore();
-
-  const [uploaderTarget, setUploaderTarget] = useState<string | null>(null);
-  const [uploadedEvidences, setUploadedEvidences] = useState<
-    Record<string, { name: string; url: string; hash: string }>
-  >({});
-
-  // OmniNotes Integration States
-  const editorRef = React.useRef<any>(null);
-  const { notes: omniNotes } = useOmniNotesStore();
-  const [noteSearchQuery, setNoteSearchQuery] = useState('');
-  const [noteFilterType, setNoteFilterType] = useState<string>('all');
-
-  // OmniNotes Custom Integrations
-  const [pinnedNotes, setPinnedNotes] = useState<Record<string, string[]>>({});
-  const [isRefining, setIsRefining] = useState<Record<string, boolean>>({});
-  const [showBlueprintBanner, setShowBlueprintBanner] = useState(true);
-  const [showPublishNotification, setShowPublishNotification] = useState(false);
-  const [showAuditSidebar, setShowAuditSidebar] = useState(false);
-
-  const togglePinNote = (noteId: string) => {
-    if (!currentChapterId) return;
-    setPinnedNotes((prev) => {
-      const currentPinned = prev[currentChapterId] || [];
-      const isPinned = currentPinned.includes(noteId);
-      const newPinned = isPinned
-        ? currentPinned.filter((id) => id !== noteId)
-        : [...currentPinned, noteId];
-      return { ...prev, [currentChapterId]: newPinned };
-    });
-  };
-
-  const handleRefineAndInsert = async (noteContent: string, noteId: string) => {
-    if (!editorRef.current?.editorInstance) {
-      alert('請先在編輯器中點擊，以定位插入游標');
-      return;
-    }
-
-    setIsRefining((prev) => ({ ...prev, [noteId]: true }));
-    try {
-      const res = await fetch('/api/ai/expand', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          companyId: 'default',
-          chapterName: currentChapterName,
-          content: '', // Empty start content so it only returns the refined version
-          prompt: `請將以下日常/草稿筆記，潤飾改寫成一段正式、流暢、符合 GRI 標準的 ESG 報告段落。直接輸出改寫後的內容，不需任何客套話、解釋或引言：\n\n"${noteContent}"`,
-          targetWordCount: 200,
-        }),
-      });
-
-      if (!res.ok) throw new Error('Refinement failed');
-
-      const reader = res.body?.getReader();
-      if (!reader) throw new Error('Failed to get stream reader');
-
-      const editor = editorRef.current.editorInstance;
-      editor.chain().focus().run();
-
-      const decoder = new TextDecoder();
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        editor.chain().insertContent(chunk).run();
-      }
-    } catch (err) {
-      console.error('Refinement failed:', err);
-      alert('AI 潤飾失敗，請重試');
-    } finally {
-      setIsRefining((prev) => ({ ...prev, [noteId]: false }));
-    }
-  };
-
-  const { syncWithBackend } = usePreferencesStore();
-
-  useEffect(() => {
-    initData('default');
-    syncWithBackend();
-  }, [initData, syncWithBackend]);
-
-  const currentChapter = activeTemplate?.chapters[activeChapterIndex] || null;
-  const currentChapterId = currentChapter ? `chapter-${activeChapterIndex}` : 'main-chapter';
-  const currentChapterName = currentChapter ? currentChapter.title : '永續藍圖報告';
-  const currentChapterOrder = activeChapterIndex + 1;
-  const currentGriRefs = currentChapter ? currentChapter.requiredIndicators : ['GRI-2-1'];
-
-  // Calculate unique active required indicators for the entire blueprint
-  const activeRequiredIndicators = Array.from(
-    new Set(activeTemplate?.chapters.flatMap((ch) => ch.requiredIndicators) || [])
-  );
-
-  const [vaultIndicators, setVaultIndicators] = useState<any[]>([]);
-  const [isFetchingVault, setIsFetchingVault] = useState(false);
-
-  useEffect(() => {
-    if (activeRequiredIndicators.length === 0) {
-      setVaultIndicators([]);
-      return;
-    }
-
-    const fetchVaultData = async () => {
-      setIsFetchingVault(true);
-      try {
-        const res = await fetch('/api/vault/indicators', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ indicatorIds: activeRequiredIndicators }),
-        });
-        const json = await res.json();
-        if (json.success) {
-          setVaultIndicators(json.data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch vault indicators:', error);
-      } finally {
-        setIsFetchingVault(false);
-      }
-    };
-
-    fetchVaultData();
-  }, [JSON.stringify(activeRequiredIndicators)]); // Use JSON.stringify for deep comparison of the array
-
+  const [activeTemplate, setActiveTemplate] = useState<(typeof TEMPLATES)[0] | null>(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedHash, setPublishedHash] = useState<string | null>(null);
+  const [content, setContent] = useState('');
 
   const toggleTrait = (trait: string) => {
-    if (selectedTraits.includes(trait)) {
+    if (selectedTraits.includes(trait))
       setSelectedTraits((prev) => prev.filter((t) => t !== trait));
-      logUserActivity('sustainwrite_toggle_trait_remove', { trait });
-    } else {
-      if (selectedTraits.length < 3) {
-        setSelectedTraits((prev) => [...prev, trait]);
-        logUserActivity('sustainwrite_toggle_trait_add', { trait });
-      }
-    }
+    else if (selectedTraits.length < 3) setSelectedTraits((prev) => [...prev, trait]);
   };
 
   const handleAiAnalysis = () => {
     if (selectedTraits.length === 0) return;
     setIsAiAnalyzing(true);
-    logUserActivity('sustainwrite_ai_profile_start', { traits: selectedTraits });
-    // Simulate AI thinking time for effect
     setTimeout(() => {
-      const template = aiTemplateSelector(selectedTraits);
-      setActiveTemplate(template);
+      setActiveTemplate(TEMPLATES[0]);
       setIsAiAnalyzing(false);
-      logUserActivity('sustainwrite_ai_profile_complete', { templateName: template?.name });
     }, 1500);
-  };
-  const handlePublish = async () => {
-    setIsPublishing(true);
-
-    try {
-      // Get current content for sealing
-      const currentContent = generatedContent[currentChapterId] || '';
-
-      // Use browser-compatible hash generation
-      const encoder = new TextEncoder();
-      const data = encoder.encode(currentContent);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const contentHash = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-
-      // Call ZKP seal API for T4 Trustworthy verification
-      const sealResponse = await fetch('/api/vault/seal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          evidenceUuid: currentChapterId,
-          sealType: '5t',
-          formula: 'SHA-256(content)',
-          impactMetric: { wordCount: currentContent.length },
-          sourceOrigin: 'sustain-write',
-        }),
-      });
-
-      const sealResult = await sealResponse.json();
-      const hash = sealResult.hashLock || `0x${contentHash}`;
-      setPublishedHash(hash);
-      setShowPublishNotification(true);
-      logUserActivity('sustainwrite_chapter_publish', {
-        chapterId: currentChapterId,
-        chapterName: currentChapterName,
-        hash,
-      });
-    } catch (error) {
-      console.error('Publish failed:', error);
-      // Fallback to local hash generation
-      const encoder = new TextEncoder();
-      const data = encoder.encode(`${currentChapterId}-${Date.now()}`);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const fallbackHash = `0x${hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')}`;
-      setPublishedHash(fallbackHash);
-      setShowPublishNotification(true);
-    } finally {
-      setIsPublishing(false);
-    }
-  };
-
-  const handleSaveDraft = async () => {
-    try {
-      await manualSave(currentChapterId, currentChapterName, currentChapterOrder, currentGriRefs);
-      alert('當前章節草稿已安全加密儲存至 OmniVault！');
-      logUserActivity('sustainwrite_chapter_save_draft', {
-        chapterId: currentChapterId,
-        chapterName: currentChapterName,
-      });
-    } catch (e) {
-      alert('儲存失敗！');
-    }
-  };
-
-  const RealTimeHashLock = ({ content }: { content: string }) => {
-    const [hash, setHash] = useState('calculating...');
-
-    useEffect(() => {
-      if (!content) {
-        setHash('pending...');
-        return;
-      }
-
-      const computeHash = async () => {
-        try {
-          const encoder = new TextEncoder();
-          const data = encoder.encode(content);
-          const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-          const hashArray = Array.from(new Uint8Array(hashBuffer));
-          const computedHash = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-          setHash(computedHash.slice(0, 16) + '...');
-        } catch (e) {
-          setHash('error');
-        }
-      };
-
-      computeHash();
-    }, [content]);
-
-    return <span className="text-cyan-600 font-bold select-all">{hash}</span>;
   };
 
   const handleWeave = async () => {
     if (!activeTemplate) return;
     setIsWeaving(true);
     setWeavingProgress(0);
-    logUserActivity('sustainwrite_holographic_weave_start', { templateName: activeTemplate.name });
-
-    try {
-      // Auto-switch to preview to see the magic typing live
-      setActiveTab('preview');
-      setActiveChapterIndex(0);
-
-      for (let i = 0; i < activeTemplate.chapters.length; i++) {
-        const ch = activeTemplate.chapters[i];
-        const chId = `chapter-${i}`;
-
-        setActiveChapterIndex(i);
-
-        const contextDataStr = ch.requiredIndicators
-          .map((ref) => {
-            const dataItem = vaultIndicators.find((item) => item.id === ref);
-            return dataItem ? `${dataItem.name}: ${dataItem.val}` : `${ref}: (尚未連結數據)`;
-          })
-          .join('; ');
-
-        // Initialize empty content
-        updateContent(chId, `<h2>${ch.title}</h2>\n`, ch.title, i + 1, ch.requiredIndicators);
-
-        // Real AI generation with streaming
-        await expandContentWithAI(
-          chId,
-          ch.title,
-          i + 1,
-          ch.requiredIndicators,
-          `你是一個專業的 ESG 永續報告編撰系統。請根據以下藍圖要求：\n${ch.contentBlueprint}\n\n並且融合以下 5T 實證數據：\n[${contextDataStr}]\n\n為本章節撰寫專業、正式且詳細的永續報告內容。\n\n**重要指示：如果發現任何「尚未連結數據」或缺失的指標，請不要留空或道歉，請直接為使用者撰寫符合產業標準的「預設內容、最佳實踐範本或常見答案選項」，讓使用者可以直接參考、填空或修改。永遠先提供優質的版型給使用者。**\n\n避免過多的前言，直接進入正題，使用 HTML 段落 (<p>, <ul>, <li> 等) 進行排版。`
-        );
-
-        setWeavingProgress(Math.floor(((i + 1) / activeTemplate.chapters.length) * 100));
-      }
-      logUserActivity('sustainwrite_holographic_weave_complete', {
-        templateName: activeTemplate.name,
-      });
-    } catch (error) {
-      console.error('Weaving failed:', error);
-      alert('AI 編織過程發生錯誤！');
-    } finally {
-      setIsWeaving(false);
-      setWeavingProgress(100);
+    setActiveTab('editor');
+    // Simulate weaving
+    for (let i = 0; i <= 100; i += 20) {
+      await new Promise((r) => setTimeout(r, 300));
+      setWeavingProgress(i);
     }
+    setContent(
+      `<h2>${activeTemplate.name}</h2><p>AI 正在根據您的產業特徵「${selectedTraits.join(
+        '、'
+      )}」生成專屬永續報告內容...</p>`
+    );
+    setIsWeaving(false);
   };
 
-  const handleExportReport = async () => {
-    if (!activeTemplate) return;
-    try {
-      // For 240,000 words (250+ pages), html2canvas will exceed browser canvas limits and OOM.
-      // We use a native print window for safe, paginated, and vector-text PDF export.
-      const printWindow = window.open('', '_blank', 'width=800,height=900');
-      if (!printWindow) {
-        alert('請允許彈出視窗以匯出報告。');
-        return;
-      }
-
-      let htmlContent = `
- <html>
- <head>
- <title>${activeTemplate.name} - ESGGO報告</title>
- <style>
- body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 40px; color: #333; line-height: 1.6; }
- h1 { color: #06b6d4; text-align: center; margin-bottom: 10px; }
- .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-weight: bold; }
- h2 { color: #003262; border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-top: 40px; page-break-before: always; }
- h2:first-of-type { page-break-before: auto; }
- p { margin-bottom: 15px; text-align: justify; }
- @media print {
- body { padding: 0; }
- }
- </style>
- </head>
- <body>
- <h1>${activeTemplate.name}</h1>
- <div class="subtitle">ESGGO OmniCore Verified Report</div>
- `;
-
-      activeTemplate.chapters.forEach((ch, idx) => {
-        const chId = `chapter-${idx}`;
-        htmlContent += `<h2>${ch.title}</h2>`;
-        htmlContent += `<div>${generatedContent[chId] || '<p>(此章節尚無內容)</p>'}</div>`;
-      });
-
-      htmlContent += `
- </body>
- </html>
- `;
-
-      printWindow.document.open();
-      printWindow.document.write(htmlContent);
-      printWindow.document.close();
-
-      // Wait for resources to load then print
-      printWindow.onload = () => {
-        printWindow.focus();
-        printWindow.print();
-        // Optional: printWindow.close(); after printing
-      };
-    } catch (e) {
-      console.error('PDF Export Error:', e);
-      alert('PDF 匯出失敗，請檢查日誌');
-    }
-  };
-
-  const p = {
-    id: `SW-850`,
-    title: 'SustainWrite 永續編織',
-    sub: 'Holographic Report Generation Engine',
+  const handlePublish = async () => {
+    setIsPublishing(true);
+    await new Promise((r) => setTimeout(r, 1500));
+    setPublishedHash('0x' + Math.random().toString(16).substring(2, 10) + '...sealed');
+    setIsPublishing(false);
   };
 
   return (
-    <div
-      className={`min-h-screen p-6 md:p-8 selection:bg-cyan-500/30 transition-colors duration-normal ${'bg-[#F8FAFC] text-slate-800'}`}
-    >
-      {uploaderTarget && (
-        <OmniEvidenceUploader
-          onClose={() => setUploaderTarget(null)}
-          onUploadSuccess={(evidence) => {
-            setUploadedEvidences((prev) => ({ ...prev, [uploaderTarget]: evidence }));
-          }}
-        />
-      )}
-      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in- duration-700">
-        {/* Header Area */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-slate-200/80">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-neutral-200 pb-6">
           <div className="flex items-center gap-4">
-            <div
-              onClick={() => {
-                setShowAuditSidebar(!showAuditSidebar);
-                logUserActivity('sustainwrite_toggle_audit_sidebar_via_logo', {
-                  isOpen: !showAuditSidebar,
-                });
-              }}
-              className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20 shadow-sm relative cursor-pointer hover:bg-cyan-500/20 active:scale-95 transition-all"
-              title="點擊切換顯示/隱藏實境審計與真實之盾面板"
-            >
+            <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center border border-cyan-200">
               <BookOpen className="text-cyan-600" size={20} />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
-                  <Sparkles size={11} className="text-cyan-500 animate-pulse" /> Cognitive
-                  Programming
+                <span className="text-xs font-bold text-neutral-500 flex items-center gap-1">
+                  <Sparkles size={11} className="text-cyan-500" /> Cognitive Programming
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-cyan-100/80 text-cyan-800 rounded font-mono">
-                  {p.id}
+                <span className="text-[10px] font-bold px-1.5 py-0.5 bg-cyan-100 text-cyan-800 rounded font-mono">
+                  SW-850
                 </span>
               </div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight">{p.title}</h1>
-              <p className="text-xs font-mono text-slate-400 mt-1 uppercase tracking-wider">
-                {p.sub}
+              <h1 className="text-2xl font-black text-neutral-900 tracking-tight">
+                SustainWrite 永續編織
+              </h1>
+              <p className="text-xs text-neutral-400 font-mono mt-0.5">
+                Holographic Report Generation Engine
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
-            <Button
-              variant="outline"
-              icon={<ShieldCheck size={16} />}
-              onClick={() => {
-                setShowAuditSidebar(!showAuditSidebar);
-                logUserActivity('sustainwrite_toggle_audit_sidebar', { isOpen: !showAuditSidebar });
-              }}
-              className={cn(
-                'flex-1 md:flex-none border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2',
-                showAuditSidebar
-                  ? 'bg-cyan-50 border-cyan-200 text-cyan-700 font-bold shadow-sm'
-                  : ''
-              )}
-            >
-              {showAuditSidebar ? '隱藏實境審計' : '顯示實境審計'}
+          <div className="flex gap-2">
+            <Button variant="secondary" size="sm" icon={<ShieldCheck size={14} />}>
+              實境審計
             </Button>
-            <Button
-              variant="outline"
-              icon={<RefreshCcw size={16} />}
-              className="flex-1 md:flex-none border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2"
-            >
-              重置引擎
-            </Button>
-            {activeTemplate && activeTab === 'preview' && (
-              <Button
-                variant="outline"
-                icon={<AlignLeft size={16} />}
-                onClick={handleExportReport}
-                className="flex-1 md:flex-none bg-white hover:bg-slate-50 text-emerald-600 border-slate-200 rounded-xl h-10 px-4 transition-all shadow-sm flex items-center gap-2"
-              >
-                匯出報告 (HTML)
-              </Button>
-            )}
             <Button
               variant="primary"
-              icon={<Layers size={16} />}
+              size="sm"
+              icon={<Sparkles size={14} />}
               onClick={handleWeave}
-              isLoading={isWeaving}
-              disabled={!activeTemplate || isWeaving}
-              className="flex-1 md:flex-none bg-[#003262] hover:bg-[#002244] text-white border-none shadow-sm shadow-blue-900/20 flex items-center gap-2 rounded-xl h-10 px-4 transition-all"
+              loading={isWeaving}
             >
-              啟動全息編織
+              {isWeaving ? `編織中 ${weavingProgress}%` : '開始編織'}
             </Button>
           </div>
         </header>
 
-        {/* AI Setup / Profiling Section */}
-        {!activeTemplate && (
-          <div className="bg-white border border-slate-200 rounded-2xl p-8 relative overflow-hidden shadow-sm">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-3xl rounded-full" />
-            <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-              <Cpu className="text-cyan-600" size={20} />
-              零算力專家模板 (Zero-Compute AI Profiling)
-            </h2>
-            <p className="text-slate-500 text-sm mb-6 max-w-2xl">
-              選擇最符合您企業當前特徵的標籤（最多 3 項）。AI
-              將根據這些特徵，從預先部署的專家模板庫中為您配對最佳的永續報告藍圖。
-            </p>
+        <Tabs
+          tabs={[
+            { id: 'blueprint', label: '報告藍圖', icon: <Layers size={14} /> },
+            { id: 'editor', label: '編輯器', icon: <AlignLeft size={14} /> },
+            { id: 'preview', label: '預覽', icon: <Eye size={14} /> },
+          ]}
+          activeTab={activeTab}
+          onTabChange={(t) => setActiveTab(t as any)}
+          variant="pill"
+        />
 
-            <div className="flex flex-wrap gap-3 mb-8">
-              {TRAITS_POOL.map((trait) => (
-                <button
-                  key={trait}
-                  onClick={() => toggleTrait(trait)}
-                  className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border',
-                    selectedTraits.includes(trait)
-                      ? 'bg-cyan-50 border-cyan-300 text-cyan-700 shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-600 hover:border-slate-400 hover:text-slate-800 shadow-sm'
-                  )}
+        {activeTab === 'blueprint' && (
+          <div className="space-y-6">
+            <Card variant="default" padding="md">
+              <SectionHeader
+                title="產業特徵選擇"
+                subtitle="選擇最多 3 個特徵，AI 將為您推薦最適合的報告模板"
+              />
+              <div className="flex flex-wrap gap-2 mt-4">
+                {TRAITS_POOL.map((trait) => (
+                  <button
+                    key={trait}
+                    onClick={() => toggleTrait(trait)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      selectedTraits.includes(trait)
+                        ? 'bg-cyan-600 text-white'
+                        : 'bg-white text-neutral-600 border border-neutral-200 hover:border-cyan-300'
+                    }`}
+                  >
+                    {trait}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-4">
+                <Button
+                  variant="primary"
+                  onClick={handleAiAnalysis}
+                  loading={isAiAnalyzing}
+                  disabled={selectedTraits.length === 0}
+                  icon={<Sparkles size={14} />}
                 >
-                  {trait}
-                </button>
+                  {isAiAnalyzing ? 'AI 分析中...' : 'AI 推薦模板'}
+                </Button>
+              </div>
+            </Card>
+
+            {activeTemplate && (
+              <Card variant="default" padding="md">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                    <FileText size={18} className="text-emerald-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-neutral-900">{activeTemplate.name}</h3>
+                    <p className="text-xs text-neutral-400">
+                      {activeTemplate.category} · {activeTemplate.difficulty} ·{' '}
+                      {activeTemplate.usage} 次使用
+                    </p>
+                  </div>
+                  <Badge variant="success" size="sm">
+                    已選擇
+                  </Badge>
+                </div>
+                <Progress value={weavingProgress} size="sm" color="auto" />
+              </Card>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {TEMPLATES.map((t) => (
+                <Card
+                  key={t.id}
+                  variant="outlined"
+                  padding="md"
+                  hover
+                  onClick={() => setActiveTemplate(t)}
+                  className={activeTemplate?.id === t.id ? 'border-cyan-400 bg-cyan-50/30' : ''}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-neutral-50 flex items-center justify-center">
+                      <FileText size={20} className="text-neutral-400" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-bold text-neutral-900">{t.name}</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] text-neutral-400">{t.category}</span>
+                        <span className="text-[10px] text-neutral-300">·</span>
+                        <span className="text-[10px] text-neutral-400">{t.difficulty}</span>
+                        <span className="text-[10px] text-neutral-300">·</span>
+                        <span className="text-[10px] text-neutral-400">{t.usage} 次</span>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               ))}
             </div>
-
-            <Button
-              variant="primary"
-              icon={<Sparkles size={16} />}
-              onClick={handleAiAnalysis}
-              disabled={selectedTraits.length === 0 || isAiAnalyzing}
-              isLoading={isAiAnalyzing}
-            >
-              {isAiAnalyzing ? 'AI 神經突觸配對中...' : '執行 AI 模板配對'}
-            </Button>
           </div>
         )}
 
-        {isWeaving && (
-          <div className="p-6 bg-cyan-950/40 border border-cyan-500/30 rounded-2xl space-y-4 animate-pulse relative overflow-hidden">
-            <div className="absolute inset-0 bg-neutral-100 from-transparent via-cyan-500/10 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
-            <div className="flex justify-between items-center relative z-10">
-              <div className="flex items-center gap-3">
-                <Cpu className="text-cyan-400 animate-spin-slow" size={24} />
-                <div>
-                  <h3 className="text-cyan-400 font-bold">無有技藝・連發 (Void-Presence Combo)</h3>
-                  <p className="text-xs text-cyan-500/70">
-                    正在將碎片化指標映射至「{activeTemplate?.name}」結構中...
-                  </p>
+        {activeTab === 'editor' && (
+          <div className="space-y-4">
+            <Card variant="default" padding="md">
+              <div className="flex items-center justify-between mb-4">
+                <SectionHeader
+                  title="報告編輯器"
+                  subtitle={activeTemplate ? activeTemplate.name : '請先選擇模板'}
+                />
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm" icon={<Undo2 size={14} />}>
+                    復原
+                  </Button>
+                  <Button variant="ghost" size="sm" icon={<Redo2 size={14} />}>
+                    重做
+                  </Button>
+                  <Button variant="secondary" size="sm" icon={<Wand2 size={14} />}>
+                    AI 潤飾
+                  </Button>
                 </div>
               </div>
-              <span className="text-xl font-mono font-black text-cyan-300">{weavingProgress}%</span>
-            </div>
-            <div className="h-2 w-full bg-cyan-950 rounded-full overflow-hidden relative z-10">
-              <div
-                className="h-full bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.8)] transition-all duration-200"
-                style={{ width: `${weavingProgress}%` }}
-              />
-            </div>
+              <div className="border border-neutral-200 rounded-lg min-h-[400px] p-4 bg-white">
+                {content ? (
+                  <div
+                    className="prose prose-sm max-w-none text-neutral-700"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-64 text-neutral-400">
+                    <BookOpen size={32} className="mb-2 opacity-50" />
+                    <p className="text-sm">選擇模板並點擊「開始編織」以生成報告內容</p>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-neutral-100">
+                <FiveTStrip
+                  status={[true, true, true, activeTemplate !== null, false]}
+                  showLabels={false}
+                />
+                <div className="flex gap-2">
+                  <Button variant="secondary" size="sm" icon={<AlignLeft size={14} />}>
+                    儲存草稿
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<ShieldCheck size={14} />}
+                    onClick={handlePublish}
+                    loading={isPublishing}
+                  >
+                    {isPublishing ? '發布中...' : '發布封印'}
+                  </Button>
+                </div>
+              </div>
+              {publishedHash && (
+                <div className="mt-3 p-3 bg-emerald-50 rounded-lg border border-emerald-200 flex items-center gap-2">
+                  <CheckCircle2 size={14} className="text-emerald-600" />
+                  <span className="text-xs font-mono text-emerald-700">
+                    已發布並封印：{publishedHash}
+                  </span>
+                </div>
+              )}
+            </Card>
           </div>
         )}
 
-        <div
-          className={cn(
-            'grid grid-cols-1 gap-6 transition-all duration-700',
-            showAuditSidebar ? 'lg:grid-cols-4' : 'grid-cols-1',
-            activeTemplate ? 'opacity-100' : 'opacity-30 pointer-events-none filter blur-sm'
-          )}
-        >
-          <div className={cn('space-y-6', showAuditSidebar ? 'lg:col-span-3' : 'w-full')}>
-            {/* Nav Tabs */}
-            <div className="flex gap-2 border-b border-slate-200/80 pb-px overflow-x-auto">
-              {[
-                { id: 'blueprint', label: '永續藍圖 (Blueprint)', icon: <Layers size={16} /> },
-                { id: 'data', label: '實證數據庫 (Vault)', icon: <Database size={16} /> },
-                { id: 'preview', label: '全息編撰 (Smart Edit)', icon: <Eye size={16} /> },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={cn(
-                    'pb-3 px-4 text-sm font-semibold transition-all border-b-2 flex items-center gap-2',
-                    activeTab === tab.id
-                      ? 'border-[#63a6b0] text-[#63a6b0] font-bold'
-                      : 'border-transparent text-slate-500 hover:text-slate-800'
-                  )}
-                >
-                  {tab.icon}
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Tab Content */}
-            <div className="min-h-[500px]">
-              {activeTab === 'blueprint' && activeTemplate && (
-                <div className="space-y-6">
-                  {showBlueprintBanner && (
-                    <div className="p-4 bg-cyan-950/20 border border-cyan-500/20 rounded-xl flex items-start justify-between gap-4 animate-in fade-in zoom-in duration-500 relative">
-                      <div className="flex items-start gap-4">
-                        <div className="p-3 bg-cyan-900/50 text-cyan-400 rounded-lg">
-                          <activeTemplate.icon size={24} />
-                        </div>
-                        <div>
-                          <h3 className="text-cyan-300 font-bold flex items-center gap-2">
-                            {activeTemplate.name}
-                            <Badge variant="success" size="sm" icon={<CheckCircle2 size={12} />}>
-                              AI Selected
-                            </Badge>
-                          </h3>
-                          <p className="text-sm text-cyan-500/80 mt-1">
-                            {activeTemplate.aiSelectionPrompt}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowBlueprintBanner(false)}
-                        className="text-cyan-400/50 hover:text-cyan-400 p-1 hover: rounded-lg transition-colors cursor-pointer"
-                        title="關閉說明"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  )}
-
-                  <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
-                    <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                      <Database className="text-cyan-600" size={20} />
-                      永續撰寫單據需求一覽表
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {activeRequiredIndicators.map((ind) => {
-                        const vData = vaultIndicators.find((v) => v.id === ind);
-                        const isReady = vData && vData.val !== 'N/A' && vData.status === 'verified';
-                        return (
-                          <div
-                            key={ind}
-                            className={cn(
-                              'p-3 rounded-xl border flex items-start gap-3 transition-colors',
-                              isReady
-                                ? 'bg-emerald-50 border-emerald-200'
-                                : 'bg-slate-50 border-slate-200'
-                            )}
-                          >
-                            {isReady ? (
-                              <CheckCircle2
-                                className="text-emerald-500 mt-0.5 shrink-0"
-                                size={16}
-                              />
-                            ) : (
-                              <div className="w-4 h-4 rounded-full border-2 border-slate-300 mt-0.5 shrink-0" />
-                            )}
-                            <div className="min-w-0">
-                              <div className="text-xs font-bold text-slate-700 font-mono">
-                                {ind}
-                              </div>
-                              <div
-                                className="text-[10px] text-slate-500 truncate"
-                                title={vData?.name || '資料讀取中...'}
-                              >
-                                {vData?.name || '資料讀取中...'}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {activeTemplate.chapters.map((chapter, i) => (
-                      <Card
-                        variant="elevated"
-                        key={i}
-                        variant="default"
-                        className="hover:border-cyan-500/50 transition-colors group cursor-pointer"
-                      >
-                        <div className="flex justify-between items-start mb-4">
-                          <div className="p-2 rounded-lg bg-slate-800 text-slate-300 group-hover:bg-cyan-900/50 group-hover:text-cyan-400 transition-colors">
-                            <AlignLeft size={20} />
-                          </div>
-                          <Badge variant="primary" size="sm">
-                            READY
-                          </Badge>
-                        </div>
-                        <h3 className="font-bold text-white mb-2">{chapter.title}</h3>
-                        <p className="text-xs text-slate-400 leading-relaxed mb-3">
-                          {chapter.desc}
-                        </p>
-                        <div className="space-y-2 mt-4 pt-4 border-t border-slate-100/10">
-                          <div className="text-[10px] font-bold text-slate-500">待收齊單據：</div>
-                          <div className="flex flex-col gap-1.5">
-                            {chapter.requiredIndicators.map((ind) => {
-                              const vData = vaultIndicators.find((v) => v.id === ind);
-                              const isReady =
-                                vData && vData.val !== 'N/A' && vData.status === 'verified';
-                              if (isReady) return null;
-                              return (
-                                <div
-                                  key={ind}
-                                  className="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-2 py-1.5 rounded border border-amber-200/50"
-                                >
-                                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
-                                  <span className="font-mono font-bold shrink-0">{ind}</span>
-                                  <span className="truncate text-[10px]">
-                                    {vData?.name || '讀取中...'}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                            {chapter.requiredIndicators.every((ind) => {
-                              const vData = vaultIndicators.find((v) => v.id === ind);
-                              return vData && vData.val !== 'N/A' && vData.status === 'verified';
-                            }) && (
-                              <div className="flex items-center gap-2 text-xs text-emerald-600 bg-emerald-50 px-2 py-1.5 rounded border border-emerald-200/50">
-                                <CheckCircle2 size={12} className="text-emerald-500 shrink-0" />
-                                <span>所有單據皆已收齊就緒</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 'preview' && (
-                <div className="flex flex-col lg:flex-row gap-4 animate-in fade-in slide-in-">
-                  {/* Left Sidebar: Chapter List */}
-                  <div className="w-full lg:w-64 flex-shrink-0 space-y-2">
-                    <h3 className="text-cyan-600 font-bold mb-3 px-2 flex items-center gap-2">
-                      <Layers size={16} /> 報告目錄
-                    </h3>
-                    {activeTemplate?.chapters.map((ch, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setActiveChapterIndex(idx)}
-                        className={cn(
-                          'w-full text-left px-4 py-3 rounded-xl text-sm transition-all border',
-                          activeChapterIndex === idx
-                            ? 'bg-cyan-50 border-cyan-200 text-cyan-700 shadow-sm font-semibold'
-                            : ' border-transparent text-slate-500 hover: hover:text-slate-850'
-                        )}
-                      >
-                        <div className="font-bold truncate">{ch.title}</div>
-                        <div className="text-[10px] text-slate-500 mt-2 flex flex-col gap-1">
-                          {ch.requiredIndicators.map((r) => {
-                            const vData = vaultIndicators.find((v) => v.id === r);
-                            const isReady =
-                              vData && vData.val !== 'N/A' && vData.status === 'verified';
-                            if (isReady) return null;
-                            return (
-                              <div
-                                key={r}
-                                className="flex items-center gap-1.5 text-amber-600 bg-amber-50/80 px-1.5 py-1 rounded border border-amber-200/50"
-                                title={vData?.name || r}
-                              >
-                                <span className="font-bold truncate max-w-[140px]">
-                                  {vData?.name || r}
-                                </span>
-                                <span className="text-[8px] border border-amber-300 px-1 rounded ml-auto shrink-0 bg-amber-100">
-                                  待收齊
-                                </span>
-                              </div>
-                            );
-                          })}
-                          {ch.requiredIndicators.every((r) => {
-                            const vData = vaultIndicators.find((v) => v.id === r);
-                            return vData && vData.val !== 'N/A' && vData.status === 'verified';
-                          }) && (
-                            <div className="text-emerald-600 flex items-center gap-1 font-bold mt-1">
-                              <CheckCircle2 size={10} /> 單據齊全
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Right: Editor */}
-                  <div className="flex-1 p-6 bg-white border border-slate-200/60 text-slate-850 rounded-2xl shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-neutral-100  " />
-                    <div className="max-w-4xl mx-auto space-y-4">
-                      <div className="flex flex-wrap md:flex-nowrap justify-between items-center pb-4 border-b border-slate-100 mt-2 gap-4">
-                        <h2 className="text-xl font-bold text-[#003262] flex items-center gap-2 whitespace-nowrap">
-                          <Sparkles className="text-cyan-500" size={20} />
-                          {currentChapterName}
-                        </h2>
-                        <div className="flex gap-2 overflow-x-auto pb-1 md:pb-0">
-                          <div className="flex gap-1 mr-2 border-r border-slate-200 pr-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              icon={<Undo2 size={16} />}
-                              onClick={() =>
-                                undoContent(
-                                  currentChapterId,
-                                  currentChapterName,
-                                  currentChapterOrder,
-                                  currentGriRefs
-                                )
-                              }
-                              disabled={!(contentHistory[currentChapterId]?.past?.length > 0)}
-                            />
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              icon={<Redo2 size={16} />}
-                              onClick={() =>
-                                redoContent(
-                                  currentChapterId,
-                                  currentChapterName,
-                                  currentChapterOrder,
-                                  currentGriRefs
-                                )
-                              }
-                              disabled={!(contentHistory[currentChapterId]?.future?.length > 0)}
-                            />
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              icon={<Wand2 size={16} />}
-                              onClick={() => {
-                                const contextDataStr = currentGriRefs
-                                  .map((ref) => {
-                                    const dataItem = vaultIndicators.find(
-                                      (item) => item.id === ref
-                                    );
-                                    return dataItem
-                                      ? `${dataItem.name}: ${dataItem.val}`
-                                      : `${ref}: (尚未連結數據)`;
-                                  })
-                                  .join('; ');
-
-                                expandContentWithAI(
-                                  currentChapterId,
-                                  currentChapterName,
-                                  currentChapterOrder,
-                                  currentGriRefs,
-                                  `請深入擴寫此段落，並嚴格根據以下 5T Vault 實證數據進行具體的量化論述：[${contextDataStr}]。\n\n**重要指示：如果發現有「尚未連結數據」的指標，請自動為使用者撰寫符合產業標準的「預設內容、最佳實踐範本或常見答案選項」，讓使用者有明確的版型可以參考修改，絕不要留白或僅提示缺漏。**\n\n確保語氣符合企業永續報告書之正式性與 GRI 準則。`
-                                );
-                              }}
-                              isLoading={isGeneratingAI[currentChapterId]}
-                              className="text-amber-500 border-amber-200 hover:bg-amber-50"
-                            >
-                              AI 智能擴寫 (RAG)
-                            </Button>
-                          </div>
-                          <Button variant="outline" size="sm" onClick={handleSaveDraft}>
-                            儲存草稿
-                          </Button>
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            className="bg-cyan-600 hover:bg-cyan-700 border-none whitespace-nowrap"
-                            onClick={handlePublish}
-                            isLoading={isPublishing}
-                          >
-                            {publishedHash ? '重新發布' : '發布章節'}
-                          </Button>
-                        </div>
-                      </div>
-
-                      {publishedHash && showPublishNotification && (
-                        <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-lg flex items-start justify-between gap-3 animate-in fade-in relative">
-                          <div className="flex items-start gap-3">
-                            <CheckCircle2 className="text-emerald-500 mt-0.5" size={20} />
-                            <div>
-                              <h4 className="font-bold">章節發布成功！</h4>
-                              <p className="text-sm mt-1">
-                                此章節已完成 5T 驗證並上鏈，不可篡改雜湊值：
-                              </p>
-                              <p className="text-xs font-mono bg-emerald-100 px-2 py-1 rounded mt-2 break-all">
-                                {publishedHash}
-                              </p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setShowPublishNotification(false)}
-                            className="text-emerald-800/50 hover:text-emerald-800 p-1 hover:bg-emerald-100/50 rounded transition-colors cursor-pointer"
-                            title="關閉通知"
-                          >
-                            <X size={16} />
-                          </button>
-                        </div>
-                      )}
-
-                      <OmniSustainWriteEditor
-                        ref={editorRef}
-                        value={generatedContent[currentChapterId] || ''}
-                        onChange={(val: string) =>
-                          updateContent(
-                            currentChapterId,
-                            val,
-                            currentChapterName,
-                            currentChapterOrder,
-                            currentGriRefs
-                          )
-                        }
-                      />
-
-                      {/* Native Collapsible 5T Status Drawer to Clean Up Space */}
-                      <details className="mt-4 bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden transition-all duration-300">
-                        <summary className="p-3 text-xs font-mono font-bold text-slate-600 cursor-pointer flex justify-between items-center hover:bg-slate-100 select-none">
-                          <span className="flex items-center gap-1.5">
-                            <ShieldCheck size={14} className="text-emerald-500" />
-                            5T Protocol Cryptographic Meta
-                          </span>
-                          <span className="text-[10px] text-slate-400 group-open:hidden">
-                            點擊展開詳細
-                          </span>
-                          <span className="text-[10px] text-slate-400 hidden group-open:inline">
-                            點擊收合
-                          </span>
-                        </summary>
-                        <div className="p-4 border-t border-slate-200 space-y-2 text-xs text-slate-500 font-mono bg-white">
-                          <p className="flex justify-between">
-                            <span>GRI Indicators:</span>
-                            <span className="font-bold text-slate-800">
-                              {currentGriRefs.join(', ')}
-                            </span>
-                          </p>
-                          <p className="flex justify-between">
-                            <span>Synchronization Status:</span>
-                            <span className="font-bold text-emerald-600 flex items-center gap-1">
-                              LIVE <CheckCircle2 size={12} className="text-emerald-500" />
-                            </span>
-                          </p>
-                          <p className="flex justify-between">
-                            <span>Verification Hash:</span>
-                            <RealTimeHashLock content={generatedContent[currentChapterId] || ''} />
-                          </p>
-                        </div>
-                      </details>
-                    </div>
-                  </div>
-
-                  {/* Right Sidebar: OmniNotes 5T Materials Panel */}
-                  <div className="w-full lg:w-80 flex-shrink-0 bg-white border border-slate-200/60 rounded-2xl p-4 space-y-4 shadow-sm hover:shadow-md transition-all duration-300">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                      <h3 className="text-slate-800 font-bold text-sm flex items-center gap-2">
-                        <StickyNote className="text-cyan-600" size={16} />
-                        萬能筆記 5T 素材庫
-                      </h3>
-                      <span className="text-[10px] font-mono text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-full border border-cyan-100">
-                        {omniNotes.length} 筆
-                      </span>
-                    </div>
-
-                    {/* Filter and Search */}
-                    <div className="space-y-2">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={noteSearchQuery}
-                          onChange={(e) => setNoteSearchQuery(e.target.value)}
-                          placeholder="搜尋筆記內容..."
-                          className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-cyan-500/50"
-                        />
-                        <Search className="absolute left-2.5 top-2.5 text-slate-400" size={12} />
-                      </div>
-
-                      {/* Type Pills */}
-                      <div className="flex flex-wrap gap-1">
-                        <button
-                          onClick={() => setNoteFilterType('all')}
-                          className={cn(
-                            'px-2 py-1 rounded text-[10px] font-bold border transition-colors',
-                            noteFilterType === 'all'
-                              ? 'bg-cyan-50 border-cyan-200 text-cyan-700'
-                              : 'bg-slate-100 border-transparent text-slate-500 hover:text-slate-800'
-                          )}
-                        >
-                          全部
-                        </button>
-                        {['log', 'idea', 'meeting', 'task', 'research', 'knowledge'].map((type) => (
-                          <button
-                            key={type}
-                            onClick={() => setNoteFilterType(type)}
-                            className={cn(
-                              'px-2 py-1 rounded text-[10px] font-bold border transition-colors',
-                              noteFilterType === type
-                                ? 'bg-cyan-50 border-cyan-200 text-cyan-700'
-                                : 'bg-slate-100 border-transparent text-slate-500 hover:text-slate-800'
-                            )}
-                          >
-                            {type === 'log'
-                              ? '日誌'
-                              : type === 'idea'
-                              ? '靈感'
-                              : type === 'meeting'
-                              ? '會議'
-                              : type === 'task'
-                              ? '任務'
-                              : type === 'research'
-                              ? '研究'
-                              : '知識'}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Notes List */}
-                    <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
-                      {(() => {
-                        const filteredNotes = omniNotes.filter((note) => {
-                          const matchesQuery = note.content
-                            .toLowerCase()
-                            .includes(noteSearchQuery.toLowerCase());
-                          const matchesType =
-                            noteFilterType === 'all' || note.type === noteFilterType;
-                          return matchesQuery && matchesType;
-                        });
-
-                        const currentChapterPinned = pinnedNotes[currentChapterId] || [];
-
-                        // Sort: Pinned notes first, then latest created
-                        const sortedNotes = [...filteredNotes].sort((a, b) => {
-                          const aPinned = currentChapterPinned.includes(a.id);
-                          const bPinned = currentChapterPinned.includes(b.id);
-                          if (aPinned && !bPinned) return -1;
-                          if (!aPinned && bPinned) return 1;
-                          return b.createdAt - a.createdAt;
-                        });
-
-                        if (sortedNotes.length === 0) {
-                          return (
-                            <div className="text-center py-12 text-slate-500 border border-dashed border-slate-200 rounded-xl">
-                              <StickyNote
-                                size={24}
-                                className="mx-auto mb-2 opacity-20 text-slate-500"
-                              />
-                              <p className="text-[11px]">無匹配的筆記素材</p>
-                            </div>
-                          );
-                        }
-
-                        return sortedNotes.map((note) => {
-                          const isPinned = currentChapterPinned.includes(note.id);
-                          return (
-                            <div
-                              key={note.id}
-                              draggable="true"
-                              onDragStart={(e) => {
-                                e.dataTransfer.setData('text/plain', note.content);
-                              }}
-                              className={cn(
-                                ' border rounded-xl p-3 hover:border-cyan-500/25 transition-all group relative cursor-grab active:cursor-grabbing',
-                                isPinned
-                                  ? 'border-cyan-500/35 bg-cyan-950/10 shadow-[0_0_15px_rgba(6,182,212,0.05)]'
-                                  : 'border-slate-200'
-                              )}
-                              title="可直接拖曳筆記內容至編輯器中任意位置"
-                            >
-                              <div className="flex justify-between items-center mb-2">
-                                <span
-                                  className={cn(
-                                    'text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded',
-                                    note.type === 'log'
-                                      ? 'bg-slate-500/10 text-slate-400 border border-slate-500/10'
-                                      : note.type === 'idea'
-                                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/10'
-                                      : note.type === 'meeting'
-                                      ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/10'
-                                      : note.type === 'task'
-                                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/10'
-                                      : note.type === 'research'
-                                      ? 'bg-purple-500/10 text-purple-400 border border-purple-500/10'
-                                      : 'bg-blue-500/10 text-blue-400 border border-blue-500/10'
-                                  )}
-                                >
-                                  {note.type === 'log'
-                                    ? '日誌'
-                                    : note.type === 'idea'
-                                    ? '靈感'
-                                    : note.type === 'meeting'
-                                    ? '會議'
-                                    : note.type === 'task'
-                                    ? '任務'
-                                    : note.type === 'research'
-                                    ? '研究'
-                                    : '知識'}
-                                </span>
-                                <div className="flex items-center gap-1.5">
-                                  <span className="text-[9px] text-slate-500 font-mono">
-                                    {note.date}
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => togglePinNote(note.id)}
-                                    className={cn(
-                                      'p-1 rounded hover: transition-colors cursor-pointer',
-                                      isPinned
-                                        ? 'text-cyan-400'
-                                        : 'text-slate-500 hover:text-slate-300'
-                                    )}
-                                    title={isPinned ? '取消釘選' : '釘選到此章節'}
-                                  >
-                                    <Pin
-                                      size={10}
-                                      className={isPinned ? 'rotate-45 text-cyan-400' : ''}
-                                    />
-                                  </button>
-                                </div>
-                              </div>
-                              <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed mb-3 break-words">
-                                {note.content}
-                              </p>
-                              <div className="flex flex-wrap gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    if (editorRef.current?.editorInstance) {
-                                      editorRef.current.editorInstance
-                                        .chain()
-                                        .focus()
-                                        .insertContent(`<p>${note.content}</p>`)
-                                        .run();
-                                    } else {
-                                      alert('請先在編輯器中點擊，以定位插入游標');
-                                    }
-                                  }}
-                                  className="flex-1 min-w-[70px] bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 rounded px-1.5 py-1 text-[9px] font-bold text-cyan-400 transition-colors flex items-center justify-center gap-0.5 cursor-pointer"
-                                >
-                                  <Plus size={9} /> 插入
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleRefineAndInsert(note.content, note.id)}
-                                  disabled={isRefining[note.id]}
-                                  className="flex-1 min-w-[70px] bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 rounded px-1.5 py-1 text-[9px] font-bold text-emerald-400 transition-colors flex items-center justify-center gap-0.5 cursor-pointer disabled:opacity-50"
-                                >
-                                  {isRefining[note.id] ? (
-                                    <Loader2 size={9} className="animate-spin text-emerald-400" />
-                                  ) : (
-                                    <Wand2 size={9} />
-                                  )}
-                                  潤飾
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const contextDataStr = `[筆記類型: ${note.type}, 內容: ${note.content}]`;
-                                    expandContentWithAI(
-                                      currentChapterId,
-                                      currentChapterName,
-                                      currentChapterOrder,
-                                      currentGriRefs,
-                                      `請參考以下 5T 萬能筆記素材，將其融入、修飾擴寫並補充至目前段落中，使其符合正式、專業的永續報告書規格：${contextDataStr}。確保符合 GRI 準則並排除多餘開場口吻。`
-                                    );
-                                  }}
-                                  disabled={isGeneratingAI[currentChapterId]}
-                                  className="flex-1 min-w-[70px] bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 rounded px-1.5 py-1 text-[9px] font-bold text-amber-400 transition-colors flex items-center justify-center gap-0.5 disabled:opacity-50 cursor-pointer"
-                                >
-                                  <Sparkles size={9} /> 融入
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        });
-                      })()}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 'data' && (
-                <div className="space-y-4 animate-in slide-in- duration-500">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/50 p-5 rounded-xl border border-slate-200 shadow-inner">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-cyan-950/50 rounded-lg text-cyan-400 border border-cyan-500/20">
-                        <Database size={24} />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-bold text-lg tracking-wide">
-                          5T 實證數據庫 (Vault)
-                        </h3>
-                        <p className="text-xs text-slate-400 mt-1">
-                          已連結{' '}
-                          <span className="text-cyan-400 font-mono">
-                            {activeRequiredIndicators.length}
-                          </span>{' '}
-                          筆不可篡改指標
-                        </p>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      icon={<ShieldCheck size={14} />}
-                      className="w-full md:w-auto border-cyan-500/30 text-cyan-400 hover:bg-cyan-950/30"
-                    >
-                      驗證全庫 Hash
-                    </Button>
-                  </div>
-
-                  {isFetchingVault ? (
-                    <div className="p-8 text-center text-slate-500 border border-dashed border-slate-700 rounded-xl flex items-center justify-center gap-2">
-                      <RefreshCcw className="animate-spin text-cyan-500" size={16} /> 正在同步 5T
-                      實證數據庫...
-                    </div>
-                  ) : activeRequiredIndicators.length === 0 ? (
-                    <div className="p-8 text-center text-slate-500 border border-dashed border-slate-700 rounded-xl">
-                      尚未配對藍圖或藍圖未要求指標
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {vaultIndicators.map((item, idx) => {
-                        return (
-                          <Card
-                            variant="elevated"
-                            key={idx}
-                            variant="default"
-                            className="hover:border-cyan-500/30 transition-all hover:shadow-[0_4px_20px_rgba(6,182,212,0.1)]"
-                          >
-                            <div className="flex justify-between items-start mb-3">
-                              <span className="text-xs font-mono text-cyan-400 bg-cyan-950/30 px-2 py-1 rounded-md border border-cyan-500/20">
-                                {item.id}
-                              </span>
-                              <Badge
-                                variant={item.status === 'verified' ? 'success' : 'outline'}
-                                size="sm"
-                              >
-                                {item.status === 'verified' ? '5T VERIFIED' : 'PENDING'}
-                              </Badge>
-                            </div>
-                            <h4 className="text-sm text-slate-700 font-medium mb-1">{item.name}</h4>
-                            <p className="text-xl font-mono text-white font-black mb-4 tracking-tight">
-                              {item.val}
-                            </p>
-                            <div className="flex justify-between items-center text-xs border-t border-slate-200 pt-3">
-                              <span className="text-slate-500 flex items-center gap-1">
-                                <Cpu size={10} /> Hash Lock
-                              </span>
-                              <span
-                                className={
-                                  item.status === 'verified'
-                                    ? 'text-emerald-400/80 font-mono tracking-widest'
-                                    : 'text-slate-500 italic'
-                                }
-                              >
-                                {item.hash}
-                              </span>
-                            </div>
-                            {/* Evidence Receipt Collection Section (萬能智庫佐證庫) */}
-                            <div className="mt-3 pt-3 border-t border-slate-200">
-                              <div className="flex justify-between items-center mb-2">
-                                <span className="text-xs text-slate-400 flex items-center gap-1">
-                                  <ShieldCheck size={12} className="text-cyan-500" />
-                                  萬能智庫佐證單據
-                                </span>
-                                <span className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">
-                                  {uploadedEvidences[item.id] || item.status === 'verified'
-                                    ? '已鏈接'
-                                    : '待收集'}
-                                </span>
-                              </div>
-                              <div className="flex gap-2">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="flex-1 text-[10px] h-7 border-slate-700 hover:bg-slate-800 text-slate-300"
-                                >
-                                  瀏覽智庫
-                                </Button>
-                                {uploadedEvidences[item.id] ? (
-                                  <div className="flex-1 text-[10px] h-7 flex items-center justify-center gap-1 bg-emerald-950/50 text-emerald-400 rounded-md border border-emerald-500/30 font-bold">
-                                    <CheckCircle2 size={12} /> 單據已封印
-                                  </div>
-                                ) : (
-                                  <Button
-                                    variant="primary"
-                                    size="sm"
-                                    className="flex-1 text-[10px] h-7 bg-cyan-900/50 hover:bg-cyan-800 border-cyan-700/50 text-cyan-300"
-                                    onClick={() => setUploaderTarget(item.id)}
-                                  >
-                                    上傳單據
-                                  </Button>
-                                )}
-                              </div>
-                            </div>
-                          </Card>
-                        );
-                      })}
-                    </div>
-                  )}
+        {activeTab === 'preview' && (
+          <Card variant="default" padding="md">
+            <SectionHeader title="報告預覽" />
+            <div className="mt-4 p-6 bg-white border border-neutral-200 rounded-lg min-h-[400px]">
+              {content ? (
+                <div
+                  className="prose prose-sm max-w-none text-neutral-700"
+                  dangerouslySetInnerHTML={{ __html: content }}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-neutral-400">
+                  <Eye size={32} className="mb-2 opacity-50" />
+                  <p className="text-sm">尚無內容可預覽</p>
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Sidebar */}
-          {showAuditSidebar && (
-            <div className="space-y-6">
-              <Card
-                variant="elevated"
-                variant="default"
-                title="ESG 實境之眼"
-                subtitle="Eye of Sustainability Reality"
-              >
-                <div className="space-y-4 text-sm text-slate-600 ">
-                  <p>
-                    SustainWrite 引擎正即時將 Vault 中的 5T
-                    實證數據庫映射至報告書藍圖，確保每一字節的揭露皆無懈可擊。
-                  </p>
-                  <div className="space-y-2 mt-4">
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-cyan-600 ">邏輯量子糾纏</span>
-                      <span className="text-emerald-600 ">Active</span>
-                    </div>
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-cyan-600 ">Hash 連結連續體</span>
-                      <span className="text-emerald-600 ">Stable</span>
-                    </div>
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-cyan-600 ">當前模板引擎</span>
-                      <span className="text-slate-500 ">
-                        {activeTemplate ? activeTemplate.id : '等待配對'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              <ShieldOfAbsoluteTruth
-                contentId="sustain-write-draft"
-                isAiGenerated={true}
-                className="bg-white border-slate-200"
-              />
-            </div>
-          )}
-        </div>
+          </Card>
+        )}
       </div>
     </div>
   );

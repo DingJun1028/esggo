@@ -20,6 +20,10 @@ function getModel() {
     const openrouter = createOpenAI({
       baseURL: OPENROUTER_BASE_URL,
       apiKey: apiKey,
+      headers: {
+        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://esggo.vercel.app',
+        'X-Title': 'ESGGO Platform',
+      },
     });
     return openrouter(process.env.OPENROUTER_MODEL || DEFAULT_OPENROUTER_MODEL);
   }

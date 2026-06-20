@@ -21,9 +21,9 @@ import {
   WifiOff,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Card, CardContent } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { Card, CardContent } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
+import { Badge } from '@/components/ui/v2/Input';
 import {
   useOmniAgentStream,
   type StreamEvent,
@@ -147,10 +147,7 @@ function MissionCard({
           {/* Progress bar */}
           {status === 'running' && (
             <div className="h-1 rounded-full overflow-hidden mb-3">
-              <div
-                className="h-full rounded-full"
-                style={{ background: mission.color }}
-              />
+              <div className="h-full rounded-full" style={{ background: mission.color }} />
             </div>
           )}
 
@@ -213,35 +210,31 @@ function EventLog({ events }: { events: StreamEvent[] }) {
       className="space-y-2 max-h-[400px] overflow-y-auto pr-1"
       style={{ scrollbarWidth: 'thin' }}
     >
-      
-        {events.slice(0, 30).map((evt) => (
-          <div
-            key={evt.id}
-            className="flex gap-3 py-2 border-b border-white/[0.03] last:border-0"
-          >
-            <span className="text-[9px] text-slate-600 font-mono shrink-0 pt-0.5 w-16">
-              {new Date(evt.timestamp).toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-              })}
-            </span>
-            <div className="shrink-0 pt-0.5">
-              {typeIcons[evt.event] || <Activity size={10} className="text-slate-500" />}
-            </div>
-            <div className="min-w-0">
-              <span
-                className={cn('text-[10px] font-bold', typeColors[evt.event] || 'text-slate-400')}
-              >
-                {evt.event}
-              </span>
-              <p className="text-[10px] text-slate-500 truncate">
-                {JSON.stringify(evt.payload).substring(0, 120)}
-              </p>
-            </div>
+      {events.slice(0, 30).map((evt) => (
+        <div key={evt.id} className="flex gap-3 py-2 border-b border-white/[0.03] last:border-0">
+          <span className="text-[9px] text-slate-600 font-mono shrink-0 pt-0.5 w-16">
+            {new Date(evt.timestamp).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            })}
+          </span>
+          <div className="shrink-0 pt-0.5">
+            {typeIcons[evt.event] || <Activity size={10} className="text-slate-500" />}
           </div>
-        ))}
-      
+          <div className="min-w-0">
+            <span
+              className={cn('text-[10px] font-bold', typeColors[evt.event] || 'text-slate-400')}
+            >
+              {evt.event}
+            </span>
+            <p className="text-[10px] text-slate-500 truncate">
+              {JSON.stringify(evt.payload).substring(0, 120)}
+            </p>
+          </div>
+        </div>
+      ))}
+
       {events.length === 0 && (
         <p className="text-[10px] text-slate-600 text-center py-8">
           Awaiting events from OmniAgent Bus...

@@ -23,8 +23,8 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/componen
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
 import { SectionHeader } from '@/components/ui/v2/Input';
-import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
-import OmniAgentIntegrations from '@/components/omni/OmniAgentIntegrations';
+import { FiveTStrip } from '@/components/ui/v2/FiveTStrip';
+import { StatusDot } from '@/components/ui/v2/StatusDot';
 
 /* ─── Types ─── */
 interface OmniTableDataRow {
@@ -251,7 +251,7 @@ export default function DashboardPage() {
                 <span className="text-2xl font-black text-neutral-900">{kpi.value}</span>
                 <span className="text-sm text-neutral-400">{kpi.unit}</span>
               </div>
-              <Protocol5TStrip status={kpi.fiveTStatus} />
+              <FiveTStrip status={kpi.fiveTStatus} showLabels={false} size="sm" />
             </Card>
           ))}
         </div>
@@ -275,8 +275,18 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ─── OmniAgent Integrations ─── */}
-        <OmniAgentIntegrations />
+        {/* ─── Agent Status ─── */}
+        <div>
+          <SectionHeader title="代理狀態" />
+          <div className="grid grid-cols-3 gap-3">
+            {['Sentinel', 'Analyst', 'Writer'].map((agent) => (
+              <Card key={agent} variant="outlined" padding="sm" className="text-center">
+                <StatusDot status="active" pulse />
+                <p className="text-xs font-medium text-neutral-600 mt-1">{agent}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
 
         {/* ─── Data Ledger Table ─── */}
         <div>

@@ -24,8 +24,8 @@ import {
   Layers,
   GitBranch,
 } from 'lucide-react';
-import { Card, CardContent } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
+import { Card, CardContent } from '@/components/ui/v2/Card';
+import { Button } from '@/components/ui/v2/Button';
 import { cn } from '../../lib/utils';
 import { fadeIn, scaleIn, staggerContainer, slideInRight } from '@/lib/animations';
 
