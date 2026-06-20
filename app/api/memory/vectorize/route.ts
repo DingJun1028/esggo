@@ -2,13 +2,16 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Setup Supabase Client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export async function POST(req: Request) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase URL or Key is missing' }, { status: 500 });
+  }
   try {
     const { shard_id } = await req.json();
     if (!shard_id) {
