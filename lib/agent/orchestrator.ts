@@ -348,12 +348,11 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
 
       artifactData = generateMockArtifact(task, execution);
       artifactData.content = `## 🌌 全域彙整永續報告 (GRI Standard)\n\n${draftContent}\n\n> 🕊️ **OmniCore 確信**：本章節由 5T 誠信組件自動生成，所有數據具備不可篡改性。`;
-    } else if (task.taskType === 'email_processing') {
-      console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
+} else if (task.taskType === 'email_processing') {
+       console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
 
-      const { getOmniAgentCredentials } = await import('./omni-agent-store');
-      // For demonstration, we'll try to fetch for the current actor or fallback
-      const creds = await getOmniAgentCredentials(task.actorId);
+       const { getHermesCredentials } = await import('./hermes-store');
+       const creds = await getHermesCredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
       let emailResult = '';
