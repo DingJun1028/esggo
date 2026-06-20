@@ -25,7 +25,7 @@ evidence: "docs\wiki\System-Core-Architecture.md"
 
 9. UI/UX 視覺與 RWD 基準 (Visual & RWD Baseline)
    桌面版佈局： 採用標準企業級 SaaS 的「左側固定導航欄 + 頂部全局操作區 + 右側主內容區」佈局。主內容區多採用 12 欄 Bento Grid 或左右雙欄佈局，確保資訊密度與可讀性。
-   核心液態玻璃元件： BrandHeader (全局導航與通知)、BrandSidebar (模組切換)、BrandDataTable (數據展示與篩選)、BrandForm (數據輸入與編輯)、BrandModal (彈出式任務流)、BrandToast (即時反饋通知)。所有核心卡片與容器均採用 glassBg 效果，提供現代感與層次感。
+   核心液態玻璃元件 (OmniCore Alignment)： 系統已於 v8.5.2 透過 Jules Karma Engine 執行「萬能至尊對齊 (Universal to Omni Alignment)」，全面捨棄舊版 v2 組件。現行核心元件包含 `OmniBaseCard` (玻璃態卡片)、`OmniBaseTable` (5T 溯源表格)、`OmniButton` 與 `OmniBadge`。所有元件原生支援 `omniHeart` 屬性，能即時反映底層數據的 ZKP (零知識證明) 與 Hash Lock 狀態。
    行動端適配 (RWD)： < 768px 時，左側導航欄自動收合為「漢堡選單」，並將核心模組入口轉化為 Mobile Bottom Navigation (底部 Tab 欄)，方便單手操作。複雜表格自動轉化為「堆疊式資料卡片 (Stacked Cards)」或提供橫向滾動。所有輸入表單元素必須確保觸控友善，避免過小的點擊區域。
 
 10. 核心邏輯與 5T 協定 (Logic & 5T Protocol)
@@ -40,6 +40,7 @@ evidence: "docs\wiki\System-Core-Architecture.md"
   [T1 Tangible 具體]：
 - **ESG 數據層**：將抽象的環境、社會、治理議題，透過標準化的數據模型與指標（如 GRI, ISSB）具體化為可量化的數據點。
 - **Materiality 模組**：將雙重重大性評估結果，具體化為可視化的象限氣泡圖，使策略決策有明確依據。
+- **OmniCore UI 視覺化 (v8.5.2 升級)**：透過 `omniHeart` 脈動與液態玻璃 (Liquid Glass) 特效，將抽象的 5T 誠信狀態化為具體的視覺回饋。例如，當資料達成 Golden Sync 時，`OmniBaseCard` 與 `OmniBaseTable` 會發出代表信任與透明的金色或青色光譜，讓用戶「一眼即見」數據安全狀態。
   [T2 Traceable 追溯]：
 - **Audit Log**：系統對所有關鍵操作（如數據修改、文件上傳、報告發佈）自動生成不可篡改的日誌，記錄操作者、時間、內容與 IP 地址，確保操作行為可追溯。
 - **Evidence Vault**：所有數據點均可追溯至其原始佐證文件，並透過雙向連結確保數據與證據的一致性，便於稽核追溯。
