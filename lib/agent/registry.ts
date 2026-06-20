@@ -195,6 +195,18 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     version: '1.0.0',
     enabled: true,
   },
+  {
+    skillKey: 'hermes_drive_archival',
+    skillName: 'OmniAgent 雲端硬碟自動歸檔',
+    taskType: 'file_processing',
+    description: '整合 Google Drive，自動掃描與歸檔 ESG 相關文件至 Evidence Vault。',
+    allowedDataScopes: ['google_workspace_auth', 'drive_files'],
+    outputArtifactType: 'drive_archival_log',
+    requiresHumanReview: false,
+    riskLevel: 'low',
+    version: '1.0.0',
+    enabled: true,
+  },
 ];
 
 export function getSkill(skillKey: string): SkillRegistryItem | undefined {
@@ -220,6 +232,7 @@ export const TASK_TYPE_META: Record<string, { label: string; color: string; icon
   ai_ops: { label: 'AI 模型調優', color: '#3B82F6', icon: 'Cpu' },
   email_processing: { label: '郵件自動處理', color: '#EF4444', icon: 'Mail' },
   calendar_scheduling: { label: '行事曆自動排程', color: '#22C55E', icon: 'Calendar' },
+  file_processing: { label: '檔案自動處理', color: '#F59E0B', icon: 'HardDrive' },
 };
 
 export const STATUS_META: Record<string, { label: string; color: string; bg: string }> = {
