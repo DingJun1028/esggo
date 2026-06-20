@@ -1,6 +1,6 @@
+'use client';
 import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
-'use client';
 
 import React, { useState } from 'react';
 
@@ -107,7 +107,6 @@ export function OmniTable({ data, onSealAction, omniHeart }: OmniTableProps) {
         {filteredData.map((row) => (
           <div
             key={row.id}
-            layout
             className={`group rounded-2xl border transition-all duration-300 ${
               row.status === 'Void' 
                 ? 'bg-slate-900/50 border-slate-800' 

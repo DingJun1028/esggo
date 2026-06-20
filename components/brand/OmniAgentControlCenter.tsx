@@ -1,6 +1,6 @@
+'use client';
 import { OmniComponentHeart } from '@esggo/types';
 // @ts-nocheck
-'use client';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -197,8 +197,8 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                   </div>
                   <div className="h-1.5 w-full rounded-full overflow-hidden">
                     <div
-                      animate={{ width: `${rs * 100}%` }}
-                      className="h-full bg-california-gold"
+                      className="h-full bg-california-gold transition-all duration-1000"
+                      style={{ width: `${rs * 100}%` }}
                     />
                   </div>
                   <p className="text-[10px] text-blue-100/60 font-bold uppercase text-center">
@@ -241,8 +241,8 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                         </p>
                         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                           <div
-                            animate={{ width: `${streamStatus.ren}%` }}
-                            className="h-full bg-berkeley-blue"
+                            className="h-full bg-berkeley-blue transition-all duration-1000"
+                            style={{ width: `${streamStatus.ren}%` }}
                           />
                         </div>
                       </div>
@@ -263,8 +263,8 @@ export default function OmniAgentControlCenter({ isOpen, onClose }: OmniAgentCon
                         </p>
                         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                           <div
-                            animate={{ width: `${streamStatus.du}%` }}
-                            className="h-full bg-california-gold"
+                            className="h-full bg-california-gold transition-all duration-1000"
+                            style={{ width: `${streamStatus.du}%` }}
                           />
                         </div>
                       </div>

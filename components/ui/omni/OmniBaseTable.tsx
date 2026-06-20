@@ -2,6 +2,7 @@ import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { cn } from '../../../lib/utils';
 import { ShieldCheck } from 'lucide-react';
+import { useThemeStore } from '../../../lib/theme-store';
 
 export interface OmniBaseTableColumn<T> {
   key: string;
@@ -26,14 +27,18 @@ export function OmniBaseTable<T extends { id?: string | number }>({
   omniHeart,
   ...props
 }: OmniBaseTableProps<T>) {
+  const { omniTheme } = useThemeStore();
+
   return (
     <div className={cn(
-      "w-full overflow-x-auto rounded-lg border transition-all duration-500 relative",
-      omniHeart ? (
-        omniHeart.resonanceState === 1.0 
-          ? "border-[#ffd700]/30 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-[#ffd700]/5" 
-          : "border-[#63a6b0]/30 shadow-[0_0_20px_rgba(99,166,176,0.1)] bg-[#63a6b0]/5"
-      ) : "border-[var(--theme-border)] bg-[var(--theme-base)]",
+      "w-full overflow-x-auto rounded-lg transition-all duration-500 relative",
+      omniTheme === 'omnicore'
+        ? (omniHeart 
+            ? (omniHeart.resonanceState === 1.0 
+                ? "border border-[#ffd700]/30 shadow-[0_0_20px_rgba(255,215,0,0.15)] bg-[#ffd700]/5" 
+                : "border border-[#63a6b0]/30 shadow-[0_0_20px_rgba(99,166,176,0.1)] bg-[#63a6b0]/5")
+            : "border border-[var(--theme-border)] bg-[var(--theme-base)]")
+        : "border border-slate-200 bg-white shadow-sm", // V2 Utility Mode
       className
     )}>
       {omniHeart && (

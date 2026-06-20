@@ -9,8 +9,10 @@ import { OmniStatusDot } from '../../../components/ui/omni/OmniStatusDot';
 import { OmniBadge } from '../../../components/ui/omni/OmniBadge';
 import { OmniBaseCard } from '../../../components/ui/omni/OmniBaseCard';
 import { supabase } from '@/lib/db/supabase';
+import { useThemeStore } from '../../../lib/theme-store';
 
 export default function MetricsPage() {
+  const { omniTheme } = useThemeStore();
   const [metrics, setMetrics] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -254,7 +256,11 @@ export default function MetricsPage() {
   };
 
   return (
-    <div className="p-8 space-y-8 animate-fade-in text-[var(--theme-text)] min-h-screen bg-[var(--theme-base)]">
+    <div className={`p-8 space-y-8 animate-fade-in min-h-screen ${
+      omniTheme === 'omnicore' 
+        ? 'text-[var(--theme-text)] bg-[var(--theme-base)]' 
+        : 'text-slate-800 bg-[#FAF9F6]'
+    }`}>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold tracking-widest text-[var(--theme-primary)]">
