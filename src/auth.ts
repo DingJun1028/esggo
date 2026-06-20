@@ -1,4 +1,3 @@
-import { writeFileSync } from 'fs';
 import * as crypto from 'crypto';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -13,10 +12,13 @@ interface AuthorizationContext {
 interface AuthResult {
   success: boolean;
   error?: string;
+  errorCode?: 'MISSING_TOKEN' | 'INVALID_TOKEN' | 'EXPIRED_TOKEN' | 'EXTERNAL_VALIDATION_FAILED' | 'SERVER_ERROR';
   expiresAt?: number;
 }
 
-// ─── State ───────────────────────────────────────────────────────────────────
+// ─── State (in-memory cache, per-process) ────────────────────────────────────
+// NOTE: This cache is per-server-instance. For multi-instance deployments,
+// use a shared session store (Redis, database) instead.
 
 const authContext: AuthorizationContext = {
   isAuthorized: false,
@@ -25,26 +27,31 @@ const authContext: AuthorizationContext = {
   tokenExpiryTime: null,
 };
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Safety Checks ───────────────────────────────────────────────────────────
 
 /**
- * Validates token format (basic JWT structure: header.payload.signature)
+ * Validates that required environment variables are present.
+ * Throws if MASTER_AUTH_TOKEN is missing (fail-fast).
  */
+function safetyChecks(): void {
+  if (!process.env.MASTER_AUTH_TOKEN) {
+    throw new Error('[auth] Environment variable missing: MASTER_AUTH_TOKEN');
+  }
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 function isValidJwtFormat(token: string): boolean {
   const parts = token.split('.');
   if (parts.length !== 3) return false;
   return parts.every(p => p.length > 0);
 }
 
-/**
- * Decodes JWT payload without verification (for expiry extraction)
- */
 function decodeJwtPayload(token: string): Record<string, any> | null {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
     const payload = parts[1];
-    // Base64URL decode
     const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
     const padding = base64.length % 4;
     const padded = padding ? base64 + '='.repeat(4 - padding) : base64;
@@ -55,14 +62,10 @@ function decodeJwtPayload(token: string): Record<string, any> | null {
   }
 }
 
-/**
- * Gets the effective token expiry in seconds from env or JWT exp claim
- */
 function getEffectiveExpiry(masterAuthToken?: string): number {
   const envExpiry = Number(process.env.MASTER_TOKEN_EXPIRY_SECONDS);
   if (!isNaN(envExpiry) && envExpiry >= 0) return envExpiry;
 
-  // Try to extract from JWT exp
   if (masterAuthToken) {
     const payload = decodeJwtPayload(masterAuthToken);
     if (payload?.exp) {
@@ -75,10 +78,6 @@ function getEffectiveExpiry(masterAuthToken?: string): number {
   return 3600; // default 1 hour
 }
 
-/**
- * Optional: call an external OAuth 2.0 / OpenID Connect validation endpoint
- * Set MASTER_AUTH_VALIDATOR_URL to enable. Falls back to local validation.
- */
 async function validateWithExternalProvider(token: string): Promise<{ valid: boolean; payload?: Record<string, any> }> {
   const validatorUrl = process.env.MASTER_AUTH_VALIDATOR_URL;
   if (!validatorUrl) return { valid: false };
@@ -101,10 +100,6 @@ async function validateWithExternalProvider(token: string): Promise<{ valid: boo
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 
-/**
- * Returns whether the current context is authorized and token not expired.
- * Auto-clears expired tokens.
- */
 export function readAuthorizedStatus(): boolean {
   if (!authContext.isAuthorized) return false;
   if (authContext.tokenExpiryTime !== null && Date.now() >= authContext.tokenExpiryTime) {
@@ -123,33 +118,11 @@ export function getAuthContext(): Readonly<AuthorizationContext> {
   return { ...authContext };
 }
 
-/**
- * Clears the auth context (used on logout or token expiry).
- */
 export function clearAuthContext(): void {
   authContext.isAuthorized = false;
   authContext.masterCertificateHash = null;
   authContext.firstCheckTime = null;
   authContext.tokenExpiryTime = null;
-}
-
-/**
- * Persists auth context to disk (optional, for debugging only).
- * In production, disable file persistence entirely.
- */
-export async function saveMasterData(): Promise<void> {
-  const now = Date.now();
-  authContext.isAuthorized = true;
-  authContext.firstCheckTime = now;
-  authContext.masterCertificateHash = 'AUTH-ESG2023-PROXY-SIG-1ca2d93e';
-  const expirySeconds = Number(process.env.MASTER_TOKEN_EXPIRY_SECONDS) ?? 3600;
-  authContext.tokenExpiryTime = now + expirySeconds * 1000;
-
-  try {
-    writeFileSync('auth-context.json', JSON.stringify(authContext, null, 2));
-  } catch (err) {
-    console.warn('[auth] Failed to write auth-context.json:', err);
-  }
 }
 
 // ─── Core Authentication ────────────────────────────────────────────────────
@@ -158,50 +131,53 @@ export async function saveMasterData(): Promise<void> {
  * Authenticates using a master token from environment variables or external IdP.
  *
  * Environment variables:
- * - MASTER_AUTH_TOKEN: The token to validate (raw token or JWT)
- * - EXPECTED_MASTER_TOKEN: The expected token value for local validation (default: 'VALID_MASTER_TOKEN')
- * - MASTER_TOKEN_EXPIRY_SECONDS: Token expiry in seconds (default: 3600)
- * - MASTER_AUTH_VALIDATOR_URL: Optional external OAuth 2.0 / OIDC validation endpoint
+ * - MASTER_AUTH_TOKEN (REQUIRED): The token to validate
+ * - EXPECTED_MASTER_TOKEN: Expected value for local comparison (default: 'VALID_MASTER_TOKEN')
+ * - MASTER_TOKEN_EXPIRY_SECONDS: Expiry in seconds (default: 3600)
+ * - MASTER_AUTH_VALIDATOR_URL: External OAuth 2.0 / OIDC validation endpoint
  *
- * Validation order:
- * 1. Check if already authorized (cached) → return true
- * 2. If MASTER_AUTH_VALIDATOR_URL set → validate externally
- * 3. Fallback → local env token comparison
- * 4. If MASTER_AUTH_TOKEN is a JWT → extract exp claim for dynamic expiry
+ * @returns AuthResult with success status and error details
  */
-export async function authenticateWithMaster(): Promise<boolean> {
+export async function authenticateWithMaster(): Promise<AuthResult> {
   // 1. Return early if already authorized and not expired
-  if (readAuthorizedStatus()) return true;
+  if (readAuthorizedStatus()) {
+    return { success: true, expiresAt: authContext.tokenExpiryTime ?? undefined };
+  }
 
-  const masterAuthToken = process.env.MASTER_AUTH_TOKEN;
-
-  if (!masterAuthToken) {
-    console.error('[auth] MASTER_AUTH_TOKEN not set.');
-    return false;
+  // 2. Safety check — throw if MASTER_AUTH_TOKEN is missing
+  let masterAuthToken: string;
+  try {
+    safetyChecks();
+    masterAuthToken = process.env.MASTER_AUTH_TOKEN!;
+  } catch (err: any) {
+    return { success: false, error: err.message, errorCode: 'MISSING_TOKEN' };
   }
 
   let isValid = false;
 
-  // 2. Try external validator first
-  const external = await validateWithExternalProvider(masterAuthToken);
-  if (external.valid) {
-    isValid = true;
-    console.log('[auth] Validated via external IdP.');
-  } else {
-    // 3. Local validation
+  // 3. Try external validator first
+  try {
+    const external = await validateWithExternalProvider(masterAuthToken);
+    if (external.valid) {
+      isValid = true;
+      console.log('[auth] Validated via external IdP.');
+    }
+  } catch (err) {
+    console.warn('[auth] External validation error:', err);
+  }
+
+  // 4. Fallback to local validation
+  if (!isValid) {
     if (isValidJwtFormat(masterAuthToken)) {
-      // JWT format → check expiry
       const payload = decodeJwtPayload(masterAuthToken);
       if (payload?.exp && payload.exp * 1000 < Date.now()) {
         console.error('[auth] JWT token expired.');
         authContext.isAuthorized = false;
-        return false;
+        return { success: false, error: 'JWT token expired', errorCode: 'EXPIRED_TOKEN' };
       }
-      // JWT structure is valid and not expired → accept
       isValid = true;
       console.log('[auth] Validated via JWT structure.');
     } else {
-      // Raw token → compare with expected value
       const expectedToken = process.env.EXPECTED_MASTER_TOKEN ?? 'VALID_MASTER_TOKEN';
       if (masterAuthToken === expectedToken) {
         isValid = true;
@@ -209,17 +185,17 @@ export async function authenticateWithMaster(): Promise<boolean> {
       } else {
         console.error('[auth] Invalid token.');
         authContext.isAuthorized = false;
-        return false;
+        return { success: false, error: 'Invalid token', errorCode: 'INVALID_TOKEN' };
       }
     }
   }
 
   if (!isValid) {
     authContext.isAuthorized = false;
-    return false;
+    return { success: false, error: 'All validation methods failed', errorCode: 'EXTERNAL_VALIDATION_FAILED' };
   }
 
-  // Set auth context with dynamic expiry
+  // 5. Set auth context with dynamic expiry
   const now = Date.now();
   const expirySeconds = getEffectiveExpiry(masterAuthToken);
   authContext.isAuthorized = true;
@@ -229,46 +205,50 @@ export async function authenticateWithMaster(): Promise<boolean> {
 
   console.log('[auth] Authentication successful. Token expires in', expirySeconds, 'seconds.');
 
-  // Optional: persist for debugging (disabled in production)
-  if (process.env.AUTH_PERSIST_TO_FILE === 'true') {
-    await saveMasterData();
-  }
-
-  return true;
+  return { success: true, expiresAt: authContext.tokenExpiryTime };
 }
 
 // ─── Signature Verification ──────────────────────────────────────────────────
 
-/**
- * Verifies a signature against the master certificate hash.
- *
- * Current: SHA-256 hash comparison (placeholder).
- * Production: Replace with proper public-key verification.
- *
- * To enable real signature verification, set MASTER_PUBLIC_KEY (PEM format).
- */
 export function checkSignature(_header: unknown, data: Buffer): boolean {
-  // If we have a configured public key, use it
+  if (!data || data.length === 0) {
+    console.warn('[auth] checkSignature: empty data');
+    return false;
+  }
+
   const publicKeyPem = process.env.MASTER_PUBLIC_KEY;
+
   if (publicKeyPem) {
     try {
+      if (data.length < 5) {
+        console.warn('[auth] checkSignature: data too short for public-key mode');
+        return false;
+      }
+      const sigLength = data.readUInt32BE(0);
+      if (sigLength === 0 || sigLength > data.length - 4) {
+        console.warn('[auth] checkSignature: invalid signature length', sigLength);
+        return false;
+      }
+      const signature = data.subarray(4, 4 + sigLength);
+      const payload = data.subarray(4 + sigLength);
       const verifier = crypto.createVerify('SHA256');
-      verifier.update(data);
-      // Assume last 64 bytes are the signature
-      if (data.length <= 64) return false;
-      const signature = data.slice(-64);
-      const content = data.slice(0, -64);
-      const verify = crypto.createVerify('SHA256');
-      verify.update(content);
-      return verify.verify(publicKeyPem, signature);
+      verifier.update(payload);
+      return verifier.verify(publicKeyPem, signature);
     } catch (err) {
       console.error('[auth] Signature verification error:', err);
       return false;
     }
   }
 
-  // Fallback: hash comparison (demo mode)
-  const expectedHash = authContext.masterCertificateHash ?? 'FAKE_HASH';
+  // Demo mode: hash comparison with timing-safe equal
+  if (!authContext.isAuthorized || !authContext.masterCertificateHash) {
+    console.warn('[auth] checkSignature: not authorized, rejecting');
+    return false;
+  }
+
   const computedHash = crypto.createHash('sha256').update(data).digest('hex');
-  return computedHash === expectedHash;
+  const expectedBuf = Buffer.from(authContext.masterCertificateHash, 'utf-8');
+  const computedBuf = Buffer.from(computedHash, 'utf-8');
+  if (expectedBuf.length !== computedBuf.length) return false;
+  return crypto.timingSafeEqual(expectedBuf, computedBuf);
 }
