@@ -8,10 +8,11 @@ const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 const DEFAULT_OPENROUTER_MODEL = 'mistralai/mistral-small-3.1-24b:free';
 
 function getModel() {
-  if (process.env.OPENROUTER_API_KEY) {
+  const apiKey = process.env.OPENROUTER_API_KEY || process.env.AGNES_API;
+  if (apiKey) {
     const openrouter = createOpenAI({
       baseURL: OPENROUTER_BASE_URL,
-      apiKey: process.env.OPENROUTER_API_KEY,
+      apiKey: apiKey,
     });
     return openrouter(process.env.OPENROUTER_MODEL || DEFAULT_OPENROUTER_MODEL);
   }
