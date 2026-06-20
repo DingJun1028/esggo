@@ -232,14 +232,21 @@ function NoteEditor({
   const [type, setType] = useState<NoteType>(note?.type || 'log');
   const [date, setDate] = useState(note?.date || new Date().toISOString().split('T')[0]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { tasks, addTasks, syncTasks, isSyncing } = useOmniNotesStore();
+  const { tasks, addTasks, syncTasks, fetchTasksFromNCB, isSyncing } = useOmniNotesStore();
   const [syncLog, setSyncLog] = useState<string[]>(['>> SYSTEM STANDBY']);
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
 
   useEffect(() => {
     textareaRef.current?.focus();
-  }, []);
+    // Auto-fetch NCB tasks on mount
+    const fetchNcb = async () => {
+      setSyncLog((prev) => ['>> FETCHING TASKS FROM NCB...', ...prev.slice(0, 4)]);
+      await fetchTasksFromNCB();
+      setSyncLog((prev) => ['>> NCB TASKS LOADED', ...prev.slice(0, 4)]);
+    };
+    fetchNcb();
+  }, [fetchTasksFromNCB]);
 
   const handleSubmit = () => {
     if (!content.trim()) return;
@@ -257,6 +264,7 @@ function NoteEditor({
         status: (match[1] === 'x' ? 'Done' : 'Todo') as TaskStatus,
         synced: false,
         noteId: note?.id,
+        source: 'local' as const,
       });
     }
 
@@ -272,7 +280,7 @@ function NoteEditor({
   };
 
   const handleSyncToOmniTable = async () => {
-    setSyncLog((prev) => ['>> INITIATING OMNITABLE DATASHEET SYNC...', ...prev.slice(0, 4)]);
+    setSyncLog((prev) => ['>> INITIATING OMNITABLE & NCB DUAL-SYNC...', ...prev.slice(0, 4)]);
     await syncTasks();
     setSyncLog((prev) => [
       `>> SYNC COMPLETED`,
@@ -392,7 +400,7 @@ function NoteEditor({
           <div className="flex items-center gap-2 mb-2 opacity-80">
             <Server className={cn('w-4 h-4', isDark ? 'text-amber-400' : 'text-amber-600')} />
             <span className={cn('text-[10px] font-bold tracking-wider uppercase', isDark ? 'text-gray-400' : 'text-gray-500')}>
-              OmniTable Matrix
+              OmniTable & NCB Matrix
             </span>
           </div>
           <div className="flex-1 flex flex-col gap-1 overflow-y-auto font-mono text-[9px]">
@@ -412,6 +420,9 @@ function NoteEditor({
               <span className={cn('text-sm font-bold', isDark ? 'text-gray-100' : 'text-gray-900')}>
                 任務看板
               </span>
+              <OmniBadge variant="outline" size="xs" className="ml-1">
+                {tasks.length} 筆
+              </OmniBadge>
             </div>
             <button
               onClick={handleSyncToOmniTable}
@@ -439,15 +450,27 @@ function NoteEditor({
                     <span className={cn('text-xs font-medium leading-snug', isDark ? 'text-gray-200' : 'text-gray-800')}>
                       {task.title}
                     </span>
-                    {task.synced ? (
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                    ) : (
-                      <Activity className="w-3.5 h-3.5 text-amber-500 shrink-0 animate-pulse" />
-                    )}
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      {task.synced ? (
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      ) : (
+                        <Activity className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className={cn('px-1.5 py-0.5 rounded text-[9px] font-bold uppercase', task.status === 'Done' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-blue-500/10 text-blue-500')}>
-                      {task.status}
+                  <div className="flex items-center justify-between mt-1">
+                    <div className="flex items-center gap-1.5">
+                      <div className={cn('px-1.5 py-0.5 rounded text-[9px] font-bold uppercase', task.status === 'Done' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-blue-500/10 text-blue-500')}>
+                        {task.status}
+                      </div>
+                      <div className={cn(
+                        'px-1.5 py-0.5 rounded text-[8px] font-bold tracking-wider border',
+                        task.source === 'ncb' 
+                          ? 'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400' 
+                          : 'bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400'
+                      )}>
+                        {task.source === 'ncb' ? 'NCB 外部' : '本地任務'}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -747,9 +770,9 @@ export default function OmniNotesPage() {
                 <RefreshCw size={16} className="text-cyan-600" />
               </div>
               <div>
-                <p className="text-sm font-bold text-[#003262]">完整集成</p>
+                <p className="text-sm font-bold text-[#003262]">完整集成 (Dual Sync)</p>
                 <p className="text-xs text-slate-500">
-                  筆記自動同步至 OmniTable · 任務類型自動觸發 5T 驗證
+                  筆記任務自動雙向同步至 OmniTable 與 NCB · 任務類型自動觸發 5T 驗證
                 </p>
               </div>
             </div>

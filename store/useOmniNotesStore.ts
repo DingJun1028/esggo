@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { syncTaskAction } from '@/app/actions/omni-notes';
+import { syncTaskAction, fetchTasksFromNCBAction } from '@/app/actions/omni-notes';
 
 // 定義類似 Capacities 的物件類型 (Object Types)
 export type NoteType = 'log' | 'idea' | 'meeting' | 'task' | 'research' | 'knowledge';
@@ -24,6 +24,7 @@ export interface Task {
     status: TaskStatus;
     synced: boolean;
     noteId?: string; // Optional reference to the note it was extracted from
+    source?: 'local' | 'ncb';
 }
 
 interface OmniNotesState {
@@ -36,6 +37,7 @@ interface OmniNotesState {
     addTasks: (newTasks: Task[]) => void;
     updateTaskStatus: (id: string, status: TaskStatus) => void;
     syncTasks: () => Promise<void>;
+    fetchTasksFromNCB: () => Promise<void>;
 }
 
 export const useOmniNotesStore = create<OmniNotesState>()(
@@ -82,7 +84,10 @@ export const useOmniNotesStore = create<OmniNotesState>()(
 
             addTasks: (newTasks) => {
                 set((state) => {
-                    const uniqueNewTasks = newTasks.filter(t => !state.tasks.some(st => st.id === t.id));
+                    const uniqueNewTasks = newTasks.map(t => ({
+                        ...t,
+                        source: t.source || 'local'
+                    })).filter(t => !state.tasks.some(st => st.id === t.id));
                     return { tasks: [...state.tasks, ...uniqueNewTasks] };
                 });
             },
@@ -114,6 +119,31 @@ export const useOmniNotesStore = create<OmniNotesState>()(
                 }
 
                 set({ isSyncing: false });
+            },
+
+            fetchTasksFromNCB: async () => {
+                set({ isSyncing: true });
+                try {
+                    const ncbTasks = await fetchTasksFromNCBAction();
+                    if (ncbTasks && ncbTasks.length > 0) {
+                        set((state) => {
+                            const newTasks = [...state.tasks];
+                            for (const ncbTask of ncbTasks) {
+                                const idx = newTasks.findIndex(t => t.id === ncbTask.id);
+                                if (idx >= 0) {
+                                    newTasks[idx] = { ...newTasks[idx], ...ncbTask, synced: true };
+                                } else {
+                                    newTasks.push(ncbTask);
+                                }
+                            }
+                            return { tasks: newTasks };
+                        });
+                    }
+                } catch (error) {
+                    console.error('[OmniNotes Store] Failed to fetch NCB tasks:', error);
+                } finally {
+                    set({ isSyncing: false });
+                }
             }
         }),
         {

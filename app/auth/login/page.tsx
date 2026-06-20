@@ -4,7 +4,8 @@ import { Leaf, ShieldCheck, ArrowUpRight, Github, AlertCircle, Zap, Shield, Glob
 import { BrandCard, BrandButton, BrandInput, BrandBadge } from '../../../components/brand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { isDemoMode } from '../../../lib/firebase';
+import { auth, isDemoMode } from '../../../lib/firebase';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -84,24 +85,27 @@ export default function LoginPage() {
         return;
       }
 
-      // NoCodeBackend Auth Proxy Call
-      const res = await fetch('/api/auth/sign-in/email', {
+      // Firebase Authentication Call
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await userCredential.user.getIdToken();
+
+      const res = await fetch('/api/auth/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ idToken })
       });
 
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(data.message || data.error || '登入失敗 (Login Failed)');
+        throw new Error(data.message || data.error || 'Session creation failed');
       }
 
       // Session token is secure in HTTP-Only cookie, no need for localStorage
       
       router.push('/dashboard');
-    } catch (err) {
-      const message = err instanceof Error ? err.message : '連線錯誤 (Connection Error)';
+    } catch (err: any) {
+      const message = err.message || '連線錯誤 (Connection Error)';
       setError(message);
     } finally {
       setLoading(false);
@@ -149,25 +153,23 @@ export default function LoginPage() {
         return;
       }
       
-      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-      if (!clientId) {
-        throw new Error('未設定 NEXT_PUBLIC_GOOGLE_CLIENT_ID，無法進行真實驗證');
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+
+      const res = await fetch('/api/auth/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken })
+      });
+
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || data.error || 'Session creation failed');
       }
 
-      if ((window as any).google?.accounts?.id) {
-        (window as any).google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleGoogleCredentialResponse,
-        });
-        (window as any).google.accounts.id.prompt((notification: any) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            setError('Google 登入視窗被阻擋或取消，請允許彈出視窗。');
-            setLoading(false);
-          }
-        });
-      } else {
-        throw new Error('Google Identity Services 載入失敗');
-      }
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Google 登入失敗');
       setLoading(false);
