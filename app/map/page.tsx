@@ -493,7 +493,7 @@ export default function OmniMapPage() {
           {/* Left Column: SVG Star Orbit Map (8 Cols) */}
           <div className="lg:col-span-8 bg-slate-950/40 -md border border-slate-200 rounded-3xl p-6 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] lg:min-h-[650px] shadow-[inset_0_0_20px_rgba(255,255,255,0.01)]">
             {/* Hologram Circle Frame */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,6,23,0.9))] pointer-events-none z-10" />
+            <div className="absolute inset-0 bg-neutral-50 pointer-events-none z-10" />
 
             <svg viewBox="0 0 800 800" className="w-full max-w-[620px] aspect-square relative z-0">
               <defs>

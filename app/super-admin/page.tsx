@@ -1,3 +1,4 @@
+// @ts-nocheck
 // app/super-admin/page.tsx
 // @ts-nocheck
 'use client';

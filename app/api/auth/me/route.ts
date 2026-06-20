@@ -8,7 +8,7 @@ type MeResponseData = {
 };
 
 export async function GET(): Promise<NextResponse<MeResponseData>> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const sessionToken = cookieStore.get('omni_session')?.value;
 
   if (!sessionToken) {

@@ -16,3 +16,4 @@ export { OmniStatusDot, type OmniStatusDotProps } from './OmniStatusDot';
 export { OmniTag, type OmniTagProps } from './OmniTag';
 export { OmniDB, type OmniDBRecord, type OmniDBCredentials, type OmniDBProps } from './OmniDB';
 export { OmniToggle, type OmniToggleProps } from './OmniToggle';
+export { OmniHeartSeal, type OmniHeartSealProps } from './OmniHeartSeal';

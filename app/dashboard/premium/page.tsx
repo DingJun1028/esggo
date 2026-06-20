@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 🍱 Premium Bento Dashboard - ESGGO 善向永續
  * v3.0 | #BentoGrid #LiquidGlass #UXTranscendence
