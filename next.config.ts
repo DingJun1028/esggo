@@ -36,36 +36,39 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
-  webpack: (config) => {
-    config.ignoreWarnings = [
-      ...(config.ignoreWarnings || []),
-      { module: /node_modules\/@firebase/ },
-      { module: /node_modules\/firebase/ },
-      { module: /node_modules\/idb/ },
-      { module: /node_modules\/snarkjs/ },
-      { module: /node_modules\/ffjavascript/ },
-      { module: /node_modules\/web-worker/ },
-      { module: /node_modules\/@protobufjs\\/inquire/ },
-      { module: /node_modules\/@opentelemetry\\/instrumentation-winston/ },
-    ];
+  webpack: (config, { isServer }) => {
+    // Only apply webpack config for server-side builds, not Edge
+    if (isServer && !process.env.VERCEL) {
+      config.ignoreWarnings = [
+        ...(config.ignoreWarnings || []),
+        { module: /node_modules\/@firebase/ },
+        { module: /node_modules\/firebase/ },
+        { module: /node_modules\/idb/ },
+        { module: /node_modules\/snarkjs/ },
+        { module: /node_modules\/ffjavascript/ },
+        { module: /node_modules\/web-worker/ },
+        { module: /node_modules\/@protobufjs\/inquire/ },
+        { module: /node_modules\/@opentelemetry\/instrumentation-winston/ },
+      ];
 
-    if (!config.resolve) config.resolve = {};
-    if (!config.resolve.fallback) config.resolve.fallback = {};
-    Object.assign(config.resolve.fallback, {
-      net: false,
-      tls: false,
-      fs: false,
-      dns: false,
-      child_process: false,
-      dgram: false,
-      async_hooks: false,
-      http2: false,
-      http: false,
-      https: false,
-      zlib: false,
-      stream: false,
-      crypto: false,
-    });
+      if (!config.resolve) config.resolve = {};
+      if (!config.resolve.fallback) config.resolve.fallback = {};
+      Object.assign(config.resolve.fallback, {
+        net: false,
+        tls: false,
+        fs: false,
+        dns: false,
+        child_process: false,
+        dgram: false,
+        async_hooks: false,
+        http2: false,
+        http: false,
+        https: false,
+        zlib: false,
+        stream: false,
+        crypto: false,
+      });
+    }
 
     return config;
   },
