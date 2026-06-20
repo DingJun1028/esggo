@@ -303,5 +303,5 @@ export default function EndToEndMatrixPage() {
     ]
   };
 
-  return <StandardPage config={pageConfig} />;
+  return <Card config={pageConfig} />;
 }

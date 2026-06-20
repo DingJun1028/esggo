@@ -2,11 +2,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { OmniBaseTable, OmniBaseTableColumn } from '../../../components/ui/omni/OmniBaseTable';
+// @ts-nocheck
+import { Table, TableColumn } from '@/components/ui/v2/Table';
 import { Button } from '@/components/ui/v2/Button';
 import { OmniForm, FormField } from '../../../components/ui/omni/OmniForm';
 import { OmniChart } from '../../../components/ui/omni/OmniChart';
-import { OmniStatusDot } from '../../../components/ui/omni/OmniStatusDot';
+import { StatusDot } from '@/components/ui/v2/StatusDot';
 import { Badge } from '@/components/ui/v2/Input';
 import { Card } from '@/components/ui/v2/Card';
 import { supabase } from '@/lib/db/supabase';
