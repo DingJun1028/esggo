@@ -1,7 +1,8 @@
 // @ts-nocheck
+'use client';
 /**
  * 平台版本全視圖（Platform Version Overview）
- * 
+ *
  * 展示 ESGGO 平台的所有版本資訊：
  * 1. 前端版本
  * 2. 後端版本
@@ -15,9 +16,20 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Package, Server, Database, Cpu, Key, Shield,
-  RefreshCw, CheckCircle2, AlertCircle, Info,
-  GitBranch, Clock, Tag, Layers
+  Package,
+  Server,
+  Database,
+  Cpu,
+  Key,
+  Shield,
+  RefreshCw,
+  CheckCircle2,
+  AlertCircle,
+  Info,
+  GitBranch,
+  Clock,
+  Tag,
+  Layers,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
@@ -70,9 +82,9 @@ export default function PlatformVersionPage() {
       icon: Package,
       details: {
         'Next.js': '16.2.9',
-        'React': '18.3.31',
+        React: '18.3.31',
         'Tailwind CSS': '4.1.1',
-        'TypeScript': '5.9.3',
+        TypeScript: '5.9.3',
         'UI 元件庫': 'v2.0 (Minimal Clean)',
       },
     },
@@ -98,11 +110,11 @@ export default function PlatformVersionPage() {
       description: 'AI 代理控制台 · 多重步驟思考',
       icon: Cpu,
       details: {
-        '聊天引擎': 'OpenRouter (Mistral Small)',
-        '語音辨識': 'Whisper Large V3',
-        '圖片生成': 'Stable Diffusion 3.5',
+        聊天引擎: 'OpenRouter (Mistral Small)',
+        語音辨識: 'Whisper Large V3',
+        圖片生成: 'Stable Diffusion 3.5',
         'RAG 引擎': 'Supabase + pgvector',
-        '子代理數': '7',
+        子代理數: '7',
       },
     },
     {
@@ -113,10 +125,10 @@ export default function PlatformVersionPage() {
       description: '統一身份驗證 · 一切未知的解答',
       icon: Key,
       details: {
-        '等級數': '4 (探索者/創造者/領導者/無限)',
-        '能力數': '6 (身份/存取/知識/執行/預測/互操作)',
+        等級數: '4 (探索者/創造者/領導者/無限)',
+        能力數: '6 (身份/存取/知識/執行/預測/互操作)',
         'ZKP 版本': 'v1.0 (簡化版)',
-        '跨鏈支援': 'ESGGO Mainnet',
+        跨鏈支援: 'ESGGO Mainnet',
       },
     },
     {
@@ -142,10 +154,10 @@ export default function PlatformVersionPage() {
       description: 'Supabase PostgreSQL',
       icon: Database,
       details: {
-        '遷移數量': '35',
-        '最新遷移': '20260620000100_seed_reading_room',
+        遷移數量: '35',
+        最新遷移: '20260620000100_seed_reading_room',
         'RLS 政策': '已啟用',
-        '表格數': '28',
+        表格數: '28',
       },
     },
     {
@@ -156,31 +168,41 @@ export default function PlatformVersionPage() {
       description: '統一日誌系統 · 取代 console.log',
       icon: Layers,
       details: {
-        '日誌級別': 'debug/info/warn/error',
-        '模組標籤': '已啟用',
-        '時間戳': '已啟用',
-        'Emoji': '已啟用',
+        日誌級別: 'debug/info/warn/error',
+        模組標籤: '已啟用',
+        時間戳: '已啟用',
+        Emoji: '已啟用',
       },
     },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'current': return 'success';
-      case 'outdated': return 'warning';
-      case 'beta': return 'info';
-      case 'deprecated': return 'error';
-      default: return 'neutral';
+      case 'current':
+        return 'success';
+      case 'outdated':
+        return 'warning';
+      case 'beta':
+        return 'info';
+      case 'deprecated':
+        return 'error';
+      default:
+        return 'neutral';
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'current': return '最新';
-      case 'outdated': return '過時';
-      case 'beta': return '測試版';
-      case 'deprecated': return '已棄用';
-      default: return '未知';
+      case 'current':
+        return '最新';
+      case 'outdated':
+        return '過時';
+      case 'beta':
+        return '測試版';
+      case 'deprecated':
+        return '已棄用';
+      default:
+        return '未知';
     }
   };
 
@@ -210,10 +232,22 @@ export default function PlatformVersionPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
             { label: '總模組', value: versions.length, icon: Package },
-            { label: '最新版本', value: versions.filter(v => v.status === 'current').length, icon: CheckCircle2 },
-            { label: '測試版', value: versions.filter(v => v.status === 'beta').length, icon: Info },
-            { label: '過時', value: versions.filter(v => v.status === 'outdated').length, icon: AlertCircle },
-          ].map(stat => (
+            {
+              label: '最新版本',
+              value: versions.filter((v) => v.status === 'current').length,
+              icon: CheckCircle2,
+            },
+            {
+              label: '測試版',
+              value: versions.filter((v) => v.status === 'beta').length,
+              icon: Info,
+            },
+            {
+              label: '過時',
+              value: versions.filter((v) => v.status === 'outdated').length,
+              icon: AlertCircle,
+            },
+          ].map((stat) => (
             <Card key={stat.label} variant="default" padding="sm">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-neutral-50 flex items-center justify-center">
@@ -240,7 +274,7 @@ export default function PlatformVersionPage() {
           </Card>
         ) : (
           <div className="space-y-3">
-            {versions.map(version => {
+            {versions.map((version) => {
               const Icon = version.icon;
               const isExpanded = expandedItem === version.name;
 
@@ -261,8 +295,7 @@ export default function PlatformVersionPage() {
                         <p className="text-xs text-neutral-500 mb-2">{version.description}</p>
                         <div className="flex items-center gap-3 text-[10px] text-neutral-400">
                           <span className="flex items-center gap-1">
-                            <GitBranch size={8} />
-                            v{version.version}
+                            <GitBranch size={8} />v{version.version}
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock size={8} />
@@ -284,9 +317,14 @@ export default function PlatformVersionPage() {
                     <div className="mt-4 pt-4 border-t border-neutral-100">
                       <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
                         {Object.entries(version.details).map(([key, value]) => (
-                          <div key={key} className="flex items-center justify-between px-3 py-2 rounded-lg bg-neutral-50">
+                          <div
+                            key={key}
+                            className="flex items-center justify-between px-3 py-2 rounded-lg bg-neutral-50"
+                          >
                             <span className="text-[10px] text-neutral-500">{key}</span>
-                            <span className="text-[10px] font-mono font-medium text-neutral-700">{value}</span>
+                            <span className="text-[10px] font-mono font-medium text-neutral-700">
+                              {value}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -301,9 +339,7 @@ export default function PlatformVersionPage() {
         {/* ─── Footer ─── */}
         <Card variant="outlined" padding="md">
           <div className="text-center space-y-2 py-2">
-            <p className="text-sm font-medium text-neutral-700">
-              ESGGO 平台版本全視圖 v1.0
-            </p>
+            <p className="text-sm font-medium text-neutral-700">ESGGO 平台版本全視圖 v1.0</p>
             <p className="text-[10px] text-neutral-400">
               最後更新: {new Date().toLocaleString('zh-TW')} · 共 {versions.length} 個模組
             </p>

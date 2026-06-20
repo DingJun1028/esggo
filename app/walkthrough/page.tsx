@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/v2/Card';
+import { OmniBaseCard as Card } from '@/components/ui/omni/OmniBaseCard';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
 import { OmniBaseTable } from '@/components/ui/omni/OmniBaseTable';
@@ -29,17 +29,57 @@ export default function WalkthroughPage() {
       } else {
         // Fallback mock data for Trinity UIUX demonstration if API fails
         setData([
-          { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-          { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
-          { id: 3, date: '2026-06-03', metric_name: 'Sample Metric Gamma', metric_value: 98.5, unit: '%', hash_lock: '0x1c...9d4f', source_origin: 'System' },
+          {
+            id: 1,
+            date: '2026-06-01',
+            metric_name: 'Sample Metric Alpha',
+            metric_value: 1200,
+            unit: 'm³',
+            hash_lock: '0x8f...3a21',
+            source_origin: 'Auto-Agent',
+          },
+          {
+            id: 2,
+            date: '2026-06-02',
+            metric_name: 'Sample Metric Beta',
+            metric_value: 350,
+            unit: '噸',
+            hash_lock: null,
+            source_origin: 'Manual',
+          },
+          {
+            id: 3,
+            date: '2026-06-03',
+            metric_name: 'Sample Metric Gamma',
+            metric_value: 98.5,
+            unit: '%',
+            hash_lock: '0x1c...9d4f',
+            source_origin: 'System',
+          },
         ]);
       }
     } catch (e) {
       console.error('Fetch Error:', e);
       // Fallback mock data
       setData([
-        { id: 1, date: '2026-06-01', metric_name: 'Sample Metric Alpha', metric_value: 1200, unit: 'm³', hash_lock: '0x8f...3a21', source_origin: 'Auto-Agent' },
-        { id: 2, date: '2026-06-02', metric_name: 'Sample Metric Beta', metric_value: 350, unit: '噸', hash_lock: null, source_origin: 'Manual' },
+        {
+          id: 1,
+          date: '2026-06-01',
+          metric_name: 'Sample Metric Alpha',
+          metric_value: 1200,
+          unit: 'm³',
+          hash_lock: '0x8f...3a21',
+          source_origin: 'Auto-Agent',
+        },
+        {
+          id: 2,
+          date: '2026-06-02',
+          metric_name: 'Sample Metric Beta',
+          metric_value: 350,
+          unit: '噸',
+          hash_lock: null,
+          source_origin: 'Manual',
+        },
       ]);
     } finally {
       setLoading(false);
@@ -52,14 +92,16 @@ export default function WalkthroughPage() {
       const response = await fetch('/api/vault/seal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          evidence: { table: 'walkthrough', recordId: id, timestamp: Date.now() }, 
-          type: '5t-seal' 
-        })
+        body: JSON.stringify({
+          evidence: { table: 'walkthrough', recordId: id, timestamp: Date.now() },
+          type: '5t-seal',
+        }),
       });
       const resData = await response.json();
       if (resData.success && resData.hashLock) {
-        setData(prev => prev.map(m => m.id === id ? { ...m, hash_lock: resData.hashLock } : m));
+        setData((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, hash_lock: resData.hashLock } : m))
+        );
       } else {
         alert('封印失敗 (Seal Failed): ' + (resData.error || 'Unknown Error'));
       }
@@ -77,7 +119,7 @@ export default function WalkthroughPage() {
       const response = await fetch('/api/vault/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recordId: id, type: '5t-seal' })
+        body: JSON.stringify({ recordId: id, type: '5t-seal' }),
       });
       const resData = await response.json();
       if (resData.success && resData.valid) {
@@ -104,47 +146,66 @@ export default function WalkthroughPage() {
   const columns = [
     { key: 'date', label: '日期 (Date)' },
     { key: 'metric_name', label: '指標名稱 (Metric Name)' },
-    { key: 'metric_value', label: '數值 (Value)', render: (val: any, row: any) => (
-      <span>{val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span></span>
-    ) },
+    {
+      key: 'metric_value',
+      label: '數值 (Value)',
+      render: (val: any, row: any) => (
+        <span>
+          {val} <span className="text-xs text-slate-500 ml-1">{row.unit}</span>
+        </span>
+      ),
+    },
     { key: 'source_origin', label: '來源 (Source)' },
-    { key: 'hash_lock', label: '5T Hash Lock', render: (val: any) => (
-      val ? (
-        <Badge variant="success" size="sm" icon={<ShieldCheck size={12}/>}>
-          {val.substring(0, 8)}...
-        </Badge>
-      ) : (
-        <Badge variant="default" size="sm">未封印</Badge>
-      )
-    ) },
-    { key: 'action', label: '操作 (Actions)', render: (_: any, row: any) => (
-      <div className="flex items-center gap-3">
-        {!row.hash_lock && (
-          <button 
-            onClick={() => handleSeal(row.id)}
-            disabled={sealingId === row.id}
-            className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+    {
+      key: 'hash_lock',
+      label: '5T Hash Lock',
+      render: (val: any) =>
+        val ? (
+          <Badge variant="success" size="sm">
+            <ShieldCheck size={12} className="mr-1 inline-block" />
+            {val.substring(0, 8)}...
+          </Badge>
+        ) : (
+          <Badge variant="neutral" size="sm">
+            未封印
+          </Badge>
+        ),
+    },
+    {
+      key: 'action',
+      label: '操作 (Actions)',
+      render: (_: any, row: any) => (
+        <div className="flex items-center gap-3">
+          {!row.hash_lock && (
+            <button
+              onClick={() => handleSeal(row.id)}
+              disabled={sealingId === row.id}
+              className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors disabled:opacity-50"
+            >
+              {sealingId === row.id ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Lock size={14} />
+              )}
+              T5 封印
+            </button>
+          )}
+          <button
+            onClick={() => (row.hash_lock ? handleVerify(row.id) : undefined)}
+            disabled={verifyingId === row.id}
+            className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
           >
-            {sealingId === row.id ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
-            T5 封印
+            {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
+            {row.hash_lock ? '驗證 5T' : '編輯'}
           </button>
-        )}
-        <button 
-          onClick={() => row.hash_lock ? handleVerify(row.id) : undefined}
-          disabled={verifyingId === row.id}
-          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          {verifyingId === row.id ? <Loader2 size={14} className="animate-spin" /> : null}
-          {row.hash_lock ? '驗證 5T' : '編輯'}
-        </button>
-      </div>
-    ) }
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="min-h-screen bg-void-stark text-slate-200 p-4 md:p-8 selection:bg-cyan-500/30">
       <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
           <div className="flex items-center gap-4">
@@ -154,16 +215,31 @@ export default function WalkthroughPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <Badge variant="primary" size="sm" icon={<Brain size={12}/>}>OmniAgent Ready</Badge>
-                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">WALKTHROUGH</span>
+                <Badge variant="info" size="sm">
+                  <Brain size={12} className="mr-1 inline-block" />
+                  OmniAgent Ready
+                </Badge>
+                <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+                  WALKTHROUGH
+                </span>
               </div>
               <h1 className="text-4xl font-black text-white tracking-tight">WALKTHROUGH</h1>
-              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">walkthrough dashboard</p>
+              <p className="text-slate-400 font-mono text-sm tracking-widest uppercase mt-2">
+                walkthrough dashboard
+              </p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <Button variant="outline" icon={<Search size={16}/>} className="flex-1 md:flex-none">檢索</Button>
-            <Button variant="primary" icon={<Plus size={16}/>} onClick={handleAddRecord} isLoading={isProcessing} className="flex-1 md:flex-none">
+            <Button variant="secondary" icon={<Search size={16} />} className="flex-1 md:flex-none">
+              檢索
+            </Button>
+            <Button
+              variant="primary"
+              icon={<Plus size={16} />}
+              onClick={handleAddRecord}
+              loading={isProcessing}
+              className="flex-1 md:flex-none"
+            >
               新增紀錄
             </Button>
           </div>
@@ -176,7 +252,9 @@ export default function WalkthroughPage() {
               <span className="text-sm font-bold uppercase tracking-widest">活躍代理</span>
               <Activity size={18} className="text-emerald-400" />
             </div>
-            <div className="text-4xl font-black text-white">3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span></div>
+            <div className="text-4xl font-black text-white">
+              3<span className="text-lg text-slate-500 ml-2 font-normal">Nodes</span>
+            </div>
             <p className="text-xs text-emerald-400/80 font-mono">Status: Optimal</p>
           </Card>
 
@@ -185,7 +263,9 @@ export default function WalkthroughPage() {
               <span className="text-sm font-bold uppercase tracking-widest">5T 驗證率</span>
               <ShieldCheck size={18} className="text-cyan-400" />
             </div>
-            <div className="text-4xl font-black text-white">98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <div className="text-4xl font-black text-white">
+              98.5<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
+            </div>
             <p className="text-xs text-cyan-400/80 font-mono">Secured by Vault</p>
           </Card>
 
@@ -194,7 +274,9 @@ export default function WalkthroughPage() {
               <span className="text-sm font-bold uppercase tracking-widest">業務邏輯覆蓋</span>
               <Brain size={18} className="text-amber-400" />
             </div>
-            <div className="text-4xl font-black text-white">100<span className="text-lg text-slate-500 ml-2 font-normal">%</span></div>
+            <div className="text-4xl font-black text-white">
+              100<span className="text-lg text-slate-500 ml-2 font-normal">%</span>
+            </div>
             <p className="text-xs text-amber-400/80 font-mono">Trinity UIUX Compliant</p>
           </Card>
         </div>
@@ -202,29 +284,22 @@ export default function WalkthroughPage() {
         {/* Main Workspace Area */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-3 space-y-6">
-            <Card 
-              variant="default" 
-              title="業務資料視圖" 
+            <Card
+              variant="default"
+              title="業務資料視圖"
               subtitle="Data synced with 5T Integrity Protocol"
               className="min-h-[400px]"
             >
-              <OmniBaseTable 
-                columns={columns}
-                data={data}
-                loading={loading}
-              />
+              <OmniBaseTable columns={columns} data={data} loading={loading} />
             </Card>
           </div>
-          
+
           <div className="space-y-6">
-            <Card 
-              variant="glow" 
-              title="OmniAgent 輔助" 
-              subtitle="AI 智能上下文"
-            >
+            <Card variant="glow" title="OmniAgent 輔助" subtitle="AI 智能上下文">
               <div className="space-y-4 text-sm text-slate-300">
                 <p>
-                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript 規範。
+                  此模組已接軌 <strong>萬能元件原子庫-經典版</strong>，並符合全端雙向 TypeScript
+                  規範。
                 </p>
                 <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
                   <h4 className="font-bold text-cyan-400 mb-2">設計原則 (Trinity UIUX)</h4>
@@ -238,7 +313,6 @@ export default function WalkthroughPage() {
             </Card>
           </div>
         </div>
-
       </div>
     </div>
   );
