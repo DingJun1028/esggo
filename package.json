@@ -87,6 +87,7 @@
     "helmet": "^7.1.0",
     "html2canvas": "^1.4.1",
     "idb-keyval": "^6.2.5",
+    "jose": "^6.2.3",
     "jsonwebtoken": "^9.0.3",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.292.0",
