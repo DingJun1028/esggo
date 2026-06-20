@@ -31,6 +31,11 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
+// Force dynamic rendering — ensures Vercel always serves the latest build
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 function LoadingFallback() {
   return (
     <div

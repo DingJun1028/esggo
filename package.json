@@ -8,7 +8,7 @@
     "oa": "./cli/omni-cli.ts"
   },
   "scripts": {
-    "build": "next build && node scripts/copy-standalone-assets.js",
+    "build:vercel": "NEXT_PUBLIC_APP_VERSION=$(node -p \"require('./package.json').version\") next build && node scripts/copy-standalone-assets.js",
     "start": "node -r dotenv/config .next/standalone/server.js",
     "dev": "ts-node server.ts",
     "dev:ui": "next dev -p 3001",
