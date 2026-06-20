@@ -1,10 +1,34 @@
 // @ts-nocheck
 // Seed reading_room_documents via Supabase REST API
+// Run: node scripts/seed-reading-room.cjs
 
 const https = require('https');
+const fs = require('fs');
 
-const SUPABASE_URL = 'https://yhwfmavnhaivvgzeuklx.supabase.co';
-const SERVICE_KEY = 'eyJhbG...BACK'; // Replace with actual service role key from .env
+// Read .env file
+const envContent = fs.readFileSync('.env', 'utf-8');
+const getServiceKey = () => {
+  const match = envContent.match(/SUPABASE_SERVICE_ROLE_KEY=(.+)/);
+  return match ? match[1].trim() : null;
+};
+
+const SUPABASE_URL = 'https://mruetmtibkbzfaawfjbm.supabase.co';
+
+// Get the last SUPABASE_SERVICE_ROLE_KEY from .env (the correct one)
+const lines = envContent.split('\n');
+let SERVICE_KEY = null;
+for (const line of lines) {
+  if (line.startsWith('SUPABASE_SERVICE_ROLE_KEY=')) {
+    SERVICE_KEY = line.substring('SUPABASE_SERVICE_ROLE_KEY=').trim();
+  }
+}
+
+if (!SERVICE_KEY) {
+  console.error('ERROR: SUPABASE_SERVICE_ROLE_KEY not found in .env');
+  process.exit(1);
+}
+
+console.log('Using service key:', SERVICE_KEY.substring(0, 20) + '...');
 
 const documents = [
   { id: 'std-gri-2021', title: 'GRI 2021 Universal Standards', description: 'GRI 通用準則為所有組織提供關於一般揭露的基礎框架。', category: 'standard', gri_reference: 'GRI 2', esg_category: 'Governance', tags: ['GRI', 'Universal Standards', 'Governance'], source: 'https://www.globalreporting.org/standards/', published_date: '2023-01-01' },
@@ -48,8 +72,8 @@ function insertDoc(doc, index) {
           console.log(`✓ [${index + 1}/${documents.length}] ${doc.id}`);
           resolve();
         } else {
-          console.log(`✗ [${index + 1}/${documents.length}] ${doc.id}: ${res.statusCode} ${body}`);
-          resolve(); // Continue on error
+          console.log(`✗ [${index + 1}/${documents.length}] ${doc.id}: ${res.statusCode} ${body.substring(0, 100)}`);
+          resolve();
         }
       });
     });
@@ -60,10 +84,10 @@ function insertDoc(doc, index) {
 }
 
 async function main() {
-  console.log(`Inserting ${documents.length} documents...`);
+  console.log(`Inserting ${documents.length} documents to ${SUPABASE_URL}...`);
   for (let i = 0; i < documents.length; i++) {
     await insertDoc(documents[i], i);
-    await new Promise(r => setTimeout(r, 100)); // Rate limit
+    await new Promise(r => setTimeout(r, 100));
   }
   console.log('Done!');
 }

@@ -29,11 +29,7 @@ export default function ReadingRoomPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchData(activeCategory, searchQuery);
-  }, []);
-
-  const fetchData = async (category?: string | null, query?: string) => {
+  const loadDocs = async (category?: string | null, query?: string) => {
     setLoading(true);
     try {
       let url = '/api/reading-room/documents?t=' + Date.now();
@@ -68,8 +64,12 @@ export default function ReadingRoomPage() {
     }
   };
 
-  const handleSeal = async (id: number) => {
-    setSealingId(id);
+  useEffect(() => {
+    loadDocs(activeCategory, searchQuery);
+  }, [activeCategory, searchQuery]);
+
+  const handleSeal = async (id: string) => {
+    setSealingId(id as any);
     try {
       const response = await fetch('/api/vault/seal', {
         method: 'POST',
@@ -121,24 +121,57 @@ export default function ReadingRoomPage() {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      fetchData(); // re-fetch after add
+      loadDocs(activeCategory, searchQuery);
     }, 1500);
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    loadDocs(activeCategory, searchQuery);
+  };
+
+  const handleCategoryChange = (cat: string | null) => {
+    setActiveCategory(cat);
+    loadDocs(cat, searchQuery);
+  };
+
+  const categories = [
+    { key: null, label: '全部' },
+    { key: 'standard', label: '標準' },
+    { key: 'regulation', label: '法規' },
+    { key: 'industry-report', label: '年鑑' },
+    { key: 'case-study', label: '標竿案例' },
+  ];
+
   const columns = [
-    { key: 'date', label: '上傳日期' },
+    { key: 'date', label: '日期' },
     {
       key: 'doc_title',
-      label: '文獻名稱 (Document Title)',
-      render: (val: any) => (
-        <span className="flex items-center gap-2">
-          <FileText size={14} className="text-cyan-400" /> {val}
-        </span>
-      ),
+      label: '文獻名稱',
+      render: (val: any, row: any) => {
+        const doc: any = row;
+        return (
+          <span className="flex items-center gap-2">
+            <FileText size={14} className="text-cyan-400" />
+            {doc.file_url ? (
+              <a
+                href={doc.file_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2"
+              >
+                {val}
+              </a>
+            ) : (
+              <span>{val}</span>
+            )}
+          </span>
+        );
+      },
     },
     {
       key: 'status',
-      label: '知識庫狀態',
+      label: '狀態',
       render: (val: any) => (
         <Badge variant={val === '已索引' ? 'success' : 'warning'} size="sm">
           {val}
@@ -146,11 +179,52 @@ export default function ReadingRoomPage() {
       ),
     },
     {
-      key: 'vectors',
-      label: '向量切塊 (Chunks)',
-      render: (val: any) => <span className="font-mono text-xs text-slate-400">{val} 塊</span>,
+      key: 'category',
+      label: '類別',
+      render: (val: any) => <span className="text-xs text-slate-400">{val || '-'}</span>,
     },
-    { key: 'source_origin', label: '來源 (Source)' },
+    {
+      key: 'esg_category',
+      label: 'ESG',
+      render: (val: any) => <span className="text-xs text-slate-400">{val || '-'}</span>,
+    },
+    {
+      key: 'gri_reference',
+      label: 'GRI',
+      render: (val: any) => (val ? <code className="text-xs text-amber-400">{val}</code> : null),
+    },
+    {
+      key: 'tags',
+      label: '標籤',
+      render: (val: any) => {
+        if (!val || !Array.isArray(val) || val.length === 0)
+          return <span className="text-xs text-slate-500">-</span>;
+        return (
+          <div className="flex flex-wrap gap-1">
+            {val.slice(0, 3).map((tag: string, i: number) => (
+              <span key={i} className="px-1.5 py-0.5 bg-white/5 rounded text-[10px] text-slate-300">
+                {tag}
+              </span>
+            ))}
+          </div>
+        );
+      },
+    },
+    {
+      key: 'source_origin',
+      label: '來源 (Source)',
+      render: (val: any) =>
+        val ? (
+          <a
+            href={val}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-cyan-400 hover:underline"
+          >
+            {val.slice(0, 40)}...
+          </a>
+        ) : null,
+    },
     {
       key: 'hash_lock',
       label: '5T Hash Lock',
@@ -237,6 +311,35 @@ export default function ReadingRoomPage() {
             </Button>
           </div>
         </header>
+
+        {/* Filters */}
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat.key ?? 'all'}
+                onClick={() => handleCategoryChange(cat.key)}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
+                  activeCategory === cat.key
+                    ? 'bg-cyan-500 text-white'
+                    : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+          <form onSubmit={handleSearch} className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="搜尋文獻、來源或標籤..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 w-64"
+            />
+          </form>
+        </div>
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
