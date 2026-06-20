@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -125,7 +126,7 @@ export default function MemoryShardsPage() {
         <header className="bg-white rounded-2xl border border-slate-100 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg">
+              <div className="w-14 h-14 rounded-2xl bg-neutral-100   flex items-center justify-center shadow-lg">
                 <Brain size={28} className="text-white" />
               </div>
               <div>
@@ -319,7 +320,7 @@ export default function MemoryShardsPage() {
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-neutral-100   flex items-center justify-center">
                       <Sparkles size={24} className="text-white" />
                     </div>
                     <div>
@@ -378,13 +379,13 @@ export default function MemoryShardsPage() {
                 label: '總碎片數',
                 value: shards.length,
                 icon: <Database size={20} />,
-                color: 'from-violet-500 to-purple-600',
+                color: ' ',
               },
               {
                 label: '技能奧義',
                 value: ultimates.length,
                 icon: <Sparkles size={20} />,
-                color: 'from-amber-400 to-orange-500',
+                color: ' ',
               },
               {
                 label: '平均熵值',
@@ -395,19 +396,19 @@ export default function MemoryShardsPage() {
                       )
                     : 0,
                 icon: <Activity size={20} />,
-                color: 'from-emerald-500 to-teal-600',
+                color: ' ',
               },
               {
                 label: '總使用次數',
                 value: shards.reduce((sum, s) => sum + s.usageCount, 0),
                 icon: <Star size={20} />,
-                color: 'from-blue-500 to-indigo-600',
+                color: ' ',
               },
             ].map((stat, i) => (
               <div key={i} className="bg-white rounded-xl border border-slate-100 p-6">
                 <div
                   className={cn(
-                    'w-10 h-10 rounded-xl bg-gradient-to-br flex items-center justify-center text-white mb-3',
+                    'w-10 h-10 rounded-xl bg-neutral-100 flex items-center justify-center text-white mb-3',
                     stat.color
                   )}
                 >

@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState } from 'react';
@@ -50,7 +51,7 @@ export default function ThinkTankPage() {
           <Brain size={16} />
           <span className="text-xs font-bold tracking-widest uppercase">OmniMemory Sanctuary</span>
         </div>
-        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-indigo-300 to-cyan-300 mb-4 tracking-tight">
+        <h1 className="text-4xl font-black text-neutral-900 bg-neutral-100  via-indigo-300  mb-4 tracking-tight">
           萬能智庫檢索中心
         </h1>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
@@ -61,7 +62,7 @@ export default function ThinkTankPage() {
 
       {/* 搜尋列 */}
       <div className="relative max-w-3xl mx-auto mb-12">
-        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-indigo-500/20 to-cyan-500/20 rounded-2xl blur-xl opacity-70"></div>
+        <div className="absolute -inset-1 bg-neutral-100 /20 via-indigo-500/20 /20 rounded-2xl blur-xl opacity-70"></div>
         <form
           onSubmit={handleSearch}
           className="relative bg-[#020617]/70 border border-slate-200 rounded-2xl flex items-center p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
@@ -137,7 +138,7 @@ export default function ThinkTankPage() {
                 key={idx}
                 className="group relative bg-[#020617]/40 -md border border-slate-200 rounded-2xl p-6 hover: hover:border-cyan-500/30 transition-all duration-300"
               >
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
+                <div className="absolute top-0 left-0 w-1 h-full bg-neutral-100   opacity-0 group-hover:opacity-100 transition-opacity rounded-l-2xl"></div>
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">

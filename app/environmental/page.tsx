@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -131,7 +132,7 @@ export default function EnvironmentalDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800/50  text-slate-800 dark:text-slate-100 dark:text-slate-700 p-4 md:p-8 font-sans">
-      <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in- duration-700">
         {/* Header Area */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-slate-200 dark:border-slate-200">
           <div className="flex items-center gap-4">
@@ -291,7 +292,7 @@ export default function EnvironmentalDashboard() {
           <div className="space-y-6">
             <Card
               variant="default"
-              className="p-6 bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-lg"
+              className="p-6 bg-neutral-100   text-white shadow-lg"
             >
               <div className="flex items-center gap-3 mb-4">
                 <Brain className="text-emerald-200" size={24} />

@@ -207,7 +207,7 @@ export default function LoginPage() {
             onClick={handleLeafClick}
             className="w-20 h-20 rounded-[32px] bg-[#003262] flex items-center justify-center shadow-2xl shadow-blue-900/20 mb-6 relative group overflow-hidden cursor-pointer active:scale-95 transition-all"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <Leaf size={40} color="#FDB515" className="relative z-10" />
           </div>
 

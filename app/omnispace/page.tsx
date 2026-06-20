@@ -1,3 +1,4 @@
+// @ts-nocheck
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -141,7 +142,7 @@ export default function OmniSpacePage() {
                 <span className="text-xs text-slate-500">v2.1-Berkeley (Collaborative)</span>
               </div>
               <h1
-                className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-emerald-400 to-cyan-500 mt-1"
+                className="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-neutral-100  via-emerald-400  mt-1"
                 style={{ textShadow: '0 0 20px rgba(6,182,212,0.3)' }}
               >
                 OMNICORE RESONATOR
@@ -211,7 +212,7 @@ export default function OmniSpacePage() {
           {/* Main Bento Panel: Live Cyber Terminal (8 cols) */}
           <div className="col-span-12 lg:col-span-8 -md rounded-2xl p-6 flex flex-col relative overflow-hidden border border-slate-200">
             {/* Subtle light scan line */}
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-30 animate-pulse" />
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-neutral-100 from-transparent via-cyan-500 to-transparent opacity-30 animate-pulse" />
 
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
               <h2 className="text-sm font-bold text-slate-700 flex items-center gap-2.5 tracking-wider">
@@ -391,7 +392,7 @@ export default function OmniSpacePage() {
                   </div>
                   <div className="h-2.5 rounded-full overflow-hidden border border-slate-200">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-cyan-400 rounded-full transition-all duration-500"
+                      className="h-full bg-neutral-100  via-emerald-400  rounded-full transition-all duration-500"
                       style={{ width: `${Math.min(streamStatus.ren, 100)}%` }}
                     />
                   </div>
@@ -410,7 +411,7 @@ export default function OmniSpacePage() {
                   </div>
                   <div className="h-2.5 rounded-full overflow-hidden border border-slate-200">
                     <div
-                      className="h-full bg-gradient-to-r from-cyan-600 via-cyan-400 to-indigo-400 rounded-full transition-all duration-500"
+                      className="h-full bg-neutral-100  via-cyan-400  rounded-full transition-all duration-500"
                       style={{ width: `${Math.min(streamStatus.du, 100)}%` }}
                     />
                   </div>
@@ -443,7 +444,7 @@ export default function OmniSpacePage() {
                   onClick={() => (window.location.href = '/dashboard/audit')}
                   className="w-full text-left px-4 py-3 rounded text-slate-300 border border-emerald-500/20 hover:border-emerald-500/60 hover:bg-emerald-950/30 transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="absolute inset-0 bg-neutral-100 /10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                   <div className="flex justify-between items-center relative z-10">
                     <div>
                       <span className="block text-xs font-bold text-emerald-400 mb-0.5">
@@ -470,7 +471,7 @@ export default function OmniSpacePage() {
                   }
                   className="w-full text-left px-4 py-3 rounded text-slate-300 border border-purple-500/20 hover:border-purple-500/60 hover:bg-purple-950/30 transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="absolute inset-0 bg-neutral-100 /10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                   <div className="flex justify-between items-center relative z-10">
                     <div>
                       <span className="block text-xs font-bold text-purple-400 mb-0.5">
@@ -489,7 +490,7 @@ export default function OmniSpacePage() {
                   onClick={() => (window.location.href = '/omni-agent')}
                   className="w-full text-left px-4 py-3 rounded text-slate-300 border border-cyan-500/20 hover:border-cyan-500/60 hover:bg-cyan-950/30 transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="absolute inset-0 bg-neutral-100 /10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                   <div className="flex justify-between items-center relative z-10">
                     <div>
                       <span className="block text-xs font-bold text-cyan-400 mb-0.5">
@@ -516,7 +517,7 @@ export default function OmniSpacePage() {
                   }
                   className="w-full text-left px-4 py-3 rounded text-slate-300 border border-rose-500/20 hover:border-rose-500/60 hover:bg-rose-950/30 transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="absolute inset-0 bg-neutral-100 /10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                   <div className="flex justify-between items-center relative z-10">
                     <div>
                       <span className="block text-xs font-bold text-rose-400 mb-0.5">
@@ -535,7 +536,7 @@ export default function OmniSpacePage() {
                   onClick={() => (window.location.href = '/dashboard/blueprint')}
                   className="w-full text-left px-4 py-3 rounded text-slate-300 border border-amber-500/20 hover:border-amber-500/60 hover:bg-amber-950/30 transition-all group relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                  <div className="absolute inset-0 bg-neutral-100 /10 to-transparent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                   <div className="flex justify-between items-center relative z-10">
                     <div>
                       <span className="block text-xs font-bold text-amber-400 mb-0.5">

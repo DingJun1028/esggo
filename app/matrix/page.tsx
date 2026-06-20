@@ -209,7 +209,7 @@ export default function EndToEndMatrixPage() {
                       <tr key={stage}>
                         <td className="p-4 min-w-[200px]">
                           <div className="flex items-center gap-4 group">
-                            <div className="w-1.5 h-12 bg-gradient-to-b from-[#003262] to-transparent rounded-full group-hover:scale-y-110 transition-transform origin-top" />
+                            <div className="w-1.5 h-12 bg-neutral-100 from-[#003262] to-transparent rounded-full group-hover:scale-y-110 transition-transform origin-top" />
                             <div>
                               <p className="text-xs font-black text-[#003262] uppercase tracking-wider">
                                 {stageLabels[stage]}
@@ -336,7 +336,7 @@ export default function EndToEndMatrixPage() {
                   </p>
                 </div>
 
-                <div className="p-5 bg-gradient-to-br from-blue-900/40 to-transparent rounded-3xl border border-blue-500/20 shadow-inner">
+                <div className="p-5 bg-neutral-100 /40 to-transparent rounded-3xl border border-blue-500/20 shadow-inner">
                   <p className="text-[10px] font-black text-emerald-400 uppercase mb-3 flex items-center gap-2">
                     <Lock size={12} /> 哈希鎖定狀態 (Hash Locked)
                   </p>
@@ -361,7 +361,7 @@ export default function EndToEndMatrixPage() {
             <div className="absolute -bottom-20 -right-20 opacity-5 rotate-12">
               <Grid3X3 size={400} />
             </div>
-            <div className="absolute top-1/2 left-0 w-1 h-32 bg-gradient-to-b from-transparent via-[#FDB515]/30 to-transparent" />
+            <div className="absolute top-1/2 left-0 w-1 h-32 bg-neutral-100 from-transparent via-[#FDB515]/30 to-transparent" />
           </Card>
         ),
       },
