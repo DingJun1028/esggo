@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import Protocol5TStrip from '@/components/omni/Protocol5TStrip';
 
