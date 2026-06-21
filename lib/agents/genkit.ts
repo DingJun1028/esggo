@@ -6,8 +6,7 @@ const geminiApiKey =
   process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
   process.env.GEMINI_API_KEY;
 
-export const ai = geminiApiKey
-  ? genkit({
-      plugins: [googleAI({ apiKey: geminiApiKey })],
-    })
-  : (null as any);
+// Fallback gracefully during CI/build when API key is absent to avoid 'Cannot read properties of null (reading "defineTool")'
+export const ai = genkit({
+  plugins: geminiApiKey ? [googleAI({ apiKey: geminiApiKey })] : [],
+});

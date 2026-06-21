@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
+  if (!supabase)
+    return NextResponse.json({ error: 'Supabase client is not configured' }, { status: 500 });
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || undefined;
@@ -59,39 +62,75 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!supabase)
+    return NextResponse.json({ error: 'Supabase client is not configured' }, { status: 500 });
   try {
     const body = await request.json();
     const { action, filter } = body;
 
     if (action === 'export') {
-      let dbQuery = supabase.from('reading_room_documents').select('*').order('published_date', { ascending: false });
+      let dbQuery = supabase
+        .from('reading_room_documents')
+        .select('*')
+        .order('published_date', { ascending: false });
       if (filter?.category) dbQuery = dbQuery.eq('category', filter.category);
-      if (filter?.q) dbQuery = dbQuery.or(`title.ilike.%${filter.q}%,description.ilike.%${filter.q}%,source.ilike.%${filter.q}%`);
+      if (filter?.q)
+        dbQuery = dbQuery.or(
+          `title.ilike.%${filter.q}%,description.ilike.%${filter.q}%,source.ilike.%${filter.q}%`
+        );
       const { data, error } = await dbQuery;
       if (error) return NextResponse.json({ error: 'Export failed' }, { status: 500 });
       const format = body.format || 'json';
       if (format === 'csv') {
-        const headers = ['id', 'title', 'description', 'category', 'file_url', 'gri_reference', 'esg_category', 'source', 'published_date'];
+        const headers = [
+          'id',
+          'title',
+          'description',
+          'category',
+          'file_url',
+          'gri_reference',
+          'esg_category',
+          'source',
+          'published_date',
+        ];
         const csvRows = [headers.join(',')];
         for (const doc of data ?? []) {
-          const row = headers.map((h) => {
-            const val = (doc as any)[h];
-            if (val === null || val === undefined) return '';
-            if (h === 'tags') return `"${(Array.isArray(val) ? val.join(';') : val).replace(/"/g, '""')}"`;
-            return `"${String(val).replace(/"/g, '""')}"`;
-          }).join(',');
+          const row = headers
+            .map((h) => {
+              const val = (doc as any)[h];
+              if (val === null || val === undefined) return '';
+              if (h === 'tags')
+                return `"${(Array.isArray(val) ? val.join(';') : val).replace(/"/g, '""')}"`;
+              return `"${String(val).replace(/"/g, '""')}"`;
+            })
+            .join(',');
           csvRows.push(row);
         }
         return new NextResponse(csvRows.join('\n'), {
-          headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="reading-room-export.csv"' },
+          headers: {
+            'Content-Type': 'text/csv; charset=utf-8',
+            'Content-Disposition': 'attachment; filename="reading-room-export.csv"',
+          },
         });
       }
       return NextResponse.json({ documents: data ?? [] });
     }
 
     if (action === 'create') {
-      const { id, title, description, category, file_url, gri_reference, esg_category, tags, source, published_date } = body;
-      if (!id || !title) return NextResponse.json({ error: 'id and title are required' }, { status: 400 });
+      const {
+        id,
+        title,
+        description,
+        category,
+        file_url,
+        gri_reference,
+        esg_category,
+        tags,
+        source,
+        published_date,
+      } = body;
+      if (!id || !title)
+        return NextResponse.json({ error: 'id and title are required' }, { status: 400 });
       const insert: Record<string, any> = { id, title };
       if (description) insert.description = description;
       if (category) insert.category = category;
@@ -101,7 +140,11 @@ export async function POST(request: Request) {
       if (tags) insert.tags = Array.isArray(tags) ? tags : [];
       if (source) insert.source = source;
       if (published_date) insert.published_date = published_date;
-      const { data, error } = await supabase.from('reading_room_documents').insert(insert).select().single();
+      const { data, error } = await supabase
+        .from('reading_room_documents')
+        .insert(insert)
+        .select()
+        .single();
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ document: data });
     }

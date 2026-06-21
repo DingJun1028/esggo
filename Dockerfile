@@ -7,7 +7,10 @@ WORKDIR /app
 RUN npm install -g pnpm@9
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY src/dataconnect-admin-generated ./src/dataconnect-admin-generated
+COPY src/dataconnect-generated ./src/dataconnect-generated
+COPY packages/types ./packages/types
 RUN pnpm install --frozen-lockfile
 
 # Copy source code

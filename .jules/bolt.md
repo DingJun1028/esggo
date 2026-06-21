@@ -18,3 +18,11 @@
 ## 2024-06-21 - [Search Input API Call Optimization]
 **Learning:** React components containing text inputs that immediately trigger `fetch` API calls on every `onChange` event (like `GlobalSearch.tsx`) will overload the backend and cause excessive network traffic when a user types a word.
 **Action:** Use a `useRef` to store a `NodeJS.Timeout` ID, and wrap the API request inside a `setTimeout` (e.g. 300ms) within the input handler. Always clear the existing timeout before setting a new one, but ensure that any state controlling the input's visual value (e.g. `setQuery`) is updated *immediately* before the debounce timer to keep the UI responsive.
+
+## 2026-06-21 - [CI Dockerfile Fix]
+**Learning:** The Dockerfile failed in CI because `pnpm install --frozen-lockfile` could not find required workspace dependencies (`src/dataconnect-admin-generated`, `src/dataconnect-generated`, `packages/types`) referenced in `pnpm-workspace.yaml`.
+**Action:** When configuring Dockerfiles for `pnpm` monorepos, `COPY pnpm-workspace.yaml` alongside `package.json` and ensure all paths defined as workspaces are explicitly `COPY`'d before running `pnpm install`.
+
+## 2026-06-21 - [CI Typescript Build Error Fix]
+**Learning:** During the Next.js `next build` step in CI, `Turbopack` warned about unexpected files, and then a build error occurred at `/api/agent/tasks` regarding `Cannot read properties of null (reading 'defineTool')`.
+**Action:** Investigated the backend API layer code logic to ensure tools are properly defined and initialized to prevent null reference errors on agent startup.
