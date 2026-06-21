@@ -7,7 +7,10 @@ WORKDIR /app
 RUN npm install -g pnpm@9
 
 # Copy package files
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY src/dataconnect-admin-generated src/dataconnect-admin-generated
+COPY src/dataconnect-generated src/dataconnect-generated
+COPY packages/types packages/types
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
@@ -27,7 +30,10 @@ RUN npm install -g pnpm@9
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/src/dataconnect-admin-generated src/dataconnect-admin-generated
+COPY --from=builder /app/src/dataconnect-generated src/dataconnect-generated
+COPY --from=builder /app/packages/types packages/types
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
 # Install production dependencies only
