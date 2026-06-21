@@ -1,0 +1,41 @@
+# ESGGO Docker Deployment - VPS 容器化部署
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm@9
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build application
+RUN pnpm run build
+
+# Production stage
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm@9
+
+# Copy built application
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/next.config.mjs ./next.config.mjs
+
+# Install production dependencies only
+RUN pnpm install --prod --frozen-lockfile
+
+EXPOSE 3000
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+CMD ["pnpm", "start"]
