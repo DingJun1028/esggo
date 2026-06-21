@@ -1,0 +1,15 @@
+            <OmniButton
+              variant="secondary"
+              icon={<Sparkles size={16} />}
+              onClick={handleFullReport}
+              isLoading={isGeneratingReport}
+              disabled={!activeTemplate || isGeneratingReport || isWeaving}
+              className="flex-1 md:flex-none bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white border-none shadow-sm flex items-center gap-2 rounded-xl h-10 px-4 transition-all"
+            >
+              一鍵生成 24 萬字報告
+            </OmniButton>
+            {isGeneratingReport && (
+              <div className="text-xs text-slate-500 mt-1">
+                {reportProgress.phase} ({reportProgress.words.toLocaleString()} 字)
+              </div>
+            )}
