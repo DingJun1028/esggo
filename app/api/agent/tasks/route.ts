@@ -1,10 +1,12 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { SwapDeFiClient } from '../../../../lib/services/swap-defi-adapter';
 import type { SwapDefiTransaction } from '../../../../src/shared/types/swap-defi.types';
 import { createTask, executeSwarmTask } from '../../../../lib/agent/orchestrator';
 import { GLOBAL_TASKS, addTask, addExecution, addArtifact } from '../../../../lib/agent/store';
 import { omniSwarm } from '../../../../lib/agents/adk-swarm';
 import type { AgentTaskType } from '../../../../lib/agent/types';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -58,14 +60,23 @@ export async function POST(req: NextRequest) {
         throw new Error(`VPS response not OK: ${vpsRes.status}`);
       }
     } catch (vpsErr) {
-      console.warn('[VPS] OmniAgent Server unreachable, falling back to local orchestrator:', vpsErr);
+      console.warn(
+        '[VPS] OmniAgent Server unreachable, falling back to local orchestrator:',
+        vpsErr
+      );
       executionSource = 'local';
       const localResult = await executeSwarmTask(agentTask.id);
       execution = localResult.execution;
       artifact = localResult.artifact;
     }
 
-    return NextResponse.json({ task: agentTask, execution, artifact, source: executionSource, ok: true });
+    return NextResponse.json({
+      task: agentTask,
+      execution,
+      artifact,
+      source: executionSource,
+      ok: true,
+    });
   } catch (err: any) {
     const message = err.message || '未知錯誤';
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
@@ -73,9 +84,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ 
-    tasks: GLOBAL_TASKS, 
-    total: GLOBAL_TASKS.length, 
-    ok: true 
+  return NextResponse.json({
+    tasks: GLOBAL_TASKS,
+    total: GLOBAL_TASKS.length,
+    ok: true,
   });
 }
