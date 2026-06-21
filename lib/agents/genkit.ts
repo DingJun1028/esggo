@@ -6,6 +6,8 @@ const geminiApiKey =
   process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
   process.env.GEMINI_API_KEY;
 
-export const ai = genkit({
-    plugins: geminiApiKey ? [googleAI({ apiKey: geminiApiKey })] : [],
-});
+export const ai = geminiApiKey
+  ? genkit({
+      plugins: [googleAI({ apiKey: geminiApiKey })],
+    })
+  : (null as any);
