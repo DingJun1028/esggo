@@ -27,7 +27,7 @@ export async function POST(req: Request) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'jinaai/jina-embeddings-v2-base-en', // Or any free embedding model on OpenRouter
+            model: 'openai/text-embedding-3-small', // 1536 dimensions matching DB
             input: query,
           }),
         });
@@ -40,24 +40,23 @@ export async function POST(req: Request) {
         }
       } else {
         // Fallback mock embedding if no key is provided
-        queryEmbedding = Array(768).fill(0.01);
+        queryEmbedding = Array(1536).fill(0.01);
       }
     } catch (embedError) {
       console.warn('Embedding generation failed, using fallback:', embedError);
-      queryEmbedding = Array(768).fill(0.01);
+      queryEmbedding = Array(1536).fill(0.01);
     }
 
-    // 2. Query pgvector in Supabase
-    // match_documents is a stored procedure that uses cosine distance (<=>)
+    // match_documents expects (filter, match_count, query_embedding)
     const { data: documents, error } = await supabase.rpc('match_documents', {
-      query_embedding: queryEmbedding,
-      match_threshold: 0.7,
+      filter: {},
       match_count: 5,
+      query_embedding: queryEmbedding,
     });
 
     if (error) {
       console.error('Supabase RPC error:', error);
-      // Fallback response for demonstration if RPC doesn't exist
+      // Fallback response for demonstration if RPC doesn't exist or fails
       return NextResponse.json({
         success: true,
         results: [
@@ -73,7 +72,17 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ success: true, results: documents });
+    // Map the Supabase 'documents' table structure to the BestPractice UI schema
+    const mappedResults = (documents || []).map((doc: any, index: number) => ({
+      id: doc.id ? String(doc.id) : `rag-${index}`,
+      title: doc.metadata?.title || doc.content?.substring(0, 50) || `匹配結果 ${index + 1}`,
+      category: doc.metadata?.category || 'General',
+      industry: doc.metadata?.industry || '跨產業',
+      tags: doc.metadata?.tags || ['RAG', 'AI Search'],
+      similarity: doc.similarity ?? 0.85,
+    }));
+
+    return NextResponse.json({ success: true, results: mappedResults });
   } catch (error: any) {
     console.error('RAG Search Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });

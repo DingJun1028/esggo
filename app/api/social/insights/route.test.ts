@@ -1,33 +1,37 @@
 ﻿import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GET } from './route';
 import { NextRequest } from 'next/server';
-import * as db from '@/lib/db';
+
+process.env.OPENROUTER_API_KEY = 'test-openrouter-key';
 
 vi.mock('@/lib/db', () => ({
   getSocialMetrics: vi.fn(),
 }));
 
+import * as db from '@/lib/db';
+import { GET } from './route';
+
 describe('Social Insights API', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.NEXT_PUBLIC_GEMINI_API_KEY = 'test-api-key';
-    process.env.AGNES_API = 'test-agnes-api-key';
+    process.env.OPENROUTER_API_KEY = 'test-openrouter-key';
   });
 
   it('should return insights successfully', async () => {
     vi.mocked(db.getSocialMetrics).mockResolvedValue([
-      { id: '1', metric: 'Diversity', value: '80%' }
+      { id: '1', metric: 'Diversity', value: '80%' },
     ] as any);
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
-        choices: [{
-          message: {
-            content: 'Mocked Insight Report'
-          }
-        }]
-      })
+        choices: [
+          {
+            message: {
+              content: 'Mocked Insight Report',
+            },
+          },
+        ],
+      }),
     } as any);
 
     const req = new NextRequest('http://localhost:3000/api/social/insights?category=all');
@@ -41,22 +45,22 @@ describe('Social Insights API', () => {
   });
 
   it('should return 500 if API key is missing', async () => {
-    process.env.AGNES_API = '';
+    process.env.OPENROUTER_API_KEY = '';
 
     const req = new NextRequest('http://localhost:3000/api/social/insights');
     const res = await GET(req);
     const json = await res.json();
 
     expect(res.status).toBe(500);
-    expect(json.error).toBe('Agnes API Key missing');
+    expect(json.error).toBe('OPENROUTER_API_KEY not configured');
   });
 
-  it('should return 500 if Agnes API fails', async () => {
+  it('should return 500 if OpenRouter API fails', async () => {
     vi.mocked(db.getSocialMetrics).mockResolvedValue([]);
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
-      text: async () => 'API Error'
+      text: async () => 'API Error',
     } as any);
 
     const req = new NextRequest('http://localhost:3000/api/social/insights');
@@ -64,6 +68,6 @@ describe('Social Insights API', () => {
     const json = await res.json();
 
     expect(res.status).toBe(500);
-    expect(json.error).toBe('Agnes API failed');
+    expect(json.error).toBe('OpenRouter API failed: API Error');
   });
 });

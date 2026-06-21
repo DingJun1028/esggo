@@ -2,26 +2,6 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-
-import {
-  Globe,
-  Search,
-  Plus,
-  ShieldCheck,
-  Activity,
-  Brain,
-  Lock,
-  Loader2,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
-  Clipboard,
-  FileText,
-  Sparkles,
-  Send,
-  Stethoscope,
-  ArrowRight,
-} from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/v2/Card';
@@ -37,6 +17,15 @@ import {
   Lock,
   Loader2,
   RefreshCw,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle2,
+  Clipboard,
+  FileText,
+  Sparkles,
+  Send,
+  Stethoscope,
+  ArrowRight,
 } from 'lucide-react';
 
 /* ─── Types ─── */

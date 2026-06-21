@@ -2,10 +2,11 @@ module.exports = {
   apps: [
     {
       name: 'esggo-core',
-      script: 'npm',
-      args: 'start',
-      instances: 'max',       // 使用所有可用的 CPU 核心（叢集模式）
-      exec_mode: 'cluster',   // 叢集模式，支援負載平衡與零停機重啟
+      cwd: '/var/www/esggo',
+      script: 'server.js',
+      node_args: '-r dotenv/config',
+      instances: 1,
+      exec_mode: 'fork',
       autorestart: true,      // 崩潰時自動重啟（永久運行）
       watch: false,           // 生產環境關閉 watch
       max_memory_restart: '1G', // 若單一進程記憶體超過 1GB 則自動重啟

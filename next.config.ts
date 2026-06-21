@@ -1,11 +1,11 @@
-import path from 'path';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  outputFileTracingRoot: path.join(__dirname, './'),
+  output: 'standalone',
+  // Removed outputFileTracingRoot to silence Turbopack warnings
   serverExternalPackages: [
     'genkit',
     'sharp',
