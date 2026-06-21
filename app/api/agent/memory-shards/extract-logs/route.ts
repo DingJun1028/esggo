@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 
 export const runtime = 'nodejs';
@@ -13,8 +13,13 @@ export async function POST() {
 
     for (const file of possibleLogs) {
       const filePath = path.join(cwd, file);
-      if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf-8');
+      if (
+        await fs
+          .access(filePath)
+          .then(() => true)
+          .catch(() => false)
+      ) {
+        const content = await fs.readFile(filePath, 'utf-8');
         if (content.trim()) {
           conversationLog += `\n\n--- Source: ${file} ---\n${content}`;
         }
@@ -22,20 +27,25 @@ export async function POST() {
     }
 
     if (!conversationLog.trim()) {
-      return NextResponse.json({ success: false, error: 'No execution logs found to extract.' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: 'No execution logs found to extract.' },
+        { status: 404 }
+      );
     }
 
     // 將 log 傳遞給主 /api/agent/memory-shards 進行擷取
     const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `${protocol}://localhost:${process.env.PORT || 3000}`;
-    
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : `${protocol}://localhost:${process.env.PORT || 3000}`;
+
     const response = await fetch(`${baseUrl}/api/agent/memory-shards`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'extract_shard',
-        conversationLog
-      })
+        conversationLog,
+      }),
     });
 
     if (!response.ok) {
@@ -44,7 +54,7 @@ export async function POST() {
     }
 
     const data = await response.json();
-    
+
     // 如果擷取成功，再觸發一次自動合成奧義（當前系統會把這個shard寫入Supabase）
     // 我們可以另外開一隻腳本檢查庫中是否有足夠的shards可以合成
     // 這裡為了展示，我們先觸發
@@ -60,14 +70,18 @@ export async function POST() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               action: 'synthesize_ultimate',
-              shards: allShards
-            })
+              shards: allShards,
+            }),
           });
         }
       }
     }
 
-    return NextResponse.json({ success: true, message: 'Log extracted and processed.', shard: data.shard });
+    return NextResponse.json({
+      success: true,
+      message: 'Log extracted and processed.',
+      shard: data.shard,
+    });
   } catch (error: any) {
     console.error('Extraction Failed:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

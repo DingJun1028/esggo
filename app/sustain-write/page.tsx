@@ -35,6 +35,9 @@ import {
   Zap,
 } from 'lucide-react';
 
+// Holistic AI hook – provides self‑healing & resonance metrics
+import { useOmniHolisticAI } from '@/hooks/useOmniHolisticAI';
+
 const TRAITS_POOL = [
   '製造業',
   '服務業',
@@ -88,6 +91,8 @@ export default function SustainWritePage() {
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishedHash, setPublishedHash] = useState<string | null>(null);
   const [content, setContent] = useState('');
+
+  const { autoMendSystem, resonanceStability, triggerCommands } = useOmniHolisticAI();
 
   const toggleTrait = (trait: string) => {
     if (selectedTraits.includes(trait))

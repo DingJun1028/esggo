@@ -172,7 +172,8 @@ export default function ComplianceCheckPage() {
       label: '5T Hash Lock',
       render: (val: any) =>
         val ? (
-          <Badge variant="success" size="sm" icon={<ShieldCheck size={12} />}>
+          <Badge variant="success" size="sm">
+            <ShieldCheck size={12} className="mr-1" />
             {val.substring(0, 8)}...
           </Badge>
         ) : (
@@ -225,7 +226,8 @@ export default function ComplianceCheckPage() {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <Badge variant="primary" size="sm" icon={<Brain size={12} />}>
+                <Badge variant="primary" size="sm">
+                  <Brain size={12} className="mr-1" />
                   OmniAgent Ready
                 </Badge>
                 <span className="text-xs font-mono text-slate-500 uppercase tracking-widest">

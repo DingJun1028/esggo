@@ -148,7 +148,7 @@ export class DebugService {
     let result = [...this.events];
 
     if (filter?.level) {
-      result = result.filter((e) => DEBUG_LEVELS[e.level] >= DEBUG_LEVELS[filter.level!]);
+      result = result.filter((e) => e.level === filter.level);
     }
     if (filter?.source) {
       result = result.filter((e) => e.source === filter.source);
