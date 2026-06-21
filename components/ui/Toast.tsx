@@ -29,28 +29,28 @@ export function ToastContainer() {
 
   return (
     <div className="fixed top-4 right-4 z-[500] flex flex-col gap-2 pointer-events-none">
-        {toasts.map((t) => {
-          const config = variantConfig[t.variant];
-          return (
-            <div
-              key={t.id}
-              className={cn(
-                'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg min-w-[300px] max-w-[420px]',
-                config.containerClass
-              )}
+      {toasts.map((t) => {
+        const config = variantConfig[t.variant];
+        return (
+          <div
+            key={t.id}
+            className={cn(
+              'pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg min-w-[300px] max-w-[420px]',
+              config.containerClass
+            )}
+          >
+            {config.icon}
+            <p className="flex-1 text-sm font-bold text-slate-800">{t.message}</p>
+            <button
+              aria-label="Dismiss toast"
+              onClick={() => dismiss(t.id)}
+              className="shrink-0 w-7 h-7 rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
             >
-              {config.icon}
-              <p className="flex-1 text-sm font-bold text-slate-800">{t.message}</p>
-              <button
-                aria-label="Dismiss toast"
-                onClick={() => dismiss(t.id)}
-                className="shrink-0 w-7 h-7 rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-400 transition-colors"
-              >
-                <X size={14} />
-              </button>
-            </div>
-          );
-        })}
+              <X size={14} />
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
