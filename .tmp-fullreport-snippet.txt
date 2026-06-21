@@ -1,0 +1,81 @@
+
+  // === 24 萬字完整報告自動生成 ===
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [reportProgress, setReportProgress] = useState({ phase: '', current: 0, total: 0, words: 0 });
+
+  const handleFullReport = async () => {
+    if (!activeTemplate) return;
+    setIsGeneratingReport(true);
+    setReportProgress({ phase: '準備中...', current: 0, total: 0, words: 0 });
+
+    try {
+      const res = await fetch('/api/sustain-write/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          templateId: activeTemplate.id,
+          companyName: companyName || '示範企業股份有限公司',
+          industry: selectedTraits[0] || '製造業',
+          customPrompt: '請根據以下產業特性產生完整的 24 萬字永續報告',
+        }),
+      });
+
+      if (!res.ok) throw new Error('API request failed');
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error('No stream reader');
+
+      const decoder = new TextDecoder();
+      let finalReport = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('event: progress')) {
+            try {
+              const jsonStr = line.substring(6);
+              const data = JSON.parse(jsonStr);
+              setReportProgress({
+                phase: data.chapterTitle || data.phase,
+                current: data.currentChapter,
+                total: data.totalChapters,
+                words: data.totalWords,
+              });
+            } catch { /* ignore parse errors */ }
+          } else if (line.startsWith('event: complete')) {
+            try {
+              const data = JSON.parse(line.substring(6));
+              setReportProgress(prev => ({ ...prev, phase: '完成！', words: data.report?.totalWords || 0 }));
+            } catch { /* ignore */ }
+          } else if (line.startsWith('event: report')) {
+            try {
+              const data = JSON.parse(line.substring(6));
+              finalReport = data;
+            } catch { /* ignore */ }
+          }
+        }
+      }
+
+      // 自動將生成的報告內容填入各章節
+      if (finalReport && finalReport.chapters) {
+        for (let i = 0; i < finalReport.chapters.length; i++) {
+          const ch = finalReport.chapters[i];
+          const chId = 'chapter-' + i;
+          updateContent(chId, ch.content, ch.title, i + 1, ch.indicators || []);
+        }
+        alert('24 萬字完整報告已自動生成！總字數：' + finalReport.totalWords.toLocaleString() + ' 字');
+      }
+
+    } catch (error) {
+      console.error('Full report generation failed:', error);
+      alert('報告生成失敗：' + (error instanceof Error ? error.message : '未知錯誤'));
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  };
+

@@ -17,6 +17,7 @@ import { SharedMemory } from './memory';
 import { FacilityRegistry } from './registry';
 import { realtime } from './realtime';
 import { searchEngine } from './search';
+import { getWSServer } from './ws-server';
 
 class OmniHubClass {
   private static instance: OmniHubClass;
@@ -44,6 +45,17 @@ class OmniHubClass {
     await this.registry.init();
     this.initialized = true;
     console.log('[OmniHub] 萬能中心已啟動');
+  }
+
+  // ── 跨機廣播 ──
+
+  private broadcastToPeers(event: { type: string; payload: Record<string, unknown> }): void {
+    try {
+      const wss = getWSServer();
+      wss.broadcastEvent({ type: event.type, payload: event.payload, timestamp: Date.now() });
+    } catch {
+      // WS server not initialized (e.g., standalone mode)
+    }
   }
 
   // ── 設施管理 ──
@@ -74,6 +86,7 @@ class OmniHubClass {
       status,
       lastHeartbeat: facility?.lastHeartbeat || new Date().toISOString(),
     });
+    this.broadcastToPeers({ type: 'facility_status', payload: { id, status, lastHeartbeat: facility?.lastHeartbeat || new Date().toISOString() } });
   }
 
   async deregisterFacility(id: string): Promise<void> {
@@ -104,6 +117,7 @@ class OmniHubClass {
       title: newEntry.title,
       type: newEntry.type,
     });
+    this.broadcastToPeers({ type: 'memory_update', payload: { id: newEntry.id, agentId: newEntry.agentId, title: newEntry.title, type: newEntry.type } });
     return newEntry;
   }
 
@@ -135,6 +149,7 @@ class OmniHubClass {
       assignedTo: newTask.assignedTo,
       title: newTask.title,
     });
+    this.broadcastToPeers({ type: 'task_update', payload: { id: newTask.id, status: newTask.status, assignedTo: newTask.assignedTo, title: newTask.title } });
     return newTask;
   }
 
@@ -160,6 +175,7 @@ class OmniHubClass {
         title: task.title,
         output,
       });
+      this.broadcastToPeers({ type: 'task_update', payload: { id: task.id, status: 'completed', assignedTo: task.assignedTo, title: task.title } });
     }
   }
 
@@ -191,6 +207,7 @@ class OmniHubClass {
       messageType: message.type,
       priority: message.priority,
     });
+    this.broadcastToPeers({ type: 'agent_message', payload: { from: message.fromAgentId, to: message.toAgentId, messageType: message.type, priority: message.priority } });
   }
 
   getMessages(filter?: {

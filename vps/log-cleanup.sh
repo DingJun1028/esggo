@@ -1,48 +1,55 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
+# vps/log-cleanup.sh — 日誌輪換與清理
+# 使用方式：ssh root@VPS "bash -s" < vps/log-cleanup.sh
+# 排程：0 4 * * 0 /bin/bash /var/www/esggo/vps/log-cleanup.sh
 
-# ESGGO VPS Log Rotation & Cleanup Script
-# Usage: sudo ./vps/log-cleanup.sh
+set -euo pipefail
 
-LOG_DIR="/var/log/esggo"
+LOG_DIRS=(
+    "/var/www/esggo/logs"
+    "/var/log/nginx"
+    "/var/log/pm2"
+)
+
 MAX_LOG_SIZE="100M"
-KEEP_DAYS=7
+MAX_LOG_AGE_DAYS=30
+PM2_LOG_LINES=10000
 
-log() { echo "==> [Log] $1"; }
+echo "[$(date)] === Log Cleanup Start ==="
 
-# Create log directory if missing
-mkdir -p "$LOG_DIR"
-
-# Rotate PM2 logs
-log "Rotating PM2 logs..."
-pm2 reloadLogs 2>/dev/null || true
-
-# Rotate large application logs
-log "Rotating large application logs..."
-find /var/www/esggo/logs -name "*.log" -type f -size +${MAX_LOG_SIZE} -exec bash -c '
-    for f; do
-        mv "$f" "${f}.old"
-        gzip -9 "${f}.old" 2>/dev/null || true
-        touch "$f"
+# 1. 輪換大型日誌
+for dir in "${LOG_DIRS[@]}"; do
+    [ -d "$dir" ] || continue
+    for logfile in "$dir"/*.log; do
+        [ -f "$logfile" ] || continue
+        size=$(stat -f%z "$logfile" 2>/dev/null || stat -c%s "$logfile" 2>/dev/null || echo 0)
+        max_bytes=$(numfmt --from=iec "$MAX_LOG_SIZE")
+        if [ "$size" -gt "$max_bytes" ]; then
+            rotated="${logfile}.$(date +%Y%m%d_%H%M%S).gz"
+            gzip -c "$logfile" > "$rotated"
+            > "$logfile"
+            echo "  ROTATED: $logfile → $rotated"
+        fi
     done
-' bash {} + 2>/dev/null || true
+done
 
-# Remove old rotated logs
-log "Removing old rotated logs..."
-find "$LOG_DIR" -name "*.log.old.gz" -mtime +${KEEP_DAYS} -delete 2>/dev/null || true
-find /var/www/esggo/logs -name "*.log.old.gz" -mtime +${KEEP_DAYS} -delete 2>/dev/null || true
+# 2. 清理過期日誌
+for dir in "${LOG_DIRS[@]}"; do
+    [ -d "$dir" ] || continue
+    find "$dir" -name "*.log.*.gz" -mtime +${MAX_LOG_AGE_DAYS} -delete -print 2>/dev/null | while read f; do
+        echo "  DELETED: $f"
+    done
+done
 
-# Clean archived deployments
-log "Cleaning old deployment archives..."
-find /var/www/esggo -name "backup-*.tar.gz" -type f -mtime +${KEEP_DAYS} -delete 2>/dev/null || true
+# 3. PM2 日誌截斷
+if command -v pm2 &>/dev/null; then
+    pm2 logs --nostream --lines "$PM2_LOG_LINES" > /tmp/pm2-recent.log 2>/dev/null
+    echo "  PM2: log flush done"
+fi
 
-# Clean tmp files
-log "Cleaning tmp files..."
-rm -rf /tmp/esggo-* 2>/dev/null || true
+# 4. 清理 .next 快取（保留最新）
+if [ -d "/var/www/esggo/.next/cache" ]; then
+    find "/var/www/esggo/.next/cache" -mtime +7 -delete 2>/dev/null
+    echo "  .next/cache: old entries cleaned"
+fi
 
-# Show disk usage
-log "Current log disk usage:"
-du -sh "$LOG_DIR" 2>/dev/null || true
-du -sh /var/www/esggo/logs 2>/dev/null || true
-
-log "Log cleanup completed."
+echo "[$(date)] === Log Cleanup End ==="

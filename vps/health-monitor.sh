@@ -1,92 +1,124 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
+#!/bin/bash
+# vps/health-monitor.sh — 服務健康監控與自動修復
+# 使用方式：ssh root@VPS "bash -s" < vps/health-monitor.sh
+# 或排程：*/5 * * * * /bin/bash /var/www/esggo/vps/health-monitor.sh >> /var/log/health-monitor.log 2>&1
 
-# ESGGO VPS Health Monitor & Auto-Restart Script
-# Monitors services and auto-restarts on failure
-# Usage: ./vps/health-monitor.sh
+set -euo pipefail
 
-CONFIG_FILE="${CONFIG_FILE:-/var/www/esggo/health-monitor.conf}"
-LOG_FILE="/var/log/esggo-health-monitor.log"
-MAX_RESTARTS=3
-RESTART_WINDOW=300
+# 配置
+CONFIG_FILE="${1:-/var/www/esggo/vps/health-monitor.conf}"
+source "$CONFIG_FILE" 2>/dev/null || {
+    # 預設配置
+    PM2_APPS=("esggo-core" "omniagent-gateway")
+    CHECK_URLS=("http://127.0.0.1:3000/api/health" "http://127.0.0.1:3003/status")
+    CPU_THRESHOLD=90
+    MEM_THRESHOLD=85
+    DISK_THRESHOLD=90
+    RESTART_ON_FAILURE=true
+    LOG_FILE="/var/log/health-monitor.log"
+    ALERT_EMAIL="${ALERT_EMAIL:-}"
+}
 
-log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
+LOG_FILE="${LOG_FILE:-/var/log/health-monitor.log}"
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
-# Source config if exists
-if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-fi
+log() { echo "[$TIMESTAMP] $*" >> "$LOG_FILE"; }
 
-ESGGO_PORT="${ESGGO_PORT:-3000}"
-GATEWAY_PORT="${GATEWAY_PORT:-8642}"
-ESGGO_PM2="${ESGGO_PM2:-esggo-core}"
-GATEWAY_PM2="${GATEWAY_PM2:-omniagent-gateway}"
+# 1. 檢查 PM2 進程
+check_pm2() {
+    for app in "${PM2_APPS[@]}"; do
+        STATUS=$(pm2 jlist 2>/dev/null | python3 -c "
+import json, sys
+apps = json.load(sys.stdin)
+for a in apps:
+    if a['name'] == '$app':
+        print(a['pm2_env']['status'])
+        break
+" 2>/dev/null || echo "missing")
 
-check_http_health() {
-    local port=$1
-    local endpoint=$2
-    
-    if curl -fsS --max-time 5 "http://127.0.0.1:${port}${endpoint}" >/dev/null 2>&1; then
-        return 0
+        if [ "$STATUS" != "online" ]; then
+            log "WARN: $app is $STATUS (not online)"
+            if [ "$RESTART_ON_FAILURE" = true ]; then
+                log "ACTION: Restarting $app..."
+                pm2 restart "$app" --update-env
+                sleep 3
+                NEW_STATUS=$(pm2 jlist 2>/dev/null | python3 -c "
+import json, sys
+apps = json.load(sys.stdin)
+for a in apps:
+    if a['name'] == '$app':
+        print(a['pm2_env']['status'])
+        break
+" 2>/dev/null || echo "missing")
+                log "RESULT: $app restarted → $NEW_STATUS"
+            fi
+        else
+            log "OK: $app is online"
+        fi
+    done
+}
+
+# 2. 檢查 HTTP 端點
+check_http() {
+    for url in "${CHECK_URLS[@]}"; do
+        HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$url" 2>/dev/null || echo "000")
+        if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "307" ]; then
+            log "OK: $url → $HTTP_CODE"
+        else
+            log "FAIL: $url → $HTTP_CODE"
+        fi
+    done
+}
+
+# 3. 檢查系統資源
+check_resources() {
+    # CPU
+    CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | awk '{print int($2 + $4)}' || echo 0)
+    if [ "$CPU_USAGE" -gt "$CPU_THRESHOLD" ]; then
+        log "WARN: CPU ${CPU_USAGE}% > ${CPU_THRESHOLD}%"
     else
-        return 1
+        log "OK: CPU ${CPU_USAGE}%"
     fi
-}
 
-restart_service() {
-    local service_name=$1
-    local pm2_name=$2
-    local port=$3
-    
-    log "Attempting to restart ${service_name}..."
-    pm2 restart "$pm2_name" --update-env 2>/dev/null || pm2 start "$pm2_name" 2>/dev/null || true
-    
-    sleep 5
-    if check_http_health "$port" "/status" || check_http_health "$port" "/api/health"; then
-        log "SUCCESS: ${service_name} restarted successfully"
-        return 0
+    # Memory
+    MEM_TOTAL=$(free -m | awk '/^Mem:/{print $2}')
+    MEM_USED=$(free -m | awk '/^Mem:/{print $3}')
+    MEM_PCT=$((MEM_USED * 100 / MEM_TOTAL))
+    if [ "$MEM_PCT" -gt "$MEM_THRESHOLD" ]; then
+        log "WARN: Memory ${MEM_PCT}% > ${MEM_THRESHOLD}%"
     else
-        log "ERROR: ${service_name} failed to restart"
-        return 1
+        log "OK: Memory ${MEM_PCT}%"
+    fi
+
+    # Disk
+    DISK_PCT=$(df -h / | awk 'NR==2{print int($5)}')
+    if [ "$DISK_PCT" -gt "$DISK_THRESHOLD" ]; then
+        log "WARN: Disk ${DISK_PCT}% > ${DISK_THRESHOLD}%"
+    else
+        log "OK: Disk ${DISK_PCT}%"
     fi
 }
 
-check_all_services() {
-    local failed=0
-    
-    # Check Next.js app
-    if ! check_http_health "${ESGGO_PORT}" "/api/health"; then
-        log "WARNING: esggo-core not responding on port ${ESGGO_PORT}"
-        restart_service "esggo-core" "$ESGGO_PM2" "$ESGGO_PORT" || ((failed++))
+# 4. 檢查 Nginx
+check_nginx() {
+    if nginx -t >/dev/null 2>&1; then
+        log "OK: Nginx config valid"
+    else
+        log "FAIL: Nginx config invalid"
+        # 嘗試恢復
+        log "ACTION: Restarting Nginx..."
+        nginx 2>/dev/null || nginx -s reload 2>/dev/null || true
     fi
-    
-    # Check OmniAgent Gateway
-    if ! check_http_health "${GATEWAY_PORT}" "/status"; then
-        log "WARNING: omniagent-gateway not responding on port ${GATEWAY_PORT}"
-        restart_service "omniagent-gateway" "$GATEWAY_PM2" "$GATEWAY_PORT" || ((failed++))
-    fi
-    
-    # Check system resources
-    local mem_usage=$(free | awk '/Mem/{printf "%.0f", $3/$2*100}')
-    local cpu_usage=$(top -bn1 | awk '/Cpu/{print $2}' | cut -d'%' -f1 || echo 0)
-    
-    if [ "${mem_usage}" -gt 90 ]; then
-        log "WARNING: High memory usage: ${mem_usage}%"
-    fi
-    
-    if [ "${cpu_usage:-0}" -gt 90 ]; then
-        log "WARNING: High CPU usage: ${cpu_usage}%"
-    fi
-    
-    # Check disk space
-    local disk_usage=$(df / | awk 'NR==2{gsub(/%/,"",$5); print $5}')
-    if [ "${disk_usage:-0}" -gt 90 ]; then
-        log "WARNING: High disk usage: ${disk_usage}%"
-    fi
-    
-    return $failed
 }
 
-# Run health check
-check_all_services
-exit $?
+# 5. 主程式
+main() {
+    log "=== Health Check Start ==="
+    check_pm2
+    check_http
+    check_resources
+    check_nginx
+    log "=== Health Check End ==="
+}
+
+main

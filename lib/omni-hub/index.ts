@@ -30,14 +30,11 @@ export type {
 export { OmniHub } from './hub';
 export { SharedMemory } from './memory';
 export { FacilityRegistry } from './registry';
+export { realtime } from './realtime';
+export { searchEngine } from './search';
+export { getWSServer } from './ws-server';
+export { initSyncBridge } from './sync-bridge';
 export { createWSClient } from './websocket';
-export { MemorySearchEngine } from './search';
-export {
-  realtime,
-  emitFacilityStatus,
-  emitMemoryUpdate,
-  emitTaskUpdate,
-  emitAgentMessage,
-} from './realtime';
 export type { WSMessage } from './websocket';
 export type { SearchResult, SearchOptions } from './search';
+export type { RealtimeEvent } from './realtime';
