@@ -88,3 +88,8 @@ All future core components must implement the updated `IComponentCore` interface
 **Learning:** Container builds must mirror the environment logic of the host application, specifically package managers. Using `npm` instead of `pnpm` will invariably cause resolution errors when a lockfile format mismatch exists.
 **Prevention:** Ensured `Dockerfile` explicitly installs and runs `pnpm` (`RUN npm install -g pnpm && pnpm install --no-frozen-lockfile`) and references `pnpm-lock.yaml`.
 
+
+## 2026-06-21 - [XSS Protection in Intelligence Report]
+**Vulnerability:** The AI-generated `report.content` was directly rendered into the DOM using `dangerouslySetInnerHTML={{ __html: report.content }}` in `app/intelligence/page.tsx` without sanitization. This is a critical XSS vector if the AI model hallucinates or maliciously crafted external data is returned and injected.
+**Learning:** Even internal AI outputs should be treated as untrusted user input, especially when returning HTML meant for direct DOM rendering.
+**Prevention:** Used the `xss` library to wrap the generated report before injection (`xss(report.content)`), ensuring any potentially harmful `<script>` tags or inline event handlers are stripped.

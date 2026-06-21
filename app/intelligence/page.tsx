@@ -28,6 +28,7 @@ import { Card } from '@/components/ui/v2/Card';
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
 import { useThemeStore } from '@/lib/theme-store';
+import xss from 'xss';
 
 /* ─── Types ─── */
 interface IntelligenceRecord {
@@ -399,7 +400,7 @@ export default function IntelligencePage() {
                 {report.content && (
                   <div
                     className="prose prose-sm max-w-none text-slate-700 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: report.content }}
+                    dangerouslySetInnerHTML={{ __html: xss(report.content) }}
                   />
                 )}
                 {report.loading && report.content && (
