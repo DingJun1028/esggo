@@ -26,3 +26,10 @@
 ## 2026-06-21 - [CI Typescript Build Error Fix]
 **Learning:** During the Next.js `next build` step in CI, `Turbopack` warned about unexpected files, and then a build error occurred at `/api/agent/tasks` regarding `Cannot read properties of null (reading 'defineTool')`.
 **Action:** Investigated the backend API layer code logic to ensure tools are properly defined and initialized to prevent null reference errors on agent startup.
+
+## 2026-06-21 - [CI Dockerfile Fix 2]
+**Learning:** The Dockerfile failed because it was trying to `COPY --from=builder /app/next.config.mjs`, but the file is actually `next.config.ts`.
+**Action:** Always ensure the Dockerfile references the exact file extensions present in the repository, especially for build configs like `next.config`.
+
+## 2026-06-21 - [CI Docker Buildx Mount Error Note]
+**Learning:** The local `docker build` failed with a weird `overlay` mount error `invalid argument`. This is a local Sandbox Docker Engine issue (`containerd-overlayfs` driver) and unrelated to the CI run. Since `pnpm run build` succeeds locally, the Next.js and typescript configurations are correct and safe to push.
