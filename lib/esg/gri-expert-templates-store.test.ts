@@ -5,8 +5,8 @@ import { applyGRIExpertTemplate } from '@/lib/esg/gri-expert-templates-store';
 import { DEFAULT_TAGS } from '@/lib/omni-core/omni-tag-system';
 
 describe('Matrix System', () => {
-  it('should have 55 core routes', () => {
-    expect(MATRIX_ROUTES.length).toBe(55);
+  it('should have 56 core routes', () => {
+    expect(MATRIX_ROUTES.length).toBe(56);
   });
 
   it('should have route-component mapping', () => {

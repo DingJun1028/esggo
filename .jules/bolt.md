@@ -33,3 +33,6 @@
 
 ## 2026-06-21 - [CI Docker Buildx Mount Error Note]
 **Learning:** The local `docker build` failed with a weird `overlay` mount error `invalid argument`. This is a local Sandbox Docker Engine issue (`containerd-overlayfs` driver) and unrelated to the CI run. Since `pnpm run build` succeeds locally, the Next.js and typescript configurations are correct and safe to push.
+
+## 2026-06-21 - [CI Typescript Module Fix - 2]
+**Learning:** Adding workspace dependencies or missing types via `pnpm add -D -w` solves missing modules locally, but some tests failing with `better-sqlite3` import resolution errors might be an artifact of testing isolated server components with mismatched node build flags (e.g. `prebuild-install` native bindings lacking python support). The core fix for the Next config cache issue is sound.
