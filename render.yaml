@@ -2,7 +2,7 @@ services:
   - type: web
     name: esggo-platform
     runtime: node
-    plan: starter
+    plan: standard
     buildCommand: pnpm install && pnpm run build
     startCommand: pnpm start
     envVars:
@@ -12,8 +12,15 @@ services:
         fromSecret: supabase-url
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         fromSecret: supabase-anon-key
+      - key: NEXT_PUBLIC_APP_VERSION
+        value: 1.5.0
+      - key: PORT
+        value: 3000
     healthCheckPath: /api/system/health
     autoDeploy: true
+    scaling:
+      minInstances: 1
+      maxInstances: 5
 
   - type: postgresql
     name: esggo-db

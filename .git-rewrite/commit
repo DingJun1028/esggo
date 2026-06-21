@@ -1,0 +1,6 @@
+tree 709465825803afac4fdf616810e9754550d0ecda
+parent e7460d6deaff8b6fc4d8220d967f59be20c960fc
+author DingJun1028 <dingjunhong1028@gmail.com> 1780117832 +0800
+committer DingJun1028 <dingjunhong1028@gmail.com> 1780117832 +0800
+
+feat: architect AI agent swarm and integrate Genkit-based RAG search, wiki management, and DataConnect schema.
