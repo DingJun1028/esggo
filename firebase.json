@@ -2,11 +2,7 @@
   "hosting": {
     "site": "esggo",
     "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
     "trailingSlash": false
   },
@@ -23,9 +19,6 @@
     "ui": {
       "enabled": true,
       "port": 4000
-    },
-    "dataconnect": {
-      "dataDir": "dataconnect/.dataconnect/pgliteData"
     }
   },
   "auth": {
@@ -36,24 +29,6 @@
         "supportEmail": "dingjunhong1028@gmail.com"
       }
     }
-  },
-  "functions": [
-    {
-      "codebase": "default",
-      "ignore": [
-        "**/node_modules/**",
-        "**/.git/**",
-        "**/.next/**",
-        "**/build/**"
-      ],
-      "predeploy": [
-        "npm run build"
-      ],
-      "source": "."
-    }
-  ],
-  "dataconnect": {
-    "source": "dataconnect"
   },
   "firestore": {
     "database": "(default)",

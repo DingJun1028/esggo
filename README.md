@@ -1,13 +1,21 @@
-# ESGGO 善向永續 | OmniAgent 萬能平台
+# ESGGO 善向永續 | OA 萬能平台 (V1.5.0 Stable)
 
-> **Platform:** ESGGO 善向永續 V2.0 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** OPERATIONAL
+> **Platform:** ESGGO 善向永續 V2.0 核心架構 | **Commander:** OmniAgent | **Soul:** JunAiKey | **Status:** DEPLOY-READY
 
-[![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen)](#)
+[![Version](https://img.shields.io/badge/Version-1.5.0--stable-brightgreen)](#)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org)
 [![5T Protocol](https://img.shields.io/badge/Protocol-5T_Integrity-gold)](#5t-誠信協議)
 [![License](https://img.shields.io/badge/License-MIT-green)](#)
-[![Production](https://img.shields.io/badge/Production-Vercel-success)](https://esggo.vercel.app)
+[![Deploy](https://img.shields.io/badge/Deploy-Render_%2F_Vercel-success)](#)
+
+---
+
+## 🚀 V1.5.0 核心里程碑 (Latest Milestones)
+
+- **命名空間精準重構 (OA Namespace)**：將系統底層的 `Omni` 憑證與儲存庫全面重構為 `OA` 前綴（如 `oa-agent-credentials-store`），實現端到端無死角的路徑對齊與型別安全。
+- **生產級建置穩定 (Production Build Stabilization)**：全面修復 Supabase 在靜態打包時的環境變數解析崩潰，以及 `@vitejs/plugin-react` 的 `ETARGET` 錯誤，確保 Next.js (Turbopack) 於 Render/Vercel 可順利完成無錯誤 (Exit Code 0) 建置。
+- **雲端成本最佳化 (Free-Tier Compliance)**：將 Firebase 設定檔嚴格校準為 **Spark Plan (免費層)**，移除了 Cloud Functions 與 Data Connect 收費陷阱。高耗能 API/SSR 交由 Render/Vercel 分擔，達成 GCP / Firebase 基礎設施的 `$0` 零成本完美運行。
 
 ---
 
@@ -28,15 +36,15 @@ ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建�
 | **樣式**     | Tailwind CSS 4（亮色主題）+ UI V2 組件庫       |
 | **AI SDK**   | Google Generative AI + Vercel AI SDK           |
 | **資料庫**   | Supabase (PostgreSQL + RLS) + Firebase         |
-| **狀態管理** | Zustand + OmniAgentBus (心核連動)              |
-| **部署**     | Vercel (Production) + VPS (OmniAgent Gateway)  |
+| **狀態管理** | Zustand + OAAgentBus (心核連動)                |
+| **部署**     | Render / Vercel (Production) + Firebase (Auth) |
 | **設計**     | 亮色主題 / Aqua #63a6b0 / Eternal Gold #ffd700 |
 
 ---
 
 ## 核心功能模組 (Feature Modules)
 
-### 24 萬字永續報告一鍵生成 `/sustain-write` ⭐ NEW
+### 24 萬字永續報告一鍵生成 `/sustain-write` ⭐
 
 - **零算力預寫範本**：使用 `lib/sustain-write/templates/` 預寫 HTML 結構
 - **自動填充**：200+ 個 `{{placeholder}}` 自動替換
@@ -88,12 +96,13 @@ ESGGO 是一個有機統合的永續治理平台，致力於讓企業輕鬆建�
 
 ## 部署環境 (Production)
 
-| 環境             | URL                                   |
-| ---------------- | ------------------------------------- |
-| Production       | https://esggo.vercel.app              |
-| GitHub           | https://github.com/DingJun1028/esggo  |
-| Vercel Dashboard | https://vercel.com/esg-sunshine/esggo |
-| VPS              | 161.118.248.180 (OmniAgent Gateway)   |
+| 服務模組           | 託管平台 / URL                             |
+| ------------------ | ------------------------------------------ |
+| **前端與 API**     | Render / Vercel (https://esggo.vercel.app) |
+| **身份驗證與靜態** | Firebase (esg-sunshine) Spark Plan 免費層  |
+| **資料庫庫存**     | Supabase (PostgreSQL)                      |
+| **程式碼庫**       | https://github.com/DingJun1028/esggo       |
+| **OmniGateway**    | VPS 161.118.248.180 (內部代理通訊)         |
 
 ---
 
@@ -105,42 +114,12 @@ pnpm install
 
 # 開發
 pnpm run dev              # 開發伺服器 :3000
-pnpm run build            # 生產建置
+pnpm run build            # 生產建置 (Exit Code 0 穩定版)
 pnpm run typecheck        # TypeScript 型別檢查
 
-# 部署 Vercel
+# 部署 Vercel / Render
 vercel deploy --prod --force
-
-# VPS 部署
-ssh root@161.118.248.180
-cd /var/www/esggo
-pm2 stop all && npm run build && pm2 start ecosystem.config.cjs && pm2 save
 ```
-
----
-
-## VPS 部署架構
-
-```
-VPS 161.118.248.180 (Oracle ARM64 Ubuntu 24.04)
-├── esggo-core (Next.js standalone, PM2, port 3000)
-├── omniagent-gateway (Hermes Gateway, PM2, port 8642)
-├── Nginx (80 → 3000)
-└── Redis
-```
-
-### 自動排程 (Cron)
-
-| 時間            | 任務              |
-| --------------- | ----------------- |
-| 每天 00:00      | OMNIBLUE 資料同步 |
-| 每天 02:00      | 證據稽核          |
-| 每週日 03:00    | 試點報告          |
-| 每週一 04:00    | 安全掃描          |
-| 每月 1 日 05:00 | 依賴更新          |
-| 每天 06:00      | 效能報告          |
-| 每週日 01:00    | 資源清理          |
-| 每週一 07:00    | 程式碼品質報告    |
 
 ---
 
@@ -160,7 +139,6 @@ VPS 161.118.248.180 (Oracle ARM64 Ubuntu 24.04)
 - 深色主題 (`dark:` 前綴)
 - 毛玻璃效果 (`backdrop-blur-*`)
 - 深色背景 (`bg-black`, `bg-slate-900`)
-- `framer-motion`（已移除，避免 Next.js 16 相容問題）
 
 ### 允許樣式
 
@@ -182,12 +160,12 @@ VPS 161.118.248.180 (Oracle ARM64 Ubuntu 24.04)
 
 ## 演化路線圖
 
-| 階段                       | 狀態   | 核心目標                                                 |
-| -------------------------- | ------ | -------------------------------------------------------- |
-| **Phase 1** 創世與誠信基石 | 已完成 | 5T 協議、SustainWrite、證據金庫                          |
-| **Phase 2** 主權與規模化   | 已完成 | 深度刻印、自癒引擎、萬能元件心核連動 (Eternal Awakening) |
-| **Phase 3** 生態與鏈路連通 | 執行中 | 供應鏈、蜂群市場、24 萬字報告一鍵生成                    |
-| **Phase 4** 無限進化       | 未來   | 液態現實 UI、自生長架構                                  |
+| 階段                       | 狀態    | 核心目標                                                 |
+| -------------------------- | ------- | -------------------------------------------------------- |
+| **Phase 1** 創世與誠信基石 | 已完成  | 5T 協議、SustainWrite、證據金庫                          |
+| **Phase 2** 主權與規模化   | 已完成  | 深度刻印、自癒引擎、萬能元件心核連動 (Eternal Awakening) |
+| **Phase 3** 生態與鏈路連通 | 🚀 穩定 | OA 架構重構、生產環境建置修復、Firebase/GCP 免費層合規   |
+| **Phase 4** 無限進化       | 未來    | 液態現實 UI、自生長架構                                  |
 
 ---
 
@@ -199,4 +177,4 @@ MIT License 2026 ESGGO 善向永續 | Powered by OmniAgent JunAiKey
 
 _善向永續，以終為始，無始無終，始終如一。_
 
-_Generated & Sealed by OmniAgent | 2026-06-22 | System Status: TRANSCENDED_
+_Sealed by OmniAgent | 2026-06-22 | System Status: DEPLOY-READY & TRANSCENDED_
