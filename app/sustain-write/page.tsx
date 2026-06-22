@@ -1399,58 +1399,13 @@ ${appendices}
         )}
 
         {/* ====== Agent Pulse 右下角 ====== */}
-        <div className="fixed bottom-6 right-6 z-50">
-          <button
-            onClick={() => setShowAgentPulse(!showAgentPulse)}
-            className="w-14 h-14 rounded-full bg-cyan-600 text-white shadow-lg flex items-center justify-center hover:bg-cyan-700 transition-all hover:scale-105"
-          >
-            {showAgentPulse ? <X size={24} /> : <Bot size={24} />}
-          </button>
-
-          {showAgentPulse && (
-            <div className="absolute bottom-16 right-0 w-72 bg-white rounded-xl shadow-2xl border border-neutral-200 overflow-hidden">
-              <div className="p-3 bg-cyan-600 text-white">
-                <p className="font-bold text-sm">Agent Pulse</p>
-                <p className="text-xs opacity-80">我的最愛 · 超級管理員</p>
-              </div>
-              <div className="p-3 space-y-2 max-h-64 overflow-y-auto">
-                <p className="text-xs font-medium text-neutral-500 mb-2">我的最愛</p>
-                {favorites.length === 0 ? (
-                  <p className="text-xs text-neutral-400 text-center py-2">尚未加入最愛</p>
-                ) : (
-                  favorites.map((f) => (
-                    <div
-                      key={f}
-                      className="flex items-center justify-between p-2 bg-neutral-50 rounded"
-                    >
-                      <span className="text-xs text-neutral-700">{f}</span>
-                      <button onClick={() => toggleFavorite(f)}>
-                        <X size={12} className="text-neutral-400" />
-                      </button>
-                    </div>
-                  ))
-                )}
-
-                <hr className="my-2" />
-                <p className="text-xs font-medium text-neutral-500 mb-2">超級管理員</p>
-                <div className="space-y-1">
-                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
-                    <Database size={12} /> 資料庫管理
-                  </button>
-                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
-                    <Settings size={12} /> 系統設定
-                  </button>
-                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
-                    <Users size={12} /> 使用者管理
-                  </button>
-                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
-                    <FileText size={12} /> 報告歷史
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        {showAgentPulse && <AgentPulsePanel onClose={() => setShowAgentPulse(false)} />}
+        <button
+          onClick={() => setShowAgentPulse(!showAgentPulse)}
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-cyan-600 text-white shadow-lg flex items-center justify-center hover:bg-cyan-700 transition-all hover:scale-105"
+        >
+          {showAgentPulse ? <X size={24} /> : <Bot size={24} />}
+        </button>
       </div>
     </div>
   );
