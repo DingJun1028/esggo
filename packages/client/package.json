@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@esggo/types": "workspace:*"
+    "@esggo/types": "1.0.0"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

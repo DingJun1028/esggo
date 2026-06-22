@@ -7,7 +7,7 @@
   "bin": {
     "oa": "./cli/omni-cli.ts"
   },
-"scripts": {
+  "scripts": {
     "build": "next build",
     "build:vercel": "NEXT_PUBLIC_APP_VERSION=$(node -p \"require('./package.json').version\") next build && node scripts/copy-standalone-assets.js",
     "start": "node -r dotenv/config .next/standalone/server.js",
@@ -45,7 +45,7 @@
     "@ai-sdk/openai": "^3.0.71",
     "@apollo/client": "^4.2.2",
     "@base-ui/react": "^1.5.0",
-    "@esggo/types": "workspace:*",
+    "@esggo/types": "1.0.0",
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@genkit-ai/firebase": "^1.37.0",
