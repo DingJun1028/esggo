@@ -29,9 +29,6 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@types/react@18.3.31)(date-fns@4.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@dataconnect/admin-generated':
-        specifier: file:src/dataconnect-admin-generated
-        version: file:src/dataconnect-admin-generated(firebase-admin@13.10.0)
       '@dataconnect/generated':
         specifier: file:src/dataconnect-generated
         version: file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)
@@ -1150,12 +1147,6 @@ packages:
 
   '@dabh/diagnostics@2.0.8':
     resolution: {integrity: sha512-R4MSXTVnuMzGD7bzHdW2ZhhdPC/igELENcq5IjEverBvq5hn1SXCWcsi6eSsdWP0/Ur+SItRRjAktmdoX/8R/Q==}
-
-  '@dataconnect/admin-generated@file:src/dataconnect-admin-generated':
-    resolution: {directory: src/dataconnect-admin-generated, type: directory}
-    engines: {node: ' >=18.0'}
-    peerDependencies:
-      firebase-admin: ^13.4.0
 
   '@dataconnect/generated@file:src/dataconnect-generated':
     resolution: {directory: src/dataconnect-generated, type: directory}
@@ -10682,10 +10673,6 @@ snapshots:
       '@so-ric/colorspace': 1.1.6
       enabled: 2.0.0
       kuler: 2.0.0
-
-  '@dataconnect/admin-generated@file:src/dataconnect-admin-generated(firebase-admin@13.10.0)':
-    dependencies:
-      firebase-admin: 13.10.0
 
   '@dataconnect/generated@file:src/dataconnect-generated(@tanstack-query-firebase/react@2.1.1(@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.86.0(@babel/core@7.29.7)(@types/react@18.3.31)(react@18.3.1))(react@18.3.1))(firebase@12.15.0))(firebase@12.15.0)':
     dependencies:
