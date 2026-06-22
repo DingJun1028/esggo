@@ -39,14 +39,14 @@ export interface OmniAgentSkillAbsorption {
   absorptionStatus: 'pending' | 'absorbed' | 'transcended';
 }
 
-export type HermesRelease = OmniAgentRelease;
-export type HermesSkillAbsorption = OmniAgentSkillAbsorption;
+export type OmniAgentRelease = OmniAgentRelease;
+export type OmniAgentSkillAbsorption = OmniAgentSkillAbsorption;
 
 /**
  * OmniAgent → OmniAgent 技能轉化映射表
  * 這是 ESGGO 的核心機密：如何將通用 OmniAgent 技能「洗鍊」為 ESG 專屬能力
  */
-export const OmniAgent_TO_OMNI_SKILL_MAP: OmniAgentSkillAbsorption[] = [
+export const OMNI_TO_SKILL_MAP: OmniAgentSkillAbsorption[] = [
   {
     OmniAgentSkillName: 'web_search',
     omniAgentSkillName: 'esg_regulatory_intelligence',
@@ -108,7 +108,7 @@ export const OmniAgent_TO_OMNI_SKILL_MAP: OmniAgentSkillAbsorption[] = [
 /**
  * 最新版本的 OmniAgent 更新記錄 (從官方源同步)
  */
-export const OmniAgent_LATEST_RELEASES: OmniAgentRelease[] = [
+export const OMNI_LATEST_RELEASES: OmniAgentRelease[] = [
   {
     version: 'v0.14.1',
     releaseDate: '2026-06-11',
@@ -136,10 +136,10 @@ export const OmniAgent_LATEST_RELEASES: OmniAgentRelease[] = [
   },
 ];
 
-export const HERMES_LATEST_RELEASES = OmniAgent_LATEST_RELEASES;
-export const HERMES_TO_OMNI_SKILL_MAP = OmniAgent_TO_OMNI_SKILL_MAP;
+export const OMNI_LATEST_RELEASES = OMNI_LATEST_RELEASES;
+export const OMNI_TO_SKILL_MAP = OMNI_TO_SKILL_MAP;
 
-export async function pullHermesAndEvolve(): Promise<{
+export async function pullOmniAgentAndEvolve(): Promise<{
   latestRelease: OmniAgentRelease;
   evolution: OmniAgentEvolution;
   newSkillsAbsorbed: OmniAgentSkillAbsorption[];
@@ -200,11 +200,11 @@ export async function pullOmniAgentAndEvolve(): Promise<{
   // 模擬網路請求延遲 (實際應連接 https://github.com/NousResearch/OmniAgent API)
   await new Promise((r) => setTimeout(r, 1200));
 
-  const latestRelease = OmniAgent_LATEST_RELEASES[0];
+  const latestRelease = OMNI_LATEST_RELEASES[0];
 
   // 自動識別哪些新技能需要被洗鍊進 OmniAgent
   const newSkillsAbsorbed = latestRelease.newSkills.map((OmniAgentSkill) => {
-    const existingMap = OmniAgent_TO_OMNI_SKILL_MAP.find((m) =>
+    const existingMap = OMNI_TO_SKILL_MAP.find((m) =>
       m.OmniAgentSkillName.includes(OmniAgentSkill.split('_')[0])
     );
 

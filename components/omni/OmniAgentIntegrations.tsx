@@ -26,19 +26,19 @@ export default function OmniAgentIntegrations() {
   const [driveResult, setDriveResult] = useState<any>(null);
 
   useEffect(() => {
-    const hermesSuccess = searchParams?.get('hermes_success');
-    const hermesError = searchParams?.get('hermes_error');
+    const omniSuccess = searchParams?.get('omni_success');
+    const omniError = searchParams?.get('omni_error');
 
-    if (hermesSuccess === 'google_workspace_connected') {
+    if (omniSuccess === 'google_workspace_connected') {
       setStatus('connected');
-    } else if (hermesError) {
+    } else if (omniError) {
       setStatus('error');
-      setErrorMessage(hermesError);
+      setErrorMessage(omniError);
     }
 
     const checkStatus = async () => {
       try {
-        const res = await fetch('/api/hermes/google/status');
+        const res = await fetch('/api/omni/google/status');
         const data = await res.json();
 
         if (data.connected) {
@@ -46,12 +46,12 @@ export default function OmniAgentIntegrations() {
           if (data.email) {
             setConnectedEmail(data.email);
           }
-        } else if (!hermesSuccess && !hermesError) {
+        } else if (!omniSuccess && !omniError) {
           setStatus('idle');
         }
       } catch (err) {
-        console.error('Failed to check Hermes status', err);
-        if (!hermesSuccess && !hermesError) {
+        console.error('Failed to check OmniAgent status', err);
+        if (!omniSuccess && !omniError) {
           setStatus('idle');
         }
       }
@@ -61,7 +61,7 @@ export default function OmniAgentIntegrations() {
   }, [searchParams]);
 
   const handleConnect = () => {
-    window.location.href = '/api/hermes/google/oauth';
+    window.location.href = '/api/omni/google/oauth';
   };
 
   const runEmailScan = async () => {
@@ -75,7 +75,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'email_processing',
           title: 'OmniAgent 郵件自動掃描',
           description: '連線 Google Workspace 進行 ESG 信件智能篩選與歸檔。',
-          skillKey: 'hermes_email_archival',
+          skillKey: 'omni_email_archival',
           actorId: connectedEmail || 'system',
         }),
       });
@@ -104,7 +104,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'calendar_scheduling',
           title: 'OmniAgent 行事曆排程同步',
           description: '連線 Google Calendar 提取近期 ESG 關鍵會議，並建立前置自動化準備作業。',
-          skillKey: 'hermes_calendar_agent',
+          skillKey: 'omni_calendar_agent',
           actorId: connectedEmail || 'system',
         }),
       });
@@ -133,7 +133,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'file_processing',
           title: 'OmniAgent 雲端硬碟掃描',
           description: '連線 Google Drive 識別並歸檔 ESG 相關文件至 Evidence Vault。',
-          skillKey: 'hermes_drive_archival',
+          skillKey: 'omni_drive_archival',
           actorId: connectedEmail || 'system',
         }),
       });

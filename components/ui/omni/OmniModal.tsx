@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { cn } from '../../../lib/utils';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniModalProps {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -15,7 +16,15 @@ export interface OmniModalProps {
   className?: string;
 }
 
-export function OmniModal({ isOpen, onClose, title, children, className }: OmniModalProps) {
+export function OmniModal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  className,
+  omniHeart: initialHeart,
+}: OmniModalProps) {
+  const omniHeart = useOmniResonance(initialHeart);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

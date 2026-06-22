@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026',
+          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'omni_gold_2026',
         },
         body: JSON.stringify({ task: agentTask }),
       });
@@ -58,14 +58,23 @@ export async function POST(req: NextRequest) {
         throw new Error(`VPS response not OK: ${vpsRes.status}`);
       }
     } catch (vpsErr) {
-      console.warn('[VPS] OmniAgent Server unreachable, falling back to local orchestrator:', vpsErr);
+      console.warn(
+        '[VPS] OmniAgent Server unreachable, falling back to local orchestrator:',
+        vpsErr
+      );
       executionSource = 'local';
       const localResult = await executeSwarmTask(agentTask.id);
       execution = localResult.execution;
       artifact = localResult.artifact;
     }
 
-    return NextResponse.json({ task: agentTask, execution, artifact, source: executionSource, ok: true });
+    return NextResponse.json({
+      task: agentTask,
+      execution,
+      artifact,
+      source: executionSource,
+      ok: true,
+    });
   } catch (err: any) {
     const message = err.message || '未知錯誤';
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
@@ -73,9 +82,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({ 
-    tasks: GLOBAL_TASKS, 
-    total: GLOBAL_TASKS.length, 
-    ok: true 
+  return NextResponse.json({
+    tasks: GLOBAL_TASKS,
+    total: GLOBAL_TASKS.length,
+    ok: true,
   });
 }

@@ -1,10 +1,10 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 
 import { cn } from '@/lib/utils';
+import { useOmniResonance } from './useOmniResonance';
 
 export interface OmniProgressRingProps {
   /** [永恆覺醒] 萬能元件心核：無作妙德，圓通無礙 */
@@ -27,22 +27,25 @@ export function OmniProgressRing({
   trackColor = '#f1f5f9', // slate-100
   title,
   className,
+  omniHeart: initialHeart,
 }: OmniProgressRingProps) {
+  const omniHeart = useOmniResonance(initialHeart);
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div 
-      className={cn('relative flex flex-col items-center justify-center', className)} 
+    <div
+      data-omni-resonance={omniHeart?.resonanceState}
+      className={cn(
+        'relative flex flex-col items-center justify-center transition-all duration-300',
+        omniHeart?.resonanceState === 1.0 &&
+          'ring-2 ring-[var(--theme-accent)] ring-offset-2 rounded-full',
+        className
+      )}
       style={{ width: size, height: size }}
     >
-      <svg 
-        width={size} 
-        height={size} 
-        viewBox={`0 0 ${size} ${size}`} 
-        className="rotate-[-90deg]"
-      >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotate-[-90deg]">
         {/* Track */}
         <circle
           cx={size / 2}
@@ -52,7 +55,7 @@ export function OmniProgressRing({
           stroke={trackColor}
           strokeWidth={strokeWidth}
         />
-        
+
         {/* Progress */}
         <circle
           cx={size / 2}

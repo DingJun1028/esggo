@@ -48,7 +48,9 @@ export async function saveOmniAgentCredentials(
 
     if (error) throw error;
 
-    console.log(`[OmniAgentStore] Successfully secured Hermes credentials for ${userId} in Vault.`);
+    console.log(
+      `[OmniAgentStore] Successfully secured OmniAgent credentials for ${userId} in Vault.`
+    );
     return { success: true };
   } catch (err: any) {
     console.error('[OmniAgentStore] Failed to save credentials:', err);
@@ -57,7 +59,7 @@ export async function saveOmniAgentCredentials(
 }
 
 /**
- * 取得 Hermes Agent 的 Google Workspace 憑證 (需要解密)
+ * 取得 OmniAgent Agent 的 Google Workspace 憑證 (需要解密)
  */
 export async function getOmniAgentCredentials(
   userId: string = 'system_default'

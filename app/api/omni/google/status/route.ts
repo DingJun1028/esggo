@@ -2,17 +2,17 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
-import { getHermesCredentials } from '@/lib/agent/hermes-store';
+import { getOmniCredentials } from '@/lib/agent/omni-agent-credentials-store';
 
-interface HermesCreds {
+interface OmniAgentCreds {
   access_token?: string;
   [key: string]: unknown;
 }
 
 export async function GET() {
   try {
-    const creds = (await getHermesCredentials('system_default')) as {
-      data: HermesCreds | null;
+    const creds = (await getOmniCredentials('system_default')) as {
+      data: OmniAgentCreds | null;
       error?: { message: string };
     };
 

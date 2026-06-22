@@ -13,12 +13,7 @@ import { create } from 'zustand';
  * - Added skill metrics display
  */
 
-export type OmniSignalType =
-  | 'OBSERVE'
-  | 'INTENT'
-  | 'MANIFEST'
-  | 'SEAL'
-  | 'HEAL';
+export type OmniSignalType = 'OBSERVE' | 'INTENT' | 'MANIFEST' | 'SEAL' | 'HEAL';
 
 export interface OmniSignal {
   id: string;
@@ -43,7 +38,10 @@ interface OmniAgentBusState {
   wsConnected: boolean;
   sseConnected: boolean;
   dispatch: (type: OmniSignalType, source: string, payload: unknown) => void;
-  executeCelestialCommand: (intent: string, payload?: unknown) => Promise<{ message: string; artifactUuid: string }>;
+  executeCelestialCommand: (
+    intent: string,
+    payload?: unknown
+  ) => Promise<{ message: string; artifactUuid: string }>;
   clearSignals: () => void;
   setWsConnected: (v: boolean) => void;
   setSseConnected: (v: boolean) => void;
@@ -65,11 +63,13 @@ function hashSignal(data: unknown): string {
     const str = JSON.stringify(data);
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash = (hash << 5) - hash + str.charCodeAt(i);
       hash |= 0;
     }
     return Math.abs(hash).toString(16).padStart(8, '0');
-  } catch { return 'no-hash'; }
+  } catch {
+    return 'no-hash';
+  }
 }
 
 const DEFAULT_GATEWAY_URL = 'http://161.118.248.180:8642';
@@ -80,7 +80,9 @@ function toWebSocketUrl(httpUrl: string): string {
 
 function connectGatewayWS(onConnected: (v: boolean) => void) {
   if (typeof window === 'undefined') return;
-  const gatewayUrl = toWebSocketUrl(process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || DEFAULT_GATEWAY_URL);
+  const gatewayUrl = toWebSocketUrl(
+    process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL || DEFAULT_GATEWAY_URL
+  );
 
   try {
     _ws = new WebSocket(gatewayUrl);
@@ -88,7 +90,10 @@ function connectGatewayWS(onConnected: (v: boolean) => void) {
     _ws.onopen = () => {
       console.log('[OmniAgentBus] 🔌 Gateway WS connected');
       onConnected(true);
-      if (_reconnectTimer) { clearTimeout(_reconnectTimer); _reconnectTimer = null; }
+      if (_reconnectTimer) {
+        clearTimeout(_reconnectTimer);
+        _reconnectTimer = null;
+      }
     };
 
     _ws.onclose = () => {
@@ -97,7 +102,9 @@ function connectGatewayWS(onConnected: (v: boolean) => void) {
       _reconnectTimer = setTimeout(() => connectGatewayWS(onConnected), 5000);
     };
 
-    _ws.onerror = () => { _ws?.close(); };
+    _ws.onerror = () => {
+      _ws?.close();
+    };
   } catch (e) {
     console.warn('[OmniAgentBus] WS init failed:', e);
   }
@@ -105,7 +112,9 @@ function connectGatewayWS(onConnected: (v: boolean) => void) {
 
 function sendToGateway(signal: OmniSignal) {
   if (_ws?.readyState === WebSocket.OPEN) {
-    try { _ws.send(JSON.stringify(signal)); } catch {}
+    try {
+      _ws.send(JSON.stringify(signal));
+    } catch {}
   }
 }
 
@@ -148,7 +157,9 @@ function connectSSE(onConnected: (v: boolean) => void, onEvent: (event: BusEvent
       if (_sseReconnectAttempts < MAX_SSE_RECONNECT) {
         const delay = Math.min(1000 * Math.pow(2, _sseReconnectAttempts), 30000);
         _sseReconnectAttempts++;
-        console.log(`[OmniAgentBus] 🔄 SSE reconnect in ${delay}ms (attempt ${_sseReconnectAttempts})`);
+        console.log(
+          `[OmniAgentBus] 🔄 SSE reconnect in ${delay}ms (attempt ${_sseReconnectAttempts})`
+        );
         _sseReconnectTimer = setTimeout(() => connectSSE(onConnected, onEvent), delay);
       }
     };
@@ -178,34 +189,39 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
   energyLoadFactor: 1.0,
   isPulseDismissed: false,
 
-  dispatch: (type, source, payload) => set((state) => {
-    const signal: OmniSignal = {
-      id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `sig_${Date.now()}`,
-      type,
-      source,
-      payload,
-      timestamp: Date.now(),
-      hash: hashSignal({ type, source, payload, ts: Date.now() }),
-    };
+  dispatch: (type, source, payload) =>
+    set((state) => {
+      const signal: OmniSignal = {
+        id: typeof crypto !== 'undefined' ? crypto.randomUUID() : `sig_${Date.now()}`,
+        type,
+        source,
+        payload,
+        timestamp: Date.now(),
+        hash: hashSignal({ type, source, payload, ts: Date.now() }),
+      };
 
-    sendToGateway(signal);
+      sendToGateway(signal);
 
-    if (type === 'HEAL') {
-      triggerSpontaneousVirtue(signal, state.energyLoadFactor);
-    }
+      if (type === 'HEAL') {
+        triggerSpontaneousVirtue(signal, state.energyLoadFactor);
+      }
 
-    return {
-      signals: [signal, ...state.signals].slice(0, 50),
-      activeResonance: true,
-    };
-  }),
+      return {
+        signals: [signal, ...state.signals].slice(0, 50),
+        activeResonance: true,
+      };
+    }),
 
   executeCelestialCommand: async (intent: string, payload: unknown = {}) => {
     const { dispatch, energyLoadFactor } = get();
     dispatch('INTENT', 'CelestialCommand', { intent, payload });
-    await new Promise(r => setTimeout(r, 800 * Math.max(0.5, energyLoadFactor)));
+    await new Promise((r) => setTimeout(r, 800 * Math.max(0.5, energyLoadFactor)));
     const artifactUuid = `artifact_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    dispatch('SEAL', 'CelestialCommand', { intent, artifactUuid, status: 'Sealed in Eternal Memory' });
+    dispatch('SEAL', 'CelestialCommand', {
+      intent,
+      artifactUuid,
+      status: 'Sealed in Eternal Memory',
+    });
     return { message: `✨ 天命已顯化：${intent}`, artifactUuid };
   },
 
@@ -213,9 +229,10 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
   setWsConnected: (v) => set({ wsConnected: v }),
   setSseConnected: (v) => set({ sseConnected: v }),
 
-  addBusEvent: (event) => set((state) => ({
-    busEvents: [event, ...state.busEvents].slice(0, 100),
-  })),
+  addBusEvent: (event) =>
+    set((state) => ({
+      busEvents: [event, ...state.busEvents].slice(0, 100),
+    })),
   clearBusEvents: () => set({ busEvents: [] }),
 
   setEnergyLoadFactor: (factor) => set({ energyLoadFactor: factor }),
@@ -242,7 +259,10 @@ export const triggerSpontaneousVirtue = (signal: OmniSignal, loadFactor: number 
 
       fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'hermes_gold_2026' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'omni_gold_2026',
+        },
         body: JSON.stringify({
           failureReason: String(payload?.reason ?? 'Auto-heal triggered'),
           sourceTaskId: signal.id,

@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -21,15 +20,15 @@ import {
   Lock,
 } from 'lucide-react';
 import type {
-  HermesRelease,
+  OmniAgentRelease,
   OmniAgentEvolution,
-  HermesSkillAbsorption,
+  OmniAgentSkillAbsorption,
 } from '@/lib/agent/omni-evolution-engine';
 import {
-  HERMES_LATEST_RELEASES,
+  OMNI_LATEST_RELEASES,
   OMNI_EVOLUTION_LOG,
-  HERMES_TO_OMNI_SKILL_MAP,
-  pullHermesAndEvolve,
+  OMNI_TO_SKILL_MAP,
+  pullOmniAgentAndEvolve,
 } from '@/lib/agent/omni-evolution-engine';
 
 // ─── Sub Components ──────────────────────────────────────────────────────────
@@ -86,9 +85,9 @@ const PulseRing = ({ active }: { active: boolean }) => (
 export default function OmniAgentEvolutionPanel() {
   const [isEvolving, setIsEvolving] = useState(false);
   const [latestPull, setLatestPull] = useState<{
-    release: HermesRelease;
+    release: OmniAgentRelease;
     evolution: OmniAgentEvolution;
-    skills: HermesSkillAbsorption[];
+    skills: OmniAgentSkillAbsorption[];
   } | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'skills' | 'log'>('overview');
   const [evolveLog, setEvolveLog] = useState<string[]>([]);
@@ -110,7 +109,7 @@ export default function OmniAgentEvolutionPanel() {
       setEvolveLog((prev) => [...prev, step]);
     }
     try {
-      const result = await pullHermesAndEvolve();
+      const result = await pullOmniAgentAndEvolve();
       setLatestPull({
         release: result.latestRelease,
         evolution: result.evolution,
@@ -119,9 +118,9 @@ export default function OmniAgentEvolutionPanel() {
     } catch (e) {
       setEvolveLog((prev) => [...prev, '⚠️ 模擬模式：使用快取的 OmniAgent 版本資料']);
       setLatestPull({
-        release: HERMES_LATEST_RELEASES[0],
+        release: OMNI_LATEST_RELEASES[0],
         evolution: OMNI_EVOLUTION_LOG[0],
-        skills: HERMES_TO_OMNI_SKILL_MAP.slice(0, 3),
+        skills: OMNI_TO_SKILL_MAP.slice(0, 3),
       });
     }
     setIsEvolving(false);
@@ -154,7 +153,7 @@ export default function OmniAgentEvolutionPanel() {
                 代理進化引擎 (Evolution Engine)
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                持續洗鍊 Hermes 開源更新，轉化為 ESGGO 專屬 OmniAgent 能力
+                持續洗鍊 OmniAgent 開源更新，轉化為 ESGGO 專屬 OmniAgent 能力
               </p>
             </div>
           </div>
@@ -173,7 +172,7 @@ export default function OmniAgentEvolutionPanel() {
       <div className="px-8 py-4 bg-slate-50/80 border-b border-slate-100 flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-black font-mono">
-            <span className="font-mono">OmniAgent {HERMES_LATEST_RELEASES[0].version}</span>
+            <span className="font-mono">OmniAgent {OMNI_LATEST_RELEASES[0].version}</span>
           </div>
           <ArrowRight size={16} className="text-violet-500" />
           <div className="px-3 py-1.5 rounded-xl bg-violet-600 text-white text-xs font-black font-mono">
@@ -182,11 +181,10 @@ export default function OmniAgentEvolutionPanel() {
         </div>
         <span className="text-xs text-slate-400">|</span>
         <span className="text-xs text-slate-500 font-medium">
-          {HERMES_TO_OMNI_SKILL_MAP.filter((s) => s.absorptionStatus === 'transcended').length}{' '}
-          個技能已超越 ·{' '}
-          {HERMES_TO_OMNI_SKILL_MAP.filter((s) => s.absorptionStatus === 'absorbed').length}{' '}
-          個已吸收 ·{' '}
-          {HERMES_TO_OMNI_SKILL_MAP.filter((s) => s.absorptionStatus === 'pending').length} 個待洗鍊
+          {OMNI_TO_SKILL_MAP.filter((s) => s.absorptionStatus === 'transcended').length}{' '}
+          個技能已超越 · {OMNI_TO_SKILL_MAP.filter((s) => s.absorptionStatus === 'absorbed').length}{' '}
+          個已吸收 · {OMNI_TO_SKILL_MAP.filter((s) => s.absorptionStatus === 'pending').length}{' '}
+          個待洗鍊
         </span>
       </div>
 
@@ -212,12 +210,12 @@ export default function OmniAgentEvolutionPanel() {
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
-            {/* Latest Hermes Release */}
+            {/* Latest OmniAgent Release */}
             <div>
               <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">
                 Latest OmniAgent Release
               </h4>
-              {HERMES_LATEST_RELEASES.map((release) => (
+              {OMNI_LATEST_RELEASES.map((release) => (
                 <div
                   key={release.version}
                   className="p-5 rounded-2xl border border-slate-100 bg-white shadow-sm mb-3"
@@ -310,7 +308,7 @@ export default function OmniAgentEvolutionPanel() {
             <p className="text-xs text-slate-500 mb-4">
               每一行代表一個 OmniAgent 通用技能如何被 ESGGO 洗鍊為 OmniAgent 專屬 ESG 能力
             </p>
-            {HERMES_TO_OMNI_SKILL_MAP.map((skill, i) => (
+            {OMNI_TO_SKILL_MAP.map((skill, i) => (
               <div
                 key={i}
                 className="p-4 rounded-2xl border border-slate-100 bg-white hover:border-violet-200 hover:shadow-sm transition-all"
@@ -411,7 +409,7 @@ export default function OmniAgentEvolutionPanel() {
           <span>OmniAgent 是 OmniAgent 的 ESGGO 封裝版本，所有數據可跨平台共用</span>
         </div>
         <a
-          href="https://github.com/NousResearch/hermes"
+          href="https://github.com/NousResearch/omni"
           target="_blank"
           rel="noreferrer"
           className="flex items-center gap-1 text-xs text-violet-500 hover:text-violet-700 font-bold transition-colors"
