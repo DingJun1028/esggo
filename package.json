@@ -123,7 +123,7 @@
     "ws": "^8.21.0",
     "xss": "^1.0.15",
     "zod": "^3.22.4",
-    "zustand": "^4.4.6"
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
