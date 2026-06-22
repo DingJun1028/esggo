@@ -44,7 +44,13 @@ export type MemoryShardData = z.infer<typeof MemoryShardSchema>;
 export interface MemoryShard extends MemoryShardData {
   id: string;
   timestamp: number;
-  sourceType: 'conversation' | 'error_log' | 'code_review' | 'web_crawl' | 'manual' | 'auto_extract';
+  sourceType:
+    | 'conversation'
+    | 'error_log'
+    | 'code_review'
+    | 'web_crawl'
+    | 'manual'
+    | 'auto_extract';
   sourceId?: string;
   usageCount: number;
   lastUsedAt?: string;
@@ -58,7 +64,10 @@ export const SkillUltimateSchema = z.object({
   masteryLevel: z.enum(['Novice', 'Adept', 'Expert', 'Master']),
   corePrinciples: z.array(z.string()).describe('核心原則'),
   synthesis: z.string().describe('深度總結與奧義心法'),
-  voidDimension: z.enum(['Structural Void', 'Logical Void', 'Stateful Void', 'Unified']).optional().describe('無有維度'),
+  voidDimension: z
+    .enum(['Structural Void', 'Logical Void', 'Stateful Void', 'Unified'])
+    .optional()
+    .describe('無有維度'),
 });
 
 export type SkillUltimateData = z.infer<typeof SkillUltimateSchema>;
@@ -116,9 +125,10 @@ ${conversationLog}
   try {
     const response = await generateObject({
       model: agnes('agnes-2.0-flash'),
-      system: "你是一個專業的【無有技藝】記憶萃取系統。你的目標是從雜亂的對話與執行紀錄中，提煉出具有高度技術價值的記憶碎片。",
+      system:
+        '你是一個專業的【無有技藝】記憶萃取系統。你的目標是從雜亂的對話與執行紀錄中，提煉出具有高度技術價值的記憶碎片。',
       prompt,
-      schema: MemoryShardSchema
+      schema: MemoryShardSchema,
     });
 
     const shardData = response.object;
@@ -147,7 +157,10 @@ ${conversationLog}
 /**
  * 從錯誤日誌萃取記憶碎片
  */
-export async function extractShardFromErrorLog(errorLog: string, context?: string): Promise<MemoryShard> {
+export async function extractShardFromErrorLog(
+  errorLog: string,
+  context?: string
+): Promise<MemoryShard> {
   const conversationLog = `錯誤日誌：\n${errorLog}\n\n上下文：${context || '無'}`;
   return extractMemoryShard(conversationLog, 'error_log');
 }
@@ -155,7 +168,10 @@ export async function extractShardFromErrorLog(errorLog: string, context?: strin
 /**
  * 從程式碼審查萃取記憶碎片
  */
-export async function extractShardFromCodeReview(codeDiff: string, reviewComments: string): Promise<MemoryShard> {
+export async function extractShardFromCodeReview(
+  codeDiff: string,
+  reviewComments: string
+): Promise<MemoryShard> {
   const conversationLog = `程式碼變更：\n${codeDiff}\n\n審查意見：\n${reviewComments}`;
   return extractMemoryShard(conversationLog, 'code_review');
 }
@@ -163,8 +179,14 @@ export async function extractShardFromCodeReview(codeDiff: string, reviewComment
 /**
  * 從 Firecrawl 網頁爬取結果萃取記憶碎片
  */
-export async function extractShardFromWebCrawl(url: string, crawledContent: string, summary?: string): Promise<MemoryShard> {
-  const conversationLog = `網頁來源：${url}\n\n爬取內容摘要：\n${summary || crawledContent.substring(0, 2000)}`;
+export async function extractShardFromWebCrawl(
+  url: string,
+  crawledContent: string,
+  summary?: string
+): Promise<MemoryShard> {
+  const conversationLog = `網頁來源：${url}\n\n爬取內容摘要：\n${
+    summary || crawledContent.substring(0, 2000)
+  }`;
   const shard = await extractMemoryShard(conversationLog, 'web_crawl', url);
   shard.tags = [...new Set([...shard.tags, 'web-crawl', 'external-source'])];
   return shard;
@@ -178,11 +200,15 @@ export async function synthesizeSkillUltimate(shards: MemoryShard[]): Promise<Sk
     throw new Error('需要至少一個記憶碎片來合成奧義');
   }
 
-  const shardsContext = shards.map(s => `
+  const shardsContext = shards
+    .map(
+      (s) => `
 [碎片 ${s.id}] ${s.title}
 標籤: ${s.tags.join(', ')}
 描述: ${s.description}
-  `).join('\n\n');
+  `
+    )
+    .join('\n\n');
 
   const prompt = `
 系統已收集到 ${shards.length} 塊記憶碎片。請根據這些碎片的關聯性與累積的技術脈絡，將它們融合成一本【完整的技能奧義 (Skill Ultimate)】。
@@ -201,9 +227,10 @@ ${shardsContext}
   try {
     const response = await generateObject({
       model: agnes('agnes-2.0-flash'),
-      system: "你是一個專業的【無有技藝】奧義合成系統。能夠將散落的知識融合為具有系統化與哲理深度的技能奧義，並精準歸類其無有維度。",
+      system:
+        '你是一個專業的【無有技藝】奧義合成系統。能夠將散落的知識融合為具有系統化與哲理深度的技能奧義，並精準歸類其無有維度。',
       prompt,
-      schema: SkillUltimateSchema
+      schema: SkillUltimateSchema,
     });
 
     const ultimateData = response.object;
@@ -212,7 +239,7 @@ ${shardsContext}
     const ultimate: SkillUltimate = {
       ...(ultimateData as any),
       id: crypto.randomUUID(),
-      sourceShards: shards.map(s => s.id),
+      sourceShards: shards.map((s) => s.id),
       applicationCount: 0,
       successRate: 0.5,
       createdAt: new Date().toISOString(),
@@ -311,7 +338,7 @@ export async function retrieveMemoryShards(options?: {
   }
 
   return {
-    shards: (data as any[]).map(record => ({
+    shards: (data as any[]).map((record) => ({
       id: record.id,
       title: record.title,
       description: record.description,
@@ -398,7 +425,7 @@ export async function retrieveSkillUltimates(options?: {
     throw error;
   }
 
-  return (data as any[]).map(record => ({
+  return (data as any[]).map((record) => ({
     skillName: record.skill_name,
     masteryLevel: record.mastery_level,
     corePrinciples: record.core_principles,
@@ -425,12 +452,16 @@ export async function createShardRelation(
 ): Promise<ShardRelation> {
   if (!supabaseAdmin) throw new Error('Supabase 未配置');
 
-  const { data, error } = await supabaseAdmin.from('omni_shard_relations').insert({
-    source_shard_id: sourceShardId,
-    target_shard_id: targetShardId,
-    relation_type: relationType,
-    strength,
-  }).select().single();
+  const { data, error } = await supabaseAdmin
+    .from('omni_shard_relations')
+    .insert({
+      source_shard_id: sourceShardId,
+      target_shard_id: targetShardId,
+      relation_type: relationType,
+      strength,
+    })
+    .select()
+    .single();
 
   if (error) {
     console.error('建立碎片關聯失敗:', error);
@@ -530,7 +561,7 @@ export async function searchRelatedShards(shardId: string): Promise<MemoryShard[
     return [];
   }
 
-  return (data as any[]).map(record => ({
+  return (data as any[]).map((record) => ({
     id: record.id,
     title: record.title,
     description: record.description,
@@ -550,19 +581,21 @@ export async function searchRelatedShards(shardId: string): Promise<MemoryShard[
 }
 
 /**
- * 自動萃取排程（由 OmniAgentBus 呼叫）
+ * 自動萃取排程（由 OAAgentBus 呼叫）
  */
 export async function autoExtractFromBusEvents(): Promise<MemoryShard[]> {
-  // 從 OmniAgentBus 取得最近的事件
-  const { omniAgentBus } = await import('../agents/omni-agent-bus');
+  // 從 OAAgentBus 取得最近的事件
+  const { omniAgentBus } = await import('../agents/oa-agent-bus');
   const health = omniAgentBus.getHealth();
 
   const shards: MemoryShard[] = [];
 
   // 如果錯誤率高，萃取錯誤碎片
   if (health.errorRate > 0.3) {
-    const errorLog = `系統錯誤率過高: ${(health.errorRate * 100).toFixed(1)}%，總事件: ${health.totalEvents}`;
-    const shard = await extractShardFromErrorLog(errorLog, 'OmniAgentBus 自動萃取');
+    const errorLog = `系統錯誤率過高: ${(health.errorRate * 100).toFixed(1)}%，總事件: ${
+      health.totalEvents
+    }`;
+    const shard = await extractShardFromErrorLog(errorLog, 'OAAgentBus 自動萃取');
     shard.tags = [...new Set([...shard.tags, 'auto-extract', 'error-rate'])];
     shards.push(shard);
   }

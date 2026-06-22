@@ -1,4 +1,4 @@
-import { getOmniTableServerClient } from '../lib/omni-table/client';
+import { getOATableServerClient } from '../lib/oa-table/client';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 
@@ -55,7 +55,7 @@ async function main() {
   const tasks = await extractTasksWithGemma4(sampleNote);
   console.log(`✅ 成功提取 ${tasks.length} 個任務。`);
 
-  const client = getOmniTableServerClient();
+  const client = getOATableServerClient();
 
   try {
     console.log(`🚀 正在將任務同步至 OmniTable [${DATASHEET_ID}]...`);

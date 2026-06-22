@@ -90,7 +90,7 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
   const triggerForensicReplay = useCallback(async (speed: number = 2) => {
     try {
       console.log(`⏱️ [Replay Engine] 觸發時光倒流，倍速: ${speed}x`);
-      const response = await fetch('/api/omni-table', {
+      const response = await fetch('/api/oa-table', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -107,7 +107,7 @@ export function useColorDropStream(token: string = 'taiwan-jwt-token') {
 
   // 5. 建立 SSE 連線並處理實時事件流與狀態水合 (Hydration)
   useEffect(() => {
-    const url = `/api/omni-table?stream=true`;
+    const url = `/api/oa-table?stream=true`;
     console.log(`📡 [SSE Client] 正在與 AgentBus 建立安全實時串流連線...`);
 
     // 注意：因瀏覽器 EventSource 原生不支持自訂 Header，實務上可透過 cookie、URL 參數，

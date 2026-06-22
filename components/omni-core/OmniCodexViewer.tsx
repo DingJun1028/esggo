@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import {
@@ -42,14 +41,14 @@ export default function OmniCodexViewer({
             <h3 className="font-bold text-white text-sm">最新發行架構：MECE 極限性能進化矩陣</h3>
           </div>
           <p className="text-sm text-slate-400 mb-4 leading-relaxed">
-            本系統已正式將「16 條 MECE 極限進化法則」編譯為 TypeScript 強型別契約，並與 OmniAgentBus
+            本系統已正式將「16 條 MECE 極限進化法則」編譯為 TypeScript 強型別契約，並與 OAAgentBus
             及 Karma Protocol 達成無縫閉環。所有代理任務與自我修復（Spontaneous
             Virtue）皆受此中樞即時監控。
           </p>
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-xs text-slate-300">
               <CheckCircle size={14} className="text-emerald-400" />{' '}
-              <span>OmniAgentBus 事件廣播同步率 100%</span>
+              <span>OAAgentBus 事件廣播同步率 100%</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-300">
               <CheckCircle size={14} className="text-emerald-400" />{' '}
@@ -86,16 +85,10 @@ export default function OmniCodexViewer({
             {/* 雙向同步光束 */}
             <div className="flex-1 flex flex-col items-center justify-center relative px-4 z-0">
               {isVpsBound ? (
-                <div
-                  className="w-full flex flex-col items-center"
-                >
+                <div className="w-full flex flex-col items-center">
                   <div className="relative w-full h-1 bg-emerald-500/20 rounded-full overflow-hidden">
-                    <div
-                      className="absolute inset-y-0 w-1/3 bg-emerald-400/80 blur-[2px]"
-                    />
-                    <div
-                      className="absolute inset-y-0 w-1/3 bg-cyan-400/80 blur-[2px]"
-                    />
+                    <div className="absolute inset-y-0 w-1/3 bg-emerald-400/80 blur-[2px]" />
+                    <div className="absolute inset-y-0 w-1/3 bg-cyan-400/80 blur-[2px]" />
                   </div>
                   <div className="mt-2 text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1">
                     <ArrowRightLeft size={12} /> 雙向同步中 (Bidirectional Sync)

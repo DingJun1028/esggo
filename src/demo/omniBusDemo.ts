@@ -1,7 +1,7 @@
 // src/demo/omniBusDemo.ts
 
-import { OmniAgentBus, AgentCollaborationState, ICelestialAgent } from '../core/bus/OmniAgentBus';
-import { OmniAgentBusFactory, IOmniNotification } from '../core/bus/OmniAgentBusFactory';
+import { OAAgentBus, AgentCollaborationState, ICelestialAgent } from '../core/bus/OAAgentBus';
+import { OAAgentBusFactory, IOmniNotification } from '../core/bus/OAAgentBusFactory';
 
 // Define a simple UUID generator for demonstration purposes
 const generateDemoUuid = (prefix: string) => `${prefix}-${Math.random().toString(36).substring(2, 9)}`;
@@ -27,7 +27,7 @@ class CelestialAgent implements ICelestialAgent {
     const taskResult = `[${this.capabilityLabel}] 已針對指令 "${willMessage}" 完成全域優化。`;
 
     // 2. 透過萬能工廠鑄造不可篡改的通知與日誌物件
-    const notification: IOmniNotification = OmniAgentBusFactory.createNotification(
+    const notification: IOmniNotification = OAAgentBusFactory.createNotification(
       generateDemoUuid('crypto-notification'), // Use demo UUID generator
       'agent_task',
       `一體同心共鳴 - ${this.name}`,
@@ -45,7 +45,7 @@ class CelestialAgent implements ICelestialAgent {
 }
 
 // =================== ⚡ 聖典運行示範 ===================
-const bus = OmniAgentBus.getInstance();
+const bus = OAAgentBus.getInstance();
 
 // 1. 召喚全體代理
 const omniKnowledge = new CelestialAgent(generateDemoUuid('agent'), 'A01', '萬能智庫', '#記憶聖所');

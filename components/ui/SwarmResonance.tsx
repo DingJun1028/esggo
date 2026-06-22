@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import { Terminal, Cpu, Shield, Zap, Activity, Info } from 'lucide-react';
-import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
 import { cn } from '@/lib/utils';
 
 interface EventLog {
@@ -79,35 +79,33 @@ export function SwarmResonance() {
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4 font-mono text-[10px] space-y-3 custom-scrollbar"
       >
-        
-          {logs.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-white/20 italic">
-              <Info size={24} className="mb-2 opacity-20" />
-              <p>Waiting for intent resonance...</p>
-            </div>
-          ) : (
-            logs.map((log) => (
-              <div
-                key={log.id}
-                className="group border-l-2 border-white/5 pl-3 py-1 hover:border-cyan-500/50 transition-colors"
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-white/30">[{log.timestamp}]</span>
-                  <span className="px-1.5 py-0.5 rounded text-cyan-400 font-bold border border-white/5">
-                    {log.event}
-                  </span>
-                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800 text-white/60 text-[9px]">
-                    {getAgentIcon(log.agent)}
-                    {log.agent}
-                  </div>
-                </div>
-                <div className="text-white/50 break-all leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
-                  {typeof log.payload === 'string' ? log.payload : JSON.stringify(log.payload)}
+        {logs.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-white/20 italic">
+            <Info size={24} className="mb-2 opacity-20" />
+            <p>Waiting for intent resonance...</p>
+          </div>
+        ) : (
+          logs.map((log) => (
+            <div
+              key={log.id}
+              className="group border-l-2 border-white/5 pl-3 py-1 hover:border-cyan-500/50 transition-colors"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-white/30">[{log.timestamp}]</span>
+                <span className="px-1.5 py-0.5 rounded text-cyan-400 font-bold border border-white/5">
+                  {log.event}
+                </span>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800 text-white/60 text-[9px]">
+                  {getAgentIcon(log.agent)}
+                  {log.agent}
                 </div>
               </div>
-            ))
-          )}
-        
+              <div className="text-white/50 break-all leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
+                {typeof log.payload === 'string' ? log.payload : JSON.stringify(log.payload)}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <div className="px-4 py-2 border-t border-white/5 flex items-center justify-between">

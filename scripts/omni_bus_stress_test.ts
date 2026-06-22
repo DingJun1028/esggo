@@ -33,7 +33,7 @@ async function runClient(clientId: number) {
 }
 
 async function runStressTest() {
-  console.log(`🚀 [OmniAgentBus Stress Test] 初始化中... 併發數: ${CONCURRENCY_LEVEL}, 總請求: ${CONCURRENCY_LEVEL * REQUESTS_PER_CLIENT}`);
+  console.log(`🚀 [OAAgentBus Stress Test] 初始化中... 併發數: ${CONCURRENCY_LEVEL}, 總請求: ${CONCURRENCY_LEVEL * REQUESTS_PER_CLIENT}`);
   const start = performance.now();
   
   const promises = [];
@@ -53,7 +53,7 @@ async function runStressTest() {
   });
 
   console.log('==============================================');
-  console.log('📊 [測試結果] OmniAgentBus Matrix 壓力測試');
+  console.log('📊 [測試結果] OAAgentBus Matrix 壓力測試');
   console.log('==============================================');
   console.log(`總耗時: ${((end - start) / 1000).toFixed(2)} 秒`);
   console.log(`總成功: ${totalSuccess}`);

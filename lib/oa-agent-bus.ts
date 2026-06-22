@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 /**
- * OmniAgentBus — 全域之脈 (Global Pulse) / 全通之心 (Omni Heart)
+ * OAAgentBus — 全域之脈 (Global Pulse) / 全通之心 (Omni Heart)
  *
  * v2.0.0 | Production-Ready | Full Integration
  *
@@ -31,7 +31,7 @@ export interface BusEvent {
   timestamp: string;
 }
 
-interface OmniAgentBusState {
+interface OAAgentBusState {
   signals: OmniSignal[];
   busEvents: BusEvent[];
   activeResonance: boolean;
@@ -88,7 +88,7 @@ function connectGatewayWS(onConnected: (v: boolean) => void) {
     _ws = new WebSocket(gatewayUrl);
 
     _ws.onopen = () => {
-      console.log('[OmniAgentBus] 🔌 Gateway WS connected');
+      console.log('[OAAgentBus] 🔌 Gateway WS connected');
       onConnected(true);
       if (_reconnectTimer) {
         clearTimeout(_reconnectTimer);
@@ -97,7 +97,7 @@ function connectGatewayWS(onConnected: (v: boolean) => void) {
     };
 
     _ws.onclose = () => {
-      console.warn('[OmniAgentBus] ⚠️ Gateway WS disconnected');
+      console.warn('[OAAgentBus] ⚠️ Gateway WS disconnected');
       onConnected(false);
       _reconnectTimer = setTimeout(() => connectGatewayWS(onConnected), 5000);
     };
@@ -106,7 +106,7 @@ function connectGatewayWS(onConnected: (v: boolean) => void) {
       _ws?.close();
     };
   } catch (e) {
-    console.warn('[OmniAgentBus] WS init failed:', e);
+    console.warn('[OAAgentBus] WS init failed:', e);
   }
 }
 
@@ -133,7 +133,7 @@ function connectSSE(onConnected: (v: boolean) => void, onEvent: (event: BusEvent
     _sseEventSource = new EventSource(sseUrl);
 
     _sseEventSource.onopen = () => {
-      console.log('[OmniAgentBus] 📡 SSE connected');
+      console.log('[OAAgentBus] 📡 SSE connected');
       onConnected(true);
       _sseReconnectAttempts = 0;
     };
@@ -142,7 +142,7 @@ function connectSSE(onConnected: (v: boolean) => void, onEvent: (event: BusEvent
       try {
         const data = JSON.parse(e.data);
         if (data.event === 'STREAM_CONNECTED') {
-          console.log('[OmniAgentBus] 📡 SSE handshake:', data.payload);
+          console.log('[OAAgentBus] 📡 SSE handshake:', data.payload);
         } else {
           onEvent(data as BusEvent);
         }
@@ -150,7 +150,7 @@ function connectSSE(onConnected: (v: boolean) => void, onEvent: (event: BusEvent
     };
 
     _sseEventSource.onerror = () => {
-      console.warn('[OmniAgentBus] ⚠️ SSE error');
+      console.warn('[OAAgentBus] ⚠️ SSE error');
       onConnected(false);
       _sseEventSource?.close();
 
@@ -158,13 +158,13 @@ function connectSSE(onConnected: (v: boolean) => void, onEvent: (event: BusEvent
         const delay = Math.min(1000 * Math.pow(2, _sseReconnectAttempts), 30000);
         _sseReconnectAttempts++;
         console.log(
-          `[OmniAgentBus] 🔄 SSE reconnect in ${delay}ms (attempt ${_sseReconnectAttempts})`
+          `[OAAgentBus] 🔄 SSE reconnect in ${delay}ms (attempt ${_sseReconnectAttempts})`
         );
         _sseReconnectTimer = setTimeout(() => connectSSE(onConnected, onEvent), delay);
       }
     };
   } catch (e) {
-    console.warn('[OmniAgentBus] SSE init failed:', e);
+    console.warn('[OAAgentBus] SSE init failed:', e);
   }
 }
 
@@ -180,7 +180,7 @@ function disconnectSSE() {
 }
 
 // ── Zustand Store ───────────────────────────────────────────────
-export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
+export const useOAAgentBus = create<OAAgentBusState>((set, get) => ({
   signals: [],
   busEvents: [],
   activeResonance: false,
@@ -241,7 +241,7 @@ export const useOmniAgentBus = create<OmniAgentBusState>((set, get) => ({
 
 // ── Auto-connect on module load (client-side only) ──────────────
 if (typeof window !== 'undefined') {
-  const { setWsConnected, setSseConnected, addBusEvent } = useOmniAgentBus.getState();
+  const { setWsConnected, setSseConnected, addBusEvent } = useOAAgentBus.getState();
   connectGatewayWS(setWsConnected);
   connectSSE(setSseConnected, addBusEvent);
 }
@@ -249,7 +249,7 @@ if (typeof window !== 'undefined') {
 // ── Adaptive Perception Protocol ────────────────────────────────
 export const triggerSpontaneousVirtue = (signal: OmniSignal, loadFactor: number = 1.0) => {
   if (signal.type === 'HEAL') {
-    console.log(`[OmniAgentBus] 🌌 全通之心 — 啟動熵減修復 (Load: ${loadFactor.toFixed(2)})`);
+    console.log(`[OAAgentBus] 🌌 全通之心 — 啟動熵減修復 (Load: ${loadFactor.toFixed(2)})`);
     if (typeof fetch !== 'undefined' && signal.payload) {
       const gatewayBaseUrl = process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_URL;
       const endpoint = gatewayBaseUrl
@@ -261,12 +261,12 @@ export const triggerSpontaneousVirtue = (signal: OmniSignal, loadFactor: number 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'omni_gold_2026',
+          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'oa_gold_2026',
         },
         body: JSON.stringify({
           failureReason: String(payload?.reason ?? 'Auto-heal triggered'),
           sourceTaskId: signal.id,
-          context: 'OmniAgentBus HEAL event',
+          context: 'OAAgentBus HEAL event',
           energyLoadFactor: loadFactor,
         }),
       }).catch(() => {});

@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -20,7 +19,7 @@ import {
   Cpu,
 } from 'lucide-react';
 import { useOmniTable } from '@/hooks/useOmniTable';
-import { useOmniAgentBus } from '@/lib/omni-agent-bus';
+import { useOAAgentBus } from '@/lib/oa-agent-bus';
 
 export function OmniAgentPulse() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -30,7 +29,7 @@ export function OmniAgentPulse() {
 
   const { connectionStatus, records } = useOmniTable('valid-jwt-token');
   const { signals, activeResonance, isPulseDismissed, setPulseDismissed, executeCelestialCommand } =
-    useOmniAgentBus();
+    useOAAgentBus();
 
   const lastSyncRecord = records.length > 0 ? records[0] : null;
   const isSyncing = connectionStatus === 'CONNECTED' && Math.random() > 0.5;
@@ -160,7 +159,11 @@ export function OmniAgentPulse() {
                     disabled={isExecuting || !commandInput.trim()}
                     className="p-2 bg-cyan-600/30 border border-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded-xl transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isExecuting ? <Activity size={12} className="animate-spin" /> : <Send size={12} />}
+                    {isExecuting ? (
+                      <Activity size={12} className="animate-spin" />
+                    ) : (
+                      <Send size={12} />
+                    )}
                   </button>
                 </div>
               </form>
@@ -208,7 +211,9 @@ export function OmniAgentPulse() {
                           <span className="truncate">{r.event_type} locked</span>
                         </div>
                       ))}
-                  {records.length === 0 && <div className="text-slate-600">Awaiting resonance...</div>}
+                  {records.length === 0 && (
+                    <div className="text-slate-600">Awaiting resonance...</div>
+                  )}
                 </div>
               </div>
             </div>

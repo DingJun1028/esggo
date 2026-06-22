@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'omni_gold_2026',
+          'X-Omni-Token': process.env.NEXT_PUBLIC_GATEWAY_KEY || 'oa_gold_2026',
         },
         body: JSON.stringify({ task: agentTask }),
       });

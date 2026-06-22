@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
-import { getOmniCredentials } from '@/lib/agent/omni-agent-credentials-store';
+import { getOACredentials } from '@/lib/agent/oa-agent-credentials-store';
 
 interface OmniAgentCreds {
   access_token?: string;
@@ -11,7 +11,7 @@ interface OmniAgentCreds {
 
 export async function GET() {
   try {
-    const creds = (await getOmniCredentials('system_default')) as {
+    const creds = (await getOACredentials('system_default')) as {
       data: OmniAgentCreds | null;
       error?: { message: string };
     };

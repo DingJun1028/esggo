@@ -1,4 +1,4 @@
-// src/core/bus/OmniAgentBusFactory.ts
+// src/core/bus/OAAgentBusFactory.ts
 
 import { IOmniNotification } from './IOmniNotification';
 import { IT5Protocol } from '../types/IComponentCore';
@@ -6,7 +6,7 @@ import { IT5Protocol } from '../types/IComponentCore';
 export type { IOmniNotification };
 
 // 4. 萬能通知核心鑄造工廠
-export class OmniAgentBusFactory {
+export class OAAgentBusFactory {
   public static createNotification(
     uuid: string,
     type: IOmniNotification['type'],

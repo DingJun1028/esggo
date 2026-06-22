@@ -1,4 +1,4 @@
-import { OmniAgentBus } from '../lib/agents/omni-agent-bus';
+import { OAAgentBus } from '../lib/agents/oa-agent-bus';
 import * as dotenv from 'dotenv';
 import { resolve } from 'path';
 
@@ -6,8 +6,8 @@ import { resolve } from 'path';
 dotenv.config({ path: resolve(process.cwd(), '.env.local') });
 
 async function testPersistence() {
-  console.log('Initializing OmniAgentBus...');
-  const bus = OmniAgentBus.getInstance();
+  console.log('Initializing OAAgentBus...');
+  const bus = OAAgentBus.getInstance();
   
   console.log('Publishing test event: frn_loss:consensus...');
   bus.publish('frn_loss:consensus', {

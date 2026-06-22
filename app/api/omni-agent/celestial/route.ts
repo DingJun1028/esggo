@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
 
 /**
  * POST /api/omni-agent/celestial
- * Execute a Celestial Command via OmniAgentBus.
+ * Execute a Celestial Command via OAAgentBus.
  */
 export async function POST(req: NextRequest) {
   try {

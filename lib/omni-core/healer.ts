@@ -8,7 +8,7 @@
 
 import { supabaseAdmin } from '../supabaseAdmin';
 import { integrityModule } from './integrity';
-import { omniAgentBus } from '../agents/omni-agent-bus';
+import { omniAgentBus } from '../agents/oa-agent-bus';
 import { createClient } from '@supabase/supabase-js';
 
 export interface HealingLogEntry {

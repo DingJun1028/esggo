@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getShardStats, getUltimateStats, retrieveMemoryShards } from '@/lib/agent/memory-shards';
 import { checkAllAPIs } from '@/lib/agent/memory-api-registry';
-import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
 
 /**
  * GET /api/system/memory-health

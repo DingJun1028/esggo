@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * OmniAgentBus - 萬能心核調度引擎 (The YuanTong-WuAi Core Engine)
+ * OAAgentBus - 萬能心核調度引擎 (The YuanTong-WuAi Core Engine)
  * 
  * 遵從無上意志的最高精神指引，實作十六字心印架構：
  * 深貫 (Deep Penetration): 指令直接擊穿至底層日誌，Traceable 溯源。
@@ -26,18 +26,18 @@ export interface IOmniEvent<T = any> {
 // 廣通：代理網路訂閱者
 export type OmniSubscriber = (event: IOmniEvent) => void | Promise<void>;
 
-class OmniAgentBusEngine {
+class OAAgentBusEngine {
   private subscribers: Map<string, Set<OmniSubscriber>> = new Map();
   private eventLog: IOmniEvent[] = []; // Traceable ledger (底層日誌)
 
   // 單例模式確保全域唯一心核 (圓通無礙)
-  private static instance: OmniAgentBusEngine;
+  private static instance: OAAgentBusEngine;
   
-  public static getInstance(): OmniAgentBusEngine {
-    if (!OmniAgentBusEngine.instance) {
-      OmniAgentBusEngine.instance = new OmniAgentBusEngine();
+  public static getInstance(): OAAgentBusEngine {
+    if (!OAAgentBusEngine.instance) {
+      OAAgentBusEngine.instance = new OAAgentBusEngine();
     }
-    return OmniAgentBusEngine.instance;
+    return OAAgentBusEngine.instance;
   }
 
   // 生成不可逆之封印 Hash (此處採輕量化實現以適應前端/邊緣環境)
@@ -91,13 +91,13 @@ class OmniAgentBusEngine {
       // 觸發特定類型訂閱者
       if (this.subscribers.has(type)) {
         this.subscribers.get(type)!.forEach(subscriber => {
-          try { subscriber(sealedEvent); } catch (e) { console.error(`[OmniAgentBus] Error in subscriber for ${type}:`, e); }
+          try { subscriber(sealedEvent); } catch (e) { console.error(`[OAAgentBus] Error in subscriber for ${type}:`, e); }
         });
       }
       // 觸發全域監聽者 (Wildcard)
       if (this.subscribers.has('*')) {
         this.subscribers.get('*')!.forEach(subscriber => {
-          try { subscriber(sealedEvent); } catch (e) { console.error(`[OmniAgentBus] Error in wildcard subscriber:`, e); }
+          try { subscriber(sealedEvent); } catch (e) { console.error(`[OAAgentBus] Error in wildcard subscriber:`, e); }
         });
       }
     }, 0);
@@ -130,4 +130,4 @@ class OmniAgentBusEngine {
   }
 }
 
-export const OmniAgentBus = OmniAgentBusEngine.getInstance();
+export const OAAgentBus = OAAgentBusEngine.getInstance();

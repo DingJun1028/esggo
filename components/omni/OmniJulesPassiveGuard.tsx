@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React, { useEffect, useState } from 'react';
 
@@ -9,7 +8,7 @@ import { ShieldAlert, Zap } from 'lucide-react';
 /**
  * OmniJulesPassiveGuard (全域被動亂碼攔截守衛)
  * 作為全知之眼，主動掃描視覺 DOM。一旦發現亂碼 (Garbled Text)，
- * 立即觸發 OmniAgentBus 的 HEAL 訊號，由 OmniJules 介入。
+ * 立即觸發 OAAgentBus 的 HEAL 訊號，由 OmniJules 介入。
  */
 export default function OmniJulesPassiveGuard() {
   const [healingAlert, setHealingAlert] = useState<{ id: string; text: string } | null>(null);
@@ -110,16 +109,12 @@ export default function OmniJulesPassiveGuard() {
     return () => observer.disconnect();
   }, []);
 
-return (
+  return (
     <>
       {healingAlert && (
-        <div
-          className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 bg-slate-900/90 border border-red-500/50 rounded-2xl p-4 shadow-[0_0_30px_rgba(245,34,45,0.3)]"
-        >
+        <div className="fixed bottom-6 right-6 z-[10000] flex items-center gap-3 bg-slate-900/90 border border-red-500/50 rounded-2xl p-4 shadow-[0_0_30px_rgba(245,34,45,0.3)]">
           <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 relative overflow-hidden">
-            <div
-              className="absolute inset-0 border-2 border-transparent border-t-red-500 rounded-full"
-            />
+            <div className="absolute inset-0 border-2 border-transparent border-t-red-500 rounded-full" />
             <ShieldAlert size={20} />
           </div>
           <div>

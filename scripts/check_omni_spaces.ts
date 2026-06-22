@@ -1,4 +1,4 @@
-import { OmniTableClient } from '../lib/omni-table/client';
+import { OmniTableClient } from '../lib/oa-table/client';
 import dotenv from 'dotenv';
 dotenv.config();
 

@@ -1,6 +1,6 @@
 import { ADKAgent } from './adk-core';
 import { HealingGuardian } from '../healing-guardian';
-import { omniAgentBus } from './omni-agent-bus';
+import { omniAgentBus } from './oa-agent-bus';
 import { HealingGuardian as HG } from '../omni-core/healer';
 
 export const errorHandlerAgent = new ADKAgent({

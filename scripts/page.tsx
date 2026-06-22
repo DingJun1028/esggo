@@ -1,5 +1,5 @@
 import React from 'react';
-import { getOmniTableServerClient } from '@/lib/omni-table/client';
+import { getOATableServerClient } from '@/lib/oa-table/client';
 import { OmniBaseCard } from '@/components/ui/OmniBaseCard';
 import { OmniBadge } from '@/components/ui/OmniBadge';
 import { AlertOctagon, ShieldAlert } from 'lucide-react';
@@ -15,7 +15,7 @@ export default async function OmniTableDemoPage() {
     let errorMsg = null;
 
     try {
-        const client = getOmniTableServerClient();
+        const client = getOATableServerClient();
         // 呼叫 SDK 讀取特定表格中的所有記錄
         const response = await client.getRecords(DATASHEET_ID);
         records = response.records;

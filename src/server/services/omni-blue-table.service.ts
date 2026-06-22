@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { type ThinkTankRegistration, THINK_TANK_REGISTRY, getThinkTankRegistrations, getOmniBlueTablePractices } from '@/lib/agent/best-practice-registry';
 import { type BestPractice } from '@/lib/agent/best-practice-registry';
-import { aiTableBlueBridge } from '@/lib/services/omni-table-blue-bridge';
+import { aiTableBlueBridge } from '@/lib/services/oa-table-blue-bridge';
 
 export class OmniBlueTableService {
 

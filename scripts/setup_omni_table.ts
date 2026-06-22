@@ -1,5 +1,5 @@
 
-import { getOmniTableServerClient } from '../lib/omni-table/client';
+import { getOATableServerClient } from '../lib/oa-table/client';
 
 // ============================================================================
 // OmniBlueTable 全端演練：建立 Datasheet 與 同步資料
@@ -10,7 +10,7 @@ const TARGET_SPACE_ID = process.env.OMNITABLE_SPACE_ID || 'spc_demo_12345';
 
 export default async function main() {
     console.log('🚀 開始 OmniBlueTable 演練任務...');
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
 
     try {
         // ---------------------------------------------------------

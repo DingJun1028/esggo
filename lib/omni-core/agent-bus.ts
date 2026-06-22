@@ -1,6 +1,6 @@
 // @ts-nocheck
 /**
- * OmniAgentBus (萬能代理總線)
+ * OAAgentBus (萬能代理總線)
  * 作為所有 OmniAgents (Antigravity, Jules, Nexus, Pencil) 溝通的中樞。
  */
 
@@ -18,8 +18,8 @@ export interface BusMessage {
 
 type Subscriber = (message: BusMessage) => void;
 
-class OmniAgentBus {
-  private static instance: OmniAgentBus;
+class OAAgentBus {
+  private static instance: OAAgentBus;
   private subscribers: Map<AgentEvent, Subscriber[]> = new Map();
   private vpsEndpoint: string | null = null;
   private localEndpoint: string | null = null;
@@ -27,11 +27,11 @@ class OmniAgentBus {
 
   private constructor() {}
 
-  public static getInstance(): OmniAgentBus {
-    if (!OmniAgentBus.instance) {
-      OmniAgentBus.instance = new OmniAgentBus();
+  public static getInstance(): OAAgentBus {
+    if (!OAAgentBus.instance) {
+      OAAgentBus.instance = new OAAgentBus();
     }
-    return OmniAgentBus.instance;
+    return OAAgentBus.instance;
   }
 
   public subscribe(event: AgentEvent, callback: Subscriber) {
@@ -50,12 +50,12 @@ class OmniAgentBus {
     this.localEndpoint = `http://${localIpAddress}:${localPort}`;
     this.isBoundToVPS = true;
     
-    console.log(`[OmniAgentBus] 🌐 萬能元件心核已雙向綁定 (Bidirectional Matrix Sync)`);
+    console.log(`[OAAgentBus] 🌐 萬能元件心核已雙向綁定 (Bidirectional Matrix Sync)`);
     console.log(`                 [終] VPS 節點: ${this.vpsEndpoint}`);
     console.log(`                 [始] Local 節點: ${this.localEndpoint}`);
     
     // 觸發全域廣播，宣佈雙向綁定完成
-    this.publish('OBSERVE', 'OmniAgentBus', { 
+    this.publish('OBSERVE', 'OAAgentBus', { 
       message: 'MATRIX_BIDIRECTIONAL_BOUND', 
       vpsEndpoint: this.vpsEndpoint,
       localEndpoint: this.localEndpoint 
@@ -66,7 +66,7 @@ class OmniAgentBus {
    * 解綁雙向連線
    */
   public unbindVPS() {
-    console.log(`[OmniAgentBus] 🛑 已解除萬能元件心核的雙向綁定 ([終] ${this.vpsEndpoint} ↔ [始] ${this.localEndpoint})`);
+    console.log(`[OAAgentBus] 🛑 已解除萬能元件心核的雙向綁定 ([終] ${this.vpsEndpoint} ↔ [始] ${this.localEndpoint})`);
     this.vpsEndpoint = null;
     this.localEndpoint = null;
     this.isBoundToVPS = false;
@@ -81,7 +81,7 @@ class OmniAgentBus {
       timestamp: Date.now(),
     };
     
-    console.log(`[OmniAgentBus] 📡 廣播事件 [${event}] from ${source}`);
+    console.log(`[OAAgentBus] 📡 廣播事件 [${event}] from ${source}`);
     
     // 如果已綁定 VPS，非同步將事件推送至遠端網關進行迭代成長
     if (this.isBoundToVPS && this.vpsEndpoint && source !== 'VPS_Gateway') {
@@ -103,7 +103,7 @@ class OmniAgentBus {
       try {
         sub(message);
       } catch (e) {
-        console.error(`[OmniAgentBus] ⚠️ 訂閱者處理異常:`, e);
+        console.error(`[OAAgentBus] ⚠️ 訂閱者處理異常:`, e);
       }
     });
   }
@@ -122,4 +122,4 @@ class OmniAgentBus {
   }
 }
 
-export const omniAgentBus = OmniAgentBus.getInstance();
+export const omniAgentBus = OAAgentBus.getInstance();

@@ -1,6 +1,6 @@
 'use server';
 
-import { getOmniTableServerClient } from '@/lib/omni-table/client';
+import { getOATableServerClient } from '@/lib/oa-table/client';
 import { revalidatePath } from 'next/cache';
 
 /**
@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache';
  */
 export async function deleteOmniTableRecord(datasheetId: string, recordId: string, currentPath: string) {
     try {
-        const client = getOmniTableServerClient();
+        const client = getOATableServerClient();
         // 調用 SDK 的刪除方法 (陣列形式)
         await client.deleteRecords(datasheetId, [recordId]);
         // 刪除成功後，清除快取並觸發重新渲染

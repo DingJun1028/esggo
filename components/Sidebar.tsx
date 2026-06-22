@@ -53,7 +53,7 @@ import {
 import { useThemeStore, SidebarTheme } from '../lib/theme-store';
 import { useSaaS } from '../hooks/useSaaS';
 import { useAuth } from '../hooks/useAuth';
-import { useOmniAgentBus } from '../lib/omni-agent-bus';
+import { useOAAgentBus } from '../lib/oa-agent-bus';
 import { BrandBadge } from './brand';
 
 import { cn } from '../lib/utils';
@@ -143,7 +143,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/swarm', label: 'OmniAgent Swarm', sub: 'AI Swarm', icon: Bot, badge: 'AI' },
       { href: '/omni-agent', label: 'OmniAgent', sub: 'OmniAgent Evolved', icon: FlaskConical },
       {
-        href: '/omni-gateway',
+        href: '/oa-gateway',
         label: 'OmniAgent 網關',
         sub: 'Gateway v3.0',
         icon: Server,
@@ -257,10 +257,7 @@ function SaaSStatusWidget() {
           <span className="text-[9px] font-black text-[#003262]">{pct}%</span>
         </div>
         <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-          <div
-            animate={{ width: `${pct}%` }}
-            className="h-full bg-blue-600"
-          />
+          <div animate={{ width: `${pct}%` }} className="h-full bg-blue-600" />
         </div>
       </div>
       <button
@@ -282,7 +279,7 @@ export default function Sidebar({
   const pathname = usePathname() || '/';
   const { sidebarTheme } = useThemeStore();
   const { user } = useAuth();
-  const { isPulseDismissed, setPulseDismissed } = useOmniAgentBus();
+  const { isPulseDismissed, setPulseDismissed } = useOAAgentBus();
   const visibleGroups = NAV_GROUPS.filter((group) => {
     if (group.title === '超級管理員區') return user?.role === 'superadmin';
     return true;
@@ -317,14 +314,13 @@ export default function Sidebar({
 
   return (
     <>
-      
-        {mobileOpen && (
-          <div
-            onClick={() => setMobileOpen?.(false)}
-            className="fixed inset-0 bg-slate-900/60 z-[45] lg:hidden"
-          />
-        )}
-      
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen?.(false)}
+          className="fixed inset-0 bg-slate-900/60 z-[45] lg:hidden"
+        />
+      )}
+
       <aside
         className={cn(
           `fixed lg:relative h-screen flex flex-col z-50 transition-all duration-300 ease-in-out ${t.sidebar}`,

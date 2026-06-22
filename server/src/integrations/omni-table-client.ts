@@ -1,8 +1,8 @@
-// Using internal OmniTable bridge instead of missing @omni-table/client
-import { getOmniTableServerClient } from '../../../lib/omni-table';
+// Using internal OmniTable bridge instead of missing @oa-table/client
+import { getOATableServerClient } from '../../../lib/oa-table';
 import * as crypto from 'crypto';
 
-const omniTable = getOmniTableServerClient();
+const omniTable = getOATableServerClient();
 
 export interface LogicNode {
   name: string;

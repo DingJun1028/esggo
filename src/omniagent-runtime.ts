@@ -1,8 +1,8 @@
 // Conceptual example of the OmniAgent's runtime environment
 // This file demonstrates how the OmniAgent would discover and invoke skills
-// using the OmniAgentBus and OmniAgentSkillManager.
+// using the OAAgentBus and OmniAgentSkillManager.
 
-import { omniAgentBus } from './services/OmniAgentBus';
+import { omniAgentBus } from './services/OAAgentBus';
 import { OmniCoreContext } from './types/omniagent';
 
 // This function simulates the OmniAgent's reasoning engine (e.g., JunAiKey)

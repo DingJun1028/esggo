@@ -1,7 +1,7 @@
 import { OmniEventStore } from '../../../lib/omni-space/event-store';
 import { OmniEvent } from '@/src/shared/types';
 import { createClient } from '@supabase/supabase-js';
-import { OmniTableClient } from '@/lib/omni-table/client';
+import { OmniTableClient } from '@/lib/oa-table/client';
 
 /**
  * OmniMemorySync: 萬能永憶同步器

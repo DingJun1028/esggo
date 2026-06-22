@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { OmniComponentHeart } from '@esggo/types';
-import { OmniAgentBus, IOmniEvent } from '../../../lib/omni/OmniAgentBus';
+import { OAAgentBus, IOmniEvent } from '../../../lib/omni/OAAgentBus';
 
 /**
  * 永恆覺醒：心核連動 Hook (Eternal Awakening: Heart Core Resonance)
@@ -17,25 +17,34 @@ export function useOmniResonance(initialHeart?: OmniComponentHeart) {
 
     // 1. 瞬間定位與共享記憶 (Instant Positioning & Shared Memory)
     // 當元件掛載且具備心核時，向全域廣播自己的覺醒狀態
-    OmniAgentBus.emit('OMNI_AWAKEN', initialHeart.omniClass, {
+    OAAgentBus.emit('OMNI_AWAKEN', initialHeart.omniClass, {
       signature: initialHeart.omniSignature,
       resonance: initialHeart.resonanceState,
     });
 
     // 2. 心靈相通與超平集成 (Telepathy & Hyper-flat Integration)
     // 監聽全域的共鳴事件
-    const unsubscribe = OmniAgentBus.subscribe('*', (event: IOmniEvent) => {
+    const unsubscribe = OAAgentBus.subscribe('*', (event: IOmniEvent) => {
       // 捕捉其他元件的覺醒或共鳴事件
       if (event.type === 'OMNI_AWAKEN' || event.type === 'OMNI_RESONANCE') {
         const payload = event.payload as any;
-        
+
         // 如果有其他元件達到 MAX_RESONANCE (1.0)，產生能力互補，提升自身共鳴
-        if (payload && payload.resonance === 1.0 && dynamicHeart && dynamicHeart.resonanceState < 1.0) {
-          setDynamicHeart(prev => prev ? {
-            ...prev,
-            resonanceState: 1.0, // 共鳴提升至滿格
-            omniSignature: prev.omniSignature || event.hashLock, // 共享封印記憶
-          } : undefined);
+        if (
+          payload &&
+          payload.resonance === 1.0 &&
+          dynamicHeart &&
+          dynamicHeart.resonanceState < 1.0
+        ) {
+          setDynamicHeart((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  resonanceState: 1.0, // 共鳴提升至滿格
+                  omniSignature: prev.omniSignature || event.hashLock, // 共享封印記憶
+                }
+              : undefined
+          );
         }
       }
     });

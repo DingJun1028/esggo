@@ -1,4 +1,4 @@
-import { OmniTableClient } from '../../src/clients/omni-table-client';
+import { OmniTableClient } from '../../src/clients/oa-table-client';
 import { blueCC } from '../services/omni-blue';
 import { omniAgentBus } from '../agents/omni-commander';
 

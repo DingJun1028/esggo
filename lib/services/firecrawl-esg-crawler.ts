@@ -7,7 +7,7 @@
  * 1. 從 ESG 前30大情報點爬取最新資訊
  * 2. 清洗、排列、重組爬取內容
  * 3. 萃取記憶碎片
- * 4. 與 OmniAgentBus 深度整合
+ * 4. 與 OAAgentBus 深度整合
  */
 
 import { extractShardFromWebCrawl, type MemoryShard } from '../agent/memory-shards';

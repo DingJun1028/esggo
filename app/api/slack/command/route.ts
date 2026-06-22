@@ -17,7 +17,7 @@ import {
   push5TReport,
   pushAlert,
 } from '@/lib/slack/slack-gateway';
-import { fetchOmniAgentStatus } from '@/lib/omni-gateway';
+import { fetchOmniAgentStatus } from '@/lib/oa-gateway';
 
 export const runtime = 'nodejs';
 

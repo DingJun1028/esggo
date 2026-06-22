@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 /**
  * OmniAgent Stream Hook
  * ─────────────────────
- * React hook that subscribes to the OmniAgentBus SSE stream.
+ * React hook that subscribes to the OAAgentBus SSE stream.
  * Provides real-time event feed, connection status, and mission tracking.
  *
  * 5T Protocol: T5 Trackable — lifecycle-aware frontend propagation.

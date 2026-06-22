@@ -1,6 +1,5 @@
 'use client';
 
-
 import { OmniComponentHeart } from '@esggo/types';
 import React from 'react';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
@@ -369,12 +368,12 @@ const matrixData = [
     nodes: [
       {
         id: 'dat-001',
-        name: 'OmniAgentIntegrations',
+        name: 'OAAgentIntegrations',
         description: '各類第三方平台與 ERP 系統的串接管理。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Integration', 'API'],
         registered: true,
-        deliverables: ['components/omni/OmniAgentIntegrations.tsx', 'Webhook Connector API'],
+        deliverables: ['components/omni/OAAgentIntegrations.tsx', 'Webhook Connector API'],
         businessLogic:
           '管理與 ERP、SCM 等外部系統的 Webhook 和 API 連接，具備數據清洗與格式對齊邏輯。',
         uiux: '插頭連接插座動效、數據包流動粒子動畫、連接狀態徽章。',
@@ -415,12 +414,12 @@ const matrixData = [
       },
       {
         id: 'dat-004',
-        name: 'OmniAgentEvolutionPanel',
+        name: 'OAAgentEvolutionPanel',
         description: 'OmniAgent 資料管線的演化與效能面板。',
         fiveTStatus: [true, true, true, false, true],
         tags: ['Data', 'Pipeline'],
         registered: true,
-        deliverables: ['components/omni/OmniAgentEvolutionPanel.tsx'],
+        deliverables: ['components/omni/OAAgentEvolutionPanel.tsx'],
         businessLogic:
           'OmniAgent 智能數據管線的流量自適應與吞吐量優化面板，當檢測到高流量時自動擴容。',
         uiux: '動態齒輪轉動、波形負載圖、擴容進度環。',

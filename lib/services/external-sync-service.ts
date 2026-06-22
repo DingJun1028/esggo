@@ -66,7 +66,7 @@ export class ExternalSyncService {
         return false;
       }
 
-      const response = await fetch(`https://api.omni-table.ai/fusion/v1/datasheets/${datasheetId}/records`, {
+      const response = await fetch(`https://api.oa-table.ai/fusion/v1/datasheets/${datasheetId}/records`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

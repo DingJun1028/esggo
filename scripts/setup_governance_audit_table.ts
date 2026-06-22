@@ -1,4 +1,4 @@
-import { getOmniTableServerClient } from '../lib/omni-table/client';
+import { getOATableServerClient } from '../lib/oa-table/client';
 
 // ============================================================================
 // OmniBlueTable 自動化建表腳本：治理稽核日誌表
@@ -9,7 +9,7 @@ const TARGET_SPACE_ID = process.env.OMNITABLE_SPACE_ID || 'spc_demo_12345';
 
 export default async function main() {
     console.log('🚀 開始建立「治理稽核日誌」OmniTable Datasheet...');
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
 
     try {
         console.log(`\n📦 準備在 Space [${TARGET_SPACE_ID}] 中建立治理稽核日誌表...`);

@@ -107,7 +107,7 @@ export interface UpdateRecordPayload {
 interface OmniTableClientConfig {
   /** API Token (Bearer) */
   token: string;
-  /** Base URL — defaults to https://omni-table.ai */
+  /** Base URL — defaults to https://oa-table.ai */
   baseUrl?: string;
 }
 
@@ -344,7 +344,7 @@ export class OmniTableError extends Error {
 
 let _serverClient: OmniTableClient | null = null;
 
-export function getOmniTableServerClient(): OmniTableClient {
+export function getOATableServerClient(): OmniTableClient {
   if (!_serverClient) {
     const token = process.env.OMNITABLE_API_KEY;
     if (!token) {

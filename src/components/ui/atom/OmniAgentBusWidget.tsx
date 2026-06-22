@@ -4,21 +4,21 @@ import { useEffect, useState } from 'react';
 import { useOmniTheme } from '../../theme/OmniThemeProvider';
 import { cn } from '@/lib/utils';
 import { useTouchGesture } from '../../hooks/useTouchGesture';
-import type { IMiaoDeNotification } from '../../../services/OmniAgentBus';
+import type { IMiaoDeNotification } from '../../../services/OAAgentBus';
 
-export interface OmniAgentBusWidgetProps {
+export interface OAAgentBusWidgetProps {
   will: string;
   notifications?: IMiaoDeNotification[];
   showHistory?: boolean;
   onWillChange?: (will: string) => void;
 }
 
-export function OmniAgentBusWidget({
+export function OAAgentBusWidget({
   will,
   notifications = [],
   showHistory = false,
   onWillChange,
-}: OmniAgentBusWidgetProps) {
+}: OAAgentBusWidgetProps) {
   const { theme, isMobile } = useOmniTheme();
   const [activeNotifications, setActiveNotifications] = useState(notifications);
   const [isExpanded, setIsExpanded] = useState(false);

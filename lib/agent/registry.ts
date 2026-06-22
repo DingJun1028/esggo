@@ -172,7 +172,7 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     enabled: true,
   },
   {
-    skillKey: 'omni_email_archival',
+    skillKey: 'oa_email_archival',
     skillName: 'OmniAgent 郵件自動歸檔',
     taskType: 'email_processing',
     description: '讀取 Google Workspace Email 並將 ESG 相關信件自動過濾與歸檔',
@@ -184,7 +184,7 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     enabled: true,
   },
   {
-    skillKey: 'omni_calendar_agent',
+    skillKey: 'oa_calendar_agent',
     skillName: 'OmniAgent 行事曆自動排程',
     taskType: 'calendar_scheduling',
     description: '整合 Google Calendar，自動提取 ESG 會議與稽核排程，並建立待辦事項。',
@@ -196,7 +196,7 @@ export const SKILL_REGISTRY: SkillRegistryItem[] = [
     enabled: true,
   },
   {
-    skillKey: 'omni_drive_archival',
+    skillKey: 'oa_drive_archival',
     skillName: 'OmniAgent 雲端硬碟自動歸檔',
     taskType: 'file_processing',
     description: '整合 Google Drive，自動掃描與歸檔 ESG 相關文件至 Evidence Vault。',

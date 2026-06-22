@@ -200,8 +200,8 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
  */
 async function syncTaskToOmniNotes(task: AgentTask) {
   try {
-    const { getOmniTableServerClient } = await import('../omni-table/client');
-    const client = getOmniTableServerClient();
+    const { getOATableServerClient } = await import('../oa-table/client');
+    const client = getOATableServerClient();
     const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
     if (!datasheetId) {
@@ -351,8 +351,8 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     } else if (task.taskType === 'email_processing') {
       console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
 
-      const { getOmniCredentials } = await import('./omni-store');
-      const creds = await getOmniCredentials(task.actorId);
+      const { getOACredentials } = await import('./omni-store');
+      const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
       let emailResult = '';
@@ -367,8 +367,8 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     } else if (task.taskType === 'calendar_scheduling') {
       console.log(`[OmniAgent Agent] Connecting to Google Calendar for Task ${taskId}...`);
 
-      const { getOmniCredentials } = await import('./omni-store');
-      const creds = await getOmniCredentials(task.actorId);
+      const { getOACredentials } = await import('./omni-store');
+      const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1200));
       let calendarResult = '';
@@ -383,8 +383,8 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     } else if (task.taskType === 'file_processing') {
       console.log(`[OmniAgent Agent] Connecting to Google Drive for Task ${taskId}...`);
 
-      const { getOmniCredentials } = await import('./omni-store');
-      const creds = await getOmniCredentials(task.actorId);
+      const { getOACredentials } = await import('./omni-store');
+      const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
       let driveResult = '';

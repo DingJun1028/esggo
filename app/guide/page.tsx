@@ -68,7 +68,7 @@ export default function PlatformGuidePage() {
       capabilities:
         '外部環境監測、政策與法規動態抓取、今日永續觀察者日報 (Daily Observer Report) AI 生成、5T Hash Lock 鏈上雜湊校驗',
       testFiles:
-        'app/api/social/insights/route.test.ts, app/api/omni-agent-api/schedule/route.test.ts',
+        'app/api/social/insights/route.test.ts, app/api/oa-agent-api/schedule/route.test.ts',
       dimension: 'Trackable',
       testsCount: 16,
       desc: '外部風險感知與情資監控中樞，自動產出日報提供決策輔助。',

@@ -23,13 +23,13 @@ import type {
   OmniAgentRelease,
   OmniAgentEvolution,
   OmniAgentSkillAbsorption,
-} from '@/lib/agent/omni-evolution-engine';
+} from '@/lib/agent/oa-evolution-engine';
 import {
-  OMNI_LATEST_RELEASES,
+  OA_LATEST_RELEASES,
   OMNI_EVOLUTION_LOG,
   OMNI_TO_SKILL_MAP,
   pullOmniAgentAndEvolve,
-} from '@/lib/agent/omni-evolution-engine';
+} from '@/lib/agent/oa-evolution-engine';
 
 // ─── Sub Components ──────────────────────────────────────────────────────────
 
@@ -82,7 +82,7 @@ const PulseRing = ({ active }: { active: boolean }) => (
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function OmniAgentEvolutionPanel() {
+export default function OAAgentEvolutionPanel() {
   const [isEvolving, setIsEvolving] = useState(false);
   const [latestPull, setLatestPull] = useState<{
     release: OmniAgentRelease;
@@ -101,7 +101,7 @@ export default function OmniAgentEvolutionPanel() {
       '🔍  比對 ESGGO OmniAgent 現有技能樹...',
       '⚗️  啟動洗鍊引擎：OmniAgent → OmniAgent...',
       '🛡️  5T 誠信封印進化日誌...',
-      '📡  廣播進化事件至 OmniAgentBus...',
+      '📡  廣播進化事件至 OAAgentBus...',
       '✅  OmniAgent 進化完成，系統熵值降低 3.2%',
     ];
     for (const step of steps) {
@@ -118,7 +118,7 @@ export default function OmniAgentEvolutionPanel() {
     } catch (e) {
       setEvolveLog((prev) => [...prev, '⚠️ 模擬模式：使用快取的 OmniAgent 版本資料']);
       setLatestPull({
-        release: OMNI_LATEST_RELEASES[0],
+        release: OA_LATEST_RELEASES[0],
         evolution: OMNI_EVOLUTION_LOG[0],
         skills: OMNI_TO_SKILL_MAP.slice(0, 3),
       });
@@ -172,7 +172,7 @@ export default function OmniAgentEvolutionPanel() {
       <div className="px-8 py-4 bg-slate-50/80 border-b border-slate-100 flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="px-3 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-black font-mono">
-            <span className="font-mono">OmniAgent {OMNI_LATEST_RELEASES[0].version}</span>
+            <span className="font-mono">OmniAgent {OA_LATEST_RELEASES[0].version}</span>
           </div>
           <ArrowRight size={16} className="text-violet-500" />
           <div className="px-3 py-1.5 rounded-xl bg-violet-600 text-white text-xs font-black font-mono">
@@ -215,7 +215,7 @@ export default function OmniAgentEvolutionPanel() {
               <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">
                 Latest OmniAgent Release
               </h4>
-              {OMNI_LATEST_RELEASES.map((release) => (
+              {OA_LATEST_RELEASES.map((release) => (
                 <div
                   key={release.version}
                   className="p-5 rounded-2xl border border-slate-100 bg-white shadow-sm mb-3"

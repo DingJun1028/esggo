@@ -64,14 +64,14 @@ async function omniGet<T>(datasheetId: string, opts?: { pageSize?: number; viewI
   const params = new URLSearchParams({ action: 'records', datasheetId });
   if (opts?.pageSize) params.set('pageSize', String(opts.pageSize));
   if (opts?.viewId) params.set('viewId', opts.viewId);
-  const res = await fetch(`/api/omni-table?${params}`);
+  const res = await fetch(`/api/oa-table?${params}`);
   const json = await res.json();
   if (!json.success) throw new Error(json.error || 'Fetch failed');
   return { records: json.data?.records ?? [], total: json.data?.total ?? 0 };
 }
 
 async function omniCreate<T>(datasheetId: string, fields: Record<string, unknown>): Promise<T> {
-  const res = await fetch('/api/omni-table', {
+  const res = await fetch('/api/oa-table', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'createRecords', datasheetId, records: [{ fields }] }),
@@ -82,7 +82,7 @@ async function omniCreate<T>(datasheetId: string, fields: Record<string, unknown
 }
 
 async function omniUpdate(datasheetId: string, recordId: string, fields: Record<string, unknown>): Promise<void> {
-  const res = await fetch('/api/omni-table', {
+  const res = await fetch('/api/oa-table', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'updateRecords', datasheetId, records: [{ recordId, fields }] }),
@@ -92,7 +92,7 @@ async function omniUpdate(datasheetId: string, recordId: string, fields: Record<
 }
 
 async function omniDelete(datasheetId: string, recordId: string): Promise<void> {
-  const res = await fetch('/api/omni-table', {
+  const res = await fetch('/api/oa-table', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'deleteRecords', datasheetId, recordIds: [recordId] }),

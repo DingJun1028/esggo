@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
   // Request offline access to obtain a refresh token
   const searchParams = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: `${req.nextUrl.origin}/api/omni/google/callback`,
+    redirect_uri: `${req.nextUrl.origin}/api/oa/google/callback`,
     response_type: 'code',
     scope: [
       'https://www.googleapis.com/auth/gmail.readonly',

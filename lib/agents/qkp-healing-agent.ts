@@ -1,4 +1,4 @@
-import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
 import crypto from 'crypto';
 
 // =========================================================================
@@ -94,7 +94,7 @@ export class QkpHealingAgent {
     // 將修復完成的數據寫入 PostgreSQL (物理 RLS 安全通道)
     try {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-      const response = await fetch(`${appUrl}/api/omni-table`, {
+      const response = await fetch(`${appUrl}/api/oa-table`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer taiwan-jwt-token`,

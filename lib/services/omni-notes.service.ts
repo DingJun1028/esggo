@@ -1,4 +1,4 @@
-import { getOmniTableServerClient, OmniTableRecord } from '@/lib/omni-table/client';
+import { getOATableServerClient, OmniTableRecord } from '@/lib/oa-table/client';
 import { ncbClient } from '@/lib/ncbdb';
 import { createHash } from 'crypto';
 
@@ -53,7 +53,7 @@ export async function findBacklinks(noteId: string, type: string): Promise<OmniT
   const datasheetId = process.env[`OMNITABLE_${type.toUpperCase()}_DATASHEET_ID`] as string;
   if (!datasheetId) return [];
 
-  const client = getOmniTableServerClient();
+  const client = getOATableServerClient();
   const records = await client.getRecords(datasheetId, { pageSize: 100 });
   return records.records.filter(
     (r) =>
@@ -71,7 +71,7 @@ export async function syncTaskToOmniTable(taskId: string, taskContent: string, t
     console.warn('[OmniNotes Service] OMNITABLE_TASKS_DATASHEET_ID is not set. Skipping OmniTable sync.');
   } else {
     try {
-      const client = getOmniTableServerClient();
+      const client = getOATableServerClient();
       const records = await client.getRecords(datasheetId, { pageSize: 100 });
 
       const existingRecord = records.records.find(
@@ -203,7 +203,7 @@ export async function syncToPersonalDB(
   }
 
   try {
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
     const records = await client.getRecords(datasheetId, {
       pageSize: 1,
       filterByFormula: `{UserId} = '${userId}' AND {NoteId} = '${note.id}'`,
@@ -249,7 +249,7 @@ export async function getDeviceSyncStatus(
   deviceId: string
 ): Promise<{ lastSync: number; pendingCount: number }> {
   try {
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
     const records = await client.getRecords(process.env.OMNITABLE_DEVICES_DATASHEET_ID!, {
       pageSize: 1,
     });
@@ -264,7 +264,7 @@ export async function getDeviceSyncStatus(
 }
 
 export async function mergeWithOmniSystem(noteId: string, type: string): Promise<SyncResult> {
-  const client = getOmniTableServerClient();
+  const client = getOATableServerClient();
   const omnidataId = process.env.OMNITABLE_OMNI_DATASHEET_ID;
   if (!omnidataId) return { success: false, message: 'Omni system not configured' };
 
@@ -299,7 +299,7 @@ export async function syncNoteToOmniTable(
   }
 
   try {
-    const client = getOmniTableServerClient();
+    const client = getOATableServerClient();
     const autoLabels = await extractLabels(content);
     const allLabels = [...(labels || []), ...autoLabels].filter((v, i, a) => a.indexOf(v) === i);
     const title = await generateTitle(content);

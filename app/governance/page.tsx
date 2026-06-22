@@ -9,7 +9,7 @@
  *   T2 Transparent — formula derivation per metric
  *   T3 Tangible    — loading states / modal progress
  *   T4 Trustworthy — 5T seal + verify per metric
- *   T5 Trackable   — audit trail via OmniAgentBus
+ *   T5 Trackable   — audit trail via OAAgentBus
  *   P6 排版至上    — CSS Grid + Flex
  *   P7 保持純淨    — unified state
  *   P8 意圖宣告    — this metadata block

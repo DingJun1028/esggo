@@ -11,7 +11,7 @@ import {
   Maximize2,
 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
-import { OmniAgentBus, IOmniEvent } from '../../../lib/omni/OmniAgentBus';
+import { OAAgentBus, IOmniEvent } from '../../../lib/omni/OAAgentBus';
 
 export interface PulseTask {
   id: string;
@@ -31,10 +31,10 @@ export function OmniAgentPulse() {
     },
   ]);
 
-  // Subscribe to OmniAgentBus
+  // Subscribe to OAAgentBus
   useEffect(() => {
     // 廣通：訂閱全域事件
-    const unsubscribe = OmniAgentBus.subscribe('*', (event: IOmniEvent) => {
+    const unsubscribe = OAAgentBus.subscribe('*', (event: IOmniEvent) => {
       setTasks((prev) => {
         const newTasks = [...prev];
 
@@ -91,9 +91,7 @@ export function OmniAgentPulse() {
     >
       {/* 展開面板 */}
       {isExpanded && (
-        <div
-          className="w-72 bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative"
-        >
+        <div className="w-72 bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.15)] overflow-hidden relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
 
           <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">

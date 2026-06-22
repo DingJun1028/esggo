@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
-import { saveOmniCredentials } from '@/lib/agent/omni-agent-credentials-store';
+import { saveOACredentials } from '@/lib/agent/oa-agent-credentials-store';
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get('code');
@@ -11,18 +11,18 @@ export async function GET(req: NextRequest) {
   const baseUrl = req.nextUrl.origin;
 
   if (error) {
-    return NextResponse.redirect(`${baseUrl}/dashboard?omni_error=${error}`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?oa_error=${error}`);
   }
 
   if (!code) {
-    return NextResponse.redirect(`${baseUrl}/dashboard?omni_error=missing_code`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?oa_error=missing_code`);
   }
 
   const GOOGLE_CLIENT_ID = process.env.GOOGLE_WORKSPACE_CLIENT_ID;
   const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_WORKSPACE_CLIENT_SECRET;
 
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
-    return NextResponse.redirect(`${baseUrl}/dashboard?omni_error=missing_config`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?oa_error=missing_config`);
   }
 
   try {
@@ -36,18 +36,18 @@ export async function GET(req: NextRequest) {
         client_secret: GOOGLE_CLIENT_SECRET,
         code,
         grant_type: 'authorization_code',
-        redirect_uri: `${baseUrl}/api/omni/google/callback`,
+        redirect_uri: `${baseUrl}/api/oa/google/callback`,
       }),
     });
 
     const data = await res.json();
     if (!res.ok) {
       console.error('Token exchange failed:', data);
-      return NextResponse.redirect(`${baseUrl}/dashboard?omni_error=token_exchange_failed`);
+      return NextResponse.redirect(`${baseUrl}/dashboard?oa_error=token_exchange_failed`);
     }
 
     // Securely store the credentials to Supabase Vault
-    await saveOmniCredentials({
+    await saveOACredentials({
       access_token: data.access_token,
       refresh_token: data.refresh_token,
       expires_in: data.expires_in,
@@ -55,9 +55,9 @@ export async function GET(req: NextRequest) {
       scope: data.scope,
     });
 
-    return NextResponse.redirect(`${baseUrl}/dashboard?omni_success=google_workspace_connected`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?oa_success=google_workspace_connected`);
   } catch (err) {
     console.error('OAuth Callback error:', err);
-    return NextResponse.redirect(`${baseUrl}/dashboard?omni_error=internal_server_error`);
+    return NextResponse.redirect(`${baseUrl}/dashboard?oa_error=internal_server_error`);
   }
 }

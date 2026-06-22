@@ -1,10 +1,10 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server';
-import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
+import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
 
 /**
  * GET /api/system/bus-health
- * Returns OmniAgentBus health status and event statistics.
+ * Returns OAAgentBus health status and event statistics.
  */
 export async function GET() {
   try {
@@ -18,9 +18,6 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

@@ -53,7 +53,7 @@ type OmniTableSyncPayload = z.infer<typeof OmniTableSyncPayloadSchema>;
 // =========================================================================
 const BOT_SIGNATURE = 'BLUE_Automation_Bot';
 const MOCK_JWT_SECRET =
-  process.env.BLUE_CC_TOKEN || process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_TOKEN || 'omni_gold_2026';
+  process.env.BLUE_CC_TOKEN || process.env.NEXT_PUBLIC_OMNIAGENT_GATEWAY_TOKEN || 'oa_gold_2026';
 
 // Supabase 直接連線配置 (零依賴 REST 連線)
 const SUPABASE_URL =
@@ -235,7 +235,7 @@ async function runBrowserbaseEsggoAutomation(
 // =========================================================================
 
 /**
- * GET /api/omni-table
+ * GET /api/oa-table
  * 支援多雲與多租戶 RLS 隔離的歷史拉取與實時 SSE 監控
  */
 export async function GET(req: NextRequest) {
@@ -375,7 +375,7 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * POST /api/omni-table
+ * POST /api/oa-table
  * 支援數據同步、ZKP 封印，並可手動觸發時光重放 (Replay Action) 或 Browserbase 自動化技能 (Browserbase Action)
  */
 export async function POST(req: NextRequest) {
@@ -560,7 +560,7 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * PATCH /api/omni-table
+ * PATCH /api/oa-table
  * 模擬反向更新 (BLUE ➡️ AITable) 時對 AITable 進行數據回填的代理
  */
 export async function PATCH(req: NextRequest) {

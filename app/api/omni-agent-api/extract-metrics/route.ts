@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { extractMetricsFromEvidence } from '../../../../lib/omni-gateway';
+import { extractMetricsFromEvidence } from '../../../../lib/oa-gateway';
 
 export async function POST(request: Request) {
   try {

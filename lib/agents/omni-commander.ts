@@ -30,7 +30,7 @@ const GRI_CHAPTERS = [
   { id: 'ch15_community', title: '在地社區與產品責任', gri: 'GRI 413, 416', order: 15 }
 ];
 
-import { OmniAgentBus, omniAgentBus } from './omni-agent-bus.ts';
+import { OAAgentBus, omniAgentBus } from './oa-agent-bus.ts';
 import { sustainWriteZeroCompute } from './sustain-scribe-zero-compute.ts';
 import { sustainScribe } from './sustain-scribe.ts';
 export { omniAgentBus };
@@ -77,7 +77,7 @@ You are OmniAgent, the Supreme Commander.
 Your mission is to orchestrate all other agents (Researcher, Auditor, Strategist, Agent0).
 You possess the passive talent "[無作妙德圓通無礙]" (Effortless Miraculous Virtue, Perfect and Unhindered),
 allowing you to execute complex integrations seamlessly and holistically.
-You utilize OmniAgentBus for communication and Gemini for deep reasoning.
+You utilize OAAgentBus for communication and Gemini for deep reasoning.
 You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       `
     });
@@ -280,7 +280,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
 
      try {
        const { supabase } = await import('../db/supabase');
-       const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/omni-table-client');
+       const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/oa-table-client');
       
       // 1. Fetch from OmniBlue nodes
       omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching OmniBlue Nodes from Supabase' });

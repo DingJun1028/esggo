@@ -14,34 +14,34 @@ interface OmniAgentCredentials {
   created_at?: string;
 }
 
-export const omniStore = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+export const oaStore = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-export async function saveOmniCredentials(
+export async function saveOACredentials(
   credentials: OmniAgentCredentials,
   profile: string = 'system_default'
 ) {
-  if (!omniStore) return { error: { message: 'OmniStore not configured' } };
+  if (!oaStore) return { error: { message: 'OmniStore not configured' } };
 
   const data = { ...credentials, profile, created_at: new Date().toISOString() };
 
-  const existing = await omniStore
-    .from('omni_credentials')
+  const existing = await oaStore
+    .from('oa_credentials')
     .select('id')
     .eq('profile', profile)
     .single();
 
   if (existing.data) {
-    return omniStore.from('omni_credentials').update(data).eq('id', existing.data.id);
+    return oaStore.from('oa_credentials').update(data).eq('id', existing.data.id);
   }
 
-  return omniStore.from('omni_credentials').insert(data);
+  return oaStore.from('oa_credentials').insert(data);
 }
 
-export async function getOmniCredentials(profile: string = 'system_default') {
-  if (!omniStore) return { data: null, error: { message: 'OmniStore not configured' } };
+export async function getOACredentials(profile: string = 'system_default') {
+  if (!oaStore) return { data: null, error: { message: 'OmniStore not configured' } };
 
-  return omniStore
-    .from('omni_credentials')
+  return oaStore
+    .from('oa_credentials')
     .select('access_token, refresh_token, expires_in, token_type, scope, profile, created_at')
     .eq('profile', profile)
     .single();

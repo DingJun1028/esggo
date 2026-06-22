@@ -3,7 +3,7 @@
 /**
  * useOmniTable — React Hook for OmniTable Integration
  * ═══════════════════════════════════════════════
- * Client-side hook that communicates with /api/omni-table proxy
+ * Client-side hook that communicates with /api/oa-table proxy
  */
 
 import { useState, useCallback } from 'react';
@@ -14,7 +14,7 @@ import type {
   OmniTableView,
   OmniTableRecord,
   OmniTableRecordsResponse,
-} from '@/lib/omni-table/client';
+} from '@/lib/oa-table/client';
 
 interface UseOmniTableReturn {
   // State
@@ -36,7 +36,7 @@ interface UseOmniTableReturn {
 }
 
 async function apiGet<T>(action: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL('/api/omni-table', window.location.origin);
+  const url = new URL('/api/oa-table', window.location.origin);
   url.searchParams.set('action', action);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
 
@@ -47,7 +47,7 @@ async function apiGet<T>(action: string, params: Record<string, string> = {}): P
 }
 
 async function apiPost<T>(action: string, payload: Record<string, unknown>): Promise<T> {
-  const res = await fetch('/api/omni-table', {
+  const res = await fetch('/api/oa-table', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action, ...payload }),

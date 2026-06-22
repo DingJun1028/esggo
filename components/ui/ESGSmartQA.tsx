@@ -13,7 +13,7 @@ import {
   Lock,
 } from 'lucide-react';
 
-import { useOmniAgentBus } from '@/lib/omni-agent-bus';
+import { useOAAgentBus } from '@/lib/oa-agent-bus';
 import { OmniThinkingChain } from '@/components/omni/OmniThinkingChain';
 import { OmniBadge } from '@/components/ui/omni/OmniBadge';
 
@@ -34,7 +34,7 @@ export const ESGSmartQA = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [feedbackStatus, setFeedbackStatus] = useState<Record<string, 'good' | 'bad'>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const dispatchBus = useOmniAgentBus((state) => state.dispatch);
+  const dispatchBus = useOAAgentBus((state) => state.dispatch);
 
   const handleSend = async () => {
     if (!query.trim() || isLoading || isStreaming || isUploading) return;
@@ -370,9 +370,7 @@ export const ESGSmartQA = () => {
         ))}
 
         {isLoading && (
-          <div
-            className="flex gap-3 max-w-[90%]"
-          >
+          <div className="flex gap-3 max-w-[90%]">
             <div className="p-2 rounded-full h-fit bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <Bot size={16} />
             </div>

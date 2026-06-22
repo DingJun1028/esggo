@@ -108,7 +108,7 @@ export const OMNI_TO_SKILL_MAP: OmniAgentSkillAbsorption[] = [
 /**
  * 最新版本的 OmniAgent 更新記錄 (從官方源同步)
  */
-export const OMNI_LATEST_RELEASES: OmniAgentRelease[] = [
+export const OA_LATEST_RELEASES: OmniAgentRelease[] = [
   {
     version: 'v0.14.1',
     releaseDate: '2026-06-11',
@@ -136,7 +136,7 @@ export const OMNI_LATEST_RELEASES: OmniAgentRelease[] = [
   },
 ];
 
-export const OMNI_LATEST_RELEASES = OMNI_LATEST_RELEASES;
+export const OA_LATEST_RELEASES = OA_LATEST_RELEASES;
 export const OMNI_TO_SKILL_MAP = OMNI_TO_SKILL_MAP;
 
 export async function pullOmniAgentAndEvolve(): Promise<{
@@ -168,7 +168,7 @@ export const OMNI_EVOLUTION_LOG: OmniAgentEvolution[] = [
     fiveTPropagations: [
       'T1 Traceable: 所有 OmniAgent 技能轉化記錄具備溯源哈希',
       'T4 Trustworthy: 洗鍊過程封印於不可篡改的進化日誌',
-      'T5 Trackable: 進化事件即時廣播至 OmniAgentBus',
+      'T5 Trackable: 進化事件即時廣播至 OAAgentBus',
     ],
     status: 'transcended',
   },
@@ -200,7 +200,7 @@ export async function pullOmniAgentAndEvolve(): Promise<{
   // 模擬網路請求延遲 (實際應連接 https://github.com/NousResearch/OmniAgent API)
   await new Promise((r) => setTimeout(r, 1200));
 
-  const latestRelease = OMNI_LATEST_RELEASES[0];
+  const latestRelease = OA_LATEST_RELEASES[0];
 
   // 自動識別哪些新技能需要被洗鍊進 OmniAgent
   const newSkillsAbsorbed = latestRelease.newSkills.map((OmniAgentSkill) => {
@@ -230,7 +230,7 @@ export async function pullOmniAgentAndEvolve(): Promise<{
     fiveTPropagations: [
       'T1: 進化溯源哈希已記錄',
       'T4: 洗鍊過程封印完成',
-      'T5: OmniAgentBus 已廣播進化事件',
+      'T5: OAAgentBus 已廣播進化事件',
     ],
     status: 'transcended',
   };

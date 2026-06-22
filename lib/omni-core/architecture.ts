@@ -6,7 +6,7 @@
  * 奧義六式 → 12維度治理體系 → 萬能架構完備
  */
 
-import { omniAgentBus } from '../agents/omni-agent-bus';
+import { omniAgentBus } from '../agents/oa-agent-bus';
 import { omniAgent } from '../agents/adk-swarm';
 import type { MissionResult } from '../agents/omni-commander';
 

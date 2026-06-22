@@ -3,7 +3,7 @@
  * ADK小隊新手向指導手冊（E001-V2.1） - 系統基礎設備
  */
 
-import { omniAgentBus } from '../agents/omni-agent-bus';
+import { omniAgentBus } from '../agents/oa-agent-bus';
 import { healingGuardian } from './healer';
 
 export class ImpulsorEngine {

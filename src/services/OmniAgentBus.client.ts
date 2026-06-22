@@ -7,17 +7,17 @@ export interface IMiaoDeNotification {
   readonly isUnimpeded: boolean;
 }
 
-class OmniAgentBusClient {
-  private static instance: OmniAgentBusClient;
+class OAAgentBusClient {
+  private static instance: OAAgentBusClient;
   private supremeWillOcean$ = new Subject<string>();
 
   private constructor() {}
 
-  public static getUnimpededInstance(): OmniAgentBusClient {
-    if (!OmniAgentBusClient.instance) {
-      OmniAgentBusClient.instance = new OmniAgentBusClient();
+  public static getUnimpededInstance(): OAAgentBusClient {
+    if (!OAAgentBusClient.instance) {
+      OAAgentBusClient.instance = new OAAgentBusClient();
     }
-    return OmniAgentBusClient.instance;
+    return OAAgentBusClient.instance;
   }
 
   public manifestSupremeWill(_will: string): void {
@@ -34,4 +34,4 @@ class OmniAgentBusClient {
   }
 }
 
-export const omniAgentBus = OmniAgentBusClient.getUnimpededInstance();
+export const omniAgentBus = OAAgentBusClient.getUnimpededInstance();

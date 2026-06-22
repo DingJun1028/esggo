@@ -258,8 +258,8 @@ export interface GovernanceProps {
   onGovernanceClick?: (type: TState) => void;
 }
 
-// OmniAgentBus Integration Types
-export interface OmniAgentBusWidgetProps {
+// OAAgentBus Integration Types
+export interface OAAgentBusWidgetProps {
   will: string;
   notifications?: GovernanceBadge[];
   showHistory?: boolean;

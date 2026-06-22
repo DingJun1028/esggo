@@ -1,5 +1,5 @@
 // @ts-nocheck
-// src/core/bus/OmniAgentBus.ts
+// src/core/bus/OAAgentBus.ts
 
 import { Subject } from 'rxjs';
 import { IComponentCore } from '../types/IComponentCore';
@@ -20,9 +20,9 @@ export interface ICelestialAgent extends IComponentCore { // Inherit IComponentC
   receiveWill(willMessage: string, contextId: string): Promise<void>;
 }
 
-// 3. OmniAgentBus 萬能通知與全域廣播中心
-export class OmniAgentBus {
-  private static instance: OmniAgentBus;
+// 3. OAAgentBus 萬能通知與全域廣播中心
+export class OAAgentBus {
+  private static instance: OAAgentBus;
   private willBroadcast$ = new Subject<{ message: string; contextId: string }>();
   private registeredAgents = new Map<string, ICelestialAgent>();
 
@@ -30,11 +30,11 @@ export class OmniAgentBus {
     // 初始開闢秩序之路
   }
 
-  public static getInstance(): OmniAgentBus {
-    if (!OmniAgentBus.instance) {
-      OmniAgentBus.instance = new OmniAgentBus();
+  public static getInstance(): OAAgentBus {
+    if (!OAAgentBus.instance) {
+      OAAgentBus.instance = new OAAgentBus();
     }
-    return OmniAgentBus.instance;
+    return OAAgentBus.instance;
   }
 
   /**
@@ -42,7 +42,7 @@ export class OmniAgentBus {
    */
   public registerAgent(agent: ICelestialAgent): void {
     this.registeredAgents.set(agent.agentId, agent);
-    console.log(`[OmniAgentBus] 代理「${agent.name}」已鏈結至一體同心網絡。`);
+    console.log(`[OAAgentBus] 代理「${agent.name}」已鏈結至一體同心網絡。`);
   }
 
   /**

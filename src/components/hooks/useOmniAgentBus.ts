@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { omniAgentBus, IMiaoDeNotification } from '@/services/OmniAgentBus.client';
+import { omniAgentBus, IMiaoDeNotification } from '@/services/OAAgentBus.client';
 import { useOmniTheme } from '@/theme/OmniThemeProvider';
 
-export interface UseOmniAgentBusOptions {
+export interface UseOAAgentBusOptions {
   autoSubscribe?: boolean;
 }
 
-export function useOmniAgentBus(options: UseOmniAgentBusOptions = {}) {
+export function useOAAgentBus(options: UseOAAgentBusOptions = {}) {
   const { autoSubscribe = true } = options;
   const { theme } = useOmniTheme();
   const [latestWill, setLatestWill] = useState('');
@@ -34,7 +34,7 @@ export function useOmniAgentBus(options: UseOmniAgentBusOptions = {}) {
         setNotifications((prev) => [artifact, ...prev].slice(0, 20));
       },
       error: (err: any) => {
-        console.error('OmniAgentBus connection error:', err);
+        console.error('OAAgentBus connection error:', err);
         setIsConnected(false);
       },
     });

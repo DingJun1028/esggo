@@ -13,7 +13,7 @@ import {
 import { BrandCard, BrandCardHeader, BrandButton } from '../brand';
 import { useSearchParams } from 'next/navigation';
 
-export default function OmniAgentIntegrations() {
+export default function OAAgentIntegrations() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'idle' | 'connected' | 'error' | 'loading'>('loading');
   const [errorMessage, setErrorMessage] = useState('');
@@ -26,8 +26,8 @@ export default function OmniAgentIntegrations() {
   const [driveResult, setDriveResult] = useState<any>(null);
 
   useEffect(() => {
-    const omniSuccess = searchParams?.get('omni_success');
-    const omniError = searchParams?.get('omni_error');
+    const omniSuccess = searchParams?.get('oa_success');
+    const omniError = searchParams?.get('oa_error');
 
     if (omniSuccess === 'google_workspace_connected') {
       setStatus('connected');
@@ -38,7 +38,7 @@ export default function OmniAgentIntegrations() {
 
     const checkStatus = async () => {
       try {
-        const res = await fetch('/api/omni/google/status');
+        const res = await fetch('/api/oa/google/status');
         const data = await res.json();
 
         if (data.connected) {
@@ -61,7 +61,7 @@ export default function OmniAgentIntegrations() {
   }, [searchParams]);
 
   const handleConnect = () => {
-    window.location.href = '/api/omni/google/oauth';
+    window.location.href = '/api/oa/google/oauth';
   };
 
   const runEmailScan = async () => {
@@ -75,7 +75,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'email_processing',
           title: 'OmniAgent 郵件自動掃描',
           description: '連線 Google Workspace 進行 ESG 信件智能篩選與歸檔。',
-          skillKey: 'omni_email_archival',
+          skillKey: 'oa_email_archival',
           actorId: connectedEmail || 'system',
         }),
       });
@@ -104,7 +104,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'calendar_scheduling',
           title: 'OmniAgent 行事曆排程同步',
           description: '連線 Google Calendar 提取近期 ESG 關鍵會議，並建立前置自動化準備作業。',
-          skillKey: 'omni_calendar_agent',
+          skillKey: 'oa_calendar_agent',
           actorId: connectedEmail || 'system',
         }),
       });
@@ -133,7 +133,7 @@ export default function OmniAgentIntegrations() {
           taskType: 'file_processing',
           title: 'OmniAgent 雲端硬碟掃描',
           description: '連線 Google Drive 識別並歸檔 ESG 相關文件至 Evidence Vault。',
-          skillKey: 'omni_drive_archival',
+          skillKey: 'oa_drive_archival',
           actorId: connectedEmail || 'system',
         }),
       });
