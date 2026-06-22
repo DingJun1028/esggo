@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@esggo/types": "1.0.0",
+    "@esggo/types": "file:../types",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
