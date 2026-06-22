@@ -6,10 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/v2/Car
 import { Button } from '@/components/ui/v2/Button';
 import { Badge } from '@/components/ui/v2/Input';
 import { SectionHeader } from '@/components/ui/v2/Input';
-import { FiveTStrip } from '@/components/ui/v2/FiveTStrip';
 import { Progress } from '@/components/ui/v2/Progress';
 import { Input } from '@/components/ui/v2/Input';
-import { Tabs } from '@/components/ui/v2/Tabs';
 import {
   BookOpen,
   Sparkles,
@@ -18,7 +16,6 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
-  ChevronRight,
   ChevronDown,
   ChevronUp,
   Shield,
@@ -34,195 +31,663 @@ import {
   Layers,
   Zap,
   Eye,
-  Plus,
   X,
+  Star,
+  Heart,
+  Bot,
+  FileCheck,
+  Database,
+  Lock,
+  TrendingUp,
+  AlertTriangle,
+  Plus,
+  Minus,
+  Settings,
+  Bookmark,
 } from 'lucide-react';
 
 // ============================================================
-// UI 十大原則 合規設計
-// 1. 極簡美學 2. 服務教學 3. 高資訊量 4. 實用高效
-// 5. 操作簡單 6. 正確合規 7. 全域RWD 8. 進步成長
-// 9. 最佳實踐化 10. 客戶同心圓
+// 單據清單資料 (53 個單據)
 // ============================================================
+interface DocItem {
+  id: string;
+  name: string;
+  standard: string;
+  department: string;
+  category: 'D' | 'E' | 'S' | 'T' | 'G';
+  required: boolean;
+}
 
-// 24 段 × ~10,000 字 = 240,000 字
-const CHAPTER_SECTIONS = [
+const ALL_DOCS: DocItem[] = [
+  // D - 基礎治理 (14)
   {
-    id: 'ch1',
-    title: '第一章 永續治理與策略',
-    icon: Shield,
-    color: 'text-blue-600',
-    bg: 'bg-blue-50',
+    id: 'D-001',
+    name: '公司組織章程',
+    standard: 'GRI 2-1',
+    department: '法務部',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch2',
-    title: '第二章 氣候變遷與碳管理',
-    icon: Leaf,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
-  },
-  { id: 'ch3', title: '第三章 能源管理', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
-  {
-    id: 'ch4',
-    title: '第四章 水資源管理',
-    icon: Droplets,
-    color: 'text-cyan-600',
-    bg: 'bg-cyan-50',
+    id: 'D-002',
+    name: '董事會組成與職能說明',
+    standard: 'GRI 2-9',
+    department: '董事會',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch5',
-    title: '第五章 廢棄物與循環經濟',
-    icon: Recycle,
-    color: 'text-green-600',
-    bg: 'bg-green-50',
+    id: 'D-003',
+    name: '年度財務報告（稽核後）',
+    standard: 'GRI 2-5',
+    department: '財務部',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch6',
-    title: '第六章 生物多樣性與自然資本',
-    icon: Globe,
-    color: 'text-teal-600',
-    bg: 'bg-teal-50',
+    id: 'D-004',
+    name: '報告書範疇說明書',
+    standard: 'GRI 2-2',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch7',
-    title: '第七章 員工福祉與人力資本',
-    icon: Users,
-    color: 'text-indigo-600',
-    bg: 'bg-indigo-50',
+    id: 'D-005',
+    name: '永續政策聲明書',
+    standard: 'GRI 2-23',
+    department: '高層管理',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch8',
-    title: '第八章 多元平等與包容',
-    icon: Scale,
-    color: 'text-violet-600',
-    bg: 'bg-violet-50',
+    id: 'D-006',
+    name: '利害關係人議合機制說明',
+    standard: 'GRI 2-29',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch9',
-    title: '第九章 職業安全衛生',
-    icon: Shield,
-    color: 'text-rose-600',
-    bg: 'bg-rose-50',
-  },
-  { id: 'ch10', title: '第十章 人權與供應鏈', icon: Eye, color: 'text-pink-600', bg: 'bg-pink-50' },
-  {
-    id: 'ch11',
-    title: '第十一章 反貪腐與誠信經營',
-    icon: Shield,
-    color: 'text-orange-600',
-    bg: 'bg-orange-50',
+    id: 'D-007',
+    name: '重大性評估矩陣與說明',
+    standard: 'GRI 3-1/3-2',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch12',
-    title: '第十二章 資訊安全與隱私',
-    icon: Lock,
-    color: 'text-slate-600',
-    bg: 'bg-slate-50',
+    id: 'D-008',
+    name: '法令遵循聲明書',
+    standard: 'GRI 2-27',
+    department: '法務部',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch13',
-    title: '第十三章 經濟績效與價值創造',
-    icon: BarChart3,
-    color: 'text-blue-600',
-    bg: 'bg-blue-50',
+    id: 'D-009',
+    name: '企業社會責任政策',
+    standard: 'GRI 2-23',
+    department: '高層管理',
+    category: 'D',
+    required: false,
   },
   {
-    id: 'ch14',
-    title: '第十四章 市場存在與供應商管理',
-    icon: Target,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
+    id: 'D-010',
+    name: '報告書發布聲明',
+    standard: 'GRI 2-3',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch15',
-    title: '第十五章 間接經濟衝擊與社區投資',
-    icon: Users,
-    color: 'text-cyan-600',
-    bg: 'bg-cyan-50',
+    id: 'D-011',
+    name: '主要子公司與關係企業清單',
+    standard: 'GRI 2-2',
+    department: '財務部',
+    category: 'D',
+    required: false,
   },
   {
-    id: 'ch16',
-    title: '第十六章 客戶關係與產品責任',
-    icon: HeartHandshake,
-    color: 'text-indigo-600',
-    bg: 'bg-indigo-50',
+    id: 'D-012',
+    name: 'GRI符合性聲明書',
+    standard: 'GRI 2-3',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch17',
-    title: '第十七章 研發創新與數位轉型',
-    icon: Sparkles,
-    color: 'text-violet-600',
-    bg: 'bg-violet-50',
+    id: 'D-013',
+    name: '利害關係人識別與參與紀錄',
+    standard: 'GRI 2-29',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
   },
   {
-    id: 'ch18',
-    title: '第十八章 智財權保護與專利',
-    icon: FileText,
-    color: 'text-amber-600',
-    bg: 'bg-amber-50',
+    id: 'D-014',
+    name: '第三方查證報告',
+    standard: '金管會',
+    department: 'ESG辦公室',
+    category: 'D',
+    required: true,
+  },
+  // E - 環境面 (18)
+  {
+    id: 'E-001',
+    name: '溫室氣體排放盤查報告（Scope 1/2）',
+    standard: 'GRI 305 / TCFD',
+    department: '環安部',
+    category: 'E',
+    required: true,
   },
   {
-    id: 'ch19',
-    title: '第十九章 稅務透明與反洗錢',
-    icon: Scale,
-    color: 'text-rose-600',
-    bg: 'bg-rose-50',
+    id: 'E-002',
+    name: 'Scope 3 排放評估報告',
+    standard: 'GRI 305-3',
+    department: '環安部',
+    category: 'E',
+    required: true,
   },
   {
-    id: 'ch20',
-    title: '第二十章 法規遵循與合規管理',
-    icon: Shield,
-    color: 'text-orange-600',
-    bg: 'bg-orange-50',
+    id: 'E-003',
+    name: '能源消耗統計表',
+    standard: 'GRI 302',
+    department: '環安部',
+    category: 'E',
+    required: true,
   },
   {
-    id: 'ch21',
-    title: '第二十一章 GRI 準則對齊',
-    icon: BookOpen,
-    color: 'text-teal-600',
-    bg: 'bg-teal-50',
+    id: 'E-004',
+    name: '再生能源使用紀錄',
+    standard: 'GRI 302-1',
+    department: '環安部',
+    category: 'E',
+    required: true,
   },
   {
-    id: 'ch22',
-    title: '第二十二章 TCFD 氣候揭露',
-    icon: Globe,
-    color: 'text-blue-600',
-    bg: 'bg-blue-50',
+    id: 'E-005',
+    name: '碳排放減量目標與行動計畫',
+    standard: 'TCFD / SBTi',
+    department: 'ESG辦公室',
+    category: 'E',
+    required: true,
   },
   {
-    id: 'ch23',
-    title: '第二十三章 SASB 行業指標',
-    icon: BarChart3,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
+    id: 'E-006',
+    name: '氣候相關風險與機會評估報告',
+    standard: 'TCFD',
+    department: 'ESG辦公室',
+    category: 'E',
+    required: true,
   },
   {
-    id: 'ch24',
-    title: '第二十四章 IFRS S1/S2 永續揭露',
-    icon: FileText,
-    color: 'text-slate-600',
-    bg: 'bg-slate-50',
+    id: 'E-007',
+    name: '用水量統計與節水措施說明',
+    standard: 'GRI 303',
+    department: '環安部',
+    category: 'E',
+    required: true,
+  },
+  {
+    id: 'E-008',
+    name: '廢棄物管理報告',
+    standard: 'GRI 306',
+    department: '環安部',
+    category: 'E',
+    required: true,
+  },
+  {
+    id: 'E-009',
+    name: '空氣污染排放紀錄',
+    standard: 'GRI 305-7',
+    department: '環安部',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-010',
+    name: '環境法規遵循紀錄',
+    standard: 'GRI 307',
+    department: '法務部',
+    category: 'E',
+    required: true,
+  },
+  {
+    id: 'E-011',
+    name: '綠色採購政策與紀錄',
+    standard: 'GRI 308',
+    department: '採購部',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-012',
+    name: '碳足跡計算報告（產品/服務）',
+    standard: 'SASB',
+    department: '環安部',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-013',
+    name: '環境管理系統認證（ISO 14001）',
+    standard: 'GRI 307',
+    department: '環安部',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-014',
+    name: '氣候調適計畫說明書',
+    standard: 'TCFD',
+    department: 'ESG辦公室',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-015',
+    name: '土地使用與污染防治說明',
+    standard: 'GRI 304',
+    department: '環安部',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-016',
+    name: '生物多樣性評估報告',
+    standard: 'GRI 304 / TNFD',
+    department: '環安部',
+    category: 'E',
+    required: false,
+  },
+  {
+    id: 'E-017',
+    name: 'TCFD氣候情境分析報告',
+    standard: 'TCFD',
+    department: 'ESG辦公室',
+    category: 'E',
+    required: true,
+  },
+  {
+    id: 'E-018',
+    name: '水資源壓力地圖',
+    standard: 'GRI 303 / SASB',
+    department: '環安部',
+    category: 'E',
+    required: false,
+  },
+  // S - 社會面 (15)
+  {
+    id: 'S-001',
+    name: '員工人數統計表（依性別/職級/地區）',
+    standard: 'GRI 2-7',
+    department: '人資部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-002',
+    name: '薪酬結構說明書',
+    standard: 'GRI 2-19',
+    department: '人資部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-003',
+    name: '職業安全衛生報告',
+    standard: 'GRI 403',
+    department: '環安部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-004',
+    name: '員工訓練紀錄與時數統計',
+    standard: 'GRI 404',
+    department: '人資部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-005',
+    name: '多元共融（DEI）政策與數據',
+    standard: 'GRI 405',
+    department: '人資部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-006',
+    name: '員工申訴機制說明書',
+    standard: 'GRI 2-25',
+    department: '人資部',
+    category: 'S',
+    required: false,
+  },
+  {
+    id: 'S-007',
+    name: '社區投資與公益活動報告',
+    standard: 'GRI 413',
+    department: 'CSR辦公室',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-008',
+    name: '供應商行為準則',
+    standard: 'GRI 308/414',
+    department: '採購部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-009',
+    name: '顧客滿意度調查報告',
+    standard: 'GRI 417',
+    department: '行銷部',
+    category: 'S',
+    required: false,
+  },
+  {
+    id: 'S-010',
+    name: '童工與強迫勞動防範聲明',
+    standard: 'GRI 408/409',
+    department: '法務部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-011',
+    name: '員工福利項目說明書',
+    standard: 'GRI 401',
+    department: '人資部',
+    category: 'S',
+    required: false,
+  },
+  {
+    id: 'S-012',
+    name: '職場健康促進計畫',
+    standard: 'GRI 403-6',
+    department: '人資部',
+    category: 'S',
+    required: false,
+  },
+  {
+    id: 'S-013',
+    name: '供應商ESG評核報告',
+    standard: 'GRI 308/414',
+    department: '採購部',
+    category: 'S',
+    required: false,
+  },
+  {
+    id: 'S-014',
+    name: '人權盡職調查報告',
+    standard: 'GRI 411-414',
+    department: '法務部',
+    category: 'S',
+    required: true,
+  },
+  {
+    id: 'S-015',
+    name: '個資保護事件通報記錄',
+    standard: 'GRI 418',
+    department: '資訊部',
+    category: 'S',
+    required: false,
+  },
+  // T - 資訊安全 (6)
+  {
+    id: 'T-001',
+    name: '資訊安全政策聲明書',
+    standard: 'SASB / 金管會',
+    department: '資訊部',
+    category: 'T',
+    required: true,
+  },
+  {
+    id: 'T-002',
+    name: '資訊安全事件通報與處理程序',
+    standard: 'SASB',
+    department: '資訊部',
+    category: 'T',
+    required: false,
+  },
+  {
+    id: 'T-003',
+    name: '個人資料保護管理辦法',
+    standard: 'SASB / GRI 418',
+    department: '資訊部',
+    category: 'T',
+    required: true,
+  },
+  {
+    id: 'T-004',
+    name: '系統風險評估報告',
+    standard: 'SASB',
+    department: '資訊部',
+    category: 'T',
+    required: false,
+  },
+  {
+    id: 'T-005',
+    name: '資安認證（ISO 27001）文件',
+    standard: 'SASB',
+    department: '資訊部',
+    category: 'T',
+    required: false,
+  },
+  {
+    id: 'T-006',
+    name: '網路安全事件統計表',
+    standard: 'SASB',
+    department: '資訊部',
+    category: 'T',
+    required: false,
+  },
+  // G - 治理面 (16)
+  {
+    id: 'G-001',
+    name: '反貪腐政策與訓練紀錄',
+    standard: 'GRI 205',
+    department: '法務部',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-002',
+    name: '稅務策略與透明度聲明',
+    standard: 'GRI 207',
+    department: '財務部',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-003',
+    name: '政治獻金與遊說活動說明',
+    standard: 'GRI 415',
+    department: '法務部',
+    category: 'G',
+    required: false,
+  },
+  {
+    id: 'G-004',
+    name: '競爭行為與反壟斷政策',
+    standard: 'GRI 206',
+    department: '法務部',
+    category: 'G',
+    required: false,
+  },
+  {
+    id: 'G-005',
+    name: '重大違規事件紀錄',
+    standard: 'GRI 2-27',
+    department: '法務部',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-006',
+    name: '風險管理架構說明書',
+    standard: 'TCFD / GRI 2-12',
+    department: '風控部',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-007',
+    name: '高階主管薪酬連結ESG說明',
+    standard: 'GRI 2-19',
+    department: '董事會',
+    category: 'G',
+    required: false,
+  },
+  {
+    id: 'G-008',
+    name: '董事會多元化政策',
+    standard: 'GRI 2-10',
+    department: '董事會',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-009',
+    name: '內部稽核報告摘要',
+    standard: 'GRI 2-12',
+    department: '稽核部',
+    category: 'G',
+    required: false,
+  },
+  {
+    id: 'G-010',
+    name: '吹哨者保護政策',
+    standard: 'GRI 2-25',
+    department: '法務部',
+    category: 'G',
+    required: false,
+  },
+  {
+    id: 'G-011',
+    name: '關係人交易揭露說明',
+    standard: 'GRI 2-26',
+    department: '財務部',
+    category: 'G',
+    required: false,
+  },
+  {
+    id: 'G-012',
+    name: '永續發展策略藍圖',
+    standard: 'GRI 2-23',
+    department: 'ESG辦公室',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-013',
+    name: 'ESG KPI目標設定與追蹤表',
+    standard: '金管會',
+    department: 'ESG辦公室',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-014',
+    name: '董事會ESG審議紀錄',
+    standard: '金管會',
+    department: '董事會',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-015',
+    name: '永續委員會議事錄',
+    standard: '金管會',
+    department: 'ESG辦公室',
+    category: 'G',
+    required: true,
+  },
+  {
+    id: 'G-016',
+    name: '重大性評估複核簽呈',
+    standard: 'GRI 3-1/3-2',
+    department: 'ESG辦公室',
+    category: 'G',
+    required: false,
   },
 ];
 
-const Lock = () => null;
-const HeartHandshake = () => null;
-
-// 預設公司資料
-const DEFAULT_COMPANY = {
-  name: '善向永續股份有限公司',
-  en_name: 'ESG Sunshine Co., Ltd.',
-  tax_id: '60493411',
-  chairman: '楊坤修 博士',
-  address: '台北市中正區館前路 20 號 5 樓',
-  capital: '500 萬元',
-  year: '2026',
-  industry: '專業、科學及技術服務業',
-  employees: '5 人',
-  business: 'ESG 顧問諮詢、國際永續人才培力、AI-ESG 數位平台、管理顧問服務',
+// 各章節對應單據
+const CHAPTER_DOCS: Record<string, string[]> = {
+  ch1: [
+    'D-001',
+    'D-002',
+    'D-003',
+    'D-004',
+    'D-005',
+    'D-006',
+    'D-007',
+    'D-008',
+    'D-010',
+    'D-012',
+    'D-013',
+    'D-014',
+  ],
+  ch2: ['E-001', 'E-002', 'E-003', 'E-004', 'E-005', 'E-006', 'E-017'],
+  ch3: ['E-003', 'E-004', 'E-005'],
+  ch4: ['E-007', 'E-018'],
+  ch5: ['E-008', 'E-011'],
+  ch6: ['E-015', 'E-016'],
+  ch7: ['S-001', 'S-002', 'S-003', 'S-004', 'S-005', 'S-011'],
+  ch8: ['S-005', 'S-006'],
+  ch9: ['S-003', 'S-012'],
+  ch10: ['S-008', 'S-010', 'S-013', 'S-014'],
+  ch11: ['G-001', 'G-005', 'G-010'],
+  ch12: ['T-001', 'T-003', 'S-015'],
+  ch13: ['D-003', 'G-002'],
+  ch14: ['S-008', 'S-013'],
+  ch15: ['S-007'],
+  ch16: ['S-009'],
+  ch17: ['D-009'],
+  ch18: ['G-007'],
+  ch19: ['G-002'],
+  ch20: ['D-008', 'G-004', 'G-005'],
+  ch21: ['D-012', 'D-014'],
+  ch22: ['E-006', 'E-017'],
+  ch23: ['T-001', 'T-005', 'E-012'],
+  ch24: ['E-001', 'E-002', 'E-006'],
 };
 
-// 佔位符替換映射
+// 24 章定義
+const CHAPTERS = [
+  { id: 'ch1', title: '永續治理與策略', icon: Shield, color: 'blue' },
+  { id: 'ch2', title: '氣候變遷與碳管理', icon: Leaf, color: 'emerald' },
+  { id: 'ch3', title: '能源管理', icon: Zap, color: 'amber' },
+  { id: 'ch4', title: '水資源管理', icon: Droplets, color: 'cyan' },
+  { id: 'ch5', title: '廢棄物與循環經濟', icon: Recycle, color: 'green' },
+  { id: 'ch6', title: '生物多樣性與自然資本', icon: Globe, color: 'teal' },
+  { id: 'ch7', title: '員工福祉與人力資本', icon: Users, color: 'indigo' },
+  { id: 'ch8', title: '多元平等與包容', icon: Scale, color: 'violet' },
+  { id: 'ch9', title: '職業安全衛生', icon: Shield, color: 'rose' },
+  { id: 'ch10', title: '人權與供應鏈', icon: Eye, color: 'pink' },
+  { id: 'ch11', title: '反貪腐與誠信經營', icon: Shield, color: 'orange' },
+  { id: 'ch12', title: '資訊安全與隱私', icon: Lock, color: 'slate' },
+  { id: 'ch13', title: '經濟績效與價值創造', icon: BarChart3, color: 'blue' },
+  { id: 'ch14', title: '市場存在與供應商管理', icon: Target, color: 'emerald' },
+  { id: 'ch15', title: '間接經濟衝擊與社區投資', icon: Users, color: 'cyan' },
+  { id: 'ch16', title: '客戶關係與產品責任', icon: Heart, color: 'indigo' },
+  { id: 'ch17', title: '研發創新與數位轉型', icon: Sparkles, color: 'violet' },
+  { id: 'ch18', title: '智財權保護與專利', icon: FileText, color: 'amber' },
+  { id: 'ch19', title: '稅務透明與反洗錢', icon: Scale, color: 'rose' },
+  { id: 'ch20', title: '法規遵循與合規管理', icon: Shield, color: 'orange' },
+  { id: 'ch21', title: 'GRI 準則對齊', icon: BookOpen, color: 'teal' },
+  { id: 'ch22', title: 'TCFD 氣候揭露', icon: Globe, color: 'blue' },
+  { id: 'ch23', title: 'SASB 行業指標', icon: BarChart3, color: 'emerald' },
+  { id: 'ch24', title: 'IFRS S1/S2 永續揭露', icon: FileText, color: 'slate' },
+];
+
+// 佔位符替換
 const REPLACEMENTS: Record<string, string> = {
   '{{company_name}}': '善向永續股份有限公司',
   '{{report_year}}': '2026',
@@ -265,7 +730,14 @@ const REPLACEMENTS: Record<string, string> = {
   '{{attendance_rate}}': '95',
 };
 
-// 用來計數中文字數
+function fill(text: string): string {
+  let result = text;
+  for (const [key, val] of Object.entries(REPLACEMENTS)) {
+    result = result.split(key).join(val);
+  }
+  return result;
+}
+
 function countWords(html: string): number {
   const clean = html.replace(/<[^>]+>/g, ' ');
   const chinese = (clean.match(/[一-鿿]/g) || []).length;
@@ -273,53 +745,67 @@ function countWords(html: string): number {
   return chinese + english;
 }
 
-// 填充模板
-function fill(text: string, data: Record<string, string>): string {
-  let result = text;
-  for (const [key, val] of Object.entries(data)) {
-    result = result.split(key).join(val);
-  }
-  return result;
-}
-
-// 隨機但合理的數據
-const DYNAMIC_DATA: Record<string, string> = {
-  碳排放量: '8.5',
-  減碳目標: '30%',
-  再生能源: '35%',
-  能源效率: '11%',
-  水資源: '500',
-  廢棄物: '85%',
-  回收率: '85%',
-  女性員工: '40%',
-  訓練時數: '40',
-  離職率: '0%',
-  零違規: '0',
-};
-
 export default function SustainWritePage() {
   // ========== State ==========
-  const [step, setStep] = useState<'setup' | 'preview' | 'generating' | 'done'>('setup');
+  const [step, setStep] = useState<'checklist' | 'preview' | 'generating' | 'done'>('checklist');
   const [progress, setProgress] = useState(0);
   const [progressMsg, setProgressMsg] = useState('');
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
   const [wordCount, setWordCount] = useState(0);
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['ch1', 'ch2']));
+  const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
+  const [expandedDocs, setExpandedDocs] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [showAgentPulse, setShowAgentPulse] = useState(false);
 
-  const [company, setCompany] = useState({ ...DEFAULT_COMPANY });
+  const [company, setCompany] = useState({
+    name: '善向永續股份有限公司',
+    tax_id: '60493411',
+    chairman: '楊坤修 博士',
+    address: '台北市中正區館前路 20 號 5 樓',
+    capital: '500 萬元',
+    year: '2026',
+    industry: '專業、科學及技術服務業',
+    employees: '5 人',
+  });
 
   const updateField = (field: string, value: string) => {
     setCompany((prev) => ({ ...prev, [field]: value }));
   };
 
-  const toggleSection = (id: string) => {
-    setExpandedSections((prev) => {
+  const toggleDoc = (id: string) => {
+    setExpandedDocs((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
   };
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((prev) => (prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]));
+  };
+
+  // ========== 完成度計算 ==========
+  const completionStats = useMemo(() => {
+    const cats = ['D', 'E', 'S', 'T', 'G'];
+    const stats = cats.map((cat) => {
+      const docs = ALL_DOCS.filter((d) => d.category === cat);
+      const required = docs.filter((d) => d.required);
+      return {
+        category: cat,
+        label: { D: '基礎治理', E: '環境面', S: '社會面', T: '資訊安全', G: '治理面' }[cat],
+        total: docs.length,
+        completed: Math.floor(docs.length * 0.3), // 模擬 30% 完成
+        required: required.length,
+        requiredCompleted: Math.floor(required.length * 0.4),
+      };
+    });
+    const total = ALL_DOCS.length;
+    const completed = stats.reduce((s, c) => s + c.completed, 0);
+    const required = ALL_DOCS.filter((d) => d.required).length;
+    const requiredCompleted = stats.reduce((s, c) => s + c.requiredCompleted, 0);
+    return { byCategory: stats, total, completed, required, requiredCompleted };
+  }, []);
 
   // ========== 生成引擎 ==========
   const generateReport = useCallback(async () => {
@@ -329,45 +815,35 @@ export default function SustainWritePage() {
     setGeneratedHtml(null);
 
     try {
-      // Step 1: 準備數據
       await new Promise((r) => setTimeout(r, 150));
       setProgress(5);
-      setProgressMsg('準備公司資料與法規遵循宣告...');
-
-      // Step 2: 生成封面
-      await new Promise((r) => setTimeout(r, 200));
-      setProgress(10);
       setProgressMsg('生成封面與報告聲明...');
 
-      // Step 3: 生成各章 (分段處理)
-      const totalChapters = CHAPTER_SECTIONS.length;
+      await new Promise((r) => setTimeout(r, 200));
+      setProgress(10);
+
+      const totalChapters = CHAPTERS.length;
       let allHtml = '';
 
       for (let i = 0; i < totalChapters; i++) {
-        const ch = CHAPTER_SECTIONS[i];
+        const ch = CHAPTERS[i];
         const chProgress = 10 + Math.round((i / totalChapters) * 70);
         setProgress(chProgress);
         setProgressMsg(`生成 ${ch.title} (${i + 1}/${totalChapters})...`);
+        await new Promise((r) => setTimeout(r, 60));
 
-        // 模擬生成延遲
-        await new Promise((r) => setTimeout(r, 80));
-
-        // 生成單章 HTML
-        const chapterHtml = generateChapterHtml(ch, company);
+        const chapterHtml = generateChapterHtml(ch.id, ch.title);
         allHtml += `\n<div id="${ch.id}">\n${chapterHtml}\n</div>\n`;
       }
 
-      // Step 4: 生成附章
       await new Promise((r) => setTimeout(r, 300));
       setProgress(85);
       setProgressMsg('生成 GRI 索引、確信聲明、法規遵循附章...');
 
-      const appendices = generateAppendices(company);
+      const appendices = generateAppendices();
 
-      // Step 5: 組裝完整報告
       await new Promise((r) => setTimeout(r, 200));
       setProgress(95);
-      setProgressMsg('組裝完整報告並驗證...');
 
       const fullHtml = `
 <!DOCTYPE html>
@@ -380,7 +856,6 @@ body{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.8;
 h1{font-size:2em;color:#0f766e;border-bottom:2px solid #0f766e;padding-bottom:10px;margin-bottom:2em}
 h2{font-size:1.5em;color:#1e40af;margin-top:2em;border-left:4px solid #3b82f6;padding-left:12px}
 h3{font-size:1.2em;color:#334155;margin-top:1.5em}
-h4{font-size:1em;color:#475569;margin-top:1em}
 table{border-collapse:collapse;width:100%;margin:1em 0}
 th,td{border:1px solid #cbd5e1;padding:8px 12px;text-align:left}
 th{background:#f8fafc;font-weight:600}
@@ -417,13 +892,12 @@ ${appendices}
 <p>${company.name} ${company.year} 年永續報告書</p>
 <p>報告期間：${company.year}/1/1 ～ ${company.year}/12/31</p>
 <p>董事長：${company.chairman} | 地址：${company.address}</p>
-<p>© ${company.year} ${company.name}. All Rights Reserved.</p>
+<p>&copy; ${company.year} ${company.name}. All Rights Reserved.</p>
 </div>
 </body>
 </html>
 `;
 
-      // Step 6: 完成
       setProgress(100);
       setProgressMsg('完成！');
       setGeneratedHtml(fullHtml);
@@ -434,27 +908,159 @@ ${appendices}
     }
   }, [company]);
 
-  // 單章 HTML 生成（細分到多個小節）
-  function generateChapterHtml(
-    ch: (typeof CHAPTER_SECTIONS)[0],
-    data: typeof DEFAULT_COMPANY
-  ): string {
-    const dynamicReplacements: Record<string, string> = {
-      ...REPLACEMENTS,
-      '{{company_name}}': data.name,
-      '{{report_year}}': data.year,
-      '{{chairman}}': data.chairman,
-      '{{address}}': data.address,
-      '{{employee_count}}': data.employees,
-      '{{industry}}': data.industry,
-    };
+  function generateChapterHtml(chId: string, title: string): string {
+    const sectionNum = parseInt(chId.replace('ch', ''));
+    const docIds = CHAPTER_DOCS[chId] || [];
+    const docs = docIds.map((id) => ALL_DOCS.find((d) => d.id === id)).filter(Boolean);
 
-    let html = `<h2>${ch.title}</h2>`;
-    html += generateSectionContent(ch.id, dynamicReplacements);
+    let html = `<h2>${title}</h2>`;
+
+    // 根據章節生成不同內容
+    if (chId === 'ch1') {
+      html += fill(`
+<h3>1.1 公司概述與報告邊界</h3>
+<p>本報告期間為 {{report_year}} 年 1 月 1 日至 {{report_year}} 年 12 月 31 日。報導個體涵蓋 {{company_name}} 所有營運據點，主要營運地址為 {{address}}。</p>
+<h3>1.2 組織規模</h3>
+<table>
+<tr><th>項目</th><th>內容</th></tr>
+<tr><td>公司名稱</td><td>{{company_name}}</td></tr>
+<tr><td>統編</td><td>60493411</td></tr>
+<tr><td>實收資本額</td><td>{{capital}}</td></tr>
+<tr><td>員工人數</td><td>{{employee_count}} 人</td></tr>
+<tr><td>行業別</td><td>{{industry}}</td></tr>
+</table>
+<h3>1.3 治理架構</h3>
+<p>董事會由 {{board_size}} 位董事組成，其中獨立董事 {{independent_directors}} 位，獨立董事比例達 {{independent_ratio}}%。董事長為 {{chairman}}。</p>
+<h3>1.4 永續策略框架</h3>
+<p>本公司以「創價型永續」為核心理念，聚焦五大主軸：深化氣候行動與淨零轉型、強化人力資本與員工福祉、推動供應鏈永續管理、落實社區參與及社會貢獻、提升資訊透明度與治理品質。</p>
+<h3>1.5 重大主題分析</h3>
+<p>透過利害關係人分析與重大性評估，識別出氣候變遷與碳管理、資訊安全與隱私、人才吸引與留任、供應鏈永續管理、反貪腐與誠信經營等關鍵議題。</p>
+<h3>1.6 TCFD 氣候相關財務揭露</h3>
+<div class="tcfd-box">
+<p>本公司依據 TCFD 四大面向（治理、策略、風險管理、指標與目標）進行完整揭露。董事會為氣候治理最高監督單位，已進行情境分析評估不同升溫情境之影響。</p>
+</div>
+<h3>1.7 IFRS S1/S2 遵循宣告</h3>
+<p>本公司宣告提前採用 IFRS S1/S2（2027/1/1 生效），於 {{report_year}} 年度報告中接軌揭露。</p>
+<h3>1.8 GRI 內容索引</h3>
+<p>本報告書之 GRI 內容索引完整揭露於第二十四章附章。</p>
+`);
+    } else if (chId === 'ch2') {
+      html += fill(`
+<h3>2.1 氣候治理與組織文化</h3>
+<p>本公司深刻認知氣候變遷之深遠影響，承諾於 2050 年前達成淨零排放。由董事會層級負責氣候相關風險與機會的監督管理。</p>
+<h3>2.2 溫室氣體盤查</h3>
+<table>
+<tr><th>排放範圍</th><th>排放量（tCO2e）</th><th>佔比</th><th>較基準年變化</th></tr>
+<tr><td>範疇一：直接排放</td><td>{{scope1_emissions}}</td><td>32%</td><td>-8%</td></tr>
+<tr><td>範疇二：能源間接</td><td>{{scope2_emissions}}</td><td>45%</td><td>-12%</td></tr>
+<tr><td>範疇三：價值鏈</td><td>{{scope3_emissions}}</td><td>23%</td><td>-5%</td></tr>
+<tr><td><strong>合計</strong></td><td><strong>{{total_emissions}}</strong></td><td><strong>100%</strong></td><td><strong>-8%</strong></td></tr>
+</table>
+<h3>2.3 減量路徑與目標</h3>
+<p>短期（{{report_year}}-2030）：較基準年減碳 30%，再生能源使用比例達 50%；中期（2031-2040）：較基準年減碳 60%；長期（2041-2050）：達成碳中和。</p>
+<h3>2.4 再生能源使用</h3>
+<p>再生能源使用比例達 {{renewable_ratio}}%，較前年提升 10 個百分點。</p>
+<h3>2.5 碳排放強度分析</h3>
+<p>碳排放強度為 {{carbon_intensity}} tCO2e/營收億元，較基準年降低 10%。</p>
+<h3>2.6 碳中和路徑與承諾</h3>
+<p>本公司承諾於 2050 年前達成碳中和，具體路徑分為三階段推動。</p>
+`);
+    } else {
+      // 預設模板：根據章節動態生成
+      html += `<h3>${sectionNum}.1 概述</h3>`;
+      html += `<p>本章節為 {{company_name}} 於 {{report_year}} 年度在「${title
+        .replace(/[第章]|[一二三四五六七八九十]+/g, '')
+        .trim()}」面向之具體作為與績效數據。</p>`;
+
+      // 如果有單據，顯示單據清單
+      if (docs.length > 0) {
+        html += `<h3>${sectionNum}.2 所需單據</h3>`;
+        html += `<table><tr><th>單據編號</th><th>單據名稱</th><th>標準</th><th>負責部門</th><th>必填</th></tr>`;
+        for (const doc of docs) {
+          html += `<tr><td>${doc.id}</td><td>${doc.name}</td><td>${doc.standard}</td><td>${
+            doc.department
+          }</td><td>${doc.required ? '✅ 必填' : '選填'}</td></tr>`;
+        }
+        html += `</table>`;
+      }
+
+      html += `
+<h3>${sectionNum}.3 管理方針</h3>
+<p>本公司針對此面向之管理方針包括：建立完整管理制度、設定量化目標、落實風險評估、推動利害關係人參與、持續精進改善。</p>
+<h3>${sectionNum}.4 執行作為</h3>
+<p>{{report_year}} 年度之具體執行作為包括：制度建置與流程優化、人員教育訓練、系統建置與數據收集、外部合作與資源整合、成效評估與改善。</p>
+<h3>${sectionNum}.5 關鍵績效指標</h3>
+<table>
+<tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+<tr><td>主要指標 1</td><td>90%</td><td>85%</td><td>≥ 88%</td><td><span style="color:#16a34a">✅ 102%</span></td></tr>
+<tr><td>主要指標 2</td><td>85%</td><td>80%</td><td>≥ 82%</td><td><span style="color:#16a34a">✅ 104%</span></td></tr>
+<tr><td>主要指標 3</td><td>95%</td><td>92%</td><td>≥ 90%</td><td><span style="color:#16a34a">✅ 106%</span></td></tr>
+</table>
+<h3>${sectionNum}.6 未來展望</h3>
+<p>展望未來，本公司將持續精進此面向，重點包括：擴大推動範圍、強化合作、提升資訊揭露、落實持續改善。</p>
+`;
+    }
+
     return html;
   }
 
-  // 下載功能
+  function generateAppendices(): string {
+    return `
+<hr>
+<h2>附章一：GRI 內容索引</h2>
+<table>
+<tr><th>GRI 準則</th><th>揭露項目</th><th>對應章節</th><th>確信情形</th></tr>
+<tr><td>GRI 2：一般揭露 2021</td><td>組織規模、治理架構、永續策略</td><td>Ch1</td><td>有限確信</td></tr>
+<tr><td>GRI 101：生物多樣性 2024</td><td>生物多樣性影響評估</td><td>Ch6</td><td>有限確信</td></tr>
+<tr><td>GRI 102：氣候變遷 2025</td><td>氣候風險與機會</td><td>Ch2</td><td>有限確信</td></tr>
+<tr><td>GRI 103：能源 2025</td><td>能源消耗、再生能源</td><td>Ch3</td><td>有限確信</td></tr>
+<tr><td>GRI 201：經濟績效 2016</td><td>經濟價值創造</td><td>Ch13</td><td>有限確信</td></tr>
+<tr><td>GRI 205：反貪腐 2016</td><td>反貪腐政策、倫理訓練</td><td>Ch11</td><td>有限確信</td></tr>
+<tr><td>GRI 302：能源 2016</td><td>能源消耗、能源強度</td><td>Ch3</td><td>有限確信</td></tr>
+<tr><td>GRI 303：水與污水 2018</td><td>水資源管理</td><td>Ch4</td><td>有限確信</td></tr>
+<tr><td>GRI 305：排放 2016</td><td>溫室氣體排放</td><td>Ch2</td><td>有限確信</td></tr>
+<tr><td>GRI 306：廢棄物 2020</td><td>廢棄物管理</td><td>Ch5</td><td>有限確信</td></tr>
+<tr><td>GRI 401：就業 2016</td><td>員工人數、離職率</td><td>Ch7</td><td>有限確信</td></tr>
+<tr><td>GRI 403：職業安全衛生 2018</td><td>安全管理</td><td>Ch9</td><td>有限確信</td></tr>
+<tr><td>GRI 404：訓練與教育 2016</td><td>訓練時數</td><td>Ch7</td><td>有限確信</td></tr>
+<tr><td>GRI 405：多元平等 2016</td><td>性別平等、DEI</td><td>Ch8</td><td>有限確信</td></tr>
+<tr><td>GRI 413：當地社區 2016</td><td>社區投資</td><td>Ch15</td><td>有限確信</td></tr>
+<tr><td>GRI 418：顧客隱私 2016</td><td>客戶資料保護</td><td>Ch12</td><td>有限確信</td></tr>
+</table>
+
+<hr>
+<h2>附章二：第三方確信聲明</h2>
+<div class="compliance-box">
+<p>本報告書之關鍵數據已取得第三方確信機構之有限確信（Limited Assurance）。</p>
+<table>
+<tr><th>確信項目</th><th>確信範圍</th><th>確信等級</th></tr>
+<tr><td>溫室氣體排放數據</td><td>範疇一、二、三排放數據</td><td>有限確信</td></tr>
+<tr><td>員工數據</td><td>員工人數、結構、離職率、訓練時數</td><td>有限確信</td></tr>
+<tr><td>治理指標</td><td>董事會出席率、獨立董事比例、倫理訓練覆蓋率</td><td>有限確信</td></tr>
+<tr><td>環境管理數據</td><td>能源消耗、水資源使用、廢棄物產生</td><td>有限確信</td></tr>
+</table>
+<p>確信報告書編號：ESG-SUN-2026-001</p>
+</div>
+
+<hr>
+<h2>附章三：法規遵循聲明</h2>
+<div class="compliance-box">
+<p>本公司嚴格遵守所有適用法規：</p>
+<ul>
+<li>公司法、證交法、個資法</li>
+<li>勞基法與職業安全衛生法</li>
+<li>環保法規（空污、水污、廢棄物）</li>
+<li>反洗錢與反貪腐法規</li>
+<li>金管會「上市櫃公司永續發展行動方案」</li>
+<li>「永續資訊揭露規範及準則」（2026.4 更新版）</li>
+<li>IFRS S1/S2（提前採用宣告）</li>
+<li>GRI Standards 2021 · TCFD · SASB</li>
+</ul>
+<p>2026 年度無任何重大法規違反事件。</p>
+</div>
+`;
+  }
+
   const handleDownload = useCallback(() => {
     if (!generatedHtml) return;
     const blob = new Blob([generatedHtml], { type: 'text/html;charset=utf-8' });
@@ -466,136 +1072,221 @@ ${appendices}
     URL.revokeObjectURL(url);
   }, [generatedHtml, company.year]);
 
+  // ========== Render ==========
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
-        {/* ====== Header (極簡美學) ====== */}
-        <header className="border-b border-neutral-200 pb-4 mb-6">
+        {/* ====== Header ====== */}
+        <header className="border-b border-neutral-200 pb-4">
           <div className="flex items-center gap-3 mb-2">
             <BookOpen size={24} className="text-cyan-600" />
             <h1 className="text-xl md:text-2xl font-bold text-neutral-900">
               SustainWrite 永續報告
             </h1>
             <Badge variant="success" size="sm">
-              <Sparkles size={10} className="mr-1" /> 24 萬字一鍵生成
+              <Sparkles size={10} className="mr-1" /> 24 段 × 53 單據
             </Badge>
           </div>
           <p className="text-sm text-neutral-500">
-            填写公司資料 → 選擇章節 → 點擊生成 → 下載 HTML ｜ 符合金管會法規 · GRI/IFRS/TCFD/SASB
+            填寫公司資料 → 確認單據完成度 → 一鍵生成 24 萬字報告 → 下載 HTML
           </p>
         </header>
 
-        {/* ====== 步驟 1: 公司資料 (步驟Wizard) ====== */}
-        {step === 'setup' && (
+        {/* ====== 單據收集清單總表 ====== */}
+        {step === 'checklist' && (
           <>
+            {/* 整體完成度 */}
             <Card variant="default" padding="md">
               <div className="flex items-center justify-between mb-4">
                 <SectionHeader
-                  title="步驟 1：公司基本資料"
-                  subtitle="這些資料會自動填入報告的對應位置"
+                  title="單據收集進度"
+                  subtitle={`共 ${completionStats.total} 個單據，必填 ${completionStats.required} 個`}
                 />
-                <span className="text-xs text-neutral-400">必填</span>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-emerald-600">
+                    {Math.round(
+                      (completionStats.requiredCompleted / completionStats.required) * 100
+                    )}
+                    %
+                  </p>
+                  <p className="text-xs text-neutral-400">必填完成率</p>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {[
-                  {
-                    key: 'name',
-                    label: '公司名稱',
-                    placeholder: '善向永續股份有限公司',
-                    required: true,
-                  },
-                  { key: 'tax_id', label: '統編', placeholder: '60493411' },
-                  { key: 'chairman', label: '董事長', placeholder: '楊坤修 博士' },
-                  { key: 'capital', label: '實收資本額', placeholder: '500 萬元' },
-                  { key: 'employees', label: '員工人數', placeholder: '5 人' },
-                  { key: 'industry', label: '行業別', placeholder: '專業、科學及技術服務業' },
-                  { key: 'year', label: '報告年度', placeholder: '2026' },
-                  { key: 'address', label: '地址', placeholder: '台北市中正區館前路 20 號 5 樓' },
-                ].map((field) => (
-                  <div
-                    key={field.key}
-                    className={field.key === 'address' ? 'md:col-span-2 lg:col-span-2' : ''}
-                  >
-                    <label className="text-xs font-medium text-neutral-500 mb-1 block">
-                      {field.label}
-                      {field.required && <span className="text-rose-500 ml-1">*</span>}
-                    </label>
-                    <Input
-                      value={company[field.key as keyof typeof company]}
-                      onChange={(e) => updateField(field.key, e.target.value)}
-                      placeholder={field.placeholder}
-                    />
+              <Progress
+                value={Math.round(
+                  (completionStats.requiredCompleted / completionStats.required) * 100
+                )}
+                size="md"
+                color="auto"
+              />
+
+              {/* 各分類進度 */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4">
+                {completionStats.byCategory.map((cat) => (
+                  <div key={cat.category} className="p-3 bg-neutral-50 rounded-lg">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-medium text-neutral-600">{cat.label}</span>
+                      <span className="text-xs font-bold text-neutral-900">
+                        {cat.completed}/{cat.total}
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-emerald-500 rounded-full transition-all"
+                        style={{
+                          width: `${cat.total > 0 ? (cat.completed / cat.total) * 100 : 0}%`,
+                        }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </Card>
 
-            {/* ====== 步驟 2: 章節選擇 ====== */}
+            {/* 單據總表 */}
             <Card variant="default" padding="md">
               <div className="flex items-center justify-between mb-4">
-                <SectionHeader
-                  title="步驟 2：選擇報告章節"
-                  subtitle="預設全選 24 段，可取消不需要的章節"
-                />
-                <span className="text-xs text-neutral-400">{CHAPTER_SECTIONS.length} 章</span>
+                <SectionHeader title="單據收集清單總表" subtitle="點擊展開查看各章節詳細單據" />
+                <Button
+                  variant="primary"
+                  size="sm"
+                  icon={<Zap size={14} />}
+                  onClick={generateReport}
+                >
+                  一鍵生成報告
+                </Button>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {CHAPTER_SECTIONS.map((ch) => {
+
+              {/* 公司資料快速編輯 */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 p-3 bg-neutral-50 rounded-lg">
+                <div>
+                  <label className="text-xs text-neutral-500">公司名稱</label>
+                  <Input
+                    value={company.name}
+                    onChange={(e) => updateField('name', e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-neutral-500">董事長</label>
+                  <Input
+                    value={company.chairman}
+                    onChange={(e) => updateField('chairman', e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-neutral-500">年度</label>
+                  <Input
+                    value={company.year}
+                    onChange={(e) => updateField('year', e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-neutral-500">員工人數</label>
+                  <Input
+                    value={company.employees}
+                    onChange={(e) => updateField('employees', e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              {/* 各章節單據展開 */}
+              <div className="space-y-2">
+                {CHAPTERS.map((ch) => {
+                  const docIds = CHAPTER_DOCS[ch.id] || [];
+                  const docs = docIds
+                    .map((id) => ALL_DOCS.find((d) => d.id === id))
+                    .filter(Boolean);
+                  const isExpanded = expandedChapter === ch.id;
                   const Icon = ch.icon;
+
                   return (
                     <div
                       key={ch.id}
-                      className={`p-3 rounded-lg ${ch.bg} cursor-pointer transition-all hover:opacity-75`}
-                      onClick={() => toggleSection(ch.id)}
+                      className="border border-neutral-200 rounded-lg overflow-hidden"
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        {expandedSections.has(ch.id) ? (
-                          <ChevronUp size={14} className={ch.color} />
-                        ) : (
-                          <ChevronDown size={14} className={ch.color} />
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Icon size={16} className={ch.color} />
-                        <span className={`text-xs font-medium ${ch.color}`}>
-                          {ch.title.replace(/[第章]|[一二三四五六七八九十]+/g, '').trim()}
-                        </span>
-                      </div>
+                      <button
+                        className="w-full flex items-center justify-between p-3 hover:bg-neutral-50 transition-colors"
+                        onClick={() => setExpandedChapter(isExpanded ? null : ch.id)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-8 h-8 rounded-lg bg-${ch.color}-50 flex items-center justify-center`}
+                          >
+                            <Icon size={16} className={`text-${ch.color}-600`} />
+                          </div>
+                          <div className="text-left">
+                            <p className="text-sm font-medium text-neutral-900">{ch.title}</p>
+                            <p className="text-xs text-neutral-500">{docs.length} 個單據</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="default" size="sm">
+                            {docs.length}
+                          </Badge>
+                          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        </div>
+                      </button>
+
+                      {isExpanded && (
+                        <div className="border-t border-neutral-200 p-3 bg-white">
+                          <table className="w-full text-xs">
+                            <thead>
+                              <tr className="border-b border-neutral-100">
+                                <th className="text-left py-2 px-2 font-medium text-neutral-500">
+                                  編號
+                                </th>
+                                <th className="text-left py-2 px-2 font-medium text-neutral-500">
+                                  單據名稱
+                                </th>
+                                <th className="text-left py-2 px-2 font-medium text-neutral-500">
+                                  標準
+                                </th>
+                                <th className="text-left py-2 px-2 font-medium text-neutral-500">
+                                  部門
+                                </th>
+                                <th className="text-center py-2 px-2 font-medium text-neutral-500">
+                                  必填
+                                </th>
+                                <th className="text-center py-2 px-2 font-medium text-neutral-500">
+                                  狀態
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {docs.map((doc) => (
+                                <tr
+                                  key={doc.id}
+                                  className="border-b border-neutral-50 hover:bg-neutral-50"
+                                >
+                                  <td className="py-2 px-2 font-mono text-neutral-600">{doc.id}</td>
+                                  <td className="py-2 px-2 text-neutral-800">{doc.name}</td>
+                                  <td className="py-2 px-2 text-neutral-500">{doc.standard}</td>
+                                  <td className="py-2 px-2 text-neutral-500">{doc.department}</td>
+                                  <td className="py-2 px-2 text-center">
+                                    {doc.required ? (
+                                      <AlertCircle size={14} className="text-rose-500 mx-auto" />
+                                    ) : (
+                                      <span className="text-neutral-300">—</span>
+                                    )}
+                                  </td>
+                                  <td className="py-2 px-2 text-center">
+                                    <Badge variant={doc.required ? 'danger' : 'default'} size="sm">
+                                      {doc.required ? '待填報' : '選填'}
+                                    </Badge>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
-              </div>
-            </Card>
-
-            {/* ====== 步驟 3: 開始生成 ====== */}
-            <Card variant="default" padding="md">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                  <h3 className="font-bold text-neutral-900 mb-1">步驟 3：開始生成</h3>
-                  <p className="text-xs text-neutral-500">
-                    將生成 24 段 × ~10,000 字 = 約 240,000 字的完整永續報告書
-                  </p>
-                  <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500">
-                    <span>
-                      <Clock size={12} className="inline mr-1" /> 預估 30 秒
-                    </span>
-                    <span>
-                      <Layers size={12} className="inline mr-1" /> 24 段
-                    </span>
-                    <span>
-                      <Shield size={12} className="inline mr-1" /> 零算力
-                    </span>
-                  </div>
-                </div>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  icon={<Zap size={16} />}
-                  onClick={generateReport}
-                  disabled={!company.name}
-                >
-                  一鍵生成 24 萬字報告
-                </Button>
               </div>
             </Card>
           </>
@@ -612,12 +1303,6 @@ ${appendices}
               </div>
             </div>
             <Progress value={progress} size="md" color="auto" />
-            <div className="mt-4 p-3 bg-neutral-50 rounded-lg">
-              <p className="text-xs text-neutral-500">
-                💡 使用「零算力預寫範本」技術：先載入預先寫好的 HTML 結構 → 批量替換公司資料 →
-                注入法規遵循宣告 → 自動組裝成完整報告。全程不調用外部 AI API。
-              </p>
-            </div>
           </Card>
         )}
 
@@ -630,7 +1315,7 @@ ${appendices}
                 <div>
                   <p className="font-bold text-emerald-800">報告生成完成！</p>
                   <p className="text-sm text-emerald-600">
-                    總字數：{wordCount.toLocaleString()} 字 | 24 段 | 法規遵循已注入
+                    總字數：{wordCount.toLocaleString()} 字 | 24 段 | 53 單據已整合
                   </p>
                 </div>
               </div>
@@ -653,13 +1338,18 @@ ${appendices}
                 </Button>
               </div>
             </div>
-
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
                 { label: '總字數', value: wordCount.toLocaleString(), icon: FileText },
                 { label: '章節數', value: '24 段', icon: Layers },
-                { label: '法規遵循', value: '金管會+GRI', icon: Shield },
-                { label: '生成方式', value: '零算力', icon: Zap },
+                { label: '單據數', value: '53 個', icon: FileCheck },
+                {
+                  label: '完成率',
+                  value: `${Math.round(
+                    (completionStats.requiredCompleted / completionStats.required) * 100
+                  )}%`,
+                  icon: Target,
+                },
               ].map((stat) => (
                 <Card key={stat.label} variant="outlined" padding="sm">
                   <div className="flex items-center gap-2">
@@ -708,236 +1398,60 @@ ${appendices}
           </Card>
         )}
 
-        {/* ====== 功能說明 (服務教學) ====== */}
-        {step === 'setup' && (
-          <Card variant="outlined" padding="md">
-            <SectionHeader title="功能說明" subtitle="為什麼選擇 24 萬字一鍵生成？" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-              <div className="p-4 bg-neutral-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Zap size={16} className="text-amber-600" />
-                  <span className="text-sm font-bold text-neutral-800">零算力生成</span>
-                </div>
-                <p className="text-xs text-neutral-500">
-                  使用預寫 HTML 範本，不依賴外部 AI API，30 秒內完成 24 萬字報告
-                </p>
+        {/* ====== Agent Pulse 右下角 ====== */}
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setShowAgentPulse(!showAgentPulse)}
+            className="w-14 h-14 rounded-full bg-cyan-600 text-white shadow-lg flex items-center justify-center hover:bg-cyan-700 transition-all hover:scale-105"
+          >
+            {showAgentPulse ? <X size={24} /> : <Bot size={24} />}
+          </button>
+
+          {showAgentPulse && (
+            <div className="absolute bottom-16 right-0 w-72 bg-white rounded-xl shadow-2xl border border-neutral-200 overflow-hidden">
+              <div className="p-3 bg-cyan-600 text-white">
+                <p className="font-bold text-sm">Agent Pulse</p>
+                <p className="text-xs opacity-80">我的最愛 · 超級管理員</p>
               </div>
-              <div className="p-4 bg-neutral-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield size={16} className="text-emerald-600" />
-                  <span className="text-sm font-bold text-neutral-800">法規遵循</span>
+              <div className="p-3 space-y-2 max-h-64 overflow-y-auto">
+                <p className="text-xs font-medium text-neutral-500 mb-2">我的最愛</p>
+                {favorites.length === 0 ? (
+                  <p className="text-xs text-neutral-400 text-center py-2">尚未加入最愛</p>
+                ) : (
+                  favorites.map((f) => (
+                    <div
+                      key={f}
+                      className="flex items-center justify-between p-2 bg-neutral-50 rounded"
+                    >
+                      <span className="text-xs text-neutral-700">{f}</span>
+                      <button onClick={() => toggleFavorite(f)}>
+                        <X size={12} className="text-neutral-400" />
+                      </button>
+                    </div>
+                  ))
+                )}
+
+                <hr className="my-2" />
+                <p className="text-xs font-medium text-neutral-500 mb-2">超級管理員</p>
+                <div className="space-y-1">
+                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
+                    <Database size={12} /> 資料庫管理
+                  </button>
+                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
+                    <Settings size={12} /> 系統設定
+                  </button>
+                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
+                    <Users size={12} /> 使用者管理
+                  </button>
+                  <button className="w-full text-left p-2 text-xs text-neutral-700 hover:bg-neutral-50 rounded flex items-center gap-2">
+                    <FileText size={12} /> 報告歷史
+                  </button>
                 </div>
-                <p className="text-xs text-neutral-500">
-                  自動注入金管會法規、GRI 索引、TCFD 氣候揭露、SASB 行業指標
-                </p>
-              </div>
-              <div className="p-4 bg-neutral-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Layers size={16} className="text-blue-600" />
-                  <span className="text-sm font-bold text-neutral-800">24 段完整報告</span>
-                </div>
-                <p className="text-xs text-neutral-500">
-                  從治理策略到 IFRS S2 揭露，涵蓋 ESG 所有面向的完整章節
-                </p>
               </div>
             </div>
-          </Card>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
-}
-
-// ============================================================
-// 單章內容生成器（細分到多個子節）
-// ============================================================
-function generateSectionContent(chId: string, replacements: Record<string, string>): string {
-  const fill = (text: string) => {
-    let result = text;
-    for (const [key, val] of Object.entries(replacements)) {
-      result = result.split(key).join(val);
-    }
-    return result;
-  };
-
-  const sections: Record<string, () => string> = {
-    ch1: () =>
-      fill(`
-<h3>1.1 公司概述與報告邊界</h3>
-<p>本報告期間為 {{report_year}} 年 1 月 1 日至 {{report_year}} 年 12 月 31 日。報導個體涵蓋 {{company_name}} 所有營運據點，主要營運地址為 {{address}}。本公司成立於 2025 年 10 月 27 日，實收資本額為 {{capital}}，主要業務為 ESG 顧問諮詢、國際永續人才培力、AI-ESG 數位平台、管理顧問服務。</p>
-<p>本報告書依據臺灣證券交易所「上市公司編製與申報永續報告書作業辦法」、金融監督管理委員會「永續資訊揭露規範及準則」及國際永續準則編製，採用 GRI Standards 2021、IFRS S1/S2（提前採用）、TCFD 架構及 SASB 行業指標進行資訊揭露。</p>
-
-<h3>1.2 組織規模與營運據點</h3>
-<table>
-<tr><th>項目</th><th>內容</th></tr>
-<tr><td>公司名稱</td><td>{{company_name}}</td></tr>
-<tr><td>統編</td><td>60493411</td></tr>
-<tr><td>實收資本額</td><td>{{capital}}</td></tr>
-<tr><td>員工人數</td><td>{{employee_count}} 人</td></tr>
-<tr><td>行業別</td><td>{{industry}}</td></tr>
-<tr><td>營運據點</td><td>{{address}}</td></tr>
-</table>
-
-<h3>1.3 治理架構</h3>
-<p>董事會為 {{company_name}} 永續治理的最高監督單位，由 {{board_size}} 位董事組成，其中獨立董事 {{independent_directors}} 位，獨立董事比例達 {{independent_ratio}}%。董事長為 {{chairman}}，親自擔任永續發展委員會主任委員，定期向董事會報告執行成效。</p>
-<p>本公司已建立完整的永續治理組織體系，包含永續發展委員會、風險管理委員會、薪酬委員會及審計委員會，各委員會依其職掌運作，確保企業永續策略之有效落實。董事會每季聽取永續發展委員會之執行報告，並針對重大議題進行審議與決策。</p>
-
-<h3>1.4 永續策略框架</h3>
-<p>本公司以「創價型永續」為核心理念，將環境（E）、社會（S）與治理（G）三大面向全面融入企業營運策略之中。永續策略聚焦於五大主軸：一、深化氣候行動與淨零轉型；二、強化人力資本與員工福祉；三、推動供應鏈永續管理；四、落實社區參與及社會貢獻；五、提升資訊透明度與治理品質。</p>
-<p>本公司已設定短、中、長期永續發展目標：短期目標（{{report_year}}）聚焦於完善治理架構與資訊揭露；中期目標（2028）著重於價值鏈碳減排與循環經濟推動；長期目標（2030）則致力於達成淨零排放與全面永續轉型。</p>
-
-<h3>1.5 重大主題分析</h3>
-<p>透過利害關係人分析與重大性評估，本公司識別出以下關鍵永續議題：氣候變遷與碳管理（極高衝擊）、資訊安全與隱私（高衝擊）、人才吸引與留任（高衝擊）、供應鏈永續管理（高衝擊）、產品責任與客戶服務（中衝擊）、社區發展與社會貢獻（中衝擊）、生物多樣性保護（中衝擊）、反貪腐與誠信經營（高衝擊）。</p>
-<p>本公司每年針對各重大主題設定量化目標，並定期追蹤達成情形。{{report_year}} 年度之目標達成情形將於各章節中詳細揭露。</p>
-
-<h3>1.6 TCFD 氣候相關財務揭露</h3>
-<div class="tcfd-box">
-<p>本公司依據 TCFD 建議之四大面向（治理、策略、風險管理、指標與目標）進行完整之氣候相關財務揭露。在治理方面，董事會為氣候治理之最高監督單位，永續發展委員會負責氣候策略之制定與執行監督。在策略方面，本公司已進行情境分析，評估不同升溫情境對公司營運之潛在影響。</p>
-<p>在風險管理方面，本公司將氣候風險納入企業風險管理框架，並建立氣候風險評估程序。在指標與目標方面，本公司已設定溫室氣體減量目標、再生能源使用目標等量化指標，並定期追蹤達成情形。</p>
-</div>
-
-<h3>1.7 IFRS S1/S2 遵循宣告</h3>
-<p>本公司宣告提前採用 IFRS S1「永續相關財務資訊之揭露」及 IFRS S2「氣候相關揭露」（2027 年 1 月 1 日生效），於 {{report_year}} 年度報告中接軌揭露。接軌重點包含：年報新增「永續相關財務資訊專章」，經董事會通過；報導個體與合併財報一致；溫室氣體盤查依 GHG Protocol 方法（範疇一、二）；範疇三接軌後前 3 年度得不揭露，自第 4 年起揭露。</p>
-
-<h3>1.8 GRI 內容索引</h3>
-<p>本報告書之 GRI 內容索引完整揭露於第二十四章附章。索引包含所有 GRI 準則之揭露項目、對應章節、以及各項目是否取得第三方確信之說明。本報告書採用 GRI Standards 2021 年版，並納入 GRI 101:2024（生物多樣性）、GRI 102:2025（氣候變遷）、GRI 103:2025（能源）等最新版本。</p>
-`),
-
-    ch2: () =>
-      fill(`
-<h3>2.1 氣候治理與組織文化</h3>
-<p>本公司深刻認知氣候變遷對企業營運與全球環境之深遠影響，積極響應《巴黎協定》之全球升溫控制目標，承諾於 2050 年前達成淨零排放。本公司由董事會層級負責氣候相關風險與機會的監督管理，永續發展委員會定期審議氣候策略執行情形，並向董事會報告。</p>
-<p>在氣候治理方面，本公司已建立完整的氣候治理組織體系，包含氣候風險評估機制、氣候目標設定與追蹤程序、以及氣候資訊揭露制度。本公司亦將氣候績效納入高階主管薪酬指標，佔比達 20%，以強化管理階層對氣候發展之承諾與責任。</p>
-
-<h3>2.2 溫室氣體盤查</h3>
-<table>
-<tr><th>排放範圍</th><th>排放量（tCO2e）</th><th>佔比</th><th>較基準年變化</th></tr>
-<tr><td>範疇一：直接排放</td><td>{{scope1_emissions}}</td><td>32%</td><td>-8%</td></tr>
-<tr><td>範疇二：能源間接</td><td>{{scope2_emissions}}</td><td>45%</td><td>-12%</td></tr>
-<tr><td>範疇三：價值鏈</td><td>{{scope3_emissions}}</td><td>23%</td><td>-5%</td></tr>
-<tr><td><strong>合計</strong></td><td><strong>{{total_emissions}}</strong></td><td><strong>100%</strong></td><td><strong>-8%</strong></td></tr>
-</table>
-<p>本公司之溫室氣體盤查依據 ISO 14064-1:2018 標準與 GHG Protocol 企業標準進行。盤查邊界包括範疇一（直接排放）、範疇二（能源間接排放）及價值鏈間接排放（範疇三）。計算方法採用排放係數法，使用經濟部能源署發布之最新年度電力排放係數。</p>
-
-<h3>2.3 減量路徑與目標</h3>
-<p>本公司已制定明確之減量路徑，目標如下：一、短期（{{report_year}}-2030）：較基準年減碳 {{DYNAMIC_DATA['減碳目標']}}，再生能源使用比例達 50%；二、中期（2031-2040）：較基準年減碳 60%，全面使用再生能源；三、長期（2041-2050）：透過碳移除技術與碳權抵換，達成碳中和。</p>
-<p>主要減量措施包括：一、能源效率提升：設備汰換、智慧能源管理系統；二、再生能源使用：太陽能板設置、綠電採購；三、數位化減碳：AI 能源管理、雲端協作平台；四、差旅減量：視訊會議優先、低碳交通；五、員工參與：綠色辦公倡議、減碳獎勵計畫。</p>
-
-<h3>2.4 再生能源使用</h3>
-<p>本公司設定 2030 年再生能源使用比例達 50% 之中期目標，並透過自建太陽能發電系統、簽訂再生能源購電契約（PPA）、購買再生能源憑證（REC）等多元方式推動。{{report_year}} 年度再生能源使用比例已達 {{renewable_ratio}}%，較前年提升 10 個百分點。</p>
-
-<h3>2.5 碳排放強度分析</h3>
-<p>本公司 {{report_year}} 年度之碳排放強度為 {{carbon_intensity}} tCO2e/營收億元，較基準年降低 10%。碳排放強度降低之原因主要來自：能源效率提升（節電 {{DYNAMIC_DATA['能源效率']}}%）、再生能源使用比例提升、以及差旅減量措施之成效。</p>
-
-<h3>2.6 碳中和路徑與承諾</h3>
-<p>本公司承諾於 2050 年前達成碳中和（Net Zero），具體路徑分為三階段：第一階段（{{report_year}}-2030）聚焦於減量，目標較基準年減碳 {{DYNAMIC_DATA['減碳目標']}}；第二階段（2031-2040）聚焦於深度減量，目標較基準年減碳 60%；第三階段（2041-2050）聚焦於碳中和，透過碳移除技術與碳權抵換，達成碳中和。</p>
-`),
-
-    // ... 其他章節使用預設模板
-  };
-
-  // 預設模板：為沒有特製內容的章節生成通用結構
-  const defaultTemplate = (id: string, title: string) => {
-    const sectionNum = parseInt(id.replace('ch', ''));
-    return fill(`
-<h3>${sectionNum}.1 概述</h3>
-<p>本章節為 {{company_name}} 於 {{report_year}} 年度在「${title
-      .replace(/[第章]|[一二三四五六七八九十]+/g, '')
-      .trim()}」面向之具體作為與績效數據。本公司秉持創價型永續理念，將此面向納入永續發展策略之核心推動項目。</p>
-
-<h3>${sectionNum}.2 管理方針</h3>
-<p>本公司針對此面向之管理方針包括：一、建立完整之管理制度與流程；二、設定量化目標並定期追蹤達成情形；三、落實風險評估與因應措施；四、推動內外部溝通與利害關係人參與；五、持續精進改善作為。</p>
-
-<h3>${sectionNum}.3 執行作為</h3>
-<p>{{report_year}} 年度之具體執行作為包括：一、制度建置與流程優化；二、人員教育訓練與意識提升；三、系統建置與數據收集；四、外部合作與資源整合；五、成效評估與改善。</p>
-
-<h3>${sectionNum}.4 關鍵績效指標</h3>
-<table>
-<tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
-<tr><td>主要指標 1</td><td>90%</td><td>85%</td><td>≥ 88%</td><td><span style="color:#16a34a">✅ 102%</span></td></tr>
-<tr><td>主要指標 2</td><td>85%</td><td>80%</td><td>≥ 82%</td><td><span style="color:#16a34a">✅ 104%</span></td></tr>
-<tr><td>主要指標 3</td><td>95%</td><td>92%</td><td>≥ 90%</td><td><span style="color:#16a34a">✅ 106%</span></td></tr>
-</table>
-
-<h3>${sectionNum}.5 未來展望</h3>
-<p>展望未來，本公司將持續精進此面向之作為，重點工作包括：一、擴大推動範圍與深度；二、強化內外部合作；三、提升資訊揭露品質；四、落實持續改善機制；五、達成更高之永續發展目標。</p>
-`);
-  };
-
-  return sections[chId]
-    ? sections[chId]()
-    : defaultTemplate(chId, CHAPTER_SECTIONS.find((s) => s.id === chId)?.title || '');
-}
-
-// ============================================================
-// 附章生成器
-// ============================================================
-function generateAppendices(company: typeof DEFAULT_COMPANY): string {
-  return `
-<hr>
-<h2>附章一：GRI 內容索引</h2>
-<table>
-<tr><th>GRI 準則</th><th>揭露項目</th><th>對應章節</th><th>確信情形</th></tr>
-<tr><td>GRI 2：一般揭露 2021</td><td>組織規模、治理架構、永續策略</td><td>Ch1</td><td>有限確信</td></tr>
-<tr><td>GRI 101：生物多樣性 2024</td><td>生物多樣性影響評估、保護措施</td><td>Ch6</td><td>有限確信</td></tr>
-<tr><td>GRI 102：氣候變遷 2025</td><td>氣候風險與機會、減量目標</td><td>Ch2</td><td>有限確信</td></tr>
-<tr><td>GRI 103：能源 2025</td><td>能源消耗、再生能源、能源效率</td><td>Ch3</td><td>有限確信</td></tr>
-<tr><td>GRI 201：經濟績效 2016</td><td>經濟價值創造、市場佔有率</td><td>Ch13</td><td>有限確信</td></tr>
-<tr><td>GRI 203：間接經濟衝擊 2016</td><td>社區投資、在地採購</td><td>Ch15</td><td>有限確信</td></tr>
-<tr><td>GRI 204：採購實務 2016</td><td>供應商管理、在地採購</td><td>Ch14</td><td>有限確信</td></tr>
-<tr><td>GRI 205：反貪腐 2016</td><td>反貪腐政策、倫理訓練</td><td>Ch11</td><td>有限確信</td></tr>
-<tr><td>GRI 302：能源 2016</td><td>能源消耗、能源強度</td><td>Ch3</td><td>有限確信</td></tr>
-<tr><td>GRI 303：水與污水 2018</td><td>水資源管理、水污染防治</td><td>Ch4</td><td>有限確信</td></tr>
-<tr><td>GRI 305：排放 2016</td><td>溫室氣體排放（三範疇）</td><td>Ch2</td><td>有限確信</td></tr>
-<tr><td>GRI 306：廢棄物 2020</td><td>廢棄物管理、循環經濟</td><td>Ch5</td><td>有限確信</td></tr>
-<tr><td>GRI 308：供應商環境評估 2016</td><td>供應商環境稽核</td><td>Ch14</td><td>有限確信</td></tr>
-<tr><td>GRI 401：就業 2016</td><td>員工人數、離職率、薪酬</td><td>Ch7</td><td>有限確信</td></tr>
-<tr><td>GRI 403：職業安全衛生 2018</td><td>安全管理、職業病預防</td><td>Ch9</td><td>有限確信</td></tr>
-<tr><td>GRI 404：訓練與教育 2016</td><td>訓練時數、職涯發展</td><td>Ch7</td><td>有限確信</td></tr>
-<tr><td>GRI 405：多元平等 2016</td><td>性別平等、DEI</td><td>Ch8</td><td>有限確信</td></tr>
-<tr><td>GRI 406：非歧視 2016</td><td>反歧視政策</td><td>Ch8</td><td>有限確信</td></tr>
-<tr><td>GRI 413：當地社區 2016</td><td>社區投資、社區參與</td><td>Ch15</td><td>有限確信</td></tr>
-<tr><td>GRI 414：供應商社會評估 2016</td><td>供應商社會稽核</td><td>Ch10</td><td>有限確信</td></tr>
-<tr><td>GRI 415：公共政策 2016</td><td>政治捐獻、遊說</td><td>Ch11</td><td>有限確信</td></tr>
-<tr><td>GRI 416：顧客健康與安全 2016</td><td>產品責任、客戶服務</td><td>Ch16</td><td>有限確信</td></tr>
-<tr><td>GRI 417：行銷與標示 2016</td><td>負責任行銷、服務標示</td><td>Ch16</td><td>有限確信</td></tr>
-<tr><td>GRI 418：顧客隱私 2016</td><td>客戶資料保護</td><td>Ch12</td><td>有限確信</td></tr>
-</table>
-
-<hr>
-<h2>附章二：第三方確信聲明</h2>
-<div class="compliance-box">
-<p>本報告書之關鍵數據已取得第三方確信機構之有限確信（Limited Assurance）。</p>
-<table>
-<tr><th>確信項目</th><th>確信範圍</th><th>確信等級</th></tr>
-<tr><td>溫室氣體排放數據</td><td>範疇一、二、三排放數據</td><td>有限確信</td></tr>
-<tr><td>員工數據</td><td>員工人數、結構、離職率、訓練時數</td><td>有限確信</td></tr>
-<tr><td>治理指標</td><td>董事會出席率、獨立董事比例、倫理訓練覆蓋率</td><td>有限確信</td></tr>
-<tr><td>環境管理數據</td><td>能源消耗、水資源使用、廢棄物產生</td><td>有限確信</td></tr>
-<tr><td>社會責任指標</td><td>社區投資金額、受益人數、供應商稽核覆蓋率</td><td>有限確信</td></tr>
-</table>
-<p>確信報告書編號：ESG-SUN-${company.year}-001</p>
-<p>確信機構：○○聯合會計師事務所（符合「上市上櫃公司永續資訊確信機構管理要點」）</p>
-<p>確信期間：${company.year} 年 1 月 1 日至 ${company.year} 年 12 月 31 日</p>
-</div>
-
-<hr>
-<h2>附章三：法規遵循聲明</h2>
-<div class="compliance-box">
-<p>本公司嚴格遵守所有適用法規，包括但不限於：</p>
-<ul>
-<li>公司法、證交法、個資法</li>
-<li>勞基法與職業安全衛生法</li>
-<li>環保法規（空污、水污、廢棄物）</li>
-<li>反洗錢與反貪腐法規</li>
-<li>台灣金管會「上市櫃公司永續發展行動方案」</li>
-<li>「永續資訊揭露規範及準則」（2026.4 更新版）</li>
-<li>IFRS S1/S2（提前採用宣告）</li>
-<li>GRI Standards 2021</li>
-<li>TCFD 架構</li>
-<li>SASB Professional & Commercial Services Industry</li>
-</ul>
-<p>${company.year} 年度無任何重大法規違反事件，亦無因法規違反而受裁罰之情形。</p>
-</div>
-`;
 }
