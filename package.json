@@ -173,7 +173,8 @@
     "@babel/plugin-transform-typescript": "^7.28.0",
     "@babel/preset-typescript": "^7.28.0",
     "@babel/helper-module-transforms": "^7.28.0",
-    "@babel/helper-create-class-features-plugin": "^7.28.0"
+    "@babel/helper-create-class-features-plugin": "^7.28.0",
+    "@vitejs/plugin-react": "6.0.2"
   },
   "overrides": {
     "@babel/core": "^7.28.0",
