@@ -166,5 +166,8 @@
     "vitest": "^4.1.8"
   },
   "private": true,
-  "packageManager": "pnpm@10.0.0"
+  "packageManager": "pnpm@10.0.0",
+  "resolutions": {
+    "@babel/core": "^7.28.0"
+  }
 }
