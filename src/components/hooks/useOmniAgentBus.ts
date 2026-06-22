@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { omniAgentBus, IMiaoDeNotification } from '@/services/OAAgentBus.client';
+import { omniAgentBus, IMiaoDeNotification } from '@/services/OmniAgentBus.client';
 import { useOmniTheme } from '@/theme/OmniThemeProvider';
 
 export interface UseOAAgentBusOptions {

@@ -9,7 +9,7 @@
  * - Added subscriber health monitoring
  */
 
-import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 export interface BusEvent {
   id: string;

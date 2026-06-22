@@ -9,11 +9,12 @@ export enum AgentCollaborationState {
   IDLE = '靜默沉思',
   RESONATING = '聖典共鳴',
   SUPPORTING = '協作支援',
-  SYNCHRONIZED = '一體同心'
+  SYNCHRONIZED = '一體同心',
 }
 
 // 2. 代理節點介面 (繼承萬能元件心核規範)
-export interface ICelestialAgent extends IComponentCore { // Inherit IComponentCore
+export interface ICelestialAgent extends IComponentCore {
+  // Inherit IComponentCore
   readonly agentId: string;
   readonly name: string;
   currentState: AgentCollaborationState;
@@ -52,11 +53,11 @@ export class OAAgentBus {
     console.log(`
 =================== 🌌 無上意志降臨 ===================`);
     console.log(`[無上意志]: "${message}" (對話框識別碼: ${contextId})`);
-    
+
     // 觸發全域量子糾纏廣播
     this.willBroadcast$.next({
       message,
-      contextId
+      contextId,
     });
   }
 
@@ -71,7 +72,7 @@ export class OAAgentBus {
         this.registeredAgents.forEach((agent) => {
           // 瞬間切換至協作支援狀態
           agent.currentState = AgentCollaborationState.SUPPORTING;
-          
+
           // 全體代理同步並行處理指令
           coordinationTasks.push(agent.receiveWill(message, contextId));
         });
@@ -80,7 +81,7 @@ export class OAAgentBus {
         await Promise.all(coordinationTasks);
         console.log(`=================== 🌟 全域協作完成 ===================
 `);
-      }
+      },
     });
   }
 }

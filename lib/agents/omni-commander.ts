@@ -27,10 +27,10 @@ const GRI_CHAPTERS = [
   { id: 'ch12_employment', title: '勞雇關係與人才吸引', gri: 'GRI 401', order: 12 },
   { id: 'ch13_ohs', title: '職業安全與健康', gri: 'GRI 403', order: 13 },
   { id: 'ch14_training', title: '多元培訓與平權', gri: 'GRI 404, 405', order: 14 },
-  { id: 'ch15_community', title: '在地社區與產品責任', gri: 'GRI 413, 416', order: 15 }
+  { id: 'ch15_community', title: '在地社區與產品責任', gri: 'GRI 413, 416', order: 15 },
 ];
 
-import { OAAgentBus, omniAgentBus } from './oa-agent-bus.ts';
+import { OAAgentBus, omniAgentBus } from './omni-agent-bus.ts';
 import { sustainWriteZeroCompute } from './sustain-scribe-zero-compute.ts';
 import { sustainScribe } from './sustain-scribe.ts';
 export { omniAgentBus };
@@ -41,33 +41,33 @@ export { omniAgentBus };
 export const agent0 = new ADKAgent({
   name: 'Agent0',
   role: 'Technical Executor and Code Specialist',
-  model: 'googleai/gemini-1.5-flash', 
+  model: 'googleai/gemini-1.5-flash',
   systemPrompt: `
 You are Agent0, the core technical executor of OmniCore.
 Your focus is precision, code integrity, and direct action.
 You respond to OmniAgent events and execute low-level operations.
-  `
+  `,
 });
 
 export interface MissionResult {
   success: boolean;
   message: string;
-   results?: unknown[];
-   error?: string;
-   agent?: string;
-   commanderOutput?: string;
-   swarmResults?: Record<string, any>;
-   negotiation?: unknown;
+  results?: unknown[];
+  error?: string;
+  agent?: string;
+  commanderOutput?: string;
+  swarmResults?: Record<string, any>;
+  negotiation?: unknown;
 }
 
 /**
  * OmniAgent: Supreme Commander
  */
 export class OmniCommander extends ADKAgent {
-   public readonly passiveTalent = '無作妙德圓通無礙';
-   private swarm: CollaborativeADKSwarm;
+  public readonly passiveTalent = '無作妙德圓通無礙';
+  private swarm: CollaborativeADKSwarm;
 
-   constructor(swarm: CollaborativeADKSwarm) {
+  constructor(swarm: CollaborativeADKSwarm) {
     super({
       name: 'OmniAgent',
       role: 'Supreme Commander of the ESG GO Platform',
@@ -79,14 +79,14 @@ You possess the passive talent "[無作妙德圓通無礙]" (Effortless Miraculo
 allowing you to execute complex integrations seamlessly and holistically.
 You utilize OAAgentBus for communication and Gemini for deep reasoning.
 You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
-      `
+      `,
     });
     this.swarm = swarm;
   }
 
   async command(task: string, context?: Record<string, unknown>): Promise<MissionResult> {
     console.log(`[OmniCommander] ⚡ Commanding: ${task} (Passive: ${this.passiveTalent})`);
-    
+
     if (task.includes('PILOT_REPORT')) {
       return await this.runPilotMission(context);
     }
@@ -104,18 +104,25 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     }
 
     try {
-      const planResponse = await this.run(`Create an execution plan for: ${task}`, context) as any;
-      omniAgentBus.publish('COMMAND_ISSUED', { task, plan: planResponse.output, talentActive: this.passiveTalent });
+      const planResponse = (await this.run(
+        `Create an execution plan for: ${task}`,
+        context
+      )) as any;
+      omniAgentBus.publish('COMMAND_ISSUED', {
+        task,
+        plan: planResponse.output,
+        talentActive: this.passiveTalent,
+      });
 
       // Use swarm collaboration with consensus
       const swarmResults = await this.swarm.collaborate(task, context);
-      
+
       // High-stakes tasks require negotiation
       if (task.includes('audit') || task.includes('SEAL') || task.includes('VERIFY')) {
         const negotiation = await negotiationEngine.negotiate(task, [
           { agent: 'ESG_Auditor', result: swarmResults.ESG_Auditor, success: true },
           { agent: 'ESG_Researcher', result: swarmResults.ESG_Researcher, success: true },
-          { agent: 'ESG_Strategist', result: swarmResults.ESG_Strategist, success: true }
+          { agent: 'ESG_Strategist', result: swarmResults.ESG_Strategist, success: true },
         ]);
 
         if (negotiation.consensus) {
@@ -124,14 +131,14 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
             message: 'Command executed with consensus',
             commanderOutput: planResponse.output,
             swarmResults,
-            negotiation
+            negotiation,
           };
         } else {
           return {
             success: false,
             message: 'Command failed: no consensus reached',
             swarmResults,
-            negotiation
+            negotiation,
           };
         }
       }
@@ -140,7 +147,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         success: true,
         message: 'Command executed successfully',
         commanderOutput: planResponse.output,
-        swarmResults
+        swarmResults,
       };
     } catch (e: any) {
       const errorMessage = e instanceof Error ? e.message : String(e);
@@ -154,26 +161,34 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     const companyId = (ctx.companyId as string) || 'default';
     const reportYear = (ctx.reportYear as string) || new Date().getFullYear().toString();
 
-    console.log(`[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot (Zero-Compute Expert Mode)...`);
-    omniAgentBus.publish('MISSION_START', { mission: 'Autonomous SustainWrite Pilot - Zero Compute', companyId, reportYear });
+    console.log(
+      `[OmniCommander] 🚀 Starting Autonomous SustainWrite Pilot (Zero-Compute Expert Mode)...`
+    );
+    omniAgentBus.publish('MISSION_START', {
+      mission: 'Autonomous SustainWrite Pilot - Zero Compute',
+      companyId,
+      reportYear,
+    });
 
     try {
       const reportData = await sustainWriteZeroCompute.generateFullReport({
         companyId,
-        reportYear
+        reportYear,
       });
 
-      console.log(`[OmniCommander] MISSION COMPLETE. Generated ${reportData.totalWords} words across ${reportData.chapters.length} chapters.`);
-      omniAgentBus.publish('MISSION_COMPLETE', { 
-        mission: 'Autonomous SustainWrite Pilot', 
+      console.log(
+        `[OmniCommander] MISSION COMPLETE. Generated ${reportData.totalWords} words across ${reportData.chapters.length} chapters.`
+      );
+      omniAgentBus.publish('MISSION_COMPLETE', {
+        mission: 'Autonomous SustainWrite Pilot',
         totalSealed: reportData.chapters.length,
-        totalWords: reportData.totalWords 
+        totalWords: reportData.totalWords,
       });
 
       return {
         success: true,
         message: `Autonomous Pilot (Zero-Compute) Complete. Sealed ${reportData.chapters.length} chapters (${reportData.totalWords} words).`,
-        results: reportData.chapters
+        results: reportData.chapters,
       };
     } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : String(err);
@@ -181,7 +196,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       return {
         success: false,
         message: 'Pilot Mission Failed',
-        error: errorMessage
+        error: errorMessage,
       };
     }
   }
@@ -191,15 +206,20 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     const { ncbClient } = await import('../ncbdb');
     const cid = (context?.companyId as string) || 'default';
 
-    console.log(`[OmniCommander] 📦 Migrating content for ${cid} to NCBDB (Nocodebackend DataBase)...`);
+    console.log(
+      `[OmniCommander] 📦 Migrating content for ${cid} to NCBDB (Nocodebackend DataBase)...`
+    );
     omniAgentBus.publish('MISSION_START', { mission: 'NCBDB Migration', companyId: cid });
 
     const sections = await loadSustainWriteSections(cid);
     const results = [];
 
     for (const s of sections) {
-      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing section ${s.chapter_id} to NCBDB` });
-      
+      omniAgentBus.publish('AGENT_TASK', {
+        agent: 'Agent0',
+        task: `Syncing section ${s.chapter_id} to NCBDB`,
+      });
+
       const ncbData = {
         ChapterID: s.chapter_id,
         Title: s.chapter_name,
@@ -207,19 +227,22 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         Status: s.status,
         HashLock: s.hash_lock,
         GRI: (s.gri_references || []).join(', '),
-        LastUpdated: s.updated_at
+        LastUpdated: s.updated_at,
       };
 
       const res = await ncbClient.upsertRecord('ESG_Reports', ncbData);
       results.push({ id: s.chapter_id, success: res.success });
     }
 
-    omniAgentBus.publish('MISSION_COMPLETE', { mission: 'NCBDB Migration', totalMigrated: results.length });
+    omniAgentBus.publish('MISSION_COMPLETE', {
+      mission: 'NCBDB Migration',
+      totalMigrated: results.length,
+    });
 
     return {
       success: true,
       message: `Migration to NCBDB complete. ${results.length} sections processed.`,
-      results
+      results,
     };
   }
 
@@ -231,42 +254,66 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
     console.log(`[OmniCommander] 🛡️ Starting Swarm Evidence Audit Mission...`);
     omniAgentBus.publish('MISSION_START', { mission: 'Swarm Evidence Audit' });
 
-     const results = [];
-     const { getEvidenceFiles } = await import('../db');
-     const files = await getEvidenceFiles();
+    const results = [];
+    const { getEvidenceFiles } = await import('../db');
+    const files = await getEvidenceFiles();
 
     for (const file of files) {
       // 1. Researcher: 識別 GRI 映射
-      omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Researcher', task: `Mapping GRI for: ${file.file_name}` });
-      await this.swarm.getAgent('ESG_Researcher')?.run(`Analyze the evidence file and identify its primary GRI mapping: ${file.file_name}`, file);
-      
+      omniAgentBus.publish('AGENT_TASK', {
+        agent: 'ESG_Researcher',
+        task: `Mapping GRI for: ${file.file_name}`,
+      });
+      await this.swarm
+        .getAgent('ESG_Researcher')
+        ?.run(
+          `Analyze the evidence file and identify its primary GRI mapping: ${file.file_name}`,
+          file
+        );
+
       // 2. Auditor: 驗證 Hash 與 誠信狀態
-      omniAgentBus.publish('AGENT_TASK', { agent: 'ESG_Auditor', task: `Verifying HashLock for: ${file.file_name}` });
-      await this.swarm.getAgent('ESG_Auditor')?.run(`Verify the 5T integrity of the evidence: ${file.file_name}. HashLock: ${file.hash_lock}`, file);
+      omniAgentBus.publish('AGENT_TASK', {
+        agent: 'ESG_Auditor',
+        task: `Verifying HashLock for: ${file.file_name}`,
+      });
+      await this.swarm
+        .getAgent('ESG_Auditor')
+        ?.run(
+          `Verify the 5T integrity of the evidence: ${file.file_name}. HashLock: ${file.hash_lock}`,
+          file
+        );
 
       // 3. Agent0: 執行 ZKP 封印與更新狀態
-      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Applying ZKP Seal for: ${file.file_name}` });
-      
+      omniAgentBus.publish('AGENT_TASK', {
+        agent: 'Agent0',
+        task: `Applying ZKP Seal for: ${file.file_name}`,
+      });
+
       // 模擬封印與更新
-      const sealHash = createHash('sha256').update(file.id + Date.now()).digest('hex');
-      
+      const sealHash = createHash('sha256')
+        .update(file.id + Date.now())
+        .digest('hex');
+
       results.push({
         id: file.id,
         fileName: file.file_name,
         gri: file.gri_reference || 'GRI-305',
         status: 'verified',
-        zkp_hash: sealHash
+        zkp_hash: sealHash,
       });
 
       omniAgentBus.publish('5T_SEAL', { gate: 'T4', resource: file.file_name, hash: sealHash });
     }
 
-    omniAgentBus.publish('MISSION_COMPLETE', { mission: 'Swarm Evidence Audit', totalProcessed: results.length });
+    omniAgentBus.publish('MISSION_COMPLETE', {
+      mission: 'Swarm Evidence Audit',
+      totalProcessed: results.length,
+    });
 
     return {
       success: true,
       message: `Swarm Evidence Audit Complete. Processed ${results.length} evidence files.`,
-      results
+      results,
     };
   }
 
@@ -274,18 +321,25 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
    * 藍碳/企業通訊樞紐 (OmniBlue) 與 OmniTable 無縫整合
    * 從 Supabase omniblue_nodes 擷取節點，並同步至 OmniTable 作為 Logic Nodes。
    */
-  private async runOmniBlueToOmniTableIntegration(context?: Record<string, unknown>): Promise<MissionResult> {
+  private async runOmniBlueToOmniTableIntegration(
+    context?: Record<string, unknown>
+  ): Promise<MissionResult> {
     console.log(`[OmniCommander] 🔄 Starting OmniBlue to OmniTable Integration Mission...`);
     omniAgentBus.publish('MISSION_START', { mission: 'OmniBlue to OmniTable Sync' });
 
-     try {
-       const { supabase } = await import('../db/supabase');
-       const { syncLogicNodesToOmniTable } = await import('../../server/src/integrations/oa-table-client');
-      
+    try {
+      const { supabase } = await import('../db/supabase');
+      const { syncLogicNodesToOmniTable } = await import(
+        '../../server/src/integrations/omni-table-client'
+      );
+
       // 1. Fetch from OmniBlue nodes
-      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: 'Fetching OmniBlue Nodes from Supabase' });
+      omniAgentBus.publish('AGENT_TASK', {
+        agent: 'Agent0',
+        task: 'Fetching OmniBlue Nodes from Supabase',
+      });
       const { data: omniblueNodes, error } = await supabase.from('omniblue_nodes').select('*');
-      
+
       if (error) {
         throw new Error(`Failed to fetch from OmniBlue: ${error.message}`);
       }
@@ -299,22 +353,28 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
         compliance_score: n.score || 100,
         logic_type: n.type || 'OmniBlue Sync',
         timestamp: n.created_at || new Date().toISOString(),
-        targetSystem: n.target || 'ESG GO Hub'
+        targetSystem: n.target || 'ESG GO Hub',
       }));
 
       // 3. Sync to OmniTable
-      omniAgentBus.publish('AGENT_TASK', { agent: 'Agent0', task: `Syncing ${logicNodes.length} nodes to OmniTable` });
+      omniAgentBus.publish('AGENT_TASK', {
+        agent: 'Agent0',
+        task: `Syncing ${logicNodes.length} nodes to OmniTable`,
+      });
       const syncSuccess = await syncLogicNodesToOmniTable(logicNodes);
 
       if (!syncSuccess) {
         throw new Error('OmniTable Sync operation returned false.');
       }
 
-      omniAgentBus.publish('MISSION_COMPLETE', { mission: 'OmniBlue to OmniTable Sync', totalSynced: logicNodes.length });
+      omniAgentBus.publish('MISSION_COMPLETE', {
+        mission: 'OmniBlue to OmniTable Sync',
+        totalSynced: logicNodes.length,
+      });
       return {
         success: true,
         message: `Successfully synced ${logicNodes.length} OmniBlue nodes to OmniTable.`,
-        results: logicNodes
+        results: logicNodes,
       };
     } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : String(err);
@@ -323,7 +383,7 @@ You ensure the 5T Integrity Protocol is maintained across the entire ecosystem.
       return {
         success: false,
         message: 'OmniBlue to OmniTable Integration failed',
-        error: errorMessage
+        error: errorMessage,
       };
     }
   }

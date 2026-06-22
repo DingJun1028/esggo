@@ -585,7 +585,7 @@ export async function searchRelatedShards(shardId: string): Promise<MemoryShard[
  */
 export async function autoExtractFromBusEvents(): Promise<MemoryShard[]> {
   // 從 OAAgentBus 取得最近的事件
-  const { omniAgentBus } = await import('../agents/oa-agent-bus');
+  const { omniAgentBus } = await import('../agents/omni-agent-bus');
   const health = omniAgentBus.getHealth();
 
   const shards: MemoryShard[] = [];

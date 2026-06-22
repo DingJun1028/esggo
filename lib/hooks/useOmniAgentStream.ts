@@ -54,12 +54,12 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
   const connectFunctionRef = useRef<(() => void) | null>(null); // NEW: Ref to hold the connect function
 
   const processEvent = useCallback((evt: StreamEvent) => {
-    setEvents(prev => [evt, ...prev].slice(0, MAX_EVENTS));
+    setEvents((prev) => [evt, ...prev].slice(0, MAX_EVENTS));
 
     switch (evt.event) {
       case 'MISSION_START':
-        setActiveMissions(prev => [
-          ...prev.filter(m => m.mission !== String(evt.payload.mission)),
+        setActiveMissions((prev) => [
+          ...prev.filter((m) => m.mission !== String(evt.payload.mission)),
           {
             mission: String(evt.payload.mission),
             status: 'running',
@@ -69,14 +69,20 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
         break;
 
       case 'MISSION_COMPLETE':
-        setActiveMissions(prev =>
-          prev.map(m =>
+        setActiveMissions((prev) =>
+          prev.map((m) =>
             m.mission === String(evt.payload.mission)
               ? {
                   ...m,
                   status: 'complete' as const,
                   completedAt: evt.timestamp,
-                  totalProcessed: Number(evt.payload.totalSealed || evt.payload.totalMigrated || evt.payload.totalSynced || evt.payload.totalProcessed || 0),
+                  totalProcessed: Number(
+                    evt.payload.totalSealed ||
+                      evt.payload.totalMigrated ||
+                      evt.payload.totalSynced ||
+                      evt.payload.totalProcessed ||
+                      0
+                  ),
                 }
               : m
           )
@@ -84,8 +90,8 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
         break;
 
       case 'AGENT_ERROR':
-        setActiveMissions(prev =>
-          prev.map(m =>
+        setActiveMissions((prev) =>
+          prev.map((m) =>
             m.status === 'running'
               ? { ...m, status: 'error' as const, error: String(evt.payload.error) }
               : m
@@ -98,7 +104,7 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
         break;
 
       case 'AGENT_TASK':
-        setAgentActivity(prev => {
+        setAgentActivity((prev) => {
           const next = new Map(prev);
           next.set(String(evt.payload.agent), evt);
           return next;
@@ -133,9 +139,15 @@ export function useOmniAgentStream(): UseOmniAgentStreamResult {
 
       // Listen to specific event types
       const eventTypes = [
-        'MISSION_START', 'MISSION_COMPLETE', 'AGENT_TASK',
-        'AGENT_ERROR', 'COMMAND_ISSUED', '5T_SEAL',
-        'SCHEDULE_TRIGGERED', 'SCHEDULE_COMPLETE', 'SCHEDULE_ERROR',
+        'MISSION_START',
+        'MISSION_COMPLETE',
+        'AGENT_TASK',
+        'AGENT_ERROR',
+        'COMMAND_ISSUED',
+        '5T_SEAL',
+        'SCHEDULE_TRIGGERED',
+        'SCHEDULE_COMPLETE',
+        'SCHEDULE_ERROR',
       ];
 
       for (const type of eventTypes) {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 /**
  * POST /api/omni-agent/celestial

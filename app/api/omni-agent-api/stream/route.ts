@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { NextRequest } from 'next/server';
-import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 /**
  * OmniAgent Bus SSE Stream

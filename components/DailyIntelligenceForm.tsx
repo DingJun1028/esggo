@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useOmniTable } from '@/lib/oa-table/useOmniTable';
+import { useOmniTable } from '@/lib/omni-table/useOmniTable';
 import { OmniBaseCard } from '@/components/ui/omni/OmniBaseCard';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { OmniInput, OmniTextarea } from '@/components/ui/omni/OmniInput';

@@ -1,5 +1,5 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
-import { getOATableServerClient } from '@/lib/oa-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 
 /**
  * OmniTable Setup Status API

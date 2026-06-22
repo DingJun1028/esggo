@@ -1,5 +1,5 @@
 import React from 'react';
-import { getOATableServerClient } from '@/lib/oa-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 import { revalidatePath } from 'next/cache';
 import { CheckCircle2, RefreshCw } from 'lucide-react';
 

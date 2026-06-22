@@ -39,9 +39,6 @@ export interface OmniAgentSkillAbsorption {
   absorptionStatus: 'pending' | 'absorbed' | 'transcended';
 }
 
-export type OmniAgentRelease = OmniAgentRelease;
-export type OmniAgentSkillAbsorption = OmniAgentSkillAbsorption;
-
 /**
  * OmniAgent → OmniAgent 技能轉化映射表
  * 這是 ESGGO 的核心機密：如何將通用 OmniAgent 技能「洗鍊」為 ESG 專屬能力
@@ -136,17 +133,6 @@ export const OA_LATEST_RELEASES: OmniAgentRelease[] = [
   },
 ];
 
-export const OA_LATEST_RELEASES = OA_LATEST_RELEASES;
-export const OMNI_TO_SKILL_MAP = OMNI_TO_SKILL_MAP;
-
-export async function pullOmniAgentAndEvolve(): Promise<{
-  latestRelease: OmniAgentRelease;
-  evolution: OmniAgentEvolution;
-  newSkillsAbsorbed: OmniAgentSkillAbsorption[];
-}> {
-  return pullOmniAgentAndEvolve();
-}
-
 /**
  * OmniAgent 洗鍊進化歷程 (每次從 OmniAgent 更新後觸發)
  */
@@ -203,8 +189,8 @@ export async function pullOmniAgentAndEvolve(): Promise<{
   const latestRelease = OA_LATEST_RELEASES[0];
 
   // 自動識別哪些新技能需要被洗鍊進 OmniAgent
-  const newSkillsAbsorbed = latestRelease.newSkills.map((OmniAgentSkill) => {
-    const existingMap = OMNI_TO_SKILL_MAP.find((m) =>
+  const newSkillsAbsorbed = latestRelease.newSkills.map((OmniAgentSkill: string) => {
+    const existingMap = OMNI_TO_SKILL_MAP.find((m: OmniAgentSkillAbsorption) =>
       m.OmniAgentSkillName.includes(OmniAgentSkill.split('_')[0])
     );
 
@@ -223,9 +209,9 @@ export async function pullOmniAgentAndEvolve(): Promise<{
     fromOmniAgentVersion: latestRelease.version,
     toOmniAgentVersion: 'v8.5.1+',
     evolvedAt: new Date().toISOString(),
-    absorptionSummary: latestRelease.changelog.map((c) => `吸收: ${c}`),
+    absorptionSummary: latestRelease.changelog.map((c: string) => `吸收: ${c}`),
     esgAdaptations: newSkillsAbsorbed.map(
-      (s) => `${s.OmniAgentSkillName} → ${s.omniAgentSkillName}`
+      (s: OmniAgentSkillAbsorption) => `${s.OmniAgentSkillName} → ${s.omniAgentSkillName}`
     ),
     fiveTPropagations: [
       'T1: 進化溯源哈希已記錄',

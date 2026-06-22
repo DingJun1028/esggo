@@ -3,7 +3,7 @@
 import React, { useTransition } from 'react';
 import { OmniButton } from '@/components/ui/omni/OmniButton';
 import { Trash2, Loader2 } from 'lucide-react';
-import { deleteOmniTableRecord } from '@/app/actions/oa-table';
+import { deleteOmniTableRecord } from '@/app/actions/omni-table';
 
 interface DeleteRecordButtonProps {
   datasheetId: string;

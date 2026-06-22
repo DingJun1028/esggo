@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getOATableServerClient } from '@/lib/oa-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 
 const TARGET_DATASHEET_ID = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 

@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import type { HexaCoreTelemetry } from '../../app/api/oa-agent-api/telemetry/route';
+import type { HexaCoreTelemetry } from '../../app/api/omni-agent-api/telemetry/route';
 
 interface TelemetryResponse {
   id: string;

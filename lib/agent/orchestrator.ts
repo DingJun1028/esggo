@@ -200,7 +200,7 @@ const REPAIR_PLAYBOOK: RepairAction[] = [
  */
 async function syncTaskToOmniNotes(task: AgentTask) {
   try {
-    const { getOATableServerClient } = await import('../oa-table/client');
+    const { getOATableServerClient } = await import('../omni-table/client');
     const client = getOATableServerClient();
     const datasheetId = process.env.OMNITABLE_TASKS_DATASHEET_ID;
 
@@ -351,7 +351,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     } else if (task.taskType === 'email_processing') {
       console.log(`[OmniAgent] Connecting to Google Workspace for Task ${taskId}...`);
 
-      const { getOACredentials } = await import('./omni-store');
+      const { getOACredentials } = await import('./oa-agent-credentials-store');
       const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));
@@ -367,7 +367,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     } else if (task.taskType === 'calendar_scheduling') {
       console.log(`[OmniAgent Agent] Connecting to Google Calendar for Task ${taskId}...`);
 
-      const { getOACredentials } = await import('./omni-store');
+      const { getOACredentials } = await import('./oa-agent-credentials-store');
       const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1200));
@@ -383,7 +383,7 @@ export async function executeSwarmTask(taskId: string, parentArtifactId?: string
     } else if (task.taskType === 'file_processing') {
       console.log(`[OmniAgent Agent] Connecting to Google Drive for Task ${taskId}...`);
 
-      const { getOACredentials } = await import('./omni-store');
+      const { getOACredentials } = await import('./oa-agent-credentials-store');
       const creds = await getOACredentials(task.actorId);
 
       await new Promise((r) => setTimeout(r, 1500));

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useOmniTheme } from '../../theme/OmniThemeProvider';
 import { cn } from '@/lib/utils';
 import { useTouchGesture } from '../../hooks/useTouchGesture';
-import type { IMiaoDeNotification } from '../../../services/OAAgentBus';
+import type { IMiaoDeNotification } from '../../../services/OmniAgentBus';
 
 export interface OAAgentBusWidgetProps {
   will: string;
@@ -24,7 +24,7 @@ export function OAAgentBusWidget({
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
-    setActiveNotifications(prev => [...notifications, ...prev].slice(0, 20));
+    setActiveNotifications((prev) => [...notifications, ...prev].slice(0, 20));
   }, [notifications]);
 
   const { ref: touchRef } = useTouchGesture(
@@ -52,10 +52,7 @@ export function OAAgentBusWidget({
         <span className="text-caption font-bold uppercase text-theme-text-muted">
           OmniAgent Bus
         </span>
-        <div className={cn(
-          'w-2 h-2 rounded-full',
-          'bg-theme-success animate-pulse'
-        )} />
+        <div className={cn('w-2 h-2 rounded-full', 'bg-theme-success animate-pulse')} />
       </div>
 
       <div className="space-y-2">
@@ -66,10 +63,7 @@ export function OAAgentBusWidget({
         {showHistory && isExpanded && (
           <div className="space-y-1 max-h-32 overflow-y-auto">
             {activeNotifications.map((notification, idx) => (
-              <div
-                key={idx}
-                className="text-caption-sm text-theme-text-muted truncate"
-              >
+              <div key={idx} className="text-caption-sm text-theme-text-muted truncate">
                 🪞 {notification.uuid}
               </div>
             ))}

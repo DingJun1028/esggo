@@ -42,16 +42,27 @@ export interface OmniColors {
 // Component Types
 export type ComponentType = 'atom' | 'molecule' | 'organism' | 'template';
 
-export type ComponentVariant = 
-  | 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'glass'
-  | 'default' | 'filled' | 'outlined';
+export type ComponentVariant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'danger'
+  | 'success'
+  | 'glass'
+  | 'default'
+  | 'filled'
+  | 'outlined';
 
-export type ComponentSize = 
-  | 'xl' | 'lg' | 'md' | 'sm' | 'xs'
-  | 'icon' | 'full';
+export type ComponentSize = 'xl' | 'lg' | 'md' | 'sm' | 'xs' | 'icon' | 'full';
 
-export type ComponentState = 
-  | 'default' | 'hover' | 'focus' | 'active' | 'disabled' | 'loading' | 'error';
+export type ComponentState =
+  | 'default'
+  | 'hover'
+  | 'focus'
+  | 'active'
+  | 'disabled'
+  | 'loading'
+  | 'error';
 
 // 5T Dimension Types
 export interface TDimension {
@@ -75,11 +86,18 @@ export interface BaseOmniProps {
 }
 
 // Button Types
-export const buttonVariants = ['primary', 'secondary', 'ghost', 'danger', 'success', 'glass'] as const;
-export type ButtonVariant = typeof buttonVariants[number];
+export const buttonVariants = [
+  'primary',
+  'secondary',
+  'ghost',
+  'danger',
+  'success',
+  'glass',
+] as const;
+export type ButtonVariant = (typeof buttonVariants)[number];
 
 export const buttonSizes = ['xl', 'lg', 'md', 'sm', 'xs', 'icon'] as const;
-export type ButtonSize = typeof buttonSizes[number];
+export type ButtonSize = (typeof buttonSizes)[number];
 
 export interface OmniButtonProps {
   variant?: ButtonVariant;
@@ -98,7 +116,7 @@ export interface OmniButtonProps {
 
 // Input Types
 export const inputVariants = ['default', 'filled', 'outlined'] as const;
-export type InputVariant = typeof inputVariants[number];
+export type InputVariant = (typeof inputVariants)[number];
 
 export interface OmniInputProps {
   variant?: InputVariant;
@@ -120,8 +138,19 @@ export interface OmniInputProps {
 }
 
 // Badge Types
-export const badgeVariants = ['default', 't1', 't2', 't3', 't4', 't5', 'verified', 'warning', 'error', 'info'] as const;
-export type BadgeVariant = typeof badgeVariants[number];
+export const badgeVariants = [
+  'default',
+  't1',
+  't2',
+  't3',
+  't4',
+  't5',
+  'verified',
+  'warning',
+  'error',
+  'info',
+] as const;
+export type BadgeVariant = (typeof badgeVariants)[number];
 
 export interface OmniBadgeProps {
   variant?: BadgeVariant;
@@ -134,7 +163,7 @@ export interface OmniBadgeProps {
 
 // Card Types
 export const cardVariants = ['default', 'glass', 'elevated'] as const;
-export type CardVariant = typeof cardVariants[number];
+export type CardVariant = (typeof cardVariants)[number];
 
 export interface OmniCardProps {
   variant?: CardVariant;

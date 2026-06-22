@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server';
-import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 /**
  * GET /api/system/bus-health

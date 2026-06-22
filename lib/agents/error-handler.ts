@@ -1,6 +1,6 @@
 import { ADKAgent } from './adk-core';
 import { HealingGuardian } from '../healing-guardian';
-import { omniAgentBus } from './oa-agent-bus';
+import { omniAgentBus } from './omni-agent-bus';
 import { HealingGuardian as HG } from '../omni-core/healer';
 
 export const errorHandlerAgent = new ADKAgent({
@@ -14,7 +14,7 @@ When you receive an ERROR_OCCURRED event, your job is to:
 3. Trigger the HealingGuardian to perform data restoration or ZKP seal as needed.
 4. Emit a HEALING_COMPLETE event when done.
   `,
-  tools: []
+  tools: [],
 });
 
 omniAgentBus.subscribe('ERROR_OCCURRED', async (payload) => {

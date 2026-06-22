@@ -12,16 +12,16 @@ export async function gatherSystemContext() {
     getEnvironmentalData(),
     getSocialMetrics(),
     fetchOmniAgentStatus(),
-    blueCC.getSystemStatus()
+    blueCC.getSystemStatus(),
   ]);
 
   return {
     timestamp: new Date().toISOString(),
     metrics: {
       environmental: env.slice(0, 5),
-      social: soc.slice(0, 5)
+      social: soc.slice(0, 5),
     },
     runtime: status,
-    cloud: cloud
+    cloud: cloud,
   };
 }

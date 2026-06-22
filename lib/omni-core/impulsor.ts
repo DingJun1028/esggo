@@ -3,7 +3,7 @@
  * ADK小隊新手向指導手冊（E001-V2.1） - 系統基礎設備
  */
 
-import { omniAgentBus } from '../agents/oa-agent-bus';
+import { omniAgentBus } from '../agents/omni-agent-bus';
 import { healingGuardian } from './healer';
 
 export class ImpulsorEngine {
@@ -21,12 +21,12 @@ export class ImpulsorEngine {
       console.log(`[ImpulsorEngine] 🛡️ 接收到 Forge Shield 指令，準備重建權威框架...`);
       this.status = 'active';
       this.hz = 3.8;
-      
+
       // Notify the system that shield forge is complete
       omniAgentBus.publish('adk:shield:forged', {
         status: 'shield_forged',
         hz: this.hz,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     });
 
@@ -39,7 +39,7 @@ export class ImpulsorEngine {
       omniAgentBus.publish('adk:drift:cloaked', {
         status: 'drift_cloaked',
         hz: this.hz,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     });
 
@@ -57,7 +57,7 @@ export class ImpulsorEngine {
     return {
       status: this.status,
       clockSpeed: `${this.hz}GHz`,
-      version: 'sprd.ai M2'
+      version: 'sprd.ai M2',
     };
   }
 
@@ -68,8 +68,8 @@ export class ImpulsorEngine {
       system: {
         real: true,
         trace: ZKP_INSTANCE_ID,
-        fallback: 'NCBDB_Cache'
-      }
+        fallback: 'NCBDB_Cache',
+      },
     };
   }
 }

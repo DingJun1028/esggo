@@ -34,7 +34,7 @@ import {
   type SkillUltimate,
 } from '@/lib/agent/memory-shards';
 import { getESGCrawler, ESG_SOURCES } from '@/lib/services/firecrawl-esg-crawler';
-import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
 // ─── POST /api/omni-memory ─────────────────────────────────────────────────
 export async function POST(req: NextRequest) {

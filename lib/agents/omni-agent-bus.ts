@@ -16,7 +16,7 @@ export class OAAgentBus {
     this._totalEvents++;
     const callbacks = this.subscribers.get(event);
     if (callbacks) {
-      callbacks.forEach(cb => {
+      callbacks.forEach((cb) => {
         try {
           cb(data);
         } catch (e) {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { OmniComponentHeart } from '@esggo/types';
-import { OAAgentBus, IOmniEvent } from '../../../lib/omni/OAAgentBus';
+import { OAAgentBus, IOmniEvent } from '../../../lib/omni/OmniAgentBus';
 
 /**
  * 永恆覺醒：心核連動 Hook (Eternal Awakening: Heart Core Resonance)

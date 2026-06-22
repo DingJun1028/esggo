@@ -3,7 +3,7 @@ import { ADKAgent } from './adk-core';
 import type { AgentConfig } from './adk-core';
 import { ADK_STANDARD_TOOLS } from './adk-tools';
 import { OmniCommander } from './omni-commander';
-import { omniAgentBus } from './oa-agent-bus';
+import { omniAgentBus } from './omni-agent-bus';
 import { agentChannel, agentPresence, agentMemory } from './agent-channel';
 import { auditSealTool, auditSealValidationTool } from '../tools/audit-seal';
 import { memoryStore } from '../memory/memory-store';

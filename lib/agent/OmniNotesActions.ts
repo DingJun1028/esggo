@@ -1,6 +1,6 @@
 'use server';
 
-import { getOATableServerClient } from '@/lib/oa-table/client';
+import { getOATableServerClient } from '@/lib/omni-table/client';
 import { revalidatePath } from 'next/cache';
 
 export interface TaskRecord {

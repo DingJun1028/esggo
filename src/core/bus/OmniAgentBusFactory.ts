@@ -15,7 +15,6 @@ export class OAAgentBusFactory {
     origin: string,
     formula: string
   ): Readonly<IOmniNotification> {
-    
     // 建立基礎通知物件
     const notification: IOmniNotification = {
       uuid,
@@ -29,12 +28,12 @@ export class OAAgentBusFactory {
       t5Data: {
         traceable: { source_origin: origin },
         trackable: { lifecycle_hook: 'Initialized' },
-        transparent: { 
-          algorithm_formula: formula, 
-          verification: '[ISO-14064-1] Verified' 
+        transparent: {
+          algorithm_formula: formula,
+          verification: '[ISO-14064-1] Verified',
         },
-        trustworthy: { isLocked: true }
-      }
+        trustworthy: { isLocked: true },
+      },
     };
 
     // 【信 (Trust) 核⼼禁區】數據寫入後即刻執⾏ Hash Lock 與 Object.freeze()

@@ -14,7 +14,7 @@ import type {
   OmniTableView,
   OmniTableRecord,
   OmniTableRecordsResponse,
-} from '@/lib/oa-table/client';
+} from '@/lib/omni-table/client';
 
 interface UseOmniTableReturn {
   // State
@@ -24,15 +24,28 @@ interface UseOmniTableReturn {
   // Read operations
   fetchSpaces: () => Promise<OmniTableSpace[]>;
   fetchNodes: (spaceId: string) => Promise<OmniTableNode[]>;
-  fetchRecords: (datasheetId: string, opts?: { pageSize?: number; pageNum?: number; viewId?: string }) => Promise<OmniTableRecordsResponse>;
+  fetchRecords: (
+    datasheetId: string,
+    opts?: { pageSize?: number; pageNum?: number; viewId?: string }
+  ) => Promise<OmniTableRecordsResponse>;
   fetchFields: (datasheetId: string) => Promise<OmniTableField[]>;
   fetchViews: (datasheetId: string) => Promise<OmniTableView[]>;
 
   // Write operations
-  createRecords: (datasheetId: string, records: Array<{ fields: Record<string, unknown> }>) => Promise<OmniTableRecord[]>;
-  updateRecords: (datasheetId: string, records: Array<{ recordId: string; fields: Record<string, unknown> }>) => Promise<OmniTableRecord[]>;
+  createRecords: (
+    datasheetId: string,
+    records: Array<{ fields: Record<string, unknown> }>
+  ) => Promise<OmniTableRecord[]>;
+  updateRecords: (
+    datasheetId: string,
+    records: Array<{ recordId: string; fields: Record<string, unknown> }>
+  ) => Promise<OmniTableRecord[]>;
   deleteRecords: (datasheetId: string, recordIds: string[]) => Promise<void>;
-  createDatasheet: (spaceId: string, name: string, fields: Array<{ name: string; type: string }>) => Promise<{ id: string }>;
+  createDatasheet: (
+    spaceId: string,
+    name: string,
+    fields: Array<{ name: string; type: string }>
+  ) => Promise<{ id: string }>;
 }
 
 async function apiGet<T>(action: string, params: Record<string, string> = {}): Promise<T> {
@@ -79,10 +92,7 @@ export function useOmniTable(): UseOmniTableReturn {
     }
   }, []);
 
-  const fetchSpaces = useCallback(
-    () => wrap(() => apiGet<OmniTableSpace[]>('spaces')),
-    [wrap]
-  );
+  const fetchSpaces = useCallback(() => wrap(() => apiGet<OmniTableSpace[]>('spaces')), [wrap]);
 
   const fetchNodes = useCallback(
     (spaceId: string) => wrap(() => apiGet<OmniTableNode[]>('nodes', { spaceId })),

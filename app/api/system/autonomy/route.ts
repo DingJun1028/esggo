@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { omniAgentBus, OAAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus, OAAgentBus } from '@/lib/agents/omni-agent-bus';
 import { synthesizeSkillUltimate, MemoryShard } from '@/lib/agent/memory-shards';
 import { createClient } from '@supabase/supabase-js';
 

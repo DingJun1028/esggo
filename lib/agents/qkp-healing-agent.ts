@@ -1,14 +1,14 @@
-import { omniAgentBus } from '@/lib/agents/oa-agent-bus';
+import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 import crypto from 'crypto';
 
 // =========================================================================
 // 1. 萬能元件心核 (IComponentCore) 規範 - 永恆刻印
 // =========================================================================
 export interface IComponentCore {
-  readonly uuid: string;         // 萬能永憶主體唯一識別碼
-  readonly version: string;      // 語義化版本控制
-  readonly timestamp: number;    // 刻印時間戳
-  evidence: string;              // 證據佐證庫
+  readonly uuid: string; // 萬能永憶主體唯一識別碼
+  readonly version: string; // 語義化版本控制
+  readonly timestamp: number; // 刻印時間戳
+  evidence: string; // 證據佐證庫
 }
 
 // =========================================================================
@@ -17,10 +17,10 @@ export interface IComponentCore {
 export class QkpHealingAgent {
   private readonly botSignature = 'BLUE_Automation_Bot';
   private readonly core: IComponentCore = {
-    uuid: "ee4af378-b9d7-412d-91d2-d50b98fa0715",
-    version: "2.6.0-stable.5T",
+    uuid: 'ee4af378-b9d7-412d-91d2-d50b98fa0715',
+    version: '2.6.0-stable.5T',
     timestamp: 1772421600000,
-    evidence: "QKP_HEALING_AGENT_DECOUPLED_EXECUTION"
+    evidence: 'QKP_HEALING_AGENT_DECOUPLED_EXECUTION',
   };
 
   constructor() {
@@ -37,8 +37,10 @@ export class QkpHealingAgent {
     omniAgentBus.subscribe('qkp:healing:triggered', async (payload: any) => {
       try {
         const { evidence_uuid, severity } = payload;
-        console.log(`⚖️ [QKP Agent] 接收到 QKP 治療觸發請求！證據 ID: ${evidence_uuid}, 嚴重度: ${severity}`);
-        
+        console.log(
+          `⚖️ [QKP Agent] 接收到 QKP 治療觸發請求！證據 ID: ${evidence_uuid}, 嚴重度: ${severity}`
+        );
+
         await this.executeHealingWorkflow(evidence_uuid, severity);
       } catch (err) {
         console.error('❌ [QKP Agent] 治療流程執行異常:', err);
@@ -51,24 +53,24 @@ export class QkpHealingAgent {
    */
   private async executeHealingWorkflow(evidenceUuid: string, severity: string): Promise<void> {
     console.log(`🔧 [QKP Agent] 啟動量子降維優化，開始修復數據漂移 (FRN Loss Compensation)...`);
-    
+
     // 模擬治療處理時間
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    await new Promise((resolve) => setTimeout(resolve, 2500));
 
     // 治療成功後，產生醫學級別 (Medical-Grade) 的 ZKP Seal 加密雜湊
-    const prevHash = "0x76ac3039ee3039ad864d2c81d8d0715e";
+    const prevHash = '0x76ac3039ee3039ad864d2c81d8d0715e';
     const timestamp = Date.now();
     const mockSecret = process.env.BLUE_CC_TOKEN;
 
     if (!mockSecret) {
       throw new Error('Server misconfiguration: missing BLUE_CC_TOKEN');
     }
-    
-    const rawPayload = `${prevHash}||${JSON.stringify({ healed: true, severity })}||${evidenceUuid}||${timestamp}`;
-    const medicalZkpHash = crypto
-      .createHmac('sha256', mockSecret)
-      .update(rawPayload)
-      .digest('hex');
+
+    const rawPayload = `${prevHash}||${JSON.stringify({
+      healed: true,
+      severity,
+    })}||${evidenceUuid}||${timestamp}`;
+    const medicalZkpHash = crypto.createHmac('sha256', mockSecret).update(rawPayload).digest('hex');
 
     // 封鎖數據結構 (Trustworthy: Object.freeze)
     const finalizedReport = Object.freeze({
@@ -76,20 +78,25 @@ export class QkpHealingAgent {
       tenant_id: 'tenant-esg-taiwan',
       payload: {
         zkp_hash: `0x${medicalZkpHash}`,
-        nodes_involved: ["ZKP_SEAL_ENGINE_01", "MEDICAL_GRADE_ZKP_VALIDATOR", "QKP_HEALING_AGENT"],
+        nodes_involved: ['ZKP_SEAL_ENGINE_01', 'MEDICAL_GRADE_ZKP_VALIDATOR', 'QKP_HEALING_AGENT'],
         metrics: {
-          healing_status: "SUCCESSFUL_ALIGNED",
+          healing_status: 'SUCCESSFUL_ALIGNED',
           original_evidence: evidenceUuid,
           frn_loss_restored: 0.002,
-          zkp_level: "medical-grade"
-        }
+          zkp_level: 'medical-grade',
+        },
       },
-      source_origin: "effortless-zkp-extension",
+      source_origin: 'effortless-zkp-extension',
       last_modified_by: this.botSignature, // 強制押上機器人簽章防止無限雙向同步
-      timestamp
+      timestamp,
     });
 
-    console.log(`🟢 [QKP Agent] 自癒修復完成！醫學級 ZKP 哈希鎖已鑄造: ${finalizedReport.payload.zkp_hash.substring(0, 18)}...`);
+    console.log(
+      `🟢 [QKP Agent] 自癒修復完成！醫學級 ZKP 哈希鎖已鑄造: ${finalizedReport.payload.zkp_hash.substring(
+        0,
+        18
+      )}...`
+    );
 
     // 將修復完成的數據寫入 PostgreSQL (物理 RLS 安全通道)
     try {
@@ -97,12 +104,12 @@ export class QkpHealingAgent {
       const response = await fetch(`${appUrl}/api/oa-table`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer taiwan-jwt-token`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer taiwan-jwt-token`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(finalizedReport)
+        body: JSON.stringify(finalizedReport),
       });
-      
+
       if (!response.ok) throw new Error(`API Sync Failed: ${response.statusText}`);
       console.log(`💾 [QKP Agent] 醫學級審計紀錄已成功回填並歸檔。`);
     } catch (syncErr) {
@@ -114,7 +121,7 @@ export class QkpHealingAgent {
       evidenceUuid,
       zkp_hash: finalizedReport.payload.zkp_hash,
       metrics: finalizedReport.payload.metrics,
-      core: this.core
+      core: this.core,
     });
   }
 }

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Save, Loader2, Trash2 } from 'lucide-react';
 import { Modal } from './Modal';
-import type { OmniTableField, OmniTableRecord } from '@/lib/oa-table/client';
+import type { OmniTableField, OmniTableRecord } from '@/lib/omni-table/client';
 
 export function RecordEditorModal({
   open,

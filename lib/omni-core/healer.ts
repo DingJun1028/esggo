@@ -1,14 +1,14 @@
 /**
  * 🩹 HealingGuardian (自主修復與數據鏈路守護者)
  * v1.0 | #AutonomousGovernance #5TIntegrity #SelfHealing
- * 
- * 負責自動偵測數據誠信缺角，並主動從實證金庫 (Evidence Vault) 
+ *
+ * 負責自動偵測數據誠信缺角，並主動從實證金庫 (Evidence Vault)
  * 尋找合適實證進行鏈路修復與「信」的重塑。
  */
 
 import { supabaseAdmin } from '../supabaseAdmin';
 import { integrityModule } from './integrity';
-import { omniAgentBus } from '../agents/oa-agent-bus';
+import { omniAgentBus } from '../agents/omni-agent-bus';
 import { createClient } from '@supabase/supabase-js';
 
 export interface HealingLogEntry {
@@ -33,7 +33,7 @@ export class HealingGuardian {
    */
   public async triggerGlobalHealing(companyId: string = 'default'): Promise<HealingResult> {
     console.log(`[HealingGuardian] 🩺 啟動全域自主修復循環 (Company: ${companyId})`);
-    
+
     try {
       if (!supabaseAdmin!) {
         throw new Error('Supabase client offline');
@@ -41,7 +41,7 @@ export class HealingGuardian {
 
       // 呼叫預先定義之 SQL RPC
       const { data, error } = await supabaseAdmin!.rpc('execute_autonomous_healing', {
-        p_company_id: companyId 
+        p_company_id: companyId,
       });
 
       if (error) throw error;
@@ -59,7 +59,7 @@ export class HealingGuardian {
       return {
         healedCount,
         logs: (logs || []) as HealingLogEntry[],
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
@@ -72,9 +72,13 @@ export class HealingGuardian {
    * 精準修復 (Targeted Healing)
    * 針對特定的 GRI 指標與實證進行鏈路建立
    */
-  public async targetHealing(griTag: string, evidenceId: string, companyId: string = 'default'): Promise<boolean> {
+  public async targetHealing(
+    griTag: string,
+    evidenceId: string,
+    companyId: string = 'default'
+  ): Promise<boolean> {
     console.log(`[HealingGuardian] 🎯 執行精準修復: ${griTag} <-> ${evidenceId}`);
-    
+
     if (!supabaseAdmin) {
       console.error(`[HealingGuardian] Supabase client offline`);
       return false;
@@ -97,13 +101,12 @@ export class HealingGuardian {
       metric: `Targeted_Heal_${griTag}`,
       source: evidence.file_name,
       formula: 'Autonomous Linkage',
-      hooks: ['target_healing', `ev_${evidenceId}`]
+      hooks: ['target_healing', `ev_${evidenceId}`],
     });
 
     // 3. 寫入環境數據庫
-    const { error: insertError } = await supabaseAdmin!
-      .from('environmental_data')
-      .insert([{
+    const { error: insertError } = await supabaseAdmin!.from('environmental_data').insert([
+      {
         company_id: companyId,
         category: 'HEALED',
         metric_name: `精準修復：${griTag}`,
@@ -111,8 +114,9 @@ export class HealingGuardian {
         unit: 'LINK',
         year: 2024,
         gri_standard: griTag,
-        hash_lock: crystal.hash_lock
-      }]);
+        hash_lock: crystal.hash_lock,
+      },
+    ]);
 
     if (insertError) {
       console.error(`[HealingGuardian] 寫入修復數據失敗:`, insertError.message);
@@ -120,12 +124,14 @@ export class HealingGuardian {
     }
 
     // 4. 記錄修復日誌
-    await supabaseAdmin!.from('healing_log').insert([{
-      target_gri: griTag,
-      action_taken: 'TARGETED_HEALING',
-      status: 'success',
-      details: { evidence_id: evidenceId, hash_lock: crystal.hash_lock }
-    }]);
+    await supabaseAdmin!.from('healing_log').insert([
+      {
+        target_gri: griTag,
+        action_taken: 'TARGETED_HEALING',
+        status: 'success',
+        details: { evidence_id: evidenceId, hash_lock: crystal.hash_lock },
+      },
+    ]);
 
     console.log(`[HealingGuardian] ✅ 精準修復完成: ${griTag}`);
     return true;
