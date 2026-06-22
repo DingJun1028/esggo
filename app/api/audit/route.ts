@@ -1,19 +1,21 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const supabase = createClient(supabaseUrl, supabaseKey);
-    
-    const { error } = await supabase.from('audit_logs').insert([{
-      ...body,
-      company_id: body.company_id || 'default',
-      created_at: new Date().toISOString()
-    }]);
+
+    const { error } = await supabase.from('audit_logs').insert([
+      {
+        ...body,
+        company_id: body.company_id || 'default',
+        created_at: new Date().toISOString(),
+      },
+    ]);
 
     if (error) throw error;
 

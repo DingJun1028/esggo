@@ -4,10 +4,16 @@ import { synthesizeSkillUltimate, MemoryShard } from '@/lib/agent/memory-shards'
 import { createClient } from '@supabase/supabase-js';
 
 const getSupabaseAdmin = () => {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !(process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key')
+  ) {
     throw new Error('Supabase configuration missing.');
   }
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
+  );
 };
 
 // Static bus instance for autonomy

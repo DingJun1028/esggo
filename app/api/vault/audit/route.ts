@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 export async function GET() {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
     if (!supabaseUrl || !serviceRoleKey) {
@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { persistSession: false }
+      auth: { persistSession: false },
     });
 
     // 取得 vault_omni_core 總封裝筆數
@@ -37,13 +37,16 @@ export async function GET() {
         verifiedZkpRecords: verifiedCount || 0,
         lastAuditTime: new Date().toISOString(),
       },
-      message: '系統防禦完整，ZKP/Hash Lock 機制運作正常。'
+      message: '系統防禦完整，ZKP/Hash Lock 機制運作正常。',
     });
   } catch (error: any) {
-    return NextResponse.json({ 
-      success: false, 
-      defenseState: 'VULNERABLE',
-      error: error.message 
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        defenseState: 'VULNERABLE',
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

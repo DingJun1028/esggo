@@ -2,7 +2,7 @@
 import { createHash } from 'crypto';
 import { omniAgentBus } from '@/lib/agents/omni-agent-bus';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 async function getAdminClient() {

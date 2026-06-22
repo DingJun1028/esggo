@@ -8,8 +8,8 @@ export async function POST(request: Request) {
     if (!id) return NextResponse.json({ error: 'Missing record id' }, { status: 400 });
 
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://esggo.supabase.co',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy-key'
     );
 
     // 1. Fetch record
@@ -34,9 +34,9 @@ export async function POST(request: Request) {
       metric_value: record.metric_value,
       timestamp: record.timestamp,
     });
-    
+
     // Simulate PoW or ZKP computation delay
-    await new Promise(r => setTimeout(r, 800));
+    await new Promise((r) => setTimeout(r, 800));
 
     const hash = createHash('sha256').update(`zkp-seal-${payload}-${Date.now()}`).digest('hex');
 
@@ -49,12 +49,14 @@ export async function POST(request: Request) {
     if (updateError) throw updateError;
 
     // 4. Create an Immutable Audit Log (5T Integrity: Trust & Trackable)
-    await supabase.from('audit_logs').insert([{
-      record_id: id,
-      action: 'SEAL',
-      actor_id: record.org_id || null, // Will be set to the user in a real system
-      hash_signature: hash,
-    }]);
+    await supabase.from('audit_logs').insert([
+      {
+        record_id: id,
+        action: 'SEAL',
+        actor_id: record.org_id || null, // Will be set to the user in a real system
+        hash_signature: hash,
+      },
+    ]);
 
     return NextResponse.json({ success: true, hash, message: 'ZKP Hash sealed successfully' });
   } catch (err: any) {
