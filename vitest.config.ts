@@ -20,6 +20,7 @@ export default defineConfig({
       '**/esggo/workers/exportDocx.worker.test.ts',
       '**/workers/exportDocx.worker.test.ts',
       '**/*.js',
+      '**/vscode-acp/**',
     ],
     coverage: {
       provider: 'v8',
