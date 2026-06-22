@@ -35,12 +35,10 @@ export async function publishEvent(event: RealtimeEvent): Promise<void> {
   }
 }
 
-export function subscribeToEvents(
-  handler: (event: RealtimeEvent) => void
-): () => void {
+export function subscribeToEvents(handler: (event: RealtimeEvent) => void): () => void {
   if (!subClient) return () => {};
 
-  subClient.subscribe(CHANNEL, (message) => {
+  subClient.subscribe(CHANNEL, (message: string) => {
     try {
       const event = JSON.parse(message) as RealtimeEvent;
       handler(event);
