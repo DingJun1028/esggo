@@ -25,8 +25,12 @@ export async function POST(request: NextRequest) {
       async start(controller) {
         const send = (event: string, data: unknown) => {
           try {
-            controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
-          } catch { /* closed */ }
+            controller.enqueue(
+              encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+            );
+          } catch {
+            /* closed */
+          }
         };
 
         try {
@@ -37,6 +41,7 @@ export async function POST(request: NextRequest) {
             companyName || '示範企業',
             industry || '製造業',
             customPrompt || '',
+            undefined,
             (progress: GenerationProgress) => {
               send('progress', {
                 phase: progress.phase,
@@ -59,7 +64,7 @@ export async function POST(request: NextRequest) {
               totalWords: report.totalWords,
               generatedAt: report.generatedAt,
               chapterCount: report.chapters.length,
-              chapters: report.chapters.map(ch => ({
+              chapters: report.chapters.map((ch) => ({
                 id: ch.id,
                 title: ch.title,
                 wordCount: ch.wordCount,
@@ -70,11 +75,14 @@ export async function POST(request: NextRequest) {
 
           // 將完整報告存到 response 中
           controller.enqueue(encoder.encode(`event: report\ndata: ${JSON.stringify(report)}\n\n`));
-
         } catch (err) {
           send('error', { error: err instanceof Error ? err.message : 'Unknown error' });
         } finally {
-          try { controller.close(); } catch { /* already closed */ }
+          try {
+            controller.close();
+          } catch {
+            /* already closed */
+          }
         }
       },
     });
@@ -83,10 +91,9 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        Connection: 'keep-alive',
       },
     });
-
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

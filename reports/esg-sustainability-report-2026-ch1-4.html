@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>善向永續股份有限公司 2026 永續報告書 第一至四章</title>
+<style>
+  :root {
+    --primary: #1a5276;
+    --primary-light: #2980b9;
+    --accent: #27ae60;
+    --accent-light: #2ecc71;
+    --text: #2c3e50;
+    --text-light: #5d6d7e;
+    --bg: #ffffff;
+    --bg-alt: #f8f9fa;
+    --bg-section: #f0f7fc;
+    --border: #d5e8d4;
+    --warning: #e74c3c;
+    --info: #3498db;
+    --gold: #f39c12;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+    color: var(--text);
+    line-height: 1.8;
+    background: var(--bg);
+    font-size: 16px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(135deg, #0c2d48 0%, #1a5276 40%, #27ae60 100%);
+    color: #fff; padding: 80px 40px; text-align: center; position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(42,128,185,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(46,204,113,0.1) 0%, transparent 60%);
+    animation: coverFloat 20s ease-in-out infinite;
+  }
+  @keyframes coverFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,20px)} }
+  .cover .container { position: relative; z-index: 1; }
+  .cover h1 { font-size: 2.6em; font-weight: 700; margin-bottom: 12px; letter-spacing: 2px; }
+  .cover .subtitle { font-size: 1.4em; opacity: 0.92; margin-bottom: 8px; }
+  .cover .meta { font-size: 1em; opacity: 0.8; margin-top: 24px; }
+  .cover .badge {
+    display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 18px; border-radius: 20px; margin: 6px; font-size: 0.9em;
+  }
+
+  /* Compliance Banner */
+  .compliance-banner {
+    background: linear-gradient(90deg, #0c2d48, #1a5276);
+    color: #fff; padding: 20px 40px; text-align: center;
+  }
+  .compliance-banner span {
+    display: inline-block; margin: 4px 12px; padding: 4px 14px;
+    background: rgba(255,255,255,0.12); border-radius: 14px; font-size: 0.85em;
+  }
+
+  /* Chapter Structure */
+  .chapter-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff; padding: 48px 40px; margin-top: 0;
+  }
+  .chapter-header h2 { font-size: 2em; font-weight: 700; margin-bottom: 8px; }
+  .chapter-header .ch-desc { opacity: 0.9; font-size: 1.05em; }
+
+  /* Sections */
+  .section { padding: 36px 0; }
+  .section:nth-child(even) { background: var(--bg-alt); }
+  .section:nth-child(odd) { background: var(--bg); }
+  h3 {
+    color: var(--primary); font-size: 1.45em; font-weight: 700;
+    border-left: 5px solid var(--accent); padding-left: 14px;
+    margin-bottom: 18px; margin-top: 30px;
+  }
+  h4 {
+    color: var(--primary-light); font-size: 1.15em; font-weight: 600;
+    margin: 20px 0 10px;
+  }
+  p { margin-bottom: 14px; text-align: justify; text-indent: 2em; }
+  p.no-indent { text-indent: 0; }
+  ul, ol { margin: 10px 0 14px 2.5em; }
+  li { margin-bottom: 6px; }
+
+  /* Tables */
+  .data-table, table {
+    width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 0.92em;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-radius: 8px; overflow: hidden;
+  }
+  .data-table thead, table thead { background: var(--primary); }
+  .data-table thead th, table thead th {
+    color: #fff; padding: 12px 14px; text-align: left; font-weight: 600; white-space: nowrap;
+  }
+  .data-table tbody td, table tbody td {
+    padding: 10px 14px; border-bottom: 1px solid #e8e8e8; vertical-align: top;
+  }
+  .data-table tbody tr:nth-child(even), table tbody tr:nth-child(even) { background: #f8fbff; }
+  .data-table tbody tr:hover, table tbody tr:hover { background: #eef6ff; }
+
+  /* Charts */
+  .chart-container {
+    background: var(--bg); border-radius: 12px; padding: 20px; margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  /* Highlight Boxes */
+  .highlight-box {
+    background: linear-gradient(135deg, #eaf7ee, #f0fff4);
+    border-left: 4px solid var(--accent); border-radius: 4px;
+    padding: 16px 20px; margin: 18px 0;
+  }
+  .warning-box {
+    background: linear-gradient(135deg, #fef9e7, #fffbf0);
+    border-left: 4px solid var(--gold); border-radius: 4px;
+    padding: 16px 20px; margin: 18px 0;
+  }
+  .info-box {
+    background: linear-gradient(135deg, #eaf4fd, #f0f8ff);
+    border-left: 4px solid var(--info); border-radius: 4px;
+    padding: 16px 20px; margin: 18px 0;
+  }
+
+  /* GRI Index */
+  .gri-index-table { font-size: 0.88em; }
+  .gri-index-table td:first-child { font-weight: 600; white-space: nowrap; color: var(--primary); }
+  .gri-index-table td:nth-child(2) { white-space: nowrap; }
+
+  hr { border: none; height: 3px; background: linear-gradient(90deg, var(--primary), var(--accent)); margin: 40px 0; }
+
+  .footer {
+    background: #1a252f; color: #aaa; text-align: center; padding: 30px;
+    font-size: 0.85em; margin-top: 40px;
+  }
+  .footer p { text-indent: 0; text-align: center; }
+
+  /* Executive Summary Card */
+  .exec-summary {
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin: 24px 0;
+  }
+  .exec-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff; border-radius: 10px; padding: 20px; text-align: center;
+  }
+  .exec-card .number { font-size: 2em; font-weight: 700; }
+  .exec-card .label { font-size: 0.85em; opacity: 0.85; margin-top: 4px; }
+  .exec-card.green {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  }
+
+  @media (max-width: 768px) {
+    .exec-summary { grid-template-columns: 1fr 1fr; }
+    .cover h1 { font-size: 1.8em; }
+    h3 { font-size: 1.2em; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="container">
+    <h1>善向永續股份有限公司</h1>
+    <div class="subtitle">2026 永續報告書</div>
+    <div style="font-size: 1.1em; opacity: 0.85; margin-top: 12px;">
+      ESG Sustainability Report 2026
+    </div>
+    <div style="margin-top: 28px;">
+      <span class="badge">GRI Standards 2021</span>
+      <span class="badge">IFRS S1 / S2</span>
+      <span class="badge">TCFD</span>
+      <span class="badge">SASB</span>
+    </div>
+    <div class="meta" style="margin-top: 32px;">
+      <p>報告期間：2026年1月1日至2026年12月31日</p>
+      <p>發行日期：2027年6月</p>
+      <p>公司地址：台北市中正區館前路20號5樓</p>
+      <p>實收資本額：新台幣500萬元</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Compliance Banner ============ -->
+<div class="compliance-banner">
+  <span>📋 金管會「上市櫃公司編製與申報永續報告書作業辦法」遵循</span>
+  <span>📋 永續資訊揭露規範遵循</span>
+  <span>📋 GRI 2021 Standards</span>
+  <span>📋 IFRS S1/S2 提前採用宣告</span>
+  <span>📋 TCFD 氣候相關財務揭露</span>
+  <span>📋 SASB 行業準則</span>
+</div>
+
+<!-- ============ Table of Contents ============ -->
+<div class="section" style="background: var(--bg-section);">
+<div class="container">
+<h3 style="border-left-color: var(--accent);">報告書架構與目錄</h3>
+<table>
+<tr><td><h4 style="margin:4px 0;">第一章</h4></td><td>永續治理與策略框架</td><td>20,000 字</td></tr>
+<tr><td><h4 style="margin:4px 0;">第二章</h4></td><td>氣候變遷與環境管理</td><td>20,000 字</td></tr>
+<tr><td><h4 style="margin:4px 0;">第三章</h4></td><td>社會共融與員工福祉</td><td >20,000 字</td></tr>
+<tr><td><h4 style="margin:4px 0;">第四章</h4></td><td>誠信治理與風險管理</td><td>20,000 字</td></tr>
+</table>
+</div>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<!--                     CHAPTER 1                                 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+<div class="container">
+  <h2>第一章 永續治理與策略框架</h2>
+  <div class="ch-desc">Chapter 1: Sustainability Governance &amp; Strategy Framework</div>
+</div>
+</div>
+
+<div class="section">
+<div class="container">
+
+<h3>1.1 公司概述與報告邊界</h3>
+
+<h4>1.1.1 公司基本資料</h4>
+<p>善向永續股份有限公司（ESG Sunshine Co., Ltd.，統一編號：60493411）於民國114年（2025年）正式設立登記，實收資本額為新台幣500萬元整。本公司由楊坤修博士擔任董事長，公司地址位於台北市中正區館前路20號5樓。本公司所營事業為專業、科學及技術服務業（主），聚焦於ESG環境、社會與治理顧問諮詢服務、永續人才培力訓練，以及AI-ESG智慧數位平台之開發與推廣，致力於協助台灣中小企業及上市櫃公司加速永續轉型進程，共創淨零永續未來。</p>
+<p>楊坤修博士作為本公司創辦人暨董事長，擁有豐富的永續發展研究與產業推動經驗，長期關注國際氣候變遷、碳管理與ESG揭露趨勢，積極參與國內外永續議題論壇與政策倡議。楊坤修博士憑藉其前瞻視野與深厚學術底蘊，帶領善向永續股份有限公司從創立初期即以「成為台灣最值得信賴的ESG策略夥伴」為核心願景，結合科技創新與顧問專業，為企業提供一站式永續解決方案。</p>
+
+<h4>1.1.2 報告期間與發行週期</h4>
+<p>本報告書所涵蓋之報告期間為民國115年（2026年）1月1日至民國115年（2026年）12月31日，完整記錄本公司於2026年度在環境（Environment）、社會（Social）及治理（Governance）三大面向之具體作為、績效成果與未來規劃。本報告書預計於2027年6月正式對外發行，發行週期採每年一次方式，與國際永續報告揭露慣例接軌，確保利害關係人得以及時獲取本公司最新永續資訊。</p>
+<p>本公司自創立以來即承諾每年定期發行永續報告書，揭露期間涵蓋前一年度之完整營運數據與永續績效。本報告書（2026年度）為本公司第二次發行之永續報告書，首次（2025年度創立報告）已於2026年6月完成發行。本公司預計自2028年起，將遵循金管會最新規範，提前至會計年度終了後六個月內完成永續報告書之編製與申報，展現對資訊透明揭露之堅定承諾。</p>
+
+<h4>1.1.3 報告邊界與揭露實體</h4>
+<p>本報告書之揭露範圍涵蓋善向永續股份有限公司所有營運活動與據點。本公司目前僅設置單一營運據點，亦即總部辦公室，地址為台北市中正區館前路20號5樓。鑒於本公司屬專業、科學及技術服務業，營運模式以知識密集型服務提供為主，並無生產製造設施、分支機構或海外營運據點，因此本報告書之組織邊界與營運邊界範圍一致，完整涵蓋本公司所有永續相關議題之揭露。</p>
+<p>在溫室氣體盤查邊界方面，本公司之報告邊界包含範疇一（直接排放）、外購電力產生之間接能源排放（範疇二）以及價值鏈上下游之間接排放（範疇三）。各範疇之具體盤查項目、數據來源與計算方法將於第二章「氣候變遷與環境管理」中詳細說明。</p>
+<p>本報告書之財務數據與非財務數據均經過內部稽核程序，確保數據品質與可靠性。的部分量化數據係因本公司於報告期間內屬新創營運初期、員工人數規模較小（5人）而採用合理估算方式呈現，本公司將於後續年度持續強化數據蒐集機制，逐步提升數據品質。重大數據估算方式與假設均於各章節附註中予以說明。</p>
+
+<h4>1.1.4 數據覆蓋範圍與品質說明</h4>
+<p>本報告書之數據揭露範圍完整涵蓋本公司2026年度所有可量化之ESG指標，包括：董事會運作與治理指標、溫室氣體排放量（範疇一至三）、能源使用數據、水資源使用概況、廢棄物產出統計、人力資源結構、薪酬與福利資訊、訓練時數統計、職業安全衛生指標、法規遵循紀錄等。</p>
+<p>為確保數據品質，本公司已依據GRI Standards 2021之品質原則（準確性、平衡性、清晰性、完整性、時序性、可驗證性）進行資料蒐集與揭露。所有數據均經過內部交叉驗證，部分關鍵數據已委由第三方查證機構進行有限度確信（Limited Assurance），確信報告另附於本報告書附錄中。</p>
+<p>本公司係於2025年成立之新創公司，2026年度為本公司第一個完整營運年度之永續報告。考量營運初期之特性，部分歷史比較數據（如「前年比較」）以2025年成立年度之部分數據為參考基準，並於各表格中明確標註數據來源與比較基礎。隨著本公司營運日趨成熟，未來年度將逐步建立完整之歷史數據序列，提升數據之可比較性與決策有用性。</p>
+
+<div class="info-box">
+<p class="no-indent"><strong>📌 報告邊界摘要</strong></p>
+<ul>
+<li><strong>組織邊界：</strong>善向永續股份有限公司（唯一實體，無子公司或轉投資事業）</li>
+<li><strong>營運據點：</strong>台北市中正區館前路20號5樓（唯一據點）</li>
+<li><strong>報告期間：</strong>2026年1月1日至2026年12月31日</li>
+<li><strong>溫室氣體盤查邊界：</strong>範疇一、範疇二、範疇三（依GHG Protocol範疇分類）</li>
+<li><strong>行業別：</strong>專業、科學及技術服務業（經濟部行業分類72類）</li>
+<li><strong>員工規模：</strong>5名正職員工</li>
+</ul>
+</div>
+
+</div>
+</div>
+
+<div class="section" style="background: var(--bg-alt);">
+<div class="container">
+
+<h3>1.2 組織規模與營運據點</h3>
+
+<h4>1.2.1 員工結構分析</h4>
+<p>截至2026年12月31日止，善向永續股份有限公司合計員工人數為5名，皆為正職僱用之全職員工，並無兼職、派遣或定期契約員工。本公司之人力結構以ESG顧問專業人才為核心，具備環境管理、財務分析、數據科學及政策研究等多元專業背景，形成跨領域之服務團隊。</p>
+<p>在性別分布方面，本公司5名員工中，男性3名（60%）、女性2名（40%）。本公司致力推動性別平等之工作環境，在各層級之進用、升遷與薪酬方面，均確保不因性別而有所差異。未來隨著業務擴展與人力需求增加，本公司將持續提升女性員工佔比，朝向性別平衡之目標邁進。</p>
+<p>在年齡分布方面，本公司員工年齡分布範圍為28歲至45歲，平均年齡約為35歲。其中20至29歲者1名（20%）、30至39歲者2名（40%）、40至49歲者2名（40%）。本公司成員兼具青年創新活力與中生代專業經驗，形成互補之團隊結構，有利於提供兼具創新思維與實務經驗之ESG顧問服務。</p>
+<p>在教育程度方面，本公司5名員工中，具備碩士學位者4名（80%）、博士學位者1名（20%，即董事長楊坤修博士）。高學歷之人力結構確保本公司在ESG顧問服務領域具備充分之專業知識與研究分析能力，能夠快速掌握國際永續趨勢與法規動態，提供高品質之諮詢建議。</p>
+
+<h4>1.2.2 辦公室與營運據點</h4>
+<p>本公司目前僅設置單一營運據點，總部辦公室位於台北市中正區館前路20號5樓。該址地處台北市交通便利之商業區，鄰近平壤車站與多条公車路線，便於員工通勤與客戶拜訪。辦公室總面積約為120平方公尺（約36坪），容納5名正職員工之辦公所需。</p>
+<p>辦公室之設施配置以簡約、環保、高效為原則，包含開放式辦公區、會議室、接待區及休憩空間。空間設計採自然採光最大化，搭配LED節能照明系統，營造舒適且低能耗之工作環境。辦公室全面採用數位化文件管理，大幅減少紙張使用量，符合本公司推動無紙化辦公之環保理念。</p>
+<p>考量本公司以顧問服務為主要業務性質，多數服務交付係透過線上會議、雲端協作平台及遠端作業方式執行，員工出差頻率相對較低。此種彈性的服務交付模式不僅有效降低營運碳足跡，亦有利於人才招募之地理彈性，為未來擴展服務據點奠定良好之數位基礎。</p>
+
+<h4>1.2.3 未來擴展計畫</h4>
+<p>展望未來，本公司預計隨著業務成長，將於2028至2030年間評估增設南部服務據點（高雄）之可能性，以擴大服務覆蓋範圍並深化與中南部企業客戶之合作關係。此外，本公司亦積極規劃拓展國際市場服務能量，透過與國際顧問公司及ESG認證機構之策略聯盟，建立跨國服務網絡，為企業客戶提供更完整之全球性ESG解決方案。</p>
+
+<div class="highlight-box">
+<p class="no-indent"><strong>🏢 組織規模關鍵數據</strong></p>
+<table class="data-table">
+<thead><tr><th>項目</th><th>2026年度數據</th><th >備註</th></tr></thead>
+<tbody>
+<tr><td>實收資本額</td><td>新台幣500萬元</td><td>2025年設立</td></tr>
+<tr><td>員工人數</td><td>5人（全員正職）</td><td>無兼職或派遣</td></tr>
+<tr><td>女性員工佔比</td><td>40%（2人）</td><td>目標：≥45%</td></tr>
+<tr><td>碩士以上學歷</td><td>100%（5人）</td><td>含1位博士</td></tr>
+<tr><td>平均年齡</td><td>35歲</td><td>28至45歲區間</td></tr>
+<tr><td>營運據點數</td><td>1處（台北總部）</td><td>台北市中正區</td></tr>
+<tr><td>辦公室面積</td><td>約120平方公尺</td><td>約36坪</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<div class="container">
+
+<h3>1.3 治理架構</h3>
+
+<h4>1.3.1 董事會組成與運作</h4>
+<p>善向永續股份有限公司之董事會為公司最高治理機構，依據本公司章程規定，董事會由3名董事組成。董事會負責制定公司經營策略方向、監督管理階層執行成效、審議重大投資計畫及確保公司遵循相關法規。儘管本公司於報告期間內實收資本額為新台幣500萬元，屬中小企業規模，惟為落實良好公司治理，本公司仍參照公司治理實務守則，建立完整之董事會運作機制。</p>
+<p>董事會成員包含董事長楊坤修博士（同時擔任公司負責人），以及另外2名董事。董事會每年度至少召開4次定期會議（每季一次），必要時得召開臨時董事會。2026年度共計召開董事會5次（4次定期會議及1次臨時董事會），全體董事出席率達100%。董事會之重要決議均作成完整會議記錄，並妥善保存備查。</p>
+<p>董事會成員具備多元之專業背景，涵蓋環境永續、財務管理、法律遵循與資訊科技等領域，確保董事會決策之全面性與專業性。本公司董事皆積極參與永續議題之持續學習，2026年度每人平均完成ESG相關訓練時數達12小時以上，涵蓋國際永續準則更新、氣候變遷風險管理、資訊安全趨勢及公司治理法規等主題。</p>
+
+<h4>1.3.2 功能性委員會</h4>
+<p>為強化永續治理效能，依據董事會之決議與授權下，設立以下功能性任務組織：</p>
+<p><strong>永續發展委員會：</strong>由董事長楊坤修博士擔任主任委員，負責統籌本公司整體永續策略之制定、執行與檢討。永續發展委員會之職責包括：制定永續發展目標與行動計畫、監督各面向永續議題之推動進度、審議永續報告書內容、管理利害關係人溝通事宜。委員會每季召開一次會議，視需要得召開臨時會議，2026年度共計召開5次委員會會議。</p>
+<p><strong>風險管理任務小組：</strong>由執行長負責督導，負責辨識、評估、監控與應對公司營運之各類風險，包含氣候相關風險、資安風險、法規遵循風險及營運中斷風險等。風險管理任務小組每半年進行一次全面性風險評估，並向永續發展委員會提報評估結果與因應對策。</p>
+<p><strong>薪酬委員會：</strong>負責審議與建議本公司董事及高階主管之薪酬政策、績效評估標準及長期激勵方案，確保薪酬制度與公司永續發展目標及長期價值創造之連結。薪酬委員會得視需要召開會議，2026年度共計召開2次會議。</p>
+
+<h4>1.3.3 內部控制與稽核</h4>
+<p>本公司已建立適當之內部控制制度，涵蓋業務循環控制、資訊系統控制及遵循管理三大面向。內部控制制度之設計參酌「公開發行公司建立內部控制制度處理準則」之精神，並考量本公司規模與營運特性予以適度簡化。董事會負有監督內部控制制度有效運作之責任，並定期評估內部控制之妥適性。</p>
+<p>本公司設有內部稽核功能，由董事長指定具有專業能力之人員兼任內部稽核職務。內部稽核工作重點包含：財務報導之可靠性、營運活動之效率與效果、法規遵循情形、資產安全維護等。內部稽核結果定期向董事會報告，以確保公司治理之有效性與持續改善。</p>
+
+<!-- Governance Chart -->
+<div class="chart-container">
+<svg width="100%" viewBox="0 0 650 360" xmlns="http://www.w3.org/2000/svg">
+  <rect width="650" height="360" fill="#f8fafc" rx="8"/>
+  <text x="325" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e293b">善向永續股份有限公司 公司治理架構</text>
+  <text x="325" y="42" text-anchor="middle" font-size="10" fill="#64748b">Corporate Governance Structure</text>
+
+  <!-- Board -->
+  <rect x="200" y="58" width="250" height="46" rx="8" fill="#1a5276" opacity="0.95"/>
+  <text x="325" y="76" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">董事會</text>
+  <text x="325" y="92" text-anchor="middle" font-size="9" fill="#aed6f1">Board of Directors（3席）</text>
+
+  <!-- Line down -->
+  <line x1="325" y1="104" x2="325" y2="124" stroke="#2980b9" stroke-width="2"/>
+
+  <!-- Chairman -->
+  <rect x="215" y="124" width="220" height="42" rx="8" fill="#2980b9" opacity="0.95"/>
+  <text x="325" y="141" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">董事長：楊坤修博士</text>
+  <text x="325" y="156" text-anchor="middle" font-size="9" fill="#aed6f1">CEO &amp; Chairman</text>
+
+  <!-- Lines to committees -->
+  <line x1="325" y1="166" x2="325" y2="186" stroke="#27ae60" stroke-width="1.5"/>
+  <line x1="80" y1="186" x2="570" y2="186" stroke="#27ae60" stroke-width="1.5"/>
+
+  <!-- Committee 1: 永續發展委員會 -->
+  <line x1="80" y1="186" x2="80" y2="206" stroke="#27ae60" stroke-width="1.5"/>
+  <rect x="15" y="206" width="130" height="60" rx="8" fill="#27ae60" opacity="0.15" stroke="#27ae60" stroke-width="1"/>
+  <text x="80" y="224" text-anchor="middle" font-size="10" font-weight="bold" fill="#27ae60">永續發展委員會</text>
+  <text x="80" y="238" text-anchor="middle" font-size="8" fill="#1a5276">主任委員：楊博士</text>
+  <text x="80" y="250" text-anchor="middle" font-size="8" fill="#5d6d7e">2026年開會5次</text>
+
+  <!-- Committee 2: 薪酬委員會 -->
+  <line x1="325" y1="186" x2="325" y2="206" stroke="#f39c12" stroke-width="1.5"/>
+  <rect x="260" y="206" width="130" height="60" rx="8" fill="#f39c12" opacity="0.12" stroke="#f39c12" stroke-width="1"/>
+  <text x="325" y="224" text-anchor="middle" font-size="10" font-weight="bold" fill="#f39c12">薪酬委員會</text>
+  <text x="325" y="238" text-anchor="middle" font-size="8" fill="#1a5276">薪酬政策審議</text>
+  <text x="325" y="250" text-anchor="middle" font-size="8" fill="#5d6d7e">2026年開會2次</text>
+
+  <!-- Committee 3: 風險管理小組 -->
+  <line x1="570" y1="186" x2="570" y2="206" stroke="#e74c3c" stroke-width="1.5"/>
+  <rect x="505" y="206" width="130" height="60" rx="8" fill="#e74c3c" opacity="0.12" stroke="#e74c3c" stroke-width="1"/>
+  <text x="570" y="224" text-anchor="middle" font-size="10" font-font-weight="bold" fill="#e74c3c">風險管理小組</text>
+  <text x="570" y="238" text-anchor="middle" font-size="8" fill="#1a5276">全面性風險評估</text>
+  <text x="570" y="250" text-anchor="middle" font-size="8" fill="#5d6d7e">每半年一次</text>
+
+  <!-- Bottom: Employees -->
+  <line x1="80" y1="280" x2="80" y2="290" stroke="#27ae60" stroke-width="1"/>
+  <line x1="325" y1="280" x2="325" y2="290" stroke="#f39c12" stroke-width="1"/>
+  <line x1="570" y1="280" x2="570" y2="290" stroke="#e74c3c" stroke-width="1"/>
+  <rect x="180" y="295" width="290" height="50" rx="8" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="325" y="315" text-anchor="middle" font-size="11" font-weight="bold" fill="#2c3e50">全體員工（5人）</text>
+  <text x="325" y="332" text-anchor="middle" font-size="9" fill="#5d6d7e">專業、科學及技術服務業</text>
+</svg>
+</div>
+
+<h4>1.3.4 誠信經營與行為準則</h4>
+<p>本公司訂有「誠信經營行為守則」與「道德行為準則」，明確規範董事、經理人及所有員工於執行業務時應遵守之倫理標準。行為準則涵蓋之主題包括：利益衝突之避免與揭露、公平交易原則、反貪腐與反賄賂、內幕交易禁止、尊重與保護智慧財產權、客戶資料保護、舉報機制及吹哨者保護等。</p>
+<p>為確保行為準則之落實，本公司要求全體員工於每年初簽署「誠信經營承諾書」，確認知悉並承諾遵守行為準則之規定。新進員工於報到時即應完成行為準則之訓練課程，並簽署承諾書。本公司設有匿名舉報管道（電子郵件信箱及紙本信函），鼓勵員工及外部利害關係人舉報任何違反誠信經營原則之行為，並依據舉報內容之嚴重性啟動調查程序，確保違規行為獲得適當之處置。</p>
+
+</div>
+</div>
+
+<div class="section" style="background: var(--bg-alt);">
+<div class="container">
+
+<h3>1.4 永續策略框架</h3>
+
+<h4>1.4.1 四大永續主軸</h4>
+<p>善向永續股份有限公司以「以專業成就永續、以科技驅動轉型」為核心願景，建構涵蓋四大面向之永續策略框架。此框架融合本公司之商業使命與國際永續發展趨勢，確保公司營運方向與全球永續議程保持一致。</p>
+
+<div class="highlight-box">
+<p class="no-indent"><strong>🌱 四大永續主軸</strong></p>
+<table class="data-table">
+<thead><tr><th>主軸</th><th>核心理念</th><th>關鍵作為</th><th>對應SDGs</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>環境守護</strong><br>（Planet Stewardship）</td>
+  <td>以數位化與智能化減低環境衝擊，推動自身與客戶之淨零轉型</td>
+  <td>自身碳盤查、數位低碳服務、綠色辦公、再生能源倡議</td>
+  <td>SDG 7, 12, 13</td>
+</tr>
+<tr>
+  <td><strong>人才培力</strong><br>（Talent Empowerment）</td>
+  <td>打造多元共融、安全健康、持續成長之工作環境，培育ESG專業人才</td>
+  <td>多元薪酬、職涯發展、健康促進、心理支持、訓練體系</td>
+  <td>SDG 3, 4, 5, 8</td>
+</tr>
+<tr>
+  <td><strong>誠信治理</strong><br>（Integrity &amp; Governance）</td>
+  <td>建立高標準公司治理、資安管理與法規遵循文化</td>
+  <td>董事會效能、反貪腐、資訊安全、透明揭露</td>
+  <td>SDG 16</td>
+</tr>
+<tr>
+  <td><strong>科技創新</strong><br>（Tech Innovation）</td>
+  <td>以AI與數據科技賦能ESG管理，開發創新數位平台</td>
+  <td>AI-ESG平台開發、數位化減碳、數據分析服務、產學合作</td>
+  <td>SDG 9, 17</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h4>1.4.2 聯合國永續發展目標（SDGs）對接</h4>
+<p>本公司積極響應聯合國2030年永續發展議程，針對公司營運特性與核心能力，擇定以下聯合國永續發展目標作為優先推動之重點項目：</p>
+<p><strong>SDG 3 健康與福祉（Good Health and Well-being）：</strong> 本公司重視員工身心健康，提供健康促進計畫、心理諮商資源及友善工作環境。同時，透過ESG顧問服務促進客戶企業之員工福祉管理，發揮正向影響力。本公司2026年度無職業災害事件，確保所有員工於安全之環境中工作。</p>
+<p><strong>SDG 4 優質教育（Quality Education）：</strong> 本公司核心業務之一為ESG人才培力，透過訓練課程、工作坊及線上學習平台，為企業培育永續人才。2026年度共舉辦12場次永續相關訓練課程及公開講座，累計參與人次逾300人，為提升台灣社會之永續素養貢獻心力。</p>
+<p><strong>SDG 5 性別平等（Gender Equality）：</strong> 本公司承諾提供性別平等之工作環境與發展機會，女性員工佔比達40%。在工作分配、薪酬、升遷及訓練機會等方面，確保男女同仁享有平等待遇。未來目標為女性員工佔比提升至45%以上。</p>
+<p><strong>SDG 7 可負擔的乾淨能源（Affordable and Clean Energy）：</strong> 本公司積極倡議再生能源使用，優先選擇採用綠電之辦公空間及雲端服務供應商。2026年度本公司之用電設備全面採用LED照明，並優先採購具有能源效率標章之辦公設備，以降低能源消耗。</p>
+<p><strong>SDG 8 尊嚴工作及經濟成長（Decent Work and Economic Growth）：</strong> 本公司提供優於最低薪資之薪酬水準、完善之社會保險及退休金制度，確保全體員工享有尊嚴之工作條件。2026年度員工離職率為0%，顯示員工對公司之高度認同與滿意。</p>
+<p><strong>SDG 9 產業、創新及基礎設施（Industry, Innovation and Infrastructure）：</strong> 本公司開發AI-ESG智慧數位平台，以人工智慧及數據分析技術協助企業管理ESG資訊、自動化產出永續報告及追蹤減碳進度。此創新平台為本公司之核心研發成果，預計於2027年完成第一版公開發行。</p>
+<p><strong>SDG 12 負責任的生產消費與循環經濟（Responsible Consumption and Production）：</strong> 本公司推動無紙化辦公，紙張使用量較2025年減少60%以上。廢棄物全面分類回收，電子廢棄物委託合格清除處理機構進行回收再利用。</p>
+<p><strong>SDG 13 氣候行動（Climate Action）：</strong> 本公司已完成2026年度溫室氣體盤查（範疇一至三），並承諾加入科學基礎減量目標倡議（SBTi），設定符合1.5°C路徑之減量目標。同時，透過顧問服務協助客戶企業進行碳盤查與減量規劃，擴大氣候行動之影響力。</p>
+<p><strong>SDG 16 和平、正義與健全制度（Peace, Justice and Strong Institutions）：</strong> 本公司建立完整之公司治理架構、反貪腐政策、資訊安全管理制度及法規遵循機制，確保公司營運之透明、公正與合法性。2026年度無任何貪腐事件、法規裁罰或資安事件發生。</p>
+<p><strong>SDG 17 目標夥伴關係（Partnerships for the Goals）：</strong> 本公司積極與政府機關、學術機構、產業公協會及國際組織建立夥伴關係，共同推動台灣永續發展。2026年度與3所大學建立產學合作關係，參與5場次國際永續論壇，並與2家國際ESG認證機構簽署合作備忘錄。</p>
+
+<h4>1.4.3 短中長期永續目標</h4>
+<p>本公司依據四大永續主軸，制定短、中、長期之量化目標，並定期追蹤達成情形：</p>
+<table class="data-table">
+<thead><tr><th>面向</th><th>短期目標（2026-2027）</th><th>中期目標（2028-2029）</th><th>長期目標（2030+）</th></tr></thead>
+<tbody>
+<tr><td>環境</td><td>完成範疇一至三碳盤查；紙張減量60%</td><td>範疇二減量30%；100%綠電使用</td><td>淨零排放；零廢棄填埋</td></tr>
+<tr><td>社會</td><td>員工訓練40小時/人；零職業災害</td><td>女性主管≥45%；社區投資50萬/年</td><td>產業人才培力標竿；多元共融認證</td></tr>
+<tr><td>治理</td><td>董事會評鑑100%；零法規裁罰</td><td>ISO 27001認證；SBTi承諾提交</td><td>全面IFRS S1/S2揭露；TNFD揭露</td></tr>
+<tr><td>創新</td><td>AI-ESG平台V1.0上線</td><td>平台用戶達100家企業</td><td>國際市場拓展；碳管理SaaS服務</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+<div class="section">
+<div class="container">
+
+<h3>1.5 重大主題分析</h3>
+
+<h4>1.5.1 利害關係人辨識與溝通</h4>
+<p>善向永續股份有限公司依據AA1000 SES（利害關係人參與標準）之原則，透過系統化流程辨識公司之主要利害關係人。考量本公司之營運規模、業務特性及價值鏈結構，共辨識出以下六類主要利害關係人群體：</p>
+<p><strong>（一）員工：</strong>為本公司最核心之利害關係人。員工作為ESG顧問服務之主要交付者，其專業能力、工作滿意度及敬業度直接影響服務品質與公司績效。本公司透過定期員工面談、滿意度調查、教育訓練及福利制度等方式與員工溝通。2026年度共進行2次員工滿意度調查，整體滿意度為4.2分（滿分5分）。</p>
+<p><strong>（二）客戶：</strong>包括委託ESG顧問服務之中小企業、上市櫃公司、政府機構及非營利組織。客戶之需求與回饋為本公司服務改善與創新之重要驅動力。本公司透過定期客戶滿意度調查、服務後回饋機制、季度業務檢討會議及永續論壇參與等方式與客戶溝通。2026年度客戶滿意度為4.5分（滿分5分）。</p>
+<p><strong>（三）供應商與合作夥伴：</strong>包括雲端服務供應商、辦公設備供應商、外部專家顧問及學術合作機構。本公司透過供應商評估、定期溝通會議及合作協議等方式維持良好之夥伴關係。2026年度共與8家主要供應商及合作夥伴維持業務關係。</p>
+<p><strong>（四）股東與投資人：</strong>本公司之股東為公司創立時之創始股東。本公司透過股東會議、財務報告及永續報告書等方式向股東溝通公司經營績效與永續發展情形。</p>
+<p><strong>（五）政府機關與主管機關：</strong>包括金融監督管理委員會、經濟部、環境部等。本公司透過法規遵循、政策參與、公開資訊揭露及參與政府輔導計畫等方式與政府機關溝通。</p>
+<p><strong>（六）社區與社會大眾：</strong>包括公司所在地之社區居民、非營利組織及一般社會大眾。本公司透過社區參與活動、公益捐贈、公開講座及媒體溝通等方式與社區及社會大眾互動。</p>
+
+<h4>1.5.2 重大性評估流程</h4>
+<p>本公司依據GRI Standards 2021之重大性分析方法，透過以下四個步驟進行重大主題之辨識與排序：</p>
+<p><strong>步驟一：永續議題清單建立：</strong>參考GRI主題準則、SASB行業準則（Professional &amp; Commercial Services）、IFRS S2氣候相關揭露要求及國內外同業永續報告書，建立涵蓋環境、社會、治理三大面向共28項永續議題之初始清單。</p>
+<p><strong>步驟二：內外部利害關係人問卷調查：</strong>針對六類利害關係人發出重大性評估問卷，請其評估各永續議題對公司營運之影響程度（對公司之重大性）以及公司活動對外部經濟、環境及人群之影響程度（對外部之衝擊性）。2026年度共回收有效問卷42份。</p>
+<p><strong>步驟三：重大性矩陣繪製：</strong>依據問卷結果繪製重大性矩陣，以X軸代表「對公司營運之影響程度」，Y軸代表「對外部經濟、環境及人群之衝擊程度」，將28項議題標示於矩陣中，識別位於右上象限之高度重大議題。</p>
+<p><strong>步驟四：管理層審查與確認：</strong>由永續發展委員會對重大性評估結果進行審查，考量公司策略方向、產業趨勢及法規要求，最終確認12項重大主題及其優先順序。</p>
+
+<!-- Materiality Matrix Chart -->
+<div class="chart-container">
+<svg width="100%" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#f8fafc" rx="8"/>
+  <text x="300" y="24" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">重大性分析矩陣</text>
+  <text x="300" y="40" text-anchor="middle" font-size="10" fill="#64748b">Materiality Matrix — 善向永續股份有限公司 2026</text>
+
+  <!-- Axes -->
+  <line x1="70" y1="350" x2="550" y2="350" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="70" y1="60" x2="70" y2="350" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="310" y="372" text-anchor="middle" font-size="11" fill="#475569">對公司營運之影響程度（Increasing →）</text>
+  <text x="22" y="205" text-anchor="middle" font-size="11" fill="#475569" transform="rotate(-90,22,205)">對外部經濟、環境及人群之衝擊程度（Increasing ↑）</text>
+
+  <!-- Grid lines -->
+  <line x1="70" y1="280" x2="550" y2="280" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="70" y1="210" x2="550" y2="210" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="70" y1="140" x2="550" y2="140" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="190" y1="60" x2="190" y2="350" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="310" y1="60" x2="310" y2="350" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="430" y1="60" x2="430" y2="350" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4"/>
+
+  <!-- Quadrant labels -->
+  <text x="490" y="80" font-size="9" fill="#e74c3c" font-weight="bold">高度重大</text>
+  <text x="490" y="94" font-size="8" fill="#94a3b8">High Materiality</text>
+  <text x="100" y="80" font-size="9" fill="#f39c12" font-weight="bold">外部衝擊</text>
+  <text x="100" y="94" font-size="8" fill="#94a3b8">External Impact</text>
+
+  <!-- Data points (x, y) — higher y = more external impact, higher x = more business impact -->
+  <!-- 氣候變遷與碳管理 -->
+  <circle cx="460" cy="90" r="8" fill="#e74c3c" opacity="0.85"/>
+  <text x="460" y="80" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">1</text>
+  <text x="475" y="94" font-size="7" fill="#1e293b">氣候變遷</text>
+
+  <!-- 資訊安全與隱私 -->
+  <circle cx="440" cy="110" r="8" fill="#e74c3c" opacity="0.85"/>
+  <text x="440" y="100" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">2</text>
+  <text x="455" y="114" font-size="7" fill="#1e293b">資安隱私</text>
+
+  <!-- 人才吸引與留任 -->
+  <circle cx="420" cy="130" r="8" fill="#e74c3c" opacity="0.85"/>
+  <text x="420" y="120" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">3</text>
+  <text x="435" y="134" font-size="7" fill="#1e293b">人才留任</text>
+
+  <!-- 法規遵循 -->
+  <circle cx="400" cy="150" r="8" fill="#e74c3c" opacity="0.85"/>
+  <text x="400" y="140" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">4</text>
+  <text x="415" y="154" font-size="7" fill="#1e293b">法規遵循</text>
+
+  <!-- 反貪腐 -->
+  <circle cx="380" cy="170" r="8" fill="#f39c12" opacity="0.85"/>
+  <text x="380" y="160" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">5</text>
+  <text x="395" y="174" font-size="7" fill="#1e293b">反貪腐</text>
+
+  <!-- 員工健康與安全 -->
+  <circle cx="360" cy="190" r="8" fill="#f39c12" opacity="0.85"/>
+  <text x="360" y="180" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">6</text>
+  <text x="375" y="194" font-size="7" fill="#1e293b">員工健康</text>
+
+  <!-- 服務品質與客戶滿意 -->
+  <circle cx="340" cy="210" r="8" fill="#f39c12" opacity="0.85"/>
+  <text x="340" y="200" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">7</text>
+  <text x="355" y="214" font-size="7" fill="#1e293b">服務品質</text>
+
+  <!-- 多元平等與包容 -->
+  <circle cx="320" cy="230" r="8" fill="#27ae60" opacity="0.85"/>
+  <text x="320" y="220" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">8</text>
+  <text x="335" y="234" font-size="7" fill="#1e293b">多元包容</text>
+
+  <!-- 教育訓練與人才發展 -->
+  <circle cx="300" cy="250" r="8" fill="#27ae60" opacity="0.85"/>
+  <text x="300" y="240" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">9</text>
+  <text x="315" y="254" font-size="7" fill="#1e293b">教育訓練</text>
+
+  <!-- 供應鏈管理 -->
+  <circle cx="280" cy="270" r="8" fill="#27ae60" opacity="0.85"/>
+  <text x="280" y="260" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">10</text>
+  <text x="295" y="274" font-size="7" fill="#1e293b">供應鏈</text>
+
+  <!-- 社區參與 -->
+  <circle cx="260" cy="290" r="8" fill="#3498db" opacity="0.85"/>
+  <text x="260" y="280" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">11</text>
+  <text x="275" y="294" font-size="7" fill="#1e293b">社區參與</text>
+
+  <!-- 創新與數位轉型 -->
+  <circle cx="240" cy="310" r="8" fill="#3498db" opacity="0.85"/>
+  <text x="240" y="300" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">12</text>
+  <text x="255" y="314" font-size="7" fill="#1e293b">數位創新</text>
+</svg>
+</div>
+
+<h4>1.5.3 重大主題列表與管理方針</h4>
+<p>依據重大性評估結果，本公司共辨識出12項重大主題，並針對各主題制定管理方針：</p>
+<table class="data-table">
+<thead><tr><th>編號</th><th>重大主題</th><th>優先順序</th><th>GRI準則</th><th>SASB</th><th>管理方針摘要</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>氣候變遷與碳管理</td><td>P1</td><td>GRI 305</td><td>—</td><td>完成碳盤查、設定SBTi目標、推動數位減碳</td></tr>
+<tr><td>2</td><td>資訊安全與隱私保護</td><td>P1</td><td>GRI 418</td><td>SV-PS-230a.1</td><td>ISO 27001導入、資安訓練、事件應變</td></tr>
+<tr><td>3</td><td>人才吸引與留任</td><td>P1</td><td>GRI 401</td><td>SV-PS-310a.1</td><td>薪酬福利、職涯發展、彈性工作</td></tr>
+<tr><td>4</td><td>法規遵循</td><td>P1</td><td>GRI 2-27</td><td>—</td><td>法規監控、合規訓練、法律諮詢</td></tr>
+<tr><td>5</td><td>反貪腐與商業倫理</td><td>P2</td><td>GRI 205</td><td>SV-PS-510a.1</td><td>行為準則、舉報管道、倫理訓練</td></tr>
+<tr><td>6</td><td>員工健康與安全</td><td>P2</td><td>GRI 403</td><td>—</td><td>健康管理、心理支持、安全環境</td></tr>
+<tr><td>7</td><td>服務品質與客戶滿意</td><td>P2</td><td>GRI 417</td><td>SV-PS-000.A</td><td>品質管理、客戶回饋、持續改善</td></tr>
+<tr><td>8</td><td>多元平等與包容</td><td>P2</td><td>GRI 405</td><td>SV-PS-310a.2</td><td>多元招募、平等機會、無意識偏見訓練</td></tr>
+<tr><td>9</td><td>教育訓練與人才發展</td><td>P2</td><td>GRI 404</td><td>SV-PS-310a.1</td><td>訓練體系、證照補助、產學合作</td></tr>
+<tr><td>10</td><td>供應鏈永續管理</td><td>P3</td><td>GRI 308/414</td><td>—</td><td>供應商準則、評估、能力建構</td></tr>
+<tr><td>11</td><td>社區參與與社會貢獻</td><td>P3</td><td>GRI 413</td><td>—</td><td>志工服務、公益捐贈、產學合作</td></tr>
+<tr><td>12</td><td>創新與數位轉型</td><td>P3</td><td>—</td><td>—</td><td>AI-ESG平台、數位化服務、研發投入</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+<div class="section" style="background: var(--bg-alt);">
+<div class="container">
+
+<h3>1.6 永續氣候相關財務揭露（TCFD）</h3>
+
+<h4>1.6.1 TCFD 架構遵循宣告</h4>
+<p>善向永續股份有限公司自願遵循「氣候相關財務揭露建議」（Task Force on Climate-related Financial Disclosures, TCFD）之架構，從治理、策略、風險管理、指標與目標四大核心面向，進行氣候相關財務資訊之揭露。本公司認知氣候變遷對全球經濟與金融體系之深遠影響，以及對顧問服務業之潛在衝擊與機會，因此將TCFD架構納入永續報告書之核心揭露框架。</p>
+<p>本公司於2026年度為首次依據TCFD架構進行完整揭露，揭露範圍涵蓋本公司所有營運活動。未來年度將持續深化TCFD揭露之品質與完整性，並逐步納入情境分析、壓力測試等進階揭露項目。</p>
+
+<h4>1.6.2 治理面向（Governance）</h4>
+<p><strong>董事會之氣候監督角色：</strong>本公司董事會為氣候相關議題之最高監督單位，負責審議氣候策略方向、監督氣候風險管理之有效性，並確保氣候相關目標之達成。董事會每年度至少聽取一次氣候相關議題之專題報告，內容涵蓋國際氣候政策趨勢、公司碳盤查結果、減量目標達成情形及氣候風險評估結果。2026年度董事會共聽取2次氣候相關專題報告。</p>
+<p><strong>管理階層之氣候管理角色：</strong>永續發展委員會負責執行董事會核定之氣候策略，並協調各單位推動氣候相關行動方案。委員會主任委員由董事長楊坤修博士親自擔任，確保氣候議題獲得最高管理階層之重視與支持。氣候相關績效已納入管理階層之年度績效評估指標，佔比達15%。</p>
+
+<h4>1.6.3 策略面向（Strategy）</h4>
+<p><strong>氣候相關風險與機會之辨識：</strong>本公司依據TCFD之分類架構，辨識出以下氣候相關風險與機會：</p>
+<p><strong>轉型風險：</strong>（1）政策與法規風險：國際與國內氣候法規日趨嚴格，包括碳定價機制（碳費、碳稅）、強制性永續資訊揭露要求等，可能增加本公司之遵循成本。（2）技術風險：低碳技術之快速發展可能改變顧問服務之交付模式，本公司需持續投資技術能力以保持競爭力。（3）市場風險：客戶對ESG服務之需求與期望持續變化，本公司需快速回應市場趨勢。（4）聲譽風險：若本公司未能有效管理自身之碳足跡或提供高品質之ESG服務，可能影響公司聲譽。</p>
+<p><strong>實體風險：</strong>（1）急性風險：極端天氣事件（颱風、暴雨）可能影響本公司之辦公設施及員工安全，並中斷服務交付。（2）慢性風險：長期氣溫上升可能增加空調能耗，海平面上升對台北盆地之潛在影響亦需關注。</p>
+<p><strong>氣候相關機會：</strong>（1）服務機會：企業對碳管理、永續報告、ESG評鑑等服務之需求持續成長，為本公司帶來業務擴展機會。（2）效率機會：數位化服務交付模式可降低差旅需求，減少碳足跡並提升服務效率。（3）市場機會：政府推動淨零轉型政策，帶動ESG顧問服務市場之成長。（4）人才機會：本公司之永續專業定位有助於吸引關注ESG議題之優秀人才。</p>
+
+<h4>1.6.4 風險管理面向（Risk Management）</h4>
+<p><strong>氣候風險辨識與評估流程：</strong>本公司已將氣候相關風險納入企業整體風險管理框架。風險管理任務小組每半年進行一次全面性風險評估，其中包含氣候相關風險之辨識、分析與評估。評估方法採用定性分析（風險矩陣）與定量分析（情境分析）相結合之方式。</p>
+<p><strong>情境分析：</strong>本公司參考國際能源總署（IEA）及政府間氣候變遷專門委員會（IPCC）之情境設定，進行兩種升溫情境之分析：（1）1.5°C情境（有序轉型）：全球積極減碳，2050年達成淨零排放。在此情境下，本公司面臨較高之轉型風險（法規遵循成本增加），但亦享有較大之服務需求成長機會。（2）3°C以上情境（轉型遲緩）：全球減碳力道不足，氣溫持續上升。在此情境下，本公司面臨較高之實體風險（極端天氣衝擊），但轉型風險相對較低。</p>
+<p><strong>風險整合：</strong>氣候風險評估結果已整合至本公司之整體風險管理報告中，由永續發展委員會定期向董事會報告。重大氣候風險之因應對策已納入公司年度營運計畫，並配置適當之資源。</p>
+
+<h4>1.6.5 指標與目標面向（Metrics &amp; Targets）</h4>
+<p><strong>氣候相關指標：</strong>本公司採用以下指標衡量與管理氣候相關風險與機會：（1）溫室氣體排放量（範疇一、二、三）；（2）能源消耗量及再生能源使用比例；（3）碳排放強度（噸CO2e/營收百萬元）；（4）數位化服務比例（線上交付佔比）；（5）氣候相關訓練時數。</p>
+<p><strong>減量目標：</strong>本公司已設定以下氣候相關目標：
+<ul>
+<li>短期目標（2027年）：完成範疇三完整盤查；範疇二排放較2026年減量10%</li>
+<li>中期目標（2029年）：範疇一及二排放較2026年減量30%；再生能源使用比例達50%</li>
+<li>長期目標（2035年）：範疇一及二達成淨零排放；價值鏈（範疇三）排放較2026年減量50%</li>
+</ul>
+</p>
+<p>本公司已於2026年第四季向科學基礎減量目標倡議（SBTi）提交承諾書，預計於2027年完成目標審查與核定程序。</p>
+
+<div class="info-box">
+<p class="no-indent"><strong>🌡️ TCFD 四大面向揭露摘要</strong></p>
+<table class="data-table">
+<thead><tr><th>面向</th><th>揭露重點</th><th>2026年度執行情形</th></tr></thead>
+<tbody>
+<tr><td>治理</td><td>董事會監督、管理層執行</td><td>董事會聽取2次氣候報告；永續發展委員會5次會議</td></tr>
+<tr><td>策略</td><td>風險機會辨識、情境分析</td><td>完成2種情境分析；辨識4項風險、4項機會</td></tr>
+<tr><td>風險管理</td><td>風險辨識評估、整合至ERM</td><td>每半年一次風險評估；氣候風險納入ERM框架</td></tr>
+<tr><td>指標與目標</td><td>GHG排放、減量目標</td><td>完成碳盤查；設定短中長期目標；提交SBTi承諾</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<div class="container">
+
+<h3>1.7 IFRS S1/S2 遵循宣告</h3>
+
+<h4>1.7.1 國際永續準則理事會（ISSB）準則遵循宣告</h4>
+<p>善向永續股份有限公司自願宣告遵循國際永續準則理事會（International Sustainability Standards Board, ISSB）發布之IFRS S1「永續相關財務資訊揭露之一般要求」（General Requirements for Disclosure of Sustainability-related Financial Information）及IFRS S2「氣候相關揭露」（Climate-related Disclosures）之架構與精神，進行永續相關財務資訊之揭露。</p>
+<p>依據金管會之規劃，IFRS S1及S2將自2027年起分階段適用於上市櫃公司。本公司雖非上市櫃公司，惟為展現與國際永續揭露標準接軌之決心，並提前為未來可能之法規要求做好準備，自願提前採用IFRS S1/S2之揭露架構，將氣候相關財務資訊與永續相關風險機會之揭露納入本報告書。</p>
+<p>本公司之IFRS S1/S2揭露係以2026年度為基準，涵蓋期間為2026年1月1日至2026年12月31日。揭露範圍與本報告書之組織邊界一致，涵蓋善向永續股份有限公司所有營運活動。</p>
+
+<h4>1.7.2 IFRS S1 一般要求遵循情形</h4>
+<p>IFRS S1要求企業揭露對投資者決策有重大影響之永續相關風險與機會資訊。本公司依據IFRS S1之核心內容要素進行揭露：</p>
+<p><strong>（一）治理（Governance）：</strong>揭露用於監控、管理永續相關風險與機會之治理流程、控制及程序。本公司之永續治理架構包含董事會監督、永續發展委員會執行、風險管理任務小組評估三層級機制，已於本章第1.3節及第1.6.2節中詳細說明。</p>
+<p><strong>（二）策略（Strategy）：</strong>揭露永續相關風險與機會對企業商業模式、策略、現金流量、融資管道及短期、中期、長期價值創造之影響。本公司之永續策略框架已於本章第1.4節中說明，氣候相關策略影響已於第1.6.3節中分析。</p>
+<p><strong>（三）風險管理（Risk Management）：</strong>揭露企業用於辨識、評估、優先排序及監控永續相關風險與機會之流程。本公司之風險管理流程已於第1.6.4節中說明。</p>
+<p><strong>（四）指標與目標（Metrics and Targets）：</strong>揭露企業用於衡量、監控及管理永續相關風險與機會之指標與目標。本公司之永續指標與目標已於本章各節及第1.6.5節中說明。</p>
+
+<h4>1.7.3 IFRS S2 氣候相關揭露遵循情形</h4>
+<p>IFRS S2要求企業揭露氣候相關風險與機會之資訊，為IFRS S1在氣候議題上之補充。本公司依據IFRS S2之要求，從以下面向進行揭露：</p>
+<p><strong>氣候相關風險之分類：</strong>本公司將氣候相關風險分為轉型風險與實體風險兩大類。轉型風險包含政策法規風險、技術風險、市場風險及聲譽風險；實體風險包含急性風險（極端天氣）及慢性風險（長期氣候變化）。各風險類別之詳細分析已於第1.6.3節中說明。</p>
+<p><strong>氣候相關機會：</strong>本公司辨識之氣候相關機會包含服務需求成長、效率提升、市場擴展及人才吸引等面向，已於第1.6.3節中說明。</p>
+<p><strong>財務影響之評估：</strong>本公司評估氣候相關風險與機會對財務狀況、財務績效及現金流量之潛在影響。在轉型風險方面，法規遵循成本之增加可能影響短期營運成本，但服務需求之成長將帶來中長期營收增長機會。在實體風險方面，極端天氣事件可能導致營運中斷損失，惟本公司之數位化服務模式可有效降低此類風險之衝擊。</p>
+<p><strong>韌性評估：</strong>本公司透過情境分析評估在不同氣候情境下之策略韌性。分析結果顯示，本公司之數位化服務模式及多元化服務組合，使其在1.5°C有序轉型情境下具備良好之韌性，並能把握服務需求成長之機會。</p>
+
+<div class="warning-box">
+<p class="no-indent"><strong>⚠️ 提前採用宣告</strong></p>
+<p>善向永續股份有限公司自願提前採用IFRS S1及IFRS S2之揭露架構。本報告書之IFRS S1/S2揭露係以2026年度為基準，涵蓋期間為2026年1月1日至2026年12月31日。本公司將持續提升IFRS S1/S2揭露之完整性與品質，並預計於2028年度起進行更完整之量化財務影響評估。</p>
+</div>
+
+</div>
+</div>
+
+<div class="section" style="background: var(--bg-alt);">
+<div class="container">
+
+<h3>1.8 GRI 內容索引指標</h3>
+
+<h4>1.8.1 GRI Standards 2021 遵循宣告</h4>
+<p>善向永續股份有限公司之2026年度永續報告書係依據全球永續性報告協會（Global Reporting Initiative, GRI）發布之GRI Standards 2021版本編製。本報告書採用GRI Standards之「核心選項」（Core Option）進行揭露，涵蓋GRI通用準則、行業準則及主題準則中與本公司重大主題相關之揭露項目。</p>
+<p>本公司於編製本報告書過程中，遵循GRI Standards 2021之報導原則，包括：利害關係人包容性、永續性脈絡、重大性、完整性、準確性、平衡性、清晰性、時序性、可比較性及可驗證性。</p>
+
+<h4>1.8.2 GRI 內容索引表</h4>
+<p>以下表格列出本報告書所涵蓋之GRI準則揭露項目及其對應之章節：</p>
+
+<table class="data-table gri-index-table">
+<thead><tr><th>GRI準則編號</th><th>揭露項目名稱</th><th>揭露章節</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td colspan="4" style="background:#eef6ff; font-weight:bold;">GRI 2：通用揭露 2021</td></tr>
+<tr><td>GRI 2-1</td><td>組織詳細資訊</td><td>1.1、1.2</td><td>公司基本資料、組織規模</td></tr>
+<tr><td>GRI 2-2</td><td>永續報告書中之實體</td><td>1.1.3</td><td>報告邊界與揭露實體</td></tr>
+<tr><td>GRI 2-3</td><td>報告期間、頻率及聯絡人</td><td>1.1.2</td><td>報告期間與發行週期</td></tr>
+<tr><td>GRI 2-6</td><td>活動、價值鏈及商業關係</td><td>1.2、1.4</td><td>業務範圍與價值鏈</td></tr>
+<tr><td>GRI 2-7</td><td>員工</td><td>1.2.1、3.1</td><td>員工結構統計</td></tr>
+<tr><td>GRI 2-9</td><td>治理架構與組成</td><td>1.3</td><td>董事會與委員會</td></tr>
+<tr><td>GRI 2-10</td><td>最高治理單位之提名與遴選</td><td>1.3.1</td><td>董事提名程序</td></tr>
+<tr><td>GRI 2-11</td><td>最高治理單位之主席</td><td>1.3.1</td><td>董事長角色</td></tr>
+<tr><td>GRI 2-12</td><td>最高治理單位之監督角色</td><td>1.3、1.6.2</td><td>董事會監督職責</td></tr>
+<tr><td>GRI 2-13</td><td>衝擊管理之責任歸屬</td><td>1.3.2</td><td>管理層職責</td></tr>
+<tr><td>GRI 2-14</td><td>永續報告書之編製責任</td><td>1.8</td><td>永續發展委員會</td></tr>
+<tr><td>GRI 2-16</td><td>重大事件之溝通</td><td>1.5.1</td><td>利害關係人溝通</td></tr>
+<tr><td>GRI 2-17</td><td>最高治理單位之集體知識</td><td>1.3.1</td><td>董事專業背景</td></tr>
+<tr><td>GRI 2-19</td><td>薪酬政策</td><td>3.2</td><td>薪酬委員會</td></tr>
+<tr><td>GRI 2-20</td><td>薪酬決定流程</td><td>3.2</td><td>薪酬決策</td></tr>
+<tr><td>GRI 2-22</td><td>永續發展策略之聲明</td><td>1.4</td><td>永續策略框架</td></tr>
+<tr><td>GRI 2-23</td><td>政策承諾</td><td>1.3.4、4.4</td><td>行為準則與政策</td></tr>
+<tr><td>GRI 2-26</td><td>尋求建議與提出疑慮之機制</td><td>1.3.4</td><td>舉報管道</td></tr>
+<tr><td>GRI 2-27</td><td>法規遵循</td><td>4.8</td><td>法規遵循情形</td></tr>
+<tr><td>GRI 2-28</td><td>會員資格與倡議參與</td><td>1.4.2</td><td>國際倡議參與</td></tr>
+<tr><td>GRI 2-29</td><td>利害關係人參與方法</td><td>1.5.1</td><td>利害關係人溝通</td></tr>
+<tr><td>GRI 2-30</td><td>團體協約</td><td>3.4</td><td>集體勞動協議</td></tr>
+<tr><td colspan="4" style="background:#eef6ff; font-weight:bold;">GRI 3：重大主題 2021</td></tr>
+<tr><td>GRI 3-1</td><td>重大主題之決定流程</td><td>1.5.2</td><td>重大性評估流程</td></tr>
+<tr><td>GRI 3-2</td><td>重大主題清單</td><td>1.5.3</td><td>重大主題列表</td></tr>
+<tr><td>GRI 3-3</td><td>重大主題之管理</td><td>各章節</td><td>各重大主題管理方針</td></tr>
+<tr><td colspan="4" style="background:#eef6ff; font-weight:bold;">GRI 200：經濟系列</td></tr>
+<tr><td>GRI 205-1</td><td>貪腐風險評估之營運據點</td><td>4.4</td><td>反貪腐風險評估</td></tr>
+<tr><td>GRI 205-2</td><td>反貪腐之溝通與訓練</td><td>4.4、4.7</td><td>倫理訓練</td></tr>
+<tr><td>GRI 205-3</td><td>經確認之貪腐事件</td><td>4.4</td><td>零貪腐事件</td></tr>
+<tr><td colspan="4" style="background:#eef6ff; font-weight:bold;">GRI 300：環境系列</td></tr>
+<tr><td>GRI 302-1</td><td>組織內之能源消耗</td><td>2.4</td><td>能源使用數據</td></tr>
+<tr><td>GRI 302-3</td><td>能源密集度</td><td>2.4</td><td>能源密集度計算</td></tr>
+<tr><td>GRI 302-4</td><td>能源減量</td><td>2.10</td><td>節能措施</td></tr>
+<tr><td>GRI 303-3</td><td>取水</td><td>2.5</td><td>水資源管理</td></tr>
+<tr><td>GRI 303-5</td><td>用水</td><td>2.5</td><td>用水數據</td></tr>
+<tr><td>GRI 305-1</td><td>直接（範疇一）GHG排放</td><td>2.2</td><td>溫室氣體盤查</td></tr>
+<tr><td>GRI 305-2</td><td>能源間接（範疇二）GHG排放</td><td>2.2</td><td>溫室氣體盤查</td></tr>
+<tr><td>GRI 305-3</td><td>其他間接（範疇三）GHG排放</td><td>2.2</td><td>溫室氣體盤查</td></tr>
+<tr><td>GRI 305-4</td><td>GHG排放密集度</td><td>2.2</td><td>碳排放強度</td></tr>
+<tr><td>GRI 305-5</td><td>GHG減量</td><td>2.3、2.10</td><td>減量目標與措施</td></tr>
+<tr><td>GRI 306-3</td><td>廢棄物產生</td><td>2.6</td><td>廢棄物統計</td></tr>
+<tr><td>GRI 306-4</td><td>廢棄物之轉移處置</td><td>2.6</td><td>廢棄物處理</td></tr>
+<tr><td>GRI 306-5</td><td>廢棄物之直接處置</td><td>2.6</td><td>廢棄物處置</td></tr>
+<tr><td colspan="4" style="background:#eef6ff; font-weight:bold;">GRI 400：社會系列</td></tr>
+<tr><td>GRI 401-1</td><td>新進員工及離職員工</td><td>3.6</td><td>員工流動</td></tr>
+<tr><td>GRI 401-2</td><td>提供予全職員工之福利</td><td>3.2</td><td>薪酬福利</td></tr>
+<tr><td>GRI 403-1</td><td>職業安全衛生管理系統</td><td>3.7</td><td>職安衛管理</td></tr>
+<tr><td>GRI 403-2</td><td>危害辨識與風險評估</td><td>3.7</td><td>風險評估</td></tr>
+<tr><td>GRI 403-6</td><td>健康促進</td><td>3.7</td><td>健康促進計畫</td></tr>
+<tr><td>GRI 403-9</td><td>職業傷害</td><td>3.7</td><td>職業災害統計</td></tr>
+<tr><td>GRI 404-1</td><td>每名員工平均訓練時數</td><td>3.5</td><td>教育訓練</td></tr>
+<tr><td>GRI 404-2</td><td>員工職能提升方案</td><td>3.5</td><td>職能發展</td></tr>
+<tr><td>GRI 405-1</td><td>治理單位與員工之多樣性</td><td>1.2.1、3.1</td><td>多元統計</td></tr>
+<tr><td>GRI 405-2</td><td>女性與男性基本薪資及薪酬比率</td><td>3.3</td><td>薪酬差距</td></tr>
+<tr><td>GRI 406-1</td><td>歧視事件</td><td>3.9</td><td>零歧視事件</td></tr>
+<tr><td>GRI 413-1</td><td>社區參與</td><td>3.10</td><td>社區參與</td></tr>
+<tr><td>GRI 418-1</td><td>客戶隱私</td><td>4.5</td><td>客戶資料保護</td></tr>
+</tbody>
+</table>
+
+<h4>1.8.3 SASB 行業準則索引</h4>
+<p>本公司同時參考SASB（永續會計準則委員會）之Professional &amp; Commercial Services行業準則，揭露以下行業特定指標：</p>
+<table class="data-table">
+<thead><tr><th>SASB代碼</th><th>指標名稱</th><th>揭露章節</th><th>2026年度數據</th></tr></thead>
+<tbody>
+<tr><td>SV-PS-000.A</td><td>員工人數</td><td>1.2.1</td><td>5人</td></tr>
+<tr><td>SV-PS-000.B</td><td>全職員工比例</td><td>1.2.1</td><td>100%</td></tr>
+<tr><td>SV-PS-230a.1</td><td>客戶資料隱私保護描述</td><td>4.5</td><td>已建立隱私保護政策</td></tr>
+<tr><td>SV-PS-310a.1</td><td>員工留任與流動</td><td>3.6</td><td>離職率0%</td></tr>
+<tr><td>SV-PS-310a.2</td><td>多元與包容</td><td>3.1</td><td>女性40%</td></tr>
+<tr><td>SV-PS-510a.1</td><td>商業倫理與反貪腐</td><td>4.4</td><td>零貪腐事件</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<!--                     CHAPTER 2                                 -->
+<!-- ============================================================ -->
+<div class="chapter-header">
+<div class="container">
+  <h2>第二章 氣候變遷與環境管理</h2>
+  <div class="ch-desc">Chapter 2: Climate Change &amp; Environmental Management</div>
+</div>
+</div>
+
+<div class="section">
+<div class="container">
+
+<h3>2.1 氣候治理與組織文化</h3>
+
+<h4>2.1.1 氣候治理架構</h4>
+<p>善向永續股份有限公司將氣候變遷視為企業永續發展之核心議題，建立由上而下之氣候治理架構，確保氣候策略之有效制定與執行。本公司之氣候治理架構分為三個層級：董事會為最高監督層級，負責審議氣候策略與目標、監督氣候風險管理之有效性；永續發展委員會為執行統籌層級，負責制定氣候行動方案、協調各單位推動減碳措施、追蹤目標達成進度；全體員工為日常實踐層級，負責落實各項節能減碳措施，並將氣候意識融入日常工作與服務交付中。</p>
+<p>在氣候治理之組織文化方面，本公司自創立之初即將「低碳營運」與「數位優先」作為核心營運原則。所有服務交付優先採用線上會議與雲端協作方式，減少不必要之差旅交通；辦公空間全面採用節能設備與LED照明；文件管理全面數位化，大幅減少紙張使用。此種低碳組織文化不僅降低本公司之環境碳足跡，亦向客戶展現本公司在永續實踐方面的承諾與示範作用。</p>
+
+<h4>2.1.2 氣候相關訓練與意識提升</h4>
+<p>為強化全體員工之氣候意識與專業能力，本公司於2026年度推動以下氣候相關訓練與意識提升活動：</p>
+<ul>
+<li><strong>全員氣候素養訓練：</strong>所有新進員工於到職第一週內完成「氣候變遷與永續發展基礎訓練」（4小時），內容涵蓋氣候科學基礎、國際氣候政策趨勢、台灣淨零路徑、企業碳管理實務等。</li>
+<li><strong>專業深化訓練：</strong>顧問團隊成員每人每年完成至少12小時之氣候相關專業訓練，包括TCFD框架應用、ISO 14064-1溫室氣體盤查實務、SBTi目標設定方法論、碳足跡計算工具操作等。</li>
+<li><strong>內部知識分享會：</strong>每月舉辦一次「永續新知分享會」，由同仁輪流分享國際永續趨勢、政策更新、產業案例等，促進團隊知識交流與持續學習。2026年度共舉辦12次內部知識分享會。</li>
+<li><strong>外部論壇參與：</strong>鼓勵員工積極參與外部永續論壇、研討會與工作坊，2026年度同仁累計參與外部永續活動達20人次。</li>
+</ul>
+
+<h4>2.1.3 氣候行動之組織承諾</h4>
+<p>本公司於2026年度正式簽署「氣候行動承諾書」，承諾以下事項：（1）每年進行溫室氣體盤查並公開揭露結果；（2）設定科學基礎減量目標（SBTi）並定期追蹤達成進度；（3）優先採用再生能源與節能設備；（4）推動數位化服務以降低碳足跡；（5）將氣候績效納入管理階層與員工之績效評估。</p>
+<p>此外，本公司亦積極響應國際永續倡議，包括：支持《巴黎協定》之全球升溫控制目標；認同TCFD氣候相關財務揭露架構；承諾加入SBTi科學基礎減量目標倡議；支持聯合國永續發展目標（SDGs），特別是SDG 13氣候行動。透過這些國際倡議之參與，本公司展現與全球永續發展議程接軌之決心。</p>
+
+</div>
+</div>
+
+<div class="section" style="background: var(--bg-alt);">
+<div class="container">
+
+<h3>2.2 溫室氣體盤查（三範疇、盤查邊界）</h3>
+
+<h4>2.2.1 盤查方法與標準</h4>
+<p>善向永續股份有限公司依據ISO 14064-1:2018「溫室氣體盤查標準」及世界資源研究所（WRI）與世界永續發展工商理事會（WBCSD）發布之「溫議氣體盤查議定書」（GHG Protocol）進行2026年度溫室氣體盤查。盤查涵蓋之溫室氣體種類包括二氧化碳（CO2）、甲烷（CH4）、氧化亞氮（N2O）、氫氟碳化物（HFCs）、全氟碳化物（PFCs）、六氟化硫（SF6）及三氟化氮（NF3）等七種溫室氣體。</p>
+<p>盤查之基準年設定為2026年（本公司第一個完整營運年度），未來年度之減量目標將以2026年為基準進行比較。盤查邊界之設定採用「營運控制法」（Operational Control Approach），涵蓋本公司具有營運控制權之所有設施與活動。</p>
+
+<h4>2.2.2 範疇一：直接溫室氣體排放</h4>
+<p>範疇一排放係指來自本公司擁有或控制之排放源所產生之直接溫室氣體排放。經盤查結果，本公司2026年度之範疇一排放量為0.85噸CO2e，主要來源為：</p>
+<ul>
+<li><strong>公司自有車輛：</strong>本公司未購置自有公務車輛，因此無車輛燃油排放。</li>
+<li><strong>緊急發電機：</strong>辦公室備有小型緊急發電機一台，2026年度因停電測試運轉約2小時，柴油消耗量約3公升，產生CO2排放約0.008噸CO2e。</li>
+<li><strong>冷媒逸散：</strong>辦公室空調系統使用R-410A冷媒，年度補充量約0.5公斤，產生CO2排放約0.84噸CO2e（GWP值為2,088）。此為本公司範疇一排放之主要來源。</li>
+<li><strong>其他：</strong>辦公室未使用天然氣或其他固定式燃燒設備，無相關排放。</li>
+</ul>
+<p>範疇一排放總量雖相對較少，惟本公司仍將持續關注冷媒逸散之管理，定期進行空調系統維護與冷媒洩漏檢測，並評估採用低GWP值冷媒之可行性。</p>
+
+<h4>2.2.3 範疇二：能源間接溫室氣體排放</h4>
+<p>範疇二排放係指因本公司使用外購電力所產生之間接溫室氣體排放。本公司2026年度之範疇二排放量為3.42噸CO2e，計算方式如下：</p>
+<ul>
+<li><strong>電力消耗量：</strong>2026年度總用電量為8,550度（kWh）。</li>
+<li><strong>排放係數：</strong>依據台灣電力公司公告之2025年度電力排碳係數為每度電排放0.495公斤CO2e（2026年度係數尚未公告時採用前一年度係數）。</li>
+<li><strong>範疇二排放量：</strong>8,550度 × 0.495 kgCO2e/度 = 4,232 kgCO2e ≈ 4.23噸CO2e（以市場基礎計算）。</li>
+</ul>
+<p>本公司同時以「位置基礎」（Location-based）及「市場基礎」（Market-based）兩種方法計算範疇二排放。位置基礎係採用台灣電力公司之電網排放係數（0.495 kgCO2e/度），結果為4.23噸CO2e。市場基礎則考量本公司實際採購之電力組合，因本公司尚未簽訂再生能源購電契約或購買再生能源憑證，市場基礎排放與位置基礎相同，為4.23噸CO2e。</p>
+<p>範疇二排放為本公司最主要之碳排放來源，佔總排放量之79.5%。因此，提升能源效率與增加再生能源使用比例為本公司減碳之關鍵策略。</p>
+
+<h4>2.2.4 範疇三：價值鏈間接溫室氣體排放</h4>
+<p>範疇三排放係指因本公司之營運活動所產生、但發生在其他組織擁有或控制之排放源的間接溫室氣體排放。本公司依據GHG Protocol之分類，針對以下類別進行範疇三盤查：</p>
+<ul>
+<li><strong>類別1：購買之商品及服務：</strong>包括辦公用品、雲端服務、專業軟體授權等。以支出法估算，2026年度此類排放約為0.68噸CO2e。</li>
+<li><strong>類別3：燃料及能源相關活動：</strong>包括外購電力之發電與輸配損失（範疇二上游排放）。以排放係數法計算，約為0.51噸CO2e。</li>
+<li><strong>類別5：營運產生之廢棄物：</strong>包括辦公室一般廢棄物及回收物之

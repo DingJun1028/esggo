@@ -1,34 +1,14 @@
-import type { ReportTemplate, TemplateSection } from './types';
+<div id="ch1">
 
-const SECTIONS: TemplateSection[] = [
-  // ─── Ch.01 永續治理與策略 ───
-  {
-    id: 'ch-01',
-    title: '永續治理與策略',
-    chapter: 1,
-    wordCount: 2000,
-    griAlignment: ['GRI 2-9', 'GRI 2-10', 'GRI 2-11', 'GRI 2-12', 'GRI 2-13', 'GRI 2-14', 'TCFD-G'],
-    hasChart: true,
-    chartType: 'bar',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{board_size}}',
-      '{{independent_directors}}',
-      '{{chairman_name}}',
-      '{{sustainability_committee}}',
-      '{{esg_strategy}}',
-    ],
-    content: `
 <h2>第一章 永續治理與策略</h2>
-<p>{{company_name}} 秉持「誠信經營、永續發展」之核心理念，將環境（E）、社會（S）與治理（G）三大面向全面融入企業營運策略之中。本公司董事會為永續治理之最高監督單位，下設永續發展委員會，由董事長親自擔任主任委員，定期向董事會報告執行成效。</p>
+<p>善向永續股份有限公司 秉持「誠信經營、永續發展」之核心理念，將環境（E）、社會（S）與治理（G）三大面向全面融入企業營運策略之中。本公司董事會為永續治理之最高監督單位，下設永續發展委員會，由董事長親自擔任主任委員，定期向董事會報告執行成效。</p>
 
 <p>在治理架構方面，本公司已建立完善的永續治理組織體系，包含永續發展委員會、風險管理委員會、薪酬委員會及審計委員會，各委員會依其職掌運作，確保企業永續策略之有效落實。董事會每季聽取永續發展委員會之執行報告，並針對重大議題進行審議與決策。</p>
 
 <p>本公司之永續策略聚焦於五大主軸：一、深化氣候行動與淨零轉型；二、強化人力資本與員工福祉；三、推動供應鏈永續管理；四、落實社區參與及社會貢獻；五、提升資訊透明度與治理品質。透過此五大主軸之推動，本公司期望在創造經濟價值的同時，亦能為環境與社會帶來正面影響。</p>
 
 <h3>1.1 董事會組成與效能</h3>
-<p>本公司董事會由 {{board_size}} 位董事組成，其中獨立董事 {{independent_directors}} 位，獨立董事比例達 {{independent_ratio}}%。董事會成員具備多元之專業背景，涵蓋財務、法律、科技、環境永續等領域，確保決策之全面性與專業性。</p>
+<p>本公司董事會由 3 位董事組成，其中獨立董事 1 位，獨立董事比例達 33.3%。董事會成員具備多元之專業背景，涵蓋財務、法律、科技、環境永續等領域，確保決策之全面性與專業性。</p>
 
 <h3>1.2 董事會效能評估</h3>
 <div class="chart-container">
@@ -78,7 +58,7 @@ const SECTIONS: TemplateSection[] = [
 <h3>1.3 永續治理關鍵績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
     <tr><td>董事會出席率</td><td>96.5%</td><td>94.2%</td><td>95.0%</td><td>101.6%</td></tr>
@@ -91,46 +71,21 @@ const SECTIONS: TemplateSection[] = [
 </table>
 
 <h3>1.4 永續發展策略藍圖</h3>
-<p>本公司以「{{esg_strategy}}」為核心願景，制定短、中、長期永續發展目標。短期目標（{{report_year}}）聚焦於完善治理架構與資訊揭露；中期目標（{{mid_term_year}}）著重於價值鏈碳減排與循環經濟推動；長期目標（{{long_term_year}}）則致力於達成淨零排放與全面永續轉型。</p>
+<p>本公司以「創價型永續」為核心願景，制定短、中、長期永續發展目標。短期目標（2026）聚焦於完善治理架構與資訊揭露；中期目標（2028）著重於價值鏈碳減排與循環經濟推動；長期目標（2030）則致力於達成淨零排放與全面永續轉型。</p>
 
-<p>為確保策略之有效執行，本公司將永續績效納入高階主管薪酬指標，佔比達 {{esg_pay_ratio}}%，以強化管理階層對永續發展之承諾與責任。同時，本公司亦積極參與國際永續倡議，包括聯合國全球盟約（UNGC）、科學基礎減量目標倡議（SBTi）等，展現與國際標準接軌之決心。</p>
-`,
-  },
+<p>為確保策略之有效執行，本公司將永續績效納入高階主管薪酬指標，佔比達 20%，以強化管理階層對永續發展之承諾與責任。同時，本公司亦積極參與國際永續倡議，包括聯合國全球盟約（UNGC）、科學基礎減量目標倡議（SBTi）等，展現與國際標準接軌之決心。</p>
 
-  // ─── Ch.02 氣候變遷與碳管理 ───
-  {
-    id: 'ch-02',
-    title: '氣候變遷與碳管理',
-    chapter: 2,
-    wordCount: 2000,
-    griAlignment: [
-      'GRI 305-1',
-      'GRI 305-2',
-      'GRI 305-3',
-      'GRI 305-4',
-      'GRI 305-5',
-      'TCFD-M',
-      'TCFD-S',
-    ],
-    hasChart: true,
-    chartType: 'bar',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{scope1_emissions}}',
-      '{{scope2_emissions}}',
-      '{{scope3_emissions}}',
-      '{{carbon_reduction_target}}',
-      '{{net_zero_year}}',
-    ],
-    content: `
+</div>
+
+<div id="ch2">
+
 <h2>第二章 氣候變遷與碳管理</h2>
-<p>{{company_name}} 深刻認知氣候變遷對企業營運與全球環境之深遠影響，積極響應《巴黎協定》之全球升溫控制目標，承諾於 {{net_zero_year}} 年前達成淨零排放。本公司依據 TCFD 架構進行氣候相關財務揭露，從治理、策略、風險管理、指標與目標四大面向，全面管理氣候相關風險與機會。</p>
+<p>善向永續股份有限公司 深刻認知氣候變遷對企業營運與全球環境之深遠影響，積極響應《巴黎協定》之全球升溫控制目標，承諾於 2050 年前達成淨零排放。本公司依據 TCFD 架構進行氣候相關財務揭露，從治理、策略、風險管理、指標與目標四大面向，全面管理氣候相關風險與機會。</p>
 
 <p>在碳管理方面，本公司已完成溫室氣體盤查，涵蓋範疇一（直接排放）、範疇二（間接能源排放）及範疇三（價值鏈排放），並通過第三方查證機構之 ISO 14064-1 溫室氣體盤查認證。透過完整之碳盤查基礎，本公司得以制定科學基礎減量目標（SBTi），確保減碳路徑與全球氣候目標一致。</p>
 
 <h3>2.1 溫室氣體排放概況</h3>
-<p>本公司 {{report_year}} 年度之溫室氣體總排放量為 {{total_emissions}} 噸 CO2e，其中範疇一排放量為 {{scope1_emissions}} 噸 CO2e，範疇二排放量為 {{scope2_emissions}} 噸 CO2e，範疇三排放量為 {{scope3_emissions}} 噸 CO2e。與基準年相比，碳排放強度已降低 {{intensity_reduction}}%。</p>
+<p>本公司 2026 年度之溫室氣體總排放量為 26 噸 CO2e，其中範疇一排放量為 8.5 噸 CO2e，範疇二排放量為 12.3 噸 CO2e，範疇三排放量為 5.2 噸 CO2e。與基準年相比，碳排放強度已降低 10%。</p>
 
 <h3>2.2 各範疇碳排放分析</h3>
 <div class="chart-container">
@@ -171,56 +126,33 @@ const SECTIONS: TemplateSection[] = [
 <h3>2.3 碳排放管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>範疇一排放（噸CO2e）</td><td>{{scope1_emissions}}</td><td>{{scope1_prev}}</td><td>{{scope1_target}}</td><td>{{scope1_rate}}</td></tr>
-    <tr><td>範疇二排放（噸CO2e）</td><td>{{scope2_emissions}}</td><td>{{scope2_prev}}</td><td>{{scope2_target}}</td><td>{{scope2_rate}}</td></tr>
-    <tr><td>範疇三排放（噸CO2e）</td><td>{{scope3_emissions}}</td><td>{{scope3_prev}}</td><td>{{scope3_target}}</td><td>{{scope3_rate}}</td></tr>
-    <tr><td>碳排放強度（噸CO2e/營收億元）</td><td>{{carbon_intensity}}</td><td>{{carbon_intensity_prev}}</td><td>{{carbon_intensity_target}}</td><td>{{carbon_intensity_rate}}</td></tr>
-    <tr><td>再生能源使用比例</td><td>{{renewable_ratio}}%</td><td>{{renewable_ratio_prev}}%</td><td>{{renewable_ratio_target}}%</td><td>{{renewable_ratio_rate}}</td></tr>
+    <tr><td>範疇一排放（噸CO2e）</td><td>8.5</td><td>9.2</td><td>7.0</td><td>76</td></tr>
+    <tr><td>範疇二排放（噸CO2e）</td><td>12.3</td><td>13.5</td><td>10.0</td><td>74</td></tr>
+    <tr><td>範疇三排放（噸CO2e）</td><td>5.2</td><td>5.8</td><td>4.0</td><td>69</td></tr>
+    <tr><td>碳排放強度（噸CO2e/營收億元）</td><td>1.44</td><td>1.60</td><td>1.20</td><td>75</td></tr>
+    <tr><td>再生能源使用比例</td><td>35%</td><td>25%</td><td>50%</td><td>70</td></tr>
   </tbody>
 </table>
 
 <h3>2.4 氣候風險與機會管理</h3>
 <p>本公司依據 TCFD 建議，進行情境分析與壓力測試，評估不同升溫情境（1.5°C、2°C、3°C）對企業營運之潛在影響。在轉型風險方面，本公司關注碳定價政策、技術轉型需求及市場偏好變化；在實體風險方面，則評估極端氣候事件對供應鏈、設施及營運之衝擊。</p>
 
-<p>為把握氣候相關機會，本公司積極投入低碳技術研發、綠色產品開發及再生能源投資，預計 {{report_year}} 年度綠色營收佔比將達 {{green_revenue_ratio}}%。同時，本公司已設定 {{carbon_reduction_target}} 之中期減碳目標，並向 SBTi 提交承諾，展現淨零轉型之決心與行動力。</p>
-`,
-  },
+<p>為把握氣候相關機會，本公司積極投入低碳技術研發、綠色產品開發及再生能源投資，預計 2026 年度綠色營收佔比將達 15%。同時，本公司已設定 30% 之中期減碳目標，並向 SBTi 提交承諾，展現淨零轉型之決心與行動力。</p>
 
-  // ─── Ch.03 能源管理 ───
-  {
-    id: 'ch-03',
-    title: '能源管理',
-    chapter: 3,
-    wordCount: 2000,
-    griAlignment: [
-      'GRI 302-1',
-      'GRI 302-2',
-      'GRI 302-3',
-      'GRI 302-4',
-      'GRI 302-5',
-      'SASB IF-EU-140a.1',
-    ],
-    hasChart: true,
-    chartType: 'pie',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{total_energy}}',
-      '{{renewable_energy}}',
-      '{{energy_intensity}}',
-      '{{energy_reduction}}',
-    ],
-    content: `
+</div>
+
+<div id="ch3">
+
 <h2>第三章 能源管理</h2>
-<p>{{company_name}} 將能源管理視為企業永續發展之核心議題之一，積極推動能源效率提升與再生能源轉型。本公司依據 ISO 50001 能源管理系統標準，建立完整之能源管理制度，涵蓋能源監測、目標設定、執行改善及績效評估等環節，確保能源使用效率之持續提升。</p>
+<p>善向永續股份有限公司 將能源管理視為企業永續發展之核心議題之一，積極推動能源效率提升與再生能源轉型。本公司依據 ISO 50001 能源管理系統標準，建立完整之能源管理制度，涵蓋能源監測、目標設定、執行改善及績效評估等環節，確保能源使用效率之持續提升。</p>
 
-<p>在能源結構方面，本公司持續提高再生能源使用比例，透過自建太陽能發電系統、簽訂再生能源購電契約（PPA）及購買再生能源憑證（REC）等多元方式，逐步降低對化石燃料之依賴。{{report_year}} 年度再生能源使用比例已達 {{renewable_ratio}}%，較前年提升 {{renewable_increase}} 個百分點。</p>
+<p>在能源結構方面，本公司持續提高再生能源使用比例，透過自建太陽能發電系統、簽訂再生能源購電契約（PPA）及購買再生能源憑證（REC）等多元方式，逐步降低對化石燃料之依賴。2026 年度再生能源使用比例已達 35%，較前年提升 10 個百分點。</p>
 
 <h3>3.1 能源使用概況</h3>
-<p>本公司 {{report_year}} 年度總能源消耗量為 {{total_energy}} 千兆焦耳（GJ），能源密集度為 {{energy_intensity}} GJ/營收億元。與基準年相比，能源密集度已降低 {{energy_reduction}}%，顯示能源效率改善措施之具體成效。</p>
+<p>本公司 2026 年度總能源消耗量為 1,200 千兆焦耳（GJ），能源密集度為 24 GJ/營收億元。與基準年相比，能源密集度已降低 11%，顯示能源效率改善措施之具體成效。</p>
 
 <h3>3.2 能源結構分析</h3>
 <div class="chart-container">
@@ -252,58 +184,35 @@ const SECTIONS: TemplateSection[] = [
   <text x="350" y="201" font-size="11" fill="#1e293b">其他再生能源 5%</text>
   <!-- Center label -->
   <text x="200" y="155" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e293b">總量</text>
-  <text x="200" y="172" text-anchor="middle" font-size="10" fill="#475569">{{total_energy}} GJ</text>
+  <text x="200" y="172" text-anchor="middle" font-size="10" fill="#475569">1,200 GJ</text>
 </svg>
 </div>
 
 <h3>3.3 能源管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>總能源消耗（GJ）</td><td>{{total_energy}}</td><td>{{total_energy_prev}}</td><td>{{total_energy_target}}</td><td>{{total_energy_rate}}</td></tr>
-    <tr><td>能源密集度（GJ/營收億元）</td><td>{{energy_intensity}}</td><td>{{energy_intensity_prev}}</td><td>{{energy_intensity_target}}</td><td>{{energy_intensity_rate}}</td></tr>
-    <tr><td>再生能源比例</td><td>{{renewable_ratio}}%</td><td>{{renewable_ratio_prev}}%</td><td>{{renewable_ratio_target}}%</td><td>{{renewable_ratio_rate}}</td></tr>
-    <tr><td>節電量（萬度）</td><td>{{electricity_saved}}</td><td>{{electricity_saved_prev}}</td><td>{{electricity_saved_target}}</td><td>{{electricity_saved_rate}}</td></tr>
-    <tr><td>ISO 50001認證廠區數</td><td>{{iso50001_sites}}</td><td>{{iso50001_sites_prev}}</td><td>{{iso50001_sites_target}}</td><td>{{iso50001_sites_rate}}</td></tr>
+    <tr><td>總能源消耗（GJ）</td><td>1,200</td><td>1,350</td><td>1,100</td><td>81</td></tr>
+    <tr><td>能源密集度（GJ/營收億元）</td><td>24</td><td>27</td><td>20</td><td>74</td></tr>
+    <tr><td>再生能源比例</td><td>35%</td><td>25%</td><td>50%</td><td>70</td></tr>
+    <tr><td>節電量（萬度）</td><td>15</td><td>12</td><td>15</td><td>100</td></tr>
+    <tr><td>ISO 50001認證廠區數</td><td>1</td><td>1</td><td>1</td><td>100</td></tr>
   </tbody>
 </table>
 
 <h3>3.4 節能改善措施</h3>
-<p>本公司持續推動各項節能改善措施，包括：一、更換高效率 LED 照明系統，節電率達 60% 以上；二、導入智慧能源管理系統，即時監測各廠區能源使用狀況；三、優化空調系統運轉效率，採用變頻技術降低能耗；四、推動餘熱回收計畫，將製程廢熱轉化為可用能源。{{report_year}} 年度共執行 {{energy_projects}} 項節能專案，累計節電 {{total_savings}} 萬度，相當於減少 {{co2_avoided}} 噸 CO2e 排放。</p>
-`,
-  },
+<p>本公司持續推動各項節能改善措施，包括：一、更換高效率 LED 照明系統，節電率達 60% 以上；二、導入智慧能源管理系統，即時監測各廠區能源使用狀況；三、優化空調系統運轉效率，採用變頻技術降低能耗；四、推動餘熱回收計畫，將製程廢熱轉化為可用能源。2026 年度共執行 5 項節能專案，累計節電 18 萬度，相當於減少 35 噸 CO2e 排放。</p>
 
-  // ─── Ch.04 水資源管理 ───
-  {
-    id: 'ch-04',
-    title: '水資源管理',
-    chapter: 4,
-    wordCount: 2000,
-    griAlignment: [
-      'GRI 303-1',
-      'GRI 303-2',
-      'GRI 303-3',
-      'GRI 303-4',
-      'GRI 303-5',
-      'SASB IF-EU-140a.2',
-    ],
-    hasChart: true,
-    chartType: 'line',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{water_withdrawal}}',
-      '{{water_recycled}}',
-      '{{water_intensity}}',
-      '{{water_stress_area}}',
-    ],
-    content: `
+</div>
+
+<div id="ch4">
+
 <h2>第四章 水資源管理</h2>
-<p>{{company_name}} 深知水資源為地球珍貴之有限資源，尤其在氣候變遷加劇之背景下，水資源管理已成為企業永續經營之關鍵議題。本公司依據 AWS（Alliance for Water Stewardship）國際水資源管理標準，建立完整之水資源管理制度，從用水監測、節水改善、回收再利用到水資源風險評估，全面管理水資源相關議題。</p>
+<p>善向永續股份有限公司 深知水資源為地球珍貴之有限資源，尤其在氣候變遷加劇之背景下，水資源管理已成為企業永續經營之關鍵議題。本公司依據 AWS（Alliance for Water Stewardship）國際水資源管理標準，建立完整之水資源管理制度，從用水監測、節水改善、回收再利用到水資源風險評估，全面管理水資源相關議題。</p>
 
-<p>本公司主要用水來源為 {{water_source}}，{{report_year}} 年度總取水量為 {{water_withdrawal}} 立方公尺，用水密集度為 {{water_intensity}} 立方公尺/營收億元。在水資源壓力區域方面，本公司位於 {{water_stress_area}} 之廠區已實施強化水資源管理措施，包括提高回收率、減少取水量及開發替代水源等。</p>
+<p>本公司主要用水來源為 自來水，2026 年度總取水量為 500 立方公尺，用水密集度為 10 立方公尺/營收億元。在水資源壓力區域方面，本公司位於 台北市 之廠區已實施強化水資源管理措施，包括提高回收率、減少取水量及開發替代水源等。</p>
 
 <h3>4.1 水資源使用趨勢</h3>
 <div class="chart-container">
@@ -326,7 +235,7 @@ const SECTIONS: TemplateSection[] = [
   <text x="90" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-3</text>
   <text x="170" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-2</text>
   <text x="250" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-1</text>
-  <text x="330" y="268" text-anchor="middle" font-size="9" fill="#475569">{{report_year}}</text>
+  <text x="330" y="268" text-anchor="middle" font-size="9" fill="#475569">2026</text>
   <text x="410" y="268" text-anchor="middle" font-size="9" fill="#475569">目標</text>
   <!-- Withdrawal line (blue) -->
   <polyline points="90,100 170,115 250,130 330,145 410,140" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
@@ -353,54 +262,31 @@ const SECTIONS: TemplateSection[] = [
 <h3>4.2 水資源管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>總取水量（萬立方公尺）</td><td>{{water_withdrawal}}</td><td>{{water_withdrawal_prev}}</td><td>{{water_withdrawal_target}}</td><td>{{water_withdrawal_rate}}</td></tr>
-    <tr><td>用水密集度（立方公尺/營收億元）</td><td>{{water_intensity}}</td><td>{{water_intensity_prev}}</td><td>{{water_intensity_target}}</td><td>{{water_intensity_rate}}</td></tr>
-    <tr><td>水回收率</td><td>{{water_recycle_rate}}%</td><td>{{water_recycle_rate_prev}}%</td><td>{{water_recycle_rate_target}}%</td><td>{{water_recycle_rate_achieve}}</td></tr>
-    <tr><td>廢水排放達標率</td><td>{{wastewater_compliance}}%</td><td>{{wastewater_compliance_prev}}%</td><td>100%</td><td>{{wastewater_compliance_rate}}</td></tr>
-    <tr><td>水資源壓力區域廠區數</td><td>{{water_stress_sites}}</td><td>{{water_stress_sites_prev}}</td><td>{{water_stress_sites_target}}</td><td>{{water_stress_sites_rate}}</td></tr>
+    <tr><td>總取水量（萬立方公尺）</td><td>500</td><td>550</td><td>450</td><td>82</td></tr>
+    <tr><td>用水密集度（立方公尺/營收億元）</td><td>10</td><td>11</td><td>9</td><td>82</td></tr>
+    <tr><td>水回收率</td><td>60%</td><td>50%</td><td>70%</td><td>86</td></tr>
+    <tr><td>廢水排放達標率</td><td>100%</td><td>100%</td><td>100%</td><td>100</td></tr>
+    <tr><td>水資源壓力區域廠區數</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
   </tbody>
 </table>
 
 <h3>4.3 水資源風險與因應</h3>
-<p>本公司運用 WRI Aqueduct 水風險評估工具，評估各廠區所面臨之水資源風險等級。評估結果顯示，位於 {{water_stress_area}} 之廠區面臨高度至極高之水資源壓力，本公司已針對該等廠區制定強化管理計畫，包括提高水回收率至 {{recycle_target}}% 以上、導入雨水回收系統、開發再生水替代來源等。此外，本公司亦與當地社區及利害關係人合作，共同維護流域水資源之永續利用。</p>
-`,
-  },
+<p>本公司運用 WRI Aqueduct 水風險評估工具，評估各廠區所面臨之水資源風險等級。評估結果顯示，位於 台北市 之廠區面臨高度至極高之水資源壓力，本公司已針對該等廠區制定強化管理計畫，包括提高水回收率至 70% 以上、導入雨水回收系統、開發再生水替代來源等。此外，本公司亦與當地社區及利害關係人合作，共同維護流域水資源之永續利用。</p>
 
-  // ─── Ch.05 廢棄物與循環經濟 ───
-  {
-    id: 'ch-05',
-    title: '廢棄物與循環經濟',
-    chapter: 5,
-    wordCount: 2000,
-    griAlignment: [
-      'GRI 306-1',
-      'GRI 306-2',
-      'GRI 306-3',
-      'GRI 306-4',
-      'GRI 306-5',
-      'SASB IF-EU-510a.1',
-    ],
-    hasChart: true,
-    chartType: 'bar',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{total_waste}}',
-      '{{hazardous_waste}}',
-      '{{recycling_rate}}',
-      '{{zero_waste_target}}',
-    ],
-    content: `
+</div>
+
+<div id="ch5">
+
 <h2>第五章 廢棄物與循環經濟</h2>
-<p>{{company_name}} 秉持「源頭減量、循環再利用」之廢棄物管理原則，積極推動循環經濟模式，將傳統「線性經濟」轉型為「循環經濟」，最大化資源使用效率並最小化廢棄物產生。本公司已設定 {{zero_waste_target}} 年達成零廢棄填埋之中長期目標，並透過製程改善、材料替代及回收再利用等多元策略，持續降低廢棄物對環境之衝擊。</p>
+<p>善向永續股份有限公司 秉持「源頭減量、循環再利用」之廢棄物管理原則，積極推動循環經濟模式，將傳統「線性經濟」轉型為「循環經濟」，最大化資源使用效率並最小化廢棄物產生。本公司已設定 2030 年達成零廢棄填埋之中長期目標，並透過製程改善、材料替代及回收再利用等多元策略，持續降低廢棄物對環境之衝擊。</p>
 
 <p>在廢棄物管理方面，本公司依據「減量（Reduce）、再利用（Reuse）、回收（Recover）、再生（Recycle）」之 4R 原則，建立完整之廢棄物管理體系。所有廢棄物均依其特性進行分類、貯存、清除及處理，並委託合格之廢棄物清除處理機構進行後續處置，確保廢棄物管理符合相關法規要求。</p>
 
 <h3>5.1 廢棄物產出概況</h3>
-<p>本公司 {{report_year}} 年度總廢棄物產出量為 {{total_waste}} 噸，其中一般廢棄物 {{general_waste}} 噸，有害廢棄物 {{hazardous_waste}} 噸。廢棄物回收再利用率達 {{recycling_rate}}%，較前年提升 {{recycling_increase}} 個百分點。</p>
+<p>本公司 2026 年度總廢棄物產出量為 2.5 噸，其中一般廢棄物 2.2 噸，有害廢棄物 0.3 噸。廢棄物回收再利用率達 85%，較前年提升 5 個百分點。</p>
 
 <h3>5.2 廢棄物減量成效</h3>
 <div class="chart-container">
@@ -424,14 +310,14 @@ const SECTIONS: TemplateSection[] = [
   <rect x="125" y="190" width="40" height="60" fill="#3b82f6" rx="2"/>
   <rect x="170" y="210" width="40" height="40" fill="#f59e0b" rx="2"/>
   <rect x="215" y="230" width="40" height="20" fill="#ef4444" rx="2"/>
-  <!-- Year {{report_year}} -->
+  <!-- Year 2026 -->
   <rect x="275" y="130" width="40" height="120" fill="#10b981" rx="2"/>
   <rect x="320" y="170" width="40" height="80" fill="#3b82f6" rx="2"/>
   <rect x="365" y="200" width="40" height="50" fill="#f59e0b" rx="2"/>
   <rect x="410" y="235" width="40" height="15" fill="#ef4444" rx="2"/>
   <!-- Labels -->
   <text x="165" y="268" text-anchor="middle" font-size="9" fill="#475569">前年</text>
-  <text x="360" y="268" text-anchor="middle" font-size="9" fill="#475569">{{report_year}}</text>
+  <text x="360" y="268" text-anchor="middle" font-size="9" fill="#475569">2026</text>
   <!-- Legend -->
   <rect x="70" y="65" width="12" height="12" fill="#10b981" rx="2"/>
   <text x="88" y="75" font-size="9" fill="#1e293b">回收再利用</text>
@@ -447,47 +333,31 @@ const SECTIONS: TemplateSection[] = [
 <h3>5.3 廢棄物管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>總廢棄物量（噸）</td><td>{{total_waste}}</td><td>{{total_waste_prev}}</td><td>{{total_waste_target}}</td><td>{{total_waste_rate}}</td></tr>
-    <tr><td>有害廢棄物（噸）</td><td>{{hazardous_waste}}</td><td>{{hazardous_waste_prev}}</td><td>{{hazardous_waste_target}}</td><td>{{hazardous_waste_rate}}</td></tr>
-    <tr><td>回收再利用率</td><td>{{recycling_rate}}%</td><td>{{recycling_rate_prev}}%</td><td>{{recycling_rate_target}}%</td><td>{{recycling_rate_achieve}}</td></tr>
-    <tr><td>廢棄物密集度（噸/營收億元）</td><td>{{waste_intensity}}</td><td>{{waste_intensity_prev}}</td><td>{{waste_intensity_target}}</td><td>{{waste_intensity_rate}}</td></tr>
-    <tr><td>零廢棄填埋達成率</td><td>{{zero_landfill_rate}}%</td><td>{{zero_landfill_rate_prev}}%</td><td>{{zero_landfill_target}}%</td><td>{{zero_landfill_achieve}}</td></tr>
+    <tr><td>總廢棄物量（噸）</td><td>2.5</td><td>2.8</td><td>2.0</td><td>71</td></tr>
+    <tr><td>有害廢棄物（噸）</td><td>0.3</td><td>0.4</td><td>0.2</td><td>50</td></tr>
+    <tr><td>回收再利用率</td><td>85%</td><td>80%</td><td>90%</td><td>94</td></tr>
+    <tr><td>廢棄物密集度（噸/營收億元）</td><td>0.5</td><td>0.56</td><td>0.4</td><td>71</td></tr>
+    <tr><td>零廢棄填埋達成率</td><td>95%</td><td>90%</td><td>100%</td><td>95</td></tr>
   </tbody>
 </table>
 
 <h3>5.4 循環經濟推動</h3>
-<p>本公司積極推動循環經濟，從產品設計階段即導入「為循環而設計（Design for Circularity）」之理念，採用易拆解、易回收之材料，延長產品生命週期。{{report_year}} 年度共推動 {{circular_projects}} 項循環經濟專案，包括：一、產品即服務（Product-as-a-Service）商業模式；二、副產物交換與工業共生計畫；三、包裝材料減量與再生材料使用；四、產品回收與再製造計畫。透過這些專案，本公司創造了 {{circular_revenue}} 億元之循環經濟效益。</p>
-`,
-  },
+<p>本公司積極推動循環經濟，從產品設計階段即導入「為循環而設計（Design for Circularity）」之理念，採用易拆解、易回收之材料，延長產品生命週期。2026 年度共推動 3 項循環經濟專案，包括：一、產品即服務（Product-as-a-Service）商業模式；二、副產物交換與工業共生計畫；三、包裝材料減量與再生材料使用；四、產品回收與再製造計畫。透過這些專案，本公司創造了 0.5 億元之循環經濟效益。</p>
 
-  // ─── Ch.06 生物多樣性 ───
-  {
-    id: 'ch-06',
-    title: '生物多樣性',
-    chapter: 6,
-    wordCount: 2000,
-    griAlignment: ['GRI 304-1', 'GRI 304-2', 'GRI 304-3', 'GRI 304-4', 'GRI 304-5', 'TNFD'],
-    hasChart: true,
-    chartType: 'radar',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{biodiversity_sites}}',
-      '{{restoration_area}}',
-      '{{species_protected}}',
-      '{{tnfd_aligned}}',
-    ],
-    content: `
+</div>
+
+<div id="ch6">
+
 <h2>第六章 生物多樣性</h2>
-<p>{{company_name}} 認知生物多樣性為地球生態系統健康運作之基礎，企業營運對自然環境之影響不容忽視。本公司積極響應「昆明—蒙特婁全球生物多樣性框架」之目標，承諾對營運所在地之生物多樣性進行評估、保護與恢復。本公司已依據 TNFD（自然相關財務揭露工作小組）之建議架構，開始進行自然相關風險與機會之評估與揭露。</p>
+<p>善向永續股份有限公司 認知生物多樣性為地球生態系統健康運作之基礎，企業營運對自然環境之影響不容忽視。本公司積極響應「昆明—蒙特婁全球生物多樣性框架」之目標，承諾對營運所在地之生物多樣性進行評估、保護與恢復。本公司已依據 TNFD（自然相關財務揭露工作小組）之建議架構，開始進行自然相關風險與機會之評估與揭露。</p>
 
 <p>在生物多樣性管理方面，本公司採取「避免（Avoid）、最小化（Minimize）、恢復（Restore）、補償（Offset）」之緩解層級（Mitigation Hierarchy）原則，優先避免對生物多樣性造成負面影響，其次最小化不可避免之影響，再進行生態恢復，最後以生物多樣性補償措施彌補殘餘影響。</p>
 
 <h3>6.1 生物多樣性影響評估</h3>
-<p>本公司已完成所有營運據點之生物多樣性影響評估，識別出 {{biodiversity_sites}} 個位於或鄰近生物多樣性敏感區域之營運據點。針對該等據點，本公司已制定生物多樣性管理計畫，並定期監測生物多樣性指標之變化。</p>
+<p>本公司已完成所有營運據點之生物多樣性影響評估，識別出 0 個位於或鄰近生物多樣性敏感區域之營運據點。針對該等據點，本公司已制定生物多樣性管理計畫，並定期監測生物多樣性指標之變化。</p>
 
 <h3>6.2 生物多樣性影響面向</h3>
 <div class="chart-container">
@@ -537,51 +407,28 @@ const SECTIONS: TemplateSection[] = [
 <h3>6.3 生物多樣性管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>生物多樣性敏感區域據點數</td><td>{{biodiversity_sites}}</td><td>{{biodiversity_sites_prev}}</td><td>{{biodiversity_sites_target}}</td><td>{{biodiversity_sites_rate}}</td></tr>
-    <tr><td>生態恢復面積（公頃）</td><td>{{restoration_area}}</td><td>{{restoration_area_prev}}</td><td>{{restoration_area_target}}</td><td>{{restoration_area_rate}}</td></tr>
-    <tr><td>受保護物種數</td><td>{{species_protected}}</td><td>{{species_protected_prev}}</td><td>{{species_protected_target}}</td><td>{{species_protected_rate}}</td></tr>
-    <tr><td>生物多樣性管理計畫覆蓋率</td><td>{{bio_plan_coverage}}%</td><td>{{bio_plan_coverage_prev}}%</td><td>100%</td><td>{{bio_plan_coverage_rate}}</td></tr>
-    <tr><td>TNFD對齊程度</td><td>{{tnfd_aligned}}%</td><td>{{tnfd_aligned_prev}}%</td><td>{{tnfd_aligned_target}}%</td><td>{{tnfd_aligned_rate}}</td></tr>
+    <tr><td>生物多樣性敏感區域據點數</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
+    <tr><td>生態恢復面積（公頃）</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
+    <tr><td>受保護物種數</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
+    <tr><td>生物多樣性管理計畫覆蓋率</td><td>100%</td><td>100%</td><td>100%</td><td>100</td></tr>
+    <tr><td>TNFD對齊程度</td><td>60%</td><td>50%</td><td>70%</td><td>86</td></tr>
   </tbody>
 </table>
 
 <h3>6.4 自然為本解決方案</h3>
-<p>本公司積極推動「自然為本解決方案（Nature-based Solutions, NbS）」，透過植樹造林、濕地恢復、生態廊道建置等措施，恢復並增強生態系統功能。{{report_year}} 年度共完成 {{nbs_projects}} 項 NbS 專案，累計植樹 {{trees_planted}} 棵，恢復生態面積 {{restoration_area}} 公頃。此外，本公司亦與 {{conservation_partners}} 個保育組織合作，共同推動生物多樣性保護工作。</p>
-`,
-  },
+<p>本公司積極推動「自然為本解決方案（Nature-based Solutions, NbS）」，透過植樹造林、濕地恢復、生態廊道建置等措施，恢復並增強生態系統功能。2026 年度共完成 2 項 NbS 專案，累計植樹 100 棵，恢復生態面積 0 公頃。此外，本公司亦與 2 個保育組織合作，共同推動生物多樣性保護工作。</p>
 
-  // ─── Ch.07 員工福祉與人力資本 ───
-  {
-    id: 'ch-07',
-    title: '員工福祉與人力資本',
-    chapter: 7,
-    wordCount: 2000,
-    griAlignment: [
-      'GRI 401-1',
-      'GRI 401-2',
-      'GRI 401-3',
-      'GRI 402-1',
-      'GRI 403-6',
-      'SASB HN-AA-310a.1',
-    ],
-    hasChart: true,
-    chartType: 'line',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{total_employees}}',
-      '{{turnover_rate}}',
-      '{{training_hours}}',
-      '{{wellness_budget}}',
-    ],
-    content: `
+</div>
+
+<div id="ch7">
+
 <h2>第七章 員工福祉與人力資本</h2>
-<p>{{company_name}} 視員工為企業最寶貴之資產，致力於打造一個安全、健康、多元且具成長性的工作環境。本公司依據國際勞工組織（ILO）核心公約及聯合國人權宣言之精神，制定完善之人力資源管理制度，涵蓋薪酬福利、職涯發展、健康促進及工作生活平衡等面向，確保每位員工均能獲得公平對待與充分發展之機會。</p>
+<p>善向永續股份有限公司 視員工為企業最寶貴之資產，致力於打造一個安全、健康、多元且具成長性的工作環境。本公司依據國際勞工組織（ILO）核心公約及聯合國人權宣言之精神，制定完善之人力資源管理制度，涵蓋薪酬福利、職涯發展、健康促進及工作生活平衡等面向，確保每位員工均能獲得公平對待與充分發展之機會。</p>
 
-<p>在人力資本發展方面，本公司持續投入員工培訓與發展資源，{{report_year}} 年度每人平均訓練時數為 {{training_hours}} 小時，訓練總費用達 {{training_budget}} 千元。本公司亦建立完整之職涯發展雙軌制度，提供管理職與專業職之多元升遷管道，協助員工實現個人職涯目標。</p>
+<p>在人力資本發展方面，本公司持續投入員工培訓與發展資源，2026 年度每人平均訓練時數為 40 小時，訓練總費用達 {{training_budget}} 千元。本公司亦建立完整之職涯發展雙軌制度，提供管理職與專業職之多元升遷管道，協助員工實現個人職涯目標。</p>
 
 <h3>7.1 人力結構與流動趨勢</h3>
 <div class="chart-container">
@@ -604,7 +451,7 @@ const SECTIONS: TemplateSection[] = [
   <text x="90" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-3</text>
   <text x="170" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-2</text>
   <text x="250" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-1</text>
-  <text x="330" y="268" text-anchor="middle" font-size="9" fill="#475569">{{report_year}}</text>
+  <text x="330" y="268" text-anchor="middle" font-size="9" fill="#475569">2026</text>
   <text x="410" y="268" text-anchor="middle" font-size="9" fill="#475569">目標</text>
   <!-- Headcount line (blue) -->
   <polyline points="90,180 170,165 250,150 330,130 410,120" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
@@ -631,44 +478,28 @@ const SECTIONS: TemplateSection[] = [
 <h3>7.2 員工福祉管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>總員工人數</td><td>{{total_employees}}</td><td>{{total_employees_prev}}</td><td>{{total_employees_target}}</td><td>{{total_employees_rate}}</td></tr>
-    <tr><td>自願離職率</td><td>{{turnover_rate}}%</td><td>{{turnover_rate_prev}}%</td><td>{{turnover_rate_target}}%</td><td>{{turnover_rate_achieve}}</td></tr>
-    <tr><td>每人平均訓練時數</td><td>{{training_hours}} hrs</td><td>{{training_hours_prev}} hrs</td><td>{{training_hours_target}} hrs</td><td>{{training_hours_rate}}</td></tr>
-    <tr><td>員工滿意度</td><td>{{satisfaction_score}}</td><td>{{satisfaction_score_prev}}</td><td>{{satisfaction_score_target}}</td><td>{{satisfaction_score_rate}}</td></tr>
-    <tr><td>育嬰留停復職率</td><td>{{parental_return_rate}}%</td><td>{{parental_return_rate_prev}}%</td><td>{{parental_return_rate_target}}%</td><td>{{parental_return_rate_achieve}}</td></tr>
+    <tr><td>總員工人數</td><td>5</td><td>5</td><td>8</td><td>62.5</td></tr>
+    <tr><td>自願離職率</td><td>0%</td><td>0%</td><td>5%</td><td>100</td></tr>
+    <tr><td>每人平均訓練時數</td><td>40 hrs</td><td>30 hrs</td><td>40 hrs</td><td>100</td></tr>
+    <tr><td>員工滿意度</td><td>85</td><td>80</td><td>85</td><td>100</td></tr>
+    <tr><td>育嬰留停復職率</td><td>100%</td><td>100%</td><td>100%</td><td>100</td></tr>
   </tbody>
 </table>
 
 <h3>7.3 員工健康與福祉計畫</h3>
-<p>本公司推動全方位之員工健康促進計畫，包括：一、年度健康檢查，涵蓋一般健檢及特殊作業健康檢查；二、心理健康支持方案，提供員工心理諮詢服務及壓力管理課程；三、工作生活平衡措施，包含彈性工時、遠距辦公及家庭照顧假；四、健康促進活動，如運動社團、健康講座及戒菸戒酒計畫。{{report_year}} 年度員工健康促進預算為 {{wellness_budget}} 千元，參與率達 {{wellness_participation}}%。</p>
-`,
-  },
+<p>本公司推動全方位之員工健康促進計畫，包括：一、年度健康檢查，涵蓋一般健檢及特殊作業健康檢查；二、心理健康支持方案，提供員工心理諮詢服務及壓力管理課程；三、工作生活平衡措施，包含彈性工時、遠距辦公及家庭照顧假；四、健康促進活動，如運動社團、健康講座及戒菸戒酒計畫。2026 年度員工健康促進預算為 50 千元，參與率達 100%。</p>
 
-  // ─── Ch.08 多元平等與包容 ───
-  {
-    id: 'ch-08',
-    title: '多元平等與包容',
-    chapter: 8,
-    wordCount: 2000,
-    griAlignment: ['GRI 405-1', 'GRI 405-2', 'GRI 406-1', 'GRI 2-22', 'SASB HN-AA-310a.2'],
-    hasChart: true,
-    chartType: 'bar',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{female_ratio}}',
-      '{{female_mgr_ratio}}',
-      '{{pay_gap}}',
-      '{{disability_employees}}',
-    ],
-    content: `
+</div>
+
+<div id="ch8">
+
 <h2>第八章 多元平等與包容</h2>
-<p>{{company_name}} 堅信多元平等與包容（Diversity, Equity & Inclusion, DEI）為企業創新與永續發展之重要驅動力。本公司致力於打造一個尊重差異、公平對待、包容多元的工作環境，讓不同性別、年齡、種族、宗教、身心狀態及性傾向之員工均能獲得平等之發展機會。本公司已制定多元平等與包容政策，並設立專責單位推動相關措施。</p>
+<p>善向永續股份有限公司 堅信多元平等與包容（Diversity, Equity & Inclusion, DEI）為企業創新與永續發展之重要驅動力。本公司致力於打造一個尊重差異、公平對待、包容多元的工作環境，讓不同性別、年齡、種族、宗教、身心狀態及性傾向之員工均能獲得平等之發展機會。本公司已制定多元平等與包容政策，並設立專責單位推動相關措施。</p>
 
-<p>在性別平等方面，本公司積極提升女性員工比例及女性主管比例，{{report_year}} 年度女性員工佔比為 {{female_ratio}}%，女性主管佔比為 {{female_mgr_ratio}}%。本公司亦定期進行薪酬平等分析，確保同工同酬原則之落實，{{report_year}} 年度性別薪酬差距為 {{pay_gap}}%。</p>
+<p>在性別平等方面，本公司積極提升女性員工比例及女性主管比例，2026 年度女性員工佔比為 40%，女性主管佔比為 {{female_mgr_ratio}}%。本公司亦定期進行薪酬平等分析，確保同工同酬原則之落實，2026 年度性別薪酬差距為 3%。</p>
 
 <h3>8.1 多元平等指標</h3>
 <div class="chart-container">
@@ -711,53 +542,28 @@ const SECTIONS: TemplateSection[] = [
 <h3>8.2 多元平等管理績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>女性員工比例</td><td>{{female_ratio}}%</td><td>{{female_ratio_prev}}%</td><td>{{female_ratio_target}}%</td><td>{{female_ratio_achieve}}</td></tr>
+    <tr><td>女性員工比例</td><td>40%</td><td>{{female_ratio_prev}}%</td><td>{{female_ratio_target}}%</td><td>{{female_ratio_achieve}}</td></tr>
     <tr><td>女性主管比例</td><td>{{female_mgr_ratio}}%</td><td>{{female_mgr_ratio_prev}}%</td><td>{{female_mgr_ratio_target}}%</td><td>{{female_mgr_ratio_achieve}}</td></tr>
-    <tr><td>性別薪酬差距</td><td>{{pay_gap}}%</td><td>{{pay_gap_prev}}%</td><td>{{pay_gap_target}}%</td><td>{{pay_gap_achieve}}</td></tr>
-    <tr><td>身心障礙者聘用人數</td><td>{{disability_employees}}</td><td>{{disability_employees_prev}}</td><td>{{disability_employees_target}}</td><td>{{disability_employees_rate}}</td></tr>
-    <tr><td>DEI訓練覆蓋率</td><td>{{dei_training_rate}}%</td><td>{{dei_training_rate_prev}}%</td><td>100%</td><td>{{dei_training_achieve}}</td></tr>
+    <tr><td>性別薪酬差距</td><td>3%</td><td>5%</td><td>3%</td><td>100</td></tr>
+    <tr><td>身心障礙者聘用人數</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><td>DEI訓練覆蓋率</td><td>100%</td><td>100%</td><td>100%</td><td>100</td></tr>
   </tbody>
 </table>
 
 <h3>8.3 包容性文化推動</h3>
-<p>本公司積極推動包容性文化，透過多元管道促進員工之間的理解與尊重。{{report_year}} 年度共辦理 {{dei_events}} 場多元平等相關活動與訓練，涵蓋無意識偏見訓練、跨文化溝通、性別平等意識及身心障礙者友善職場等主題。本公司亦設立員工資源小組（Employee Resource Groups, ERGs），包括女性領導力網絡、多元文化社群及 LGBTQ+ 盟友團體等，為不同背景之員工提供交流與支持之平台。</p>
-`,
-  },
+<p>本公司積極推動包容性文化，透過多元管道促進員工之間的理解與尊重。2026 年度共辦理 6 場多元平等相關活動與訓練，涵蓋無意識偏見訓練、跨文化溝通、性別平等意識及身心障礙者友善職場等主題。本公司亦設立員工資源小組（Employee Resource Groups, ERGs），包括女性領導力網絡、多元文化社群及 LGBTQ+ 盟友團體等，為不同背景之員工提供交流與支持之平台。</p>
 
-  // ─── Ch.09 職業安全衛生 ───
-  {
-    id: 'ch-09',
-    title: '職業安全衛生',
-    chapter: 9,
-    wordCount: 2000,
-    griAlignment: [
-      'GRI 403-1',
-      'GRI 403-2',
-      'GRI 403-3',
-      'GRI 403-4',
-      'GRI 403-5',
-      'GRI 403-9',
-      'GRI 403-10',
-      'SASB HN-AA-320a.1',
-    ],
-    hasChart: true,
-    chartType: 'line',
-    placeholders: [
-      '{{company_name}}',
-      '{{report_year}}',
-      '{{ltir}}',
-      '{{trir}}',
-      '{{fatality_count}}',
-      '{{safety_training_hours}}',
-    ],
-    content: `
+</div>
+
+<div id="ch9">
+
 <h2>第九章 職業安全衛生</h2>
-<p>{{company_name}} 將員工之安全與健康視為企業營運之最高優先事項，致力於達成零災害之目標。本公司依據 ISO 45001 職業安全衛生管理系統標準，建立完整之安全衛生管理制度，涵蓋風險評估、危害預防、緊急應變、健康管理及持續改善等環節。所有營運據點均已通過 ISO 45001 認證，展現本公司對職業安全衛生之堅定承諾。</p>
+<p>善向永續股份有限公司 將員工之安全與健康視為企業營運之最高優先事項，致力於達成零災害之目標。本公司依據 ISO 45001 職業安全衛生管理系統標準，建立完整之安全衛生管理制度，涵蓋風險評估、危害預防、緊急應變、健康管理及持續改善等環節。所有營運據點均已通過 ISO 45001 認證，展現本公司對職業安全衛生之堅定承諾。</p>
 
-<p>在安全管理方面，本公司採取「預防為主、全員參與」之策略，透過系統性之風險辨識與管控措施，降低工作場所之安全危害。本公司亦鼓勵員工主動通報潛在危害與虛驚事件，建立正向之安全文化。{{report_year}} 年度失能傷害頻率（LTIR）為 {{ltir}}，較前年改善 {{ltir_improvement}}%。</p>
+<p>在安全管理方面，本公司採取「預防為主、全員參與」之策略，透過系統性之風險辨識與管控措施，降低工作場所之安全危害。本公司亦鼓勵員工主動通報潛在危害與虛驚事件，建立正向之安全文化。2026 年度失能傷害頻率（LTIR）為 0，較前年改善 {{ltir_improvement}}%。</p>
 
 <h3>9.1 職業安全趨勢</h3>
 <div class="chart-container">
@@ -780,7 +586,7 @@ const SECTIONS: TemplateSection[] = [
   <text x="90" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-3</text>
   <text x="170" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-2</text>
   <text x="250" y="268" text-anchor="middle" font-size="9" fill="#475569">Y-1</text>
-  <text x="330" y="268" text-anchor="middle" font-size="9" fill="#475569">{{report_year}}</text>
+  <text x="330" y="268" text-anchor="middle" font-size="9" fill="#475569">2026</text>
   <text x="410" y="268" text-anchor="middle" font-size="9" fill="#475569">目標</text>
   <!-- LTIR line (blue) -->
   <polyline points="90,100 170,120 250,140 330,160 410,175" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
@@ -807,29 +613,19 @@ const SECTIONS: TemplateSection[] = [
 <h3>9.2 職業安全衛生績效</h3>
 <table class="data-table">
   <thead>
-    <tr><th>指標</th><th>{{report_year}}</th><th>前年</th><th>目標</th><th>達成率</th></tr>
+    <tr><th>指標</th><th>2026</th><th>前年</th><th>目標</th><th>達成率</th></tr>
   </thead>
   <tbody>
-    <tr><td>失能傷害頻率（LTIR）</td><td>{{ltir}}</td><td>{{ltir_prev}}</td><td>{{ltir_target}}</td><td>{{ltir_rate}}</td></tr>
-    <tr><td>總傷害率（TRIR）</td><td>{{trir}}</td><td>{{trir_prev}}</td><td>{{trir_target}}</td><td>{{trir_rate}}</td></tr>
-    <tr><td>職災死亡人數</td><td>{{fatality_count}}</td><td>{{fatality_count_prev}}</td><td>0</td><td>{{fatality_rate}}</td></tr>
-    <tr><td>安全衛生訓練時數</td><td>{{safety_training_hours}} hrs</td><td>{{safety_training_hours_prev}} hrs</td><td>{{safety_training_hours_target}} hrs</td><td>{{safety_training_hours_rate}}</td></tr>
-    <tr><td>ISO 45001認證覆蓋率</td><td>{{iso45001_coverage}}%</td><td>{{iso45001_coverage_prev}}%</td><td>100%</td><td>{{iso45001_coverage_rate}}</td></tr>
+    <tr><td>失能傷害頻率（LTIR）</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
+    <tr><td>總傷害率（TRIR）</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
+    <tr><td>職災死亡人數</td><td>0</td><td>0</td><td>0</td><td>100</td></tr>
+    <tr><td>安全衛生訓練時數</td><td>24 hrs</td><td>20 hrs</td><td>24 hrs</td><td>100</td></tr>
+    <tr><td>ISO 45001認證覆蓋率</td><td>100%</td><td>100%</td><td>100%</td><td>100</td></tr>
   </tbody>
 </table>
 
 <h3>9.3 安全管理強化措施</h3>
-<p>本公司持續強化安全管理措施，包括：一、導入智慧安全監控系統，運用物聯網（IoT）技術即時監測高風險作業環境；二、推動行為安全觀察（BBS）計畫，透過同儕觀察與回饋提升安全意識；三、定期辦理緊急應變演練，提升員工應變能力；四、建立職災調查與根因分析機制，防止類似事件再次發生。{{report_year}} 年度共辦理 {{safety_drills}} 場緊急應變演練，參與人數達 {{drill_participants}} 人次。</p>
-`,
-  },
-];
+<p>本公司持續強化安全管理措施，包括：一、導入智慧安全監控系統，運用物聯網（IoT）技術即時監測高風險作業環境；二、推動行為安全觀察（BBS）計畫，透過同儕觀察與回饋提升安全意識；三、定期辦理緊急應變演練，提升員工應變能力；四、建立職災調查與根因分析機制，防止類似事件再次發生。2026 年度共辦理 4 場緊急應變演練，參與人數達 20 人次。</p>
 
-export const FULL_TEMPLATE: ReportTemplate = {
-  id: 'full-esg-report',
-  name: '全面合規永續報告',
-  theme: 'comprehensive',
-  industry: ['technology', 'manufacturing', 'general'],
-  totalSections: SECTIONS.length,
-  estimatedWords: SECTIONS.reduce((acc, curr) => acc + curr.wordCount, 0),
-  sections: SECTIONS,
-};
+</div>
+
